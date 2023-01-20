@@ -2,24 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
 #include "modules/mediasource/TrackDefault.h"
 
 #include "bindings/core/v8/ExceptionState.h"
-=======
-#include "config.h"
-#include "modules/mediasource/TrackDefault.h"
-
-#include "bindings/core/v8/ExceptionState.h"
-#include "core/dom/ExceptionCode.h"
->>>>>>> miniblink49
 #include "core/html/track/AudioTrack.h"
 #include "core/html/track/TextTrack.h"
 #include "core/html/track/VideoTrack.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 const AtomicString& TrackDefault::audioKeyword()
 {
     DEFINE_STATIC_LOCAL(const AtomicString, audio, ("audio"));
@@ -44,27 +35,6 @@ TrackDefault* TrackDefault::create(const AtomicString& type,
     const Vector<String>& kinds,
     const String& byteStreamTrackID,
     ExceptionState& exceptionState)
-=======
-static const AtomicString& audioKeyword()
-{
-    DEFINE_STATIC_LOCAL(const AtomicString, audio, ("audio", AtomicString::ConstructFromLiteral));
-    return audio;
-}
-
-static const AtomicString& videoKeyword()
-{
-    DEFINE_STATIC_LOCAL(const AtomicString, video, ("video", AtomicString::ConstructFromLiteral));
-    return video;
-}
-
-static const AtomicString& textKeyword()
-{
-    DEFINE_STATIC_LOCAL(const AtomicString, text, ("text", AtomicString::ConstructFromLiteral));
-    return text;
-}
-
-TrackDefault* TrackDefault::create(const AtomicString& type, const String& language, const String& label, const Vector<String>& kinds, const String& byteStreamTrackID, ExceptionState& exceptionState)
->>>>>>> miniblink49
 {
     // Per 11 Nov 2014 Editor's Draft
     // https://dvcs.w3.org/hg/html-media/raw-file/tip/media-source/media-source.html#idl-def-TrackDefault
@@ -109,11 +79,7 @@ TrackDefault* TrackDefault::create(const AtomicString& type, const String& langu
             }
         }
     } else {
-<<<<<<< HEAD
         NOTREACHED(); // IDL enforcement should prevent this case.
-=======
-        ASSERT_NOT_REACHED(); // IDL enforcement should prevent this case.
->>>>>>> miniblink49
         return nullptr;
     }
 
@@ -127,7 +93,6 @@ TrackDefault* TrackDefault::create(const AtomicString& type, const String& langu
     return new TrackDefault(type, language, label, kinds, byteStreamTrackID);
 }
 
-<<<<<<< HEAD
 TrackDefault::~TrackDefault() { }
 
 TrackDefault::TrackDefault(const AtomicString& type,
@@ -135,13 +100,6 @@ TrackDefault::TrackDefault(const AtomicString& type,
     const String& label,
     const Vector<String>& kinds,
     const String& byteStreamTrackID)
-=======
-TrackDefault::~TrackDefault()
-{
-}
-
-TrackDefault::TrackDefault(const AtomicString& type, const String& language, const String& label, const Vector<String>& kinds, const String& byteStreamTrackID)
->>>>>>> miniblink49
     : m_type(type)
     , m_byteStreamTrackID(byteStreamTrackID)
     , m_language(language)

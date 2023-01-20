@@ -31,11 +31,8 @@
 #ifndef StringUTF8Adaptor_h
 #define StringUTF8Adaptor_h
 
-<<<<<<< HEAD
 #include "base/strings/string_piece.h"
 #include "wtf/Allocator.h"
-=======
->>>>>>> miniblink49
 #include "wtf/text/CString.h"
 #include "wtf/text/TextEncoding.h"
 #include "wtf/text/WTFString.h"
@@ -45,51 +42,26 @@ namespace WTF {
 // This class lets you get UTF-8 data out of a String without mallocing a
 // separate buffer to hold the data if the String happens to be 8 bit and
 // contain only ASCII characters.
-<<<<<<< HEAD
 class StringUTF8Adaptor final {
     DISALLOW_NEW();
 
 public:
     StringUTF8Adaptor(const String& string,
         UTF8ConversionMode mode = LenientUTF8Conversion)
-=======
-class StringUTF8Adaptor {
-public:
-    enum ShouldNormalize {
-        DoNotNormalize,
-        Normalize
-    };
-
-    explicit StringUTF8Adaptor(const String& string, ShouldNormalize normalize = DoNotNormalize, UnencodableHandling handling = EntitiesForUnencodables)
->>>>>>> miniblink49
         : m_data(0)
         , m_length(0)
     {
         if (string.isEmpty())
             return;
-<<<<<<< HEAD
         // Unfortunately, 8 bit WTFStrings are encoded in Latin-1 and GURL uses
         // UTF-8 when processing 8 bit strings. If |relative| is entirely ASCII, we
         // luck out and can avoid mallocing a new buffer to hold the UTF-8 data
         // because UTF-8 and Latin-1 use the same code units for ASCII code points.
-=======
-        // Unfortunately, 8 bit WTFStrings are encoded in Latin-1 and GURL uses UTF-8
-        // when processing 8 bit strings. If |relative| is entirely ASCII, we luck out
-        // and can avoid mallocing a new buffer to hold the UTF-8 data because UTF-8
-        // and Latin-1 use the same code units for ASCII code points.
->>>>>>> miniblink49
         if (string.is8Bit() && string.containsOnlyASCII()) {
             m_data = reinterpret_cast<const char*>(string.characters8());
             m_length = string.length();
         } else {
-<<<<<<< HEAD
             m_utf8Buffer = string.utf8(mode);
-=======
-            if (normalize == Normalize)
-                m_utf8Buffer = UTF8Encoding().normalizeAndEncode(string, handling);
-            else
-                m_utf8Buffer = string.utf8();
->>>>>>> miniblink49
             m_data = m_utf8Buffer.data();
             m_length = m_utf8Buffer.length();
         }
@@ -98,14 +70,11 @@ public:
     const char* data() const { return m_data; }
     size_t length() const { return m_length; }
 
-<<<<<<< HEAD
     base::StringPiece asStringPiece() const
     {
         return base::StringPiece(m_data, m_length);
     }
 
-=======
->>>>>>> miniblink49
 private:
     CString m_utf8Buffer;
     const char* m_data;

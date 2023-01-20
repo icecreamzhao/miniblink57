@@ -32,29 +32,36 @@
 #define RangeInputType_h
 
 #include "core/html/forms/InputType.h"
+#include "core/html/forms/InputTypeView.h"
 
 namespace blink {
 
 class ExceptionState;
 class SliderThumbElement;
 
-class RangeInputType final : public InputType {
+class RangeInputType final : public InputType, public InputTypeView {
+    USING_GARBAGE_COLLECTED_MIXIN(RangeInputType);
+
 public:
-    static PassRefPtrWillBeRawPtr<InputType> create(HTMLInputElement&);
+    static InputType* create(HTMLInputElement&);
+    DECLARE_VIRTUAL_TRACE();
+    using InputType::element;
 
 private:
     RangeInputType(HTMLInputElement&);
+    InputTypeView* createView() override;
+    ValueMode valueMode() const override;
     void countUsage() override;
     const AtomicString& formControlType() const override;
     double valueAsDouble() const override;
-    void setValueAsDouble(double, TextFieldEventBehavior, ExceptionState&) const override;
+    void setValueAsDouble(double,
+        TextFieldEventBehavior,
+        ExceptionState&) const override;
     bool typeMismatchFor(const String&) const override;
     bool supportsRequired() const override;
     StepRange createStepRange(AnyStepHandling) const override;
     bool isSteppable() const override;
     void handleMouseDownEvent(MouseEvent*) override;
-    void handleTouchEvent(TouchEvent*) override;
-    bool hasTouchEventHandler() const override;
     void handleKeydownEvent(KeyboardEvent*) override;
     LayoutObject* createLayoutObject(const ComputedStyle&) const override;
     void createShadowSubtree() override;
@@ -62,8 +69,9 @@ private:
     String serialize(const Decimal&) const override;
     void accessKeyAction(bool sendMouseEvents) override;
     void sanitizeValueInResponseToMinOrMaxAttributeChange() override;
-    void setValue(const String&, bool valueChanged, TextFieldEventBehavior) override;
-    String fallbackValue() const override;
+    void stepAttributeChanged() override;
+    void warnIfValueIsInvalid(const String&) const override;
+    void didSetValue(const String&, bool valueChanged) override;
     String sanitizeValue(const String& proposedValue) const override;
     bool shouldRespectListAttribute() override;
     void disabledAttributeChanged() override;

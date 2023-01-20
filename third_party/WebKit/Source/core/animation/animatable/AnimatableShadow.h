@@ -38,27 +38,28 @@ namespace blink {
 
 class AnimatableShadow final : public AnimatableValue {
 public:
-    virtual ~AnimatableShadow() { }
-    static PassRefPtrWillBeRawPtr<AnimatableShadow> create(PassRefPtr<ShadowList> shadowList, const Color& currentColor)
+    ~AnimatableShadow() override { }
+    static PassRefPtr<AnimatableShadow> create(PassRefPtr<ShadowList> shadowList,
+        const Color& currentColor)
     {
-        return adoptRefWillBeNoop(new AnimatableShadow(shadowList, currentColor));
+        return adoptRef(new AnimatableShadow(std::move(shadowList), currentColor));
     }
-    ShadowList* shadowList() const { return m_shadowList.get(); }
-
-    DEFINE_INLINE_VIRTUAL_TRACE() { AnimatableValue::trace(visitor); }
+    ShadowList* getShadowList() const { return m_shadowList.get(); }
 
 protected:
-    virtual PassRefPtrWillBeRawPtr<AnimatableValue> interpolateTo(const AnimatableValue*, double fraction) const override;
-    virtual bool usesDefaultInterpolationWith(const AnimatableValue*) const override;
+    PassRefPtr<AnimatableValue> interpolateTo(const AnimatableValue*,
+        double fraction) const override;
+    bool usesDefaultInterpolationWith(const AnimatableValue*) const override;
 
 private:
-    explicit AnimatableShadow(PassRefPtr<ShadowList> shadowList, const Color& currentColor)
-        : m_shadowList(shadowList),
-        m_currentColor(currentColor)
+    explicit AnimatableShadow(PassRefPtr<ShadowList> shadowList,
+        const Color& currentColor)
+        : m_shadowList(shadowList)
+        , m_currentColor(currentColor)
     {
     }
-    virtual AnimatableType type() const override { return TypeShadow; }
-    virtual bool equalTo(const AnimatableValue*) const override;
+    AnimatableType type() const override { return TypeShadow; }
+    bool equalTo(const AnimatableValue*) const override;
 
     const RefPtr<ShadowList> m_shadowList;
     const Color m_currentColor;

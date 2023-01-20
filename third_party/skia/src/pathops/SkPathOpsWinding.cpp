@@ -7,7 +7,6 @@
 
 // given a prospective edge, compute its initial winding by projecting a ray
 // if the ray hits another edge
-<<<<<<< HEAD
 // if the edge doesn't have a winding yet, hop up to that edge and start over
 // concern : check for hops forming a loop
 // if the edge is unsortable, or
@@ -19,19 +18,6 @@
 
 // given the top span, project the most perpendicular ray and look for intersections
 // let's try up and then down. What the hey
-=======
-    // if the edge doesn't have a winding yet, hop up to that edge and start over
-        // concern : check for hops forming a loop
-    // if the edge is unsortable, or
-    // the intersection is nearly at the ends, or
-    // the tangent at the intersection is nearly coincident to the ray,
-        // choose a different ray and try again
-            // concern : if it is unable to succeed after N tries, try another edge? direction?
-// if no edge is hit, compute the winding directly
-
-// given the top span, project the most perpendicular ray and look for intersections
-    // let's try up and then down. What the hey
->>>>>>> miniblink49
 
 // bestXY is initialized by caller with basePt
 
@@ -55,7 +41,6 @@ const char* gDebugRayDirName[] = {
 };
 #endif
 
-<<<<<<< HEAD
 static int xy_index(SkOpRayDir dir)
 {
     return static_cast<int>(dir) & 1;
@@ -88,38 +73,10 @@ static SkScalar rect_side(const SkRect& r, SkOpRayDir dir)
 
 static bool sideways_overlap(const SkRect& rect, const SkPoint& pt, SkOpRayDir dir)
 {
-=======
-static int xy_index(SkOpRayDir dir) {
-    return static_cast<int>(dir) & 1;
-}
-
-static SkScalar pt_xy(const SkPoint& pt, SkOpRayDir dir) {
-    return (&pt.fX)[xy_index(dir)];
-}
-
-static SkScalar pt_yx(const SkPoint& pt, SkOpRayDir dir) {
-    return (&pt.fX)[!xy_index(dir)];
-}
-
-static double pt_dxdy(const SkDVector& v, SkOpRayDir dir) {
-    return (&v.fX)[xy_index(dir)];
-}
-
-static double pt_dydx(const SkDVector& v, SkOpRayDir dir) {
-    return (&v.fX)[!xy_index(dir)];
-}
-
-static SkScalar rect_side(const SkRect& r, SkOpRayDir dir) {
-    return (&r.fLeft)[static_cast<int>(dir)];
-}
-
-static bool sideways_overlap(const SkRect& rect, const SkPoint& pt, SkOpRayDir dir) {
->>>>>>> miniblink49
     int i = !xy_index(dir);
     return approximately_between((&rect.fLeft)[i], (&pt.fX)[i], (&rect.fRight)[i]);
 }
 
-<<<<<<< HEAD
 static bool less_than(SkOpRayDir dir)
 {
     return static_cast<bool>((static_cast<int>(dir) & 2) == 0);
@@ -127,27 +84,15 @@ static bool less_than(SkOpRayDir dir)
 
 static bool ccw_dxdy(const SkDVector& v, SkOpRayDir dir)
 {
-=======
-static bool less_than(SkOpRayDir dir) {
-    return static_cast<bool>((static_cast<int>(dir) & 2) == 0);
-}
-
-static bool ccw_dxdy(const SkDVector& v, SkOpRayDir dir) {
->>>>>>> miniblink49
     bool vPartPos = pt_dydx(v, dir) > 0;
     bool leftBottom = ((static_cast<int>(dir) + 1) & 2) != 0;
     return vPartPos == leftBottom;
 }
 
 struct SkOpRayHit {
-<<<<<<< HEAD
     SkOpRayDir makeTestBase(SkOpSpan* span, double t)
     {
         fNext = nullptr;
-=======
-    SkOpRayDir makeTestBase(SkOpSpan* span, double t) {
-        fNext = NULL;
->>>>>>> miniblink49
         fSpan = span;
         fT = span->t() * (1 - t) + span->next()->t() * t;
         SkOpSegment* segment = span->segment();
@@ -166,12 +111,8 @@ struct SkOpRayHit {
 };
 
 void SkOpContour::rayCheck(const SkOpRayHit& base, SkOpRayDir dir, SkOpRayHit** hits,
-<<<<<<< HEAD
     SkChunkAlloc* allocator)
 {
-=======
-        SkChunkAlloc* allocator) {
->>>>>>> miniblink49
     // if the bounds extreme is outside the best, we're done
     SkScalar baseXY = pt_xy(base.fPt, dir);
     SkScalar boundsXY = rect_side(fBounds, dir);
@@ -186,12 +127,8 @@ void SkOpContour::rayCheck(const SkOpRayHit& base, SkOpRayDir dir, SkOpRayHit** 
 }
 
 void SkOpSegment::rayCheck(const SkOpRayHit& base, SkOpRayDir dir, SkOpRayHit** hits,
-<<<<<<< HEAD
     SkChunkAlloc* allocator)
 {
-=======
-        SkChunkAlloc* allocator) {
->>>>>>> miniblink49
     if (!sideways_overlap(fBounds, base.fPt, dir)) {
         return;
     }
@@ -231,19 +168,11 @@ void SkOpSegment::rayCheck(const SkOpRayHit& base, SkOpRayDir dir, SkOpRayHit** 
                 }
                 slope = this->dSlopeAtT(t);
                 if (fVerb == SkPath::kCubic_Verb && base.fSpan->segment() == this
-<<<<<<< HEAD
                     && roughly_equal(base.fT, t)
                     && SkDPoint::RoughlyEqual(pt, base.fPt)) {
 #if DEBUG_WINDING
                     SkDebugf("%s (rarely expect this)\n", __FUNCTION__);
 #endif
-=======
-                        && roughly_equal(base.fT, t)
-                        && SkDPoint::RoughlyEqual(pt, base.fPt)) {
-    #if DEBUG_WINDING
-                    SkDebugf("%s (rarely expect this)\n", __FUNCTION__);
-    #endif
->>>>>>> miniblink49
                     continue;
                 }
                 if (fabs(pt_dydx(slope, dir) * 10000) > fabs(pt_dxdy(slope, dir))) {
@@ -268,29 +197,19 @@ void SkOpSegment::rayCheck(const SkOpRayHit& base, SkOpRayDir dir, SkOpRayHit** 
     }
 }
 
-<<<<<<< HEAD
 SkOpSpan* SkOpSegment::windingSpanAtT(double tHit)
 {
-=======
-SkOpSpan* SkOpSegment::windingSpanAtT(double tHit) {
->>>>>>> miniblink49
     SkOpSpan* span = &fHead;
     SkOpSpanBase* next;
     do {
         next = span->next();
         if (approximately_equal(tHit, next->t())) {
-<<<<<<< HEAD
             return nullptr;
         }
-=======
-            return NULL;
-        } 
->>>>>>> miniblink49
         if (tHit < next->t()) {
             return span;
         }
     } while (!next->final() && (span = next->upCast()));
-<<<<<<< HEAD
     return nullptr;
 }
 
@@ -316,28 +235,6 @@ static bool reverse_hit_compare_y(const SkOpRayHit* a, const SkOpRayHit* b)
 
 static double get_t_guess(int tTry, int* dirOffset)
 {
-=======
-    return NULL;
-}
-
-static bool hit_compare_x(const SkOpRayHit* a, const SkOpRayHit* b) {
-    return a->fPt.fX < b->fPt.fX;
-}
-
-static bool reverse_hit_compare_x(const SkOpRayHit* a, const SkOpRayHit* b) {
-    return b->fPt.fX  < a->fPt.fX;
-}
-
-static bool hit_compare_y(const SkOpRayHit* a, const SkOpRayHit* b) {
-    return a->fPt.fY < b->fPt.fY;
-}
-
-static bool reverse_hit_compare_y(const SkOpRayHit* a, const SkOpRayHit* b) {
-    return b->fPt.fY  < a->fPt.fY;
-}
-
-static double get_t_guess(int tTry, int* dirOffset) {
->>>>>>> miniblink49
     double t = 0.5;
     *dirOffset = tTry & 1;
     int tBase = tTry >> 1;
@@ -353,12 +250,8 @@ static double get_t_guess(int tTry, int* dirOffset) {
     return t;
 }
 
-<<<<<<< HEAD
 bool SkOpSpan::sortableTop(SkOpContour* contourHead)
 {
-=======
-bool SkOpSpan::sortableTop(SkOpContour* contourHead) {
->>>>>>> miniblink49
     SkChunkAlloc allocator(1024);
     int dirOffset;
     double t = get_t_guess(fTopTTry++, &dirOffset);
@@ -381,7 +274,6 @@ bool SkOpSpan::sortableTop(SkOpContour* contourHead) {
         hit = hit->fNext;
     }
     int count = sorted.count();
-<<<<<<< HEAD
     SkTQSort(sorted.begin(), sorted.end() - 1, xy_index(dir) ? less_than(dir) ? hit_compare_y : reverse_hit_compare_y : less_than(dir) ? hit_compare_x : reverse_hit_compare_x);
     // verify windings
 #if DEBUG_WINDING
@@ -396,39 +288,14 @@ bool SkOpSpan::sortableTop(SkOpContour* contourHead) {
         bool ccw = ccw_dxdy(hit->fSlope, dir);
         SkDebugf("%s [%d] valid=%d operand=%d span=%d ccw=%d ", __FUNCTION__, index,
             hit->fValid, operand, span ? span->debugID() : -1, ccw);
-=======
-    SkTQSort(sorted.begin(), sorted.end() - 1, xy_index(dir)
-            ? less_than(dir) ? hit_compare_y : reverse_hit_compare_y 
-            : less_than(dir) ? hit_compare_x : reverse_hit_compare_x);
-    // verify windings
-#if DEBUG_WINDING
-    SkDebugf("%s dir=%s seg=%d t=%1.9g pt=(%1.9g,%1.9g)\n", __FUNCTION__, 
-            gDebugRayDirName[static_cast<int>(dir)], hitBase.fSpan->segment()->debugID(),
-            hitBase.fT, hitBase.fPt.fX, hitBase.fPt.fY);
-    for (int index = 0; index < count; ++index) {
-        hit = sorted[index];
-        SkOpSpan* span = hit->fSpan;
-        SkOpSegment* hitSegment = span ? span->segment() : NULL;
-        bool operand = span ? hitSegment->operand() : false;
-        bool ccw = ccw_dxdy(hit->fSlope, dir);
-        SkDebugf("%s [%d] valid=%d operand=%d span=%d ccw=%d ", __FUNCTION__, index,
-                hit->fValid, operand, span ? span->debugID() : -1, ccw);
->>>>>>> miniblink49
         if (span) {
             hitSegment->dumpPtsInner();
         }
         SkDebugf(" t=%1.9g pt=(%1.9g,%1.9g) slope=(%1.9g,%1.9g)\n", hit->fT,
-<<<<<<< HEAD
             hit->fPt.fX, hit->fPt.fY, hit->fSlope.fX, hit->fSlope.fY);
     }
 #endif
     const SkPoint* last = nullptr;
-=======
-                hit->fPt.fX, hit->fPt.fY, hit->fSlope.fX, hit->fSlope.fY);
-    }
-#endif
-    const SkPoint* last = NULL;
->>>>>>> miniblink49
     int wind = 0;
     int oppWind = 0;
     for (int index = 0; index < count; ++index) {
@@ -437,21 +304,12 @@ bool SkOpSpan::sortableTop(SkOpContour* contourHead) {
             return false;
         }
         bool ccw = ccw_dxdy(hit->fSlope, dir);
-<<<<<<< HEAD
         //        SkASSERT(!approximately_zero(hit->fT) || !hit->fValid);
         SkOpSpan* span = hit->fSpan;
         if (!span) {
             return false;
         }
         SkOpSegment* hitSegment = span->segment();
-=======
-        SkASSERT(!approximately_zero(hit->fT) || !hit->fValid);
-        SkOpSpan* span = hit->fSpan;
-        SkOpSegment* hitSegment = span->segment();
-        if (!span) {
-            return false;
-        }
->>>>>>> miniblink49
         if (span->windValue() == 0 && span->oppValue() == 0) {
             continue;
         }
@@ -504,13 +362,8 @@ bool SkOpSpan::sortableTop(SkOpContour* contourHead) {
             if (this->globalState()->phase() == SkOpGlobalState::kFixWinding) {
                 hitSegment->contour()->setCcw(ccw);
             } else {
-<<<<<<< HEAD
                 (void)hitSegment->markAndChaseWinding(span, span->next(), windSum, oppSum, nullptr);
                 (void)hitSegment->markAndChaseWinding(span->next(), span, windSum, oppSum, nullptr);
-=======
-                (void) hitSegment->markAndChaseWinding(span, span->next(), windSum, oppSum, NULL);
-                (void) hitSegment->markAndChaseWinding(span->next(), span, windSum, oppSum, NULL);
->>>>>>> miniblink49
             }
         }
         if (operand) {
@@ -522,12 +375,8 @@ bool SkOpSpan::sortableTop(SkOpContour* contourHead) {
     return true;
 }
 
-<<<<<<< HEAD
 SkOpSpan* SkOpSegment::findSortableTop(SkOpContour* contourHead)
 {
-=======
-SkOpSpan* SkOpSegment::findSortableTop(SkOpContour* contourHead) {
->>>>>>> miniblink49
     SkOpSpan* span = &fHead;
     SkOpSpanBase* next;
     do {
@@ -542,18 +391,11 @@ SkOpSpan* SkOpSegment::findSortableTop(SkOpContour* contourHead) {
             return span;
         }
     } while (!next->final() && (span = next->upCast()));
-<<<<<<< HEAD
     return nullptr;
 }
 
 SkOpSpan* SkOpContour::findSortableTop(SkOpContour* contourHead)
 {
-=======
-    return NULL;
-}
-
-SkOpSpan* SkOpContour::findSortableTop(SkOpContour* contourHead) {
->>>>>>> miniblink49
     SkOpSegment* testSegment = &fHead;
     do {
         if (testSegment->done()) {
@@ -564,18 +406,11 @@ SkOpSpan* SkOpContour::findSortableTop(SkOpContour* contourHead) {
             return result;
         }
     } while ((testSegment = testSegment->next()));
-<<<<<<< HEAD
     return nullptr;
 }
 
 SkOpSpan* FindSortableTop(SkOpContourHead* contourHead)
 {
-=======
-    return NULL;
-}
-
-SkOpSpan* FindSortableTop(SkOpContourHead* contourHead) {
->>>>>>> miniblink49
     for (int index = 0; index < SkOpGlobalState::kMaxWindingTries; ++index) {
         SkOpContour* contour = contourHead;
         do {
@@ -588,9 +423,5 @@ SkOpSpan* FindSortableTop(SkOpContourHead* contourHead) {
             }
         } while ((contour = contour->next()));
     }
-<<<<<<< HEAD
     return nullptr;
-=======
-    return NULL;
->>>>>>> miniblink49
 }

@@ -28,10 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/text/QuotedPrintable.h"
 
 #include "wtf/ASCIICType.h"
@@ -42,17 +38,11 @@ static const size_t maximumLineLength = 76;
 
 static const char crlfLineEnding[] = "\r\n";
 
-<<<<<<< HEAD
 static size_t lengthOfLineEndingAtIndex(const char* input,
     size_t inputLength,
     size_t index)
 {
     SECURITY_DCHECK(index < inputLength);
-=======
-static size_t lengthOfLineEndingAtIndex(const char* input, size_t inputLength, size_t index)
-{
-    ASSERT_WITH_SECURITY_IMPLICATION(index < inputLength);
->>>>>>> miniblink49
     if (input[index] == '\n')
         return 1; // Single LF.
 
@@ -70,13 +60,9 @@ void quotedPrintableEncode(const Vector<char>& in, Vector<char>& out)
     quotedPrintableEncode(in.data(), in.size(), out);
 }
 
-<<<<<<< HEAD
 void quotedPrintableEncode(const char* input,
     size_t inputLength,
     Vector<char>& out)
-=======
-void quotedPrintableEncode(const char* input, size_t inputLength, Vector<char>& out)
->>>>>>> miniblink49
 {
     out.clear();
     out.reserveCapacity(inputLength);
@@ -89,12 +75,8 @@ void quotedPrintableEncode(const char* input, size_t inputLength, Vector<char>& 
         if ((currentCharacter < ' ' || currentCharacter > '~' || currentCharacter == '=') && currentCharacter != '\t')
             requiresEncoding = true;
 
-<<<<<<< HEAD
         // Space and tab characters have to be encoded if they appear at the end of
         // a line.
-=======
-        // Space and tab characters have to be encoded if they appear at the end of a line.
->>>>>>> miniblink49
         if (!requiresEncoding && (currentCharacter == '\t' || currentCharacter == ' ') && (isLastCharacter || lengthOfLineEndingAtIndex(input, inputLength, i + 1)))
             requiresEncoding = true;
 
@@ -117,32 +99,19 @@ void quotedPrintableEncode(const char* input, size_t inputLength, Vector<char>& 
 
         // Insert a soft line break if necessary.
         if (currentLineLength + lengthOfEncodedCharacter > maximumLineLength) {
-<<<<<<< HEAD
             out.push_back('=');
-=======
-            out.append('=');
->>>>>>> miniblink49
             out.append(crlfLineEnding, strlen(crlfLineEnding));
             currentLineLength = 0;
         }
 
         // Finally, insert the actual character(s).
         if (requiresEncoding) {
-<<<<<<< HEAD
             out.push_back('=');
             out.push_back(upperNibbleToASCIIHexDigit(currentCharacter));
             out.push_back(lowerNibbleToASCIIHexDigit(currentCharacter));
             currentLineLength += 3;
         } else {
             out.push_back(currentCharacter);
-=======
-            out.append('=');
-            out.append(upperNibbleToASCIIHexDigit(currentCharacter));
-            out.append(lowerNibbleToASCIIHexDigit(currentCharacter));
-            currentLineLength += 3;
-        } else {
-            out.append(currentCharacter);
->>>>>>> miniblink49
             currentLineLength++;
         }
     }
@@ -153,13 +122,9 @@ void quotedPrintableDecode(const Vector<char>& in, Vector<char>& out)
     quotedPrintableDecode(in.data(), in.size(), out);
 }
 
-<<<<<<< HEAD
 void quotedPrintableDecode(const char* data,
     size_t dataLength,
     Vector<char>& out)
-=======
-void quotedPrintableDecode(const char* data, size_t dataLength, Vector<char>& out)
->>>>>>> miniblink49
 {
     out.clear();
     if (!dataLength)
@@ -168,21 +133,13 @@ void quotedPrintableDecode(const char* data, size_t dataLength, Vector<char>& ou
     for (size_t i = 0; i < dataLength; ++i) {
         char currentCharacter = data[i];
         if (currentCharacter != '=') {
-<<<<<<< HEAD
             out.push_back(currentCharacter);
-=======
-            out.append(currentCharacter);
->>>>>>> miniblink49
             continue;
         }
         // We are dealing with a '=xx' sequence.
         if (dataLength - i < 3) {
             // Unfinished = sequence, append as is.
-<<<<<<< HEAD
             out.push_back(currentCharacter);
-=======
-            out.append(currentCharacter);
->>>>>>> miniblink49
             continue;
         }
         char upperCharacter = data[++i];
@@ -191,7 +148,6 @@ void quotedPrintableDecode(const char* data, size_t dataLength, Vector<char>& ou
             continue;
 
         if (!isASCIIHexDigit(upperCharacter) || !isASCIIHexDigit(lowerCharacter)) {
-<<<<<<< HEAD
             // Invalid sequence, = followed by non hex digits, just insert the
             // characters as is.
             out.push_back('=');
@@ -205,16 +161,3 @@ void quotedPrintableDecode(const char* data, size_t dataLength, Vector<char>& ou
 }
 
 } // namespace blink
-=======
-            // Invalid sequence, = followed by non hex digits, just insert the characters as is.
-            out.append('=');
-            out.append(upperCharacter);
-            out.append(lowerCharacter);
-            continue;
-        }
-        out.append(static_cast<char>(toASCIIHexValue(upperCharacter, lowerCharacter)));
-    }
-}
-
-}
->>>>>>> miniblink49

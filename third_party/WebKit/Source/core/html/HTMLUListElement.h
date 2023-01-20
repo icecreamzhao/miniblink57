@@ -29,6 +29,7 @@ namespace blink {
 
 class HTMLUListElement final : public HTMLElement {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     DECLARE_NODE_FACTORY(HTMLUListElement);
 
@@ -36,7 +37,9 @@ private:
     explicit HTMLUListElement(Document&);
 
     bool isPresentationAttribute(const QualifiedName&) const override;
-    void collectStyleForPresentationAttribute(const QualifiedName&, const AtomicString&, MutableStylePropertySet*) override;
+    void collectStyleForPresentationAttribute(const QualifiedName&,
+        const AtomicString&,
+        MutableStylePropertySet*) override;
 };
 
 } // namespace blink

@@ -11,7 +11,6 @@
 namespace v8 {
 namespace internal {
 
-<<<<<<< HEAD
     Handle<Code> Builtins::CallFunction(ConvertReceiverMode mode)
     {
         switch (mode) {
@@ -40,31 +39,3 @@ namespace internal {
 
 } // namespace internal
 } // namespace v8
-=======
-Handle<Code> Builtins::CallFunction(ConvertReceiverMode mode) {
-  switch (mode) {
-    case ConvertReceiverMode::kNullOrUndefined:
-      return builtin_handle(kCallFunction_ReceiverIsNullOrUndefined);
-    case ConvertReceiverMode::kNotNullOrUndefined:
-      return builtin_handle(kCallFunction_ReceiverIsNotNullOrUndefined);
-    case ConvertReceiverMode::kAny:
-      return builtin_handle(kCallFunction_ReceiverIsAny);
-  }
-  UNREACHABLE();
-}
-
-Handle<Code> Builtins::Call(ConvertReceiverMode mode) {
-  switch (mode) {
-    case ConvertReceiverMode::kNullOrUndefined:
-      return builtin_handle(kCall_ReceiverIsNullOrUndefined);
-    case ConvertReceiverMode::kNotNullOrUndefined:
-      return builtin_handle(kCall_ReceiverIsNotNullOrUndefined);
-    case ConvertReceiverMode::kAny:
-      return builtin_handle(kCall_ReceiverIsAny);
-  }
-  UNREACHABLE();
-}
-
-}  // namespace internal
-}  // namespace v8
->>>>>>> miniblink49

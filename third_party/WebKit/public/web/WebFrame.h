@@ -31,7 +31,6 @@
 #ifndef WebFrame_h
 #define WebFrame_h
 
-<<<<<<< HEAD
 #include "WebIconURL.h"
 #include "WebNode.h"
 #include "public/platform/WebCanvas.h"
@@ -39,35 +38,13 @@
 #include "public/web/WebFrameLoadType.h"
 #include "public/web/WebTreeScopeType.h"
 #include <memory>
-=======
-#include "WebCompositionUnderline.h"
-#include "WebHistoryItem.h"
-#include "WebIconURL.h"
-#include "WebNode.h"
-#include "WebURLLoaderOptions.h"
-#include "public/platform/WebCanvas.h"
-#include "public/platform/WebMessagePortChannel.h"
-#include "public/platform/WebPrivateOwnPtr.h"
-#include "public/platform/WebReferrerPolicy.h"
-#include "public/platform/WebURL.h"
-#include "public/platform/WebURLRequest.h"
-#include "public/web/WebTreeScopeType.h"
-
-struct NPObject;
->>>>>>> miniblink49
 
 namespace v8 {
 class Context;
 class Function;
-<<<<<<< HEAD
 class Value;
 template <class T>
 class Local;
-=======
-class Object;
-class Value;
-template <class T> class Local;
->>>>>>> miniblink49
 }
 
 namespace blink {
@@ -75,60 +52,32 @@ namespace blink {
 class Frame;
 class OpenedFrameTracker;
 class Visitor;
-<<<<<<< HEAD
 class WebAssociatedURLLoader;
 struct WebAssociatedURLLoaderOptions;
 class WebDOMEvent;
-=======
->>>>>>> miniblink49
 class WebData;
 class WebDataSource;
 class WebDocument;
 class WebElement;
-<<<<<<< HEAD
 class WebFrameImplBase;
 class WebLocalFrame;
 class WebPerformance;
-=======
-class WebLayer;
-class WebLocalFrame;
-class WebPerformance;
-class WebRange;
->>>>>>> miniblink49
 class WebRemoteFrame;
 class WebSecurityOrigin;
 class WebSharedWorkerRepositoryClient;
 class WebString;
 class WebURL;
-<<<<<<< HEAD
 class WebURLRequest;
 class WebView;
 enum class WebSandboxFlags;
 struct WebFrameOwnerProperties;
-=======
-class WebURLLoader;
-class WebURLRequest;
-class WebView;
-enum class WebSandboxFlags;
-struct WebConsoleMessage;
-struct WebFindOptions;
-struct WebFloatPoint;
-struct WebFloatRect;
-struct WebPoint;
->>>>>>> miniblink49
 struct WebPrintParams;
 struct WebRect;
 struct WebScriptSource;
 struct WebSize;
-<<<<<<< HEAD
 
 template <typename T>
 class WebVector;
-=======
-struct WebURLLoaderOptions;
-
-template <typename T> class WebVector;
->>>>>>> miniblink49
 
 // Frames may be rendered in process ('local') or out of process ('remote').
 // A remote frame is always cross-site; a local frame may be either same-site or
@@ -138,18 +87,6 @@ template <typename T> class WebVector;
 // getting a frame's parent or its opener.
 class WebFrame {
 public:
-<<<<<<< HEAD
-=======
-    // Control of layoutTreeAsText output
-    enum LayoutAsTextControl {
-        LayoutAsTextNormal = 0,
-        LayoutAsTextDebug = 1 << 0,
-        LayoutAsTextPrinting = 1 << 1,
-        LayoutAsTextWithLineTrees = 1 << 2
-    };
-    typedef unsigned LayoutAsTextControls;
-
->>>>>>> miniblink49
     // FIXME: We already have blink::TextGranularity. For now we support only
     // a part of blink::TextGranularity.
     // Ideally it seems blink::TextGranularity should be broken up into
@@ -175,11 +112,7 @@ public:
     // This method closes and deletes the WebFrame. This is typically called by
     // the embedder in response to a frame detached callback to the WebFrame
     // client.
-<<<<<<< HEAD
     virtual void close();
-=======
-    virtual void close() = 0;
->>>>>>> miniblink49
 
     // Called by the embedder when it needs to detach the subtree rooted at this
     // frame.
@@ -204,7 +137,6 @@ public:
     // URLs
     virtual WebVector<WebIconURL> iconURLs(int iconTypesMask) const = 0;
 
-<<<<<<< HEAD
     // Initializes the various client interfaces.
     virtual void setSharedWorkerRepositoryClient(
         WebSharedWorkerRepositoryClient*)
@@ -212,18 +144,6 @@ public:
 
     // The security origin of this frame.
     BLINK_EXPORT WebSecurityOrigin getSecurityOrigin() const;
-=======
-    // For a WebFrame with contents being rendered in another process, this
-    // sets a layer for use by the in-process compositor. WebLayer should be
-    // null if the content is being rendered in the current process.
-    virtual void setRemoteWebLayer(WebLayer*) = 0;
-
-    // Initializes the various client interfaces.
-    virtual void setSharedWorkerRepositoryClient(WebSharedWorkerRepositoryClient*) = 0;
-
-    // The security origin of this frame.
-    BLINK_EXPORT WebSecurityOrigin securityOrigin() const;
->>>>>>> miniblink49
 
     // Updates the sandbox flags in the frame's FrameOwner.  This is used when
     // this frame's parent is in another process and it dynamically updates
@@ -231,7 +151,6 @@ public:
     // navigation.
     BLINK_EXPORT void setFrameOwnerSandboxFlags(WebSandboxFlags);
 
-<<<<<<< HEAD
     // The frame's insecure request policy.
     BLINK_EXPORT WebInsecureRequestPolicy getInsecureRequestPolicy() const;
 
@@ -242,8 +161,6 @@ public:
     // navigation.  This matches the in-process frame behavior.
     BLINK_EXPORT void setFrameOwnerProperties(const WebFrameOwnerProperties&);
 
-=======
->>>>>>> miniblink49
     // Geometry -----------------------------------------------------------
 
     // NOTE: These routines do not force page layout so their results may
@@ -253,19 +170,9 @@ public:
     virtual void setCanHaveScrollbars(bool) = 0;
 
     // The scroll offset from the top-left corner of the frame in pixels.
-<<<<<<< HEAD
     virtual WebSize getScrollOffset() const = 0;
     virtual void setScrollOffset(const WebSize&) = 0;
 
-=======
-    virtual WebSize scrollOffset() const = 0;
-    virtual void setScrollOffset(const WebSize&) = 0;
-
-    // The minimum and maxium scroll positions in pixels.
-    virtual WebSize minimumScrollOffset() const = 0;
-    virtual WebSize maximumScrollOffset() const = 0;
-
->>>>>>> miniblink49
     // The size of the contents area.
     virtual WebSize contentsSize() const = 0;
 
@@ -287,11 +194,7 @@ public:
     BLINK_EXPORT WebFrame* opener() const;
 
     // Sets the frame that opened this one or 0 if there is none.
-<<<<<<< HEAD
     BLINK_EXPORT void setOpener(WebFrame*);
-=======
-    virtual void setOpener(WebFrame*);
->>>>>>> miniblink49
 
     // Reset the frame that opened this frame to 0.
     // This is executed between layout tests runs
@@ -305,11 +208,7 @@ public:
     BLINK_EXPORT void appendChild(WebFrame*);
 
     // Removes the given child from this frame.
-<<<<<<< HEAD
     BLINK_EXPORT void removeChild(WebFrame*);
-=======
-    virtual void removeChild(WebFrame*);
->>>>>>> miniblink49
 
     // Returns the parent frame or 0 if this is a top-most frame.
     BLINK_EXPORT WebFrame* parent() const;
@@ -317,7 +216,6 @@ public:
     // Returns the top-most frame in the hierarchy containing this frame.
     BLINK_EXPORT WebFrame* top() const;
 
-<<<<<<< HEAD
     // Returns the first child frame.
     BLINK_EXPORT WebFrame* firstChild() const;
 
@@ -326,29 +224,10 @@ public:
 
     // Returns the next frame in "frame traversal order".
     BLINK_EXPORT WebFrame* traverseNext() const;
-=======
-    // Returns the first/last child frame.
-    BLINK_EXPORT WebFrame* firstChild() const;
-    BLINK_EXPORT WebFrame* lastChild() const;
-
-    // Returns the previous/next sibling frame.
-    BLINK_EXPORT WebFrame* previousSibling() const;
-    BLINK_EXPORT WebFrame* nextSibling() const;
-
-    // Returns the previous/next frame in "frame traversal order",
-    // optionally wrapping around.
-    BLINK_EXPORT WebFrame* traversePrevious(bool wrap) const;
-    BLINK_EXPORT WebFrame* traverseNext(bool wrap) const;
-
-    // Returns the child frame identified by the given name.
-    BLINK_EXPORT WebFrame* findChildByName(const WebString& name) const;
-
->>>>>>> miniblink49
 
     // Content ------------------------------------------------------------
 
     virtual WebDocument document() const = 0;
-<<<<<<< HEAD
 
     virtual WebPerformance performance() const = 0;
 
@@ -359,32 +238,6 @@ public:
 
     // Scripting ----------------------------------------------------------
 
-=======
-#ifdef IMPLEMENTED_NEWEST_BLINK
-    virtual WebPerformance performance() const = 0;
-#endif // IMPLEMENTED_NEWEST_BLINK
-
-    // Closing -------------------------------------------------------------
-
-    // Runs beforeunload handlers for this frame, returning false if a
-    // handler suppressed unloading.
-    virtual bool dispatchBeforeUnloadEvent() = 0;
-
-    // Runs unload handlers for this frame.
-    virtual void dispatchUnloadEvent() = 0;
-
-
-    // Scripting ----------------------------------------------------------
-
-    // Returns a NPObject corresponding to this frame's DOMWindow.
-    virtual NPObject* windowObject() const = 0;
-
-    // Binds a NPObject as a property of this frame's DOMWindow.
-    virtual void bindToWindowObject(const WebString& name, NPObject*) = 0;
-    virtual void bindToWindowObject(
-        const WebString& name, NPObject*, void*) = 0;
-
->>>>>>> miniblink49
     // Executes script in the context of the current page.
     virtual void executeScript(const WebScriptSource&) = 0;
 
@@ -392,7 +245,6 @@ public:
     // The script gets its own global scope and its own prototypes for
     // intrinsic JavaScript objects (String, Array, and so-on). It also
     // gets its own wrappers for all DOM nodes and DOM constructors.
-<<<<<<< HEAD
     //
     // worldID must be > 0 (as 0 represents the main world).
     // worldID must be < EmbedderWorldIdLimit, high number used internally.
@@ -400,29 +252,13 @@ public:
         const WebScriptSource* sources,
         unsigned numSources)
         = 0;
-=======
-    // extensionGroup is an embedder-provided specifier that controls which
-    // v8 extensions are loaded into the new context - see
-    // blink::registerExtension for the corresponding specifier.
-    //
-    // worldID must be > 0 (as 0 represents the main world).
-    // worldID must be < EmbedderWorldIdLimit, high number used internally.
-    virtual void executeScriptInIsolatedWorld(
-        int worldID, const WebScriptSource* sources, unsigned numSources,
-        int extensionGroup) = 0;
->>>>>>> miniblink49
 
     // Associates an isolated world (see above for description) with a security
     // origin. XMLHttpRequest instances used in that world will be considered
     // to come from that origin, not the frame's.
-<<<<<<< HEAD
     virtual void setIsolatedWorldSecurityOrigin(int worldID,
         const WebSecurityOrigin&)
         = 0;
-=======
-    virtual void setIsolatedWorldSecurityOrigin(
-        int worldID, const WebSecurityOrigin&) = 0;
->>>>>>> miniblink49
 
     // Associates a content security policy with an isolated world. This policy
     // should be used when evaluating script in the isolated world, and should
@@ -431,53 +267,29 @@ public:
     //
     // FIXME: Setting this simply bypasses the protected resource's CSP. It
     //     doesn't yet restrict the isolated world to the provided policy.
-<<<<<<< HEAD
     virtual void setIsolatedWorldContentSecurityPolicy(int worldID,
         const WebString&)
         = 0;
-=======
-    virtual void setIsolatedWorldContentSecurityPolicy(
-        int worldID, const WebString&) = 0;
-
-    // Logs to the console associated with this frame.
-    virtual void addMessageToConsole(const WebConsoleMessage&) = 0;
->>>>>>> miniblink49
 
     // Calls window.gc() if it is defined.
     virtual void collectGarbage() = 0;
 
-<<<<<<< HEAD
-=======
-    // Check if the scripting URL represents a mixed content condition relative
-    // to this frame.
-    virtual bool checkIfRunInsecureContent(const WebURL&) const = 0;
-
->>>>>>> miniblink49
     // Executes script in the context of the current page and returns the value
     // that the script evaluated to.
     // DEPRECATED: Use WebLocalFrame::requestExecuteScriptAndReturnValue.
     virtual v8::Local<v8::Value> executeScriptAndReturnValue(
-<<<<<<< HEAD
         const WebScriptSource&)
         = 0;
-=======
-        const WebScriptSource&) = 0;
->>>>>>> miniblink49
 
     // worldID must be > 0 (as 0 represents the main world).
     // worldID must be < EmbedderWorldIdLimit, high number used internally.
     // DEPRECATED: Use WebLocalFrame::requestExecuteScriptInIsolatedWorld.
     virtual void executeScriptInIsolatedWorld(
-<<<<<<< HEAD
         int worldID,
         const WebScriptSource* sourcesIn,
         unsigned numSources,
         WebVector<v8::Local<v8::Value>>* results)
         = 0;
-=======
-        int worldID, const WebScriptSource* sourcesIn, unsigned numSources,
-        int extensionGroup, WebVector<v8::Local<v8::Value> >* results) = 0;
->>>>>>> miniblink49
 
     // Call the function with the given receiver and arguments, bypassing
     // canExecute().
@@ -485,12 +297,8 @@ public:
         v8::Local<v8::Function>,
         v8::Local<v8::Value>,
         int argc,
-<<<<<<< HEAD
         v8::Local<v8::Value> argv[])
         = 0;
-=======
-        v8::Local<v8::Value> argv[]) = 0;
->>>>>>> miniblink49
 
     // Returns the V8 context for associated with the main world and this
     // frame. There can be many V8 contexts associated with this frame, one for
@@ -499,15 +307,10 @@ public:
     // be calling this API.
     virtual v8::Local<v8::Context> mainWorldScriptContext() const = 0;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
     // Returns true if the WebFrame currently executing JavaScript has access
     // to the given WebFrame, or false otherwise.
     BLINK_EXPORT static bool scriptCanAccess(WebFrame*);
 
-<<<<<<< HEAD
     // Navigation ----------------------------------------------------------
     // TODO(clamy): Remove the reload, reloadWithOverrideURL, and loadRequest
     // functions once RenderFrame only calls WebLoadFrame::load.
@@ -522,23 +325,10 @@ public:
     virtual void reloadWithOverrideURL(const WebURL& overrideUrl,
         WebFrameLoadType)
         = 0;
-=======
-
-    // Navigation ----------------------------------------------------------
-
-    // Reload the current document.
-    // True |ignoreCache| explicitly bypasses caches.
-    // False |ignoreCache| revalidates any existing cache entries.
-    virtual void reload(bool ignoreCache = false) = 0;
-
-    // This is used for situations where we want to reload a different URL because of a redirect.
-    virtual void reloadWithOverrideURL(const WebURL& overrideUrl, bool ignoreCache = false) = 0;
->>>>>>> miniblink49
 
     // Load the given URL.
     virtual void loadRequest(const WebURLRequest&) = 0;
 
-<<<<<<< HEAD
     // This method is short-hand for calling LoadData, where mime_type is
     // "text/html" and text_encoding is "UTF-8".
     virtual void loadHTMLString(const WebData& html,
@@ -546,34 +336,6 @@ public:
         const WebURL& unreachableURL = WebURL(),
         bool replace = false)
         = 0;
-=======
-    // Load the given history state, corresponding to a back/forward
-    // navigation of a frame. Multiple frames may be navigated via separate calls.
-    virtual void loadHistoryItem(
-        const WebHistoryItem&,
-        WebHistoryLoadType,
-        WebURLRequest::CachePolicy = WebURLRequest::UseProtocolCachePolicy) = 0;
-
-    // Loads the given data with specific mime type and optional text
-    // encoding.  For HTML data, baseURL indicates the security origin of
-    // the document and is used to resolve links.  If specified,
-    // unreachableURL is reported via WebDataSource::unreachableURL.  If
-    // replace is false, then this data will be loaded as a normal
-    // navigation.  Otherwise, the current history item will be replaced.
-    virtual void loadData(const WebData& data,
-                          const WebString& mimeType,
-                          const WebString& textEncoding,
-                          const WebURL& baseURL,
-                          const WebURL& unreachableURL = WebURL(),
-                          bool replace = false) = 0;
-
-    // This method is short-hand for calling LoadData, where mime_type is
-    // "text/html" and text_encoding is "UTF-8".
-    virtual void loadHTMLString(const WebData& html,
-                                const WebURL& baseURL,
-                                const WebURL& unreachableURL = WebURL(),
-                                bool replace = false) = 0;
->>>>>>> miniblink49
 
     // Stops any pending loads on the frame and its children.
     virtual void stopLoading() = 0;
@@ -602,7 +364,6 @@ public:
     // DEPRECATED: Please use createAssociatedURLLoader instead.
     virtual void dispatchWillSendRequest(WebURLRequest&) = 0;
 
-<<<<<<< HEAD
     // Returns an AssociatedURLLoader that is associated with this frame.  The
     // loader will, for example, be cancelled when WebFrame::stopLoading is
     // called.
@@ -611,96 +372,18 @@ public:
     virtual WebAssociatedURLLoader* createAssociatedURLLoader(
         const WebAssociatedURLLoaderOptions&)
         = 0;
-=======
-    // Returns a WebURLLoader that is associated with this frame.  The loader
-    // will, for example, be cancelled when WebFrame::stopLoading is called.
-    // FIXME: stopLoading does not yet cancel an associated loader!!
-    virtual WebURLLoader* createAssociatedURLLoader(const WebURLLoaderOptions& = WebURLLoaderOptions()) = 0;
->>>>>>> miniblink49
 
     // Returns the number of registered unload listeners.
     virtual unsigned unloadListenerCount() const = 0;
 
-<<<<<<< HEAD
     // Will return true if between didStartLoading and didStopLoading
     // notifications.
     virtual bool isLoading() const;
-=======
-
-    // Editing -------------------------------------------------------------
-
-    // Replaces the selection with the given text.
-    virtual void replaceSelection(const WebString& text) = 0;
-
-    virtual void insertText(const WebString& text) = 0;
-
-    virtual void setMarkedText(const WebString& text, unsigned location, unsigned length) = 0;
-    virtual void unmarkText() = 0;
-    virtual bool hasMarkedText() const = 0;
-
-    virtual WebRange markedRange() const = 0;
-
-    // Returns the text range rectangle in the viepwort coordinate space.
-    virtual bool firstRectForCharacterRange(unsigned location, unsigned length, WebRect&) const = 0;
-
-    // Returns the index of a character in the Frame's text stream at the given
-    // point. The point is in the viewport coordinate space. Will return
-    // WTF::notFound if the point is invalid.
-    virtual size_t characterIndexForPoint(const WebPoint&) const = 0;
-
-    // Supports commands like Undo, Redo, Cut, Copy, Paste, SelectAll,
-    // Unselect, etc. See EditorCommand.cpp for the full list of supported
-    // commands.
-    virtual bool executeCommand(const WebString&, const WebNode& = WebNode()) = 0;
-    virtual bool executeCommand(const WebString&, const WebString& value, const WebNode& = WebNode()) = 0;
-    virtual bool isCommandEnabled(const WebString&) const = 0;
-
-    // Spell-checking support.
-    virtual void enableContinuousSpellChecking(bool) = 0;
-    virtual bool isContinuousSpellCheckingEnabled() const = 0;
-    virtual void requestTextChecking(const WebElement&) = 0;
-    virtual void replaceMisspelledRange(const WebString&) = 0;
-    virtual void removeSpellingMarkers() = 0;
-
-    // Selection -----------------------------------------------------------
-
-    virtual bool hasSelection() const = 0;
-
-    virtual WebRange selectionRange() const = 0;
-
-    virtual WebString selectionAsText() const = 0;
-    virtual WebString selectionAsMarkup() const = 0;
-
-    // Expands the selection to a word around the caret and returns
-    // true. Does nothing and returns false if there is no caret or
-    // there is ranged selection.
-    virtual bool selectWordAroundCaret() = 0;
-
-    // DEPRECATED: Use moveRangeSelection.
-    virtual void selectRange(const WebPoint& base, const WebPoint& extent) = 0;
-
-    virtual void selectRange(const WebRange&) = 0;
-
-    // Move the current selection to the provided viewport point/points. If the
-    // current selection is editable, the new selection will be restricted to
-    // the root editable element.
-    // |TextGranularity| represents character wrapping granularity. If
-    // WordGranularity is set, WebFrame extends selection to wrap word.
-    virtual void moveRangeSelection(const WebPoint& base, const WebPoint& extent, WebFrame::TextGranularity = CharacterGranularity) = 0;
-    virtual void moveCaretSelection(const WebPoint&) = 0;
-
-    virtual bool setEditableSelectionOffsets(int start, int end) = 0;
-    virtual bool setCompositionFromExistingText(int compositionStart, int compositionEnd, const WebVector<WebCompositionUnderline>& underlines) = 0;
-    virtual void extendSelectionAndDelete(int before, int after) = 0;
-
-    virtual void setCaretVisible(bool) = 0;
->>>>>>> miniblink49
 
     // Printing ------------------------------------------------------------
 
     // Reformats the WebFrame for printing. WebPrintParams specifies the printable
     // content size, paper size, printable area size, printer DPI and print
-<<<<<<< HEAD
     // scaling option. If constrainToNode node is specified, then only the given
     // node is printed (for now only plugins are supported), instead of the entire
     // frame.
@@ -712,25 +395,11 @@ public:
 
     // Returns the page shrinking factor calculated by webkit (usually
     // between 1/1.33 and 1/2). Returns 0 if the page number is invalid or
-=======
-    // scaling option. If constrainToNode node is specified, then only the given node
-    // is printed (for now only plugins are supported), instead of the entire frame.
-    // Returns the number of pages that can be printed at the given
-    // page size.
-    virtual int printBegin(const WebPrintParams&, const WebNode& constrainToNode = WebNode()) = 0;
-
-    // Returns the page shrinking factor calculated by webkit (usually
-    // between 1/1.25 and 1/2). Returns 0 if the page number is invalid or
->>>>>>> miniblink49
     // not in printing mode.
     virtual float getPrintPageShrink(int page) = 0;
 
     // Prints one page, and returns the calculated page shrinking factor
-<<<<<<< HEAD
     // (usually between 1/1.33 and 1/2).  Returns 0 if the page number is
-=======
-    // (usually between 1/1.25 and 1/2).  Returns 0 if the page number is
->>>>>>> miniblink49
     // invalid or not in printing mode.
     virtual float printPage(int pageToPrint, WebCanvas*) = 0;
 
@@ -742,161 +411,16 @@ public:
     // return true, otherwise return false.
     virtual bool isPrintScalingDisabledForPlugin(const WebNode& = WebNode()) = 0;
 
-<<<<<<< HEAD
-=======
-    // CSS3 Paged Media ----------------------------------------------------
-
-    // Returns true if page box (margin boxes and page borders) is visible.
-    virtual bool isPageBoxVisible(int pageIndex) = 0;
-
-    // Returns true if the page style has custom size information.
-    virtual bool hasCustomPageSizeStyle(int pageIndex) = 0;
-
-    // Returns the preferred page size and margins in pixels, assuming 96
-    // pixels per inch. pageSize, marginTop, marginRight, marginBottom,
-    // marginLeft must be initialized to the default values that are used if
-    // auto is specified.
-    virtual void pageSizeAndMarginsInPixels(int pageIndex,
-                                            WebSize& pageSize,
-                                            int& marginTop,
-                                            int& marginRight,
-                                            int& marginBottom,
-                                            int& marginLeft) = 0;
-
-    // Returns the value for a page property that is only defined when printing.
-    // printBegin must have been called before this method.
-    virtual WebString pageProperty(const WebString& propertyName, int pageIndex) = 0;
-
-    // Find-in-page --------------------------------------------------------
-
-    // Searches a frame for a given string.
-    //
-    // If a match is found, this function will select it (scrolling down to
-    // make it visible if needed) and fill in selectionRect with the
-    // location of where the match was found (in window coordinates).
-    //
-    // If no match is found, this function clears all tickmarks and
-    // highlighting.
-    //
-    // Returns true if the search string was found, false otherwise.
-    virtual bool find(int identifier,
-                      const WebString& searchText,
-                      const WebFindOptions& options,
-                      bool wrapWithinFrame,
-                      WebRect* selectionRect) = 0;
-
-    // Notifies the frame that we are no longer interested in searching.
-    // This will abort any asynchronous scoping effort already under way
-    // (see the function scopeStringMatches for details) and erase all
-    // tick-marks and highlighting from the previous search.  If
-    // clearSelection is true, it will also make sure the end state for the
-    // find operation does not leave a selection.  This can occur when the
-    // user clears the search string but does not close the find box.
-    virtual void stopFinding(bool clearSelection) = 0;
-
-    // Counts how many times a particular string occurs within the frame.
-    // It also retrieves the location of the string and updates a vector in
-    // the frame so that tick-marks and highlighting can be drawn.  This
-    // function does its work asynchronously, by running for a certain
-    // time-slice and then scheduling itself (co-operative multitasking) to
-    // be invoked later (repeating the process until all matches have been
-    // found).  This allows multiple frames to be searched at the same time
-    // and provides a way to cancel at any time (see
-    // cancelPendingScopingEffort).  The parameter searchText specifies
-    // what to look for and |reset| signals whether this is a brand new
-    // request or a continuation of the last scoping effort.
-    virtual void scopeStringMatches(int identifier,
-                                    const WebString& searchText,
-                                    const WebFindOptions& options,
-                                    bool reset) = 0;
-
-    // Cancels any outstanding requests for scoping string matches on a frame.
-    virtual void cancelPendingScopingEffort() = 0;
-
-    // This function is called on the main frame during the scoping effort
-    // to keep a running tally of the accumulated total match-count for all
-    // frames.  After updating the count it will notify the WebViewClient
-    // about the new count.
-    virtual void increaseMatchCount(int count, int identifier) = 0;
-
-    // This function is called on the main frame to reset the total number
-    // of matches found during the scoping effort.
-    virtual void resetMatchCount() = 0;
-
-    // Returns a counter that is incremented when the find-in-page markers are
-    // changed on any frame. Switching the active marker doesn't change the
-    // current version. Should be called only on the main frame.
-    virtual int findMatchMarkersVersion() const = 0;
-
-    // Returns the bounding box of the active find-in-page match marker or an
-    // empty rect if no such marker exists. The rect is returned in find-in-page
-    // coordinates whatever frame the active marker is.
-    // Should be called only on the main frame.
-    virtual WebFloatRect activeFindMatchRect() = 0;
-
-    // Swaps the contents of the provided vector with the bounding boxes of the
-    // find-in-page match markers from all frames. The bounding boxes are returned
-    // in find-in-page coordinates. This method should be called only on the main frame.
-    virtual void findMatchRects(WebVector<WebFloatRect>&) = 0;
-
-    // Selects the find-in-page match in the appropriate frame closest to the
-    // provided point in find-in-page coordinates. Returns the ordinal of such
-    // match or -1 if none could be found. If not null, selectionRect is set to
-    // the bounding box of the selected match in window coordinates.
-    // This method should be called only on the main frame.
-    virtual int selectNearestFindMatch(const WebFloatPoint&,
-                                       WebRect* selectionRect) = 0;
-
-
-    // Set the tickmarks for the frame. This will override the default tickmarks
-    // generated by find results. If this is called with an empty array, the
-    // default behavior will be restored.
-    virtual void setTickmarks(const WebVector<WebRect>&) = 0;
-
->>>>>>> miniblink49
     // Events --------------------------------------------------------------
 
     // Dispatches a message event on the current DOMWindow in this WebFrame.
     virtual void dispatchMessageEventWithOriginCheck(
         const WebSecurityOrigin& intendedTargetOrigin,
-<<<<<<< HEAD
         const WebDOMEvent&)
         = 0;
 
     // Utility -------------------------------------------------------------
 
-=======
-        const WebDOMEvent&) = 0;
-
-
-    // Utility -------------------------------------------------------------
-
-    // Returns the contents of this frame as a string.  If the text is
-    // longer than maxChars, it will be clipped to that length.  WARNING:
-    // This function may be slow depending on the number of characters
-    // retrieved and page complexity.  For a typically sized page, expect
-    // it to take on the order of milliseconds.
-    //
-    // If there is room, subframe text will be recursively appended. Each
-    // frame will be separated by an empty line.
-    virtual WebString contentAsText(size_t maxChars) const = 0;
-
-    // Returns HTML text for the contents of this frame.  This is generated
-    // from the DOM.
-    virtual WebString contentAsMarkup() const = 0;
-
-    // Returns a text representation of the render tree.  This method is used
-    // to support layout tests.
-    virtual WebString layoutTreeAsText(LayoutAsTextControls toShow = LayoutAsTextNormal) const = 0;
-
-    // Draws the contents of the web frame at the specified region onto the
-    // specified canvas
-    virtual void drawInCanvas(const WebRect& rect, const WebString& customCSS, WebCanvas* canvas) const {};
-
-    // Calls markerTextForListItem() defined in core/layout/LayoutTreeAsText.h.
-    virtual WebString markerTextForListItem(const WebElement&) const = 0;
-
->>>>>>> miniblink49
     // Prints all of the pages into the canvas, with page boundaries drawn as
     // one pixel wide blue lines. This method exists to support layout tests.
     virtual void printPagesWithBoundaries(WebCanvas*, const WebSize&) = 0;
@@ -907,18 +431,10 @@ public:
     // empty ((0,0), (0,0)).
     virtual WebRect selectionBoundsRect() const = 0;
 
-<<<<<<< HEAD
-=======
-    // Only for testing purpose:
-    // Returns true if selection.anchorNode has a marker on range from |from| with |length|.
-    virtual bool selectionStartHasSpellingMarkerFor(int from, int length) const = 0;
-
->>>>>>> miniblink49
     // Dumps the layer tree, used by the accelerated compositor, in
     // text form. This is used only by layout tests.
     virtual WebString layerTreeAsText(bool showDebugInfo = false) const = 0;
 
-<<<<<<< HEAD
     virtual WebFrameImplBase* toImplBase() = 0;
     // TODO(dcheng): Fix const-correctness issues and remove this overload.
     virtual const WebFrameImplBase* toImplBase() const
@@ -926,8 +442,6 @@ public:
         return const_cast<WebFrame*>(this)->toImplBase();
     }
 
-=======
->>>>>>> miniblink49
     // Returns the frame inside a given frame or iframe element. Returns 0 if
     // the given element is not a frame, iframe or if the frame is empty.
     BLINK_EXPORT static WebFrame* fromFrameOwnerElement(const WebElement&);
@@ -937,17 +451,8 @@ public:
 
     bool inShadowTree() const { return m_scope == WebTreeScopeType::Shadow; }
 
-<<<<<<< HEAD
     static void traceFrames(Visitor*, WebFrame*);
     static void traceFrames(InlinedGlobalMarkingVisitor, WebFrame*);
-=======
-#if ENABLE(OILPAN)
-    static void traceFrames(Visitor*, WebFrame*);
-    static void traceFrames(InlinedGlobalMarkingVisitor, WebFrame*);
-    void clearWeakFrames(Visitor*);
-    void clearWeakFrames(InlinedGlobalMarkingVisitor);
-#endif
->>>>>>> miniblink49
 #endif
 
 protected:
@@ -961,36 +466,18 @@ protected:
     void setParent(WebFrame*);
 
 private:
-<<<<<<< HEAD
 #if BLINK_IMPLEMENTATION
     friend class OpenedFrameTracker;
     friend class WebFrameTest;
 
     static void traceFrame(Visitor*, WebFrame*);
     static void traceFrame(InlinedGlobalMarkingVisitor, WebFrame*);
-=======
-    friend class OpenedFrameTracker;
-
-#if BLINK_IMPLEMENTATION
-#if ENABLE(OILPAN)
-    static void traceFrame(Visitor*, WebFrame*);
-    static void traceFrame(InlinedGlobalMarkingVisitor, WebFrame*);
-    static bool isFrameAlive(const WebFrame*);
->>>>>>> miniblink49
 
     template <typename VisitorDispatcher>
     static void traceFramesImpl(VisitorDispatcher, WebFrame*);
     template <typename VisitorDispatcher>
-<<<<<<< HEAD
     static void traceFrameImpl(VisitorDispatcher, WebFrame*);
 #endif
-=======
-    void clearWeakFramesImpl(VisitorDispatcher);
-    template <typename VisitorDispatcher>
-    static void traceFrameImpl(VisitorDispatcher, WebFrame*);
-#endif
-#endif
->>>>>>> miniblink49
 
     const WebTreeScopeType m_scope;
 
@@ -1001,11 +488,7 @@ private:
     WebFrame* m_lastChild;
 
     WebFrame* m_opener;
-<<<<<<< HEAD
     std::unique_ptr<OpenedFrameTracker> m_openedFrameTracker;
-=======
-    WebPrivateOwnPtr<OpenedFrameTracker> m_openedFrameTracker;
->>>>>>> miniblink49
 };
 
 #if BLINK_IMPLEMENTATION

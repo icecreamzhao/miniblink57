@@ -36,7 +36,6 @@ class DeviceOrientationData;
 
 class DeviceOrientationEvent final : public Event {
     DEFINE_WRAPPERTYPEINFO();
-<<<<<<< HEAD
 
 public:
     ~DeviceOrientationEvent() override;
@@ -54,31 +53,13 @@ public:
         const Nullable<double>& beta,
         const Nullable<double>& gamma,
         bool absolute);
-=======
-public:
-    ~DeviceOrientationEvent() override;
-    static PassRefPtrWillBeRawPtr<DeviceOrientationEvent> create()
-    {
-        return adoptRefWillBeNoop(new DeviceOrientationEvent);
-    }
-    static PassRefPtrWillBeRawPtr<DeviceOrientationEvent> create(const AtomicString& eventType, DeviceOrientationData* orientation)
-    {
-        return adoptRefWillBeNoop(new DeviceOrientationEvent(eventType, orientation));
-    }
-
-    void initDeviceOrientationEvent(const AtomicString& type, bool bubbles, bool cancelable, const Nullable<double>& alpha, const Nullable<double>& beta, const Nullable<double>& gamma, const Nullable<bool>& absolute);
->>>>>>> miniblink49
 
     DeviceOrientationData* orientation() const { return m_orientation.get(); }
 
     double alpha(bool& isNull) const;
     double beta(bool& isNull) const;
     double gamma(bool& isNull) const;
-<<<<<<< HEAD
     bool absolute() const;
-=======
-    bool absolute(bool& isNull) const;
->>>>>>> miniblink49
 
     const AtomicString& interfaceName() const override;
 
@@ -88,7 +69,6 @@ private:
     DeviceOrientationEvent();
     DeviceOrientationEvent(const AtomicString& eventType, DeviceOrientationData*);
 
-<<<<<<< HEAD
     Member<DeviceOrientationData> m_orientation;
 };
 
@@ -97,12 +77,6 @@ DEFINE_TYPE_CASTS(DeviceOrientationEvent,
     event,
     event->interfaceName() == EventNames::DeviceOrientationEvent,
     event.interfaceName() == EventNames::DeviceOrientationEvent);
-=======
-    PersistentWillBeMember<DeviceOrientationData> m_orientation;
-};
-
-DEFINE_TYPE_CASTS(DeviceOrientationEvent, Event, event, event->interfaceName() == EventNames::DeviceOrientationEvent, event.interfaceName() == EventNames::DeviceOrientationEvent);
->>>>>>> miniblink49
 
 } // namespace blink
 

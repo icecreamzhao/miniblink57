@@ -6,10 +6,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #ifndef SkExtras_DEFINED
 #define SkExtras_DEFINED
 
@@ -17,13 +13,8 @@
 
 class SkExtras {
 public:
-<<<<<<< HEAD
     SkExtras();
     virtual ~SkExtras() { }
-=======
-            SkExtras();
-    virtual ~SkExtras() {}
->>>>>>> miniblink49
 
     virtual SkDisplayable* createInstance(SkDisplayTypes type) = 0;
     virtual bool definesType(SkDisplayTypes type) = 0;
@@ -33,11 +24,7 @@ public:
 #ifdef SK_DEBUG
     virtual const char* getName(SkDisplayTypes type) = 0;
 #endif
-<<<<<<< HEAD
     virtual SkDisplayTypes getType(const char match[], size_t len) = 0;
-=======
-    virtual SkDisplayTypes getType(const char match[], size_t len ) = 0;
->>>>>>> miniblink49
 
     SkScriptEngine::_propertyCallBack fExtraCallBack;
     void* fExtraStorage;

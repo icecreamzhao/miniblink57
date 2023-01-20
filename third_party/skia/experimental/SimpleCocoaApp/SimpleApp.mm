@@ -1,12 +1,9 @@
-<<<<<<< HEAD
 /*
  * Copyright 2011 Google Inc.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-=======
->>>>>>> miniblink49
 #include "SkCanvas.h"
 #include "SkCGUtils.h"
 #include "SkGraphics.h"
@@ -32,23 +29,14 @@ static SkPicture* LoadPicture(const char path[]) {
     SkBitmap bm;
     if (SkImageDecoder::DecodeFile(path, &bm)) {
         bm.setImmutable();
-<<<<<<< HEAD
         pic = new SkPicture;
-=======
-        pic = SkNEW(SkPicture);
->>>>>>> miniblink49
         SkCanvas* can = pic->beginRecording(bm.width(), bm.height());
         can->drawBitmap(bm, 0, 0, NULL);
         pic->endRecording();
     } else {
         SkFILEStream stream(path);
         if (stream.isValid()) {
-<<<<<<< HEAD
             pic = new SkPicture(&stream, NULL, &SkImageDecoder::DecodeStream);
-=======
-            pic = SkNEW_ARGS(SkPicture,
-                             (&stream, NULL, &SkImageDecoder::DecodeStream));
->>>>>>> miniblink49
         }
 
         if (false) { // re-record
@@ -81,11 +69,7 @@ protected:
      //   SkRect r = {50, 50, 80, 80};
         p.setColor(0xAA11EEAA);
    //     canvas->drawRect(r, p);
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> miniblink49
         SkRect result;
         SkPath path;
         path.moveTo(0, 0);
@@ -93,11 +77,7 @@ protected:
         path.lineTo(1, 8);
         path.lineTo(0, 9);
         SkASSERT(path.hasRectangularInterior(&result));
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> miniblink49
         path.reset();
         path.addRect(10, 10, 100, 100, SkPath::kCW_Direction);
         path.addRect(20, 20, 50, 50, SkPath::kCW_Direction);
@@ -114,11 +94,7 @@ protected:
 
     }
 private:
-<<<<<<< HEAD
     typedef SkView INHERITED;
-=======
-    typedef SkView INHERITED; 
->>>>>>> miniblink49
 };
 
 void application_init();
@@ -218,20 +194,12 @@ class PathCanvas : public SkCanvas {
         path.hasRectangularInterior(&copy);
         SkDebugf("</div>\n\n");
     }
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> miniblink49
     virtual void drawPosTextH(const void* text, size_t byteLength,
                               const SkScalar xpos[], SkScalar constY,
                               const SkPaint& paint) {
     }
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> miniblink49
 public:
     void divName(const SkString& str, bool only) {
         filename = str;
@@ -243,22 +211,14 @@ public:
         count = 0;
         nameonly = only;
     }
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> miniblink49
     void init() {
         pointsMin = verbsMin = SK_MaxS32;
         pointsMax = verbsMax = SK_MinS32;
         rectPointsMin = rectVerbsMin = SK_MaxS32;
         rectPointsMax = rectVerbsMax = SK_MinS32;
     }
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> miniblink49
     SkString filename;
     int count;
     bool nameonly;
@@ -292,11 +252,7 @@ void application_init() {
         canvas.divName(filename, false);
         SkPicture* pic = LoadPicture(path.c_str());
         pic->draw(&canvas);
-<<<<<<< HEAD
         delete pic;
-=======
-        SkDELETE(pic);
->>>>>>> miniblink49
     }
     SkDebugf("\n</div>\n\n");
 
@@ -310,11 +266,7 @@ void application_init() {
         canvas.divName(filename, true);
         SkPicture* pic = LoadPicture(path.c_str());
         pic->draw(&canvas);
-<<<<<<< HEAD
         delete pic;
-=======
-        SkDELETE(pic);
->>>>>>> miniblink49
     }
     SkDebugf("];\n\n");
 
@@ -327,10 +279,6 @@ void application_init() {
 }
 
 void application_term() {
-<<<<<<< HEAD
-=======
-    SkGraphics::Term();
->>>>>>> miniblink49
     SkEvent::Term();
 }
 

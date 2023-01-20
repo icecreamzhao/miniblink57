@@ -15,17 +15,10 @@
 #ifndef __UCHARSTRIEBUILDER_H__
 #define __UCHARSTRIEBUILDER_H__
 
-<<<<<<< HEAD
 #include "unicode/stringtriebuilder.h"
 #include "unicode/ucharstrie.h"
 #include "unicode/unistr.h"
 #include "unicode/utypes.h"
-=======
-#include "unicode/utypes.h"
-#include "unicode/stringtriebuilder.h"
-#include "unicode/ucharstrie.h"
-#include "unicode/unistr.h"
->>>>>>> miniblink49
 
 /**
  * \file
@@ -49,11 +42,7 @@ public:
      * @param errorCode Standard ICU error code.
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     UCharsTrieBuilder(UErrorCode& errorCode);
-=======
-    UCharsTrieBuilder(UErrorCode &errorCode);
->>>>>>> miniblink49
 
     /**
      * Destructor.
@@ -75,11 +64,7 @@ public:
      * @return *this
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     UCharsTrieBuilder& add(const UnicodeString& s, int32_t value, UErrorCode& errorCode);
-=======
-    UCharsTrieBuilder &add(const UnicodeString &s, int32_t value, UErrorCode &errorCode);
->>>>>>> miniblink49
 
     /**
      * Builds a UCharsTrie for the add()ed data.
@@ -99,11 +84,7 @@ public:
      * @return A new UCharsTrie for the add()ed data.
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     UCharsTrie* build(UStringTrieBuildOption buildOption, UErrorCode& errorCode);
-=======
-    UCharsTrie *build(UStringTrieBuildOption buildOption, UErrorCode &errorCode);
->>>>>>> miniblink49
 
     /**
      * Builds a UCharsTrie for the add()ed data and UChar-serializes it.
@@ -129,13 +110,8 @@ public:
      * @return result
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     UnicodeString& buildUnicodeString(UStringTrieBuildOption buildOption, UnicodeString& result,
         UErrorCode& errorCode);
-=======
-    UnicodeString &buildUnicodeString(UStringTrieBuildOption buildOption, UnicodeString &result,
-                                      UErrorCode &errorCode);
->>>>>>> miniblink49
 
     /**
      * Removes all (string, value) pairs.
@@ -143,33 +119,19 @@ public:
      * @return *this
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     UCharsTrieBuilder& clear()
     {
         strings.remove();
         elementsLength = 0;
         ucharsLength = 0;
-=======
-    UCharsTrieBuilder &clear() {
-        strings.remove();
-        elementsLength=0;
-        ucharsLength=0;
->>>>>>> miniblink49
         return *this;
     }
 
 private:
-<<<<<<< HEAD
     UCharsTrieBuilder(const UCharsTrieBuilder& other); // no copy constructor
     UCharsTrieBuilder& operator=(const UCharsTrieBuilder& other); // no assignment operator
 
     void buildUChars(UStringTrieBuildOption buildOption, UErrorCode& errorCode);
-=======
-    UCharsTrieBuilder(const UCharsTrieBuilder &other);  // no copy constructor
-    UCharsTrieBuilder &operator=(const UCharsTrieBuilder &other);  // no assignment operator
-
-    void buildUChars(UStringTrieBuildOption buildOption, UErrorCode &errorCode);
->>>>>>> miniblink49
 
     virtual int32_t getElementStringLength(int32_t i) const;
     virtual UChar getElementUnit(int32_t i, int32_t unitIndex) const;
@@ -189,7 +151,6 @@ private:
 
     class UCTLinearMatchNode : public LinearMatchNode {
     public:
-<<<<<<< HEAD
         UCTLinearMatchNode(const UChar* units, int32_t len, Node* nextNode);
         virtual UBool operator==(const Node& other) const;
         virtual void write(StringTrieBuilder& builder);
@@ -204,50 +165,23 @@ private:
     UBool ensureCapacity(int32_t length);
     virtual int32_t write(int32_t unit);
     int32_t write(const UChar* s, int32_t length);
-=======
-        UCTLinearMatchNode(const UChar *units, int32_t len, Node *nextNode);
-        virtual UBool operator==(const Node &other) const;
-        virtual void write(StringTrieBuilder &builder);
-    private:
-        const UChar *s;
-    };
-
-    virtual Node *createLinearMatchNode(int32_t i, int32_t unitIndex, int32_t length,
-                                        Node *nextNode) const;
-
-    UBool ensureCapacity(int32_t length);
-    virtual int32_t write(int32_t unit);
-    int32_t write(const UChar *s, int32_t length);
->>>>>>> miniblink49
     virtual int32_t writeElementUnits(int32_t i, int32_t unitIndex, int32_t length);
     virtual int32_t writeValueAndFinal(int32_t i, UBool isFinal);
     virtual int32_t writeValueAndType(UBool hasValue, int32_t value, int32_t node);
     virtual int32_t writeDeltaTo(int32_t jumpTarget);
 
     UnicodeString strings;
-<<<<<<< HEAD
     UCharsTrieElement* elements;
-=======
-    UCharsTrieElement *elements;
->>>>>>> miniblink49
     int32_t elementsCapacity;
     int32_t elementsLength;
 
     // UChar serialization of the trie.
     // Grows from the back: ucharsLength measures from the end of the buffer!
-<<<<<<< HEAD
     UChar* uchars;
-=======
-    UChar *uchars;
->>>>>>> miniblink49
     int32_t ucharsCapacity;
     int32_t ucharsLength;
 };
 
 U_NAMESPACE_END
 
-<<<<<<< HEAD
 #endif // __UCHARSTRIEBUILDER_H__
-=======
-#endif  // __UCHARSTRIEBUILDER_H__
->>>>>>> miniblink49

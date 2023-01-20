@@ -145,14 +145,9 @@ static CURLcode process_trailer(struct connectdata *conn, zlib_params *zp)
   zp->trailerlen -= len;
   z->avail_in -= len;
   z->next_in += len;
-<<<<<<< HEAD
   if(z->avail_in > 10) // weolar:fix mj19916992-4.icoc.vc bug
     result = CURLE_WRITE_ERROR;
   z->avail_in = 0; // weolar:fix mj19916992-4.icoc.vc bug
-=======
-  if(z->avail_in)
-    result = CURLE_WRITE_ERROR;
->>>>>>> miniblink49
   if(result || !zp->trailerlen)
     result = exit_zlib(conn, z, &zp->zlib_init, result);
   else {
@@ -749,7 +744,6 @@ static const content_encoding identity_encoding = {
   0
 };
 
-<<<<<<< HEAD
 // name = "gzip\r\n"; // To fix http://src.leju.com/imp/imp/deal/b8/ba/f/9eaefaee5a46778ffe2dd8ff91b_p47_mk47.jpg
 static const content_encoding null_encoding = {
   "null",
@@ -758,16 +752,6 @@ static const content_encoding null_encoding = {
   identity_unencode_write,
   identity_close_writer,
     0
-=======
-// name = "gzip\r\n"; // To fix http://src.leju.com/imp/imp/deal/b8/ba/f/9eaefaee5a46778ffe2dd8ff91b_p47_mk47.jpg
-static const content_encoding null_encoding = {
-  "null",
-  NULL,
-  identity_init_writer,
-  identity_unencode_write,
-  identity_close_writer,
-    0
->>>>>>> miniblink49
 };
 
 

@@ -17,7 +17,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/layout/svg/LayoutSVGHiddenContainer.h"
 
 #include "core/layout/LayoutAnalyzer.h"
@@ -34,24 +33,22 @@ void LayoutSVGHiddenContainer::layout()
 {
     ASSERT(needsLayout());
     LayoutAnalyzer::Scope analyzer(*this);
-    SVGLayoutSupport::layoutChildren(this, selfNeedsLayout());
+
+    // When hasRelativeLengths() is false, no descendants have relative lengths
+    // (hence no one is interested in viewport size changes).
+    bool layoutSizeChanged = element()->hasRelativeLengths() && SVGLayoutSupport::layoutSizeOfNearestViewportChanged(this);
+
+    SVGLayoutSupport::layoutChildren(firstChild(), selfNeedsLayout(), false,
+        layoutSizeChanged);
     updateCachedBoundaries();
     clearNeedsLayout();
 }
 
-void LayoutSVGHiddenContainer::paint(const PaintInfo&, const LayoutPoint&)
-{
-    // This subtree does not paint.
-}
-
-void LayoutSVGHiddenContainer::absoluteQuads(Vector<FloatQuad>&, bool*) const
-{
-    // This subtree does not take up space or paint
-}
-
-bool LayoutSVGHiddenContainer::nodeAtFloatPoint(HitTestResult&, const FloatPoint&, HitTestAction)
+bool LayoutSVGHiddenContainer::nodeAtFloatPoint(HitTestResult&,
+    const FloatPoint&,
+    HitTestAction)
 {
     return false;
 }
 
-}
+} // namespace blink

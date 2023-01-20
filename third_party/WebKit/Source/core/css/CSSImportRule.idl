@@ -18,11 +18,11 @@
  * Boston, MA 02110-1301, USA.
  */
 
-// http://dev.w3.org/csswg/cssom/#the-cssimportrule-interface
+// https://dev.w3.org/csswg/cssom/#the-cssimportrule-interface
 
 interface CSSImportRule : CSSRule {
     readonly attribute DOMString href;
-    // TODO(philipj): media should have [PutForwards=mediaText].
+    // TODO(foolip): media should have [PutForwards=mediaText].
     [SameObject] readonly attribute MediaList media;
     [SameObject] readonly attribute CSSStyleSheet styleSheet;
 };

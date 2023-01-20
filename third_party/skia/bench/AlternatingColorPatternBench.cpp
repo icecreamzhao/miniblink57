@@ -9,10 +9,7 @@
 #include "SkCanvas.h"
 #include "SkGradientShader.h"
 #include "SkPaint.h"
-<<<<<<< HEAD
 #include "SkPath.h"
-=======
->>>>>>> miniblink49
 #include "SkString.h"
 
 enum ColorPattern {
@@ -22,7 +19,6 @@ enum ColorPattern {
     kAlphaBitmap_ColorPattern,
 };
 
-<<<<<<< HEAD
 static const struct ColorPatternData {
     SkColor fColor;
     bool fIsBitmap;
@@ -33,18 +29,6 @@ static const struct ColorPatternData {
     { SK_ColorBLUE, false, "blue" }, // kBlue_ColorPattern
     { SK_ColorWHITE, true, "obaqueBitMap" }, // kOpaqueBitmap_ColorPattern
     { 0x10000000, true, "alphaBitmap" }, // kAlphaBitmap_ColorPattern
-=======
-static const struct ColorPatternData{
-    SkColor         fColor;
-    bool            fIsBitmap;
-    const char*     fName;
-} gColorPatterns[] = {
-    // Keep this in same order as ColorPattern enum
-    { SK_ColorWHITE, false,  "white"        }, // kWhite_ColorPattern
-    { SK_ColorBLUE,  false,  "blue"         }, // kBlue_ColorPattern
-    { SK_ColorWHITE, true,   "obaqueBitMap" }, // kOpaqueBitmap_ColorPattern
-    { 0x10000000,    true,   "alphaBitmap"  }, // kAlphaBitmap_ColorPattern
->>>>>>> miniblink49
 };
 
 enum DrawType {
@@ -52,7 +36,6 @@ enum DrawType {
     kPath_DrawType,
 };
 
-<<<<<<< HEAD
 static void makebm(SkBitmap* bm, int w, int h)
 {
     bm->allocN32Pixels(w, h);
@@ -73,28 +56,6 @@ static void makebm(SkBitmap* bm, int w, int h)
     canvas.drawPaint(paint);
     paint.setShader(SkGradientShader::MakeLinear(kPts1, kColors1, kPos, SK_ARRAY_COUNT(kColors1),
         SkShader::kClamp_TileMode));
-=======
-static void makebm(SkBitmap* bm, int w, int h) {
-    bm->allocN32Pixels(w, h);
-    bm->eraseColor(SK_ColorTRANSPARENT);
-
-    SkCanvas    canvas(*bm);
-    SkScalar    s = SkIntToScalar(SkMin32(w, h));
-    static const SkPoint     kPts0[] = { { 0, 0 }, { s, s } };
-    static const SkPoint     kPts1[] = { { s/2, 0 }, { s/2, s } };
-    static const SkScalar    kPos[] = { 0, SK_Scalar1/2, SK_Scalar1 };
-    static const SkColor kColors0[] = {0x80F00080, 0xF0F08000, 0x800080F0 };
-    static const SkColor kColors1[] = {0xF08000F0, 0x8080F000, 0xF000F080 };
-
-
-    SkPaint     paint;
-
-    paint.setShader(SkGradientShader::CreateLinear(kPts0, kColors0, kPos,
-                    SK_ARRAY_COUNT(kColors0), SkShader::kClamp_TileMode))->unref();
-    canvas.drawPaint(paint);
-    paint.setShader(SkGradientShader::CreateLinear(kPts1, kColors1, kPos,
-                    SK_ARRAY_COUNT(kColors1), SkShader::kClamp_TileMode))->unref();
->>>>>>> miniblink49
     canvas.drawPaint(paint);
 }
 
@@ -119,7 +80,6 @@ public:
         NY = 5,
         NUM_DRAWS = NX * NY,
     };
-<<<<<<< HEAD
     sk_sp<SkShader> fBmShader;
 
     SkPath fPaths[NUM_DRAWS];
@@ -157,48 +117,6 @@ protected:
         fBmShader = SkShader::MakeBitmapShader(fBmp,
             SkShader::kRepeat_TileMode,
             SkShader::kRepeat_TileMode);
-=======
-    SkShader* fBmShader;
-
-    SkPath  fPaths[NUM_DRAWS];
-    SkRect  fRects[NUM_DRAWS];
-    SkColor fColors[NUM_DRAWS];
-    SkShader* fShaders[NUM_DRAWS];
-
-    SkString        fName;
-    ColorPatternData    fPattern1;
-    ColorPatternData    fPattern2;
-    DrawType fDrawType;
-    SkBitmap fBmp;
-
-
-    AlternatingColorPatternBench(ColorPattern pattern1, ColorPattern pattern2, DrawType drawType)
-        : fBmShader(NULL) {
-        fPattern1 = gColorPatterns[pattern1];
-        fPattern2 = gColorPatterns[pattern2];
-        fName.printf("colorPattern_%s_%s_%s",
-                     fPattern1.fName, fPattern2.fName,
-                     kRect_DrawType == drawType ? "rect" : "path");
-        fDrawType = drawType;
-    }
-
-    virtual ~AlternatingColorPatternBench() {
-        SkSafeUnref(fBmShader);
-    }
-
-protected:
-    const char* onGetName() override {
-        return fName.c_str();
-    }
-
-    virtual void onPreDraw() {
-        int w = 40;
-        int h = 40;
-        makebm(&fBmp, w, h);
-        fBmShader = SkShader::CreateBitmapShader(fBmp,
-                                                 SkShader::kRepeat_TileMode,
-                                                 SkShader::kRepeat_TileMode);
->>>>>>> miniblink49
         int offset = 2;
         int count = 0;
         for (int j = 0; j < NY; ++j) {
@@ -207,11 +125,7 @@ protected:
                 int y = (h * offset) * j;
                 if (kRect_DrawType == fDrawType) {
                     fRects[count].set(SkIntToScalar(x), SkIntToScalar(y),
-<<<<<<< HEAD
                         SkIntToScalar(x + w), SkIntToScalar(y + h));
-=======
-                                      SkIntToScalar(x + w), SkIntToScalar(y + h));
->>>>>>> miniblink49
                 } else {
                     fPaths[count].moveTo(SkIntToScalar(x), SkIntToScalar(y));
                     fPaths[count].rLineTo(SkIntToScalar(w), 0);
@@ -219,31 +133,19 @@ protected:
                     fPaths[count].rLineTo(SkIntToScalar(-w + 1), 0);
                 }
                 if (0 == count % 2) {
-<<<<<<< HEAD
                     fColors[count] = fPattern1.fColor;
                     fShaders[count] = fPattern1.fIsBitmap ? fBmShader : nullptr;
                 } else {
                     fColors[count] = fPattern2.fColor;
                     fShaders[count] = fPattern2.fIsBitmap ? fBmShader : nullptr;
-=======
-                    fColors[count]  = fPattern1.fColor;
-                    fShaders[count] = fPattern1.fIsBitmap ? fBmShader : NULL;
-                } else {
-                    fColors[count]  = fPattern2.fColor;
-                    fShaders[count] = fPattern2.fIsBitmap ? fBmShader : NULL;
->>>>>>> miniblink49
                 }
                 ++count;
             }
         }
     }
 
-<<<<<<< HEAD
     void onDraw(int loops, SkCanvas* canvas) override
     {
-=======
-    void onDraw(const int loops, SkCanvas* canvas) override {
->>>>>>> miniblink49
         SkPaint paint;
         paint.setAntiAlias(false);
         paint.setFilterQuality(kLow_SkFilterQuality);
@@ -265,7 +167,6 @@ private:
     typedef Benchmark INHERITED;
 };
 
-<<<<<<< HEAD
 DEF_BENCH(return new AlternatingColorPatternBench(kWhite_ColorPattern,
     kWhite_ColorPattern,
     kPath_DrawType);)
@@ -295,35 +196,3 @@ DEF_BENCH(return new AlternatingColorPatternBench(kAlphaBitmap_ColorPattern,
 DEF_BENCH(return new AlternatingColorPatternBench(kOpaqueBitmap_ColorPattern,
     kAlphaBitmap_ColorPattern,
     kRect_DrawType);)
-=======
-DEF_BENCH( return SkNEW_ARGS(AlternatingColorPatternBench,
-                             (kWhite_ColorPattern, kWhite_ColorPattern,
-                              kPath_DrawType)); )
-DEF_BENCH( return SkNEW_ARGS(AlternatingColorPatternBench,
-                             (kBlue_ColorPattern, kBlue_ColorPattern,
-                              kPath_DrawType)); )
-DEF_BENCH( return SkNEW_ARGS(AlternatingColorPatternBench,
-                             (kWhite_ColorPattern, kBlue_ColorPattern,
-                              kPath_DrawType)); )
-
-DEF_BENCH( return SkNEW_ARGS(AlternatingColorPatternBench,
-                             (kOpaqueBitmap_ColorPattern, kOpaqueBitmap_ColorPattern,
-                              kPath_DrawType)); )
-DEF_BENCH( return SkNEW_ARGS(AlternatingColorPatternBench,
-                             (kAlphaBitmap_ColorPattern, kAlphaBitmap_ColorPattern,
-                              kPath_DrawType)); )
-DEF_BENCH( return SkNEW_ARGS(AlternatingColorPatternBench,
-                             (kOpaqueBitmap_ColorPattern, kAlphaBitmap_ColorPattern,
-                              kPath_DrawType)); )
-
-DEF_BENCH( return SkNEW_ARGS(AlternatingColorPatternBench,
-                             (kOpaqueBitmap_ColorPattern, kOpaqueBitmap_ColorPattern,
-                              kRect_DrawType)); )
-DEF_BENCH( return SkNEW_ARGS(AlternatingColorPatternBench,
-                             (kAlphaBitmap_ColorPattern, kAlphaBitmap_ColorPattern,
-                              kRect_DrawType)); )
-DEF_BENCH( return SkNEW_ARGS(AlternatingColorPatternBench,
-                             (kOpaqueBitmap_ColorPattern, kAlphaBitmap_ColorPattern,
-                              kRect_DrawType)); )
-
->>>>>>> miniblink49

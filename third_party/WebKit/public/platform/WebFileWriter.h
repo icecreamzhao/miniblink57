@@ -37,17 +37,12 @@
 namespace blink {
 
 class WebString;
-<<<<<<< HEAD
-=======
-class WebURL;
->>>>>>> miniblink49
 
 class WebFileWriter {
 public:
     virtual ~WebFileWriter() { }
 
     // Only one write or one truncate operation can be in progress at a time.
-<<<<<<< HEAD
     // These functions are asynchronous and will report results through the
     // WebFileWriter's associated WebFileWriterClient.
     virtual void write(long long position, const WebString& blobUUID) { }
@@ -56,14 +51,6 @@ public:
     // Cancel will attempt to abort a running write or truncate. However, it may
     // not be possible to cancel an in-progress action, or the call may have come
     // in too late. Partial writes are possible.
-=======
-    // These functions are asynchronous and will report results through the WebFileWriter's associated WebFileWriterClient.
-    virtual void write(long long position, const WebURL& blobURL) { } // DEPRECATED
-    virtual void write(long long position, const WebString& blobUUID) { }
-    virtual void truncate(long long length) = 0;
-
-    // Cancel will attempt to abort a running write or truncate. However, it may not be possible to cancel an in-progress action, or the call may have come in too late. Partial writes are possible.
->>>>>>> miniblink49
     // Do not call cancel when there is no write or truncate in progress.
     virtual void cancel() = 0;
 };

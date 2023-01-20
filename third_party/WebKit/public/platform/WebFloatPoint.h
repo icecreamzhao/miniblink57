@@ -71,14 +71,7 @@ struct WebFloatPoint {
         return *this;
     }
 
-<<<<<<< HEAD
     operator FloatPoint() const { return FloatPoint(x, y); }
-=======
-    operator FloatPoint() const
-    {
-        return FloatPoint(x, y);
-    }
->>>>>>> miniblink49
 #else
     WebFloatPoint(const gfx::PointF& p)
         : x(p.x())
@@ -93,14 +86,7 @@ struct WebFloatPoint {
         return *this;
     }
 
-<<<<<<< HEAD
     operator gfx::PointF() const { return gfx::PointF(x, y); }
-=======
-    operator gfx::PointF() const
-    {
-        return gfx::PointF(x, y);
-    }
->>>>>>> miniblink49
 
 #endif
 };

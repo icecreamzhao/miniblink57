@@ -28,10 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "public/web/WebInputElement.h"
 
 #include "core/HTMLNames.h"
@@ -46,10 +42,7 @@
 #include "platform/RuntimeEnabledFeatures.h"
 #include "public/platform/WebString.h"
 #include "public/web/WebElementCollection.h"
-<<<<<<< HEAD
 #include "public/web/WebOptionElement.h"
-=======
->>>>>>> miniblink49
 #include "wtf/PassRefPtr.h"
 
 namespace blink {
@@ -91,12 +84,8 @@ bool WebInputElement::isCheckbox() const
 
 int WebInputElement::maxLength() const
 {
-<<<<<<< HEAD
     int maxLen = constUnwrap<HTMLInputElement>()->maxLength();
     return maxLen == -1 ? defaultMaxLength() : maxLen;
-=======
-    return constUnwrap<HTMLInputElement>()->maxLength();
->>>>>>> miniblink49
 }
 
 void WebInputElement::setActivatedSubmit(bool activated)
@@ -121,12 +110,8 @@ bool WebInputElement::isValidValue(const WebString& value) const
 
 void WebInputElement::setChecked(bool nowChecked, bool sendEvents)
 {
-<<<<<<< HEAD
     unwrap<HTMLInputElement>()->setChecked(
         nowChecked, sendEvents ? DispatchInputAndChangeEvent : DispatchNoEvent);
-=======
-    unwrap<HTMLInputElement>()->setChecked(nowChecked, sendEvents ? DispatchInputAndChangeEvent : DispatchNoEvent);
->>>>>>> miniblink49
 }
 
 bool WebInputElement::isChecked() const
@@ -139,18 +124,10 @@ bool WebInputElement::isMultiple() const
     return constUnwrap<HTMLInputElement>()->multiple();
 }
 
-<<<<<<< HEAD
 WebVector<WebOptionElement> WebInputElement::filteredDataListOptions() const
 {
     return WebVector<WebOptionElement>(
         constUnwrap<HTMLInputElement>()->filteredDataListOptions());
-=======
-WebElementCollection WebInputElement::dataListOptions() const
-{
-    if (HTMLDataListElement* dataList = toHTMLDataListElement(constUnwrap<HTMLInputElement>()->list()))
-        return WebElementCollection(dataList->options());
-    return WebElementCollection();
->>>>>>> miniblink49
 }
 
 WebString WebInputElement::localizeValue(const WebString& proposedValue) const
@@ -160,11 +137,7 @@ WebString WebInputElement::localizeValue(const WebString& proposedValue) const
 
 int WebInputElement::defaultMaxLength()
 {
-<<<<<<< HEAD
     return std::numeric_limits<int>::max();
-=======
-    return HTMLInputElement::maximumLength;
->>>>>>> miniblink49
 }
 
 void WebInputElement::setShouldRevealPassword(bool value)
@@ -172,33 +145,21 @@ void WebInputElement::setShouldRevealPassword(bool value)
     unwrap<HTMLInputElement>()->setShouldRevealPassword(value);
 }
 
-<<<<<<< HEAD
 WebInputElement::WebInputElement(HTMLInputElement* elem)
-=======
-WebInputElement::WebInputElement(const PassRefPtrWillBeRawPtr<HTMLInputElement>& elem)
->>>>>>> miniblink49
     : WebFormControlElement(elem)
 {
 }
 
-<<<<<<< HEAD
 DEFINE_WEB_NODE_TYPE_CASTS(WebInputElement,
     isHTMLInputElement(constUnwrap<Node>()));
 
 WebInputElement& WebInputElement::operator=(HTMLInputElement* elem)
-=======
-WebInputElement& WebInputElement::operator=(const PassRefPtrWillBeRawPtr<HTMLInputElement>& elem)
->>>>>>> miniblink49
 {
     m_private = elem;
     return *this;
 }
 
-<<<<<<< HEAD
 WebInputElement::operator HTMLInputElement*() const
-=======
-WebInputElement::operator PassRefPtrWillBeRawPtr<HTMLInputElement>() const
->>>>>>> miniblink49
 {
     return toHTMLInputElement(m_private.get());
 }

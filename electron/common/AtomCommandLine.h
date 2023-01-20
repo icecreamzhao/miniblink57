@@ -8,7 +8,8 @@
 #include <string>
 #include <vector>
 
-#include "cef/include/base/cef_macros.h"
+//#include "cef/include/base/cef_macros.h"
+#include "base/macros.h"
 #include "build/build_config.h"
 
 namespace atom {
@@ -42,6 +43,6 @@ private:
     DISALLOW_IMPLICIT_CONSTRUCTORS(AtomCommandLine);
 };
 
-}  // namespace atom
+} // namespace atom
 
-#endif  // ATOM_COMMON_ATOM_COMMAND_LINE_H_
+#endif // ATOM_COMMON_ATOM_COMMAND_LINE_H_

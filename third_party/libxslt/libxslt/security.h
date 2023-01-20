@@ -48,11 +48,7 @@ typedef enum {
  * User provided function to check the value of a string like a file
  * path or an URL ...
  */
-<<<<<<< HEAD
 typedef int (XSLTCALL *xsltSecurityCheck)	(xsltSecurityPrefsPtr sec,
-=======
-typedef int (*xsltSecurityCheck)	(xsltSecurityPrefsPtr sec,
->>>>>>> miniblink49
 					 xsltTransformContextPtr ctxt,
 					 const char *value);
 

@@ -27,15 +27,20 @@
 #define DocumentLoadTiming_h
 
 #include "core/CoreExport.h"
+#include "platform/heap/Handle.h"
 #include "wtf/CurrentTime.h"
 
 namespace blink {
 
+class DocumentLoader;
 class KURL;
+class LocalFrame;
 
-class CORE_EXPORT DocumentLoadTiming {
+class CORE_EXPORT DocumentLoadTiming final {
+    DISALLOW_NEW();
+
 public:
-    DocumentLoadTiming();
+    explicit DocumentLoadTiming(DocumentLoader&);
 
     double monotonicTimeToZeroBasedDocumentTime(double) const;
     double monotonicTimeToPseudoWallTime(double) const;
@@ -43,16 +48,31 @@ public:
 
     void markNavigationStart();
     void setNavigationStart(double);
+
     void addRedirect(const KURL& redirectingUrl, const KURL& redirectedUrl);
+    void setRedirectStart(double);
+    void setRedirectEnd(double);
+    void setRedirectCount(short value) { m_redirectCount = value; }
+    void setHasCrossOriginRedirect(bool value)
+    {
+        m_hasCrossOriginRedirect = value;
+    }
 
     void markUnloadEventStart();
     void markUnloadEventEnd();
+
     void markFetchStart();
+    void setFetchStart(double);
+
     void setResponseEnd(double);
+
     void markLoadEventStart();
     void markLoadEventEnd();
 
-    void setHasSameOriginAsPreviousDocument(bool value) { m_hasSameOriginAsPreviousDocument = value; }
+    void setHasSameOriginAsPreviousDocument(bool value)
+    {
+        m_hasSameOriginAsPreviousDocument = value;
+    }
 
     double navigationStart() const { return m_navigationStart; }
     double unloadEventStart() const { return m_unloadEventStart; }
@@ -65,13 +85,20 @@ public:
     double loadEventStart() const { return m_loadEventStart; }
     double loadEventEnd() const { return m_loadEventEnd; }
     bool hasCrossOriginRedirect() const { return m_hasCrossOriginRedirect; }
-    bool hasSameOriginAsPreviousDocument() const { return m_hasSameOriginAsPreviousDocument; }
+    bool hasSameOriginAsPreviousDocument() const
+    {
+        return m_hasSameOriginAsPreviousDocument;
+    }
 
     double referenceMonotonicTime() const { return m_referenceMonotonicTime; }
 
+    DECLARE_TRACE();
+
 private:
-    void setRedirectStart(double);
     void markRedirectEnd();
+    void notifyDocumentTimingChanged();
+    void ensureReferenceTimesSet();
+    LocalFrame* frame() const;
 
     double m_referenceMonotonicTime;
     double m_referenceWallTime;
@@ -87,6 +114,8 @@ private:
     double m_loadEventEnd;
     bool m_hasCrossOriginRedirect;
     bool m_hasSameOriginAsPreviousDocument;
+
+    Member<DocumentLoader> m_documentLoader;
 };
 
 } // namespace blink

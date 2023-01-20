@@ -4,7 +4,6 @@
 # the debugging environment.
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-<<<<<<< HEAD
 source $SCRIPT_DIR/android_setup.sh "$@"
 source $SCRIPT_DIR/utils/setup_adb.sh
 
@@ -26,15 +25,6 @@ else
     echo "ERROR: supports either 'SampleApp' or 'Viewer' as valid apps"
     exit 1
 fi
-=======
-source $SCRIPT_DIR/android_setup.sh
-
-APP_NAME=${APP_ARGS[0]}
-PORT=5039
-
-source $SCRIPT_DIR/utils/setup_adb.sh
-
->>>>>>> miniblink49
 
 # Forward local to remote socket connection.
 $ADB $DEVICE_SERIAL forward "tcp:$PORT" "tcp:$PORT"
@@ -50,7 +40,6 @@ else
 fi
 
 # We need the debug symbols from these files
-<<<<<<< HEAD
 GDB_TMP_DIR=$SKIA_OUT/android_gdb_tmp
 mkdir -p $GDB_TMP_DIR
 
@@ -60,32 +49,12 @@ adb_push_if_needed $ANDROID_TOOLCHAIN/gdbserver /data/local/tmp
 # Launch the app
 echo "Launching the app..."
 $ADB $DEVICE_SERIAL shell "am start -n ${activity} --es cmdLineFlags \"${APP_ARGS[*]:1}\""
-=======
-GDB_TMP_DIR=$(pwd)/android_gdb_tmp
-mkdir -p $GDB_TMP_DIR
-echo "Copying symbol files"
-adb_pull_if_needed /system/bin/app_process $GDB_TMP_DIR
-adb_pull_if_needed /system/lib/libc.so $GDB_TMP_DIR
-adb_pull_if_needed /data/data/com.skia/lib/libskia_android.so $GDB_TMP_DIR
-adb_pull_if_needed /data/data/com.skia/lib/libSampleApp.so $GDB_TMP_DIR
-
-echo "Pushing gdbserver..."
-adb_push_if_needed $ANDROID_TOOLCHAIN/../gdbserver /data/local/tmp
-
-# Launch the app
-echo "Launching the app..."
-$ADB $DEVICE_SERIAL shell am start -n com.skia/com.skia.SkiaSampleActivity
->>>>>>> miniblink49
 
 # Wait for app process to initialize
 sleep 2
 
 # Attach gdbserver to the app process
-<<<<<<< HEAD
 PID=$($ADB shell ps | grep ${activityShort} | awk '{print $2}')
-=======
-PID=$($ADB shell ps | grep com.skia | awk '{print $2}')
->>>>>>> miniblink49
 echo "Attaching to pid: $PID"
 $ADB $DEVICE_SERIAL shell /data/local/tmp/gdbserver :$PORT --attach $PID &
 
@@ -94,24 +63,12 @@ sleep 2
 
 # Set up gdb commands
 GDBSETUP=$GDB_TMP_DIR/gdb.setup
-<<<<<<< HEAD
 echo "target remote :$PORT" >> $GDBSETUP
 
 
 # Launch gdb client
 echo "Entering gdb client shell"
 ${ANDROID_TOOLCHAIN}/host_prebuilt/bin/gdb-orig -x $GDBSETUP
-=======
-echo "file $GDB_TMP_DIR/app_process" >> $GDBSETUP
-echo "target remote :$PORT" >> $GDBSETUP
-echo "set solib-absolute-prefix $GDB_TMP_DIR" >> $GDBSETUP
-echo "set solib-search-path $GDB_TMP_DIR" >> $GDBSETUP
-
-# Launch gdb client
-echo "Entering gdb client shell"
-GDB_COMMAND=$(command ls "$ANDROID_TOOLCHAIN"/*-gdb | head -n1)
-"$GDB_COMMAND" -x $GDBSETUP
->>>>>>> miniblink49
 
 # Clean up:
 # We could 'rm -rf $GDB_TMP_DIR', but doing so would cause subsequent debugging

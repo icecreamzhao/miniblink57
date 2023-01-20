@@ -37,7 +37,6 @@ namespace blink {
 
 class PLATFORM_EXPORT ScrollbarThemeOverlayMock : public ScrollbarThemeOverlay {
 public:
-<<<<<<< HEAD
     ScrollbarThemeOverlayMock()
         : ScrollbarThemeOverlay(3, 4, DisallowHitTest, Color(128, 128, 128))
         , m_delayInSeconds(0.0)
@@ -72,11 +71,6 @@ public:
 
 private:
     double m_delayInSeconds;
-=======
-    ScrollbarThemeOverlayMock() : ScrollbarThemeOverlay(3, 4, DisallowHitTest, Color(128, 128, 128)) { }
-
-private:
->>>>>>> miniblink49
     bool isMockTheme() const final { return true; }
 };
 

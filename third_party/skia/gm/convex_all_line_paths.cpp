@@ -5,7 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "SkPathPriv.h"
 #include "gm.h"
 
@@ -14,15 +13,6 @@ static void create_ngon(int n, SkPoint* pts, SkScalar width, SkScalar height)
     float angleStep = 360.0f / n, angle = 0.0f, sin, cos;
     if ((n % 2) == 1) {
         angle = angleStep / 2.0f;
-=======
-#include "gm.h"
-#include "SkPathPriv.h"
-
-static void create_ngon(int n, SkPoint* pts, SkScalar width, SkScalar height) {
-    float angleStep = 360.0f / n, angle = 0.0f, sin, cos;
-    if ((n % 2) == 1) {
-        angle = angleStep/2.0f;
->>>>>>> miniblink49
     }
 
     for (int i = 0; i < n; ++i) {
@@ -39,12 +29,8 @@ namespace skiagm {
 // paths
 class ConvexLineOnlyPathsGM : public GM {
 public:
-<<<<<<< HEAD
     ConvexLineOnlyPathsGM()
     {
-=======
-    ConvexLineOnlyPathsGM() { 
->>>>>>> miniblink49
         this->setBGColor(0xFFFFFFFF);
     }
 
@@ -53,7 +39,6 @@ protected:
     SkISize onISize() override { return SkISize::Make(kGMWidth, kGMHeight); }
     bool runAsBench() const override { return true; }
 
-<<<<<<< HEAD
     static SkPath GetPath(int index, int offset, SkPath::Direction dir)
     {
         // narrow rect
@@ -62,58 +47,31 @@ protected:
             { 1.5f, -50.0f },
             { 1.5f, 50.0f },
             { -1.5f, 50.0f }
-=======
-    static SkPath GetPath(int index, int offset, SkPath::Direction dir) {
-        // narrow rect
-        const SkPoint gPoints0[] = {
-            { -1.5f, -50.0f },
-            {  1.5f, -50.0f },
-            {  1.5f,  50.0f },
-            { -1.5f,  50.0f }
->>>>>>> miniblink49
         };
         // narrow rect on an angle
         const SkPoint gPoints1[] = {
             { -50.0f, -49.0f },
             { -49.0f, -50.0f },
-<<<<<<< HEAD
             { 50.0f, 49.0f },
             { 49.0f, 50.0f }
-=======
-            {  50.0f,  49.0f },
-            {  49.0f,  50.0f }
->>>>>>> miniblink49
         };
         // trap - narrow on top - wide on bottom
         const SkPoint gPoints2[] = {
             { -10.0f, -50.0f },
-<<<<<<< HEAD
             { 10.0f, -50.0f },
             { 50.0f, 50.0f },
             { -50.0f, 50.0f }
-=======
-            {  10.0f, -50.0f },
-            {  50.0f,  50.0f },
-            { -50.0f,  50.0f }
->>>>>>> miniblink49
         };
         // wide skewed rect
         const SkPoint gPoints3[] = {
             { -50.0f, -50.0f },
-<<<<<<< HEAD
             { 0.0f, -50.0f },
             { 50.0f, 50.0f },
             { 0.0f, 50.0f }
-=======
-            {   0.0f, -50.0f },
-            {  50.0f,  50.0f },
-            {   0.0f,  50.0f }
->>>>>>> miniblink49
         };
         // thin rect with colinear-ish lines
         const SkPoint gPoints4[] = {
             { -6.0f, -50.0f },
-<<<<<<< HEAD
             { 4.0f, -50.0f },
             { 5.0f, -25.0f },
             { 6.0f, 0.0f },
@@ -127,38 +85,17 @@ protected:
             { 0.025f, -0.025f },
             { 0.025f, 0.025f },
             { -0.025f, 0.025f }
-=======
-            {  4.0f, -50.0f },
-            {  5.0f, -25.0f },
-            {  6.0f,   0.0f },
-            {  5.0f,  25.0f },
-            {  4.0f,  50.0f },
-            { -4.0f,  50.0f }
-        };
-        // degenerate
-        const SkPoint gPoints5[] = {
-            { -0.025f, -0.025f  },
-            {  0.025f, -0.025f  },
-            {  0.025f,  0.025f },
-            { -0.025f,  0.025f }
->>>>>>> miniblink49
         };
         // Triangle in which the first point should fuse with last
         const SkPoint gPoints6[] = {
             { -20.0f, -13.0f },
             { -20.0f, -13.05f },
-<<<<<<< HEAD
             { 20.0f, -13.0f },
             { 20.0f, 27.0f }
-=======
-            {  20.0f, -13.0f },
-            {  20.0f,  27.0f }
->>>>>>> miniblink49
         };
         // thin rect with colinear lines
         const SkPoint gPoints7[] = {
             { -10.0f, -50.0f },
-<<<<<<< HEAD
             { 10.0f, -50.0f },
             { 10.0f, -25.0f },
             { 10.0f, 0.0f },
@@ -175,29 +112,10 @@ protected:
             { -40.45f, 29.39f },
             { -47.55f, 15.45f },
             { -50.00f, 0.00f },
-=======
-            {  10.0f, -50.0f },
-            {  10.0f, -25.0f },
-            {  10.0f,   0.0f },
-            {  10.0f,  25.0f },
-            {  10.0f,  50.0f },
-            { -10.0f,  50.0f }
-        };
-        // capped teardrop
-        const SkPoint gPoints8[] = {
-            {  50.00f,  50.00f },
-            {   0.00f,  50.00f },
-            { -15.45f,  47.55f },
-            { -29.39f,  40.45f },
-            { -40.45f,  29.39f },
-            { -47.55f,  15.45f },
-            { -50.00f,   0.00f },
->>>>>>> miniblink49
             { -47.55f, -15.45f },
             { -40.45f, -29.39f },
             { -29.39f, -40.45f },
             { -15.45f, -47.55f },
-<<<<<<< HEAD
             { 0.00f, -50.00f },
             { 50.00f, -50.00f }
         };
@@ -211,41 +129,18 @@ protected:
             { -65.45f, 29.39f },
             { -72.55f, 15.45f },
             { -75.00f, 0.00f },
-=======
-            {   0.00f, -50.00f },
-            {  50.00f, -50.00f }
-        };
-        // teardrop
-        const SkPoint gPoints9[] = {
-            {   4.39f,  40.45f },
-            {  -9.55f,  47.55f },
-            { -25.00f,  50.00f },
-            { -40.45f,  47.55f },
-            { -54.39f,  40.45f },
-            { -65.45f,  29.39f },
-            { -72.55f,  15.45f },
-            { -75.00f,   0.00f },
->>>>>>> miniblink49
             { -72.55f, -15.45f },
             { -65.45f, -29.39f },
             { -54.39f, -40.45f },
             { -40.45f, -47.55f },
-<<<<<<< HEAD
             { -25.0f, -50.0f },
             { -9.55f, -47.55f },
             { 4.39f, -40.45f },
             { 75.00f, 0.00f }
-=======
-            { -25.0f,  -50.0f },
-            {  -9.55f, -47.55f },
-            {   4.39f, -40.45f },
-            {  75.00f,   0.00f }
->>>>>>> miniblink49
         };
         // clipped triangle
         const SkPoint gPoints10[] = {
             { -10.0f, -50.0f },
-<<<<<<< HEAD
             { 10.0f, -50.0f },
             { 50.0f, 31.0f },
             { 40.0f, 50.0f },
@@ -265,18 +160,6 @@ protected:
             gPoints8,
             gPoints9,
             gPoints10,
-=======
-            {  10.0f, -50.0f },
-            {  50.0f,  31.0f },
-            {  40.0f,  50.0f },
-            { -40.0f,  50.0f },
-            { -50.0f,  31.0f },
-        };
-
-        const SkPoint* gPoints[] = {
-            gPoints0, gPoints1, gPoints2, gPoints3, gPoints4, gPoints5, gPoints6,
-            gPoints7, gPoints8, gPoints9, gPoints10,
->>>>>>> miniblink49
         };
 
         const size_t gSizes[] = {
@@ -292,7 +175,6 @@ protected:
             SK_ARRAY_COUNT(gPoints9),
             SK_ARRAY_COUNT(gPoints10),
         };
-<<<<<<< HEAD
         static_assert(SK_ARRAY_COUNT(gSizes) == SK_ARRAY_COUNT(gPoints), "array_mismatch");
 
         SkAutoTDeleteArray<SkPoint> data(nullptr);
@@ -307,22 +189,6 @@ protected:
             SkScalar width = kMaxPathHeight / 2;
             SkScalar height = kMaxPathHeight / 2;
             switch (index - SK_ARRAY_COUNT(gPoints)) {
-=======
-        SK_COMPILE_ASSERT(SK_ARRAY_COUNT(gSizes) == SK_ARRAY_COUNT(gPoints), array_mismatch);
-
-        SkAutoTDeleteArray<SkPoint> data(NULL);
-        const SkPoint* points;
-        int numPts;
-        if (index < (int) SK_ARRAY_COUNT(gPoints)) {
-            // manually specified
-            points = gPoints[index];
-            numPts = (int) gSizes[index];
-        } else {
-            // procedurally generated
-            SkScalar width = kMaxPathHeight/2;
-            SkScalar height = kMaxPathHeight/2;
-            switch (index-SK_ARRAY_COUNT(gPoints)) {
->>>>>>> miniblink49
             case 0:
                 numPts = 3;
                 break;
@@ -332,15 +198,9 @@ protected:
             case 2:
                 numPts = 5;
                 break;
-<<<<<<< HEAD
             case 3: // squashed pentagon
                 numPts = 5;
                 width = kMaxPathHeight / 5;
-=======
-            case 3:             // squashed pentagon
-                numPts = 5;
-                width = kMaxPathHeight/5;
->>>>>>> miniblink49
                 break;
             case 4:
                 numPts = 6;
@@ -348,15 +208,9 @@ protected:
             case 5:
                 numPts = 8;
                 break;
-<<<<<<< HEAD
             case 6: // squashed octogon
                 numPts = 8;
                 width = kMaxPathHeight / 5;
-=======
-            case 6:              // squashed octogon
-                numPts = 8;
-                width = kMaxPathHeight/5;
->>>>>>> miniblink49
                 break;
             case 7:
                 numPts = 20;
@@ -369,11 +223,7 @@ protected:
                 break;
             }
 
-<<<<<<< HEAD
             data.reset(new SkPoint[numPts]);
-=======
-            data.reset(SkNEW_ARRAY(SkPoint, numPts));
->>>>>>> miniblink49
 
             create_ngon(numPts, data.get(), width, height);
             points = data.get();
@@ -387,13 +237,8 @@ protected:
                 path.lineTo(points[i]);
             }
         } else {
-<<<<<<< HEAD
             path.moveTo(points[numPts - 1]);
             for (int i = numPts - 2; i >= 0; --i) {
-=======
-            path.moveTo(points[numPts-1]);
-            for (int i = numPts-2; i >= 0; --i) {
->>>>>>> miniblink49
                 path.lineTo(points[i]);
             }
         }
@@ -417,29 +262,17 @@ protected:
 
     // Draw a single path several times, shrinking it, flipping its direction
     // and changing its start vertex each time.
-<<<<<<< HEAD
     void drawPath(SkCanvas* canvas, int index, SkPoint* offset)
     {
-=======
-    void drawPath(SkCanvas* canvas, int index, SkPoint* offset) {
->>>>>>> miniblink49
 
         SkPoint center;
         {
             SkPath path = GetPath(index, 0, SkPath::kCW_Direction);
-<<<<<<< HEAD
             if (offset->fX + path.getBounds().width() > kGMWidth) {
                 offset->fX = 0;
                 offset->fY += kMaxPathHeight;
             }
             center = { offset->fX + SkScalarHalf(path.getBounds().width()), offset->fY };
-=======
-            if (offset->fX+path.getBounds().width() > kGMWidth) {
-                offset->fX = 0;
-                offset->fY += kMaxPathHeight;
-            }
-            center = { offset->fX + SkScalarHalf(path.getBounds().width()), offset->fY};
->>>>>>> miniblink49
             offset->fX += path.getBounds().width();
         }
 
@@ -451,7 +284,6 @@ protected:
         paint.setAntiAlias(true);
 
         for (size_t i = 0; i < SK_ARRAY_COUNT(scales); ++i) {
-<<<<<<< HEAD
             SkPath path = GetPath(index, (int)i, dirs[i % 2]);
 
             canvas->save();
@@ -459,29 +291,14 @@ protected:
             canvas->scale(scales[i], scales[i]);
             paint.setColor(colors[i % 2]);
             canvas->drawPath(path, paint);
-=======
-            SkPath path = GetPath(index, (int) i, dirs[i%2]);
-
-            canvas->save();
-                canvas->translate(center.fX, center.fY);
-                canvas->scale(scales[i], scales[i]);
-                paint.setColor(colors[i%2]);
-                canvas->drawPath(path, paint);
->>>>>>> miniblink49
             canvas->restore();
         }
     }
 
-<<<<<<< HEAD
     void onDraw(SkCanvas* canvas) override
     {
         // the right edge of the last drawn path
         SkPoint offset = { 0, SkScalarHalf(kMaxPathHeight) };
-=======
-    void onDraw(SkCanvas* canvas) override {
-        // the right edge of the last drawn path
-        SkPoint offset = { 0, SkScalarHalf(kMaxPathHeight) }; 
->>>>>>> miniblink49
 
         for (int i = 0; i < kNumPaths; ++i) {
             this->drawPath(canvas, i, &offset);
@@ -504,27 +321,15 @@ protected:
     }
 
 private:
-<<<<<<< HEAD
     static const int kNumPaths = 20;
     static const int kMaxPathHeight = 100;
     static const int kGMWidth = 512;
     static const int kGMHeight = 512;
-=======
-    static const int kNumPaths      = 20;
-    static const int kMaxPathHeight = 100;
-    static const int kGMWidth       = 512;
-    static const int kGMHeight      = 512;
->>>>>>> miniblink49
 
     typedef GM INHERITED;
 };
 
 //////////////////////////////////////////////////////////////////////////////
 
-<<<<<<< HEAD
 DEF_GM(return new ConvexLineOnlyPathsGM;)
-=======
-DEF_GM( return SkNEW(ConvexLineOnlyPathsGM); )
-
->>>>>>> miniblink49
 }

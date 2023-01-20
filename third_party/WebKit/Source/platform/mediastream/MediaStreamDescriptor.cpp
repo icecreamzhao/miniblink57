@@ -29,18 +29,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
-
->>>>>>> miniblink49
 #include "platform/mediastream/MediaStreamDescriptor.h"
 
 #include "platform/UUID.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 MediaStreamDescriptor* MediaStreamDescriptor::create(
     const MediaStreamSourceVector& audioSources,
     const MediaStreamSourceVector& videoSources)
@@ -66,50 +60,20 @@ MediaStreamDescriptor* MediaStreamDescriptor::create(
 }
 
 void MediaStreamDescriptor::addComponent(MediaStreamComponent* component)
-=======
-PassRefPtr<MediaStreamDescriptor> MediaStreamDescriptor::create(const MediaStreamSourceVector& audioSources, const MediaStreamSourceVector& videoSources)
-{
-    return adoptRef(new MediaStreamDescriptor(createCanonicalUUIDString(), audioSources, videoSources));
-}
-
-PassRefPtr<MediaStreamDescriptor> MediaStreamDescriptor::create(const MediaStreamComponentVector& audioComponents, const MediaStreamComponentVector& videoComponents)
-{
-    return adoptRef(new MediaStreamDescriptor(createCanonicalUUIDString(), audioComponents, videoComponents));
-}
-
-PassRefPtr<MediaStreamDescriptor> MediaStreamDescriptor::create(const String& id, const MediaStreamComponentVector& audioComponents, const MediaStreamComponentVector& videoComponents)
-{
-    return adoptRef(new MediaStreamDescriptor(id, audioComponents, videoComponents));
-}
-
-void MediaStreamDescriptor::addComponent(PassRefPtr<MediaStreamComponent> component)
->>>>>>> miniblink49
 {
     switch (component->source()->type()) {
     case MediaStreamSource::TypeAudio:
         if (m_audioComponents.find(component) == kNotFound)
-<<<<<<< HEAD
             m_audioComponents.push_back(component);
         break;
     case MediaStreamSource::TypeVideo:
         if (m_videoComponents.find(component) == kNotFound)
             m_videoComponents.push_back(component);
-=======
-            m_audioComponents.append(component);
-        break;
-    case MediaStreamSource::TypeVideo:
-        if (m_videoComponents.find(component) == kNotFound)
-            m_videoComponents.append(component);
->>>>>>> miniblink49
         break;
     }
 }
 
-<<<<<<< HEAD
 void MediaStreamDescriptor::removeComponent(MediaStreamComponent* component)
-=======
-void MediaStreamDescriptor::removeComponent(PassRefPtr<MediaStreamComponent> component)
->>>>>>> miniblink49
 {
     size_t pos = kNotFound;
     switch (component->source()->type()) {
@@ -142,7 +106,6 @@ void MediaStreamDescriptor::removeRemoteTrack(MediaStreamComponent* component)
         removeComponent(component);
 }
 
-<<<<<<< HEAD
 MediaStreamDescriptor::MediaStreamDescriptor(
     const String& id,
     const MediaStreamSourceVector& audioSources,
@@ -184,34 +147,3 @@ DEFINE_TRACE(MediaStreamDescriptor)
 }
 
 } // namespace blink
-=======
-MediaStreamDescriptor::MediaStreamDescriptor(const String& id, const MediaStreamSourceVector& audioSources, const MediaStreamSourceVector& videoSources)
-    : m_client(0)
-    , m_id(id)
-    , m_active(true)
-    , m_ended(false)
-{
-    ASSERT(m_id.length());
-    for (size_t i = 0; i < audioSources.size(); i++)
-        m_audioComponents.append(MediaStreamComponent::create(audioSources[i]));
-
-    for (size_t i = 0; i < videoSources.size(); i++)
-        m_videoComponents.append(MediaStreamComponent::create(videoSources[i]));
-}
-
-MediaStreamDescriptor::MediaStreamDescriptor(const String& id, const MediaStreamComponentVector& audioComponents, const MediaStreamComponentVector& videoComponents)
-    : m_client(0)
-    , m_id(id)
-    , m_active(true)
-    , m_ended(false)
-{
-    ASSERT(m_id.length());
-    for (MediaStreamComponentVector::const_iterator iter = audioComponents.begin(); iter != audioComponents.end(); ++iter)
-        m_audioComponents.append((*iter));
-    for (MediaStreamComponentVector::const_iterator iter = videoComponents.begin(); iter != videoComponents.end(); ++iter)
-        m_videoComponents.append((*iter));
-}
-
-} // namespace blink
-
->>>>>>> miniblink49

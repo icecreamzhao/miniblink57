@@ -2,41 +2,37 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "core/events/RelatedEvent.h"
 
 namespace blink {
 
-RelatedEvent::~RelatedEvent()
+RelatedEvent::~RelatedEvent() { }
+
+RelatedEvent* RelatedEvent::create(const AtomicString& type,
+    bool canBubble,
+    bool cancelable,
+    EventTarget* relatedTarget)
 {
+    return new RelatedEvent(type, canBubble, cancelable, relatedTarget);
 }
 
-PassRefPtrWillBeRawPtr<RelatedEvent> RelatedEvent::create()
+RelatedEvent* RelatedEvent::create(const AtomicString& type,
+    const RelatedEventInit& initializer)
 {
-    return adoptRefWillBeNoop(new RelatedEvent);
+    return new RelatedEvent(type, initializer);
 }
 
-PassRefPtrWillBeRawPtr<RelatedEvent> RelatedEvent::create(const AtomicString& type, bool canBubble, bool cancelable, EventTarget* relatedTarget)
-{
-    return adoptRefWillBeNoop(new RelatedEvent(type, canBubble, cancelable, relatedTarget));
-}
-
-PassRefPtrWillBeRawPtr<RelatedEvent> RelatedEvent::create(const AtomicString& type, const RelatedEventInit& initializer)
-{
-    return adoptRefWillBeNoop(new RelatedEvent(type, initializer));
-}
-
-RelatedEvent::RelatedEvent()
-{
-}
-
-RelatedEvent::RelatedEvent(const AtomicString& type, bool canBubble, bool cancelable, EventTarget* relatedTarget)
+RelatedEvent::RelatedEvent(const AtomicString& type,
+    bool canBubble,
+    bool cancelable,
+    EventTarget* relatedTarget)
     : Event(type, canBubble, cancelable)
     , m_relatedTarget(relatedTarget)
 {
 }
 
-RelatedEvent::RelatedEvent(const AtomicString& eventType, const RelatedEventInit& initializer)
+RelatedEvent::RelatedEvent(const AtomicString& eventType,
+    const RelatedEventInit& initializer)
     : Event(eventType, initializer)
 {
     if (initializer.hasRelatedTarget())

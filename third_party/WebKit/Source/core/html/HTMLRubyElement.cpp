@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "core/html/HTMLRubyElement.h"
 
 #include "core/HTMLNames.h"
@@ -21,11 +20,11 @@ DEFINE_NODE_FACTORY(HTMLRubyElement)
 
 LayoutObject* HTMLRubyElement::createLayoutObject(const ComputedStyle& style)
 {
-    if (style.display() == INLINE)
+    if (style.display() == EDisplay::Inline)
         return new LayoutRubyAsInline(this);
-    if (style.display() == BLOCK)
+    if (style.display() == EDisplay::Block)
         return new LayoutRubyAsBlock(this);
     return LayoutObject::createObject(this, style);
 }
 
-}
+} // namespace blink

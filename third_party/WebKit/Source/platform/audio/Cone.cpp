@@ -26,13 +26,6 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
-
-#if ENABLE(WEB_AUDIO)
-
->>>>>>> miniblink49
 #include "platform/audio/Cone.h"
 #include "wtf/MathExtras.h"
 
@@ -45,13 +38,9 @@ ConeEffect::ConeEffect()
 {
 }
 
-<<<<<<< HEAD
 double ConeEffect::gain(FloatPoint3D sourcePosition,
     FloatPoint3D sourceOrientation,
     FloatPoint3D listenerPosition)
-=======
-double ConeEffect::gain(FloatPoint3D sourcePosition, FloatPoint3D sourceOrientation, FloatPoint3D listenerPosition)
->>>>>>> miniblink49
 {
     if (sourceOrientation.isZero() || ((m_innerAngle == 360.0) && (m_outerAngle == 360.0)))
         return 1.0; // no cone specified - unity gain
@@ -85,8 +74,3 @@ double ConeEffect::gain(FloatPoint3D sourcePosition, FloatPoint3D sourceOrientat
 }
 
 } // namespace blink
-<<<<<<< HEAD
-=======
-
-#endif // ENABLE(WEB_AUDIO)
->>>>>>> miniblink49

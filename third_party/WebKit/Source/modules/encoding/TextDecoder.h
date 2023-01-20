@@ -31,23 +31,15 @@
 #ifndef TextDecoder_h
 #define TextDecoder_h
 
-<<<<<<< HEAD
 #include "bindings/core/v8/ArrayBufferOrArrayBufferView.h"
 #include "bindings/core/v8/ScriptWrappable.h"
-=======
-#include "bindings/core/v8/ScriptWrappable.h"
-#include "bindings/modules/v8/UnionTypesModules.h"
->>>>>>> miniblink49
 #include "modules/encoding/TextDecodeOptions.h"
 #include "modules/encoding/TextDecoderOptions.h"
 #include "platform/heap/Handle.h"
 #include "wtf/text/TextCodec.h"
 #include "wtf/text/TextEncoding.h"
 #include "wtf/text/WTFString.h"
-<<<<<<< HEAD
 #include <memory>
-=======
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -55,7 +47,6 @@ class ExceptionState;
 
 typedef ArrayBufferOrArrayBufferView BufferSource;
 
-<<<<<<< HEAD
 class TextDecoder final : public GarbageCollectedFinalized<TextDecoder>,
                           public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
@@ -64,12 +55,6 @@ public:
     static TextDecoder* create(const String& label,
         const TextDecoderOptions&,
         ExceptionState&);
-=======
-class TextDecoder final : public GarbageCollectedFinalized<TextDecoder>, public ScriptWrappable {
-    DEFINE_WRAPPERTYPEINFO();
-public:
-    static TextDecoder* create(const String& label, const TextDecoderOptions&, ExceptionState&);
->>>>>>> miniblink49
     ~TextDecoder();
 
     // Implement the IDL
@@ -84,7 +69,6 @@ public:
 private:
     TextDecoder(const WTF::TextEncoding&, bool fatal, bool ignoreBOM);
 
-<<<<<<< HEAD
     String decode(const char* start,
         size_t length,
         const TextDecodeOptions&,
@@ -92,12 +76,6 @@ private:
 
     WTF::TextEncoding m_encoding;
     std::unique_ptr<WTF::TextCodec> m_codec;
-=======
-    String decode(const char* start, size_t length, const TextDecodeOptions&, ExceptionState&);
-
-    WTF::TextEncoding m_encoding;
-    OwnPtr<WTF::TextCodec> m_codec;
->>>>>>> miniblink49
     bool m_fatal;
     bool m_ignoreBOM;
     bool m_bomSeen;

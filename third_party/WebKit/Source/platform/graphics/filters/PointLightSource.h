@@ -27,26 +27,13 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 class PLATFORM_EXPORT PointLightSource final : public LightSource {
-=======
-class PLATFORM_EXPORT PointLightSource : public LightSource {
->>>>>>> miniblink49
 public:
     static PassRefPtr<PointLightSource> create(const FloatPoint3D& position)
     {
         return adoptRef(new PointLightSource(position));
     }
 
-<<<<<<< HEAD
-=======
-    PassRefPtr<LightSource> create(const FloatPoint3D& scale, const FloatSize& offset) const override
-    {
-        FloatPoint3D position(m_position.x() * scale.x() - offset.width(), m_position.y() * scale.y() - offset.height(), m_position.z() * scale.z());
-        return adoptRef(new PointLightSource(position));
-    }
-
->>>>>>> miniblink49
     const FloatPoint3D& position() const { return m_position; }
     bool setPosition(const FloatPoint3D&) override;
 

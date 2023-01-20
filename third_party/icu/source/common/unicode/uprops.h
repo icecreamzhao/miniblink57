@@ -18,15 +18,8 @@
 */
 
 #ifndef __UPROPS_H__
-<<<<<<< HEAD
 #define __UPROPS_H__
 
 #define GET_CATEGORY(props) ((props)&0x1f)
 
-=======
-#define __UPROPS_H__
-
-#define GET_CATEGORY(props) ((props)&0x1f)
-
->>>>>>> miniblink49
 #endif // __UPROPS_H__

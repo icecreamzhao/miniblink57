@@ -12,7 +12,6 @@
 
 #ifdef GR_TEST_UTILS
 
-<<<<<<< HEAD
 #include "../private/SkTemplates.h"
 #include "GrColor.h"
 #include "SkPathEffect.h"
@@ -20,12 +19,6 @@
 #include "SkStrokeRec.h"
 
 class GrStyle;
-=======
-#include "GrColor.h"
-#include "SkRandom.h"
-#include "SkStrokeRec.h"
-
->>>>>>> miniblink49
 class SkMatrix;
 class SkPath;
 class SkRRect;
@@ -33,11 +26,7 @@ struct SkRect;
 
 namespace GrTest {
 /**
-<<<<<<< HEAD
  * Helpers for use in Test functions.
-=======
- * A helper for use in Test functions.
->>>>>>> miniblink49
  */
 const SkMatrix& TestMatrix(SkRandom*);
 const SkMatrix& TestMatrixPreservesRightAngles(SkRandom*);
@@ -49,7 +38,6 @@ const SkRRect& TestRRectSimple(SkRandom*);
 const SkPath& TestPath(SkRandom*);
 const SkPath& TestPathConvex(SkRandom*);
 SkStrokeRec TestStrokeRec(SkRandom*);
-<<<<<<< HEAD
 /** Creates styles with dash path effects and null path effects */
 void TestStyle(SkRandom*, GrStyle*);
 
@@ -82,12 +70,6 @@ private:
 
 static inline GrColor GrRandomColor(SkRandom* random)
 {
-=======
-
-}
-
-static inline GrColor GrRandomColor(SkRandom* random) {
->>>>>>> miniblink49
     // There are only a few cases of random colors which interest us
     enum ColorMode {
         kAllOnes_ColorMode,
@@ -98,7 +80,6 @@ static inline GrColor GrRandomColor(SkRandom* random) {
     };
 
     ColorMode colorMode = ColorMode(random->nextULessThan(kLast_ColorMode + 1));
-<<<<<<< HEAD
     GrColor color SK_INIT_TO_AVOID_WARNING;
     switch (colorMode) {
     case kAllOnes_ColorMode:
@@ -121,41 +102,13 @@ static inline GrColor GrRandomColor(SkRandom* random) {
             alpha);
         break;
     }
-=======
-    GrColor color;
-    switch (colorMode) {
-        case kAllOnes_ColorMode:
-            color = GrColorPackRGBA(0xFF, 0xFF, 0xFF, 0xFF);
-            break;
-        case kAllZeros_ColorMode:
-            color = GrColorPackRGBA(0, 0, 0, 0);
-            break;
-        case kAlphaOne_ColorMode:
-            color = GrColorPackRGBA(random->nextULessThan(256),
-                                    random->nextULessThan(256),
-                                    random->nextULessThan(256),
-                                    0xFF);
-            break;
-        case kRandom_ColorMode: {
-                uint8_t alpha = random->nextULessThan(256);
-                color = GrColorPackRGBA(random->nextRangeU(0, alpha),
-                                        random->nextRangeU(0, alpha),
-                                        random->nextRangeU(0, alpha),
-                                        alpha);
-            break;
-        }
->>>>>>> miniblink49
     }
     GrColorIsPMAssert(color);
     return color;
 }
 
-<<<<<<< HEAD
 static inline uint8_t GrRandomCoverage(SkRandom* random)
 {
-=======
-static inline uint8_t GrRandomCoverage(SkRandom* random) {
->>>>>>> miniblink49
     enum CoverageMode {
         kZero_CoverageMode,
         kAllOnes_CoverageMode,
@@ -164,7 +117,6 @@ static inline uint8_t GrRandomCoverage(SkRandom* random) {
     };
 
     CoverageMode colorMode = CoverageMode(random->nextULessThan(kLast_CoverageMode + 1));
-<<<<<<< HEAD
     uint8_t coverage SK_INIT_TO_AVOID_WARNING;
     switch (colorMode) {
     case kZero_CoverageMode:
@@ -176,18 +128,6 @@ static inline uint8_t GrRandomCoverage(SkRandom* random) {
     case kRandom_CoverageMode:
         coverage = random->nextULessThan(256);
         break;
-=======
-    uint8_t coverage;
-    switch (colorMode) {
-        case kZero_CoverageMode:
-            coverage = 0;
-        case kAllOnes_CoverageMode:
-            coverage = 0xff;
-            break;
-        case kRandom_CoverageMode:
-            coverage = random->nextULessThan(256);
-            break;
->>>>>>> miniblink49
     }
     return coverage;
 }

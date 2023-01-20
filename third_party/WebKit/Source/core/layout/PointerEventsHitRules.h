@@ -22,10 +22,13 @@
 
 #include "core/layout/HitTestRequest.h"
 #include "core/style/ComputedStyleConstants.h"
+#include "wtf/Allocator.h"
 
 namespace blink {
 
 class PointerEventsHitRules {
+    STACK_ALLOCATED();
+
 public:
     enum EHitTesting {
         SVG_IMAGE_HITTESTING,
@@ -43,6 +46,6 @@ public:
     unsigned canHitBoundingBox : 1;
 };
 
-}
+} // namespace blink
 
 #endif

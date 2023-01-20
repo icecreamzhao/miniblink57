@@ -10,7 +10,6 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
-<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -22,45 +21,22 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
-=======
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
->>>>>>> miniblink49
  */
 
 #ifndef ConvolverNode_h
 #define ConvolverNode_h
 
-<<<<<<< HEAD
 #include "base/gtest_prod_util.h"
 #include "modules/ModulesExport.h"
 #include "modules/webaudio/AudioNode.h"
 #include "wtf/RefPtr.h"
 #include "wtf/ThreadingPrimitives.h"
 #include <memory>
-=======
-#include "modules/ModulesExport.h"
-#include "modules/webaudio/AudioNode.h"
-#include "wtf/OwnPtr.h"
-#include "wtf/RefPtr.h"
-#include "wtf/ThreadingPrimitives.h"
->>>>>>> miniblink49
 
 namespace blink {
 
 class AudioBuffer;
-<<<<<<< HEAD
 class ConvolverOptions;
-=======
->>>>>>> miniblink49
 class ExceptionState;
 class Reverb;
 
@@ -84,47 +60,29 @@ private:
     double tailTime() const override;
     double latencyTime() const override;
 
-<<<<<<< HEAD
     std::unique_ptr<Reverb> m_reverb;
-=======
-    OwnPtr<Reverb> m_reverb;
->>>>>>> miniblink49
     // This Persistent doesn't make a reference cycle including the owner
     // ConvolverNode.
     Persistent<AudioBuffer> m_buffer;
 
-<<<<<<< HEAD
     // This synchronizes dynamic changes to the convolution impulse response with
     // process().
-=======
-    // This synchronizes dynamic changes to the convolution impulse response with process().
->>>>>>> miniblink49
     mutable Mutex m_processLock;
 
     // Normalize the impulse response or not. Must default to true.
     bool m_normalize;
 
-<<<<<<< HEAD
     FRIEND_TEST_ALL_PREFIXES(ConvolverNodeTest, ReverbLifetime);
-=======
-    // TODO(tkent): Use FRIEND_TEST macro provided by gtest_prod.h
-    friend class ConvolverNodeTest_ReverbLifetime_Test;
->>>>>>> miniblink49
 };
 
 class MODULES_EXPORT ConvolverNode final : public AudioNode {
     DEFINE_WRAPPERTYPEINFO();
-<<<<<<< HEAD
 
 public:
     static ConvolverNode* create(BaseAudioContext&, ExceptionState&);
     static ConvolverNode* create(BaseAudioContext*,
         const ConvolverOptions&,
         ExceptionState&);
-=======
-public:
-    static ConvolverNode* create(AudioContext&, float sampleRate);
->>>>>>> miniblink49
 
     AudioBuffer* buffer() const;
     void setBuffer(AudioBuffer*, ExceptionState&);
@@ -132,18 +90,10 @@ public:
     void setNormalize(bool);
 
 private:
-<<<<<<< HEAD
     ConvolverNode(BaseAudioContext&);
     ConvolverHandler& convolverHandler() const;
 
     FRIEND_TEST_ALL_PREFIXES(ConvolverNodeTest, ReverbLifetime);
-=======
-    ConvolverNode(AudioContext&, float sampleRate);
-    ConvolverHandler& convolverHandler() const;
-
-    // TODO(tkent): Use FRIEND_TEST macro provided by gtest_prod.h
-    friend class ConvolverNodeTest_ReverbLifetime_Test;
->>>>>>> miniblink49
 };
 
 } // namespace blink

@@ -10,7 +10,6 @@
 namespace ots {
 
 struct OpenTypePREP {
-<<<<<<< HEAD
     const uint8_t* data;
     uint32_t length;
 };
@@ -18,12 +17,3 @@ struct OpenTypePREP {
 } // namespace ots
 
 #endif // OTS_PREP_H_
-=======
-  const uint8_t *data;
-  uint32_t length;
-};
-
-}  // namespace ots
-
-#endif  // OTS_PREP_H_
->>>>>>> miniblink49

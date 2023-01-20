@@ -12,7 +12,6 @@
 namespace v8 {
 namespace internal {
 
-<<<<<<< HEAD
     class AccountingAllocator;
     class AsmWasmData;
     class FunctionLiteral;
@@ -43,35 +42,3 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_ASMJS_ASM_JS_H_
-=======
-class AccountingAllocator;
-class AsmWasmData;
-class FunctionLiteral;
-class JSArrayBuffer;
-class ParseInfo;
-class SharedFunctionInfo;
-class UnoptimizedCompilationJob;
-
-// Interface to compile and instantiate for asm.js modules.
-class AsmJs {
- public:
-  static UnoptimizedCompilationJob* NewCompilationJob(
-      ParseInfo* parse_info, FunctionLiteral* literal,
-      AccountingAllocator* allocator);
-  static MaybeHandle<Object> InstantiateAsmWasm(Isolate* isolate,
-                                                Handle<SharedFunctionInfo>,
-                                                Handle<AsmWasmData> wasm_data,
-                                                Handle<JSReceiver> stdlib,
-                                                Handle<JSReceiver> foreign,
-                                                Handle<JSArrayBuffer> memory);
-
-  // Special export name used to indicate that the module exports a single
-  // function instead of a JavaScript object holding multiple functions.
-  static const char* const kSingleFunctionName;
-};
-
-}  // namespace internal
-}  // namespace v8
-
-#endif  // V8_ASMJS_ASM_JS_H_
->>>>>>> miniblink49

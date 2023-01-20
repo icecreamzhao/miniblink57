@@ -28,23 +28,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/inspector/InspectorDOMDebuggerAgent.h"
 
 #include "bindings/core/v8/ScriptEventListener.h"
-#include "core/InspectorFrontend.h"
+#include "bindings/core/v8/V8EventTarget.h"
 #include "core/dom/Element.h"
 #include "core/dom/Node.h"
 #include "core/events/Event.h"
 #include "core/events/EventTarget.h"
 #include "core/frame/LocalDOMWindow.h"
-#include "core/inspector/EventListenerInfo.h"
-#include "core/inspector/InjectedScript.h"
-#include "core/inspector/InjectedScriptManager.h"
 #include "core/inspector/InspectorDOMAgent.h"
-#include "core/inspector/InspectorState.h"
-#include "core/inspector/InstrumentingAgents.h"
-#include "platform/JSONValues.h"
+#include "core/inspector/V8InspectorString.h"
 
 namespace {
 
@@ -61,190 +55,306 @@ static const char instrumentationEventCategoryType[] = "instrumentation:";
 const uint32_t inheritableDOMBreakpointTypesMask = (1 << SubtreeModified);
 const int domBreakpointDerivedTypeShift = 16;
 
-}
+} // namespace
 
 namespace blink {
 
-static const char requestAnimationFrameEventName[] = "requestAnimationFrame";
-static const char cancelAnimationFrameEventName[] = "cancelAnimationFrame";
-static const char animationFrameFiredEventName[] = "animationFrameFired";
-static const char setInnerHTMLEventName[] = "setInnerHTML";
-static const char setTimerEventName[] = "setTimer";
-static const char clearTimerEventName[] = "clearTimer";
-static const char timerFiredEventName[] = "timerFired";
-static const char newPromiseEventName[] = "newPromise";
-static const char promiseResolvedEventName[] = "promiseResolved";
-static const char promiseRejectedEventName[] = "promiseRejected";
-static const char scriptFirstStatementEventName[] = "scriptFirstStatement";
-static const char windowCloseEventName[] = "close";
 static const char webglErrorFiredEventName[] = "webglErrorFired";
 static const char webglWarningFiredEventName[] = "webglWarningFired";
 static const char webglErrorNameProperty[] = "webglErrorName";
+static const char scriptBlockedByCSPEventName[] = "scriptBlockedByCSP";
 
 namespace DOMDebuggerAgentState {
-static const char eventListenerBreakpoints[] = "eventListenerBreakpoints";
-static const char eventTargetAny[] = "*";
-static const char pauseOnAllXHRs[] = "pauseOnAllXHRs";
-static const char xhrBreakpoints[] = "xhrBreakpoints";
+    static const char eventListenerBreakpoints[] = "eventListenerBreakpoints";
+    static const char eventTargetAny[] = "*";
+    static const char pauseOnAllXHRs[] = "pauseOnAllXHRs";
+    static const char xhrBreakpoints[] = "xhrBreakpoints";
+    static const char enabled[] = "enabled";
 }
 
-PassOwnPtrWillBeRawPtr<InspectorDOMDebuggerAgent> InspectorDOMDebuggerAgent::create(InjectedScriptManager* injectedScriptManager, InspectorDOMAgent* domAgent, InspectorDebuggerAgent* debuggerAgent)
+static void removeEventListenerCallback(
+    const v8::FunctionCallbackInfo<v8::Value>& info)
 {
-    return adoptPtrWillBeNoop(new InspectorDOMDebuggerAgent(injectedScriptManager, domAgent, debuggerAgent));
+    v8::Isolate* isolate = info.GetIsolate();
+    v8::Local<v8::Context> context = isolate->GetCurrentContext();
+    v8::Local<v8::Object> data = info.Data().As<v8::Object>();
+
+    v8::Local<v8::Value> v8Target;
+    if (!data->Get(context, v8String(isolate, "target")).ToLocal(&v8Target) || !v8Target->IsObject())
+        return;
+    EventTarget* target = V8EventTarget::toImplWithTypeCheck(isolate, v8Target);
+    // We need to handle LocalDOMWindow specially, because LocalDOMWindow wrapper
+    // exists on prototype chain.
+    if (!target)
+        target = toDOMWindow(isolate, v8Target);
+    if (!target || !target->getExecutionContext())
+        return;
+
+    v8::Local<v8::Value> v8Handler;
+    if (!data->Get(context, v8String(isolate, "handler")).ToLocal(&v8Handler) || !v8Handler->IsObject())
+        return;
+    v8::Local<v8::Value> v8Type;
+    if (!data->Get(context, v8String(isolate, "type")).ToLocal(&v8Type) || !v8Type->IsString())
+        return;
+    AtomicString type = AtomicString(toCoreString(v8::Local<v8::String>::Cast(v8Type)));
+    v8::Local<v8::Value> v8UseCapture;
+    if (!data->Get(context, v8String(isolate, "useCapture"))
+             .ToLocal(&v8UseCapture)
+        || !v8UseCapture->IsBoolean())
+        return;
+    bool useCapture = v8::Local<v8::Boolean>::Cast(v8UseCapture)->Value();
+
+    EventListener* eventListener = nullptr;
+    EventListenerVector* listeners = target->getEventListeners(type);
+    if (!listeners)
+        return;
+    for (size_t i = 0; i < listeners->size(); ++i) {
+        if (listeners->at(i).capture() != useCapture)
+            continue;
+        V8AbstractEventListener* v8Listener = V8AbstractEventListener::cast(listeners->at(i).listener());
+        if (!v8Listener)
+            continue;
+        if (!v8Listener->hasExistingListenerObject())
+            continue;
+        if (!v8Listener->getExistingListenerObject()
+                 ->Equals(context, v8Handler)
+                 .FromMaybe(false))
+            continue;
+        eventListener = v8Listener;
+        break;
+    }
+    if (!eventListener)
+        return;
+    EventListenerOptions options;
+    options.setCapture(useCapture);
+    target->removeEventListener(type, eventListener, options);
 }
 
-InspectorDOMDebuggerAgent::InspectorDOMDebuggerAgent(InjectedScriptManager* injectedScriptManager, InspectorDOMAgent* domAgent, InspectorDebuggerAgent* debuggerAgent)
-    : InspectorBaseAgent<InspectorDOMDebuggerAgent, InspectorFrontend::DOMDebugger>("DOMDebugger")
-    , m_injectedScriptManager(injectedScriptManager)
+static void returnDataCallback(
+    const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    info.GetReturnValue().Set(info.Data());
+}
+
+static v8::MaybeLocal<v8::Function> createRemoveFunction(
+    v8::Local<v8::Context> context,
+    v8::Local<v8::Value> object,
+    v8::Local<v8::Object> handler,
+    AtomicString type,
+    bool useCapture)
+{
+    v8::Isolate* isolate = context->GetIsolate();
+    v8::Local<v8::Object> data = v8::Object::New(isolate);
+    if (!data->Set(context, v8String(isolate, "target"), object).FromMaybe(false))
+        return v8::MaybeLocal<v8::Function>();
+    if (!data->Set(context, v8String(isolate, "handler"), handler)
+             .FromMaybe(false))
+        return v8::MaybeLocal<v8::Function>();
+    if (!data->Set(context, v8String(isolate, "type"), v8String(isolate, type))
+             .FromMaybe(false))
+        return v8::MaybeLocal<v8::Function>();
+    if (!data->Set(context, v8String(isolate, "useCapture"),
+                 v8Boolean(useCapture, isolate))
+             .FromMaybe(false))
+        return v8::MaybeLocal<v8::Function>();
+    v8::Local<v8::Function> removeFunction = v8::Function::New(context, removeEventListenerCallback, data, 0,
+        v8::ConstructorBehavior::kThrow)
+                                                 .ToLocalChecked();
+    v8::Local<v8::Function> toStringFunction;
+    if (v8::Function::New(
+            context, returnDataCallback,
+            v8String(isolate, "function remove() { [Command Line API] }"), 0,
+            v8::ConstructorBehavior::kThrow)
+            .ToLocal(&toStringFunction))
+        removeFunction->Set(v8String(context->GetIsolate(), "toString"),
+            toStringFunction);
+    return removeFunction;
+}
+
+void InspectorDOMDebuggerAgent::eventListenersInfoForTarget(
+    v8::Isolate* isolate,
+    v8::Local<v8::Value> value,
+    V8EventListenerInfoList& eventInformation)
+{
+    EventTarget* target = V8EventTarget::toImplWithTypeCheck(isolate, value);
+    // We need to handle LocalDOMWindow specially, because LocalDOMWindow wrapper
+    // exists on prototype chain.
+    if (!target)
+        target = toDOMWindow(isolate, value);
+    if (!target || !target->getExecutionContext())
+        return;
+
+    ExecutionContext* executionContext = target->getExecutionContext();
+
+    // Nodes and their Listeners for the concerned event types (order is top to
+    // bottom).
+    Vector<AtomicString> eventTypes = target->eventTypes();
+    for (size_t j = 0; j < eventTypes.size(); ++j) {
+        AtomicString& type = eventTypes[j];
+        EventListenerVector* listeners = target->getEventListeners(type);
+        if (!listeners)
+            continue;
+        for (size_t k = 0; k < listeners->size(); ++k) {
+            EventListener* eventListener = listeners->at(k).listener();
+            if (eventListener->type() != EventListener::JSEventListenerType)
+                continue;
+            V8AbstractEventListener* v8Listener = static_cast<V8AbstractEventListener*>(eventListener);
+            v8::Local<v8::Context> context = toV8Context(executionContext, v8Listener->world());
+            // Hide listeners from other contexts.
+            if (context != isolate->GetCurrentContext())
+                continue;
+            // getListenerObject() may cause JS in the event attribute to get
+            // compiled, potentially unsuccessfully.  In that case, the function
+            // returns the empty handle without an exception.
+            v8::Local<v8::Object> handler = v8Listener->getListenerObject(executionContext);
+            if (handler.IsEmpty())
+                continue;
+            bool useCapture = listeners->at(k).capture();
+            eventInformation.push_back(V8EventListenerInfo(
+                type, useCapture, listeners->at(k).passive(), listeners->at(k).once(),
+                handler,
+                createRemoveFunction(context, value, handler, type, useCapture)));
+        }
+    }
+}
+
+InspectorDOMDebuggerAgent::InspectorDOMDebuggerAgent(
+    v8::Isolate* isolate,
+    InspectorDOMAgent* domAgent,
+    v8_inspector::V8InspectorSession* v8Session)
+    : m_isolate(isolate)
     , m_domAgent(domAgent)
-    , m_debuggerAgent(debuggerAgent)
+    , m_v8Session(v8Session)
 {
-    m_debuggerAgent->setListener(this);
-    m_domAgent->setListener(this);
 }
 
-InspectorDOMDebuggerAgent::~InspectorDOMDebuggerAgent()
-{
-#if !ENABLE(OILPAN)
-    ASSERT(!m_debuggerAgent);
-    ASSERT(!m_domAgent);
-    ASSERT(!m_instrumentingAgents->inspectorDOMDebuggerAgent());
-#endif
-}
+InspectorDOMDebuggerAgent::~InspectorDOMDebuggerAgent() { }
 
 DEFINE_TRACE(InspectorDOMDebuggerAgent)
 {
-    visitor->trace(m_injectedScriptManager);
     visitor->trace(m_domAgent);
-    visitor->trace(m_debuggerAgent);
-#if ENABLE(OILPAN)
     visitor->trace(m_domBreakpoints);
-#endif
     InspectorBaseAgent::trace(visitor);
 }
 
-// Browser debugger agent enabled only when JS debugger is enabled.
-void InspectorDOMDebuggerAgent::debuggerWasEnabled()
+Response InspectorDOMDebuggerAgent::disable()
 {
-    if (m_domAgent->enabled() && m_debuggerAgent->enabled())
-        m_instrumentingAgents->setInspectorDOMDebuggerAgent(this);
+    setEnabled(false);
+    m_domBreakpoints.clear();
+    m_state->remove(DOMDebuggerAgentState::eventListenerBreakpoints);
+    m_state->remove(DOMDebuggerAgentState::xhrBreakpoints);
+    m_state->remove(DOMDebuggerAgentState::pauseOnAllXHRs);
+    return Response::OK();
 }
 
-void InspectorDOMDebuggerAgent::debuggerWasDisabled()
+void InspectorDOMDebuggerAgent::restore()
 {
-    disable(nullptr);
+    if (m_state->booleanProperty(DOMDebuggerAgentState::enabled, false))
+        m_instrumentingAgents->addInspectorDOMDebuggerAgent(this);
 }
 
-void InspectorDOMDebuggerAgent::domAgentWasEnabled()
+Response InspectorDOMDebuggerAgent::setEventListenerBreakpoint(
+    const String& eventName,
+    Maybe<String> targetName)
 {
-    if (m_domAgent->enabled() && m_debuggerAgent->enabled())
-        m_instrumentingAgents->setInspectorDOMDebuggerAgent(this);
+    return setBreakpoint(String(listenerEventCategoryType) + eventName,
+        targetName.fromMaybe(String()));
 }
 
-void InspectorDOMDebuggerAgent::domAgentWasDisabled()
+Response InspectorDOMDebuggerAgent::setInstrumentationBreakpoint(
+    const String& eventName)
 {
-    disable(nullptr);
+    return setBreakpoint(String(instrumentationEventCategoryType) + eventName,
+        String());
 }
 
-bool InspectorDOMDebuggerAgent::checkEnabled(ErrorString* errorString)
+static protocol::DictionaryValue* ensurePropertyObject(
+    protocol::DictionaryValue* object,
+    const String& propertyName)
 {
-    if (!m_domAgent->enabled()) {
-        *errorString = "DOM domain required by DOMDebugger is not enabled";
-        return false;
+    protocol::Value* value = object->get(propertyName);
+    if (value)
+        return protocol::DictionaryValue::cast(value);
+
+    std::unique_ptr<protocol::DictionaryValue> newResult = protocol::DictionaryValue::create();
+    protocol::DictionaryValue* result = newResult.get();
+    object->setObject(propertyName, std::move(newResult));
+    return result;
+}
+
+protocol::DictionaryValue*
+InspectorDOMDebuggerAgent::eventListenerBreakpoints()
+{
+    protocol::DictionaryValue* breakpoints = m_state->getObject(DOMDebuggerAgentState::eventListenerBreakpoints);
+    if (!breakpoints) {
+        std::unique_ptr<protocol::DictionaryValue> newBreakpoints = protocol::DictionaryValue::create();
+        breakpoints = newBreakpoints.get();
+        m_state->setObject(DOMDebuggerAgentState::eventListenerBreakpoints,
+            std::move(newBreakpoints));
     }
-    if (!m_debuggerAgent->enabled()) {
-        *errorString = "Debugger domain required by DOMDebugger is not enabled";
-        return false;
+    return breakpoints;
+}
+
+protocol::DictionaryValue* InspectorDOMDebuggerAgent::xhrBreakpoints()
+{
+    protocol::DictionaryValue* breakpoints = m_state->getObject(DOMDebuggerAgentState::xhrBreakpoints);
+    if (!breakpoints) {
+        std::unique_ptr<protocol::DictionaryValue> newBreakpoints = protocol::DictionaryValue::create();
+        breakpoints = newBreakpoints.get();
+        m_state->setObject(DOMDebuggerAgentState::xhrBreakpoints,
+            std::move(newBreakpoints));
     }
-    return true;
+    return breakpoints;
 }
 
-void InspectorDOMDebuggerAgent::disable(ErrorString*)
+Response InspectorDOMDebuggerAgent::setBreakpoint(const String& eventName,
+    const String& targetName)
 {
-    m_instrumentingAgents->setInspectorDOMDebuggerAgent(nullptr);
-    clear();
-}
-
-void InspectorDOMDebuggerAgent::discardAgent()
-{
-    m_debuggerAgent->setListener(nullptr);
-    m_debuggerAgent = nullptr;
-    m_domAgent->setListener(nullptr);
-    m_domAgent = nullptr;
-}
-
-void InspectorDOMDebuggerAgent::setEventListenerBreakpoint(ErrorString* error, const String& eventName, const String* targetName)
-{
-    setBreakpoint(error, String(listenerEventCategoryType) + eventName, targetName);
-}
-
-void InspectorDOMDebuggerAgent::setInstrumentationBreakpoint(ErrorString* error, const String& eventName)
-{
-    setBreakpoint(error, String(instrumentationEventCategoryType) + eventName, 0);
-}
-
-static PassRefPtr<JSONObject> ensurePropertyObject(JSONObject* object, const String& propertyName)
-{
-    JSONObject::iterator it = object->find(propertyName);
-    if (it != object->end())
-        return it->value->asObject();
-
-    RefPtr<JSONObject> result = JSONObject::create();
-    object->setObject(propertyName, result);
-    return result.release();
-}
-
-void InspectorDOMDebuggerAgent::setBreakpoint(ErrorString* error, const String& eventName, const String* targetName)
-{
-    if (!checkEnabled(error))
-        return;
-    if (eventName.isEmpty()) {
-        *error = "Event name is empty";
-        return;
-    }
-
-    RefPtr<JSONObject> eventListenerBreakpoints = m_state->getObject(DOMDebuggerAgentState::eventListenerBreakpoints);
-    RefPtr<JSONObject> breakpointsByTarget = ensurePropertyObject(eventListenerBreakpoints.get(), eventName);
-    if (!targetName || targetName->isEmpty())
-        breakpointsByTarget->setBoolean(DOMDebuggerAgentState::eventTargetAny, true);
+    if (eventName.isEmpty())
+        return Response::Error("Event name is empty");
+    protocol::DictionaryValue* breakpointsByTarget = ensurePropertyObject(eventListenerBreakpoints(), eventName);
+    if (targetName.isEmpty())
+        breakpointsByTarget->setBoolean(DOMDebuggerAgentState::eventTargetAny,
+            true);
     else
-        breakpointsByTarget->setBoolean(targetName->lower(), true);
-    m_state->setObject(DOMDebuggerAgentState::eventListenerBreakpoints, eventListenerBreakpoints.release());
+        breakpointsByTarget->setBoolean(targetName.lower(), true);
+    didAddBreakpoint();
+    return Response::OK();
 }
 
-void InspectorDOMDebuggerAgent::removeEventListenerBreakpoint(ErrorString* error, const String& eventName, const String* targetName)
+Response InspectorDOMDebuggerAgent::removeEventListenerBreakpoint(
+    const String& eventName,
+    Maybe<String> targetName)
 {
-    removeBreakpoint(error, String(listenerEventCategoryType) + eventName, targetName);
+    return removeBreakpoint(String(listenerEventCategoryType) + eventName,
+        targetName.fromMaybe(String()));
 }
 
-void InspectorDOMDebuggerAgent::removeInstrumentationBreakpoint(ErrorString* error, const String& eventName)
+Response InspectorDOMDebuggerAgent::removeInstrumentationBreakpoint(
+    const String& eventName)
 {
-    removeBreakpoint(error, String(instrumentationEventCategoryType) + eventName, 0);
+    return removeBreakpoint(String(instrumentationEventCategoryType) + eventName,
+        String());
 }
 
-void InspectorDOMDebuggerAgent::removeBreakpoint(ErrorString* error, const String& eventName, const String* targetName)
+Response InspectorDOMDebuggerAgent::removeBreakpoint(const String& eventName,
+    const String& targetName)
 {
-    if (eventName.isEmpty()) {
-        *error = "Event name is empty";
-        return;
-    }
-
-    RefPtr<JSONObject> eventListenerBreakpoints = m_state->getObject(DOMDebuggerAgentState::eventListenerBreakpoints);
-    RefPtr<JSONObject> breakpointsByTarget = ensurePropertyObject(eventListenerBreakpoints.get(), eventName);
-    if (!targetName || targetName->isEmpty())
+    if (eventName.isEmpty())
+        return Response::Error("Event name is empty");
+    protocol::DictionaryValue* breakpointsByTarget = ensurePropertyObject(eventListenerBreakpoints(), eventName);
+    if (targetName.isEmpty())
         breakpointsByTarget->remove(DOMDebuggerAgentState::eventTargetAny);
     else
-        breakpointsByTarget->remove(targetName->lower());
-    m_state->setObject(DOMDebuggerAgentState::eventListenerBreakpoints, eventListenerBreakpoints.release());
+        breakpointsByTarget->remove(targetName.lower());
+    didRemoveBreakpoint();
+    return Response::OK();
 }
 
 void InspectorDOMDebuggerAgent::didInvalidateStyleAttr(Node* node)
 {
-    if (hasBreakpoint(node, AttributeModified)) {
-        RefPtr<JSONObject> eventData = JSONObject::create();
-        descriptionForDOMEvent(node, AttributeModified, false, eventData.get());
-        m_debuggerAgent->breakProgram(InspectorFrontend::Debugger::Reason::DOM, eventData.release());
-    }
+    if (hasBreakpoint(node, AttributeModified))
+        breakProgramOnDOMEvent(node, AttributeModified, false);
 }
 
 void InspectorDOMDebuggerAgent::didInsertDOMNode(Node* node)
@@ -262,72 +372,88 @@ void InspectorDOMDebuggerAgent::didRemoveDOMNode(Node* node)
     if (m_domBreakpoints.size()) {
         // Remove subtree breakpoints.
         m_domBreakpoints.remove(node);
-        WillBeHeapVector<RawPtrWillBeMember<Node> > stack(1, InspectorDOMAgent::innerFirstChild(node));
+        HeapVector<Member<Node>> stack(1, InspectorDOMAgent::innerFirstChild(node));
         do {
-            Node* node = stack.last();
-            stack.removeLast();
+            Node* node = stack.back();
+            stack.pop_back();
             if (!node)
                 continue;
             m_domBreakpoints.remove(node);
-            stack.append(InspectorDOMAgent::innerFirstChild(node));
-            stack.append(InspectorDOMAgent::innerNextSibling(node));
+            stack.push_back(InspectorDOMAgent::innerFirstChild(node));
+            stack.push_back(InspectorDOMAgent::innerNextSibling(node));
         } while (!stack.isEmpty());
     }
 }
 
-static int domTypeForName(ErrorString* errorString, const String& typeString)
+static Response domTypeForName(const String& typeString, int& type)
 {
-    if (typeString == "subtree-modified")
-        return SubtreeModified;
-    if (typeString == "attribute-modified")
-        return AttributeModified;
-    if (typeString == "node-removed")
-        return NodeRemoved;
-    *errorString = "Unknown DOM breakpoint type: " + typeString;
-    return -1;
+    if (typeString == "subtree-modified") {
+        type = SubtreeModified;
+        return Response::OK();
+    }
+    if (typeString == "attribute-modified") {
+        type = AttributeModified;
+        return Response::OK();
+    }
+    if (typeString == "node-removed") {
+        type = NodeRemoved;
+        return Response::OK();
+    }
+    return Response::Error(String("Unknown DOM breakpoint type: " + typeString));
 }
 
 static String domTypeName(int type)
 {
     switch (type) {
-    case SubtreeModified: return "subtree-modified";
-    case AttributeModified: return "attribute-modified";
-    case NodeRemoved: return "node-removed";
-    default: break;
+    case SubtreeModified:
+        return "subtree-modified";
+    case AttributeModified:
+        return "attribute-modified";
+    case NodeRemoved:
+        return "node-removed";
+    default:
+        break;
     }
     return "";
 }
 
-void InspectorDOMDebuggerAgent::setDOMBreakpoint(ErrorString* errorString, int nodeId, const String& typeString)
+Response InspectorDOMDebuggerAgent::setDOMBreakpoint(int nodeId,
+    const String& typeString)
 {
-    if (!checkEnabled(errorString))
-        return;
-    Node* node = m_domAgent->assertNode(errorString, nodeId);
-    if (!node)
-        return;
+    Node* node = nullptr;
+    Response response = m_domAgent->assertNode(nodeId, node);
+    if (!response.isSuccess())
+        return response;
 
-    int type = domTypeForName(errorString, typeString);
-    if (type == -1)
-        return;
+    int type = -1;
+    response = domTypeForName(typeString, type);
+    if (!response.isSuccess())
+        return response;
 
     uint32_t rootBit = 1 << type;
     m_domBreakpoints.set(node, m_domBreakpoints.get(node) | rootBit);
     if (rootBit & inheritableDOMBreakpointTypesMask) {
-        for (Node* child = InspectorDOMAgent::innerFirstChild(node); child; child = InspectorDOMAgent::innerNextSibling(child))
+        for (Node* child = InspectorDOMAgent::innerFirstChild(node); child;
+             child = InspectorDOMAgent::innerNextSibling(child))
             updateSubtreeBreakpoints(child, rootBit, true);
     }
+    didAddBreakpoint();
+    return Response::OK();
 }
 
-void InspectorDOMDebuggerAgent::removeDOMBreakpoint(ErrorString* errorString, int nodeId, const String& typeString)
+Response InspectorDOMDebuggerAgent::removeDOMBreakpoint(
+    int nodeId,
+    const String& typeString)
 {
-    if (!checkEnabled(errorString))
-        return;
-    Node* node = m_domAgent->assertNode(errorString, nodeId);
-    if (!node)
-        return;
-    int type = domTypeForName(errorString, typeString);
-    if (type == -1)
-        return;
+    Node* node = nullptr;
+    Response response = m_domAgent->assertNode(nodeId, node);
+    if (!response.isSuccess())
+        return response;
+
+    int type = -1;
+    response = domTypeForName(typeString, type);
+    if (!response.isSuccess())
+        return response;
 
     uint32_t rootBit = 1 << type;
     uint32_t mask = m_domBreakpoints.get(node) & ~rootBit;
@@ -337,113 +463,147 @@ void InspectorDOMDebuggerAgent::removeDOMBreakpoint(ErrorString* errorString, in
         m_domBreakpoints.remove(node);
 
     if ((rootBit & inheritableDOMBreakpointTypesMask) && !(mask & (rootBit << domBreakpointDerivedTypeShift))) {
-        for (Node* child = InspectorDOMAgent::innerFirstChild(node); child; child = InspectorDOMAgent::innerNextSibling(child))
+        for (Node* child = InspectorDOMAgent::innerFirstChild(node); child;
+             child = InspectorDOMAgent::innerNextSibling(child))
             updateSubtreeBreakpoints(child, rootBit, false);
     }
+    didRemoveBreakpoint();
+    return Response::OK();
 }
 
-void InspectorDOMDebuggerAgent::getEventListeners(ErrorString* errorString, const String& objectId, RefPtr<TypeBuilder::Array<TypeBuilder::DOMDebugger::EventListener>>& listenersArray)
+Response InspectorDOMDebuggerAgent::getEventListeners(
+    const String& objectId,
+    std::unique_ptr<protocol::Array<protocol::DOMDebugger::EventListener>>*
+        listenersArray)
 {
-    InjectedScript injectedScript = m_injectedScriptManager->injectedScriptForObjectId(objectId);
-    if (injectedScript.isEmpty()) {
-        *errorString = "Inspected frame has gone";
-        return;
+    v8::HandleScope handles(m_isolate);
+    v8::Local<v8::Value> object;
+    v8::Local<v8::Context> context;
+    std::unique_ptr<v8_inspector::StringBuffer> error;
+    std::unique_ptr<v8_inspector::StringBuffer> objectGroup;
+    if (!m_v8Session->unwrapObject(&error, toV8InspectorStringView(objectId),
+            &object, &context, &objectGroup)) {
+        return Response::Error(toCoreString(std::move(error)));
     }
-    EventTarget* target = injectedScript.eventTargetForObjectId(objectId);
-    if (!target) {
-        *errorString = "No event target with passed objectId";
-        return;
-    }
-
-    listenersArray = TypeBuilder::Array<TypeBuilder::DOMDebugger::EventListener>::create();
-    Vector<EventListenerInfo> eventInformation;
-    EventListenerInfo::getEventListeners(target, eventInformation, false);
-    if (eventInformation.isEmpty())
-        return;
-
-    String objectGroup = injectedScript.objectIdToObjectGroupName(objectId);
-    RegisteredEventListenerIterator iterator(eventInformation);
-    while (const RegisteredEventListener* listener = iterator.nextRegisteredEventListener()) {
-        const EventListenerInfo& info = iterator.currentEventListenerInfo();
-        RefPtr<TypeBuilder::DOMDebugger::EventListener> listenerObject = buildObjectForEventListener(*listener, info.eventType, info.eventTarget, objectGroup);
+    v8::Context::Scope scope(context);
+    *listenersArray = protocol::Array<protocol::DOMDebugger::EventListener>::create();
+    V8EventListenerInfoList eventInformation;
+    InspectorDOMDebuggerAgent::eventListenersInfoForTarget(
+        context->GetIsolate(), object, eventInformation);
+    for (const auto& info : eventInformation) {
+        if (!info.useCapture)
+            continue;
+        std::unique_ptr<protocol::DOMDebugger::EventListener> listenerObject = buildObjectForEventListener(context, info, objectGroup->string());
         if (listenerObject)
-            listenersArray->addItem(listenerObject);
+            (*listenersArray)->addItem(std::move(listenerObject));
     }
+    for (const auto& info : eventInformation) {
+        if (info.useCapture)
+            continue;
+        std::unique_ptr<protocol::DOMDebugger::EventListener> listenerObject = buildObjectForEventListener(context, info, objectGroup->string());
+        if (listenerObject)
+            (*listenersArray)->addItem(std::move(listenerObject));
+    }
+    return Response::OK();
 }
 
-PassRefPtr<TypeBuilder::DOMDebugger::EventListener> InspectorDOMDebuggerAgent::buildObjectForEventListener(const RegisteredEventListener& registeredEventListener, const AtomicString& eventType, EventTarget* target, const String& objectGroupId)
+std::unique_ptr<protocol::DOMDebugger::EventListener>
+InspectorDOMDebuggerAgent::buildObjectForEventListener(
+    v8::Local<v8::Context> context,
+    const V8EventListenerInfo& info,
+    const v8_inspector::StringView& objectGroupId)
 {
-    RefPtr<EventListener> eventListener = registeredEventListener.listener;
+    if (info.handler.IsEmpty())
+        return nullptr;
+
+    v8::Isolate* isolate = context->GetIsolate();
+    v8::Local<v8::Function> function = eventListenerEffectiveFunction(isolate, info.handler);
+    if (function.IsEmpty())
+        return nullptr;
+
     String scriptId;
     int lineNumber;
     int columnNumber;
-    ExecutionContext* context = target->executionContext();
-    if (!context)
-        return nullptr;
-    if (!eventListenerHandlerLocation(context, eventListener.get(), scriptId, lineNumber, columnNumber))
-        return nullptr;
+    getFunctionLocation(function, scriptId, lineNumber, columnNumber);
 
-    RefPtr<TypeBuilder::Debugger::Location> location = TypeBuilder::Debugger::Location::create()
-        .setScriptId(scriptId)
-        .setLineNumber(lineNumber);
-    location->setColumnNumber(columnNumber);
-    RefPtr<TypeBuilder::DOMDebugger::EventListener> value = TypeBuilder::DOMDebugger::EventListener::create()
-        .setType(eventType)
-        .setUseCapture(registeredEventListener.useCapture)
-        .setLocation(location);
-    if (!objectGroupId.isEmpty())
-        value->setHandler(eventHandlerObject(context, eventListener.get(), m_injectedScriptManager, &objectGroupId));
-    return value.release();
+    std::unique_ptr<protocol::DOMDebugger::EventListener> value = protocol::DOMDebugger::EventListener::create()
+                                                                      .setType(info.eventType)
+                                                                      .setUseCapture(info.useCapture)
+                                                                      .setPassive(info.passive)
+                                                                      .setOnce(info.once)
+                                                                      .setScriptId(scriptId)
+                                                                      .setLineNumber(lineNumber)
+                                                                      .setColumnNumber(columnNumber)
+                                                                      .build();
+    if (objectGroupId.length()) {
+        value->setHandler(m_v8Session->wrapObject(context, function, objectGroupId
+#if V8_MAJOR_VERSION >= 7
+            , false
+#endif
+        ));
+        value->setOriginalHandler(m_v8Session->wrapObject(context, info.handler, objectGroupId
+#if V8_MAJOR_VERSION >= 7
+            , false
+#endif
+        ));
+        v8::Local<v8::Function> removeFunction;
+        if (info.removeFunction.ToLocal(&removeFunction))
+            value->setRemoveFunction(m_v8Session->wrapObject(context, removeFunction, objectGroupId
+#if V8_MAJOR_VERSION >= 7
+                , false
+#endif
+            ));
+    }
+    return value;
+}
+
+void InspectorDOMDebuggerAgent::allowNativeBreakpoint(
+    const String& breakpointName,
+    const String* targetName,
+    bool sync)
+{
+    pauseOnNativeEventIfNeeded(
+        preparePauseOnNativeEventData(breakpointName, targetName), sync);
 }
 
 void InspectorDOMDebuggerAgent::willInsertDOMNode(Node* parent)
 {
-    if (hasBreakpoint(parent, SubtreeModified)) {
-        RefPtr<JSONObject> eventData = JSONObject::create();
-        descriptionForDOMEvent(parent, SubtreeModified, true, eventData.get());
-        m_debuggerAgent->breakProgram(InspectorFrontend::Debugger::Reason::DOM, eventData.release());
-    }
+    if (hasBreakpoint(parent, SubtreeModified))
+        breakProgramOnDOMEvent(parent, SubtreeModified, true);
 }
 
 void InspectorDOMDebuggerAgent::willRemoveDOMNode(Node* node)
 {
     Node* parentNode = InspectorDOMAgent::innerParentNode(node);
-    if (hasBreakpoint(node, NodeRemoved)) {
-        RefPtr<JSONObject> eventData = JSONObject::create();
-        descriptionForDOMEvent(node, NodeRemoved, false, eventData.get());
-        m_debuggerAgent->breakProgram(InspectorFrontend::Debugger::Reason::DOM, eventData.release());
-    } else if (parentNode && hasBreakpoint(parentNode, SubtreeModified)) {
-        RefPtr<JSONObject> eventData = JSONObject::create();
-        descriptionForDOMEvent(node, SubtreeModified, false, eventData.get());
-        m_debuggerAgent->breakProgram(InspectorFrontend::Debugger::Reason::DOM, eventData.release());
-    }
+    if (hasBreakpoint(node, NodeRemoved))
+        breakProgramOnDOMEvent(node, NodeRemoved, false);
+    else if (parentNode && hasBreakpoint(parentNode, SubtreeModified))
+        breakProgramOnDOMEvent(node, SubtreeModified, false);
     didRemoveDOMNode(node);
 }
 
-void InspectorDOMDebuggerAgent::willModifyDOMAttr(Element* element, const AtomicString&, const AtomicString&)
+void InspectorDOMDebuggerAgent::willModifyDOMAttr(Element* element,
+    const AtomicString&,
+    const AtomicString&)
 {
-    if (hasBreakpoint(element, AttributeModified)) {
-        RefPtr<JSONObject> eventData = JSONObject::create();
-        descriptionForDOMEvent(element, AttributeModified, false, eventData.get());
-        m_debuggerAgent->breakProgram(InspectorFrontend::Debugger::Reason::DOM, eventData.release());
-    }
+    if (hasBreakpoint(element, AttributeModified))
+        breakProgramOnDOMEvent(element, AttributeModified, false);
 }
 
-void InspectorDOMDebuggerAgent::willSetInnerHTML()
+void InspectorDOMDebuggerAgent::breakProgramOnDOMEvent(Node* target,
+    int breakpointType,
+    bool insertion)
 {
-    pauseOnNativeEventIfNeeded(preparePauseOnNativeEventData(setInnerHTMLEventName, 0), true);
-}
-
-void InspectorDOMDebuggerAgent::descriptionForDOMEvent(Node* target, int breakpointType, bool insertion, JSONObject* description)
-{
-    ASSERT(hasBreakpoint(target, breakpointType));
+    DCHECK(hasBreakpoint(target, breakpointType));
+    std::unique_ptr<protocol::DictionaryValue> description = protocol::DictionaryValue::create();
 
     Node* breakpointOwner = target;
     if ((1 << breakpointType) & inheritableDOMBreakpointTypesMask) {
-        // For inheritable breakpoint types, target node isn't always the same as the node that owns a breakpoint.
-        // Target node may be unknown to frontend, so we need to push it first.
-        RefPtr<TypeBuilder::Runtime::RemoteObject> targetNodeObject = m_domAgent->resolveNode(target, InspectorDebuggerAgent::backtraceObjectGroup);
-        description->setValue("targetNode", targetNodeObject);
+        // For inheritable breakpoint types, target node isn't always the same as
+        // the node that owns a breakpoint.  Target node may be unknown to frontend,
+        // so we need to push it first.
+        description->setInteger("targetNodeId",
+            m_domAgent->pushNodePathToFrontend(target));
 
         // Find breakpoint owner node.
         if (!insertion)
@@ -462,18 +622,27 @@ void InspectorDOMDebuggerAgent::descriptionForDOMEvent(Node* target, int breakpo
 
     int breakpointOwnerNodeId = m_domAgent->boundNodeId(breakpointOwner);
     ASSERT(breakpointOwnerNodeId);
-    description->setNumber("nodeId", breakpointOwnerNodeId);
+    description->setInteger("nodeId", breakpointOwnerNodeId);
     description->setString("type", domTypeName(breakpointType));
+    String json = description->serialize();
+    m_v8Session->breakProgram(
+        toV8InspectorStringView(
+            v8_inspector::protocol::Debugger::API::Paused::ReasonEnum::DOM),
+        toV8InspectorStringView(json));
 }
 
 bool InspectorDOMDebuggerAgent::hasBreakpoint(Node* node, int type)
 {
+    if (!m_domAgent->enabled())
+        return false;
     uint32_t rootBit = 1 << type;
     uint32_t derivedBit = rootBit << domBreakpointDerivedTypeShift;
     return m_domBreakpoints.get(node) & (rootBit | derivedBit);
 }
 
-void InspectorDOMDebuggerAgent::updateSubtreeBreakpoints(Node* node, uint32_t rootMask, bool set)
+void InspectorDOMDebuggerAgent::updateSubtreeBreakpoints(Node* node,
+    uint32_t rootMask,
+    bool set)
 {
     uint32_t oldMask = m_domBreakpoints.get(node);
     uint32_t derivedMask = rootMask << domBreakpointDerivedTypeShift;
@@ -487,129 +656,76 @@ void InspectorDOMDebuggerAgent::updateSubtreeBreakpoints(Node* node, uint32_t ro
     if (!newRootMask)
         return;
 
-    for (Node* child = InspectorDOMAgent::innerFirstChild(node); child; child = InspectorDOMAgent::innerNextSibling(child))
+    for (Node* child = InspectorDOMAgent::innerFirstChild(node); child;
+         child = InspectorDOMAgent::innerNextSibling(child))
         updateSubtreeBreakpoints(child, newRootMask, set);
 }
 
-void InspectorDOMDebuggerAgent::pauseOnNativeEventIfNeeded(PassRefPtr<JSONObject> eventData, bool synchronous)
+void InspectorDOMDebuggerAgent::pauseOnNativeEventIfNeeded(
+    std::unique_ptr<protocol::DictionaryValue> eventData,
+    bool synchronous)
 {
     if (!eventData)
         return;
+    String json = eventData->serialize();
     if (synchronous)
-        m_debuggerAgent->breakProgram(InspectorFrontend::Debugger::Reason::EventListener, eventData);
+        m_v8Session->breakProgram(
+            toV8InspectorStringView(v8_inspector::protocol::Debugger::API::Paused::
+                    ReasonEnum::EventListener),
+            toV8InspectorStringView(json));
     else
-        m_debuggerAgent->schedulePauseOnNextStatement(InspectorFrontend::Debugger::Reason::EventListener, eventData);
+        m_v8Session->schedulePauseOnNextStatement(
+            toV8InspectorStringView(v8_inspector::protocol::Debugger::API::Paused::
+                    ReasonEnum::EventListener),
+            toV8InspectorStringView(json));
 }
 
-PassRefPtr<JSONObject> InspectorDOMDebuggerAgent::preparePauseOnNativeEventData(const String& eventName, const String* targetName)
+std::unique_ptr<protocol::DictionaryValue>
+InspectorDOMDebuggerAgent::preparePauseOnNativeEventData(
+    const String& eventName,
+    const String* targetName)
 {
-    String fullEventName = (targetName ? listenerEventCategoryType : instrumentationEventCategoryType) + eventName;
-    RefPtr<JSONObject> eventListenerBreakpoints = m_state->getObject(DOMDebuggerAgentState::eventListenerBreakpoints);
-    JSONObject::iterator it = eventListenerBreakpoints->find(fullEventName);
-    if (it == eventListenerBreakpoints->end())
+    String fullEventName = (targetName ? listenerEventCategoryType
+                                       : instrumentationEventCategoryType)
+        + eventName;
+    protocol::DictionaryValue* breakpoints = eventListenerBreakpoints();
+    protocol::Value* value = breakpoints->get(fullEventName);
+    if (!value)
         return nullptr;
     bool match = false;
-    RefPtr<JSONObject> breakpointsByTarget = it->value->asObject();
-    breakpointsByTarget->getBoolean(DOMDebuggerAgentState::eventTargetAny, &match);
+    protocol::DictionaryValue* breakpointsByTarget = protocol::DictionaryValue::cast(value);
+    breakpointsByTarget->getBoolean(DOMDebuggerAgentState::eventTargetAny,
+        &match);
     if (!match && targetName)
         breakpointsByTarget->getBoolean(targetName->lower(), &match);
     if (!match)
         return nullptr;
 
-    RefPtr<JSONObject> eventData = JSONObject::create();
+    std::unique_ptr<protocol::DictionaryValue> eventData = protocol::DictionaryValue::create();
     eventData->setString("eventName", fullEventName);
     if (targetName)
         eventData->setString("targetName", *targetName);
-    return eventData.release();
-}
-
-void InspectorDOMDebuggerAgent::didInstallTimer(ExecutionContext*, int, int, bool)
-{
-    pauseOnNativeEventIfNeeded(preparePauseOnNativeEventData(setTimerEventName, 0), true);
-}
-
-void InspectorDOMDebuggerAgent::didRemoveTimer(ExecutionContext*, int)
-{
-    pauseOnNativeEventIfNeeded(preparePauseOnNativeEventData(clearTimerEventName, 0), true);
-}
-
-void InspectorDOMDebuggerAgent::willFireTimer(ExecutionContext*, int)
-{
-    pauseOnNativeEventIfNeeded(preparePauseOnNativeEventData(timerFiredEventName, 0), false);
-}
-
-bool InspectorDOMDebuggerAgent::canPauseOnPromiseEvent()
-{
-    RefPtr<JSONObject> eventListenerBreakpoints = m_state->getObject(DOMDebuggerAgentState::eventListenerBreakpoints);
-    JSONObject::iterator end = eventListenerBreakpoints->end();
-    return eventListenerBreakpoints->find(String(instrumentationEventCategoryType) + newPromiseEventName) != end
-        || eventListenerBreakpoints->find(String(instrumentationEventCategoryType) + promiseResolvedEventName) != end
-        || eventListenerBreakpoints->find(String(instrumentationEventCategoryType) + promiseRejectedEventName) != end;
-}
-
-void InspectorDOMDebuggerAgent::didCreatePromise()
-{
-    pauseOnNativeEventIfNeeded(preparePauseOnNativeEventData(newPromiseEventName, 0), true);
-}
-
-void InspectorDOMDebuggerAgent::didResolvePromise()
-{
-    pauseOnNativeEventIfNeeded(preparePauseOnNativeEventData(promiseResolvedEventName, 0), true);
-}
-
-void InspectorDOMDebuggerAgent::didRejectPromise()
-{
-    pauseOnNativeEventIfNeeded(preparePauseOnNativeEventData(promiseRejectedEventName, 0), true);
-}
-
-void InspectorDOMDebuggerAgent::didRequestAnimationFrame(ExecutionContext*, int)
-{
-    pauseOnNativeEventIfNeeded(preparePauseOnNativeEventData(requestAnimationFrameEventName, 0), true);
-}
-
-void InspectorDOMDebuggerAgent::didCancelAnimationFrame(ExecutionContext*, int)
-{
-    pauseOnNativeEventIfNeeded(preparePauseOnNativeEventData(cancelAnimationFrameEventName, 0), true);
-}
-
-void InspectorDOMDebuggerAgent::willFireAnimationFrame(ExecutionContext*, int)
-{
-    pauseOnNativeEventIfNeeded(preparePauseOnNativeEventData(animationFrameFiredEventName, 0), false);
-}
-
-void InspectorDOMDebuggerAgent::willHandleEvent(EventTarget* target, Event* event, EventListener*, bool)
-{
-    Node* node = target->toNode();
-    String targetName = node ? node->nodeName() : target->interfaceName();
-    pauseOnNativeEventIfNeeded(preparePauseOnNativeEventData(event->type(), &targetName), false);
-}
-
-void InspectorDOMDebuggerAgent::willEvaluateScript(LocalFrame*, const String& url, int)
-{
-    pauseOnNativeEventIfNeeded(preparePauseOnNativeEventData(scriptFirstStatementEventName, 0), false);
-}
-
-void InspectorDOMDebuggerAgent::willCloseWindow()
-{
-    pauseOnNativeEventIfNeeded(preparePauseOnNativeEventData(windowCloseEventName, 0), true);
+    return eventData;
 }
 
 void InspectorDOMDebuggerAgent::didFireWebGLError(const String& errorName)
 {
-    RefPtr<JSONObject> eventData = preparePauseOnNativeEventData(webglErrorFiredEventName, 0);
+    std::unique_ptr<protocol::DictionaryValue> eventData = preparePauseOnNativeEventData(webglErrorFiredEventName, 0);
     if (!eventData)
         return;
     if (!errorName.isEmpty())
         eventData->setString(webglErrorNameProperty, errorName);
-    pauseOnNativeEventIfNeeded(eventData.release(), m_debuggerAgent->canBreakProgram());
+    pauseOnNativeEventIfNeeded(std::move(eventData), false);
 }
 
 void InspectorDOMDebuggerAgent::didFireWebGLWarning()
 {
-    pauseOnNativeEventIfNeeded(preparePauseOnNativeEventData(webglWarningFiredEventName, 0), m_debuggerAgent->canBreakProgram());
+    pauseOnNativeEventIfNeeded(
+        preparePauseOnNativeEventData(webglWarningFiredEventName, 0), false);
 }
 
-void InspectorDOMDebuggerAgent::didFireWebGLErrorOrWarning(const String& message)
+void InspectorDOMDebuggerAgent::didFireWebGLErrorOrWarning(
+    const String& message)
 {
     if (message.findIgnoringCase("error") != WTF::kNotFound)
         didFireWebGLError(String());
@@ -617,42 +733,53 @@ void InspectorDOMDebuggerAgent::didFireWebGLErrorOrWarning(const String& message
         didFireWebGLWarning();
 }
 
-void InspectorDOMDebuggerAgent::setXHRBreakpoint(ErrorString* errorString, const String& url)
+void InspectorDOMDebuggerAgent::cancelNativeBreakpoint()
 {
-    if (!checkEnabled(errorString))
+    m_v8Session->cancelPauseOnNextStatement();
+}
+
+void InspectorDOMDebuggerAgent::scriptExecutionBlockedByCSP(
+    const String& directiveText)
+{
+    std::unique_ptr<protocol::DictionaryValue> eventData = preparePauseOnNativeEventData(scriptBlockedByCSPEventName, 0);
+    if (!eventData)
         return;
-    if (url.isEmpty()) {
+    eventData->setString("directiveText", directiveText);
+    pauseOnNativeEventIfNeeded(std::move(eventData), true);
+}
+
+Response InspectorDOMDebuggerAgent::setXHRBreakpoint(const String& url)
+{
+    if (url.isEmpty())
         m_state->setBoolean(DOMDebuggerAgentState::pauseOnAllXHRs, true);
-        return;
-    }
-
-    RefPtr<JSONObject> xhrBreakpoints = m_state->getObject(DOMDebuggerAgentState::xhrBreakpoints);
-    xhrBreakpoints->setBoolean(url, true);
-    m_state->setObject(DOMDebuggerAgentState::xhrBreakpoints, xhrBreakpoints.release());
+    else
+        xhrBreakpoints()->setBoolean(url, true);
+    didAddBreakpoint();
+    return Response::OK();
 }
 
-void InspectorDOMDebuggerAgent::removeXHRBreakpoint(ErrorString* errorString, const String& url)
+Response InspectorDOMDebuggerAgent::removeXHRBreakpoint(const String& url)
 {
-    if (url.isEmpty()) {
+    if (url.isEmpty())
         m_state->setBoolean(DOMDebuggerAgentState::pauseOnAllXHRs, false);
-        return;
-    }
-
-    RefPtr<JSONObject> xhrBreakpoints = m_state->getObject(DOMDebuggerAgentState::xhrBreakpoints);
-    xhrBreakpoints->remove(url);
-    m_state->setObject(DOMDebuggerAgentState::xhrBreakpoints, xhrBreakpoints.release());
+    else
+        xhrBreakpoints()->remove(url);
+    didRemoveBreakpoint();
+    return Response::OK();
 }
 
-void InspectorDOMDebuggerAgent::willSendXMLHttpRequest(const String& url)
+void InspectorDOMDebuggerAgent::willSendXMLHttpOrFetchNetworkRequest(
+    const String& url)
 {
     String breakpointURL;
-    if (m_state->getBoolean(DOMDebuggerAgentState::pauseOnAllXHRs))
+    if (m_state->booleanProperty(DOMDebuggerAgentState::pauseOnAllXHRs, false))
         breakpointURL = "";
     else {
-        RefPtr<JSONObject> xhrBreakpoints = m_state->getObject(DOMDebuggerAgentState::xhrBreakpoints);
-        for (auto& breakpoint : *xhrBreakpoints) {
-            if (url.contains(breakpoint.key)) {
-                breakpointURL = breakpoint.key;
+        protocol::DictionaryValue* breakpoints = xhrBreakpoints();
+        for (size_t i = 0; i < breakpoints->size(); ++i) {
+            auto breakpoint = breakpoints->at(i);
+            if (url.contains(breakpoint.first)) {
+                breakpointURL = breakpoint.first;
                 break;
             }
         }
@@ -661,13 +788,48 @@ void InspectorDOMDebuggerAgent::willSendXMLHttpRequest(const String& url)
     if (breakpointURL.isNull())
         return;
 
-    RefPtr<JSONObject> eventData = JSONObject::create();
+    std::unique_ptr<protocol::DictionaryValue> eventData = protocol::DictionaryValue::create();
     eventData->setString("breakpointURL", breakpointURL);
     eventData->setString("url", url);
-    m_debuggerAgent->breakProgram(InspectorFrontend::Debugger::Reason::XHR, eventData.release());
+    String json = eventData->serialize();
+    m_v8Session->breakProgram(
+        toV8InspectorStringView(
+            v8_inspector::protocol::Debugger::API::Paused::ReasonEnum::XHR),
+        toV8InspectorStringView(json));
 }
 
-void InspectorDOMDebuggerAgent::clear()
+void InspectorDOMDebuggerAgent::didAddBreakpoint()
+{
+    if (m_state->booleanProperty(DOMDebuggerAgentState::enabled, false))
+        return;
+    setEnabled(true);
+}
+
+void InspectorDOMDebuggerAgent::didRemoveBreakpoint()
+{
+    if (!m_domBreakpoints.isEmpty())
+        return;
+    if (eventListenerBreakpoints()->size())
+        return;
+    if (xhrBreakpoints()->size())
+        return;
+    if (m_state->booleanProperty(DOMDebuggerAgentState::pauseOnAllXHRs, false))
+        return;
+    setEnabled(false);
+}
+
+void InspectorDOMDebuggerAgent::setEnabled(bool enabled)
+{
+    if (enabled) {
+        m_instrumentingAgents->addInspectorDOMDebuggerAgent(this);
+        m_state->setBoolean(DOMDebuggerAgentState::enabled, true);
+    } else {
+        m_state->remove(DOMDebuggerAgentState::enabled);
+        m_instrumentingAgents->removeInspectorDOMDebuggerAgent(this);
+    }
+}
+
+void InspectorDOMDebuggerAgent::didCommitLoadForLocalFrame(LocalFrame*)
 {
     m_domBreakpoints.clear();
 }

@@ -24,18 +24,10 @@
 #if !UCONFIG_NO_BREAK_ITERATION
 
 #include "unicode/brkiter.h"
-<<<<<<< HEAD
 #include "unicode/parseerr.h"
 #include "unicode/schriter.h"
 #include "unicode/uchriter.h"
 #include "unicode/udata.h"
-=======
-#include "unicode/udata.h"
-#include "unicode/parseerr.h"
-#include "unicode/schriter.h"
-#include "unicode/uchriter.h"
-
->>>>>>> miniblink49
 
 struct UTrie;
 
@@ -43,7 +35,6 @@ U_NAMESPACE_BEGIN
 
 /** @internal */
 struct RBBIDataHeader;
-<<<<<<< HEAD
 class RuleBasedBreakIteratorTables;
 class BreakIterator;
 class RBBIDataWrapper;
@@ -52,19 +43,6 @@ class LanguageBreakEngine;
 class UnhandledEngine;
 struct RBBIStateTable;
 
-=======
-class  RuleBasedBreakIteratorTables;
-class  BreakIterator;
-class  RBBIDataWrapper;
-class  UStack;
-class  LanguageBreakEngine;
-class  UnhandledEngine;
-struct RBBIStateTable;
-
-
-
-
->>>>>>> miniblink49
 /**
  *
  * A subclass of BreakIterator whose behavior is specified using a list of rules.
@@ -87,63 +65,39 @@ protected:
      * The UText through which this BreakIterator accesses the text
      * @internal
      */
-<<<<<<< HEAD
     UText* fText;
-=======
-    UText  *fText;
->>>>>>> miniblink49
 
     /**
      *   A character iterator that refers to the same text as the UText, above.
      *   Only included for compatibility with old API, which was based on CharacterIterators.
      *   Value may be adopted from outside, or one of fSCharIter or fDCharIter, below.
      */
-<<<<<<< HEAD
     CharacterIterator* fCharIter;
-=======
-    CharacterIterator  *fCharIter;
->>>>>>> miniblink49
 
     /**
      *   When the input text is provided by a UnicodeString, this will point to
      *    a characterIterator that wraps that data.  Needed only for the
      *    implementation of getText(), a backwards compatibility issue.
      */
-<<<<<<< HEAD
     StringCharacterIterator* fSCharIter;
-=======
-    StringCharacterIterator *fSCharIter;
->>>>>>> miniblink49
 
     /**
      *  When the input text is provided by a UText, this
      *    dummy CharacterIterator over an empty string will
      *    be returned from getText()
      */
-<<<<<<< HEAD
     UCharCharacterIterator* fDCharIter;
-=======
-    UCharCharacterIterator *fDCharIter;
->>>>>>> miniblink49
 
     /**
      * The rule data for this BreakIterator instance
      * @internal
      */
-<<<<<<< HEAD
     RBBIDataWrapper* fData;
-=======
-    RBBIDataWrapper    *fData;
->>>>>>> miniblink49
 
     /** Index of the Rule {tag} values for the most recent match.
      *  @internal
     */
-<<<<<<< HEAD
     int32_t fLastRuleStatusIndex;
-=======
-    int32_t             fLastRuleStatusIndex;
->>>>>>> miniblink49
 
     /**
      * Rule tag value valid flag.
@@ -151,22 +105,14 @@ protected:
      * This flag lets us lazily compute the value if we are ever asked for it.
      * @internal
      */
-<<<<<<< HEAD
     UBool fLastStatusIndexValid;
-=======
-    UBool               fLastStatusIndexValid;
->>>>>>> miniblink49
 
     /**
      * Counter for the number of characters encountered with the "dictionary"
      *   flag set.
      * @internal
      */
-<<<<<<< HEAD
     uint32_t fDictionaryCharCount;
-=======
-    uint32_t            fDictionaryCharCount;
->>>>>>> miniblink49
 
     /**
      * When a range of characters is divided up using the dictionary, the break
@@ -175,34 +121,21 @@ protected:
      * leaves this range of text. Has the most impact for line breaking.
      * @internal
      */
-<<<<<<< HEAD
     int32_t* fCachedBreakPositions;
-=======
-    int32_t*            fCachedBreakPositions;
->>>>>>> miniblink49
 
     /**
      * The number of elements in fCachedBreakPositions
      * @internal
      */
-<<<<<<< HEAD
     int32_t fNumCachedBreakPositions;
-=======
-    int32_t             fNumCachedBreakPositions;
->>>>>>> miniblink49
 
     /**
      * if fCachedBreakPositions is not null, this indicates which item in the
      * cache the current iteration position refers to
      * @internal
      */
-<<<<<<< HEAD
     int32_t fPositionInCache;
 
-=======
-    int32_t             fPositionInCache;
-    
->>>>>>> miniblink49
     /**
      *
      * If present, UStack of LanguageBreakEngine objects that might handle
@@ -210,13 +143,8 @@ protected:
      * handle a given character.
      * @internal
      */
-<<<<<<< HEAD
     UStack* fLanguageBreakEngines;
 
-=======
-    UStack              *fLanguageBreakEngines;
-    
->>>>>>> miniblink49
     /**
      *
      * If present, the special LanguageBreakEngine used for handling
@@ -224,25 +152,15 @@ protected:
      * LangugageBreakEngine.
      * @internal
      */
-<<<<<<< HEAD
     UnhandledEngine* fUnhandledBreakEngine;
 
-=======
-    UnhandledEngine     *fUnhandledBreakEngine;
-    
->>>>>>> miniblink49
     /**
      *
      * The type of the break iterator, or -1 if it has not been set.
      * @internal
      */
-<<<<<<< HEAD
     int32_t fBreakType;
 
-=======
-    int32_t             fBreakType;
-    
->>>>>>> miniblink49
 protected:
     //=======================================================================
     // constructors
@@ -271,11 +189,7 @@ protected:
      *             free it when done.
      * @internal
      */
-<<<<<<< HEAD
     RuleBasedBreakIterator(RBBIDataHeader* data, UErrorCode& status);
-=======
-    RuleBasedBreakIterator(RBBIDataHeader* data, UErrorCode &status);
->>>>>>> miniblink49
 
     /**
      * Constructor from a flattened set of RBBI data in memory which need not
@@ -285,27 +199,14 @@ protected:
      *             free it when done.
      * @internal
      */
-<<<<<<< HEAD
     RuleBasedBreakIterator(const RBBIDataHeader* data, enum EDontAdopt dontAdopt, UErrorCode& status);
 #endif /* U_HIDE_INTERNAL_API */
-=======
-    RuleBasedBreakIterator(const RBBIDataHeader* data, enum EDontAdopt dontAdopt, UErrorCode &status);
-#endif  /* U_HIDE_INTERNAL_API */
-
->>>>>>> miniblink49
 
     friend class RBBIRuleBuilder;
     /** @internal */
     friend class BreakIterator;
 
-<<<<<<< HEAD
 public:
-=======
-
-
-public:
-
->>>>>>> miniblink49
     /** Default constructor.  Creates an empty shell of an iterator, with no
      *  rules or text to iterate over.   Object can subsequently be assigned to.
      *  @stable ICU 2.2
@@ -328,15 +229,9 @@ public:
      * @param status Information on any errors encountered.
      * @stable ICU 2.2
      */
-<<<<<<< HEAD
     RuleBasedBreakIterator(const UnicodeString& rules,
         UParseError& parseError,
         UErrorCode& status);
-=======
-    RuleBasedBreakIterator( const UnicodeString    &rules,
-                             UParseError           &parseError,
-                             UErrorCode            &status);
->>>>>>> miniblink49
 
     /**
      * Contruct a RuleBasedBreakIterator from a set of precompiled binary rules.
@@ -361,15 +256,9 @@ public:
      *   binary rules.
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     RuleBasedBreakIterator(const uint8_t* compiledRules,
         uint32_t ruleLength,
         UErrorCode& status);
-=======
-    RuleBasedBreakIterator(const uint8_t *compiledRules,
-                           uint32_t       ruleLength,
-                           UErrorCode    &status);
->>>>>>> miniblink49
 
     /**
      * This constructor uses the udata interface to create a BreakIterator
@@ -383,11 +272,7 @@ public:
      * @see #getBinaryRules
      * @stable ICU 2.8
      */
-<<<<<<< HEAD
     RuleBasedBreakIterator(UDataMemory* image, UErrorCode& status);
-=======
-    RuleBasedBreakIterator(UDataMemory* image, UErrorCode &status);
->>>>>>> miniblink49
 
     /**
      * Destructor
@@ -478,12 +363,7 @@ public:
      * @return An iterator over the text being analyzed.
      * @stable ICU 2.0
      */
-<<<<<<< HEAD
     virtual CharacterIterator& getText(void) const;
-=======
-    virtual  CharacterIterator& getText(void) const;
-
->>>>>>> miniblink49
 
     /**
       *  Get a UText for the text being analyzed.
@@ -499,11 +379,7 @@ public:
       *           UText was provided, it will always be returned.
       * @stable ICU 3.4
       */
-<<<<<<< HEAD
     virtual UText* getUText(UText* fillIn, UErrorCode& status) const;
-=======
-     virtual UText *getUText(UText *fillIn, UErrorCode &status) const;
->>>>>>> miniblink49
 
     /**
      * Set the iterator to analyze a new piece of text.  This function resets
@@ -535,11 +411,7 @@ public:
      * @param status  Receives any error codes.
      * @stable ICU 3.4
      */
-<<<<<<< HEAD
     virtual void setText(UText* text, UErrorCode& status);
-=======
-    virtual void  setText(UText *text, UErrorCode &status);
->>>>>>> miniblink49
 
     /**
      * Sets the current iteration position to the beginning of the text, position zero.
@@ -616,10 +488,6 @@ public:
      */
     virtual int32_t current(void) const;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
     /**
      * Return the status tag from the break rule that determined the most recently
      * returned break position.  For break rules that do not specify a
@@ -654,11 +522,7 @@ public:
      */
     virtual int32_t getRuleStatus() const;
 
-<<<<<<< HEAD
     /**
-=======
-   /**
->>>>>>> miniblink49
     * Get the status (tag) values from the break rule(s) that determined the most
     * recently returned break position.
     * <p>
@@ -681,11 +545,7 @@ public:
     * @see getRuleStatus
     * @stable ICU 3.0
     */
-<<<<<<< HEAD
     virtual int32_t getRuleStatusVec(int32_t* fillInVec, int32_t capacity, UErrorCode& status);
-=======
-    virtual int32_t getRuleStatusVec(int32_t *fillInVec, int32_t capacity, UErrorCode &status);
->>>>>>> miniblink49
 
     /**
      * Returns a unique class ID POLYMORPHICALLY.  Pure virtual override.
@@ -739,16 +599,9 @@ public:
      *          or if the stackBuffer was too small to hold the clone.
      * @deprecated ICU 52. Use clone() instead.
      */
-<<<<<<< HEAD
     virtual BreakIterator* createBufferClone(void* stackBuffer,
         int32_t& BufferSize,
         UErrorCode& status);
-=======
-    virtual BreakIterator *  createBufferClone(void *stackBuffer,
-                                               int32_t &BufferSize,
-                                               UErrorCode &status);
-
->>>>>>> miniblink49
 
     /**
      * Return the binary form of compiled break rules,
@@ -767,11 +620,7 @@ public:
      *           caller, and must not be modified or deleted.
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     virtual const uint8_t* getBinaryRules(uint32_t& length);
-=======
-    virtual const uint8_t *getBinaryRules(uint32_t &length);
->>>>>>> miniblink49
 
     /**
      *  Set the subject text string upon which the break iterator is operating
@@ -798,12 +647,7 @@ public:
      *
      * @stable ICU 49
      */
-<<<<<<< HEAD
     virtual RuleBasedBreakIterator& refreshInputText(UText* input, UErrorCode& status);
-=======
-    virtual RuleBasedBreakIterator &refreshInputText(UText *input, UErrorCode &status);
-
->>>>>>> miniblink49
 
 protected:
     //=======================================================================
@@ -846,16 +690,9 @@ protected:
       * @internal
       */
     void init();
-<<<<<<< HEAD
 #endif /* U_HIDE_INTERNAL_API */
 
 private:
-=======
-#endif  /* U_HIDE_INTERNAL_API */
-
-private:
-
->>>>>>> miniblink49
     /**
      * This method backs the iterator back up to a "safe position" in the text.
      * This is a position that we know, without any context, must be a break position.
@@ -865,11 +702,7 @@ private:
      * @param statetable state table used of moving backwards
      * @internal
      */
-<<<<<<< HEAD
     int32_t handlePrevious(const RBBIStateTable* statetable);
-=======
-    int32_t handlePrevious(const RBBIStateTable *statetable);
->>>>>>> miniblink49
 
     /**
      * This method is the actual implementation of the next() method.  All iteration
@@ -880,16 +713,9 @@ private:
      * @param statetable state table used of moving forwards
      * @internal
      */
-<<<<<<< HEAD
     int32_t handleNext(const RBBIStateTable* statetable);
 
 protected:
-=======
-    int32_t handleNext(const RBBIStateTable *statetable);
-
-protected:
-
->>>>>>> miniblink49
 #ifndef U_HIDE_INTERNAL_API
     /**
      * This is the function that actually implements dictionary-based
@@ -906,36 +732,21 @@ protected:
      * @internal
      */
     int32_t checkDictionary(int32_t startPos, int32_t endPos, UBool reverse);
-<<<<<<< HEAD
 #endif /* U_HIDE_INTERNAL_API */
 
 private:
-=======
-#endif  /* U_HIDE_INTERNAL_API */
-
-private:
-
->>>>>>> miniblink49
     /**
      * This function returns the appropriate LanguageBreakEngine for a
      * given character c.
      * @param c         A character in the dictionary set
      * @internal
      */
-<<<<<<< HEAD
     const LanguageBreakEngine* getLanguageBreakEngine(UChar32 c);
-=======
-    const LanguageBreakEngine *getLanguageBreakEngine(UChar32 c);
->>>>>>> miniblink49
 
     /**
      *  @internal
      */
     void makeRuleStatusValid();
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 };
 
 //------------------------------------------------------------------------------
@@ -944,12 +755,8 @@ private:
 //
 //------------------------------------------------------------------------------
 
-<<<<<<< HEAD
 inline UBool RuleBasedBreakIterator::operator!=(const BreakIterator& that) const
 {
-=======
-inline UBool RuleBasedBreakIterator::operator!=(const BreakIterator& that) const {
->>>>>>> miniblink49
     return !operator==(that);
 }
 

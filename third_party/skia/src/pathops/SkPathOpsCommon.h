@@ -13,7 +13,6 @@
 class SkOpCoincidence;
 class SkOpContour;
 class SkPathWriter;
-<<<<<<< HEAD
 class SkChunkAlloc;
 
 const SkOpAngle* AngleWinding(SkOpSpanBase* start, SkOpSpanBase* end, int* windingPtr, bool* sortable);
@@ -28,23 +27,6 @@ bool OpDebug(const SkPath& one, const SkPath& two, SkPathOp op, SkPath* result S
 
 #if DEBUG_ACTIVE_SPANS
 void DebugShowActiveSpans(SkOpContourHead*);
-=======
-
-const SkOpAngle* AngleWinding(SkOpSpanBase* start, SkOpSpanBase* end, int* windingPtr,
-                              bool* sortable);
-void Assemble(const SkPathWriter& path, SkPathWriter* simple);
-SkOpSegment* FindChase(SkTDArray<SkOpSpanBase*>* chase, SkOpSpanBase** startPtr,
-                       SkOpSpanBase** endPtr);
-SkOpSpan* FindSortableTop(SkOpContourHead* );
-SkOpSegment* FindUndone(SkOpContourHead* , SkOpSpanBase** startPtr,
-                        SkOpSpanBase** endPtr);
-void FixWinding(SkPath* path);
-bool SortContourList(SkOpContourHead** , bool evenOdd, bool oppEvenOdd);
-bool HandleCoincidence(SkOpContourHead* , SkOpCoincidence* , SkChunkAlloc* );
-bool OpDebug(const SkPath& one, const SkPath& two, SkPathOp op, SkPath* result, bool expectSuccess);
-#if DEBUG_ACTIVE_SPANS
-void DebugShowActiveSpans(SkOpContourHead* );
->>>>>>> miniblink49
 #endif
 
 #endif

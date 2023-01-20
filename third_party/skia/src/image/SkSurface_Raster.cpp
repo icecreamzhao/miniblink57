@@ -5,19 +5,11 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "SkCanvas.h"
 #include "SkDevice.h"
 #include "SkImagePriv.h"
 #include "SkMallocPixelRef.h"
 #include "SkSurface_Base.h"
-=======
-#include "SkSurface_Base.h"
-#include "SkImagePriv.h"
-#include "SkCanvas.h"
-#include "SkDevice.h"
-#include "SkMallocPixelRef.h"
->>>>>>> miniblink49
 
 static const size_t kIgnoreRowBytesValue = (size_t)~0;
 
@@ -26,7 +18,6 @@ public:
     static bool Valid(const SkImageInfo&, size_t rb = kIgnoreRowBytesValue);
 
     SkSurface_Raster(const SkImageInfo&, void*, size_t rb,
-<<<<<<< HEAD
         void (*releaseProc)(void* pixels, void* context), void* context,
         const SkSurfaceProps*);
     SkSurface_Raster(SkPixelRef*, const SkSurfaceProps*);
@@ -42,33 +33,14 @@ private:
     SkBitmap fBitmap;
     size_t fRowBytes;
     bool fWeOwnThePixels;
-=======
-                     void (*releaseProc)(void* pixels, void* context), void* context,
-                     const SkSurfaceProps*);
-    SkSurface_Raster(SkPixelRef*, const SkSurfaceProps*);
-
-    SkCanvas* onNewCanvas() override;
-    SkSurface* onNewSurface(const SkImageInfo&) override;
-    SkImage* onNewImageSnapshot(Budgeted) override;
-    void onDraw(SkCanvas*, SkScalar x, SkScalar y, const SkPaint*) override;
-    void onCopyOnWrite(ContentChangeMode) override;
-
-private:
-    SkBitmap    fBitmap;
-    bool        fWeOwnThePixels;
->>>>>>> miniblink49
 
     typedef SkSurface_Base INHERITED;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 
-<<<<<<< HEAD
 bool SkSurface_Raster::Valid(const SkImageInfo& info, size_t rowBytes)
 {
-=======
-bool SkSurface_Raster::Valid(const SkImageInfo& info, size_t rowBytes) {
->>>>>>> miniblink49
     if (info.isEmpty()) {
         return false;
     }
@@ -77,7 +49,6 @@ bool SkSurface_Raster::Valid(const SkImageInfo& info, size_t rowBytes) {
 
     int shift = 0;
     switch (info.colorType()) {
-<<<<<<< HEAD
     case kAlpha_8_SkColorType:
         shift = 0;
         break;
@@ -92,19 +63,6 @@ bool SkSurface_Raster::Valid(const SkImageInfo& info, size_t rowBytes) {
         break;
     default:
         return false;
-=======
-        case kAlpha_8_SkColorType:
-            shift = 0;
-            break;
-        case kRGB_565_SkColorType:
-            shift = 1;
-            break;
-        case kN32_SkColorType:
-            shift = 2;
-            break;
-        default:
-            return false;
->>>>>>> miniblink49
     }
 
     if (kIgnoreRowBytesValue == rowBytes) {
@@ -130,7 +88,6 @@ bool SkSurface_Raster::Valid(const SkImageInfo& info, size_t rowBytes) {
 }
 
 SkSurface_Raster::SkSurface_Raster(const SkImageInfo& info, void* pixels, size_t rb,
-<<<<<<< HEAD
     void (*releaseProc)(void* pixels, void* context), void* context,
     const SkSurfaceProps* props)
     : INHERITED(info, props)
@@ -138,14 +95,6 @@ SkSurface_Raster::SkSurface_Raster(const SkImageInfo& info, void* pixels, size_t
     fBitmap.installPixels(info, pixels, rb, nullptr, releaseProc, context);
     fRowBytes = 0; // don't need to track the rowbytes
     fWeOwnThePixels = false; // We are "Direct"
-=======
-                                   void (*releaseProc)(void* pixels, void* context), void* context,
-                                   const SkSurfaceProps* props)
-    : INHERITED(info, props)
-{
-    fBitmap.installPixels(info, pixels, rb, NULL, releaseProc, context);
-    fWeOwnThePixels = false;    // We are "Direct"
->>>>>>> miniblink49
 }
 
 SkSurface_Raster::SkSurface_Raster(SkPixelRef* pr, const SkSurfaceProps* props)
@@ -153,7 +102,6 @@ SkSurface_Raster::SkSurface_Raster(SkPixelRef* pr, const SkSurfaceProps* props)
 {
     const SkImageInfo& info = pr->info();
 
-<<<<<<< HEAD
     fBitmap.setInfo(info, pr->rowBytes());
     fBitmap.setPixelRef(pr);
     fRowBytes = pr->rowBytes(); // we track this, so that subsequent re-allocs will match
@@ -217,46 +165,6 @@ void SkSurface_Raster::onCopyOnWrite(ContentChangeMode mode)
         }
         SkASSERT(fBitmap.rowBytes() == fRowBytes); // be sure we always use the same value
 
-=======
-    fBitmap.setInfo(info, info.minRowBytes());
-    fBitmap.setPixelRef(pr);
-    fWeOwnThePixels = true;
-
-    if (!info.isOpaque()) {
-        fBitmap.eraseColor(SK_ColorTRANSPARENT);
-    }
-}
-
-SkCanvas* SkSurface_Raster::onNewCanvas() {
-    return SkNEW_ARGS(SkCanvas, (fBitmap, this->props()));
-}
-
-SkSurface* SkSurface_Raster::onNewSurface(const SkImageInfo& info) {
-    return SkSurface::NewRaster(info, &this->props());
-}
-
-void SkSurface_Raster::onDraw(SkCanvas* canvas, SkScalar x, SkScalar y,
-                              const SkPaint* paint) {
-    canvas->drawBitmap(fBitmap, x, y, paint);
-}
-
-SkImage* SkSurface_Raster::onNewImageSnapshot(Budgeted) {
-    return SkNewImageFromRasterBitmap(fBitmap, fWeOwnThePixels, &this->props());
-}
-
-void SkSurface_Raster::onCopyOnWrite(ContentChangeMode mode) {
-    // are we sharing pixelrefs with the image?
-    SkASSERT(this->getCachedImage(kNo_Budgeted));
-    if (SkBitmapImageGetPixelRef(this->getCachedImage(kNo_Budgeted)) == fBitmap.pixelRef()) {
-        SkASSERT(fWeOwnThePixels);
-        if (kDiscard_ContentChangeMode == mode) {
-            fBitmap.setPixelRef(NULL);
-            fBitmap.allocPixels();
-        } else {
-            SkBitmap prev(fBitmap);
-            prev.deepCopyTo(&fBitmap);
-        }
->>>>>>> miniblink49
         // Now fBitmap is a deep copy of itself (and therefore different from
         // what is being used by the image. Next we update the canvas to use
         // this as its backend, so we can't modify the image's pixels anymore.
@@ -267,7 +175,6 @@ void SkSurface_Raster::onCopyOnWrite(ContentChangeMode mode) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-<<<<<<< HEAD
 sk_sp<SkSurface> SkSurface::MakeRasterDirectReleaseProc(const SkImageInfo& info, void* pixels,
     size_t rb, void (*releaseProc)(void* pixels, void* context), void* context,
     const SkSurfaceProps* props)
@@ -311,37 +218,4 @@ sk_sp<SkSurface> SkSurface::MakeRaster(const SkImageInfo& info, size_t rowBytes,
 sk_sp<SkSurface> SkSurface::MakeRaster(const SkImageInfo& info, const SkSurfaceProps* props)
 {
     return MakeRaster(info, 0, props);
-=======
-SkSurface* SkSurface::NewRasterDirectReleaseProc(const SkImageInfo& info, void* pixels, size_t rb,
-                                                 void (*releaseProc)(void* pixels, void* context),
-                                                 void* context, const SkSurfaceProps* props) {
-    if (NULL == releaseProc) {
-        context = NULL;
-    }
-    if (!SkSurface_Raster::Valid(info, rb)) {
-        return NULL;
-    }
-    if (NULL == pixels) {
-        return NULL;
-    }
-    
-    return SkNEW_ARGS(SkSurface_Raster, (info, pixels, rb, releaseProc, context, props));
-}
-
-SkSurface* SkSurface::NewRasterDirect(const SkImageInfo& info, void* pixels, size_t rowBytes,
-                                      const SkSurfaceProps* props) {
-    return NewRasterDirectReleaseProc(info, pixels, rowBytes, NULL, NULL, props);
-}
-
-SkSurface* SkSurface::NewRaster(const SkImageInfo& info, const SkSurfaceProps* props) {
-    if (!SkSurface_Raster::Valid(info)) {
-        return NULL;
-    }
-
-    SkAutoTUnref<SkPixelRef> pr(SkMallocPixelRef::NewAllocate(info, 0, NULL));
-    if (NULL == pr.get()) {
-        return NULL;
-    }
-    return SkNEW_ARGS(SkSurface_Raster, (pr, props));
->>>>>>> miniblink49
 }

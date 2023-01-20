@@ -6,12 +6,8 @@
  */
 #include "SkOSFile.h"
 
-<<<<<<< HEAD
 SkString SkOSPath::Join(const char* rootPath, const char* relativePath)
 {
-=======
-SkString SkOSPath::Join(const char *rootPath, const char *relativePath) {
->>>>>>> miniblink49
     SkString result(rootPath);
     if (!result.endsWith(SkPATH_SEPARATOR) && !result.isEmpty()) {
         result.appendUnichar(SkPATH_SEPARATOR);
@@ -20,21 +16,13 @@ SkString SkOSPath::Join(const char *rootPath, const char *relativePath) {
     return result;
 }
 
-<<<<<<< HEAD
 SkString SkOSPath::Basename(const char* fullPath)
 {
-=======
-SkString SkOSPath::Basename(const char* fullPath) {
->>>>>>> miniblink49
     if (!fullPath) {
         return SkString();
     }
     const char* filename = strrchr(fullPath, SkPATH_SEPARATOR);
-<<<<<<< HEAD
     if (nullptr == filename) {
-=======
-    if (NULL == filename) {
->>>>>>> miniblink49
         filename = fullPath;
     } else {
         ++filename;
@@ -42,21 +30,13 @@ SkString SkOSPath::Basename(const char* fullPath) {
     return SkString(filename);
 }
 
-<<<<<<< HEAD
 SkString SkOSPath::Dirname(const char* fullPath)
 {
-=======
-SkString SkOSPath::Dirname(const char* fullPath) {
->>>>>>> miniblink49
     if (!fullPath) {
         return SkString();
     }
     const char* end = strrchr(fullPath, SkPATH_SEPARATOR);
-<<<<<<< HEAD
     if (nullptr == end) {
-=======
-    if (NULL == end) {
->>>>>>> miniblink49
         return SkString();
     }
     if (end == fullPath) {

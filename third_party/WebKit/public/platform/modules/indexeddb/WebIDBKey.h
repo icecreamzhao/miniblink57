@@ -39,12 +39,8 @@ class IDBKey;
 
 class WebIDBKey {
 public:
-<<<<<<< HEAD
     // Please use one of the factory methods. This is public only to allow
     // WebVector.
-=======
-    // Please use one of the factory methods. This is public only to allow WebVector.
->>>>>>> miniblink49
     WebIDBKey() { }
     ~WebIDBKey() { reset(); }
 
@@ -71,11 +67,7 @@ public:
     BLINK_EXPORT void assignNumber(double);
     BLINK_EXPORT void assignInvalid();
     BLINK_EXPORT void assignNull();
-<<<<<<< HEAD
 #if !BLINK_WEB_IMPLEMENTATION && BLINK_IMPLEMENTATION && defined(COMPONENT_BUILD)
-=======
-#if !BLINK_WEB_IMPLEMENTATION && LINK_CORE_MODULES_SEPARATELY
->>>>>>> miniblink49
     void reset()
     {
         m_private.reset();
@@ -95,25 +87,14 @@ public:
 #if BLINK_IMPLEMENTATION
     WebIDBKey(IDBKey* value)
         : m_private(value)
-<<<<<<< HEAD
     {
     }
-=======
-    { }
->>>>>>> miniblink49
     WebIDBKey& operator=(IDBKey* value)
     {
         m_private = value;
         return *this;
     }
-<<<<<<< HEAD
     operator IDBKey*() const { return m_private.get(); }
-=======
-    operator IDBKey*() const
-    {
-        return m_private.get();
-    }
->>>>>>> miniblink49
 #endif
 
 private:

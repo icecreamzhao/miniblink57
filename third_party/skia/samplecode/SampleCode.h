@@ -11,18 +11,12 @@
 #include "SkColor.h"
 #include "SkEvent.h"
 #include "SkKey.h"
-<<<<<<< HEAD
 #include "SkOSMenu.h"
 #include "SkView.h"
-=======
-#include "SkView.h"
-#include "SkOSMenu.h"
->>>>>>> miniblink49
 
 class GrContext;
 class SkAnimTimer;
 
-<<<<<<< HEAD
 #define DEF_SAMPLE(code)                               \
     static SkView* SK_MACRO_APPEND_LINE(F_)() { code } \
     static SkViewRegister SK_MACRO_APPEND_LINE(R_)(SK_MACRO_APPEND_LINE(F_));
@@ -36,12 +30,6 @@ static const char gTitleEvtName[] = "SampleCode_Title_Event";
 static const char gPrefSizeEvtName[] = "SampleCode_PrefSize_Event";
 static const char gFastTextEvtName[] = "SampleCode_FastText_Event";
 static const char gUpdateWindowTitleEvtName[] = "SampleCode_UpdateWindowTitle";
-=======
-#define DEF_SAMPLE(code) \
-    static SkView*          SK_MACRO_APPEND_LINE(F_)() { code } \
-    static SkViewRegister   SK_MACRO_APPEND_LINE(R_)(SK_MACRO_APPEND_LINE(F_));
-
->>>>>>> miniblink49
 
 class SampleCode {
 public:
@@ -65,11 +53,7 @@ public:
 // interface that constructs SkViews
 class SkViewFactory : public SkRefCnt {
 public:
-<<<<<<< HEAD
     virtual SkView* operator()() const = 0;
-=======
-    virtual SkView* operator() () const = 0;
->>>>>>> miniblink49
 };
 
 typedef SkView* (*SkViewCreateFunc)();
@@ -78,11 +62,7 @@ typedef SkView* (*SkViewCreateFunc)();
 class SkFuncViewFactory : public SkViewFactory {
 public:
     SkFuncViewFactory(SkViewCreateFunc func);
-<<<<<<< HEAD
     SkView* operator()() const override;
-=======
-    SkView* operator() () const override;
->>>>>>> miniblink49
 
 private:
     SkViewCreateFunc fCreateFunc;
@@ -101,12 +81,8 @@ typedef skiagm::GM* (*GMFactoryFunc)(void*);
 class SkGMSampleViewFactory : public SkViewFactory {
 public:
     SkGMSampleViewFactory(GMFactoryFunc func);
-<<<<<<< HEAD
     SkView* operator()() const override;
 
-=======
-    SkView* operator() () const override;
->>>>>>> miniblink49
 private:
     GMFactoryFunc fFunc;
 };
@@ -117,29 +93,18 @@ public:
     explicit SkViewRegister(SkViewCreateFunc);
     explicit SkViewRegister(GMFactoryFunc);
 
-<<<<<<< HEAD
     ~SkViewRegister()
     {
-=======
-    ~SkViewRegister() {
->>>>>>> miniblink49
         fFact->unref();
     }
 
     static const SkViewRegister* Head() { return gHead; }
 
     SkViewRegister* next() const { return fChain; }
-<<<<<<< HEAD
     const SkViewFactory* factory() const { return fFact; }
 
 private:
     SkViewFactory* fFact;
-=======
-    const SkViewFactory*   factory() const { return fFact; }
-
-private:
-    SkViewFactory*  fFact;
->>>>>>> miniblink49
     SkViewRegister* fChain;
 
     static SkViewRegister* gHead;
@@ -154,12 +119,8 @@ public:
         , fBGColor(SK_ColorWHITE)
         , fRepeatCount(1)
         , fHaveCalledOnceBeforeDraw(false)
-<<<<<<< HEAD
     {
     }
-=======
-    {}
->>>>>>> miniblink49
 
     void setBGColor(SkColor color) { fBGColor = color; }
     bool animate(const SkAnimTimer& timer) { return this->onAnimate(timer); }
@@ -175,33 +136,19 @@ public:
      *  The events attached to any new menu items must be handled in its onEvent
      *  method. See SkOSMenu.h for helper functions.
      */
-<<<<<<< HEAD
     virtual void requestMenu(SkOSMenu* menu) { }
 
     virtual void onTileSizeChanged(const SkSize& tileSize) { }
-=======
-    virtual void requestMenu(SkOSMenu* menu) {}
-
-    virtual void onTileSizeChanged(const SkSize& tileSize) {}
->>>>>>> miniblink49
 
 protected:
     virtual void onDrawBackground(SkCanvas*);
     virtual void onDrawContent(SkCanvas*) = 0;
     virtual bool onAnimate(const SkAnimTimer&) { return false; }
-<<<<<<< HEAD
     virtual void onOnceBeforeDraw() { }
-=======
-    virtual void onOnceBeforeDraw() {}
->>>>>>> miniblink49
 
     // overrides
     virtual bool onEvent(const SkEvent& evt);
     virtual bool onQuery(SkEvent* evt);
-<<<<<<< HEAD
-=======
-    virtual void draw(SkCanvas*);
->>>>>>> miniblink49
     virtual void onDraw(SkCanvas*);
 
     SkOSMenu::TriState fPipeState;

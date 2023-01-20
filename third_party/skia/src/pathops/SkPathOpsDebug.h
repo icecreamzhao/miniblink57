@@ -9,29 +9,20 @@
 
 #include "SkPathOps.h"
 #include "SkTypes.h"
-<<<<<<< HEAD
 
 #include <stdio.h>
 #include <stdlib.h>
-=======
-#include <stdio.h>
->>>>>>> miniblink49
 
 #ifdef SK_RELEASE
 #define FORCE_RELEASE 1
 #else
-<<<<<<< HEAD
 #define FORCE_RELEASE 1 // set force release to 1 for multiple thread -- no debugging
-=======
-#define FORCE_RELEASE 1  // set force release to 1 for multiple thread -- no debugging
->>>>>>> miniblink49
 #endif
 
 #define ONE_OFF_DEBUG 0
 #define ONE_OFF_DEBUG_MATHEMATICA 0
 
 #if defined(SK_BUILD_FOR_WIN) || defined(SK_BUILD_FOR_ANDROID)
-<<<<<<< HEAD
 #define SK_RAND(seed) rand()
 #else
 #define SK_RAND(seed) rand_r(&seed)
@@ -48,21 +39,6 @@
         strcpy(x##Str, "?");           \
     else                               \
         SK_SNPRINTF(x##Str, sizeof(x##Str), "%d", x)
-=======
-    #define SK_RAND(seed) rand()
-#else
-    #define SK_RAND(seed) rand_r(&seed)
-#endif
-#ifdef SK_BUILD_FOR_WIN
-    #define SK_SNPRINTF _snprintf
-#else
-    #define SK_SNPRINTF snprintf
-#endif
-
-#define WIND_AS_STRING(x) char x##Str[12]; \
-        if (!SkPathOpsDebug::ValidWind(x)) strcpy(x##Str, "?"); \
-        else SK_SNPRINTF(x##Str, sizeof(x##Str), "%d", x)
->>>>>>> miniblink49
 
 #if FORCE_RELEASE
 
@@ -70,15 +46,10 @@
 #define DEBUG_ACTIVE_SPANS 0
 #define DEBUG_ADD_INTERSECTING_TS 0
 #define DEBUG_ADD_T 0
-<<<<<<< HEAD
 #define DEBUG_ALIGNMENT 0
 #define DEBUG_ANGLE 0
 #define DEBUG_ASSEMBLE 0
 #define DEBUG_COINCIDENCE 0
-=======
-#define DEBUG_ANGLE 0
-#define DEBUG_ASSEMBLE 0
->>>>>>> miniblink49
 #define DEBUG_CUBIC_BINARY_SEARCH 0
 #define DEBUG_CUBIC_SPLIT 0
 #define DEBUG_DUMP_SEGMENTS 0
@@ -91,10 +62,7 @@
 #define DEBUG_SORT 0
 #define DEBUG_T_SECT 0
 #define DEBUG_T_SECT_DUMP 0
-<<<<<<< HEAD
 #define DEBUG_T_SECT_LOOP_COUNT 0
-=======
->>>>>>> miniblink49
 #define DEBUG_VALIDATE 0
 #define DEBUG_WINDING 0
 #define DEBUG_WINDING_AT_T 0
@@ -105,15 +73,10 @@
 #define DEBUG_ACTIVE_SPANS 1
 #define DEBUG_ADD_INTERSECTING_TS 1
 #define DEBUG_ADD_T 1
-<<<<<<< HEAD
 #define DEBUG_ALIGNMENT 0
 #define DEBUG_ANGLE 1
 #define DEBUG_ASSEMBLE 1
 #define DEBUG_COINCIDENCE 0
-=======
-#define DEBUG_ANGLE 1
-#define DEBUG_ASSEMBLE 1
->>>>>>> miniblink49
 #define DEBUG_CUBIC_BINARY_SEARCH 0
 #define DEBUG_CUBIC_SPLIT 1
 #define DEBUG_DUMP_SEGMENTS 1
@@ -126,10 +89,7 @@
 #define DEBUG_SORT 1
 #define DEBUG_T_SECT 0
 #define DEBUG_T_SECT_DUMP 0
-<<<<<<< HEAD
 #define DEBUG_T_SECT_LOOP_COUNT 0
-=======
->>>>>>> miniblink49
 #define DEBUG_VALIDATE 1
 #define DEBUG_WINDING 1
 #define DEBUG_WINDING_AT_T 1
@@ -137,7 +97,6 @@
 #endif
 
 #ifdef SK_RELEASE
-<<<<<<< HEAD
 #define SkDEBUGRELEASE(a, b) b
 #define SkDEBUGPARAMS(...)
 #define SkDEBUGCODE_(...)
@@ -178,54 +137,14 @@ extern int gDumpTSectNum;
 #define CONIC_DEBUG_STR "{{{{%1.9g,%1.9g}, {%1.9g,%1.9g}, {%1.9g,%1.9g}}}, %1.9g}"
 #define QUAD_DEBUG_STR "{{{%1.9g,%1.9g}, {%1.9g,%1.9g}, {%1.9g,%1.9g}}}"
 #define LINE_DEBUG_STR "{{{%1.9g,%1.9g}, {%1.9g,%1.9g}}}"
-=======
-    #define SkDEBUGRELEASE(a, b) b
-    #define SkDEBUGPARAMS(...)
-    #define SkDEBUGCODE_(...)
-#else
-    #define SkDEBUGRELEASE(a, b) a
-    #define SkDEBUGPARAMS(...) , __VA_ARGS__
-    #define SkDEBUGCODE_(...) __VA_ARGS__  // temporary until SkDEBUGCODE is fixed
-#endif
-
-#if DEBUG_VALIDATE == 0
-    #define PATH_OPS_DEBUG_VALIDATE_PARAMS(...)
-#else
-    #define PATH_OPS_DEBUG_VALIDATE_PARAMS(...) , __VA_ARGS__
-#endif
-
-#if DEBUG_T_SECT == 0
-    #define PATH_OPS_DEBUG_T_SECT_RELEASE(a, b) b
-    #define PATH_OPS_DEBUG_T_SECT_PARAMS(...)
-    #define PATH_OPS_DEBUG_T_SECT_CODE(...)
-#else
-    #define PATH_OPS_DEBUG_T_SECT_RELEASE(a, b) a
-    #define PATH_OPS_DEBUG_T_SECT_PARAMS(...) , __VA_ARGS__
-    #define PATH_OPS_DEBUG_T_SECT_CODE(...) __VA_ARGS__
-#endif
-
-#if DEBUG_T_SECT_DUMP > 1
-    extern int gDumpTSectNum;
-#endif
-
-#define CUBIC_DEBUG_STR  "{{{%1.9g,%1.9g}, {%1.9g,%1.9g}, {%1.9g,%1.9g}, {%1.9g,%1.9g}}}"
-#define CONIC_DEBUG_STR "{{{{%1.9g,%1.9g}, {%1.9g,%1.9g}, {%1.9g,%1.9g}}}, %1.9g}"
-#define QUAD_DEBUG_STR   "{{{%1.9g,%1.9g}, {%1.9g,%1.9g}, {%1.9g,%1.9g}}}"
-#define LINE_DEBUG_STR   "{{{%1.9g,%1.9g}, {%1.9g,%1.9g}}}"
->>>>>>> miniblink49
 #define PT_DEBUG_STR "{{%1.9g,%1.9g}}"
 
 #define T_DEBUG_STR(t, n) #t "[" #n "]=%1.9g"
 #define TX_DEBUG_STR(t) #t "[%d]=%1.9g"
 #define CUBIC_DEBUG_DATA(c) c[0].fX, c[0].fY, c[1].fX, c[1].fY, c[2].fX, c[2].fY, c[3].fX, c[3].fY
 #define CONIC_DEBUG_DATA(c, w) c[0].fX, c[0].fY, c[1].fX, c[1].fY, c[2].fX, c[2].fY, w
-<<<<<<< HEAD
 #define QUAD_DEBUG_DATA(q) q[0].fX, q[0].fY, q[1].fX, q[1].fY, q[2].fX, q[2].fY
 #define LINE_DEBUG_DATA(l) l[0].fX, l[0].fY, l[1].fX, l[1].fY
-=======
-#define QUAD_DEBUG_DATA(q)  q[0].fX, q[0].fY, q[1].fX, q[1].fY, q[2].fX, q[2].fY
-#define LINE_DEBUG_DATA(l)  l[0].fX, l[0].fY, l[1].fX, l[1].fY
->>>>>>> miniblink49
 #define PT_DEBUG_DATA(i, n) i.pt(n).asSkPoint().fX, i.pt(n).asSkPoint().fY
 
 #ifndef DEBUG_TEST
@@ -239,10 +158,7 @@ extern int gDumpTSectNum;
 class SkPathOpsDebug {
 public:
     static const char* kLVerbStr[];
-<<<<<<< HEAD
     struct GlitchLog;
-=======
->>>>>>> miniblink49
 
 #if defined(SK_DEBUG) || !FORCE_RELEASE
     static int gContourID;
@@ -258,10 +174,7 @@ public:
     static const char* kPathOpStr[];
 #endif
 
-<<<<<<< HEAD
     static void CoincidentHealth(class SkOpContourHead* contourList, const char* id);
-=======
->>>>>>> miniblink49
     static void MathematicaIze(char* str, size_t bufferSize);
     static bool ValidWind(int winding);
     static void WindingPrintf(int winding);
@@ -270,7 +183,6 @@ public:
     static void* CreateNameStr();
     static void DeleteNameStr(void* v);
 #define DEBUG_FILENAME_STRING_LENGTH 64
-<<<<<<< HEAD
 #define DEBUG_FILENAME_STRING (reinterpret_cast<char*>(SkTLS::Get(SkPathOpsDebug::CreateNameStr, \
     SkPathOpsDebug::DeleteNameStr)))
     static void BumpTestName(char*);
@@ -282,17 +194,6 @@ public:
     static bool ChaseContains(const SkTDArray<class SkOpSpanBase*>&, const class SkOpSpanBase*);
 
     static void CheckHealth(class SkOpContourHead* contourList, const char* id);
-=======
-#define DEBUG_FILENAME_STRING (reinterpret_cast<char* >(SkTLS::Get(SkPathOpsDebug::CreateNameStr, \
-        SkPathOpsDebug::DeleteNameStr)))
-    static void BumpTestName(char* );
-#endif
-    static const char* OpStr(SkPathOp );
-    static void ShowOnePath(const SkPath& path, const char* name, bool includeDeclaration);
-    static void ShowPath(const SkPath& one, const SkPath& two, SkPathOp op, const char* name);
-
-    static bool ChaseContains(const SkTDArray<class SkOpSpanBase*>& , const class SkOpSpanBase* );
->>>>>>> miniblink49
 
     static const struct SkOpAngle* DebugAngleAngle(const struct SkOpAngle*, int id);
     static class SkOpContour* DebugAngleContour(struct SkOpAngle*, int id);

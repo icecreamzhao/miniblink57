@@ -20,26 +20,25 @@
 
 // https://html.spec.whatwg.org/#the-embed-element
 
+// TODO(foolip): HTMLEmbedElement should not have [Custom=LegacyCallAsFunction].
+// https://crbug.com/663662
 // TODO(yukishiino): HTMLEmbedElement should not have [OverrideBuiltins].
 [
     Custom=LegacyCallAsFunction,
     OverrideBuiltins,
 ] interface HTMLEmbedElement : HTMLElement {
-    [Reflect, URL] attribute DOMString src;
-    [Reflect] attribute DOMString type;
-    [Reflect] attribute DOMString width;
-    [Reflect] attribute DOMString height;
-    [CheckSecurity=Node, RaisesException] Document? getSVGDocument();
-    // FIXME: The spec has a legacycaller any (any... arguments); crbug.com/465009
+    [CEReactions, Reflect, URL] attribute DOMString src;
+    [CEReactions, Reflect] attribute DOMString type;
+    [CEReactions, Reflect] attribute DOMString width;
+    [CEReactions, Reflect] attribute DOMString height;
+    [CheckSecurity=ReturnValue, RaisesException] Document? getSVGDocument();
 
     // obsolete members
     // https://html.spec.whatwg.org/#HTMLEmbedElement-partial
-    [Reflect] attribute DOMString align;
-    [Reflect] attribute DOMString name;
+    [CEReactions, Reflect] attribute DOMString align;
+    [CEReactions, Reflect] attribute DOMString name;
 
     // FIXME: None of these getters and setters are in the spec.
-    [Custom, NotEnumerable] getter boolean (unsigned long index);
-    [Custom] setter boolean (unsigned long index, Node value);
     [Custom, NotEnumerable] getter Node (DOMString name);
     [Custom] setter Node (DOMString name, Node value);
 };

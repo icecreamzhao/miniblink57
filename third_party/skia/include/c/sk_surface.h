@@ -15,7 +15,6 @@
 
 SK_C_PLUS_PLUS_BEGIN_GUARD
 
-<<<<<<< HEAD
 /**
     Return a new surface, with the memory for the pixels automatically
     allocated.  If the requested surface cannot be created, or the
@@ -57,36 +56,17 @@ SK_API sk_surface_t* sk_surface_new_raster_direct(const sk_imageinfo_t*,
     sk_surface_t are created with a reference count of 1.
 */
 SK_API void sk_surface_unref(sk_surface_t*);
-=======
-sk_surface_t* sk_surface_new_raster(const sk_imageinfo_t*, const sk_surfaceprops_t*);
-sk_surface_t* sk_surface_new_raster_direct(const sk_imageinfo_t*, void* pixels, size_t rowBytes,
-                                           const sk_surfaceprops_t* props);
-void sk_surface_unref(sk_surface_t*);
->>>>>>> miniblink49
 
 /**
  *  Return the canvas associated with this surface. Note: the canvas is owned by the surface,
  *  so the returned object is only valid while the owning surface is valid.
  */
-<<<<<<< HEAD
 SK_API sk_canvas_t* sk_surface_get_canvas(sk_surface_t*);
-=======
-sk_canvas_t* sk_surface_get_canvas(sk_surface_t*);
->>>>>>> miniblink49
 
 /**
  *  Call sk_image_unref() when the returned image is no longer used.
  */
-<<<<<<< HEAD
 SK_API sk_image_t* sk_surface_new_image_snapshot(sk_surface_t*);
-=======
-sk_image_t* sk_surface_new_image_snapshot(sk_surface_t*);
-
-#ifdef __cplusplus
-    class SkCanvas;
-    void sk_test_capi(SkCanvas*);
-#endif
->>>>>>> miniblink49
 
 SK_C_PLUS_PLUS_END_GUARD
 

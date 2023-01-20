@@ -26,16 +26,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "platform/audio/FFTConvolver.h"
-=======
-#include "config.h"
-
-#if ENABLE(WEB_AUDIO)
-
-#include "platform/audio/FFTConvolver.h"
-
->>>>>>> miniblink49
 #include "platform/audio/VectorMath.h"
 
 namespace blink {
@@ -45,36 +36,23 @@ using namespace VectorMath;
 FFTConvolver::FFTConvolver(size_t fftSize)
     : m_frame(fftSize)
     , m_readWriteIndex(0)
-<<<<<<< HEAD
     , m_inputBuffer(fftSize)
     , // 2nd half of buffer is always zeroed
     m_outputBuffer(fftSize)
-=======
-    , m_inputBuffer(fftSize) // 2nd half of buffer is always zeroed
-    , m_outputBuffer(fftSize)
->>>>>>> miniblink49
     , m_lastOverlapBuffer(fftSize / 2)
 {
 }
 
-<<<<<<< HEAD
 void FFTConvolver::process(FFTFrame* fftKernel,
     const float* sourceP,
     float* destP,
     size_t framesToProcess)
-=======
-void FFTConvolver::process(FFTFrame* fftKernel, const float* sourceP, float* destP, size_t framesToProcess)
->>>>>>> miniblink49
 {
     size_t halfSize = fftSize() / 2;
 
     // framesToProcess must be an exact multiple of halfSize,
-<<<<<<< HEAD
     // or halfSize is a multiple of framesToProcess when halfSize >
     // framesToProcess.
-=======
-    // or halfSize is a multiple of framesToProcess when halfSize > framesToProcess.
->>>>>>> miniblink49
     bool isGood = !(halfSize % framesToProcess && framesToProcess % halfSize);
     ASSERT(isGood);
     if (!isGood)
@@ -83,12 +61,8 @@ void FFTConvolver::process(FFTFrame* fftKernel, const float* sourceP, float* des
     size_t numberOfDivisions = halfSize <= framesToProcess ? (framesToProcess / halfSize) : 1;
     size_t divisionSize = numberOfDivisions == 1 ? framesToProcess : halfSize;
 
-<<<<<<< HEAD
     for (size_t i = 0; i < numberOfDivisions;
          ++i, sourceP += divisionSize, destP += divisionSize) {
-=======
-    for (size_t i = 0; i < numberOfDivisions; ++i, sourceP += divisionSize, destP += divisionSize) {
->>>>>>> miniblink49
         // Copy samples to input buffer (note contraint above!)
         float* inputP = m_inputBuffer.data();
 
@@ -120,12 +94,8 @@ void FFTConvolver::process(FFTFrame* fftKernel, const float* sourceP, float* des
             m_frame.doInverseFFT(m_outputBuffer.data());
 
             // Overlap-add 1st half from previous time
-<<<<<<< HEAD
             vadd(m_outputBuffer.data(), 1, m_lastOverlapBuffer.data(), 1,
                 m_outputBuffer.data(), 1, halfSize);
-=======
-            vadd(m_outputBuffer.data(), 1, m_lastOverlapBuffer.data(), 1, m_outputBuffer.data(), 1, halfSize);
->>>>>>> miniblink49
 
             // Finally, save 2nd half of result
             bool isCopyGood3 = m_outputBuffer.size() == 2 * halfSize && m_lastOverlapBuffer.size() == halfSize;
@@ -133,12 +103,8 @@ void FFTConvolver::process(FFTFrame* fftKernel, const float* sourceP, float* des
             if (!isCopyGood3)
                 return;
 
-<<<<<<< HEAD
             memcpy(m_lastOverlapBuffer.data(), m_outputBuffer.data() + halfSize,
                 sizeof(float) * halfSize);
-=======
-            memcpy(m_lastOverlapBuffer.data(), m_outputBuffer.data() + halfSize, sizeof(float) * halfSize);
->>>>>>> miniblink49
 
             // Reset index back to start for next time
             m_readWriteIndex = 0;
@@ -153,8 +119,3 @@ void FFTConvolver::reset()
 }
 
 } // namespace blink
-<<<<<<< HEAD
-=======
-
-#endif // ENABLE(WEB_AUDIO)
->>>>>>> miniblink49

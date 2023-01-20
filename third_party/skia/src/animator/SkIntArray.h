@@ -6,10 +6,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #ifndef SkIntArray_DEFINED
 #define SkIntArray_DEFINED
 

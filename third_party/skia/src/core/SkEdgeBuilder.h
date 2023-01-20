@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -30,7 +26,6 @@ public:
     SkEdge** edgeList() { return fEdgeList; }
 
 private:
-<<<<<<< HEAD
     enum Combine {
         kNo_Combine,
         kPartial_Combine,
@@ -42,10 +37,6 @@ private:
 
     SkChunkAlloc fAlloc;
     SkTDArray<SkEdge*> fList;
-=======
-    SkChunkAlloc        fAlloc;
-    SkTDArray<SkEdge*>  fList;
->>>>>>> miniblink49
 
     /*
      *  If we're in general mode, we allcoate the pointers in fList, and this
@@ -53,15 +44,9 @@ private:
      *  empty, as we will have preallocated room for the pointers in fAlloc's
      *  block, and fEdgeList will point into that.
      */
-<<<<<<< HEAD
     SkEdge** fEdgeList;
 
     int fShiftUp;
-=======
-    SkEdge**    fEdgeList;
-
-    int         fShiftUp;
->>>>>>> miniblink49
 
 public:
     void addLine(const SkPoint pts[]);

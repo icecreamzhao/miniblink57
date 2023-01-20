@@ -6,16 +6,26 @@
 #define CSSPropertyMetadata_h
 
 #include "core/CSSPropertyNames.h"
+#include "core/CoreExport.h"
+#include "wtf/Allocator.h"
+#include "wtf/Vector.h"
 
 namespace blink {
 
-class CSSPropertyMetadata {
+class CORE_EXPORT CSSPropertyMetadata {
+    STATIC_ONLY(CSSPropertyMetadata);
+
 public:
     static bool isEnabledProperty(CSSPropertyID);
     static bool isInterpolableProperty(CSSPropertyID);
     static bool isInheritedProperty(CSSPropertyID);
+    static bool propertySupportsPercentage(CSSPropertyID);
+    static bool propertyIsRepeated(CSSPropertyID);
+    static bool isDescriptorOnly(CSSPropertyID);
 
-    static void filterEnabledCSSPropertiesIntoVector(const CSSPropertyID*, size_t length, Vector<CSSPropertyID>&);
+    static void filterEnabledCSSPropertiesIntoVector(const CSSPropertyID*,
+        size_t length,
+        Vector<CSSPropertyID>&);
 };
 
 } // namespace blink

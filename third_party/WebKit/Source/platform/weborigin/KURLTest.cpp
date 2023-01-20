@@ -31,7 +31,6 @@
 // Basic tests that verify our KURL's interface behaves the same as the
 // original KURL's.
 
-<<<<<<< HEAD
 #include "platform/weborigin/KURL.h"
 
 #include "testing/gtest/include/gtest/gtest.h"
@@ -43,32 +42,6 @@
 namespace blink {
 
 TEST(KURLTest, Getters)
-=======
-#include "config.h"
-#include "platform/weborigin/KURL.h"
-
-#include "wtf/testing/WTFTestHelpers.h"
-#include "wtf/text/CString.h"
-#include "wtf/text/WTFString.h"
-#include <gtest/gtest.h>
-
-namespace blink {
-
-struct ComponentCase {
-    const char* url;
-    const char* protocol;
-    const char* host;
-    const int port;
-    const char* user;
-    const char* pass;
-    const char* lastPath;
-    const char* query;
-    const char* ref;
-};
-
-// Test the cases where we should be the same as WebKit's old KURL.
-TEST(KURLTest, SameGetters)
->>>>>>> miniblink49
 {
     struct GetterCase {
         const char* url;
@@ -77,7 +50,6 @@ TEST(KURLTest, SameGetters)
         int port;
         const char* user;
         const char* pass;
-<<<<<<< HEAD
         const char* path;
         const char* lastPathComponent;
         const char* query;
@@ -139,115 +111,6 @@ TEST(KURLTest, SameGetters)
     }
 }
 
-=======
-        const char* lastPathComponent;
-        const char* query;
-        const char* ref;
-        bool hasRef;
-    } cases[] = {
-        {"http://www.google.com/foo/blah?bar=baz#ref", "http", "www.google.com", 0, "", 0, "blah", "bar=baz", "ref", true},
-        {"http://foo.com:1234/foo/bar/", "http", "foo.com", 1234, "", 0, "bar", 0, 0, false},
-        {"http://www.google.com?#", "http", "www.google.com", 0, "", 0, 0, "", "", true},
-        {"https://me:pass@google.com:23#foo", "https", "google.com", 23, "me", "pass", 0, 0, "foo", true},
-        {"javascript:hello!//world", "javascript", "", 0, "", 0, "world", 0, 0, false},
-    };
-
-    for (size_t i = 0; i < arraysize(cases); i++) {
-        // UTF-8
-        KURL kurl(ParsedURLString, cases[i].url);
-
-        EXPECT_EQ(cases[i].protocol, kurl.protocol());
-        EXPECT_EQ(cases[i].host, kurl.host());
-        EXPECT_EQ(cases[i].port, kurl.port());
-        EXPECT_EQ(cases[i].user, kurl.user());
-        EXPECT_EQ(cases[i].pass, kurl.pass());
-        EXPECT_EQ(cases[i].lastPathComponent, kurl.lastPathComponent());
-        EXPECT_EQ(cases[i].query, kurl.query());
-        EXPECT_EQ(cases[i].ref, kurl.fragmentIdentifier());
-        EXPECT_EQ(cases[i].hasRef, kurl.hasFragmentIdentifier());
-
-        // UTF-16
-        String utf16(cases[i].url);
-        kurl = KURL(ParsedURLString, utf16);
-
-        EXPECT_EQ(cases[i].protocol, kurl.protocol());
-        EXPECT_EQ(cases[i].host, kurl.host());
-        EXPECT_EQ(cases[i].port, kurl.port());
-        EXPECT_EQ(cases[i].user, kurl.user());
-        EXPECT_EQ(cases[i].pass, kurl.pass());
-        EXPECT_EQ(cases[i].lastPathComponent, kurl.lastPathComponent());
-        EXPECT_EQ(cases[i].query, kurl.query());
-        EXPECT_EQ(cases[i].ref, kurl.fragmentIdentifier());
-        EXPECT_EQ(cases[i].hasRef, kurl.hasFragmentIdentifier());
-    }
-}
-
-// Test a few cases where we're different just to make sure we give reasonable
-// output.
-TEST(KURLTest, DISABLED_DifferentGetters)
-{
-    ComponentCase cases[] = {
-        // url                                    protocol      host        port  user  pass             lastPath  query      ref
-
-        // Old WebKit allows references and queries in what we call "path" URLs
-        // like javascript, so the path here will only consist of "hello!".
-        {"javascript:hello!?#/\\world",           "javascript", "",         0,    "",   0,               "world",  0,         0},
-
-        // Old WebKit doesn't handle "parameters" in paths, so will
-        // disagree with us about where the path is for this URL.
-        {"http://a.com/hello;world",              "http",       "a.com",    0,    "",   0,               "hello",  0,         0},
-
-        // WebKit doesn't like UTF-8 or UTF-16 input.
-        {"http://\xe4\xbd\xa0\xe5\xa5\xbd\xe4\xbd\xa0\xe5\xa5\xbd/", "http", "xn--6qqa088eba", 0, "", 0, 0,        0,         0},
-
-        // WebKit %-escapes non-ASCII characters in reference, but we don't.
-        {"http://www.google.com/foo/blah?bar=baz#\xce\xb1\xce\xb2", "http", "www.google.com", 0, "", 0,  "blah", "bar=baz", "\xce\xb1\xce\xb2"},
-    };
-
-    for (size_t i = 0; i < arraysize(cases); i++) {
-        KURL kurl(ParsedURLString, cases[i].url);
-
-        EXPECT_EQ(cases[i].protocol, kurl.protocol());
-        EXPECT_EQ(cases[i].host, kurl.host());
-        EXPECT_EQ(cases[i].port, kurl.port());
-        EXPECT_EQ(cases[i].user, kurl.user());
-        EXPECT_EQ(cases[i].pass, kurl.pass());
-        EXPECT_EQ(cases[i].lastPath, kurl.lastPathComponent());
-        EXPECT_EQ(cases[i].query, kurl.query());
-        // Want to compare UCS-16 refs (or to null).
-        if (cases[i].ref)
-            EXPECT_EQ(String::fromUTF8(cases[i].ref), kurl.fragmentIdentifier());
-        else
-            EXPECT_TRUE(kurl.fragmentIdentifier().isNull());
-    }
-}
-
-// Ensures that both ASCII and UTF-8 canonical URLs are handled properly and we
-// get the correct string object out.
-TEST(KURLTest, DISABLED_UTF8)
-{
-    const char asciiURL[] = "http://foo/bar#baz";
-    KURL asciiKURL(ParsedURLString, asciiURL);
-    EXPECT_TRUE(asciiKURL.string() == String(asciiURL));
-
-    // When the result is ASCII, we should get an ASCII String. Some
-    // code depends on being able to compare the result of the .string()
-    // getter with another String, and the isASCIIness of the two
-    // strings must match for these functions (like equalIgnoringCase).
-    EXPECT_TRUE(equalIgnoringCase(asciiKURL, String(asciiURL)));
-
-    // Reproduce code path in FrameLoader.cpp -- equalIgnoringCase implicitly
-    // expects gkurl.protocol() to have been created as ascii.
-    KURL mailto(ParsedURLString, "mailto:foo@foo.com");
-    EXPECT_TRUE(equalIgnoringCase(mailto.protocol(), "mailto"));
-
-    const char utf8URL[] = "http://foo/bar#\xe4\xbd\xa0\xe5\xa5\xbd";
-    KURL utf8KURL(ParsedURLString, utf8URL);
-
-    EXPECT_TRUE(utf8KURL.string() == String::fromUTF8(utf8URL));
-}
-
->>>>>>> miniblink49
 TEST(KURLTest, Setters)
 {
     // Replace the starting URL with the given components one at a time and
@@ -281,12 +144,7 @@ TEST(KURLTest, Setters)
         const char* query;
         const char* expectedQuery;
     } cases[] = {
-<<<<<<< HEAD
         { "http://www.google.com/",
-=======
-        {
-            "http://www.google.com/",
->>>>>>> miniblink49
             // protocol
             "https", "https://www.google.com/",
             // host
@@ -300,14 +158,8 @@ TEST(KURLTest, Setters)
             // path
             "/foo", "https://me:pass@news.google.com:8888/foo",
             // query
-<<<<<<< HEAD
             "?q=asdf", "https://me:pass@news.google.com:8888/foo?q=asdf" },
         { "https://me:pass@google.com:88/a?f#b",
-=======
-            "?q=asdf", "https://me:pass@news.google.com:8888/foo?q=asdf"
-        }, {
-            "https://me:pass@google.com:88/a?f#b",
->>>>>>> miniblink49
             // protocol
             "http", "http://me:pass@google.com:88/a?f#b",
             // host
@@ -321,7 +173,6 @@ TEST(KURLTest, Setters)
             // path
             "/", "http://goo.com:92/?f#b",
             // query
-<<<<<<< HEAD
             0, "http://goo.com:92/#b" },
     };
 
@@ -348,35 +199,6 @@ TEST(KURLTest, Setters)
 
         kurl.setQuery(cases[i].query);
         EXPECT_STREQ(cases[i].expectedQuery, kurl.getString().utf8().data());
-=======
-            0, "http://goo.com:92/#b"
-        },
-    };
-
-    for (size_t i = 0; i < arraysize(cases); i++) {
-        KURL kurl(ParsedURLString, cases[i].url);
-
-        kurl.setProtocol(cases[i].protocol);
-        EXPECT_STREQ(cases[i].expectedProtocol, kurl.string().utf8().data());
-
-        kurl.setHost(cases[i].host);
-        EXPECT_STREQ(cases[i].expectedHost, kurl.string().utf8().data());
-
-        kurl.setPort(cases[i].port);
-        EXPECT_STREQ(cases[i].expectedPort, kurl.string().utf8().data());
-
-        kurl.setUser(cases[i].user);
-        EXPECT_STREQ(cases[i].expectedUser, kurl.string().utf8().data());
-
-        kurl.setPass(cases[i].pass);
-        EXPECT_STREQ(cases[i].expectedPass, kurl.string().utf8().data());
-
-        kurl.setPath(cases[i].path);
-        EXPECT_STREQ(cases[i].expectedPath, kurl.string().utf8().data());
-
-        kurl.setQuery(cases[i].query);
-        EXPECT_STREQ(cases[i].expectedQuery, kurl.string().utf8().data());
->>>>>>> miniblink49
 
         // Refs are tested below. On the Safari 3.1 branch, we don't match their
         // KURL since we integrated a fix from their trunk.
@@ -384,17 +206,12 @@ TEST(KURLTest, Setters)
 }
 
 // Tests that KURL::decodeURLEscapeSequences works as expected
-<<<<<<< HEAD
 TEST(KURLTest, DecodeURLEscapeSequences)
-=======
-TEST(KURLTest, Decode)
->>>>>>> miniblink49
 {
     struct DecodeCase {
         const char* input;
         const char* output;
     } decodeCases[] = {
-<<<<<<< HEAD
         { "hello, world", "hello, world" },
         { "%01%02%03%04%05%06%07%08%09%0a%0B%0C%0D%0e%0f/",
             "\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0B\x0C\x0D\x0e\x0f/" },
@@ -417,22 +234,6 @@ TEST(KURLTest, Decode)
     };
 
     for (size_t i = 0; i < WTF_ARRAY_LENGTH(decodeCases); i++) {
-=======
-        {"hello, world", "hello, world"},
-        {"%01%02%03%04%05%06%07%08%09%0a%0B%0C%0D%0e%0f/", "\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0B\x0C\x0D\x0e\x0f/"},
-        {"%10%11%12%13%14%15%16%17%18%19%1a%1B%1C%1D%1e%1f/", "\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1B\x1C\x1D\x1e\x1f/"},
-        {"%20%21%22%23%24%25%26%27%28%29%2a%2B%2C%2D%2e%2f/", " !\"#$%&'()*+,-.//"},
-        {"%30%31%32%33%34%35%36%37%38%39%3a%3B%3C%3D%3e%3f/", "0123456789:;<=>?/"},
-        {"%40%41%42%43%44%45%46%47%48%49%4a%4B%4C%4D%4e%4f/", "@ABCDEFGHIJKLMNO/"},
-        {"%50%51%52%53%54%55%56%57%58%59%5a%5B%5C%5D%5e%5f/", "PQRSTUVWXYZ[\\]^_/"},
-        {"%60%61%62%63%64%65%66%67%68%69%6a%6B%6C%6D%6e%6f/", "`abcdefghijklmno/"},
-        {"%70%71%72%73%74%75%76%77%78%79%7a%7B%7C%7D%7e%7f/", "pqrstuvwxyz{|}~\x7f/"},
-          // Test un-UTF-8-ization.
-        {"%e4%bd%a0%e5%a5%bd", "\xe4\xbd\xa0\xe5\xa5\xbd"},
-    };
-
-    for (size_t i = 0; i < arraysize(decodeCases); i++) {
->>>>>>> miniblink49
         String input(decodeCases[i].input);
         String str = decodeURLEscapeSequences(input);
         EXPECT_STREQ(decodeCases[i].output, str.utf8().data());
@@ -442,39 +243,26 @@ TEST(KURLTest, Decode)
     String zero = decodeURLEscapeSequences("%00");
     EXPECT_STRNE("%00", zero.utf8().data());
 
-<<<<<<< HEAD
     // Decode UTF-8.
     String decoded = decodeURLEscapeSequences("%e6%bc%a2%e5%ad%97");
     const UChar decodedExpected[] = { 0x6F22, 0x5b57 };
     EXPECT_EQ(String(decodedExpected, WTF_ARRAY_LENGTH(decodedExpected)),
         decoded);
 
-=======
->>>>>>> miniblink49
     // Test the error behavior for invalid UTF-8 (we differ from WebKit here).
     String invalid = decodeURLEscapeSequences("%e4%a0%e5%a5%bd");
     UChar invalidExpectedHelper[4] = { 0x00e4, 0x00a0, 0x597d, 0 };
     String invalidExpected(
-<<<<<<< HEAD
         reinterpret_cast<const ::UChar*>(invalidExpectedHelper), 3);
     EXPECT_EQ(invalidExpected, invalid);
 }
 
 TEST(KURLTest, EncodeWithURLEscapeSequences)
-=======
-        reinterpret_cast<const ::UChar*>(invalidExpectedHelper),
-        3);
-    EXPECT_EQ(invalidExpected, invalid);
-}
-
-TEST(KURLTest, Encode)
->>>>>>> miniblink49
 {
     struct EncodeCase {
         const char* input;
         const char* output;
     } encode_cases[] = {
-<<<<<<< HEAD
         { "hello, world", "hello%2C%20world" },
         { "\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0A\x0B\x0C\x0D\x0E\x0F",
             "%01%02%03%04%05%06%07%08%09%0A%0B%0C%0D%0E%0F" },
@@ -489,27 +277,6 @@ TEST(KURLTest, Encode)
     };
 
     for (size_t i = 0; i < WTF_ARRAY_LENGTH(encode_cases); i++) {
-=======
-        {"hello, world", "hello%2C%20world"},
-        {"\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0A\x0B\x0C\x0D\x0E\x0F",
-          "%01%02%03%04%05%06%07%08%09%0A%0B%0C%0D%0E%0F"},
-        {"\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1A\x1B\x1C\x1D\x1E\x1F",
-          "%10%11%12%13%14%15%16%17%18%19%1A%1B%1C%1D%1E%1F"},
-        {" !\"#$%&'()*+,-./", "%20!%22%23%24%25%26%27()*%2B%2C-./"},
-        {"0123456789:;<=>?",
-          "0123456789%3A%3B%3C%3D%3E%3F"},
-        {"@ABCDEFGHIJKLMNO",
-          "%40ABCDEFGHIJKLMNO"},
-        {"PQRSTUVWXYZ[\\]^_",
-          "PQRSTUVWXYZ%5B%5C%5D%5E_"},
-        {"`abcdefghijklmno",
-          "%60abcdefghijklmno"},
-        {"pqrstuvwxyz{|}~\x7f",
-          "pqrstuvwxyz%7B%7C%7D~%7F"},
-    };
-
-    for (size_t i = 0; i < arraysize(encode_cases); i++) {
->>>>>>> miniblink49
         String input(encode_cases[i].input);
         String expectedOutput(encode_cases[i].output);
         String output = encodeWithURLEscapeSequences(input);
@@ -529,7 +296,6 @@ TEST(KURLTest, Encode)
     String wideReference("%E4%BD%A0%E5%A5%BD");
     String wideOutput = encodeWithURLEscapeSequences(wideInput);
     EXPECT_EQ(wideReference, wideOutput);
-<<<<<<< HEAD
 
     // Encoding should not NFC-normalize the string.
     // Contain a combining character ('e' + COMBINING OGONEK).
@@ -570,8 +336,6 @@ TEST(KURLTest, RemoveWhitespace)
         EXPECT_TRUE(input.whitespaceRemoved());
         EXPECT_FALSE(expected.whitespaceRemoved());
     }
-=======
->>>>>>> miniblink49
 }
 
 TEST(KURLTest, ResolveEmpty)
@@ -583,11 +347,7 @@ TEST(KURLTest, ResolveEmpty)
     const char abs[] = "http://www.google.com/";
     KURL resolveAbs(emptyBase, abs);
     EXPECT_TRUE(resolveAbs.isValid());
-<<<<<<< HEAD
     EXPECT_STREQ(abs, resolveAbs.getString().utf8().data());
-=======
-    EXPECT_STREQ(abs, resolveAbs.string().utf8().data());
->>>>>>> miniblink49
 
     // Resolving a non-relative URL agains the empty one should still error.
     const char rel[] = "foo.html";
@@ -603,11 +363,7 @@ TEST(KURLTest, ReplaceInvalid)
 
     EXPECT_FALSE(kurl.isValid());
     EXPECT_TRUE(kurl.isEmpty());
-<<<<<<< HEAD
     EXPECT_STREQ("", kurl.getString().utf8().data());
-=======
-    EXPECT_STREQ("", kurl.string().utf8().data());
->>>>>>> miniblink49
 
     kurl.setProtocol("http");
     // GKURL will say that a URL with just a scheme is invalid, KURL will not.
@@ -616,39 +372,23 @@ TEST(KURLTest, ReplaceInvalid)
     // At this point, we do things slightly differently if there is only a scheme.
     // We check the results here to make it more obvious what is going on, but it
     // shouldn't be a big deal if these change.
-<<<<<<< HEAD
     EXPECT_STREQ("http:", kurl.getString().utf8().data());
-=======
-    EXPECT_STREQ("http:", kurl.string().utf8().data());
->>>>>>> miniblink49
 
     kurl.setHost("www.google.com");
     EXPECT_TRUE(kurl.isValid());
     EXPECT_FALSE(kurl.isEmpty());
-<<<<<<< HEAD
     EXPECT_STREQ("http://www.google.com/", kurl.getString().utf8().data());
-=======
-    EXPECT_STREQ("http://www.google.com/", kurl.string().utf8().data());
->>>>>>> miniblink49
 
     kurl.setPort(8000);
     EXPECT_TRUE(kurl.isValid());
     EXPECT_FALSE(kurl.isEmpty());
-<<<<<<< HEAD
     EXPECT_STREQ("http://www.google.com:8000/", kurl.getString().utf8().data());
-=======
-    EXPECT_STREQ("http://www.google.com:8000/", kurl.string().utf8().data());
->>>>>>> miniblink49
 
     kurl.setPath("/favicon.ico");
     EXPECT_TRUE(kurl.isValid());
     EXPECT_FALSE(kurl.isEmpty());
-<<<<<<< HEAD
     EXPECT_STREQ("http://www.google.com:8000/favicon.ico",
         kurl.getString().utf8().data());
-=======
-    EXPECT_STREQ("http://www.google.com:8000/favicon.ico", kurl.string().utf8().data());
->>>>>>> miniblink49
 
     // Now let's test that giving an invalid replacement fails. Invalid
     // protocols fail without modifying the URL, which should remain valid.
@@ -656,7 +396,6 @@ TEST(KURLTest, ReplaceInvalid)
     EXPECT_TRUE(kurl.isValid());
 }
 
-<<<<<<< HEAD
 TEST(KURLTest, Valid_HTTP_FTP_URLsHaveHosts)
 {
     // Since the suborigin schemes are added at the content layer, its
@@ -745,8 +484,6 @@ TEST(KURLTest, Valid_HTTP_FTP_URLsHaveHosts)
     EXPECT_TRUE(kurl.isValid());
 }
 
-=======
->>>>>>> miniblink49
 TEST(KURLTest, Path)
 {
     const char initial[] = "http://www.google.com/path/foo";
@@ -756,11 +493,7 @@ TEST(KURLTest, Path)
     String nullString;
     EXPECT_TRUE(nullString.isNull());
     kurl.setPath(nullString);
-<<<<<<< HEAD
     EXPECT_STREQ("http://www.google.com/", kurl.getString().utf8().data());
-=======
-    EXPECT_STREQ("http://www.google.com/", kurl.string().utf8().data());
->>>>>>> miniblink49
 }
 
 // Test that setting the query to different things works. Thq query is handled
@@ -774,42 +507,26 @@ TEST(KURLTest, Query)
     String nullString;
     EXPECT_TRUE(nullString.isNull());
     kurl.setQuery(nullString);
-<<<<<<< HEAD
     EXPECT_STREQ("http://www.google.com/search", kurl.getString().utf8().data());
-=======
-    EXPECT_STREQ("http://www.google.com/search", kurl.string().utf8().data());
->>>>>>> miniblink49
 
     // Clear by setting an empty string.
     kurl = KURL(ParsedURLString, initial);
     String emptyString("");
     EXPECT_FALSE(emptyString.isNull());
     kurl.setQuery(emptyString);
-<<<<<<< HEAD
     EXPECT_STREQ("http://www.google.com/search?", kurl.getString().utf8().data());
-=======
-    EXPECT_STREQ("http://www.google.com/search?", kurl.string().utf8().data());
->>>>>>> miniblink49
 
     // Set with something that begins in a question mark.
     const char question[] = "?foo=bar";
     kurl.setQuery(question);
     EXPECT_STREQ("http://www.google.com/search?foo=bar",
-<<<<<<< HEAD
         kurl.getString().utf8().data());
-=======
-                 kurl.string().utf8().data());
->>>>>>> miniblink49
 
     // Set with something that doesn't begin in a question mark.
     const char query[] = "foo=bar";
     kurl.setQuery(query);
     EXPECT_STREQ("http://www.google.com/search?foo=bar",
-<<<<<<< HEAD
         kurl.getString().utf8().data());
-=======
-                 kurl.string().utf8().data());
->>>>>>> miniblink49
 }
 
 TEST(KURLTest, Ref)
@@ -819,47 +536,26 @@ TEST(KURLTest, Ref)
     // Basic ref setting.
     KURL cur(ParsedURLString, "http://foo/bar");
     cur.setFragmentIdentifier("asdf");
-<<<<<<< HEAD
     EXPECT_STREQ("http://foo/bar#asdf", cur.getString().utf8().data());
     cur = kurl;
     cur.setFragmentIdentifier("asdf");
     EXPECT_STREQ("http://foo/bar#asdf", cur.getString().utf8().data());
-=======
-    EXPECT_STREQ("http://foo/bar#asdf", cur.string().utf8().data());
-    cur = kurl;
-    cur.setFragmentIdentifier("asdf");
-    EXPECT_STREQ("http://foo/bar#asdf", cur.string().utf8().data());
->>>>>>> miniblink49
 
     // Setting a ref to the empty string will set it to "#".
     cur = KURL(ParsedURLString, "http://foo/bar");
     cur.setFragmentIdentifier("");
-<<<<<<< HEAD
     EXPECT_STREQ("http://foo/bar#", cur.getString().utf8().data());
     cur = kurl;
     cur.setFragmentIdentifier("");
     EXPECT_STREQ("http://foo/bar#", cur.getString().utf8().data());
-=======
-    EXPECT_STREQ("http://foo/bar#", cur.string().utf8().data());
-    cur = kurl;
-    cur.setFragmentIdentifier("");
-    EXPECT_STREQ("http://foo/bar#", cur.string().utf8().data());
->>>>>>> miniblink49
 
     // Setting the ref to the null string will clear it altogether.
     cur = KURL(ParsedURLString, "http://foo/bar");
     cur.setFragmentIdentifier(String());
-<<<<<<< HEAD
     EXPECT_STREQ("http://foo/bar", cur.getString().utf8().data());
     cur = kurl;
     cur.setFragmentIdentifier(String());
     EXPECT_STREQ("http://foo/bar", cur.getString().utf8().data());
-=======
-    EXPECT_STREQ("http://foo/bar", cur.string().utf8().data());
-    cur = kurl;
-    cur.setFragmentIdentifier(String());
-    EXPECT_STREQ("http://foo/bar", cur.string().utf8().data());
->>>>>>> miniblink49
 }
 
 TEST(KURLTest, Empty)
@@ -870,47 +566,28 @@ TEST(KURLTest, Empty)
     EXPECT_TRUE(kurl.isEmpty());
     EXPECT_FALSE(kurl.isValid());
     EXPECT_TRUE(kurl.isNull());
-<<<<<<< HEAD
     EXPECT_TRUE(kurl.getString().isNull());
     EXPECT_TRUE(kurl.getString().isEmpty());
-=======
-    EXPECT_TRUE(kurl.string().isNull());
-    EXPECT_TRUE(kurl.string().isEmpty());
->>>>>>> miniblink49
 
     // Test resolving a null URL on an empty string.
     KURL kurl2(kurl, "");
     EXPECT_FALSE(kurl2.isNull());
     EXPECT_TRUE(kurl2.isEmpty());
     EXPECT_FALSE(kurl2.isValid());
-<<<<<<< HEAD
     EXPECT_FALSE(kurl2.getString().isNull());
     EXPECT_TRUE(kurl2.getString().isEmpty());
     EXPECT_FALSE(kurl2.getString().isNull());
     EXPECT_TRUE(kurl2.getString().isEmpty());
-=======
-    EXPECT_FALSE(kurl2.string().isNull());
-    EXPECT_TRUE(kurl2.string().isEmpty());
-    EXPECT_FALSE(kurl2.string().isNull());
-    EXPECT_TRUE(kurl2.string().isEmpty());
->>>>>>> miniblink49
 
     // Resolve the null URL on a null string.
     KURL kurl22(kurl, String());
     EXPECT_FALSE(kurl22.isNull());
     EXPECT_TRUE(kurl22.isEmpty());
     EXPECT_FALSE(kurl22.isValid());
-<<<<<<< HEAD
     EXPECT_FALSE(kurl22.getString().isNull());
     EXPECT_TRUE(kurl22.getString().isEmpty());
     EXPECT_FALSE(kurl22.getString().isNull());
     EXPECT_TRUE(kurl22.getString().isEmpty());
-=======
-    EXPECT_FALSE(kurl22.string().isNull());
-    EXPECT_TRUE(kurl22.string().isEmpty());
-    EXPECT_FALSE(kurl22.string().isNull());
-    EXPECT_TRUE(kurl22.string().isEmpty());
->>>>>>> miniblink49
 
     // Test non-hierarchical schemes resolving. The actual URLs will be different.
     // WebKit's one will set the string to "something.gif" and we'll set it to an
@@ -921,45 +598,26 @@ TEST(KURLTest, Empty)
 
     // Test for weird isNull string input,
     // see: http://bugs.webkit.org/show_bug.cgi?id=16487
-<<<<<<< HEAD
     KURL kurl4(ParsedURLString, kurl.getString());
     EXPECT_TRUE(kurl4.isEmpty());
     EXPECT_FALSE(kurl4.isValid());
     EXPECT_TRUE(kurl4.getString().isNull());
     EXPECT_TRUE(kurl4.getString().isEmpty());
-=======
-    KURL kurl4(ParsedURLString, kurl.string());
-    EXPECT_TRUE(kurl4.isEmpty());
-    EXPECT_FALSE(kurl4.isValid());
-    EXPECT_TRUE(kurl4.string().isNull());
-    EXPECT_TRUE(kurl4.string().isEmpty());
->>>>>>> miniblink49
 
     // Resolving an empty URL on an invalid string.
     KURL kurl5(KURL(), "foo.js");
     // We'll be empty in this case, but KURL won't be. Should be OK.
     // EXPECT_EQ(kurl5.isEmpty(), kurl5.isEmpty());
-<<<<<<< HEAD
     // EXPECT_EQ(kurl5.getString().isEmpty(), kurl5.getString().isEmpty());
     EXPECT_FALSE(kurl5.isValid());
     EXPECT_FALSE(kurl5.getString().isNull());
-=======
-    // EXPECT_EQ(kurl5.string().isEmpty(), kurl5.string().isEmpty());
-    EXPECT_FALSE(kurl5.isValid());
-    EXPECT_FALSE(kurl5.string().isNull());
->>>>>>> miniblink49
 
     // Empty string as input
     KURL kurl6(ParsedURLString, "");
     EXPECT_TRUE(kurl6.isEmpty());
     EXPECT_FALSE(kurl6.isValid());
-<<<<<<< HEAD
     EXPECT_FALSE(kurl6.getString().isNull());
     EXPECT_TRUE(kurl6.getString().isEmpty());
-=======
-    EXPECT_FALSE(kurl6.string().isNull());
-    EXPECT_TRUE(kurl6.string().isEmpty());
->>>>>>> miniblink49
 
     // Non-empty but invalid C string as input.
     KURL kurl7(ParsedURLString, "foo.js");
@@ -967,11 +625,7 @@ TEST(KURLTest, Empty)
     // We don't do that.
     // EXPECT_EQ(kurl7.isEmpty(), kurl7.isEmpty());
     EXPECT_FALSE(kurl7.isValid());
-<<<<<<< HEAD
     EXPECT_FALSE(kurl7.getString().isNull());
-=======
-    EXPECT_FALSE(kurl7.string().isNull());
->>>>>>> miniblink49
 }
 
 TEST(KURLTest, UserPass)
@@ -981,28 +635,16 @@ TEST(KURLTest, UserPass)
 
     // Clear just the username.
     kurl.setUser("");
-<<<<<<< HEAD
     EXPECT_EQ("http://:pass@google.com/", kurl.getString());
-=======
-    EXPECT_EQ("http://:pass@google.com/", kurl.string());
->>>>>>> miniblink49
 
     // Clear just the password.
     kurl = KURL(ParsedURLString, src);
     kurl.setPass("");
-<<<<<<< HEAD
     EXPECT_EQ("http://user@google.com/", kurl.getString());
 
     // Now clear both.
     kurl.setUser("");
     EXPECT_EQ("http://google.com/", kurl.getString());
-=======
-    EXPECT_EQ("http://user@google.com/", kurl.string());
-
-    // Now clear both.
-    kurl.setUser("");
-    EXPECT_EQ("http://google.com/", kurl.string());
->>>>>>> miniblink49
 }
 
 TEST(KURLTest, Offsets)
@@ -1039,21 +681,12 @@ TEST(KURLTest, DeepCopy)
 {
     const char url[] = "http://www.google.com/";
     KURL src(ParsedURLString, url);
-<<<<<<< HEAD
     EXPECT_TRUE(src.getString() == url); // This really just initializes the cache.
     KURL dest = src.copy();
     EXPECT_TRUE(dest.getString() == url); // This really just initializes the cache.
 
     // The pointers should be different for both UTF-8 and UTF-16.
     EXPECT_NE(dest.getString().impl(), src.getString().impl());
-=======
-    EXPECT_TRUE(src.string() == url); // This really just initializes the cache.
-    KURL dest = src.copy();
-    EXPECT_TRUE(dest.string() == url); // This really just initializes the cache.
-
-    // The pointers should be different for both UTF-8 and UTF-16.
-    EXPECT_NE(dest.string().impl(), src.string().impl());
->>>>>>> miniblink49
 }
 
 TEST(KURLTest, DeepCopyInnerURL)
@@ -1061,19 +694,11 @@ TEST(KURLTest, DeepCopyInnerURL)
     const char url[] = "filesystem:http://www.google.com/temporary/test.txt";
     const char innerURL[] = "http://www.google.com/temporary";
     KURL src(ParsedURLString, url);
-<<<<<<< HEAD
     EXPECT_TRUE(src.getString() == url);
     EXPECT_TRUE(src.innerURL()->getString() == innerURL);
     KURL dest = src.copy();
     EXPECT_TRUE(dest.getString() == url);
     EXPECT_TRUE(dest.innerURL()->getString() == innerURL);
-=======
-    EXPECT_TRUE(src.string() == url);
-    EXPECT_TRUE(src.innerURL()->string() == innerURL);
-    KURL dest = src.copy();
-    EXPECT_TRUE(dest.string() == url);
-    EXPECT_TRUE(dest.innerURL()->string() == innerURL);
->>>>>>> miniblink49
 }
 
 TEST(KURLTest, LastPathComponent)
@@ -1124,14 +749,10 @@ TEST(KURLTest, ProtocolIs)
 
     KURL invalidUTF8(ParsedURLString, "http://a@9%aa%:");
     EXPECT_FALSE(invalidUTF8.protocolIs("http"));
-<<<<<<< HEAD
 
     KURL capital(KURL(), "HTTP://www.example.text");
     EXPECT_TRUE(capital.protocolIs("http"));
     EXPECT_EQ(capital.protocol(), "http");
-=======
-    EXPECT_TRUE(invalidUTF8.protocolIs(""));
->>>>>>> miniblink49
 }
 
 TEST(KURLTest, strippedForUseAsReferrer)
@@ -1140,7 +761,6 @@ TEST(KURLTest, strippedForUseAsReferrer)
         const char* input;
         const char* output;
     } referrerCases[] = {
-<<<<<<< HEAD
         { "data:text/html;charset=utf-8,<html></html>", "" },
         { "javascript:void(0);", "" },
         { "about:config", "" },
@@ -1155,21 +775,6 @@ TEST(KURLTest, strippedForUseAsReferrer)
     };
 
     for (size_t i = 0; i < WTF_ARRAY_LENGTH(referrerCases); i++) {
-=======
-        {"data:text/html;charset=utf-8,<html></html>", ""},
-        {"javascript:void(0);", ""},
-        {"about:config", ""},
-        {"https://www.google.com/", "https://www.google.com/"},
-        {"http://me@news.google.com:8888/", "http://news.google.com:8888/"},
-        {"http://:pass@news.google.com:8888/foo", "http://news.google.com:8888/foo"},
-        {"http://me:pass@news.google.com:8888/", "http://news.google.com:8888/"},
-        {"https://www.google.com/a?f#b", "https://www.google.com/a?f"},
-        {"file:///tmp/test.html", ""},
-        {"https://www.google.com/#", "https://www.google.com/"},
-    };
-
-    for (size_t i = 0; i < arraysize(referrerCases); i++) {
->>>>>>> miniblink49
         KURL kurl(ParsedURLString, referrerCases[i].input);
         String referrer = kurl.strippedForUseAsReferrer();
         EXPECT_STREQ(referrerCases[i].output, referrer.utf8().data());

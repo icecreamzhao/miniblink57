@@ -30,13 +30,16 @@
 
 namespace blink {
 
-// Collection that limits to a particular tag and whose rootNode is in an HTMLDocument.
+// Collection that limits to a particular tag and whose rootNode is in an
+// HTMLDocument.
 class HTMLTagCollection final : public TagCollection {
 public:
-    static PassRefPtrWillBeRawPtr<HTMLTagCollection> create(ContainerNode& rootNode, CollectionType type, const AtomicString& localName)
+    static HTMLTagCollection* create(ContainerNode& rootNode,
+        CollectionType type,
+        const AtomicString& localName)
     {
-        ASSERT_UNUSED(type, type == HTMLTagCollectionType);
-        return adoptRefWillBeNoop(new HTMLTagCollection(rootNode, localName));
+        DCHECK_EQ(type, HTMLTagCollectionType);
+        return new HTMLTagCollection(rootNode, localName);
     }
 
     bool elementMatches(const Element&) const;
@@ -47,17 +50,23 @@ private:
     AtomicString m_loweredLocalName;
 };
 
-DEFINE_TYPE_CASTS(HTMLTagCollection, LiveNodeListBase, collection, collection->type() == HTMLTagCollectionType, collection.type() == HTMLTagCollectionType);
+DEFINE_TYPE_CASTS(HTMLTagCollection,
+    LiveNodeListBase,
+    collection,
+    collection->type() == HTMLTagCollectionType,
+    collection.type() == HTMLTagCollectionType);
 
-inline bool HTMLTagCollection::elementMatches(const Element& testElement) const
+inline bool HTMLTagCollection::elementMatches(
+    const Element& testElement) const
 {
-    // Implements http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#concept-getelementsbytagname
+    // Implements
+    // https://dom.spec.whatwg.org/#concept-getelementsbytagname
     if (m_localName != starAtom) {
         const AtomicString& localName = testElement.isHTMLElement() ? m_loweredLocalName : m_localName;
         if (localName != testElement.localName())
             return false;
     }
-    ASSERT(m_namespaceURI == starAtom);
+    DCHECK_EQ(m_namespaceURI, starAtom);
     return true;
 }
 

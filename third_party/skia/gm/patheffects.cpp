@@ -4,7 +4,6 @@
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-<<<<<<< HEAD
 #include "Sk1DPathEffect.h"
 #include "Sk2DPathEffect.h"
 #include "SkCanvas.h"
@@ -36,117 +35,53 @@ static void hair_pe(SkPaint* paint)
 
 static void hair2_pe(SkPaint* paint)
 {
-=======
-#include "gm.h"
-#include "SkCanvas.h"
-#include "SkPaint.h"
-#include "Sk1DPathEffect.h"
-#include "Sk2DPathEffect.h"
-#include "SkCornerPathEffect.h"
-#include "SkDashPathEffect.h"
-#include "SkDiscretePathEffect.h"
-
-namespace skiagm {
-
-static void compose_pe(SkPaint* paint) {
-    SkPathEffect* pe = paint->getPathEffect();
-    SkPathEffect* corner = SkCornerPathEffect::Create(25);
-    SkPathEffect* compose;
-    if (pe) {
-        compose = SkComposePathEffect::Create(pe, corner);
-        corner->unref();
-    } else {
-        compose = corner;
-    }
-    paint->setPathEffect(compose)->unref();
-}
-
-static void hair_pe(SkPaint* paint) {
-    paint->setStrokeWidth(0);
-}
-
-static void hair2_pe(SkPaint* paint) {
->>>>>>> miniblink49
     paint->setStrokeWidth(0);
     compose_pe(paint);
 }
 
-<<<<<<< HEAD
 static void stroke_pe(SkPaint* paint)
 {
-=======
-static void stroke_pe(SkPaint* paint) {
->>>>>>> miniblink49
     paint->setStrokeWidth(12);
     compose_pe(paint);
 }
 
-<<<<<<< HEAD
 static void dash_pe(SkPaint* paint)
 {
     SkScalar inter[] = { 20, 10, 10, 10 };
     paint->setStrokeWidth(12);
     paint->setPathEffect(SkDashPathEffect::Make(inter, SK_ARRAY_COUNT(inter), 0));
-=======
-static void dash_pe(SkPaint* paint) {
-    SkScalar inter[] = { 20, 10, 10, 10 };
-    paint->setStrokeWidth(12);
-    paint->setPathEffect(SkDashPathEffect::Create(inter, SK_ARRAY_COUNT(inter),
-                                                  0))->unref();
->>>>>>> miniblink49
     compose_pe(paint);
 }
 
 static const int gXY[] = {
-<<<<<<< HEAD
     4, 0, 0, -4, 8, -4, 12, 0, 8, 4, 0, 4
 };
 
 static void scale(SkPath* path, SkScalar scale)
 {
-=======
-4, 0, 0, -4, 8, -4, 12, 0, 8, 4, 0, 4
-};
-
-static void scale(SkPath* path, SkScalar scale) {
->>>>>>> miniblink49
     SkMatrix m;
     m.setScale(scale, scale);
     path->transform(m);
 }
 
-<<<<<<< HEAD
 static void one_d_pe(SkPaint* paint)
 {
     SkPath path;
     path.moveTo(SkIntToScalar(gXY[0]), SkIntToScalar(gXY[1]));
     for (unsigned i = 2; i < SK_ARRAY_COUNT(gXY); i += 2)
         path.lineTo(SkIntToScalar(gXY[i]), SkIntToScalar(gXY[i + 1]));
-=======
-static void one_d_pe(SkPaint* paint) {
-    SkPath  path;
-    path.moveTo(SkIntToScalar(gXY[0]), SkIntToScalar(gXY[1]));
-    for (unsigned i = 2; i < SK_ARRAY_COUNT(gXY); i += 2)
-        path.lineTo(SkIntToScalar(gXY[i]), SkIntToScalar(gXY[i+1]));
->>>>>>> miniblink49
     path.close();
     path.offset(SkIntToScalar(-6), 0);
     scale(&path, 1.5f);
 
-<<<<<<< HEAD
     paint->setPathEffect(SkPath1DPathEffect::Make(path, SkIntToScalar(21), 0,
         SkPath1DPathEffect::kRotate_Style));
-=======
-    paint->setPathEffect(SkPath1DPathEffect::Create(path, SkIntToScalar(21), 0,
-                                SkPath1DPathEffect::kRotate_Style))->unref();
->>>>>>> miniblink49
     compose_pe(paint);
 }
 
 typedef void (*PE_Proc)(SkPaint*);
 static const PE_Proc gPE[] = { hair_pe, hair2_pe, stroke_pe, dash_pe, one_d_pe };
 
-<<<<<<< HEAD
 static void fill_pe(SkPaint* paint)
 {
     paint->setStyle(SkPaint::kFill_Style);
@@ -160,68 +95,36 @@ static void discrete_pe(SkPaint* paint)
 
 static sk_sp<SkPathEffect> MakeTileEffect()
 {
-=======
-static void fill_pe(SkPaint* paint) {
-    paint->setStyle(SkPaint::kFill_Style);
-    paint->setPathEffect(NULL);
-}
-
-static void discrete_pe(SkPaint* paint) {
-    paint->setPathEffect(SkDiscretePathEffect::Create(10, 4))->unref();
-}
-
-static SkPathEffect* MakeTileEffect() {
->>>>>>> miniblink49
     SkMatrix m;
     m.setScale(SkIntToScalar(12), SkIntToScalar(12));
 
     SkPath path;
     path.addCircle(0, 0, SkIntToScalar(5));
 
-<<<<<<< HEAD
     return SkPath2DPathEffect::Make(m, path);
 }
 
 static void tile_pe(SkPaint* paint)
 {
     paint->setPathEffect(MakeTileEffect());
-=======
-    return SkPath2DPathEffect::Create(m, path);
-}
-
-static void tile_pe(SkPaint* paint) {
-    paint->setPathEffect(MakeTileEffect())->unref();
->>>>>>> miniblink49
 }
 
 static const PE_Proc gPE2[] = { fill_pe, discrete_pe, tile_pe };
 
 class PathEffectGM : public GM {
 public:
-<<<<<<< HEAD
     PathEffectGM() { }
 
 protected:
     SkString onShortName() override
     {
-=======
-    PathEffectGM() {}
-
-protected:
-
-    SkString onShortName() override {
->>>>>>> miniblink49
         return SkString("patheffect");
     }
 
     SkISize onISize() override { return SkISize::Make(800, 600); }
 
-<<<<<<< HEAD
     void onDraw(SkCanvas* canvas) override
     {
-=======
-    void onDraw(SkCanvas* canvas) override {
->>>>>>> miniblink49
         SkPaint paint;
         paint.setAntiAlias(true);
         paint.setStyle(SkPaint::kStroke_Style);

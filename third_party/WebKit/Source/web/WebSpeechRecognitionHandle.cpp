@@ -23,10 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "public/web/WebSpeechRecognitionHandle.h"
 
 #include "modules/speech/SpeechRecognition.h"
@@ -38,42 +34,26 @@ void WebSpeechRecognitionHandle::reset()
     m_private.reset();
 }
 
-<<<<<<< HEAD
 void WebSpeechRecognitionHandle::assign(
     const WebSpeechRecognitionHandle& other)
-=======
-void WebSpeechRecognitionHandle::assign(const WebSpeechRecognitionHandle& other)
->>>>>>> miniblink49
 {
     m_private = other.m_private;
 }
 
-<<<<<<< HEAD
 bool WebSpeechRecognitionHandle::equals(
     const WebSpeechRecognitionHandle& other) const
-=======
-bool WebSpeechRecognitionHandle::equals(const WebSpeechRecognitionHandle& other) const
->>>>>>> miniblink49
 {
     return m_private.get() == other.m_private.get();
 }
 
-<<<<<<< HEAD
 bool WebSpeechRecognitionHandle::lessThan(
     const WebSpeechRecognitionHandle& other) const
-=======
-bool WebSpeechRecognitionHandle::lessThan(const WebSpeechRecognitionHandle& other) const
->>>>>>> miniblink49
 {
     return m_private.get() < other.m_private.get();
 }
 
-<<<<<<< HEAD
 WebSpeechRecognitionHandle::WebSpeechRecognitionHandle(
     SpeechRecognition* speechRecognition)
-=======
-WebSpeechRecognitionHandle::WebSpeechRecognitionHandle(SpeechRecognition* speechRecognition)
->>>>>>> miniblink49
     : m_private(speechRecognition)
 {
 }

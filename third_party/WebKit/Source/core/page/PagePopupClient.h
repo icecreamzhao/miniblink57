@@ -45,8 +45,6 @@ class Locale;
 
 class CORE_EXPORT PagePopupClient {
 public:
-    virtual IntSize contentSize() = 0;
-
     // Provide an HTML source to the specified buffer. The HTML
     // source is rendered in a PagePopup.
     // The content HTML supports:
@@ -58,12 +56,18 @@ public:
     virtual void selectFontsFromOwnerDocument(Document&) = 0;
 
     virtual Element& ownerElement() = 0;
+    // Returns effective zoom factor of ownerElement, or the page zoom factor if
+    // the effective zoom factor is not available.
+    virtual float zoomFactor();
     // Returns a Locale object associated to the client.
     virtual Locale& locale() = 0;
 
     // This is called by the content HTML of a PagePopup.
-    // An implementation of this function should call ChromeClient::closePagePopup().
-    virtual void setValueAndClosePopup(int numValue, const String& stringValue) = 0;
+    // An implementation of this function should call
+    // ChromeClient::closePagePopup().
+    virtual void setValueAndClosePopup(int numValue,
+        const String& stringValue)
+        = 0;
 
     // This is called by the content HTML of a PagePopup.
     virtual void setValue(const String&) = 0;
@@ -84,7 +88,9 @@ public:
     static void addProperty(const char* name, unsigned value, SharedBuffer*);
     static void addProperty(const char* name, bool value, SharedBuffer*);
     static void addProperty(const char* name, double, SharedBuffer*);
-    static void addProperty(const char* name, const Vector<String>& values, SharedBuffer*);
+    static void addProperty(const char* name,
+        const Vector<String>& values,
+        SharedBuffer*);
     static void addProperty(const char* name, const IntRect&, SharedBuffer*);
 };
 
@@ -94,5 +100,5 @@ inline void PagePopupClient::addString(const String& str, SharedBuffer* data)
     data->append(str8.data(), str8.length());
 }
 
-}
+} // namespace blink
 #endif

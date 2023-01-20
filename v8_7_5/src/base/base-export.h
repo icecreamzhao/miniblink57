@@ -15,15 +15,9 @@
 #define V8_BASE_EXPORT __declspec(dllimport)
 #else
 #define V8_BASE_EXPORT
-<<<<<<< HEAD
 #endif // BUILDING_V8_BASE_SHARED
 
 #else // !V8_OS_WIN
-=======
-#endif  // BUILDING_V8_BASE_SHARED
-
-#else  // !V8_OS_WIN
->>>>>>> miniblink49
 
 // Setup for Linux shared library export.
 #ifdef BUILDING_V8_BASE_SHARED
@@ -32,12 +26,6 @@
 #define V8_BASE_EXPORT
 #endif
 
-<<<<<<< HEAD
 #endif // V8_OS_WIN
 
 #endif // V8_BASE_BASE_EXPORT_H_
-=======
-#endif  // V8_OS_WIN
-
-#endif  // V8_BASE_BASE_EXPORT_H_
->>>>>>> miniblink49

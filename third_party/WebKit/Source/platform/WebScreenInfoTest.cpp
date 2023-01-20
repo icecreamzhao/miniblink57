@@ -2,16 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
 #include "public/platform/WebScreenInfo.h"
 
 #include "testing/gtest/include/gtest/gtest.h"
-=======
-#include "config.h"
-#include "public/platform/WebScreenInfo.h"
-
-#include <gtest/gtest.h>
->>>>>>> miniblink49
 
 namespace blink {
 

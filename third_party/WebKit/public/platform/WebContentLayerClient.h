@@ -26,7 +26,6 @@
 #ifndef WebContentLayerClient_h
 #define WebContentLayerClient_h
 
-<<<<<<< HEAD
 #include "WebCommon.h"
 
 namespace gfx {
@@ -36,20 +35,10 @@ class Rect;
 namespace blink {
 
 class WebDisplayItemList;
-=======
-#include "WebCanvas.h"
-#include "WebCommon.h"
-
-namespace blink {
-
-class WebDisplayItemList;
-struct WebRect;
->>>>>>> miniblink49
 
 class BLINK_PLATFORM_EXPORT WebContentLayerClient {
 public:
     enum PaintingControlSetting {
-<<<<<<< HEAD
         // Returns the last PaintArtifact produced.
         PaintDefaultBehavior,
         // Paints the content to simulate the behavior of FrameView::paintTree().
@@ -69,25 +58,10 @@ public:
     // that is guaranteed valid only within this region.  In particular, this is
     // used to represent the interest rect in Blink.
     virtual gfx::Rect paintableRegion() = 0;
-=======
-        PaintDefaultBehavior,
-        DisplayListConstructionDisabled,
-        DisplayListCachingDisabled,
-        DisplayListPaintingDisabled
-    };
-
-    // Paints the content area for the layer, typically dirty rects submitted
-    // through WebContentLayer::setNeedsDisplay, submitting drawing commands
-    // through the WebCanvas.
-    // The canvas is already clipped to the |clip| rect.
-    // The |PaintingControlSetting| enum controls painting to isolate different components in performance tests.
-    virtual void paintContents(WebCanvas*, const WebRect& clip, PaintingControlSetting = PaintDefaultBehavior) = 0;
->>>>>>> miniblink49
 
     // Paints the content area for the layer, typically dirty rects submitted
     // through WebContentLayer::setNeedsDisplayInRect, submitting drawing commands
     // to populate the WebDisplayItemList.
-<<<<<<< HEAD
     // The |PaintingControlSetting| enum controls painting to isolate different
     // components in performance tests.
     virtual void paintContents(WebDisplayItemList*,
@@ -99,17 +73,6 @@ public:
     // WebDisplayItemList). Should be invoked after paintContents, so that the
     // result includes data cached internally during painting.
     virtual size_t approximateUnsharedMemoryUsage() const { return 0; }
-=======
-    // The |clip| rect defines the region of interest. The resulting WebDisplayItemList should contain
-    // sufficient content to correctly paint the rect, but may also contain other content. The result
-    // will be clipped on playback.
-    // The |PaintingControlSetting| enum controls painting to isolate different components in performance tests.
-    // Currently the DisplayListConstructionDisabled does nothing.
-    virtual void paintContents(
-        WebDisplayItemList*,
-        const WebRect& clip,
-        PaintingControlSetting = PaintDefaultBehavior) = 0;
->>>>>>> miniblink49
 
 protected:
     virtual ~WebContentLayerClient() { }

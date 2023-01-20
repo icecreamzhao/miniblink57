@@ -6,10 +6,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #include "SkDisplayRandom.h"
 #include "SkInterpolator.h"
 
@@ -32,7 +28,6 @@ const SkMemberInfo SkDisplayRandom::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkDisplayRandom);
 
-<<<<<<< HEAD
 SkDisplayRandom::SkDisplayRandom()
     : blend(0)
     , min(0)
@@ -43,13 +38,6 @@ SkDisplayRandom::SkDisplayRandom()
 #ifdef SK_DUMP_ENABLED
 void SkDisplayRandom::dump(SkAnimateMaker* maker)
 {
-=======
-SkDisplayRandom::SkDisplayRandom() : blend(0), min(0), max(SK_Scalar1) {
-}
-
-#ifdef SK_DUMP_ENABLED
-void SkDisplayRandom::dump(SkAnimateMaker* maker) {
->>>>>>> miniblink49
     dumpBase(maker);
     SkDebugf("min=\"%g\" ", SkScalarToFloat(min));
     SkDebugf("max=\"%g\" ", SkScalarToFloat(max));
@@ -58,7 +46,6 @@ void SkDisplayRandom::dump(SkAnimateMaker* maker) {
 }
 #endif
 
-<<<<<<< HEAD
 bool SkDisplayRandom::getProperty(int index, SkScriptValue* value) const
 {
     switch (index) {
@@ -71,29 +58,12 @@ bool SkDisplayRandom::getProperty(int index, SkScriptValue* value) const
     }
     default:
         SkASSERT(0);
-=======
-bool SkDisplayRandom::getProperty(int index, SkScriptValue* value) const {
-    switch(index) {
-        case SK_PROPERTY(random): {
-            SkScalar random = fRandom.nextUScalar1();
-            SkScalar relativeT = SkUnitCubicInterp(random, SK_Scalar1 - blend, 0, 0, SK_Scalar1 - blend);
-            value->fOperand.fScalar = min + SkScalarMul(max - min, relativeT);
-            value->fType = SkType_Float;
-            return true;
-        }
-        default:
-            SkASSERT(0);
->>>>>>> miniblink49
     }
     return false;
 }
 
-<<<<<<< HEAD
 bool SkDisplayRandom::setProperty(int index, SkScriptValue& value)
 {
-=======
-bool SkDisplayRandom::setProperty(int index, SkScriptValue& value) {
->>>>>>> miniblink49
     SkASSERT(index == SK_PROPERTY(seed));
     SkASSERT(value.fType == SkType_Int);
     fRandom.setSeed(value.fOperand.fS32);

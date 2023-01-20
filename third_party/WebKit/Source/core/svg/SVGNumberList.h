@@ -31,35 +31,40 @@
 #ifndef SVGNumberList_h
 #define SVGNumberList_h
 
-#include "bindings/core/v8/ScriptWrappable.h"
 #include "core/svg/SVGNumber.h"
+#include "core/svg/SVGParsingError.h"
 #include "core/svg/properties/SVGListPropertyHelper.h"
 
 namespace blink {
 
 class SVGNumberListTearOff;
 
-class SVGNumberList final : public SVGListPropertyHelper<SVGNumberList, SVGNumber> {
+class SVGNumberList final
+    : public SVGListPropertyHelper<SVGNumberList, SVGNumber> {
 public:
     typedef SVGNumberListTearOff TearOffType;
 
-    static PassRefPtrWillBeRawPtr<SVGNumberList> create()
-    {
-        return adoptRefWillBeNoop(new SVGNumberList());
-    }
+    static SVGNumberList* create() { return new SVGNumberList(); }
 
     ~SVGNumberList() override;
 
-    void setValueAsString(const String&, ExceptionState&);
+    SVGParsingError setValueAsString(const String&);
 
     // SVGPropertyBase:
     String valueAsString() const override;
 
-    void add(PassRefPtrWillBeRawPtr<SVGPropertyBase>, SVGElement*) override;
-    void calculateAnimatedValue(SVGAnimationElement*, float percentage, unsigned repeatCount, PassRefPtrWillBeRawPtr<SVGPropertyBase> fromValue, PassRefPtrWillBeRawPtr<SVGPropertyBase> toValue, PassRefPtrWillBeRawPtr<SVGPropertyBase> toAtEndOfDurationValue, SVGElement*) override;
-    float calculateDistance(PassRefPtrWillBeRawPtr<SVGPropertyBase> to, SVGElement*) override;
+    void add(SVGPropertyBase*, SVGElement*) override;
+    void calculateAnimatedValue(SVGAnimationElement*,
+        float percentage,
+        unsigned repeatCount,
+        SVGPropertyBase* fromValue,
+        SVGPropertyBase* toValue,
+        SVGPropertyBase* toAtEndOfDurationValue,
+        SVGElement*) override;
+    float calculateDistance(SVGPropertyBase* to, SVGElement*) override;
 
     static AnimatedPropertyType classType() { return AnimatedNumberList; }
+    AnimatedPropertyType type() const override { return classType(); }
 
     Vector<float> toFloatVector() const;
 
@@ -67,8 +72,10 @@ private:
     SVGNumberList();
 
     template <typename CharType>
-    bool parse(const CharType*& ptr, const CharType* end);
+    SVGParsingError parse(const CharType*& ptr, const CharType* end);
 };
+
+DEFINE_SVG_PROPERTY_TYPE_CASTS(SVGNumberList);
 
 } // namespace blink
 

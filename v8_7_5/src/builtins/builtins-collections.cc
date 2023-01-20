@@ -11,7 +11,6 @@
 namespace v8 {
 namespace internal {
 
-<<<<<<< HEAD
     BUILTIN(MapPrototypeClear)
     {
         HandleScope scope(isolate);
@@ -32,23 +31,3 @@ namespace internal {
 
 } // namespace internal
 } // namespace v8
-=======
-BUILTIN(MapPrototypeClear) {
-  HandleScope scope(isolate);
-  const char* const kMethodName = "Map.prototype.clear";
-  CHECK_RECEIVER(JSMap, map, kMethodName);
-  JSMap::Clear(isolate, map);
-  return ReadOnlyRoots(isolate).undefined_value();
-}
-
-BUILTIN(SetPrototypeClear) {
-  HandleScope scope(isolate);
-  const char* const kMethodName = "Set.prototype.clear";
-  CHECK_RECEIVER(JSSet, set, kMethodName);
-  JSSet::Clear(isolate, set);
-  return ReadOnlyRoots(isolate).undefined_value();
-}
-
-}  // namespace internal
-}  // namespace v8
->>>>>>> miniblink49

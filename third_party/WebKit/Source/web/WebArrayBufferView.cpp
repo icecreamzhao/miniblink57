@@ -26,10 +26,6 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "public/web/WebArrayBufferView.h"
 
 #include "bindings/core/v8/V8ArrayBufferView.h"
@@ -61,12 +57,8 @@ unsigned WebArrayBufferView::byteLength() const
     return m_private->byteLength();
 }
 
-<<<<<<< HEAD
 WebArrayBufferView* WebArrayBufferView::createFromV8Value(
     v8::Local<v8::Value> value)
-=======
-WebArrayBufferView* WebArrayBufferView::createFromV8Value(v8::Local<v8::Value> value)
->>>>>>> miniblink49
 {
     if (!value->IsArrayBufferView())
         return 0;
@@ -74,30 +66,18 @@ WebArrayBufferView* WebArrayBufferView::createFromV8Value(v8::Local<v8::Value> v
     return new WebArrayBufferView(view);
 }
 
-<<<<<<< HEAD
 WebArrayBufferView::WebArrayBufferView(DOMArrayBufferView* value)
-=======
-WebArrayBufferView::WebArrayBufferView(const PassRefPtr<DOMArrayBufferView>& value)
->>>>>>> miniblink49
     : m_private(value)
 {
 }
 
-<<<<<<< HEAD
 WebArrayBufferView& WebArrayBufferView::operator=(DOMArrayBufferView* value)
-=======
-WebArrayBufferView& WebArrayBufferView::operator=(const PassRefPtr<DOMArrayBufferView>& value)
->>>>>>> miniblink49
 {
     m_private = value;
     return *this;
 }
 
-<<<<<<< HEAD
 WebArrayBufferView::operator DOMArrayBufferView*() const
-=======
-WebArrayBufferView::operator PassRefPtr<DOMArrayBufferView>() const
->>>>>>> miniblink49
 {
     return m_private.get();
 }

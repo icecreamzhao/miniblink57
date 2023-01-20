@@ -23,25 +23,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 // https://dvcs.w3.org/hg/speech-api/raw-file/tip/webspeechapi.html#speechrecognitionevent
 
-=======
->>>>>>> miniblink49
 [
     NoInterfaceObject,
     Constructor(DOMString type, optional SpeechRecognitionEventInit initDict),
 ] interface SpeechRecognitionEvent : Event {
     readonly attribute unsigned long resultIndex;
-<<<<<<< HEAD
     readonly attribute SpeechRecognitionResultList? results;
 
     readonly attribute Document? interpretation;
     readonly attribute Document? emma;
-=======
-    readonly attribute SpeechRecognitionResultList results;
-
-    readonly attribute Document interpretation;
-    readonly attribute Document emma;
->>>>>>> miniblink49
 };

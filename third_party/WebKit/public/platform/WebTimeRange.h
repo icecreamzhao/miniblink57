@@ -36,7 +36,6 @@
 namespace blink {
 
 struct WebTimeRange {
-<<<<<<< HEAD
     WebTimeRange()
         : start(0)
         , end(0)
@@ -47,10 +46,6 @@ struct WebTimeRange {
         , end(e)
     {
     }
-=======
-    WebTimeRange() : start(0), end(0) { }
-    WebTimeRange(double s, double e) : start(s), end(e) { }
->>>>>>> miniblink49
 
     double start;
     double end;

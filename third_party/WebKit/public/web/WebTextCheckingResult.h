@@ -49,15 +49,11 @@ struct WebTextCheckingResult {
     {
     }
 
-<<<<<<< HEAD
     WebTextCheckingResult(WebTextDecorationType decoration,
         int location,
         int length,
         const WebString& replacement = WebString(),
         uint32_t hash = 0)
-=======
-    WebTextCheckingResult(WebTextDecorationType decoration, int location, int length, const WebString& replacement = WebString(), uint32_t hash = 0)
->>>>>>> miniblink49
         : decoration(decoration)
         , location(location)
         , length(length)

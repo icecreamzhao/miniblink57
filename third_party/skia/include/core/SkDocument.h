@@ -10,31 +10,20 @@
 
 #include "SkBitmap.h"
 #include "SkPicture.h"
-<<<<<<< HEAD
 #include "SkPixelSerializer.h"
 #include "SkRect.h"
 #include "SkRefCnt.h"
 #include "SkString.h"
 #include "SkTime.h"
-=======
-#include "SkRect.h"
-#include "SkRefCnt.h"
->>>>>>> miniblink49
 
 class SkCanvas;
 class SkWStream;
 
-<<<<<<< HEAD
 #define SK_SUPPORT_LEGACY_DOCUMENT_API
 
 /** SK_ScalarDefaultDPI is 72 DPI.
 */
 #define SK_ScalarDefaultRasterDPI 72.0f
-=======
-/** SK_ScalarDefaultDPI is 72 DPI.
-*/
-#define SK_ScalarDefaultRasterDPI           72.0f
->>>>>>> miniblink49
 
 /**
  *  High-level API for creating a document-based canvas. To use..
@@ -48,7 +37,6 @@ class SkWStream;
  */
 class SK_API SkDocument : public SkRefCnt {
 public:
-<<<<<<< HEAD
     struct OptionalTimestamp {
         SkTime::DateTime fDateTime;
         bool fEnabled;
@@ -175,8 +163,6 @@ public:
 
 #ifdef SK_SUPPORT_LEGACY_DOCUMENT_API
 
-=======
->>>>>>> miniblink49
     /**
      *  Create a PDF-backed document, writing the results into a SkWStream.
      *
@@ -197,7 +183,6 @@ public:
      *  @returns NULL if there is an error, otherwise a newly created
      *           PDF-backed SkDocument.
      */
-<<<<<<< HEAD
     static SkDocument* CreatePDF(SkWStream* stream,
         SkScalar dpi = SK_ScalarDefaultRasterDPI)
     {
@@ -228,16 +213,11 @@ public:
             sk_ref_sp(jpegEncoder), false)
             .release();
     }
-=======
-    static SkDocument* CreatePDF(SkWStream*,
-                                 SkScalar dpi = SK_ScalarDefaultRasterDPI);
->>>>>>> miniblink49
 
     /**
      *  Create a PDF-backed document, writing the results into a file.
      */
     static SkDocument* CreatePDF(const char outputFilePath[],
-<<<<<<< HEAD
         SkScalar dpi = SK_ScalarDefaultRasterDPI)
     {
         return SkDocument::MakePDF(outputFilePath, dpi).release();
@@ -246,34 +226,12 @@ public:
 #endif // SK_SUPPORT_LEGACY_DOCUMENT_API
 
     /**
-=======
-                                 SkScalar dpi = SK_ScalarDefaultRasterDPI);
-
-    /**
-     *  Create a XPS-backed document, writing the results into the stream.
-     *  Returns NULL if XPS is not supported.
-     */
-    static SkDocument* CreateXPS(SkWStream* stream,
-                                 SkScalar dpi = SK_ScalarDefaultRasterDPI);
-
-    /**
-     *  Create a XPS-backed document, writing the results into a file.
-     *  Returns NULL if XPS is not supported.
-     */
-    static SkDocument* CreateXPS(const char path[],
-                                 SkScalar dpi = SK_ScalarDefaultRasterDPI);
-    /**
->>>>>>> miniblink49
      *  Begin a new page for the document, returning the canvas that will draw
      *  into the page. The document owns this canvas, and it will go out of
      *  scope when endPage() or close() is called, or the document is deleted.
      */
     SkCanvas* beginPage(SkScalar width, SkScalar height,
-<<<<<<< HEAD
         const SkRect* content = NULL);
-=======
-                        const SkRect* content = NULL);
->>>>>>> miniblink49
 
     /**
      *  Call endPage() when the content for the current page has been drawn
@@ -297,7 +255,6 @@ public:
      */
     void abort();
 
-<<<<<<< HEAD
 #ifdef SK_SUPPORT_LEGACY_DOCUMENT_API
     /**
      *  Set the document's metadata, if supported by the document
@@ -332,8 +289,6 @@ public:
         const SkTime::DateTime* /* modifiedDate */) { }
 #endif // SK_SUPPORT_LEGACY_DOCUMENT_API
 
-=======
->>>>>>> miniblink49
 protected:
     SkDocument(SkWStream*, void (*)(SkWStream*, bool aborted));
 
@@ -342,12 +297,8 @@ protected:
     virtual ~SkDocument();
 
     virtual SkCanvas* onBeginPage(SkScalar width, SkScalar height,
-<<<<<<< HEAD
         const SkRect& content)
         = 0;
-=======
-                                  const SkRect& content) = 0;
->>>>>>> miniblink49
     virtual void onEndPage() = 0;
     virtual bool onClose(SkWStream*) = 0;
     virtual void onAbort() = 0;
@@ -364,13 +315,8 @@ protected:
 
 private:
     SkWStream* fStream;
-<<<<<<< HEAD
     void (*fDoneProc)(SkWStream*, bool aborted);
     State fState;
-=======
-    void       (*fDoneProc)(SkWStream*, bool aborted);
-    State      fState;
->>>>>>> miniblink49
 
     typedef SkRefCnt INHERITED;
 };

@@ -23,22 +23,22 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/loader/SinkDocument.h"
 
 #include "core/dom/RawDataDocumentParser.h"
+#include "core/frame/UseCounter.h"
 
 namespace blink {
 
 class SinkDocumentParser : public RawDataDocumentParser {
 public:
-    static PassRefPtrWillBeRawPtr<SinkDocumentParser> create(SinkDocument* document)
+    static SinkDocumentParser* create(SinkDocument* document)
     {
-        return adoptRefWillBeNoop(new SinkDocumentParser(document));
+        return new SinkDocumentParser(document);
     }
 
 private:
-    SinkDocumentParser(SinkDocument* document)
+    explicit SinkDocumentParser(SinkDocument* document)
         : RawDataDocumentParser(document)
     {
     }
@@ -52,9 +52,12 @@ SinkDocument::SinkDocument(const DocumentInit& initializer)
 {
     setCompatibilityMode(QuirksMode);
     lockCompatibilityMode();
+    UseCounter::count(*this, UseCounter::SinkDocument);
+    if (!isInMainFrame())
+        UseCounter::count(*this, UseCounter::SinkDocumentInFrame);
 }
 
-PassRefPtrWillBeRawPtr<DocumentParser> SinkDocument::createParser()
+DocumentParser* SinkDocument::createParser()
 {
     return SinkDocumentParser::create(this);
 }

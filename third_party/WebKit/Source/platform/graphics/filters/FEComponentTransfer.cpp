@@ -22,37 +22,25 @@
  * Boston, MA 02110-1301, USA.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/graphics/filters/FEComponentTransfer.h"
 
 #include "SkColorFilterImageFilter.h"
 #include "SkTableColorFilter.h"
 #include "platform/graphics/filters/SkiaImageFilterBuilder.h"
 #include "platform/text/TextStream.h"
-<<<<<<< HEAD
 #include "wtf/MathExtras.h"
 #include <algorithm>
-=======
->>>>>>> miniblink49
 
 namespace blink {
 
 typedef void (*TransferType)(unsigned char*, const ComponentTransferFunction&);
 
-<<<<<<< HEAD
 FEComponentTransfer::FEComponentTransfer(
     Filter* filter,
     const ComponentTransferFunction& redFunc,
     const ComponentTransferFunction& greenFunc,
     const ComponentTransferFunction& blueFunc,
     const ComponentTransferFunction& alphaFunc)
-=======
-FEComponentTransfer::FEComponentTransfer(Filter* filter, const ComponentTransferFunction& redFunc, const ComponentTransferFunction& greenFunc,
-    const ComponentTransferFunction& blueFunc, const ComponentTransferFunction& alphaFunc)
->>>>>>> miniblink49
     : FilterEffect(filter)
     , m_redFunc(redFunc)
     , m_greenFunc(greenFunc)
@@ -61,7 +49,6 @@ FEComponentTransfer::FEComponentTransfer(Filter* filter, const ComponentTransfer
 {
 }
 
-<<<<<<< HEAD
 FEComponentTransfer* FEComponentTransfer::create(
     Filter* filter,
     const ComponentTransferFunction& redFunc,
@@ -77,19 +64,6 @@ static void identity(unsigned char*, const ComponentTransferFunction&) { }
 
 static void table(unsigned char* values,
     const ComponentTransferFunction& transferFunction)
-=======
-PassRefPtrWillBeRawPtr<FEComponentTransfer> FEComponentTransfer::create(Filter* filter, const ComponentTransferFunction& redFunc,
-    const ComponentTransferFunction& greenFunc, const ComponentTransferFunction& blueFunc, const ComponentTransferFunction& alphaFunc)
-{
-    return adoptRefWillBeNoop(new FEComponentTransfer(filter, redFunc, greenFunc, blueFunc, alphaFunc));
-}
-
-static void identity(unsigned char*, const ComponentTransferFunction&)
-{
-}
-
-static void table(unsigned char* values, const ComponentTransferFunction& transferFunction)
->>>>>>> miniblink49
 {
     const Vector<float>& tableValues = transferFunction.tableValues;
     unsigned n = tableValues.size();
@@ -101,21 +75,13 @@ static void table(unsigned char* values, const ComponentTransferFunction& transf
         double v1 = tableValues[k];
         double v2 = tableValues[std::min((k + 1), (n - 1))];
         double val = 255.0 * (v1 + (c * (n - 1) - k) * (v2 - v1));
-<<<<<<< HEAD
         val = clampTo(val, 0.0, 255.0);
-=======
-        val = std::max(0.0, std::min(255.0, val));
->>>>>>> miniblink49
         values[i] = static_cast<unsigned char>(val);
     }
 }
 
-<<<<<<< HEAD
 static void discrete(unsigned char* values,
     const ComponentTransferFunction& transferFunction)
-=======
-static void discrete(unsigned char* values, const ComponentTransferFunction& transferFunction)
->>>>>>> miniblink49
 {
     const Vector<float>& tableValues = transferFunction.tableValues;
     unsigned n = tableValues.size();
@@ -125,34 +91,21 @@ static void discrete(unsigned char* values, const ComponentTransferFunction& tra
         unsigned k = static_cast<unsigned>((i * n) / 255.0);
         k = std::min(k, n - 1);
         double val = 255 * tableValues[k];
-<<<<<<< HEAD
         val = clampTo(val, 0.0, 255.0);
-=======
-        val = std::max(0.0, std::min(255.0, val));
->>>>>>> miniblink49
         values[i] = static_cast<unsigned char>(val);
     }
 }
 
-<<<<<<< HEAD
 static void linear(unsigned char* values,
     const ComponentTransferFunction& transferFunction)
 {
     for (unsigned i = 0; i < 256; ++i) {
         double val = transferFunction.slope * i + 255 * transferFunction.intercept;
         val = clampTo(val, 0.0, 255.0);
-=======
-static void linear(unsigned char* values, const ComponentTransferFunction& transferFunction)
-{
-    for (unsigned i = 0; i < 256; ++i) {
-        double val = transferFunction.slope * i + 255 * transferFunction.intercept;
-        val = std::max(0.0, std::min(255.0, val));
->>>>>>> miniblink49
         values[i] = static_cast<unsigned char>(val);
     }
 }
 
-<<<<<<< HEAD
 static void gamma(unsigned char* values,
     const ComponentTransferFunction& transferFunction)
 {
@@ -160,23 +113,11 @@ static void gamma(unsigned char* values,
         double exponent = transferFunction.exponent;
         double val = 255.0 * (transferFunction.amplitude * pow((i / 255.0), exponent) + transferFunction.offset);
         val = clampTo(val, 0.0, 255.0);
-=======
-static void gamma(unsigned char* values, const ComponentTransferFunction& transferFunction)
-{
-    for (unsigned i = 0; i < 256; ++i) {
-        double exponent = transferFunction.exponent; // RCVT doesn't like passing a double and a float to pow, so promote this to double
-        double val = 255.0 * (transferFunction.amplitude * pow((i / 255.0), exponent) + transferFunction.offset);
-        val = std::max(0.0, std::min(255.0, val));
->>>>>>> miniblink49
         values[i] = static_cast<unsigned char>(val);
     }
 }
 
-<<<<<<< HEAD
 bool FEComponentTransfer::affectsTransparentPixels() const
-=======
-bool FEComponentTransfer::affectsTransparentPixels()
->>>>>>> miniblink49
 {
     double intercept = 0;
     switch (m_alphaFunc.type) {
@@ -198,21 +139,14 @@ bool FEComponentTransfer::affectsTransparentPixels()
     return 255 * intercept >= 1;
 }
 
-<<<<<<< HEAD
 sk_sp<SkImageFilter> FEComponentTransfer::createImageFilter()
 {
     sk_sp<SkImageFilter> input(
         SkiaImageFilterBuilder::build(inputEffect(0), operatingColorSpace()));
-=======
-PassRefPtr<SkImageFilter> FEComponentTransfer::createImageFilter(SkiaImageFilterBuilder* builder)
-{
-    RefPtr<SkImageFilter> input(builder->build(inputEffect(0), operatingColorSpace()));
->>>>>>> miniblink49
 
     unsigned char rValues[256], gValues[256], bValues[256], aValues[256];
     getValues(rValues, gValues, bValues, aValues);
 
-<<<<<<< HEAD
     SkImageFilter::CropRect cropRect = getCropRect();
     sk_sp<SkColorFilter> colorFilter = SkTableColorFilter::MakeARGB(aValues, rValues, gValues, bValues);
     return SkColorFilterImageFilter::Make(std::move(colorFilter),
@@ -223,20 +157,10 @@ void FEComponentTransfer::getValues(unsigned char rValues[256],
     unsigned char gValues[256],
     unsigned char bValues[256],
     unsigned char aValues[256])
-=======
-    SkAutoTUnref<SkColorFilter> colorFilter(SkTableColorFilter::CreateARGB(aValues, rValues, gValues, bValues));
-
-    SkImageFilter::CropRect cropRect = getCropRect(builder->cropOffset());
-    return adoptRef(SkColorFilterImageFilter::Create(colorFilter, input.get(), &cropRect));
-}
-
-void FEComponentTransfer::getValues(unsigned char rValues[256], unsigned char gValues[256], unsigned char bValues[256], unsigned char aValues[256])
->>>>>>> miniblink49
 {
     for (unsigned i = 0; i < 256; ++i)
         rValues[i] = gValues[i] = bValues[i] = aValues[i] = i;
     unsigned char* tables[] = { rValues, gValues, bValues, aValues };
-<<<<<<< HEAD
     ComponentTransferFunction transferFunction[] = { m_redFunc, m_greenFunc,
         m_blueFunc, m_alphaFunc };
     TransferType callEffect[] = { identity, identity, table,
@@ -251,18 +175,6 @@ void FEComponentTransfer::getValues(unsigned char rValues[256], unsigned char gV
 
 static TextStream& operator<<(TextStream& ts,
     const ComponentTransferType& type)
-=======
-    ComponentTransferFunction transferFunction[] = {m_redFunc, m_greenFunc, m_blueFunc, m_alphaFunc};
-    TransferType callEffect[] = {identity, identity, table, discrete, linear, gamma};
-
-    for (unsigned channel = 0; channel < 4; channel++) {
-        ASSERT_WITH_SECURITY_IMPLICATION(static_cast<size_t>(transferFunction[channel].type) < WTF_ARRAY_LENGTH(callEffect));
-        (*callEffect[transferFunction[channel].type])(tables[channel], transferFunction[channel]);
-    }
-}
-
-static TextStream& operator<<(TextStream& ts, const ComponentTransferType& type)
->>>>>>> miniblink49
 {
     switch (type) {
     case FECOMPONENTTRANSFER_TYPE_UNKNOWN:
@@ -287,32 +199,18 @@ static TextStream& operator<<(TextStream& ts, const ComponentTransferType& type)
     return ts;
 }
 
-<<<<<<< HEAD
 static TextStream& operator<<(TextStream& ts,
     const ComponentTransferFunction& function)
 {
     ts << "type=\"" << function.type << "\" slope=\"" << function.slope
        << "\" intercept=\"" << function.intercept << "\" amplitude=\""
        << function.amplitude << "\" exponent=\"" << function.exponent
-=======
-static TextStream& operator<<(TextStream& ts, const ComponentTransferFunction& function)
-{
-    ts << "type=\"" << function.type
-       << "\" slope=\"" << function.slope
-       << "\" intercept=\"" << function.intercept
-       << "\" amplitude=\"" << function.amplitude
-       << "\" exponent=\"" << function.exponent
->>>>>>> miniblink49
        << "\" offset=\"" << function.offset << "\"";
     return ts;
 }
 
-<<<<<<< HEAD
 TextStream& FEComponentTransfer::externalRepresentation(TextStream& ts,
     int indent) const
-=======
-TextStream& FEComponentTransfer::externalRepresentation(TextStream& ts, int indent) const
->>>>>>> miniblink49
 {
     writeIndent(ts, indent);
     ts << "[feComponentTransfer";

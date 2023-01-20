@@ -9,19 +9,38 @@
 #include "core/dom/Document.h"
 #include "core/html/canvas/CanvasContextCreationAttributes.h"
 #include "core/html/canvas/CanvasRenderingContext.h"
+#include "wtf/Allocator.h"
 #include "wtf/PassRefPtr.h"
 
 namespace blink {
 
 class HTMLCanvasElement;
+class OffscreenCanvas;
 
 class CORE_EXPORT CanvasRenderingContextFactory {
+    USING_FAST_MALLOC(CanvasRenderingContextFactory);
+    WTF_MAKE_NONCOPYABLE(CanvasRenderingContextFactory);
+
 public:
+    CanvasRenderingContextFactory() = default;
     virtual ~CanvasRenderingContextFactory() { }
 
-    virtual PassOwnPtrWillBeRawPtr<CanvasRenderingContext> create(HTMLCanvasElement*, const CanvasContextCreationAttributes&, Document&) = 0;
-    virtual CanvasRenderingContext::ContextType contextType() const = 0;
-    virtual void onError(HTMLCanvasElement*, const String& error) = 0;
+    virtual CanvasRenderingContext* create(HTMLCanvasElement*,
+        const CanvasContextCreationAttributes&,
+        Document&)
+    {
+        return nullptr;
+    }
+    virtual CanvasRenderingContext* create(
+        ScriptState*,
+        OffscreenCanvas*,
+        const CanvasContextCreationAttributes&)
+    {
+        return nullptr;
+    }
+    virtual CanvasRenderingContext::ContextType getContextType() const = 0;
+    virtual void onError(HTMLCanvasElement*, const String& error) {};
+    virtual void onError(OffscreenCanvas*, const String& error) {};
 };
 
 } // namespace blink

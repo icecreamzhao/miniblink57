@@ -5,17 +5,13 @@
 #ifndef WTF_ContainerAnnotations_h
 #define WTF_ContainerAnnotations_h
 
-<<<<<<< HEAD
 #include "wtf/AddressSanitizer.h"
-=======
->>>>>>> miniblink49
 #include "wtf/CPU.h"
 
 // TODO(ochang): Remove the CPU(X86_64) condition to enable this for X86 once
 // the crashes there have been fixed: http://crbug.com/461406
 #if defined(ADDRESS_SANITIZER) && OS(LINUX) && CPU(X86_64)
 #define ANNOTATE_CONTIGUOUS_CONTAINER
-<<<<<<< HEAD
 #define ANNOTATE_NEW_BUFFER(buffer, capacity, newSize)                           \
     if (buffer) {                                                                \
         __sanitizer_annotate_contiguous_container(buffer, (buffer) + (capacity), \
@@ -36,22 +32,6 @@
     }
 #define ANNOTATE_CHANGE_CAPACITY(buffer, oldCapacity, bufferSize, newCapacity) \
     ANNOTATE_DELETE_BUFFER(buffer, oldCapacity, bufferSize);                   \
-=======
-#define ANNOTATE_NEW_BUFFER(buffer, capacity, newSize) \
-    if (buffer) { \
-        __sanitizer_annotate_contiguous_container(buffer, buffer + capacity, buffer + capacity, buffer + newSize); \
-    }
-#define ANNOTATE_DELETE_BUFFER(buffer, capacity, oldSize) \
-    if (buffer) { \
-        __sanitizer_annotate_contiguous_container(buffer, buffer + capacity, buffer + oldSize, buffer + capacity); \
-    }
-#define ANNOTATE_CHANGE_SIZE(buffer, capacity, oldSize, newSize) \
-    if (buffer) { \
-        __sanitizer_annotate_contiguous_container(buffer, buffer + capacity, buffer + oldSize, buffer + newSize); \
-    }
-#define ANNOTATE_CHANGE_CAPACITY(buffer, oldCapacity, bufferSize, newCapacity) \
-    ANNOTATE_DELETE_BUFFER(buffer, oldCapacity, bufferSize); \
->>>>>>> miniblink49
     ANNOTATE_NEW_BUFFER(buffer, newCapacity, bufferSize);
 // Annotations require buffers to begin on an 8-byte boundary.
 #else // defined(ADDRESS_SANITIZER) && OS(LINUX) && CPU(X86_64)

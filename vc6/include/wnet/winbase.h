@@ -11281,7 +11281,6 @@ GetNumaAvailableMemoryNode(
     __out PULONGLONG AvailableBytes
     );
 
-<<<<<<< HEAD
 typedef union _INIT_ONCE {
     void * Ptr;
 } INIT_ONCE, *PINIT_ONCE;
@@ -11313,9 +11312,6 @@ typedef PRTL_RUN_ONCE LPINIT_ONCE;
 #define RTL_RUN_ONCE_ASYNC 0x00000002UL
 #define STATUS_INVALID_PARAMETER ((DWORD )0xC000000DL)
 #define RTL_RUN_ONCE_INIT_FAILED 0x00000004UL
-=======
-
->>>>>>> miniblink49
 
 #if !defined(RC_INVOKED) /* RC complains about long symbols in #ifs */
 #if defined(ISOLATION_AWARE_ENABLED) && (ISOLATION_AWARE_ENABLED != 0)

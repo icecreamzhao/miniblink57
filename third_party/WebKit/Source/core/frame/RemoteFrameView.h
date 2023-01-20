@@ -15,11 +15,12 @@ class RemoteFrame;
 
 class RemoteFrameView final : public Widget {
 public:
-    static PassRefPtrWillBeRawPtr<RemoteFrameView> create(RemoteFrame*);
+    static RemoteFrameView* create(RemoteFrame*);
 
-    virtual ~RemoteFrameView();
+    ~RemoteFrameView() override;
 
-    virtual bool isRemoteFrameView() const override { return true; }
+    bool isRemoteFrameView() const override { return true; }
+    void setParent(Widget*) override;
 
     RemoteFrame& frame() const
     {
@@ -27,26 +28,36 @@ public:
         return *m_remoteFrame;
     }
 
+    void dispose() override;
     // Override to notify remote frame that its viewport size has changed.
-    virtual void frameRectsChanged() override;
-
-    virtual void invalidateRect(const IntRect&) override;
-
-    virtual void setFrameRect(const IntRect&) override;
+    void frameRectsChanged() override;
+    void invalidateRect(const IntRect&) override;
+    void setFrameRect(const IntRect&) override;
+    void hide() override;
+    void show() override;
+    void setParentVisible(bool) override;
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
     explicit RemoteFrameView(RemoteFrame*);
 
+    void updateRemoteViewportIntersection();
+
     // The properties and handling of the cycle between RemoteFrame
     // and its RemoteFrameView corresponds to that between LocalFrame
     // and FrameView. Please see the FrameView::m_frame comment for
     // details.
-    RefPtrWillBeMember<RemoteFrame> m_remoteFrame;
+    Member<RemoteFrame> m_remoteFrame;
+
+    IntRect m_lastViewportIntersection;
 };
 
-DEFINE_TYPE_CASTS(RemoteFrameView, Widget, widget, widget->isRemoteFrameView(), widget.isRemoteFrameView());
+DEFINE_TYPE_CASTS(RemoteFrameView,
+    Widget,
+    widget,
+    widget->isRemoteFrameView(),
+    widget.isRemoteFrameView());
 
 } // namespace blink
 

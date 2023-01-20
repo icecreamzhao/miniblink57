@@ -14,13 +14,8 @@ static inline int is_ws(int c)
 }
 
 static size_t linebreak(const char text[], const char stop[],
-<<<<<<< HEAD
     const SkPaint& paint, SkScalar margin,
     size_t* trailing = nullptr)
-=======
-                        const SkPaint& paint, SkScalar margin,
-                        size_t* trailing = NULL)
->>>>>>> miniblink49
 {
     size_t lengthBreak = paint.breakText(text, stop - text, margin);
 
@@ -103,16 +98,9 @@ static size_t linebreak(const char text[], const char stop[],
 int SkTextLineBreaker::CountLines(const char text[], size_t len, const SkPaint& paint, SkScalar width)
 {
     const char* stop = text + len;
-<<<<<<< HEAD
     int count = 0;
 
     if (width > 0) {
-=======
-    int         count = 0;
-
-    if (width > 0)
-    {
->>>>>>> miniblink49
         do {
             count += 1;
             text += linebreak(text, stop, paint, width);
@@ -177,12 +165,8 @@ void SkTextBox::setSpacing(SkScalar mul, SkScalar add)
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 SkScalar SkTextBox::visit(Visitor& visitor, const char text[], size_t len,
-<<<<<<< HEAD
     const SkPaint& paint) const
 {
-=======
-                          const SkPaint& paint) const {
->>>>>>> miniblink49
     SkScalar marginWidth = fBox.width();
 
     if (marginWidth <= 0 || len == 0) {
@@ -191,13 +175,8 @@ SkScalar SkTextBox::visit(Visitor& visitor, const char text[], size_t len,
 
     const char* textStop = text + len;
 
-<<<<<<< HEAD
     SkScalar x, y, scaledSpacing, height, fontHeight;
     SkPaint::FontMetrics metrics;
-=======
-    SkScalar                x, y, scaledSpacing, height, fontHeight;
-    SkPaint::FontMetrics    metrics;
->>>>>>> miniblink49
 
     switch (paint.getTextAlign()) {
     case SkPaint::kLeft_Align:
@@ -263,7 +242,6 @@ SkScalar SkTextBox::visit(Visitor& visitor, const char text[], size_t len,
 
 class CanvasVisitor : public SkTextBox::Visitor {
     SkCanvas* fCanvas;
-<<<<<<< HEAD
 
 public:
     CanvasVisitor(SkCanvas* canvas)
@@ -274,39 +252,23 @@ public:
     void operator()(const char text[], size_t length, SkScalar x, SkScalar y,
         const SkPaint& paint) override
     {
-=======
-public:
-    CanvasVisitor(SkCanvas* canvas) : fCanvas(canvas) {}
-
-    void operator()(const char text[], size_t length, SkScalar x, SkScalar y,
-                    const SkPaint& paint) override {
->>>>>>> miniblink49
         fCanvas->drawText(text, length, x, y, paint);
     }
 };
 
-<<<<<<< HEAD
 void SkTextBox::setText(const char text[], size_t len, const SkPaint& paint)
 {
-=======
-void SkTextBox::setText(const char text[], size_t len, const SkPaint& paint) {
->>>>>>> miniblink49
     fText = text;
     fLen = len;
     fPaint = &paint;
 }
 
-<<<<<<< HEAD
 void SkTextBox::draw(SkCanvas* canvas, const char text[], size_t len, const SkPaint& paint)
 {
-=======
-void SkTextBox::draw(SkCanvas* canvas, const char text[], size_t len, const SkPaint& paint) {
->>>>>>> miniblink49
     CanvasVisitor sink(canvas);
     this->visit(sink, text, len, paint);
 }
 
-<<<<<<< HEAD
 void SkTextBox::draw(SkCanvas* canvas)
 {
     this->draw(canvas, fText, fLen, *fPaint);
@@ -319,17 +281,6 @@ int SkTextBox::countLines() const
 
 SkScalar SkTextBox::getTextHeight() const
 {
-=======
-void SkTextBox::draw(SkCanvas* canvas) {
-    this->draw(canvas, fText, fLen, *fPaint);
-}
-
-int SkTextBox::countLines() const {
-    return SkTextLineBreaker::CountLines(fText, fLen, *fPaint, fBox.width());
-}
-
-SkScalar SkTextBox::getTextHeight() const {
->>>>>>> miniblink49
     SkScalar spacing = SkScalarMul(fPaint->getTextSize(), fSpacingMul) + fSpacingAdd;
     return this->countLines() * spacing;
 }
@@ -343,12 +294,8 @@ public:
     SkTextBlobBuilder fBuilder;
 
     void operator()(const char text[], size_t length, SkScalar x, SkScalar y,
-<<<<<<< HEAD
         const SkPaint& paint) override
     {
-=======
-                    const SkPaint& paint) override {
->>>>>>> miniblink49
         SkPaint p(paint);
         p.setTextEncoding(SkPaint::kGlyphID_TextEncoding);
         const int count = paint.countText(text, length);
@@ -356,12 +303,8 @@ public:
     }
 };
 
-<<<<<<< HEAD
 SkTextBlob* SkTextBox::snapshotTextBlob(SkScalar* computedBottom) const
 {
-=======
-SkTextBlob* SkTextBox::snapshotTextBlob(SkScalar* computedBottom) const {
->>>>>>> miniblink49
     TextBlobVisitor visitor;
     SkScalar newB = this->visit(visitor, fText, fLen, *fPaint);
     if (computedBottom) {
@@ -369,7 +312,3 @@ SkTextBlob* SkTextBox::snapshotTextBlob(SkScalar* computedBottom) const {
     }
     return (SkTextBlob*)visitor.fBuilder.build();
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49

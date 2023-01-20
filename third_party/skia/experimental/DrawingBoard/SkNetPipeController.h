@@ -6,17 +6,10 @@
  */
 #ifndef SkNetPipeController_DEFINED
 #define SkNetPipeController_DEFINED
-<<<<<<< HEAD
 #include "SkCanvas.h"
 #include "SkGPipe.h"
 #include "SkSockets.h"
 #include "SkTypes.h"
-=======
-#include "SkTypes.h"
-#include "SkCanvas.h"
-#include "SkGPipe.h"
-#include "SkSockets.h"
->>>>>>> miniblink49
 class SkNetPipeController : public SkGPipeController {
 public:
     SkNetPipeController(SkCanvas* target);
@@ -30,7 +23,6 @@ public:
     void disablePlayback() { fPlayback = false; }
 
 private:
-<<<<<<< HEAD
     SkGPipeReader fReader;
     bool fPlayback;
     void* fBlock;
@@ -40,16 +32,5 @@ private:
     size_t fTotalWritten;
 
     SkGPipeReader::Status fStatus;
-=======
-    SkGPipeReader   fReader;
-    bool            fPlayback;
-    void*           fBlock;
-    size_t          fBlockSize;
-    size_t          fBytesWritten;
-    int             fAtomsWritten;
-    size_t          fTotalWritten;
-
-    SkGPipeReader::Status   fStatus;
->>>>>>> miniblink49
 };
 #endif

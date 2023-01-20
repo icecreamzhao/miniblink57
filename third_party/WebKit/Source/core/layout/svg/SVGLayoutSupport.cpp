@@ -22,7 +22,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/layout/svg/SVGLayoutSupport.h"
 
 #include "core/frame/FrameHost.h"
@@ -35,120 +34,189 @@
 #include "core/layout/svg/LayoutSVGRoot.h"
 #include "core/layout/svg/LayoutSVGShape.h"
 #include "core/layout/svg/LayoutSVGText.h"
+#include "core/layout/svg/LayoutSVGTransformableContainer.h"
 #include "core/layout/svg/LayoutSVGViewportContainer.h"
 #include "core/layout/svg/SVGResources.h"
 #include "core/layout/svg/SVGResourcesCache.h"
-#include "core/paint/DeprecatedPaintLayer.h"
+#include "core/paint/PaintLayer.h"
 #include "core/svg/SVGElement.h"
 #include "platform/geometry/TransformState.h"
 #include "platform/graphics/StrokeData.h"
+#include "wtf/MathExtras.h"
 
 namespace blink {
 
-static inline LayoutRect enclosingIntRectIfNotEmpty(const FloatRect& rect)
+struct SearchCandidate {
+    SearchCandidate()
+        : candidateLayoutObject(nullptr)
+        , candidateDistance(std::numeric_limits<float>::max())
+    {
+    }
+    SearchCandidate(LayoutObject* layoutObject, float distance)
+        : candidateLayoutObject(layoutObject)
+        , candidateDistance(distance)
+    {
+    }
+    LayoutObject* candidateLayoutObject;
+    float candidateDistance;
+};
+
+FloatRect SVGLayoutSupport::localVisualRect(const LayoutObject& object)
 {
-    if (rect.isEmpty())
-        return LayoutRect();
-    return LayoutRect(enclosingIntRect(rect));
+    // For LayoutSVGRoot, use LayoutSVGRoot::localVisualRect() instead.
+    DCHECK(!object.isSVGRoot());
+
+    // Return early for any cases where we don't actually paint
+    if (object.styleRef().visibility() != EVisibility::kVisible && !object.enclosingLayer()->hasVisibleContent())
+        return FloatRect();
+
+    FloatRect visualRect = object.visualRectInLocalSVGCoordinates();
+    if (int outlineOutset = object.styleRef().outlineOutsetExtent())
+        visualRect.inflate(outlineOutset);
+    return visualRect;
 }
 
-LayoutRect SVGLayoutSupport::clippedOverflowRectForPaintInvalidation(const LayoutObject& object, const LayoutBoxModelObject* paintInvalidationContainer, const PaintInvalidationState* paintInvalidationState)
+LayoutRect SVGLayoutSupport::visualRectInAncestorSpace(
+    const LayoutObject& object,
+    const LayoutBoxModelObject& ancestor)
 {
-    // Return early for any cases where we don't actually paint
-    if (object.styleRef().visibility() != VISIBLE && !object.enclosingLayer()->hasVisibleContent())
-        return LayoutRect();
-
-    FloatRect paintInvalidationRect = object.paintInvalidationRectInLocalCoordinates();
-    if (int outlineOutset = object.styleRef().outlineOutset())
-        paintInvalidationRect.inflate(outlineOutset);
-
-    if (paintInvalidationState && paintInvalidationState->canMapToContainer(paintInvalidationContainer)) {
-        // Compute accumulated SVG transform and apply to local paint rect.
-        AffineTransform transform = paintInvalidationState->svgTransform() * object.localToParentTransform();
-        // FIXME: These are quirks carried forward from the old paint invalidation infrastructure.
-        LayoutRect rect = enclosingIntRectIfNotEmpty(transform.mapRect(paintInvalidationRect));
-        // Offset by SVG root paint offset and apply clipping as needed.
-        rect.move(paintInvalidationState->paintOffset());
-        if (paintInvalidationState->isClipped())
-            rect.intersect(paintInvalidationState->clipRect());
-        return rect;
-    }
-
     LayoutRect rect;
-    const LayoutSVGRoot& svgRoot = mapRectToSVGRootForPaintInvalidation(object, paintInvalidationRect, rect);
-    svgRoot.mapRectToPaintInvalidationBacking(paintInvalidationContainer, rect, paintInvalidationState);
+    mapToVisualRectInAncestorSpace(object, &ancestor, localVisualRect(object),
+        rect);
     return rect;
 }
 
-const LayoutSVGRoot& SVGLayoutSupport::mapRectToSVGRootForPaintInvalidation(const LayoutObject& object, const FloatRect& localPaintInvalidationRect, LayoutRect& rect)
+LayoutRect SVGLayoutSupport::transformVisualRect(
+    const LayoutObject& object,
+    const AffineTransform& rootTransform,
+    const FloatRect& localRect)
 {
-    ASSERT(object.isSVG() && !object.isSVGRoot());
+    FloatRect adjustedRect = rootTransform.mapRect(localRect);
 
-    FloatRect paintInvalidationRect = localPaintInvalidationRect;
-    // FIXME: Building the transform to the SVG root border box and then doing
-    // mapRect() with that would be slightly more efficient, but requires some
-    // additions to AffineTransform (preMultiply, preTranslate) to avoid
-    // excessive copying and to get a similar fast-path for translations.
-    const LayoutObject* parent = &object;
-    do {
-        paintInvalidationRect = parent->localToParentTransform().mapRect(paintInvalidationRect);
-        parent = parent->parent();
-    } while (!parent->isSVGRoot());
+    if (adjustedRect.isEmpty())
+        return LayoutRect();
+
+    // Use enclosingIntRect because we cannot properly apply subpixel offset of
+    // the SVGRoot since we don't know the desired subpixel accumulation at this
+    // point.
+    return LayoutRect(enclosingIntRect(adjustedRect));
+}
+
+static const LayoutSVGRoot& computeTransformToSVGRoot(
+    const LayoutObject& object,
+    AffineTransform& rootBorderBoxTransform)
+{
+    DCHECK(object.isSVGChild());
+
+    const LayoutObject* parent;
+    for (parent = &object; !parent->isSVGRoot(); parent = parent->parent())
+        rootBorderBoxTransform.preMultiply(parent->localToSVGParentTransform());
 
     const LayoutSVGRoot& svgRoot = toLayoutSVGRoot(*parent);
-
-    paintInvalidationRect = svgRoot.localToBorderBoxTransform().mapRect(paintInvalidationRect);
-    rect = enclosingIntRectIfNotEmpty(paintInvalidationRect);
+    rootBorderBoxTransform.preMultiply(svgRoot.localToBorderBoxTransform());
     return svgRoot;
 }
 
-void SVGLayoutSupport::mapLocalToContainer(const LayoutObject* object, const LayoutBoxModelObject* paintInvalidationContainer, TransformState& transformState, bool* wasFixed, const PaintInvalidationState* paintInvalidationState)
+bool SVGLayoutSupport::mapToVisualRectInAncestorSpace(
+    const LayoutObject& object,
+    const LayoutBoxModelObject* ancestor,
+    const FloatRect& localVisualRect,
+    LayoutRect& resultRect,
+    VisualRectFlags visualRectFlags)
 {
-    transformState.applyTransform(object->localToParentTransform());
+    AffineTransform rootBorderBoxTransform;
+    const LayoutSVGRoot& svgRoot = computeTransformToSVGRoot(object, rootBorderBoxTransform);
+    resultRect = transformVisualRect(object, rootBorderBoxTransform, localVisualRect);
 
-    if (paintInvalidationState && paintInvalidationState->canMapToContainer(paintInvalidationContainer)) {
-        // |svgTransform| contains localToBorderBoxTransform mentioned below.
-        transformState.applyTransform(paintInvalidationState->svgTransform());
-        transformState.move(paintInvalidationState->paintOffset());
-        return;
+    // Apply initial viewport clip.
+    if (svgRoot.shouldApplyViewportClip()) {
+        LayoutRect clipRect(svgRoot.overflowClipRect(LayoutPoint()));
+        if (visualRectFlags & EdgeInclusive) {
+            if (!resultRect.inclusiveIntersect(clipRect))
+                return false;
+        } else {
+            resultRect.intersect(clipRect);
+        }
     }
-
-    LayoutObject* parent = object->parent();
-
-    // At the SVG/HTML boundary (aka LayoutSVGRoot), we apply the localToBorderBoxTransform
-    // to map an element from SVG viewport coordinates to CSS box coordinates.
-    // LayoutSVGRoot's mapLocalToContainer method expects CSS box coordinates.
-    if (parent->isSVGRoot())
-        transformState.applyTransform(toLayoutSVGRoot(parent)->localToBorderBoxTransform());
-
-    MapCoordinatesFlags mode = UseTransforms;
-    parent->mapLocalToContainer(paintInvalidationContainer, transformState, mode, wasFixed, paintInvalidationState);
+    return svgRoot.mapToVisualRectInAncestorSpace(ancestor, resultRect,
+        visualRectFlags);
 }
 
-const LayoutObject* SVGLayoutSupport::pushMappingToContainer(const LayoutObject* object, const LayoutBoxModelObject* ancestorToStopAt, LayoutGeometryMap& geometryMap)
+void SVGLayoutSupport::mapLocalToAncestor(const LayoutObject* object,
+    const LayoutBoxModelObject* ancestor,
+    TransformState& transformState,
+    MapCoordinatesFlags flags)
 {
-    ASSERT_UNUSED(ancestorToStopAt, ancestorToStopAt != object);
+    transformState.applyTransform(object->localToSVGParentTransform());
 
     LayoutObject* parent = object->parent();
 
-    // At the SVG/HTML boundary (aka LayoutSVGRoot), we apply the localToBorderBoxTransform
-    // to map an element from SVG viewport coordinates to CSS box coordinates.
-    // LayoutSVGRoot's mapLocalToContainer method expects CSS box coordinates.
+    // At the SVG/HTML boundary (aka LayoutSVGRoot), we apply the
+    // localToBorderBoxTransform to map an element from SVG viewport coordinates
+    // to CSS box coordinates.
+    // LayoutSVGRoot's mapLocalToAncestor method expects CSS box coordinates.
+    if (parent->isSVGRoot())
+        transformState.applyTransform(
+            toLayoutSVGRoot(parent)->localToBorderBoxTransform());
+
+    parent->mapLocalToAncestor(ancestor, transformState, flags);
+}
+
+void SVGLayoutSupport::mapAncestorToLocal(const LayoutObject& object,
+    const LayoutBoxModelObject* ancestor,
+    TransformState& transformState,
+    MapCoordinatesFlags flags)
+{
+    // |object| is either a LayoutSVGModelObject or a LayoutSVGBlock here. In
+    // the former case, |object| can never be an ancestor while in the latter
+    // the caller is responsible for doing the ancestor check. Because of this,
+    // computing the transform to the SVG root is always what we want to do here.
+    ASSERT(ancestor != &object);
+    ASSERT(object.isSVGContainer() || object.isSVGShape() || object.isSVGImage() || object.isSVGText() || object.isSVGForeignObject());
+    AffineTransform localToSVGRoot;
+    const LayoutSVGRoot& svgRoot = computeTransformToSVGRoot(object, localToSVGRoot);
+
+    MapCoordinatesFlags mode = flags | UseTransforms | ApplyContainerFlip;
+    svgRoot.mapAncestorToLocal(ancestor, transformState, mode);
+
+    transformState.applyTransform(localToSVGRoot);
+}
+
+const LayoutObject* SVGLayoutSupport::pushMappingToContainer(
+    const LayoutObject* object,
+    const LayoutBoxModelObject* ancestorToStopAt,
+    LayoutGeometryMap& geometryMap)
+{
+    DCHECK_NE(ancestorToStopAt, object);
+
+    LayoutObject* parent = object->parent();
+
+    // At the SVG/HTML boundary (aka LayoutSVGRoot), we apply the
+    // localToBorderBoxTransform to map an element from SVG viewport coordinates
+    // to CSS box coordinates.
+    // LayoutSVGRoot's mapLocalToAncestor method expects CSS box coordinates.
     if (parent->isSVGRoot()) {
-        TransformationMatrix matrix(object->localToParentTransform());
+        TransformationMatrix matrix(object->localToSVGParentTransform());
         matrix.multiply(toLayoutSVGRoot(parent)->localToBorderBoxTransform());
         geometryMap.push(object, matrix);
     } else {
-        geometryMap.push(object, object->localToParentTransform());
+        geometryMap.push(object, object->localToSVGParentTransform());
     }
 
     return parent;
 }
 
-// Update a bounding box taking into account the validity of the other bounding box.
-inline void SVGLayoutSupport::updateObjectBoundingBox(FloatRect& objectBoundingBox, bool& objectBoundingBoxValid, LayoutObject* other, FloatRect otherBoundingBox)
+// Update a bounding box taking into account the validity of the other bounding
+// box.
+inline void SVGLayoutSupport::updateObjectBoundingBox(
+    FloatRect& objectBoundingBox,
+    bool& objectBoundingBoxValid,
+    LayoutObject* other,
+    FloatRect otherBoundingBox)
 {
-    bool otherValid = other->isSVGContainer() ? toLayoutSVGContainer(other)->isObjectBoundingBoxValid() : true;
+    bool otherValid = other->isSVGContainer()
+        ? toLayoutSVGContainer(other)->isObjectBoundingBoxValid()
+        : true;
     if (!otherValid)
         return;
 
@@ -161,16 +229,25 @@ inline void SVGLayoutSupport::updateObjectBoundingBox(FloatRect& objectBoundingB
     objectBoundingBox.uniteEvenIfEmpty(otherBoundingBox);
 }
 
-void SVGLayoutSupport::computeContainerBoundingBoxes(const LayoutObject* container, FloatRect& objectBoundingBox, bool& objectBoundingBoxValid, FloatRect& strokeBoundingBox, FloatRect& paintInvalidationBoundingBox)
+void SVGLayoutSupport::computeContainerBoundingBoxes(
+    const LayoutObject* container,
+    FloatRect& objectBoundingBox,
+    bool& objectBoundingBoxValid,
+    FloatRect& strokeBoundingBox,
+    FloatRect& localVisualRect)
 {
     objectBoundingBox = FloatRect();
     objectBoundingBoxValid = false;
     strokeBoundingBox = FloatRect();
 
-    // When computing the strokeBoundingBox, we use the paintInvalidationRects of the container's children so that the container's stroke includes
-    // the resources applied to the children (such as clips and filters). This allows filters applied to containers to correctly bound
-    // the children, and also improves inlining of SVG content, as the stroke bound is used in that situation also.
-    for (LayoutObject* current = container->slowFirstChild(); current; current = current->nextSibling()) {
+    // When computing the strokeBoundingBox, we use the visualRects of
+    // the container's children so that the container's stroke includes the
+    // resources applied to the children (such as clips and filters). This allows
+    // filters applied to containers to correctly bound the children, and also
+    // improves inlining of SVG content, as the stroke bound is used in that
+    // situation also.
+    for (LayoutObject* current = container->slowFirstChild(); current;
+         current = current->nextSibling()) {
         if (current->isSVGHiddenContainer())
             continue;
 
@@ -178,16 +255,22 @@ void SVGLayoutSupport::computeContainerBoundingBoxes(const LayoutObject* contain
         if (current->isSVGShape() && toLayoutSVGShape(current)->isShapeEmpty())
             continue;
 
-        const AffineTransform& transform = current->localToParentTransform();
+        if (current->isSVGText() && !toLayoutSVGText(current)->isObjectBoundingBoxValid())
+            continue;
+
+        const AffineTransform& transform = current->localToSVGParentTransform();
         updateObjectBoundingBox(objectBoundingBox, objectBoundingBoxValid, current,
             transform.mapRect(current->objectBoundingBox()));
-        strokeBoundingBox.unite(transform.mapRect(current->paintInvalidationRectInLocalCoordinates()));
+        strokeBoundingBox.unite(
+            transform.mapRect(current->visualRectInLocalSVGCoordinates()));
     }
 
-    paintInvalidationBoundingBox = strokeBoundingBox;
+    localVisualRect = strokeBoundingBox;
+    adjustVisualRectWithResources(container, localVisualRect);
 }
 
-const LayoutSVGRoot* SVGLayoutSupport::findTreeRootObject(const LayoutObject* start)
+const LayoutSVGRoot* SVGLayoutSupport::findTreeRootObject(
+    const LayoutObject* start)
 {
     while (start && !start->isSVGRoot())
         start = start->parent();
@@ -197,56 +280,59 @@ const LayoutSVGRoot* SVGLayoutSupport::findTreeRootObject(const LayoutObject* st
     return toLayoutSVGRoot(start);
 }
 
-inline bool SVGLayoutSupport::layoutSizeOfNearestViewportChanged(const LayoutObject* start)
+bool SVGLayoutSupport::layoutSizeOfNearestViewportChanged(
+    const LayoutObject* start)
 {
-    while (start && !start->isSVGRoot() && !start->isSVGViewportContainer())
-        start = start->parent();
-
-    ASSERT(start);
-    ASSERT(start->isSVGRoot() || start->isSVGViewportContainer());
-    if (start->isSVGViewportContainer())
-        return toLayoutSVGViewportContainer(start)->isLayoutSizeChanged();
-
-    return toLayoutSVGRoot(start)->isLayoutSizeChanged();
-}
-
-bool SVGLayoutSupport::transformToRootChanged(LayoutObject* ancestor)
-{
-    while (ancestor && !ancestor->isSVGRoot()) {
-        if (ancestor->isSVGTransformableContainer())
-            return toLayoutSVGContainer(ancestor)->didTransformToRootUpdate();
-        if (ancestor->isSVGViewportContainer())
-            return toLayoutSVGViewportContainer(ancestor)->didTransformToRootUpdate();
-        ancestor = ancestor->parent();
+    for (; start; start = start->parent()) {
+        if (start->isSVGRoot())
+            return toLayoutSVGRoot(start)->isLayoutSizeChanged();
+        if (start->isSVGViewportContainer())
+            return toLayoutSVGViewportContainer(start)->isLayoutSizeChanged();
     }
-
+    ASSERT_NOT_REACHED();
     return false;
 }
 
-void SVGLayoutSupport::layoutChildren(LayoutObject* start, bool selfNeedsLayout)
+bool SVGLayoutSupport::screenScaleFactorChanged(const LayoutObject* ancestor)
 {
-    // When hasRelativeLengths() is false, no descendants have relative lengths
-    // (hence no one is interested in viewport size changes).
-    bool layoutSizeChanged = toSVGElement(start->node())->hasRelativeLengths()
-        && layoutSizeOfNearestViewportChanged(start);
-    bool transformChanged = transformToRootChanged(start);
+    for (; ancestor; ancestor = ancestor->parent()) {
+        if (ancestor->isSVGRoot())
+            return toLayoutSVGRoot(ancestor)->didScreenScaleFactorChange();
+        if (ancestor->isSVGTransformableContainer())
+            return toLayoutSVGTransformableContainer(ancestor)
+                ->didScreenScaleFactorChange();
+        if (ancestor->isSVGViewportContainer())
+            return toLayoutSVGViewportContainer(ancestor)
+                ->didScreenScaleFactorChange();
+    }
+    ASSERT_NOT_REACHED();
+    return false;
+}
 
-    for (LayoutObject* child = start->slowFirstChild(); child; child = child->nextSibling()) {
-        bool forceLayout = selfNeedsLayout;
+void SVGLayoutSupport::layoutChildren(LayoutObject* firstChild,
+    bool forceLayout,
+    bool screenScalingFactorChanged,
+    bool layoutSizeChanged)
+{
+    for (LayoutObject* child = firstChild; child; child = child->nextSibling()) {
+        bool forceChildLayout = forceLayout;
 
-        if (transformChanged) {
-            // If the transform changed we need to update the text metrics (note: this also happens for layoutSizeChanged=true).
+        if (screenScalingFactorChanged) {
+            // If the screen scaling factor changed we need to update the text
+            // metrics (note: this also happens for layoutSizeChanged=true).
             if (child->isSVGText())
                 toLayoutSVGText(child)->setNeedsTextMetricsUpdate();
-            forceLayout = true;
+            forceChildLayout = true;
         }
 
         if (layoutSizeChanged) {
-            // When selfNeedsLayout is false and the layout size changed, we have to check whether this child uses relative lengths
+            // When selfNeedsLayout is false and the layout size changed, we have to
+            // check whether this child uses relative lengths
             if (SVGElement* element = child->node()->isSVGElement() ? toSVGElement(child->node()) : 0) {
                 if (element->hasRelativeLengths()) {
                     // FIXME: this should be done on invalidation, not during layout.
-                    // When the layout size changed and when using relative values tell the LayoutSVGShape to update its shape object
+                    // When the layout size changed and when using relative values tell
+                    // the LayoutSVGShape to update its shape object
                     if (child->isSVGShape()) {
                         toLayoutSVGShape(child)->setNeedsShapeUpdate();
                     } else if (child->isSVGText()) {
@@ -254,22 +340,33 @@ void SVGLayoutSupport::layoutChildren(LayoutObject* start, bool selfNeedsLayout)
                         toLayoutSVGText(child)->setNeedsPositioningValuesUpdate();
                     }
 
-                    forceLayout = true;
+                    forceChildLayout = true;
                 }
             }
         }
 
-        SubtreeLayoutScope layoutScope(*child);
-        // Resource containers are nasty: they can invalidate clients outside the current SubtreeLayoutScope.
-        // Since they only care about viewport size changes (to resolve their relative lengths), we trigger
-        // their invalidation directly from SVGSVGElement::svgAttributeChange() or at a higher
-        // SubtreeLayoutScope (in LayoutView::layout()).
-        if (forceLayout && !child->isSVGResourceContainer())
-            layoutScope.setNeedsLayout(child, LayoutInvalidationReason::SvgChanged);
+        // Resource containers are nasty: they can invalidate clients outside the
+        // current SubtreeLayoutScope.
+        // Since they only care about viewport size changes (to resolve their
+        // relative lengths), we trigger their invalidation directly from
+        // SVGSVGElement::svgAttributeChange() or at a higher SubtreeLayoutScope (in
+        // LayoutView::layout()). We do not create a SubtreeLayoutScope for
+        // resources because their ability to reference each other leads to circular
+        // layout. We protect against that within the layout code for resources, but
+        // it causes assertions if we use a SubTreeLayoutScope for them.
+        if (child->isSVGResourceContainer()) {
+            // Lay out any referenced resources before the child.
+            layoutResourcesIfNeeded(child);
+            child->layoutIfNeeded();
+        } else {
+            SubtreeLayoutScope layoutScope(*child);
+            if (forceChildLayout)
+                layoutScope.setNeedsLayout(child, LayoutInvalidationReason::SvgChanged);
 
-        // Lay out any referenced resources before the child.
-        layoutResourcesIfNeeded(child);
-        child->layoutIfNeeded();
+            // Lay out any referenced resources before the child.
+            layoutResourcesIfNeeded(child);
+            child->layoutIfNeeded();
+        }
     }
 }
 
@@ -284,13 +381,16 @@ void SVGLayoutSupport::layoutResourcesIfNeeded(const LayoutObject* object)
 
 bool SVGLayoutSupport::isOverflowHidden(const LayoutObject* object)
 {
-    // LayoutSVGRoot should never query for overflow state - it should always clip itself to the initial viewport size.
+    // LayoutSVGRoot should never query for overflow state - it should always clip
+    // itself to the initial viewport size.
     ASSERT(!object->isDocumentElement());
 
-    return object->style()->overflowX() == OHIDDEN || object->style()->overflowX() == OSCROLL;
+    return object->style()->overflowX() == EOverflow::Hidden || object->style()->overflowX() == EOverflow::Scroll;
 }
 
-void SVGLayoutSupport::intersectPaintInvalidationRectWithResources(const LayoutObject* layoutObject, FloatRect& paintInvalidationRect)
+void SVGLayoutSupport::adjustVisualRectWithResources(
+    const LayoutObject* layoutObject,
+    FloatRect& visualRect)
 {
     ASSERT(layoutObject);
 
@@ -299,46 +399,45 @@ void SVGLayoutSupport::intersectPaintInvalidationRectWithResources(const LayoutO
         return;
 
     if (LayoutSVGResourceFilter* filter = resources->filter())
-        paintInvalidationRect = filter->resourceBoundingBox(layoutObject);
+        visualRect = filter->resourceBoundingBox(layoutObject);
 
     if (LayoutSVGResourceClipper* clipper = resources->clipper())
-        paintInvalidationRect.intersect(clipper->resourceBoundingBox(layoutObject));
+        visualRect.intersect(
+            clipper->resourceBoundingBox(layoutObject->objectBoundingBox()));
 
     if (LayoutSVGResourceMasker* masker = resources->masker())
-        paintInvalidationRect.intersect(masker->resourceBoundingBox(layoutObject));
+        visualRect.intersect(masker->resourceBoundingBox(layoutObject));
 }
 
-bool SVGLayoutSupport::filtersForceContainerLayout(LayoutObject* object)
+bool SVGLayoutSupport::hasFilterResource(const LayoutObject& object)
 {
-    // If any of this container's children need to be laid out, and a filter is applied
-    // to the container, we need to issue paint invalidations the entire container.
-    if (!object->normalChildNeedsLayout())
-        return false;
-
-    SVGResources* resources = SVGResourcesCache::cachedResourcesForLayoutObject(object);
-    if (!resources || !resources->filter())
-        return false;
-
-    return true;
+    SVGResources* resources = SVGResourcesCache::cachedResourcesForLayoutObject(&object);
+    return resources && resources->filter();
 }
 
-bool SVGLayoutSupport::pointInClippingArea(LayoutObject* object, const FloatPoint& point)
+bool SVGLayoutSupport::pointInClippingArea(const LayoutObject& object,
+    const FloatPoint& point)
 {
-    ASSERT(object);
-
-    // We just take clippers into account to determine if a point is on the node. The Specification may
-    // change later and we also need to check maskers.
-    SVGResources* resources = SVGResourcesCache::cachedResourcesForLayoutObject(object);
-    if (!resources)
+    ClipPathOperation* clipPathOperation = object.styleRef().clipPath();
+    if (!clipPathOperation)
         return true;
-
-    if (LayoutSVGResourceClipper* clipper = resources->clipper())
-        return clipper->hitTestClipContent(object->objectBoundingBox(), point);
-
-    return true;
+    if (clipPathOperation->type() == ClipPathOperation::SHAPE) {
+        ShapeClipPathOperation& clipPath = toShapeClipPathOperation(*clipPathOperation);
+        return clipPath.path(object.objectBoundingBox()).contains(point);
+    }
+    DCHECK_EQ(clipPathOperation->type(), ClipPathOperation::REFERENCE);
+    SVGResources* resources = SVGResourcesCache::cachedResourcesForLayoutObject(&object);
+    if (!resources || !resources->clipper())
+        return true;
+    return resources->clipper()->hitTestClipContent(object.objectBoundingBox(),
+        point);
 }
 
-bool SVGLayoutSupport::transformToUserSpaceAndCheckClipping(LayoutObject* object, const AffineTransform& localTransform, const FloatPoint& pointInParent, FloatPoint& localPoint)
+bool SVGLayoutSupport::transformToUserSpaceAndCheckClipping(
+    const LayoutObject& object,
+    const AffineTransform& localTransform,
+    const FloatPoint& pointInParent,
+    FloatPoint& localPoint)
 {
     if (!localTransform.isInvertible())
         return false;
@@ -346,15 +445,21 @@ bool SVGLayoutSupport::transformToUserSpaceAndCheckClipping(LayoutObject* object
     return pointInClippingArea(object, localPoint);
 }
 
-DashArray SVGLayoutSupport::resolveSVGDashArray(const SVGDashArray& svgDashArray, const ComputedStyle& style, const SVGLengthContext& lengthContext)
+DashArray SVGLayoutSupport::resolveSVGDashArray(
+    const SVGDashArray& svgDashArray,
+    const ComputedStyle& style,
+    const SVGLengthContext& lengthContext)
 {
     DashArray dashArray;
     for (const Length& dashLength : svgDashArray.vector())
-        dashArray.append(lengthContext.valueForLength(dashLength, style));
+        dashArray.push_back(lengthContext.valueForLength(dashLength, style));
     return dashArray;
 }
 
-void SVGLayoutSupport::applyStrokeStyleToStrokeData(StrokeData& strokeData, const ComputedStyle& style, const LayoutObject& object)
+void SVGLayoutSupport::applyStrokeStyleToStrokeData(StrokeData& strokeData,
+    const ComputedStyle& style,
+    const LayoutObject& object,
+    float dashScaleFactor)
 {
     ASSERT(object.node());
     ASSERT(object.node()->isSVGElement());
@@ -368,7 +473,15 @@ void SVGLayoutSupport::applyStrokeStyleToStrokeData(StrokeData& strokeData, cons
     strokeData.setMiterLimit(svgStyle.strokeMiterLimit());
 
     DashArray dashArray = resolveSVGDashArray(*svgStyle.strokeDashArray(), style, lengthContext);
-    strokeData.setLineDash(dashArray, lengthContext.valueForLength(svgStyle.strokeDashOffset(), style));
+    float dashOffset = lengthContext.valueForLength(svgStyle.strokeDashOffset(), style);
+    // Apply scaling from 'pathLength'.
+    if (dashScaleFactor != 1) {
+        ASSERT(dashScaleFactor >= 0);
+        dashOffset *= dashScaleFactor;
+        for (auto& dashItem : dashArray)
+            dashItem *= dashScaleFactor;
+    }
+    strokeData.setLineDash(dashArray, dashOffset);
 }
 
 bool SVGLayoutSupport::isLayoutableTextNode(const LayoutObject* object)
@@ -378,15 +491,16 @@ bool SVGLayoutSupport::isLayoutableTextNode(const LayoutObject* object)
     return object->isSVGInlineText() && !toLayoutSVGInlineText(object)->hasEmptyText();
 }
 
-bool SVGLayoutSupport::willIsolateBlendingDescendantsForStyle(const ComputedStyle& style)
+bool SVGLayoutSupport::willIsolateBlendingDescendantsForStyle(
+    const ComputedStyle& style)
 {
     const SVGComputedStyle& svgStyle = style.svgStyle();
 
-    return style.hasIsolation() || style.opacity() < 1 || style.hasBlendMode()
-        || svgStyle.hasFilter() || svgStyle.hasMasker() || svgStyle.hasClipper();
+    return style.hasIsolation() || style.opacity() < 1 || style.hasBlendMode() || style.hasFilter() || svgStyle.hasMasker() || style.clipPath();
 }
 
-bool SVGLayoutSupport::willIsolateBlendingDescendantsForObject(const LayoutObject* object)
+bool SVGLayoutSupport::willIsolateBlendingDescendantsForObject(
+    const LayoutObject* object)
 {
     if (object->isSVGHiddenContainer())
         return false;
@@ -400,66 +514,119 @@ bool SVGLayoutSupport::isIsolationRequired(const LayoutObject* object)
     return willIsolateBlendingDescendantsForObject(object) && object->hasNonIsolatedBlendingDescendants();
 }
 
-static AffineTransform& currentContentTransformation()
-{
-    DEFINE_STATIC_LOCAL(AffineTransform, s_currentContentTransformation, ());
-    return s_currentContentTransformation;
-}
+AffineTransform::Transform
+    SubtreeContentTransformScope::s_currentContentTransformation
+    = IDENTITY_TRANSFORM;
 
-SubtreeContentTransformScope::SubtreeContentTransformScope(const AffineTransform& subtreeContentTransformation)
+SubtreeContentTransformScope::SubtreeContentTransformScope(
+    const AffineTransform& subtreeContentTransformation)
+    : m_savedContentTransformation(s_currentContentTransformation)
 {
-    AffineTransform& contentTransformation = currentContentTransformation();
-    m_savedContentTransformation = contentTransformation;
-    contentTransformation = subtreeContentTransformation * contentTransformation;
+    AffineTransform contentTransformation = subtreeContentTransformation * AffineTransform(s_currentContentTransformation);
+    contentTransformation.copyTransformTo(s_currentContentTransformation);
 }
 
 SubtreeContentTransformScope::~SubtreeContentTransformScope()
 {
-    currentContentTransformation() = m_savedContentTransformation;
+    m_savedContentTransformation.copyTransformTo(s_currentContentTransformation);
 }
 
-AffineTransform SVGLayoutSupport::deprecatedCalculateTransformToLayer(const LayoutObject* layoutObject)
+float SVGLayoutSupport::calculateScreenFontSizeScalingFactor(
+    const LayoutObject* layoutObject)
 {
     AffineTransform transform;
     while (layoutObject) {
-        transform = layoutObject->localToParentTransform() * transform;
+        transform = layoutObject->localToSVGParentTransform() * transform;
         if (layoutObject->isSVGRoot())
             break;
         layoutObject = layoutObject->parent();
     }
+    transform.multiply(
+        SubtreeContentTransformScope::currentContentTransformation());
+    return clampTo<float>(
+        sqrt((transform.xScaleSquared() + transform.yScaleSquared()) / 2));
+}
 
-    // Continue walking up the layer tree, accumulating CSS transforms.
-    // FIXME: this queries layer compositing state - which is not
-    // supported during layout. Hence, the result may not include all CSS transforms.
-    DeprecatedPaintLayer* layer = layoutObject ? layoutObject->enclosingLayer() : 0;
-    while (layer && layer->isAllowedToQueryCompositingState()) {
-        // We can stop at compositing layers, to match the backing resolution.
-        // FIXME: should we be computing the transform to the nearest composited layer,
-        // or the nearest composited layer that does not paint into its ancestor?
-        // I think this is the nearest composited ancestor since we will inherit its
-        // transforms in the composited layer tree.
-        if (layer->compositingState() != NotComposited)
-            break;
+static inline bool compareCandidateDistance(const SearchCandidate& r1,
+    const SearchCandidate& r2)
+{
+    return r1.candidateDistance < r2.candidateDistance;
+}
 
-        if (TransformationMatrix* layerTransform = layer->transform())
-            transform = layerTransform->toAffineTransform() * transform;
+static inline float distanceToChildLayoutObject(LayoutObject* child,
+    const FloatPoint& point)
+{
+    const AffineTransform& localToParentTransform = child->localToSVGParentTransform();
+    if (!localToParentTransform.isInvertible())
+        return std::numeric_limits<float>::max();
+    FloatPoint childLocalPoint = localToParentTransform.inverse().mapPoint(point);
+    return child->objectBoundingBox().squaredDistanceTo(childLocalPoint);
+}
 
-        layer = layer->parent();
+static SearchCandidate searchTreeForFindClosestLayoutSVGText(
+    LayoutObject* layoutObject,
+    const FloatPoint& point)
+{
+    // Try to find the closest LayoutSVGText.
+    SearchCandidate closestText;
+    Vector<SearchCandidate> candidates;
+
+    // Find the closest LayoutSVGText on this tree level, and also collect any
+    // containers that could contain LayoutSVGTexts that are closer.
+    for (LayoutObject* child = layoutObject->slowLastChild(); child;
+         child = child->previousSibling()) {
+        if (child->isSVGText()) {
+            float distance = distanceToChildLayoutObject(child, point);
+            if (distance >= closestText.candidateDistance)
+                continue;
+            candidates.clear();
+            closestText.candidateLayoutObject = child;
+            closestText.candidateDistance = distance;
+            continue;
+        }
+
+        if (child->isSVGContainer() && !layoutObject->isSVGHiddenContainer()) {
+            float distance = distanceToChildLayoutObject(child, point);
+            if (distance > closestText.candidateDistance)
+                continue;
+            candidates.push_back(SearchCandidate(child, distance));
+        }
     }
 
-    return transform;
+    // If a LayoutSVGText was found and there are no potentially closer sub-trees,
+    // just return |closestText|.
+    if (closestText.candidateLayoutObject && candidates.isEmpty())
+        return closestText;
+
+    std::stable_sort(candidates.begin(), candidates.end(),
+        compareCandidateDistance);
+
+    // Find the closest LayoutSVGText in the sub-trees in |candidates|.
+    // If a LayoutSVGText is found that is strictly closer than any previous
+    // candidate, then end the search.
+    for (const SearchCandidate& searchCandidate : candidates) {
+        if (closestText.candidateDistance < searchCandidate.candidateDistance)
+            break;
+        LayoutObject* candidateLayoutObject = searchCandidate.candidateLayoutObject;
+        FloatPoint candidateLocalPoint = candidateLayoutObject->localToSVGParentTransform().inverse().mapPoint(
+            point);
+
+        SearchCandidate candidateText = searchTreeForFindClosestLayoutSVGText(
+            candidateLayoutObject, candidateLocalPoint);
+
+        if (candidateText.candidateDistance < closestText.candidateDistance)
+            closestText = candidateText;
+    }
+
+    return closestText;
 }
 
-float SVGLayoutSupport::calculateScreenFontSizeScalingFactor(const LayoutObject* layoutObject)
+LayoutObject* SVGLayoutSupport::findClosestLayoutSVGText(
+    LayoutObject* layoutObject,
+    const FloatPoint& point)
 {
-    ASSERT(layoutObject);
-
-    // FIXME: trying to compute a device space transform at record time is wrong. All clients
-    // should be updated to avoid relying on this information, and the method should be removed.
-    AffineTransform ctm = deprecatedCalculateTransformToLayer(layoutObject) * currentContentTransformation();
-    ctm.scale(layoutObject->document().frameHost()->deviceScaleFactor());
-
-    return narrowPrecisionToFloat(sqrt((pow(ctm.xScale(), 2) + pow(ctm.yScale(), 2)) / 2));
+    return searchTreeForFindClosestLayoutSVGText(layoutObject, point)
+        .candidateLayoutObject;
 }
 
-}
+} // namespace blink

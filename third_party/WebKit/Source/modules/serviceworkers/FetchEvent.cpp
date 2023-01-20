@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
 #include "modules/serviceworkers/FetchEvent.h"
 
 #include "bindings/core/v8/ScriptState.h"
@@ -16,18 +15,10 @@
 #include "public/platform/WebURLResponse.h"
 #include "public/platform/modules/serviceworker/WebServiceWorkerError.h"
 #include "wtf/PtrUtil.h"
-=======
-#include "config.h"
-#include "FetchEvent.h"
-
-#include "modules/fetch/Request.h"
-#include "modules/serviceworkers/ServiceWorkerGlobalScope.h"
->>>>>>> miniblink49
 #include "wtf/RefPtr.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 FetchEvent* FetchEvent::create(ScriptState* scriptState,
     const AtomicString& type,
     const FetchEventInit& initializer)
@@ -45,21 +36,6 @@ FetchEvent* FetchEvent::create(ScriptState* scriptState,
 {
     return new FetchEvent(scriptState, type, initializer, respondWithObserver,
         waitUntilObserver, navigationPreloadSent);
-=======
-PassRefPtrWillBeRawPtr<FetchEvent> FetchEvent::create()
-{
-    return adoptRefWillBeNoop(new FetchEvent());
-}
-
-PassRefPtrWillBeRawPtr<FetchEvent> FetchEvent::create(const AtomicString& type, const FetchEventInit& initializer)
-{
-    return adoptRefWillBeNoop(new FetchEvent(type, initializer, nullptr));
-}
-
-PassRefPtrWillBeRawPtr<FetchEvent> FetchEvent::create(const AtomicString& type, const FetchEventInit& initializer, RespondWithObserver* observer)
-{
-    return adoptRefWillBeNoop(new FetchEvent(type, initializer, observer));
->>>>>>> miniblink49
 }
 
 Request* FetchEvent::request() const
@@ -67,20 +43,16 @@ Request* FetchEvent::request() const
     return m_request;
 }
 
-<<<<<<< HEAD
 String FetchEvent::clientId() const
 {
     return m_clientId;
 }
 
-=======
->>>>>>> miniblink49
 bool FetchEvent::isReload() const
 {
     return m_isReload;
 }
 
-<<<<<<< HEAD
 void FetchEvent::respondWith(ScriptState* scriptState,
     ScriptPromise scriptPromise,
     ExceptionState& exceptionState)
@@ -93,12 +65,6 @@ void FetchEvent::respondWith(ScriptState* scriptState,
 ScriptPromise FetchEvent::preloadResponse(ScriptState* scriptState)
 {
     return m_preloadResponseProperty->promise(scriptState->world());
-=======
-void FetchEvent::respondWith(ScriptState* scriptState, const ScriptValue& value, ExceptionState& exceptionState)
-{
-    stopImmediatePropagation();
-    m_observer->respondWith(scriptState, value, exceptionState);
->>>>>>> miniblink49
 }
 
 const AtomicString& FetchEvent::interfaceName() const
@@ -106,7 +72,6 @@ const AtomicString& FetchEvent::interfaceName() const
     return EventNames::FetchEvent;
 }
 
-<<<<<<< HEAD
 FetchEvent::FetchEvent(ScriptState* scriptState,
     const AtomicString& type,
     const FetchEventInit& initializer,
@@ -185,30 +150,13 @@ void FetchEvent::onNavigationPreloadError(
     DCHECK(m_preloadResponseProperty);
     m_preloadResponseProperty->reject(
         ServiceWorkerError::take(nullptr, *error.get()));
-=======
-FetchEvent::FetchEvent()
-    : m_isReload(false)
-{
-}
-
-FetchEvent::FetchEvent(const AtomicString& type, const FetchEventInit& initializer, RespondWithObserver* observer)
-    : ExtendableEvent(type, initializer)
-    , m_observer(observer)
-{
-    if (initializer.hasRequest())
-        m_request = initializer.request();
-    m_isReload = initializer.isReload();
->>>>>>> miniblink49
 }
 
 DEFINE_TRACE(FetchEvent)
 {
     visitor->trace(m_observer);
     visitor->trace(m_request);
-<<<<<<< HEAD
     visitor->trace(m_preloadResponseProperty);
-=======
->>>>>>> miniblink49
     ExtendableEvent::trace(visitor);
 }
 

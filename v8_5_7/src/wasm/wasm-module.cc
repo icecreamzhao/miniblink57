@@ -71,11 +71,7 @@ void ReplaceReferenceInCode(Handle<Code> code, Handle<Object> old_ref,
   }
 }
 
-<<<<<<< HEAD
 static void V8CALL MemoryFinalizer(const v8::WeakCallbackInfo<void>& data) {
-=======
-static void MemoryFinalizer(const v8::WeakCallbackInfo<void>& data) {
->>>>>>> miniblink49
   DisallowHeapAllocation no_gc;
   JSArrayBuffer** p = reinterpret_cast<JSArrayBuffer**>(data.GetParameter());
   JSArrayBuffer* buffer = *p;
@@ -605,11 +601,7 @@ static void MemoryInstanceFinalizer(Isolate* isolate,
   }
 }
 
-<<<<<<< HEAD
 static void V8CALL InstanceFinalizer(const v8::WeakCallbackInfo<void>& data) {
-=======
-static void InstanceFinalizer(const v8::WeakCallbackInfo<void>& data) {
->>>>>>> miniblink49
   DisallowHeapAllocation no_gc;
   JSObject** p = reinterpret_cast<JSObject**>(data.GetParameter());
   WasmInstanceObject* owner = reinterpret_cast<WasmInstanceObject*>(*p);

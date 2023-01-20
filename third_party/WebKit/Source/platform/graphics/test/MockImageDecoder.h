@@ -26,35 +26,25 @@
 #ifndef MockImageDecoder_h
 
 #include "platform/image-decoders/ImageDecoder.h"
-<<<<<<< HEAD
 #include "wtf/PtrUtil.h"
 #include <memory>
-=======
-#include "wtf/PassOwnPtr.h"
->>>>>>> miniblink49
 
 namespace blink {
 
 class MockImageDecoderClient {
 public:
-<<<<<<< HEAD
     MockImageDecoderClient()
         : m_firstFrameForcedToBeEmpty(false)
     {
     }
 
-=======
->>>>>>> miniblink49
     virtual void decoderBeingDestroyed() = 0;
     virtual void decodeRequested() = 0;
     virtual ImageFrame::Status status() = 0;
     virtual size_t frameCount() = 0;
     virtual int repetitionCount() const = 0;
     virtual float frameDuration() const = 0;
-<<<<<<< HEAD
     virtual void clearCacheExceptFrameRequested(size_t) {};
-=======
->>>>>>> miniblink49
 
     // Clients can control the behavior of MockImageDecoder::decodedSize() by
     // overriding this method. The default implementation causes
@@ -62,7 +52,6 @@ public:
     // MockImageDecoder::size(). See the precise implementation of
     // MockImageDecoder::decodedSize() below.
     virtual IntSize decodedSize() const { return IntSize(); }
-<<<<<<< HEAD
 
     void forceFirstFrameToBeEmpty() { m_firstFrameForcedToBeEmpty = true; };
 
@@ -70,13 +59,10 @@ public:
 
 private:
     bool m_firstFrameForcedToBeEmpty;
-=======
->>>>>>> miniblink49
 };
 
 class MockImageDecoder : public ImageDecoder {
 public:
-<<<<<<< HEAD
     static std::unique_ptr<MockImageDecoder> create(
         MockImageDecoderClient* client)
     {
@@ -92,40 +78,15 @@ public:
     }
 
     ~MockImageDecoder() { m_client->decoderBeingDestroyed(); }
-=======
-    static PassOwnPtr<MockImageDecoder> create(MockImageDecoderClient* client) { return adoptPtr(new MockImageDecoder(client)); }
-
-    MockImageDecoder(MockImageDecoderClient* client)
-        : ImageDecoder(ImageSource::AlphaPremultiplied, ImageSource::GammaAndColorProfileApplied, noDecodedImageByteLimit)
-        , m_client(client)
-    { }
-
-    ~MockImageDecoder()
-    {
-        m_client->decoderBeingDestroyed();
-    }
->>>>>>> miniblink49
 
     IntSize decodedSize() const override
     {
         return m_client->decodedSize().isEmpty() ? size() : m_client->decodedSize();
     }
 
-<<<<<<< HEAD
     String filenameExtension() const override { return "mock"; }
 
     int repetitionCount() const override { return m_client->repetitionCount(); }
-=======
-    String filenameExtension() const override
-    {
-        return "mock";
-    }
-
-    int repetitionCount() const override
-    {
-        return m_client->repetitionCount();
-    }
->>>>>>> miniblink49
 
     bool frameIsCompleteAtIndex(size_t) const override
     {
@@ -137,7 +98,6 @@ public:
         return m_client->frameDuration();
     }
 
-<<<<<<< HEAD
     size_t clearCacheExceptFrame(size_t clearExceptFrame) override
     {
         m_client->clearCacheExceptFrameRequested(clearExceptFrame);
@@ -150,9 +110,6 @@ public:
             return 0;
         return ImageDecoder::frameBytesAtIndex(index);
     }
-=======
-    size_t clearCacheExceptFrame(size_t) override { return 0; }
->>>>>>> miniblink49
 
 private:
     void decodeSize() override { }
@@ -167,12 +124,8 @@ private:
 
     void initializeNewFrame(size_t index) override
     {
-<<<<<<< HEAD
         m_frameBufferCache[index].setSizeAndColorSpace(
             size().width(), size().height(), colorSpaceForSkImages());
-=======
-        m_frameBufferCache[index].setSize(size().width(), size().height());
->>>>>>> miniblink49
         m_frameBufferCache[index].setHasAlpha(false);
     }
 
@@ -181,7 +134,6 @@ private:
 
 class MockImageDecoderFactory : public ImageDecoderFactory {
 public:
-<<<<<<< HEAD
     static std::unique_ptr<MockImageDecoderFactory> create(
         MockImageDecoderClient* client,
         const SkISize& decodedSize)
@@ -207,27 +159,6 @@ public:
 private:
     MockImageDecoderFactory(MockImageDecoderClient* client,
         const IntSize& decodedSize)
-=======
-    static PassOwnPtr<MockImageDecoderFactory> create(MockImageDecoderClient* client, const SkISize& decodedSize)
-    {
-        return adoptPtr(new MockImageDecoderFactory(client, IntSize(decodedSize.width(), decodedSize.height())));
-    }
-
-    static PassOwnPtr<MockImageDecoderFactory> create(MockImageDecoderClient* client, const IntSize& decodedSize)
-    {
-        return adoptPtr(new MockImageDecoderFactory(client, decodedSize));
-    }
-
-    PassOwnPtr<ImageDecoder> create() override
-    {
-        OwnPtr<MockImageDecoder> decoder = MockImageDecoder::create(m_client);
-        decoder->setSize(m_decodedSize.width(), m_decodedSize.height());
-        return decoder.release();
-    }
-
-private:
-    MockImageDecoderFactory(MockImageDecoderClient* client, const IntSize& decodedSize)
->>>>>>> miniblink49
         : m_client(client)
         , m_decodedSize(decodedSize)
     {

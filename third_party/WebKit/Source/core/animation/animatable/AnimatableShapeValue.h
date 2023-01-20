@@ -39,29 +39,28 @@ namespace blink {
 
 class CORE_EXPORT AnimatableShapeValue final : public AnimatableValue {
 public:
-    virtual ~AnimatableShapeValue() { }
-    static PassRefPtrWillBeRawPtr<AnimatableShapeValue> create(ShapeValue* shape)
+    ~AnimatableShapeValue() override { }
+    static PassRefPtr<AnimatableShapeValue> create(ShapeValue* shape)
     {
-        return adoptRefWillBeNoop(new AnimatableShapeValue(shape));
+        return adoptRef(new AnimatableShapeValue(shape));
     }
-    ShapeValue* shapeValue() const { return m_shape.get(); }
-
-    DEFINE_INLINE_VIRTUAL_TRACE() { AnimatableValue::trace(visitor); }
+    ShapeValue* getShapeValue() const { return m_shape.get(); }
 
 protected:
-    virtual PassRefPtrWillBeRawPtr<AnimatableValue> interpolateTo(const AnimatableValue*, double fraction) const override;
-    virtual bool usesDefaultInterpolationWith(const AnimatableValue*) const override;
+    PassRefPtr<AnimatableValue> interpolateTo(const AnimatableValue*,
+        double fraction) const override;
+    bool usesDefaultInterpolationWith(const AnimatableValue*) const override;
 
 private:
     AnimatableShapeValue(ShapeValue* shape)
         : m_shape(shape)
     {
-        ASSERT(m_shape);
+        DCHECK(m_shape);
     }
-    virtual AnimatableType type() const override { return TypeShapeValue; }
-    virtual bool equalTo(const AnimatableValue*) const override;
+    AnimatableType type() const override { return TypeShapeValue; }
+    bool equalTo(const AnimatableValue*) const override;
 
-    RefPtr<ShapeValue> m_shape;
+    Persistent<ShapeValue> m_shape;
 };
 
 DEFINE_ANIMATABLE_VALUE_TYPE_CASTS(AnimatableShapeValue, isShapeValue());

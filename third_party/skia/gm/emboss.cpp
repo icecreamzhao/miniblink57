@@ -5,7 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "SkBlurMaskFilter.h"
 #include "SkCanvas.h"
 #include "SkColorFilter.h"
@@ -14,15 +13,6 @@
 #include "SkColorFilter.h"
 static SkBitmap make_bm()
 {
-=======
-#include "gm.h"
-#include "SkBlurMaskFilter.h"
-#include "SkCanvas.h"
-#include "SkColorFilter.h"
-
-#include "SkColorFilter.h"
-static SkBitmap make_bm() {
->>>>>>> miniblink49
     SkBitmap bm;
     bm.allocN32Pixels(100, 100);
 
@@ -36,7 +26,6 @@ static SkBitmap make_bm() {
 
 class EmbossGM : public skiagm::GM {
 public:
-<<<<<<< HEAD
     EmbossGM()
     {
     }
@@ -54,41 +43,18 @@ protected:
 
     void onDraw(SkCanvas* canvas) override
     {
-=======
-    EmbossGM() {
-    }
-
-protected:
-    SkString onShortName() override {
-        return SkString("emboss");
-    }
-
-    SkISize onISize() override {
-        return SkISize::Make(600, 120);
-    }
-
-    void onDraw(SkCanvas* canvas) override {
->>>>>>> miniblink49
         SkPaint paint;
         SkBitmap bm = make_bm();
         canvas->drawBitmap(bm, 10, 10, &paint);
 
         const SkScalar dir[] = { 1, 1, 1 };
-<<<<<<< HEAD
         paint.setMaskFilter(SkBlurMaskFilter::MakeEmboss(3, dir, 0.3f, 0.1f));
-=======
-        paint.setMaskFilter(SkBlurMaskFilter::CreateEmboss(3, dir, 0.3f, 0.1f))->unref();
->>>>>>> miniblink49
         canvas->translate(bm.width() + SkIntToScalar(10), 0);
         canvas->drawBitmap(bm, 10, 10, &paint);
 
         // this combination of emboss+colorfilter used to crash -- so we exercise it to
         // confirm that we have a fix.
-<<<<<<< HEAD
         paint.setColorFilter(SkColorFilter::MakeModeFilter(0xFFFF0000, SkXfermode::kSrcATop_Mode));
-=======
-        paint.setColorFilter(SkColorFilter::CreateModeFilter(0xFFFF0000, SkXfermode::kSrcATop_Mode))->unref();
->>>>>>> miniblink49
         canvas->translate(bm.width() + SkIntToScalar(10), 0);
         canvas->drawBitmap(bm, 10, 10, &paint);
     }
@@ -97,8 +63,4 @@ private:
     typedef skiagm::GM INHERITED;
 };
 
-<<<<<<< HEAD
 DEF_GM(return new EmbossGM;)
-=======
-DEF_GM( return SkNEW(EmbossGM); )
->>>>>>> miniblink49

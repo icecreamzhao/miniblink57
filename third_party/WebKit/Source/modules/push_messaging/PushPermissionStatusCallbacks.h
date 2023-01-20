@@ -9,11 +9,6 @@
 #include "public/platform/modules/push_messaging/WebPushPermissionStatus.h"
 #include "public/platform/modules/push_messaging/WebPushProvider.h"
 #include "wtf/Noncopyable.h"
-<<<<<<< HEAD
-=======
-#include "wtf/PassRefPtr.h"
-#include "wtf/RefPtr.h"
->>>>>>> miniblink49
 
 namespace WTF {
 class String;
@@ -24,7 +19,6 @@ namespace blink {
 class ScriptPromiseResolver;
 
 // Will resolve the underlying promise depending on the permission received.
-<<<<<<< HEAD
 class PushPermissionStatusCallbacks final
     : public WebPushPermissionStatusCallbacks {
     WTF_MAKE_NONCOPYABLE(PushPermissionStatusCallbacks);
@@ -42,23 +36,6 @@ public:
 private:
     static WTF::String permissionString(WebPushPermissionStatus);
     Persistent<ScriptPromiseResolver> m_resolver;
-=======
-class PushPermissionStatusCallbacks final : public WebPushPermissionStatusCallbacks {
-    WTF_MAKE_NONCOPYABLE(PushPermissionStatusCallbacks);
-
-public:
-    explicit PushPermissionStatusCallbacks(PassRefPtrWillBeRawPtr<ScriptPromiseResolver>);
-    ~PushPermissionStatusCallbacks() override;
-
-    void onSuccess(WebPushPermissionStatus*) override;
-
-    // Called if for some reason the status of the push permission cannot be checked.
-    void onError(WebPushError*) override;
-
-private:
-    static WTF::String permissionString(WebPushPermissionStatus);
-    RefPtrWillBePersistent<ScriptPromiseResolver> m_resolver;
->>>>>>> miniblink49
 };
 
 } // namespace blink

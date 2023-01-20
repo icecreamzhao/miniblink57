@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 erik.corry@gmail.com
 esprehn@chromium.org
 haraken@chromium.org
@@ -11,13 +10,3 @@ yutak@chromium.org
 
 # TEAM: platform-architecture-dev@chromium.org
 # COMPONENT: Blink>Internals>WTF
-=======
-cevans@chromium.org
-jchaffraix@chromium.org
-jochen@chromium.org
-mikhail.pozdnyakov@intel.com
-morrita@chromium.org
-thakis@chromium.org
-tkent@chromium.org
-erik.corry@gmail.com
->>>>>>> miniblink49

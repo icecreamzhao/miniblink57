@@ -15,7 +15,6 @@
 
 SK_C_PLUS_PLUS_BEGIN_GUARD
 
-<<<<<<< HEAD
 /** Set the matrix to identity */
 void sk_matrix_set_identity(sk_matrix_t*);
 
@@ -43,16 +42,6 @@ void sk_matrix_pre_scale(sk_matrix_t*, float sx, float sy);
     Postconcats the matrix with the specified scale.
         M' = S(sx, sy) * M
 */
-=======
-void sk_matrix_set_identity(sk_matrix_t*);
-
-void sk_matrix_set_translate(sk_matrix_t*, float tx, float ty);
-void sk_matrix_pre_translate(sk_matrix_t*, float tx, float ty);
-void sk_matrix_post_translate(sk_matrix_t*, float tx, float ty);
-
-void sk_matrix_set_scale(sk_matrix_t*, float sx, float sy);
-void sk_matrix_pre_scale(sk_matrix_t*, float sx, float sy);
->>>>>>> miniblink49
 void sk_matrix_post_scale(sk_matrix_t*, float sx, float sy);
 
 SK_C_PLUS_PLUS_END_GUARD

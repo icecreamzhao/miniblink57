@@ -36,15 +36,16 @@ namespace blink {
 
 class HTMLUnknownElement final : public HTMLElement {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<HTMLUnknownElement> create(const QualifiedName& tagName, Document& document)
+    static HTMLUnknownElement* create(const QualifiedName& tagName,
+        Document& document)
     {
-        return adoptRefWillBeNoop(new HTMLUnknownElement(tagName, document));
+        return new HTMLUnknownElement(tagName, document);
     }
 
 private:
-    HTMLUnknownElement(const QualifiedName& tagName, Document& document)
-        : HTMLElement(tagName, document) { }
+    HTMLUnknownElement(const QualifiedName&, Document&);
 
     bool isHTMLUnknownElement() const override { return true; }
 };

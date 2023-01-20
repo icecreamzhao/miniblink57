@@ -28,10 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "modules/filesystem/EntryBase.h"
 
 #include "modules/filesystem/DOMFilePath.h"
@@ -47,13 +43,7 @@ EntryBase::EntryBase(DOMFileSystemBase* fileSystem, const String& fullPath)
 {
 }
 
-<<<<<<< HEAD
 EntryBase::~EntryBase() { }
-=======
-EntryBase::~EntryBase()
-{
-}
->>>>>>> miniblink49
 
 String EntryBase::toURL() const
 {
@@ -64,11 +54,7 @@ String EntryBase::toURL() const
     if (!m_fileSystem->supportsToURL())
         m_cachedURL = emptyString();
     else
-<<<<<<< HEAD
         m_cachedURL = m_fileSystem->createFileSystemURL(this).getString();
-=======
-        m_cachedURL = m_fileSystem->createFileSystemURL(this).string();
->>>>>>> miniblink49
     return m_cachedURL;
 }
 

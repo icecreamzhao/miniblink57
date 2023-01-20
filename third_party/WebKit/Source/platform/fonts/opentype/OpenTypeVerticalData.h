@@ -27,10 +27,7 @@
 
 #include "platform/PlatformExport.h"
 #include "platform/fonts/Glyph.h"
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
-=======
->>>>>>> miniblink49
 #include "wtf/HashMap.h"
 #include "wtf/PassRefPtr.h"
 #include "wtf/RefCounted.h"
@@ -58,10 +55,6 @@ public:
     void getVerticalTranslationsForGlyphs(const SimpleFontData*, const Glyph*, size_t, float* outXYArray) const;
 
 private:
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
     explicit OpenTypeVerticalData(const FontPlatformData&);
 
     void loadMetrics(const FontPlatformData&);

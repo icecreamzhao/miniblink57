@@ -23,7 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "platform/graphics/DeferredImageDecoder.h"
 
 #include "platform/RuntimeEnabledFeatures.h"
@@ -180,107 +179,6 @@ void DeferredImageDecoder::setDataInternal(PassRefPtr<SharedBuffer> passData,
             m_rwBuffer->append(segment, length, remaining);
         }
     }
-=======
-#include "config.h"
-#include "platform/graphics/DeferredImageDecoder.h"
-
-#include "platform/graphics/DecodingImageGenerator.h"
-#include "platform/graphics/ImageDecodingStore.h"
-#include "third_party/skia/include/core/SkImageInfo.h"
-#include "wtf/PassOwnPtr.h"
-
-namespace blink {
-
-namespace {
-
-// URI label for SkDiscardablePixelRef.
-const char labelDiscardable[] = "discardable";
-
-} // namespace
-
-bool DeferredImageDecoder::s_enabled = true;
-
-DeferredImageDecoder::DeferredImageDecoder(PassOwnPtr<ImageDecoder> actualDecoder)
-    : m_allDataReceived(false)
-    , m_lastDataSize(0)
-    , m_actualDecoder(actualDecoder)
-    , m_repetitionCount(cAnimationNone)
-    , m_hasColorProfile(false)
-{
-}
-
-DeferredImageDecoder::~DeferredImageDecoder()
-{
-}
-
-PassOwnPtr<DeferredImageDecoder> DeferredImageDecoder::create(const SharedBuffer& data, ImageSource::AlphaOption alphaOption, ImageSource::GammaAndColorProfileOption gammaAndColorOption)
-{
-    OwnPtr<ImageDecoder> actualDecoder = ImageDecoder::create(data, alphaOption, gammaAndColorOption);
-    return actualDecoder ? adoptPtr(new DeferredImageDecoder(actualDecoder.release())) : nullptr;
-}
-
-PassOwnPtr<DeferredImageDecoder> DeferredImageDecoder::createForTesting(PassOwnPtr<ImageDecoder> decoder)
-{
-    return adoptPtr(new DeferredImageDecoder(decoder));
-}
-
-bool DeferredImageDecoder::isLazyDecoded(const SkBitmap& bitmap)
-{
-    return bitmap.pixelRef()
-        && bitmap.pixelRef()->getURI()
-        && !memcmp(bitmap.pixelRef()->getURI(), labelDiscardable, sizeof(labelDiscardable));
-}
-
-void DeferredImageDecoder::setEnabled(bool enabled)
-{
-    s_enabled = enabled;
-}
-
-bool DeferredImageDecoder::enabled()
-{
-    return s_enabled;
-}
-
-String DeferredImageDecoder::filenameExtension() const
-{
-    return m_actualDecoder ? m_actualDecoder->filenameExtension() : m_filenameExtension;
-}
-
-bool DeferredImageDecoder::createFrameAtIndex(size_t index, SkBitmap* bitmap)
-{
-    prepareLazyDecodedFrames();
-    if (index < m_frameData.size()) {
-        // ImageFrameGenerator has the latest known alpha state. There will be a
-        // performance boost if this frame is opaque.
-        *bitmap = createBitmap(index);
-        FrameData* frameData = &m_frameData[index];
-        frameData->m_hasAlpha = m_frameGenerator->hasAlpha(index);
-        bitmap->setAlphaType(frameData->m_hasAlpha ? kPremul_SkAlphaType : kOpaque_SkAlphaType);
-        frameData->m_frameBytes = m_size.area() *  sizeof(ImageFrame::PixelData);
-        return true;
-    }
-    if (!m_actualDecoder)
-        return false;
-    ImageFrame* buffer = m_actualDecoder->frameBufferAtIndex(index);
-    if (!buffer || buffer->status() == ImageFrame::FrameEmpty)
-        return false;
-    *bitmap = buffer->bitmap();
-    return true;
-}
-
-void DeferredImageDecoder::setData(SharedBuffer& data, bool allDataReceived)
-{
-    if (m_actualDecoder) {
-        m_data = RefPtr<SharedBuffer>(data);
-        m_lastDataSize = data.size();
-        m_allDataReceived = allDataReceived;
-        m_actualDecoder->setData(&data, allDataReceived);
-        prepareLazyDecodedFrames();
-    }
-
-    if (m_frameGenerator)
-        m_frameGenerator->setData(&data, allDataReceived);
->>>>>>> miniblink49
 }
 
 bool DeferredImageDecoder::isSizeAvailable()
@@ -290,16 +188,10 @@ bool DeferredImageDecoder::isSizeAvailable()
     return m_actualDecoder ? m_actualDecoder->isSizeAvailable() : true;
 }
 
-<<<<<<< HEAD
 bool DeferredImageDecoder::hasEmbeddedColorSpace() const
 {
     return m_actualDecoder ? m_actualDecoder->hasEmbeddedColorSpace()
                            : m_hasEmbeddedColorSpace;
-=======
-bool DeferredImageDecoder::hasColorProfile() const
-{
-    return m_actualDecoder ? m_actualDecoder->hasColorProfile() : m_hasColorProfile;
->>>>>>> miniblink49
 }
 
 IntSize DeferredImageDecoder::size() const
@@ -321,12 +213,8 @@ size_t DeferredImageDecoder::frameCount()
 
 int DeferredImageDecoder::repetitionCount() const
 {
-<<<<<<< HEAD
     return m_actualDecoder ? m_actualDecoder->repetitionCount()
                            : m_repetitionCount;
-=======
-    return m_actualDecoder ? m_actualDecoder->repetitionCount() : m_repetitionCount;
->>>>>>> miniblink49
 }
 
 size_t DeferredImageDecoder::clearCacheExceptFrame(size_t clearExceptFrame)
@@ -392,7 +280,6 @@ void DeferredImageDecoder::activateLazyDecoding()
 {
     if (m_frameGenerator)
         return;
-<<<<<<< HEAD
 
     m_size = m_actualDecoder->size();
     m_hasHotSpot = m_actualDecoder->hotSpot(m_hotSpot);
@@ -408,25 +295,11 @@ void DeferredImageDecoder::activateLazyDecoding()
         m_actualDecoder->decodedSize().height());
     m_frameGenerator = ImageFrameGenerator::create(
         decodedSize, !isSingleFrame, m_actualDecoder->colorBehavior());
-=======
-    m_size = m_actualDecoder->size();
-    m_filenameExtension = m_actualDecoder->filenameExtension();
-    m_hasColorProfile = m_actualDecoder->hasColorProfile();
-    const bool isSingleFrame = m_actualDecoder->repetitionCount() == cAnimationNone || (m_allDataReceived && m_actualDecoder->frameCount() == 1u);
-    m_frameGenerator = ImageFrameGenerator::create(SkISize::Make(m_actualDecoder->decodedSize().width(), m_actualDecoder->decodedSize().height()), m_data, m_allDataReceived, !isSingleFrame);
->>>>>>> miniblink49
 }
 
 void DeferredImageDecoder::prepareLazyDecodedFrames()
 {
-<<<<<<< HEAD
     if (!m_actualDecoder || !m_actualDecoder->isSizeAvailable())
-=======
-    if (!s_enabled
-        || !m_actualDecoder
-        || !m_actualDecoder->isSizeAvailable()
-        || m_actualDecoder->filenameExtension() == "ico")
->>>>>>> miniblink49
         return;
 
     activateLazyDecoding();
@@ -439,10 +312,6 @@ void DeferredImageDecoder::prepareLazyDecodedFrames()
         return;
 
     for (size_t i = previousSize; i < m_frameData.size(); ++i) {
-<<<<<<< HEAD
-=======
-        m_frameData[i].m_haveMetadata = true;
->>>>>>> miniblink49
         m_frameData[i].m_duration = m_actualDecoder->frameDurationAtIndex(i);
         m_frameData[i].m_orientation = m_actualDecoder->orientation();
         m_frameData[i].m_isComplete = m_actualDecoder->frameIsCompleteAtIndex(i);
@@ -457,7 +326,6 @@ void DeferredImageDecoder::prepareLazyDecodedFrames()
 
     if (m_allDataReceived) {
         m_repetitionCount = m_actualDecoder->repetitionCount();
-<<<<<<< HEAD
         m_actualDecoder.reset();
         // Hold on to m_rwBuffer, which is still needed by createFrameAtIndex.
     }
@@ -498,39 +366,10 @@ sk_sp<SkImage> DeferredImageDecoder::createFrameImageAtIndex(
     generator->setCanYUVDecode(m_canYUVDecode);
 
     return image;
-=======
-        m_actualDecoder.clear();
-        m_data = nullptr;
-    }
-}
-
-// Creates a SkBitmap that is backed by SkDiscardablePixelRef.
-SkBitmap DeferredImageDecoder::createBitmap(size_t index)
-{
-    SkISize decodedSize = m_frameGenerator->getFullSize();
-    ASSERT(decodedSize.width() > 0);
-    ASSERT(decodedSize.height() > 0);
-
-#if SK_B32_SHIFT // Little-endian RGBA pixels. (Android)
-    const SkColorType colorType = kRGBA_8888_SkColorType;
-#else
-    const SkColorType colorType = kBGRA_8888_SkColorType;
-#endif
-    const SkImageInfo info = SkImageInfo::Make(decodedSize.width(), decodedSize.height(), colorType, kPremul_SkAlphaType);
-
-    SkBitmap bitmap;
-    DecodingImageGenerator* generator = new DecodingImageGenerator(m_frameGenerator, info, index);
-    bool installed = SkInstallDiscardablePixelRef(generator, &bitmap);
-    ASSERT_UNUSED(installed, installed);
-    bitmap.pixelRef()->setURI(labelDiscardable);
-    generator->setGenerationId(bitmap.getGenerationID());
-    return bitmap;
->>>>>>> miniblink49
 }
 
 bool DeferredImageDecoder::hotSpot(IntPoint& hotSpot) const
 {
-<<<<<<< HEAD
     if (m_actualDecoder)
         return m_actualDecoder->hotSpot(hotSpot);
     if (m_hasHotSpot)
@@ -548,10 +387,3 @@ struct VectorTraits<blink::DeferredFrameData>
     static const bool canInitializeWithMemset = false; // Not all DeferredFrameData members initialize to 0.
 };
 }
-=======
-    // TODO: Implement.
-    return m_actualDecoder ? m_actualDecoder->hotSpot(hotSpot) : false;
-}
-
-} // namespace blink
->>>>>>> miniblink49

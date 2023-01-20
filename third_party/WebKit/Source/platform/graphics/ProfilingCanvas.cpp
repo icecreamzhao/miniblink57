@@ -28,22 +28,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/graphics/ProfilingCanvas.h"
 
 #include "wtf/CurrentTime.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 CanvasInterceptor<ProfilingCanvas>::CanvasInterceptor(
     InterceptingCanvasBase* canvas)
-=======
-CanvasInterceptor<ProfilingCanvas>::CanvasInterceptor(InterceptingCanvasBase* canvas)
->>>>>>> miniblink49
     : CanvasInterceptorBase(canvas)
     , m_startTime(WTF::monotonicallyIncreasingTime())
 {
@@ -56,11 +48,7 @@ CanvasInterceptor<ProfilingCanvas>::~CanvasInterceptor()
     double delta = WTF::monotonicallyIncreasingTime() - m_startTime;
     if (auto timings = canvas()->m_timings) {
         ASSERT(timings->size() == canvas()->callCount());
-<<<<<<< HEAD
         timings->push_back(delta);
-=======
-        timings->append(delta);
->>>>>>> miniblink49
     }
 }
 

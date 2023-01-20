@@ -26,31 +26,19 @@
 
 #include "platform/PlatformExport.h"
 #include "platform/geometry/FloatPoint3D.h"
-<<<<<<< HEAD
 #include "wtf/Noncopyable.h"
-=======
->>>>>>> miniblink49
 #include "wtf/PassRefPtr.h"
 #include "wtf/RefCounted.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 enum LightType { LS_DISTANT,
     LS_POINT,
     LS_SPOT };
-=======
-enum LightType {
-    LS_DISTANT,
-    LS_POINT,
-    LS_SPOT
-};
->>>>>>> miniblink49
 
 class TextStream;
 
 class PLATFORM_EXPORT LightSource : public RefCounted<LightSource> {
-<<<<<<< HEAD
     WTF_MAKE_NONCOPYABLE(LightSource);
 
 public:
@@ -58,23 +46,12 @@ public:
         : m_type(type)
     {
     }
-=======
-public:
-    LightSource(LightType type)
-        : m_type(type)
-    { }
->>>>>>> miniblink49
 
     virtual ~LightSource();
 
     LightType type() const { return m_type; }
     virtual TextStream& externalRepresentation(TextStream&) const = 0;
 
-<<<<<<< HEAD
-=======
-    virtual PassRefPtr<LightSource> create(const FloatPoint3D& scale, const FloatSize& offset) const = 0;
-
->>>>>>> miniblink49
     virtual bool setAzimuth(float) { return false; }
     virtual bool setElevation(float) { return false; }
     virtual bool setPosition(const FloatPoint3D&) { return false; }

@@ -10,7 +10,6 @@
 
 namespace v8 {
 namespace internal {
-<<<<<<< HEAD
     namespace torque {
         namespace ls {
 
@@ -23,17 +22,3 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_TORQUE_LS_MESSAGE_PIPE_H_
-=======
-namespace torque {
-namespace ls {
-
-JsonValue ReadMessage();
-void WriteMessage(JsonValue& message);
-
-}  // namespace ls
-}  // namespace torque
-}  // namespace internal
-}  // namespace v8
-
-#endif  // V8_TORQUE_LS_MESSAGE_PIPE_H_
->>>>>>> miniblink49

@@ -25,15 +25,19 @@
 #ifndef CounterDirectives_h
 #define CounterDirectives_h
 
+#include "wtf/Allocator.h"
 #include "wtf/HashMap.h"
 #include "wtf/MathExtras.h"
 #include "wtf/RefPtr.h"
 #include "wtf/text/AtomicString.h"
 #include "wtf/text/AtomicStringHash.h"
+#include <memory>
 
 namespace blink {
 
 class CounterDirectives {
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
+
 public:
     CounterDirectives()
         : m_isResetSet(false)
@@ -100,11 +104,14 @@ private:
 };
 
 bool operator==(const CounterDirectives&, const CounterDirectives&);
-inline bool operator!=(const CounterDirectives& a, const CounterDirectives& b) { return !(a == b); }
+inline bool operator!=(const CounterDirectives& a, const CounterDirectives& b)
+{
+    return !(a == b);
+}
 
 typedef HashMap<AtomicString, CounterDirectives> CounterDirectiveMap;
 
-PassOwnPtr<CounterDirectiveMap> clone(const CounterDirectiveMap&);
+std::unique_ptr<CounterDirectiveMap> clone(const CounterDirectiveMap&);
 
 } // namespace blink
 

@@ -14,12 +14,6 @@ class V8Inspector;
 V8_EXPORT void SetMaxAsyncTaskStacksForTest(V8Inspector* inspector, int limit);
 V8_EXPORT void DumpAsyncTaskStacksStateForTest(V8Inspector* inspector);
 
-<<<<<<< HEAD
 } //  v8_inspector
 
 #endif // V8_INSPECTOR_TEST_INTERFACE_H_
-=======
-}  //  v8_inspector
-
-#endif  // V8_INSPECTOR_TEST_INTERFACE_H_
->>>>>>> miniblink49

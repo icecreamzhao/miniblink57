@@ -33,26 +33,17 @@
 
 #include "core/workers/WorkerLoaderProxy.h"
 
-<<<<<<< HEAD
 #include "platform/heap/Handle.h"
-=======
->>>>>>> miniblink49
 #include "public/web/WebContentSecurityPolicy.h"
 #include "public/web/WebDevToolsAgentClient.h"
 #include "public/web/WebEmbeddedWorker.h"
 #include "public/web/WebEmbeddedWorkerStartData.h"
 #include "public/web/WebFrameClient.h"
-<<<<<<< HEAD
 #include <memory>
 
 namespace blink {
 
 class ParentFrameTaskRunners;
-=======
-
-namespace blink {
-
->>>>>>> miniblink49
 class ServiceWorkerGlobalScopeProxy;
 class WebLocalFrameImpl;
 class WebServiceWorkerNetworkProvider;
@@ -61,7 +52,6 @@ class WorkerInspectorProxy;
 class WorkerScriptLoader;
 class WorkerThread;
 
-<<<<<<< HEAD
 class WebEmbeddedWorkerImpl final : public WebEmbeddedWorker,
                                     public WebFrameClient,
                                     public WebDevToolsAgentClient,
@@ -87,31 +77,6 @@ public:
         const WebString& method,
         const WebString& message) override;
     void addMessageToConsole(const WebConsoleMessage&) override;
-=======
-class WebEmbeddedWorkerImpl final
-    : public WebEmbeddedWorker
-    , public WebFrameClient
-    , public WebDevToolsAgentClient
-    , private WorkerLoaderProxyProvider {
-    WTF_MAKE_NONCOPYABLE(WebEmbeddedWorkerImpl);
-public:
-    WebEmbeddedWorkerImpl(PassOwnPtr<WebServiceWorkerContextClient>, PassOwnPtr<WebWorkerContentSettingsClientProxy>);
-    ~WebEmbeddedWorkerImpl() override;
-
-    // Terminate all WebEmbeddedWorkerImpl for testing purposes.
-    // Note that this only schedules termination and
-    // does not synchronously wait for it to complete.
-    static void terminateAll();
-
-    // WebEmbeddedWorker overrides.
-    void startWorkerContext(const WebEmbeddedWorkerStartData&) override;
-    void resumeAfterDownload() override;
-    void terminateWorkerContext() override;
-    void attachDevTools(const WebString& hostId) override;
-    void reattachDevTools(const WebString& hostId, const WebString& savedState) override;
-    void detachDevTools() override;
-    void dispatchDevToolsMessage(const WebString&) override;
->>>>>>> miniblink49
 
     void postMessageToPageInspector(const WTF::String&);
 
@@ -120,7 +85,6 @@ private:
     void loadShadowPage();
 
     // WebFrameClient overrides.
-<<<<<<< HEAD
     void willSendRequest(WebLocalFrame*, WebURLRequest&) override;
     void didFinishDocumentLoad(WebLocalFrame*) override;
 
@@ -132,22 +96,11 @@ private:
     void resumeStartup() override;
     WebDevToolsAgentClient::WebKitClientMessageLoop* createClientMessageLoop()
         override;
-=======
-    void willSendRequest(
-        WebLocalFrame*, unsigned identifier, WebURLRequest&,
-        const WebURLResponse& redirectResponse) override;
-    void didFinishDocumentLoad(WebLocalFrame*) override;
-
-    // WebDevToolsAgentClient overrides.
-    void sendProtocolMessage(int callId, const WebString&, const WebString&) override;
-    void resumeStartup() override;
->>>>>>> miniblink49
 
     void onScriptLoaderFinished();
     void startWorkerThread();
 
     // WorkerLoaderProxyProvider
-<<<<<<< HEAD
     void postTaskToLoader(const WebTraceLocation&,
         std::unique_ptr<ExecutionContextTask>) override;
     void postTaskToWorkerGlobalScope(
@@ -175,55 +128,19 @@ private:
     RefPtr<WorkerLoaderProxy> m_loaderProxy;
     Persistent<ServiceWorkerGlobalScopeProxy> m_workerGlobalScopeProxy;
     Persistent<WorkerInspectorProxy> m_workerInspectorProxy;
-=======
-    void postTaskToLoader(PassOwnPtr<ExecutionContextTask>) override;
-    bool postTaskToWorkerGlobalScope(PassOwnPtr<ExecutionContextTask>) override;
-
-    WebEmbeddedWorkerStartData m_workerStartData;
-
-    OwnPtr<WebServiceWorkerContextClient> m_workerContextClient;
-
-    // This is kept until startWorkerContext is called, and then passed on
-    // to WorkerContext.
-    OwnPtr<WebWorkerContentSettingsClientProxy> m_contentSettingsClient;
-
-    // We retain ownership of this one which is for use on the
-    // main thread only.
-    OwnPtr<WebServiceWorkerNetworkProvider> m_networkProvider;
-
-    // Kept around only while main script loading is ongoing.
-    OwnPtr<WorkerScriptLoader> m_mainScriptLoader;
-
-    RefPtr<WorkerThread> m_workerThread;
-    RefPtr<WorkerLoaderProxy> m_loaderProxy;
-    OwnPtr<ServiceWorkerGlobalScopeProxy> m_workerGlobalScopeProxy;
-    OwnPtr<WorkerInspectorProxy> m_workerInspectorProxy;
->>>>>>> miniblink49
 
     // 'shadow page' - created to proxy loading requests from the worker.
     // Both WebView and WebFrame objects are close()'ed (where they're
     // deref'ed) when this EmbeddedWorkerImpl is destructed, therefore they
     // are guaranteed to exist while this object is around.
     WebView* m_webView;
-<<<<<<< HEAD
     Persistent<WebLocalFrameImpl> m_mainFrame;
-=======
-    WebLocalFrameImpl* m_mainFrame;
->>>>>>> miniblink49
 
     bool m_loadingShadowPage;
     bool m_askedToTerminate;
 
-<<<<<<< HEAD
     enum WaitingForDebuggerState { WaitingForDebugger,
         NotWaitingForDebugger };
-=======
-    enum WaitingForDebuggerState {
-        WaitingForDebuggerBeforeLoadingScript,
-        WaitingForDebuggerAfterScriptLoaded,
-        NotWaitingForDebugger
-    };
->>>>>>> miniblink49
 
     enum {
         DontPauseAfterDownload,

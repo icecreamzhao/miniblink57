@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/clipboard/DataObjectItem.h"
 
 #include "core/clipboard/Pasteboard.h"
@@ -39,7 +38,8 @@
 
 namespace blink {
 
-DataObjectItem* DataObjectItem::createFromString(const String& type, const String& data)
+DataObjectItem* DataObjectItem::createFromString(const String& type,
+    const String& data)
 {
     DataObjectItem* item = new DataObjectItem(StringKind, type);
     item->m_data = data;
@@ -53,7 +53,18 @@ DataObjectItem* DataObjectItem::createFromFile(File* file)
     return item;
 }
 
-DataObjectItem* DataObjectItem::createFromURL(const String& url, const String& title)
+DataObjectItem* DataObjectItem::createFromFileWithFileSystemId(
+    File* file,
+    const String& fileSystemId)
+{
+    DataObjectItem* item = new DataObjectItem(FileKind, file->type());
+    item->m_file = file;
+    item->m_fileSystemId = fileSystemId;
+    return item;
+}
+
+DataObjectItem* DataObjectItem::createFromURL(const String& url,
+    const String& title)
 {
     DataObjectItem* item = new DataObjectItem(StringKind, mimeTypeTextURIList);
     item->m_data = url;
@@ -61,7 +72,8 @@ DataObjectItem* DataObjectItem::createFromURL(const String& url, const String& t
     return item;
 }
 
-DataObjectItem* DataObjectItem::createFromHTML(const String& html, const KURL& baseURL)
+DataObjectItem* DataObjectItem::createFromHTML(const String& html,
+    const KURL& baseURL)
 {
     DataObjectItem* item = new DataObjectItem(StringKind, mimeTypeTextHTML);
     item->m_data = html;
@@ -69,7 +81,9 @@ DataObjectItem* DataObjectItem::createFromHTML(const String& html, const KURL& b
     return item;
 }
 
-DataObjectItem* DataObjectItem::createFromSharedBuffer(const String& name, PassRefPtr<SharedBuffer> buffer)
+DataObjectItem* DataObjectItem::createFromSharedBuffer(
+    const String& name,
+    PassRefPtr<SharedBuffer> buffer)
 {
     DataObjectItem* item = new DataObjectItem(FileKind, String());
     item->m_sharedBuffer = buffer;
@@ -77,14 +91,15 @@ DataObjectItem* DataObjectItem::createFromSharedBuffer(const String& name, PassR
     return item;
 }
 
-DataObjectItem* DataObjectItem::createFromPasteboard(const String& type, uint64_t sequenceNumber)
+DataObjectItem* DataObjectItem::createFromPasteboard(const String& type,
+    uint64_t sequenceNumber)
 {
     if (type == mimeTypeImagePng)
         return new DataObjectItem(FileKind, type, sequenceNumber);
     return new DataObjectItem(StringKind, type, sequenceNumber);
 }
 
-DataObjectItem::DataObjectItem(Kind kind, const String& type)
+DataObjectItem::DataObjectItem(ItemKind kind, const String& type)
     : m_source(InternalSource)
     , m_kind(kind)
     , m_type(type)
@@ -92,7 +107,9 @@ DataObjectItem::DataObjectItem(Kind kind, const String& type)
 {
 }
 
-DataObjectItem::DataObjectItem(Kind kind, const String& type, uint64_t sequenceNumber)
+DataObjectItem::DataObjectItem(ItemKind kind,
+    const String& type,
+    uint64_t sequenceNumber)
     : m_source(PasteboardSource)
     , m_kind(kind)
     , m_type(type)
@@ -109,28 +126,20 @@ Blob* DataObjectItem::getAsFile() const
         if (m_file)
             return m_file.get();
         ASSERT(m_sharedBuffer);
-        // FIXME: This code is currently impossible--we never populate m_sharedBuffer when dragging
-        // in. At some point though, we may need to support correctly converting a shared buffer
-        // into a file.
+        // FIXME: This code is currently impossible--we never populate
+        // m_sharedBuffer when dragging in. At some point though, we may need to
+        // support correctly converting a shared buffer into a file.
         return nullptr;
     }
 
     ASSERT(m_source == PasteboardSource);
     if (type() == mimeTypeImagePng) {
-        // FIXME: This is pretty inefficient. We copy the data from the browser
-        // to the renderer. We then place it in a blob in WebKit, which
-        // registers it and copies it *back* to the browser. When a consumer
-        // wants to read the data, we then copy the data back into the renderer.
-        // https://bugs.webkit.org/show_bug.cgi?id=58107 has been filed to track
-        // improvements to this code (in particular, add a registerClipboardBlob
-        // method to the blob registry; that way the data is only copied over
-        // into the renderer when it's actually read, not when the blob is
-        // initially constructed).
-        RefPtr<SharedBuffer> data = static_cast<PassRefPtr<SharedBuffer>>(Platform::current()->clipboard()->readImage(WebClipboard::BufferStandard));
-        OwnPtr<BlobData> blobData = BlobData::create();
-        blobData->appendBytes(data->data(), data->size());
-        blobData->setContentType(mimeTypeImagePng);
-        return Blob::create(BlobDataHandle::create(blobData.release(), data->size()));
+        WebBlobInfo blobInfo = Platform::current()->clipboard()->readImage(
+            WebClipboard::BufferStandard);
+        if (blobInfo.size() < 0)
+            return nullptr;
+        return Blob::create(BlobDataHandle::create(blobInfo.uuid(), blobInfo.type(),
+            blobInfo.size()));
     }
 
     return nullptr;
@@ -150,22 +159,38 @@ String DataObjectItem::getAsString() const
     // This is ugly but there's no real alternative.
     if (m_type == mimeTypeTextPlain) {
         data = Platform::current()->clipboard()->readPlainText(buffer);
+    } else if (m_type == mimeTypeTextRTF) {
+        data = Platform::current()->clipboard()->readRTF(buffer);
     } else if (m_type == mimeTypeTextHTML) {
         WebURL ignoredSourceURL;
         unsigned ignored;
-        data = Platform::current()->clipboard()->readHTML(buffer, &ignoredSourceURL, &ignored, &ignored);
+        data = Platform::current()->clipboard()->readHTML(buffer, &ignoredSourceURL,
+            &ignored, &ignored);
     } else {
         data = Platform::current()->clipboard()->readCustomData(buffer, m_type);
     }
 
-    return Platform::current()->clipboard()->sequenceNumber(buffer) == m_sequenceNumber ? data : String();
+    return Platform::current()->clipboard()->sequenceNumber(buffer) == m_sequenceNumber
+        ? data
+        : String();
 }
 
 bool DataObjectItem::isFilename() const
 {
-    // FIXME: https://bugs.webkit.org/show_bug.cgi?id=81261: When we properly support File dragout,
-    // we'll need to make sure this works as expected for DragDataChromium.
+    // FIXME: https://bugs.webkit.org/show_bug.cgi?id=81261: When we properly
+    // support File dragout, we'll need to make sure this works as expected for
+    // DragDataChromium.
     return m_kind == FileKind && m_file;
+}
+
+bool DataObjectItem::hasFileSystemId() const
+{
+    return m_kind == FileKind && !m_fileSystemId.isEmpty();
+}
+
+String DataObjectItem::fileSystemId() const
+{
+    return m_fileSystemId;
 }
 
 DEFINE_TRACE(DataObjectItem)

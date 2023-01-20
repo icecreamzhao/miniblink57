@@ -15,7 +15,6 @@
 
 SK_C_PLUS_PLUS_BEGIN_GUARD
 
-<<<<<<< HEAD
 /**
     Create a new paint with default settings:
         antialias : false
@@ -89,27 +88,6 @@ SK_API float sk_paint_get_stroke_miter(const sk_paint_t*);
    must be >= 0.
 */
 SK_API void sk_paint_set_stroke_miter(sk_paint_t*, float miter);
-=======
-sk_paint_t* sk_paint_new();
-void sk_paint_delete(sk_paint_t*);
-
-bool sk_paint_is_antialias(const sk_paint_t*);
-void sk_paint_set_antialias(sk_paint_t*, bool);
-
-sk_color_t sk_paint_get_color(const sk_paint_t*);
-void sk_paint_set_color(sk_paint_t*, sk_color_t);
-
-/* stroke settings */
-
-bool sk_paint_is_stroke(const sk_paint_t*);
-void sk_paint_set_stroke(sk_paint_t*, bool);
-
-float sk_paint_get_stroke_width(const sk_paint_t*);
-void sk_paint_set_stroke_width(sk_paint_t*, float width);
-
-float sk_paint_get_stroke_miter(const sk_paint_t*);
-void sk_paint_set_stroke_miter(sk_paint_t*, float miter);
->>>>>>> miniblink49
 
 typedef enum {
     BUTT_SK_STROKE_CAP,
@@ -117,7 +95,6 @@ typedef enum {
     SQUARE_SK_STROKE_CAP
 } sk_stroke_cap_t;
 
-<<<<<<< HEAD
 /**
     Return the paint's stroke cap type, controlling how the start and
     end of stroked lines and paths are treated.
@@ -128,10 +105,6 @@ SK_API sk_stroke_cap_t sk_paint_get_stroke_cap(const sk_paint_t*);
     end of stroked lines and paths are treated.
 */
 SK_API void sk_paint_set_stroke_cap(sk_paint_t*, sk_stroke_cap_t);
-=======
-sk_stroke_cap_t sk_paint_get_stroke_cap(const sk_paint_t*);
-void sk_paint_set_stroke_cap(sk_paint_t*, sk_stroke_cap_t);
->>>>>>> miniblink49
 
 typedef enum {
     MITER_SK_STROKE_JOIN,
@@ -139,7 +112,6 @@ typedef enum {
     BEVEL_SK_STROKE_JOIN
 } sk_stroke_join_t;
 
-<<<<<<< HEAD
 /**
     Return the paint's stroke join type, specifies the treatment that
     is applied to corners in paths and rectangles
@@ -150,35 +122,23 @@ SK_API sk_stroke_join_t sk_paint_get_stroke_join(const sk_paint_t*);
     is applied to corners in paths and rectangles
  */
 SK_API void sk_paint_set_stroke_join(sk_paint_t*, sk_stroke_join_t);
-=======
-sk_stroke_join_t sk_paint_get_stroke_join(const sk_paint_t*);
-void sk_paint_set_stroke_join(sk_paint_t*, sk_stroke_join_t);
->>>>>>> miniblink49
 
 /**
  *  Set the paint's shader to the specified parameter. This will automatically call unref() on
  *  any previous value, and call ref() on the new value.
  */
-<<<<<<< HEAD
 SK_API void sk_paint_set_shader(sk_paint_t*, sk_shader_t*);
-=======
-void sk_paint_set_shader(sk_paint_t*, sk_shader_t*);
->>>>>>> miniblink49
 
 /**
  *  Set the paint's maskfilter to the specified parameter. This will automatically call unref() on
  *  any previous value, and call ref() on the new value.
  */
-<<<<<<< HEAD
 SK_API void sk_paint_set_maskfilter(sk_paint_t*, sk_maskfilter_t*);
 
 /**
  *  Set the paint's xfermode to the specified parameter.
  */
 SK_API void sk_paint_set_xfermode_mode(sk_paint_t*, sk_xfermode_mode_t);
-=======
-void sk_paint_set_maskfilter(sk_paint_t*, sk_maskfilter_t*);
->>>>>>> miniblink49
 
 SK_C_PLUS_PLUS_END_GUARD
 

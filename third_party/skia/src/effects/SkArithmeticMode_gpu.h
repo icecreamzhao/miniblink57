@@ -31,37 +31,23 @@ class GrGLArtithmeticFP;
 
 class GrArithmeticFP : public GrFragmentProcessor {
 public:
-<<<<<<< HEAD
     static sk_sp<GrFragmentProcessor> Make(float k1, float k2, float k3, float k4,
         bool enforcePMColor, sk_sp<GrFragmentProcessor> dst)
     {
         return sk_sp<GrFragmentProcessor>(new GrArithmeticFP(k1, k2, k3, k4, enforcePMColor,
             std::move(dst)));
-=======
-    static GrFragmentProcessor* Create(GrProcessorDataManager* procDataManager, float k1, float k2,
-                                       float k3, float k4, bool enforcePMColor,
-                                       GrTexture* background) {
-        return SkNEW_ARGS(GrArithmeticFP, (procDataManager, k1, k2, k3, k4, enforcePMColor,
-                                           background));
->>>>>>> miniblink49
     }
 
     ~GrArithmeticFP() override {};
 
     const char* name() const override { return "Arithmetic"; }
 
-<<<<<<< HEAD
     SkString dumpInfo() const override
     {
         SkString str;
         str.appendf("K1: %.2f K2: %.2f K3: %.2f K4: %.2f", fK1, fK2, fK3, fK4);
         return str;
     }
-=======
-    void getGLProcessorKey(const GrGLSLCaps& caps, GrProcessorKeyBuilder* b) const override;
-
-    GrGLFragmentProcessor* createGLInstance() const override;
->>>>>>> miniblink49
 
     float k1() const { return fK1; }
     float k2() const { return fK2; }
@@ -70,32 +56,19 @@ public:
     bool enforcePMColor() const { return fEnforcePMColor; }
 
 private:
-<<<<<<< HEAD
     GrGLSLFragmentProcessor* onCreateGLSLInstance() const override;
 
     void onGetGLSLProcessorKey(const GrGLSLCaps& caps, GrProcessorKeyBuilder* b) const override;
 
-=======
->>>>>>> miniblink49
     bool onIsEqual(const GrFragmentProcessor&) const override;
 
     void onComputeInvariantOutput(GrInvariantOutput* inout) const override;
 
-<<<<<<< HEAD
     GrArithmeticFP(float k1, float k2, float k3, float k4, bool enforcePMColor,
         sk_sp<GrFragmentProcessor> dst);
 
     float fK1, fK2, fK3, fK4;
     bool fEnforcePMColor;
-=======
-    GrArithmeticFP(GrProcessorDataManager*, float k1, float k2, float k3, float k4,
-                   bool enforcePMColor, GrTexture* background);
-
-    float                       fK1, fK2, fK3, fK4;
-    bool                        fEnforcePMColor;
-    GrCoordTransform            fBackgroundTransform;
-    GrTextureAccess             fBackgroundAccess;
->>>>>>> miniblink49
 
     GR_DECLARE_FRAGMENT_PROCESSOR_TEST;
     typedef GrFragmentProcessor INHERITED;
@@ -107,7 +80,6 @@ private:
 
 class GrArithmeticXPFactory : public GrXPFactory {
 public:
-<<<<<<< HEAD
     static sk_sp<GrXPFactory> Make(float k1, float k2, float k3, float k4, bool enforcePMColor)
     {
         return sk_sp<GrXPFactory>(new GrArithmeticXPFactory(k1, k2, k3, k4, enforcePMColor));
@@ -133,42 +105,6 @@ private:
     {
         const GrArithmeticXPFactory& xpf = xpfBase.cast<GrArithmeticXPFactory>();
         if (fK1 != xpf.fK1 || fK2 != xpf.fK2 || fK3 != xpf.fK3 || fK4 != xpf.fK4 || fEnforcePMColor != xpf.fEnforcePMColor) {
-=======
-    static GrXPFactory* Create(float k1, float k2, float k3, float k4, bool enforcePMColor) {
-        return SkNEW_ARGS(GrArithmeticXPFactory, (k1, k2, k3, k4, enforcePMColor));
-    }
-
-    bool supportsRGBCoverage(GrColor knownColor, uint32_t knownColorFlags) const override {
-        return true;
-    }
-
-    void getInvariantBlendedColor(const GrProcOptInfo& colorPOI,
-                                  GrXPFactory::InvariantBlendedColor*) const override;
-
-private:
-    GrArithmeticXPFactory(float k1, float k2, float k3, float k4, bool enforcePMColor); 
-
-    GrXferProcessor* onCreateXferProcessor(const GrCaps& caps,
-                                           const GrProcOptInfo& colorPOI,
-                                           const GrProcOptInfo& coveragePOI,
-                                           bool hasMixedSamples,
-                                           const DstTexture*) const override; 
-
-    bool willReadDstColor(const GrCaps& caps,
-                          const GrProcOptInfo& colorPOI,
-                          const GrProcOptInfo& coveragePOI,
-                          bool hasMixedSamples) const override {
-        return true;
-    }
-
-    bool onIsEqual(const GrXPFactory& xpfBase) const override {
-        const GrArithmeticXPFactory& xpf = xpfBase.cast<GrArithmeticXPFactory>();
-        if (fK1 != xpf.fK1 ||
-            fK2 != xpf.fK2 ||
-            fK3 != xpf.fK3 ||
-            fK4 != xpf.fK4 ||
-            fEnforcePMColor != xpf.fEnforcePMColor) {
->>>>>>> miniblink49
             return false;
         }
         return true;
@@ -176,13 +112,8 @@ private:
 
     GR_DECLARE_XP_FACTORY_TEST;
 
-<<<<<<< HEAD
     float fK1, fK2, fK3, fK4;
     bool fEnforcePMColor;
-=======
-    float                       fK1, fK2, fK3, fK4;
-    bool                        fEnforcePMColor;
->>>>>>> miniblink49
 
     typedef GrXPFactory INHERITED;
 };

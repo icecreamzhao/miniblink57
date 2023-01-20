@@ -9,10 +9,7 @@
 #define SkSurface_Base_DEFINED
 
 #include "SkCanvas.h"
-<<<<<<< HEAD
 #include "SkImagePriv.h"
-=======
->>>>>>> miniblink49
 #include "SkSurface.h"
 #include "SkSurfacePriv.h"
 
@@ -22,7 +19,6 @@ public:
     SkSurface_Base(const SkImageInfo&, const SkSurfaceProps*);
     virtual ~SkSurface_Base();
 
-<<<<<<< HEAD
     virtual GrBackendObject onGetTextureHandle(BackendHandleAccess)
     {
         return 0;
@@ -30,13 +26,6 @@ public:
 
     virtual bool onGetRenderTargetHandle(GrBackendObject*, BackendHandleAccess)
     {
-=======
-    virtual GrBackendObject onGetTextureHandle(BackendHandleAccess) {
-        return 0;
-    }
-
-    virtual bool onGetRenderTargetHandle(GrBackendObject*, BackendHandleAccess) {
->>>>>>> miniblink49
         return false;
     }
 
@@ -48,11 +37,7 @@ public:
      */
     virtual SkCanvas* onNewCanvas() = 0;
 
-<<<<<<< HEAD
     virtual sk_sp<SkSurface> onNewSurface(const SkImageInfo&) = 0;
-=======
-    virtual SkSurface* onNewSurface(const SkImageInfo&) = 0;
->>>>>>> miniblink49
 
     /**
      *  Allocate an SkImage that represents the current contents of the surface.
@@ -60,11 +45,7 @@ public:
      *  must faithfully represent the current contents, even if the surface
      *  is changed after this called (e.g. it is drawn to via its canvas).
      */
-<<<<<<< HEAD
     virtual sk_sp<SkImage> onNewImageSnapshot(SkBudgeted, ForceCopyMode) = 0;
-=======
-    virtual SkImage* onNewImageSnapshot(Budgeted) = 0;
->>>>>>> miniblink49
 
     /**
      *  Default implementation:
@@ -81,11 +62,7 @@ public:
      * Called as a performance hint when the Surface is allowed to make it's contents
      * undefined.
      */
-<<<<<<< HEAD
     virtual void onDiscard() { }
-=======
-    virtual void onDiscard() {}
->>>>>>> miniblink49
 
     /**
      *  If the surface is about to change, we call this so that our subclass
@@ -94,7 +71,6 @@ public:
      */
     virtual void onCopyOnWrite(ContentChangeMode) = 0;
 
-<<<<<<< HEAD
     /**
      *  Signal the surface to remind its backing store that it's mutable again.
      *  Called only when we _didn't_ copy-on-write; we assume the copies start mutable.
@@ -110,16 +86,11 @@ public:
     inline sk_sp<SkImage> refCachedImage(SkBudgeted, ForceUnique);
 
     bool hasCachedImage() const { return fCachedImage != nullptr; }
-=======
-    inline SkCanvas* getCachedCanvas();
-    inline SkImage* getCachedImage(Budgeted);
->>>>>>> miniblink49
 
     // called by SkSurface to compute a new genID
     uint32_t newGenerationID();
 
 private:
-<<<<<<< HEAD
     SkCanvas* fCachedCanvas;
     SkImage* fCachedImage;
 
@@ -129,26 +100,15 @@ private:
     // would trigger a copy-on-write.
     bool outstandingImageSnapshot() const;
 
-=======
-    SkCanvas*   fCachedCanvas;
-    SkImage*    fCachedImage;
-
-    void aboutToDraw(ContentChangeMode mode);
->>>>>>> miniblink49
     friend class SkCanvas;
     friend class SkSurface;
 
     typedef SkSurface INHERITED;
 };
 
-<<<<<<< HEAD
 SkCanvas* SkSurface_Base::getCachedCanvas()
 {
     if (nullptr == fCachedCanvas) {
-=======
-SkCanvas* SkSurface_Base::getCachedCanvas() {
-    if (NULL == fCachedCanvas) {
->>>>>>> miniblink49
         fCachedCanvas = this->onNewCanvas();
         if (fCachedCanvas) {
             fCachedCanvas->setSurfaceBase(this);
@@ -157,7 +117,6 @@ SkCanvas* SkSurface_Base::getCachedCanvas() {
     return fCachedCanvas;
 }
 
-<<<<<<< HEAD
 sk_sp<SkImage> SkSurface_Base::refCachedImage(SkBudgeted budgeted, ForceUnique unique)
 {
     SkImage* snap = fCachedImage;
@@ -175,14 +134,6 @@ sk_sp<SkImage> SkSurface_Base::refCachedImage(SkBudgeted budgeted, ForceUnique u
     }
     SkASSERT(!fCachedCanvas || fCachedCanvas->getSurfaceBase() == this);
     return sk_sp<SkImage>(snap);
-=======
-SkImage* SkSurface_Base::getCachedImage(Budgeted budgeted) {
-    if (NULL == fCachedImage) {
-        fCachedImage = this->onNewImageSnapshot(budgeted);
-        SkASSERT(!fCachedCanvas || fCachedCanvas->getSurfaceBase() == this);
-    }
-    return fCachedImage;
->>>>>>> miniblink49
 }
 
 #endif

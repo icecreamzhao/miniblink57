@@ -26,67 +26,28 @@
 #ifndef PlatformEvent_h
 #define PlatformEvent_h
 
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/Noncopyable.h"
 #include "wtf/Time.h"
 
-=======
->>>>>>> miniblink49
 namespace blink {
 
 class PlatformEvent {
 public:
-<<<<<<< HEAD
     enum EventType {
         NoType = 0,
 
-=======
-    enum Type {
-        NoType = 0,
-
-        // PlatformKeyboardEvent
-        KeyDown,
-        KeyUp,
-        RawKeyDown,
-        Char,
-
->>>>>>> miniblink49
         // PlatformMouseEvent
         MouseMoved,
         MousePressed,
         MouseReleased,
         MouseScroll,
 
-<<<<<<< HEAD
-=======
-        // PlatformWheelEvent
-        Wheel,
-
-        // PlatformGestureEvent
-        GestureScrollBegin,
-        GestureScrollEnd,
-        GestureScrollUpdate,
-        GestureTap,
-        GestureTapUnconfirmed,
-        GestureTapDown,
-        GestureShowPress,
-        GestureTapDownCancel,
-        GestureTwoFingerTap,
-        GestureLongPress,
-        GestureLongTap,
-        GesturePinchBegin,
-        GesturePinchEnd,
-        GesturePinchUpdate,
-        GestureFlingStart,
-
->>>>>>> miniblink49
         // PlatformTouchEvent
         TouchStart,
         TouchMove,
         TouchEnd,
         TouchCancel,
-<<<<<<< HEAD
         TouchScrollStarted,
     };
 
@@ -149,48 +110,19 @@ public:
     };
 
     EventType type() const { return static_cast<EventType>(m_type); }
-=======
-    };
-
-    enum Modifiers {
-        AltKey      = 1 << 0,
-        CtrlKey     = 1 << 1,
-        MetaKey     = 1 << 2,
-        ShiftKey    = 1 << 3,
-
-        LeftButtonDown   = 1 << 6,
-        MiddleButtonDown = 1 << 7,
-        RightButtonDown  = 1 << 8,
-    };
-
-    enum RailsMode {
-        RailsModeFree       = 0,
-        RailsModeHorizontal = 1,
-        RailsModeVertical   = 2,
-    };
-
-    Type type() const { return static_cast<Type>(m_type); }
->>>>>>> miniblink49
 
     bool shiftKey() const { return m_modifiers & ShiftKey; }
     bool ctrlKey() const { return m_modifiers & CtrlKey; }
     bool altKey() const { return m_modifiers & AltKey; }
     bool metaKey() const { return m_modifiers & MetaKey; }
 
-<<<<<<< HEAD
     Modifiers getModifiers() const { return static_cast<Modifiers>(m_modifiers); }
 
     TimeTicks timestamp() const { return m_timestamp; }
-=======
-    unsigned modifiers() const { return m_modifiers; }
-
-    double timestamp() const { return m_timestamp; }
->>>>>>> miniblink49
 
 protected:
     PlatformEvent()
         : m_type(NoType)
-<<<<<<< HEAD
         , m_modifiers()
     {
     }
@@ -202,28 +134,12 @@ protected:
     }
 
     PlatformEvent(EventType type, Modifiers modifiers, TimeTicks timestamp)
-=======
-        , m_modifiers(0)
-        , m_timestamp(0)
-    {
-    }
-
-    explicit PlatformEvent(Type type)
-        : m_type(type)
-        , m_modifiers(0)
-        , m_timestamp(0)
-    {
-    }
-
-    PlatformEvent(Type type, Modifiers modifiers, double timestamp)
->>>>>>> miniblink49
         : m_type(type)
         , m_modifiers(modifiers)
         , m_timestamp(timestamp)
     {
     }
 
-<<<<<<< HEAD
     // Explicit protected destructor so that people don't accidentally
     // delete a PlatformEvent.
     ~PlatformEvent() { }
@@ -231,32 +147,6 @@ protected:
     unsigned m_type;
     unsigned m_modifiers;
     TimeTicks m_timestamp;
-=======
-    PlatformEvent(Type type, bool shiftKey, bool ctrlKey, bool altKey, bool metaKey, double timestamp)
-        : m_type(type)
-        , m_modifiers(0)
-        , m_timestamp(timestamp)
-    {
-        if (shiftKey)
-            m_modifiers |= ShiftKey;
-        if (ctrlKey)
-            m_modifiers |= CtrlKey;
-        if (altKey)
-            m_modifiers |= AltKey;
-        if (metaKey)
-            m_modifiers |= MetaKey;
-    }
-
-    // Explicit protected destructor so that people don't accidentally
-    // delete a PlatformEvent.
-    ~PlatformEvent()
-    {
-    }
-
-    unsigned m_type;
-    unsigned m_modifiers;
-    double m_timestamp;
->>>>>>> miniblink49
 };
 
 } // namespace blink

@@ -28,10 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "modules/webmidi/MIDIInput.h"
 
 #include "modules/webmidi/MIDIAccess.h"
@@ -40,7 +36,6 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 using midi::mojom::PortState;
 
 MIDIInput* MIDIInput::create(MIDIAccess* access,
@@ -60,19 +55,6 @@ MIDIInput::MIDIInput(MIDIAccess* access,
     const String& name,
     const String& version,
     PortState state)
-=======
-using PortState = MIDIAccessor::MIDIPortState;
-
-MIDIInput* MIDIInput::create(MIDIAccess* access, const String& id, const String& manufacturer, const String& name, const String& version, PortState state)
-{
-    ASSERT(access);
-    MIDIInput* input = new MIDIInput(access, id, manufacturer, name, version, state);
-    input->suspendIfNeeded();
-    return input;
-}
-
-MIDIInput::MIDIInput(MIDIAccess* access, const String& id, const String& manufacturer, const String& name, const String& version, PortState state)
->>>>>>> miniblink49
     : MIDIPort(access, id, manufacturer, name, TypeInput, version, state)
 {
 }
@@ -82,11 +64,7 @@ EventListener* MIDIInput::onmidimessage()
     return getAttributeEventListener(EventTypeNames::midimessage);
 }
 
-<<<<<<< HEAD
 void MIDIInput::setOnmidimessage(EventListener* listener)
-=======
-void MIDIInput::setOnmidimessage(PassRefPtr<EventListener> listener)
->>>>>>> miniblink49
 {
     // Implicit open. It does nothing if the port is already opened.
     // See http://www.w3.org/TR/webmidi/#widl-MIDIPort-open-Promise-MIDIPort
@@ -95,7 +73,6 @@ void MIDIInput::setOnmidimessage(PassRefPtr<EventListener> listener)
     setAttributeEventListener(EventTypeNames::midimessage, listener);
 }
 
-<<<<<<< HEAD
 void MIDIInput::addedEventListener(
     const AtomicString& eventType,
     RegisteredEventListener& registeredListener)
@@ -113,11 +90,6 @@ void MIDIInput::didReceiveMIDIData(unsigned portIndex,
     double timeStamp)
 {
     DCHECK(isMainThread());
-=======
-void MIDIInput::didReceiveMIDIData(unsigned portIndex, const unsigned char* data, size_t length, double timeStamp)
-{
-    ASSERT(isMainThread());
->>>>>>> miniblink49
 
     if (!length)
         return;
@@ -125,7 +97,6 @@ void MIDIInput::didReceiveMIDIData(unsigned portIndex, const unsigned char* data
     if (getConnection() != ConnectionStateOpen)
         return;
 
-<<<<<<< HEAD
     // Drop sysex message here when the client does not request it. Note that this
     // is not a security check but an automatic filtering for clients that do not
     // want sysex message. Also note that sysex message will never be sent unless
@@ -133,14 +104,6 @@ void MIDIInput::didReceiveMIDIData(unsigned portIndex, const unsigned char* data
     if (data[0] == 0xf0 && !midiAccess()->sysexEnabled())
         return;
     DOMUint8Array* array = DOMUint8Array::create(data, length);
-=======
-    // Drop sysex message here when the client does not request it. Note that this is not a security check but an
-    // automatic filtering for clients that do not want sysex message. Also note that sysex message will never be sent
-    // unless the current process has an explicit permission to handle sysex message.
-    if (data[0] == 0xf0 && !midiAccess()->sysexEnabled())
-        return;
-    RefPtr<DOMUint8Array> array = DOMUint8Array::create(data, length);
->>>>>>> miniblink49
     dispatchEvent(MIDIMessageEvent::create(timeStamp, array));
 }
 

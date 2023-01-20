@@ -2,12 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "HTMLElementFactory.h"
 
 #include "HTMLNames.h"
+#include "core/dom/Document.h"
+#include "core/dom/custom/CustomElement.h"
+#include "core/dom/custom/V0CustomElement.h"
+#include "core/dom/custom/V0CustomElementRegistrationContext.h"
+#include "core/frame/Settings.h"
 #include "core/html/HTMLAnchorElement.h"
-#include "core/html/HTMLAppletElement.h"
 #include "core/html/HTMLAreaElement.h"
 #include "core/html/HTMLAudioElement.h"
 #include "core/html/HTMLBDIElement.h"
@@ -37,7 +40,6 @@
 #include "core/html/HTMLIFrameElement.h"
 #include "core/html/HTMLImageElement.h"
 #include "core/html/HTMLInputElement.h"
-#include "core/html/HTMLKeygenElement.h"
 #include "core/html/HTMLLIElement.h"
 #include "core/html/HTMLLabelElement.h"
 #include "core/html/HTMLLegendElement.h"
@@ -67,6 +69,7 @@
 #include "core/html/HTMLScriptElement.h"
 #include "core/html/HTMLSelectElement.h"
 #include "core/html/HTMLShadowElement.h"
+#include "core/html/HTMLSlotElement.h"
 #include "core/html/HTMLSourceElement.h"
 #include "core/html/HTMLSpanElement.h"
 #include "core/html/HTMLStyleElement.h"
@@ -85,11 +88,6 @@
 #include "core/html/HTMLUnknownElement.h"
 #include "core/html/HTMLVideoElement.h"
 #include "core/html/HTMLWBRElement.h"
-#include "core/html/HTMLUnknownElement.h"
-#include "core/dom/custom/CustomElement.h"
-#include "core/dom/custom/CustomElementRegistrationContext.h"
-#include "core/dom/Document.h"
-#include "core/frame/Settings.h"
 #include "platform/RuntimeEnabledFeatures.h"
 #include "wtf/HashMap.h"
 
@@ -97,993 +95,854 @@ namespace blink {
 
 using namespace HTMLNames;
 
-typedef PassRefPtrWillBeRawPtr<HTMLElement> (*ConstructorFunction)(
+typedef HTMLElement* (*ConstructorFunction)(
     Document&,
-    HTMLFormElement*,
-    bool createdByParser);
+    CreateElementFlags);
 
 typedef HashMap<AtomicString, ConstructorFunction> FunctionMap;
 
 static FunctionMap* g_constructors = 0;
 
-static PassRefPtrWillBeRawPtr<HTMLElement> abbrConstructor(
+static HTMLElement* abbrConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(abbrTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> acronymConstructor(
+static HTMLElement* acronymConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(acronymTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> addressConstructor(
+static HTMLElement* addressConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(addressTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> articleConstructor(
+static HTMLElement* articleConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(articleTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> asideConstructor(
+static HTMLElement* asideConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(asideTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> bConstructor(
+static HTMLElement* bConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(bTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> basefontConstructor(
+static HTMLElement* basefontConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(basefontTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> bdoConstructor(
+static HTMLElement* bdoConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(bdoTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> bigConstructor(
+static HTMLElement* bigConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(bigTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> centerConstructor(
+static HTMLElement* centerConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(centerTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> citeConstructor(
+static HTMLElement* citeConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(citeTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> codeConstructor(
+static HTMLElement* codeConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(codeTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> commandConstructor(
+static HTMLElement* ddConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
-{
-    return HTMLElement::create(commandTag, document);
-}
-static PassRefPtrWillBeRawPtr<HTMLElement> ddConstructor(
-    Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(ddTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> dfnConstructor(
+static HTMLElement* dfnConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(dfnTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> dtConstructor(
+static HTMLElement* dtConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(dtTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> emConstructor(
+static HTMLElement* emConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(emTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> figcaptionConstructor(
+static HTMLElement* figcaptionConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(figcaptionTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> figureConstructor(
+static HTMLElement* figureConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(figureTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> footerConstructor(
+static HTMLElement* footerConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(footerTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> headerConstructor(
+static HTMLElement* headerConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(headerTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> hgroupConstructor(
+static HTMLElement* hgroupConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(hgroupTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> iConstructor(
+static HTMLElement* iConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(iTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> kbdConstructor(
+static HTMLElement* kbdConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(kbdTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> layerConstructor(
+static HTMLElement* layerConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(layerTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> mainConstructor(
+static HTMLElement* mainConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(mainTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> markConstructor(
+static HTMLElement* markConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(markTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> navConstructor(
+static HTMLElement* navConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(navTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> nobrConstructor(
+static HTMLElement* nobrConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(nobrTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> noframesConstructor(
+static HTMLElement* noframesConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(noframesTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> nolayerConstructor(
+static HTMLElement* nolayerConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(nolayerTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> plaintextConstructor(
+static HTMLElement* plaintextConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(plaintextTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> rpConstructor(
+static HTMLElement* rbConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
+{
+    return HTMLElement::create(rbTag, document);
+}
+static HTMLElement* rpConstructor(
+    Document& document,
+    CreateElementFlags flags)
 {
     return HTMLElement::create(rpTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> sConstructor(
+static HTMLElement* rtcConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
+{
+    return HTMLElement::create(rtcTag, document);
+}
+static HTMLElement* sConstructor(
+    Document& document,
+    CreateElementFlags flags)
 {
     return HTMLElement::create(sTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> sampConstructor(
+static HTMLElement* sampConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(sampTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> sectionConstructor(
+static HTMLElement* sectionConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(sectionTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> smallConstructor(
+static HTMLElement* smallConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(smallTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> strikeConstructor(
+static HTMLElement* strikeConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(strikeTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> strongConstructor(
+static HTMLElement* strongConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(strongTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> subConstructor(
+static HTMLElement* subConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(subTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> supConstructor(
+static HTMLElement* supConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(supTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> ttConstructor(
+static HTMLElement* ttConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(ttTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> uConstructor(
+static HTMLElement* uConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(uTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> varConstructor(
+static HTMLElement* varConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLElement::create(varTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> aConstructor(
+static HTMLElement* aConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLAnchorElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> areaConstructor(
+static HTMLElement* areaConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLAreaElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> audioConstructor(
+static HTMLElement* audioConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
-    if (!RuntimeEnabledFeatures::mediaEnabled())
-        return HTMLUnknownElement::create(audioTag, document);
     return HTMLAudioElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> brConstructor(
+static HTMLElement* brConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLBRElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> baseConstructor(
+static HTMLElement* baseConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLBaseElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> bodyConstructor(
+static HTMLElement* bodyConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLBodyElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> canvasConstructor(
+static HTMLElement* buttonConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
+{
+    return HTMLButtonElement::create(document);
+}
+static HTMLElement* canvasConstructor(
+    Document& document,
+    CreateElementFlags flags)
 {
     return HTMLCanvasElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> contentConstructor(
+static HTMLElement* contentConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLContentElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> dlConstructor(
+static HTMLElement* dlConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLDListElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> datalistConstructor(
+static HTMLElement* datalistConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLDataListElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> detailsConstructor(
+static HTMLElement* detailsConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLDetailsElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> dialogConstructor(
+static HTMLElement* dialogConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLDialogElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> dirConstructor(
+static HTMLElement* dirConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLDirectoryElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> divConstructor(
+static HTMLElement* divConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLDivElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> fontConstructor(
+static HTMLElement* fieldsetConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
+{
+    return HTMLFieldSetElement::create(document);
+}
+static HTMLElement* fontConstructor(
+    Document& document,
+    CreateElementFlags flags)
 {
     return HTMLFontElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> formConstructor(
+static HTMLElement* formConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLFormElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> frameConstructor(
+static HTMLElement* frameConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLFrameElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> framesetConstructor(
+static HTMLElement* framesetConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLFrameSetElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> hrConstructor(
+static HTMLElement* hrConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLHRElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> headConstructor(
+static HTMLElement* headConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLHeadElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> h1Constructor(
+static HTMLElement* h1Constructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLHeadingElement::create(h1Tag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> h2Constructor(
+static HTMLElement* h2Constructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLHeadingElement::create(h2Tag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> h3Constructor(
+static HTMLElement* h3Constructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLHeadingElement::create(h3Tag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> h4Constructor(
+static HTMLElement* h4Constructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLHeadingElement::create(h4Tag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> h5Constructor(
+static HTMLElement* h5Constructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLHeadingElement::create(h5Tag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> h6Constructor(
+static HTMLElement* h6Constructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLHeadingElement::create(h6Tag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> htmlConstructor(
+static HTMLElement* htmlConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLHtmlElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> iframeConstructor(
+static HTMLElement* iframeConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLIFrameElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> liConstructor(
+static HTMLElement* liConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLLIElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> legendConstructor(
+static HTMLElement* labelConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
+{
+    return HTMLLabelElement::create(document);
+}
+static HTMLElement* legendConstructor(
+    Document& document,
+    CreateElementFlags flags)
 {
     return HTMLLegendElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> mapConstructor(
+static HTMLElement* mapConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLMapElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> marqueeConstructor(
+static HTMLElement* marqueeConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLMarqueeElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> menuConstructor(
+static HTMLElement* menuConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLMenuElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> menuitemConstructor(
+static HTMLElement* menuitemConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     if (!RuntimeEnabledFeatures::contextMenuEnabled())
         return HTMLUnknownElement::create(menuitemTag, document);
     return HTMLMenuItemElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> metaConstructor(
+static HTMLElement* metaConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLMetaElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> meterConstructor(
+static HTMLElement* meterConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLMeterElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> delConstructor(
+static HTMLElement* delConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLModElement::create(delTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> insConstructor(
+static HTMLElement* insConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLModElement::create(insTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> olConstructor(
+static HTMLElement* olConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLOListElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> optgroupConstructor(
+static HTMLElement* optgroupConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLOptGroupElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> optionConstructor(
+static HTMLElement* optionConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLOptionElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> pConstructor(
+static HTMLElement* outputConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
+{
+    return HTMLOutputElement::create(document);
+}
+static HTMLElement* pConstructor(
+    Document& document,
+    CreateElementFlags flags)
 {
     return HTMLParagraphElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> paramConstructor(
+static HTMLElement* paramConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLParamElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> pictureConstructor(
+static HTMLElement* pictureConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLPictureElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> preConstructor(
+static HTMLElement* preConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLPreElement::create(preTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> listingConstructor(
+static HTMLElement* listingConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLPreElement::create(listingTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> xmpConstructor(
+static HTMLElement* xmpConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLPreElement::create(xmpTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> progressConstructor(
+static HTMLElement* progressConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLProgressElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> blockquoteConstructor(
+static HTMLElement* blockquoteConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLQuoteElement::create(blockquoteTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> qConstructor(
+static HTMLElement* qConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLQuoteElement::create(qTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> shadowConstructor(
+static HTMLElement* selectConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
+{
+    return HTMLSelectElement::create(document);
+}
+static HTMLElement* shadowConstructor(
+    Document& document,
+    CreateElementFlags flags)
 {
     return HTMLShadowElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> sourceConstructor(
+static HTMLElement* slotConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
-    if (!RuntimeEnabledFeatures::mediaEnabled())
-        return HTMLUnknownElement::create(sourceTag, document);
+    return HTMLSlotElement::create(document);
+}
+static HTMLElement* sourceConstructor(
+    Document& document,
+    CreateElementFlags flags)
+{
     return HTMLSourceElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> spanConstructor(
+static HTMLElement* spanConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLSpanElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> captionConstructor(
+static HTMLElement* captionConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLTableCaptionElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> tdConstructor(
+static HTMLElement* tdConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLTableCellElement::create(tdTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> thConstructor(
+static HTMLElement* thConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLTableCellElement::create(thTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> colConstructor(
+static HTMLElement* colConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLTableColElement::create(colTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> colgroupConstructor(
+static HTMLElement* colgroupConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLTableColElement::create(colgroupTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> tableConstructor(
+static HTMLElement* tableConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLTableElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> trConstructor(
+static HTMLElement* trConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLTableRowElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> tbodyConstructor(
+static HTMLElement* tbodyConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLTableSectionElement::create(tbodyTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> tfootConstructor(
+static HTMLElement* tfootConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLTableSectionElement::create(tfootTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> theadConstructor(
+static HTMLElement* theadConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLTableSectionElement::create(theadTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> templateConstructor(
+static HTMLElement* templateConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLTemplateElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> titleConstructor(
+static HTMLElement* textareaConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
+{
+    return HTMLTextAreaElement::create(document);
+}
+static HTMLElement* titleConstructor(
+    Document& document,
+    CreateElementFlags flags)
 {
     return HTMLTitleElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> trackConstructor(
+static HTMLElement* trackConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLTrackElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> ulConstructor(
+static HTMLElement* ulConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLUListElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> bgsoundConstructor(
+static HTMLElement* appletConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
+{
+    return HTMLUnknownElement::create(appletTag, document);
+}
+static HTMLElement* bgsoundConstructor(
+    Document& document,
+    CreateElementFlags flags)
 {
     return HTMLUnknownElement::create(bgsoundTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> imageConstructor(
+static HTMLElement* commandConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
+{
+    return HTMLUnknownElement::create(commandTag, document);
+}
+static HTMLElement* imageConstructor(
+    Document& document,
+    CreateElementFlags flags)
 {
     return HTMLUnknownElement::create(imageTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> rbConstructor(
+static HTMLElement* keygenConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
-    return HTMLUnknownElement::create(rbTag, document);
+    return HTMLUnknownElement::create(keygenTag, document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> rtcConstructor(
+static HTMLElement* videoConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
-    return HTMLUnknownElement::create(rtcTag, document);
-}
-static PassRefPtrWillBeRawPtr<HTMLElement> videoConstructor(
-    Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
-{
-    if (!RuntimeEnabledFeatures::mediaEnabled())
-        return HTMLUnknownElement::create(videoTag, document);
     return HTMLVideoElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> buttonConstructor(
+static HTMLElement* embedConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
-    return HTMLButtonElement::create(document, formElement);
+    return HTMLEmbedElement::create(document, flags & CreatedByParser);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> fieldsetConstructor(
+static HTMLElement* imgConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
-    return HTMLFieldSetElement::create(document, formElement);
+    return HTMLImageElement::create(document, flags & CreatedByParser);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> keygenConstructor(
+static HTMLElement* inputConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
-    return HTMLKeygenElement::create(document, formElement);
+    return HTMLInputElement::create(document, flags & CreatedByParser);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> labelConstructor(
+static HTMLElement* linkConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
-    return HTMLLabelElement::create(document, formElement);
+    return HTMLLinkElement::create(document, flags & CreatedByParser);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> outputConstructor(
+static HTMLElement* objectConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
-    return HTMLOutputElement::create(document, formElement);
+    return HTMLObjectElement::create(document, flags & CreatedByParser);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> selectConstructor(
+static HTMLElement* scriptConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
-    return HTMLSelectElement::create(document, formElement);
+    return HTMLScriptElement::create(document, flags & CreatedByParser);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> textareaConstructor(
+static HTMLElement* styleConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
-    return HTMLTextAreaElement::create(document, formElement);
+    return HTMLStyleElement::create(document, flags & CreatedByParser);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> appletConstructor(
+static HTMLElement* bdiConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
-{
-    return HTMLAppletElement::create(document, createdByParser);
-}
-static PassRefPtrWillBeRawPtr<HTMLElement> embedConstructor(
-    Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
-{
-    return HTMLEmbedElement::create(document, createdByParser);
-}
-static PassRefPtrWillBeRawPtr<HTMLElement> linkConstructor(
-    Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
-{
-    return HTMLLinkElement::create(document, createdByParser);
-}
-static PassRefPtrWillBeRawPtr<HTMLElement> scriptConstructor(
-    Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
-{
-    return HTMLScriptElement::create(document, createdByParser);
-}
-static PassRefPtrWillBeRawPtr<HTMLElement> styleConstructor(
-    Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
-{
-    return HTMLStyleElement::create(document, createdByParser);
-}
-static PassRefPtrWillBeRawPtr<HTMLElement> imgConstructor(
-    Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
-{
-    return HTMLImageElement::create(document, formElement, createdByParser);
-}
-static PassRefPtrWillBeRawPtr<HTMLElement> inputConstructor(
-    Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
-{
-    return HTMLInputElement::create(document, formElement, createdByParser);
-}
-static PassRefPtrWillBeRawPtr<HTMLElement> objectConstructor(
-    Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
-{
-    return HTMLObjectElement::create(document, formElement, createdByParser);
-}
-static PassRefPtrWillBeRawPtr<HTMLElement> bdiConstructor(
-    Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLBDIElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> noembedConstructor(
+static HTMLElement* noembedConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLNoEmbedElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> noscriptConstructor(
+static HTMLElement* noscriptConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLNoScriptElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> rtConstructor(
+static HTMLElement* rtConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLRTElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> rubyConstructor(
+static HTMLElement* rubyConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLRubyElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> summaryConstructor(
+static HTMLElement* summaryConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLSummaryElement::create(document);
 }
-static PassRefPtrWillBeRawPtr<HTMLElement> wbrConstructor(
+static HTMLElement* wbrConstructor(
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     return HTMLWBRElement::create(document);
 }
 
 struct CreateHTMLFunctionMapData {
-  const QualifiedName& tag;
-  ConstructorFunction func;
+    const QualifiedName& tag;
+    ConstructorFunction func;
 };
 
 static void createHTMLFunctionMap()
@@ -1105,7 +964,6 @@ static void createHTMLFunctionMap()
         { centerTag, centerConstructor },
         { citeTag, citeConstructor },
         { codeTag, codeConstructor },
-        { commandTag, commandConstructor },
         { ddTag, ddConstructor },
         { dfnTag, dfnConstructor },
         { dtTag, dtConstructor },
@@ -1125,7 +983,9 @@ static void createHTMLFunctionMap()
         { noframesTag, noframesConstructor },
         { nolayerTag, nolayerConstructor },
         { plaintextTag, plaintextConstructor },
+        { rbTag, rbConstructor },
         { rpTag, rpConstructor },
+        { rtcTag, rtcConstructor },
         { sTag, sConstructor },
         { sampTag, sampConstructor },
         { sectionTag, sectionConstructor },
@@ -1143,6 +1003,7 @@ static void createHTMLFunctionMap()
         { brTag, brConstructor },
         { baseTag, baseConstructor },
         { bodyTag, bodyConstructor },
+        { buttonTag, buttonConstructor },
         { canvasTag, canvasConstructor },
         { contentTag, contentConstructor },
         { dlTag, dlConstructor },
@@ -1151,6 +1012,7 @@ static void createHTMLFunctionMap()
         { dialogTag, dialogConstructor },
         { dirTag, dirConstructor },
         { divTag, divConstructor },
+        { fieldsetTag, fieldsetConstructor },
         { fontTag, fontConstructor },
         { formTag, formConstructor },
         { frameTag, frameConstructor },
@@ -1166,6 +1028,7 @@ static void createHTMLFunctionMap()
         { htmlTag, htmlConstructor },
         { iframeTag, iframeConstructor },
         { liTag, liConstructor },
+        { labelTag, labelConstructor },
         { legendTag, legendConstructor },
         { mapTag, mapConstructor },
         { marqueeTag, marqueeConstructor },
@@ -1178,6 +1041,7 @@ static void createHTMLFunctionMap()
         { olTag, olConstructor },
         { optgroupTag, optgroupConstructor },
         { optionTag, optionConstructor },
+        { outputTag, outputConstructor },
         { pTag, pConstructor },
         { paramTag, paramConstructor },
         { pictureTag, pictureConstructor },
@@ -1187,7 +1051,9 @@ static void createHTMLFunctionMap()
         { progressTag, progressConstructor },
         { blockquoteTag, blockquoteConstructor },
         { qTag, qConstructor },
+        { selectTag, selectConstructor },
         { shadowTag, shadowConstructor },
+        { slotTag, slotConstructor },
         { sourceTag, sourceConstructor },
         { spanTag, spanConstructor },
         { captionTag, captionConstructor },
@@ -1201,29 +1067,23 @@ static void createHTMLFunctionMap()
         { tfootTag, tfootConstructor },
         { theadTag, theadConstructor },
         { templateTag, templateConstructor },
+        { textareaTag, textareaConstructor },
         { titleTag, titleConstructor },
         { trackTag, trackConstructor },
         { ulTag, ulConstructor },
-        { bgsoundTag, bgsoundConstructor },
-        { imageTag, imageConstructor },
-        { rbTag, rbConstructor },
-        { rtcTag, rtcConstructor },
-        { videoTag, videoConstructor },
-        { buttonTag, buttonConstructor },
-        { fieldsetTag, fieldsetConstructor },
-        { keygenTag, keygenConstructor },
-        { labelTag, labelConstructor },
-        { outputTag, outputConstructor },
-        { selectTag, selectConstructor },
-        { textareaTag, textareaConstructor },
         { appletTag, appletConstructor },
+        { bgsoundTag, bgsoundConstructor },
+        { commandTag, commandConstructor },
+        { imageTag, imageConstructor },
+        { keygenTag, keygenConstructor },
+        { videoTag, videoConstructor },
         { embedTag, embedConstructor },
-        { linkTag, linkConstructor },
-        { scriptTag, scriptConstructor },
-        { styleTag, styleConstructor },
         { imgTag, imgConstructor },
         { inputTag, inputConstructor },
+        { linkTag, linkConstructor },
         { objectTag, objectConstructor },
+        { scriptTag, scriptConstructor },
+        { styleTag, styleConstructor },
         { bdiTag, bdiConstructor },
         { noembedTag, noembedConstructor },
         { noscriptTag, noscriptConstructor },
@@ -1236,24 +1096,34 @@ static void createHTMLFunctionMap()
         g_constructors->set(data[i].tag.localName(), data[i].func);
 }
 
-PassRefPtrWillBeRawPtr<HTMLElement> HTMLElementFactory::createHTMLElement(
+HTMLElement* HTMLElementFactory::createHTMLElement(
     const AtomicString& localName,
     Document& document,
-    HTMLFormElement* formElement,
-    bool createdByParser)
+    CreateElementFlags flags)
 {
     if (!g_constructors)
         createHTMLFunctionMap();
     if (ConstructorFunction function = g_constructors->get(localName))
-        return function(document, formElement, createdByParser);
+        return function(document, flags);
 
-#if 1 // def MINIBLINK_NOT_IMPLEMENTED
-    if (document.registrationContext() && CustomElement::isValidName(localName)) {
-        RefPtrWillBeRawPtr<Element> element = document.registrationContext()->createCustomTagElement(document, QualifiedName(nullAtom, localName, xhtmlNamespaceURI));
-        ASSERT_WITH_SECURITY_IMPLICATION(element->isHTMLElement());
-        return static_pointer_cast<HTMLElement>(element.release());
+    // createElement handles custom element creation itself in order to
+    // transmit exceptions.
+    // TODO(dominicc): When the HTML parser can pass an error
+    // reporting ExceptionState, and "v0" custom elements have been
+    // removed, consolidate custom element creation into one place.
+    if (flags != CreatedByCreateElement && CustomElement::shouldCreateCustomElement(localName)) {
+        QualifiedName tagName(nullAtom, localName, HTMLNames::xhtmlNamespaceURI);
+        if (flags & AsynchronousCustomElements)
+            return CustomElement::createCustomElementAsync(document, tagName);
+        return CustomElement::createCustomElementSync(document, tagName);
     }
-#endif // MINIBLINK_NOT_IMPLEMENTED
+
+    if (document.registrationContext() && V0CustomElement::isValidName(localName)) {
+        Element* element = document.registrationContext()->createCustomTagElement(
+            document, QualifiedName(nullAtom, localName, xhtmlNamespaceURI));
+        SECURITY_DCHECK(element->isHTMLElement());
+        return toHTMLElement(element);
+    }
 
     return HTMLUnknownElement::create(QualifiedName(nullAtom, localName, xhtmlNamespaceURI), document);
 }

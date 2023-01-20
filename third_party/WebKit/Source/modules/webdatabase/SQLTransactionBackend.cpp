@@ -26,10 +26,6 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "modules/webdatabase/SQLTransactionBackend.h"
 
 #include "modules/webdatabase/Database.h"
@@ -42,7 +38,6 @@
 #include "modules/webdatabase/SQLTransaction.h"
 #include "modules/webdatabase/SQLTransactionClient.h"
 #include "modules/webdatabase/SQLTransactionCoordinator.h"
-<<<<<<< HEAD
 #include "modules/webdatabase/StorageLog.h"
 #include "modules/webdatabase/sqlite/SQLValue.h"
 #include "modules/webdatabase/sqlite/SQLiteTransaction.h"
@@ -54,17 +49,6 @@
 // ==============================
 // The SQLTransaction is a state machine that executes a series of states /
 // steps.
-=======
-#include "modules/webdatabase/sqlite/SQLValue.h"
-#include "modules/webdatabase/sqlite/SQLiteTransaction.h"
-#include "platform/Logging.h"
-#include "wtf/StdLibExtras.h"
-
-
-// How does a SQLTransaction work?
-// ==============================
-// The SQLTransaction is a state machine that executes a series of states / steps.
->>>>>>> miniblink49
 //
 // The work of the transaction states are defined in section of 4.3.2 of the
 // webdatabase spec: http://dev.w3.org/html5/webdatabase/#processing-model
@@ -72,7 +56,6 @@
 // the State Transition Graph at a glance:
 // ======================================
 //
-<<<<<<< HEAD
 //     Backend                        .   Frontend
 //     (works with SQLiteDatabase)    .   (works with Script)
 //     ===========================    .   ===================
@@ -105,40 +88,6 @@
 //                     |            .                                          |
 //                7: CleanupAfterTransactionErrorCallback <--------------------'
 //                                  .
-=======
-//     Backend                          .   Frontend
-//     (works with SQLiteDatabase)      .   (works with Script)
-//     ===========================      .   ===================
-//                                      .
-//     1. Idle                          .
-//         v                            .
-//     2. AcquireLock                   .
-//         v                            .
-//     3. OpenTransactionAndPreflight ------------------------------------------.
-//         |                            .                                       |
-//         `-------------------------------> 8. DeliverTransactionCallback --.  |
-//                                      .        |                           v  v
-//         ,-------------------------------------'   9. DeliverTransactionErrorCallback +
-//         |                            .                                    ^  ^  ^    |
-//         v                            .                                    |  |  |    |
-//     4. RunStatements -----------------------------------------------------'  |  |    |
-//         |        ^  ^ |  ^ |         .                                       |  |    |
-//         |--------'  | |  | `------------> 10. DeliverStatementCallback +-----'  |    |
-//         |           | |  `---------------------------------------------'        |    |
-//         |           | `-----------------> 11. DeliverQuotaIncreaseCallback +    |    |
-//         |            `-----------------------------------------------------'    |    |
-//         v                            .                                          |    |
-//     5. PostflightAndCommit --+--------------------------------------------------'    |
-//                              |----------> 12. DeliverSuccessCallback +               |
-//         ,--------------------'       .                               |               |
-//         v                            .                               |               |
-//     6. CleanupAndTerminate <-----------------------------------------'               |
-//         v           ^                .                                               |
-//     0. End          |                .                                               |
-//                     |                .                                               |
-//                7: CleanupAfterTransactionErrorCallback <----------------------------'
-//                                      .
->>>>>>> miniblink49
 //
 // the States and State Transitions:
 // ================================
@@ -146,66 +95,41 @@
 //         - the end state.
 //
 //     1. SQLTransactionState::Idle
-<<<<<<< HEAD
 //         - placeholder state while waiting on frontend/backend, etc. See
 //           comment on "State transitions between SQLTransaction and
 //           SQLTransactionBackend" below.
-=======
-//         - placeholder state while waiting on frontend/backend, etc. See comment on
-//           "State transitions between SQLTransaction and SQLTransactionBackend"
-//           below.
->>>>>>> miniblink49
 //
 //     2. SQLTransactionState::AcquireLock (runs in backend)
 //         - this is the start state.
 //         - acquire the "lock".
-<<<<<<< HEAD
 //         - on "lock" acquisition, goto
 //           SQLTransactionState::OpenTransactionAndPreflight.
-=======
-//         - on "lock" acquisition, goto SQLTransactionState::OpenTransactionAndPreflight.
->>>>>>> miniblink49
 //
 //     3. SQLTransactionState::openTransactionAndPreflight (runs in backend)
 //         - Sets up an SQLiteTransaction.
 //         - begin the SQLiteTransaction.
 //         - call the SQLTransactionWrapper preflight if available.
 //         - schedule script callback.
-<<<<<<< HEAD
 //         - on error, goto
 //           SQLTransactionState::DeliverTransactionErrorCallback.
-=======
-//         - on error, goto SQLTransactionState::DeliverTransactionErrorCallback.
->>>>>>> miniblink49
 //         - goto SQLTransactionState::DeliverTransactionCallback.
 //
 //     4. SQLTransactionState::DeliverTransactionCallback (runs in frontend)
 //         - invoke the script function callback() if available.
-<<<<<<< HEAD
 //         - on error, goto
 //           SQLTransactionState::DeliverTransactionErrorCallback.
 //         - goto SQLTransactionState::RunStatements.
 //
 //     5. SQLTransactionState::DeliverTransactionErrorCallback (runs in
 //        frontend)
-=======
-//         - on error, goto SQLTransactionState::DeliverTransactionErrorCallback.
-//         - goto SQLTransactionState::RunStatements.
-//
-//     5. SQLTransactionState::DeliverTransactionErrorCallback (runs in frontend)
->>>>>>> miniblink49
 //         - invoke the script function errorCallback if available.
 //         - goto SQLTransactionState::CleanupAfterTransactionErrorCallback.
 //
 //     6. SQLTransactionState::RunStatements (runs in backend)
 //         - while there are statements {
 //             - run a statement.
-<<<<<<< HEAD
 //             - if statementCallback is available, goto
 //               SQLTransactionState::DeliverStatementCallback.
-=======
-//             - if statementCallback is available, goto SQLTransactionState::DeliverStatementCallback.
->>>>>>> miniblink49
 //             - on error,
 //               goto SQLTransactionState::DeliverQuotaIncreaseCallback, or
 //               goto SQLTransactionState::DeliverStatementCallback, or
@@ -215,12 +139,8 @@
 //
 //     7. SQLTransactionState::DeliverStatementCallback (runs in frontend)
 //         - invoke script statement callback (assume available).
-<<<<<<< HEAD
 //         - on error, goto
 //           SQLTransactionState::DeliverTransactionErrorCallback.
-=======
-//         - on error, goto SQLTransactionState::DeliverTransactionErrorCallback.
->>>>>>> miniblink49
 //         - goto SQLTransactionState::RunStatements.
 //
 //     8. SQLTransactionState::DeliverQuotaIncreaseCallback (runs in frontend)
@@ -230,15 +150,10 @@
 //     9. SQLTransactionState::PostflightAndCommit (runs in backend)
 //         - call the SQLTransactionWrapper postflight if available.
 //         - commit the SQLiteTansaction.
-<<<<<<< HEAD
 //         - on error, goto
 //           SQLTransactionState::DeliverTransactionErrorCallback.
 //         - if successCallback is available, goto
 //           SQLTransactionState::DeliverSuccessCallback.
-=======
-//         - on error, goto SQLTransactionState::DeliverTransactionErrorCallback.
-//         - if successCallback is available, goto SQLTransactionState::DeliverSuccessCallback.
->>>>>>> miniblink49
 //           else goto SQLTransactionState::CleanupAndTerminate.
 //
 //     10. SQLTransactionState::DeliverSuccessCallback (runs in frontend)
@@ -250,12 +165,8 @@
 //         - release the "lock".
 //         - goto SQLTransactionState::End.
 //
-<<<<<<< HEAD
 //     12. SQLTransactionState::CleanupAfterTransactionErrorCallback (runs in
 //         backend)
-=======
-//     12. SQLTransactionState::CleanupAfterTransactionErrorCallback (runs in backend)
->>>>>>> miniblink49
 //         - rollback the SQLiteTransaction.
 //         - goto SQLTransactionState::CleanupAndTerminate.
 //
@@ -270,7 +181,6 @@
 //
 // This cross boundary transition is done by posting transition requests to the
 // other side and letting the other side's state machine execute the state
-<<<<<<< HEAD
 // transition in the appropriate thread (i.e. the script thread for the
 // frontend, and the database thread for the backend).
 //
@@ -279,16 +189,6 @@
 // frontend and backend) as a waiting state for further activity. For example,
 // taking a closer look at the 3 state transition example above, what actually
 // happens is as follows:
-=======
-// transition in the appropriate thread (i.e. the script thread for the frontend,
-// and the database thread for the backend).
-//
-// Logically, the state transitions work as shown in the graph above. But
-// physically, the transition mechanism uses the Idle state (both in the frontend
-// and backend) as a waiting state for further activity. For example, taking a
-// closer look at the 3 state transition example above, what actually happens
-// is as follows:
->>>>>>> miniblink49
 //
 //     Step 1:
 //     ======
@@ -323,15 +223,9 @@
 //        ...
 //
 // So, when the frontend or backend are not active, they will park themselves in
-<<<<<<< HEAD
 // their Idle states. This means their m_nextState is set to Idle, but they
 // never actually run the corresponding state function. Note: for both the
 // frontend and backend, the state function for Idle is unreachableState().
-=======
-// their Idle states. This means their m_nextState is set to Idle, but they never
-// actually run the corresponding state function. Note: for both the frontend and
-// backend, the state function for Idle is unreachableState().
->>>>>>> miniblink49
 //
 // The states that send a request to their peer across the front/back boundary
 // are implemented with just 2 functions: SQLTransaction::sendToBackendState()
@@ -340,19 +234,13 @@
 // state (indicated by m_nextState), and then transits itself to the Idle state
 // to wait for further action.
 
-<<<<<<< HEAD
 // The Life-Cycle of a SQLTransaction i.e. Who's keeping the SQLTransaction
 // alive?
-=======
-
-// The Life-Cycle of a SQLTransaction i.e. Who's keeping the SQLTransaction alive?
->>>>>>> miniblink49
 // ==============================================================================
 // The RefPtr chain goes something like this:
 //
 //     At birth (in Database::runTransaction()):
 //     ====================================================
-<<<<<<< HEAD
 //     Database
 //         // HeapDeque<Member<SQLTransactionBackend>> m_transactionQueue
 //         // points to ...
@@ -417,72 +305,15 @@
 //     executing the transaction" chain above). This will keep the
 //     SQLTransactionBackend alive until DatabaseThread::databaseThread()
 //     releases its task std::unique_ptr.
-=======
-//     Database                           // HeapDeque<Member<SQLTransactionBackend>> m_transactionQueue points to ...
-//     --> SQLTransactionBackend          // Member<SQLTransaction> m_frontend points to ...
-//         --> SQLTransaction             // Member<SQLTransactionBackend> m_backend points to ...
-//             --> SQLTransactionBackend  // which is a circular reference.
-//
-//     Note: there's a circular reference between the SQLTransaction front-end and
-//     back-end. This circular reference is established in the constructor of the
-//     SQLTransactionBackend. The circular reference will be broken by calling
-//     doCleanup() to nullify m_frontend. This is done at the end of the transaction's
-//     clean up state (i.e. when the transaction should no longer be in use thereafter),
-//     or if the database was interrupted. See comments on "What happens if a transaction
-//     is interrupted?" below for details.
-//
-//     After scheduling the transaction with the DatabaseThread (Database::scheduleTransaction()):
-//     ======================================================================================================
-//     DatabaseThread                         // MessageQueue<DatabaseTask> m_queue points to ...
-//     --> DatabaseTransactionTask            // Member<SQLTransactionBackend> m_transaction points to ...
-//         --> SQLTransactionBackend          // Member<SQLTransaction> m_frontend points to ...
-//             --> SQLTransaction             // Member<SQLTransactionBackend> m_backend points to ...
-//                 --> SQLTransactionBackend  // which is a circular reference.
-//
-//     When executing the transaction (in DatabaseThread::databaseThread()):
-//     ====================================================================
-//     OwnPtr<DatabaseTask> task;             // points to ...
-//     --> DatabaseTransactionTask            // Member<SQLTransactionBackend> m_transaction points to ...
-//         --> SQLTransactionBackend          // Member<SQLTransaction> m_frontend;
-//             --> SQLTransaction             // Member<SQLTransactionBackend> m_backend points to ...
-//                 --> SQLTransactionBackend  // which is a circular reference.
-//
-//     At the end of cleanupAndTerminate():
-//     ===================================
-//     At the end of the cleanup state, the SQLTransactionBackend::m_frontend is nullified.
-//     If by then, a JSObject wrapper is referring to the SQLTransaction, then the reference
-//     chain looks like this:
-//
-//     JSObjectWrapper
-//     --> SQLTransaction             // in Member<SQLTransactionBackend> m_backend points to ...
-//         --> SQLTransactionBackend  // which no longer points back to its SQLTransaction.
-//
-//     When the GC collects the corresponding JSObject, the above chain will be cleaned up
-//     and deleted.
-//
-//     If there is no JSObject wrapper referring to the SQLTransaction when the cleanup
-//     states nullify SQLTransactionBackend::m_frontend, the SQLTransaction will deleted then.
-//     However, there will still be a DatabaseTask pointing to the SQLTransactionBackend (see
-//     the "When executing the transaction" chain above). This will keep the
-//     SQLTransactionBackend alive until DatabaseThread::databaseThread() releases its
-//     task OwnPtr.
->>>>>>> miniblink49
 //
 //     What happens if a transaction is interrupted?
 //     ============================================
 //     If the transaction is interrupted half way, it won't get to run to state
-<<<<<<< HEAD
 //     CleanupAndTerminate, and hence, would not have called
 //     SQLTransactionBackend's doCleanup(). doCleanup() is where we nullify
 //     SQLTransactionBackend::m_frontend to break the reference cycle between
 //     the frontend and backend. Hence, we need to cleanup the transaction by
 //     other means.
-=======
-//     CleanupAndTerminate, and hence, would not have called SQLTransactionBackend's
-//     doCleanup(). doCleanup() is where we nullify SQLTransactionBackend::m_frontend
-//     to break the reference cycle between the frontend and backend. Hence, we need
-//     to cleanup the transaction by other means.
->>>>>>> miniblink49
 //
 //     Note: calling SQLTransactionBackend::notifyDatabaseThreadIsShuttingDown()
 //     is effectively the same as calling SQLTransactionBackend::doClean().
@@ -532,7 +363,6 @@
 //     - This is how a transaction ends normally.
 //     - state CleanupAndTerminate calls doCleanup().
 
-<<<<<<< HEAD
 namespace blink {
 
 SQLTransactionBackend* SQLTransactionBackend::create(
@@ -540,24 +370,14 @@ SQLTransactionBackend* SQLTransactionBackend::create(
     SQLTransaction* frontend,
     SQLTransactionWrapper* wrapper,
     bool readOnly)
-=======
-
-namespace blink {
-
-SQLTransactionBackend* SQLTransactionBackend::create(Database* db, SQLTransaction* frontend, SQLTransactionWrapper* wrapper, bool readOnly)
->>>>>>> miniblink49
 {
     return new SQLTransactionBackend(db, frontend, wrapper, readOnly);
 }
 
-<<<<<<< HEAD
 SQLTransactionBackend::SQLTransactionBackend(Database* db,
     SQLTransaction* frontend,
     SQLTransactionWrapper* wrapper,
     bool readOnly)
-=======
-SQLTransactionBackend::SQLTransactionBackend(Database* db, SQLTransaction* frontend, SQLTransactionWrapper* wrapper, bool readOnly)
->>>>>>> miniblink49
     : m_frontend(frontend)
     , m_database(db)
     , m_wrapper(wrapper)
@@ -570,10 +390,7 @@ SQLTransactionBackend::SQLTransactionBackend(Database* db, SQLTransaction* front
     , m_readOnly(readOnly)
     , m_hasVersionMismatch(false)
 {
-<<<<<<< HEAD
     DCHECK(isMainThread());
-=======
->>>>>>> miniblink49
     ASSERT(m_database);
     m_frontend->setBackend(this);
     m_requestedState = SQLTransactionState::AcquireLock;
@@ -586,33 +403,19 @@ SQLTransactionBackend::~SQLTransactionBackend()
 
 DEFINE_TRACE(SQLTransactionBackend)
 {
-<<<<<<< HEAD
     visitor->trace(m_database);
     visitor->trace(m_wrapper);
-=======
-    visitor->trace(m_frontend);
-    visitor->trace(m_currentStatementBackend);
-    visitor->trace(m_database);
-    visitor->trace(m_wrapper);
-    visitor->trace(m_statementQueue);
->>>>>>> miniblink49
 }
 
 void SQLTransactionBackend::doCleanup()
 {
     if (!m_frontend)
         return;
-<<<<<<< HEAD
     // Break the reference cycle. See comment about the life-cycle above.
     m_frontend = nullptr;
 
     ASSERT(
         database()->getDatabaseContext()->databaseThread()->isDatabaseThread());
-=======
-    m_frontend = nullptr; // Break the reference cycle. See comment about the life-cycle above.
-
-    ASSERT(database()->databaseContext()->databaseThread()->isDatabaseThread());
->>>>>>> miniblink49
 
     MutexLocker locker(m_statementMutex);
     m_statementQueue.clear();
@@ -623,11 +426,7 @@ void SQLTransactionBackend::doCleanup()
         // m_sqliteTransaction invokes SQLiteTransaction's destructor which does
         // just that. We might as well do this unconditionally and free up its
         // resources because we're already terminating.
-<<<<<<< HEAD
         m_sqliteTransaction.reset();
-=======
-        m_sqliteTransaction.clear();
->>>>>>> miniblink49
     }
 
     // Release the lock on this database
@@ -676,7 +475,6 @@ void SQLTransactionBackend::setShouldRetryCurrentStatement(bool shouldRetry)
     m_shouldRetryCurrentStatement = shouldRetry;
 }
 
-<<<<<<< HEAD
 SQLTransactionBackend::StateFunction SQLTransactionBackend::stateFunctionFor(
     SQLTransactionState state)
 {
@@ -699,24 +497,6 @@ SQLTransactionBackend::StateFunction SQLTransactionBackend::stateFunctionFor(
         &SQLTransactionBackend::sendToFrontendState,
         // 12. deliverSuccessCallback
         &SQLTransactionBackend::sendToFrontendState,
-=======
-SQLTransactionBackend::StateFunction SQLTransactionBackend::stateFunctionFor(SQLTransactionState state)
-{
-    static const StateFunction stateFunctions[] = {
-        &SQLTransactionBackend::unreachableState,            // 0. end
-        &SQLTransactionBackend::unreachableState,            // 1. idle
-        &SQLTransactionBackend::acquireLock,                 // 2.
-        &SQLTransactionBackend::openTransactionAndPreflight, // 3.
-        &SQLTransactionBackend::runStatements,               // 4.
-        &SQLTransactionBackend::postflightAndCommit,         // 5.
-        &SQLTransactionBackend::cleanupAndTerminate,         // 6.
-        &SQLTransactionBackend::cleanupAfterTransactionErrorCallback, // 7.
-        &SQLTransactionBackend::sendToFrontendState,         // 8. deliverTransactionCallback
-        &SQLTransactionBackend::sendToFrontendState,         // 9. deliverTransactionErrorCallback
-        &SQLTransactionBackend::sendToFrontendState,         // 10. deliverStatementCallback
-        &SQLTransactionBackend::sendToFrontendState,         // 11. deliverQuotaIncreaseCallback
-        &SQLTransactionBackend::sendToFrontendState          // 12. deliverSuccessCallback
->>>>>>> miniblink49
     };
 
     ASSERT(WTF_ARRAY_LENGTH(stateFunctions) == static_cast<int>(SQLTransactionState::NumberOfStates));
@@ -725,45 +505,26 @@ SQLTransactionBackend::StateFunction SQLTransactionBackend::stateFunctionFor(SQL
     return stateFunctions[static_cast<int>(state)];
 }
 
-<<<<<<< HEAD
 void SQLTransactionBackend::enqueueStatementBackend(
     SQLStatementBackend* statementBackend)
 {
     DCHECK(isMainThread());
-=======
-void SQLTransactionBackend::enqueueStatementBackend(SQLStatementBackend* statementBackend)
-{
->>>>>>> miniblink49
     MutexLocker locker(m_statementMutex);
     m_statementQueue.append(statementBackend);
 }
 
 void SQLTransactionBackend::computeNextStateAndCleanupIfNeeded()
 {
-<<<<<<< HEAD
     DCHECK(
         database()->getDatabaseContext()->databaseThread()->isDatabaseThread());
-=======
->>>>>>> miniblink49
     // Only honor the requested state transition if we're not supposed to be
     // cleaning up and shutting down:
     if (m_database->opened()) {
         setStateToRequestedState();
-<<<<<<< HEAD
         ASSERT(m_nextState == SQLTransactionState::AcquireLock || m_nextState == SQLTransactionState::OpenTransactionAndPreflight || m_nextState == SQLTransactionState::RunStatements || m_nextState == SQLTransactionState::PostflightAndCommit || m_nextState == SQLTransactionState::CleanupAndTerminate || m_nextState == SQLTransactionState::CleanupAfterTransactionErrorCallback);
 #if DCHECK_IS_ON()
         STORAGE_DVLOG(1) << "State " << nameForSQLTransactionState(m_nextState);
 #endif
-=======
-        ASSERT(m_nextState == SQLTransactionState::AcquireLock
-            || m_nextState == SQLTransactionState::OpenTransactionAndPreflight
-            || m_nextState == SQLTransactionState::RunStatements
-            || m_nextState == SQLTransactionState::PostflightAndCommit
-            || m_nextState == SQLTransactionState::CleanupAndTerminate
-            || m_nextState == SQLTransactionState::CleanupAfterTransactionErrorCallback);
-
-        WTF_LOG(StorageAPI, "State %s\n", nameForSQLTransactionState(m_nextState));
->>>>>>> miniblink49
         return;
     }
 
@@ -773,21 +534,13 @@ void SQLTransactionBackend::computeNextStateAndCleanupIfNeeded()
     m_nextState = SQLTransactionState::End;
 
     // If the database was stopped, don't do anything and cancel queued work
-<<<<<<< HEAD
     STORAGE_DVLOG(1) << "Database was stopped or interrupted - cancelling work "
                         "for this transaction";
-=======
-    WTF_LOG(StorageAPI, "Database was stopped or interrupted - cancelling work for this transaction");
->>>>>>> miniblink49
 
     // The current SQLite transaction should be stopped, as well
     if (m_sqliteTransaction) {
         m_sqliteTransaction->stop();
-<<<<<<< HEAD
         m_sqliteTransaction.reset();
-=======
-        m_sqliteTransaction.clear();
->>>>>>> miniblink49
     }
 
     // Terminate the frontend state machine. This also gets the frontend to
@@ -806,7 +559,6 @@ void SQLTransactionBackend::performNextStep()
 }
 
 void SQLTransactionBackend::executeSQL(SQLStatement* statement,
-<<<<<<< HEAD
     const String& sqlStatement,
     const Vector<SQLValue>& arguments,
     int permissions)
@@ -814,21 +566,12 @@ void SQLTransactionBackend::executeSQL(SQLStatement* statement,
     DCHECK(isMainThread());
     enqueueStatementBackend(SQLStatementBackend::create(statement, sqlStatement,
         arguments, permissions));
-=======
-    const String& sqlStatement, const Vector<SQLValue>& arguments, int permissions)
-{
-    enqueueStatementBackend(SQLStatementBackend::create(statement, sqlStatement, arguments, permissions));
->>>>>>> miniblink49
 }
 
 void SQLTransactionBackend::notifyDatabaseThreadIsShuttingDown()
 {
-<<<<<<< HEAD
     ASSERT(
         database()->getDatabaseContext()->databaseThread()->isDatabaseThread());
-=======
-    ASSERT(database()->databaseContext()->databaseThread()->isDatabaseThread());
->>>>>>> miniblink49
 
     // If the transaction is in progress, we should roll it back here, since this
     // is our last opportunity to do something related to this transaction on the
@@ -852,7 +595,6 @@ void SQLTransactionBackend::lockAcquired()
 
 SQLTransactionState SQLTransactionBackend::openTransactionAndPreflight()
 {
-<<<<<<< HEAD
     DCHECK(
         database()->getDatabaseContext()->databaseThread()->isDatabaseThread());
     ASSERT(!m_database->sqliteDatabase().transactionInProgress());
@@ -862,31 +604,18 @@ SQLTransactionState SQLTransactionBackend::openTransactionAndPreflight()
 
     // Set the maximum usage for this transaction if this transactions is not
     // read-only.
-=======
-    ASSERT(!m_database->sqliteDatabase().transactionInProgress());
-    ASSERT(m_lockAcquired);
-
-    WTF_LOG(StorageAPI, "Opening and preflighting transaction %p", this);
-
-    // Set the maximum usage for this transaction if this transactions is not read-only
->>>>>>> miniblink49
     if (!m_readOnly)
         m_database->sqliteDatabase().setMaximumSize(m_database->maximumSize());
 
     ASSERT(!m_sqliteTransaction);
-<<<<<<< HEAD
     m_sqliteTransaction = WTF::wrapUnique(
         new SQLiteTransaction(m_database->sqliteDatabase(), m_readOnly));
-=======
-    m_sqliteTransaction = adoptPtr(new SQLiteTransaction(m_database->sqliteDatabase(), m_readOnly));
->>>>>>> miniblink49
 
     m_database->resetDeletes();
     m_database->disableAuthorizer();
     m_sqliteTransaction->begin();
     m_database->enableAuthorizer();
 
-<<<<<<< HEAD
     // Spec 4.3.2.1+2: Open a transaction to the database, jumping to the error
     // callback if that fails.
     if (!m_sqliteTransaction->inProgress()) {
@@ -914,68 +643,30 @@ SQLTransactionState SQLTransactionBackend::openTransactionAndPreflight()
             m_database->sqliteDatabase().lastErrorMsg());
         m_database->disableAuthorizer();
         m_sqliteTransaction.reset();
-=======
-    // Spec 4.3.2.1+2: Open a transaction to the database, jumping to the error callback if that fails
-    if (!m_sqliteTransaction->inProgress()) {
-        ASSERT(!m_database->sqliteDatabase().transactionInProgress());
-        m_database->reportStartTransactionResult(2, SQLError::DATABASE_ERR, m_database->sqliteDatabase().lastError());
-        m_transactionError = SQLErrorData::create(SQLError::DATABASE_ERR, "unable to begin transaction",
-            m_database->sqliteDatabase().lastError(), m_database->sqliteDatabase().lastErrorMsg());
-        m_sqliteTransaction.clear();
-        return nextStateForTransactionError();
-    }
-
-    // Note: We intentionally retrieve the actual version even with an empty expected version.
-    // In multi-process browsers, we take this opportinutiy to update the cached value for
-    // the actual version. In single-process browsers, this is just a map lookup.
-    String actualVersion;
-    if (!m_database->getActualVersionForTransaction(actualVersion)) {
-        m_database->reportStartTransactionResult(3, SQLError::DATABASE_ERR, m_database->sqliteDatabase().lastError());
-        m_transactionError = SQLErrorData::create(SQLError::DATABASE_ERR, "unable to read version",
-            m_database->sqliteDatabase().lastError(), m_database->sqliteDatabase().lastErrorMsg());
-        m_database->disableAuthorizer();
-        m_sqliteTransaction.clear();
->>>>>>> miniblink49
         m_database->enableAuthorizer();
         return nextStateForTransactionError();
     }
     m_hasVersionMismatch = !m_database->expectedVersion().isEmpty() && (m_database->expectedVersion() != actualVersion);
 
-<<<<<<< HEAD
     // Spec 4.3.2.3: Perform preflight steps, jumping to the error callback if
     // they fail.
     if (m_wrapper && !m_wrapper->performPreflight(this)) {
         m_database->disableAuthorizer();
         m_sqliteTransaction.reset();
-=======
-    // Spec 4.3.2.3: Perform preflight steps, jumping to the error callback if they fail
-    if (m_wrapper && !m_wrapper->performPreflight(this)) {
-        m_database->disableAuthorizer();
-        m_sqliteTransaction.clear();
->>>>>>> miniblink49
         m_database->enableAuthorizer();
         if (m_wrapper->sqlError()) {
             m_transactionError = SQLErrorData::create(*m_wrapper->sqlError());
         } else {
-<<<<<<< HEAD
             m_database->reportStartTransactionResult(4, SQLError::kUnknownErr, 0);
             m_transactionError = SQLErrorData::create(
                 SQLError::kUnknownErr,
                 "unknown error occurred during transaction preflight");
-=======
-            m_database->reportStartTransactionResult(4, SQLError::UNKNOWN_ERR, 0);
-            m_transactionError = SQLErrorData::create(SQLError::UNKNOWN_ERR, "unknown error occurred during transaction preflight");
->>>>>>> miniblink49
         }
         return nextStateForTransactionError();
     }
 
-<<<<<<< HEAD
     // Spec 4.3.2.4: Invoke the transaction callback with the new SQLTransaction
     // object.
-=======
-    // Spec 4.3.2.4: Invoke the transaction callback with the new SQLTransaction object
->>>>>>> miniblink49
     if (m_hasCallback)
         return SQLTransactionState::DeliverTransactionCallback;
 
@@ -985,7 +676,6 @@ SQLTransactionState SQLTransactionBackend::openTransactionAndPreflight()
 
 SQLTransactionState SQLTransactionBackend::runStatements()
 {
-<<<<<<< HEAD
     DCHECK(
         database()->getDatabaseContext()->databaseThread()->isDatabaseThread());
     ASSERT(m_lockAcquired);
@@ -1011,27 +701,6 @@ SQLTransactionState SQLTransactionBackend::runStatements()
             // If the current statement has already been run, failed due to quota
             // constraints, and we're not retrying it, that means it ended in an
             // error. Handle it now.
-=======
-    ASSERT(m_lockAcquired);
-    SQLTransactionState nextState;
-
-    // If there is a series of statements queued up that are all successful and have no associated
-    // SQLStatementCallback objects, then we can burn through the queue
-    do {
-        if (m_shouldRetryCurrentStatement && !m_sqliteTransaction->wasRolledBackBySqlite()) {
-            m_shouldRetryCurrentStatement = false;
-            // FIXME - Another place that needs fixing up after <rdar://problem/5628468> is addressed.
-            // See ::openTransactionAndPreflight() for discussion
-
-            // Reset the maximum size here, as it was increased to allow us to retry this statement.
-            // m_shouldRetryCurrentStatement is set to true only when a statement exceeds
-            // the quota, which can happen only in a read-write transaction. Therefore, there
-            // is no need to check here if the transaction is read-write.
-            m_database->sqliteDatabase().setMaximumSize(m_database->maximumSize());
-        } else {
-            // If the current statement has already been run, failed due to quota constraints, and we're not retrying it,
-            // that means it ended in an error. Handle it now
->>>>>>> miniblink49
             if (m_currentStatementBackend && m_currentStatementBackend->lastExecutionFailedDueToQuota()) {
                 return nextStateForCurrentStatementError();
             }
@@ -1047,11 +716,8 @@ SQLTransactionState SQLTransactionBackend::runStatements()
 
 void SQLTransactionBackend::getNextStatement()
 {
-<<<<<<< HEAD
     DCHECK(
         database()->getDatabaseContext()->databaseThread()->isDatabaseThread());
-=======
->>>>>>> miniblink49
     m_currentStatementBackend = nullptr;
 
     MutexLocker locker(m_statementMutex);
@@ -1059,12 +725,8 @@ void SQLTransactionBackend::getNextStatement()
         m_currentStatementBackend = m_statementQueue.takeFirst();
 }
 
-<<<<<<< HEAD
 SQLTransactionState
 SQLTransactionBackend::runCurrentStatementAndGetNextState()
-=======
-SQLTransactionState SQLTransactionBackend::runCurrentStatementAndGetNextState()
->>>>>>> miniblink49
 {
     if (!m_currentStatementBackend) {
         // No more statements to run. So move on to the next state.
@@ -1078,12 +740,8 @@ SQLTransactionState SQLTransactionBackend::runCurrentStatementAndGetNextState()
 
     if (m_currentStatementBackend->execute(m_database.get())) {
         if (m_database->lastActionChangedDatabase()) {
-<<<<<<< HEAD
             // Flag this transaction as having changed the database for later delegate
             // notification.
-=======
-            // Flag this transaction as having changed the database for later delegate notification
->>>>>>> miniblink49
             m_modifiedDatabase = true;
         }
 
@@ -1105,28 +763,18 @@ SQLTransactionState SQLTransactionBackend::runCurrentStatementAndGetNextState()
 
 SQLTransactionState SQLTransactionBackend::nextStateForCurrentStatementError()
 {
-<<<<<<< HEAD
     // Spec 4.3.2.6.6: error - Call the statement's error callback, but if there
     // was no error callback, or the transaction was rolled back, jump to the
     // transaction error callback.
-=======
-    // Spec 4.3.2.6.6: error - Call the statement's error callback, but if there was no error callback,
-    // or the transaction was rolled back, jump to the transaction error callback
->>>>>>> miniblink49
     if (m_currentStatementBackend->hasStatementErrorCallback() && !m_sqliteTransaction->wasRolledBackBySqlite())
         return SQLTransactionState::DeliverStatementCallback;
 
     if (m_currentStatementBackend->sqlError()) {
         m_transactionError = SQLErrorData::create(*m_currentStatementBackend->sqlError());
     } else {
-<<<<<<< HEAD
         m_database->reportCommitTransactionResult(1, SQLError::kDatabaseErr, 0);
         m_transactionError = SQLErrorData::create(
             SQLError::kDatabaseErr, "the statement failed to execute");
-=======
-        m_database->reportCommitTransactionResult(1, SQLError::DATABASE_ERR, 0);
-        m_transactionError = SQLErrorData::create(SQLError::DATABASE_ERR, "the statement failed to execute");
->>>>>>> miniblink49
     }
     return nextStateForTransactionError();
 }
@@ -1135,35 +783,22 @@ SQLTransactionState SQLTransactionBackend::postflightAndCommit()
 {
     ASSERT(m_lockAcquired);
 
-<<<<<<< HEAD
     // Spec 4.3.2.7: Perform postflight steps, jumping to the error callback if
     // they fail.
-=======
-    // Spec 4.3.2.7: Perform postflight steps, jumping to the error callback if they fail.
->>>>>>> miniblink49
     if (m_wrapper && !m_wrapper->performPostflight(this)) {
         if (m_wrapper->sqlError()) {
             m_transactionError = SQLErrorData::create(*m_wrapper->sqlError());
         } else {
-<<<<<<< HEAD
             m_database->reportCommitTransactionResult(3, SQLError::kUnknownErr, 0);
             m_transactionError = SQLErrorData::create(
                 SQLError::kUnknownErr,
                 "unknown error occurred during transaction postflight");
-=======
-            m_database->reportCommitTransactionResult(3, SQLError::UNKNOWN_ERR, 0);
-            m_transactionError = SQLErrorData::create(SQLError::UNKNOWN_ERR, "unknown error occurred during transaction postflight");
->>>>>>> miniblink49
         }
         return nextStateForTransactionError();
     }
 
-<<<<<<< HEAD
     // Spec 4.3.2.7: Commit the transaction, jumping to the error callback if that
     // fails.
-=======
-    // Spec 4.3.2.7: Commit the transaction, jumping to the error callback if that fails.
->>>>>>> miniblink49
     ASSERT(m_sqliteTransaction);
 
     m_database->disableAuthorizer();
@@ -1174,18 +809,12 @@ SQLTransactionState SQLTransactionBackend::postflightAndCommit()
     if (m_sqliteTransaction->inProgress()) {
         if (m_wrapper)
             m_wrapper->handleCommitFailedAfterPostflight(this);
-<<<<<<< HEAD
         m_database->reportCommitTransactionResult(
             4, SQLError::kDatabaseErr, m_database->sqliteDatabase().lastError());
         m_transactionError = SQLErrorData::create(
             SQLError::kDatabaseErr, "unable to commit transaction",
             m_database->sqliteDatabase().lastError(),
             m_database->sqliteDatabase().lastErrorMsg());
-=======
-        m_database->reportCommitTransactionResult(4, SQLError::DATABASE_ERR, m_database->sqliteDatabase().lastError());
-        m_transactionError = SQLErrorData::create(SQLError::DATABASE_ERR, "unable to commit transaction",
-            m_database->sqliteDatabase().lastError(), m_database->sqliteDatabase().lastErrorMsg());
->>>>>>> miniblink49
         return nextStateForTransactionError();
     }
 
@@ -1195,12 +824,8 @@ SQLTransactionState SQLTransactionBackend::postflightAndCommit()
     if (m_database->hadDeletes())
         m_database->incrementalVacuumIfNeeded();
 
-<<<<<<< HEAD
     // The commit was successful. If the transaction modified this database,
     // notify the delegates.
-=======
-    // The commit was successful. If the transaction modified this database, notify the delegates.
->>>>>>> miniblink49
     if (m_modifiedDatabase)
         m_database->transactionClient()->didCommitWriteTransaction(database());
 
@@ -1213,11 +838,7 @@ SQLTransactionState SQLTransactionBackend::cleanupAndTerminate()
     ASSERT(m_lockAcquired);
 
     // Spec 4.3.2.9: End transaction steps. There is no next step.
-<<<<<<< HEAD
     STORAGE_DVLOG(1) << "Transaction " << this << " is complete";
-=======
-    WTF_LOG(StorageAPI, "Transaction %p is complete\n", this);
->>>>>>> miniblink49
     ASSERT(!m_database->sqliteDatabase().transactionInProgress());
 
     // Phase 5 cleanup. See comment on the SQLTransaction life-cycle above.
@@ -1237,31 +858,19 @@ SQLTransactionState SQLTransactionBackend::nextStateForTransactionError()
     return SQLTransactionState::CleanupAfterTransactionErrorCallback;
 }
 
-<<<<<<< HEAD
 SQLTransactionState
 SQLTransactionBackend::cleanupAfterTransactionErrorCallback()
 {
     ASSERT(m_lockAcquired);
 
     STORAGE_DVLOG(1) << "Transaction " << this << " is complete with an error";
-=======
-SQLTransactionState SQLTransactionBackend::cleanupAfterTransactionErrorCallback()
-{
-    ASSERT(m_lockAcquired);
-
-    WTF_LOG(StorageAPI, "Transaction %p is complete with an error\n", this);
->>>>>>> miniblink49
     m_database->disableAuthorizer();
     if (m_sqliteTransaction) {
         // Spec 4.3.2.10: Rollback the transaction.
         m_sqliteTransaction->rollback();
 
         ASSERT(!m_database->sqliteDatabase().transactionInProgress());
-<<<<<<< HEAD
         m_sqliteTransaction.reset();
-=======
-        m_sqliteTransaction.clear();
->>>>>>> miniblink49
     }
     m_database->enableAuthorizer();
 
@@ -1273,7 +882,6 @@ SQLTransactionState SQLTransactionBackend::cleanupAfterTransactionErrorCallback(
 // requestTransitToState() can be called from the frontend. Hence, it should
 // NOT be modifying SQLTransactionBackend in general. The only safe field to
 // modify is m_requestedState which is meant for this purpose.
-<<<<<<< HEAD
 void SQLTransactionBackend::requestTransitToState(
     SQLTransactionState nextState)
 {
@@ -1281,11 +889,6 @@ void SQLTransactionBackend::requestTransitToState(
     STORAGE_DVLOG(1) << "Scheduling " << nameForSQLTransactionState(nextState)
                      << " for transaction " << this;
 #endif
-=======
-void SQLTransactionBackend::requestTransitToState(SQLTransactionState nextState)
-{
-    WTF_LOG(StorageAPI, "Scheduling %s for transaction %p\n", nameForSQLTransactionState(nextState), this);
->>>>>>> miniblink49
     m_requestedState = nextState;
     ASSERT(m_requestedState != SQLTransactionState::End);
     m_database->scheduleTransactionStep(this);

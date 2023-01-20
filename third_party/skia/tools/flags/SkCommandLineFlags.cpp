@@ -9,7 +9,6 @@
 #include "SkTDArray.h"
 #include "SkTSort.h"
 
-<<<<<<< HEAD
 #include <stdlib.h>
 
 #if defined(GOOGLE3) && defined(SK_BUILD_FOR_IOS)
@@ -31,16 +30,6 @@ bool SkFlagInfo::CreateStringFlag(const char* name, const char* shortName,
 {
     SkFlagInfo* info = new SkFlagInfo(name, shortName, kString_FlagType, helpString,
         extendedHelpString);
-=======
-DEFINE_bool(undefok, false, "Silently ignore unknown flags instead of crashing.");
-
-template <typename T> static void ignore_result(const T&) {}
-
-bool SkFlagInfo::CreateStringFlag(const char* name, const char* shortName,
-                                  SkCommandLineFlags::StringArray* pStrings,
-                                  const char* defaultValue, const char* helpString) {
-    SkFlagInfo* info = SkNEW_ARGS(SkFlagInfo, (name, shortName, kString_FlagType, helpString));
->>>>>>> miniblink49
     info->fDefaultString.set(defaultValue);
 
     info->fStrings = pStrings;
@@ -49,16 +38,10 @@ bool SkFlagInfo::CreateStringFlag(const char* name, const char* shortName,
 }
 
 void SkFlagInfo::SetDefaultStrings(SkCommandLineFlags::StringArray* pStrings,
-<<<<<<< HEAD
     const char* defaultValue)
 {
     pStrings->reset();
     if (nullptr == defaultValue) {
-=======
-                                   const char* defaultValue) {
-    pStrings->reset();
-    if (NULL == defaultValue) {
->>>>>>> miniblink49
         return;
     }
     // If default is "", leave the array empty.
@@ -85,12 +68,8 @@ void SkFlagInfo::SetDefaultStrings(SkCommandLineFlags::StringArray* pStrings,
     }
 }
 
-<<<<<<< HEAD
 static bool string_is_in(const char* target, const char* set[], size_t len)
 {
-=======
-static bool string_is_in(const char* target, const char* set[], size_t len) {
->>>>>>> miniblink49
     for (size_t i = 0; i < len; i++) {
         if (0 == strcmp(target, set[i])) {
             return true;
@@ -106,12 +85,8 @@ static bool string_is_in(const char* target, const char* set[], size_t len) {
  *      string represents a boolean.
  *  @param boolean True if the string represents a boolean, false otherwise.
  */
-<<<<<<< HEAD
 static bool parse_bool_arg(const char* string, bool* result)
 {
-=======
-static bool parse_bool_arg(const char* string, bool* result) {
->>>>>>> miniblink49
     static const char* trueValues[] = { "1", "TRUE", "true" };
     if (string_is_in(string, trueValues, SK_ARRAY_COUNT(trueValues))) {
         *result = true;
@@ -126,12 +101,8 @@ static bool parse_bool_arg(const char* string, bool* result) {
     return false;
 }
 
-<<<<<<< HEAD
 bool SkFlagInfo::match(const char* string)
 {
-=======
-bool SkFlagInfo::match(const char* string) {
->>>>>>> miniblink49
     if (SkStrStartsWith(string, '-') && strlen(string) > 1) {
         string++;
         const SkString* compareName;
@@ -183,7 +154,6 @@ bool SkFlagInfo::match(const char* string) {
 SkFlagInfo* SkCommandLineFlags::gHead;
 SkString SkCommandLineFlags::gUsage;
 
-<<<<<<< HEAD
 void SkCommandLineFlags::SetUsage(const char* usage)
 {
     gUsage.set(usage);
@@ -208,38 +178,6 @@ static void print_indented(const SkString& text)
             lineBreak = static_cast<int>(strlen(currLine));
         }
         if (lineBreak > LINE_LENGTH) {
-=======
-void SkCommandLineFlags::SetUsage(const char* usage) {
-    gUsage.set(usage);
-}
-
-// Maximum line length for the help message.
-#define LINE_LENGTH 72
-
-static void print_help_for_flag(const SkFlagInfo* flag) {
-    SkDebugf("    --%s", flag->name().c_str());
-    const SkString& shortName = flag->shortName();
-    if (shortName.size() > 0) {
-        SkDebugf(" or -%s", shortName.c_str());
-    }
-    SkDebugf(":\ttype: %s", flag->typeAsString().c_str());
-    if (flag->defaultValue().size() > 0) {
-        SkDebugf("\tdefault: %s", flag->defaultValue().c_str());
-    }
-    SkDebugf("\n");
-    const SkString& help = flag->help();
-    size_t length = help.size();
-    const char* currLine = help.c_str();
-    const char* stop = currLine + length;
-    while (currLine < stop) {
-        if (strlen(currLine) < LINE_LENGTH) {
-            // Only one line length's worth of text left.
-            SkDebugf("        %s\n", currLine);
-            break;
-        }
-        int lineBreak = SkStrFind(currLine, "\n");
-        if (lineBreak < 0 || lineBreak > LINE_LENGTH) {
->>>>>>> miniblink49
             // No line break within line length. Will need to insert one.
             // Find a space before the line break.
             int spaceIndex = LINE_LENGTH - 1;
@@ -264,7 +202,6 @@ static void print_help_for_flag(const SkFlagInfo* flag) {
             currLine += lineBreak;
         }
     }
-<<<<<<< HEAD
 }
 
 static void print_help_for_flag(const SkFlagInfo* flag)
@@ -287,14 +224,11 @@ static void print_extended_help_for_flag(const SkFlagInfo* flag)
 {
     print_help_for_flag(flag);
     print_indented(flag->extendedHelp());
-=======
->>>>>>> miniblink49
     SkDebugf("\n");
 }
 
 namespace {
 struct CompareFlagsByName {
-<<<<<<< HEAD
     bool operator()(SkFlagInfo* a, SkFlagInfo* b) const
     {
         return strcmp(a->name().c_str(), b->name().c_str()) < 0;
@@ -304,15 +238,6 @@ struct CompareFlagsByName {
 
 void SkCommandLineFlags::Parse(int argc, char** argv)
 {
-=======
-    bool operator()(SkFlagInfo* a, SkFlagInfo* b) const {
-        return strcmp(a->name().c_str(), b->name().c_str()) < 0;
-    }
-};
-}  // namespace
-
-void SkCommandLineFlags::Parse(int argc, char** argv) {
->>>>>>> miniblink49
     // Only allow calling this function once.
     static bool gOnce;
     if (gOnce) {
@@ -348,7 +273,6 @@ void SkCommandLineFlags::Parse(int argc, char** argv) {
                     allFlags.push(flag);
                 }
                 SkTQSort(&allFlags[0], &allFlags[allFlags.count() - 1],
-<<<<<<< HEAD
                     CompareFlagsByName());
                 for (int i = 0; i < allFlags.count(); ++i) {
                     print_help_for_flag(allFlags[i]);
@@ -356,24 +280,13 @@ void SkCommandLineFlags::Parse(int argc, char** argv) {
                         SkDebugf("        Use '--help %s' for more information.\n",
                             allFlags[i]->name().c_str());
                     }
-=======
-                         CompareFlagsByName());
-                for (int i = 0; i < allFlags.count(); ++i) {
-                    print_help_for_flag(allFlags[i]);
->>>>>>> miniblink49
                 }
             } else {
                 for (SkFlagInfo* flag = SkCommandLineFlags::gHead; flag;
                      flag = flag->next()) {
                     for (int k = 0; k < helpFlags.count(); k++) {
-<<<<<<< HEAD
                         if (flag->name().equals(helpFlags[k]) || flag->shortName().equals(helpFlags[k])) {
                             print_extended_help_for_flag(flag);
-=======
-                        if (flag->name().equals(helpFlags[k]) ||
-                            flag->shortName().equals(helpFlags[k])) {
-                            print_help_for_flag(flag);
->>>>>>> miniblink49
                             helpFlags.remove(k);
                             break;
                         }
@@ -391,7 +304,6 @@ void SkCommandLineFlags::Parse(int argc, char** argv) {
         if (!helpPrinted) {
             bool flagMatched = false;
             SkFlagInfo* flag = gHead;
-<<<<<<< HEAD
             while (flag != nullptr) {
                 if (flag->match(argv[i])) {
                     flagMatched = true;
@@ -431,47 +343,6 @@ void SkCommandLineFlags::Parse(int argc, char** argv) {
                         break;
                     default:
                         SkDEBUGFAIL("Invalid flag type");
-=======
-            while (flag != NULL) {
-                if (flag->match(argv[i])) {
-                    flagMatched = true;
-                    switch (flag->getFlagType()) {
-                        case SkFlagInfo::kBool_FlagType:
-                            // Can be handled by match, above, but can also be set by the next
-                            // string.
-                            if (i+1 < argc && !SkStrStartsWith(argv[i+1], '-')) {
-                                i++;
-                                bool value;
-                                if (parse_bool_arg(argv[i], &value)) {
-                                    flag->setBool(value);
-                                }
-                            }
-                            break;
-                        case SkFlagInfo::kString_FlagType:
-                            flag->resetStrings();
-                            // Add all arguments until another flag is reached.
-                            while (i+1 < argc) {
-                                char* end = NULL;
-                                // Negative numbers aren't flags.
-                                ignore_result(strtod(argv[i+1], &end));
-                                if (end == argv[i+1] && SkStrStartsWith(argv[i+1], '-')) {
-                                    break;
-                                }
-                                i++;
-                                flag->append(argv[i]);
-                            }
-                            break;
-                        case SkFlagInfo::kInt_FlagType:
-                            i++;
-                            flag->setInt(atoi(argv[i]));
-                            break;
-                        case SkFlagInfo::kDouble_FlagType:
-                            i++;
-                            flag->setDouble(atof(argv[i]));
-                            break;
-                        default:
-                            SkDEBUGFAIL("Invalid flag type");
->>>>>>> miniblink49
                     }
                     break;
                 }
@@ -480,19 +351,11 @@ void SkCommandLineFlags::Parse(int argc, char** argv) {
             if (!flagMatched) {
 #if SK_BUILD_FOR_MAC
                 if (SkStrStartsWith(argv[i], "NSDocumentRevisions")
-<<<<<<< HEAD
                     || SkStrStartsWith(argv[i], "-NSDocumentRevisions")) {
                     i++; // skip YES
                 } else
 #endif
                     if (FLAGS_undefok) {
-=======
-                        || SkStrStartsWith(argv[i], "-NSDocumentRevisions")) {
-                    i++;  // skip YES
-                } else
-#endif
-                if (FLAGS_undefok) {
->>>>>>> miniblink49
                     SkDebugf("FYI: ignoring unknown flag '%s'.\n", argv[i]);
                 } else {
                     SkDebugf("Got unknown flag '%s'. Exiting.\n", argv[i]);
@@ -504,17 +367,10 @@ void SkCommandLineFlags::Parse(int argc, char** argv) {
     // Since all of the flags have been set, release the memory used by each
     // flag. FLAGS_x can still be used after this.
     SkFlagInfo* flag = gHead;
-<<<<<<< HEAD
     gHead = nullptr;
     while (flag != nullptr) {
         SkFlagInfo* next = flag->next();
         delete flag;
-=======
-    gHead = NULL;
-    while (flag != NULL) {
-        SkFlagInfo* next = flag->next();
-        SkDELETE(flag);
->>>>>>> miniblink49
         flag = next;
     }
     if (helpPrinted) {
@@ -525,12 +381,8 @@ void SkCommandLineFlags::Parse(int argc, char** argv) {
 namespace {
 
 template <typename Strings>
-<<<<<<< HEAD
 bool ShouldSkipImpl(const Strings& strings, const char* name)
 {
-=======
-bool ShouldSkipImpl(const Strings& strings, const char* name) {
->>>>>>> miniblink49
     int count = strings.count();
     size_t testLen = strlen(name);
     bool anyExclude = count == 0;
@@ -551,24 +403,16 @@ bool ShouldSkipImpl(const Strings& strings, const char* name) {
             matchLen--;
         }
         if (matchStart ? (!matchEnd || matchLen == testLen)
-<<<<<<< HEAD
                     && strncmp(name, matchName, matchLen) == 0
                        : matchEnd ? matchLen <= testLen
                         && strncmp(name + testLen - matchLen, matchName, matchLen) == 0
                                   : strstr(name, matchName) != 0) {
-=======
-                && strncmp(name, matchName, matchLen) == 0
-                : matchEnd ? matchLen <= testLen
-                && strncmp(name + testLen - matchLen, matchName, matchLen) == 0
-                : strstr(name, matchName) != 0) {
->>>>>>> miniblink49
             return matchExclude;
         }
     }
     return !anyExclude;
 }
 
-<<<<<<< HEAD
 } // namespace
 
 bool SkCommandLineFlags::ShouldSkip(const SkTDArray<const char*>& strings, const char* name)
@@ -577,13 +421,5 @@ bool SkCommandLineFlags::ShouldSkip(const SkTDArray<const char*>& strings, const
 }
 bool SkCommandLineFlags::ShouldSkip(const StringArray& strings, const char* name)
 {
-=======
-}  // namespace
-
-bool SkCommandLineFlags::ShouldSkip(const SkTDArray<const char*>& strings, const char* name) {
-    return ShouldSkipImpl(strings, name);
-}
-bool SkCommandLineFlags::ShouldSkip(const StringArray& strings, const char* name) {
->>>>>>> miniblink49
     return ShouldSkipImpl(strings, name);
 }

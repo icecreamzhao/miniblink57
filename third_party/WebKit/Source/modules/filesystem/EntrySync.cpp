@@ -28,18 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "modules/filesystem/EntrySync.h"
 
 #include "bindings/core/v8/ExceptionMessages.h"
 #include "bindings/core/v8/ExceptionState.h"
-<<<<<<< HEAD
-=======
-#include "core/dom/ExceptionCode.h"
->>>>>>> miniblink49
 #include "modules/filesystem/DOMFilePath.h"
 #include "modules/filesystem/DirectoryEntry.h"
 #include "modules/filesystem/DirectoryEntrySync.h"
@@ -59,7 +51,6 @@ EntrySync* EntrySync::create(EntryBase* entry)
 Metadata* EntrySync::getMetadata(ExceptionState& exceptionState)
 {
     MetadataSyncCallbackHelper* helper = MetadataSyncCallbackHelper::create();
-<<<<<<< HEAD
     m_fileSystem->getMetadata(this, helper->getSuccessCallback(),
         helper->getErrorCallback(),
         DOMFileSystemBase::Synchronous);
@@ -85,36 +76,15 @@ EntrySync* EntrySync::copyTo(DirectoryEntrySync* parent,
     m_fileSystem->copy(this, parent, name, helper->getSuccessCallback(),
         helper->getErrorCallback(),
         DOMFileSystemBase::Synchronous);
-=======
-    m_fileSystem->getMetadata(this, helper->successCallback(), helper->errorCallback(), DOMFileSystemBase::Synchronous);
-    return helper->getResult(exceptionState);
-}
-
-EntrySync* EntrySync::moveTo(DirectoryEntrySync* parent, const String& name, ExceptionState& exceptionState) const
-{
-    EntrySyncCallbackHelper* helper = EntrySyncCallbackHelper::create();
-    m_fileSystem->move(this, parent, name, helper->successCallback(), helper->errorCallback(), DOMFileSystemBase::Synchronous);
-    return helper->getResult(exceptionState);
-}
-
-EntrySync* EntrySync::copyTo(DirectoryEntrySync* parent, const String& name, ExceptionState& exceptionState) const
-{
-    EntrySyncCallbackHelper* helper = EntrySyncCallbackHelper::create();
-    m_fileSystem->copy(this, parent, name, helper->successCallback(), helper->errorCallback(), DOMFileSystemBase::Synchronous);
->>>>>>> miniblink49
     return helper->getResult(exceptionState);
 }
 
 void EntrySync::remove(ExceptionState& exceptionState) const
 {
     VoidSyncCallbackHelper* helper = VoidSyncCallbackHelper::create();
-<<<<<<< HEAD
     m_fileSystem->remove(this, helper->getSuccessCallback(),
         helper->getErrorCallback(),
         DOMFileSystemBase::Synchronous);
-=======
-    m_fileSystem->remove(this, helper->successCallback(), helper->errorCallback(), DOMFileSystemBase::Synchronous);
->>>>>>> miniblink49
     helper->getResult(exceptionState);
 }
 
@@ -135,8 +105,4 @@ DEFINE_TRACE(EntrySync)
     EntryBase::trace(visitor);
 }
 
-<<<<<<< HEAD
 } // namespace blink
-=======
-}
->>>>>>> miniblink49

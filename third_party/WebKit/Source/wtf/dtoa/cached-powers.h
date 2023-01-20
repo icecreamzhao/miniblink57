@@ -36,10 +36,6 @@ namespace double_conversion {
 
     class PowersOfTenCache {
     public:
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
         // Not all powers of ten are cached. The decimal exponent of two neighboring
         // cached numbers will differ by kDecimalExponentDistance.
         static const int kDecimalExponentDistance;
@@ -50,15 +46,9 @@ namespace double_conversion {
         // Returns a cached power-of-ten with a binary exponent in the range
         // [min_exponent; max_exponent] (boundaries included).
         static void GetCachedPowerForBinaryExponentRange(int min_exponent,
-<<<<<<< HEAD
             int max_exponent,
             DiyFp* power,
             int* decimal_exponent);
-=======
-                                                         int max_exponent,
-                                                         DiyFp* power,
-                                                         int* decimal_exponent);
->>>>>>> miniblink49
 
         // Returns a cached power of ten x ~= 10^k such that
         //   k <= decimal_exponent < k + kCachedPowersDecimalDistance.
@@ -66,7 +56,6 @@ namespace double_conversion {
         //   kMinDecimalExponent <= requested_exponent, and
         //   requested_exponent < kMaxDecimalExponent + kDecimalExponentDistance.
         static void GetCachedPowerForDecimalExponent(int requested_exponent,
-<<<<<<< HEAD
             DiyFp* power,
             int* found_exponent);
     };
@@ -75,13 +64,3 @@ namespace double_conversion {
 } // namespace WTF
 
 #endif // DOUBLE_CONVERSION_CACHED_POWERS_H_
-=======
-                                                     DiyFp* power,
-                                                     int* found_exponent);
-    };
-}  // namespace double_conversion
-
-} // namespace WTF
-
-#endif  // DOUBLE_CONVERSION_CACHED_POWERS_H_
->>>>>>> miniblink49

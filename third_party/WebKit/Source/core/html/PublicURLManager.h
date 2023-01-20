@@ -26,33 +26,42 @@
 #ifndef PublicURLManager_h
 #define PublicURLManager_h
 
-#include "core/dom/ActiveDOMObject.h"
+#include "core/dom/ContextLifecycleObserver.h"
 #include "platform/heap/Handle.h"
 #include "wtf/HashMap.h"
-#include "wtf/HashSet.h"
-#include "wtf/PassOwnPtr.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
 class KURL;
 class ExecutionContext;
-class SecurityOrigin;
 class URLRegistry;
 class URLRegistrable;
 
-class PublicURLManager final : public NoBaseWillBeGarbageCollectedFinalized<PublicURLManager>, public ActiveDOMObject {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(PublicURLManager);
-    WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(PublicURLManager);
-public:
-    static PassOwnPtrWillBeRawPtr<PublicURLManager> create(ExecutionContext*);
+class PublicURLManager final
+    : public GarbageCollectedFinalized<PublicURLManager>,
+      public ContextLifecycleObserver {
+    USING_GARBAGE_COLLECTED_MIXIN(PublicURLManager);
 
-    void registerURL(SecurityOrigin*, const KURL&, URLRegistrable*, const String& uuid = String());
+public:
+    static PublicURLManager* create(ExecutionContext*);
+
+    // Generates a new Blob URL and registers the URLRegistrable to the
+    // corresponding URLRegistry with the Blob URL. Returns the serialization
+    // of the Blob URL.
+    //
+    // |uuid| can be used for revoke() to revoke all URLs associated with the
+    // |uuid|. It's not the UUID generated and appended to the BlobURL, but an
+    // identifier for the object to which URL(s) are generated e.g. ones
+    // returned by blink::Blob::uuid().
+    String registerURL(ExecutionContext*, URLRegistrable*, const String& uuid);
+    // Revokes the given URL.
     void revoke(const KURL&);
+    // Revokes all URLs associated with |uuid|.
     void revoke(const String& uuid);
 
-    // ActiveDOMObject interface.
-    void stop() override;
+    // ContextLifecycleObserver interface.
+    void contextDestroyed(ExecutionContext*) override;
 
     DECLARE_VIRTUAL_TRACE();
 
@@ -63,6 +72,9 @@ private:
     // Objects need be revoked by unique ID in some cases.
     typedef String URLString;
     typedef HashMap<URLString, String> URLMap;
+    // Map from URLRegistry instances to the maps which store association
+    // between URLs registered with the URLRegistry and UUIDs assigned for
+    // each of the URLs.
     typedef HashMap<URLRegistry*, URLMap> RegistryURLMap;
 
     RegistryURLMap m_registryToURL;

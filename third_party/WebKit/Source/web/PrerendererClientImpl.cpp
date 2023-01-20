@@ -29,10 +29,6 @@
  *
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "web/PrerendererClientImpl.h"
 
 #include "platform/Prerender.h"
@@ -55,12 +51,9 @@ void PrerendererClientImpl::willAddPrerender(Prerender* prerender)
     m_client->willAddPrerender(&webPrerender);
 }
 
-<<<<<<< HEAD
 bool PrerendererClientImpl::isPrefetchOnly()
 {
     return m_client && m_client->isPrefetchOnly();
 }
 
-=======
->>>>>>> miniblink49
 } // namespace blink

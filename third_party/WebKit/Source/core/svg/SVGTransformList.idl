@@ -24,15 +24,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// http://www.w3.org/TR/SVG2/coords.html#InterfaceSVGTransformList
+// https://svgwg.org/svg2-draft/coords.html#InterfaceSVGTransformList
 
 [
     ImplementedAs=SVGTransformListTearOff,
     SetWrapperReferenceTo(SVGElement contextElement),
-    TypeChecking=Interface,
-    RuntimeEnabled=SVG1DOM,
-    MeasureAs=SVG1DOM,
-    WillBeGarbageCollected,
 ] interface SVGTransformList {
     readonly attribute unsigned long length;
     [ImplementedAs=length] readonly attribute unsigned long numberOfItems;
@@ -44,7 +40,7 @@
     [RaisesException] SVGTransform replaceItem(SVGTransform newItem, unsigned long index);
     [RaisesException] SVGTransform removeItem(unsigned long index);
     [RaisesException] SVGTransform appendItem(SVGTransform newItem);
-    // TODO(philipj): SVGMatrix should be DOMMatrix.
+    // TODO(foolip): SVGMatrix should be DOMMatrix.
     SVGTransform createSVGTransformFromMatrix(SVGMatrix matrix);
     [RaisesException, MeasureAs=SVGTransformListConsolidate] SVGTransform? consolidate();
     [RaisesException] setter void (unsigned long index, SVGTransform newItem);

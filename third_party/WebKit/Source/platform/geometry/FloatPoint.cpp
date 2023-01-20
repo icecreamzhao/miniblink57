@@ -24,7 +24,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "platform/geometry/FloatPoint.h"
 
 #include "SkPoint.h"
@@ -33,16 +32,6 @@
 #include "platform/geometry/LayoutSize.h"
 #include "wtf/MathExtras.h"
 #include "wtf/text/WTFString.h"
-=======
-#include "config.h"
-#include "platform/geometry/FloatPoint.h"
-
-#include "SkPoint.h"
-#include "platform/FloatConversion.h"
-#include "platform/geometry/DoublePoint.h"
-#include "platform/geometry/LayoutPoint.h"
-#include "platform/geometry/LayoutSize.h"
->>>>>>> miniblink49
 #include <limits>
 #include <math.h>
 
@@ -51,7 +40,6 @@ namespace blink {
 // Skia has problems when passed infinite, etc floats, filter them to 0.
 static inline SkScalar WebCoreFloatToSkScalar(float f)
 {
-<<<<<<< HEAD
     return SkFloatToScalar(std_isfinite(f) ? f : 0);
 }
 
@@ -64,16 +52,6 @@ FloatPoint::FloatPoint(const IntPoint& p)
 FloatPoint::FloatPoint(const DoublePoint& p)
     : m_x(p.x())
     , m_y(p.y())
-=======
-    return SkFloatToScalar(std::isfinite(f) ? f : 0);
-}
-
-FloatPoint::FloatPoint(const IntPoint& p) : m_x(p.x()), m_y(p.y())
-{
-}
-
-FloatPoint::FloatPoint(const DoublePoint& p) : m_x(p.x()), m_y(p.y())
->>>>>>> miniblink49
 {
 }
 
@@ -84,12 +62,8 @@ FloatPoint::FloatPoint(const LayoutPoint& p)
 }
 
 FloatPoint::FloatPoint(const LayoutSize& size)
-<<<<<<< HEAD
     : m_x(size.width().toFloat())
     , m_y(size.height().toFloat())
-=======
-    : m_x(size.width().toFloat()), m_y(size.height().toFloat())
->>>>>>> miniblink49
 {
 }
 
@@ -123,7 +97,6 @@ SkPoint FloatPoint::data() const
 
 FloatPoint FloatPoint::narrowPrecision(double x, double y)
 {
-<<<<<<< HEAD
     return FloatPoint(clampTo<float>(x), clampTo<float>(y));
 }
 
@@ -132,12 +105,6 @@ bool findIntersection(const FloatPoint& p1,
     const FloatPoint& d1,
     const FloatPoint& d2,
     FloatPoint& intersection)
-=======
-    return FloatPoint(narrowPrecisionToFloat(x), narrowPrecisionToFloat(y));
-}
-
-bool findIntersection(const FloatPoint& p1, const FloatPoint& p2, const FloatPoint& d1, const FloatPoint& d2, FloatPoint& intersection)
->>>>>>> miniblink49
 {
     float pxLength = p2.x() - p1.x();
     float pyLength = p2.y() - p1.y();
@@ -156,13 +123,9 @@ bool findIntersection(const FloatPoint& p1, const FloatPoint& p2, const FloatPoi
     return true;
 }
 
-<<<<<<< HEAD
 String FloatPoint::toString() const
 {
     return String::format("%lg,%lg", x(), y());
 }
 
 } // namespace blink
-=======
-}
->>>>>>> miniblink49

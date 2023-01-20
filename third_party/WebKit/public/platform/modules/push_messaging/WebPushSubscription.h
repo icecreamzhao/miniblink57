@@ -6,19 +6,13 @@
 #define WebPushSubscription_h
 
 #include "public/platform/WebCommon.h"
-<<<<<<< HEAD
 #include "public/platform/WebURL.h"
 #include "public/platform/WebVector.h"
 #include "public/platform/modules/push_messaging/WebPushSubscriptionOptions.h"
-=======
-#include "public/platform/WebString.h"
-#include "public/platform/WebURL.h"
->>>>>>> miniblink49
 
 namespace blink {
 
 struct WebPushSubscription {
-<<<<<<< HEAD
     // The |endpoint|, |p256dh| and |auth| must all be unique for each
     // subscription.
     WebPushSubscription(const WebURL& endpoint,
@@ -38,17 +32,6 @@ struct WebPushSubscription {
     WebPushSubscriptionOptions options;
     WebVector<unsigned char> p256dh;
     WebVector<unsigned char> auth;
-=======
-    explicit WebPushSubscription(const WebURL& endpoint)
-        : endpoint(endpoint)
-    {
-    }
-
-    // TODO(peter): Remove this constructor when the embedder switched over to the one above.
-    BLINK_PLATFORM_EXPORT WebPushSubscription(const WebString& endpointWithoutSubscriptionId, const WebString& subscriptionId);
-
-    WebURL endpoint;
->>>>>>> miniblink49
 };
 
 } // namespace blink

@@ -6,10 +6,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #include "SkDisplayable.h"
 #include "SkDisplayApply.h"
 #include "SkParse.h"
@@ -24,12 +20,8 @@ SkTDDisplayableArray SkDisplayable::fAllocations;
 #endif
 
 #ifdef SK_DEBUG
-<<<<<<< HEAD
 SkDisplayable::SkDisplayable()
 {
-=======
-SkDisplayable::SkDisplayable() {
->>>>>>> miniblink49
     id = _id.c_str();
 #ifdef SK_FIND_LEAKS
     // fAllocationCount++;
@@ -38,12 +30,8 @@ SkDisplayable::SkDisplayable() {
 }
 #endif
 
-<<<<<<< HEAD
 SkDisplayable::~SkDisplayable()
 {
-=======
-SkDisplayable::~SkDisplayable() {
->>>>>>> miniblink49
 #ifdef SK_FIND_LEAKS
     //  fAllocationCount--;
     int index = fAllocations.find(this);
@@ -52,12 +40,8 @@ SkDisplayable::~SkDisplayable() {
 #endif
 }
 
-<<<<<<< HEAD
 bool SkDisplayable::addChild(SkAnimateMaker&, SkDisplayable* child)
 {
-=======
-bool SkDisplayable::addChild(SkAnimateMaker& , SkDisplayable* child) {
->>>>>>> miniblink49
     return false;
 }
 
@@ -66,7 +50,6 @@ bool SkDisplayable::addChild(SkAnimateMaker& , SkDisplayable* child) {
 //  SkASSERT(0);
 //}
 
-<<<<<<< HEAD
 bool SkDisplayable::canContainDependents() const
 {
     return false;
@@ -97,32 +80,6 @@ SkDisplayable* SkDisplayable::deepCopy(SkAnimateMaker* maker)
     if (type == SkType_Unknown) {
         SkASSERT(0);
         return nullptr;
-=======
-bool SkDisplayable::canContainDependents() const {
-    return false;
-}
-
-bool SkDisplayable::childrenNeedDisposing() const {
-    return false;
-}
-
-void SkDisplayable::clearBounder() {
-}
-
-bool SkDisplayable::contains(SkDisplayable* ) {
-    return false;
-}
-
-SkDisplayable* SkDisplayable::contains(const SkString& ) {
-    return NULL;
-}
-
-SkDisplayable* SkDisplayable::deepCopy(SkAnimateMaker* maker) {
-    SkDisplayTypes type = getType();
-    if (type == SkType_Unknown) {
-        SkASSERT(0);
-        return NULL;
->>>>>>> miniblink49
     }
     SkDisplayable* copy = SkDisplayType::CreateInstance(maker, type);
     int index = -1;
@@ -130,11 +87,7 @@ SkDisplayable* SkDisplayable::deepCopy(SkAnimateMaker* maker) {
     const SkMemberInfo* info;
     do {
         info = copy->getMember(++index);
-<<<<<<< HEAD
         if (info == nullptr)
-=======
-        if (info == NULL)
->>>>>>> miniblink49
             break;
         if (info->fType == SkType_MemberProperty) {
             SkScriptValue value;
@@ -146,7 +99,6 @@ SkDisplayable* SkDisplayable::deepCopy(SkAnimateMaker* maker) {
         if (info->fType == SkType_MemberFunction)
             continue;
         if (info->fType == SkType_Array) {
-<<<<<<< HEAD
             SkTDOperandArray* array = (SkTDOperandArray*)info->memberData(this);
             int arrayCount;
             if (array == nullptr || (arrayCount = array->count()) == 0)
@@ -156,17 +108,6 @@ SkDisplayable* SkDisplayable::deepCopy(SkAnimateMaker* maker) {
             SkDisplayTypes elementType;
             if (type == SkType_Array) {
                 SkDisplayArray* dispArray = (SkDisplayArray*)this;
-=======
-            SkTDOperandArray* array = (SkTDOperandArray*) info->memberData(this);
-            int arrayCount;
-            if (array == NULL || (arrayCount = array->count()) == 0)
-                continue;
-            SkTDOperandArray* copyArray = (SkTDOperandArray*) info->memberData(copy);
-            copyArray->setCount(arrayCount);
-            SkDisplayTypes elementType;
-            if (type == SkType_Array) {
-                SkDisplayArray* dispArray = (SkDisplayArray*) this;
->>>>>>> miniblink49
                 elementType = dispArray->values.getType();
             } else
                 elementType = info->arrayType();
@@ -176,13 +117,8 @@ SkDisplayable* SkDisplayable::deepCopy(SkAnimateMaker* maker) {
             continue;
         }
         if (SkDisplayType::IsDisplayable(maker, info->fType)) {
-<<<<<<< HEAD
             SkDisplayable** displayable = (SkDisplayable**)info->memberData(this);
             if (*displayable == nullptr || *displayable == (SkDisplayable*)-1)
-=======
-            SkDisplayable** displayable = (SkDisplayable**) info->memberData(this);
-            if (*displayable == NULL || *displayable == (SkDisplayable*) -1)
->>>>>>> miniblink49
                 continue;
             SkDisplayable* deeper = (*displayable)->deepCopy(maker);
             info->setMemberData(copy, deeper, sizeof(deeper));
@@ -202,7 +138,6 @@ SkDisplayable* SkDisplayable::deepCopy(SkAnimateMaker* maker) {
     return copy;
 }
 
-<<<<<<< HEAD
 void SkDisplayable::dirty()
 {
 }
@@ -210,13 +145,6 @@ void SkDisplayable::dirty()
 #ifdef SK_DUMP_ENABLED
 void SkDisplayable::dump(SkAnimateMaker* maker)
 {
-=======
-void SkDisplayable::dirty() {
-}
-
-#ifdef SK_DUMP_ENABLED
-void SkDisplayable::dump(SkAnimateMaker* maker) {
->>>>>>> miniblink49
     dumpBase(maker);
 #if SK_USE_CONDENSED_INFO == 0
     this->dumpAttrs(maker);
@@ -224,12 +152,8 @@ void SkDisplayable::dump(SkAnimateMaker* maker) {
 #endif
 }
 
-<<<<<<< HEAD
 void SkDisplayable::dumpAttrs(SkAnimateMaker* maker)
 {
-=======
-void SkDisplayable::dumpAttrs(SkAnimateMaker* maker) {
->>>>>>> miniblink49
     SkDisplayTypes type = getType();
     if (type == SkType_Unknown) {
         //SkDebugf("/>\n");
@@ -247,11 +171,7 @@ void SkDisplayable::dumpAttrs(SkAnimateMaker* maker) {
     SkOperand blankValues[2];
     do {
         info = this->getMember(++index);
-<<<<<<< HEAD
         if (nullptr == info) {
-=======
-        if (NULL == info) {
->>>>>>> miniblink49
             //SkDebugf("\n");
             break;
         }
@@ -260,11 +180,7 @@ void SkDisplayable::dumpAttrs(SkAnimateMaker* maker) {
                 blankCopy->getProperty(propIndex, &blankValue);
                 //last two are dummies
                 dumpValues(info, value.fType, value.fOperand, blankValue.fOperand, value.fOperand, blankValue.fOperand);
-<<<<<<< HEAD
             }
-=======
-                }
->>>>>>> miniblink49
 
             propIndex++;
             continue;
@@ -276,7 +192,6 @@ void SkDisplayable::dumpAttrs(SkAnimateMaker* maker) {
         if (info->fType == SkType_MemberFunction)
             continue;
 
-<<<<<<< HEAD
         if (info->fType == SkType_Array) {
             SkTDOperandArray* array = (SkTDOperandArray*)info->memberData(this);
             int arrayCount;
@@ -285,24 +200,12 @@ void SkDisplayable::dumpAttrs(SkAnimateMaker* maker) {
             SkDisplayTypes elementType;
             if (type == SkType_Array) {
                 SkDisplayArray* dispArray = (SkDisplayArray*)this;
-=======
-
-        if (info->fType == SkType_Array) {
-            SkTDOperandArray* array = (SkTDOperandArray*) info->memberData(this);
-            int arrayCount;
-            if (array == NULL || (arrayCount = array->count()) == 0)
-                continue;
-            SkDisplayTypes elementType;
-            if (type == SkType_Array) {
-                SkDisplayArray* dispArray = (SkDisplayArray*) this;
->>>>>>> miniblink49
                 elementType = dispArray->values.getType();
             } else
                 elementType = info->arrayType();
             bool firstElem = true;
             SkDebugf("%s=\"[", info->fName);
             for (SkOperand* op = array->begin(); op < array->end(); op++) {
-<<<<<<< HEAD
                 if (!firstElem)
                     SkDebugf(",");
                 switch (elementType) {
@@ -321,25 +224,6 @@ void SkDisplayable::dumpAttrs(SkAnimateMaker* maker) {
                     break;
                 default:
                     break;
-=======
-                if (!firstElem) SkDebugf(",");
-                switch (elementType) {
-                        case SkType_Displayable:
-                            SkDebugf("%s", op->fDisplayable->id);
-                            break;
-                        case SkType_Int:
-                            SkDebugf("%d", op->fS32);
-                            break;
-                        case SkType_Float:
-                            SkDebugf("%g", SkScalarToFloat(op->fScalar));
-                            break;
-                        case SkType_String:
-                        case SkType_DynamicString:
-                            SkDebugf("%s", op->fString->c_str());
-                            break;
-                        default:
-                            break;
->>>>>>> miniblink49
                 }
                 firstElem = false;
             }
@@ -355,10 +239,6 @@ void SkDisplayable::dumpAttrs(SkAnimateMaker* maker) {
             continue;
         }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
         blankInfo = blankCopy->getMember(index);
         int i = info->fCount;
         info->getValue(this, values, i);
@@ -368,12 +248,8 @@ void SkDisplayable::dumpAttrs(SkAnimateMaker* maker) {
     delete blankCopy;
 }
 
-<<<<<<< HEAD
 void SkDisplayable::dumpBase(SkAnimateMaker* maker)
 {
-=======
-void SkDisplayable::dumpBase(SkAnimateMaker* maker) {
->>>>>>> miniblink49
     SkDisplayTypes type = getType();
     const char* elementName = "(unknown)";
     if (type != SkType_Unknown && type != SkType_Screenplay)
@@ -382,20 +258,12 @@ void SkDisplayable::dumpBase(SkAnimateMaker* maker) {
     if (SkDisplayList::fDumpIndex != 0 && SkDisplayList::fIndent == 0)
         SkDebugf("%d: ", SkDisplayList::fDumpIndex);
     SkDebugf("<%s ", elementName);
-<<<<<<< HEAD
     if (strcmp(id, "") != 0)
         SkDebugf("id=\"%s\" ", id);
 }
 
 void SkDisplayable::dumpChildren(SkAnimateMaker* maker, bool closedAngle)
 {
-=======
-    if (strcmp(id,"") != 0)
-        SkDebugf("id=\"%s\" ", id);
-}
-
-void SkDisplayable::dumpChildren(SkAnimateMaker* maker, bool closedAngle) {
->>>>>>> miniblink49
 
     int index = -1;
     const SkMemberInfo* info;
@@ -403,21 +271,12 @@ void SkDisplayable::dumpChildren(SkAnimateMaker* maker, bool closedAngle) {
     SkDisplayList::fIndent += 4;
     do {
         info = this->getMember(++index);
-<<<<<<< HEAD
         if (nullptr == info) {
             break;
         }
         if (SkDisplayType::IsDisplayable(maker, info->fType)) {
             SkDisplayable** displayable = (SkDisplayable**)info->memberData(this);
             if (*displayable == nullptr || *displayable == (SkDisplayable*)-1)
-=======
-        if (NULL == info) {
-            break;
-        }
-        if (SkDisplayType::IsDisplayable(maker, info->fType)) {
-            SkDisplayable** displayable = (SkDisplayable**) info->memberData(this);
-            if (*displayable == NULL || *displayable == (SkDisplayable*) -1)
->>>>>>> miniblink49
                 continue;
             if (closedAngle == false) {
                 SkDebugf(">\n");
@@ -433,12 +292,8 @@ void SkDisplayable::dumpChildren(SkAnimateMaker* maker, bool closedAngle) {
         SkDebugf("/>\n");
 }
 
-<<<<<<< HEAD
 void SkDisplayable::dumpEnd(SkAnimateMaker* maker)
 {
-=======
-void SkDisplayable::dumpEnd(SkAnimateMaker* maker) {
->>>>>>> miniblink49
     SkDisplayTypes type = getType();
     const char* elementName = "(unknown)";
     if (type != SkType_Unknown && type != SkType_Screenplay)
@@ -447,7 +302,6 @@ void SkDisplayable::dumpEnd(SkAnimateMaker* maker) {
     SkDebugf("</%s>\n", elementName);
 }
 
-<<<<<<< HEAD
 void SkDisplayable::dumpEvents()
 {
 }
@@ -466,21 +320,6 @@ void SkDisplayable::dumpValues(const SkMemberInfo* info, SkDisplayTypes type, Sk
             break;
         default:
             SkDebugf("type=\"UNDEFINED\" ");
-=======
-void SkDisplayable::dumpEvents() {
-}
-
-void SkDisplayable::dumpValues(const SkMemberInfo* info, SkDisplayTypes type, SkOperand op, SkOperand blankOp,
-    SkOperand op2, SkOperand blankOp2) {
-    switch (type) {
-    case SkType_BitmapEncoding:
-        switch (op.fS32) {
-            case 0 : SkDebugf("type=\"jpeg\" ");
-                break;
-            case 1 : SkDebugf("type=\"png\" ");
-                break;
-            default: SkDebugf("type=\"UNDEFINED\" ");
->>>>>>> miniblink49
         }
         break;
     //should make this a separate case in dump attrs, rather than make dump values have a larger signature
@@ -491,7 +330,6 @@ void SkDisplayable::dumpValues(const SkMemberInfo* info, SkDisplayTypes type, Sk
         break;
     case SkType_FromPathMode:
         switch (op.fS32) {
-<<<<<<< HEAD
         case 0:
             //don't want to print anything for 0, just adding it to remove it from default:
             break;
@@ -503,24 +341,10 @@ void SkDisplayable::dumpValues(const SkMemberInfo* info, SkDisplayTypes type, Sk
             break;
         default:
             SkDebugf("%s=\"INVALID\" ", info->fName);
-=======
-            case 0:
-                //don't want to print anything for 0, just adding it to remove it from default:
-                break;
-            case 1:
-                SkDebugf("%s=\"%s\" ", info->fName, "angle");
-                break;
-            case 2:
-                SkDebugf("%s=\"%s\" ", info->fName, "position");
-                break;
-            default:
-                SkDebugf("%s=\"INVALID\" ", info->fName);
->>>>>>> miniblink49
         }
         break;
     case SkType_MaskFilterBlurStyle:
         switch (op.fS32) {
-<<<<<<< HEAD
         case 0:
             break;
         case 1:
@@ -534,21 +358,6 @@ void SkDisplayable::dumpValues(const SkMemberInfo* info, SkDisplayTypes type, Sk
             break;
         default:
             SkDebugf("%s=\"INVALID\" ", info->fName);
-=======
-            case 0:
-                break;
-            case 1:
-                SkDebugf("%s=\"%s\" ", info->fName, "solid");
-                break;
-            case 2:
-                SkDebugf("%s=\"%s\" ", info->fName, "outer");
-                break;
-            case 3:
-                SkDebugf("%s=\"%s\" ", info->fName, "inner");
-                break;
-            default:
-                SkDebugf("%s=\"INVALID\" ", info->fName);
->>>>>>> miniblink49
         }
         break;
     case SkType_FilterType:
@@ -595,7 +404,6 @@ void SkDisplayable::dumpValues(const SkMemberInfo* info, SkDisplayTypes type, Sk
 
 #endif
 
-<<<<<<< HEAD
 bool SkDisplayable::enable(SkAnimateMaker&)
 {
     return false;
@@ -608,27 +416,12 @@ void SkDisplayable::enableBounder()
 void SkDisplayable::executeFunction(SkDisplayable*, int index,
     SkTDArray<SkScriptValue>&, SkDisplayTypes, SkScriptValue*)
 {
-=======
-bool SkDisplayable::enable( SkAnimateMaker& ) {
-    return false;
-}
-
-void SkDisplayable::enableBounder() {
-}
-
-void SkDisplayable::executeFunction(SkDisplayable* , int index,
-        SkTDArray<SkScriptValue>& , SkDisplayTypes, SkScriptValue*  ) {
->>>>>>> miniblink49
     SkASSERT(0);
 }
 
 void SkDisplayable::executeFunction(SkDisplayable* target,
-<<<<<<< HEAD
     const SkMemberInfo* info, SkTypedArray* values, SkScriptValue* value)
 {
-=======
-        const SkMemberInfo* info, SkTypedArray* values, SkScriptValue* value) {
->>>>>>> miniblink49
     SkTDArray<SkScriptValue> typedValues;
     for (SkOperand* op = values->begin(); op < values->end(); op++) {
         SkScriptValue temp;
@@ -639,7 +432,6 @@ void SkDisplayable::executeFunction(SkDisplayable* target,
     executeFunction(target, info->functionIndex(), typedValues, info->getType(), value);
 }
 
-<<<<<<< HEAD
 void SkDisplayable::executeFunction2(SkDisplayable*, int index,
     SkOpArray* params, SkDisplayTypes, SkOperand2*)
 {
@@ -673,35 +465,6 @@ const SkFunctionParamType* SkDisplayable::getParameters(const SkMemberInfo* info
 {
     const SkFunctionParamType* params = getFunctionsParameters();
     SkASSERT(params != nullptr);
-=======
-void SkDisplayable::executeFunction2(SkDisplayable* , int index,
-        SkOpArray* params, SkDisplayTypes, SkOperand2*  ) {
-    SkASSERT(0);
-}
-
-void SkDisplayable::getBounds(SkRect* rect) {
-    SkASSERT(rect);
-    rect->fLeft = rect->fTop = SK_ScalarMax;
-    rect->fRight= rect->fBottom = -SK_ScalarMax;
-}
-
-const SkFunctionParamType* SkDisplayable::getFunctionsParameters() {
-    return NULL;
-}
-
-const SkMemberInfo* SkDisplayable::getMember(int index) {
-    return NULL;
-}
-
-const SkMemberInfo* SkDisplayable::getMember(const char name[]) {
-    return NULL;
-}
-
-const SkFunctionParamType* SkDisplayable::getParameters(const SkMemberInfo* info,
-        int* paramCount) {
-    const SkFunctionParamType* params = getFunctionsParameters();
-    SkASSERT(params != NULL);
->>>>>>> miniblink49
     int funcIndex = info->functionIndex();
     // !!! eventually break traversing params into an external function (maybe this whole function)
     int index = funcIndex;
@@ -720,7 +483,6 @@ const SkFunctionParamType* SkDisplayable::getParameters(const SkMemberInfo* info
     return &params[offset - count];
 }
 
-<<<<<<< HEAD
 SkDisplayable* SkDisplayable::getParent() const
 {
     return nullptr;
@@ -734,23 +496,10 @@ bool SkDisplayable::getProperty(int index, SkScriptValue*) const
 
 bool SkDisplayable::getProperty2(int index, SkOperand2* value) const
 {
-=======
-SkDisplayable* SkDisplayable::getParent() const {
-    return NULL;
-}
-
-bool SkDisplayable::getProperty(int index, SkScriptValue* ) const {
-//  SkASSERT(0);
-    return false;
-}
-
-bool SkDisplayable::getProperty2(int index, SkOperand2* value) const {
->>>>>>> miniblink49
     SkASSERT(0);
     return false;
 }
 
-<<<<<<< HEAD
 SkDisplayTypes SkDisplayable::getType() const
 {
     return SkType_Unknown;
@@ -775,27 +524,6 @@ const SkMemberInfo* SkDisplayable::preferredChild(SkDisplayTypes type)
 
 bool SkDisplayable::resolveIDs(SkAnimateMaker& maker, SkDisplayable* original, SkApply* apply)
 {
-=======
-SkDisplayTypes SkDisplayable::getType() const {
-    return SkType_Unknown;
-}
-
-bool SkDisplayable::hasEnable() const {
-    return false;
-}
-
-bool SkDisplayable::isDrawable() const {
-    return false;
-}
-
-void SkDisplayable::onEndElement(SkAnimateMaker& ) {}
-
-const SkMemberInfo* SkDisplayable::preferredChild(SkDisplayTypes type) {
-    return NULL;
-}
-
-bool SkDisplayable::resolveIDs(SkAnimateMaker& maker, SkDisplayable* original, SkApply* apply) {
->>>>>>> miniblink49
     return false;
 }
 
@@ -803,7 +531,6 @@ bool SkDisplayable::resolveIDs(SkAnimateMaker& maker, SkDisplayable* original, S
 //  return this;
 //}
 
-<<<<<<< HEAD
 void SkDisplayable::setChildHasID()
 {
 }
@@ -815,26 +542,12 @@ bool SkDisplayable::setParent(SkDisplayable*)
 
 bool SkDisplayable::setProperty(int index, SkScriptValue&)
 {
-=======
-void SkDisplayable::setChildHasID() {
-}
-
-bool SkDisplayable::setParent(SkDisplayable* ) {
-    return false;
-}
-
-bool SkDisplayable::setProperty(int index, SkScriptValue& ) {
->>>>>>> miniblink49
     //SkASSERT(0);
     return false;
 }
 
-<<<<<<< HEAD
 void SkDisplayable::setReference(const SkMemberInfo* info, SkDisplayable* displayable)
 {
-=======
-void SkDisplayable::setReference(const SkMemberInfo* info, SkDisplayable* displayable) {
->>>>>>> miniblink49
     if (info->fType == SkType_MemberProperty) {
         SkScriptValue scriptValue;
         scriptValue.fOperand.fDisplayable = displayable;
@@ -842,13 +555,8 @@ void SkDisplayable::setReference(const SkMemberInfo* info, SkDisplayable* displa
         setProperty(info->propertyIndex(), scriptValue);
     } else if (info->fType == SkType_Array) {
         SkASSERT(displayable->getType() == SkType_Array);
-<<<<<<< HEAD
         SkDisplayArray* dispArray = (SkDisplayArray*)displayable;
         SkTDScalarArray* array = (SkTDScalarArray*)info->memberData(this);
-=======
-        SkDisplayArray* dispArray = (SkDisplayArray*) displayable;
-        SkTDScalarArray* array = (SkTDScalarArray* ) info->memberData(this);
->>>>>>> miniblink49
         array->setCount(dispArray->values.count());
         memcpy(array->begin(), dispArray->values.begin(), dispArray->values.count() * sizeof(int));
         //
@@ -861,7 +569,6 @@ void SkDisplayable::setReference(const SkMemberInfo* info, SkDisplayable* displa
         void* storage = info->memberData(this);
         memcpy(storage, &displayable, sizeof(SkDisplayable*));
     }
-<<<<<<< HEAD
     // !!! unclear why displayable is dirtied here
     // if this is called, this breaks fromPath.xml
     //  displayable->dirty();
@@ -870,14 +577,5 @@ void SkDisplayable::setReference(const SkMemberInfo* info, SkDisplayable* displa
 #ifdef SK_DEBUG
 void SkDisplayable::validate()
 {
-=======
-// !!! unclear why displayable is dirtied here
-// if this is called, this breaks fromPath.xml
-//  displayable->dirty();
-}
-
-#ifdef SK_DEBUG
-void SkDisplayable::validate() {
->>>>>>> miniblink49
 }
 #endif

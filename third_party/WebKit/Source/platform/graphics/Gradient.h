@@ -33,7 +33,6 @@
 #include "platform/geometry/FloatPoint.h"
 #include "platform/graphics/Color.h"
 #include "platform/graphics/GraphicsTypes.h"
-<<<<<<< HEAD
 #include "third_party/skia/include/core/SkRefCnt.h"
 #include "wtf/Noncopyable.h"
 #include "wtf/PassRefPtr.h"
@@ -42,20 +41,11 @@
 
 class SkMatrix;
 class SkPaint;
-=======
-#include "platform/transforms/AffineTransform.h"
-#include "wtf/PassRefPtr.h"
-#include "wtf/RefCounted.h"
-#include "wtf/RefPtr.h"
-#include "wtf/Vector.h"
-
->>>>>>> miniblink49
 class SkShader;
 
 namespace blink {
 
 class PLATFORM_EXPORT Gradient : public RefCounted<Gradient> {
-<<<<<<< HEAD
     WTF_MAKE_NONCOPYABLE(Gradient);
 
 public:
@@ -69,21 +59,12 @@ public:
         const FloatPoint& p1,
         float r1,
         float aspectRatio = 1)
-=======
-public:
-    static PassRefPtr<Gradient> create(const FloatPoint& p0, const FloatPoint& p1)
-    {
-        return adoptRef(new Gradient(p0, p1));
-    }
-    static PassRefPtr<Gradient> create(const FloatPoint& p0, float r0, const FloatPoint& p1, float r1, float aspectRatio = 1)
->>>>>>> miniblink49
     {
         return adoptRef(new Gradient(p0, r0, p1, r1, aspectRatio));
     }
     ~Gradient();
 
     struct ColorStop {
-<<<<<<< HEAD
         DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
         float stop;
         Color color;
@@ -105,20 +86,6 @@ public:
     {
         return m_p0.x() == m_p1.x() && m_p0.y() == m_p1.y() && (!m_radial || m_r0 == m_r1);
     }
-=======
-        float stop;
-        Color color;
-
-        ColorStop(float s, const Color& c) : stop(s), color(c) { }
-    };
-    void addColorStop(const ColorStop&);
-    void addColorStop(float value, const Color& color) { addColorStop(ColorStop(value, color)); }
-
-    bool shaderChanged() const { return !m_gradient; }
-
-    bool isRadial() const { return m_radial; }
-    bool isZeroSize() const { return m_p0.x() == m_p1.x() && m_p0.y() == m_p1.y() && (!m_radial || m_r0 == m_r1); }
->>>>>>> miniblink49
 
     const FloatPoint& p0() const { return m_p0; }
     const FloatPoint& p1() const { return m_p1; }
@@ -158,19 +125,12 @@ public:
         m_r1 = r;
     }
 
-<<<<<<< HEAD
     void applyToPaint(SkPaint&, const SkMatrix& localMatrix);
-=======
-    float aspectRatio() const { return m_aspectRatio; }
-
-    SkShader* shader();
->>>>>>> miniblink49
 
     void setDrawsInPMColorSpace(bool drawInPMColorSpace);
 
     void setSpreadMethod(GradientSpreadMethod);
     GradientSpreadMethod spreadMethod() const { return m_spreadMethod; }
-<<<<<<< HEAD
 
 private:
     Gradient(const FloatPoint& p0, const FloatPoint& p1);
@@ -181,16 +141,6 @@ private:
         float aspectRatio);
 
     sk_sp<SkShader> createShader(const SkMatrix& localMatrix);
-=======
-    void setGradientSpaceTransform(const AffineTransform& gradientSpaceTransformation);
-    AffineTransform gradientSpaceTransform() { return m_gradientSpaceTransformation; }
-
-private:
-    Gradient(const FloatPoint& p0, const FloatPoint& p1);
-    Gradient(const FloatPoint& p0, float r0, const FloatPoint& p1, float r1, float aspectRatio);
-
-    void destroyShader();
->>>>>>> miniblink49
 
     void sortStopsIfNecessary();
 
@@ -204,14 +154,8 @@ private:
     bool m_stopsSorted;
     bool m_drawInPMColorSpace;
     GradientSpreadMethod m_spreadMethod;
-<<<<<<< HEAD
 
     mutable sk_sp<SkShader> m_cachedShader;
-=======
-    AffineTransform m_gradientSpaceTransformation;
-
-    RefPtr<SkShader> m_gradient;
->>>>>>> miniblink49
 };
 
 } // namespace blink

@@ -35,6 +35,7 @@
 #include "core/layout/compositing/CompositedSelectionBound.h"
 #include "platform/geometry/FloatPoint.h"
 #include "platform/graphics/GraphicsLayer.h"
+#include "wtf/Allocator.h"
 
 namespace blink {
 
@@ -42,11 +43,11 @@ namespace blink {
 // end points as well as metadata for the selection region.
 // See |WebSelection|.
 struct CompositedSelection {
-
+    STACK_ALLOCATED();
     CompositedSelection()
         : type(NoSelection)
         , isEditable(false)
-        , isEmptyTextFormControl(false)
+        , isEmptyTextControl(false)
     {
     }
 
@@ -54,7 +55,7 @@ struct CompositedSelection {
     CompositedSelectionBound start;
     CompositedSelectionBound end;
     bool isEditable;
-    bool isEmptyTextFormControl;
+    bool isEmptyTextControl;
 };
 
 } // namespace blink

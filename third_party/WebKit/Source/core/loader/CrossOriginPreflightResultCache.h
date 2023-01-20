@@ -31,8 +31,8 @@
 #include "platform/weborigin/KURLHash.h"
 #include "wtf/HashMap.h"
 #include "wtf/HashSet.h"
-#include "wtf/PassOwnPtr.h"
 #include "wtf/text/StringHash.h"
+#include <memory>
 
 namespace blink {
 
@@ -40,9 +40,11 @@ class HTTPHeaderMap;
 class ResourceResponse;
 
 class CrossOriginPreflightResultCacheItem {
-    WTF_MAKE_NONCOPYABLE(CrossOriginPreflightResultCacheItem); WTF_MAKE_FAST_ALLOCATED(CrossOriginPreflightResultCacheItem);
+    WTF_MAKE_NONCOPYABLE(CrossOriginPreflightResultCacheItem);
+    USING_FAST_MALLOC(CrossOriginPreflightResultCacheItem);
+
 public:
-    CrossOriginPreflightResultCacheItem(StoredCredentials credentials)
+    explicit CrossOriginPreflightResultCacheItem(StoredCredentials credentials)
         : m_absoluteExpiryTime(0)
         , m_credentials(credentials)
     {
@@ -50,15 +52,18 @@ public:
 
     bool parse(const ResourceResponse&, String& errorDescription);
     bool allowsCrossOriginMethod(const String&, String& errorDescription) const;
-    bool allowsCrossOriginHeaders(const HTTPHeaderMap&, String& errorDescription) const;
-    bool allowsRequest(StoredCredentials, const String& method, const HTTPHeaderMap& requestHeaders) const;
+    bool allowsCrossOriginHeaders(const HTTPHeaderMap&,
+        String& errorDescription) const;
+    bool allowsRequest(StoredCredentials,
+        const String& method,
+        const HTTPHeaderMap& requestHeaders) const;
 
 private:
     typedef HashSet<String, CaseFoldingHash> HeadersSet;
 
-    // FIXME: A better solution to holding onto the absolute expiration time might be
-    // to start a timer for the expiration delta that removes this from the cache when
-    // it fires.
+    // FIXME: A better solution to holding onto the absolute expiration time might
+    // be to start a timer for the expiration delta that removes this from the
+    // cache when it fires.
     double m_absoluteExpiryTime;
     StoredCredentials m_credentials;
     HashSet<String> m_methods;
@@ -66,17 +71,27 @@ private:
 };
 
 class CrossOriginPreflightResultCache {
-    WTF_MAKE_NONCOPYABLE(CrossOriginPreflightResultCache); WTF_MAKE_FAST_ALLOCATED(CrossOriginPreflightResultCache);
+    WTF_MAKE_NONCOPYABLE(CrossOriginPreflightResultCache);
+    USING_FAST_MALLOC(CrossOriginPreflightResultCache);
+
 public:
     static CrossOriginPreflightResultCache& shared();
 
-    void appendEntry(const String& origin, const KURL&, PassOwnPtr<CrossOriginPreflightResultCacheItem>);
-    bool canSkipPreflight(const String& origin, const KURL&, StoredCredentials, const String& method, const HTTPHeaderMap& requestHeaders);
+    void appendEntry(const String& origin,
+        const KURL&,
+        std::unique_ptr<CrossOriginPreflightResultCacheItem>);
+    bool canSkipPreflight(const String& origin,
+        const KURL&,
+        StoredCredentials,
+        const String& method,
+        const HTTPHeaderMap& requestHeaders);
 
 private:
     CrossOriginPreflightResultCache() { }
 
-    typedef HashMap<std::pair<String, KURL>, OwnPtr<CrossOriginPreflightResultCacheItem>> CrossOriginPreflightResultHashMap;
+    typedef HashMap<std::pair<String, KURL>,
+        std::unique_ptr<CrossOriginPreflightResultCacheItem>>
+        CrossOriginPreflightResultHashMap;
 
     CrossOriginPreflightResultHashMap m_preflightHashMap;
 };

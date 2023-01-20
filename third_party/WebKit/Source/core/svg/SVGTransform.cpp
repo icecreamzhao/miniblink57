@@ -18,10 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/svg/SVGTransform.h"
 
-#include "platform/FloatConversion.h"
 #include "platform/geometry/FloatSize.h"
 #include "wtf/MathExtras.h"
 #include "wtf/text/StringBuilder.h"
@@ -29,15 +27,14 @@
 namespace blink {
 
 SVGTransform::SVGTransform()
-    : SVGPropertyBase(classType())
-    , m_transformType(SVG_TRANSFORM_UNKNOWN)
+    : m_transformType(kSvgTransformUnknown)
     , m_angle(0)
 {
 }
 
-SVGTransform::SVGTransform(SVGTransformType transformType, ConstructionMode mode)
-    : SVGPropertyBase(classType())
-    , m_transformType(transformType)
+SVGTransform::SVGTransform(SVGTransformType transformType,
+    ConstructionMode mode)
+    : m_transformType(transformType)
     , m_angle(0)
 {
     if (mode == ConstructZeroTransform)
@@ -45,32 +42,31 @@ SVGTransform::SVGTransform(SVGTransformType transformType, ConstructionMode mode
 }
 
 SVGTransform::SVGTransform(const AffineTransform& matrix)
-    : SVGPropertyBase(classType())
-    , m_transformType(SVG_TRANSFORM_MATRIX)
+    : m_transformType(kSvgTransformMatrix)
     , m_angle(0)
     , m_matrix(matrix)
 {
 }
 
-SVGTransform::SVGTransform(SVGTransformType transformType, float angle, const FloatPoint& center, const AffineTransform& matrix)
-    : SVGPropertyBase(classType())
-    , m_transformType(transformType)
+SVGTransform::SVGTransform(SVGTransformType transformType,
+    float angle,
+    const FloatPoint& center,
+    const AffineTransform& matrix)
+    : m_transformType(transformType)
     , m_angle(angle)
     , m_center(center)
     , m_matrix(matrix)
 {
 }
 
-SVGTransform::~SVGTransform()
+SVGTransform::~SVGTransform() { }
+
+SVGTransform* SVGTransform::clone() const
 {
+    return new SVGTransform(m_transformType, m_angle, m_center, m_matrix);
 }
 
-PassRefPtrWillBeRawPtr<SVGTransform> SVGTransform::clone() const
-{
-    return adoptRefWillBeNoop(new SVGTransform(m_transformType, m_angle, m_center, m_matrix));
-}
-
-PassRefPtrWillBeRawPtr<SVGPropertyBase> SVGTransform::cloneForAnimation(const String&) const
+SVGPropertyBase* SVGTransform::cloneForAnimation(const String&) const
 {
     // SVGTransform is never animated.
     ASSERT_NOT_REACHED();
@@ -85,13 +81,13 @@ void SVGTransform::setMatrix(const AffineTransform& matrix)
 
 void SVGTransform::onMatrixChange()
 {
-    m_transformType = SVG_TRANSFORM_MATRIX;
+    m_transformType = kSvgTransformMatrix;
     m_angle = 0;
 }
 
 void SVGTransform::setTranslate(float tx, float ty)
 {
-    m_transformType = SVG_TRANSFORM_TRANSLATE;
+    m_transformType = kSvgTransformTranslate;
     m_angle = 0;
 
     m_matrix.makeIdentity();
@@ -105,7 +101,7 @@ FloatPoint SVGTransform::translate() const
 
 void SVGTransform::setScale(float sx, float sy)
 {
-    m_transformType = SVG_TRANSFORM_SCALE;
+    m_transformType = kSvgTransformScale;
     m_angle = 0;
     m_center = FloatPoint();
 
@@ -120,7 +116,7 @@ FloatSize SVGTransform::scale() const
 
 void SVGTransform::setRotate(float angle, float cx, float cy)
 {
-    m_transformType = SVG_TRANSFORM_ROTATE;
+    m_transformType = kSvgTransformRotate;
     m_angle = angle;
     m_center = FloatPoint(cx, cy);
 
@@ -133,7 +129,7 @@ void SVGTransform::setRotate(float angle, float cx, float cy)
 
 void SVGTransform::setSkewX(float angle)
 {
-    m_transformType = SVG_TRANSFORM_SKEWX;
+    m_transformType = kSvgTransformSkewx;
     m_angle = angle;
 
     m_matrix.makeIdentity();
@@ -142,7 +138,7 @@ void SVGTransform::setSkewX(float angle)
 
 void SVGTransform::setSkewY(float angle)
 {
-    m_transformType = SVG_TRANSFORM_SKEWY;
+    m_transformType = kSvgTransformSkewy;
     m_angle = angle;
 
     m_matrix.makeIdentity();
@@ -151,92 +147,116 @@ void SVGTransform::setSkewY(float angle)
 
 namespace {
 
-const String& transformTypePrefixForParsing(SVGTransformType type)
-{
-    switch (type) {
-    case SVG_TRANSFORM_UNKNOWN:
-        return emptyString();
-    case SVG_TRANSFORM_MATRIX: {
-        DEFINE_STATIC_LOCAL(String, matrixString, ("matrix("));
-        return matrixString;
-    }
-    case SVG_TRANSFORM_TRANSLATE: {
-        DEFINE_STATIC_LOCAL(String, translateString, ("translate("));
-        return translateString;
-    }
-    case SVG_TRANSFORM_SCALE: {
-        DEFINE_STATIC_LOCAL(String, scaleString, ("scale("));
-        return scaleString;
-    }
-    case SVG_TRANSFORM_ROTATE: {
-        DEFINE_STATIC_LOCAL(String, rotateString, ("rotate("));
-        return rotateString;
-    }
-    case SVG_TRANSFORM_SKEWX: {
-        DEFINE_STATIC_LOCAL(String, skewXString, ("skewX("));
-        return skewXString;
-    }
-    case SVG_TRANSFORM_SKEWY: {
-        DEFINE_STATIC_LOCAL(String, skewYString, ("skewY("));
-        return skewYString;
-    }
+    const char* transformTypePrefixForParsing(SVGTransformType type)
+    {
+        switch (type) {
+        case kSvgTransformUnknown:
+            return "";
+        case kSvgTransformMatrix:
+            return "matrix(";
+        case kSvgTransformTranslate:
+            return "translate(";
+        case kSvgTransformScale:
+            return "scale(";
+        case kSvgTransformRotate:
+            return "rotate(";
+        case kSvgTransformSkewx:
+            return "skewX(";
+        case kSvgTransformSkewy:
+            return "skewY(";
+        }
+        ASSERT_NOT_REACHED();
+        return "";
     }
 
-    ASSERT_NOT_REACHED();
-    return emptyString();
-}
-
-}
+} // namespace
 
 String SVGTransform::valueAsString() const
 {
-    const String& prefix = transformTypePrefixForParsing(m_transformType);
+    double arguments[6];
+    size_t argumentCount = 0;
     switch (m_transformType) {
-    case SVG_TRANSFORM_UNKNOWN:
-        return prefix;
-    case SVG_TRANSFORM_MATRIX: {
-        StringBuilder builder;
-        builder.append(prefix + String::number(m_matrix.a()) + ' ' + String::number(m_matrix.b()) + ' ' + String::number(m_matrix.c()) + ' ' +
-                       String::number(m_matrix.d()) + ' ' + String::number(m_matrix.e()) + ' ' + String::number(m_matrix.f()) + ')');
-        return builder.toString();
+    case kSvgTransformUnknown:
+        return emptyString();
+    case kSvgTransformMatrix: {
+        arguments[argumentCount++] = m_matrix.a();
+        arguments[argumentCount++] = m_matrix.b();
+        arguments[argumentCount++] = m_matrix.c();
+        arguments[argumentCount++] = m_matrix.d();
+        arguments[argumentCount++] = m_matrix.e();
+        arguments[argumentCount++] = m_matrix.f();
+        break;
     }
-    case SVG_TRANSFORM_TRANSLATE:
-        return prefix + String::number(m_matrix.e()) + ' ' + String::number(m_matrix.f()) + ')';
-    case SVG_TRANSFORM_SCALE:
-        return prefix + String::number(m_matrix.a()) + ' ' + String::number(m_matrix.d()) + ')';
-    case SVG_TRANSFORM_ROTATE: {
+    case kSvgTransformTranslate: {
+        arguments[argumentCount++] = m_matrix.e();
+        arguments[argumentCount++] = m_matrix.f();
+        break;
+    }
+    case kSvgTransformScale: {
+        arguments[argumentCount++] = m_matrix.a();
+        arguments[argumentCount++] = m_matrix.d();
+        break;
+    }
+    case kSvgTransformRotate: {
+        arguments[argumentCount++] = m_angle;
+
         double angleInRad = deg2rad(m_angle);
         double cosAngle = cos(angleInRad);
         double sinAngle = sin(angleInRad);
-        float cx = narrowPrecisionToFloat(cosAngle != 1 ? (m_matrix.e() * (1 - cosAngle) - m_matrix.f() * sinAngle) / (1 - cosAngle) / 2 : 0);
-        float cy = narrowPrecisionToFloat(cosAngle != 1 ? (m_matrix.e() * sinAngle / (1 - cosAngle) + m_matrix.f()) / 2 : 0);
-        if (cx || cy)
-            return prefix + String::number(m_angle) + ' ' + String::number(cx) + ' ' + String::number(cy) + ')';
-        return prefix + String::number(m_angle) + ')';
+        float cx = clampTo<float>(
+            cosAngle != 1
+                ? (m_matrix.e() * (1 - cosAngle) - m_matrix.f() * sinAngle) / (1 - cosAngle) / 2
+                : 0);
+        float cy = clampTo<float>(
+            cosAngle != 1
+                ? (m_matrix.e() * sinAngle / (1 - cosAngle) + m_matrix.f()) / 2
+                : 0);
+        if (cx || cy) {
+            arguments[argumentCount++] = cx;
+            arguments[argumentCount++] = cy;
+        }
+        break;
     }
-    case SVG_TRANSFORM_SKEWX:
-        return prefix + String::number(m_angle) + ')';
-    case SVG_TRANSFORM_SKEWY:
-        return prefix + String::number(m_angle) + ')';
+    case kSvgTransformSkewx:
+        arguments[argumentCount++] = m_angle;
+        break;
+    case kSvgTransformSkewy:
+        arguments[argumentCount++] = m_angle;
+        break;
     }
+    ASSERT(argumentCount <= WTF_ARRAY_LENGTH(arguments));
 
-    ASSERT_NOT_REACHED();
-    return emptyString();
+    StringBuilder builder;
+    builder.append(transformTypePrefixForParsing(m_transformType));
+
+    for (size_t i = 0; i < argumentCount; ++i) {
+        if (i)
+            builder.append(' ');
+        builder.appendNumber(arguments[i]);
+    }
+    builder.append(')');
+    return builder.toString();
 }
 
-void SVGTransform::add(PassRefPtrWillBeRawPtr<SVGPropertyBase>, SVGElement*)
+void SVGTransform::add(SVGPropertyBase*, SVGElement*)
 {
     // SVGTransform is not animated by itself.
     ASSERT_NOT_REACHED();
 }
 
-void SVGTransform::calculateAnimatedValue(SVGAnimationElement*, float, unsigned, PassRefPtrWillBeRawPtr<SVGPropertyBase>, PassRefPtrWillBeRawPtr<SVGPropertyBase>, PassRefPtrWillBeRawPtr<SVGPropertyBase>, SVGElement*)
+void SVGTransform::calculateAnimatedValue(SVGAnimationElement*,
+    float,
+    unsigned,
+    SVGPropertyBase*,
+    SVGPropertyBase*,
+    SVGPropertyBase*,
+    SVGElement*)
 {
     // SVGTransform is not animated by itself.
     ASSERT_NOT_REACHED();
 }
 
-float SVGTransform::calculateDistance(PassRefPtrWillBeRawPtr<SVGPropertyBase>, SVGElement*)
+float SVGTransform::calculateDistance(SVGPropertyBase*, SVGElement*)
 {
     // SVGTransform is not animated by itself.
     ASSERT_NOT_REACHED();

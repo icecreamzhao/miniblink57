@@ -23,10 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "web/SpeechRecognitionClientProxy.h"
 
 #include "core/dom/ExecutionContext.h"
@@ -46,7 +42,6 @@
 #include "public/web/WebSpeechRecognitionResult.h"
 #include "public/web/WebSpeechRecognizer.h"
 #include "wtf/PassRefPtr.h"
-<<<<<<< HEAD
 #include "wtf/PtrUtil.h"
 #include <memory>
 
@@ -71,36 +66,14 @@ void SpeechRecognitionClientProxy::start(SpeechRecognition* recognition,
     size_t length = grammarList ? static_cast<size_t>(grammarList->length()) : 0U;
     WebVector<WebSpeechGrammar> webSpeechGrammars(length);
     for (unsigned long i = 0; i < length; ++i)
-=======
-
-namespace blink {
-
-SpeechRecognitionClientProxy::~SpeechRecognitionClientProxy()
-{
-}
-
-PassOwnPtr<SpeechRecognitionClientProxy> SpeechRecognitionClientProxy::create(WebSpeechRecognizer* recognizer)
-{
-    return adoptPtr(new SpeechRecognitionClientProxy(recognizer));
-}
-
-void SpeechRecognitionClientProxy::start(SpeechRecognition* recognition, const SpeechGrammarList* grammarList, const String& lang, const String& serviceURI, bool continuous, bool interimResults, unsigned long maxAlternatives, MediaStreamTrack* audioTrack)
-{
-    WebVector<WebSpeechGrammar> webSpeechGrammars(static_cast<size_t>(grammarList->length()));
-    for (unsigned long i = 0; i < grammarList->length(); ++i)
->>>>>>> miniblink49
         webSpeechGrammars[i] = grammarList->item(i);
 
     WebMediaStreamTrack track;
     if (RuntimeEnabledFeatures::mediaStreamSpeechEnabled() && audioTrack)
         track.assign(audioTrack->component());
-<<<<<<< HEAD
     WebSpeechRecognitionParams params(
         webSpeechGrammars, lang, continuous, interimResults, maxAlternatives,
         track, WebSecurityOrigin(recognition->getExecutionContext()->getSecurityOrigin()));
-=======
-    WebSpeechRecognitionParams params(webSpeechGrammars, lang, serviceURI, continuous, interimResults, maxAlternatives, track, WebSecurityOrigin(recognition->executionContext()->securityOrigin()));
->>>>>>> miniblink49
     m_recognizer->start(recognition, params, this);
 }
 
@@ -114,53 +87,36 @@ void SpeechRecognitionClientProxy::abort(SpeechRecognition* recognition)
     m_recognizer->abort(recognition, this);
 }
 
-<<<<<<< HEAD
 void SpeechRecognitionClientProxy::didStartAudio(
     const WebSpeechRecognitionHandle& handle)
-=======
-void SpeechRecognitionClientProxy::didStartAudio(const WebSpeechRecognitionHandle& handle)
->>>>>>> miniblink49
 {
     SpeechRecognition* recognition(handle);
     recognition->didStartAudio();
 }
 
-<<<<<<< HEAD
 void SpeechRecognitionClientProxy::didStartSound(
     const WebSpeechRecognitionHandle& handle)
-=======
-void SpeechRecognitionClientProxy::didStartSound(const WebSpeechRecognitionHandle& handle)
->>>>>>> miniblink49
 {
     SpeechRecognition* recognition(handle);
     recognition->didStartSound();
     recognition->didStartSpeech();
 }
 
-<<<<<<< HEAD
 void SpeechRecognitionClientProxy::didEndSound(
     const WebSpeechRecognitionHandle& handle)
-=======
-void SpeechRecognitionClientProxy::didEndSound(const WebSpeechRecognitionHandle& handle)
->>>>>>> miniblink49
 {
     SpeechRecognition* recognition(handle);
     recognition->didEndSpeech();
     recognition->didEndSound();
 }
 
-<<<<<<< HEAD
 void SpeechRecognitionClientProxy::didEndAudio(
     const WebSpeechRecognitionHandle& handle)
-=======
-void SpeechRecognitionClientProxy::didEndAudio(const WebSpeechRecognitionHandle& handle)
->>>>>>> miniblink49
 {
     SpeechRecognition* recognition(handle);
     recognition->didEndAudio();
 }
 
-<<<<<<< HEAD
 void SpeechRecognitionClientProxy::didReceiveResults(
     const WebSpeechRecognitionHandle& handle,
     const WebVector<WebSpeechRecognitionResult>& newFinalResults,
@@ -175,36 +131,20 @@ void SpeechRecognitionClientProxy::didReceiveResults(
 
     HeapVector<Member<SpeechRecognitionResult>> interimResultsVector(
         currentInterimResults.size());
-=======
-void SpeechRecognitionClientProxy::didReceiveResults(const WebSpeechRecognitionHandle& handle, const WebVector<WebSpeechRecognitionResult>& newFinalResults, const WebVector<WebSpeechRecognitionResult>& currentInterimResults)
-{
-    SpeechRecognition* recognition(handle);
-
-    HeapVector<Member<SpeechRecognitionResult>> finalResultsVector(newFinalResults.size());
-    for (size_t i = 0; i < newFinalResults.size(); ++i)
-        finalResultsVector[i] = Member<SpeechRecognitionResult>(newFinalResults[i]);
-
-    HeapVector<Member<SpeechRecognitionResult>> interimResultsVector(currentInterimResults.size());
->>>>>>> miniblink49
     for (size_t i = 0; i < currentInterimResults.size(); ++i)
         interimResultsVector[i] = Member<SpeechRecognitionResult>(currentInterimResults[i]);
 
     recognition->didReceiveResults(finalResultsVector, interimResultsVector);
 }
 
-<<<<<<< HEAD
 void SpeechRecognitionClientProxy::didReceiveNoMatch(
     const WebSpeechRecognitionHandle& handle,
     const WebSpeechRecognitionResult& result)
-=======
-void SpeechRecognitionClientProxy::didReceiveNoMatch(const WebSpeechRecognitionHandle& handle, const WebSpeechRecognitionResult& result)
->>>>>>> miniblink49
 {
     SpeechRecognition* recognition(handle);
     recognition->didReceiveNoMatch(result);
 }
 
-<<<<<<< HEAD
 void SpeechRecognitionClientProxy::didReceiveError(
     const WebSpeechRecognitionHandle& handle,
     const WebString& message,
@@ -218,38 +158,20 @@ void SpeechRecognitionClientProxy::didReceiveError(
 
 void SpeechRecognitionClientProxy::didStart(
     const WebSpeechRecognitionHandle& handle)
-=======
-void SpeechRecognitionClientProxy::didReceiveError(const WebSpeechRecognitionHandle& handle, const WebString& message, WebSpeechRecognizerClient::ErrorCode code)
-{
-    SpeechRecognition* recognition(handle);
-    SpeechRecognitionError::ErrorCode errorCode = static_cast<SpeechRecognitionError::ErrorCode>(code);
-    recognition->didReceiveError(SpeechRecognitionError::create(errorCode, message));
-}
-
-void SpeechRecognitionClientProxy::didStart(const WebSpeechRecognitionHandle& handle)
->>>>>>> miniblink49
 {
     SpeechRecognition* recognition(handle);
     recognition->didStart();
 }
 
-<<<<<<< HEAD
 void SpeechRecognitionClientProxy::didEnd(
     const WebSpeechRecognitionHandle& handle)
-=======
-void SpeechRecognitionClientProxy::didEnd(const WebSpeechRecognitionHandle& handle)
->>>>>>> miniblink49
 {
     SpeechRecognition* recognition(handle);
     recognition->didEnd();
 }
 
-<<<<<<< HEAD
 SpeechRecognitionClientProxy::SpeechRecognitionClientProxy(
     WebSpeechRecognizer* recognizer)
-=======
-SpeechRecognitionClientProxy::SpeechRecognitionClientProxy(WebSpeechRecognizer* recognizer)
->>>>>>> miniblink49
     : m_recognizer(recognizer)
 {
 }

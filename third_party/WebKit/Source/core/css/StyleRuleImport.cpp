@@ -1,7 +1,8 @@
 /*
  * (C) 1999-2003 Lars Knoll (knoll@kde.org)
  * (C) 2002-2003 Dirk Mueller (mueller@kde.org)
- * Copyright (C) 2002, 2005, 2006, 2008, 2009, 2010, 2012 Apple Inc. All rights reserved.
+ * Copyright (C) 2002, 2005, 2006, 2008, 2009, 2010, 2012 Apple Inc. All rights
+ * reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,71 +20,81 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/css/StyleRuleImport.h"
 
 #include "core/css/StyleSheetContents.h"
 #include "core/dom/Document.h"
-#include "core/fetch/CSSStyleSheetResource.h"
 #include "core/fetch/FetchInitiatorTypeNames.h"
 #include "core/fetch/FetchRequest.h"
 #include "core/fetch/ResourceFetcher.h"
+#include "core/loader/resource/CSSStyleSheetResource.h"
 
 namespace blink {
 
-PassRefPtrWillBeRawPtr<StyleRuleImport> StyleRuleImport::create(const String& href, PassRefPtrWillBeRawPtr<MediaQuerySet> media)
+StyleRuleImport* StyleRuleImport::create(const String& href,
+    MediaQuerySet* media)
 {
-    return adoptRefWillBeNoop(new StyleRuleImport(href, media));
+    return new StyleRuleImport(href, media);
 }
 
-StyleRuleImport::StyleRuleImport(const String& href, PassRefPtrWillBeRawPtr<MediaQuerySet> media)
+StyleRuleImport::StyleRuleImport(const String& href, MediaQuerySet* media)
     : StyleRuleBase(Import)
     , m_parentStyleSheet(nullptr)
-    , m_styleSheetClient(this)
+    , m_styleSheetClient(new ImportedStyleSheetClient(this))
     , m_strHref(href)
     , m_mediaQueries(media)
-    , m_resource(0)
     , m_loading(false)
 {
     if (!m_mediaQueries)
         m_mediaQueries = MediaQuerySet::create(String());
 }
 
-StyleRuleImport::~StyleRuleImport()
+StyleRuleImport::~StyleRuleImport() { }
+
+void StyleRuleImport::dispose()
 {
-#if !ENABLE(OILPAN)
-    if (m_styleSheet)
-        m_styleSheet->clearOwnerRule();
-#endif
     if (m_resource)
-        m_resource->removeClient(&m_styleSheetClient);
+        m_resource->removeClient(m_styleSheetClient);
+    m_resource = nullptr;
 }
 
 DEFINE_TRACE_AFTER_DISPATCH(StyleRuleImport)
 {
+    visitor->trace(m_styleSheetClient);
     visitor->trace(m_parentStyleSheet);
     visitor->trace(m_mediaQueries);
     visitor->trace(m_styleSheet);
+    visitor->trace(m_resource);
     StyleRuleBase::traceAfterDispatch(visitor);
 }
 
-void StyleRuleImport::setCSSStyleSheet(const String& href, const KURL& baseURL, const String& charset, const CSSStyleSheetResource* cachedStyleSheet)
+void StyleRuleImport::setCSSStyleSheet(
+    const String& href,
+    const KURL& baseURL,
+    const String& charset,
+    const CSSStyleSheetResource* cachedStyleSheet)
 {
     if (m_styleSheet)
         m_styleSheet->clearOwnerRule();
 
-    CSSParserContext context = m_parentStyleSheet ? m_parentStyleSheet->parserContext() : strictCSSParserContext();
-    context.setCharset(charset);
-    Document* document = m_parentStyleSheet ? m_parentStyleSheet->singleOwnerDocument() : 0;
+    CSSParserContext* context = CSSParserContext::create(
+        m_parentStyleSheet ? m_parentStyleSheet->parserContext()
+                           : strictCSSParserContext(),
+        nullptr);
+    context->setCharset(charset);
+    Document* document = m_parentStyleSheet ? m_parentStyleSheet->singleOwnerDocument() : nullptr;
     if (!baseURL.isNull()) {
-        context.setBaseURL(baseURL);
-        if (document)
-            context.setReferrer(Referrer(baseURL.strippedForUseAsReferrer(), document->referrerPolicy()));
+        context->setBaseURL(baseURL);
+        if (document) {
+            context->setReferrer(Referrer(baseURL.strippedForUseAsReferrer(),
+                document->getReferrerPolicy()));
+        }
     }
 
     m_styleSheet = StyleSheetContents::create(this, href, context);
 
-    m_styleSheet->parseAuthorStyleSheet(cachedStyleSheet, document ? document->securityOrigin() : 0);
+    m_styleSheet->parseAuthorStyleSheet(
+        cachedStyleSheet, document ? document->getSecurityOrigin() : 0);
 
     m_loading = false;
 
@@ -121,14 +132,15 @@ void StyleRuleImport::requestStyleSheet()
     // Check for a cycle in our import chain.  If we encounter a stylesheet
     // in our parent chain with the same URL, then just bail.
     StyleSheetContents* rootSheet = m_parentStyleSheet;
-    for (StyleSheetContents* sheet = m_parentStyleSheet; sheet; sheet = sheet->parentStyleSheet()) {
-        if (equalIgnoringFragmentIdentifier(absURL, sheet->baseURL())
-            || equalIgnoringFragmentIdentifier(absURL, document->completeURL(sheet->originalURL())))
+    for (StyleSheetContents* sheet = m_parentStyleSheet; sheet;
+         sheet = sheet->parentStyleSheet()) {
+        if (equalIgnoringFragmentIdentifier(absURL, sheet->baseURL()) || equalIgnoringFragmentIdentifier(absURL, document->completeURL(sheet->originalURL())))
             return;
         rootSheet = sheet;
     }
 
-    FetchRequest request(ResourceRequest(absURL), FetchInitiatorTypeNames::css, m_parentStyleSheet->charset());
+    FetchRequest request(ResourceRequest(absURL), FetchInitiatorTypeNames::css,
+        m_parentStyleSheet->charset());
     m_resource = CSSStyleSheetResource::fetch(request, fetcher);
     if (m_resource) {
         // if the import rule is issued dynamically, the sheet may be
@@ -137,7 +149,7 @@ void StyleRuleImport::requestStyleSheet()
         if (m_parentStyleSheet && m_parentStyleSheet->loadCompleted() && rootSheet == m_parentStyleSheet)
             m_parentStyleSheet->startLoadingDynamicSheet();
         m_loading = true;
-        m_resource->addClient(&m_styleSheetClient);
+        m_resource->addClient(m_styleSheetClient);
     }
 }
 

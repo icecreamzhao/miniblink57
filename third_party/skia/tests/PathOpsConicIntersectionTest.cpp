@@ -13,7 +13,6 @@
 manually compute the intersection of a pair of circles and see if the conic intersection matches
   given two circles
     construct a line connecting their centers
-<<<<<<< HEAD
 
  */
 
@@ -322,23 +321,6 @@ static void oneOff(skiatest::Reporter* reporter, const SkDConic& c1, const SkDCo
     writeDPng(c1, "d1");
     writeDPng(c2, "d2");
 #endif
-=======
-    
- */
-
-static const SkDConic testSet[] = {
-    {{{{-4,1}, {-4,5}, {0,5}}}, 0.707106769f},
-    {{{{-3,4}, {-3,1}, {0,1}}}, 0.707106769f},
-
-    {{{{0, 0}, {0, 1}, {1, 1}}}, 0.5f},
-    {{{{1, 0}, {0, 0}, {0, 1}}}, 0.5f},
-};
-
-const int testSetCount = (int) SK_ARRAY_COUNT(testSet);
-
-static void oneOff(skiatest::Reporter* reporter, const SkDConic& c1, const SkDConic& c2,
-        bool coin) {
->>>>>>> miniblink49
     SkASSERT(ValidConic(c1));
     SkASSERT(ValidConic(c2));
     SkIntersections intersections;
@@ -362,23 +344,15 @@ static void oneOff(skiatest::Reporter* reporter, const SkDConic& c1, const SkDCo
     reporter->bumpTestCount();
 }
 
-<<<<<<< HEAD
 static void oneOff(skiatest::Reporter* reporter, int outer, int inner)
 {
-=======
-static void oneOff(skiatest::Reporter* reporter, int outer, int inner) {
->>>>>>> miniblink49
     const SkDConic& c1 = testSet[outer];
     const SkDConic& c2 = testSet[inner];
     oneOff(reporter, c1, c2, false);
 }
 
-<<<<<<< HEAD
 static void oneOffTests(skiatest::Reporter* reporter)
 {
-=======
-static void oneOffTests(skiatest::Reporter* reporter) {
->>>>>>> miniblink49
     for (int outer = 0; outer < testSetCount - 1; ++outer) {
         for (int inner = outer + 1; inner < testSetCount; ++inner) {
             oneOff(reporter, outer, inner);
@@ -386,7 +360,6 @@ static void oneOffTests(skiatest::Reporter* reporter) {
     }
 }
 
-<<<<<<< HEAD
 DEF_TEST(PathOpsConicIntersectionOneOff, reporter)
 {
     oneOff(reporter, 0, 1);
@@ -394,12 +367,5 @@ DEF_TEST(PathOpsConicIntersectionOneOff, reporter)
 
 DEF_TEST(PathOpsConicIntersection, reporter)
 {
-=======
-DEF_TEST(PathOpsConicIntersectionOneOff, reporter) {
-    oneOff(reporter, 0, 1);
-}
-
-DEF_TEST(PathOpsConicIntersection, reporter) {
->>>>>>> miniblink49
     oneOffTests(reporter);
 }

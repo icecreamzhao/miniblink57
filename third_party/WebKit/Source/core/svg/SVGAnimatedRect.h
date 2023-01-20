@@ -31,22 +31,34 @@
 #ifndef SVGAnimatedRect_h
 #define SVGAnimatedRect_h
 
+#include "bindings/core/v8/ScriptWrappable.h"
 #include "core/svg/SVGRectTearOff.h"
 #include "core/svg/properties/SVGAnimatedProperty.h"
 
 namespace blink {
 
-class SVGAnimatedRect : public SVGAnimatedProperty<SVGRect> {
+class SVGAnimatedRect : public SVGAnimatedProperty<SVGRect>,
+                        public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<SVGAnimatedRect> create(SVGElement* contextElement, const QualifiedName& attributeName)
+    static SVGAnimatedRect* create(SVGElement* contextElement,
+        const QualifiedName& attributeName)
     {
-        return adoptRefWillBeNoop(new SVGAnimatedRect(contextElement, attributeName));
+        return new SVGAnimatedRect(contextElement, attributeName);
+    }
+
+    DEFINE_INLINE_VIRTUAL_TRACE_WRAPPERS()
+    {
+        visitor->traceWrappers(contextElement());
     }
 
 protected:
-    SVGAnimatedRect(SVGElement* contextElement, const QualifiedName& attributeName)
-        : SVGAnimatedProperty<SVGRect>(contextElement, attributeName, SVGRect::create(SVGRect::InvalidSVGRectTag()))
+    SVGAnimatedRect(SVGElement* contextElement,
+        const QualifiedName& attributeName)
+        : SVGAnimatedProperty<SVGRect>(contextElement,
+            attributeName,
+            SVGRect::createInvalid())
     {
     }
 };

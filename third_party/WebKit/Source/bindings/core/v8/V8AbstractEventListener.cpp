@@ -28,42 +28,49 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "bindings/core/v8/V8AbstractEventListener.h"
 
 #include "bindings/core/v8/V8Binding.h"
 #include "bindings/core/v8/V8Event.h"
-#include "bindings/core/v8/V8EventListenerList.h"
+#include "bindings/core/v8/V8EventListenerHelper.h"
 #include "bindings/core/v8/V8EventTarget.h"
 #include "bindings/core/v8/V8HiddenValue.h"
+#include "core/dom/Document.h"
+#include "core/dom/DocumentParser.h"
 #include "core/events/BeforeUnloadEvent.h"
 #include "core/events/Event.h"
-#include "core/inspector/InstanceCounters.h"
 #include "core/workers/WorkerGlobalScope.h"
+#include "platform/InstanceCounters.h"
 
 namespace blink {
 
-V8AbstractEventListener::V8AbstractEventListener(bool isAttribute, DOMWrapperWorld& world, v8::Isolate* isolate)
+V8AbstractEventListener::V8AbstractEventListener(bool isAttribute,
+    DOMWrapperWorld& world,
+    v8::Isolate* isolate)
     : EventListener(JSEventListenerType)
+    , m_listener(nullptr)
     , m_isAttribute(isAttribute)
     , m_world(world)
     , m_isolate(isolate)
+    , m_workerGlobalScope(nullptr)
 {
     if (isMainThread())
-        InstanceCounters::incrementCounter(InstanceCounters::JSEventListenerCounter);
+        InstanceCounters::incrementCounter(
+            InstanceCounters::JSEventListenerCounter);
+    else
+        m_workerGlobalScope = toWorkerGlobalScope(currentExecutionContext(isolate));
 }
 
 V8AbstractEventListener::~V8AbstractEventListener()
 {
-    if (!m_listener.isEmpty()) {
-        v8::HandleScope scope(m_isolate);
-        V8EventListenerList::clearWrapper(m_listener.newLocal(isolate()), m_isAttribute, isolate());
-    }
+    ASSERT(m_listener.isEmpty());
     if (isMainThread())
-        InstanceCounters::decrementCounter(InstanceCounters::JSEventListenerCounter);
+        InstanceCounters::decrementCounter(
+            InstanceCounters::JSEventListenerCounter);
 }
 
-void V8AbstractEventListener::handleEvent(ExecutionContext* executionContext, Event* event)
+void V8AbstractEventListener::handleEvent(ExecutionContext* executionContext,
+    Event* event)
 {
     if (!executionContext)
         return;
@@ -85,44 +92,56 @@ void V8AbstractEventListener::handleEvent(ExecutionContext* executionContext, Ev
     handleEvent(scriptState, event);
 }
 
-void V8AbstractEventListener::handleEvent(ScriptState* scriptState, Event* event)
+void V8AbstractEventListener::handleEvent(ScriptState* scriptState,
+    Event* event)
 {
-    // The callback function on XMLHttpRequest can clear the event listener and destroys 'this' object. Keep a local reference to it.
-    // See issue 889829.
-    RefPtr<V8AbstractEventListener> protect(this);
-
     ScriptState::Scope scope(scriptState);
 
     // Get the V8 wrapper for the event object.
-    v8::Local<v8::Value> jsEvent = toV8(event, scriptState->context()->Global(), isolate());
+    v8::Local<v8::Value> jsEvent = ToV8(event, scriptState->context()->Global(), isolate());
     if (jsEvent.IsEmpty())
         return;
-    invokeEventHandler(scriptState, event, v8::Local<v8::Value>::New(isolate(), jsEvent));
+    invokeEventHandler(scriptState, event,
+        v8::Local<v8::Value>::New(isolate(), jsEvent));
 }
 
-void V8AbstractEventListener::setListenerObject(v8::Local<v8::Object> listener)
+void V8AbstractEventListener::setListenerObject(
+    v8::Local<v8::Object> listener)
 {
-    m_listener.set(isolate(), listener);
-    m_listener.setWeak(this, &setWeakCallback);
+    ASSERT(m_listener.isEmpty());
+    // Balanced in wrapperCleared xor clearListenerObject.
+    if (m_workerGlobalScope) {
+        m_workerGlobalScope->registerEventListener(this);
+    } else {
+        m_keepAlive = this;
+    }
+    m_listener.set(isolate(), listener, this, &wrapperCleared);
 }
 
-void V8AbstractEventListener::invokeEventHandler(ScriptState* scriptState, Event* event, v8::Local<v8::Value> jsEvent)
+void V8AbstractEventListener::invokeEventHandler(ScriptState* scriptState,
+    Event* event,
+    v8::Local<v8::Value> jsEvent)
 {
     if (!event->canBeDispatchedInWorld(world()))
         return;
 
     v8::Local<v8::Value> returnValue;
     {
-        // Catch exceptions thrown in the event handler so they do not propagate to javascript code that caused the event to fire.
+        // Catch exceptions thrown in the event handler so they do not propagate to
+        // javascript code that caused the event to fire.
         v8::TryCatch tryCatch(isolate());
         tryCatch.SetVerbose(true);
 
         // Save the old 'event' property so we can restore it later.
-        v8::Local<v8::Value> savedEvent = V8HiddenValue::getHiddenValue(isolate(), scriptState->context()->Global(), V8HiddenValue::event(isolate()));
+        v8::Local<v8::Value> savedEvent = V8HiddenValue::getHiddenValue(
+            scriptState, scriptState->context()->Global(),
+            V8HiddenValue::event(isolate()));
         tryCatch.Reset();
 
-        // Make the event available in the global object, so LocalDOMWindow can expose it.
-        V8HiddenValue::setHiddenValue(isolate(), scriptState->context()->Global(), V8HiddenValue::event(isolate()), jsEvent);
+        // Make the event available in the global object, so LocalDOMWindow can
+        // expose it.
+        V8HiddenValue::setHiddenValue(scriptState, scriptState->context()->Global(),
+            V8HiddenValue::event(isolate()), jsEvent);
         tryCatch.Reset();
 
         returnValue = callListenerFunction(scriptState, jsEvent, event);
@@ -130,17 +149,24 @@ void V8AbstractEventListener::invokeEventHandler(ScriptState* scriptState, Event
             event->target()->uncaughtExceptionInEventHandler();
 
         if (!tryCatch.CanContinue()) { // Result of TerminateExecution().
-            if (scriptState->executionContext()->isWorkerGlobalScope())
-                toWorkerGlobalScope(scriptState->executionContext())->script()->forbidExecution();
+            if (scriptState->getExecutionContext()->isWorkerGlobalScope())
+                toWorkerGlobalScope(scriptState->getExecutionContext())
+                    ->scriptController()
+                    ->forbidExecution();
             return;
         }
         tryCatch.Reset();
 
-        // Restore the old event. This must be done for all exit paths through this method.
+        // Restore the old event. This must be done for all exit paths through this
+        // method.
         if (savedEvent.IsEmpty())
-            V8HiddenValue::setHiddenValue(isolate(), scriptState->context()->Global(), V8HiddenValue::event(isolate()), v8::Undefined(isolate()));
+            V8HiddenValue::setHiddenValue(
+                scriptState, scriptState->context()->Global(),
+                V8HiddenValue::event(isolate()), v8::Undefined(isolate()));
         else
-            V8HiddenValue::setHiddenValue(isolate(), scriptState->context()->Global(), V8HiddenValue::event(isolate()), savedEvent);
+            V8HiddenValue::setHiddenValue(
+                scriptState, scriptState->context()->Global(),
+                V8HiddenValue::event(isolate()), savedEvent);
         tryCatch.Reset();
     }
 
@@ -156,34 +182,72 @@ void V8AbstractEventListener::invokeEventHandler(ScriptState* scriptState, Event
         event->preventDefault();
 }
 
-bool V8AbstractEventListener::shouldPreventDefault(v8::Local<v8::Value> returnValue)
+bool V8AbstractEventListener::shouldPreventDefault(
+    v8::Local<v8::Value> returnValue)
 {
     // Prevent default action if the return value is false in accord with the spec
     // http://www.w3.org/TR/html5/webappapis.html#event-handler-attributes
     return returnValue->IsBoolean() && !returnValue.As<v8::Boolean>()->Value();
 }
 
-v8::Local<v8::Object> V8AbstractEventListener::getReceiverObject(ScriptState* scriptState, Event* event)
+v8::Local<v8::Object> V8AbstractEventListener::getReceiverObject(
+    ScriptState* scriptState,
+    Event* event)
 {
     v8::Local<v8::Object> listener = m_listener.newLocal(isolate());
     if (!m_listener.isEmpty() && !listener->IsFunction())
         return listener;
 
     EventTarget* target = event->currentTarget();
-    v8::Local<v8::Value> value = toV8(target, scriptState->context()->Global(), isolate());
+    v8::Local<v8::Value> value = ToV8(target, scriptState->context()->Global(), isolate());
     if (value.IsEmpty())
         return v8::Local<v8::Object>();
-    return v8::Local<v8::Object>::New(isolate(), v8::Local<v8::Object>::Cast(value));
+    return v8::Local<v8::Object>::New(isolate(),
+        v8::Local<v8::Object>::Cast(value));
 }
 
-bool V8AbstractEventListener::belongsToTheCurrentWorld() const
+bool V8AbstractEventListener::belongsToTheCurrentWorld(
+    ExecutionContext* executionContext) const
 {
-    return ScriptState::hasCurrentScriptState(isolate()) && &world() == &DOMWrapperWorld::current(isolate());
+    if (!isolate()->GetCurrentContext().IsEmpty() && &world() == &DOMWrapperWorld::current(isolate()))
+        return true;
+    // If currently parsing, the parser could be accessing this listener
+    // outside of any v8 context; check if it belongs to the main world.
+    if (!isolate()->InContext() && executionContext->isDocument()) {
+        Document* document = toDocument(executionContext);
+        if (document->parser() && document->parser()->isParsing())
+            return world().isMainWorld();
+    }
+    return false;
 }
 
-void V8AbstractEventListener::setWeakCallback(const v8::WeakCallbackInfo<V8AbstractEventListener> &data)
+void V8AbstractEventListener::clearListenerObject()
 {
-    data.GetParameter()->m_listener.clear();
+    if (!hasExistingListenerObject())
+        return;
+    m_listener.clear();
+    if (m_workerGlobalScope) {
+        m_workerGlobalScope->deregisterEventListener(this);
+    } else {
+        m_keepAlive.clear();
+    }
+}
+
+void V8AbstractEventListener::wrapperCleared(
+    const v8::WeakCallbackInfo<V8AbstractEventListener>& data)
+{
+    data.GetParameter()->clearListenerObject();
+}
+
+DEFINE_TRACE(V8AbstractEventListener)
+{
+    visitor->trace(m_workerGlobalScope);
+    EventListener::trace(visitor);
+}
+
+DEFINE_TRACE_WRAPPERS(V8AbstractEventListener)
+{
+    visitor->traceWrappers(m_listener.cast<v8::Value>());
 }
 
 } // namespace blink

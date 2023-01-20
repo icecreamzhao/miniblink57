@@ -8,17 +8,10 @@
 #ifndef SkDataTable_DEFINED
 #define SkDataTable_DEFINED
 
-<<<<<<< HEAD
 #include "../private/SkTDArray.h"
 #include "SkChunkAlloc.h"
 #include "SkData.h"
 #include "SkString.h"
-=======
-#include "SkChunkAlloc.h"
-#include "SkData.h"
-#include "SkString.h"
-#include "SkTDArray.h"
->>>>>>> miniblink49
 
 /**
  *  Like SkData, SkDataTable holds an immutable data buffer. The data buffer is
@@ -53,12 +46,8 @@ public:
     const void* at(int index, size_t* size = NULL) const;
 
     template <typename T>
-<<<<<<< HEAD
     const T* atT(int index, size_t* size = NULL) const
     {
-=======
-    const T* atT(int index, size_t* size = NULL) const {
->>>>>>> miniblink49
         return reinterpret_cast<const T*>(this->at(index, size));
     }
 
@@ -66,12 +55,8 @@ public:
      *  Returns the index'th entry as a c-string, and assumes that the trailing
      *  null byte had been copied into the table as well.
      */
-<<<<<<< HEAD
     const char* atStr(int index) const
     {
-=======
-    const char* atStr(int index) const {
->>>>>>> miniblink49
         size_t size;
         const char* str = this->atT<const char>(index, &size);
         SkASSERT(strlen(str) + 1 == size);
@@ -91,13 +76,8 @@ public:
      *               ptrs[] array.
      *  @param count the number of array elements in ptrs[] and sizes[] to copy.
      */
-<<<<<<< HEAD
     static SkDataTable* NewCopyArrays(const void* const* ptrs,
         const size_t sizes[], int count);
-=======
-    static SkDataTable* NewCopyArrays(const void * const * ptrs,
-                                      const size_t sizes[], int count);
->>>>>>> miniblink49
 
     /**
      *  Return a new table that contains a copy of the data in array.
@@ -108,22 +88,14 @@ public:
      *               of bytes that will be copied is count * elemSize.
      */
     static SkDataTable* NewCopyArray(const void* array, size_t elemSize,
-<<<<<<< HEAD
         int count);
 
     static SkDataTable* NewArrayProc(const void* array, size_t elemSize,
         int count, FreeProc proc, void* context);
-=======
-                                     int count);
-
-    static SkDataTable* NewArrayProc(const void* array, size_t elemSize,
-                                     int count, FreeProc proc, void* context);
->>>>>>> miniblink49
 
 private:
     struct Dir {
         const void* fPtr;
-<<<<<<< HEAD
         uintptr_t fSize;
     };
 
@@ -144,28 +116,6 @@ private:
     virtual ~SkDataTable();
 
     friend class SkDataTableBuilder; // access to Dir
-=======
-        uintptr_t   fSize;
-    };
-
-    int         fCount;
-    size_t      fElemSize;
-    union {
-        const Dir*  fDir;
-        const char* fElems;
-    } fU;
-
-    FreeProc    fFreeProc;
-    void*       fFreeProcContext;
-
-    SkDataTable();
-    SkDataTable(const void* array, size_t elemSize, int count,
-                FreeProc, void* context);
-    SkDataTable(const Dir*, int count, FreeProc, void* context);
-    virtual ~SkDataTable();
-
-    friend class SkDataTableBuilder;    // access to Dir
->>>>>>> miniblink49
 
     typedef SkRefCnt INHERITED;
 };
@@ -179,23 +129,15 @@ public:
     SkDataTableBuilder(size_t minChunkSize);
     ~SkDataTableBuilder();
 
-<<<<<<< HEAD
     int count() const { return fDir.count(); }
-=======
-    int  count() const { return fDir.count(); }
->>>>>>> miniblink49
     size_t minChunkSize() const { return fMinChunkSize; }
 
     /**
      *  Forget any previously appended entries, setting count() back to 0.
      */
     void reset(size_t minChunkSize);
-<<<<<<< HEAD
     void reset()
     {
-=======
-    void reset() {
->>>>>>> miniblink49
         this->reset(fMinChunkSize);
     }
 
@@ -208,12 +150,8 @@ public:
      *  Helper version of append() passes strlen() + 1 for the size,
      *  so the trailing-zero will be copied as well.
      */
-<<<<<<< HEAD
     void appendStr(const char str[])
     {
-=======
-    void appendStr(const char str[]) {
->>>>>>> miniblink49
         this->append(str, strlen(str) + 1);
     }
 
@@ -221,12 +159,8 @@ public:
      *  Helper version of append() passes string.size() + 1 for the size,
      *  so the trailing-zero will be copied as well.
      */
-<<<<<<< HEAD
     void appendString(const SkString& string)
     {
-=======
-    void appendString(const SkString& string) {
->>>>>>> miniblink49
         this->append(string.c_str(), string.size() + 1);
     }
 
@@ -239,13 +173,8 @@ public:
 
 private:
     SkTDArray<SkDataTable::Dir> fDir;
-<<<<<<< HEAD
     SkChunkAlloc* fHeap;
     size_t fMinChunkSize;
-=======
-    SkChunkAlloc*               fHeap;
-    size_t                      fMinChunkSize;
->>>>>>> miniblink49
 };
 
 #endif

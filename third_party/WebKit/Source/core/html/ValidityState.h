@@ -25,26 +25,21 @@
 #define ValidityState_h
 
 #include "bindings/core/v8/ScriptWrappable.h"
-#include "core/html/FormAssociatedElement.h"
-#include "wtf/PassOwnPtr.h"
+#include "core/html/ListedElement.h"
 
 namespace blink {
 
-class ValidityState : public NoBaseWillBeGarbageCollectedFinalized<ValidityState>, public ScriptWrappable {
+class ValidityState final : public GarbageCollected<ValidityState>,
+                            public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
-    WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(ValidityState);
     WTF_MAKE_NONCOPYABLE(ValidityState);
+
 public:
-    static PassOwnPtrWillBeRawPtr<ValidityState> create(FormAssociatedElement* control)
+    static ValidityState* create(ListedElement* control)
     {
-        return adoptPtrWillBeNoop(new ValidityState(control));
+        return new ValidityState(control);
     }
     DEFINE_INLINE_TRACE() { visitor->trace(m_control); }
-
-#if !ENABLE(OILPAN)
-    void ref() { m_control->ref(); }
-    void deref() { m_control->deref(); }
-#endif
 
     String validationMessage() const;
 
@@ -63,10 +58,12 @@ public:
     bool valid() const;
 
 private:
-    explicit ValidityState(FormAssociatedElement* control)
-        : m_control(control) { }
+    explicit ValidityState(ListedElement* control)
+        : m_control(control)
+    {
+    }
 
-    RawPtrWillBeMember<FormAssociatedElement> m_control;
+    Member<ListedElement> m_control;
 };
 
 } // namespace blink

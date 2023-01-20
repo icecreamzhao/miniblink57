@@ -19,10 +19,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/svg/SVGFEImageElement.h"
 
-#include "core/XLinkNames.h"
 #include "core/dom/Document.h"
 #include "core/fetch/FetchRequest.h"
 #include "core/fetch/ResourceFetcher.h"
@@ -36,7 +34,9 @@ namespace blink {
 inline SVGFEImageElement::SVGFEImageElement(Document& document)
     : SVGFilterPrimitiveStandardAttributes(SVGNames::feImageTag, document)
     , SVGURIReference(this)
-    , m_preserveAspectRatio(SVGAnimatedPreserveAspectRatio::create(this, SVGNames::preserveAspectRatioAttr, SVGPreserveAspectRatio::create()))
+    , m_preserveAspectRatio(SVGAnimatedPreserveAspectRatio::create(
+          this,
+          SVGNames::preserveAspectRatioAttr))
 {
     addToPropertyMap(m_preserveAspectRatio);
 }
@@ -45,27 +45,24 @@ DEFINE_NODE_FACTORY(SVGFEImageElement)
 
 SVGFEImageElement::~SVGFEImageElement()
 {
-#if ENABLE(OILPAN)
     if (m_cachedImage) {
-        m_cachedImage->removeClient(this);
-        m_cachedImage = 0;
+        m_cachedImage->removeObserver(this);
+        m_cachedImage = nullptr;
     }
-#else
-    clearResourceReferences();
-#endif
 }
 
 DEFINE_TRACE(SVGFEImageElement)
 {
     visitor->trace(m_preserveAspectRatio);
+    visitor->trace(m_cachedImage);
     SVGFilterPrimitiveStandardAttributes::trace(visitor);
     SVGURIReference::trace(visitor);
 }
 
 bool SVGFEImageElement::currentFrameHasSingleSecurityOrigin() const
 {
-    if (m_cachedImage && m_cachedImage->image())
-        return m_cachedImage->image()->currentFrameHasSingleSecurityOrigin();
+    if (m_cachedImage && m_cachedImage->getImage())
+        return m_cachedImage->getImage()->currentFrameHasSingleSecurityOrigin();
 
     return true;
 }
@@ -73,8 +70,8 @@ bool SVGFEImageElement::currentFrameHasSingleSecurityOrigin() const
 void SVGFEImageElement::clearResourceReferences()
 {
     if (m_cachedImage) {
-        m_cachedImage->removeClient(this);
-        m_cachedImage = 0;
+        m_cachedImage->removeObserver(this);
+        m_cachedImage = nullptr;
     }
 
     removeAllOutgoingReferences();
@@ -82,31 +79,34 @@ void SVGFEImageElement::clearResourceReferences()
 
 void SVGFEImageElement::fetchImageResource()
 {
-    FetchRequest request(ResourceRequest(ownerDocument()->completeURL(hrefString())), localName());
-    m_cachedImage = ImageResource::fetch(request, document().fetcher());
+    FetchRequest request(
+        ResourceRequest(ownerDocument()->completeURL(hrefString())), localName());
+    m_cachedImage = ImageResourceContent::fetch(request, document().fetcher());
 
     if (m_cachedImage)
-        m_cachedImage->addClient(this);
+        m_cachedImage->addObserver(this);
 }
 
 void SVGFEImageElement::buildPendingResource()
 {
     clearResourceReferences();
-    if (!inDocument())
+    if (!isConnected())
         return;
 
     AtomicString id;
-    Element* target = SVGURIReference::targetElementFromIRIString(hrefString(), treeScope(), &id);
+    Element* target = SVGURIReference::targetElementFromIRIString(
+        hrefString(), treeScope(), &id);
     if (!target) {
-        if (id.isEmpty())
+        if (id.isEmpty()) {
             fetchImageResource();
-        else {
+        } else {
             document().accessSVGExtensions().addPendingResource(id, this);
             ASSERT(hasPendingResources());
         }
     } else if (target->isSVGElement()) {
-        // Register us with the target in the dependencies map. Any change of hrefElement
-        // that leads to relayout/repainting now informs us, so we can react to it.
+        // Register us with the target in the dependencies map. Any change of
+        // hrefElement that leads to relayout/repainting now informs us, so we can
+        // react to it.
         addReferenceTo(toSVGElement(target));
     }
 
@@ -130,7 +130,8 @@ void SVGFEImageElement::svgAttributeChanged(const QualifiedName& attrName)
     SVGFilterPrimitiveStandardAttributes::svgAttributeChanged(attrName);
 }
 
-Node::InsertionNotificationRequest SVGFEImageElement::insertedInto(ContainerNode* rootParent)
+Node::InsertionNotificationRequest SVGFEImageElement::insertedInto(
+    ContainerNode* rootParent)
 {
     SVGFilterPrimitiveStandardAttributes::insertedInto(rootParent);
     buildPendingResource();
@@ -140,13 +141,13 @@ Node::InsertionNotificationRequest SVGFEImageElement::insertedInto(ContainerNode
 void SVGFEImageElement::removedFrom(ContainerNode* rootParent)
 {
     SVGFilterPrimitiveStandardAttributes::removedFrom(rootParent);
-    if (rootParent->inDocument())
+    if (rootParent->isConnected())
         clearResourceReferences();
 }
 
-void SVGFEImageElement::notifyFinished(Resource*)
+void SVGFEImageElement::imageNotifyFinished(ImageResourceContent*)
 {
-    if (!inDocument())
+    if (!isConnected())
         return;
 
     Element* parent = parentElement();
@@ -157,11 +158,17 @@ void SVGFEImageElement::notifyFinished(Resource*)
         markForLayoutAndParentResourceInvalidation(layoutObject);
 }
 
-PassRefPtrWillBeRawPtr<FilterEffect> SVGFEImageElement::build(SVGFilterBuilder*, Filter* filter)
+FilterEffect* SVGFEImageElement::build(SVGFilterBuilder*, Filter* filter)
 {
-    if (m_cachedImage)
-        return FEImage::createWithImage(filter, m_cachedImage->imageForLayoutObject(layoutObject()), m_preserveAspectRatio->currentValue());
-    return FEImage::createWithIRIReference(filter, treeScope(), hrefString(), m_preserveAspectRatio->currentValue());
+    if (m_cachedImage) {
+        // Don't use the broken image icon on image loading errors.
+        RefPtr<Image> image = m_cachedImage->errorOccurred() ? nullptr : m_cachedImage->getImage();
+        return FEImage::createWithImage(filter, image,
+            m_preserveAspectRatio->currentValue());
+    }
+
+    return FEImage::createWithIRIReference(filter, treeScope(), hrefString(),
+        m_preserveAspectRatio->currentValue());
 }
 
-}
+} // namespace blink

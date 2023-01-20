@@ -20,88 +20,123 @@
 #ifndef SVGElementRareData_h
 #define SVGElementRareData_h
 
+#include "core/style/ComputedStyle.h"
 #include "core/svg/SVGElement.h"
 #include "platform/heap/Handle.h"
+#include "platform/transforms/AffineTransform.h"
 #include "wtf/HashSet.h"
 #include "wtf/Noncopyable.h"
-#include "wtf/StdLibExtras.h"
 
 namespace blink {
 
-class CSSCursorImageValue;
-class SVGCursorElement;
+class SVGElementProxySet;
 
-class SVGElementRareData : public NoBaseWillBeGarbageCollectedFinalized<SVGElementRareData> {
-    WTF_MAKE_NONCOPYABLE(SVGElementRareData); WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(SVGElementRareData);
+class SVGElementRareData
+    : public GarbageCollectedFinalized<SVGElementRareData> {
+    WTF_MAKE_NONCOPYABLE(SVGElementRareData);
+
 public:
     SVGElementRareData(SVGElement* owner)
-#if ENABLE(OILPAN)
         : m_owner(owner)
-        , m_cursorElement(nullptr)
-#else
-        : m_cursorElement(nullptr)
-#endif
-        , m_cursorImageValue(nullptr)
         , m_correspondingElement(nullptr)
         , m_instancesUpdatesBlocked(false)
         , m_useOverrideComputedStyle(false)
         , m_needsOverrideComputedStyleUpdate(false)
+        , m_webAnimatedAttributesDirty(false)
     {
     }
 
     SVGElementSet& outgoingReferences() { return m_outgoingReferences; }
-    const SVGElementSet& outgoingReferences() const { return m_outgoingReferences; }
+    const SVGElementSet& outgoingReferences() const
+    {
+        return m_outgoingReferences;
+    }
     SVGElementSet& incomingReferences() { return m_incomingReferences; }
-    const SVGElementSet& incomingReferences() const { return m_incomingReferences; }
+    const SVGElementSet& incomingReferences() const
+    {
+        return m_incomingReferences;
+    }
 
-    WillBeHeapHashSet<RawPtrWillBeWeakMember<SVGElement>>& elementInstances() { return m_elementInstances; }
-    const WillBeHeapHashSet<RawPtrWillBeWeakMember<SVGElement>>& elementInstances() const { return m_elementInstances; }
+    SVGElementProxySet& ensureElementProxySet();
+
+    HeapHashSet<WeakMember<SVGElement>>& elementInstances()
+    {
+        return m_elementInstances;
+    }
+    const HeapHashSet<WeakMember<SVGElement>>& elementInstances() const
+    {
+        return m_elementInstances;
+    }
 
     bool instanceUpdatesBlocked() const { return m_instancesUpdatesBlocked; }
-    void setInstanceUpdatesBlocked(bool value) { m_instancesUpdatesBlocked = value; }
+    void setInstanceUpdatesBlocked(bool value)
+    {
+        m_instancesUpdatesBlocked = value;
+    }
 
-    SVGCursorElement* cursorElement() const { return m_cursorElement; }
-    void setCursorElement(SVGCursorElement* cursorElement) { m_cursorElement = cursorElement; }
+    SVGElement* correspondingElement() const
+    {
+        return m_correspondingElement.get();
+    }
+    void setCorrespondingElement(SVGElement* correspondingElement)
+    {
+        m_correspondingElement = correspondingElement;
+    }
 
-    SVGElement* correspondingElement() { return m_correspondingElement.get(); }
-    void setCorrespondingElement(SVGElement* correspondingElement) { m_correspondingElement = correspondingElement; }
+    void setWebAnimatedAttributesDirty(bool dirty)
+    {
+        m_webAnimatedAttributesDirty = dirty;
+    }
+    bool webAnimatedAttributesDirty() const
+    {
+        return m_webAnimatedAttributesDirty;
+    }
 
-    CSSCursorImageValue* cursorImageValue() const { return m_cursorImageValue; }
-    void setCursorImageValue(CSSCursorImageValue* cursorImageValue) { m_cursorImageValue = cursorImageValue; }
+    HashSet<const QualifiedName*>& webAnimatedAttributes()
+    {
+        return m_webAnimatedAttributes;
+    }
 
-    MutableStylePropertySet* animatedSMILStyleProperties() const { return m_animatedSMILStyleProperties.get(); }
+    MutableStylePropertySet* animatedSMILStyleProperties() const
+    {
+        return m_animatedSMILStyleProperties.get();
+    }
     MutableStylePropertySet* ensureAnimatedSMILStyleProperties();
 
     ComputedStyle* overrideComputedStyle(Element*, const ComputedStyle*);
 
     bool useOverrideComputedStyle() const { return m_useOverrideComputedStyle; }
-    void setUseOverrideComputedStyle(bool value) { m_useOverrideComputedStyle = value; }
-    void setNeedsOverrideComputedStyleUpdate() { m_needsOverrideComputedStyleUpdate = true; }
+    void setUseOverrideComputedStyle(bool value)
+    {
+        m_useOverrideComputedStyle = value;
+    }
+    void setNeedsOverrideComputedStyleUpdate()
+    {
+        m_needsOverrideComputedStyleUpdate = true;
+    }
 
     AffineTransform* animateMotionTransform();
 
     DECLARE_TRACE();
-    void processWeakMembers(Visitor*);
 
 private:
-#if ENABLE(OILPAN)
     Member<SVGElement> m_owner;
-#endif
     SVGElementSet m_outgoingReferences;
     SVGElementSet m_incomingReferences;
-    WillBeHeapHashSet<RawPtrWillBeWeakMember<SVGElement>> m_elementInstances;
-    RawPtrWillBeWeakMember<SVGCursorElement> m_cursorElement;
-    RawPtrWillBeWeakMember<CSSCursorImageValue> m_cursorImageValue;
-    RefPtrWillBeMember<SVGElement> m_correspondingElement;
+    HeapHashSet<WeakMember<SVGElement>> m_elementInstances;
+    Member<SVGElementProxySet> m_elementProxySet;
+    Member<SVGElement> m_correspondingElement;
     bool m_instancesUpdatesBlocked : 1;
     bool m_useOverrideComputedStyle : 1;
     bool m_needsOverrideComputedStyleUpdate : 1;
-    RefPtrWillBeMember<MutableStylePropertySet> m_animatedSMILStyleProperties;
+    bool m_webAnimatedAttributesDirty : 1;
+    HashSet<const QualifiedName*> m_webAnimatedAttributes;
+    Member<MutableStylePropertySet> m_animatedSMILStyleProperties;
     RefPtr<ComputedStyle> m_overrideComputedStyle;
     // Used by <animateMotion>
-    OwnPtr<AffineTransform> m_animateMotionTransform;
+    AffineTransform m_animateMotionTransform;
 };
 
-}
+} // namespace blink
 
 #endif

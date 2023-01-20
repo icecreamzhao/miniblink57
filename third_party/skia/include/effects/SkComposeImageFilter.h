@@ -12,30 +12,13 @@
 
 class SK_API SkComposeImageFilter : public SkImageFilter {
 public:
-<<<<<<< HEAD
     static sk_sp<SkImageFilter> Make(sk_sp<SkImageFilter> outer, sk_sp<SkImageFilter> inner);
 
     SkRect computeFastBounds(const SkRect& src) const override;
-=======
-    virtual ~SkComposeImageFilter();
-
-    static SkImageFilter* Create(SkImageFilter* outer, SkImageFilter* inner) {
-        if (NULL == outer) {
-            return SkSafeRef(inner);
-        }
-        if (NULL == inner) {
-            return SkRef(outer);
-        }
-        SkImageFilter* inputs[2] = { outer, inner };
-        return SkNEW_ARGS(SkComposeImageFilter, (inputs));
-    }
-    void computeFastBounds(const SkRect& src, SkRect* dst) const override;
->>>>>>> miniblink49
 
     SK_TO_STRING_OVERRIDE()
     SK_DECLARE_PUBLIC_FLATTENABLE_DESERIALIZATION_PROCS(SkComposeImageFilter)
 
-<<<<<<< HEAD
 #ifdef SK_SUPPORT_LEGACY_IMAGEFILTER_PTR
     static SkImageFilter* Create(SkImageFilter* outer, SkImageFilter* inner)
     {
@@ -56,16 +39,6 @@ protected:
         SkIPoint* offset) const override;
     SkIRect onFilterBounds(const SkIRect&, const SkMatrix&, MapDirection) const override;
     bool onCanHandleComplexCTM() const override { return true; }
-=======
-protected:
-    explicit SkComposeImageFilter(SkImageFilter* inputs[2]) : INHERITED(2, inputs) {
-        SkASSERT(inputs[0]);
-        SkASSERT(inputs[1]);
-    }
-    virtual bool onFilterImage(Proxy*, const SkBitmap& src, const Context&,
-                               SkBitmap* result, SkIPoint* loc) const override;
-    bool onFilterBounds(const SkIRect&, const SkMatrix&, SkIRect*) const override;
->>>>>>> miniblink49
 
 private:
     typedef SkImageFilter INHERITED;

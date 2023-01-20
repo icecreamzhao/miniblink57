@@ -8,7 +8,6 @@
 #include "GrDefaultGeoProcFactory.h"
 
 #include "GrInvariantOutput.h"
-<<<<<<< HEAD
 #include "SkRefCnt.h"
 #include "glsl/GrGLSLFragmentShaderBuilder.h"
 #include "glsl/GrGLSLGeometryProcessor.h"
@@ -16,17 +15,12 @@
 #include "glsl/GrGLSLUtil.h"
 #include "glsl/GrGLSLVarying.h"
 #include "glsl/GrGLSLVertexShaderBuilder.h"
-=======
-#include "gl/GrGLGeometryProcessor.h"
-#include "gl/builders/GrGLProgramBuilder.h"
->>>>>>> miniblink49
 
 /*
  * The default Geometry Processor simply takes position and multiplies it by the uniform view
  * matrix. It also leaves coverage untouched.  Behind the scenes, we may add per vertex color or
  * local coords.
  */
-<<<<<<< HEAD
 
 enum GPFlag {
     kColor_GPFlag = 0x1,
@@ -48,26 +42,6 @@ public:
         return sk_sp<GrGeometryProcessor>(new DefaultGeoProc(
             gpTypeFlags, color, viewMatrix, localMatrix, coverage,
             localCoordsWillBeRead, coverageWillBeIgnored));
-=======
-typedef GrDefaultGeoProcFactory Flag;
-
-class DefaultGeoProc : public GrGeometryProcessor {
-public:
-    static GrGeometryProcessor* Create(uint32_t gpTypeFlags,
-                                       GrColor color,
-                                       const SkMatrix& viewMatrix,
-                                       const SkMatrix& localMatrix,
-                                       bool localCoordsWillBeRead,
-                                       bool coverageWillBeIgnored,
-                                       uint8_t coverage) {
-        return SkNEW_ARGS(DefaultGeoProc, (gpTypeFlags,
-                                           color,
-                                           viewMatrix,
-                                           localMatrix,
-                                           coverage,
-                                           localCoordsWillBeRead,
-                                           coverageWillBeIgnored));
->>>>>>> miniblink49
     }
 
     const char* name() const override { return "DefaultGeometryProcessor"; }
@@ -86,7 +60,6 @@ public:
     bool coverageWillBeIgnored() const { return fCoverageWillBeIgnored; }
     bool hasVertexCoverage() const { return SkToBool(fInCoverage); }
 
-<<<<<<< HEAD
     class GLSLProcessor : public GrGLSLGeometryProcessor {
     public:
         GLSLProcessor()
@@ -106,40 +79,18 @@ public:
 
             // emit attributes
             varyingHandler->emitAttributes(gp);
-=======
-    class GLProcessor : public GrGLGeometryProcessor {
-    public:
-        GLProcessor(const GrGeometryProcessor& gp, const GrBatchTracker&)
-            : fViewMatrix(SkMatrix::InvalidMatrix()), fColor(GrColor_ILLEGAL), fCoverage(0xff) {}
-
-        void onEmitCode(EmitArgs& args, GrGPArgs* gpArgs) override {
-            const DefaultGeoProc& gp = args.fGP.cast<DefaultGeoProc>();
-            GrGLGPBuilder* pb = args.fPB;
-            GrGLVertexBuilder* vsBuilder = pb->getVertexShaderBuilder();
-            GrGLFragmentBuilder* fs = args.fPB->getFragmentShaderBuilder();
-
-            // emit attributes
-            vsBuilder->emitAttributes(gp);
->>>>>>> miniblink49
 
             // Setup pass through color
             if (!gp.colorIgnored()) {
                 if (gp.hasVertexColor()) {
-<<<<<<< HEAD
                     varyingHandler->addPassThroughAttribute(gp.inColor(), args.fOutputColor);
                 } else {
                     this->setupUniformColor(fragBuilder, uniformHandler, args.fOutputColor,
                         &fColorUniform);
-=======
-                    pb->addPassThroughAttribute(gp.inColor(), args.fOutputColor);
-                } else {
-                    this->setupUniformColor(pb, args.fOutputColor, &fColorUniform);
->>>>>>> miniblink49
                 }
             }
 
             // Setup position
-<<<<<<< HEAD
             this->setupPosition(vertBuilder,
                 uniformHandler,
                 gpArgs,
@@ -174,25 +125,11 @@ public:
                     gp.localMatrix(),
                     args.fTransformsIn,
                     args.fTransformsOut);
-=======
-            this->setupPosition(pb, gpArgs, gp.inPosition()->fName, gp.viewMatrix(),
-                                &fViewMatrixUniform);
-
-            if (gp.inLocalCoords()) {
-                // emit transforms with explicit local coords
-                this->emitTransforms(pb, gpArgs->fPositionVar, gp.inLocalCoords()->fName,
-                                     gp.localMatrix(), args.fTransformsIn, args.fTransformsOut);
-            } else {
-                // emit transforms with position
-                this->emitTransforms(pb, gpArgs->fPositionVar, gp.inPosition()->fName,
-                                     gp.localMatrix(), args.fTransformsIn, args.fTransformsOut);
->>>>>>> miniblink49
             }
 
             // Setup coverage as pass through
             if (!gp.coverageWillBeIgnored()) {
                 if (gp.hasVertexCoverage()) {
-<<<<<<< HEAD
                     fragBuilder->codeAppendf("float alpha = 1.0;");
                     varyingHandler->addPassThroughAttribute(gp.inCoverage(), "alpha");
                     fragBuilder->codeAppendf("%s = vec4(alpha);", args.fOutputCoverage);
@@ -206,35 +143,14 @@ public:
                         "Coverage",
                         &fragCoverage);
                     fragBuilder->codeAppendf("%s = vec4(%s);", args.fOutputCoverage, fragCoverage);
-=======
-                    fs->codeAppendf("float alpha = 1.0;");
-                    args.fPB->addPassThroughAttribute(gp.inCoverage(), "alpha");
-                    fs->codeAppendf("%s = vec4(alpha);", args.fOutputCoverage);
-                } else if (gp.coverage() == 0xff) {
-                    fs->codeAppendf("%s = vec4(1);", args.fOutputCoverage);
-                } else {
-                    const char* fragCoverage;
-                    fCoverageUniform = pb->addUniform(GrGLProgramBuilder::kFragment_Visibility,
-                                                      kFloat_GrSLType,
-                                                      kDefault_GrSLPrecision,
-                                                      "Coverage",
-                                                      &fragCoverage);
-                    fs->codeAppendf("%s = vec4(%s);", args.fOutputCoverage, fragCoverage);
->>>>>>> miniblink49
                 }
             }
         }
 
         static inline void GenKey(const GrGeometryProcessor& gp,
-<<<<<<< HEAD
             const GrGLSLCaps&,
             GrProcessorKeyBuilder* b)
         {
-=======
-                                  const GrBatchTracker& bt,
-                                  const GrGLSLCaps&,
-                                  GrProcessorKeyBuilder* b) {
->>>>>>> miniblink49
             const DefaultGeoProc& def = gp.cast<DefaultGeoProc>();
             uint32_t key = def.fFlags;
             key |= def.colorIgnored() << 8;
@@ -242,72 +158,41 @@ public:
             key |= def.hasVertexColor() << 10;
             key |= def.hasVertexCoverage() << 11;
             key |= def.coverage() == 0xff ? 0x1 << 12 : 0;
-<<<<<<< HEAD
             key |= def.localCoordsWillBeRead() && def.localMatrix().hasPerspective() ? 0x1 << 24 : 0x0;
-=======
-            key |= def.localCoordsWillBeRead() && def.localMatrix().hasPerspective() ? 0x1 << 24 :
-                                                                                       0x0;
->>>>>>> miniblink49
             key |= ComputePosKey(def.viewMatrix()) << 25;
             b->add32(key);
         }
 
-<<<<<<< HEAD
         void setData(const GrGLSLProgramDataManager& pdman,
             const GrPrimitiveProcessor& gp) override
         {
-=======
-        virtual void setData(const GrGLProgramDataManager& pdman,
-                             const GrPrimitiveProcessor& gp,
-                             const GrBatchTracker& bt) override {
->>>>>>> miniblink49
             const DefaultGeoProc& dgp = gp.cast<DefaultGeoProc>();
 
             if (!dgp.viewMatrix().isIdentity() && !fViewMatrix.cheapEqualTo(dgp.viewMatrix())) {
                 fViewMatrix = dgp.viewMatrix();
-<<<<<<< HEAD
                 float viewMatrix[3 * 3];
                 GrGLSLGetMatrix<3>(viewMatrix, fViewMatrix);
-=======
-                GrGLfloat viewMatrix[3 * 3];
-                GrGLGetMatrix<3>(viewMatrix, fViewMatrix);
->>>>>>> miniblink49
                 pdman.setMatrix3f(fViewMatrixUniform, viewMatrix);
             }
 
             if (dgp.color() != fColor && !dgp.hasVertexColor()) {
-<<<<<<< HEAD
                 float c[4];
-=======
-                GrGLfloat c[4];
->>>>>>> miniblink49
                 GrColorToRGBAFloat(dgp.color(), c);
                 pdman.set4fv(fColorUniform, 1, c);
                 fColor = dgp.color();
             }
 
-<<<<<<< HEAD
             if (!dgp.coverageWillBeIgnored() && dgp.coverage() != fCoverage && !dgp.hasVertexCoverage()) {
-=======
-            if (!dgp.coverageWillBeIgnored() &&
-                dgp.coverage() != fCoverage && !dgp.hasVertexCoverage()) {
->>>>>>> miniblink49
                 pdman.set1f(fCoverageUniform, GrNormalizeByteToFloat(dgp.coverage()));
                 fCoverage = dgp.coverage();
             }
         }
 
         void setTransformData(const GrPrimitiveProcessor& primProc,
-<<<<<<< HEAD
             const GrGLSLProgramDataManager& pdman,
             int index,
             const SkTArray<const GrCoordTransform*, true>& transforms) override
         {
-=======
-                              const GrGLProgramDataManager& pdman,
-                              int index,
-                              const SkTArray<const GrCoordTransform*, true>& transforms) override {
->>>>>>> miniblink49
             this->setTransformDataHelper<DefaultGeoProc>(primProc, pdman, index, transforms);
         }
 
@@ -319,7 +204,6 @@ public:
         UniformHandle fColorUniform;
         UniformHandle fCoverageUniform;
 
-<<<<<<< HEAD
         typedef GrGLSLGeometryProcessor INHERITED;
     };
 
@@ -331,25 +215,10 @@ public:
     GrGLSLPrimitiveProcessor* createGLSLInstance(const GrGLSLCaps&) const override
     {
         return new GLSLProcessor();
-=======
-        typedef GrGLGeometryProcessor INHERITED;
-    };
-
-    virtual void getGLProcessorKey(const GrBatchTracker& bt,
-                                   const GrGLSLCaps& caps,
-                                   GrProcessorKeyBuilder* b) const override {
-        GLProcessor::GenKey(*this, bt, caps, b);
-    }
-
-    virtual GrGLPrimitiveProcessor* createGLInstance(const GrBatchTracker& bt,
-                                                     const GrGLSLCaps&) const override {
-        return SkNEW_ARGS(GLProcessor, (*this, bt));
->>>>>>> miniblink49
     }
 
 private:
     DefaultGeoProc(uint32_t gpTypeFlags,
-<<<<<<< HEAD
         GrColor color,
         const SkMatrix& viewMatrix,
         const SkMatrix& localMatrix,
@@ -360,25 +229,12 @@ private:
         , fInColor(nullptr)
         , fInLocalCoords(nullptr)
         , fInCoverage(nullptr)
-=======
-                   GrColor color,
-                   const SkMatrix& viewMatrix,
-                   const SkMatrix& localMatrix,
-                   uint8_t coverage,
-                   bool localCoordsWillBeRead,
-                   bool coverageWillBeIgnored)
-        : fInPosition(NULL)
-        , fInColor(NULL)
-        , fInLocalCoords(NULL)
-        , fInCoverage(NULL)
->>>>>>> miniblink49
         , fColor(color)
         , fViewMatrix(viewMatrix)
         , fLocalMatrix(localMatrix)
         , fCoverage(coverage)
         , fFlags(gpTypeFlags)
         , fLocalCoordsWillBeRead(localCoordsWillBeRead)
-<<<<<<< HEAD
         , fCoverageWillBeIgnored(coverageWillBeIgnored)
     {
         this->initClassID<DefaultGeoProc>();
@@ -389,21 +245,11 @@ private:
         bool hasCoverage = SkToBool(gpTypeFlags & kCoverage_GPFlag);
         fInPosition = &this->addVertexAttrib(Attribute("inPosition", kVec2f_GrVertexAttribType,
             kHigh_GrSLPrecision));
-=======
-        , fCoverageWillBeIgnored(coverageWillBeIgnored) {
-        this->initClassID<DefaultGeoProc>();
-        bool hasColor = SkToBool(gpTypeFlags & GrDefaultGeoProcFactory::kColor_GPType);
-        bool hasLocalCoord = SkToBool(gpTypeFlags & GrDefaultGeoProcFactory::kLocalCoord_GPType);
-        bool hasCoverage = SkToBool(gpTypeFlags & GrDefaultGeoProcFactory::kCoverage_GPType);
-        fInPosition = &this->addVertexAttrib(Attribute("inPosition", kVec2f_GrVertexAttribType,
-                                                       kHigh_GrSLPrecision));
->>>>>>> miniblink49
         if (hasColor) {
             fInColor = &this->addVertexAttrib(Attribute("inColor", kVec4ub_GrVertexAttribType));
         }
         if (hasLocalCoord) {
             fInLocalCoords = &this->addVertexAttrib(Attribute("inLocalCoord",
-<<<<<<< HEAD
                 kVec2f_GrVertexAttribType));
             if (hasExplicitLocalCoords) {
                 this->setHasExplicitLocalCoords();
@@ -415,14 +261,6 @@ private:
         if (hasCoverage) {
             fInCoverage = &this->addVertexAttrib(Attribute("inCoverage",
                 kFloat_GrVertexAttribType));
-=======
-                                                              kVec2f_GrVertexAttribType));
-            this->setHasLocalCoords();
-        }
-        if (hasCoverage) {
-            fInCoverage = &this->addVertexAttrib(Attribute("inCoverage",
-                                                           kFloat_GrVertexAttribType));
->>>>>>> miniblink49
         }
     }
 
@@ -445,7 +283,6 @@ private:
 
 GR_DEFINE_GEOMETRY_PROCESSOR_TEST(DefaultGeoProc);
 
-<<<<<<< HEAD
 sk_sp<GrGeometryProcessor> DefaultGeoProc::TestCreate(GrProcessorTestData* d)
 {
     uint32_t flags = 0;
@@ -517,41 +354,4 @@ sk_sp<GrGeometryProcessor> GrDefaultGeoProcFactory::MakeForDeviceSpace(
 
     LocalCoords inverted(LocalCoords::kUsePosition_Type, &invert);
     return Make(color, coverage, inverted, SkMatrix::I());
-=======
-GrGeometryProcessor* DefaultGeoProc::TestCreate(GrProcessorTestData* d) {
-    uint32_t flags = 0;
-    if (d->fRandom->nextBool()) {
-        flags |= GrDefaultGeoProcFactory::kColor_GPType;
-    }
-    if (d->fRandom->nextBool()) {
-        flags |= GrDefaultGeoProcFactory::kCoverage_GPType;
-    }
-    if (d->fRandom->nextBool()) {
-        flags |= GrDefaultGeoProcFactory::kLocalCoord_GPType;
-    }
-
-    return DefaultGeoProc::Create(flags,
-                                  GrRandomColor(d->fRandom),
-                                  GrTest::TestMatrix(d->fRandom),
-                                  GrTest::TestMatrix(d->fRandom),
-                                  d->fRandom->nextBool(),
-                                  d->fRandom->nextBool(),
-                                  GrRandomCoverage(d->fRandom));
-}
-
-const GrGeometryProcessor* GrDefaultGeoProcFactory::Create(uint32_t gpTypeFlags,
-                                                           GrColor color,
-                                                           bool localCoordsWillBeRead,
-                                                           bool coverageWillBeIgnored,
-                                                           const SkMatrix& viewMatrix,
-                                                           const SkMatrix& localMatrix,
-                                                           uint8_t coverage) {
-    return DefaultGeoProc::Create(gpTypeFlags,
-                                  color,
-                                  viewMatrix,
-                                  localMatrix,
-                                  localCoordsWillBeRead,
-                                  coverageWillBeIgnored,
-                                  coverage);
->>>>>>> miniblink49
 }

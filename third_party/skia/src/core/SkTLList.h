@@ -9,18 +9,8 @@
 #define SkTLList_DEFINED
 
 #include "SkTInternalLList.h"
-<<<<<<< HEAD
 #include "SkTypes.h"
 #include <utility>
-=======
-#include "SkTemplates.h"
-
-template <typename T> class SkTLList;
-template <typename T>
-inline void* operator new(size_t, SkTLList<T>* list,
-                          typename SkTLList<T>::Placement placement,
-                          const typename SkTLList<T>::Iter& location);
->>>>>>> miniblink49
 
 /** Doubly-linked list of objects. The objects' lifetimes are controlled by the list. I.e. the
     the list creates the objects and they are deleted upon removal. This class block-allocates
@@ -31,16 +21,11 @@ inline void* operator new(size_t, SkTLList<T>* list,
         SkNEW_INSERT_IN_LLIST_AFTER(list, location, type_name, args)
     where list is a SkTLList<type_name>*, location is an iterator, and args is the paren-surrounded
     constructor arguments for type_name. These macros behave like addBefore() and addAfter().
-<<<<<<< HEAD
 
     allocCnt is the number of objects to allocate as a group. In the worst case fragmentation
     each object is using the space required for allocCnt unfragmented objects.
 */
 template <typename T, unsigned int N>
-=======
-*/
-template <typename T>
->>>>>>> miniblink49
 class SkTLList : SkNoncopyable {
 private:
     struct Block;
@@ -52,7 +37,6 @@ private:
     typedef SkTInternalLList<Node> NodeList;
 
 public:
-<<<<<<< HEAD
     class Iter;
 
     SkTLList()
@@ -68,19 +52,6 @@ public:
 
     ~SkTLList()
     {
-=======
-
-    class Iter;
-
-    /** allocCnt is the number of objects to allocate as a group. In the worst case fragmentation
-        each object is using the space required for allocCnt unfragmented objects. */
-    SkTLList(int allocCnt = 1) : fCount(0), fAllocCnt(allocCnt) {
-        SkASSERT(allocCnt > 0);
-        this->validate();
-    }
-
-    ~SkTLList() {
->>>>>>> miniblink49
         this->validate();
         typename NodeList::Iter iter;
         Node* node = iter.init(fList, Iter::kHead_IterStart);
@@ -89,24 +60,16 @@ public:
             Block* block = node->fBlock;
             node = iter.next();
             if (0 == --block->fNodesInUse) {
-<<<<<<< HEAD
                 for (unsigned int i = 0; i < N; ++i) {
                     block->fNodes[i].~Node();
                 }
                 if (block != &fFirstBlock) {
                     sk_free(block);
                 }
-=======
-                for (int i = 0; i < fAllocCnt; ++i) {
-                    block->fNodes[i].~Node();
-                }
-                sk_free(block);
->>>>>>> miniblink49
             }
         }
     }
 
-<<<<<<< HEAD
     /** Adds a new element to the list at the head. */
     template <typename... Args>
     T* addToHead(Args&&... args)
@@ -151,54 +114,6 @@ public:
         fList.addAfter(node, location.getNode());
         this->validate();
         return new (node->fObj) T(std::forward<Args>(args)...);
-=======
-    T* addToHead(const T& t) {
-        this->validate();
-        Node* node = this->createNode();
-        fList.addToHead(node);
-        SkNEW_PLACEMENT_ARGS(node->fObj, T, (t));
-        this->validate();
-        return reinterpret_cast<T*>(node->fObj);
-    }
-
-    T* addToHead() {
-        this->validate();
-        Node* node = this->createNode();
-        fList.addToHead(node);
-        SkNEW_PLACEMENT(node->fObj, T);
-        this->validate();
-        return reinterpret_cast<T*>(node->fObj);
-    }
-
-    T* addToTail(const T& t) {
-        this->validate();
-        Node* node = this->createNode();
-        fList.addToTail(node);
-        SkNEW_PLACEMENT_ARGS(node->fObj, T, (t));
-        this->validate();
-        return reinterpret_cast<T*>(node->fObj);
-    }
-
-    T* addToTail() {
-        this->validate();
-        Node* node = this->createNode();
-        fList.addToTail(node);
-        SkNEW_PLACEMENT(node->fObj, T);
-        this->validate();
-        return reinterpret_cast<T*>(node->fObj);
-    }
-
-    /** Adds a new element to the list before the location indicated by the iterator. If the
-        iterator refers to a NULL location then the new element is added at the tail */
-    T* addBefore(const T& t, const Iter& location) {
-        return SkNEW_PLACEMENT_ARGS(this->internalAddBefore(location), T, (t));
-    }
-
-    /** Adds a new element to the list after the location indicated by the iterator. If the
-        iterator refers to a NULL location then the new element is added at the head */
-    T* addAfter(const T& t, const Iter& location) {
-        return SkNEW_PLACEMENT_ARGS(this->internalAddAfter(location), T, (t));
->>>>>>> miniblink49
     }
 
     /** Convenience methods for getting an iterator initialized to the head/tail of the list. */
@@ -210,12 +125,8 @@ public:
     const T* head() const { return Iter(*this, Iter::kHead_IterStart).get(); }
     const T* tail() const { return Iter(*this, Iter::kTail_IterStart).get(); }
 
-<<<<<<< HEAD
     void popHead()
     {
-=======
-    void popHead() {
->>>>>>> miniblink49
         this->validate();
         Node* node = fList.head();
         if (node) {
@@ -224,12 +135,8 @@ public:
         this->validate();
     }
 
-<<<<<<< HEAD
     void popTail()
     {
-=======
-    void popTail() {
->>>>>>> miniblink49
         this->validate();
         Node* node = fList.head();
         if (node) {
@@ -238,12 +145,8 @@ public:
         this->validate();
     }
 
-<<<<<<< HEAD
     void remove(T* t)
     {
-=======
-    void remove(T* t) {
->>>>>>> miniblink49
         this->validate();
         Node* node = reinterpret_cast<Node*>(t);
         SkASSERT(reinterpret_cast<T*>(node->fObj) == t);
@@ -251,12 +154,8 @@ public:
         this->validate();
     }
 
-<<<<<<< HEAD
     void reset()
     {
-=======
-    void reset() {
->>>>>>> miniblink49
         this->validate();
         Iter iter(*this, Iter::kHead_IterStart);
         while (iter.get()) {
@@ -270,7 +169,6 @@ public:
     }
 
     int count() const { return fCount; }
-<<<<<<< HEAD
     bool isEmpty() const
     {
         this->validate();
@@ -279,11 +177,6 @@ public:
 
     bool operator==(const SkTLList& list) const
     {
-=======
-    bool isEmpty() const { this->validate(); return 0 == fCount; }
-
-    bool operator== (const SkTLList& list) const {
->>>>>>> miniblink49
         if (this == &list) {
             return true;
         }
@@ -300,11 +193,7 @@ public:
         }
         return true;
     }
-<<<<<<< HEAD
     bool operator!=(const SkTLList& list) const { return !(*this == list); }
-=======
-    bool operator!= (const SkTLList& list) const { return !(*this == list); }
->>>>>>> miniblink49
 
     /** The iterator becomes invalid if the element it refers to is removed from the list. */
     class Iter : private NodeList::Iter {
@@ -318,7 +207,6 @@ public:
         //!< Start the iterator at the tail of the list.
         static const IterStart kTail_IterStart = INHERITED::kTail_IterStart;
 
-<<<<<<< HEAD
         Iter() { }
 
         Iter(const SkTLList& list, IterStart start = kHead_IterStart)
@@ -328,15 +216,6 @@ public:
 
         T* init(const SkTLList& list, IterStart start = kHead_IterStart)
         {
-=======
-        Iter() {}
-
-        Iter(const SkTLList& list, IterStart start = kHead_IterStart) {
-            INHERITED::init(list.fList, start);
-        }
-
-        T* init(const SkTLList& list, IterStart start = kHead_IterStart) {
->>>>>>> miniblink49
             return this->nodeToObj(INHERITED::init(list.fList, start));
         }
 
@@ -346,39 +225,26 @@ public:
 
         T* prev() { return this->nodeToObj(INHERITED::prev()); }
 
-<<<<<<< HEAD
         Iter& operator=(const Iter& iter)
         {
             INHERITED::operator=(iter);
             return *this;
         }
-=======
-        Iter& operator= (const Iter& iter) { INHERITED::operator=(iter); return *this; }
->>>>>>> miniblink49
 
     private:
         friend class SkTLList;
         Node* getNode() { return INHERITED::get(); }
 
-<<<<<<< HEAD
         T* nodeToObj(Node* node)
         {
             if (node) {
                 return reinterpret_cast<T*>(node->fObj);
             } else {
                 return nullptr;
-=======
-        T* nodeToObj(Node* node) {
-            if (node) {
-                return reinterpret_cast<T*>(node->fObj);
-            } else {
-                return NULL;
->>>>>>> miniblink49
             }
         }
     };
 
-<<<<<<< HEAD
 private:
     struct Block {
         int fNodesInUse;
@@ -387,29 +253,11 @@ private:
 
     Node* createNode()
     {
-=======
-    // For use with operator new
-    enum Placement {
-        kBefore_Placement,
-        kAfter_Placement,
-    };
-
-private:
-    struct Block {
-        int fNodesInUse;
-        Node fNodes[1];
-    };
-
-    size_t blockSize() const { return sizeof(Block) + sizeof(Node) * (fAllocCnt-1); }
-
-    Node* createNode() {
->>>>>>> miniblink49
         Node* node = fFreeList.head();
         if (node) {
             fFreeList.remove(node);
             ++node->fBlock->fNodesInUse;
         } else {
-<<<<<<< HEAD
             // Should not get here when count == 0 because we always have the preallocated first
             // block.
             SkASSERT(fCount > 0);
@@ -420,15 +268,6 @@ private:
             block->fNodesInUse = 1;
             for (unsigned int i = 1; i < N; ++i) {
                 new (block->fNodes + i) Node;
-=======
-            Block* block = reinterpret_cast<Block*>(sk_malloc_flags(this->blockSize(), 0));
-            node = &block->fNodes[0];
-            SkNEW_PLACEMENT(node, Node);
-            node->fBlock = block;
-            block->fNodesInUse = 1;
-            for (int i = 1; i < fAllocCnt; ++i) {
-                SkNEW_PLACEMENT(block->fNodes + i, Node);
->>>>>>> miniblink49
                 fFreeList.addToHead(block->fNodes + i);
                 block->fNodes[i].fBlock = block;
             }
@@ -437,7 +276,6 @@ private:
         return node;
     }
 
-<<<<<<< HEAD
     void removeNode(Node* node)
     {
         SkASSERT(node);
@@ -447,15 +285,6 @@ private:
         // Don't ever elease the first block, just add its nodes to the free list
         if (0 == --block->fNodesInUse && block != &fFirstBlock) {
             for (unsigned int i = 0; i < N; ++i) {
-=======
-    void removeNode(Node* node) {
-        SkASSERT(node);
-        fList.remove(node);
-        SkTCast<T*>(node->fObj)->~T();
-        if (0 == --node->fBlock->fNodesInUse) {
-            Block* block = node->fBlock;
-            for (int i = 0; i < fAllocCnt; ++i) {
->>>>>>> miniblink49
                 if (block->fNodes + i != node) {
                     fFreeList.remove(block->fNodes + i);
                 }
@@ -469,7 +298,6 @@ private:
         this->validate();
     }
 
-<<<<<<< HEAD
     void validate() const
     {
 #ifdef SK_DEBUG
@@ -478,13 +306,6 @@ private:
             // Should only have the nodes from the first block in the free list.
             SkASSERT(fFreeList.countEntries() == N);
         }
-=======
-    void validate() const {
-#ifdef SK_DEBUG
-        SkASSERT((0 == fCount) == fList.isEmpty());
-        SkASSERT((0 != fCount) || fFreeList.isEmpty());
-
->>>>>>> miniblink49
         fList.validate();
         fFreeList.validate();
         typename NodeList::Iter iter;
@@ -492,20 +313,12 @@ private:
         while (freeNode) {
             SkASSERT(fFreeList.isInList(freeNode));
             Block* block = freeNode->fBlock;
-<<<<<<< HEAD
             // Only the first block is allowed to have all its nodes in the free list.
             SkASSERT(block->fNodesInUse > 0 || block == &fFirstBlock);
             SkASSERT((unsigned)block->fNodesInUse < N);
             int activeCnt = 0;
             int freeCnt = 0;
             for (unsigned int i = 0; i < N; ++i) {
-=======
-            SkASSERT(block->fNodesInUse > 0 && block->fNodesInUse < fAllocCnt);
-
-            int activeCnt = 0;
-            int freeCnt = 0;
-            for (int i = 0; i < fAllocCnt; ++i) {
->>>>>>> miniblink49
                 bool free = fFreeList.isInList(block->fNodes + i);
                 bool active = fList.isInList(block->fNodes + i);
                 SkASSERT(free != active);
@@ -522,19 +335,11 @@ private:
             ++count;
             SkASSERT(fList.isInList(activeNode));
             Block* block = activeNode->fBlock;
-<<<<<<< HEAD
             SkASSERT(block->fNodesInUse > 0 && (unsigned)block->fNodesInUse <= N);
 
             int activeCnt = 0;
             int freeCnt = 0;
             for (unsigned int i = 0; i < N; ++i) {
-=======
-            SkASSERT(block->fNodesInUse > 0 && block->fNodesInUse <= fAllocCnt);
-
-            int activeCnt = 0;
-            int freeCnt = 0;
-            for (int i = 0; i < fAllocCnt; ++i) {
->>>>>>> miniblink49
                 bool free = fFreeList.isInList(block->fNodes + i);
                 bool active = fList.isInList(block->fNodes + i);
                 SkASSERT(free != active);
@@ -548,80 +353,10 @@ private:
 #endif
     }
 
-<<<<<<< HEAD
     NodeList fList;
     NodeList fFreeList;
     Block fFirstBlock;
     int fCount;
 };
 
-=======
-    // Support in-place initializing of objects inserted into the list via operator new.
-    friend void* operator new<T>(size_t,
-                                 SkTLList* list,
-                                 Placement placement,
-                                 const Iter& location);
-
-
-    // Helpers that insert the node and returns a pointer to where the new object should be init'ed.
-    void* internalAddBefore(Iter location) {
-        this->validate();
-        Node* node = this->createNode();
-        fList.addBefore(node, location.getNode());
-        this->validate();
-        return node->fObj;
-    }
-
-    void* internalAddAfter(Iter location) {
-        this->validate();
-        Node* node = this->createNode();
-        fList.addAfter(node, location.getNode());
-        this->validate();
-        return node->fObj;
-    }
-
-    NodeList fList;
-    NodeList fFreeList;
-    int fCount;
-    int fAllocCnt;
-
-};
-
-// Use the below macros rather than calling this directly
-template <typename T>
-void *operator new(size_t, SkTLList<T>* list,
-                   typename SkTLList<T>::Placement placement,
-                   const typename SkTLList<T>::Iter& location) {
-    SkASSERT(list);
-    if (SkTLList<T>::kBefore_Placement == placement) {
-        return list->internalAddBefore(location);
-    } else {
-        return list->internalAddAfter(location);
-    }
-}
-
-// Skia doesn't use C++ exceptions but it may be compiled with them enabled. Having an op delete
-// to match the op new silences warnings about missing op delete when a constructor throws an
-// exception.
-template <typename T>
-void operator delete(void*,
-                     SkTLList<T>*,
-                     typename SkTLList<T>::Placement,
-                     const typename SkTLList<T>::Iter&) {
-    SK_CRASH();
-}
-
-#define SkNEW_INSERT_IN_LLIST_BEFORE(list, location, type_name, args) \
-    (new ((list), SkTLList< type_name >::kBefore_Placement, (location)) type_name args)
-
-#define SkNEW_INSERT_IN_LLIST_AFTER(list, location, type_name, args) \
-    (new ((list), SkTLList< type_name >::kAfter_Placement, (location)) type_name args)
-
-#define SkNEW_INSERT_AT_LLIST_HEAD(list, type_name, args) \
-    SkNEW_INSERT_IN_LLIST_BEFORE((list), (list)->headIter(), type_name, args)
-
-#define SkNEW_INSERT_AT_LLIST_TAIL(list, type_name, args) \
-    SkNEW_INSERT_IN_LLIST_AFTER((list), (list)->tailIter(), type_name, args)
-
->>>>>>> miniblink49
 #endif

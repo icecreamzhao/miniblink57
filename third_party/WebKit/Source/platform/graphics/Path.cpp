@@ -27,15 +27,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "platform/graphics/Path.h"
 
-=======
-#include "config.h"
-#include "platform/graphics/Path.h"
-
-#include <math.h>
->>>>>>> miniblink49
 #include "platform/geometry/FloatPoint.h"
 #include "platform/geometry/FloatRect.h"
 #include "platform/graphics/GraphicsContext.h"
@@ -43,10 +36,7 @@
 #include "platform/transforms/AffineTransform.h"
 #include "third_party/skia/include/pathops/SkPathOps.h"
 #include "wtf/MathExtras.h"
-<<<<<<< HEAD
 #include <math.h>
-=======
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -60,7 +50,6 @@ Path::Path(const Path& other)
     m_path = SkPath(other.m_path);
 }
 
-<<<<<<< HEAD
 Path::Path(const SkPath& other)
 {
     m_path = other;
@@ -68,12 +57,6 @@ Path::Path(const SkPath& other)
 
 Path::~Path() { }
 
-=======
-Path::~Path()
-{
-}
-
->>>>>>> miniblink49
 Path& Path::operator=(const Path& other)
 {
     m_path = SkPath(other.m_path);
@@ -91,7 +74,6 @@ bool Path::operator==(const Path& other) const
     return m_path == other.m_path;
 }
 
-<<<<<<< HEAD
 bool Path::contains(const FloatPoint& point) const
 {
     return m_path.contains(WebCoreFloatToSkScalar(point.x()),
@@ -113,14 +95,6 @@ bool Path::contains(const FloatPoint& point, WindRule rule) const
 
 // FIXME: this method ignores the CTM and may yield inaccurate results for large
 // scales.
-=======
-bool Path::contains(const FloatPoint& point, WindRule rule) const
-{
-    return SkPathContainsPoint(m_path, point, static_cast<SkPath::FillType>(rule));
-}
-
-// FIXME: this method ignores the CTM and may yield inaccurate results for large scales.
->>>>>>> miniblink49
 SkPath Path::strokePath(const StrokeData& strokeData) const
 {
     SkPaint paint;
@@ -136,7 +110,6 @@ SkPath Path::strokePath(const StrokeData& strokeData) const
     return strokePath;
 }
 
-<<<<<<< HEAD
 bool Path::strokeContains(const FloatPoint& point,
     const StrokeData& strokeData) const
 {
@@ -175,24 +148,6 @@ FloatRect Path::strokeBoundingRect(const StrokeData& strokeData,
 static FloatPoint* convertPathPoints(FloatPoint dst[],
     const SkPoint src[],
     int count)
-=======
-bool Path::strokeContains(const FloatPoint& point, const StrokeData& strokeData) const
-{
-    return SkPathContainsPoint(strokePath(strokeData), point, SkPath::kWinding_FillType);
-}
-
-FloatRect Path::boundingRect() const
-{
-    return m_path.getBounds();
-}
-
-FloatRect Path::strokeBoundingRect(const StrokeData& strokeData) const
-{
-    return strokePath(strokeData).getBounds();
-}
-
-static FloatPoint* convertPathPoints(FloatPoint dst[], const SkPoint src[], int count)
->>>>>>> miniblink49
 {
     for (int i = 0; i < count; i++) {
         dst[i].setX(SkScalarToFloat(src[i].fX));
@@ -226,7 +181,6 @@ void Path::apply(void* info, PathApplierFunction function) const
             pathElement.type = PathElementAddCurveToPoint;
             pathElement.points = convertPathPoints(pathPoints, &pts[1], 3);
             break;
-<<<<<<< HEAD
         case SkPath::kConic_Verb: {
             // Approximate with quads.  Use two for now, increase if more precision
             // is needed.
@@ -243,19 +197,12 @@ void Path::apply(void* info, PathApplierFunction function) const
             }
             continue;
         }
-=======
->>>>>>> miniblink49
         case SkPath::kClose_Verb:
             pathElement.type = PathElementCloseSubpath;
             pathElement.points = convertPathPoints(pathPoints, 0, 0);
             break;
         case SkPath::kDone_Verb:
             return;
-<<<<<<< HEAD
-=======
-        default: // place-holder for kConic_Verb, when that lands from skia
-            break;
->>>>>>> miniblink49
         }
         function(info, &pathElement);
     }
@@ -278,7 +225,6 @@ float Path::length() const
     return SkScalarToFloat(length);
 }
 
-<<<<<<< HEAD
 FloatPoint Path::pointAtLength(float length) const
 {
     FloatPoint point;
@@ -292,17 +238,6 @@ static bool calculatePointAndNormalOnPath(SkPathMeasure& measure,
     FloatPoint& point,
     float& normalAngle,
     SkScalar* accumulatedLength = 0)
-=======
-FloatPoint Path::pointAtLength(float length, bool& ok) const
-{
-    FloatPoint point;
-    float normal;
-    ok = pointAndNormalAtLength(length, point, normal);
-    return point;
-}
-
-static bool calculatePointAndNormalOnPath(SkPathMeasure& measure, SkScalar length, FloatPoint& point, float& normalAngle, SkScalar* accumulatedLength = 0)
->>>>>>> miniblink49
 {
     do {
         SkScalar contourLength = measure.getLength();
@@ -312,12 +247,8 @@ static bool calculatePointAndNormalOnPath(SkPathMeasure& measure, SkScalar lengt
 
             if (measure.getPosTan(length, &position, &tangent)) {
                 normalAngle = rad2deg(SkScalarToFloat(SkScalarATan2(tangent.fY, tangent.fX)));
-<<<<<<< HEAD
                 point = FloatPoint(SkScalarToFloat(position.fX),
                     SkScalarToFloat(position.fY));
-=======
-                point = FloatPoint(SkScalarToFloat(position.fX), SkScalarToFloat(position.fY));
->>>>>>> miniblink49
                 return true;
             }
         }
@@ -328,7 +259,6 @@ static bool calculatePointAndNormalOnPath(SkPathMeasure& measure, SkScalar lengt
     return false;
 }
 
-<<<<<<< HEAD
 void Path::pointAndNormalAtLength(float length,
     FloatPoint& point,
     float& normal) const
@@ -346,34 +276,13 @@ void Path::pointAndNormalAtLength(float length,
 Path::PositionCalculator::PositionCalculator(const Path& path)
     : m_path(path.getSkPath())
     , m_pathMeasure(path.getSkPath(), false)
-=======
-bool Path::pointAndNormalAtLength(float length, FloatPoint& point, float& normal) const
-{
-    SkPathMeasure measure(m_path, false);
-
-    if (calculatePointAndNormalOnPath(measure, WebCoreFloatToSkScalar(length), point, normal))
-        return true;
-
-    normal = 0;
-    point = FloatPoint(0, 0);
-    return false;
-}
-
-Path::PositionCalculator::PositionCalculator(const Path& path)
-    : m_path(path.skPath())
-    , m_pathMeasure(path.skPath(), false)
->>>>>>> miniblink49
     , m_accumulatedLength(0)
 {
 }
 
-<<<<<<< HEAD
 void Path::PositionCalculator::pointAndNormalAtLength(float length,
     FloatPoint& point,
     float& normalAngle)
-=======
-bool Path::PositionCalculator::pointAndNormalAtLength(float length, FloatPoint& point, float& normalAngle)
->>>>>>> miniblink49
 {
     SkScalar skLength = WebCoreFloatToSkScalar(length);
     if (skLength >= 0) {
@@ -385,7 +294,6 @@ bool Path::PositionCalculator::pointAndNormalAtLength(float length, FloatPoint& 
             skLength -= m_accumulatedLength;
         }
 
-<<<<<<< HEAD
         if (calculatePointAndNormalOnPath(m_pathMeasure, skLength, point,
                 normalAngle, &m_accumulatedLength))
             return;
@@ -395,15 +303,6 @@ bool Path::PositionCalculator::pointAndNormalAtLength(float length, FloatPoint& 
     point = FloatPoint(SkScalarToFloat(position.fX), SkScalarToFloat(position.fY));
     normalAngle = 0;
     return;
-=======
-        if (calculatePointAndNormalOnPath(m_pathMeasure, skLength, point, normalAngle, &m_accumulatedLength))
-            return true;
-    }
-
-    normalAngle = 0;
-    point = FloatPoint(0, 0);
-    return false;
->>>>>>> miniblink49
 }
 
 void Path::clear()
@@ -416,14 +315,11 @@ bool Path::isEmpty() const
     return m_path.isEmpty();
 }
 
-<<<<<<< HEAD
 bool Path::isClosed() const
 {
     return m_path.isLastContourClosed();
 }
 
-=======
->>>>>>> miniblink49
 void Path::setIsVolatile(bool isVolatile)
 {
     m_path.setIsVolatile(isVolatile);
@@ -470,13 +366,9 @@ void Path::addQuadCurveTo(const FloatPoint& cp, const FloatPoint& ep)
     m_path.quadTo(cp.data(), ep.data());
 }
 
-<<<<<<< HEAD
 void Path::addBezierCurveTo(const FloatPoint& p1,
     const FloatPoint& p2,
     const FloatPoint& ep)
-=======
-void Path::addBezierCurveTo(const FloatPoint& p1, const FloatPoint& p2, const FloatPoint& ep)
->>>>>>> miniblink49
 {
     m_path.cubicTo(p1.data(), p2.data(), ep.data());
 }
@@ -486,7 +378,6 @@ void Path::addArcTo(const FloatPoint& p1, const FloatPoint& p2, float radius)
     m_path.arcTo(p1.data(), p2.data(), WebCoreFloatToSkScalar(radius));
 }
 
-<<<<<<< HEAD
 void Path::addArcTo(const FloatPoint& p,
     const FloatSize& r,
     float xRotate,
@@ -501,23 +392,17 @@ void Path::addArcTo(const FloatPoint& p,
         WebCoreFloatToSkScalar(p.x()), WebCoreFloatToSkScalar(p.y()));
 }
 
-=======
->>>>>>> miniblink49
 void Path::closeSubpath()
 {
     m_path.close();
 }
 
-<<<<<<< HEAD
 void Path::addEllipse(const FloatPoint& p,
     float radiusX,
     float radiusY,
     float startAngle,
     float endAngle,
     bool anticlockwise)
-=======
-void Path::addEllipse(const FloatPoint& p, float radiusX, float radiusY, float startAngle, float endAngle, bool anticlockwise)
->>>>>>> miniblink49
 {
     ASSERT(ellipseIsRenderable(startAngle, endAngle));
     ASSERT(startAngle >= 0 && startAngle < twoPiFloat);
@@ -529,19 +414,14 @@ void Path::addEllipse(const FloatPoint& p, float radiusX, float radiusY, float s
     SkScalar radiusYScalar = WebCoreFloatToSkScalar(radiusY);
 
     SkRect oval;
-<<<<<<< HEAD
     oval.set(cx - radiusXScalar, cy - radiusYScalar, cx + radiusXScalar,
         cy + radiusYScalar);
-=======
-    oval.set(cx - radiusXScalar, cy - radiusYScalar, cx + radiusXScalar, cy + radiusYScalar);
->>>>>>> miniblink49
 
     float sweep = endAngle - startAngle;
     SkScalar startDegrees = WebCoreFloatToSkScalar(startAngle * 180 / piFloat);
     SkScalar sweepDegrees = WebCoreFloatToSkScalar(sweep * 180 / piFloat);
     SkScalar s360 = SkIntToScalar(360);
 
-<<<<<<< HEAD
     // We can't use SkPath::addOval(), because addOval() makes a new sub-path.
     // addOval() calls moveTo() and close() internally.
 
@@ -551,14 +431,6 @@ void Path::addEllipse(const FloatPoint& p, float radiusX, float radiusY, float s
     if (SkScalarNearlyEqual(sweepDegrees, s360)) {
         // SkPath::arcTo can't handle the sweepAngle that is equal to or greater
         // than 2Pi.
-=======
-    // We can't use SkPath::addOval(), because addOval() makes new sub-path. addOval() calls moveTo() and close() internally.
-
-    // Use s180, not s360, because SkPath::arcTo(oval, angle, s360, false) draws nothing.
-    SkScalar s180 = SkIntToScalar(180);
-    if (SkScalarNearlyEqual(sweepDegrees, s360)) {
-        // SkPath::arcTo can't handle the sweepAngle that is equal to or greater than 2Pi.
->>>>>>> miniblink49
         m_path.arcTo(oval, startDegrees, s180, false);
         m_path.arcTo(oval, startDegrees + s180, s180, false);
         return;
@@ -572,22 +444,17 @@ void Path::addEllipse(const FloatPoint& p, float radiusX, float radiusY, float s
     m_path.arcTo(oval, startDegrees, sweepDegrees, false);
 }
 
-<<<<<<< HEAD
 void Path::addArc(const FloatPoint& p,
     float radius,
     float startAngle,
     float endAngle,
     bool anticlockwise)
-=======
-void Path::addArc(const FloatPoint& p, float radius, float startAngle, float endAngle, bool anticlockwise)
->>>>>>> miniblink49
 {
     addEllipse(p, radius, radius, startAngle, endAngle, anticlockwise);
 }
 
 void Path::addRect(const FloatRect& rect)
 {
-<<<<<<< HEAD
     // Start at upper-left, add clock-wise.
     m_path.addRect(rect, SkPath::kCW_Direction, 0);
 }
@@ -599,24 +466,14 @@ void Path::addEllipse(const FloatPoint& p,
     float startAngle,
     float endAngle,
     bool anticlockwise)
-=======
-    m_path.addRect(rect);
-}
-
-void Path::addEllipse(const FloatPoint& p, float radiusX, float radiusY, float rotation, float startAngle, float endAngle, bool anticlockwise)
->>>>>>> miniblink49
 {
     ASSERT(ellipseIsRenderable(startAngle, endAngle));
     ASSERT(startAngle >= 0 && startAngle < twoPiFloat);
     ASSERT((anticlockwise && (startAngle - endAngle) >= 0) || (!anticlockwise && (endAngle - startAngle) >= 0));
 
     if (!rotation) {
-<<<<<<< HEAD
         addEllipse(FloatPoint(p.x(), p.y()), radiusX, radiusY, startAngle, endAngle,
             anticlockwise);
-=======
-        addEllipse(FloatPoint(p.x(), p.y()), radiusX, radiusY, startAngle, endAngle, anticlockwise);
->>>>>>> miniblink49
         return;
     }
 
@@ -625,40 +482,25 @@ void Path::addEllipse(const FloatPoint& p, float radiusX, float radiusY, float r
     ASSERT(ellipseTransform.isInvertible());
     AffineTransform inverseEllipseTransform = ellipseTransform.inverse();
     transform(inverseEllipseTransform);
-<<<<<<< HEAD
     addEllipse(FloatPoint::zero(), radiusX, radiusY, startAngle, endAngle,
         anticlockwise);
-=======
-    addEllipse(FloatPoint::zero(), radiusX, radiusY, startAngle, endAngle, anticlockwise);
->>>>>>> miniblink49
     transform(ellipseTransform);
 }
 
 void Path::addEllipse(const FloatRect& rect)
 {
-<<<<<<< HEAD
     // Start at 3 o'clock, add clock-wise.
     m_path.addOval(rect, SkPath::kCW_Direction, 1);
-=======
-    m_path.addOval(rect);
->>>>>>> miniblink49
 }
 
 void Path::addRoundedRect(const FloatRoundedRect& r)
 {
-<<<<<<< HEAD
     addRoundedRect(r.rect(), r.getRadii().topLeft(), r.getRadii().topRight(),
         r.getRadii().bottomLeft(), r.getRadii().bottomRight());
 }
 
 void Path::addRoundedRect(const FloatRect& rect,
     const FloatSize& roundingRadii)
-=======
-    addRoundedRect(r.rect(), r.radii().topLeft(), r.radii().topRight(), r.radii().bottomLeft(), r.radii().bottomRight());
-}
-
-void Path::addRoundedRect(const FloatRect& rect, const FloatSize& roundingRadii)
->>>>>>> miniblink49
 {
     if (rect.isEmpty())
         return;
@@ -666,18 +508,11 @@ void Path::addRoundedRect(const FloatRect& rect, const FloatSize& roundingRadii)
     FloatSize radius(roundingRadii);
     FloatSize halfSize(rect.width() / 2, rect.height() / 2);
 
-<<<<<<< HEAD
     // Apply the SVG corner radius constraints, per the rect section of the SVG
     // shapes spec: if one of rx,ry is negative, then the other corner radius
     // value is used. If both values are negative then rx = ry = 0. If rx is
     // greater than half of the width of the rectangle then set rx to half of the
     // width; ry is handled similarly.
-=======
-    // Apply the SVG corner radius constraints, per the rect section of the SVG shapes spec: if
-    // one of rx,ry is negative, then the other corner radius value is used. If both values are
-    // negative then rx = ry = 0. If rx is greater than half of the width of the rectangle
-    // then set rx to half of the width; ry is handled similarly.
->>>>>>> miniblink49
 
     if (radius.width() < 0)
         radius.setWidth((radius.height() < 0) ? 0 : radius.height());
@@ -694,20 +529,15 @@ void Path::addRoundedRect(const FloatRect& rect, const FloatSize& roundingRadii)
     addPathForRoundedRect(rect, radius, radius, radius, radius);
 }
 
-<<<<<<< HEAD
 void Path::addRoundedRect(const FloatRect& rect,
     const FloatSize& topLeftRadius,
     const FloatSize& topRightRadius,
     const FloatSize& bottomLeftRadius,
     const FloatSize& bottomRightRadius)
-=======
-void Path::addRoundedRect(const FloatRect& rect, const FloatSize& topLeftRadius, const FloatSize& topRightRadius, const FloatSize& bottomLeftRadius, const FloatSize& bottomRightRadius)
->>>>>>> miniblink49
 {
     if (rect.isEmpty())
         return;
 
-<<<<<<< HEAD
     if (rect.width() < topLeftRadius.width() + topRightRadius.width() || rect.width() < bottomLeftRadius.width() + bottomRightRadius.width() || rect.height() < topLeftRadius.height() + bottomLeftRadius.height() || rect.height() < topRightRadius.height() + bottomRightRadius.height()) {
         // If all the radii cannot be accommodated, return a rect.
         // FIXME: Is this an error scenario, given that it appears the code in
@@ -715,22 +545,10 @@ void Path::addRoundedRect(const FloatRect& rect, const FloatSize& topLeftRadius,
         // we assert that this code is not reached? This fallback is very bad, since
         // it means that radii that are just barely too big due to rounding or
         // snapping will get completely ignored.
-=======
-    if (rect.width() < topLeftRadius.width() + topRightRadius.width()
-            || rect.width() < bottomLeftRadius.width() + bottomRightRadius.width()
-            || rect.height() < topLeftRadius.height() + bottomLeftRadius.height()
-            || rect.height() < topRightRadius.height() + bottomRightRadius.height()) {
-        // If all the radii cannot be accommodated, return a rect.
-        // FIXME: is this an error scenario, given that it appears the code in FloatRoundedRect::constrainRadii()
-        // should be always called first? Should we assert that this code is not reached?
-        // This fallback is very bad, since it means that radii that are just barely too big due to rounding or snapping
-        // will get completely ignored.
->>>>>>> miniblink49
         addRect(rect);
         return;
     }
 
-<<<<<<< HEAD
     addPathForRoundedRect(rect, topLeftRadius, topRightRadius, bottomLeftRadius,
         bottomRightRadius);
 }
@@ -745,65 +563,17 @@ void Path::addPathForRoundedRect(const FloatRect& rect,
     m_path.addRRect(FloatRoundedRect(rect, topLeftRadius, topRightRadius,
                         bottomLeftRadius, bottomRightRadius),
         SkPath::kCW_Direction, 0);
-=======
-    addPathForRoundedRect(rect, topLeftRadius, topRightRadius, bottomLeftRadius, bottomRightRadius);
-}
-
-void Path::addPathForRoundedRect(const FloatRect& rect, const FloatSize& topLeftRadius, const FloatSize& topRightRadius, const FloatSize& bottomLeftRadius, const FloatSize& bottomRightRadius)
-{
-    addBeziersForRoundedRect(rect, topLeftRadius, topRightRadius, bottomLeftRadius, bottomRightRadius);
-}
-
-// Approximation of control point positions on a bezier to simulate a quarter of a circle.
-// This is 1-kappa, where kappa = 4 * (sqrt(2) - 1) / 3
-static const float gCircleControlPoint = 0.447715f;
-
-void Path::addBeziersForRoundedRect(const FloatRect& rect, const FloatSize& topLeftRadius, const FloatSize& topRightRadius, const FloatSize& bottomLeftRadius, const FloatSize& bottomRightRadius)
-{
-    moveTo(FloatPoint(rect.x() + topLeftRadius.width(), rect.y()));
-
-    addLineTo(FloatPoint(rect.maxX() - topRightRadius.width(), rect.y()));
-    if (topRightRadius.width() > 0 || topRightRadius.height() > 0)
-        addBezierCurveTo(FloatPoint(rect.maxX() - topRightRadius.width() * gCircleControlPoint, rect.y()),
-            FloatPoint(rect.maxX(), rect.y() + topRightRadius.height() * gCircleControlPoint),
-            FloatPoint(rect.maxX(), rect.y() + topRightRadius.height()));
-    addLineTo(FloatPoint(rect.maxX(), rect.maxY() - bottomRightRadius.height()));
-    if (bottomRightRadius.width() > 0 || bottomRightRadius.height() > 0)
-        addBezierCurveTo(FloatPoint(rect.maxX(), rect.maxY() - bottomRightRadius.height() * gCircleControlPoint),
-            FloatPoint(rect.maxX() - bottomRightRadius.width() * gCircleControlPoint, rect.maxY()),
-            FloatPoint(rect.maxX() - bottomRightRadius.width(), rect.maxY()));
-    addLineTo(FloatPoint(rect.x() + bottomLeftRadius.width(), rect.maxY()));
-    if (bottomLeftRadius.width() > 0 || bottomLeftRadius.height() > 0)
-        addBezierCurveTo(FloatPoint(rect.x() + bottomLeftRadius.width() * gCircleControlPoint, rect.maxY()),
-            FloatPoint(rect.x(), rect.maxY() - bottomLeftRadius.height() * gCircleControlPoint),
-            FloatPoint(rect.x(), rect.maxY() - bottomLeftRadius.height()));
-    addLineTo(FloatPoint(rect.x(), rect.y() + topLeftRadius.height()));
-    if (topLeftRadius.width() > 0 || topLeftRadius.height() > 0)
-        addBezierCurveTo(FloatPoint(rect.x(), rect.y() + topLeftRadius.height() * gCircleControlPoint),
-            FloatPoint(rect.x() + topLeftRadius.width() * gCircleControlPoint, rect.y()),
-            FloatPoint(rect.x() + topLeftRadius.width(), rect.y()));
-
-    closeSubpath();
->>>>>>> miniblink49
 }
 
 void Path::addPath(const Path& src, const AffineTransform& transform)
 {
-<<<<<<< HEAD
     m_path.addPath(src.getSkPath(), affineTransformToSkMatrix(transform));
-=======
-    m_path.addPath(src.skPath(), affineTransformToSkMatrix(transform));
->>>>>>> miniblink49
 }
 
 void Path::translate(const FloatSize& size)
 {
-<<<<<<< HEAD
     m_path.offset(WebCoreFloatToSkScalar(size.width()),
         WebCoreFloatToSkScalar(size.height()));
-=======
-    m_path.offset(WebCoreFloatToSkScalar(size.width()), WebCoreFloatToSkScalar(size.height()));
->>>>>>> miniblink49
 }
 
 bool Path::subtractPath(const Path& other)
@@ -816,7 +586,6 @@ bool Path::unionPath(const Path& other)
     return Op(m_path, other.m_path, kUnion_SkPathOp, &m_path);
 }
 
-<<<<<<< HEAD
 bool Path::intersectPath(const Path& other)
 {
     return Op(m_path, other.m_path, kIntersect_SkPathOp, &m_path);
@@ -826,13 +595,6 @@ bool Path::intersectPath(const Path& other)
 bool ellipseIsRenderable(float startAngle, float endAngle)
 {
     return (std::abs(endAngle - startAngle) < twoPiFloat) || WebCoreFloatNearlyEqual(std::abs(endAngle - startAngle), twoPiFloat);
-=======
-#if ENABLE(ASSERT)
-bool ellipseIsRenderable(float startAngle, float endAngle)
-{
-    return (std::abs(endAngle - startAngle) < twoPiFloat)
-        || WebCoreFloatNearlyEqual(std::abs(endAngle - startAngle), twoPiFloat);
->>>>>>> miniblink49
 }
 #endif
 

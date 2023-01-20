@@ -17,7 +17,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-<<<<<<< HEAD
 // https://w3c.github.io/mediacapture-main/#navigatorusermedia-interface-extensions
 
 partial interface Navigator {
@@ -35,10 +34,4 @@ partial interface Navigator {
     ] void webkitGetUserMedia(MediaStreamConstraints constraints,
                               NavigatorUserMediaSuccessCallback successCallback,
                               NavigatorUserMediaErrorCallback errorCallback);
-=======
-partial interface Navigator {
-    [RaisesException] void webkitGetUserMedia(Dictionary options,
-                                              NavigatorUserMediaSuccessCallback successCallback,
-                                              NavigatorUserMediaErrorCallback errorCallback);
->>>>>>> miniblink49
 };

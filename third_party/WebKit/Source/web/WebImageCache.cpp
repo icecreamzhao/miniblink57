@@ -28,41 +28,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "public/web/WebImageCache.h"
 
 #include "platform/graphics/ImageDecodingStore.h"
 
 namespace blink {
 
-<<<<<<< HEAD
-=======
-void WebImageCache::setCacheLimitInBytes(size_t size)
-{
-    ImageDecodingStore::instance().setCacheLimitInBytes(size);
-}
-
->>>>>>> miniblink49
 void WebImageCache::clear()
 {
     ImageDecodingStore::instance().clear();
 }
 
-<<<<<<< HEAD
 } // namespace blink
-=======
-size_t WebImageCache::memoryUsageInBytes()
-{
-    return ImageDecodingStore::instance().memoryUsageInBytes();
-}
-
-unsigned WebImageCache::cacheEntries()
-{
-    return ImageDecodingStore::instance().cacheEntries();
-}
-
-}  // namespace blink
->>>>>>> miniblink49

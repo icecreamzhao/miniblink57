@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
 struct Arguments {
   const frame: FrameWithArguments;
   const base: RawPtr;
@@ -13,8 +12,6 @@ extern operator '[]' macro GetArgumentValue(Arguments, intptr): Object;
 
 extern macro GetFrameArguments(FrameWithArguments, intptr): Arguments;
 
-=======
->>>>>>> miniblink49
 namespace arguments {
 
   struct ArgumentsInfo {
@@ -46,7 +43,6 @@ namespace arguments {
 
     const adaptor: ArgumentsAdaptorFrame =
         Cast<ArgumentsAdaptorFrame>(frame.caller)
-<<<<<<< HEAD
         otherwise return ArgumentsInfo{
       frame,
       argument_count: argumentCount,
@@ -57,14 +53,6 @@ namespace arguments {
       frame: adaptor,
       argument_count: Convert<bint>(adaptor.length),
       formal_parameter_count: formalParameterCount
-=======
-        otherwise return ArgumentsInfo{frame, argumentCount, formalParameterCount};
-
-    return ArgumentsInfo{
-      adaptor,
-      Convert<bint>(adaptor.length),
-      formalParameterCount
->>>>>>> miniblink49
     };
   }
 }

@@ -10,7 +10,6 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
-<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,29 +24,10 @@
  */
 
 #include "modules/webaudio/WaveShaperNode.h"
-=======
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-
-#include "config.h"
-#if ENABLE(WEB_AUDIO)
-#include "modules/webaudio/WaveShaperNode.h"
-
->>>>>>> miniblink49
 #include "bindings/core/v8/ExceptionMessages.h"
 #include "bindings/core/v8/ExceptionState.h"
 #include "core/dom/ExceptionCode.h"
 #include "modules/webaudio/AudioBasicProcessorHandler.h"
-<<<<<<< HEAD
 #include "modules/webaudio/BaseAudioContext.h"
 #include "modules/webaudio/WaveShaperOptions.h"
 #include "wtf/PtrUtil.h"
@@ -60,22 +40,10 @@ WaveShaperNode::WaveShaperNode(BaseAudioContext& context)
     setHandler(AudioBasicProcessorHandler::create(
         AudioHandler::NodeTypeWaveShaper, *this, context.sampleRate(),
         WTF::wrapUnique(new WaveShaperProcessor(context.sampleRate(), 1))));
-=======
-#include "modules/webaudio/AudioContext.h"
-#include "wtf/MainThread.h"
-
-namespace blink {
-
-WaveShaperNode::WaveShaperNode(AudioContext& context)
-    : AudioNode(context)
-{
-    setHandler(AudioBasicProcessorHandler::create(AudioHandler::NodeTypeWaveShaper, *this, context.sampleRate(), adoptPtr(new WaveShaperProcessor(context.sampleRate(), 1))));
->>>>>>> miniblink49
 
     handler().initialize();
 }
 
-<<<<<<< HEAD
 WaveShaperNode* WaveShaperNode::create(BaseAudioContext& context,
     ExceptionState& exceptionState)
 {
@@ -147,33 +115,10 @@ void WaveShaperNode::setCurve(const Vector<float>& curve,
     DCHECK(isMainThread());
 
     setCurveImpl(curve.data(), curve.size(), exceptionState);
-=======
-WaveShaperProcessor* WaveShaperNode::waveShaperProcessor() const
-{
-    return static_cast<WaveShaperProcessor*>(static_cast<AudioBasicProcessorHandler&>(handler()).processor());
-}
-
-void WaveShaperNode::setCurve(DOMFloat32Array* curve, ExceptionState& exceptionState)
-{
-    ASSERT(isMainThread());
-
-    if (curve && curve->length() < 2) {
-        exceptionState.throwDOMException(
-            InvalidAccessError,
-            ExceptionMessages::indexExceedsMinimumBound<unsigned>(
-                "curve length",
-                curve->length(),
-                2));
-        return;
-    }
-
-    waveShaperProcessor()->setCurve(curve);
->>>>>>> miniblink49
 }
 
 DOMFloat32Array* WaveShaperNode::curve()
 {
-<<<<<<< HEAD
     Vector<float>* curve = getWaveShaperProcessor()->curve();
     if (!curve)
         return nullptr;
@@ -184,23 +129,15 @@ DOMFloat32Array* WaveShaperNode::curve()
     memcpy(newCurve->data(), curve->data(), sizeof(float) * size);
 
     return DOMFloat32Array::create(newCurve.release());
-=======
-    return waveShaperProcessor()->curve();
->>>>>>> miniblink49
 }
 
 void WaveShaperNode::setOversample(const String& type)
 {
-<<<<<<< HEAD
     DCHECK(isMainThread());
-=======
-    ASSERT(isMainThread());
->>>>>>> miniblink49
 
     // This is to synchronize with the changes made in
     // AudioBasicProcessorNode::checkNumberOfChannelsForInput() where we can
     // initialize() and uninitialize().
-<<<<<<< HEAD
     BaseAudioContext::AutoLocker contextLocker(context());
 
     if (type == "none") {
@@ -210,16 +147,6 @@ void WaveShaperNode::setOversample(const String& type)
         getWaveShaperProcessor()->setOversample(WaveShaperProcessor::OverSample2x);
     } else if (type == "4x") {
         getWaveShaperProcessor()->setOversample(WaveShaperProcessor::OverSample4x);
-=======
-    AudioContext::AutoLocker contextLocker(context());
-
-    if (type == "none") {
-        waveShaperProcessor()->setOversample(WaveShaperProcessor::OverSampleNone);
-    } else if (type == "2x") {
-        waveShaperProcessor()->setOversample(WaveShaperProcessor::OverSample2x);
-    } else if (type == "4x") {
-        waveShaperProcessor()->setOversample(WaveShaperProcessor::OverSample4x);
->>>>>>> miniblink49
     } else {
         ASSERT_NOT_REACHED();
     }
@@ -227,13 +154,9 @@ void WaveShaperNode::setOversample(const String& type)
 
 String WaveShaperNode::oversample() const
 {
-<<<<<<< HEAD
     switch (const_cast<WaveShaperNode*>(this)
                 ->getWaveShaperProcessor()
                 ->oversample()) {
-=======
-    switch (const_cast<WaveShaperNode*>(this)->waveShaperProcessor()->oversample()) {
->>>>>>> miniblink49
     case WaveShaperProcessor::OverSampleNone:
         return "none";
     case WaveShaperProcessor::OverSample2x:
@@ -247,8 +170,3 @@ String WaveShaperNode::oversample() const
 }
 
 } // namespace blink
-<<<<<<< HEAD
-=======
-
-#endif // ENABLE(WEB_AUDIO)
->>>>>>> miniblink49

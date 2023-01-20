@@ -8,58 +8,72 @@
 #define InspectorTracingAgent_h
 
 #include "core/CoreExport.h"
-#include "core/InspectorFrontend.h"
 #include "core/inspector/InspectorBaseAgent.h"
-#include "wtf/PassOwnPtr.h"
+#include "core/inspector/protocol/Tracing.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
-class InspectorPageAgent;
+class InspectedFrames;
 class InspectorWorkerAgent;
 
 class CORE_EXPORT InspectorTracingAgent final
-    : public InspectorBaseAgent<InspectorTracingAgent, InspectorFrontend::Tracing>
-    , public InspectorBackendDispatcher::TracingCommandHandler {
+    : public InspectorBaseAgent<protocol::Tracing::Metainfo> {
     WTF_MAKE_NONCOPYABLE(InspectorTracingAgent);
+
 public:
     class Client {
     public:
         virtual ~Client() { }
 
-        virtual void enableTracing(const String& categoryFilter) { }
-        virtual void disableTracing() { }
+        virtual void enableTracing(const String& categoryFilter) = 0;
+        virtual void disableTracing() = 0;
+        virtual void showReloadingBlanket() = 0;
+        virtual void hideReloadingBlanket() = 0;
     };
 
-    static PassOwnPtrWillBeRawPtr<InspectorTracingAgent> create(Client* client, InspectorWorkerAgent* workerAgent, InspectorPageAgent* pageAgent)
+    static InspectorTracingAgent* create(Client* client,
+        InspectorWorkerAgent* workerAgent,
+        InspectedFrames* inspectedFrames)
     {
-        return adoptPtrWillBeNoop(new InspectorTracingAgent(client, workerAgent, pageAgent));
+        return new InspectorTracingAgent(client, workerAgent, inspectedFrames);
     }
 
     DECLARE_VIRTUAL_TRACE();
 
     // Base agent methods.
     void restore() override;
-    void disable(ErrorString*) override;
+    Response disable() override;
+
+    // InspectorInstrumentation methods
+    void frameStartedLoading(LocalFrame*);
+    void frameStoppedLoading(LocalFrame*);
 
     // Protocol method implementations.
-    virtual void start(ErrorString*, const String* categoryFilter, const String*, const double*, PassRefPtrWillBeRawPtr<StartCallback>) override;
-    virtual void end(ErrorString*, PassRefPtrWillBeRawPtr<EndCallback>);
+    void start(Maybe<String> categories,
+        Maybe<String> options,
+        Maybe<double> bufferUsageReportingInterval,
+        Maybe<String> transferMode,
+        Maybe<protocol::Tracing::TraceConfig>,
+        std::unique_ptr<StartCallback>) override;
+    void end(std::unique_ptr<EndCallback>) override;
 
     // Methods for other agents to use.
     void setLayerTreeId(int);
+    void rootLayerCleared();
 
 private:
-    InspectorTracingAgent(Client*, InspectorWorkerAgent*, InspectorPageAgent*);
+    InspectorTracingAgent(Client*, InspectorWorkerAgent*, InspectedFrames*);
 
     void emitMetadataEvents();
-    void resetSessionId();
-    String sessionId();
+    void innerDisable();
+    String sessionId() const;
+    bool isStarted() const;
 
     int m_layerTreeId;
     Client* m_client;
-    RawPtrWillBeMember<InspectorWorkerAgent> m_workerAgent;
-    RawPtrWillBeMember<InspectorPageAgent> m_pageAgent;
+    Member<InspectorWorkerAgent> m_workerAgent;
+    Member<InspectedFrames> m_inspectedFrames;
 };
 
 } // namespace blink

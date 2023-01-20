@@ -10,7 +10,6 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
-<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,27 +24,6 @@
  */
 
 #include "platform/audio/HRTFPanner.h"
-=======
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-
-#include "config.h"
-
-#if ENABLE(WEB_AUDIO)
-
-#include "platform/audio/HRTFPanner.h"
-
-#include <algorithm>
->>>>>>> miniblink49
 #include "platform/audio/AudioBus.h"
 #include "platform/audio/AudioUtilities.h"
 #include "platform/audio/HRTFDatabase.h"
@@ -54,20 +32,12 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 // The value of 2 milliseconds is larger than the largest delay which exists in
 // any HRTFKernel from the default HRTFDatabase (0.0136 seconds).
-=======
-// The value of 2 milliseconds is larger than the largest delay which exists in any HRTFKernel from the default HRTFDatabase (0.0136 seconds).
->>>>>>> miniblink49
 // We ASSERT the delay values used in process() with this value.
 const double MaxDelayTimeSeconds = 0.002;
 
 const int UninitializedAzimuth = -1;
-<<<<<<< HEAD
-=======
-const unsigned RenderingQuantum = 128;
->>>>>>> miniblink49
 
 HRTFPanner::HRTFPanner(float sampleRate, HRTFDatabaseLoader* databaseLoader)
     : Panner(PanningModelHRTF)
@@ -86,22 +56,14 @@ HRTFPanner::HRTFPanner(float sampleRate, HRTFDatabaseLoader* databaseLoader)
     , m_convolverR2(fftSizeForSampleRate(sampleRate))
     , m_delayLineL(MaxDelayTimeSeconds, sampleRate)
     , m_delayLineR(MaxDelayTimeSeconds, sampleRate)
-<<<<<<< HEAD
     , m_tempL1(AudioUtilities::kRenderQuantumFrames)
     , m_tempR1(AudioUtilities::kRenderQuantumFrames)
     , m_tempL2(AudioUtilities::kRenderQuantumFrames)
     , m_tempR2(AudioUtilities::kRenderQuantumFrames)
-=======
-    , m_tempL1(RenderingQuantum)
-    , m_tempR1(RenderingQuantum)
-    , m_tempL2(RenderingQuantum)
-    , m_tempR2(RenderingQuantum)
->>>>>>> miniblink49
 {
     ASSERT(databaseLoader);
 }
 
-<<<<<<< HEAD
 HRTFPanner::~HRTFPanner() { }
 
 size_t HRTFPanner::fftSizeForSampleRate(float sampleRate)
@@ -114,21 +76,6 @@ size_t HRTFPanner::fftSizeForSampleRate(float sampleRate)
     // The resampled length is used to compute the FFT size by choosing a power
     // of two that is greater than or equal the resampled length. This power of
     // two is doubled to get the actual FFT size.
-=======
-HRTFPanner::~HRTFPanner()
-{
-}
-
-size_t HRTFPanner::fftSizeForSampleRate(float sampleRate)
-{
-    // The HRTF impulse responses (loaded as audio resources) are 512 sample-frames @44.1KHz.
-    // Currently, we truncate the impulse responses to half this size,
-    // but an FFT-size of twice impulse response size is needed (for convolution).
-    // So for sample rates around 44.1KHz an FFT size of 512 is good.
-    // For different sample rates, the truncated response is resampled.
-    // The resampled length is used to compute the FFT size by choosing a power of two that is
-    // greater than or equal the resampled length. This power of two is doubled to get the actual FFT size.
->>>>>>> miniblink49
 
     ASSERT(AudioUtilities::isValidAudioBufferSampleRate(sampleRate));
 
@@ -149,18 +96,11 @@ void HRTFPanner::reset()
     m_delayLineR.reset();
 }
 
-<<<<<<< HEAD
 int HRTFPanner::calculateDesiredAzimuthIndexAndBlend(double azimuth,
     double& azimuthBlend)
 {
     // Convert the azimuth angle from the range -180 -> +180 into the range 0 ->
     // 360.  The azimuth index may then be calculated from this positive value.
-=======
-int HRTFPanner::calculateDesiredAzimuthIndexAndBlend(double azimuth, double& azimuthBlend)
-{
-    // Convert the azimuth angle from the range -180 -> +180 into the range 0 -> 360.
-    // The azimuth index may then be calculated from this positive value.
->>>>>>> miniblink49
     if (azimuth < 0)
         azimuth += 360.0;
 
@@ -172,7 +112,6 @@ int HRTFPanner::calculateDesiredAzimuthIndexAndBlend(double azimuth, double& azi
     int desiredAzimuthIndex = static_cast<int>(desiredAzimuthIndexFloat);
     azimuthBlend = desiredAzimuthIndexFloat - static_cast<double>(desiredAzimuthIndex);
 
-<<<<<<< HEAD
     // We don't immediately start using this azimuth index, but instead approach
     // this index from the last index we rendered at.  This minimizes the clicks
     // and graininess for moving sources which occur otherwise.
@@ -190,20 +129,6 @@ void HRTFPanner::pan(double desiredAzimuth,
     unsigned numInputChannels = inputBus ? inputBus->numberOfChannels() : 0;
 
     bool isInputGood = inputBus && numInputChannels >= 1 && numInputChannels <= 2;
-=======
-    // We don't immediately start using this azimuth index, but instead approach this index from the last index we rendered at.
-    // This minimizes the clicks and graininess for moving sources which occur otherwise.
-    desiredAzimuthIndex = std::max(0, desiredAzimuthIndex);
-    desiredAzimuthIndex = std::min(numberOfAzimuths - 1, desiredAzimuthIndex);
-    return desiredAzimuthIndex;
-}
-
-void HRTFPanner::pan(double desiredAzimuth, double elevation, const AudioBus* inputBus, AudioBus* outputBus, size_t framesToProcess)
-{
-    unsigned numInputChannels = inputBus ? inputBus->numberOfChannels() : 0;
-
-    bool isInputGood = inputBus &&  numInputChannels >= 1 && numInputChannels <= 2;
->>>>>>> miniblink49
     ASSERT(isInputGood);
 
     bool isOutputGood = outputBus && outputBus->numberOfChannels() == 2 && framesToProcess <= outputBus->length();
@@ -216,7 +141,6 @@ void HRTFPanner::pan(double desiredAzimuth, double elevation, const AudioBus* in
     }
 
     HRTFDatabase* database = m_databaseLoader->database();
-<<<<<<< HEAD
     if (!database) {
         outputBus->copyFrom(*inputBus, channelInterpretation);
         return;
@@ -224,15 +148,6 @@ void HRTFPanner::pan(double desiredAzimuth, double elevation, const AudioBus* in
 
     // IRCAM HRTF azimuths values from the loaded database is reversed from the
     // panner's notion of azimuth.
-=======
-    ASSERT(database);
-    if (!database) {
-        outputBus->zero();
-        return;
-    }
-
-    // IRCAM HRTF azimuths values from the loaded database is reversed from the panner's notion of azimuth.
->>>>>>> miniblink49
     double azimuth = -desiredAzimuth;
 
     bool isAzimuthGood = azimuth >= -180.0 && azimuth <= 180.0;
@@ -243,17 +158,11 @@ void HRTFPanner::pan(double desiredAzimuth, double elevation, const AudioBus* in
     }
 
     // Normally, we'll just be dealing with mono sources.
-<<<<<<< HEAD
     // If we have a stereo input, implement stereo panning with left source
     // processed by left HRTF, and right source by right HRTF.
     const AudioChannel* inputChannelL = inputBus->channelByType(AudioBus::ChannelLeft);
     const AudioChannel* inputChannelR = numInputChannels > 1 ? inputBus->channelByType(AudioBus::ChannelRight)
                                                              : nullptr;
-=======
-    // If we have a stereo input, implement stereo panning with left source processed by left HRTF, and right source by right HRTF.
-    const AudioChannel* inputChannelL = inputBus->channelByType(AudioBus::ChannelLeft);
-    const AudioChannel* inputChannelR = numInputChannels > 1 ? inputBus->channelByType(AudioBus::ChannelRight) : nullptr;
->>>>>>> miniblink49
 
     // Get source and destination pointers.
     const float* sourceL = inputChannelL->data();
@@ -297,20 +206,12 @@ void HRTFPanner::pan(double desiredAzimuth, double elevation, const AudioBus* in
         }
     }
 
-<<<<<<< HEAD
     // This algorithm currently requires that we process in power-of-two size
     // chunks at least AudioUtilities::kRenderQuantumFrames.
     ASSERT(1UL << static_cast<int>(log2(framesToProcess)) == framesToProcess);
     DCHECK_GE(framesToProcess, AudioUtilities::kRenderQuantumFrames);
 
     const unsigned framesPerSegment = AudioUtilities::kRenderQuantumFrames;
-=======
-    // This algorithm currently requires that we process in power-of-two size chunks at least RenderingQuantum.
-    ASSERT(1UL << static_cast<int>(log2(framesToProcess)) == framesToProcess);
-    ASSERT(framesToProcess >= RenderingQuantum);
-
-    const unsigned framesPerSegment = RenderingQuantum;
->>>>>>> miniblink49
     const unsigned numberOfSegments = framesToProcess / framesPerSegment;
 
     for (unsigned segment = 0; segment < numberOfSegments; ++segment) {
@@ -323,17 +224,12 @@ void HRTFPanner::pan(double desiredAzimuth, double elevation, const AudioBus* in
         double frameDelayR1;
         double frameDelayL2;
         double frameDelayR2;
-<<<<<<< HEAD
         database->getKernelsFromAzimuthElevation(azimuthBlend, m_azimuthIndex1,
             m_elevation1, kernelL1, kernelR1,
             frameDelayL1, frameDelayR1);
         database->getKernelsFromAzimuthElevation(azimuthBlend, m_azimuthIndex2,
             m_elevation2, kernelL2, kernelR2,
             frameDelayL2, frameDelayR2);
-=======
-        database->getKernelsFromAzimuthElevation(azimuthBlend, m_azimuthIndex1, m_elevation1, kernelL1, kernelR1, frameDelayL1, frameDelayR1);
-        database->getKernelsFromAzimuthElevation(azimuthBlend, m_azimuthIndex2, m_elevation2, kernelL2, kernelR2, frameDelayL2, frameDelayR2);
->>>>>>> miniblink49
 
         bool areKernelsGood = kernelL1 && kernelR1 && kernelL2 && kernelR2;
         ASSERT(areKernelsGood);
@@ -364,19 +260,14 @@ void HRTFPanner::pan(double desiredAzimuth, double elevation, const AudioBus* in
 
         bool needsCrossfading = m_crossfadeIncr;
 
-<<<<<<< HEAD
         // Have the convolvers render directly to the final destination if we're not
         // cross-fading.
-=======
-        // Have the convolvers render directly to the final destination if we're not cross-fading.
->>>>>>> miniblink49
         float* convolutionDestinationL1 = needsCrossfading ? m_tempL1.data() : segmentDestinationL;
         float* convolutionDestinationR1 = needsCrossfading ? m_tempR1.data() : segmentDestinationR;
         float* convolutionDestinationL2 = needsCrossfading ? m_tempL2.data() : segmentDestinationL;
         float* convolutionDestinationR2 = needsCrossfading ? m_tempR2.data() : segmentDestinationR;
 
         // Now do the convolutions.
-<<<<<<< HEAD
         // Note that we avoid doing convolutions on both sets of convolvers if we're
         // not currently cross-fading.
 
@@ -392,18 +283,6 @@ void HRTFPanner::pan(double desiredAzimuth, double elevation, const AudioBus* in
                 convolutionDestinationL2, framesPerSegment);
             m_convolverR2.process(kernelR2->fftFrame(), segmentDestinationR,
                 convolutionDestinationR2, framesPerSegment);
-=======
-        // Note that we avoid doing convolutions on both sets of convolvers if we're not currently cross-fading.
-
-        if (m_crossfadeSelection == CrossfadeSelection1 || needsCrossfading) {
-            m_convolverL1.process(kernelL1->fftFrame(), segmentDestinationL, convolutionDestinationL1, framesPerSegment);
-            m_convolverR1.process(kernelR1->fftFrame(), segmentDestinationR, convolutionDestinationR1, framesPerSegment);
-        }
-
-        if (m_crossfadeSelection == CrossfadeSelection2 || needsCrossfading) {
-            m_convolverL2.process(kernelL2->fftFrame(), segmentDestinationL, convolutionDestinationL2, framesPerSegment);
-            m_convolverR2.process(kernelR2->fftFrame(), segmentDestinationR, convolutionDestinationR2, framesPerSegment);
->>>>>>> miniblink49
         }
 
         if (needsCrossfading) {
@@ -433,7 +312,6 @@ void HRTFPanner::pan(double desiredAzimuth, double elevation, const AudioBus* in
     }
 }
 
-<<<<<<< HEAD
 void HRTFPanner::panWithSampleAccurateValues(
     double* desiredAzimuth,
     double* elevation,
@@ -461,31 +339,14 @@ double HRTFPanner::tailTime() const
     // the tailTime of the HRTFPanner is the sum of the tailTime of the
     // DelayKernel and the tailTime of the FFTConvolver, which is
     // MaxDelayTimeSeconds and fftSize() / 2, respectively.
-=======
-double HRTFPanner::tailTime() const
-{
-    // Because HRTFPanner is implemented with a DelayKernel and a FFTConvolver, the tailTime of the HRTFPanner
-    // is the sum of the tailTime of the DelayKernel and the tailTime of the FFTConvolver, which is MaxDelayTimeSeconds
-    // and fftSize() / 2, respectively.
->>>>>>> miniblink49
     return MaxDelayTimeSeconds + (fftSize() / 2) / static_cast<double>(sampleRate());
 }
 
 double HRTFPanner::latencyTime() const
 {
-<<<<<<< HEAD
     // The latency of a FFTConvolver is also fftSize() / 2, and is in addition to
     // its tailTime of the same value.
-=======
-    // The latency of a FFTConvolver is also fftSize() / 2, and is in addition to its tailTime of the
-    // same value.
->>>>>>> miniblink49
     return (fftSize() / 2) / static_cast<double>(sampleRate());
 }
 
 } // namespace blink
-<<<<<<< HEAD
-=======
-
-#endif // ENABLE(WEB_AUDIO)
->>>>>>> miniblink49

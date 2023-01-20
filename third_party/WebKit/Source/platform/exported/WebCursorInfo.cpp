@@ -28,10 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "public/platform/WebCursorInfo.h"
 
 #include "platform/Cursor.h"
@@ -39,17 +35,10 @@
 namespace blink {
 
 WebCursorInfo::WebCursorInfo(const Cursor& cursor)
-<<<<<<< HEAD
     : type(static_cast<Type>(cursor.getType()))
     , hotSpot(cursor.hotSpot())
     , imageScaleFactor(cursor.imageScaleFactor())
     , customImage(cursor.getImage())
-=======
-    : type(static_cast<Type>(cursor.type()))
-    , hotSpot(cursor.hotSpot())
-    , imageScaleFactor(cursor.imageScaleFactor())
-    , customImage(cursor.image())
->>>>>>> miniblink49
 #ifdef WIN32
     , externalHandle(0)
 #endif

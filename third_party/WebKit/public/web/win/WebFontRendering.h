@@ -6,23 +6,15 @@
 #define WebFontRendering_h
 
 #include "public/platform/WebCommon.h"
-<<<<<<< HEAD
 #include "third_party/skia/include/core/SkRefCnt.h"
 
 class SkFontMgr;
 class SkTypeface;
-=======
-#include <SkFontHost.h>
-
-class SkTypeface;
-struct IDWriteFactory;
->>>>>>> miniblink49
 
 namespace blink {
 
 class WebFontRendering {
 public:
-<<<<<<< HEAD
     BLINK_EXPORT static void setSkiaFontManager(sk_sp<SkFontMgr>);
     BLINK_EXPORT static void setDeviceScaleFactor(float);
     BLINK_EXPORT static void addSideloadedFontForTesting(SkTypeface*);
@@ -35,18 +27,6 @@ public:
     BLINK_EXPORT static void setAntialiasedTextEnabled(bool);
     BLINK_EXPORT static void setLCDTextEnabled(bool);
     BLINK_EXPORT static void setUseSkiaFontFallback(bool);
-=======
-    BLINK_EXPORT static void setUseDirectWrite(bool);
-    BLINK_EXPORT static void setDirectWriteFactory(IDWriteFactory*);
-    BLINK_EXPORT static void setDeviceScaleFactor(float);
-    BLINK_EXPORT static void setUseSubpixelPositioning(bool);
-    BLINK_EXPORT static void addSideloadedFontForTesting(SkTypeface*);
-    BLINK_EXPORT static void setMenuFontMetrics(const wchar_t* familyName, int32_t fontHeight);
-    BLINK_EXPORT static void setSmallCaptionFontMetrics(const wchar_t* familyName, int32_t fontHeight);
-    BLINK_EXPORT static void setStatusFontMetrics(const wchar_t* familyName, int32_t fontHeight);
-    BLINK_EXPORT static void setLCDOrder(SkFontHost::LCDOrder);
-    BLINK_EXPORT static void setLCDOrientation(SkFontHost::LCDOrientation);
->>>>>>> miniblink49
 };
 
 } // namespace blink

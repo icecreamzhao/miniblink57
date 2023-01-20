@@ -15,7 +15,6 @@
 namespace v8 {
 namespace internal {
 
-<<<<<<< HEAD
     OBJECT_CONSTRUCTORS_IMPL(TemplateObjectDescription, Tuple2)
     OBJECT_CONSTRUCTORS_IMPL(CachedTemplateObject, Tuple3)
 
@@ -36,25 +35,3 @@ namespace internal {
 #include "src/objects/object-macros-undef.h"
 
 #endif // V8_OBJECTS_TEMPLATE_OBJECTS_INL_H_
-=======
-OBJECT_CONSTRUCTORS_IMPL(TemplateObjectDescription, Tuple2)
-OBJECT_CONSTRUCTORS_IMPL(CachedTemplateObject, Tuple3)
-
-CAST_ACCESSOR(TemplateObjectDescription)
-CAST_ACCESSOR(CachedTemplateObject)
-
-ACCESSORS(TemplateObjectDescription, raw_strings, FixedArray, kRawStringsOffset)
-ACCESSORS(TemplateObjectDescription, cooked_strings, FixedArray,
-          kCookedStringsOffset)
-
-SMI_ACCESSORS(CachedTemplateObject, slot_id, kSlotIdOffset)
-ACCESSORS(CachedTemplateObject, template_object, JSArray, kTemplateObjectOffset)
-ACCESSORS(CachedTemplateObject, next, HeapObject, kNextOffset)
-
-}  // namespace internal
-}  // namespace v8
-
-#include "src/objects/object-macros-undef.h"
-
-#endif  // V8_OBJECTS_TEMPLATE_OBJECTS_INL_H_
->>>>>>> miniblink49

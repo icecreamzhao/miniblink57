@@ -23,12 +23,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "wtf/InstanceCounter.h"
-=======
-#include "config.h"
-#include "InstanceCounter.h"
->>>>>>> miniblink49
 
 #include "wtf/HashMap.h"
 #include "wtf/StdLibExtras.h"
@@ -39,7 +34,6 @@
 
 namespace WTF {
 
-<<<<<<< HEAD
 #if ENABLE(INSTANCE_COUNTER)
 
 #if COMPILER(CLANG)
@@ -60,41 +54,15 @@ const size_t stringWithTypeNamePostfixLength = sizeof(">(void)") - 1;
 // The result of stringWithTypeName<T>() is given as |funcName|.
 // |extractTypeNameFromFunctionName| then extracts a typename string from
 // |funcName|.
-=======
-#if ENABLE(INSTANCE_COUNTER) || ENABLE(GC_PROFILING)
-
-#if COMPILER(CLANG)
-const size_t extractNameFunctionPrefixLength = sizeof("const char *WTF::extractNameFunction() [T = ") - 1;
-const size_t extractNameFunctionPostfixLength = sizeof("]") - 1;
-#elif COMPILER(GCC)
-const size_t extractNameFunctionPrefixLength = sizeof("const char* WTF::extractNameFunction() [with T = ") - 1;
-const size_t extractNameFunctionPostfixLength = sizeof("]") - 1;
-#elif COMPILER(MSVC)
-const size_t extractNameFunctionPrefixLength = sizeof("const char *__cdecl WTF::extractNameFunction<class ") - 1;
-const size_t extractNameFunctionPostfixLength = sizeof(">(void)") - 1;
-#else
-#warning "Extracting typename is supported only in compiler GCC, CLANG and MSVC at this moment"
-#endif
-
-// This function is used to stringify a typename T without using RTTI.
-// The result of extractNameFunction<T>() is given as |funcName|. |extractTypeNameFromFunctionName| then extracts a typename string from |funcName|.
->>>>>>> miniblink49
 String extractTypeNameFromFunctionName(const char* funcName)
 {
 #if COMPILER(CLANG) || COMPILER(GCC) || COMPILER(MSVC)
     size_t funcNameLength = strlen(funcName);
-<<<<<<< HEAD
     DCHECK_GT(funcNameLength,
         stringWithTypeNamePrefixLength + stringWithTypeNamePostfixLength);
 
     const char* funcNameWithoutPrefix = funcName + stringWithTypeNamePrefixLength;
     return String(funcNameWithoutPrefix, funcNameLength - stringWithTypeNamePrefixLength - stringWithTypeNamePostfixLength);
-=======
-    ASSERT(funcNameLength > extractNameFunctionPrefixLength + extractNameFunctionPostfixLength);
-
-    const char* funcNameWithoutPrefix = funcName + extractNameFunctionPrefixLength;
-    return String(funcNameWithoutPrefix, funcNameLength - extractNameFunctionPrefixLength - extractNameFunctionPostfixLength);
->>>>>>> miniblink49
 #else
     return String("unknown");
 #endif
@@ -119,7 +87,6 @@ private:
     HashMap<String, int> m_counterMap;
 };
 
-<<<<<<< HEAD
 void incrementInstanceCount(const char* stringWithTypeNameName, void* ptr)
 {
     String instanceName = extractTypeNameFromFunctionName(stringWithTypeNameName);
@@ -129,17 +96,6 @@ void incrementInstanceCount(const char* stringWithTypeNameName, void* ptr)
 void decrementInstanceCount(const char* stringWithTypeNameName, void* ptr)
 {
     String instanceName = extractTypeNameFromFunctionName(stringWithTypeNameName);
-=======
-void incrementInstanceCount(const char* extractNameFunctionName, void* ptr)
-{
-    String instanceName = extractTypeNameFromFunctionName(extractNameFunctionName);
-    InstanceCounter::instance()->incrementInstanceCount(instanceName, ptr);
-}
-
-void decrementInstanceCount(const char* extractNameFunctionName, void* ptr)
-{
-    String instanceName = extractTypeNameFromFunctionName(extractNameFunctionName);
->>>>>>> miniblink49
     InstanceCounter::instance()->decrementInstanceCount(instanceName, ptr);
 }
 
@@ -148,12 +104,8 @@ String dumpRefCountedInstanceCounts()
     return InstanceCounter::instance()->dump();
 }
 
-<<<<<<< HEAD
 void InstanceCounter::incrementInstanceCount(const String& instanceName,
     void* ptr)
-=======
-void InstanceCounter::incrementInstanceCount(const String& instanceName, void* ptr)
->>>>>>> miniblink49
 {
     MutexLocker locker(m_mutex);
     HashMap<String, int>::AddResult result = m_counterMap.add(instanceName, 1);
@@ -161,20 +113,12 @@ void InstanceCounter::incrementInstanceCount(const String& instanceName, void* p
         ++(result.storedValue->value);
 }
 
-<<<<<<< HEAD
 void InstanceCounter::decrementInstanceCount(const String& instanceName,
     void* ptr)
 {
     MutexLocker locker(m_mutex);
     HashMap<String, int>::iterator it = m_counterMap.find(instanceName);
     DCHECK(it != m_counterMap.end());
-=======
-void InstanceCounter::decrementInstanceCount(const String& instanceName, void* ptr)
-{
-    MutexLocker locker(m_mutex);
-    HashMap<String, int>::iterator it = m_counterMap.find(instanceName);
-    ASSERT(it != m_counterMap.end());
->>>>>>> miniblink49
 
     --(it->value);
     if (!it->value)
@@ -195,11 +139,7 @@ String InstanceCounter::dump()
             builder.append(',');
         builder.append('"');
         builder.append(it->key);
-<<<<<<< HEAD
         builder.append("\": ");
-=======
-        builder.appendLiteral("\": ");
->>>>>>> miniblink49
         builder.appendNumber(it->value);
     }
     builder.append('}');
@@ -214,10 +154,6 @@ String dumpRefCountedInstanceCounts()
     return String("{}");
 }
 
-<<<<<<< HEAD
 #endif // ENABLE(INSTANCE_COUNTER)
-=======
-#endif // ENABLE(INSTANCE_COUNTER) || ENABLE(GC_PROFILING)
->>>>>>> miniblink49
 
 } // namespace WTF

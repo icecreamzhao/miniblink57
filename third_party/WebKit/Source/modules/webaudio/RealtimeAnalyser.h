@@ -10,7 +10,6 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
-<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -22,18 +21,6 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
-=======
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
->>>>>>> miniblink49
  */
 
 #ifndef RealtimeAnalyser_h
@@ -43,11 +30,7 @@
 #include "platform/audio/AudioArray.h"
 #include "platform/audio/FFTFrame.h"
 #include "wtf/Noncopyable.h"
-<<<<<<< HEAD
 #include <memory>
-=======
-#include "wtf/OwnPtr.h"
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -55,11 +38,8 @@ class AudioBus;
 
 class RealtimeAnalyser final {
     WTF_MAKE_NONCOPYABLE(RealtimeAnalyser);
-<<<<<<< HEAD
     DISALLOW_NEW();
 
-=======
->>>>>>> miniblink49
 public:
     RealtimeAnalyser();
 
@@ -77,13 +57,8 @@ public:
     void setSmoothingTimeConstant(double k) { m_smoothingTimeConstant = k; }
     double smoothingTimeConstant() const { return m_smoothingTimeConstant; }
 
-<<<<<<< HEAD
     void getFloatFrequencyData(DOMFloat32Array*, double);
     void getByteFrequencyData(DOMUint8Array*, double);
-=======
-    void getFloatFrequencyData(DOMFloat32Array*);
-    void getByteFrequencyData(DOMUint8Array*);
->>>>>>> miniblink49
     void getFloatTimeDomainData(DOMFloat32Array*);
     void getByteTimeDomainData(DOMUint8Array*);
 
@@ -104,7 +79,6 @@ private:
     AudioFloatArray m_inputBuffer;
     unsigned m_writeIndex;
 
-<<<<<<< HEAD
     // Input audio is downmixed to this bus before copying to m_inputBuffer.
     RefPtr<AudioBus> m_downMixBus;
 
@@ -119,33 +93,20 @@ private:
     // Convert magnidue buffer to dB, saving the result in |destination|
     void convertFloatToDb(DOMFloat32Array* destination);
 
-=======
-    size_t m_fftSize;
-    OwnPtr<FFTFrame> m_analysisFrame;
-    void doFFTAnalysis();
-
->>>>>>> miniblink49
     // doFFTAnalysis() stores the floating-point magnitude analysis data here.
     AudioFloatArray m_magnitudeBuffer;
     AudioFloatArray& magnitudeBuffer() { return m_magnitudeBuffer; }
 
-<<<<<<< HEAD
     // A value between 0 and 1 which averages the previous version of
     // m_magnitudeBuffer with the current analysis magnitude data.
-=======
-    // A value between 0 and 1 which averages the previous version of m_magnitudeBuffer with the current analysis magnitude data.
->>>>>>> miniblink49
     double m_smoothingTimeConstant;
 
     // The range used when converting when using getByteFrequencyData().
     double m_minDecibels;
     double m_maxDecibels;
-<<<<<<< HEAD
 
     // Time at which the FFT was last computed.
     double m_lastAnalysisTime;
-=======
->>>>>>> miniblink49
 };
 
 } // namespace blink

@@ -10,12 +10,11 @@
 namespace gin {
 
 class File {
- public:
-  static const char kModuleName[];
-  static v8::Local<v8::Value> GetModule(v8::Isolate* isolate);
+public:
+    static const char kModuleName[];
+    static v8::Local<v8::Value> GetModule(v8::Isolate* isolate);
 };
 
-}  // namespace gin
+} // namespace gin
 
-#endif  // GIN_TEST_FILE_H_
-
+#endif // GIN_TEST_FILE_H_

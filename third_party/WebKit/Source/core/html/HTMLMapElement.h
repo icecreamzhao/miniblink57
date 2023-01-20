@@ -28,26 +28,27 @@
 
 namespace blink {
 
-class HitTestResult;
 class HTMLImageElement;
 
 class CORE_EXPORT HTMLMapElement final : public HTMLElement {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     DECLARE_NODE_FACTORY(HTMLMapElement);
     ~HTMLMapElement() override;
 
     const AtomicString& getName() const { return m_name; }
 
-    HTMLAreaElement* areaForPoint(LayoutPoint, const LayoutSize& containerSize);
+    HTMLAreaElement* areaForPoint(const LayoutPoint&,
+        const LayoutObject* containerObject);
 
     HTMLImageElement* imageElement();
-    PassRefPtrWillBeRawPtr<HTMLCollection> areas();
+    HTMLCollection* areas();
 
 private:
     explicit HTMLMapElement(Document&);
 
-    void parseAttribute(const QualifiedName&, const AtomicString&) override;
+    void parseAttribute(const AttributeModificationParams&) override;
 
     InsertionNotificationRequest insertedInto(ContainerNode*) override;
     void removedFrom(ContainerNode*) override;

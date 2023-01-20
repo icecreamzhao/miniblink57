@@ -24,7 +24,6 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/xml/XPathExpressionNode.h"
 
 #include "wtf/StdLibExtras.h"
@@ -32,30 +31,28 @@
 namespace blink {
 namespace XPath {
 
-EvaluationContext::EvaluationContext(Node& contextNode)
-    : node(contextNode)
-    , size(1)
-    , position(1)
-    , hadTypeConversionError(false)
-{
-}
+    EvaluationContext::EvaluationContext(Node& contextNode)
+        : node(contextNode)
+        , size(1)
+        , position(1)
+        , hadTypeConversionError(false)
+    {
+    }
 
-Expression::Expression()
-    : m_isContextNodeSensitive(false)
-    , m_isContextPositionSensitive(false)
-    , m_isContextSizeSensitive(false)
-{
-}
+    Expression::Expression()
+        : m_isContextNodeSensitive(false)
+        , m_isContextPositionSensitive(false)
+        , m_isContextSizeSensitive(false)
+    {
+    }
 
-Expression::~Expression()
-{
-}
+    Expression::~Expression() { }
 
-DEFINE_TRACE(Expression)
-{
-    visitor->trace(m_subExpressions);
-    ParseNode::trace(visitor);
-}
+    DEFINE_TRACE(Expression)
+    {
+        visitor->trace(m_subExpressions);
+        ParseNode::trace(visitor);
+    }
 
-}
-}
+} // namespace XPath
+} // namespace blink

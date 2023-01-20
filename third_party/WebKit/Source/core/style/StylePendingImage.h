@@ -26,57 +26,94 @@
 #ifndef StylePendingImage_h
 #define StylePendingImage_h
 
-#include "core/css/CSSCursorImageValue.h"
 #include "core/css/CSSImageGeneratorValue.h"
 #include "core/css/CSSImageSetValue.h"
 #include "core/css/CSSImageValue.h"
+#include "core/css/CSSPaintValue.h"
 #include "core/style/StyleImage.h"
 #include "platform/graphics/Image.h"
 
 namespace blink {
 
-// StylePendingImage is a placeholder StyleImage that is entered into the ComputedStyle during
-// style resolution, in order to avoid loading images that are not referenced by the final style.
-// They should never exist in a ComputedStyle after it has been returned from the style selector.
+// StylePendingImage is a placeholder StyleImage that is entered into the
+// ComputedStyle during style resolution, in order to avoid loading images that
+// are not referenced by the final style.  They should never exist in a
+// ComputedStyle after it has been returned from the style selector.
 
 class StylePendingImage final : public StyleImage {
 public:
-    static PassRefPtr<StylePendingImage> create(CSSValue* value) { return adoptRef(new StylePendingImage(value)); }
+    static StylePendingImage* create(const CSSValue& value)
+    {
+        return new StylePendingImage(value);
+    }
 
-    virtual WrappedImagePtr data() const override { return m_value; }
+    WrappedImagePtr data() const override { return m_value.get(); }
 
-    virtual PassRefPtrWillBeRawPtr<CSSValue> cssValue() const override { return m_value; }
-    CSSImageValue* cssImageValue() const { return m_value->isImageValue() ? toCSSImageValue(m_value) : 0; }
-    CSSImageGeneratorValue* cssImageGeneratorValue() const { return m_value->isImageGeneratorValue() ? toCSSImageGeneratorValue(m_value) : 0; }
-    CSSCursorImageValue* cssCursorImageValue() const { return m_value->isCursorImageValue() ? toCSSCursorImageValue(m_value) : 0; }
-    CSSImageSetValue* cssImageSetValue() const { return m_value->isImageSetValue() ? toCSSImageSetValue(m_value) : 0; }
+    CSSValue* cssValue() const override { return m_value; }
 
-    virtual LayoutSize imageSize(const LayoutObject*, float /*multiplier*/) const override { return LayoutSize(); }
-    virtual bool imageHasRelativeWidth() const override { return false; }
-    virtual bool imageHasRelativeHeight() const override { return false; }
-    virtual void computeIntrinsicDimensions(const LayoutObject*, Length& /* intrinsicWidth */ , Length& /* intrinsicHeight */, FloatSize& /* intrinsicRatio */) override { }
-    virtual bool usesImageContainerSize() const override { return false; }
-    virtual void setContainerSizeForLayoutObject(const LayoutObject*, const IntSize&, float) override { }
-    virtual void addClient(LayoutObject*) override { }
-    virtual void removeClient(LayoutObject*) override { }
-    virtual PassRefPtr<Image> image(LayoutObject*, const IntSize&) const override
+    CSSValue* computedCSSValue() const override
     {
         ASSERT_NOT_REACHED();
         return nullptr;
     }
-    virtual bool knownToBeOpaque(const LayoutObject*) const override { return false; }
+
+    CSSImageValue* cssImageValue() const
+    {
+        return m_value->isImageValue() ? toCSSImageValue(m_value.get()) : 0;
+    }
+    CSSPaintValue* cssPaintValue() const
+    {
+        return m_value->isPaintValue() ? toCSSPaintValue(m_value.get()) : 0;
+    }
+    CSSImageGeneratorValue* cssImageGeneratorValue() const
+    {
+        return m_value->isImageGeneratorValue()
+            ? toCSSImageGeneratorValue(m_value.get())
+            : 0;
+    }
+    CSSImageSetValue* cssImageSetValue() const
+    {
+        return m_value->isImageSetValue() ? toCSSImageSetValue(m_value.get()) : 0;
+    }
+
+    LayoutSize imageSize(const LayoutObject&,
+        float /*multiplier*/,
+        const LayoutSize& /*defaultObjectSize*/) const override
+    {
+        return LayoutSize();
+    }
+    bool imageHasRelativeSize() const override { return false; }
+    bool usesImageContainerSize() const override { return false; }
+    void addClient(LayoutObject*) override { }
+    void removeClient(LayoutObject*) override { }
+    PassRefPtr<Image> image(const LayoutObject&,
+        const IntSize&,
+        float) const override
+    {
+        ASSERT_NOT_REACHED();
+        return nullptr;
+    }
+    bool knownToBeOpaque(const LayoutObject&) const override { return false; }
+
+    DEFINE_INLINE_VIRTUAL_TRACE()
+    {
+        visitor->trace(m_value);
+        StyleImage::trace(visitor);
+    }
 
 private:
-    StylePendingImage(CSSValue* value)
-        : m_value(value)
+    explicit StylePendingImage(const CSSValue& value)
+        : m_value(const_cast<CSSValue*>(&value))
     {
         m_isPendingImage = true;
     }
 
-    CSSValue* m_value; // Not retained; it owns us.
+    // TODO(sashab): Replace this with <const CSSValue> once Member<>
+    // supports const types.
+    Member<CSSValue> m_value;
 };
 
 DEFINE_STYLE_IMAGE_TYPE_CASTS(StylePendingImage, isPendingImage());
 
-}
+} // namespace blink
 #endif

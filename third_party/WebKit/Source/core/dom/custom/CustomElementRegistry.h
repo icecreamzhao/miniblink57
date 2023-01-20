@@ -1,71 +1,102 @@
-/*
- * Copyright (C) 2012 Google Inc. All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer
- *    in the documentation and/or other materials provided with the
- *    distribution.
- * 3. Neither the name of Google Inc. nor the names of its contributors
- *    may be used to endorse or promote products derived from this
- *    software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
- * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+// Copyright 2016 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
 
 #ifndef CustomElementRegistry_h
 #define CustomElementRegistry_h
 
-#include "core/dom/custom/CustomElement.h"
-#include "core/dom/custom/CustomElementDefinition.h"
-#include "core/dom/custom/CustomElementDescriptor.h"
-#include "core/dom/custom/CustomElementDescriptorHash.h"
-#include "wtf/HashMap.h"
-#include "wtf/HashSet.h"
-#include "wtf/RefPtr.h"
+#include "base/gtest_prod_util.h"
+#include "bindings/core/v8/ScriptPromise.h"
+#include "bindings/core/v8/ScriptWrappable.h"
+#include "core/CoreExport.h"
+#include "platform/heap/Handle.h"
+#include "wtf/Noncopyable.h"
 #include "wtf/text/AtomicString.h"
 #include "wtf/text/AtomicStringHash.h"
 
 namespace blink {
 
-class CustomElementConstructorBuilder;
+class CustomElementDefinition;
+class CustomElementDefinitionBuilder;
+class CustomElementDescriptor;
+class Element;
+class ElementDefinitionOptions;
 class ExceptionState;
+class LocalDOMWindow;
+class ScriptPromiseResolver;
+class ScriptState;
+class ScriptValue;
+class V0CustomElementRegistrationContext;
 
-class CustomElementRegistry final {
+class CORE_EXPORT CustomElementRegistry final
+    : public GarbageCollectedFinalized<CustomElementRegistry>,
+      public ScriptWrappable {
+    DEFINE_WRAPPERTYPEINFO();
     WTF_MAKE_NONCOPYABLE(CustomElementRegistry);
-    DISALLOW_ALLOCATION();
+
 public:
+    static CustomElementRegistry* create(const LocalDOMWindow*);
+
+    virtual ~CustomElementRegistry() = default;
+
+    CustomElementDefinition* define(ScriptState*,
+        const AtomicString& name,
+        const ScriptValue& constructor,
+        const ElementDefinitionOptions&,
+        ExceptionState&);
+
+    CustomElementDefinition* define(const AtomicString& name,
+        CustomElementDefinitionBuilder&,
+        const ElementDefinitionOptions&,
+        ExceptionState&);
+
+    ScriptValue get(const AtomicString& name);
+    bool nameIsDefined(const AtomicString& name) const;
+    CustomElementDefinition* definitionForName(const AtomicString& name) const;
+
+    // TODO(dominicc): Switch most callers of definitionForName to
+    // definitionFor when implementing type extensions.
+    CustomElementDefinition* definitionFor(const CustomElementDescriptor&) const;
+
+    // TODO(dominicc): Consider broadening this API when type extensions are
+    // implemented.
+    void addCandidate(Element*);
+    ScriptPromise whenDefined(ScriptState*,
+        const AtomicString& name,
+        ExceptionState&);
+
+    void entangle(V0CustomElementRegistrationContext*);
+
     DECLARE_TRACE();
-    void documentWasDetached() { m_documentWasDetached = true; }
-
-protected:
-    friend class CustomElementRegistrationContext;
-
-    CustomElementRegistry() : m_documentWasDetached(false) { }
-
-    CustomElementDefinition* registerElement(Document*, CustomElementConstructorBuilder*, const AtomicString& name, CustomElement::NameSet validNames, ExceptionState&);
-    CustomElementDefinition* find(const CustomElementDescriptor&) const;
+    DECLARE_VIRTUAL_TRACE_WRAPPERS();
 
 private:
-    typedef WillBeHeapHashMap<CustomElementDescriptor, RefPtrWillBeMember<CustomElementDefinition>> DefinitionMap;
+    friend class CustomElementRegistryTest;
+
+    CustomElementRegistry(const LocalDOMWindow*);
+
+    bool v0NameIsDefined(const AtomicString& name);
+
+    void collectCandidates(const CustomElementDescriptor&,
+        HeapVector<Member<Element>>*);
+
+    class ElementDefinitionIsRunning;
+    bool m_elementDefinitionIsRunning;
+
+    using DefinitionMap = HeapHashMap<AtomicString, Member<CustomElementDefinition>>;
     DefinitionMap m_definitions;
-    HashSet<AtomicString> m_registeredTypeNames;
-    bool m_documentWasDetached;
+
+    Member<const LocalDOMWindow> m_owner;
+
+    using V0RegistrySet = HeapHashSet<WeakMember<V0CustomElementRegistrationContext>>;
+    Member<V0RegistrySet> m_v0;
+
+    using UpgradeCandidateSet = HeapHashSet<WeakMember<Element>>;
+    using UpgradeCandidateMap = HeapHashMap<AtomicString, Member<UpgradeCandidateSet>>;
+    Member<UpgradeCandidateMap> m_upgradeCandidates;
+
+    using WhenDefinedPromiseMap = HeapHashMap<AtomicString, Member<ScriptPromiseResolver>>;
+    WhenDefinedPromiseMap m_whenDefinedPromiseMap;
 };
 
 } // namespace blink

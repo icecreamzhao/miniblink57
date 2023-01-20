@@ -4,10 +4,7 @@
 # output, and kills the app if interrupted.
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-<<<<<<< HEAD
 SKIP_TOOLCHAIN_SETUP="true"
-=======
->>>>>>> miniblink49
 source $SCRIPT_DIR/android_setup.sh
 source $SCRIPT_DIR/utils/setup_adb.sh
 

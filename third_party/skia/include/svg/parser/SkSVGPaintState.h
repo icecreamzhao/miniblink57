@@ -6,10 +6,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #ifndef SkSVGPaintState_DEFINED
 #define SkSVGPaintState_DEFINED
 
@@ -47,11 +43,7 @@ public:
     SkSVGPaint();
     virtual void addAttribute(SkSVGParser& parser, int attrIndex,
         const char* attrValue, size_t attrLength);
-<<<<<<< HEAD
     bool flush(SkSVGParser&, bool isFlushable, bool isDef);
-=======
-    bool flush(SkSVGParser& , bool isFlushable, bool isDef);
->>>>>>> miniblink49
     virtual int getAttributes(const SkSVGAttribute** attrPtr);
     static void Push(SkSVGPaint** head, SkSVGPaint* add);
     static void Pop(SkSVGPaint** head);
@@ -84,18 +76,11 @@ public:
     SkString fTransformID;
     static SkSVGAttribute gAttributes[];
     static const int kAttributesSize;
-<<<<<<< HEAD
 
 private:
     void setSave(SkSVGParser&);
     bool writeChangedAttributes(SkSVGParser&, SkSVGPaint&, bool* changed);
     bool writeChangedElements(SkSVGParser&, SkSVGPaint&, bool* changed);
-=======
-private:
-    void setSave(SkSVGParser& );
-    bool writeChangedAttributes(SkSVGParser& , SkSVGPaint& , bool* changed);
-    bool writeChangedElements(SkSVGParser& , SkSVGPaint& , bool* changed);
->>>>>>> miniblink49
     SkSVGPaint* fNext;
     friend class SkSVGParser;
     typedef SkSVGPaint BASE_CLASS;

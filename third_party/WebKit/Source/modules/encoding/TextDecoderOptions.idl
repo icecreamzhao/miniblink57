@@ -2,17 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
 // https://encoding.spec.whatwg.org/#textdecoder
 
 dictionary TextDecoderOptions {
-=======
-// http://encoding.spec.whatwg.org/#textdecoder
-
-[
-    GarbageCollected
-] dictionary TextDecoderOptions {
->>>>>>> miniblink49
     boolean fatal = false;
     boolean ignoreBOM = false;
 };

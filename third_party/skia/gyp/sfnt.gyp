@@ -13,11 +13,8 @@
         'core.gyp:*',
       ],
       'include_dirs': [
-<<<<<<< HEAD
         '../include/private',
         '../src/core',
-=======
->>>>>>> miniblink49
         '../src/sfnt',
       ],
       'sources': [

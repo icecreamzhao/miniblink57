@@ -29,19 +29,12 @@
 #ifndef AudioScheduledSourceNode_h
 #define AudioScheduledSourceNode_h
 
-<<<<<<< HEAD
 #include "bindings/core/v8/ActiveScriptWrappable.h"
 #include "modules/webaudio/AudioNode.h"
 
 namespace blink {
 
 class BaseAudioContext;
-=======
-#include "modules/webaudio/AudioSourceNode.h"
-
-namespace blink {
-
->>>>>>> miniblink49
 class AudioBus;
 
 class AudioScheduledSourceHandler : public AudioHandler {
@@ -53,13 +46,8 @@ public:
     // PLAYING_STATE - Generating sound.
     // FINISHED_STATE - Finished generating sound.
     //
-<<<<<<< HEAD
     // The state can only transition to the next state, except for the
     // FINISHED_STATE which can never be changed.
-=======
-    // The state can only transition to the next state, except for the FINISHED_STATE which can
-    // never be changed.
->>>>>>> miniblink49
     enum PlaybackState {
         // These must be defined with the same names and values as in the .idl file.
         UNSCHEDULED_STATE = 0,
@@ -74,7 +62,6 @@ public:
     void start(double when, ExceptionState&);
     void stop(double when, ExceptionState&);
 
-<<<<<<< HEAD
     PlaybackState playbackState() const
     {
         return static_cast<PlaybackState>(acquireLoad(&m_playbackState));
@@ -92,18 +79,10 @@ public:
     }
 
     bool hasFinished() const { return playbackState() == FINISHED_STATE; }
-=======
-    unsigned short playbackState() const { return static_cast<unsigned short>(m_playbackState); }
-    bool isPlayingOrScheduled() const { return m_playbackState == PLAYING_STATE || m_playbackState == SCHEDULED_STATE; }
-    bool hasFinished() const { return m_playbackState == FINISHED_STATE; }
-
-    void setHasEndedListener() { m_hasEndedListener = true; }
->>>>>>> miniblink49
 
 protected:
     // Get frame information for the current time quantum.
     // We handle the transition into PLAYING_STATE and FINISHED_STATE here,
-<<<<<<< HEAD
     // zeroing out portions of the outputBus which are outside the range of
     // startFrame and endFrame.
     //
@@ -124,17 +103,6 @@ protected:
 
     // Called when we have no more sound to play or the stop() time has been
     // reached. No onEnded event is called.
-=======
-    // zeroing out portions of the outputBus which are outside the range of startFrame and endFrame.
-    //
-    // Each frame time is relative to the context's currentSampleFrame().
-    // quantumFrameOffset    : Offset frame in this time quantum to start rendering.
-    // nonSilentFramesToProcess : Number of frames rendering non-silence (will be <= quantumFrameSize).
-    void updateSchedulingInfo(size_t quantumFrameSize, AudioBus* outputBus, size_t& quantumFrameOffset, size_t& nonSilentFramesToProcess);
-
-    // Called when we have no more sound to play or the stop() time has been reached. No onEnded
-    // event is called.
->>>>>>> miniblink49
     virtual void finishWithoutOnEnded();
 
     // Like finishWithoutOnEnded(), but an onEnded (if specified) is called.
@@ -142,7 +110,6 @@ protected:
 
     void notifyEnded();
 
-<<<<<<< HEAD
     // This synchronizes with process() and any other method that needs to be
     // synchronized like setBuffer for AudioBufferSource.
     mutable Mutex m_processLock;
@@ -171,24 +138,6 @@ class AudioScheduledSourceNode
     USING_GARBAGE_COLLECTED_MIXIN(AudioScheduledSourceNode);
     DEFINE_WRAPPERTYPEINFO();
 
-=======
-    PlaybackState m_playbackState;
-
-    // m_startTime is the time to start playing based on the context's timeline (0 or a time less than the context's current time means "now").
-    double m_startTime; // in seconds
-
-    // m_endTime is the time to stop playing based on the context's timeline (0 or a time less than the context's current time means "now").
-    // If it hasn't been set explicitly, then the sound will not stop playing (if looping) or will stop when the end of the AudioBuffer
-    // has been reached.
-    double m_endTime; // in seconds
-
-    bool m_hasEndedListener;
-
-    static const double UnknownTime;
-};
-
-class AudioScheduledSourceNode : public AudioSourceNode {
->>>>>>> miniblink49
 public:
     void start(ExceptionState&);
     void start(double when, ExceptionState&);
@@ -196,7 +145,6 @@ public:
     void stop(double when, ExceptionState&);
 
     EventListener* onended();
-<<<<<<< HEAD
     void setOnended(EventListener*);
 
     // ScriptWrappable:
@@ -206,12 +154,6 @@ public:
 
 protected:
     explicit AudioScheduledSourceNode(BaseAudioContext&);
-=======
-    void setOnended(PassRefPtr<EventListener>);
-
-protected:
-    explicit AudioScheduledSourceNode(AudioContext&);
->>>>>>> miniblink49
     AudioScheduledSourceHandler& audioScheduledSourceHandler() const;
 };
 

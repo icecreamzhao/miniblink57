@@ -9,9 +9,5 @@
     Exposed=ServiceWorker,
     RuntimeEnabled=PushMessaging,
 ] interface PushEvent : ExtendableEvent {
-<<<<<<< HEAD
     readonly attribute PushMessageData? data;
-=======
-    [RuntimeEnabled=PushMessagingData] readonly attribute PushMessageData data;
->>>>>>> miniblink49
 };

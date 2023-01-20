@@ -47,7 +47,6 @@ inline double currentTimeMS()
     return currentTime() * 1000.0;
 }
 
-<<<<<<< HEAD
 // Provides a monotonically increasing time in seconds since an arbitrary point
 // in the past.  On unsupported platforms, this function only guarantees the
 // result will be non-decreasing.
@@ -69,33 +68,14 @@ WTF_EXPORT TimeFunction setTimeFunctionsForTesting(TimeFunction);
 
 // Allows wtf/Time.h to use the same mock time function
 WTF_EXPORT TimeFunction getTimeFunctionForTesting();
-=======
-// Provides a monotonically increasing time in seconds since an arbitrary point in the past.
-// On unsupported platforms, this function only guarantees the result will be non-decreasing.
-WTF_EXPORT double monotonicallyIncreasingTime();
-
-// Provides a timestamp that aligns with system tracing utilities on the host operating
-// system.
-WTF_EXPORT double systemTraceTime();
-
-typedef double(*TimeFunction)(void);
-void setCurrentTimeFunction(TimeFunction);
-WTF_EXPORT void setMonotonicallyIncreasingTimeFunction(TimeFunction);
-void setSystemTraceTimeFunction(TimeFunction);
-
->>>>>>> miniblink49
 
 } // namespace WTF
 
 using WTF::currentTime;
 using WTF::currentTimeMS;
 using WTF::monotonicallyIncreasingTime;
-<<<<<<< HEAD
 using WTF::monotonicallyIncreasingTimeMS;
 using WTF::setTimeFunctionsForTesting;
 using WTF::TimeFunction;
-=======
-using WTF::systemTraceTime;
->>>>>>> miniblink49
 
 #endif // CurrentTime_h

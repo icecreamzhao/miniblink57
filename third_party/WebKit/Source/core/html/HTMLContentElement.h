@@ -38,23 +38,28 @@
 
 namespace blink {
 
-class HTMLContentSelectFilter : public NoBaseWillBeGarbageCollectedFinalized<HTMLContentSelectFilter> {
+class HTMLContentSelectFilter
+    : public GarbageCollectedFinalized<HTMLContentSelectFilter> {
 public:
     virtual ~HTMLContentSelectFilter() { }
-    virtual bool canSelectNode(const WillBeHeapVector<RawPtrWillBeMember<Node>, 32>& siblings, int nth) const = 0;
+    virtual bool canSelectNode(const HeapVector<Member<Node>, 32>& siblings,
+        int nth) const = 0;
 
     DEFINE_INLINE_VIRTUAL_TRACE() { }
 };
 
 class CORE_EXPORT HTMLContentElement final : public InsertionPoint {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<HTMLContentElement> create(Document&, PassOwnPtrWillBeRawPtr<HTMLContentSelectFilter> = nullptr);
+    static HTMLContentElement* create(Document&,
+        HTMLContentSelectFilter* = nullptr);
     ~HTMLContentElement() override;
 
     bool canAffectSelector() const override { return true; }
 
-    bool canSelectNode(const WillBeHeapVector<RawPtrWillBeMember<Node>, 32>& siblings, int nth) const;
+    bool canSelectNode(const HeapVector<Member<Node>, 32>& siblings,
+        int nth) const;
 
     const CSSSelectorList& selectorList() const;
     bool isSelectValid() const;
@@ -62,9 +67,9 @@ public:
     DECLARE_VIRTUAL_TRACE();
 
 private:
-    HTMLContentElement(Document&, PassOwnPtrWillBeRawPtr<HTMLContentSelectFilter>);
+    HTMLContentElement(Document&, HTMLContentSelectFilter*);
 
-    void parseAttribute(const QualifiedName&, const AtomicString&) override;
+    void parseAttribute(const AttributeModificationParams&) override;
 
     bool validateSelect() const;
     void parseSelect();
@@ -75,7 +80,7 @@ private:
     bool m_isValidSelector;
     AtomicString m_select;
     CSSSelectorList m_selectorList;
-    OwnPtrWillBeMember<HTMLContentSelectFilter> m_filter;
+    Member<HTMLContentSelectFilter> m_filter;
 };
 
 inline const CSSSelectorList& HTMLContentElement::selectorList() const
@@ -92,7 +97,9 @@ inline bool HTMLContentElement::isSelectValid() const
     return m_isValidSelector;
 }
 
-inline bool HTMLContentElement::canSelectNode(const WillBeHeapVector<RawPtrWillBeMember<Node>, 32>& siblings, int nth) const
+inline bool HTMLContentElement::canSelectNode(
+    const HeapVector<Member<Node>, 32>& siblings,
+    int nth) const
 {
     if (m_filter)
         return m_filter->canSelectNode(siblings, nth);

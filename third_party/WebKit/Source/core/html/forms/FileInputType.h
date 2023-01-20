@@ -33,7 +33,8 @@
 #define FileInputType_h
 
 #include "core/CoreExport.h"
-#include "core/html/forms/BaseClickableWithKeyInputType.h"
+#include "core/html/forms/InputType.h"
+#include "core/html/forms/KeyboardClickableInputTypeView.h"
 #include "platform/FileChooser.h"
 #include "platform/heap/Handle.h"
 #include "wtf/RefPtr.h"
@@ -43,21 +44,31 @@ namespace blink {
 class DragData;
 class FileList;
 
-class CORE_EXPORT FileInputType final : public BaseClickableWithKeyInputType, private FileChooserClient {
+class CORE_EXPORT FileInputType final : public InputType,
+                                        public KeyboardClickableInputTypeView,
+                                        private FileChooserClient {
+    USING_GARBAGE_COLLECTED_MIXIN(FileInputType);
+
 public:
-    static PassRefPtrWillBeRawPtr<InputType> create(HTMLInputElement&);
+    static InputType* create(HTMLInputElement&);
     DECLARE_VIRTUAL_TRACE();
-    static Vector<FileChooserFileInfo> filesFromFormControlState(const FormControlState&);
-    static FileList* createFileList(const Vector<FileChooserFileInfo>& files, bool hasWebkitDirectoryAttr);
+    using InputType::element;
+    static Vector<FileChooserFileInfo> filesFromFormControlState(
+        const FormControlState&);
+    static FileList* createFileList(const Vector<FileChooserFileInfo>& files,
+        bool hasWebkitDirectoryAttr);
 
     void countUsage() override;
 
+    void setFilesFromPaths(const Vector<String>&) override;
+
 private:
     FileInputType(HTMLInputElement&);
+    InputTypeView* createView() override;
     const AtomicString& formControlType() const override;
     FormControlState saveFormControlState() const override;
     void restoreFormControlState(const FormControlState&) override;
-    bool appendFormData(FormDataList&, bool) const override;
+    void appendToFormData(FormData&) const override;
     bool valueMissing(const String&) const override;
     String valueMissingText() const override;
     void handleDOMActivateEvent(Event*) override;
@@ -65,22 +76,26 @@ private:
     bool canSetStringValue() const override;
     FileList* files() override;
     void setFiles(FileList*) override;
+    ValueMode valueMode() const override;
     bool canSetValue(const String&) override;
-    bool getTypeSpecificValue(String&) override; // Checked first, before internal storage or the value attribute.
-    void setValue(const String&, bool valueChanged, TextFieldEventBehavior) override;
+    String valueInFilenameValueMode() const override;
+    void setValue(const String&,
+        bool valueChanged,
+        TextFieldEventBehavior) override;
     bool receiveDroppedFiles(const DragData*) override;
     String droppedFileSystemId() override;
     void createShadowSubtree() override;
     void disabledAttributeChanged() override;
     void multipleAttributeChanged() override;
-    String defaultToolTip() const override;
+    String defaultToolTip(const InputTypeView&) const override;
+    void copyNonAttributeProperties(const HTMLInputElement&) override;
 
     // FileChooserClient implementation.
     void filesChosen(const Vector<FileChooserFileInfo>&) override;
 
-    void receiveDropForDirectoryUpload(const Vector<String>&);
+    void setFilesFromDirectory(const String&);
 
-    PersistentWillBeMember<FileList> m_fileList;
+    Member<FileList> m_fileList;
     String m_droppedFileSystemId;
 };
 

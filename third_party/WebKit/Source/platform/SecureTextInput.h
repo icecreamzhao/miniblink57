@@ -32,10 +32,7 @@
 #define SecureTextInput_h
 
 #include "platform/PlatformExport.h"
-<<<<<<< HEAD
 #include "wtf/build_config.h"
-=======
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -45,13 +42,9 @@ namespace blink {
 PLATFORM_EXPORT void enableSecureTextInput();
 PLATFORM_EXPORT void disableSecureTextInput();
 #else
-<<<<<<< HEAD
 inline void enableSecureTextInput()
 {
 }
-=======
-inline void enableSecureTextInput() { }
->>>>>>> miniblink49
 inline void disableSecureTextInput() { }
 #endif
 

@@ -6,13 +6,8 @@
 #define ScreenOrientation_h
 
 #include "bindings/core/v8/ScriptWrappable.h"
-<<<<<<< HEAD
 #include "core/dom/ContextLifecycleObserver.h"
 #include "core/events/EventTarget.h"
-=======
-#include "core/events/EventTarget.h"
-#include "core/frame/DOMWindowProperty.h"
->>>>>>> miniblink49
 #include "platform/heap/Handle.h"
 #include "public/platform/modules/screen_orientation/WebScreenOrientationType.h"
 #include "wtf/text/AtomicString.h"
@@ -24,7 +19,6 @@ class ExecutionContext;
 class LocalFrame;
 class ScriptPromise;
 class ScriptState;
-<<<<<<< HEAD
 class ScreenOrientationControllerImpl;
 
 class ScreenOrientation final : public EventTargetWithInlineData,
@@ -32,16 +26,6 @@ class ScreenOrientation final : public EventTargetWithInlineData,
     DEFINE_WRAPPERTYPEINFO();
     USING_GARBAGE_COLLECTED_MIXIN(ScreenOrientation);
 
-=======
-class ScreenOrientationController;
-
-class ScreenOrientation final
-    : public RefCountedGarbageCollectedEventTargetWithInlineData<ScreenOrientation>
-    , public DOMWindowProperty {
-    REFCOUNTED_GARBAGE_COLLECTED_EVENT_TARGET(ScreenOrientation);
-    DEFINE_WRAPPERTYPEINFO();
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(ScreenOrientation);
->>>>>>> miniblink49
 public:
     static ScreenOrientation* create(LocalFrame*);
 
@@ -49,11 +33,7 @@ public:
 
     // EventTarget implementation.
     const WTF::AtomicString& interfaceName() const override;
-<<<<<<< HEAD
     ExecutionContext* getExecutionContext() const override;
-=======
-    ExecutionContext* executionContext() const override;
->>>>>>> miniblink49
 
     String type() const;
     unsigned short angle() const;
@@ -74,11 +54,7 @@ public:
 private:
     explicit ScreenOrientation(LocalFrame*);
 
-<<<<<<< HEAD
     ScreenOrientationControllerImpl* controller();
-=======
-    ScreenOrientationController* controller();
->>>>>>> miniblink49
 
     WebScreenOrientationType m_type;
     unsigned short m_angle;

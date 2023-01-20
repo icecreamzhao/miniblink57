@@ -23,11 +23,7 @@
 U_NAMESPACE_BEGIN
 
 // Forward Declarations.
-<<<<<<< HEAD
 void U_CALLCONV UnicodeSet_initInclusion(int32_t src, UErrorCode& status); /**< @internal */
-=======
-void U_CALLCONV UnicodeSet_initInclusion(int32_t src, UErrorCode &status); /**< @internal */
->>>>>>> miniblink49
 
 class BMPSet;
 class ParsePosition;
@@ -282,11 +278,7 @@ class U_COMMON_API UnicodeSet U_FINAL : public UnicodeFilter {
     int32_t len; // length of list used; 0 <= len <= capacity
     int32_t capacity; // capacity of list
     UChar32* list; // MUST be terminated with HIGH
-<<<<<<< HEAD
     BMPSet* bmpSet; // The set is frozen iff either bmpSet or stringSpan is not NULL.
-=======
-    BMPSet *bmpSet; // The set is frozen iff either bmpSet or stringSpan is not NULL.
->>>>>>> miniblink49
     UChar32* buffer; // internal buffer, may be NULL
     int32_t bufferCapacity; // capacity of buffer
     int32_t patLen;
@@ -300,7 +292,6 @@ class U_COMMON_API UnicodeSet U_FINAL : public UnicodeFilter {
      * indicating that toPattern() must generate a pattern
      * representation from the inversion list.
      */
-<<<<<<< HEAD
     UChar* pat;
     UVector* strings; // maintained in sorted order
     UnicodeSetStringSpan* stringSpan;
@@ -310,17 +301,6 @@ private:
         kIsBogus = 1 // This set is bogus (i.e. not valid)
     };
     uint8_t fFlags; // Bit flag (see constants above)
-=======
-    UChar *pat;
-    UVector* strings; // maintained in sorted order
-    UnicodeSetStringSpan *stringSpan;
-
-private:
-    enum { // constants
-        kIsBogus = 1       // This set is bogus (i.e. not valid)
-    };
-    uint8_t fFlags;         // Bit flag (see constants above)
->>>>>>> miniblink49
 public:
     /**
      * Determine if this object contains a valid set.
@@ -332,11 +312,7 @@ public:
      * @stable ICU 4.0
      */
     inline UBool isBogus(void) const;
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> miniblink49
     /**
      * Make this UnicodeSet object invalid.
      * The string will test TRUE with isBogus().
@@ -356,10 +332,6 @@ public:
     void setToBogus();
 
 public:
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
     enum {
         /**
          * Minimum value that can be stored in a UnicodeSet.
@@ -379,10 +351,6 @@ public:
     //----------------------------------------------------------------
 
 public:
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
     /**
      * Constructs an empty set.
      * @stable ICU 2.0
@@ -408,11 +376,7 @@ public:
      * @stable ICU 2.0
      */
     UnicodeSet(const UnicodeString& pattern,
-<<<<<<< HEAD
         UErrorCode& status);
-=======
-               UErrorCode& status);
->>>>>>> miniblink49
 
 #ifndef U_HIDE_INTERNAL_API
     /**
@@ -428,17 +392,10 @@ public:
      * @internal
      */
     UnicodeSet(const UnicodeString& pattern,
-<<<<<<< HEAD
         uint32_t options,
         const SymbolTable* symbols,
         UErrorCode& status);
 #endif /* U_HIDE_INTERNAL_API */
-=======
-               uint32_t options,
-               const SymbolTable* symbols,
-               UErrorCode& status);
-#endif  /* U_HIDE_INTERNAL_API */
->>>>>>> miniblink49
 
     /**
      * Constructs a set from the given pattern.  See the class description
@@ -454,15 +411,9 @@ public:
      * @stable ICU 2.8
      */
     UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
-<<<<<<< HEAD
         uint32_t options,
         const SymbolTable* symbols,
         UErrorCode& status);
-=======
-               uint32_t options,
-               const SymbolTable* symbols,
-               UErrorCode& status);
->>>>>>> miniblink49
 
     /**
      * Constructs a set that is identical to the given UnicodeSet.
@@ -531,11 +482,7 @@ public:
      *
      * @stable ICU 4.2
      */
-<<<<<<< HEAD
     inline static UnicodeSet* fromUSet(USet* uset);
-=======
-    inline static UnicodeSet *fromUSet(USet *uset);
->>>>>>> miniblink49
 
     /**
      * Get a UnicodeSet pointer from a const USet
@@ -545,13 +492,8 @@ public:
      *
      * @stable ICU 4.2
      */
-<<<<<<< HEAD
     inline static const UnicodeSet* fromUSet(const USet* uset);
 
-=======
-    inline static const UnicodeSet *fromUSet(const USet *uset);
-    
->>>>>>> miniblink49
     /**
      * Produce a USet * pointer for this UnicodeSet.
      * USet is the plain C type for UnicodeSet
@@ -559,12 +501,7 @@ public:
      * @return a USet pointer for this UnicodeSet
      * @stable ICU 4.2
      */
-<<<<<<< HEAD
     inline USet* toUSet();
-=======
-    inline USet *toUSet();
-
->>>>>>> miniblink49
 
     /**
      * Produce a const USet * pointer for this UnicodeSet.
@@ -573,12 +510,7 @@ public:
      * @return a const USet pointer for this UnicodeSet
      * @stable ICU 4.2
      */
-<<<<<<< HEAD
     inline const USet* toUSet() const;
-=======
-    inline const USet * toUSet() const;
-
->>>>>>> miniblink49
 
     //----------------------------------------------------------------
     // Freezable API
@@ -607,11 +539,7 @@ public:
      * @see cloneAsThawed
      * @stable ICU 3.8
      */
-<<<<<<< HEAD
     UnicodeFunctor* freeze();
-=======
-    UnicodeFunctor *freeze();
->>>>>>> miniblink49
 
     /**
      * Clone the set and make the clone mutable.
@@ -621,11 +549,7 @@ public:
      * @see isFrozen
      * @stable ICU 3.8
      */
-<<<<<<< HEAD
     UnicodeFunctor* cloneAsThawed() const;
-=======
-    UnicodeFunctor *cloneAsThawed() const;
->>>>>>> miniblink49
 
     //----------------------------------------------------------------
     // Public API
@@ -649,11 +573,7 @@ public:
      * @stable ICU 2.4
      */
     static UBool resemblesPattern(const UnicodeString& pattern,
-<<<<<<< HEAD
         int32_t pos);
-=======
-                                  int32_t pos);
->>>>>>> miniblink49
 
     /**
      * Modifies this set to represent the set specified by the given
@@ -668,11 +588,7 @@ public:
      * @stable ICU 2.0
      */
     UnicodeSet& applyPattern(const UnicodeString& pattern,
-<<<<<<< HEAD
         UErrorCode& status);
-=======
-                             UErrorCode& status);
->>>>>>> miniblink49
 
 #ifndef U_HIDE_INTERNAL_API
     /**
@@ -692,17 +608,10 @@ public:
      * @internal
      */
     UnicodeSet& applyPattern(const UnicodeString& pattern,
-<<<<<<< HEAD
         uint32_t options,
         const SymbolTable* symbols,
         UErrorCode& status);
 #endif /* U_HIDE_INTERNAL_API */
-=======
-                             uint32_t options,
-                             const SymbolTable* symbols,
-                             UErrorCode& status);
-#endif  /* U_HIDE_INTERNAL_API */
->>>>>>> miniblink49
 
     /**
      * Parses the given pattern, starting at the given position.  The
@@ -736,17 +645,10 @@ public:
      * @stable ICU 2.8
      */
     UnicodeSet& applyPattern(const UnicodeString& pattern,
-<<<<<<< HEAD
         ParsePosition& pos,
         uint32_t options,
         const SymbolTable* symbols,
         UErrorCode& status);
-=======
-                             ParsePosition& pos,
-                             uint32_t options,
-                             const SymbolTable* symbols,
-                             UErrorCode& status);
->>>>>>> miniblink49
 
     /**
      * Returns a string representation of this set.  If the result of
@@ -762,11 +664,7 @@ public:
      * @stable ICU 2.0
      */
     virtual UnicodeString& toPattern(UnicodeString& result,
-<<<<<<< HEAD
         UBool escapeUnprintable = FALSE) const;
-=======
-                             UBool escapeUnprintable = FALSE) const;
->>>>>>> miniblink49
 
     /**
      * Modifies this set to contain those code points which have the given value
@@ -791,13 +689,8 @@ public:
      * @stable ICU 2.4
      */
     UnicodeSet& applyIntPropertyValue(UProperty prop,
-<<<<<<< HEAD
         int32_t value,
         UErrorCode& ec);
-=======
-                                      int32_t value,
-                                      UErrorCode& ec);
->>>>>>> miniblink49
 
     /**
      * Modifies this set to contain those code points which have the
@@ -829,13 +722,8 @@ public:
      * @stable ICU 2.4
      */
     UnicodeSet& applyPropertyAlias(const UnicodeString& prop,
-<<<<<<< HEAD
         const UnicodeString& value,
         UErrorCode& ec);
-=======
-                                   const UnicodeString& value,
-                                   UErrorCode& ec);
->>>>>>> miniblink49
 
     /**
      * Returns the number of elements in this set (its cardinality).
@@ -975,11 +863,7 @@ public:
      * @stable ICU 3.8
      * @see USetSpanCondition
      */
-<<<<<<< HEAD
     int32_t span(const UChar* s, int32_t length, USetSpanCondition spanCondition) const;
-=======
-    int32_t span(const UChar *s, int32_t length, USetSpanCondition spanCondition) const;
->>>>>>> miniblink49
 
     /**
      * Returns the end of the substring of the input string according to the USetSpanCondition.
@@ -993,11 +877,7 @@ public:
      * @stable ICU 4.4
      * @see USetSpanCondition
      */
-<<<<<<< HEAD
     inline int32_t span(const UnicodeString& s, int32_t start, USetSpanCondition spanCondition) const;
-=======
-    inline int32_t span(const UnicodeString &s, int32_t start, USetSpanCondition spanCondition) const;
->>>>>>> miniblink49
 
     /**
      * Returns the start of the trailing substring of the input string which
@@ -1016,11 +896,7 @@ public:
      * @stable ICU 3.8
      * @see USetSpanCondition
      */
-<<<<<<< HEAD
     int32_t spanBack(const UChar* s, int32_t length, USetSpanCondition spanCondition) const;
-=======
-    int32_t spanBack(const UChar *s, int32_t length, USetSpanCondition spanCondition) const;
->>>>>>> miniblink49
 
     /**
      * Returns the start of the substring of the input string according to the USetSpanCondition.
@@ -1035,11 +911,7 @@ public:
      * @stable ICU 4.4
      * @see USetSpanCondition
      */
-<<<<<<< HEAD
     inline int32_t spanBack(const UnicodeString& s, int32_t limit, USetSpanCondition spanCondition) const;
-=======
-    inline int32_t spanBack(const UnicodeString &s, int32_t limit, USetSpanCondition spanCondition) const;
->>>>>>> miniblink49
 
     /**
      * Returns the length of the initial substring of the input string which
@@ -1059,11 +931,7 @@ public:
      * @stable ICU 3.8
      * @see USetSpanCondition
      */
-<<<<<<< HEAD
     int32_t spanUTF8(const char* s, int32_t length, USetSpanCondition spanCondition) const;
-=======
-    int32_t spanUTF8(const char *s, int32_t length, USetSpanCondition spanCondition) const;
->>>>>>> miniblink49
 
     /**
      * Returns the start of the trailing substring of the input string which
@@ -1082,26 +950,16 @@ public:
      * @stable ICU 3.8
      * @see USetSpanCondition
      */
-<<<<<<< HEAD
     int32_t spanBackUTF8(const char* s, int32_t length, USetSpanCondition spanCondition) const;
-=======
-    int32_t spanBackUTF8(const char *s, int32_t length, USetSpanCondition spanCondition) const;
->>>>>>> miniblink49
 
     /**
      * Implement UnicodeMatcher::matches()
      * @stable ICU 2.4
      */
     virtual UMatchDegree matches(const Replaceable& text,
-<<<<<<< HEAD
         int32_t& offset,
         int32_t limit,
         UBool incremental);
-=======
-                         int32_t& offset,
-                         int32_t limit,
-                         UBool incremental);
->>>>>>> miniblink49
 
 private:
     /**
@@ -1127,13 +985,8 @@ private:
      * 0
      */
     static int32_t matchRest(const Replaceable& text,
-<<<<<<< HEAD
         int32_t start, int32_t limit,
         const UnicodeString& s);
-=======
-                             int32_t start, int32_t limit,
-                             const UnicodeString& s);
->>>>>>> miniblink49
 
     /**
      * Returns the smallest value i such that c < list[i].  Caller
@@ -1147,10 +1000,6 @@ private:
     int32_t findCodePoint(UChar32 c) const;
 
 public:
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
     /**
      * Implementation of UnicodeMatcher API.  Union the set of all
      * characters that may be matched by this object into the given
@@ -1219,11 +1068,7 @@ public:
      */
     UnicodeSet& add(const UnicodeString& s);
 
-<<<<<<< HEAD
 private:
-=======
- private:
->>>>>>> miniblink49
     /**
      * @return a code point IF the string consists of a single one.
      * otherwise returns -1.
@@ -1233,11 +1078,7 @@ private:
 
     void _add(const UnicodeString& s);
 
-<<<<<<< HEAD
 public:
-=======
- public:
->>>>>>> miniblink49
     /**
      * Adds each of the characters in this string to the set. Thus "ch" => {"c", "h"}
      * If this set already any particular character, it has no effect on that character.
@@ -1288,10 +1129,6 @@ public:
      */
     static UnicodeSet* U_EXPORT2 createFrom(const UnicodeString& s);
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
     /**
      * Makes a set from each of the characters in the string. Thus "ch" => {"c", "h"}
      * @param s the source string
@@ -1316,10 +1153,6 @@ public:
      */
     virtual UnicodeSet& retain(UChar32 start, UChar32 end);
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
     /**
      * Retain the specified character from this set if it is present.
      * A frozen set will not be modified.
@@ -1501,11 +1334,7 @@ public:
      * @return a reference to this set.
      * @stable ICU 4.2
      */
-<<<<<<< HEAD
     virtual UnicodeSet& removeAllStrings();
-=======
-    virtual UnicodeSet &removeAllStrings();
->>>>>>> miniblink49
 
     /**
      * Iteration method that returns the number of ranges contained in
@@ -1582,11 +1411,7 @@ public:
      * than U_BUFFER_OVERFLOW_ERROR.
      * @stable ICU 2.4
      */
-<<<<<<< HEAD
     int32_t serialize(uint16_t* dest, int32_t destCapacity, UErrorCode& ec) const;
-=======
-    int32_t serialize(uint16_t *dest, int32_t destCapacity, UErrorCode& ec) const;
->>>>>>> miniblink49
 
     /**
      * Reallocate this objects internal structures to take up the least
@@ -1620,10 +1445,6 @@ public:
     virtual UClassID getDynamicClassID(void) const;
 
 private:
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
     // Private API for the USet API
 
     friend class USetAccess;
@@ -1637,10 +1458,6 @@ private:
     //----------------------------------------------------------------
 
 private:
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
     /**
      * Returns <tt>true</tt> if this set contains any character whose low byte
      * is the given value.  This is used by <tt>RuleBasedTransliterator</tt> for
@@ -1662,7 +1479,6 @@ private:
     //----------------------------------------------------------------
 
     void applyPatternIgnoreSpace(const UnicodeString& pattern,
-<<<<<<< HEAD
         ParsePosition& pos,
         const SymbolTable* symbols,
         UErrorCode& status);
@@ -1673,18 +1489,6 @@ private:
         uint32_t options,
         UnicodeSet& (UnicodeSet::*caseClosure)(int32_t attribute),
         UErrorCode& ec);
-=======
-                                 ParsePosition& pos,
-                                 const SymbolTable* symbols,
-                                 UErrorCode& status);
-
-    void applyPattern(RuleCharacterIterator& chars,
-                      const SymbolTable* symbols,
-                      UnicodeString& rebuiltPat,
-                      uint32_t options,
-                      UnicodeSet& (UnicodeSet::*caseClosure)(int32_t attribute),
-                      UErrorCode& ec);
->>>>>>> miniblink49
 
     //----------------------------------------------------------------
     // Implementation: Utility methods
@@ -1696,7 +1500,6 @@ private:
 
     void swapBuffers(void);
 
-<<<<<<< HEAD
     UBool allocateStrings(UErrorCode& status);
 
     UnicodeString& _toPattern(UnicodeString& result,
@@ -1704,15 +1507,6 @@ private:
 
     UnicodeString& _generatePattern(UnicodeString& result,
         UBool escapeUnprintable) const;
-=======
-    UBool allocateStrings(UErrorCode &status);
-
-    UnicodeString& _toPattern(UnicodeString& result,
-                              UBool escapeUnprintable) const;
-
-    UnicodeString& _generatePattern(UnicodeString& result,
-                                    UBool escapeUnprintable) const;
->>>>>>> miniblink49
 
     static void _appendToPat(UnicodeString& buf, const UnicodeString& s, UBool escapeUnprintable);
 
@@ -1734,17 +1528,10 @@ private:
      * \\P{foo}, or \\N{name}.
      */
     static UBool resemblesPropertyPattern(const UnicodeString& pattern,
-<<<<<<< HEAD
         int32_t pos);
 
     static UBool resemblesPropertyPattern(RuleCharacterIterator& chars,
         int32_t iterOpts);
-=======
-                                          int32_t pos);
-
-    static UBool resemblesPropertyPattern(RuleCharacterIterator& chars,
-                                          int32_t iterOpts);
->>>>>>> miniblink49
 
     /**
      * Parse the given property pattern at the given parse position
@@ -1786,7 +1573,6 @@ private:
      * @return a reference to this.
      */
     UnicodeSet& applyPropertyPattern(const UnicodeString& pattern,
-<<<<<<< HEAD
         ParsePosition& ppos,
         UErrorCode& ec);
 
@@ -1796,17 +1582,6 @@ private:
 
     friend void U_CALLCONV UnicodeSet_initInclusion(int32_t src, UErrorCode& status);
     static const UnicodeSet* getInclusions(int32_t src, UErrorCode& status);
-=======
-                                     ParsePosition& ppos,
-                                     UErrorCode &ec);
-
-    void applyPropertyPattern(RuleCharacterIterator& chars,
-                              UnicodeString& rebuiltPat,
-                              UErrorCode& ec);
-
-    friend void U_CALLCONV UnicodeSet_initInclusion(int32_t src, UErrorCode &status);
-    static const UnicodeSet* getInclusions(int32_t src, UErrorCode &status);
->>>>>>> miniblink49
 
     /**
      * A filter that returns TRUE if the given code point should be
@@ -1824,15 +1599,9 @@ private:
      * src is a UPropertySource value.
      */
     void applyFilter(Filter filter,
-<<<<<<< HEAD
         void* context,
         int32_t src,
         UErrorCode& status);
-=======
-                     void* context,
-                     int32_t src,
-                     UErrorCode &status);
->>>>>>> miniblink49
 
     /**
      * Set the new pattern to cache.
@@ -1846,7 +1615,6 @@ private:
     friend class UnicodeSetIterator;
 };
 
-<<<<<<< HEAD
 inline UBool UnicodeSet::operator!=(const UnicodeSet& o) const
 {
     return !operator==(o);
@@ -1915,66 +1683,6 @@ inline int32_t UnicodeSet::spanBack(const UnicodeString& s, int32_t limit, USetS
         limit = 0;
     } else if (limit > sLength) {
         limit = sLength;
-=======
-
-
-inline UBool UnicodeSet::operator!=(const UnicodeSet& o) const {
-    return !operator==(o);
-}
-
-inline UBool UnicodeSet::isFrozen() const {
-    return (UBool)(bmpSet!=NULL || stringSpan!=NULL);
-}
-
-inline UBool UnicodeSet::containsSome(UChar32 start, UChar32 end) const {
-    return !containsNone(start, end);
-}
-
-inline UBool UnicodeSet::containsSome(const UnicodeSet& s) const {
-    return !containsNone(s);
-}
-
-inline UBool UnicodeSet::containsSome(const UnicodeString& s) const {
-    return !containsNone(s);
-}
-
-inline UBool UnicodeSet::isBogus() const {
-    return (UBool)(fFlags & kIsBogus);
-}
-
-inline UnicodeSet *UnicodeSet::fromUSet(USet *uset) {
-    return reinterpret_cast<UnicodeSet *>(uset);
-}
-
-inline const UnicodeSet *UnicodeSet::fromUSet(const USet *uset) {
-    return reinterpret_cast<const UnicodeSet *>(uset);
-}
-
-inline USet *UnicodeSet::toUSet() {
-    return reinterpret_cast<USet *>(this);
-}
-
-inline const USet *UnicodeSet::toUSet() const {
-    return reinterpret_cast<const USet *>(this);
-}
-
-inline int32_t UnicodeSet::span(const UnicodeString &s, int32_t start, USetSpanCondition spanCondition) const {
-    int32_t sLength=s.length();
-    if(start<0) {
-        start=0;
-    } else if(start>sLength) {
-        start=sLength;
-    }
-    return start+span(s.getBuffer()+start, sLength-start, spanCondition);
-}
-
-inline int32_t UnicodeSet::spanBack(const UnicodeString &s, int32_t limit, USetSpanCondition spanCondition) const {
-    int32_t sLength=s.length();
-    if(limit<0) {
-        limit=0;
-    } else if(limit>sLength) {
-        limit=sLength;
->>>>>>> miniblink49
     }
     return spanBack(s.getBuffer(), limit, spanCondition);
 }

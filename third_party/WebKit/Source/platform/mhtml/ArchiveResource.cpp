@@ -26,15 +26,10 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/mhtml/ArchiveResource.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 ArchiveResource::ArchiveResource(PassRefPtr<SharedBuffer> data,
     const KURL& url,
     const String& contentID,
@@ -45,28 +40,10 @@ ArchiveResource::ArchiveResource(PassRefPtr<SharedBuffer> data,
     , m_data(data)
     , m_mimeType(mimeType)
     , m_textEncoding(textEncoding)
-=======
-inline ArchiveResource::ArchiveResource(
-    PassRefPtr<SharedBuffer> data,
-    const KURL& url,
-    const String& contentID,
-    const AtomicString& mimeType,
-    const AtomicString& textEncoding,
-    const String& frameName,
-    const ResourceResponse& response)
-    : m_url(url)
-    , m_contentID(contentID)
-    , m_response(response)
-    , m_data(data)
-    , m_mimeType(mimeType)
-    , m_textEncoding(textEncoding)
-    , m_frameName(frameName)
->>>>>>> miniblink49
 {
     ASSERT(m_data);
 }
 
-<<<<<<< HEAD
 ArchiveResource::~ArchiveResource() { }
 
 ArchiveResource* ArchiveResource::create(PassRefPtr<SharedBuffer> data,
@@ -80,31 +57,3 @@ ArchiveResource* ArchiveResource::create(PassRefPtr<SharedBuffer> data,
 }
 
 } // namespace blink
-=======
-ArchiveResource::~ArchiveResource()
-{
-}
-
-PassRefPtrWillBeRawPtr<ArchiveResource> ArchiveResource::create(
-    PassRefPtr<SharedBuffer> data,
-    const KURL& url,
-    const String& contentID,
-    const AtomicString& mimeType,
-    const AtomicString& textEncoding,
-    const String& frameName,
-    const ResourceResponse& response)
-{
-    if (!data)
-        return nullptr;
-    if (response.isNull()) {
-        const ResourceResponse& resourceResponse = ResourceResponse(
-            url, mimeType, data->size(), textEncoding, String());
-        return adoptRefWillBeNoop(new ArchiveResource(
-            data, url, contentID, mimeType, textEncoding, frameName, resourceResponse));
-    }
-    return adoptRefWillBeNoop(new ArchiveResource(
-        data, url, contentID, mimeType, textEncoding, frameName, response));
-}
-
-}
->>>>>>> miniblink49

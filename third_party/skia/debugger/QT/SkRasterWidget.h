@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 
 /*
  * Copyright 2016 Google Inc.
@@ -7,16 +6,6 @@
  * found in the LICENSE file.
  */
 
-=======
-/*
- * SkRasterWidget.h
- *
- *  Created on: Jul 28, 2012
- *      Author: chudy
- */
-
-
->>>>>>> miniblink49
 #ifndef SKRASTERWIDGET_H_
 #define SKRASTERWIDGET_H_
 
@@ -25,11 +14,7 @@ class SkDebugger;
 
 #include <QWidget>
 
-<<<<<<< HEAD
 class SkRasterWidget : public QWidget {
-=======
-class  SkRasterWidget : public QWidget {
->>>>>>> miniblink49
     Q_OBJECT
 
 public:
@@ -37,11 +22,7 @@ public:
 
     void updateImage();
 
-<<<<<<< HEAD
 Q_SIGNALS:
-=======
-signals:
->>>>>>> miniblink49
     void drawComplete();
 
 protected:
@@ -51,11 +32,7 @@ protected:
 
 private:
     SkDebugger* fDebugger;
-<<<<<<< HEAD
     sk_sp<SkSurface> fSurface;
-=======
-    SkAutoTUnref<SkSurface> fSurface;
->>>>>>> miniblink49
     bool fNeedImageUpdate;
 };
 

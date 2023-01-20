@@ -18,11 +18,7 @@ static struct {
     SkShader::TileMode tmy;
 } kTileConfigs[] = {
     { SkShader::kRepeat_TileMode, SkShader::kRepeat_TileMode },
-<<<<<<< HEAD
     { SkShader::kRepeat_TileMode, SkShader::kClamp_TileMode },
-=======
-    { SkShader::kRepeat_TileMode, SkShader::kClamp_TileMode  },
->>>>>>> miniblink49
     { SkShader::kMirror_TileMode, SkShader::kRepeat_TileMode },
 };
 
@@ -30,7 +26,6 @@ class PictureShaderGM : public skiagm::GM {
 public:
     PictureShaderGM(SkScalar tileSize, SkScalar sceneSize)
         : fTileSize(tileSize)
-<<<<<<< HEAD
         , fSceneSize(sceneSize)
     {
     }
@@ -43,18 +38,6 @@ protected:
         SkCanvas* pictureCanvas = recorder.beginRecording(fTileSize, fTileSize, nullptr, 0);
         this->drawTile(pictureCanvas);
         fPicture = recorder.finishRecordingAsPicture();
-=======
-        , fSceneSize(sceneSize) {
-    }
-
- protected:
-    void onOnceBeforeDraw() override {
-       // Build the picture.
-        SkPictureRecorder recorder;
-        SkCanvas* pictureCanvas = recorder.beginRecording(fTileSize, fTileSize, NULL, 0);
-        this->drawTile(pictureCanvas);
-        fPicture.reset(recorder.endRecording());
->>>>>>> miniblink49
 
         // Build a reference bitmap.
         fBitmap.allocN32Pixels(SkScalarCeilToInt(fTileSize), SkScalarCeilToInt(fTileSize));
@@ -63,7 +46,6 @@ protected:
         this->drawTile(&bitmapCanvas);
     }
 
-<<<<<<< HEAD
     SkString onShortName() override
     {
         return SkString("pictureshader");
@@ -76,18 +58,6 @@ protected:
 
     void onDraw(SkCanvas* canvas) override
     {
-=======
-
-    SkString onShortName() override {
-        return SkString("pictureshader");
-    }
-
-    SkISize onISize() override {
-        return SkISize::Make(1400, 1450);
-    }
-
-    void onDraw(SkCanvas* canvas) override {
->>>>>>> miniblink49
         this->drawSceneColumn(canvas, SkPoint::Make(0, 0), 1, 1, 0);
         this->drawSceneColumn(canvas, SkPoint::Make(0, fSceneSize * 6.4f), 1, 2, 0);
         this->drawSceneColumn(canvas, SkPoint::Make(fSceneSize * 2.4f, 0), 1, 1, 1);
@@ -120,12 +90,8 @@ protected:
 
 private:
     void drawSceneColumn(SkCanvas* canvas, const SkPoint& pos, SkScalar scale, SkScalar localScale,
-<<<<<<< HEAD
         unsigned tileMode)
     {
-=======
-                         unsigned tileMode) {
->>>>>>> miniblink49
         SkMatrix ctm, localMatrix;
 
         ctm.setTranslate(pos.x(), pos.y());
@@ -159,12 +125,8 @@ private:
         this->drawScene(canvas, ctm, localMatrix, tileMode);
     }
 
-<<<<<<< HEAD
     void drawTile(SkCanvas* canvas)
     {
-=======
-    void drawTile(SkCanvas* canvas) {
->>>>>>> miniblink49
         SkPaint paint;
         paint.setColor(SK_ColorGREEN);
         paint.setStyle(SkPaint::kFill_Style);
@@ -172,7 +134,6 @@ private:
 
         canvas->drawCircle(fTileSize / 4, fTileSize / 4, fTileSize / 4, paint);
         canvas->drawRect(SkRect::MakeXYWH(fTileSize / 2, fTileSize / 2,
-<<<<<<< HEAD
                              fTileSize / 2, fTileSize / 2),
             paint);
 
@@ -186,95 +147,46 @@ private:
     void drawScene(SkCanvas* canvas, const SkMatrix& matrix, const SkMatrix& localMatrix,
         unsigned tileMode)
     {
-=======
-                                          fTileSize / 2, fTileSize / 2), paint);
-
-        paint.setColor(SK_ColorRED);
-        canvas->drawLine(fTileSize / 2, fTileSize * 1 / 3,
-                         fTileSize / 2, fTileSize * 2 / 3, paint);
-        canvas->drawLine(fTileSize * 1 / 3, fTileSize / 2,
-                         fTileSize * 2 / 3, fTileSize / 2, paint);
-    }
-
-    void drawScene(SkCanvas* canvas, const SkMatrix& matrix, const SkMatrix& localMatrix,
-                   unsigned tileMode) {
->>>>>>> miniblink49
         SkASSERT(tileMode < SK_ARRAY_COUNT(kTileConfigs));
 
         SkPaint paint;
         paint.setStyle(SkPaint::kFill_Style);
-<<<<<<< HEAD
         paint.setColor(sk_tool_utils::color_to_565(SK_ColorLTGRAY));
-=======
-        paint.setColor(SK_ColorLTGRAY);
->>>>>>> miniblink49
 
         canvas->save();
         canvas->concat(matrix);
         canvas->drawRect(SkRect::MakeWH(fSceneSize, fSceneSize), paint);
         canvas->drawRect(SkRect::MakeXYWH(fSceneSize * 1.1f, 0, fSceneSize, fSceneSize), paint);
 
-<<<<<<< HEAD
         paint.setShader(SkShader::MakePictureShader(fPicture, kTileConfigs[tileMode].tmx,
             kTileConfigs[tileMode].tmy, &localMatrix,
             nullptr));
-=======
-        SkAutoTUnref<SkShader> pictureShader(SkShader::CreatePictureShader(
-                    fPicture,
-                    kTileConfigs[tileMode].tmx,
-                    kTileConfigs[tileMode].tmy,
-                    &localMatrix,
-                    NULL));
-        paint.setShader(pictureShader.get());
->>>>>>> miniblink49
         canvas->drawRect(SkRect::MakeWH(fSceneSize, fSceneSize), paint);
 
         canvas->translate(fSceneSize * 1.1f, 0);
 
-<<<<<<< HEAD
         paint.setShader(SkShader::MakeBitmapShader(fBitmap,
             kTileConfigs[tileMode].tmx,
             kTileConfigs[tileMode].tmy,
             &localMatrix));
-=======
-        SkAutoTUnref<SkShader> bitmapShader(SkShader::CreateBitmapShader(
-                    fBitmap,
-                    kTileConfigs[tileMode].tmx,
-                    kTileConfigs[tileMode].tmy,
-                    &localMatrix));
-        paint.setShader(bitmapShader.get());
->>>>>>> miniblink49
         canvas->drawRect(SkRect::MakeWH(fSceneSize, fSceneSize), paint);
 
         canvas->restore();
     }
 
-<<<<<<< HEAD
     SkScalar fTileSize;
     SkScalar fSceneSize;
 
     sk_sp<SkPicture> fPicture;
-=======
-    SkScalar    fTileSize;
-    SkScalar    fSceneSize;
-
-    SkAutoTUnref<SkPicture> fPicture;
->>>>>>> miniblink49
     SkBitmap fBitmap;
 
     typedef GM INHERITED;
 };
 
-<<<<<<< HEAD
 DEF_GM(return new PictureShaderGM(50, 100);)
 
 DEF_SIMPLE_GM(tiled_picture_shader, canvas, 400, 400)
 {
-=======
-DEF_GM( return SkNEW_ARGS(PictureShaderGM, (50, 100)); )
-
-DEF_SIMPLE_GM(tiled_picture_shader, canvas, 400, 400) {
->>>>>>> miniblink49
     // https://code.google.com/p/skia/issues/detail?id=3398
     SkRect tile = SkRect::MakeWH(100, 100);
 
@@ -284,7 +196,6 @@ DEF_SIMPLE_GM(tiled_picture_shader, canvas, 400, 400) {
     SkRect r = tile;
     r.inset(4, 4);
     SkPaint p;
-<<<<<<< HEAD
     p.setColor(sk_tool_utils::color_to_565(0xFF303F9F)); // dark blue
     c->drawRect(r, p);
     p.setColor(sk_tool_utils::color_to_565(0xFFC5CAE9)); // light blue
@@ -303,29 +214,5 @@ DEF_SIMPLE_GM(tiled_picture_shader, canvas, 400, 400) {
     p.setShader(SkShader::MakePictureShader(std::move(picture), SkShader::kRepeat_TileMode,
         SkShader::kRepeat_TileMode,
         nullptr, nullptr));
-=======
-    p.setColor(0xFF303F9F);  // dark blue
-    c->drawRect(r, p);
-    p.setColor(0xFFC5CAE9);  // light blue
-    p.setStrokeWidth(10);
-    c->drawLine(20, 20, 80, 80, p);
-
-    SkAutoTUnref<SkPicture> picture(recorder.endRecording());
-    SkAutoTUnref<SkShader> shader(SkShader::CreatePictureShader(
-	      picture.get(),
-	      SkShader::kRepeat_TileMode,
-	      SkShader::kRepeat_TileMode,
-	      NULL,
-	      NULL));
-
-    p.setColor(0xFF8BC34A);  // green
-    canvas->drawPaint(p);
-
-    canvas->clipRect(SkRect::MakeXYWH(0, 0, 400, 350));
-    p.setColor(0xFFB6B6B6);  // gray
-    canvas->drawPaint(p);
-    p.setShader(shader.get());
-
->>>>>>> miniblink49
     canvas->drawPaint(p);
 }

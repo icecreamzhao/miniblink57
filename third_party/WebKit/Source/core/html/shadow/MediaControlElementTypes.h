@@ -33,7 +33,7 @@
 #include "core/CoreExport.h"
 #include "core/html/HTMLDivElement.h"
 #include "core/html/HTMLInputElement.h"
-#include "core/layout/LayoutBlock.h"
+#include "public/platform/WebLocalizedString.h"
 
 namespace blink {
 
@@ -48,59 +48,117 @@ enum MediaControlElementType {
     MediaSliderThumb,
     MediaShowClosedCaptionsButton,
     MediaHideClosedCaptionsButton,
+    MediaTextTrackList,
     MediaUnMuteButton,
     MediaPauseButton,
     MediaTimelineContainer,
     MediaCurrentTimeDisplay,
     MediaTimeRemainingDisplay,
+    MediaTrackSelectionCheckmark,
     MediaControlsPanel,
     MediaVolumeSliderContainer,
     MediaVolumeSlider,
     MediaVolumeSliderThumb,
-    MediaFullScreenVolumeSlider,
-    MediaFullScreenVolumeSliderThumb,
+    MediaFullscreenVolumeSlider,
+    MediaFullscreenVolumeSliderThumb,
     MediaExitFullscreenButton,
     MediaOverlayPlayButton,
     MediaCastOffButton,
     MediaCastOnButton,
     MediaOverlayCastOffButton,
     MediaOverlayCastOnButton,
+    MediaOverflowButton,
+    MediaOverflowList,
+    MediaDownloadButton,
 };
 
-CORE_EXPORT HTMLMediaElement* toParentMediaElement(Node*);
-inline HTMLMediaElement* toParentMediaElement(LayoutObject* layoutObject) { return toParentMediaElement(layoutObject->node()); }
+CORE_EXPORT const HTMLMediaElement* toParentMediaElement(const Node*);
+CORE_EXPORT const HTMLMediaElement* toParentMediaElement(const LayoutObject&);
 
-CORE_EXPORT MediaControlElementType mediaControlElementType(Node*);
+CORE_EXPORT MediaControlElementType mediaControlElementType(const Node*);
 
 // ----------------------------
 
-class MediaControlElement : public WillBeGarbageCollectedMixin {
+// TODO(mustaq): The Media control elements that use MouseEvents should be
+// ported to use PointerEvents instead.
+class MediaControlElement : public GarbageCollectedMixin {
 public:
-    void hide();
-    void show();
+    // These hold the state about whether this control should be shown if
+    // space permits.  These will also show / hide as needed.
+    void setIsWanted(bool);
+    bool isWanted();
 
-    MediaControlElementType displayType() { return m_displayType; }
+    // Tell us whether we fit or not.  This will hide / show the control as
+    // needed, also.
+    void setDoesFit(bool);
+
+    MediaControlElementType displayType() const { return m_displayType; }
+
+    // By default, media controls elements are not added to the overflow menu.
+    // Controls that can be added to the overflow menu should override this
+    // function and return true.
+    virtual bool hasOverflowButton() { return false; }
+
+    // If true, shows the overflow menu item if it exists. Hides it if false.
+    void shouldShowButtonInOverflowMenu(bool);
+
+    // Returns a string representation of the media control element. Used for
+    // the overflow menu.
+    String getOverflowMenuString();
+
+    // Updates the value of the Text string shown in the overflow menu.
+    void updateOverflowString();
 
     DECLARE_VIRTUAL_TRACE();
 
 protected:
     MediaControlElement(MediaControls&, MediaControlElementType, HTMLElement*);
 
-    MediaControls& mediaControls() const { return m_mediaControls; }
+    MediaControls& mediaControls() const
+    {
+        DCHECK(m_mediaControls);
+        return *m_mediaControls;
+    }
     HTMLMediaElement& mediaElement() const;
 
     void setDisplayType(MediaControlElementType);
 
+    // Represents the overflow menu element for this media control.
+    // The Element contains the button that the user can click on, but having
+    // the button within an Element enables us to style the overflow menu.
+    // Setting this pointer is optional so it may be null.
+    Member<Element> m_overflowMenuElement;
+
+    // The text representation of the button within the overflow menu.
+    Member<Text> m_overflowMenuText;
+
 private:
-    MediaControls& m_mediaControls;
+    // Hide or show based on our fits / wanted state.  We want to show
+    // if and only if we're wanted and we fit.
+    void updateShownState();
+
+    // Returns a string representation of the media control element.
+    // Subclasses should override this method to return the string representation
+    // of the overflow button.
+    virtual WebLocalizedString::Name getOverflowStringName()
+    {
+        NOTREACHED();
+        return WebLocalizedString::AXAMPMFieldText;
+    }
+
+    Member<MediaControls> m_mediaControls;
     MediaControlElementType m_displayType;
-    RawPtrWillBeMember<HTMLElement> m_element;
+    Member<HTMLElement> m_element;
+    bool m_isWanted : 1;
+    bool m_doesFit : 1;
 };
 
 // ----------------------------
 
-class MediaControlDivElement : public HTMLDivElement, public MediaControlElement {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(MediaControlDivElement);
+class MediaControlDivElement : public HTMLDivElement,
+                               public MediaControlElement {
+    USING_GARBAGE_COLLECTED_MIXIN(MediaControlDivElement);
+
 public:
     DECLARE_VIRTUAL_TRACE();
 
@@ -113,10 +171,15 @@ private:
 
 // ----------------------------
 
-class MediaControlInputElement : public HTMLInputElement, public MediaControlElement {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(MediaControlInputElement);
+class MediaControlInputElement : public HTMLInputElement,
+                                 public MediaControlElement {
+    USING_GARBAGE_COLLECTED_MIXIN(MediaControlInputElement);
+
 public:
     DECLARE_VIRTUAL_TRACE();
+
+    // Creates an overflow menu element with the given button as a child.
+    HTMLElement* createOverflowElement(MediaControls&, MediaControlInputElement*);
 
 protected:
     MediaControlInputElement(MediaControls&, MediaControlElementType);
@@ -125,6 +188,12 @@ private:
     virtual void updateDisplayType() { }
     bool isMediaControlElement() const final { return true; }
     bool isMouseFocusable() const override;
+
+    // Creates an overflow menu HTML element.
+    virtual MediaControlInputElement* createOverflowButton(MediaControls&)
+    {
+        return nullptr;
+    }
 };
 
 // ----------------------------

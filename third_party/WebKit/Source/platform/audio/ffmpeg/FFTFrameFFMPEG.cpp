@@ -26,13 +26,7 @@
 // FFTFrame implementation using FFmpeg's RDFT algorithm,
 // suitable for use on Windows and Linux.
 
-<<<<<<< HEAD
 #include "wtf/build_config.h"
-=======
-#include "config.h"
-
-#if ENABLE(WEB_AUDIO)
->>>>>>> miniblink49
 
 #if USE(WEBAUDIO_FFMPEG)
 
@@ -41,26 +35,17 @@
 #include "platform/audio/VectorMath.h"
 
 extern "C" {
-<<<<<<< HEAD
 #include <libavcodec/avfft.h>
-=======
-    #include <libavcodec/avfft.h>
->>>>>>> miniblink49
 }
 
 #include "wtf/MathExtras.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 #if DCHECK_IS_ON()
 // Max FFT size for FFMPEG.  WebAudio currently only uses FFTs up to size 15
 // (2^15 points).
 const int kMaxFFTPow2Size = 16;
-=======
-#if ENABLE(ASSERT)
-const int kMaxFFTPow2Size = 24;
->>>>>>> miniblink49
 #endif
 
 // Normal constructor: allocates for a given fftSize.
@@ -108,19 +93,9 @@ FFTFrame::FFTFrame(const FFTFrame& frame)
     memcpy(imagData(), frame.imagData(), nbytes);
 }
 
-<<<<<<< HEAD
 void FFTFrame::initialize() { }
 
 void FFTFrame::cleanup() { }
-=======
-void FFTFrame::initialize()
-{
-}
-
-void FFTFrame::cleanup()
-{
-}
->>>>>>> miniblink49
 
 FFTFrame::~FFTFrame()
 {
@@ -144,13 +119,8 @@ void FFTFrame::doFFT(const float* data)
     float* imag = m_imagData.data();
     for (int i = 0; i < len; ++i) {
         int baseComplexIndex = 2 * i;
-<<<<<<< HEAD
         // m_realData[0] is the DC component and m_imagData[0] is the nyquist
         // component since the interleaved complex data is packed.
-=======
-        // m_realData[0] is the DC component and m_imagData[0] is the nyquist component
-        // since the interleaved complex data is packed.
->>>>>>> miniblink49
         real[i] = p[baseComplexIndex];
         imag[i] = p[baseComplexIndex + 1];
     }
@@ -164,14 +134,9 @@ void FFTFrame::doInverseFFT(float* data)
     // Compute inverse transform.
     av_rdft_calc(m_inverseContext, interleavedData);
 
-<<<<<<< HEAD
     // Scale so that a forward then inverse FFT yields exactly the original data.
     // For some reason av_rdft_calc above returns values that are half of what I
     // expect. Hence make the scale factor
-=======
-    // Scale so that a forward then inverse FFT yields exactly the original data. For some reason
-    // av_rdft_calc above returns values that are half of what I expect. Hence make the scale factor
->>>>>>> miniblink49
     // twice as large to compensate for that.
     const float scale = 2.0 / m_FFTSize;
     VectorMath::vsmul(interleavedData, 1, &scale, data, 1, m_FFTSize);
@@ -195,16 +160,10 @@ float* FFTFrame::getUpToDateComplexData()
 
 RDFTContext* FFTFrame::contextForSize(unsigned fftSize, int trans)
 {
-<<<<<<< HEAD
     // FIXME: This is non-optimal. Ideally, we'd like to share the contexts for
     // FFTFrames of the same size.  But FFmpeg's RDFT uses a scratch buffer
     // inside the context and so they are not thread-safe.  We could improve this
     // by sharing the FFTFrames on a per-thread basis.
-=======
-    // FIXME: This is non-optimal. Ideally, we'd like to share the contexts for FFTFrames of the same size.
-    // But FFmpeg's RDFT uses a scratch buffer inside the context and so they are not thread-safe.
-    // We could improve this by sharing the FFTFrames on a per-thread basis.
->>>>>>> miniblink49
     ASSERT(fftSize);
     int pow2size = static_cast<int>(log2(fftSize));
     ASSERT(pow2size < kMaxFFTPow2Size);
@@ -216,8 +175,3 @@ RDFTContext* FFTFrame::contextForSize(unsigned fftSize, int trans)
 } // namespace blink
 
 #endif // USE(WEBAUDIO_FFMPEG)
-<<<<<<< HEAD
-=======
-
-#endif // ENABLE(WEB_AUDIO)
->>>>>>> miniblink49

@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -9,10 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #include "SkSVGPolyline.h"
 #include "SkSVGParser.h"
 
@@ -23,26 +15,16 @@ enum {
 };
 
 const SkSVGAttribute SkSVGPolyline::gAttributes[] = {
-<<<<<<< HEAD
     SVG_LITERAL_ATTRIBUTE(clip - rule, f_clipRule),
     SVG_LITERAL_ATTRIBUTE(fill - rule, f_fillRule),
-=======
-    SVG_LITERAL_ATTRIBUTE(clip-rule, f_clipRule),
-    SVG_LITERAL_ATTRIBUTE(fill-rule, f_fillRule),
->>>>>>> miniblink49
     SVG_ATTRIBUTE(points)
 };
 
 DEFINE_SVG_INFO(Polyline)
 
-<<<<<<< HEAD
 void SkSVGPolyline::addAttribute(SkSVGParser&, int attrIndex,
     const char* attrValue, size_t attrLength)
 {
-=======
-void SkSVGPolyline::addAttribute(SkSVGParser& , int attrIndex,
-        const char* attrValue, size_t attrLength) {
->>>>>>> miniblink49
     if (attrIndex != kPoints)
         return;
     f_points.set("[");
@@ -50,12 +32,8 @@ void SkSVGPolyline::addAttribute(SkSVGParser& , int attrIndex,
     SkSVGParser::ConvertToArray(f_points);
 }
 
-<<<<<<< HEAD
 void SkSVGPolyline::translate(SkSVGParser& parser, bool defState)
 {
-=======
-void SkSVGPolyline::translate(SkSVGParser& parser, bool defState) {
->>>>>>> miniblink49
     parser._startElement("polyline");
     INHERITED::translate(parser, defState);
     SVG_ADD_ATTRIBUTE(points);

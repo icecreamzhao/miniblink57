@@ -6,20 +6,11 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #ifndef SkDisplayEvents_DEFINED
 #define SkDisplayEvents_DEFINED
 
 #include "SkDisplayEvent.h"
 #include "SkEvent.h"
-=======
-
-#ifndef SkDisplayEvents_DEFINED
-#define SkDisplayEvents_DEFINED
-
-#include "SkEvent.h"
-#include "SkDisplayEvent.h"
->>>>>>> miniblink49
 
 struct SkEventState {
     SkEventState();
@@ -35,7 +26,6 @@ public:
     SkEvents();
     ~SkEvents();
     void addEvent(SkDisplayEvent* evt) { *fEvents.append() = evt; }
-<<<<<<< HEAD
     bool doEvent(SkAnimateMaker&, SkDisplayEvent::Kind, SkEventState*);
 #ifdef SK_DUMP_ENABLED
     void dump(SkAnimateMaker&);
@@ -46,14 +36,6 @@ public:
     }
     void removeEvent(SkDisplayEvent::Kind kind, SkEventState*);
 
-=======
-    bool doEvent(SkAnimateMaker& , SkDisplayEvent::Kind , SkEventState* );
-#ifdef SK_DUMP_ENABLED
-    void dump(SkAnimateMaker& );
-#endif
-    void reset() { fEvents.reset(); }
-    void removeEvent(SkDisplayEvent::Kind kind, SkEventState* );
->>>>>>> miniblink49
 private:
     SkTDDisplayEventArray fEvents;
     SkBool fError;

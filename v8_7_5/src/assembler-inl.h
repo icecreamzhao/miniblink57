@@ -27,8 +27,4 @@
 #error Unknown architecture.
 #endif
 
-<<<<<<< HEAD
 #endif // V8_ASSEMBLER_INL_H_
-=======
-#endif  // V8_ASSEMBLER_INL_H_
->>>>>>> miniblink49

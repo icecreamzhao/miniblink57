@@ -5,15 +5,11 @@
 #ifndef WorkerNavigatorNetworkInformation_h
 #define WorkerNavigatorNetworkInformation_h
 
-<<<<<<< HEAD
 #include "core/workers/WorkerNavigator.h"
-=======
->>>>>>> miniblink49
 #include "platform/Supplementable.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 class NetworkInformation;
 class ScriptState;
 class WorkerNavigator;
@@ -32,20 +28,6 @@ public:
     static const char* supplementName();
 
     static NetworkInformation* connection(ScriptState*, WorkerNavigator&);
-=======
-class ExecutionContext;
-class NetworkInformation;
-class WorkerNavigator;
-
-class WorkerNavigatorNetworkInformation final : public GarbageCollected<WorkerNavigatorNetworkInformation>, public HeapSupplement<WorkerNavigator> {
-    USING_GARBAGE_COLLECTED_MIXIN(WorkerNavigatorNetworkInformation);
-public:
-    static WorkerNavigatorNetworkInformation& from(WorkerNavigator&, ExecutionContext*);
-    static WorkerNavigatorNetworkInformation* toWorkerNavigatorNetworkInformation(WorkerNavigator&, ExecutionContext*);
-    static const char* supplementName();
-
-    static NetworkInformation* connection(ExecutionContext*, WorkerNavigator&);
->>>>>>> miniblink49
 
     DECLARE_VIRTUAL_TRACE();
 

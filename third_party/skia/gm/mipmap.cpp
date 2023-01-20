@@ -5,15 +5,10 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-#include "gm.h"
->>>>>>> miniblink49
 #include "SkCanvas.h"
 #include "SkImage.h"
 #include "SkRandom.h"
 #include "SkSurface.h"
-<<<<<<< HEAD
 #include "gm.h"
 
 static sk_sp<SkImage> make_image()
@@ -22,14 +17,6 @@ static sk_sp<SkImage> make_image()
     auto surface(SkSurface::MakeRaster(info));
     SkCanvas* canvas = surface->getCanvas();
     canvas->drawColor(sk_tool_utils::color_to_565(0xFFF8F8F8));
-=======
-
-static SkImage* make_image() {
-    const SkImageInfo info = SkImageInfo::MakeN32Premul(319, 52);
-    SkAutoTUnref<SkSurface> surface(SkSurface::NewRaster(info));
-    SkCanvas* canvas = surface->getCanvas();
-    canvas->drawColor(0xFFF8F8F8);
->>>>>>> miniblink49
 
     SkPaint paint;
     paint.setAntiAlias(true);
@@ -39,20 +26,12 @@ static SkImage* make_image() {
         canvas->drawCircle(-4, 25, 20, paint);
         canvas->translate(25, 0);
     }
-<<<<<<< HEAD
     return surface->makeImageSnapshot();
 }
 
 DEF_SIMPLE_GM(mipmap, canvas, 400, 200)
 {
     sk_sp<SkImage> img(make_image()); //SkImage::NewFromEncoded(data));
-=======
-    return surface->newImageSnapshot();
-}
-
-static void test_mip(SkCanvas* canvas) {
-    SkAutoTUnref<SkImage> img(make_image());//SkImage::NewFromEncoded(data));
->>>>>>> miniblink49
 
     SkPaint paint;
     const SkRect dst = SkRect::MakeWH(177, 15);
@@ -60,16 +39,11 @@ static void test_mip(SkCanvas* canvas) {
     paint.setTextSize(30);
     SkString str;
     str.printf("scale %g %g", dst.width() / img->width(), dst.height() / img->height());
-<<<<<<< HEAD
     //    canvas->drawText(str.c_str(), str.size(), 300, 100, paint);
-=======
-//    canvas->drawText(str.c_str(), str.size(), 300, 100, paint);
->>>>>>> miniblink49
 
     canvas->translate(20, 20);
     for (int i = 0; i < 4; ++i) {
         paint.setFilterQuality(SkFilterQuality(i));
-<<<<<<< HEAD
         canvas->drawImageRect(img.get(), dst, &paint);
         canvas->translate(0, 20);
     }
@@ -181,29 +155,3 @@ DEF_SIMPLE_GM(mipmap_gray8_srgb, canvas, 260, 230)
     canvas->translate(0, limg->height() + 10.0f);
     show_mips_only(canvas, simg.get());
 }
-=======
-        canvas->drawImageRect(img, NULL, dst, &paint);
-        canvas->translate(0, 20);
-    }
-    canvas->drawImage(img, 20, 20, NULL);
-}
-
-class MipMapGM : public skiagm::GM {
-public:
-    MipMapGM() {}
-
-protected:
-    SkString onShortName() override { return SkString("mipmap"); }
-
-    SkISize onISize() override { return SkISize::Make(400, 200); }
-
-    void onDraw(SkCanvas* canvas) override {
-        test_mip(canvas);
-    }
-
-private:
-    typedef skiagm::GM INHERITED;
-};
-DEF_GM( return new MipMapGM; )
-
->>>>>>> miniblink49

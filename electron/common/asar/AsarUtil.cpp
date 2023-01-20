@@ -9,7 +9,7 @@
 
 #include "common/asar/Archive.h"
 #include "base/files/file_path.h"
-//#include "base/files/file_util.h"
+#include "base/files/file_util.h"
 //#include "base/lazy_instance.h"
 //#include "base/stl_util.h"
 
@@ -17,16 +17,17 @@ namespace asar {
 
 namespace {
 
-// The global instance of ArchiveMap, will be destroyed on exit.
-typedef std::map<base::FilePath, Archive*> ArchiveMap;
-//static base::LazyInstance<ArchiveMap> g_archive_map = LAZY_INSTANCE_INITIALIZER;
-static ArchiveMap* g_archive_map = nullptr;
+    // The global instance of ArchiveMap, will be destroyed on exit.
+    typedef std::map<base::FilePath, Archive*> ArchiveMap;
+    //static base::LazyInstance<ArchiveMap> g_archive_map = LAZY_INSTANCE_INITIALIZER;
+    static ArchiveMap* g_archive_map = nullptr;
 
-const base::FilePath::CharType kAsarExtension[] = FILE_PATH_LITERAL(".asar");
+    const base::FilePath::CharType kAsarExtension[] = FILE_PATH_LITERAL(".asar");
 
-}  // namespace
+} // namespace
 
-Archive* GetOrCreateAsarArchive(const base::FilePath& path) {
+Archive* GetOrCreateAsarArchive(const base::FilePath& path)
+{
     if (!g_archive_map)
         g_archive_map = new ArchiveMap();
     ArchiveMap& archive_map = *g_archive_map;
@@ -44,7 +45,8 @@ Archive* GetOrCreateAsarArchive(const base::FilePath& path) {
 
 bool GetAsarArchivePath(const base::FilePath& full_path,
     base::FilePath* asar_path,
-    base::FilePath* relative_path) {
+    base::FilePath* relative_path)
+{
     base::FilePath iter = full_path;
     while (true) {
         base::FilePath dirname = iter.DirName();
@@ -64,25 +66,27 @@ bool GetAsarArchivePath(const base::FilePath& full_path,
     return true;
 }
 
-bool ReadFileToString(const wchar_t* path, std::string* buffer) {
-    HANDLE hFile = ::CreateFileW(path, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-    if (INVALID_HANDLE_VALUE == hFile)
-        return false;
+// bool ReadFileToString(const wchar_t* path, std::string* buffer)
+// {
+//     HANDLE hFile = ::CreateFileW(path, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+//     if (INVALID_HANDLE_VALUE == hFile)
+//         return false;
+// 
+//     DWORD fileSizeHigh;
+//     const DWORD bufferSize = ::GetFileSize(hFile, &fileSizeHigh);
+// 
+//     DWORD numberOfBytesRead = 0;
+//     buffer->resize(bufferSize);
+//     BOOL b = ::ReadFile(hFile, &buffer->at(0), bufferSize, &numberOfBytesRead, nullptr);
+//     ::CloseHandle(hFile);
+//     return !!b && 0 != numberOfBytesRead;
+// }
 
-    DWORD fileSizeHigh;
-    const DWORD bufferSize = ::GetFileSize(hFile, &fileSizeHigh);
-
-    DWORD numberOfBytesRead = 0;
-    buffer->resize(bufferSize);
-    BOOL b = ::ReadFile(hFile, &buffer->at(0), bufferSize, &numberOfBytesRead, nullptr);
-    ::CloseHandle(hFile);
-    return !!b && 0 != numberOfBytesRead;
-}
-
-bool ReadFileToString(const base::FilePath& path, std::string* contents) {
+bool ReadFileToStr(const base::FilePath& path, std::string* contents)
+{
     base::FilePath asar_path, relative_path;
     if (!GetAsarArchivePath(path, &asar_path, &relative_path))
-        return ReadFileToString(path.AsUTF16Unsafe().c_str(), contents);
+        return base::ReadFileToString(path, contents);
 
     Archive* archive = GetOrCreateAsarArchive(asar_path);
     if (!archive)
@@ -107,4 +111,4 @@ bool ReadFileToString(const base::FilePath& path, std::string* contents) {
     return static_cast<int>(info.size) == src.Read(info.offset, const_cast<char*>(contents->data()), contents->size());
 }
 
-}  // namespace asar
+} // namespace asar

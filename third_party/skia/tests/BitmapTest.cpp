@@ -9,41 +9,25 @@
 #include "SkMallocPixelRef.h"
 #include "Test.h"
 
-<<<<<<< HEAD
 static void test_peekpixels(skiatest::Reporter* reporter)
 {
-=======
-static void test_peekpixels(skiatest::Reporter* reporter) {
->>>>>>> miniblink49
     const SkImageInfo info = SkImageInfo::MakeN32Premul(10, 10);
 
     SkPixmap pmap;
     SkBitmap bm;
 
     // empty should return false
-<<<<<<< HEAD
     REPORTER_ASSERT(reporter, !bm.peekPixels(nullptr));
-=======
-    REPORTER_ASSERT(reporter, !bm.peekPixels(NULL));
->>>>>>> miniblink49
     REPORTER_ASSERT(reporter, !bm.peekPixels(&pmap));
 
     // no pixels should return false
     bm.setInfo(SkImageInfo::MakeN32Premul(10, 10));
-<<<<<<< HEAD
     REPORTER_ASSERT(reporter, !bm.peekPixels(nullptr));
-=======
-    REPORTER_ASSERT(reporter, !bm.peekPixels(NULL));
->>>>>>> miniblink49
     REPORTER_ASSERT(reporter, !bm.peekPixels(&pmap));
 
     // real pixels should return true
     bm.allocPixels(info);
-<<<<<<< HEAD
     REPORTER_ASSERT(reporter, bm.peekPixels(nullptr));
-=======
-    REPORTER_ASSERT(reporter, bm.peekPixels(NULL));
->>>>>>> miniblink49
     REPORTER_ASSERT(reporter, bm.peekPixels(&pmap));
     REPORTER_ASSERT(reporter, pmap.info() == bm.info());
     REPORTER_ASSERT(reporter, pmap.addr() == bm.getPixels());
@@ -52,12 +36,8 @@ static void test_peekpixels(skiatest::Reporter* reporter) {
 }
 
 // https://code.google.com/p/chromium/issues/detail?id=446164
-<<<<<<< HEAD
 static void test_bigalloc(skiatest::Reporter* reporter)
 {
-=======
-static void test_bigalloc(skiatest::Reporter* reporter) {
->>>>>>> miniblink49
     const int width = 0x40000001;
     const int height = 0x00000096;
     const SkImageInfo info = SkImageInfo::MakeN32Premul(width, height);
@@ -65,20 +45,12 @@ static void test_bigalloc(skiatest::Reporter* reporter) {
     SkBitmap bm;
     REPORTER_ASSERT(reporter, !bm.tryAllocPixels(info));
 
-<<<<<<< HEAD
     SkPixelRef* pr = SkMallocPixelRef::NewAllocate(info, info.minRowBytes(), nullptr);
     REPORTER_ASSERT(reporter, !pr);
 }
 
 static void test_allocpixels(skiatest::Reporter* reporter)
 {
-=======
-    SkPixelRef* pr = SkMallocPixelRef::NewAllocate(info, info.minRowBytes(), NULL);
-    REPORTER_ASSERT(reporter, !pr);
-}
-
-static void test_allocpixels(skiatest::Reporter* reporter) {
->>>>>>> miniblink49
     const int width = 10;
     const int height = 10;
     const SkImageInfo info = SkImageInfo::MakeN32Premul(width, height);
@@ -109,25 +81,15 @@ static void test_allocpixels(skiatest::Reporter* reporter) {
     REPORTER_ASSERT(reporter, info.minRowBytes() == bm.rowBytes());
 
     bm.reset();
-<<<<<<< HEAD
     bool success = bm.setInfo(info, info.minRowBytes() - 1); // invalid for 32bit
-=======
-    bool success = bm.setInfo(info, info.minRowBytes() - 1);   // invalid for 32bit
->>>>>>> miniblink49
     REPORTER_ASSERT(reporter, !success);
     REPORTER_ASSERT(reporter, bm.isNull());
 }
 
-<<<<<<< HEAD
 static void test_bigwidth(skiatest::Reporter* reporter)
 {
     SkBitmap bm;
     int width = 1 << 29; // *4 will be the high-bit of 32bit int
-=======
-static void test_bigwidth(skiatest::Reporter* reporter) {
-    SkBitmap bm;
-    int width = 1 << 29;    // *4 will be the high-bit of 32bit int
->>>>>>> miniblink49
 
     SkImageInfo info = SkImageInfo::MakeA8(width, 1);
     REPORTER_ASSERT(reporter, bm.setInfo(info));
@@ -145,12 +107,8 @@ static void test_bigwidth(skiatest::Reporter* reporter) {
 /**
  *  This test contains basic sanity checks concerning bitmaps.
  */
-<<<<<<< HEAD
 DEF_TEST(Bitmap, reporter)
 {
-=======
-DEF_TEST(Bitmap, reporter) {
->>>>>>> miniblink49
     // Zero-sized bitmaps are allowed
     for (int width = 0; width < 2; ++width) {
         for (int height = 0; height < 2; ++height) {
@@ -169,7 +127,6 @@ DEF_TEST(Bitmap, reporter) {
     test_bigalloc(reporter);
     test_peekpixels(reporter);
 }
-<<<<<<< HEAD
 
 /**
  *  This test checks that getColor works for both swizzles.
@@ -217,5 +174,3 @@ DEF_TEST(Bitmap_eraseColor_Premul, r)
     test_erasecolor_premul(r, kRGBA_8888_SkColorType, color, color);
     test_erasecolor_premul(r, kBGRA_8888_SkColorType, color, color);
 }
-=======
->>>>>>> miniblink49

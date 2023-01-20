@@ -11,11 +11,11 @@ namespace gin {
 
 // This module provides bindings to the garbage collector.
 class GC {
- public:
-  static const char kModuleName[];
-  static v8::Local<v8::Value> GetModule(v8::Isolate* isolate);
+public:
+    static const char kModuleName[];
+    static v8::Local<v8::Value> GetModule(v8::Isolate* isolate);
 };
 
-}  // namespace gin
+} // namespace gin
 
-#endif  // GIN_TEST_GC_H_
+#endif // GIN_TEST_GC_H_

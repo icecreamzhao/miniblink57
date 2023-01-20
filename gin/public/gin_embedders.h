@@ -12,10 +12,10 @@ namespace gin {
 // v8::Isolate.
 
 enum GinEmbedder {
-  kEmbedderNativeGin,
-  kEmbedderBlink,
+    kEmbedderNativeGin,
+    kEmbedderBlink,
 };
 
-}  // namespace gin
+} // namespace gin
 
-#endif  // GIN_PUBLIC_GIN_EMBEDDERS_H_
+#endif // GIN_PUBLIC_GIN_EMBEDDERS_H_

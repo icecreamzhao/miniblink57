@@ -23,17 +23,11 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
-
->>>>>>> miniblink49
 #include "platform/exported/WebScrollbarThemeGeometryNative.h"
 
 #include "platform/exported/WebScrollbarThemeClientImpl.h"
 #include "platform/scroll/ScrollbarTheme.h"
 #include "public/platform/WebScrollbar.h"
-<<<<<<< HEAD
 #include "wtf/PtrUtil.h"
 #include <memory>
 
@@ -47,85 +41,27 @@ WebScrollbarThemeGeometryNative::create(ScrollbarTheme& theme)
 
 WebScrollbarThemeGeometryNative::WebScrollbarThemeGeometryNative(
     ScrollbarTheme& theme)
-=======
-
-namespace blink {
-
-PassOwnPtr<WebScrollbarThemeGeometryNative> WebScrollbarThemeGeometryNative::create(ScrollbarTheme* theme)
-{
-    return adoptPtr(new WebScrollbarThemeGeometryNative(theme));
-}
-
-WebScrollbarThemeGeometryNative::WebScrollbarThemeGeometryNative(ScrollbarTheme* theme)
->>>>>>> miniblink49
     : m_theme(theme)
 {
 }
 
-<<<<<<< HEAD
 bool WebScrollbarThemeGeometryNative::hasButtons(WebScrollbar* scrollbar)
 {
     return m_theme.hasButtons(WebScrollbarThemeClientImpl(*scrollbar));
-=======
-WebScrollbarThemeGeometryNative* WebScrollbarThemeGeometryNative::clone() const
-{
-    return new WebScrollbarThemeGeometryNative(m_theme);
-}
-
-int WebScrollbarThemeGeometryNative::thumbPosition(WebScrollbar* scrollbar)
-{
-    WebScrollbarThemeClientImpl client(scrollbar);
-    return m_theme->thumbPosition(&client);
-}
-
-int WebScrollbarThemeGeometryNative::thumbLength(WebScrollbar* scrollbar)
-{
-    WebScrollbarThemeClientImpl client(scrollbar);
-    return m_theme->thumbLength(&client);
-}
-
-int WebScrollbarThemeGeometryNative::trackPosition(WebScrollbar* scrollbar)
-{
-    WebScrollbarThemeClientImpl client(scrollbar);
-    return m_theme->trackPosition(&client);
-}
-
-int WebScrollbarThemeGeometryNative::trackLength(WebScrollbar* scrollbar)
-{
-    WebScrollbarThemeClientImpl client(scrollbar);
-    return m_theme->trackLength(&client);
-}
-
-bool WebScrollbarThemeGeometryNative::hasButtons(WebScrollbar* scrollbar)
-{
-    WebScrollbarThemeClientImpl client(scrollbar);
-    return m_theme->hasButtons(&client);
->>>>>>> miniblink49
 }
 
 bool WebScrollbarThemeGeometryNative::hasThumb(WebScrollbar* scrollbar)
 {
-<<<<<<< HEAD
     return m_theme.hasThumb(WebScrollbarThemeClientImpl(*scrollbar));
-=======
-    WebScrollbarThemeClientImpl client(scrollbar);
-    return m_theme->hasThumb(&client);
->>>>>>> miniblink49
 }
 
 WebRect WebScrollbarThemeGeometryNative::trackRect(WebScrollbar* scrollbar)
 {
-<<<<<<< HEAD
     return m_theme.trackRect(WebScrollbarThemeClientImpl(*scrollbar));
-=======
-    WebScrollbarThemeClientImpl client(scrollbar);
-    return m_theme->trackRect(&client);
->>>>>>> miniblink49
 }
 
 WebRect WebScrollbarThemeGeometryNative::thumbRect(WebScrollbar* scrollbar)
 {
-<<<<<<< HEAD
     return m_theme.thumbRect(WebScrollbarThemeClientImpl(*scrollbar));
 }
 
@@ -155,66 +91,6 @@ WebRect WebScrollbarThemeGeometryNative::forwardButtonEndRect(
 {
     return m_theme.forwardButtonRect(WebScrollbarThemeClientImpl(*scrollbar),
         ForwardButtonEndPart, false);
-=======
-    WebScrollbarThemeClientImpl client(scrollbar);
-    return m_theme->thumbRect(&client);
-}
-
-int WebScrollbarThemeGeometryNative::minimumThumbLength(WebScrollbar* scrollbar)
-{
-    WebScrollbarThemeClientImpl client(scrollbar);
-    return m_theme->minimumThumbLength(&client);
-}
-
-int WebScrollbarThemeGeometryNative::scrollbarThickness(WebScrollbar* scrollbar)
-{
-    WebScrollbarThemeClientImpl client(scrollbar);
-    return m_theme->scrollbarThickness(client.controlSize());
-}
-
-WebRect WebScrollbarThemeGeometryNative::backButtonStartRect(WebScrollbar* scrollbar)
-{
-    WebScrollbarThemeClientImpl client(scrollbar);
-    return m_theme->backButtonRect(&client, BackButtonStartPart, false);
-}
-
-WebRect WebScrollbarThemeGeometryNative::backButtonEndRect(WebScrollbar* scrollbar)
-{
-    WebScrollbarThemeClientImpl client(scrollbar);
-    return m_theme->backButtonRect(&client, BackButtonEndPart, false);
-}
-
-WebRect WebScrollbarThemeGeometryNative::forwardButtonStartRect(WebScrollbar* scrollbar)
-{
-    WebScrollbarThemeClientImpl client(scrollbar);
-    return m_theme->forwardButtonRect(&client, ForwardButtonStartPart, false);
-}
-
-WebRect WebScrollbarThemeGeometryNative::forwardButtonEndRect(WebScrollbar* scrollbar)
-{
-    WebScrollbarThemeClientImpl client(scrollbar);
-    return m_theme->forwardButtonRect(&client, ForwardButtonEndPart, false);
-}
-
-WebRect WebScrollbarThemeGeometryNative::constrainTrackRectToTrackPieces(WebScrollbar* scrollbar, const WebRect& rect)
-{
-    WebScrollbarThemeClientImpl client(scrollbar);
-    return m_theme->constrainTrackRectToTrackPieces(&client, IntRect(rect));
-}
-
-void WebScrollbarThemeGeometryNative::splitTrack(WebScrollbar* scrollbar, const WebRect& webTrack, WebRect& webStartTrack, WebRect& webThumb, WebRect& webEndTrack)
-{
-    WebScrollbarThemeClientImpl client(scrollbar);
-    IntRect track(webTrack);
-    IntRect startTrack;
-    IntRect thumb;
-    IntRect endTrack;
-    m_theme->splitTrack(&client, track, startTrack, thumb, endTrack);
-
-    webStartTrack = startTrack;
-    webThumb = thumb;
-    webEndTrack = endTrack;
->>>>>>> miniblink49
 }
 
 } // namespace blink

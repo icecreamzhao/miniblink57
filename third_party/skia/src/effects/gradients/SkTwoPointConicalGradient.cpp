@@ -9,7 +9,6 @@
 #include "SkTwoPointConicalGradient_gpu.h"
 
 struct TwoPtRadialContext {
-<<<<<<< HEAD
     const TwoPtRadial& fRec;
     float fRelX, fRelY;
     const float fIncX, fIncY;
@@ -23,20 +22,6 @@ struct TwoPtRadialContext {
 
 static int valid_divide(float numer, float denom, float* ratio)
 {
-=======
-    const TwoPtRadial&  fRec;
-    float               fRelX, fRelY;
-    const float         fIncX, fIncY;
-    float               fB;
-    const float         fDB;
-
-    TwoPtRadialContext(const TwoPtRadial& rec, SkScalar fx, SkScalar fy,
-                       SkScalar dfx, SkScalar dfy);
-    SkFixed nextT();
-};
-
-static int valid_divide(float numer, float denom, float* ratio) {
->>>>>>> miniblink49
     SkASSERT(ratio);
     if (0 == denom) {
         return 0;
@@ -47,23 +32,15 @@ static int valid_divide(float numer, float denom, float* ratio) {
 
 // Return the number of distinct real roots, and write them into roots[] in
 // ascending order
-<<<<<<< HEAD
 static int find_quad_roots(float A, float B, float C, float roots[2], bool descendingOrder = false)
 {
-=======
-static int find_quad_roots(float A, float B, float C, float roots[2], bool descendingOrder = false) {
->>>>>>> miniblink49
     SkASSERT(roots);
 
     if (A == 0) {
         return valid_divide(-C, B, roots);
     }
 
-<<<<<<< HEAD
     float R = B * B - 4 * A * C;
-=======
-    float R = B*B - 4*A*C;
->>>>>>> miniblink49
     if (R < 0) {
         return 0;
     }
@@ -96,26 +73,17 @@ static int find_quad_roots(float A, float B, float C, float roots[2], bool desce
     return 2;
 }
 
-<<<<<<< HEAD
 static float lerp(float x, float dx, float t)
 {
-=======
-static float lerp(float x, float dx, float t) {
->>>>>>> miniblink49
     return x + t * dx;
 }
 
 static float sqr(float x) { return x * x; }
 
 void TwoPtRadial::init(const SkPoint& center0, SkScalar rad0,
-<<<<<<< HEAD
     const SkPoint& center1, SkScalar rad1,
     bool flipped)
 {
-=======
-                       const SkPoint& center1, SkScalar rad1,
-                       bool flipped) {
->>>>>>> miniblink49
     fCenterX = SkScalarToFloat(center0.fX);
     fCenterY = SkScalarToFloat(center0.fY);
     fDCenterX = SkScalarToFloat(center1.fX) - fCenterX;
@@ -131,29 +99,19 @@ void TwoPtRadial::init(const SkPoint& center0, SkScalar rad0,
 }
 
 TwoPtRadialContext::TwoPtRadialContext(const TwoPtRadial& rec, SkScalar fx, SkScalar fy,
-<<<<<<< HEAD
     SkScalar dfx, SkScalar dfy)
-=======
-                                       SkScalar dfx, SkScalar dfy)
->>>>>>> miniblink49
     : fRec(rec)
     , fRelX(SkScalarToFloat(fx) - rec.fCenterX)
     , fRelY(SkScalarToFloat(fy) - rec.fCenterY)
     , fIncX(SkScalarToFloat(dfx))
     , fIncY(SkScalarToFloat(dfy))
     , fB(-2 * (rec.fDCenterX * fRelX + rec.fDCenterY * fRelY + rec.fRDR))
-<<<<<<< HEAD
     , fDB(-2 * (rec.fDCenterX * fIncX + rec.fDCenterY * fIncY))
 {
 }
 
 SkFixed TwoPtRadialContext::nextT()
 {
-=======
-    , fDB(-2 * (rec.fDCenterX * fIncX + rec.fDCenterY * fIncY)) {}
-
-SkFixed TwoPtRadialContext::nextT() {
->>>>>>> miniblink49
     float roots[2];
 
     float C = sqr(fRelX) + sqr(fRelY) - fRec.fRadius2;
@@ -171,17 +129,10 @@ SkFixed TwoPtRadialContext::nextT() {
     // find_quad_roots returns the values sorted, so we start with the last
     float t = roots[countRoots - 1];
     float r = lerp(fRec.fRadius, fRec.fDRadius, t);
-<<<<<<< HEAD
     if (r < 0) {
         t = roots[0]; // might be the same as roots[countRoots-1]
         r = lerp(fRec.fRadius, fRec.fDRadius, t);
         if (r < 0) {
-=======
-    if (r <= 0) {
-        t = roots[0];   // might be the same as roots[countRoots-1]
-        r = lerp(fRec.fRadius, fRec.fDRadius, t);
-        if (r <= 0) {
->>>>>>> miniblink49
             return TwoPtRadial::kDontDrawT;
         }
     }
@@ -189,20 +140,12 @@ SkFixed TwoPtRadialContext::nextT() {
 }
 
 typedef void (*TwoPointConicalProc)(TwoPtRadialContext* rec, SkPMColor* dstC,
-<<<<<<< HEAD
     const SkPMColor* cache, int toggle, int count);
 
 static void twopoint_clamp(TwoPtRadialContext* rec, SkPMColor* SK_RESTRICT dstC,
     const SkPMColor* SK_RESTRICT cache, int toggle,
     int count)
 {
-=======
-                                    const SkPMColor* cache, int toggle, int count);
-
-static void twopoint_clamp(TwoPtRadialContext* rec, SkPMColor* SK_RESTRICT dstC,
-                           const SkPMColor* SK_RESTRICT cache, int toggle,
-                           int count) {
->>>>>>> miniblink49
     for (; count > 0; --count) {
         SkFixed t = rec->nextT();
         if (TwoPtRadial::DontDrawT(t)) {
@@ -210,26 +153,16 @@ static void twopoint_clamp(TwoPtRadialContext* rec, SkPMColor* SK_RESTRICT dstC,
         } else {
             SkFixed index = SkClampMax(t, 0xFFFF);
             SkASSERT(index <= 0xFFFF);
-<<<<<<< HEAD
             *dstC++ = cache[toggle + (index >> SkGradientShaderBase::kCache32Shift)];
-=======
-            *dstC++ = cache[toggle +
-                            (index >> SkGradientShaderBase::kCache32Shift)];
->>>>>>> miniblink49
         }
         toggle = next_dither_toggle(toggle);
     }
 }
 
 static void twopoint_repeat(TwoPtRadialContext* rec, SkPMColor* SK_RESTRICT dstC,
-<<<<<<< HEAD
     const SkPMColor* SK_RESTRICT cache, int toggle,
     int count)
 {
-=======
-                            const SkPMColor* SK_RESTRICT cache, int toggle,
-                            int count) {
->>>>>>> miniblink49
     for (; count > 0; --count) {
         SkFixed t = rec->nextT();
         if (TwoPtRadial::DontDrawT(t)) {
@@ -237,26 +170,16 @@ static void twopoint_repeat(TwoPtRadialContext* rec, SkPMColor* SK_RESTRICT dstC
         } else {
             SkFixed index = repeat_tileproc(t);
             SkASSERT(index <= 0xFFFF);
-<<<<<<< HEAD
             *dstC++ = cache[toggle + (index >> SkGradientShaderBase::kCache32Shift)];
-=======
-            *dstC++ = cache[toggle +
-                            (index >> SkGradientShaderBase::kCache32Shift)];
->>>>>>> miniblink49
         }
         toggle = next_dither_toggle(toggle);
     }
 }
 
 static void twopoint_mirror(TwoPtRadialContext* rec, SkPMColor* SK_RESTRICT dstC,
-<<<<<<< HEAD
     const SkPMColor* SK_RESTRICT cache, int toggle,
     int count)
 {
-=======
-                            const SkPMColor* SK_RESTRICT cache, int toggle,
-                            int count) {
->>>>>>> miniblink49
     for (; count > 0; --count) {
         SkFixed t = rec->nextT();
         if (TwoPtRadial::DontDrawT(t)) {
@@ -264,12 +187,7 @@ static void twopoint_mirror(TwoPtRadialContext* rec, SkPMColor* SK_RESTRICT dstC
         } else {
             SkFixed index = mirror_tileproc(t);
             SkASSERT(index <= 0xFFFF);
-<<<<<<< HEAD
             *dstC++ = cache[toggle + (index >> SkGradientShaderBase::kCache32Shift)];
-=======
-            *dstC++ = cache[toggle +
-                            (index >> SkGradientShaderBase::kCache32Shift)];
->>>>>>> miniblink49
         }
         toggle = next_dither_toggle(toggle);
     }
@@ -278,15 +196,9 @@ static void twopoint_mirror(TwoPtRadialContext* rec, SkPMColor* SK_RESTRICT dstC
 /////////////////////////////////////////////////////////////////////
 
 SkTwoPointConicalGradient::SkTwoPointConicalGradient(
-<<<<<<< HEAD
     const SkPoint& start, SkScalar startRadius,
     const SkPoint& end, SkScalar endRadius,
     bool flippedGrad, const Descriptor& desc)
-=======
-        const SkPoint& start, SkScalar startRadius,
-        const SkPoint& end, SkScalar endRadius,
-        bool flippedGrad, const Descriptor& desc)
->>>>>>> miniblink49
     : SkGradientShaderBase(desc, SkMatrix::I())
     , fCenter1(start)
     , fCenter2(end)
@@ -299,29 +211,20 @@ SkTwoPointConicalGradient::SkTwoPointConicalGradient(
     fRec.init(fCenter1, fRadius1, fCenter2, fRadius2, fFlippedGrad);
 }
 
-<<<<<<< HEAD
 bool SkTwoPointConicalGradient::isOpaque() const
 {
-=======
-bool SkTwoPointConicalGradient::isOpaque() const {
->>>>>>> miniblink49
     // Because areas outside the cone are left untouched, we cannot treat the
     // shader as opaque even if the gradient itself is opaque.
     // TODO(junov): Compute whether the cone fills the plane crbug.com/222380
     return false;
 }
 
-<<<<<<< HEAD
 size_t SkTwoPointConicalGradient::onContextSize(const ContextRec&) const
 {
-=======
-size_t SkTwoPointConicalGradient::contextSize() const {
->>>>>>> miniblink49
     return sizeof(TwoPointConicalGradientContext);
 }
 
 SkShader::Context* SkTwoPointConicalGradient::onCreateContext(const ContextRec& rec,
-<<<<<<< HEAD
     void* storage) const
 {
     return new (storage) TwoPointConicalGradientContext(*this, rec);
@@ -331,34 +234,15 @@ SkTwoPointConicalGradient::TwoPointConicalGradientContext::TwoPointConicalGradie
     const SkTwoPointConicalGradient& shader, const ContextRec& rec)
     : INHERITED(shader, rec)
 {
-=======
-                                                              void* storage) const {
-    return SkNEW_PLACEMENT_ARGS(storage, TwoPointConicalGradientContext, (*this, rec));
-}
-
-SkTwoPointConicalGradient::TwoPointConicalGradientContext::TwoPointConicalGradientContext(
-        const SkTwoPointConicalGradient& shader, const ContextRec& rec)
-    : INHERITED(shader, rec)
-{
-    // we don't have a span16 proc
-    fFlags &= ~kHasSpan16_Flag;
-
->>>>>>> miniblink49
     // in general, we might discard based on computed-radius, so clear
     // this flag (todo: sometimes we can detect that we never discard...)
     fFlags &= ~kOpaqueAlpha_Flag;
 }
 
 void SkTwoPointConicalGradient::TwoPointConicalGradientContext::shadeSpan(
-<<<<<<< HEAD
     int x, int y, SkPMColor* dstCParam, int count)
 {
     const SkTwoPointConicalGradient& twoPointConicalGradient = static_cast<const SkTwoPointConicalGradient&>(fShader);
-=======
-        int x, int y, SkPMColor* dstCParam, int count) {
-    const SkTwoPointConicalGradient& twoPointConicalGradient =
-            static_cast<const SkTwoPointConicalGradient&>(fShader);
->>>>>>> miniblink49
 
     int toggle = init_dither_toggle(x, y);
 
@@ -382,25 +266,14 @@ void SkTwoPointConicalGradient::TwoPointConicalGradientContext::shadeSpan(
     if (fDstToIndexClass != kPerspective_MatrixClass) {
         SkPoint srcPt;
         dstProc(fDstToIndex, SkIntToScalar(x) + SK_ScalarHalf,
-<<<<<<< HEAD
             SkIntToScalar(y) + SK_ScalarHalf, &srcPt);
-=======
-                SkIntToScalar(y) + SK_ScalarHalf, &srcPt);
->>>>>>> miniblink49
         SkScalar dx, fx = srcPt.fX;
         SkScalar dy, fy = srcPt.fY;
 
         if (fDstToIndexClass == kFixedStepInX_MatrixClass) {
-<<<<<<< HEAD
             const auto step = fDstToIndex.fixedStepInX(SkIntToScalar(y));
             dx = step.fX;
             dy = step.fY;
-=======
-            SkFixed fixedX, fixedY;
-            (void)fDstToIndex.fixedStepInX(SkIntToScalar(y), &fixedX, &fixedY);
-            dx = SkFixedToScalar(fixedX);
-            dy = SkFixedToScalar(fixedY);
->>>>>>> miniblink49
         } else {
             SkASSERT(fDstToIndexClass == kLinear_MatrixClass);
             dx = fDstToIndex.getScaleX();
@@ -409,11 +282,7 @@ void SkTwoPointConicalGradient::TwoPointConicalGradientContext::shadeSpan(
 
         TwoPtRadialContext rec(twoPointConicalGradient.fRec, fx, fy, dx, dy);
         (*shadeProc)(&rec, dstC, cache, toggle, count);
-<<<<<<< HEAD
     } else { // perspective case
-=======
-    } else {    // perspective case
->>>>>>> miniblink49
         SkScalar dstX = SkIntToScalar(x) + SK_ScalarHalf;
         SkScalar dstY = SkIntToScalar(y) + SK_ScalarHalf;
         for (; count > 0; --count) {
@@ -429,45 +298,10 @@ void SkTwoPointConicalGradient::TwoPointConicalGradientContext::shadeSpan(
     }
 }
 
-<<<<<<< HEAD
 // Returns the original non-sorted version of the gradient
 SkShader::GradientType SkTwoPointConicalGradient::asAGradient(
     GradientInfo* info) const
 {
-=======
-SkShader::BitmapType SkTwoPointConicalGradient::asABitmap(
-    SkBitmap* bitmap, SkMatrix* matrix, SkShader::TileMode* xy) const {
-    SkPoint diff = fCenter2 - fCenter1;
-    SkScalar diffLen = 0;
-
-    if (bitmap) {
-        this->getGradientTableBitmap(bitmap);
-    }
-    if (matrix) {
-        diffLen = diff.length();
-    }
-    if (matrix) {
-        if (diffLen) {
-            SkScalar invDiffLen = SkScalarInvert(diffLen);
-            // rotate to align circle centers with the x-axis
-            matrix->setSinCos(-SkScalarMul(invDiffLen, diff.fY),
-                              SkScalarMul(invDiffLen, diff.fX));
-        } else {
-            matrix->reset();
-        }
-        matrix->preTranslate(-fCenter1.fX, -fCenter1.fY);
-    }
-    if (xy) {
-        xy[0] = fTileMode;
-        xy[1] = kClamp_TileMode;
-    }
-    return kTwoPointConical_BitmapType;
-}
-
-// Returns the original non-sorted version of the gradient
-SkShader::GradientType SkTwoPointConicalGradient::asAGradient(
-    GradientInfo* info) const {
->>>>>>> miniblink49
     if (info) {
         commonAsAGradient(info, fFlippedGrad);
         info->fPoint[0] = fCenter1;
@@ -482,29 +316,18 @@ SkShader::GradientType SkTwoPointConicalGradient::asAGradient(
     return kConical_GradientType;
 }
 
-<<<<<<< HEAD
 sk_sp<SkFlattenable> SkTwoPointConicalGradient::CreateProc(SkReadBuffer& buffer)
 {
     DescriptorScope desc;
     if (!desc.unflatten(buffer)) {
         return nullptr;
-=======
-SkFlattenable* SkTwoPointConicalGradient::CreateProc(SkReadBuffer& buffer) {
-    DescriptorScope desc;
-    if (!desc.unflatten(buffer)) {
-        return NULL;
->>>>>>> miniblink49
     }
     SkPoint c1 = buffer.readPoint();
     SkPoint c2 = buffer.readPoint();
     SkScalar r1 = buffer.readScalar();
     SkScalar r2 = buffer.readScalar();
 
-<<<<<<< HEAD
     if (buffer.readBool()) { // flipped
-=======
-    if (buffer.readBool()) {    // flipped
->>>>>>> miniblink49
         SkTSwap(c1, c2);
         SkTSwap(r1, r2);
 
@@ -527,7 +350,6 @@ SkFlattenable* SkTwoPointConicalGradient::CreateProc(SkReadBuffer& buffer) {
         }
     }
 
-<<<<<<< HEAD
     return SkGradientShader::MakeTwoPointConical(c1, r1, c2, r2, desc.fColors, desc.fPos,
         desc.fCount, desc.fTileMode, desc.fGradFlags,
         desc.fLocalMatrix);
@@ -535,14 +357,6 @@ SkFlattenable* SkTwoPointConicalGradient::CreateProc(SkReadBuffer& buffer) {
 
 void SkTwoPointConicalGradient::flatten(SkWriteBuffer& buffer) const
 {
-=======
-    return SkGradientShader::CreateTwoPointConical(c1, r1, c2, r2, desc.fColors, desc.fPos,
-                                                   desc.fCount, desc.fTileMode, desc.fGradFlags,
-                                                   desc.fLocalMatrix);
-}
-
-void SkTwoPointConicalGradient::flatten(SkWriteBuffer& buffer) const {
->>>>>>> miniblink49
     this->INHERITED::flatten(buffer);
     buffer.writePoint(fCenter1);
     buffer.writePoint(fCenter2);
@@ -555,7 +369,6 @@ void SkTwoPointConicalGradient::flatten(SkWriteBuffer& buffer) const {
 
 #include "SkGr.h"
 
-<<<<<<< HEAD
 sk_sp<GrFragmentProcessor> SkTwoPointConicalGradient::asFragmentProcessor(
     GrContext* context,
     const SkMatrix& viewM,
@@ -568,43 +381,13 @@ sk_sp<GrFragmentProcessor> SkTwoPointConicalGradient::asFragmentProcessor(
     sk_sp<GrFragmentProcessor> inner(
         Gr2PtConicalGradientEffect::Make(context, *this, fTileMode, localMatrix));
     return GrFragmentProcessor::MulOutputByInputAlpha(std::move(inner));
-=======
-bool SkTwoPointConicalGradient::asFragmentProcessor(GrContext* context,
-                                                    const SkPaint& paint,
-                                                    const SkMatrix& viewM,
-                                                    const SkMatrix* localMatrix,
-                                                    GrColor* paintColor,
-                                                    GrProcessorDataManager* procDataManager,
-                                                    GrFragmentProcessor** fp)  const {
-    SkASSERT(context);
-    SkASSERT(fPtsToUnit.isIdentity());
-
-    *fp = Gr2PtConicalGradientEffect::Create(context, procDataManager, *this, fTileMode,
-                                             localMatrix);
-    *paintColor = SkColor2GrColorJustAlpha(paint.getColor());
-    return true;
-}
-
-#else
-
-bool SkTwoPointConicalGradient::asFragmentProcessor(GrContext*, const SkPaint&,
-                                                    const SkMatrix&, const SkMatrix*,
-                                                    GrColor*, GrProcessorDataManager*,
-                                                    GrFragmentProcessor**)  const {
-    SkDEBUGFAIL("Should not call in GPU-less build");
-    return false;
->>>>>>> miniblink49
 }
 
 #endif
 
 #ifndef SK_IGNORE_TO_STRING
-<<<<<<< HEAD
 void SkTwoPointConicalGradient::toString(SkString* str) const
 {
-=======
-void SkTwoPointConicalGradient::toString(SkString* str) const {
->>>>>>> miniblink49
     str->append("SkTwoPointConicalGradient: (");
 
     str->append("center1: (");

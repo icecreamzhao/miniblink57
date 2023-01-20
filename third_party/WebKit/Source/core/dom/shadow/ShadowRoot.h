@@ -27,12 +27,13 @@
 #ifndef ShadowRoot_h
 #define ShadowRoot_h
 
+#include "bindings/core/v8/ScriptWrappableVisitor.h"
 #include "core/CoreExport.h"
+#include "core/css/StyleSheetList.h"
 #include "core/dom/ContainerNode.h"
 #include "core/dom/DocumentFragment.h"
 #include "core/dom/Element.h"
 #include "core/dom/TreeScope.h"
-#include "wtf/DoublyLinkedList.h"
 
 namespace blink {
 
@@ -41,121 +42,156 @@ class ElementShadow;
 class ExceptionState;
 class HTMLShadowElement;
 class InsertionPoint;
-class ShadowRootRareData;
-class StyleSheetList;
+class ShadowRootRareDataV0;
+class SlotAssignment;
 
-enum class ShadowRootType {
-    UserAgent,
-    Open
-};
+enum class ShadowRootType { UserAgent,
+    V0,
+    Open,
+    Closed };
 
-class CORE_EXPORT ShadowRoot final : public DocumentFragment, public TreeScope, public DoublyLinkedListNode<ShadowRoot> {
+class CORE_EXPORT ShadowRoot final : public DocumentFragment, public TreeScope {
     DEFINE_WRAPPERTYPEINFO();
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(ShadowRoot);
-    friend class WTF::DoublyLinkedListNode<ShadowRoot>;
+    USING_GARBAGE_COLLECTED_MIXIN(ShadowRoot);
+
 public:
-    // FIXME: Current implementation does not work well if a shadow root is dynamically created.
-    // So multiple shadow subtrees in several elements are prohibited.
-    // See https://github.com/w3c/webcomponents/issues/102 and http://crbug.com/234020
-    static PassRefPtrWillBeRawPtr<ShadowRoot> create(Document& document, ShadowRootType type)
+    // FIXME: Current implementation does not work well if a shadow root is
+    // dynamically created.  So multiple shadow subtrees in several elements are
+    // prohibited.
+    // See https://github.com/w3c/webcomponents/issues/102 and
+    // http://crbug.com/234020
+    static ShadowRoot* create(Document& document, ShadowRootType type)
     {
-        return adoptRefWillBeNoop(new ShadowRoot(document, type));
+        return new ShadowRoot(document, type);
     }
 
-    void recalcStyle(StyleRecalcChange);
-
-    // Disambiguate between Node and TreeScope hierarchies; TreeScope's implementation is simpler.
+    // Disambiguate between Node and TreeScope hierarchies; TreeScope's
+    // implementation is simpler.
     using TreeScope::document;
     using TreeScope::getElementById;
-
-    Element* host() const { return toElement(parentOrShadowHostNode()); }
-    ElementShadow* owner() const { return host() ? host()->shadow() : 0; }
-
-    ShadowRoot* youngerShadowRoot() const { return prev(); }
-
-    ShadowRoot* olderShadowRootForBindings() const;
-    bool shouldExposeToBindings() const { return type() == ShadowRootType::Open; }
-
-    bool isYoungest() const { return !youngerShadowRoot(); }
-    bool isOldest() const { return !olderShadowRoot(); }
-
-    void attach(const AttachContext& = AttachContext()) override;
-
-    InsertionNotificationRequest insertedInto(ContainerNode*) override;
-    void removedFrom(ContainerNode*) override;
-
-    void registerScopedHTMLStyleChild();
-    void unregisterScopedHTMLStyleChild();
-
-    bool containsShadowElements() const;
-    bool containsContentElements() const;
-    bool containsInsertionPoints() const { return containsShadowElements() || containsContentElements(); }
-    bool containsShadowRoots() const;
-
-    unsigned descendantShadowElementCount() const;
-
-    // For Internals, don't use this.
-    unsigned childShadowRootCount() const;
-    unsigned numberOfStyles() const { return m_numberOfStyles; }
-
-    HTMLShadowElement* shadowInsertionPointOfYoungerShadowRoot() const;
-    void setShadowInsertionPointOfYoungerShadowRoot(PassRefPtrWillBeRawPtr<HTMLShadowElement>);
-
-    void didAddInsertionPoint(InsertionPoint*);
-    void didRemoveInsertionPoint(InsertionPoint*);
-    const WillBeHeapVector<RefPtrWillBeMember<InsertionPoint>>& descendantInsertionPoints();
-
-    ShadowRootType type() const { return static_cast<ShadowRootType>(m_type); }
 
     // Make protected methods from base class public here.
     using TreeScope::setDocument;
     using TreeScope::setParentTreeScope;
 
-public:
+    Element& host() const
+    {
+        DCHECK(parentOrShadowHostNode());
+        return *toElement(parentOrShadowHostNode());
+    }
+    ElementShadow* owner() const { return host().shadow(); }
+    ShadowRootType type() const { return static_cast<ShadowRootType>(m_type); }
+    String mode() const
+    {
+        return (type() == ShadowRootType::V0 || type() == ShadowRootType::Open)
+            ? "open"
+            : "closed";
+    };
+
+    bool isOpenOrV0() const
+    {
+        return type() == ShadowRootType::V0 || type() == ShadowRootType::Open;
+    }
+    bool isV1() const
+    {
+        return type() == ShadowRootType::Open || type() == ShadowRootType::Closed;
+    }
+
+    void attachLayoutTree(const AttachContext& = AttachContext()) override;
+    void detachLayoutTree(const AttachContext& = AttachContext()) override;
+
+    InsertionNotificationRequest insertedInto(ContainerNode*) override;
+    void removedFrom(ContainerNode*) override;
+
+    // For V0
+    ShadowRoot* youngerShadowRoot() const;
+    ShadowRoot* olderShadowRoot() const;
+    ShadowRoot* olderShadowRootForBindings() const;
+    void setYoungerShadowRoot(ShadowRoot&);
+    void setOlderShadowRoot(ShadowRoot&);
+    bool isYoungest() const { return !youngerShadowRoot(); }
+    bool isOldest() const { return !olderShadowRoot(); }
+    bool containsShadowElements() const;
+    bool containsContentElements() const;
+    bool containsInsertionPoints() const
+    {
+        return containsShadowElements() || containsContentElements();
+    }
+    unsigned descendantShadowElementCount() const;
+    HTMLShadowElement* shadowInsertionPointOfYoungerShadowRoot() const;
+    void setShadowInsertionPointOfYoungerShadowRoot(HTMLShadowElement*);
+    void didAddInsertionPoint(InsertionPoint*);
+    void didRemoveInsertionPoint(InsertionPoint*);
+    const HeapVector<Member<InsertionPoint>>& descendantInsertionPoints();
+
+    // For Internals, don't use this.
+    unsigned childShadowRootCount() const { return m_childShadowRootCount; }
+
+    void recalcStyle(StyleRecalcChange);
+
+    void registerScopedHTMLStyleChild();
+    void unregisterScopedHTMLStyleChild();
+
+    SlotAssignment& slotAssignment()
+    {
+        DCHECK(m_slotAssignment);
+        return *m_slotAssignment;
+    }
+
+    HTMLSlotElement* assignedSlotFor(const Node&);
+    void didAddSlot(HTMLSlotElement&);
+    void didChangeHostChildSlotName(const AtomicString& oldValue,
+        const AtomicString& newValue);
+
+    void distributeV1();
+
     Element* activeElement() const;
 
-    ShadowRoot* olderShadowRoot() const { return next(); }
-
     String innerHTML() const;
-    void setInnerHTML(const String&, ExceptionState&);
+    void setInnerHTML(const String&, ExceptionState& = ASSERT_NO_EXCEPTION);
 
-    PassRefPtrWillBeRawPtr<Node> cloneNode(bool, ExceptionState&);
-    PassRefPtrWillBeRawPtr<Node> cloneNode(ExceptionState& exceptionState) { return cloneNode(true, exceptionState); }
-
-    StyleSheetList* styleSheets();
+    Node* cloneNode(bool, ExceptionState&);
 
     void setDelegatesFocus(bool flag) { m_delegatesFocus = flag; }
     bool delegatesFocus() const { return m_delegatesFocus; }
 
+    bool containsShadowRoots() const { return m_childShadowRootCount; }
+
+    StyleSheetList& styleSheets();
+    void setStyleSheets(StyleSheetList* styleSheetList)
+    {
+        m_styleSheetList = styleSheetList;
+        ScriptWrappableVisitor::writeBarrier(this, m_styleSheetList);
+    }
+
     DECLARE_VIRTUAL_TRACE();
+    DECLARE_VIRTUAL_TRACE_WRAPPERS();
 
 private:
     ShadowRoot(Document&, ShadowRootType);
     ~ShadowRoot() override;
 
-#if !ENABLE(OILPAN)
-    void dispose() override;
-#endif
-
     void childrenChanged(const ChildrenChange&) override;
 
-    ShadowRootRareData* ensureShadowRootRareData();
+    ShadowRootRareDataV0& ensureShadowRootRareDataV0();
+    SlotAssignment& ensureSlotAssignment();
 
-    void addChildShadowRoot();
-    void removeChildShadowRoot();
+    void addChildShadowRoot() { ++m_childShadowRootCount; }
+    void removeChildShadowRoot()
+    {
+        DCHECK_GT(m_childShadowRootCount, 0u);
+        --m_childShadowRootCount;
+    }
     void invalidateDescendantInsertionPoints();
 
     // ShadowRoots should never be cloned.
-    PassRefPtrWillBeRawPtr<Node> cloneNode(bool) override { return nullptr; }
+    Node* cloneNode(bool) override { return nullptr; }
 
-    // FIXME: This shouldn't happen. https://bugs.webkit.org/show_bug.cgi?id=88834
-    bool isOrphan() const { return !host(); }
-
-    RawPtrWillBeMember<ShadowRoot> m_prev;
-    RawPtrWillBeMember<ShadowRoot> m_next;
-    OwnPtrWillBeMember<ShadowRootRareData> m_shadowRootRareData;
-    unsigned m_numberOfStyles : 27;
-    unsigned m_type : 1;
+    Member<ShadowRootRareDataV0> m_shadowRootRareDataV0;
+    Member<StyleSheetList> m_styleSheetList;
+    Member<SlotAssignment> m_slotAssignment;
+    unsigned m_childShadowRootCount : 13;
+    unsigned m_type : 2;
     unsigned m_registeredWithParentShadowRoot : 1;
     unsigned m_descendantInsertionPointsIsValid : 1;
     unsigned m_delegatesFocus : 1;
@@ -166,9 +202,23 @@ inline Element* ShadowRoot::activeElement() const
     return adjustedFocusedElement();
 }
 
+inline ShadowRoot* Element::shadowRootIfV1() const
+{
+    ShadowRoot* root = this->shadowRoot();
+    if (root && root->isV1())
+        return root;
+    return nullptr;
+}
+
 DEFINE_NODE_TYPE_CASTS(ShadowRoot, isShadowRoot());
-DEFINE_TYPE_CASTS(ShadowRoot, TreeScope, treeScope, treeScope->rootNode().isShadowRoot(), treeScope.rootNode().isShadowRoot());
+DEFINE_TYPE_CASTS(ShadowRoot,
+    TreeScope,
+    treeScope,
+    treeScope->rootNode().isShadowRoot(),
+    treeScope.rootNode().isShadowRoot());
 DEFINE_TYPE_CASTS(TreeScope, ShadowRoot, shadowRoot, true, true);
+
+CORE_EXPORT std::ostream& operator<<(std::ostream&, const ShadowRootType&);
 
 } // namespace blink
 

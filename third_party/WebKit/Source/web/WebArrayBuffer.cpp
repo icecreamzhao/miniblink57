@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "public/web/WebArrayBuffer.h"
 
 #include "core/dom/DOMArrayBuffer.h"
@@ -37,17 +36,6 @@ namespace blink {
 
 WebArrayBuffer WebArrayBuffer::create(unsigned numElements,
     unsigned elementByteSize)
-=======
-#include "config.h"
-#include "public/web/WebArrayBuffer.h"
-
-#include "core/dom/DOMArrayBuffer.h"
-#include "wtf/PassOwnPtr.h"
-
-namespace blink {
-
-WebArrayBuffer WebArrayBuffer::create(unsigned numElements, unsigned elementByteSize)
->>>>>>> miniblink49
 {
     return WebArrayBuffer(DOMArrayBuffer::create(numElements, elementByteSize));
 }
@@ -76,30 +64,18 @@ unsigned WebArrayBuffer::byteLength() const
     return 0;
 }
 
-<<<<<<< HEAD
 WebArrayBuffer::WebArrayBuffer(DOMArrayBuffer* buffer)
-=======
-WebArrayBuffer::WebArrayBuffer(const PassRefPtr<DOMArrayBuffer>& buffer)
->>>>>>> miniblink49
     : m_private(buffer)
 {
 }
 
-<<<<<<< HEAD
 WebArrayBuffer& WebArrayBuffer::operator=(DOMArrayBuffer* buffer)
-=======
-WebArrayBuffer& WebArrayBuffer::operator=(const PassRefPtr<DOMArrayBuffer>& buffer)
->>>>>>> miniblink49
 {
     m_private = buffer;
     return *this;
 }
 
-<<<<<<< HEAD
 WebArrayBuffer::operator DOMArrayBuffer*() const
-=======
-WebArrayBuffer::operator PassRefPtr<DOMArrayBuffer>() const
->>>>>>> miniblink49
 {
     return m_private.get();
 }

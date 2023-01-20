@@ -5,9 +5,13 @@
 #ifndef ModuleBindingsInitializer_h
 #define ModuleBindingsInitializer_h
 
+#include "wtf/Allocator.h"
+
 namespace blink {
 
 class ModuleBindingsInitializer {
+    STATIC_ONLY(ModuleBindingsInitializer);
+
 public:
     static void init();
 };

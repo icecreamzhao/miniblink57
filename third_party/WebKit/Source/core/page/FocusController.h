@@ -37,26 +37,56 @@
 namespace blink {
 
 struct FocusCandidate;
+struct FocusParams;
+class Document;
 class Element;
 class Frame;
+class HTMLFrameOwnerElement;
+class InputDeviceCapabilities;
+class LocalFrame;
 class Node;
 class Page;
+class RemoteFrame;
 
-class CORE_EXPORT FocusController final : public NoBaseWillBeGarbageCollectedFinalized<FocusController> {
-    WTF_MAKE_NONCOPYABLE(FocusController); WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(FocusController);
+class CORE_EXPORT FocusController final
+    : public GarbageCollected<FocusController> {
+    WTF_MAKE_NONCOPYABLE(FocusController);
+
 public:
-    static PassOwnPtrWillBeRawPtr<FocusController> create(Page*);
+    static FocusController* create(Page*);
 
-    void setFocusedFrame(PassRefPtrWillBeRawPtr<Frame>);
-    void focusDocumentView(PassRefPtrWillBeRawPtr<Frame>);
-    Frame* focusedFrame() const { return m_focusedFrame.get(); }
+    void setFocusedFrame(Frame*, bool notifyEmbedder = true);
+    void focusDocumentView(Frame*, bool notifyEmbedder = true);
+    LocalFrame* focusedFrame() const;
     Frame* focusedOrMainFrame() const;
 
-    bool setInitialFocus(WebFocusType);
-    bool advanceFocus(WebFocusType type) { return advanceFocus(type, false); }
-    Element* findFocusableElement(WebFocusType, Node&);
+    // Finds the focused HTMLFrameOwnerElement, if any, in the provided frame.
+    // An HTMLFrameOwnerElement is considered focused if the frame it owns, or
+    // one of its descendant frames, is currently focused.
+    HTMLFrameOwnerElement* focusedFrameOwnerElement(
+        LocalFrame& currentFrame) const;
 
-    bool setFocusedElement(Element*, PassRefPtrWillBeRawPtr<Frame>, WebFocusType = WebFocusTypeNone);
+    // Determines whether the provided Document has focus according to
+    // http://www.w3.org/TR/html5/editing.html#dom-document-hasfocus
+    bool isDocumentFocused(const Document&) const;
+
+    bool setInitialFocus(WebFocusType);
+    bool advanceFocus(WebFocusType type,
+        InputDeviceCapabilities* sourceCapabilities = nullptr)
+    {
+        return advanceFocus(type, false, sourceCapabilities);
+    }
+    bool advanceFocusAcrossFrames(
+        WebFocusType,
+        RemoteFrame* from,
+        LocalFrame* to,
+        InputDeviceCapabilities* sourceCapabilities = nullptr);
+    Element* findFocusableElementInShadowHost(const Element& shadowHost);
+
+    bool setFocusedElement(Element*, Frame*, const FocusParams&);
+    // |setFocusedElement| variant with SelectionBehaviorOnFocus::None,
+    // |WebFocusTypeNone, and null InputDeviceCapabilities.
+    bool setFocusedElement(Element*, Frame*);
 
     void setActive(bool);
     bool isActive() const { return m_isActive; }
@@ -69,15 +99,28 @@ public:
 private:
     explicit FocusController(Page*);
 
-    bool advanceFocus(WebFocusType, bool initialFocus);
+    Element* findFocusableElement(WebFocusType, Element&);
+
+    bool advanceFocus(WebFocusType,
+        bool initialFocus,
+        InputDeviceCapabilities* sourceCapabilities = nullptr);
     bool advanceFocusDirectionally(WebFocusType);
-    bool advanceFocusInDocumentOrder(WebFocusType, bool initialFocus);
+    bool advanceFocusInDocumentOrder(LocalFrame*,
+        Element* start,
+        WebFocusType,
+        bool initialFocus,
+        InputDeviceCapabilities* sourceCapabilities);
 
-    bool advanceFocusDirectionallyInContainer(Node* container, const LayoutRect& startingRect, WebFocusType);
-    void findFocusCandidateInContainer(Node& container, const LayoutRect& startingRect, WebFocusType, FocusCandidate& closest);
+    bool advanceFocusDirectionallyInContainer(Node* container,
+        const LayoutRect& startingRect,
+        WebFocusType);
+    void findFocusCandidateInContainer(Node& container,
+        const LayoutRect& startingRect,
+        WebFocusType,
+        FocusCandidate& closest);
 
-    RawPtrWillBeMember<Page> m_page;
-    RefPtrWillBeMember<Frame> m_focusedFrame;
+    Member<Page> m_page;
+    Member<Frame> m_focusedFrame;
     bool m_isActive;
     bool m_isFocused;
     bool m_isChangingFocusedFrame;

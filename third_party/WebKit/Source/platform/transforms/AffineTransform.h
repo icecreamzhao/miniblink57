@@ -29,13 +29,8 @@
 
 #include "platform/transforms/TransformationMatrix.h"
 
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include <string.h> // for memcpy
-=======
-#include <string.h> // for memcpy
-#include "wtf/FastAllocBase.h"
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -46,7 +41,6 @@ class IntPoint;
 class IntRect;
 class TransformationMatrix;
 
-<<<<<<< HEAD
 #define IDENTITY_TRANSFORM \
     {                      \
         1, 0, 0, 1, 0, 0   \
@@ -55,16 +49,11 @@ class TransformationMatrix;
 class PLATFORM_EXPORT AffineTransform {
     DISALLOW_NEW();
 
-=======
-class PLATFORM_EXPORT AffineTransform {
-    WTF_MAKE_FAST_ALLOCATED(AffineTransform);
->>>>>>> miniblink49
 public:
     typedef double Transform[6];
 
     AffineTransform();
     AffineTransform(double a, double b, double c, double d, double e, double f);
-<<<<<<< HEAD
     AffineTransform(const Transform transform) { setMatrix(transform); }
 
     void setMatrix(double a, double b, double c, double d, double e, double f);
@@ -73,12 +62,6 @@ public:
     {
         setMatrix(other.m_transform);
     }
-=======
-
-    void setMatrix(double a, double b, double c, double d, double e, double f);
-
-    void setTransform(const AffineTransform& other) { setMatrix(other.m_transform); }
->>>>>>> miniblink49
 
     void map(double x, double y, double& x2, double& y2) const;
 
@@ -115,15 +98,11 @@ public:
 
     void makeIdentity();
 
-<<<<<<< HEAD
     // this' = this * other
     AffineTransform& multiply(const AffineTransform& other);
     // this' = other * this
     AffineTransform& preMultiply(const AffineTransform& other);
 
-=======
-    AffineTransform& multiply(const AffineTransform& other);
->>>>>>> miniblink49
     AffineTransform& scale(double);
     AffineTransform& scale(double sx, double sy);
     AffineTransform& scaleNonUniform(double sx, double sy);
@@ -138,13 +117,9 @@ public:
     AffineTransform& skewX(double angle);
     AffineTransform& skewY(double angle);
 
-<<<<<<< HEAD
     double xScaleSquared() const;
     double xScale() const;
     double yScaleSquared() const;
-=======
-    double xScale() const;
->>>>>>> miniblink49
     double yScale() const;
 
     double det() const;
@@ -168,7 +143,6 @@ public:
         return (m_transform[1] == 0 && m_transform[2] == 0) || (m_transform[0] == 0 && m_transform[3] == 0);
     }
 
-<<<<<<< HEAD
     bool operator==(const AffineTransform& m2) const
     {
         return (m_transform[0] == m2.m_transform[0] && m_transform[1] == m2.m_transform[1] && m_transform[2] == m2.m_transform[2] && m_transform[3] == m2.m_transform[3] && m_transform[4] == m2.m_transform[4] && m_transform[5] == m2.m_transform[5]);
@@ -181,25 +155,6 @@ public:
 
     // *this = *this * t (i.e., a multRight)
     AffineTransform& operator*=(const AffineTransform& t) { return multiply(t); }
-=======
-    bool operator== (const AffineTransform& m2) const
-    {
-        return (m_transform[0] == m2.m_transform[0]
-             && m_transform[1] == m2.m_transform[1]
-             && m_transform[2] == m2.m_transform[2]
-             && m_transform[3] == m2.m_transform[3]
-             && m_transform[4] == m2.m_transform[4]
-             && m_transform[5] == m2.m_transform[5]);
-    }
-
-    bool operator!=(const AffineTransform& other) const { return !(*this == other); }
-
-    // *this = *this * t (i.e., a multRight)
-    AffineTransform& operator*=(const AffineTransform& t)
-    {
-        return multiply(t);
-    }
->>>>>>> miniblink49
 
     // result = *this * t (i.e., a multRight)
     AffineTransform operator*(const AffineTransform& t) const
@@ -225,7 +180,6 @@ public:
     bool decompose(DecomposedType&) const;
     void recompose(const DecomposedType&);
 
-<<<<<<< HEAD
     void copyTransformTo(Transform m)
     {
         memcpy(m, m_transform, sizeof(Transform));
@@ -236,8 +190,6 @@ public:
     // the translation, scale, etc.
     String toString(bool asMatrix = false) const;
 
-=======
->>>>>>> miniblink49
 private:
     void setMatrix(const Transform m)
     {
@@ -248,14 +200,10 @@ private:
     Transform m_transform;
 };
 
-<<<<<<< HEAD
 // Redeclared here to avoid ODR issues.
 // See platform/testing/TransformPrinters.h.
 void PrintTo(const AffineTransform&, std::ostream*);
 
 } // namespace blink
-=======
-}
->>>>>>> miniblink49
 
 #endif

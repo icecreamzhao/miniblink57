@@ -28,9 +28,9 @@
 
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "core/CoreExport.h"
+#include "platform/heap/Handle.h"
 #include "public/platform/WebTimeRange.h"
-#include "wtf/PassRefPtr.h"
-#include "wtf/RefCounted.h"
+#include "wtf/Allocator.h"
 #include "wtf/Vector.h"
 
 #include <algorithm>
@@ -39,11 +39,16 @@ namespace blink {
 
 class ExceptionState;
 
-class CORE_EXPORT TimeRanges : public RefCountedWillBeGarbageCollectedFinalized<TimeRanges>, public ScriptWrappable {
+class CORE_EXPORT TimeRanges final
+    : public GarbageCollectedFinalized<TimeRanges>,
+      public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     // We consider all the Ranges to be semi-bounded as follow: [start, end[
     struct Range {
+        DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
+
     public:
         Range() { }
         Range(double start, double end)
@@ -69,7 +74,8 @@ public:
             return range.m_start == m_end || range.m_end == m_start;
         }
 
-        inline Range unionWithOverlappingOrContiguousRange(const Range& range) const
+        inline Range unionWithOverlappingOrContiguousRange(
+            const Range& range) const
         {
             Range ret;
 
@@ -85,17 +91,14 @@ public:
         }
     };
 
-    static PassRefPtrWillBeRawPtr<TimeRanges> create()
+    static TimeRanges* create() { return new TimeRanges; }
+    static TimeRanges* create(double start, double end)
     {
-        return adoptRefWillBeNoop(new TimeRanges);
+        return new TimeRanges(start, end);
     }
-    static PassRefPtrWillBeRawPtr<TimeRanges> create(double start, double end)
-    {
-        return adoptRefWillBeNoop(new TimeRanges(start, end));
-    }
-    static PassRefPtrWillBeRawPtr<TimeRanges> create(const blink::WebTimeRanges&);
+    static TimeRanges* create(const WebTimeRanges&);
 
-    PassRefPtrWillBeRawPtr<TimeRanges> copy() const;
+    TimeRanges* copy() const;
     void intersectWith(const TimeRanges*);
     void unionWith(const TimeRanges*);
 
@@ -107,7 +110,8 @@ public:
 
     bool contain(double time) const;
 
-    double nearest(double newPlaybackPosition, double currentPlaybackPosition) const;
+    double nearest(double newPlaybackPosition,
+        double currentPlaybackPosition) const;
 
     DEFINE_INLINE_TRACE() { }
 

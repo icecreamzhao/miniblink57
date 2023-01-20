@@ -28,8 +28,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/css/CSSGridLineNamesValue.h"
+
+#include "wtf/text/WTFString.h"
 
 namespace blink {
 
@@ -43,5 +44,4 @@ CSSGridLineNamesValue::CSSGridLineNamesValue()
 {
 }
 
-}
-
+} // namespace blink

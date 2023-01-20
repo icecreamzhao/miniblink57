@@ -39,21 +39,14 @@
 #include "modules/filesystem/EntriesCallback.h"
 #include "modules/filesystem/EntryCallback.h"
 #include "modules/filesystem/EntrySync.h"
-<<<<<<< HEAD
 #include "modules/filesystem/FileEntry.h"
 #include "modules/filesystem/FileSystemCallback.h"
 #include "modules/filesystem/FileSystemCallbacks.h"
-=======
-#include "modules/filesystem/ErrorCallback.h"
-#include "modules/filesystem/FileEntry.h"
-#include "modules/filesystem/FileSystemCallback.h"
->>>>>>> miniblink49
 #include "modules/filesystem/MetadataCallback.h"
 #include "platform/heap/Handle.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 // A helper template for FileSystemSync implementation.
 template <typename SuccessCallback, typename CallbackArg, typename ResultType>
 class SyncCallbackHelper final
@@ -66,36 +59,6 @@ public:
     static HelperType* create() { return new SyncCallbackHelper(); }
 
     ResultType* getResult(ExceptionState& exceptionState)
-=======
-template <typename ResultType, typename CallbackArg>
-struct HelperResultType {
-    DISALLOW_ALLOCATION();
-public:
-    typedef ResultType* ReturnType;
-    typedef Member<ResultType> StorageType;
-
-    static ReturnType createFromCallbackArg(CallbackArg argument)
-    {
-        return ResultType::create(argument);
-    }
-};
-
-// A helper template for FileSystemSync implementation.
-template <typename SuccessCallback, typename CallbackArg, typename ResultType>
-class SyncCallbackHelper final : public GarbageCollected<SyncCallbackHelper<SuccessCallback, CallbackArg, ResultType>> {
-public:
-    typedef SyncCallbackHelper<SuccessCallback, CallbackArg, ResultType> HelperType;
-    typedef HelperResultType<ResultType, CallbackArg> ResultTypeTrait;
-    typedef typename ResultTypeTrait::StorageType ResultStorageType;
-    typedef typename ResultTypeTrait::ReturnType ResultReturnType;
-
-    static HelperType* create()
-    {
-        return new SyncCallbackHelper();
-    }
-
-    ResultReturnType getResult(ExceptionState& exceptionState)
->>>>>>> miniblink49
     {
         if (m_errorCode)
             FileError::throwDOMException(exceptionState, m_errorCode);
@@ -103,7 +66,6 @@ public:
         return m_result;
     }
 
-<<<<<<< HEAD
     SuccessCallback* getSuccessCallback()
     {
         return SuccessCallbackImpl::create(this);
@@ -118,19 +80,6 @@ public:
 private:
     SyncCallbackHelper()
         : m_errorCode(FileError::kOK)
-=======
-    SuccessCallback* successCallback() { return SuccessCallbackImpl::create(this); }
-    ErrorCallback* errorCallback() { return ErrorCallbackImpl::create(this); }
-
-    DEFINE_INLINE_TRACE()
-    {
-        visitor->trace(m_result);
-    }
-
-private:
-    SyncCallbackHelper()
-        : m_errorCode(FileError::OK)
->>>>>>> miniblink49
         , m_completed(false)
     {
     }
@@ -142,7 +91,6 @@ private:
             return new SuccessCallbackImpl(helper);
         }
 
-<<<<<<< HEAD
         virtual void handleEvent() { m_helper->setError(FileError::kOK); }
 
         virtual void handleEvent(CallbackArg arg) { m_helper->setResult(arg); }
@@ -151,16 +99,6 @@ private:
         {
             visitor->trace(m_helper);
             SuccessCallback::trace(visitor);
-=======
-        virtual void handleEvent()
-        {
-            m_helper->setError(FileError::OK);
-        }
-
-        virtual void handleEvent(CallbackArg arg)
-        {
-            m_helper->setResult(arg);
->>>>>>> miniblink49
         }
 
     private:
@@ -168,24 +106,16 @@ private:
             : m_helper(helper)
         {
         }
-<<<<<<< HEAD
         Member<HelperType> m_helper;
     };
 
     class ErrorCallbackImpl final : public ErrorCallbackBase {
-=======
-        Persistent<HelperType> m_helper;
-    };
-
-    class ErrorCallbackImpl final : public ErrorCallback {
->>>>>>> miniblink49
     public:
         static ErrorCallbackImpl* create(HelperType* helper)
         {
             return new ErrorCallbackImpl(helper);
         }
 
-<<<<<<< HEAD
         void invoke(FileError::ErrorCode error) override
         {
             m_helper->setError(error);
@@ -195,12 +125,6 @@ private:
         {
             visitor->trace(m_helper);
             ErrorCallbackBase::trace(visitor);
-=======
-        void handleEvent(FileError* error) override
-        {
-            ASSERT(error);
-            m_helper->setError(error->code());
->>>>>>> miniblink49
         }
 
     private:
@@ -208,57 +132,32 @@ private:
             : m_helper(helper)
         {
         }
-<<<<<<< HEAD
         Member<HelperType> m_helper;
     };
 
     void setError(FileError::ErrorCode error)
     {
         m_errorCode = error;
-=======
-        Persistent<HelperType> m_helper;
-    };
-
-    void setError(FileError::ErrorCode code)
-    {
-        m_errorCode = code;
->>>>>>> miniblink49
         m_completed = true;
     }
 
     void setResult(CallbackArg result)
     {
-<<<<<<< HEAD
         m_result = ResultType::create(result);
         m_completed = true;
     }
 
     Member<ResultType> m_result;
-=======
-        m_result = ResultTypeTrait::createFromCallbackArg(result);
-        m_completed = true;
-    }
-
-    ResultStorageType m_result;
->>>>>>> miniblink49
     FileError::ErrorCode m_errorCode;
     bool m_completed;
 };
 
 struct EmptyType : public GarbageCollected<EmptyType> {
-<<<<<<< HEAD
     static EmptyType* create(EmptyType*) { return 0; }
-=======
-    static EmptyType* create(EmptyType*)
-    {
-        return 0;
-    }
->>>>>>> miniblink49
 
     DEFINE_INLINE_TRACE() { }
 };
 
-<<<<<<< HEAD
 typedef SyncCallbackHelper<EntryCallback, Entry*, EntrySync>
     EntrySyncCallbackHelper;
 typedef SyncCallbackHelper<MetadataCallback, Metadata*, Metadata>
@@ -269,12 +168,6 @@ typedef SyncCallbackHelper<FileSystemCallback,
     DOMFileSystem*,
     DOMFileSystemSync>
     FileSystemSyncCallbackHelper;
-=======
-typedef SyncCallbackHelper<EntryCallback, Entry*, EntrySync> EntrySyncCallbackHelper;
-typedef SyncCallbackHelper<MetadataCallback, Metadata*, Metadata> MetadataSyncCallbackHelper;
-typedef SyncCallbackHelper<VoidCallback, EmptyType*, EmptyType> VoidSyncCallbackHelper;
-typedef SyncCallbackHelper<FileSystemCallback, DOMFileSystem*, DOMFileSystemSync> FileSystemSyncCallbackHelper;
->>>>>>> miniblink49
 
 } // namespace blink
 

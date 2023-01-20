@@ -7,7 +7,6 @@
 
 #include "platform/graphics/paint/DisplayItem.h"
 #include "platform/transforms/AffineTransform.h"
-<<<<<<< HEAD
 
 namespace blink {
 
@@ -26,37 +25,19 @@ public:
         WebDisplayItemList*) const override;
 
     const AffineTransform& transform() const { return m_transform; }
-=======
-#include "wtf/PassOwnPtr.h"
-
-namespace blink {
-
-class PLATFORM_EXPORT BeginTransformDisplayItem : public PairedBeginDisplayItem {
-public:
-    BeginTransformDisplayItem(const DisplayItemClientWrapper& client, const AffineTransform& transform)
-        : PairedBeginDisplayItem(client, BeginTransform)
-        , m_transform(transform) { }
-
-    void replay(GraphicsContext&) override;
-    void appendToWebDisplayItemList(WebDisplayItemList*) const override;
->>>>>>> miniblink49
 
 private:
 #ifndef NDEBUG
     void dumpPropertiesAsDebugString(WTF::StringBuilder&) const final;
 #endif
-<<<<<<< HEAD
     bool equals(const DisplayItem& other) const final
     {
         return DisplayItem::equals(other) && m_transform == static_cast<const BeginTransformDisplayItem&>(other).m_transform;
     }
-=======
->>>>>>> miniblink49
 
     const AffineTransform m_transform;
 };
 
-<<<<<<< HEAD
 class PLATFORM_EXPORT EndTransformDisplayItem final
     : public PairedEndDisplayItem {
 public:
@@ -75,19 +56,6 @@ private:
     {
         return otherType == kBeginTransform;
     }
-=======
-class PLATFORM_EXPORT EndTransformDisplayItem : public PairedEndDisplayItem {
-public:
-    EndTransformDisplayItem(const DisplayItemClientWrapper& client)
-        : PairedEndDisplayItem(client, EndTransform) { }
-
-    void replay(GraphicsContext&) override;
-    void appendToWebDisplayItemList(WebDisplayItemList*) const override;
-
-private:
-#if ENABLE(ASSERT)
-    bool isEndAndPairedWith(DisplayItem::Type otherType) const final { return otherType == BeginTransform; }
->>>>>>> miniblink49
 #endif
 };
 

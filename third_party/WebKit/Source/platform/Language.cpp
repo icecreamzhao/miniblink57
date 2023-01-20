@@ -23,10 +23,6 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/Language.h"
 
 #include "public/platform/Platform.h"
@@ -46,12 +42,8 @@ static const AtomicString& platformLanguage()
 {
     DEFINE_STATIC_LOCAL(AtomicString, computedDefaultLanguage, ());
     if (computedDefaultLanguage.isEmpty()) {
-<<<<<<< HEAD
         computedDefaultLanguage = AtomicString(
             canonicalizeLanguageIdentifier(Platform::current()->defaultLocale()));
-=======
-        computedDefaultLanguage = AtomicString(canonicalizeLanguageIdentifier(Platform::current()->defaultLocale()));
->>>>>>> miniblink49
         ASSERT(!computedDefaultLanguage.isEmpty());
     }
     return computedDefaultLanguage;
@@ -69,11 +61,7 @@ void overrideUserPreferredLanguages(const Vector<AtomicString>& override)
     canonicalized.resize(0);
     canonicalized.reserveCapacity(override.size());
     for (const auto& lang : override)
-<<<<<<< HEAD
         canonicalized.push_back(canonicalizeLanguageIdentifier(lang));
-=======
-        canonicalized.append(canonicalizeLanguageIdentifier(lang));
->>>>>>> miniblink49
 }
 
 AtomicString defaultLanguage()
@@ -92,7 +80,6 @@ Vector<AtomicString> userPreferredLanguages()
 
     Vector<AtomicString> languages;
     languages.reserveInitialCapacity(1);
-<<<<<<< HEAD
     languages.push_back(platformLanguage());
     return languages;
 }
@@ -100,13 +87,6 @@ Vector<AtomicString> userPreferredLanguages()
 size_t indexOfBestMatchingLanguageInList(
     const AtomicString& language,
     const Vector<AtomicString>& languageList)
-=======
-    languages.append(platformLanguage());
-    return languages;
-}
-
-size_t indexOfBestMatchingLanguageInList(const AtomicString& language, const Vector<AtomicString>& languageList)
->>>>>>> miniblink49
 {
     AtomicString languageWithoutLocaleMatch;
     AtomicString languageMatchButNotLocale;
@@ -134,16 +114,10 @@ size_t indexOfBestMatchingLanguageInList(const AtomicString& language, const Vec
         }
     }
 
-<<<<<<< HEAD
     // If we have both a language-only match and a languge-but-not-locale match,
     // return the languge-only match as is considered a "better" match. For
     // example, if the list provided has both "en-GB" and "en" and the user
     // prefers "en-US" we will return "en".
-=======
-    // If we have both a language-only match and a languge-but-not-locale match, return the
-    // languge-only match as is considered a "better" match. For example, if the list
-    // provided has both "en-GB" and "en" and the user prefers "en-US" we will return "en".
->>>>>>> miniblink49
     if (languageWithoutLocaleMatch.length())
         return languageWithoutLocaleMatchIndex;
 
@@ -153,8 +127,4 @@ size_t indexOfBestMatchingLanguageInList(const AtomicString& language, const Vec
     return languageList.size();
 }
 
-<<<<<<< HEAD
 } // namespace blink
-=======
-}
->>>>>>> miniblink49

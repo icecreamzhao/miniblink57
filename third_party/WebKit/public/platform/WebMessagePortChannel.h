@@ -34,13 +34,10 @@
 #include "WebCommon.h"
 #include "WebVector.h"
 
-<<<<<<< HEAD
 #if INSIDE_BLINK
 #include <memory>
 #endif
 
-=======
->>>>>>> miniblink49
 namespace blink {
 
 class WebMessagePortChannelClient;
@@ -48,14 +45,9 @@ class WebString;
 
 typedef WebVector<class WebMessagePortChannel*> WebMessagePortChannelArray;
 
-<<<<<<< HEAD
 // Provides an interface to a Message Port Channel implementation. The object
 // owns itself and is signalled that its not needed anymore with the destroy()
 // call.
-=======
-// Provides an interface to a Message Port Channel implementation. The object owns itself and
-// is signalled that its not needed anymore with the destroy() call.
->>>>>>> miniblink49
 class WebMessagePortChannel {
 public:
     virtual void setClient(WebMessagePortChannelClient*) = 0;
@@ -69,39 +61,20 @@ protected:
     ~WebMessagePortChannel() { }
 };
 
-<<<<<<< HEAD
 #if INSIDE_BLINK
 
 struct WebMessagePortChannelDeleter {
     void operator()(WebMessagePortChannel* channel)
-=======
-} // namespace blink
-
-#if INSIDE_BLINK
-
-namespace WTF {
-
-template<typename T> struct OwnedPtrDeleter;
-template<> struct OwnedPtrDeleter<blink::WebMessagePortChannel> {
-    static void deletePtr(blink::WebMessagePortChannel* channel)
->>>>>>> miniblink49
     {
         if (channel)
             channel->destroy();
     }
 };
 
-<<<<<<< HEAD
 using WebMessagePortChannelUniquePtr = std::unique_ptr<WebMessagePortChannel, WebMessagePortChannelDeleter>;
 
 #endif // INSIDE_BLINK
 
 } // namespace blink
 
-=======
-} // namespace WTF
-
-#endif // INSIDE_BLINK
-
->>>>>>> miniblink49
 #endif // WebMessagePortChannel_h

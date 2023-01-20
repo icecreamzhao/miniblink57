@@ -6,33 +6,19 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #ifndef SkDisplayApply_DEFINED
 #define SkDisplayApply_DEFINED
 
 #include "SkADrawable.h"
 #include "SkAnimateBase.h"
-=======
-
-#ifndef SkDisplayApply_DEFINED
-#define SkDisplayApply_DEFINED
-
-#include "SkAnimateBase.h"
-#include "SkADrawable.h"
->>>>>>> miniblink49
 #include "SkIntArray.h"
 
 class SkActive;
 
 class SkApply : public SkADrawable {
     DECLARE_MEMBER_INFO(Apply);
-<<<<<<< HEAD
 
 public:
-=======
-public:
-
->>>>>>> miniblink49
     SkApply();
     virtual ~SkApply();
 
@@ -46,7 +32,6 @@ public:
         kMode_immediate,
         //kMode_once
     };
-<<<<<<< HEAD
     void activate(SkAnimateMaker&);
     void append(SkApply* apply);
     void appendActive(SkActive*);
@@ -63,40 +48,16 @@ public:
     bool enable(SkAnimateMaker&) override;
     void enableCreate(SkAnimateMaker&);
     void enableDynamic(SkAnimateMaker&);
-=======
-    void activate(SkAnimateMaker& );
-    void append(SkApply* apply);
-    void appendActive(SkActive* );
-    void applyValues(int animatorIndex, SkOperand* values, int count,
-        SkDisplayTypes , SkMSec time);
-    bool contains(SkDisplayable*) override;
-//  void createActive(SkAnimateMaker& );
-    SkDisplayable* deepCopy(SkAnimateMaker* ) override;
-    void disable();
-    bool draw(SkAnimateMaker& ) override;
-#ifdef SK_DUMP_ENABLED
-    void dump(SkAnimateMaker* ) override;
-#endif
-    bool enable(SkAnimateMaker& ) override;
-    void enableCreate(SkAnimateMaker& );
-    void enableDynamic(SkAnimateMaker& );
->>>>>>> miniblink49
     void endSave(int index);
     Mode getMode() { return mode; }
     bool getProperty(int index, SkScriptValue* value) const override;
     SkADrawable* getScope() { return scope; }
-<<<<<<< HEAD
     void getStep(SkScriptValue*);
     SkADrawable* getTarget(SkAnimateBase*);
-=======
-    void getStep(SkScriptValue* );
-    SkADrawable* getTarget(SkAnimateBase* );
->>>>>>> miniblink49
     bool hasDelayedAnimator() const;
     bool hasEnable() const override;
     bool inactivate(SkAnimateMaker& maker);
     void initialize() override;
-<<<<<<< HEAD
     bool interpolate(SkAnimateMaker&, SkMSec time);
     void onEndElement(SkAnimateMaker&) override;
     const SkMemberInfo* preferredChild(SkDisplayTypes type) override;
@@ -107,18 +68,6 @@ public:
     void save(int index);
     void setEmbedded() { fEmbedded = true; }
     bool setProperty(int index, SkScriptValue&) override;
-=======
-    bool interpolate(SkAnimateMaker& , SkMSec time);
-    void onEndElement(SkAnimateMaker& ) override;
-    const SkMemberInfo* preferredChild(SkDisplayTypes type) override;
-    void refresh(SkAnimateMaker& );
-    void reset();
-    bool resolveIDs(SkAnimateMaker& maker, SkDisplayable* original, SkApply* ) override;
-    bool resolveField(SkAnimateMaker& , SkDisplayable* parent, SkString* str);
-    void save(int index);
-    void setEmbedded() { fEmbedded = true; }
-    bool setProperty(int index, SkScriptValue& ) override;
->>>>>>> miniblink49
     void setSteps(int _steps) override;
 //  virtual void setTime(SkMSec time);
 #ifdef SK_DEBUG
@@ -139,13 +88,8 @@ private:
     Transition transition;
     SkActive* fActive;
     SkTDAnimateArray fAnimators;
-<<<<<<< HEAD
     //  SkADrawable* fCurrentScope;
     SkMSec fLastTime; // used only to return script property time
-=======
-//  SkADrawable* fCurrentScope;
-    SkMSec fLastTime;   // used only to return script property time
->>>>>>> miniblink49
     SkTDDrawableArray fScopes;
     SkBool fAppended : 1;
     SkBool fContainsScope : 1;

@@ -6,10 +6,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #ifndef SkSVGTypes_DEFINED
 #define SkSVGTypes_DEFINED
 

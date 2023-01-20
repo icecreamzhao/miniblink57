@@ -20,46 +20,41 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/svg/SVGParserUtilities.h"
 
-#include "core/svg/SVGPointList.h"
-#include "platform/geometry/FloatRect.h"
-#include "platform/transforms/AffineTransform.h"
-#include "wtf/ASCIICType.h"
-#include "wtf/text/StringHash.h"
+#include "wtf/MathExtras.h"
 #include <limits>
 
 namespace blink {
 
 template <typename FloatType>
-static inline bool isValidRange(const FloatType& x)
+static inline bool isValidRange(const FloatType x)
 {
     static const FloatType max = std::numeric_limits<FloatType>::max();
     return x >= -max && x <= max;
 }
 
-// We use this generic parseNumber function to allow the Path parsing code to work
-// at a higher precision internally, without any unnecessary runtime cost or code
-// complexity.
-template <typename CharType, typename FloatType>
-static bool genericParseNumber(const CharType*& ptr, const CharType* end, FloatType& number, WhitespaceMode mode)
+template <typename FloatType>
+static inline bool isValidExponent(const FloatType x)
 {
-    FloatType integer, decimal, frac, exponent;
-    int sign, expsign;
-    const CharType* start = ptr;
+    return x >= std::numeric_limits<FloatType>::min_exponent10 && x <= std::numeric_limits<FloatType>::max_exponent10;
+}
 
-    exponent = 0;
-    integer = 0;
-    frac = 1;
-    decimal = 0;
-    sign = 1;
-    expsign = 1;
-
+// We use this generic parseNumber function to allow the Path parsing code to
+// work at a higher precision internally, without any unnecessary runtime cost
+// or code complexity.
+template <typename CharType, typename FloatType>
+static bool genericParseNumber(const CharType*& cursor,
+    const CharType* end,
+    FloatType& number,
+    WhitespaceMode mode)
+{
     if (mode & AllowLeadingWhitespace)
-        skipOptionalSVGSpaces(ptr, end);
+        skipOptionalSVGSpaces(cursor, end);
 
+    const CharType* ptr = cursor;
     // read the sign
+    int sign = 1;
     if (ptr < end && *ptr == '+')
         ptr++;
     else if (ptr < end && *ptr == '-') {
@@ -72,14 +67,15 @@ static bool genericParseNumber(const CharType*& ptr, const CharType* end, FloatT
         return false;
 
     // read the integer part, build right-to-left
-    const CharType* ptrStartIntPart = ptr;
+    const CharType* digitsStart = ptr;
     while (ptr < end && *ptr >= '0' && *ptr <= '9')
         ++ptr; // Advance to first non-digit.
 
-    if (ptr != ptrStartIntPart) {
+    FloatType integer = 0;
+    if (ptr != digitsStart) {
         const CharType* ptrScanIntPart = ptr - 1;
         FloatType multiplier = 1;
-        while (ptrScanIntPart >= ptrStartIntPart) {
+        while (ptrScanIntPart >= digitsStart) {
             integer += multiplier * static_cast<FloatType>(*(ptrScanIntPart--) - '0');
             multiplier *= 10;
         }
@@ -88,6 +84,7 @@ static bool genericParseNumber(const CharType*& ptr, const CharType* end, FloatT
             return false;
     }
 
+    FloatType decimal = 0;
     if (ptr < end && *ptr == '.') { // read the decimals
         ptr++;
 
@@ -95,62 +92,77 @@ static bool genericParseNumber(const CharType*& ptr, const CharType* end, FloatT
         if (ptr >= end || *ptr < '0' || *ptr > '9')
             return false;
 
-        while (ptr < end && *ptr >= '0' && *ptr <= '9')
-            decimal += (*(ptr++) - '0') * (frac *= static_cast<FloatType>(0.1));
+        FloatType frac = 1;
+        while (ptr < end && *ptr >= '0' && *ptr <= '9') {
+            frac *= static_cast<FloatType>(0.1);
+            decimal += (*(ptr++) - '0') * frac;
+        }
     }
 
+    // When we get here we should have consumed either a digit for the integer
+    // part or a fractional part (with at least one digit after the '.'.)
+    DCHECK_NE(digitsStart, ptr);
+
+    number = integer + decimal;
+    number *= sign;
+
     // read the exponent part
-    if (ptr != start && ptr + 1 < end && (*ptr == 'e' || *ptr == 'E')
-        && (ptr[1] != 'x' && ptr[1] != 'm')) {
+    if (ptr + 1 < end && (*ptr == 'e' || *ptr == 'E') && (ptr[1] != 'x' && ptr[1] != 'm')) {
         ptr++;
 
         // read the sign of the exponent
+        bool exponentIsNegative = false;
         if (*ptr == '+')
             ptr++;
         else if (*ptr == '-') {
             ptr++;
-            expsign = -1;
+            exponentIsNegative = true;
         }
 
         // There must be an exponent
         if (ptr >= end || *ptr < '0' || *ptr > '9')
             return false;
 
+        FloatType exponent = 0;
         while (ptr < end && *ptr >= '0' && *ptr <= '9') {
             exponent *= static_cast<FloatType>(10);
             exponent += *ptr - '0';
             ptr++;
         }
+        if (exponentIsNegative)
+            exponent = -exponent;
         // Make sure exponent is valid.
-        if (!isValidRange(exponent) || exponent > std::numeric_limits<FloatType>::max_exponent)
+        if (!isValidExponent(exponent))
             return false;
+        if (exponent)
+            number *= static_cast<FloatType>(pow(10.0, static_cast<int>(exponent)));
     }
-
-    number = integer + decimal;
-    number *= sign;
-
-    if (exponent)
-        number *= static_cast<FloatType>(pow(10.0, expsign * static_cast<int>(exponent)));
 
     // Don't return Infinity() or NaN().
     if (!isValidRange(number))
         return false;
 
-    if (start == ptr)
-        return false;
+    // A valid number has been parsed. Commit cursor.
+    cursor = ptr;
 
     if (mode & AllowTrailingWhitespace)
-        skipOptionalSVGSpacesOrDelimiter(ptr, end);
+        skipOptionalSVGSpacesOrDelimiter(cursor, end);
 
     return true;
 }
 
-bool parseNumber(const LChar*& ptr, const LChar* end, float& number, WhitespaceMode mode)
+bool parseNumber(const LChar*& ptr,
+    const LChar* end,
+    float& number,
+    WhitespaceMode mode)
 {
     return genericParseNumber(ptr, end, number, mode);
 }
 
-bool parseNumber(const UChar*& ptr, const UChar* end, float& number, WhitespaceMode mode)
+bool parseNumber(const UChar*& ptr,
+    const UChar* end,
+    float& number,
+    WhitespaceMode mode)
 {
     return genericParseNumber(ptr, end, number, mode);
 }
@@ -158,11 +170,13 @@ bool parseNumber(const UChar*& ptr, const UChar* end, float& number, WhitespaceM
 // only used to parse largeArcFlag and sweepFlag which must be a "0" or "1"
 // and might not have any whitespace/comma after it
 template <typename CharType>
-bool genericParseArcFlag(const CharType*& ptr, const CharType* end, bool& flag)
+bool genericParseArcFlag(const CharType*& ptr,
+    const CharType* end,
+    bool& flag)
 {
     if (ptr >= end)
         return false;
-    const CharType flagChar = *ptr++;
+    const CharType flagChar = *ptr;
     if (flagChar == '0')
         flag = false;
     else if (flagChar == '1')
@@ -170,6 +184,7 @@ bool genericParseArcFlag(const CharType*& ptr, const CharType* end, bool& flag)
     else
         return false;
 
+    ptr++;
     skipOptionalSVGSpacesOrDelimiter(ptr, end);
 
     return true;
@@ -185,8 +200,11 @@ bool parseArcFlag(const UChar*& ptr, const UChar* end, bool& flag)
     return genericParseArcFlag(ptr, end, flag);
 }
 
-template<typename CharType>
-static bool genericParseNumberOptionalNumber(const CharType*& ptr, const CharType* end, float& x, float& y)
+template <typename CharType>
+static bool genericParseNumberOptionalNumber(const CharType*& ptr,
+    const CharType* end,
+    float& x,
+    float& y)
 {
     if (!parseNumber(ptr, end, x))
         return false;
@@ -214,95 +232,4 @@ bool parseNumberOptionalNumber(const String& string, float& x, float& y)
     return genericParseNumberOptionalNumber(ptr, end, x, y);
 }
 
-template<typename CharType>
-bool genericParseNumberOrPercentage(const CharType*& ptr, const CharType* end, float& number)
-{
-    if (genericParseNumber(ptr, end, number, AllowLeadingWhitespace)) {
-        if (ptr == end)
-            return true;
-
-        bool isPercentage = (*ptr == '%');
-        if (isPercentage)
-            ptr++;
-
-        skipOptionalSVGSpaces(ptr, end);
-
-        if (isPercentage)
-            number /= 100.f;
-
-        return ptr == end;
-    }
-
-    return false;
-}
-
-bool parseNumberOrPercentage(const String& string, float& number)
-{
-    if (string.isEmpty())
-        return false;
-
-    if (string.is8Bit()) {
-        const LChar* ptr = string.characters8();
-        const LChar* end = ptr + string.length();
-        return genericParseNumberOrPercentage(ptr, end, number);
-    }
-    const UChar* ptr = string.characters16();
-    const UChar* end = ptr + string.length();
-    return genericParseNumberOrPercentage(ptr, end, number);
-}
-
-static const LChar skewXDesc[] =  {'s', 'k', 'e', 'w', 'X'};
-static const LChar skewYDesc[] =  {'s', 'k', 'e', 'w', 'Y'};
-static const LChar scaleDesc[] =  {'s', 'c', 'a', 'l', 'e'};
-static const LChar translateDesc[] =  {'t', 'r', 'a', 'n', 's', 'l', 'a', 't', 'e'};
-static const LChar rotateDesc[] =  {'r', 'o', 't', 'a', 't', 'e'};
-static const LChar matrixDesc[] =  {'m', 'a', 't', 'r', 'i', 'x'};
-
-template<typename CharType>
-bool parseAndSkipTransformType(const CharType*& ptr, const CharType* end, SVGTransformType& type)
-{
-    if (ptr >= end)
-        return false;
-
-    if (*ptr == 's') {
-        if (skipString(ptr, end, skewXDesc, WTF_ARRAY_LENGTH(skewXDesc)))
-            type = SVG_TRANSFORM_SKEWX;
-        else if (skipString(ptr, end, skewYDesc, WTF_ARRAY_LENGTH(skewYDesc)))
-            type = SVG_TRANSFORM_SKEWY;
-        else if (skipString(ptr, end, scaleDesc, WTF_ARRAY_LENGTH(scaleDesc)))
-            type = SVG_TRANSFORM_SCALE;
-        else
-            return false;
-    } else if (skipString(ptr, end, translateDesc, WTF_ARRAY_LENGTH(translateDesc)))
-        type = SVG_TRANSFORM_TRANSLATE;
-    else if (skipString(ptr, end, rotateDesc, WTF_ARRAY_LENGTH(rotateDesc)))
-        type = SVG_TRANSFORM_ROTATE;
-    else if (skipString(ptr, end, matrixDesc, WTF_ARRAY_LENGTH(matrixDesc)))
-        type = SVG_TRANSFORM_MATRIX;
-    else
-        return false;
-
-    return true;
-}
-
-template bool parseAndSkipTransformType(const UChar*& current, const UChar* end, SVGTransformType&);
-template bool parseAndSkipTransformType(const LChar*& current, const LChar* end, SVGTransformType&);
-
-SVGTransformType parseTransformType(const String& string)
-{
-    if (string.isEmpty())
-        return SVG_TRANSFORM_UNKNOWN;
-    SVGTransformType type = SVG_TRANSFORM_UNKNOWN;
-    if (string.is8Bit()) {
-        const LChar* ptr = string.characters8();
-        const LChar* end = ptr + string.length();
-        parseAndSkipTransformType(ptr, end, type);
-    } else {
-        const UChar* ptr = string.characters16();
-        const UChar* end = ptr + string.length();
-        parseAndSkipTransformType(ptr, end, type);
-    }
-    return type;
-}
-
-}
+} // namespace blink

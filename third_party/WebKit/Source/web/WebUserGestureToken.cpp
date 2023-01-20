@@ -28,10 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "public/web/WebUserGestureToken.h"
 
 #include "platform/UserGestureIndicator.h"
@@ -45,20 +41,12 @@ bool WebUserGestureToken::hasGestures() const
 
 void WebUserGestureToken::setOutOfProcess()
 {
-<<<<<<< HEAD
     m_token->setTimeoutPolicy(UserGestureToken::OutOfProcess);
-=======
-    m_token->setOutOfProcess();
->>>>>>> miniblink49
 }
 
 void WebUserGestureToken::setJavascriptPrompt()
 {
-<<<<<<< HEAD
     m_token->setTimeoutPolicy(UserGestureToken::HasPaused);
-=======
-    m_token->setJavascriptPrompt();
->>>>>>> miniblink49
 }
 
 WebUserGestureToken::WebUserGestureToken(PassRefPtr<UserGestureToken> token)

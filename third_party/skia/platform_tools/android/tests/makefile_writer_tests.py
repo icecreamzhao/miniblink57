@@ -111,7 +111,6 @@ def generate_dummy_makefile(target_dir):
                                    common=common_vars_dict,
                                    deviations_from_common=deviations)
 
-<<<<<<< HEAD
 def generate_dummy_static_deps_makefile(target_dir):
   """Create a dummy makefile that prints out the static dependencies.
 
@@ -131,8 +130,6 @@ def generate_dummy_static_deps_makefile(target_dir):
                                        common=common_vars_dict,
                                        deviations_from_common=deviations)
 
-=======
->>>>>>> miniblink49
 def generate_dummy_tool_makefile(target_dir):
   """Create a dummy makefile for a tool.
 
@@ -203,7 +200,6 @@ class MakefileWriterTest(unittest.TestCase):
 
     shutil.rmtree(outdir)
 
-<<<<<<< HEAD
   def test_include_static_deps_writer(self):
     outdir = tempfile.mkdtemp()
     generate_dummy_static_deps_makefile(outdir)
@@ -212,8 +208,6 @@ class MakefileWriterTest(unittest.TestCase):
     utils.compare_to_expectation(os.path.join(outdir, filename),
                                  filename, self.assertTrue, REBASELINE_MSG)
 
-=======
->>>>>>> miniblink49
   def test_tool_writer(self):
     outdir = tempfile.mkdtemp()
     tool_dir = os.path.join(outdir, TOOL_DIR)
@@ -241,10 +235,7 @@ def rebaseline():
     with open(os.path.join(utils.EXPECTATIONS_DIR, filename), 'w') as f:
       makefile_writer.write_local_vars(f, vars_dict, append, name)
 
-<<<<<<< HEAD
   generate_dummy_static_deps_makefile(utils.EXPECTATIONS_DIR)
-=======
->>>>>>> miniblink49
   generate_dummy_tool_makefile(os.path.join(utils.EXPECTATIONS_DIR, TOOL_DIR))
 
 

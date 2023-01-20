@@ -43,13 +43,9 @@ struct WebFallbackFont {
         , fontconfigInterfaceId(0)
         , ttcIndex(0)
         , isBold(false)
-<<<<<<< HEAD
         , isItalic(false)
     {
     }
-=======
-        , isItalic(false) { }
->>>>>>> miniblink49
     WebCString name;
     WebCString filename;
     int fontconfigInterfaceId;

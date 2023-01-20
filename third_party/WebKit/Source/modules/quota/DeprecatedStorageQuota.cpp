@@ -28,18 +28,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "modules/quota/DeprecatedStorageQuota.h"
 
 #include "core/dom/ExceptionCode.h"
 #include "core/dom/ExecutionContext.h"
-<<<<<<< HEAD
 #include "core/dom/TaskRunnerHelper.h"
-=======
->>>>>>> miniblink49
 #include "modules/quota/DeprecatedStorageQuotaCallbacksImpl.h"
 #include "modules/quota/StorageErrorCallback.h"
 #include "modules/quota/StorageQuotaClient.h"
@@ -59,21 +52,16 @@ DeprecatedStorageQuota::DeprecatedStorageQuota(Type type)
 {
 }
 
-<<<<<<< HEAD
 void DeprecatedStorageQuota::queryUsageAndQuota(
     ExecutionContext* executionContext,
     StorageUsageCallback* successCallback,
     StorageErrorCallback* errorCallback)
-=======
-void DeprecatedStorageQuota::queryUsageAndQuota(ExecutionContext* executionContext, StorageUsageCallback* successCallback, StorageErrorCallback* errorCallback)
->>>>>>> miniblink49
 {
     ASSERT(executionContext);
 
     WebStorageQuotaType storageType = static_cast<WebStorageQuotaType>(m_type);
     if (storageType != WebStorageQuotaTypeTemporary && storageType != WebStorageQuotaTypePersistent) {
         // Unknown storage type is requested.
-<<<<<<< HEAD
         executionContext->postTask(TaskType::MiscPlatformAPI, BLINK_FROM_HERE,
             StorageErrorCallback::createSameThreadTask(
                 errorCallback, NotSupportedError));
@@ -85,20 +73,10 @@ void DeprecatedStorageQuota::queryUsageAndQuota(ExecutionContext* executionConte
         executionContext->postTask(TaskType::MiscPlatformAPI, BLINK_FROM_HERE,
             StorageErrorCallback::createSameThreadTask(
                 errorCallback, NotSupportedError));
-=======
-        executionContext->postTask(FROM_HERE, StorageErrorCallback::CallbackTask::create(errorCallback, NotSupportedError));
-        return;
-    }
-
-    SecurityOrigin* securityOrigin = executionContext->securityOrigin();
-    if (securityOrigin->isUnique()) {
-        executionContext->postTask(FROM_HERE, StorageErrorCallback::CallbackTask::create(errorCallback, NotSupportedError));
->>>>>>> miniblink49
         return;
     }
 
     KURL storagePartition = KURL(KURL(), securityOrigin->toString());
-<<<<<<< HEAD
     StorageQuotaCallbacks* callbacks = DeprecatedStorageQuotaCallbacksImpl::create(successCallback,
         errorCallback);
     Platform::current()->queryStorageUsageAndQuota(storagePartition, storageType,
@@ -109,32 +87,20 @@ void DeprecatedStorageQuota::requestQuota(ExecutionContext* executionContext,
     unsigned long long newQuotaInBytes,
     StorageQuotaCallback* successCallback,
     StorageErrorCallback* errorCallback)
-=======
-    StorageQuotaCallbacks* callbacks = DeprecatedStorageQuotaCallbacksImpl::create(successCallback, errorCallback);
-    Platform::current()->queryStorageUsageAndQuota(storagePartition, storageType, callbacks);
-}
-
-void DeprecatedStorageQuota::requestQuota(ExecutionContext* executionContext, unsigned long long newQuotaInBytes, StorageQuotaCallback* successCallback, StorageErrorCallback* errorCallback)
->>>>>>> miniblink49
 {
     ASSERT(executionContext);
 
     WebStorageQuotaType storageType = static_cast<WebStorageQuotaType>(m_type);
     if (storageType != WebStorageQuotaTypeTemporary && storageType != WebStorageQuotaTypePersistent) {
         // Unknown storage type is requested.
-<<<<<<< HEAD
         executionContext->postTask(TaskType::MiscPlatformAPI, BLINK_FROM_HERE,
             StorageErrorCallback::createSameThreadTask(
                 errorCallback, NotSupportedError));
-=======
-        executionContext->postTask(FROM_HERE, StorageErrorCallback::CallbackTask::create(errorCallback, NotSupportedError));
->>>>>>> miniblink49
         return;
     }
 
     StorageQuotaClient* client = StorageQuotaClient::from(executionContext);
     if (!client) {
-<<<<<<< HEAD
         executionContext->postTask(TaskType::MiscPlatformAPI, BLINK_FROM_HERE,
             StorageErrorCallback::createSameThreadTask(
                 errorCallback, NotSupportedError));
@@ -143,13 +109,6 @@ void DeprecatedStorageQuota::requestQuota(ExecutionContext* executionContext, un
 
     client->requestQuota(executionContext, storageType, newQuotaInBytes,
         successCallback, errorCallback);
-=======
-        executionContext->postTask(FROM_HERE, StorageErrorCallback::CallbackTask::create(errorCallback, NotSupportedError));
-        return;
-    }
-
-    client->requestQuota(executionContext, storageType, newQuotaInBytes, successCallback, errorCallback);
->>>>>>> miniblink49
 }
 
 } // namespace blink

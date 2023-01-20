@@ -32,12 +32,15 @@
 #define DocumentEncodingData_h
 
 #include "platform/CrossThreadCopier.h"
+#include "wtf/Allocator.h"
 #include "wtf/text/TextEncoding.h"
 
 namespace blink {
 class TextResourceDecoder;
 
 class DocumentEncodingData {
+    DISALLOW_NEW();
+
 public:
     DocumentEncodingData();
     explicit DocumentEncodingData(const TextResourceDecoder&);
@@ -53,14 +56,15 @@ private:
     bool m_sawDecodingError;
 };
 
-template<> struct CrossThreadCopierBase<false, false, false, DocumentEncodingData> : public CrossThreadCopierPassThrough<DocumentEncodingData> {
+template <>
+struct CrossThreadCopier<DocumentEncodingData>
+    : public CrossThreadCopierPassThrough<DocumentEncodingData> {
 };
 
-inline bool operator!=(const DocumentEncodingData& a, const DocumentEncodingData& b)
+inline bool operator!=(const DocumentEncodingData& a,
+    const DocumentEncodingData& b)
 {
-    return a.encoding() != b.encoding()
-        || a.wasDetectedHeuristically() != b.wasDetectedHeuristically()
-        || a.sawDecodingError() != b.sawDecodingError();
+    return a.encoding() != b.encoding() || a.wasDetectedHeuristically() != b.wasDetectedHeuristically() || a.sawDecodingError() != b.sawDecodingError();
 }
 
 } // namespace blink

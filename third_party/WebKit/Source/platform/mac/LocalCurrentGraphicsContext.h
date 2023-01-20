@@ -34,7 +34,6 @@ class GraphicsContext;
 // functions which call out into AppKit and rely on the currentContext being set
 class PLATFORM_EXPORT LocalCurrentGraphicsContext {
     WTF_MAKE_NONCOPYABLE(LocalCurrentGraphicsContext);
-<<<<<<< HEAD
 
 public:
     LocalCurrentGraphicsContext(GraphicsContext&, const IntRect& dirtyRect);
@@ -45,27 +44,10 @@ public:
     CGContextRef cgContext();
 
 private:
-=======
-public:
-    LocalCurrentGraphicsContext(GraphicsContext*, const IntRect& dirtyRect);
-    // Allows specifying an interest rect to which we clip if slimming paint is enabled and performance would benefit.
-    LocalCurrentGraphicsContext(GraphicsContext*, const IntRect* interestRect, const IntRect& dirtyRect);
-    LocalCurrentGraphicsContext(SkCanvas*, float deviceScaleFactor, const IntRect* interestRect, const IntRect& dirtyRect);
-    ~LocalCurrentGraphicsContext();
-    CGContextRef cgContext();
-private:
-
->>>>>>> miniblink49
     SkCanvas* m_savedCanvas;
     NSGraphicsContext* m_savedNSGraphicsContext;
     bool m_didSetGraphicsContext;
     IntRect m_inflatedDirtyRect;
-<<<<<<< HEAD
     skia::SkiaBitLocker m_skiaBitLocker;
 };
-=======
-    gfx::SkiaBitLocker m_skiaBitLocker;
-};
-
->>>>>>> miniblink49
 }

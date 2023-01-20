@@ -5,7 +5,6 @@
 #ifndef InspectorRenderingAgent_h
 #define InspectorRenderingAgent_h
 
-<<<<<<< HEAD
 #include "core/inspector/InspectorBaseAgent.h"
 #include "core/inspector/protocol/Rendering.h"
 
@@ -31,37 +30,11 @@ public:
 
     // InspectorBaseAgent overrides.
     Response disable() override;
-=======
-#include "core/InspectorFrontend.h"
-#include "core/inspector/InspectorBaseAgent.h"
-
-namespace blink {
-
-class WebViewImpl;
-
-using ErrorString = String;
-
-class InspectorRenderingAgent final : public InspectorBaseAgent<InspectorRenderingAgent, InspectorFrontend::Rendering>, public InspectorBackendDispatcher::RenderingCommandHandler {
-    WTF_MAKE_NONCOPYABLE(InspectorRenderingAgent);
-public:
-    static PassOwnPtrWillBeRawPtr<InspectorRenderingAgent> create(WebViewImpl*);
-
-    // InspectorBackendDispatcher::PageCommandHandler implementation.
-    void setShowPaintRects(ErrorString*, bool show) override;
-    void setShowDebugBorders(ErrorString*, bool show) override;
-    void setShowFPSCounter(ErrorString*, bool show) override;
-    void setContinuousPaintingEnabled(ErrorString*, bool enabled) override;
-    void setShowScrollBottleneckRects(ErrorString*, bool show) override;
-
-    // InspectorBaseAgent overrides.
-    void disable(ErrorString*) override;
->>>>>>> miniblink49
     void restore() override;
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
-<<<<<<< HEAD
     InspectorRenderingAgent(WebLocalFrameImpl*, InspectorOverlay*);
     Response compositingEnabled();
     WebViewImpl* webViewImpl();
@@ -72,16 +45,4 @@ private:
 
 } // namespace blink
 
-=======
-    explicit InspectorRenderingAgent(WebViewImpl*);
-    bool compositingEnabled(ErrorString*);
-
-    WebViewImpl* m_webViewImpl;
-};
-
-
-} // namespace blink
-
-
->>>>>>> miniblink49
 #endif // !defined(InspectorRenderingAgent_h)

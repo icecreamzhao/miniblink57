@@ -28,11 +28,7 @@
 
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "bindings/core/v8/V8Binding.h"
-<<<<<<< HEAD
 #include "core/dom/ContextLifecycleObserver.h"
-=======
-#include "core/frame/DOMWindowProperty.h"
->>>>>>> miniblink49
 #include "modules/storage/StorageArea.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
@@ -43,7 +39,6 @@ namespace blink {
 class ExceptionState;
 class LocalFrame;
 
-<<<<<<< HEAD
 class Storage final : public GarbageCollected<Storage>,
                       public ScriptWrappable,
                       public ContextClient {
@@ -85,31 +80,6 @@ public:
         const AtomicString& value,
         ExceptionState&);
     DeleteResult anonymousNamedDeleter(const AtomicString&, ExceptionState&);
-=======
-class Storage final : public GarbageCollectedFinalized<Storage>, public ScriptWrappable, public DOMWindowProperty {
-    DEFINE_WRAPPERTYPEINFO();
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(Storage);
-public:
-    static Storage* create(LocalFrame*, StorageArea*);
-    virtual ~Storage();
-
-    unsigned length(ExceptionState& ec) const { return m_storageArea->length(ec, m_frame); }
-    String key(unsigned index, ExceptionState& ec) const { return m_storageArea->key(index, ec, m_frame); }
-    String getItem(const String& key, ExceptionState& ec) const { return m_storageArea->getItem(key, ec, m_frame); }
-    void setItem(const String& key, const String& value, ExceptionState& ec) { m_storageArea->setItem(key, value, ec, m_frame); }
-    void removeItem(const String& key, ExceptionState& ec) { m_storageArea->removeItem(key, ec, m_frame); }
-    void clear(ExceptionState& ec) { m_storageArea->clear(ec, m_frame); }
-    bool contains(const String& key, ExceptionState& ec) const { return m_storageArea->contains(key, ec, m_frame); }
-
-    StorageArea* area() const { return m_storageArea.get(); }
-
-    String anonymousIndexedGetter(unsigned, ExceptionState&);
-    String anonymousNamedGetter(const AtomicString&, ExceptionState&);
-    bool anonymousNamedSetter(const AtomicString& name, const AtomicString& value, ExceptionState&);
-    bool anonymousIndexedSetter(unsigned, const AtomicString&, ExceptionState&);
-    DeleteResult anonymousNamedDeleter(const AtomicString&, ExceptionState&);
-    DeleteResult anonymousIndexedDeleter(unsigned, ExceptionState&);
->>>>>>> miniblink49
     void namedPropertyEnumerator(Vector<String>&, ExceptionState&);
     bool namedPropertyQuery(const AtomicString&, ExceptionState&);
 

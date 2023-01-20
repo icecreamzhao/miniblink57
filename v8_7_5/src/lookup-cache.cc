@@ -7,7 +7,6 @@
 namespace v8 {
 namespace internal {
 
-<<<<<<< HEAD
     void DescriptorLookupCache::Clear()
     {
         for (int index = 0; index < kLength; index++)
@@ -16,11 +15,3 @@ namespace internal {
 
 } // namespace internal
 } // namespace v8
-=======
-void DescriptorLookupCache::Clear() {
-  for (int index = 0; index < kLength; index++) keys_[index].source = Map();
-}
-
-}  // namespace internal
-}  // namespace v8
->>>>>>> miniblink49

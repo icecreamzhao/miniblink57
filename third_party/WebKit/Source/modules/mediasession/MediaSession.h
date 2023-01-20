@@ -6,7 +6,6 @@
 #define MediaSession_h
 
 #include "bindings/core/v8/ScriptWrappable.h"
-<<<<<<< HEAD
 #include "bindings/core/v8/TraceWrapperMember.h"
 #include "core/dom/ContextLifecycleObserver.h"
 #include "modules/ModulesExport.h"
@@ -79,24 +78,6 @@ private:
         m_actionHandlers;
     mojom::blink::MediaSessionServicePtr m_service;
     mojo::Binding<blink::mojom::blink::MediaSessionClient> m_clientBinding;
-=======
-#include "platform/heap/Handle.h"
-
-namespace blink {
-
-class MediaSession : public GarbageCollected<MediaSession>, public ScriptWrappable {
-    DEFINE_WRAPPERTYPEINFO();
-public:
-    static MediaSession* create();
-
-    void activate();
-    void deactivate();
-
-    DEFINE_INLINE_TRACE() { }
-
-private:
-    MediaSession() = default;
->>>>>>> miniblink49
 };
 
 } // namespace blink

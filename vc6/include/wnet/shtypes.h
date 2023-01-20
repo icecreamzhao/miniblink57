@@ -42,11 +42,8 @@
 /* header files for imported files */
 #include "wtypes.h"
 
-<<<<<<< HEAD
 typedef DWORD SHCOLSTATEF;
 
-=======
->>>>>>> miniblink49
 #ifdef __cplusplus
 extern "C"{
 #endif 

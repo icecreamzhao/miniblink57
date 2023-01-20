@@ -6,27 +6,15 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #ifndef SkLayer_DEFINED
 #define SkLayer_DEFINED
 
 #include "../private/SkTDArray.h"
-=======
-
-#ifndef SkLayer_DEFINED
-#define SkLayer_DEFINED
-
-#include "SkRefCnt.h"
-#include "SkTDArray.h"
->>>>>>> miniblink49
 #include "SkColor.h"
 #include "SkMatrix.h"
 #include "SkPoint.h"
 #include "SkRect.h"
-<<<<<<< HEAD
 #include "SkRefCnt.h"
-=======
->>>>>>> miniblink49
 #include "SkSize.h"
 
 class SkCanvas;
@@ -34,11 +22,6 @@ class SkCanvas;
 class SkLayer : public SkRefCnt {
 
 public:
-<<<<<<< HEAD
-=======
-    
-
->>>>>>> miniblink49
     SkLayer();
     SkLayer(const SkLayer&);
     virtual ~SkLayer();
@@ -115,12 +98,8 @@ public:
     // paint method
 
     void draw(SkCanvas*, SkScalar opacity);
-<<<<<<< HEAD
     void draw(SkCanvas* canvas)
     {
-=======
-    void draw(SkCanvas* canvas) {
->>>>>>> miniblink49
         this->draw(canvas, SK_Scalar1);
     }
 
@@ -132,7 +111,6 @@ private:
         kInheritFromRootTransform_Flag = 0x01
     };
 
-<<<<<<< HEAD
     SkLayer* fParent;
     SkScalar m_opacity;
     SkSize m_size;
@@ -141,16 +119,6 @@ private:
     SkMatrix fMatrix;
     SkMatrix fChildrenMatrix;
     uint32_t fFlags;
-=======
-    SkLayer*    fParent;
-    SkScalar    m_opacity;
-    SkSize      m_size;
-    SkPoint     m_position;
-    SkPoint     m_anchorPoint;
-    SkMatrix    fMatrix;
-    SkMatrix    fChildrenMatrix;
-    uint32_t    fFlags;
->>>>>>> miniblink49
 
     SkTDArray<SkLayer*> m_children;
 

@@ -28,48 +28,33 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 // https://webaudio.github.io/web-midi-api/#idl-def-MIDIPortConnectionState
 
-=======
->>>>>>> miniblink49
 enum MIDIPortConnectionState {
     "open",
     "closed",
     "pending"
 };
 
-<<<<<<< HEAD
 // https://webaudio.github.io/web-midi-api/#idl-def-MIDIPortDeviceState
 
-=======
->>>>>>> miniblink49
 enum MIDIPortDeviceState {
     "disconnected",
     "connected"
 };
 
-<<<<<<< HEAD
 // https://webaudio.github.io/web-midi-api/#idl-def-MIDIPortType
 
-=======
->>>>>>> miniblink49
 enum MIDIPortType {
     "input",
     "output"
 };
 
-<<<<<<< HEAD
 // https://webaudio.github.io/web-midi-api/#MIDIPort
 
 [
     ActiveScriptWrappable,
     DependentLifetime,
-=======
-[
-    ActiveDOMObject,
-    GarbageCollected,
->>>>>>> miniblink49
 ] interface MIDIPort : EventTarget {
     readonly attribute MIDIPortConnectionState connection;
     readonly attribute DOMString id;

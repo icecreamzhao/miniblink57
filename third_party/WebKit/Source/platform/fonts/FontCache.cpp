@@ -27,7 +27,6 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "platform/fonts/FontCache.h"
 
 #include "base/trace_event/process_memory_dump.h"
@@ -35,14 +34,6 @@
 #include "platform/Histogram.h"
 #include "platform/RuntimeEnabledFeatures.h"
 #include "platform/fonts/AcceptLanguagesResolver.h"
-=======
-#include "config.h"
-#include "platform/fonts/FontCache.h"
-
-#include "platform/FontFamilyNames.h"
-
-#include "platform/RuntimeEnabledFeatures.h"
->>>>>>> miniblink49
 #include "platform/fonts/AlternateFontFamily.h"
 #include "platform/fonts/FontCacheClient.h"
 #include "platform/fonts/FontCacheKey.h"
@@ -52,7 +43,6 @@
 #include "platform/fonts/FontSmoothingMode.h"
 #include "platform/fonts/SimpleFontData.h"
 #include "platform/fonts/TextRenderingMode.h"
-<<<<<<< HEAD
 #include "platform/fonts/opentype/OpenTypeVerticalData.h"
 #include "platform/fonts/shaping/ShapeCache.h"
 // #include "platform/web_memory_allocator_dump.h"
@@ -61,25 +51,16 @@
 #include "wtf/HashMap.h"
 #include "wtf/ListHashSet.h"
 #include "wtf/PtrUtil.h"
-=======
-//#include "platform/fonts/opentype/OpenTypeVerticalData.h"
-#include "wtf/HashMap.h"
-#include "wtf/ListHashSet.h"
->>>>>>> miniblink49
 #include "wtf/StdLibExtras.h"
 #include "wtf/Vector.h"
 #include "wtf/text/AtomicStringHash.h"
 #include "wtf/text/StringHash.h"
-<<<<<<< HEAD
 #include <memory>
-=======
->>>>>>> miniblink49
 
 using namespace WTF;
 
 namespace blink {
 
-<<<<<<< HEAD
 #if !OS(WIN) && !OS(LINUX)
 FontCache::FontCache()
     : m_purgePreventCount(0)
@@ -102,24 +83,6 @@ bool FontCache::s_antialiasedTextEnabled = false;
 bool FontCache::s_lcdTextEnabled = false;
 float FontCache::s_deviceScaleFactor = 1.0;
 bool FontCache::s_useSkiaFontFallback = false;
-=======
-#if !OS(WIN)
-FontCache::FontCache()
-    : m_purgePreventCount(0)
-{
-}
-#endif // !OS(WIN)
-
-typedef HashMap<FontCacheKey, OwnPtr<FontPlatformData>, FontCacheKeyHash, FontCacheKeyTraits> FontPlatformDataCache;
-
-static FontPlatformDataCache* gFontPlatformDataCache = 0;
-
-#if OS(WIN)
-bool FontCache::s_useDirectWrite = false;
-IDWriteFactory* FontCache::s_directWriteFactory = 0;
-bool FontCache::s_useSubpixelPositioning = false;
-float FontCache::s_deviceScaleFactor = 1.0;
->>>>>>> miniblink49
 #endif // OS(WIN)
 
 FontCache* FontCache::fontCache()
@@ -131,17 +94,13 @@ FontCache* FontCache::fontCache()
 FontPlatformData* FontCache::getFontPlatformData(const FontDescription& fontDescription,
     const FontFaceCreationParams& creationParams, bool checkingAlternateName)
 {
-<<<<<<< HEAD
     //notImplemented(); // may be memory leak!!
 
-=======
->>>>>>> miniblink49
     if (!gFontPlatformDataCache) {
         gFontPlatformDataCache = new FontPlatformDataCache;
         platformInit();
     }
 
-<<<<<<< HEAD
     float size = fontDescription.effectiveFontSize();
     unsigned roundedSize = size * FontCacheKey::precisionMultiplier();
     FontCacheKey key = fontDescription.cacheKey(creationParams);
@@ -176,19 +135,6 @@ FontPlatformData* FontCache::getFontPlatformData(const FontDescription& fontDesc
 
         result = *found /*->get()*/;
         foundResult = result || !addResult.isNewEntry;
-=======
-    FontCacheKey key = fontDescription.cacheKey(creationParams);
-    FontPlatformData* result = 0;
-    bool foundResult;
-    FontPlatformDataCache::iterator it = gFontPlatformDataCache->find(key);
-    if (it == gFontPlatformDataCache->end()) {
-        result = createFontPlatformData(fontDescription, creationParams, fontDescription.effectiveFontSize());
-        gFontPlatformDataCache->set(key, adoptPtr(result));
-        foundResult = result;
-    } else {
-        result = it->value.get();
-        foundResult = true;
->>>>>>> miniblink49
     }
 
     if (!foundResult && !checkingAlternateName && creationParams.creationType() == CreateFontByFamily) {
@@ -199,22 +145,16 @@ FontPlatformData* FontCache::getFontPlatformData(const FontDescription& fontDesc
             FontFaceCreationParams createByAlternateFamily(alternateName);
             result = getFontPlatformData(fontDescription, createByAlternateFamily, true);
         }
-<<<<<<< HEAD
         if (result) {
             // Cache the result under the old name.
             auto adding = &gFontPlatformDataCache->add(key, SizedFontPlatformDataSet()).storedValue->value;
             adding->set(roundedSize, /*wrapUnique*/ (new FontPlatformData(*result)));
         }
-=======
-        if (result)
-            gFontPlatformDataCache->set(key, adoptPtr(new FontPlatformData(*result))); // Cache the result under the old name.
->>>>>>> miniblink49
     }
 
     return result;
 }
 
-<<<<<<< HEAD
 std::unique_ptr<FontPlatformData> FontCache::scaleFontPlatformData(const FontPlatformData& fontPlatformData, const FontDescription& fontDescription, const FontFaceCreationParams& creationParams, float fontSize)
 {
 #if OS(MACOSX)
@@ -241,9 +181,6 @@ ShapeCache* FontCache::getShapeCache(const FallbackListCompositeKey& key)
     ASSERT(result);
     return result;
 }
-=======
-#ifndef MINIBLINK_NO_HARFBUZZ
->>>>>>> miniblink49
 
 typedef HashMap<FontCache::FontFileKey, RefPtr<OpenTypeVerticalData>, IntHash<FontCache::FontFileKey>, UnsignedWithZeroKeyHashTraits<FontCache::FontFileKey>> FontVerticalDataCache;
 
@@ -253,7 +190,6 @@ FontVerticalDataCache& fontVerticalDataCacheInstance()
     return fontVerticalDataCache;
 }
 
-<<<<<<< HEAD
 void FontCache::setFontManager(const sk_sp<SkFontMgr>& fontManager)
 {
     ASSERT(!s_fontManager);
@@ -265,11 +201,6 @@ void FontCache::setFontManager(const sk_sp<SkFontMgr>& fontManager)
 PassRefPtr<OpenTypeVerticalData> FontCache::getVerticalData(const FontFileKey& key, const FontPlatformData& platformData)
 {
 #if 1 // def MINIBLINK_NOT_IMPLEMENTED
-=======
-PassRefPtr<OpenTypeVerticalData> FontCache::getVerticalData(const FontFileKey& key, const FontPlatformData& platformData)
-{
-
->>>>>>> miniblink49
     FontVerticalDataCache& fontVerticalDataCache = fontVerticalDataCacheInstance();
     FontVerticalDataCache::iterator result = fontVerticalDataCache.find(key);
     if (result != fontVerticalDataCache.end())
@@ -280,7 +211,6 @@ PassRefPtr<OpenTypeVerticalData> FontCache::getVerticalData(const FontFileKey& k
         verticalData.clear();
     fontVerticalDataCache.set(key, verticalData);
     return verticalData;
-<<<<<<< HEAD
 #endif
     notImplemented();
     return nullptr;
@@ -290,10 +220,6 @@ void FontCache::acceptLanguagesChanged(const String& acceptLanguages)
 {
     AcceptLanguagesResolver::acceptLanguagesChanged(acceptLanguages);
 }
-=======
-}
-#endif // MINIBLINK_NO_HARFBUZZ
->>>>>>> miniblink49
 
 static FontDataCache* gFontDataCache = 0;
 
@@ -343,7 +269,6 @@ static inline void purgePlatformFontDataCache()
 
     Vector<FontCacheKey> keysToRemove;
     keysToRemove.reserveInitialCapacity(gFontPlatformDataCache->size());
-<<<<<<< HEAD
     for (auto& sizedFonts : *gFontPlatformDataCache) {
         Vector<unsigned> sizesToRemove;
         sizesToRemove.reserveInitialCapacity(sizedFonts.value.size());
@@ -354,25 +279,12 @@ static inline void purgePlatformFontDataCache()
         sizedFonts.value.removeAll(sizesToRemove);
         if (sizedFonts.value.isEmpty())
             keysToRemove.append(sizedFonts.key);
-=======
-    FontPlatformDataCache::iterator platformDataEnd = gFontPlatformDataCache->end();
-    for (FontPlatformDataCache::iterator platformData = gFontPlatformDataCache->begin(); platformData != platformDataEnd; ++platformData) {
-        if (platformData->value && !gFontDataCache->contains(platformData->value.get()))
-            keysToRemove.append(platformData->key);
->>>>>>> miniblink49
     }
     gFontPlatformDataCache->removeAll(keysToRemove);
 }
 
-<<<<<<< HEAD
 static inline void purgeFontVerticalDataCache()
 {
-=======
-
-static inline void purgeFontVerticalDataCache()
-{
-#ifndef MINIBLINK_NO_HARFBUZZ
->>>>>>> miniblink49
     FontVerticalDataCache& fontVerticalDataCache = fontVerticalDataCacheInstance();
     if (!fontVerticalDataCache.isEmpty()) {
         // Mark & sweep unused verticalData
@@ -392,7 +304,6 @@ static inline void purgeFontVerticalDataCache()
         }
         fontVerticalDataCache.removeAll(keysToRemove);
     }
-<<<<<<< HEAD
 }
 
 static inline void purgeFallbackListShaperCache()
@@ -413,9 +324,6 @@ static inline void purgeFallbackListShaperCache()
 void FontCache::invalidateShapeCache()
 {
     purgeFallbackListShaperCache();
-=======
-#endif // MINIBLINK_NO_HARFBUZZ
->>>>>>> miniblink49
 }
 
 void FontCache::purge(PurgeSeverity PurgeSeverity)
@@ -430,27 +338,16 @@ void FontCache::purge(PurgeSeverity PurgeSeverity)
 
     purgePlatformFontDataCache();
     purgeFontVerticalDataCache();
-<<<<<<< HEAD
     purgeFallbackListShaperCache();
-=======
->>>>>>> miniblink49
 }
 
 static bool invalidateFontCache = false;
 
-<<<<<<< HEAD
 HeapHashSet<WeakMember<FontCacheClient>>& fontCacheClients()
 {
     DEFINE_STATIC_LOCAL(HeapHashSet<WeakMember<FontCacheClient>>, clients, (new HeapHashSet<WeakMember<FontCacheClient>>));
     invalidateFontCache = true;
     return clients;
-=======
-WillBeHeapHashSet<RawPtrWillBeWeakMember<FontCacheClient>>& fontCacheClients()
-{
-    DEFINE_STATIC_LOCAL(OwnPtrWillBePersistent<WillBeHeapHashSet<RawPtrWillBeWeakMember<FontCacheClient>>>, clients, (adoptPtrWillBeNoop(new WillBeHeapHashSet<RawPtrWillBeWeakMember<FontCacheClient>>())));
-    invalidateFontCache = true;
-    return *clients;
->>>>>>> miniblink49
 }
 
 void FontCache::addClient(FontCacheClient* client)
@@ -459,17 +356,6 @@ void FontCache::addClient(FontCacheClient* client)
     fontCacheClients().add(client);
 }
 
-<<<<<<< HEAD
-=======
-#if !ENABLE(OILPAN)
-void FontCache::removeClient(FontCacheClient* client)
-{
-    ASSERT(fontCacheClients().contains(client));
-    fontCacheClients().remove(client);
-}
-#endif
-
->>>>>>> miniblink49
 static unsigned short gGeneration = 0;
 
 unsigned short FontCache::generation()
@@ -491,19 +377,11 @@ void FontCache::invalidate()
 
     gGeneration++;
 
-<<<<<<< HEAD
     HeapVector<Member<FontCacheClient>> clients;
     size_t numClients = fontCacheClients().size();
     clients.reserveInitialCapacity(numClients);
     HeapHashSet<WeakMember<FontCacheClient>>::iterator end = fontCacheClients().end();
     for (HeapHashSet<WeakMember<FontCacheClient>>::iterator it = fontCacheClients().begin(); it != end; ++it)
-=======
-    WillBeHeapVector<RefPtrWillBeMember<FontCacheClient>> clients;
-    size_t numClients = fontCacheClients().size();
-    clients.reserveInitialCapacity(numClients);
-    WillBeHeapHashSet<RawPtrWillBeWeakMember<FontCacheClient>>::iterator end = fontCacheClients().end();
-    for (WillBeHeapHashSet<RawPtrWillBeWeakMember<FontCacheClient>>::iterator it = fontCacheClients().begin(); it != end; ++it)
->>>>>>> miniblink49
         clients.append(*it);
 
     ASSERT(numClients == clients.size());
@@ -513,7 +391,6 @@ void FontCache::invalidate()
     purge(ForcePurge);
 }
 
-<<<<<<< HEAD
 void FontCache::dumpFontPlatformDataCache(base::trace_event::ProcessMemoryDump* memoryDump)
 {
     ASSERT(isMainThread());
@@ -560,6 +437,4 @@ CString toSkFontMgrLocale(const String& locale)
     }
 }
 
-=======
->>>>>>> miniblink49
 } // namespace blink

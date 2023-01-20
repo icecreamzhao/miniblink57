@@ -21,16 +21,11 @@
 
 namespace v8 {
 namespace internal {
-<<<<<<< HEAD
     namespace trap_handler {
-=======
-namespace trap_handler {
->>>>>>> miniblink49
 
 // We declare this as int rather than bool as a workaround for a glibc bug, in
 // which the dynamic loader cannot handle executables whose TLS area is only
 // 1 byte in size; see https://sourceware.org/bugzilla/show_bug.cgi?id=14898.
-<<<<<<< HEAD
 #ifdef SUPPORT_XP_CODE
         //int g_thread_in_wasm_code_tls = 0;
 #else
@@ -69,37 +64,3 @@ namespace trap_handler {
     } // namespace trap_handler
 } // namespace internal
 } // namespace v8
-=======
-THREAD_LOCAL int g_thread_in_wasm_code;
-
-static_assert(sizeof(g_thread_in_wasm_code) > 1,
-              "sizeof(thread_local_var) must be > 1, see "
-              "https://sourceware.org/bugzilla/show_bug.cgi?id=14898");
-
-size_t gNumCodeObjects = 0;
-CodeProtectionInfoListEntry* gCodeObjects = nullptr;
-std::atomic_size_t gRecoveredTrapCount = {0};
-
-std::atomic_flag MetadataLock::spinlock_ = ATOMIC_FLAG_INIT;
-
-MetadataLock::MetadataLock() {
-  if (g_thread_in_wasm_code) {
-    abort();
-  }
-
-  while (spinlock_.test_and_set(std::memory_order::memory_order_acquire)) {
-  }
-}
-
-MetadataLock::~MetadataLock() {
-  if (g_thread_in_wasm_code) {
-    abort();
-  }
-
-  spinlock_.clear(std::memory_order::memory_order_release);
-}
-
-}  // namespace trap_handler
-}  // namespace internal
-}  // namespace v8
->>>>>>> miniblink49

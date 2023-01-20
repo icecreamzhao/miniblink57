@@ -23,20 +23,12 @@ public:
 protected:
     const char* onGetName() override;
     bool isSuitableFor(Backend backend) override;
-<<<<<<< HEAD
     void onDraw(int loops, SkCanvas* canvas) override;
-=======
-    void onDraw(const int loops, SkCanvas* canvas) override;
->>>>>>> miniblink49
     SkIPoint onGetSize() override;
 
 private:
     skiagm::GM* fGM;
-<<<<<<< HEAD
     SkString fName;
-=======
-    SkString    fName;
->>>>>>> miniblink49
     typedef Benchmark INHERITED;
 };
 

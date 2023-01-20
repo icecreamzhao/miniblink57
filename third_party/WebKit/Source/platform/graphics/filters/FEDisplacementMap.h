@@ -35,18 +35,12 @@ enum ChannelSelectorType {
     CHANNEL_A = 4
 };
 
-<<<<<<< HEAD
 class PLATFORM_EXPORT FEDisplacementMap final : public FilterEffect {
 public:
     static FEDisplacementMap* create(Filter*,
         ChannelSelectorType xChannelSelector,
         ChannelSelectorType yChannelSelector,
         float);
-=======
-class PLATFORM_EXPORT FEDisplacementMap : public FilterEffect {
-public:
-    static PassRefPtrWillBeRawPtr<FEDisplacementMap> create(Filter*, ChannelSelectorType xChannelSelector, ChannelSelectorType yChannelSelector, float);
->>>>>>> miniblink49
 
     ChannelSelectorType xChannelSelector() const;
     bool setXChannelSelector(const ChannelSelectorType);
@@ -57,7 +51,6 @@ public:
     float scale() const;
     bool setScale(float);
 
-<<<<<<< HEAD
     TextStream& externalRepresentation(TextStream&, int indention) const override;
 
 private:
@@ -70,18 +63,6 @@ private:
     FloatRect mapEffect(const FloatRect&) const override;
 
     sk_sp<SkImageFilter> createImageFilter() override;
-=======
-    FloatRect mapPaintRect(const FloatRect&, bool forward = true) final;
-
-    TextStream& externalRepresentation(TextStream&, int indention) const override;
-
-    FloatRect determineAbsolutePaintRect(const FloatRect& requestedRect) override;
-
-private:
-    FEDisplacementMap(Filter*, ChannelSelectorType xChannelSelector, ChannelSelectorType yChannelSelector, float);
-
-    PassRefPtr<SkImageFilter> createImageFilter(SkiaImageFilterBuilder*) override;
->>>>>>> miniblink49
 
     ChannelSelectorType m_xChannelSelector;
     ChannelSelectorType m_yChannelSelector;

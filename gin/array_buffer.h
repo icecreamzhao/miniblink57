@@ -18,70 +18,71 @@
 namespace gin {
 
 class ArrayBufferAllocator : public v8::ArrayBuffer::Allocator {
- public:
-  void* Allocate(size_t length) override;
-  void* AllocateUninitialized(size_t length) override;
-  void Free(void* data, size_t length) override;
+public:
+    void* Allocate(size_t length) override;
+    void* AllocateUninitialized(size_t length) override;
+    void Free(void* data, size_t length) override;
 
-  GIN_EXPORT static ArrayBufferAllocator* SharedInstance();
+    GIN_EXPORT static ArrayBufferAllocator* SharedInstance();
 };
 
 #ifdef MINIBLINK_NOT_IMPLEMENTED
 
 class GIN_EXPORT ArrayBuffer {
- public:
-  ArrayBuffer();
-  ArrayBuffer(v8::Isolate* isolate, v8::Local<v8::ArrayBuffer> buffer);
-  ~ArrayBuffer();
-  ArrayBuffer& operator=(const ArrayBuffer& other);
+public:
+    ArrayBuffer();
+    ArrayBuffer(v8::Isolate* isolate, v8::Local<v8::ArrayBuffer> buffer);
+    ~ArrayBuffer();
+    ArrayBuffer& operator=(const ArrayBuffer& other);
 
-  void* bytes() const { return bytes_; }
-  size_t num_bytes() const { return num_bytes_; }
+    void* bytes() const { return bytes_; }
+    size_t num_bytes() const { return num_bytes_; }
 
- private:
-  class Private;
+private:
+    class Private;
 
-  scoped_refptr<Private> private_;
-  void* bytes_;
-  size_t num_bytes_;
+    scoped_refptr<Private> private_;
+    void* bytes_;
+    size_t num_bytes_;
 
-  DISALLOW_COPY(ArrayBuffer);
+    DISALLOW_COPY(ArrayBuffer);
 };
 
-template<>
+template <>
 struct GIN_EXPORT Converter<ArrayBuffer> {
-  static bool FromV8(v8::Isolate* isolate, v8::Local<v8::Value> val,
-                     ArrayBuffer* out);
+    static bool FromV8(v8::Isolate* isolate, v8::Local<v8::Value> val,
+        ArrayBuffer* out);
 };
 
 class GIN_EXPORT ArrayBufferView {
- public:
-  ArrayBufferView();
-  ArrayBufferView(v8::Isolate* isolate, v8::Local<v8::ArrayBufferView> view);
-  ~ArrayBufferView();
-  ArrayBufferView& operator=(const ArrayBufferView& other);
+public:
+    ArrayBufferView();
+    ArrayBufferView(v8::Isolate* isolate, v8::Local<v8::ArrayBufferView> view);
+    ~ArrayBufferView();
+    ArrayBufferView& operator=(const ArrayBufferView& other);
 
-  void* bytes() const {
-    return static_cast<uint8_t*>(array_buffer_.bytes()) + offset_;
-  }
-  size_t num_bytes() const { return num_bytes_; }
+    void* bytes() const
+    {
+        return static_cast<uint8_t*>(array_buffer_.bytes()) + offset_;
+    }
+    size_t num_bytes() const { return num_bytes_; }
 
- private:
-  ArrayBuffer array_buffer_;
-  size_t offset_;
-  size_t num_bytes_;
+private:
+    ArrayBuffer array_buffer_;
+    size_t offset_;
+    size_t num_bytes_;
 
-  DISALLOW_COPY(ArrayBufferView);
+    DISALLOW_COPY(ArrayBufferView);
 };
 
-template<>
+template <>
 struct GIN_EXPORT Converter<ArrayBufferView> {
-  static bool FromV8(v8::Isolate* isolate, v8::Local<v8::Value> val,
-                     ArrayBufferView* out);
+    static bool FromV8(v8::Isolate* isolate, v8::Local<v8::Value> val,
+        ArrayBufferView* out);
 };
 
 #endif // MINIBLINK_NOT_IMPLEMENTED
 
 } // namespace gin
 
-#endif  // GIN_ARRAY_BUFFER_H_
+#endif // GIN_ARRAY_BUFFER_H_

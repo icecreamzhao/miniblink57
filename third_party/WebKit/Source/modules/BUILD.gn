@@ -2,17 +2,13 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-<<<<<<< HEAD
 import("//build/split_static_library.gni")
 import("//build/config/chromecast_build.gni")
-=======
->>>>>>> miniblink49
 import("//third_party/WebKit/Source/bindings/bindings.gni")
 import("//third_party/WebKit/Source/bindings/modules/v8/generated.gni")
 import("//third_party/WebKit/Source/bindings/modules/v8/v8.gni")
 import("//third_party/WebKit/Source/build/scripts/scripts.gni")
 import("//third_party/WebKit/Source/modules/modules.gni")
-<<<<<<< HEAD
 import("//third_party/WebKit/Source/modules/modules_idl_files.gni")
 
 visibility = [ "//third_party/WebKit/Source/*" ]
@@ -86,44 +82,10 @@ target(modules_target_type, "modules") {
     "//third_party/WebKit/Source:non_test_config",
     "//third_party/WebKit/Source:inside_blink",
     "//third_party/WebKit/Source/core:blink_core_pch",
-=======
-
-visibility = [ "//third_party/WebKit/Source/*" ]
-
-# GYP version: WebKit/Source/modules/modules.gyp:modules
-source_set("modules") {
-  visibility = []  # Allow re-assignment of list.
-  visibility = [ "//third_party/WebKit/*" ]
-
-  sources = rebase_path(modules_files, ".", "//")
-  sources += bindings_modules_v8_files
-  sources += rebase_path(bindings_modules_generated_aggregate_files, ".", "//")
-  sources += rebase_path(bindings_modules_generated_union_type_files, ".", "//")
-  sources += rebase_path(bindings_modules_generated_partial_aggregate_files, ".", "//")
-  sources += rebase_path([ bindings_modules_generated_init_partial_interfaces_file ], ".", "//")
-
-  if (!is_win) {
-    sources -= [
-      "webdatabase/sqlite/SQLiteFileSystemWin.cpp",
-    ]
-  }
-  if (!is_posix) {
-    sources -= [
-      "webdatabase/sqlite/SQLiteFileSystemPosix.cpp",
-    ]
-  }
-
-  configs += [
-    # TODO(jschuh): crbug.com/167187 fix size_t to int truncations.
-    "//build/config/compiler:no_size_t_to_int_warning",
-    "//third_party/WebKit/Source:config",
-    "//third_party/WebKit/Source:inside_blink",
->>>>>>> miniblink49
   ]
 
   deps = [
     ":make_modules_generated",
-<<<<<<< HEAD
     ":module_names",
     "//device/geolocation/public/interfaces:interfaces_blink",
     "//third_party/WebKit/Source/bindings/modules:generated",
@@ -197,15 +159,11 @@ source_set("modules") {
     "//third_party/WebKit/Source/modules/websockets",
     "//third_party/WebKit/Source/modules/webusb",
     "//third_party/icu",
-=======
-    "//third_party/WebKit/Source/core",
->>>>>>> miniblink49
     "//third_party/sqlite",
     "//third_party/zlib",
   ]
 
   if (is_win) {
-<<<<<<< HEAD
     cflags = [ "/wd4334" ]  # Result of 32-bit shift implicitly converted to 64 bits.
   }
 
@@ -245,40 +203,16 @@ source_set("modules_testing") {
     "vibration/testing/InternalsVibration.h",
     "webaudio/testing/InternalsWebAudio.cpp",
     "webaudio/testing/InternalsWebAudio.h",
-=======
-    cflags = [
-      "/wd4334",  # Result of 32-bit shift implicitly converted to 64 bits.
-    ]
-    # TODO(GYP)
-    # Shard this taret into parts to work around linker limitations.
-    # on link time code generation builds.
-    #[buildtype=="Official"', {
-    #  'msvs_shard': 5,
-    #}],
-  }
-}
-
-# GYP version: WebKit/Source/modules/modules.gyp:modules_testing
-source_set("modules_testing") {
-  sources = modules_testing_files
-  sources += [
-    "$bindings_modules_v8_output_dir/V8InternalsPartial.cpp",
-    "$bindings_modules_v8_output_dir/V8InternalsPartial.h",
->>>>>>> miniblink49
   ]
 
   configs += [
     "//third_party/WebKit/Source:config",
     "//third_party/WebKit/Source:inside_blink",
-<<<<<<< HEAD
     "//third_party/WebKit/Source/core:blink_core_pch",
-=======
->>>>>>> miniblink49
   ]
 
   deps = [
     "//third_party/WebKit/Source/core",
-<<<<<<< HEAD
     "//third_party/WebKit/Source/modules",
   ]
 }
@@ -379,34 +313,5 @@ source_set("unit_tests") {
     "//third_party/WebKit/Source/core",
     "//third_party/WebKit/Source/wtf",
     "//v8",
-=======
-  ]
-}
-
-action("module_names") {
-  script = "../build/scripts/make_names.py"
-
-  module_names_in = "indexeddb/IndexedDBNames.in"
-  inputs = make_names_files + [ module_names_in ]
-
-  outputs = [
-    "$blink_modules_output_dir/IndexedDBNames.cpp",
-    "$blink_modules_output_dir/IndexedDBNames.h",
-  ]
-
-  args = [
-    rebase_path(module_names_in, root_build_dir),
-    "--output_dir",
-    rebase_path(blink_modules_output_dir, root_build_dir),
-  ]
-}
-
-# GYP version: WebKit/Source/modules/modules_generated.gyp:make_modules_generated
-group("make_modules_generated") {
-  deps = [
-    "//third_party/WebKit/Source/core:core_event_interfaces",
-    "//third_party/WebKit/Source/bindings/modules:bindings_modules_generated",
-    ":module_names",
->>>>>>> miniblink49
   ]
 }

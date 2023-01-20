@@ -13,11 +13,7 @@
 #include "src/base/platform/semaphore.h"
 #include "src/base/platform/time.h"
 #include "src/zone/zone-segment.h"
-<<<<<<< HEAD
 //#include "testing/gtest/include/gtest/gtest_prod.h"
-=======
-#include "testing/gtest/include/gtest/gtest_prod.h"
->>>>>>> miniblink49
 
 namespace v8 {
 namespace internal {
@@ -54,11 +50,7 @@ class V8_EXPORT_PRIVATE AccountingAllocator {
   virtual void ZoneDestruction(const Zone* zone) {}
 
  private:
-<<<<<<< HEAD
   //FRIEND_TEST(Zone, SegmentPoolConstraints);
-=======
-  FRIEND_TEST(Zone, SegmentPoolConstraints);
->>>>>>> miniblink49
 
   static const size_t kMinSegmentSizePower = 13;
   static const size_t kMaxSegmentSizePower = 18;

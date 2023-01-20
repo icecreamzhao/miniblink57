@@ -28,12 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "bindings/core/v8/ScriptController.h"
-=======
-#include "config.h"
-
->>>>>>> miniblink49
 #include "core/dom/Document.h"
 #include "core/frame/LocalFrame.h"
 #include "core/frame/Location.h"
@@ -42,7 +37,6 @@
 #include "platform/SharedBuffer.h"
 #include "platform/mhtml/MHTMLArchive.h"
 #include "platform/testing/URLTestHelpers.h"
-<<<<<<< HEAD
 #include "platform/testing/UnitTestHelpers.h"
 #include "platform/weborigin/KURL.h"
 #include "platform/weborigin/SchemeRegistry.h"
@@ -58,20 +52,6 @@
 #include "public/web/WebView.h"
 #include "testing/gtest/include/gtest/gtest.h"
 #include "web/tests/FrameTestHelpers.h"
-=======
-#include "platform/weborigin/KURL.h"
-#include "public/platform/Platform.h"
-#include "public/platform/WebString.h"
-#include "public/platform/WebURL.h"
-#include "public/platform/WebURLRequest.h"
-#include "public/platform/WebURLResponse.h"
-#include "public/platform/WebUnitTestSupport.h"
-#include "public/web/WebDocument.h"
-#include "public/web/WebFrame.h"
-#include "public/web/WebView.h"
-#include "web/tests/FrameTestHelpers.h"
-#include <gtest/gtest.h>
->>>>>>> miniblink49
 
 using blink::URLTestHelpers::toKURL;
 
@@ -79,15 +59,11 @@ namespace blink {
 
 class LineReader {
 public:
-<<<<<<< HEAD
     LineReader(const std::string& text)
         : m_text(text)
         , m_index(0)
     {
     }
-=======
-    LineReader(const std::string& text) : m_text(text), m_index(0) { }
->>>>>>> miniblink49
     bool getNextLine(std::string* line)
     {
         line->clear();
@@ -111,24 +87,15 @@ private:
     size_t m_index;
 };
 
-<<<<<<< HEAD
 class MHTMLTest : public ::testing::Test {
 public:
     MHTMLTest()
     {
         m_filePath = testing::blinkRootDir();
-=======
-class MHTMLTest : public testing::Test {
-public:
-    MHTMLTest()
-    {
-        m_filePath = Platform::current()->unitTestSupport()->webKitRootDir();
->>>>>>> miniblink49
         m_filePath.append("/Source/web/tests/data/mhtml/");
     }
 
 protected:
-<<<<<<< HEAD
     void SetUp() override { m_helper.initialize(); }
 
     void TearDown() override
@@ -143,26 +110,10 @@ protected:
         URLTestHelpers::registerMockedURLLoad(
             toKURL(url), fileName, WebString::fromUTF8("mhtml/"),
             WebString::fromUTF8("multipart/related"));
-=======
-    void SetUp() override
-    {
-        m_helper.initialize();
-    }
-
-    void TearDown() override
-    {
-        Platform::current()->unitTestSupport()->unregisterAllMockedURLs();
-    }
-
-    void registerMockedURLLoad(const std::string& url, const WebString& fileName)
-    {
-        URLTestHelpers::registerMockedURLLoad(toKURL(url), fileName, WebString::fromUTF8("mhtml/"), WebString::fromUTF8("text/html"));
->>>>>>> miniblink49
     }
 
     void loadURLInTopFrame(const WebURL& url)
     {
-<<<<<<< HEAD
         FrameTestHelpers::loadFrame(m_helper.webView()->mainFrame(),
             url.string().utf8().data());
     }
@@ -175,18 +126,6 @@ protected:
     {
         SerializedResource resource(toKURL(url), mime, data);
         m_resources.push_back(resource);
-=======
-        FrameTestHelpers::loadFrame(m_helper.webView()->mainFrame(), url.string().utf8().data());
-    }
-
-    Page* page() const { return m_helper.webViewImpl()->page(); }
-
-
-    void addResource(const char* url, const char* mime, PassRefPtr<SharedBuffer> data)
-    {
-        SerializedResource resource(toKURL(url), mime, data);
-        m_resources.append(resource);
->>>>>>> miniblink49
     }
 
     void addResource(const char* url, const char* mime, const char* fileName)
@@ -197,7 +136,6 @@ protected:
     void addTestResources()
     {
         addResource("http://www.test.com", "text/html", "css_test_page.html");
-<<<<<<< HEAD
         addResource("http://www.test.com/link_styles.css", "text/css",
             "link_styles.css");
         addResource("http://www.test.com/import_style_from_link.css", "text/css",
@@ -216,22 +154,10 @@ protected:
             "blue_background.png");
         addResource("http://www.test.com/purple_background.png", "image/png",
             "purple_background.png");
-=======
-        addResource("http://www.test.com/link_styles.css", "text/css", "link_styles.css");
-        addResource("http://www.test.com/import_style_from_link.css", "text/css", "import_style_from_link.css");
-        addResource("http://www.test.com/import_styles.css", "text/css", "import_styles.css");
-        addResource("http://www.test.com/red_background.png", "image/png", "red_background.png");
-        addResource("http://www.test.com/orange_background.png", "image/png", "orange_background.png");
-        addResource("http://www.test.com/yellow_background.png", "image/png", "yellow_background.png");
-        addResource("http://www.test.com/green_background.png", "image/png", "green_background.png");
-        addResource("http://www.test.com/blue_background.png", "image/png", "blue_background.png");
-        addResource("http://www.test.com/purple_background.png", "image/png", "purple_background.png");
->>>>>>> miniblink49
         addResource("http://www.test.com/ul-dot.png", "image/png", "ul-dot.png");
         addResource("http://www.test.com/ol-dot.png", "image/png", "ol-dot.png");
     }
 
-<<<<<<< HEAD
     static PassRefPtr<RawData> generateMHTMLData(
         const Vector<SerializedResource>& resources,
         MHTMLArchive::EncodingPolicy encodingPolicy,
@@ -258,22 +184,13 @@ protected:
         MHTMLArchive::EncodingPolicy encodingPolicy)
     {
         return generateMHTMLData(m_resources, encodingPolicy, title, mime);
-=======
-    PassRefPtr<SharedBuffer> serialize(const char *title, const char *mime,  MHTMLArchive::EncodingPolicy encodingPolicy)
-    {
-        return MHTMLArchive::generateMHTMLData(m_resources, encodingPolicy, title, mime);
->>>>>>> miniblink49
     }
 
 private:
     PassRefPtr<SharedBuffer> readFile(const char* fileName)
     {
         String filePath = m_filePath + fileName;
-<<<<<<< HEAD
         return testing::readFromFile(filePath);
-=======
-        return Platform::current()->unitTestSupport()->readFromFile(filePath);
->>>>>>> miniblink49
     }
 
     String m_filePath;
@@ -299,30 +216,19 @@ TEST_F(MHTMLTest, CheckDomain)
 
     EXPECT_STREQ(kFileURL, frame->domWindow()->location()->href().ascii().data());
 
-<<<<<<< HEAD
     SecurityOrigin* origin = document->getSecurityOrigin();
-=======
-    SecurityOrigin* origin = document->securityOrigin();
->>>>>>> miniblink49
     EXPECT_STRNE("localhost", origin->domain().ascii().data());
 }
 
 TEST_F(MHTMLTest, TestMHTMLEncoding)
 {
     addTestResources();
-<<<<<<< HEAD
     RefPtr<RawData> data = serialize("Test Serialization", "text/html",
         MHTMLArchive::UseDefaultEncoding);
 
     // Read the MHTML data line per line and do some pseudo-parsing to make sure
     // the right encoding is used for the different sections.
     LineReader lineReader(std::string(data->data(), data->length()));
-=======
-    RefPtr<SharedBuffer> data  = serialize("Test Serialization", "text/html", MHTMLArchive::UseDefaultEncoding);
-
-    // Read the MHTML data line per line and do some pseudo-parsing to make sure the right encoding is used for the different sections.
-    LineReader lineReader(std::string(data->data(), data->size()));
->>>>>>> miniblink49
     int sectionCheckedCount = 0;
     const char* expectedEncoding = 0;
     std::string line;
@@ -351,7 +257,6 @@ TEST_F(MHTMLTest, TestMHTMLEncoding)
     EXPECT_EQ(12, sectionCheckedCount);
 }
 
-<<<<<<< HEAD
 TEST_F(MHTMLTest, MHTMLFromScheme)
 {
     addTestResources();
@@ -400,6 +305,4 @@ TEST_F(MHTMLTest, EnforceSandboxFlags)
     EXPECT_FALSE(frame->script().canExecuteScripts(NotAboutToExecuteScript));
 }
 
-=======
->>>>>>> miniblink49
 } // namespace blink

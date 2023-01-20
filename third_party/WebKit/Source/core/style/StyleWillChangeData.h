@@ -15,18 +15,21 @@ namespace blink {
 
 class StyleWillChangeData : public RefCounted<StyleWillChangeData> {
 public:
-    static PassRefPtr<StyleWillChangeData> create() { return adoptRef(new StyleWillChangeData); }
-    PassRefPtr<StyleWillChangeData> copy() const { return adoptRef(new StyleWillChangeData(*this)); }
+    static PassRefPtr<StyleWillChangeData> create()
+    {
+        return adoptRef(new StyleWillChangeData);
+    }
+    PassRefPtr<StyleWillChangeData> copy() const
+    {
+        return adoptRef(new StyleWillChangeData(*this));
+    }
 
     bool operator==(const StyleWillChangeData& o) const
     {
         return m_properties == o.m_properties && m_contents == o.m_contents && m_scrollPosition == o.m_scrollPosition;
     }
 
-    bool operator!=(const StyleWillChangeData& o) const
-    {
-        return !(*this == o);
-    }
+    bool operator!=(const StyleWillChangeData& o) const { return !(*this == o); }
 
     Vector<CSSPropertyID> m_properties;
     unsigned m_contents : 1;

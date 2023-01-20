@@ -25,7 +25,6 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/xml/XPathParser.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -34,6 +33,7 @@
 #include "core/xml/XPathEvaluator.h"
 #include "core/xml/XPathNSResolver.h"
 #include "core/xml/XPathPath.h"
+#include "wtf/PtrUtil.h"
 #include "wtf/StdLibExtras.h"
 #include "wtf/text/StringHash.h"
 
@@ -44,7 +44,9 @@ using namespace XPath;
 
 Parser* Parser::currentParser = nullptr;
 
-enum XMLCat { NameStart, NameCont, NotPartOfName };
+enum XMLCat { NameStart,
+    NameCont,
+    NotPartOfName };
 
 typedef HashMap<String, Step::Axis> AxisNamesMap;
 
@@ -86,8 +88,8 @@ static void setUpAxisNamesMap(AxisNamesMap& axisNames)
         { "preceding-sibling", Step::PrecedingSiblingAxis },
         { "self", Step::SelfAxis }
     };
-    for (unsigned i = 0; i < sizeof(axisNameList) / sizeof(axisNameList[0]); ++i)
-        axisNames.set(axisNameList[i].name, axisNameList[i].axis);
+    for (const auto& axisName : axisNameList)
+        axisNames.set(axisName.name, axisName.axis);
 }
 
 static bool isAxisName(const String& name, Step::Axis& type)
@@ -106,13 +108,13 @@ static bool isAxisName(const String& name, Step::Axis& type)
 
 static bool isNodeTypeName(const String& name)
 {
-    DEFINE_STATIC_LOCAL(HashSet<String>, nodeTypeNames, ());
-    if (nodeTypeNames.isEmpty()) {
-        nodeTypeNames.add("comment");
-        nodeTypeNames.add("text");
-        nodeTypeNames.add("processing-instruction");
-        nodeTypeNames.add("node");
-    }
+    DEFINE_STATIC_LOCAL(HashSet<String>, nodeTypeNames,
+        ({
+            "comment",
+            "text",
+            "processing-instruction",
+            "node",
+        }));
     return nodeTypeNames.contains(name);
 }
 
@@ -124,10 +126,21 @@ bool Parser::isBinaryOperatorContext() const
 {
     switch (m_lastTokenType) {
     case 0:
-    case '@': case AXISNAME: case '(': case '[': case ',':
-    case AND: case OR: case MULOP:
-    case '/': case SLASHSLASH: case '|': case PLUS: case MINUS:
-    case EQOP: case RELOP:
+    case '@':
+    case AXISNAME:
+    case '(':
+    case '[':
+    case ',':
+    case AND:
+    case OR:
+    case MULOP:
+    case '/':
+    case SLASHSLASH:
+    case '|':
+    case PLUS:
+    case MINUS:
+    case EQOP:
+    case RELOP:
         return false;
     default:
         return true;
@@ -146,7 +159,9 @@ Token Parser::makeTokenAndAdvance(int code, int advance)
     return Token(code);
 }
 
-Token Parser::makeTokenAndAdvance(int code, NumericOp::Opcode val, int advance)
+Token Parser::makeTokenAndAdvance(int code,
+    NumericOp::Opcode val,
+    int advance)
 {
     m_nextPos += advance;
     return Token(code, val);
@@ -271,14 +286,27 @@ Token Parser::nextTokenInternal()
 
     char code = peekCurHelper();
     switch (code) {
-    case '(': case ')': case '[': case ']':
-    case '@': case ',': case '|':
+    case '(':
+    case ')':
+    case '[':
+    case ']':
+    case '@':
+    case ',':
+    case '|':
         return makeTokenAndAdvance(code);
     case '\'':
     case '\"':
         return lexString();
-    case '0': case '1': case '2': case '3': case '4':
-    case '5': case '6': case '7': case '8': case '9':
+    case '0':
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+    case '5':
+    case '6':
+    case '7':
+    case '8':
+    case '9':
         return lexNumber();
     case '.': {
         char next = peekAheadHelper();
@@ -403,9 +431,7 @@ Parser::Parser()
     reset(String());
 }
 
-Parser::~Parser()
-{
-}
+Parser::~Parser() { }
 
 void Parser::reset(const String& data)
 {
@@ -448,7 +474,9 @@ int Parser::lex(void* data)
     return tok.type;
 }
 
-bool Parser::expandQName(const String& qName, AtomicString& localName, AtomicString& namespaceURI)
+bool Parser::expandQName(const String& qName,
+    AtomicString& localName,
+    AtomicString& namespaceURI)
 {
     size_t colon = qName.find(':');
     if (colon != kNotFound) {
@@ -465,7 +493,15 @@ bool Parser::expandQName(const String& qName, AtomicString& localName, AtomicStr
     return true;
 }
 
-Expression* Parser::parseStatement(const String& statement, XPathNSResolver* resolver, ExceptionState& exceptionState)
+int xpathyyparse(blink::XPath::Parser*)
+{
+    DebugBreak();
+    return 0;
+}
+
+Expression* Parser::parseStatement(const String& statement,
+    XPathNSResolver* resolver,
+    ExceptionState& exceptionState)
 {
     reset(statement);
 
@@ -482,12 +518,16 @@ Expression* Parser::parseStatement(const String& statement, XPathNSResolver* res
         m_topExpr = nullptr;
 
         if (m_gotNamespaceError)
-            exceptionState.throwDOMException(NamespaceError, "The string '" + statement + "' contains unresolvable namespaces.");
+            exceptionState.throwDOMException(
+                NamespaceError,
+                "The string '" + statement + "' contains unresolvable namespaces.");
         else
-            exceptionState.throwDOMException(SyntaxError, "The string '" + statement + "' is not a valid XPath expression.");
+            exceptionState.throwDOMException(
+                SyntaxError,
+                "The string '" + statement + "' is not a valid XPath expression.");
         return nullptr;
     }
-    ASSERT(m_strings.size() == 0);
+    DCHECK_EQ(m_strings.size(), 0u);
     Expression* result = m_topExpr;
     m_topExpr = nullptr;
 
@@ -496,20 +536,18 @@ Expression* Parser::parseStatement(const String& statement, XPathNSResolver* res
 
 void Parser::registerString(String* s)
 {
-    if (s == 0)
+    if (!s)
         return;
 
-    ASSERT(!m_strings.contains(s));
-
-    m_strings.add(adoptPtr(s));
+    DCHECK(!m_strings.contains(s));
+    m_strings.add(WTF::wrapUnique(s));
 }
 
 void Parser::deleteString(String* s)
 {
-    if (s == 0)
+    if (!s)
         return;
 
-    ASSERT(m_strings.contains(s));
-
+    DCHECK(m_strings.contains(s));
     m_strings.remove(s);
 }

@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/streams/Stream.h"
 
 #include "platform/blob/BlobData.h"
@@ -38,7 +37,7 @@
 namespace blink {
 
 Stream::Stream(ExecutionContext* context, const String& mediaType)
-    : ActiveDOMObject(context)
+    : SuspendableObject(context)
     , m_mediaType(mediaType)
     , m_isNeutered(false)
 {
@@ -76,15 +75,11 @@ Stream::~Stream()
     BlobRegistry::unregisterStreamURL(m_internalURL);
 }
 
-void Stream::suspend()
-{
-}
+void Stream::suspend() { }
 
-void Stream::resume()
-{
-}
+void Stream::resume() { }
 
-void Stream::stop()
+void Stream::contextDestroyed(ExecutionContext*)
 {
     neuter();
     abort();
@@ -92,7 +87,7 @@ void Stream::stop()
 
 DEFINE_TRACE(Stream)
 {
-    ActiveDOMObject::trace(visitor);
+    SuspendableObject::trace(visitor);
 }
 
 } // namespace blink

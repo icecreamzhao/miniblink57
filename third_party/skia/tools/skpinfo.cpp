@@ -6,10 +6,7 @@
  */
 
 #include "SkCommandLineFlags.h"
-<<<<<<< HEAD
 #include "SkFontDescriptor.h"
-=======
->>>>>>> miniblink49
 #include "SkPicture.h"
 #include "SkPictureData.h"
 #include "SkStream.h"
@@ -33,12 +30,8 @@ static const int kMissingInput = 4;
 static const int kIOError = 5;
 
 int tool_main(int argc, char** argv);
-<<<<<<< HEAD
 int tool_main(int argc, char** argv)
 {
-=======
-int tool_main(int argc, char** argv) {
->>>>>>> miniblink49
     SkCommandLineFlags::SetUsage("Prints information about an skp file");
     SkCommandLineFlags::Parse(argc, argv);
 
@@ -69,7 +62,6 @@ int tool_main(int argc, char** argv) {
     }
     if (FLAGS_cullRect && !FLAGS_quiet) {
         SkDebugf("Cull Rect: %f,%f,%f,%f\n",
-<<<<<<< HEAD
             info.fCullRect.fLeft, info.fCullRect.fTop,
             info.fCullRect.fRight, info.fCullRect.fBottom);
     }
@@ -94,13 +86,6 @@ int tool_main(int argc, char** argv) {
             SkDebugf("kPtrIs64Bit");
         }
         SkDebugf("\n");
-=======
-                 info.fCullRect.fLeft, info.fCullRect.fTop,
-                 info.fCullRect.fRight, info.fCullRect.fBottom);
-    }
-    if (FLAGS_flags && !FLAGS_quiet) {
-        SkDebugf("Flags: 0x%x\n", info.fFlags);
->>>>>>> miniblink49
     }
 
     if (!stream.readBool()) {
@@ -121,11 +106,7 @@ int tool_main(int argc, char** argv) {
 
         // "move" doesn't error out when seeking beyond the end of file
         // so we need a preemptive check here.
-<<<<<<< HEAD
         if (curPos + chunkSize > totStreamSize) {
-=======
-        if (curPos+chunkSize > totStreamSize) {
->>>>>>> miniblink49
             if (!FLAGS_quiet) {
                 SkDebugf("truncated file\n");
             }
@@ -147,7 +128,6 @@ int tool_main(int argc, char** argv) {
                 SkDebugf("SK_PICT_FACTORY_TAG %d\n", chunkSize);
             }
             break;
-<<<<<<< HEAD
         case SK_PICT_TYPEFACE_TAG: {
             if (FLAGS_tags && !FLAGS_quiet) {
                 SkDebugf("SK_PICT_TYPEFACE_TAG %d\n", chunkSize);
@@ -168,25 +148,12 @@ int tool_main(int argc, char** argv) {
             chunkSize = 0;
             break;
         }
-=======
-        case SK_PICT_TYPEFACE_TAG:
-            if (FLAGS_tags && !FLAGS_quiet) {
-                SkDebugf("SK_PICT_TYPEFACE_TAG %d\n", chunkSize);
-                SkDebugf("Exiting early due to format limitations\n");
-            }
-            return kSuccess;       // TODO: need to store size in bytes
-            break;
->>>>>>> miniblink49
         case SK_PICT_PICTURE_TAG:
             if (FLAGS_tags && !FLAGS_quiet) {
                 SkDebugf("SK_PICT_PICTURE_TAG %d\n", chunkSize);
                 SkDebugf("Exiting early due to format limitations\n");
             }
-<<<<<<< HEAD
             return kSuccess; // TODO: need to store size in bytes
-=======
-            return kSuccess;       // TODO: need to store size in bytes
->>>>>>> miniblink49
             break;
         case SK_PICT_BUFFER_SIZE_TAG:
             if (FLAGS_tags && !FLAGS_quiet) {
@@ -212,13 +179,8 @@ int tool_main(int argc, char** argv) {
 }
 
 #if !defined SK_BUILD_FOR_IOS
-<<<<<<< HEAD
 int main(int argc, char* const argv[])
 {
     return tool_main(argc, (char**)argv);
-=======
-int main(int argc, char * const argv[]) {
-    return tool_main(argc, (char**) argv);
->>>>>>> miniblink49
 }
 #endif

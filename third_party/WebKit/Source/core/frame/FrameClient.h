@@ -6,16 +6,15 @@
 #define FrameClient_h
 
 #include "core/CoreExport.h"
+#include "platform/heap/Handle.h"
+#include "public/platform/BlameContext.h"
 
 namespace blink {
 
 class Frame;
-class LocalFrame;
-class MessageEvent;
-class SecurityOrigin;
 enum class FrameDetachType;
 
-class CORE_EXPORT FrameClient {
+class CORE_EXPORT FrameClient : public GarbageCollectedFinalized<FrameClient> {
 public:
     virtual bool inShadowTree() const = 0;
 
@@ -29,17 +28,16 @@ public:
 
     virtual Frame* parent() const = 0;
     virtual Frame* top() const = 0;
-    virtual Frame* previousSibling() const = 0;
     virtual Frame* nextSibling() const = 0;
     virtual Frame* firstChild() const = 0;
-    virtual Frame* lastChild() const = 0;
 
     virtual unsigned backForwardLength() = 0;
 
-    // Returns true if the embedder intercepted the postMessage call
-    virtual bool willCheckAndDispatchMessageEvent(SecurityOrigin* /*target*/, MessageEvent*, LocalFrame* /*sourceFrame*/) const { return false; }
+    virtual void frameFocused() const = 0;
 
     virtual ~FrameClient() { }
+
+    DEFINE_INLINE_VIRTUAL_TRACE() { }
 };
 
 } // namespace blink

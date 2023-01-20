@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/dom/NodeListsNodeData.h"
 
 namespace blink {
@@ -47,11 +46,14 @@ void NodeListsNodeData::invalidateCaches(const QualifiedName* attrName)
 
 DEFINE_TRACE(NodeListsNodeData)
 {
-#if ENABLE(OILPAN)
     visitor->trace(m_childNodeList);
     visitor->trace(m_atomicNameCaches);
     visitor->trace(m_tagCollectionCacheNS);
-#endif
+}
+
+DEFINE_TRACE_WRAPPERS(NodeListsNodeData)
+{
+    visitor->traceWrappersWithManualWriteBarrier(m_childNodeList);
 }
 
 } // namespace blink

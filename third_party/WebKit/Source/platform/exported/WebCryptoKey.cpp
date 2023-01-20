@@ -28,39 +28,25 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "public/platform/WebCryptoKey.h"
 
 #include "public/platform/WebCryptoAlgorithm.h"
 #include "public/platform/WebCryptoAlgorithmParams.h"
 #include "public/platform/WebCryptoKeyAlgorithm.h"
-<<<<<<< HEAD
 #include "wtf/PtrUtil.h"
 #include "wtf/ThreadSafeRefCounted.h"
 #include <memory>
-=======
-#include "wtf/OwnPtr.h"
-#include "wtf/ThreadSafeRefCounted.h"
->>>>>>> miniblink49
 
 namespace blink {
 
 class WebCryptoKeyPrivate : public ThreadSafeRefCounted<WebCryptoKeyPrivate> {
 public:
-<<<<<<< HEAD
     WebCryptoKeyPrivate(std::unique_ptr<WebCryptoKeyHandle> handle,
         WebCryptoKeyType type,
         bool extractable,
         const WebCryptoKeyAlgorithm& algorithm,
         WebCryptoKeyUsageMask usages)
         : handle(std::move(handle))
-=======
-    WebCryptoKeyPrivate(PassOwnPtr<WebCryptoKeyHandle> handle, WebCryptoKeyType type, bool extractable, const WebCryptoKeyAlgorithm& algorithm, WebCryptoKeyUsageMask usages)
-        : handle(handle)
->>>>>>> miniblink49
         , type(type)
         , extractable(extractable)
         , algorithm(algorithm)
@@ -69,18 +55,13 @@ public:
         ASSERT(!algorithm.isNull());
     }
 
-<<<<<<< HEAD
     const std::unique_ptr<WebCryptoKeyHandle> handle;
-=======
-    const OwnPtr<WebCryptoKeyHandle> handle;
->>>>>>> miniblink49
     const WebCryptoKeyType type;
     const bool extractable;
     const WebCryptoKeyAlgorithm algorithm;
     const WebCryptoKeyUsageMask usages;
 };
 
-<<<<<<< HEAD
 WebCryptoKey WebCryptoKey::create(WebCryptoKeyHandle* handle,
     WebCryptoKeyType type,
     bool extractable,
@@ -90,12 +71,6 @@ WebCryptoKey WebCryptoKey::create(WebCryptoKeyHandle* handle,
     WebCryptoKey key;
     key.m_private = adoptRef(new WebCryptoKeyPrivate(
         WTF::wrapUnique(handle), type, extractable, algorithm, usages));
-=======
-WebCryptoKey WebCryptoKey::create(WebCryptoKeyHandle* handle, WebCryptoKeyType type, bool extractable, const WebCryptoKeyAlgorithm& algorithm, WebCryptoKeyUsageMask usages)
-{
-    WebCryptoKey key;
-    key.m_private = adoptRef(new WebCryptoKeyPrivate(adoptPtr(handle), type, extractable, algorithm, usages));
->>>>>>> miniblink49
     return key;
 }
 
@@ -139,14 +114,11 @@ bool WebCryptoKey::isNull() const
     return m_private.isNull();
 }
 
-<<<<<<< HEAD
 bool WebCryptoKey::keyUsageAllows(const blink::WebCryptoKeyUsage usage) const
 {
     return ((m_private->usages & usage) != 0);
 }
 
-=======
->>>>>>> miniblink49
 void WebCryptoKey::assign(const WebCryptoKey& other)
 {
     m_private = other.m_private;

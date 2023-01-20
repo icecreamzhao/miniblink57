@@ -33,10 +33,7 @@
 
 #include "WebCanvas.h"
 #include "WebColor.h"
-<<<<<<< HEAD
 #include "WebScrollbarOverlayColorTheme.h"
-=======
->>>>>>> miniblink49
 #include "WebSize.h"
 
 namespace blink {
@@ -114,12 +111,8 @@ public:
         bool hasBorderRadius;
         int arrowX;
         int arrowY;
-<<<<<<< HEAD
         int arrowSize;
         WebColor arrowColor;
-=======
-        int arrowHeight;
->>>>>>> miniblink49
         WebColor backgroundColor;
         bool fillContentArea;
     };
@@ -145,14 +138,11 @@ public:
         int valueRectHeight;
     };
 
-<<<<<<< HEAD
     // Extra parameters for scrollbar thumb. Used only for overlay scrollbars.
     struct ScrollbarThumbExtraParams {
         WebScrollbarOverlayColorTheme scrollbarTheme;
     };
 
-=======
->>>>>>> miniblink49
     union ExtraParams {
         ScrollbarTrackExtraParams scrollbarTrack;
         ButtonExtraParams button;
@@ -161,17 +151,13 @@ public:
         SliderExtraParams slider;
         InnerSpinButtonExtraParams innerSpin;
         ProgressBarExtraParams progressBar;
-<<<<<<< HEAD
         ScrollbarThumbExtraParams scrollbarThumb;
-=======
->>>>>>> miniblink49
     };
 
     // Gets the size of the given theme part. For variable sized items
     // like vertical scrollbar thumbs, the width will be the required width of
     // the track while the height will be the minimum height.
     virtual WebSize getSize(Part) { return WebSize(); }
-<<<<<<< HEAD
 
     struct ScrollbarStyle {
         int thumbThickness;
@@ -200,10 +186,6 @@ public:
         State,
         const WebRect&,
         const ExtraParams*) { }
-=======
-    // Paint the given the given theme part.
-    virtual void paint(WebCanvas*, Part, State, const WebRect&, const ExtraParams*) { }
->>>>>>> miniblink49
 };
 
 } // namespace blink

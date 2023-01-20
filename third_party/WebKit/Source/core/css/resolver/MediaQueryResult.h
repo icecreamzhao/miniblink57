@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
- * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc. All rights reserved.
+ * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc.
+ * All rights reserved.
  * Copyright (C) 2013 Google Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
@@ -25,45 +26,30 @@
 
 #include "core/css/MediaQueryExp.h"
 #include "wtf/Noncopyable.h"
-#include "wtf/RefCounted.h"
 
 namespace blink {
 
-class MediaQueryResult : public RefCountedWillBeGarbageCollectedFinalized<MediaQueryResult> {
-    WTF_MAKE_NONCOPYABLE(MediaQueryResult); WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(MediaQueryResult);
+class MediaQueryResult : public GarbageCollected<MediaQueryResult> {
+    WTF_MAKE_NONCOPYABLE(MediaQueryResult);
+
 public:
     MediaQueryResult(const MediaQueryExp& expr, bool result)
-#if ENABLE(OILPAN)
         : m_expression(&expr)
-#else
-        : m_expression(expr)
-#endif
         , m_result(result)
     {
     }
 
     DEFINE_INLINE_TRACE() { visitor->trace(m_expression); }
 
-    const MediaQueryExp* expression() const
-    {
-#if ENABLE(OILPAN)
-        return m_expression;
-#else
-        return &m_expression;
-#endif
-    }
+    const MediaQueryExp* expression() const { return m_expression; }
 
     bool result() const { return m_result; }
 
 private:
-#if ENABLE(OILPAN)
     Member<const MediaQueryExp> m_expression;
-#else
-    MediaQueryExp m_expression;
-#endif
     bool m_result;
 };
 
-}
+} // namespace blink
 
 #endif

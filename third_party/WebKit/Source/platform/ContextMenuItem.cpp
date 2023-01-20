@@ -23,25 +23,17 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/ContextMenuItem.h"
 
 #include "platform/ContextMenu.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 ContextMenuItem::ContextMenuItem(ContextMenuItemType type,
     ContextMenuAction action,
     const String& title,
     const String& icon,
     ContextMenu* subMenu)
-=======
-ContextMenuItem::ContextMenuItem(ContextMenuItemType type, ContextMenuAction action, const String& title, const String& icon, ContextMenu* subMenu)
->>>>>>> miniblink49
     : m_type(type)
     , m_action(action)
     , m_title(title)
@@ -53,16 +45,12 @@ ContextMenuItem::ContextMenuItem(ContextMenuItemType type, ContextMenuAction act
         setSubMenu(subMenu);
 }
 
-<<<<<<< HEAD
 ContextMenuItem::ContextMenuItem(ContextMenuItemType type,
     ContextMenuAction action,
     const String& title,
     const String& icon,
     bool enabled,
     bool checked)
-=======
-ContextMenuItem::ContextMenuItem(ContextMenuItemType type, ContextMenuAction action, const String& title, const String& icon, bool enabled, bool checked)
->>>>>>> miniblink49
     : m_type(type)
     , m_action(action)
     , m_title(title)
@@ -72,15 +60,11 @@ ContextMenuItem::ContextMenuItem(ContextMenuItemType type, ContextMenuAction act
 {
 }
 
-<<<<<<< HEAD
 ContextMenuItem::ContextMenuItem(ContextMenuAction action,
     const String& title,
     bool enabled,
     bool checked,
     const Vector<ContextMenuItem>& subMenuItems)
-=======
-ContextMenuItem::ContextMenuItem(ContextMenuAction action, const String& title, bool enabled, bool checked, const Vector<ContextMenuItem>& subMenuItems)
->>>>>>> miniblink49
     : m_type(SubmenuType)
     , m_action(action)
     , m_title(title)
@@ -90,13 +74,7 @@ ContextMenuItem::ContextMenuItem(ContextMenuAction action, const String& title, 
 {
 }
 
-<<<<<<< HEAD
 ContextMenuItem::~ContextMenuItem() { }
-=======
-ContextMenuItem::~ContextMenuItem()
-{
-}
->>>>>>> miniblink49
 
 void ContextMenuItem::setSubMenu(ContextMenu* subMenu)
 {

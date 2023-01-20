@@ -9,10 +9,7 @@
 #include "core/workers/WorkerClients.h"
 #include "modules/ModulesExport.h"
 #include "wtf/Forward.h"
-<<<<<<< HEAD
 #include <memory>
-=======
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -22,7 +19,6 @@ class WebServiceWorkerProvider;
 // This mainly exists to provide access to WebServiceWorkerProvider.
 // Owned by Document (or WorkerClients).
 class MODULES_EXPORT ServiceWorkerContainerClient final
-<<<<<<< HEAD
     : public GarbageCollectedFinalized<ServiceWorkerContainerClient>,
       public Supplement<Document>,
       public Supplement<WorkerClients> {
@@ -34,15 +30,6 @@ public:
         std::unique_ptr<WebServiceWorkerProvider>);
     ServiceWorkerContainerClient(WorkerClients&,
         std::unique_ptr<WebServiceWorkerProvider>);
-=======
-    : public NoBaseWillBeGarbageCollectedFinalized<ServiceWorkerContainerClient>
-    , public WillBeHeapSupplement<Document>
-    , public WillBeHeapSupplement<WorkerClients> {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(ServiceWorkerContainerClient);
-    WTF_MAKE_NONCOPYABLE(ServiceWorkerContainerClient);
-public:
-    static PassOwnPtrWillBeRawPtr<ServiceWorkerContainerClient> create(PassOwnPtr<WebServiceWorkerProvider>);
->>>>>>> miniblink49
     virtual ~ServiceWorkerContainerClient();
 
     WebServiceWorkerProvider* provider() { return m_provider.get(); }
@@ -52,7 +39,6 @@ public:
 
     DEFINE_INLINE_VIRTUAL_TRACE()
     {
-<<<<<<< HEAD
         Supplement<Document>::trace(visitor);
         Supplement<WorkerClients>::trace(visitor);
     }
@@ -64,19 +50,6 @@ private:
 MODULES_EXPORT void provideServiceWorkerContainerClientToWorker(
     WorkerClients*,
     std::unique_ptr<WebServiceWorkerProvider>);
-=======
-        WillBeHeapSupplement<Document>::trace(visitor);
-        WillBeHeapSupplement<WorkerClients>::trace(visitor);
-    }
-
-protected:
-    explicit ServiceWorkerContainerClient(PassOwnPtr<WebServiceWorkerProvider>);
-
-    OwnPtr<WebServiceWorkerProvider> m_provider;
-};
-
-MODULES_EXPORT void provideServiceWorkerContainerClientToWorker(WorkerClients*, PassOwnPtr<WebServiceWorkerProvider>);
->>>>>>> miniblink49
 
 } // namespace blink
 

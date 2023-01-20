@@ -41,32 +41,21 @@ struct WebFontRenderStyle;
 
 // Put methods here that are required due to sandbox restrictions.
 // These are currently only implemented only on Linux:
-<<<<<<< HEAD
 // https://chromium.googlesource.com/chromium/src/+/master/docs/linux_sandbox_ipc.md
 class WebSandboxSupport {
 public:
     // Get information to instantiate a font which contains glyphs for the given
     // Unicode code-point.
-=======
-// https://code.google.com/p/chromium/wiki/LinuxSandboxIPC
-class WebSandboxSupport {
-public:
-    // Get information to instantiate a font which contains glyphs for the given Unicode code-point.
->>>>>>> miniblink49
     //   character: a UTF-32 codepoint
     //   preferredLocale: preferred locale identifier for the |characters|
     //                    (e.g. "en", "ja", "zh-CN")
     //
     // Returns a WebFallbackFont instance with the font name and filename.
     // The instance has empty font name if the request cannot be satisfied.
-<<<<<<< HEAD
     virtual void getFallbackFontForCharacter(WebUChar32,
         const char* preferredLocale,
         WebFallbackFont*)
         = 0;
-=======
-    virtual void getFallbackFontForCharacter(WebUChar32, const char* preferredLocale, WebFallbackFont*) = 0;
->>>>>>> miniblink49
 
     // Fill out the given WebFontRenderStyle with the user's preferences for
     // rendering the given font at the given size (in pixels).
@@ -80,14 +69,10 @@ public:
     //     I: italic flag
     //     B: bold flag
     // TODO(derat): Use separate parameters for the size and the style.
-<<<<<<< HEAD
     virtual void getWebFontRenderStyleForStrike(const char* family,
         int sizeAndStyle,
         WebFontRenderStyle*)
         = 0;
-=======
-    virtual void getRenderStyleForStrike(const char* family, int sizeAndStyle, WebFontRenderStyle*) = 0;
->>>>>>> miniblink49
 };
 
 } // namespace blink

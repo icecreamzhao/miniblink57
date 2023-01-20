@@ -38,14 +38,14 @@
 #include "third_party/WebKit/Source/platform/Timer.h"
 #include "third_party/WebKit/Source/platform/weborigin/KURL.h"
 #include "third_party/WebKit/Source/wtf/Noncopyable.h"
-#include "third_party/WebKit/Source/wtf/FastAllocBase.h"
+//#include "third_party/WebKit/Source/wtf/FastAllocBase.h"
 #include "third_party/WebKit/public/platform/WebURLLoaderClient.h"
 #include "third_party/WebKit/Source/wtf/OwnPtr.h"
 #include <windows.h>
 #include <memory>
 #include "third_party/libcurl/include/curl/curl.h"
 
-#define MINIBLINK_NO_MULTITHREAD_NET 1
+//#define MINIBLINK_NO_MULTITHREAD_NET 0
 
 // The allocations and releases in WebURLLoaderInternal are
 // Cocoa-exception-free (either simple Foundation classes or
@@ -70,7 +70,6 @@ class WebURLLoaderManagerMainTask;
 class WebURLLoaderManager;
 class FlattenHTTPBodyElementStream;
 struct InitializeHandleInfo;
-struct DiskCacheItem;
 
 class JobHead {
 public:
@@ -93,8 +92,10 @@ public:
 
 class WebURLLoaderInternal : public JobHead {
 public:
-    WebURLLoaderInternal(WebURLLoaderImplCurl* loader, const WebURLRequest& request, WebURLLoaderClient* client, bool defersLoading, bool shouldContentSniff);
+    WebURLLoaderInternal(blink::WebThread* ioThread, WebURLLoaderImplCurl* loader, const WebURLRequest& request, WebURLLoaderClient* client, bool defersLoading, bool shouldContentSniff);
     virtual ~WebURLLoaderInternal() override;
+
+    static void release(int jobId);
 
     WebURLLoaderClient* client() { return m_client; }
 
@@ -110,6 +111,13 @@ public:
         RELEASE_ASSERT(WTF::isMainThread());
 #endif
         return m_firstRequest; 
+    }
+
+    void decodeUrlRequest()
+    {
+        KURL url = m_firstRequest->url();
+        String newUrl = blink::decodeURLEscapeSequences(url.getUTF8String());
+        m_firstRequest->setURL(KURL(ParsedURLString, newUrl));
     }
 
     void resetFirstRequest(blink::WebURLRequest* newRequest)
@@ -131,9 +139,13 @@ private:
     blink::WebURLRequest* m_firstRequest;
 
 public:
-    WebURLResponse m_response;
-    char* m_url; // 设置给curl的地址。和request可能不同，主要是fragment
+    blink::WebURLResponse m_response;
+    std::string m_url; // 设置给curl的地址。和request可能不同，主要是fragment
+    std::string m_fragment;
+
     String m_lastHTTPMethod;
+
+    int m_webviewId;
 
     // Suggested credentials for the current redirection step.
     String m_user;
@@ -173,7 +185,7 @@ public:
     WebURLLoaderImplCurl* m_loader;
     WebURLLoaderManager* m_manager;
 
-    WTF::Mutex m_destroingMutex;
+    WTF::RecursiveMutex* m_destroingMutex;
     enum State {
         kNormal,
         kDestroying,
@@ -203,7 +215,12 @@ public:
     Vector<char>* m_asynWkeNetSetData;
     bool m_isWkeNetSetDataBeSetted;
 
+    bool m_isWkeCanceled; // 是否调用过wkeNetCancelRequest
+
     bool m_hasCallResponse; // 是否有head call被调用过。如果没有的话，且又有write call 提前调用了，就需要缓存数据给下载
+
+    unsigned long m_sentDataBytes;
+    unsigned long m_totalBytesToBeSent; // post的时候，记录发送进度用
 
     enum CacheForDownloadOpt {
         kCacheForDownloadUnknow,
@@ -216,7 +233,9 @@ public:
     Vector<char> m_dataCacheForDownload; // 下载时需要先缓存再给外部
 #endif
 
-    DiskCacheItem* m_diskCacheItem;
+    RefPtr<PageNetExtraData> m_pageNetExtraData;
+
+    blink::WebThread* m_ioThread;
 };
 
 } // namespace net

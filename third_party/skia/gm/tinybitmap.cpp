@@ -1,14 +1,9 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-<<<<<<< HEAD
 #include "SkCanvas.h"
 #include "SkColorPriv.h"
 #include "SkShader.h"
@@ -19,29 +14,13 @@ namespace skiagm {
 
 static SkBitmap make_bitmap()
 {
-=======
-#include "gm.h"
-#include "SkColorPriv.h"
-#include "SkShader.h"
-#include "SkCanvas.h"
-#include "SkUtils.h"
-
-namespace skiagm {
-
-static SkBitmap make_bitmap() {
->>>>>>> miniblink49
     const SkPMColor c[] = { SkPackARGB32(0x80, 0x80, 0, 0) };
     SkColorTable* ctable = new SkColorTable(c, SK_ARRAY_COUNT(c));
 
     SkBitmap bm;
     bm.allocPixels(SkImageInfo::Make(1, 1, kIndex_8_SkColorType,
-<<<<<<< HEAD
                        kPremul_SkAlphaType),
         nullptr, ctable);
-=======
-                                     kPremul_SkAlphaType),
-                   NULL, ctable);
->>>>>>> miniblink49
     ctable->unref();
 
     bm.lockPixels();
@@ -52,28 +31,19 @@ static SkBitmap make_bitmap() {
 
 class TinyBitmapGM : public GM {
 public:
-<<<<<<< HEAD
     TinyBitmapGM()
     {
-=======
-    TinyBitmapGM() {
->>>>>>> miniblink49
         this->setBGColor(sk_tool_utils::color_to_565(0xFFDDDDDD));
     }
 
 protected:
-<<<<<<< HEAD
     SkString onShortName()
     {
-=======
-    SkString onShortName() {
->>>>>>> miniblink49
         return SkString("tinybitmap");
     }
 
     virtual SkISize onISize() { return SkISize::Make(100, 100); }
 
-<<<<<<< HEAD
     virtual void onDraw(SkCanvas* canvas)
     {
         SkBitmap bm = make_bitmap();
@@ -81,16 +51,6 @@ protected:
         paint.setAlpha(0x80);
         paint.setShader(SkShader::MakeBitmapShader(bm, SkShader::kRepeat_TileMode,
             SkShader::kMirror_TileMode));
-=======
-    virtual void onDraw(SkCanvas* canvas) {
-        SkBitmap bm = make_bitmap();
-        SkShader* s =
-            SkShader::CreateBitmapShader(bm, SkShader::kRepeat_TileMode,
-                                         SkShader::kMirror_TileMode);
-        SkPaint paint;
-        paint.setAlpha(0x80);
-        paint.setShader(s)->unref();
->>>>>>> miniblink49
         canvas->drawPaint(paint);
     }
 

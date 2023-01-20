@@ -24,7 +24,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/html/shadow/SpinButtonElement.h"
 
 #include "core/HTMLNames.h"
@@ -42,7 +41,8 @@ namespace blink {
 
 using namespace HTMLNames;
 
-inline SpinButtonElement::SpinButtonElement(Document& document, SpinButtonOwner& spinButtonOwner)
+inline SpinButtonElement::SpinButtonElement(Document& document,
+    SpinButtonOwner& spinButtonOwner)
     : HTMLDivElement(document)
     , m_spinButtonOwner(&spinButtonOwner)
     , m_capturing(false)
@@ -52,18 +52,19 @@ inline SpinButtonElement::SpinButtonElement(Document& document, SpinButtonOwner&
 {
 }
 
-PassRefPtrWillBeRawPtr<SpinButtonElement> SpinButtonElement::create(Document& document, SpinButtonOwner& spinButtonOwner)
+SpinButtonElement* SpinButtonElement::create(Document& document,
+    SpinButtonOwner& spinButtonOwner)
 {
-    RefPtrWillBeRawPtr<SpinButtonElement> element = adoptRefWillBeNoop(new SpinButtonElement(document, spinButtonOwner));
-    element->setShadowPseudoId(AtomicString("-webkit-inner-spin-button", AtomicString::ConstructFromLiteral));
+    SpinButtonElement* element = new SpinButtonElement(document, spinButtonOwner);
+    element->setShadowPseudoId(AtomicString("-webkit-inner-spin-button"));
     element->setAttribute(idAttr, ShadowElementNames::spinButton());
-    return element.release();
+    return element;
 }
 
-void SpinButtonElement::detach(const AttachContext& context)
+void SpinButtonElement::detachLayoutTree(const AttachContext& context)
 {
     releaseCapture(EventDispatchDisallowed);
-    HTMLDivElement::detach(context);
+    HTMLDivElement::detachLayoutTree(context);
 }
 
 void SpinButtonElement::defaultEventHandler(Event* event)
@@ -88,13 +89,10 @@ void SpinButtonElement::defaultEventHandler(Event* event)
     }
 
     MouseEvent* mouseEvent = toMouseEvent(event);
-    IntPoint local = roundedIntPoint(box->absoluteToLocal(FloatPoint(mouseEvent->absoluteLocation()), UseTransforms));
-    if (mouseEvent->type() == EventTypeNames::mousedown && mouseEvent->button() == LeftButton) {
+    IntPoint local = roundedIntPoint(box->absoluteToLocal(
+        FloatPoint(mouseEvent->absoluteLocation()), UseTransforms));
+    if (mouseEvent->type() == EventTypeNames::mousedown && mouseEvent->button() == static_cast<short>(WebPointerProperties::Button::Left)) {
         if (box->pixelSnappedBorderBoxRect().contains(local)) {
-            // The following functions of HTMLInputElement may run JavaScript
-            // code which detaches this shadow node. We need to take a reference
-            // and check layoutObject() after such function calls.
-            RefPtrWillBeRawPtr<Node> protector(this);
             if (m_spinButtonOwner)
                 m_spinButtonOwner->focusAndSelectSpinButtonOwner();
             if (layoutObject()) {
@@ -110,7 +108,7 @@ void SpinButtonElement::defaultEventHandler(Event* event)
             }
             event->setDefaultHandled();
         }
-    } else if (mouseEvent->type() == EventTypeNames::mouseup && mouseEvent->button() == LeftButton) {
+    } else if (mouseEvent->type() == EventTypeNames::mouseup && mouseEvent->button() == static_cast<short>(WebPointerProperties::Button::Left)) {
         releaseCapture();
     } else if (event->type() == EventTypeNames::mousemove) {
         if (box->pixelSnappedBorderBoxRect().contains(local)) {
@@ -190,34 +188,34 @@ void SpinButtonElement::doStepAction(int amount)
 void SpinButtonElement::releaseCapture(EventDispatch eventDispatch)
 {
     stopRepeatingTimer();
-    if (m_capturing) {
-        if (LocalFrame* frame = document().frame()) {
-            frame->eventHandler().setCapturingMouseEventsNode(nullptr);
-            m_capturing = false;
-            if (Page* page = document().page())
-                page->chromeClient().unregisterPopupOpeningObserver(this);
-        }
+    if (!m_capturing)
+        return;
+    if (LocalFrame* frame = document().frame()) {
+        frame->eventHandler().setCapturingMouseEventsNode(nullptr);
+        m_capturing = false;
+        if (Page* page = document().page())
+            page->chromeClient().unregisterPopupOpeningObserver(this);
     }
     if (m_spinButtonOwner)
         m_spinButtonOwner->spinButtonDidReleaseMouseCapture(eventDispatch);
-
 }
 
 bool SpinButtonElement::matchesReadOnlyPseudoClass() const
 {
-    return shadowHost()->matchesReadOnlyPseudoClass();
+    return ownerShadowHost()->matchesReadOnlyPseudoClass();
 }
 
 bool SpinButtonElement::matchesReadWritePseudoClass() const
 {
-    return shadowHost()->matchesReadWritePseudoClass();
+    return ownerShadowHost()->matchesReadWritePseudoClass();
 }
 
 void SpinButtonElement::startRepeatingTimer()
 {
     m_pressStartingState = m_upDownState;
-    ScrollbarTheme* theme = ScrollbarTheme::theme();
-    m_repeatingTimer.start(theme->initialAutoscrollTimerDelay(), theme->autoscrollTimerDelay(), FROM_HERE);
+    ScrollbarTheme& theme = ScrollbarTheme::theme();
+    m_repeatingTimer.start(theme.initialAutoscrollTimerDelay(),
+        theme.autoscrollTimerDelay(), BLINK_FROM_HERE);
 }
 
 void SpinButtonElement::stopRepeatingTimer()
@@ -229,9 +227,9 @@ void SpinButtonElement::step(int amount)
 {
     if (!shouldRespondToMouseEvents())
         return;
-    // On Mac OS, NSStepper updates the value for the button under the mouse
-    // cursor regardless of the button pressed at the beginning. So the
-    // following check is not needed for Mac OS.
+// On Mac OS, NSStepper updates the value for the button under the mouse
+// cursor regardless of the button pressed at the beginning. So the
+// following check is not needed for Mac OS.
 #if !OS(MACOSX)
     if (m_upDownState != m_pressStartingState)
         return;
@@ -239,7 +237,7 @@ void SpinButtonElement::step(int amount)
     doStepAction(amount);
 }
 
-void SpinButtonElement::repeatingTimerFired(Timer<SpinButtonElement>*)
+void SpinButtonElement::repeatingTimerFired(TimerBase*)
 {
     if (m_upDownState != Indeterminate)
         step(m_upDownState == Up ? 1 : -1);
@@ -263,4 +261,4 @@ DEFINE_TRACE(SpinButtonElement)
     HTMLDivElement::trace(visitor);
 }
 
-}
+} // namespace blink

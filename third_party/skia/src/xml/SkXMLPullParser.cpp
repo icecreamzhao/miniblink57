@@ -1,20 +1,11 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-<<<<<<< HEAD
 #include "SkStream.h"
 #include "SkXMLParser.h"
-=======
-#include "SkXMLParser.h"
-#include "SkStream.h"
->>>>>>> miniblink49
 
 static void reset(SkXMLPullParser::Curr* curr)
 {
@@ -24,23 +15,15 @@ static void reset(SkXMLPullParser::Curr* curr)
     curr->fIsWhitespace = false;
 }
 
-<<<<<<< HEAD
 SkXMLPullParser::SkXMLPullParser()
     : fStream(nullptr)
-=======
-SkXMLPullParser::SkXMLPullParser() : fStream(NULL)
->>>>>>> miniblink49
 {
     fCurr.fEventType = ERROR;
     fDepth = -1;
 }
 
-<<<<<<< HEAD
 SkXMLPullParser::SkXMLPullParser(SkStream* stream)
     : fStream(nullptr)
-=======
-SkXMLPullParser::SkXMLPullParser(SkStream* stream) : fStream(NULL)
->>>>>>> miniblink49
 {
     fCurr.fEventType = ERROR;
     fDepth = 0;
@@ -50,11 +33,7 @@ SkXMLPullParser::SkXMLPullParser(SkStream* stream) : fStream(NULL)
 
 SkXMLPullParser::~SkXMLPullParser()
 {
-<<<<<<< HEAD
     this->setStream(nullptr);
-=======
-    this->setStream(NULL);
->>>>>>> miniblink49
 }
 
 SkStream* SkXMLPullParser::setStream(SkStream* stream)
@@ -64,20 +43,10 @@ SkStream* SkXMLPullParser::setStream(SkStream* stream)
 
     SkRefCnt_SafeAssign(fStream, stream);
 
-<<<<<<< HEAD
     if (fStream) {
         fCurr.fEventType = START_DOCUMENT;
         this->onInit();
     } else {
-=======
-    if (fStream)
-    {
-        fCurr.fEventType = START_DOCUMENT;
-        this->onInit();
-    }
-    else
-    {
->>>>>>> miniblink49
         fCurr.fEventType = ERROR;
     }
     fDepth = 0;
@@ -118,11 +87,7 @@ const char* SkXMLPullParser::getName()
     case END_TAG:
         return fCurr.fName;
     default:
-<<<<<<< HEAD
         return nullptr;
-=======
-        return NULL;
->>>>>>> miniblink49
     }
 }
 
@@ -133,11 +98,7 @@ const char* SkXMLPullParser::getText()
     case IGNORABLE_WHITESPACE:
         return fCurr.fName;
     default:
-<<<<<<< HEAD
         return nullptr;
-=======
-        return NULL;
->>>>>>> miniblink49
     }
 }
 
@@ -150,11 +111,7 @@ bool SkXMLPullParser::isWhitespace()
     case CDSECT:
         return fCurr.fIsWhitespace;
     default:
-<<<<<<< HEAD
         return false; // unknown/illegal
-=======
-        return false;   // unknown/illegal
->>>>>>> miniblink49
     }
 }
 
@@ -172,11 +129,7 @@ void SkXMLPullParser::getAttributeInfo(int index, AttrInfo* info)
 }
 
 bool SkXMLPullParser::onEntityReplacement(const char name[],
-<<<<<<< HEAD
     SkString* replacement)
-=======
-                                          SkString* replacement)
->>>>>>> miniblink49
 {
     // TODO: std 5 entities here
     return false;

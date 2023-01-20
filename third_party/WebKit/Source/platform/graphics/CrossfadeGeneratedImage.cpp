@@ -23,10 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/graphics/CrossfadeGeneratedImage.h"
 
 #include "platform/geometry/FloatRect.h"
@@ -34,15 +30,11 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 CrossfadeGeneratedImage::CrossfadeGeneratedImage(PassRefPtr<Image> fromImage,
     PassRefPtr<Image> toImage,
     float percentage,
     IntSize crossfadeSize,
     const IntSize& size)
-=======
-CrossfadeGeneratedImage::CrossfadeGeneratedImage(Image* fromImage, Image* toImage, float percentage, IntSize crossfadeSize, const IntSize& size)
->>>>>>> miniblink49
     : GeneratedImage(size)
     , m_fromImage(fromImage)
     , m_toImage(toImage)
@@ -51,7 +43,6 @@ CrossfadeGeneratedImage::CrossfadeGeneratedImage(Image* fromImage, Image* toImag
 {
 }
 
-<<<<<<< HEAD
 void CrossfadeGeneratedImage::drawCrossfade(
     SkCanvas* canvas,
     const SkPaint& paint,
@@ -68,25 +59,10 @@ void CrossfadeGeneratedImage::drawCrossfade(
     // this code.  This should be investigated further. crbug.com/472634
     SkPaint layerPaint;
     layerPaint.setBlendMode(paint.getBlendMode());
-=======
-void CrossfadeGeneratedImage::drawCrossfade(SkCanvas* canvas, const SkPaint& paint, ImageClampingMode clampMode)
-{
-    FloatRect fromImageRect(FloatPoint(), m_fromImage->size());
-    FloatRect toImageRect(FloatPoint(), m_toImage->size());
-    FloatRect destRect(FloatPoint(), m_crossfadeSize);
-
-    // TODO(junov): The various effects encoded into paint should probably be applied here
-    // instead of inside the layer.  This probably faulty behavior was maintained in order
-    // to preserve pre-existing behavior while refactoring this code.  This should be
-    // investigated further. crbug.com/472634
-    SkPaint layerPaint;
-    layerPaint.setXfermode(paint.getXfermode());
->>>>>>> miniblink49
     SkAutoCanvasRestore ar(canvas, false);
     canvas->saveLayer(nullptr, &layerPaint);
 
     SkPaint imagePaint(paint);
-<<<<<<< HEAD
     imagePaint.setBlendMode(SkBlendMode::kSrcOver);
     int imageAlpha = clampedAlphaForBlending(1 - m_percentage);
     imagePaint.setAlpha(imageAlpha > 255 ? 255 : imageAlpha);
@@ -111,23 +87,6 @@ void CrossfadeGeneratedImage::draw(SkCanvas* canvas,
     RespectImageOrientationEnum,
     ImageClampingMode clampMode,
     const ColorBehavior& colorBehavior)
-=======
-    imagePaint.setXfermodeMode(SkXfermode::kSrcOver_Mode);
-    int imageAlpha = clampedAlphaForBlending(1 - m_percentage);
-    imagePaint.setAlpha(imageAlpha > 255 ? 255 : imageAlpha);
-    imagePaint.setAntiAlias(paint.isAntiAlias());
-    // TODO(junov): This code should probably be propagating the RespectImageOrientationEnum
-    // form CrossfadeGeneratedImage::draw. Code was written this way during refactoring to
-    // avoid modifying existing behavior, but this warrants further investigation. crbug.com/472634
-    m_fromImage->draw(canvas, imagePaint, destRect, fromImageRect, DoNotRespectImageOrientation, clampMode);
-    imagePaint.setXfermodeMode(SkXfermode::kPlus_Mode);
-    imageAlpha = clampedAlphaForBlending(m_percentage);
-    imagePaint.setAlpha(imageAlpha > 255 ? 255 : imageAlpha);
-    m_toImage->draw(canvas, imagePaint, destRect, toImageRect, DoNotRespectImageOrientation, clampMode);
-}
-
-void CrossfadeGeneratedImage::draw(SkCanvas* canvas, const SkPaint& paint, const FloatRect& dstRect, const FloatRect& srcRect, RespectImageOrientationEnum, ImageClampingMode clampMode)
->>>>>>> miniblink49
 {
     // Draw nothing if either of the images hasn't loaded yet.
     if (m_fromImage == Image::nullImage() || m_toImage == Image::nullImage())
@@ -137,7 +96,6 @@ void CrossfadeGeneratedImage::draw(SkCanvas* canvas, const SkPaint& paint, const
     canvas->clipRect(dstRect);
     canvas->translate(dstRect.x(), dstRect.y());
     if (dstRect.size() != srcRect.size())
-<<<<<<< HEAD
         canvas->scale(dstRect.width() / srcRect.width(),
             dstRect.height() / srcRect.height());
     canvas->translate(-srcRect.x(), -srcRect.y());
@@ -147,22 +105,11 @@ void CrossfadeGeneratedImage::draw(SkCanvas* canvas, const SkPaint& paint, const
 
 void CrossfadeGeneratedImage::drawTile(GraphicsContext& context,
     const FloatRect& srcRect)
-=======
-        canvas->scale(dstRect.width() / srcRect.width(), dstRect.height() / srcRect.height());
-    canvas->translate(-srcRect.x(), -srcRect.y());
-
-    drawCrossfade(canvas, paint, clampMode);
-    canvas->restore();
-}
-
-void CrossfadeGeneratedImage::drawTile(GraphicsContext* context, const FloatRect& srcRect)
->>>>>>> miniblink49
 {
     // Draw nothing if either of the images hasn't loaded yet.
     if (m_fromImage == Image::nullImage() || m_toImage == Image::nullImage())
         return;
 
-<<<<<<< HEAD
     SkPaint paint = context.fillPaint();
     paint.setBlendMode(SkBlendMode::kSrcOver);
     paint.setAntiAlias(context.shouldAntialias());
@@ -170,14 +117,6 @@ void CrossfadeGeneratedImage::drawTile(GraphicsContext* context, const FloatRect
     paint.setFilterQuality(context.computeFilterQuality(this, destRect, srcRect));
     drawCrossfade(context.canvas(), paint, ClampImageToSourceRect,
         context.getColorBehavior());
-=======
-    SkPaint paint = context->fillPaint();
-    paint.setXfermodeMode(SkXfermode::kSrcOver_Mode);
-    paint.setAntiAlias(context->shouldAntialias());
-    FloatRect destRect(FloatPoint(), m_crossfadeSize);
-    paint.setFilterQuality(context->computeFilterQuality(this, destRect, srcRect));
-    drawCrossfade(context->canvas(), paint, ClampImageToSourceRect);
->>>>>>> miniblink49
 }
 
 } // namespace blink

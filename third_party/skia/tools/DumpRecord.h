@@ -18,14 +18,7 @@ class SkCanvas;
  *        first column.
  */
 void DumpRecord(const SkRecord& record,
-<<<<<<< HEAD
     SkCanvas* canvas,
     bool timeWithCommand);
 
 #endif // DumpRecord_DEFINED
-=======
-                SkCanvas* canvas,
-                bool timeWithCommand);
-
-#endif  // DumpRecord_DEFINED
->>>>>>> miniblink49

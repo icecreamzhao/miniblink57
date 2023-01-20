@@ -23,10 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "public/web/WebSpeechGrammar.h"
 
 #include "modules/speech/SpeechGrammar.h"
@@ -52,21 +48,13 @@ WebSpeechGrammar& WebSpeechGrammar::operator=(SpeechGrammar* value)
 
 WebURL WebSpeechGrammar::src() const
 {
-<<<<<<< HEAD
     DCHECK(m_private.get());
-=======
-    BLINK_ASSERT(m_private.get());
->>>>>>> miniblink49
     return m_private->src();
 }
 
 float WebSpeechGrammar::weight() const
 {
-<<<<<<< HEAD
     DCHECK(m_private.get());
-=======
-    BLINK_ASSERT(m_private.get());
->>>>>>> miniblink49
     return m_private->weight();
 }
 

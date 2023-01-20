@@ -28,10 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "modules/crypto/CryptoResultImpl.h"
 
 #include "bindings/core/v8/Dictionary.h"
@@ -43,17 +39,12 @@
 #include "bindings/modules/v8/V8CryptoKey.h"
 #include "core/dom/ContextLifecycleObserver.h"
 #include "core/dom/DOMArrayBuffer.h"
-<<<<<<< HEAD
-=======
-#include "core/dom/DOMError.h"
->>>>>>> miniblink49
 #include "core/dom/DOMException.h"
 #include "core/dom/ExecutionContext.h"
 #include "modules/crypto/CryptoKey.h"
 #include "modules/crypto/NormalizeAlgorithm.h"
 #include "public/platform/Platform.h"
 #include "public/platform/WebCryptoAlgorithm.h"
-<<<<<<< HEAD
 #include "wtf/Atomics.h"
 
 namespace blink {
@@ -67,25 +58,11 @@ static void rejectWithTypeError(const String& errorDetails,
 
     ScriptState::Scope scope(resolver->getScriptState());
     v8::Isolate* isolate = resolver->getScriptState()->isolate();
-=======
-
-namespace blink {
-
-static void rejectWithTypeError(const String& errorDetails, ScriptPromiseResolver* resolver)
-{
-    // Duplicate some of the checks done by ScriptPromiseResolver.
-    if (!resolver->executionContext() || resolver->executionContext()->activeDOMObjectsAreStopped())
-        return;
-
-    ScriptState::Scope scope(resolver->scriptState());
-    v8::Isolate* isolate = resolver->scriptState()->isolate();
->>>>>>> miniblink49
     resolver->reject(v8::Exception::TypeError(v8String(isolate, errorDetails)));
 }
 
 class CryptoResultImpl::Resolver final : public ScriptPromiseResolver {
 public:
-<<<<<<< HEAD
     static Resolver* create(ScriptState* scriptState, CryptoResultImpl* result)
     {
         ASSERT(scriptState->contextIsValid());
@@ -106,28 +83,11 @@ public:
     {
         visitor->trace(m_result);
         ScriptPromiseResolver::trace(visitor);
-=======
-    static PassRefPtrWillBeRawPtr<ScriptPromiseResolver> create(ScriptState* scriptState, CryptoResultImpl* result)
-    {
-        RefPtrWillBeRawPtr<Resolver> resolver = adoptRefWillBeNoop(new Resolver(scriptState, result));
-        resolver->suspendIfNeeded();
-        resolver->keepAliveWhilePending();
-        return resolver.release();
-    }
-
-    void stop() override
-    {
-        m_result->cancel();
-        m_result->clearResolver();
-        m_result = nullptr;
-        ScriptPromiseResolver::stop();
->>>>>>> miniblink49
     }
 
 private:
     Resolver(ScriptState* scriptState, CryptoResultImpl* result)
         : ScriptPromiseResolver(scriptState)
-<<<<<<< HEAD
         , m_result(result)
     {
     }
@@ -150,12 +110,6 @@ void CryptoResultImpl::ResultCancel::cancel()
     releaseStore(&m_cancelled, 1);
 }
 
-=======
-        , m_result(result) { }
-    RefPtr<CryptoResultImpl> m_result;
-};
-
->>>>>>> miniblink49
 ExceptionCode webCryptoErrorToExceptionCode(WebCryptoErrorType errorType)
 {
     switch (errorType) {
@@ -177,7 +131,6 @@ ExceptionCode webCryptoErrorToExceptionCode(WebCryptoErrorType errorType)
     return 0;
 }
 
-<<<<<<< HEAD
 CryptoResultImpl::CryptoResultImpl(ScriptState* scriptState)
     : m_resolver(Resolver::create(scriptState, this))
     , m_cancel(ResultCancel::create())
@@ -187,28 +140,22 @@ CryptoResultImpl::CryptoResultImpl(ScriptState* scriptState)
         m_cancel->cancel();
 }
 
-=======
->>>>>>> miniblink49
 CryptoResultImpl::~CryptoResultImpl()
 {
     ASSERT(!m_resolver);
 }
 
-<<<<<<< HEAD
 DEFINE_TRACE(CryptoResultImpl)
 {
     visitor->trace(m_resolver);
     CryptoResult::trace(visitor);
 }
 
-=======
->>>>>>> miniblink49
 void CryptoResultImpl::clearResolver()
 {
     m_resolver = nullptr;
 }
 
-<<<<<<< HEAD
 CryptoResultImpl* CryptoResultImpl::create(ScriptState* scriptState)
 {
     return new CryptoResultImpl(scriptState);
@@ -238,38 +185,11 @@ void CryptoResultImpl::completeWithBuffer(const void* bytes,
         return;
 
     m_resolver->resolve(DOMArrayBuffer::create(bytes, bytesSize));
-=======
-PassRefPtrWillBeRawPtr<CryptoResultImpl> CryptoResultImpl::create(ScriptState* scriptState)
-{
-    return adoptRefWillBeNoop(new CryptoResultImpl(scriptState));
-}
-
-void CryptoResultImpl::completeWithError(WebCryptoErrorType errorType, const WebString& errorDetails)
-{
-    if (m_resolver) {
-        ExceptionCode ec = webCryptoErrorToExceptionCode(errorType);
-
-        // Handle TypeError separately, as it cannot be created using
-        // DOMException.
-        if (ec == V8TypeError)
-            rejectWithTypeError(errorDetails, m_resolver);
-        else
-            m_resolver->reject(DOMException::create(ec, errorDetails));
-    }
-    clearResolver();
-}
-
-void CryptoResultImpl::completeWithBuffer(const void* bytes, unsigned bytesSize)
-{
-    if (m_resolver)
-        m_resolver->resolve(DOMArrayBuffer::create(bytes, bytesSize));
->>>>>>> miniblink49
     clearResolver();
 }
 
 void CryptoResultImpl::completeWithJson(const char* utf8Data, unsigned length)
 {
-<<<<<<< HEAD
     if (!m_resolver)
         return;
 
@@ -285,42 +205,20 @@ void CryptoResultImpl::completeWithJson(const char* utf8Data, unsigned length)
         m_resolver->resolve(jsonDictionary);
     else
         m_resolver->reject(exceptionCatcher.Exception());
-=======
-    if (m_resolver) {
-        ScriptPromiseResolver* resolver = m_resolver;
-        ScriptState* scriptState = resolver->scriptState();
-        ScriptState::Scope scope(scriptState);
-
-        v8::Local<v8::String> jsonString = v8AtomicString(scriptState->isolate(), utf8Data, length);
-
-        v8::TryCatch exceptionCatcher;
-        v8::Local<v8::Value> jsonDictionary;
-        if (v8Call(v8::JSON::Parse(scriptState->isolate(), jsonString), jsonDictionary, exceptionCatcher))
-            resolver->resolve(jsonDictionary);
-        else
-            resolver->reject(exceptionCatcher.Exception());
-    }
->>>>>>> miniblink49
     clearResolver();
 }
 
 void CryptoResultImpl::completeWithBoolean(bool b)
 {
-<<<<<<< HEAD
     if (!m_resolver)
         return;
 
     m_resolver->resolve(b);
-=======
-    if (m_resolver)
-        m_resolver->resolve(b);
->>>>>>> miniblink49
     clearResolver();
 }
 
 void CryptoResultImpl::completeWithKey(const WebCryptoKey& key)
 {
-<<<<<<< HEAD
     if (!m_resolver)
         return;
 
@@ -354,50 +252,6 @@ void CryptoResultImpl::cancel()
     m_cancel->cancel();
     m_cancel.clear();
     clearResolver();
-=======
-    if (m_resolver)
-        m_resolver->resolve(CryptoKey::create(key));
-    clearResolver();
-}
-
-void CryptoResultImpl::completeWithKeyPair(const WebCryptoKey& publicKey, const WebCryptoKey& privateKey)
-{
-    if (m_resolver) {
-        ScriptState* scriptState = m_resolver->scriptState();
-        ScriptState::Scope scope(scriptState);
-
-        V8ObjectBuilder keyPair(scriptState);
-
-        keyPair.add("publicKey", ScriptValue::from(scriptState, CryptoKey::create(publicKey)));
-        keyPair.add("privateKey", ScriptValue::from(scriptState, CryptoKey::create(privateKey)));
-
-        m_resolver->resolve(keyPair.v8Value());
-    }
-    clearResolver();
-}
-
-bool CryptoResultImpl::cancelled() const
-{
-    return acquireLoad(&m_cancelled);
-}
-
-void CryptoResultImpl::cancel()
-{
-    releaseStore(&m_cancelled, 1);
-}
-
-CryptoResultImpl::CryptoResultImpl(ScriptState* scriptState)
-    : m_cancelled(0)
-{
-    ASSERT(scriptState->contextIsValid());
-    if (scriptState->executionContext()->activeDOMObjectsAreStopped()) {
-        // If active dom objects have been stopped, avoid creating
-        // CryptoResultResolver.
-        m_resolver = nullptr;
-    } else {
-        m_resolver = Resolver::create(scriptState, this).get();
-    }
->>>>>>> miniblink49
 }
 
 ScriptPromise CryptoResultImpl::promise()

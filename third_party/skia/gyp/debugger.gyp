@@ -6,11 +6,7 @@
   'variables': {
     'skia_warnings_as_errors': 0,
     'conditions': [
-<<<<<<< HEAD
       [ 'skia_os in ["linux", "freebsd", "openbsd", "solaris"]', {
-=======
-      [ 'skia_os in ["linux", "freebsd", "openbsd", "solaris", "chromeos"]', {
->>>>>>> miniblink49
         # Use the systemwide Qt libs by default
         'variables': {
           'qt_sdk%': '/usr',
@@ -57,11 +53,7 @@
       [ 'skia_os == "win"', {
         'variables': {
           # This is the default location for the version of Qt current on 10/11/12
-<<<<<<< HEAD
           'qt_sdk%': 'C:/Qt/4.8.6/',
-=======
-          'qt_sdk%': 'C:/Qt/4.8.3/',
->>>>>>> miniblink49
         },
         'qt_sdk': '<(qt_sdk)',
         'qt_moc%': '<(qt_sdk)/bin/moc',
@@ -90,14 +82,9 @@
         '/Library/Frameworks',
       ],
       'include_dirs' : [
-<<<<<<< HEAD
         '../include/private',
         '../src/core',
         '../tools/debugger',
-=======
-        '../src/core',
-        '../src/utils/debugger',
->>>>>>> miniblink49
         '../debugger',      # To pull SkDebugger.h
         '../src/gpu',       # To pull gl/GrGLUtil.h
         '../src/ports',     # To pull SkFontDescriptor.h
@@ -108,7 +95,6 @@
       ],
       'sources': [
         '../debugger/SkDebugger.cpp',
-<<<<<<< HEAD
         '../tools/debugger/SkDebugCanvas.h',
         '../tools/debugger/SkDebugCanvas.cpp',
         '../tools/debugger/SkDrawCommand.h',
@@ -119,14 +105,6 @@
         '../tools/debugger/SkObjectParser.cpp',
         '../tools/debugger/SkOverdrawMode.h',
         '../tools/debugger/SkOverdrawMode.cpp',
-=======
-        '../src/utils/debugger/SkDebugCanvas.h',
-        '../src/utils/debugger/SkDebugCanvas.cpp',
-        '../src/utils/debugger/SkDrawCommand.h',
-        '../src/utils/debugger/SkDrawCommand.cpp',
-        '../src/utils/debugger/SkObjectParser.h',
-        '../src/utils/debugger/SkObjectParser.cpp',
->>>>>>> miniblink49
         '../debugger/debuggermain.cpp',
         '../debugger/QT/SkDebuggerGUI.cpp',
         '../debugger/QT/SkDebuggerGUI.h',
@@ -160,14 +138,9 @@
       'dependencies': [
         'debugger_qt_mocs',
         'skia_lib.gyp:skia_lib',
-<<<<<<< HEAD
         'jsoncpp.gyp:jsoncpp',
         'libpng.gyp:libpng',
         'tools.gyp:url_data_manager',
-=======
-        'tools.gyp:picture_renderer',
-        'tools.gyp:timer',
->>>>>>> miniblink49
       ],
       'cflags': [
         # Clang gets confused by QWeakPointer, see http://llvm.org/bugs/show_bug.cgi?id=13127

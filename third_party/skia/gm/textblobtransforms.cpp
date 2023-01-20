@@ -18,18 +18,11 @@ namespace skiagm {
 class TextBlobTransforms : public GM {
 public:
     // This gm tests that textblobs can be translated, rotated, and scaled
-<<<<<<< HEAD
     TextBlobTransforms() { }
 
 protected:
     void onOnceBeforeDraw() override
     {
-=======
-    TextBlobTransforms() {}
-
-protected:
-    void onOnceBeforeDraw() override {
->>>>>>> miniblink49
         SkTextBlobBuilder builder;
 
         // make textblob.  To stress distance fields, we choose sizes appropriately
@@ -60,7 +53,6 @@ protected:
         fBlob.reset(builder.build());
     }
 
-<<<<<<< HEAD
     SkString onShortName() override
     {
         return SkString("textblobtransforms");
@@ -75,19 +67,6 @@ protected:
     {
 
         canvas->drawColor(sk_tool_utils::color_to_565(SK_ColorGRAY));
-=======
-    SkString onShortName() override {
-        return SkString("textblobtransforms");
-    }
-
-    SkISize onISize() override {
-        return SkISize::Make(kWidth, kHeight);
-    }
-
-    void onDraw(SkCanvas* canvas) override {
-
-        canvas->drawColor(SK_ColorGRAY);
->>>>>>> miniblink49
 
         SkPaint paint;
 
@@ -97,11 +76,7 @@ protected:
         // Colors were chosen to map to pairs of canonical colors.  The GPU Backend will cache A8
         // Texture Blobs based on the canonical color they map to.  Canonical colors are used to
         // create masks.  For A8 there are 8 of them.
-<<<<<<< HEAD
         //SkColor colors[] = {SK_ColorCYAN, sk_tool_utils::color_to_565(SK_ColorLTGRAY), SK_ColorYELLOW, SK_ColorWHITE};
-=======
-        //SkColor colors[] = {SK_ColorCYAN, SK_ColorLTGRAY, SK_ColorYELLOW, SK_ColorWHITE};
->>>>>>> miniblink49
 
         SkScalar xOffset = SkScalarCeilToScalar(bounds.width());
         SkScalar yOffset = SkScalarCeilToScalar(bounds.height());
@@ -134,11 +109,7 @@ protected:
         canvas->rotate(90.f);
 
         // and scales
-<<<<<<< HEAD
         canvas->translate(-3 * xOffset, 3 * yOffset);
-=======
-        canvas->translate(- 3 * xOffset, 3 * yOffset);
->>>>>>> miniblink49
         canvas->scale(1.5f, 1.5f);
         canvas->drawTextBlob(fBlob, 0, 0, paint);
         canvas->translate(xOffset, 0);
@@ -201,9 +172,5 @@ private:
 
 //////////////////////////////////////////////////////////////////////////////
 
-<<<<<<< HEAD
 DEF_GM(return new TextBlobTransforms;)
-=======
-DEF_GM( return SkNEW(TextBlobTransforms); )
->>>>>>> miniblink49
 }

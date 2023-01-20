@@ -41,11 +41,13 @@ protected:
     }
 
     bool isPresentationAttribute(const QualifiedName&) const override;
-    void collectStyleForPresentationAttribute(const QualifiedName&, const AtomicString&, MutableStylePropertySet*) override;
+    void collectStyleForPresentationAttribute(const QualifiedName&,
+        const AtomicString&,
+        MutableStylePropertySet*) override;
 
     HTMLTableElement* findParentTable() const;
 };
 
-} // namespace
+} // namespace blink
 
 #endif

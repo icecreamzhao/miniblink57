@@ -32,7 +32,6 @@
 #define V8NodeFilterCondition_h
 
 #include "bindings/core/v8/ScopedPersistent.h"
-#include "bindings/core/v8/ScriptState.h"
 #include "core/dom/NodeFilterCondition.h"
 #include "platform/heap/Handle.h"
 #include "wtf/PassRefPtr.h"
@@ -40,8 +39,9 @@
 
 namespace blink {
 
-class Node;
 class ExceptionState;
+class Node;
+class ScriptState;
 
 // V8NodeFilterCondition maintains a Javascript implemented callback for
 // filtering Node returned by NodeIterator/TreeWalker.
@@ -62,9 +62,11 @@ class ExceptionState;
 // (V8)
 class V8NodeFilterCondition final : public NodeFilterCondition {
 public:
-    static PassRefPtrWillBeRawPtr<V8NodeFilterCondition> create(v8::Local<v8::Value> filter, v8::Local<v8::Object> owner, ScriptState* scriptState)
+    static V8NodeFilterCondition* create(v8::Local<v8::Value> filter,
+        v8::Local<v8::Object> owner,
+        ScriptState* scriptState)
     {
-        return adoptRefWillBeNoop(new V8NodeFilterCondition(filter, owner, scriptState));
+        return new V8NodeFilterCondition(filter, owner, scriptState);
     }
 
     ~V8NodeFilterCondition() override;
@@ -75,9 +77,9 @@ private:
     // As the value |filter| is maintained by V8GC, the |owner| which references
     // V8NodeFilterCondition, usually a wrapper of NodeFilter, is specified here
     // to hold a strong reference to |filter|.
-    V8NodeFilterCondition(v8::Local<v8::Value> filter, v8::Local<v8::Object> owner, ScriptState*);
-
-    static void setWeakCallback(const v8::WeakCallbackInfo<V8NodeFilterCondition>&);
+    V8NodeFilterCondition(v8::Local<v8::Value> filter,
+        v8::Local<v8::Object> owner,
+        ScriptState*);
 
     RefPtr<ScriptState> m_scriptState;
     ScopedPersistent<v8::Value> m_filter;

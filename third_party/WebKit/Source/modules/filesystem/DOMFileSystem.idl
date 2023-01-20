@@ -30,15 +30,9 @@
  */
 
 [
-<<<<<<< HEAD
     ActiveScriptWrappable,
     DependentLifetime,
     NoInterfaceObject,
-=======
-    NoInterfaceObject,
-    ActiveDOMObject,
-    GarbageCollected,
->>>>>>> miniblink49
 ] interface DOMFileSystem {
     readonly attribute DOMString name;
     readonly attribute DirectoryEntry root;

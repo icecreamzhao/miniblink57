@@ -21,13 +21,13 @@
 #ifndef SVGSwitchElement_h
 #define SVGSwitchElement_h
 
-#include "core/svg/SVGAnimatedBoolean.h"
 #include "core/svg/SVGGraphicsElement.h"
 
 namespace blink {
 
 class SVGSwitchElement final : public SVGGraphicsElement {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     DECLARE_NODE_FACTORY(SVGSwitchElement);
 

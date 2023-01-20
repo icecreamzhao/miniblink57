@@ -345,11 +345,7 @@ Type::bitset BitsetType::Lub(i::Object* value) {
 Type::bitset BitsetType::Lub(double value) {
   DisallowHeapAllocation no_allocation;
   if (i::IsMinusZero(value)) return kMinusZero;
-<<<<<<< HEAD
   if (std_isnan(value)) return kNaN;
-=======
-  if (std::isnan(value)) return kNaN;
->>>>>>> miniblink49
   if (IsUint32Double(value) || IsInt32Double(value)) return Lub(value, value);
   return kOtherNumber;
 }
@@ -452,11 +448,7 @@ double BitsetType::Max(bitset bits) {
 // static
 bool OtherNumberConstantType::IsOtherNumberConstant(double value) {
   // Not an integer, not NaN, and not -0.
-<<<<<<< HEAD
   return !std_isnan(value) && !Type::IsInteger(value) &&
-=======
-  return !std::isnan(value) && !Type::IsInteger(value) &&
->>>>>>> miniblink49
          !i::IsMinusZero(value);
 }
 
@@ -832,11 +824,7 @@ Type* Type::NewConstant(double value, Zone* zone) {
     return Range(value, value, zone);
   } else if (i::IsMinusZero(value)) {
     return Type::MinusZero();
-<<<<<<< HEAD
   } else if (std_isnan(value)) {
-=======
-  } else if (std::isnan(value)) {
->>>>>>> miniblink49
     return Type::NaN();
   }
 

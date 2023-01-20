@@ -5,18 +5,12 @@
 #ifndef TabSize_h
 #define TabSize_h
 
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
 
 namespace blink {
 
 struct TabSize {
     DISALLOW_NEW();
-=======
-namespace blink {
-
-struct TabSize {
->>>>>>> miniblink49
     TabSize(float pixels)
         : m_floatValue(pixels)
         , m_isSpaces(0)
@@ -29,14 +23,7 @@ struct TabSize {
     {
     }
 
-<<<<<<< HEAD
     bool isSpaces() const { return m_isSpaces; }
-=======
-    bool isSpaces() const
-    {
-        return m_isSpaces;
-    }
->>>>>>> miniblink49
 
     float getPixelSize(float spaceWidth) const
     {

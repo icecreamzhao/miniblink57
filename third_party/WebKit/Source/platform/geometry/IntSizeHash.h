@@ -21,16 +21,12 @@
 #define IntSizeHash_h
 
 #include "platform/geometry/IntSize.h"
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
-=======
->>>>>>> miniblink49
 #include "wtf/HashMap.h"
 #include "wtf/HashSet.h"
 
 namespace WTF {
 
-<<<<<<< HEAD
 template <>
 struct IntHash<blink::IntSize> {
     STATIC_ONLY(IntHash);
@@ -63,22 +59,6 @@ struct HashTraits<blink::IntSize> : GenericHashTraits<blink::IntSize> {
     {
         return value.width() == -1 && value.height() == -1;
     }
-=======
-template<> struct IntHash<blink::IntSize> {
-    static unsigned hash(const blink::IntSize& key) { return pairIntHash(key.width(), key.height()); }
-    static bool equal(const blink::IntSize& a, const blink::IntSize& b) { return a == b; }
-    static const bool safeToCompareToEmptyOrDeleted = true;
-};
-
-template<> struct DefaultHash<blink::IntSize> {
-    typedef IntHash<blink::IntSize> Hash;
-};
-
-template<> struct HashTraits<blink::IntSize> : GenericHashTraits<blink::IntSize> {
-    static const bool emptyValueIsZero = true;
-    static void constructDeletedValue(blink::IntSize& slot, bool) { new (NotNull, &slot) blink::IntSize(-1, -1); }
-    static bool isDeletedValue(const blink::IntSize& value) { return value.width() == -1 && value.height() == -1; }
->>>>>>> miniblink49
 };
 
 } // namespace WTF

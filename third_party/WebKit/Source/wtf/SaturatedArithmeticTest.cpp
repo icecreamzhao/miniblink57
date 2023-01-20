@@ -28,16 +28,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "wtf/SaturatedArithmetic.h"
 
 #include "testing/gtest/include/gtest/gtest.h"
-=======
-#include "config.h"
-
-#include "wtf/SaturatedArithmetic.h"
-#include <gtest/gtest.h>
->>>>>>> miniblink49
 #include <limits.h>
 
 namespace WTF {
@@ -116,7 +109,6 @@ TEST(SaturatedArithmeticTest, SetSigned)
     const int intMaxForLayoutUnit = INT_MAX >> kFractionBits;
     const int intMinForLayoutUnit = INT_MIN >> kFractionBits;
 
-<<<<<<< HEAD
     EXPECT_EQ(0, saturatedSet<kFractionBits>(0));
 
     // Internally the max number we can represent (without saturating)
@@ -141,30 +133,6 @@ TEST(SaturatedArithmeticTest, SetSigned)
     // multiplication instead of direct shifting here.
     EXPECT_EQ((intMinForLayoutUnit + 100) * (1 << kFractionBits),
         saturatedSet<kFractionBits>(intMinForLayoutUnit + 100));
-=======
-    EXPECT_EQ(0, saturatedSet(0, kFractionBits));
-
-    // Internally the max number we can represent (without saturating)
-    // is all the (non-sign) bits set except for the bottom n fraction bits
-    const int maxInternalRepresentation = INT_MAX ^ ((1 << kFractionBits)-1);
-    EXPECT_EQ(maxInternalRepresentation,
-        saturatedSet(intMaxForLayoutUnit, kFractionBits));
-
-    EXPECT_EQ(getMaxSaturatedSetResultForTesting(kFractionBits),
-        saturatedSet(intMaxForLayoutUnit + 100, kFractionBits));
-
-    EXPECT_EQ((intMaxForLayoutUnit - 100) << kFractionBits,
-        saturatedSet(intMaxForLayoutUnit - 100, kFractionBits));
-
-    EXPECT_EQ(getMinSaturatedSetResultForTesting(kFractionBits),
-        saturatedSet(intMinForLayoutUnit, kFractionBits));
-
-    EXPECT_EQ(getMinSaturatedSetResultForTesting(kFractionBits),
-        saturatedSet(intMinForLayoutUnit - 100, kFractionBits));
-
-    EXPECT_EQ((intMinForLayoutUnit + 100) << kFractionBits,
-        saturatedSet(intMinForLayoutUnit + 100, kFractionBits));
->>>>>>> miniblink49
 }
 
 TEST(SaturatedArithmeticTest, SetUnsigned)
@@ -172,7 +140,6 @@ TEST(SaturatedArithmeticTest, SetUnsigned)
     const int kFractionBits = 6;
     const int intMaxForLayoutUnit = INT_MAX >> kFractionBits;
 
-<<<<<<< HEAD
     EXPECT_EQ(0, saturatedSet<kFractionBits>((unsigned)0));
 
     EXPECT_EQ(getMaxSaturatedSetResultForTesting(kFractionBits),
@@ -185,20 +152,6 @@ TEST(SaturatedArithmeticTest, SetUnsigned)
     const unsigned kNotOverflowed = intMaxForLayoutUnit - 100;
     EXPECT_EQ((intMaxForLayoutUnit - 100) << kFractionBits,
         saturatedSet<kFractionBits>(kNotOverflowed));
-=======
-    EXPECT_EQ(0, saturatedSet((unsigned)0, kFractionBits));
-
-    EXPECT_EQ(getMaxSaturatedSetResultForTesting(kFractionBits),
-        saturatedSet((unsigned)intMaxForLayoutUnit, kFractionBits));
-
-    const unsigned kOverflowed = intMaxForLayoutUnit + 100;
-    EXPECT_EQ(getMaxSaturatedSetResultForTesting(kFractionBits),
-        saturatedSet(kOverflowed, kFractionBits));
-
-    const unsigned kNotOverflowed = intMaxForLayoutUnit - 100;
-    EXPECT_EQ((intMaxForLayoutUnit - 100) << kFractionBits,
-        saturatedSet(kNotOverflowed, kFractionBits));
->>>>>>> miniblink49
 }
 
 } // namespace WTF

@@ -6,10 +6,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #ifndef SkTextOnPath_DEFINED
 #define SkTextOnPath_DEFINED
 
@@ -22,12 +18,8 @@ class SkText;
 class SkTextOnPath : public SkBoundable {
     DECLARE_MEMBER_INFO(TextOnPath);
     SkTextOnPath();
-<<<<<<< HEAD
     bool draw(SkAnimateMaker&) override;
 
-=======
-    bool draw(SkAnimateMaker& ) override;
->>>>>>> miniblink49
 private:
     SkScalar offset;
     SkDrawPath* path;

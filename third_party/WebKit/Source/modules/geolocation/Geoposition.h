@@ -30,7 +30,6 @@
 #include "modules/EventModules.h"
 #include "modules/geolocation/Coordinates.h"
 #include "platform/heap/Handle.h"
-<<<<<<< HEAD
 #include "wtf/Assertions.h"
 
 namespace blink {
@@ -39,44 +38,23 @@ class Geoposition final : public GarbageCollected<Geoposition>,
                           public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
 
-=======
-
-namespace blink {
-
-class Geoposition final : public GarbageCollected<Geoposition>, public ScriptWrappable {
-    DEFINE_WRAPPERTYPEINFO();
->>>>>>> miniblink49
 public:
     static Geoposition* create(Coordinates* coordinates, DOMTimeStamp timestamp)
     {
         return new Geoposition(coordinates, timestamp);
     }
 
-<<<<<<< HEAD
     DEFINE_INLINE_TRACE() { visitor->trace(m_coordinates); }
 
     DOMTimeStamp timestamp() const { return m_timestamp; }
     Coordinates* coords() const { return m_coordinates; }
-=======
-    DEFINE_INLINE_TRACE()
-    {
-        visitor->trace(m_coordinates);
-    }
-
-    DOMTimeStamp timestamp() const { return m_timestamp; }
-    Coordinates* coords() const { return m_coordinates.get(); }
->>>>>>> miniblink49
 
 private:
     Geoposition(Coordinates* coordinates, DOMTimeStamp timestamp)
         : m_coordinates(coordinates)
         , m_timestamp(timestamp)
     {
-<<<<<<< HEAD
         DCHECK(m_coordinates);
-=======
-        ASSERT(m_coordinates);
->>>>>>> miniblink49
     }
 
     Member<Coordinates> m_coordinates;

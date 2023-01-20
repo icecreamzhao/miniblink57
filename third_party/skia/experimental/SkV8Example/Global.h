@@ -14,7 +14,6 @@
 
 #include <v8.h>
 
-<<<<<<< HEAD
 #include "SkEvent.h"
 #include "SkTypes.h"
 
@@ -25,19 +24,6 @@ typedef v8::Persistent<v8::Function, v8::CopyablePersistentTraits<v8::Function>>
 // Provides the global isolate and context for our V8 instance.
 // Also implements all the global level functions.
 class Global : SkNoncopyable {
-=======
-
-#include "SkTypes.h"
-#include "SkEvent.h"
-
-class SkOSWindow;
-
-typedef v8::Persistent<v8::Function, v8::CopyablePersistentTraits<v8::Function> > CopyablePersistentFn;
-
-// Provides the global isolate and context for our V8 instance.
-// Also implements all the global level functions.
-class Global : SkNoncopyable  {
->>>>>>> miniblink49
 public:
     Global(v8::Isolate* isolate)
         : fIsolate(isolate)
@@ -47,16 +33,11 @@ public:
         gGlobal = this;
         this->initialize();
     }
-<<<<<<< HEAD
     virtual ~Global() { }
-=======
-    virtual ~Global() {}
->>>>>>> miniblink49
 
     // The script will be parsed into the context this Global contains.
     bool parseScript(const char script[]);
 
-<<<<<<< HEAD
     v8::Local<v8::Context> getContext()
     {
         return v8::Local<v8::Context>::New(fIsolate, fContext);
@@ -73,20 +54,6 @@ public:
     }
     SkOSWindow* getWindow()
     {
-=======
-    v8::Local<v8::Context> getContext() {
-        return v8::Local<v8::Context>::New(fIsolate, fContext);
-    }
-
-    v8::Isolate* getIsolate() {
-        return fIsolate;
-    }
-
-    void setWindow(SkOSWindow* win) {
-        fWindow = win;
-    }
-    SkOSWindow* getWindow() {
->>>>>>> miniblink49
         return fWindow;
     }
 
@@ -106,21 +73,12 @@ private:
     static void Inval(const v8::FunctionCallbackInfo<v8::Value>& args);
 
     v8::Persistent<v8::Context> fContext;
-<<<<<<< HEAD
     v8::Isolate* fIsolate;
     SkOSWindow* fWindow;
     static Global* gGlobal;
 
     // Handle to the functions to call when a timeout triggers as indexed by id.
     std::map<int32_t, CopyablePersistentFn> fTimeouts;
-=======
-    v8::Isolate*                fIsolate;
-    SkOSWindow*                 fWindow;
-    static Global*              gGlobal;
-
-    // Handle to the functions to call when a timeout triggers as indexed by id.
-    std::map<int32_t, CopyablePersistentFn > fTimeouts;
->>>>>>> miniblink49
 
     // Last timer ID generated.
     int32_t fLastTimerID;

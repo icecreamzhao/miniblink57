@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 dglazkov@chromium.org
 drott@chromium.org
 eae@chromium.org
@@ -10,40 +9,18 @@ jochen@chromium.org
 junov@chromium.org
 kbr@chromium.org
 kinuko@chromium.org
-=======
-adamk@chromium.org
-dglazkov@chromium.org
-drott@chromium.org
-eae@chromium.org
-eroman@chromium.org
-esprehn@chromium.org
-fmalita@chromium.org
-haraken@chromium.org
-jchaffraix@chromium.org
-jochen@chromium.org
-junov@chromium.org
-kbr@chromium.org
-leviw@chromium.org
->>>>>>> miniblink49
 mkwst@chromium.org
 noel@chromium.org
 pdr@chromium.org
 pfeldman@chromium.org
-<<<<<<< HEAD
-=======
-rtoy@chromium.org
->>>>>>> miniblink49
 schenney@chromium.org
 senorblanco@chromium.org
 thakis@chromium.org
 tkent@chromium.org
 vollick@chromium.org
-<<<<<<< HEAD
 
 # In addition to the above, API_OWNERS are also adequate reviewers
 # for adding / changing the status of a feature.
 per-file RuntimeEnabledFeatures.in=file://third_party/WebKit/API_OWNERS
 
 # COMPONENT: Platform
-=======
->>>>>>> miniblink49

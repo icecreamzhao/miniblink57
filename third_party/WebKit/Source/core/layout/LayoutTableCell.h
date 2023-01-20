@@ -4,7 +4,8 @@
  *           (C) 1998 Waldo Bastian (bastian@kde.org)
  *           (C) 1999 Lars Knoll (knoll@kde.org)
  *           (C) 1999 Antti Koivisto (koivisto@kde.org)
- * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2009, 2013 Apple Inc. All rights reserved.
+ * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2009, 2013 Apple Inc.
+ *               All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,16 +31,60 @@
 #include "core/layout/LayoutTableRow.h"
 #include "core/layout/LayoutTableSection.h"
 #include "platform/LengthFunctions.h"
+#include <memory>
 
 namespace blink {
 
 static const unsigned unsetColumnIndex = 0x1FFFFFFF;
 static const unsigned maxColumnIndex = 0x1FFFFFFE; // 536,870,910
 
-enum IncludeBorderColorOrNot { DoNotIncludeBorderColor, IncludeBorderColor };
+enum IncludeBorderColorOrNot { DoNotIncludeBorderColor,
+    IncludeBorderColor };
 
 class SubtreeLayoutScope;
 
+// LayoutTableCell is used to represent a table cell (display: table-cell).
+//
+// Because rows are as tall as the tallest cell, cells need to be aligned into
+// the enclosing row space. To achieve this, LayoutTableCell introduces the
+// concept of 'intrinsic padding'. Those 2 paddings are used to shift the box
+// into the row as follows:
+//
+//        --------------------------------
+//        ^  ^
+//        |  |
+//        |  |    cell's border before
+//        |  |
+//        |  v
+//        |  ^
+//        |  |
+//        |  | m_intrinsicPaddingBefore
+//        |  |
+//        |  v
+//        |  -----------------------------
+//        |  |                           |
+// row    |  |   cell's padding box      |
+// height |  |                           |
+//        |  -----------------------------
+//        |  ^
+//        |  |
+//        |  | m_intrinsicPaddingAfter
+//        |  |
+//        |  v
+//        |  ^
+//        |  |
+//        |  |    cell's border after
+//        |  |
+//        v  v
+//        ---------------------------------
+//
+// Note that this diagram is not impacted by collapsing or separate borders
+// (see 'border-collapse').
+// Also there is no margin on table cell (or any internal table element).
+//
+// LayoutTableCell is positioned with respect to the enclosing
+// LayoutTableSection. See callers of
+// LayoutTableSection::setLogicalPositionForCell() for when it is placed.
 class CORE_EXPORT LayoutTableCell final : public LayoutBlockFlow {
 public:
     explicit LayoutTableCell(Element*);
@@ -60,25 +105,34 @@ public:
     // Called from HTMLTableCellElement.
     void colSpanOrRowSpanChanged();
 
-    void setCol(unsigned column)
+    void setAbsoluteColumnIndex(unsigned column)
     {
         if (UNLIKELY(column > maxColumnIndex))
             CRASH();
 
-        m_column = column;
+        m_absoluteColumnIndex = column;
     }
 
-    bool hasCol() const { return m_column != unsetColumnIndex; }
-
-    unsigned col() const
+    bool hasSetAbsoluteColumnIndex() const
     {
-        ASSERT(hasCol());
-        return m_column;
+        return m_absoluteColumnIndex != unsetColumnIndex;
+    }
+
+    unsigned absoluteColumnIndex() const
+    {
+        ASSERT(hasSetAbsoluteColumnIndex());
+        return m_absoluteColumnIndex;
     }
 
     LayoutTableRow* row() const { return toLayoutTableRow(parent()); }
-    LayoutTableSection* section() const { return toLayoutTableSection(parent()->parent()); }
-    LayoutTable* table() const { return toLayoutTable(parent()->parent()->parent()); }
+    LayoutTableSection* section() const
+    {
+        return toLayoutTableSection(parent()->parent());
+    }
+    LayoutTable* table() const
+    {
+        return toLayoutTable(parent()->parent()->parent());
+    }
 
     LayoutTableCell* previousCell() const;
     LayoutTableCell* nextCell() const;
@@ -95,95 +149,110 @@ public:
         Length styleWidth = style()->logicalWidth();
         if (!styleWidth.isAuto())
             return styleWidth;
-        if (LayoutTableCol* firstColumn = table()->colElement(col()))
+        if (LayoutTableCol* firstColumn = table()
+                                              ->colElementAtAbsoluteColumn(absoluteColumnIndex())
+                                              .innermostColOrColGroup())
             return logicalWidthFromColumns(firstColumn, styleWidth);
         return styleWidth;
     }
 
     int logicalHeightFromStyle() const
     {
-        int styleLogicalHeight = valueForLength(style()->logicalHeight(), 0);
-        // In strict mode, box-sizing: content-box do the right thing and actually add in the border and padding.
+        Length height = style()->logicalHeight();
+        int styleLogicalHeight = height.isIntrinsicOrAuto()
+            ? 0
+            : valueForLength(height, LayoutUnit()).toInt();
+
+        // In strict mode, box-sizing: content-box do the right thing and actually
+        // add in the border and padding.
         // Call computedCSSPadding* directly to avoid including implicitPadding.
-        if (!document().inQuirksMode() && style()->boxSizing() != BORDER_BOX)
+        if (!document().inQuirksMode() && style()->boxSizing() != EBoxSizing::kBorderBox)
             styleLogicalHeight += (computedCSSPaddingBefore() + computedCSSPaddingAfter()).floor() + borderBefore() + borderAfter();
         return styleLogicalHeight;
     }
 
     int logicalHeightForRowSizing() const
     {
-        // FIXME: This function does too much work, and is very hot during table layout!
+        // FIXME: This function does too much work, and is very hot during table
+        // layout!
         int adjustedLogicalHeight = pixelSnappedLogicalHeight() - (intrinsicPaddingBefore() + intrinsicPaddingAfter());
         int styleLogicalHeight = logicalHeightFromStyle();
         return max(styleLogicalHeight, adjustedLogicalHeight);
     }
 
-
     void setCellLogicalWidth(int constrainedLogicalWidth, SubtreeLayoutScope&);
 
-    virtual int borderLeft() const override;
-    virtual int borderRight() const override;
-    virtual int borderTop() const override;
-    virtual int borderBottom() const override;
-    virtual int borderStart() const override;
-    virtual int borderEnd() const override;
-    virtual int borderBefore() const override;
-    virtual int borderAfter() const override;
+    int borderLeft() const override;
+    int borderRight() const override;
+    int borderTop() const override;
+    int borderBottom() const override;
+    int borderStart() const override;
+    int borderEnd() const override;
+    int borderBefore() const override;
+    int borderAfter() const override;
 
     void collectBorderValues(LayoutTable::CollapsedBorderValues&);
     static void sortBorderValues(LayoutTable::CollapsedBorderValues&);
 
-    virtual void layout() override;
+    void layout() override;
 
-    virtual void paint(const PaintInfo&, const LayoutPoint&) override;
+    void paint(const PaintInfo&, const LayoutPoint&) const override;
 
-    LayoutUnit cellBaselinePosition() const;
+    int cellBaselinePosition() const;
     bool isBaselineAligned() const
     {
         EVerticalAlign va = style()->verticalAlign();
-        return va == BASELINE || va == TEXT_BOTTOM || va == TEXT_TOP || va == SUPER || va == SUB || va == LENGTH;
+        return va == EVerticalAlign::Baseline || va == EVerticalAlign::TextBottom || va == EVerticalAlign::TextTop || va == EVerticalAlign::Super || va == EVerticalAlign::Sub || va == EVerticalAlign::Length;
     }
 
-    void computeIntrinsicPadding(int rowHeight, SubtreeLayoutScope&);
+    // Align the cell in the block direction. This is done by calculating an
+    // intrinsic padding before and after the cell contents, so that all cells in
+    // the row get the same logical height.
+    void computeIntrinsicPadding(int rowHeight,
+        EVerticalAlign,
+        SubtreeLayoutScope&);
+
     void clearIntrinsicPadding() { setIntrinsicPadding(0, 0); }
 
     int intrinsicPaddingBefore() const { return m_intrinsicPaddingBefore; }
     int intrinsicPaddingAfter() const { return m_intrinsicPaddingAfter; }
 
-    virtual LayoutUnit paddingTop() const override;
-    virtual LayoutUnit paddingBottom() const override;
-    virtual LayoutUnit paddingLeft() const override;
-    virtual LayoutUnit paddingRight() const override;
+    LayoutUnit paddingTop() const override;
+    LayoutUnit paddingBottom() const override;
+    LayoutUnit paddingLeft() const override;
+    LayoutUnit paddingRight() const override;
 
-    // FIXME: For now we just assume the cell has the same block flow direction as the table. It's likely we'll
-    // create an extra anonymous LayoutBlock to handle mixing directionality anyway, in which case we can lock
-    // the block flow directionality of the cells to the table's directionality.
-    virtual LayoutUnit paddingBefore() const override;
-    virtual LayoutUnit paddingAfter() const override;
+    // FIXME: For now we just assume the cell has the same block flow direction as
+    // the table. It's likely we'll create an extra anonymous LayoutBlock to
+    // handle mixing directionality anyway, in which case we can lock the block
+    // flow directionality of the cells to the table's directionality.
+    LayoutUnit paddingBefore() const override;
+    LayoutUnit paddingAfter() const override;
 
     void setOverrideLogicalContentHeightFromRowHeight(LayoutUnit);
 
-    virtual void scrollbarsChanged(bool horizontalScrollbarChanged, bool verticalScrollbarChanged) override;
+    void scrollbarsChanged(bool horizontalScrollbarChanged,
+        bool verticalScrollbarChanged,
+        ScrollbarChangeContext = Layout) override;
 
     bool cellWidthChanged() const { return m_cellWidthChanged; }
     void setCellWidthChanged(bool b = true) { m_cellWidthChanged = b; }
 
     static LayoutTableCell* createAnonymous(Document*);
     static LayoutTableCell* createAnonymousWithParent(const LayoutObject*);
-    virtual LayoutBox* createAnonymousBoxWithSameTypeAs(const LayoutObject* parent) const override
+    LayoutBox* createAnonymousBoxWithSameTypeAs(
+        const LayoutObject* parent) const override
     {
         return createAnonymousWithParent(parent);
     }
 
-    // This function is used to unify which table part's style we use for computing direction and
-    // writing mode. Writing modes are not allowed on row group and row but direction is.
-    // This means we can safely use the same style in all cases to simplify our code.
-    // FIXME: Eventually this function should replaced by style() once we support direction
-    // on all table parts and writing-mode on cells.
-    const ComputedStyle& styleForCellFlow() const
-    {
-        return row()->styleRef();
-    }
+    // This function is used to unify which table part's style we use for
+    // computing direction and writing mode. Writing modes are not allowed on row
+    // group and row but direction is. This means we can safely use the same style
+    // in all cases to simplify our code.
+    // FIXME: Eventually this function should replaced by style() once we support
+    // direction on all table parts and writing-mode on cells.
+    const ComputedStyle& styleForCellFlow() const { return row()->styleRef(); }
 
     const BorderValue& borderAdjoiningTableStart() const
     {
@@ -205,48 +274,125 @@ public:
 
     const BorderValue& borderAdjoiningCellBefore(const LayoutTableCell* cell)
     {
-        ASSERT_UNUSED(cell, table()->cellAfter(cell) == this);
-        // FIXME: https://webkit.org/b/79272 - Add support for mixed directionality at the cell level.
+        DCHECK_EQ(table()->cellAfter(cell), this);
+        // FIXME: https://webkit.org/b/79272 - Add support for mixed directionality
+        // at the cell level.
         return style()->borderStart();
     }
 
     const BorderValue& borderAdjoiningCellAfter(const LayoutTableCell* cell)
     {
-        ASSERT_UNUSED(cell, table()->cellBefore(cell) == this);
-        // FIXME: https://webkit.org/b/79272 - Add support for mixed directionality at the cell level.
+        DCHECK_EQ(table()->cellBefore(cell), this);
+        // FIXME: https://webkit.org/b/79272 - Add support for mixed directionality
+        // at the cell level.
         return style()->borderEnd();
     }
 
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
     bool isFirstOrLastCellInRow() const
     {
         return !table()->cellAfter(this) || !table()->cellBefore(this);
     }
 #endif
 
-    virtual const char* name() const override { return "LayoutTableCell"; }
+    const char* name() const override
+    {
+        return "LayoutTableCell";
+    }
+
+    bool backgroundIsKnownToBeOpaqueInRect(const LayoutRect&) const override;
+    void invalidateDisplayItemClients(PaintInvalidationReason) const override;
+
+    // TODO(wkorman): Consider renaming to more clearly differentiate from
+    // CollapsedBorderValue.
+    class CollapsedBorderValues : public DisplayItemClient {
+    public:
+        CollapsedBorderValues(const LayoutTableCell&,
+            const CollapsedBorderValue& startBorder,
+            const CollapsedBorderValue& endBorder,
+            const CollapsedBorderValue& beforeBorder,
+            const CollapsedBorderValue& afterBorder);
+
+        const CollapsedBorderValue& startBorder() const { return m_startBorder; }
+        const CollapsedBorderValue& endBorder() const { return m_endBorder; }
+        const CollapsedBorderValue& beforeBorder() const { return m_beforeBorder; }
+        const CollapsedBorderValue& afterBorder() const { return m_afterBorder; }
+
+        void setCollapsedBorderValues(const CollapsedBorderValues& other);
+
+        // DisplayItemClient methods.
+        String debugName() const;
+        LayoutRect visualRect() const;
+
+    private:
+        const LayoutTableCell& m_layoutTableCell;
+        CollapsedBorderValue m_startBorder;
+        CollapsedBorderValue m_endBorder;
+        CollapsedBorderValue m_beforeBorder;
+        CollapsedBorderValue m_afterBorder;
+    };
+
+    class RowBackgroundDisplayItemClient : public DisplayItemClient {
+    public:
+        RowBackgroundDisplayItemClient(const LayoutTableCell&);
+
+        // DisplayItemClient methods.
+        String debugName() const;
+        LayoutRect visualRect() const;
+
+    private:
+        const LayoutTableCell& m_layoutTableCell;
+    };
+
+    bool usesCompositedCellDisplayItemClients() const;
+    const CollapsedBorderValues* collapsedBorderValues() const
+    {
+        return m_collapsedBorderValues.get();
+    }
+    const DisplayItemClient& backgroundDisplayItemClient() const
+    {
+        return m_rowBackgroundDisplayItemClient
+            ? static_cast<const DisplayItemClient&>(
+                *m_rowBackgroundDisplayItemClient)
+            : *this;
+    }
+
+    LayoutRect debugRect() const override;
+
+    void adjustChildDebugRect(LayoutRect&) const override;
+
+    // A table cell's location is relative to its containing section.
+    LayoutBox* locationContainer() const override { return section(); }
+
+    void ensureIsReadyForPaintInvalidation() override;
+
+    bool hasLineIfEmpty() const override;
 
 protected:
-    virtual void styleDidChange(StyleDifference, const ComputedStyle* oldStyle) override;
-    virtual void computePreferredLogicalWidths() override;
+    void styleDidChange(StyleDifference, const ComputedStyle* oldStyle) override;
+    void computePreferredLogicalWidths() override;
 
-    virtual void addLayerHitTestRects(LayerHitTestRects&, const DeprecatedPaintLayer* currentCompositedLayer, const LayoutPoint& layerOffset, const LayoutRect& containerRect) const override;
+    void addLayerHitTestRects(LayerHitTestRects&,
+        const PaintLayer* currentCompositedLayer,
+        const LayoutPoint& layerOffset,
+        const LayoutRect& containerRect) const override;
 
 private:
-    virtual bool isOfType(LayoutObjectType type) const override { return type == LayoutObjectTableCell || LayoutBlockFlow::isOfType(type); }
+    bool isOfType(LayoutObjectType type) const override
+    {
+        return type == LayoutObjectTableCell || LayoutBlockFlow::isOfType(type);
+    }
 
-    virtual void willBeRemovedFromTree() override;
+    void willBeRemovedFromTree() override;
 
-    virtual void updateLogicalWidth() override;
+    void updateLogicalWidth() override;
 
-    virtual void paintBoxDecorationBackground(const PaintInfo&, const LayoutPoint&) override;
-    virtual void paintMask(const PaintInfo&, const LayoutPoint&) override;
+    void paintBoxDecorationBackground(const PaintInfo&,
+        const LayoutPoint&) const override;
+    void paintMask(const PaintInfo&, const LayoutPoint&) const override;
 
-    virtual bool boxShadowShouldBeAppliedToBackground(BackgroundBleedAvoidance, InlineFlowBox*) const override;
-
-    virtual LayoutSize offsetFromContainer(const LayoutObject*, const LayoutPoint&, bool* offsetDependsOnPoint = nullptr) const override;
-    virtual LayoutRect clippedOverflowRectForPaintInvalidation(const LayoutBoxModelObject* paintInvalidationContainer, const PaintInvalidationState* = nullptr) const override;
-    virtual void mapRectToPaintInvalidationBacking(const LayoutBoxModelObject* paintInvalidationContainer, LayoutRect&, const PaintInvalidationState*) const override;
+    LayoutSize offsetFromContainer(const LayoutObject*) const override;
+    LayoutRect localVisualRect() const override;
 
     int borderHalfLeft(bool outer) const;
     int borderHalfRight(bool outer) const;
@@ -260,17 +406,44 @@ private:
 
     void setIntrinsicPaddingBefore(int p) { m_intrinsicPaddingBefore = p; }
     void setIntrinsicPaddingAfter(int p) { m_intrinsicPaddingAfter = p; }
-    void setIntrinsicPadding(int before, int after) { setIntrinsicPaddingBefore(before); setIntrinsicPaddingAfter(after); }
+    void setIntrinsicPadding(int before, int after)
+    {
+        setIntrinsicPaddingBefore(before);
+        setIntrinsicPaddingAfter(after);
+    }
 
     bool hasStartBorderAdjoiningTable() const;
     bool hasEndBorderAdjoiningTable() const;
 
-    CollapsedBorderValue computeCollapsedStartBorder(IncludeBorderColorOrNot = IncludeBorderColor) const;
-    CollapsedBorderValue computeCollapsedEndBorder(IncludeBorderColorOrNot = IncludeBorderColor) const;
-    CollapsedBorderValue computeCollapsedBeforeBorder(IncludeBorderColorOrNot = IncludeBorderColor) const;
-    CollapsedBorderValue computeCollapsedAfterBorder(IncludeBorderColorOrNot = IncludeBorderColor) const;
+    // Those functions implement the CSS collapsing border conflict
+    // resolution algorithm.
+    // http://www.w3.org/TR/CSS2/tables.html#border-conflict-resolution
+    //
+    // The code is pretty complicated as it needs to handle mixed directionality
+    // between the table and the different table parts (cell, row, row group,
+    // column, column group).
+    // TODO(jchaffraix): It should be easier to compute all the borders in
+    // physical coordinates. However this is not the design of the current code.
+    //
+    // Blink's support for mixed directionality is currently partial. We only
+    // support the directionality up to |styleForCellFlow|. See comment on the
+    // function above for more details.
+    // See also https://code.google.com/p/chromium/issues/detail?id=128227 for
+    // some history.
+    //
+    // Those functions are called when the cache (m_collapsedBorders) is
+    // invalidated on LayoutTable.
+    CollapsedBorderValue computeCollapsedStartBorder(
+        IncludeBorderColorOrNot = IncludeBorderColor) const;
+    CollapsedBorderValue computeCollapsedEndBorder(
+        IncludeBorderColorOrNot = IncludeBorderColor) const;
+    CollapsedBorderValue computeCollapsedBeforeBorder(
+        IncludeBorderColorOrNot = IncludeBorderColor) const;
+    CollapsedBorderValue computeCollapsedAfterBorder(
+        IncludeBorderColorOrNot = IncludeBorderColor) const;
 
-    Length logicalWidthFromColumns(LayoutTableCol* firstColForThisCell, Length widthFromStyle) const;
+    Length logicalWidthFromColumns(LayoutTableCol* firstColForThisCell,
+        Length widthFromStyle) const;
 
     void updateColAndRowSpanFlags();
 
@@ -280,13 +453,24 @@ private:
     void nextSibling() const = delete;
     void previousSibling() const = delete;
 
-    // Note MSVC will only pack members if they have identical types, hence we use unsigned instead of bool here.
-    unsigned m_column : 29;
+    // Note MSVC will only pack members if they have identical types, hence we use
+    // unsigned instead of bool here.
+    unsigned m_absoluteColumnIndex : 29;
     unsigned m_cellWidthChanged : 1;
-    unsigned m_hasColSpan: 1;
-    unsigned m_hasRowSpan: 1;
+    unsigned m_hasColSpan : 1;
+    unsigned m_hasRowSpan : 1;
+
+    // The intrinsic padding.
+    // See class comment for what they are.
+    //
+    // Note: Those fields are using non-subpixel units (int)
+    // because we don't do fractional arithmetic on tables.
     int m_intrinsicPaddingBefore;
     int m_intrinsicPaddingAfter;
+
+    std::unique_ptr<CollapsedBorderValues> m_collapsedBorderValues;
+    std::unique_ptr<RowBackgroundDisplayItemClient>
+        m_rowBackgroundDisplayItemClient;
 };
 
 DEFINE_LAYOUT_OBJECT_TYPE_CASTS(LayoutTableCell, isTableCell());
@@ -303,14 +487,12 @@ inline LayoutTableCell* LayoutTableCell::nextCell() const
 
 inline LayoutTableCell* LayoutTableRow::firstCell() const
 {
-    ASSERT(children() == virtualChildren());
-    return toLayoutTableCell(children()->firstChild());
+    return toLayoutTableCell(firstChild());
 }
 
 inline LayoutTableCell* LayoutTableRow::lastCell() const
 {
-    ASSERT(children() == virtualChildren());
-    return toLayoutTableCell(children()->lastChild());
+    return toLayoutTableCell(lastChild());
 }
 
 } // namespace blink

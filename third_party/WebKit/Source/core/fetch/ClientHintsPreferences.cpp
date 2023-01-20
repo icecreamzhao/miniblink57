@@ -2,38 +2,54 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "core/fetch/ClientHintsPreferences.h"
 
-#include "core/fetch/ResourceFetcher.h"
 #include "platform/RuntimeEnabledFeatures.h"
 #include "platform/network/HTTPParsers.h"
 
 namespace blink {
 
-void handleAcceptClientHintsHeader(const String& headerValue, ClientHintsPreferences& preferences, ResourceFetcher* fetcher)
+ClientHintsPreferences::ClientHintsPreferences()
+    : m_shouldSendDPR(false)
+    , m_shouldSendResourceWidth(false)
+    , m_shouldSendViewportWidth(false)
+{
+}
+
+void ClientHintsPreferences::updateFrom(
+    const ClientHintsPreferences& preferences)
+{
+    m_shouldSendDPR = preferences.m_shouldSendDPR;
+    m_shouldSendResourceWidth = preferences.m_shouldSendResourceWidth;
+    m_shouldSendViewportWidth = preferences.m_shouldSendViewportWidth;
+}
+
+void ClientHintsPreferences::updateFromAcceptClientHintsHeader(
+    const String& headerValue,
+    Context* context)
 {
     if (!RuntimeEnabledFeatures::clientHintsEnabled() || headerValue.isEmpty())
         return;
-    CommaDelimitedHeaderSet acceptCH;
-    parseCommaDelimitedHeader(headerValue, acceptCH);
-    if (acceptCH.contains("dpr")) {
-        if (fetcher)
-            fetcher->context().countClientHintsDPR();
-        preferences.setShouldSendDPR(true);
+
+    CommaDelimitedHeaderSet acceptClientHintsHeader;
+    parseCommaDelimitedHeader(headerValue, acceptClientHintsHeader);
+    if (acceptClientHintsHeader.contains("dpr")) {
+        if (context)
+            context->countClientHintsDPR();
+        m_shouldSendDPR = true;
     }
 
-    if (acceptCH.contains("width")) {
-        if (fetcher)
-            fetcher->context().countClientHintsResourceWidth();
-        preferences.setShouldSendResourceWidth(true);
+    if (acceptClientHintsHeader.contains("width")) {
+        if (context)
+            context->countClientHintsResourceWidth();
+        m_shouldSendResourceWidth = true;
     }
 
-    if (acceptCH.contains("viewport-width")) {
-        if (fetcher)
-            fetcher->context().countClientHintsViewportWidth();
-        preferences.setShouldSendViewportWidth(true);
+    if (acceptClientHintsHeader.contains("viewport-width")) {
+        if (context)
+            context->countClientHintsViewportWidth();
+        m_shouldSendViewportWidth = true;
     }
 }
 
-}
+} // namespace blink

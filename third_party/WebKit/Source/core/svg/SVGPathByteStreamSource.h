@@ -21,12 +21,15 @@
 #define SVGPathByteStreamSource_h
 
 #include "core/svg/SVGPathByteStream.h"
-#include "core/svg/SVGPathSource.h"
+#include "core/svg/SVGPathData.h"
 #include "platform/geometry/FloatPoint.h"
 
 namespace blink {
 
-class SVGPathByteStreamSource final : public SVGPathSource {
+class SVGPathByteStreamSource {
+    WTF_MAKE_NONCOPYABLE(SVGPathByteStreamSource);
+    STACK_ALLOCATED();
+
 public:
     explicit SVGPathByteStreamSource(const SVGPathByteStream& stream)
         : m_streamCurrent(stream.begin())
@@ -34,15 +37,14 @@ public:
     {
     }
 
-private:
-    bool hasMoreData() const override;
-    SVGPathSegType peekSegmentType() override;
-    PathSegmentData parseSegment() override;
+    bool hasMoreData() const { return m_streamCurrent < m_streamEnd; }
+    PathSegmentData parseSegment();
 
+private:
 #if COMPILER(MSVC)
-#pragma warning(disable: 4701)
+#pragma warning(disable : 4701)
 #endif
-    template<typename DataType>
+    template <typename DataType>
     DataType readType()
     {
         ByteType<DataType> data;

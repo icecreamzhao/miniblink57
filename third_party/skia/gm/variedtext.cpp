@@ -5,19 +5,11 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "SkCanvas.h"
 #include "SkPath.h"
 #include "SkRandom.h"
 #include "SkTypeface.h"
 #include "gm.h"
-=======
-#include "gm.h"
-#include "SkCanvas.h"
-#include "SkPath.h"
-#include "SkTypeface.h"
-#include "SkRandom.h"
->>>>>>> miniblink49
 
 /**
  * Draws text with random parameters. The text draws each get their own clip rect. It is also
@@ -28,7 +20,6 @@ class VariedTextGM : public skiagm::GM {
 public:
     VariedTextGM(bool effectiveClip, bool lcd)
         : fEffectiveClip(effectiveClip)
-<<<<<<< HEAD
         , fLCD(lcd)
     {
     }
@@ -36,20 +27,6 @@ public:
 protected:
     SkString onShortName() override
     {
-=======
-        , fLCD(lcd) {
-        memset(fTypefacesToUnref, 0, sizeof(fTypefacesToUnref));
-    }
-
-    ~VariedTextGM() {
-        for (size_t i = 0; i < SK_ARRAY_COUNT(fTypefacesToUnref); ++i) {
-            SkSafeUnref(fTypefacesToUnref[i]);
-        }
-    }
-
-protected:
-    SkString onShortName() override {
->>>>>>> miniblink49
         SkString name("varied_text");
         if (fEffectiveClip) {
             name.append("_clipped");
@@ -64,7 +41,6 @@ protected:
         return name;
     }
 
-<<<<<<< HEAD
     SkISize onISize() override
     {
         return SkISize::Make(640, 480);
@@ -72,13 +48,6 @@ protected:
 
     void onOnceBeforeDraw() override
     {
-=======
-    SkISize onISize() override {
-        return SkISize::Make(640, 480);
-    }
-
-    void onOnceBeforeDraw() override {
->>>>>>> miniblink49
         fPaint.setAntiAlias(true);
         fPaint.setLCDRenderText(fLCD);
 
@@ -86,7 +55,6 @@ protected:
         SkScalar w = SkIntToScalar(size.fWidth);
         SkScalar h = SkIntToScalar(size.fHeight);
 
-<<<<<<< HEAD
         static_assert(4 == SK_ARRAY_COUNT(fTypefaces), "typeface_cnt");
         fTypefaces[0] = sk_tool_utils::create_portable_typeface("sans-serif", SkFontStyle());
         fTypefaces[1] = sk_tool_utils::create_portable_typeface("sans-serif",
@@ -94,13 +62,6 @@ protected:
         fTypefaces[2] = sk_tool_utils::create_portable_typeface("serif", SkFontStyle());
         fTypefaces[3] = sk_tool_utils::create_portable_typeface("serif",
             SkFontStyle::FromOldStyle(SkTypeface::kBold));
-=======
-        SK_COMPILE_ASSERT(4 == SK_ARRAY_COUNT(fTypefacesToUnref), typeface_cnt);
-        fTypefacesToUnref[0] = sk_tool_utils::create_portable_typeface("sans-serif", SkTypeface::kNormal);
-        fTypefacesToUnref[1] = sk_tool_utils::create_portable_typeface("sans-serif", SkTypeface::kBold);
-        fTypefacesToUnref[2] = sk_tool_utils::create_portable_typeface("serif", SkTypeface::kNormal);
-        fTypefacesToUnref[3] = sk_tool_utils::create_portable_typeface("serif", SkTypeface::kBold);
->>>>>>> miniblink49
 
         SkRandom random;
         for (int i = 0; i < kCnt; ++i) {
@@ -113,30 +74,18 @@ protected:
 
             fColors[i] = random.nextU();
             fColors[i] |= 0xFF000000;
-<<<<<<< HEAD
             fColors[i] = sk_tool_utils::color_to_565(fColors[i]);
-=======
->>>>>>> miniblink49
 
             static const SkScalar kMinPtSize = 8.f;
             static const SkScalar kMaxPtSize = 32.f;
 
             fPtSizes[i] = random.nextRangeScalar(kMinPtSize, kMaxPtSize);
 
-<<<<<<< HEAD
             fTypefaceIndices[i] = random.nextULessThan(SK_ARRAY_COUNT(fTypefaces));
 
             SkRect r;
             fPaint.setColor(fColors[i]);
             fPaint.setTypeface(fTypefaces[fTypefaceIndices[i]]);
-=======
-            fTypefaces[i] = fTypefacesToUnref[
-                random.nextULessThan(SK_ARRAY_COUNT(fTypefacesToUnref))];
-
-            SkRect r;
-            fPaint.setColor(fColors[i]);
-            fPaint.setTypeface(fTypefaces[i]);
->>>>>>> miniblink49
             fPaint.setTextSize(fPtSizes[i]);
 
             fPaint.measureText(fStrings[i].c_str(), fStrings[i].size(), &r);
@@ -161,7 +110,6 @@ protected:
         }
     }
 
-<<<<<<< HEAD
     void onDraw(SkCanvas* canvas) override
     {
         for (int i = 0; i < kCnt; ++i) {
@@ -173,18 +121,6 @@ protected:
             canvas->clipRect(fClipRects[i]);
             canvas->translate(fPositions[i].fX, fPositions[i].fY);
             canvas->drawText(fStrings[i].c_str(), fStrings[i].size(), 0, 0, fPaint);
-=======
-    void onDraw(SkCanvas* canvas) override {
-        for (int i = 0; i < kCnt; ++i) {
-            fPaint.setColor(fColors[i]);
-            fPaint.setTextSize(fPtSizes[i]);
-            fPaint.setTypeface(fTypefaces[i]);
-
-            canvas->save();
-                canvas->clipRect(fClipRects[i]);
-                canvas->translate(fPositions[i].fX, fPositions[i].fY);
-                canvas->drawText(fStrings[i].c_str(), fStrings[i].size(), 0, 0, fPaint);
->>>>>>> miniblink49
             canvas->restore();
         }
 
@@ -207,7 +143,6 @@ private:
     static const int kMinLength = 15;
     static const int kMaxLength = 40;
 
-<<<<<<< HEAD
     bool fEffectiveClip;
     bool fLCD;
     sk_sp<SkTypeface> fTypefaces[4];
@@ -220,32 +155,11 @@ private:
     int fTypefaceIndices[kCnt];
     SkPoint fPositions[kCnt];
     SkRect fClipRects[kCnt];
-=======
-    bool        fEffectiveClip;
-    bool        fLCD;
-    SkTypeface* fTypefacesToUnref[4];
-    SkPaint     fPaint;
-
-    // precomputed for each text draw
-    SkString        fStrings[kCnt];
-    SkColor         fColors[kCnt];
-    SkScalar        fPtSizes[kCnt];
-    SkTypeface*     fTypefaces[kCnt];
-    SkPoint         fPositions[kCnt];
-    SkRect          fClipRects[kCnt];
->>>>>>> miniblink49
 
     typedef skiagm::GM INHERITED;
 };
 
-<<<<<<< HEAD
 DEF_GM(return new VariedTextGM(false, false);)
 DEF_GM(return new VariedTextGM(true, false);)
 DEF_GM(return new VariedTextGM(false, true);)
 DEF_GM(return new VariedTextGM(true, true);)
-=======
-DEF_GM( return SkNEW(VariedTextGM(false, false)); )
-DEF_GM( return SkNEW(VariedTextGM(true, false)); )
-DEF_GM( return SkNEW(VariedTextGM(false, true)); )
-DEF_GM( return SkNEW(VariedTextGM(true, true)); )
->>>>>>> miniblink49

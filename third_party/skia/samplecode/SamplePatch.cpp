@@ -5,7 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "DecodeFile.h"
 #include "SampleCode.h"
 #include "SkAnimTimer.h"
@@ -14,40 +13,21 @@
 #include "SkColorPriv.h"
 #include "SkGradientShader.h"
 #include "SkGraphics.h"
-=======
-#include "SampleCode.h"
-#include "SkAnimTimer.h"
-#include "SkView.h"
-#include "SkCanvas.h"
-#include "SkGradientShader.h"
-#include "SkGraphics.h"
-#include "SkImageDecoder.h"
->>>>>>> miniblink49
 #include "SkPath.h"
 #include "SkRandom.h"
 #include "SkRegion.h"
 #include "SkShader.h"
-<<<<<<< HEAD
 #include "SkTime.h"
 #include "SkTypeface.h"
 #include "SkUtils.h"
 #include "SkView.h"
 #include "SkXfermode.h"
-=======
-#include "SkUtils.h"
-#include "SkXfermode.h"
-#include "SkColorPriv.h"
-#include "SkColorFilter.h"
-#include "SkTime.h"
-#include "SkTypeface.h"
->>>>>>> miniblink49
 
 #include "SkOSFile.h"
 #include "SkStream.h"
 
 #include "SkGeometry.h" // private include :(
 
-<<<<<<< HEAD
 static sk_sp<SkShader> make_shader0(SkIPoint* size)
 {
     SkBitmap bm;
@@ -69,24 +49,6 @@ static sk_sp<SkShader> make_shader1(const SkIPoint& size)
     SkColor colors[] = { SK_ColorRED, SK_ColorGREEN, SK_ColorBLUE, SK_ColorRED };
     return SkGradientShader::MakeLinear(pts, colors, nullptr,
         SK_ARRAY_COUNT(colors), SkShader::kMirror_TileMode);
-=======
-static SkShader* make_shader0(SkIPoint* size) {
-    SkBitmap    bm;
-
-//    SkImageDecoder::DecodeFile("/skimages/progressivejpg.jpg", &bm);
-    SkImageDecoder::DecodeFile("/skimages/logo.png", &bm);
-    size->set(bm.width(), bm.height());
-    return SkShader::CreateBitmapShader(bm, SkShader::kClamp_TileMode,
-                                        SkShader::kClamp_TileMode);
-}
-
-static SkShader* make_shader1(const SkIPoint& size) {
-    SkPoint pts[] = { { 0, 0, },
-                      { SkIntToScalar(size.fX), SkIntToScalar(size.fY) } };
-    SkColor colors[] = { SK_ColorRED, SK_ColorGREEN, SK_ColorBLUE, SK_ColorRED };
-    return SkGradientShader::CreateLinear(pts, colors, NULL,
-                    SK_ARRAY_COUNT(colors), SkShader::kMirror_TileMode);
->>>>>>> miniblink49
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -94,7 +56,6 @@ static SkShader* make_shader1(const SkIPoint& size) {
 class Patch {
 public:
     Patch() { sk_bzero(fPts, sizeof(fPts)); }
-<<<<<<< HEAD
     ~Patch() { }
 
     void setPatch(const SkPoint pts[12])
@@ -118,46 +79,19 @@ private:
 
 static void eval_patch_edge(const SkPoint cubic[], SkPoint samples[], int segs)
 {
-=======
-    ~Patch() {}
-
-    void setPatch(const SkPoint pts[12]) {
-        memcpy(fPts, pts, 12 * sizeof(SkPoint));
-        fPts[12] = pts[0];  // the last shall be first
-    }
-    void setBounds(int w, int h) { fW = w; fH = h; }
-
-    void draw(SkCanvas*, const SkPaint&, int segsU, int segsV,
-              bool doTextures, bool doColors);
-
-private:
-    SkPoint fPts[13];
-    int     fW, fH;
-};
-
-static void eval_patch_edge(const SkPoint cubic[], SkPoint samples[], int segs) {
->>>>>>> miniblink49
     SkScalar t = 0;
     SkScalar dt = SK_Scalar1 / segs;
 
     samples[0] = cubic[0];
     for (int i = 1; i < segs; i++) {
         t += dt;
-<<<<<<< HEAD
         SkEvalCubicAt(cubic, t, &samples[i], nullptr, nullptr);
-=======
-        SkEvalCubicAt(cubic, t, &samples[i], NULL, NULL);
->>>>>>> miniblink49
     }
 }
 
 static void eval_sheet(const SkPoint edge[], int nu, int nv, int iu, int iv,
-<<<<<<< HEAD
     SkPoint* pt)
 {
-=======
-                       SkPoint* pt) {
->>>>>>> miniblink49
     const int TL = 0;
     const int TR = nu;
     const int BR = TR + nv;
@@ -171,7 +105,6 @@ static void eval_sheet(const SkPoint edge[], int nu, int nv, int iu, int iv,
     SkScalar uV = SkScalarMul(u, SK_Scalar1 - v);
     SkScalar UV = SkScalarMul(SK_Scalar1 - u, SK_Scalar1 - v);
 
-<<<<<<< HEAD
     SkScalar x0 = SkScalarMul(UV, edge[TL].fX) + SkScalarMul(uV, edge[TR].fX) + SkScalarMul(Uv, edge[BL].fX) + SkScalarMul(uv, edge[BR].fX);
     SkScalar y0 = SkScalarMul(UV, edge[TL].fY) + SkScalarMul(uV, edge[TR].fY) + SkScalarMul(Uv, edge[BL].fY) + SkScalarMul(uv, edge[BR].fY);
 
@@ -188,42 +121,6 @@ static SkColor make_color(SkScalar s, SkScalar t)
 void Patch::draw(SkCanvas* canvas, const SkPaint& paint, int nu, int nv,
     bool doTextures, bool doColors)
 {
-=======
-    SkScalar x0 = SkScalarMul(UV, edge[TL].fX) + SkScalarMul(uV, edge[TR].fX) +
-                  SkScalarMul(Uv, edge[BL].fX) + SkScalarMul(uv, edge[BR].fX);
-    SkScalar y0 = SkScalarMul(UV, edge[TL].fY) + SkScalarMul(uV, edge[TR].fY) +
-                  SkScalarMul(Uv, edge[BL].fY) + SkScalarMul(uv, edge[BR].fY);
-
-    SkScalar x =    SkScalarMul(SK_Scalar1 - v, edge[TL+iu].fX) +
-                    SkScalarMul(u, edge[TR+iv].fX) +
-                    SkScalarMul(v, edge[BR+nu-iu].fX) +
-                    SkScalarMul(SK_Scalar1 - u, edge[BL+nv-iv].fX) - x0;
-    SkScalar y =    SkScalarMul(SK_Scalar1 - v, edge[TL+iu].fY) +
-                    SkScalarMul(u, edge[TR+iv].fY) +
-                    SkScalarMul(v, edge[BR+nu-iu].fY) +
-                    SkScalarMul(SK_Scalar1 - u, edge[BL+nv-iv].fY) - y0;
-    pt->set(x, y);
-}
-
-static int ScalarTo255(SkScalar v) {
-    int scale = SkScalarToFixed(v) >> 8;
-    if (scale < 0) {
-        scale = 0;
-    } else if (scale > 255) {
-        scale = 255;
-    }
-    return scale;
-}
-
-static SkColor make_color(SkScalar s, SkScalar t) {
-    int cs = ScalarTo255(s);
-    int ct = ScalarTo255(t);
-    return SkColorSetARGB(0xFF, cs, 0, 0) + SkColorSetARGB(0, 0, ct, 0);
-}
-
-void Patch::draw(SkCanvas* canvas, const SkPaint& paint, int nu, int nv,
-                 bool doTextures, bool doColors) {
->>>>>>> miniblink49
     if (nu < 1 || nv < 1) {
         return;
     }
@@ -240,7 +137,6 @@ void Patch::draw(SkCanvas* canvas, const SkPaint& paint, int nu, int nv,
     eval_patch_edge(fPts + 3, edge1, nv);
     eval_patch_edge(fPts + 6, edge2, nu);
     eval_patch_edge(fPts + 9, edge3, nv);
-<<<<<<< HEAD
     edge3[nv] = edge0[0]; // the last shall be first
 
     for (i = 0; i < npts; i++) {
@@ -249,16 +145,6 @@ void Patch::draw(SkCanvas* canvas, const SkPaint& paint, int nu, int nv,
 
     int row, vertCount = (nu + 1) * (nv + 1);
     SkAutoTMalloc<SkPoint> vertStorage(vertCount);
-=======
-    edge3[nv] = edge0[0];   // the last shall be first
-
-    for (i = 0; i < npts; i++) {
-//        canvas->drawLine(edge0[i].fX, edge0[i].fY, edge0[i+1].fX, edge0[i+1].fY, paint);
-    }
-
-    int row, vertCount = (nu + 1) * (nv + 1);
-    SkAutoTMalloc<SkPoint>  vertStorage(vertCount);
->>>>>>> miniblink49
     SkPoint* verts = vertStorage.get();
 
     // first row
@@ -279,19 +165,11 @@ void Patch::draw(SkCanvas* canvas, const SkPaint& paint, int nu, int nv,
         last[i] = edge2[nu - i];
     }
 
-<<<<<<< HEAD
     //    canvas->drawPoints(verts, vertCount, paint);
 
     int stripCount = (nu + 1) * 2;
     SkAutoTMalloc<SkPoint> stripStorage(stripCount * 2);
     SkAutoTMalloc<SkColor> colorStorage(stripCount);
-=======
-//    canvas->drawPoints(verts, vertCount, paint);
-
-    int stripCount = (nu + 1) * 2;
-    SkAutoTMalloc<SkPoint>  stripStorage(stripCount * 2);
-    SkAutoTMalloc<SkColor>  colorStorage(stripCount);
->>>>>>> miniblink49
     SkPoint* strip = stripStorage.get();
     SkPoint* tex = strip + stripCount;
     SkColor* colors = colorStorage.get();
@@ -304,7 +182,6 @@ void Patch::draw(SkCanvas* canvas, const SkPaint& paint, int nu, int nv,
         SkPoint* lower = r + nu + 1;
         r = lower;
         SkScalar s = 0;
-<<<<<<< HEAD
         for (i = 0; i <= nu; i++) {
             strip[i * 2 + 0] = *upper++;
             strip[i * 2 + 1] = *lower++;
@@ -312,38 +189,19 @@ void Patch::draw(SkCanvas* canvas, const SkPaint& paint, int nu, int nv,
             tex[i * 2 + 1].set(s, t + dt);
             colors[i * 2 + 0] = make_color(s / fW, t / fH);
             colors[i * 2 + 1] = make_color(s / fW, (t + dt) / fH);
-=======
-        for (i = 0; i <= nu; i++)  {
-            strip[i*2 + 0] = *upper++;
-            strip[i*2 + 1] = *lower++;
-            tex[i*2 + 0].set(s, t);
-            tex[i*2 + 1].set(s, t + dt);
-            colors[i*2 + 0] = make_color(s/fW, t/fH);
-            colors[i*2 + 1] = make_color(s/fW, (t + dt)/fH);
->>>>>>> miniblink49
             s += ds;
         }
         t += dt;
         canvas->drawVertices(SkCanvas::kTriangleStrip_VertexMode, stripCount,
-<<<<<<< HEAD
             strip, doTextures ? tex : nullptr,
             doColors ? colors : nullptr, nullptr,
             nullptr, 0, paint);
-=======
-                             strip, doTextures ? tex : NULL,
-                             doColors ? colors : NULL, NULL,
-                             NULL, 0, paint);
->>>>>>> miniblink49
     }
 }
 
 static void drawpatches(SkCanvas* canvas, const SkPaint& paint, int nu, int nv,
-<<<<<<< HEAD
     Patch* patch)
 {
-=======
-                        Patch* patch) {
->>>>>>> miniblink49
     SkAutoCanvasRestore ar(canvas, true);
 
     patch->draw(canvas, paint, nu, nv, false, false);
@@ -359,7 +217,6 @@ const SkScalar DX = 20;
 const SkScalar DY = 0;
 
 class PatchView : public SampleView {
-<<<<<<< HEAD
     SkScalar fAngle;
     sk_sp<SkShader> fShader0;
     sk_sp<SkShader> fShader1;
@@ -370,16 +227,6 @@ public:
     PatchView()
         : fAngle(0)
     {
-=======
-    SkScalar    fAngle;
-    SkShader*   fShader0;
-    SkShader*   fShader1;
-    SkIPoint    fSize0, fSize1;
-    SkPoint     fPts[12];
-
-public:
-    PatchView() : fAngle(0) {
->>>>>>> miniblink49
         fShader0 = make_shader0(&fSize0);
         fSize1 = fSize0;
         if (fSize0.fX == 0 || fSize0.fY == 0) {
@@ -389,7 +236,6 @@ public:
 
         const SkScalar S = SkIntToScalar(50);
         const SkScalar T = SkIntToScalar(40);
-<<<<<<< HEAD
         fPts[0].set(S * 0, T);
         fPts[1].set(S * 1, T);
         fPts[2].set(S * 2, T);
@@ -402,39 +248,14 @@ public:
         fPts[9].set(S * 0, T * 4);
         fPts[10].set(S * 0, T * 3);
         fPts[11].set(S * 0, T * 2);
-=======
-        fPts[0].set(S*0, T);
-        fPts[1].set(S*1, T);
-        fPts[2].set(S*2, T);
-        fPts[3].set(S*3, T);
-        fPts[4].set(S*3, T*2);
-        fPts[5].set(S*3, T*3);
-        fPts[6].set(S*3, T*4);
-        fPts[7].set(S*2, T*4);
-        fPts[8].set(S*1, T*4);
-        fPts[9].set(S*0, T*4);
-        fPts[10].set(S*0, T*3);
-        fPts[11].set(S*0, T*2);
->>>>>>> miniblink49
 
         this->setBGColor(SK_ColorGRAY);
     }
 
-<<<<<<< HEAD
 protected:
     // overrides from SkEventSink
     bool onQuery(SkEvent* evt) override
     {
-=======
-    virtual ~PatchView() {
-        SkSafeUnref(fShader0);
-        SkSafeUnref(fShader1);
-    }
-
-protected:
-    // overrides from SkEventSink
-    virtual bool onQuery(SkEvent* evt)  {
->>>>>>> miniblink49
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "Patch");
             return true;
@@ -442,12 +263,8 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-<<<<<<< HEAD
     void onDrawContent(SkCanvas* canvas) override
     {
-=======
-    virtual void onDrawContent(SkCanvas* canvas) {
->>>>>>> miniblink49
         const int nu = 10;
         const int nv = 10;
 
@@ -457,11 +274,7 @@ protected:
 
         canvas->translate(DX, DY);
 
-<<<<<<< HEAD
         Patch patch;
-=======
-        Patch   patch;
->>>>>>> miniblink49
 
         paint.setShader(fShader0);
         if (fSize0.fX == 0) {
@@ -475,11 +288,7 @@ protected:
         patch.setPatch(fPts);
         drawpatches(canvas, paint, nu, nv, &patch);
 
-<<<<<<< HEAD
         paint.setShader(nullptr);
-=======
-        paint.setShader(NULL);
->>>>>>> miniblink49
         paint.setAntiAlias(true);
         paint.setStrokeWidth(SkIntToScalar(5));
         canvas->drawPoints(SkCanvas::kPoints_PointMode, SK_ARRAY_COUNT(fPts), fPts, paint);
@@ -491,33 +300,19 @@ protected:
         if (true) {
             SkMatrix m;
             m.setSkew(1, 0);
-<<<<<<< HEAD
             paint.setShader(paint.getShader()->makeWithLocalMatrix(m));
-=======
-            SkShader* s = SkShader::CreateLocalMatrixShader(paint.getShader(), m);
-            paint.setShader(s)->unref();
->>>>>>> miniblink49
         }
         if (true) {
             SkMatrix m;
             m.setRotate(fAngle);
-<<<<<<< HEAD
             paint.setShader(paint.getShader()->makeWithLocalMatrix(m));
-=======
-            SkShader* s = SkShader::CreateLocalMatrixShader(paint.getShader(), m);
-            paint.setShader(s)->unref();
->>>>>>> miniblink49
         }
         patch.setBounds(fSize1.fX, fSize1.fY);
         drawpatches(canvas, paint, nu, nv, &patch);
     }
 
-<<<<<<< HEAD
     bool onAnimate(const SkAnimTimer& timer) override
     {
-=======
-    bool onAnimate(const SkAnimTimer& timer) override {
->>>>>>> miniblink49
         fAngle = timer.scaled(60, 360);
         return true;
     }
@@ -525,7 +320,6 @@ protected:
     class PtClick : public Click {
     public:
         int fIndex;
-<<<<<<< HEAD
         PtClick(SkView* view, int index)
             : Click(view)
             , fIndex(index)
@@ -540,17 +334,6 @@ protected:
 
     SkView::Click* onFindClickHandler(SkScalar x, SkScalar y, unsigned modi) override
     {
-=======
-        PtClick(SkView* view, int index) : Click(view), fIndex(index) {}
-    };
-
-    static bool hittest(const SkPoint& pt, SkScalar x, SkScalar y) {
-        return SkPoint::Length(pt.fX - x, pt.fY - y) < SkIntToScalar(5);
-    }
-
-    virtual SkView::Click* onFindClickHandler(SkScalar x, SkScalar y,
-                                              unsigned modi) override {
->>>>>>> miniblink49
         x -= DX;
         y -= DY;
         for (size_t i = 0; i < SK_ARRAY_COUNT(fPts); i++) {
@@ -561,16 +344,10 @@ protected:
         return this->INHERITED::onFindClickHandler(x, y, modi);
     }
 
-<<<<<<< HEAD
     bool onClick(Click* click) override
     {
         fPts[((PtClick*)click)->fIndex].set(click->fCurr.fX - DX, click->fCurr.fY - DY);
         this->inval(nullptr);
-=======
-    virtual bool onClick(Click* click) {
-        fPts[((PtClick*)click)->fIndex].set(click->fCurr.fX - DX, click->fCurr.fY - DY);
-        this->inval(NULL);
->>>>>>> miniblink49
         return true;
     }
 

@@ -4,7 +4,8 @@
  *           (C) 1998 Waldo Bastian (bastian@kde.org)
  *           (C) 1999 Lars Knoll (knoll@kde.org)
  *           (C) 1999 Antti Koivisto (koivisto@kde.org)
- * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2010 Apple Inc. All rights reserved.
+ * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2010 Apple Inc. All rights
+ * reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -35,6 +36,7 @@ class ExceptionState;
 
 class CORE_EXPORT HTMLTableRowElement final : public HTMLTablePartElement {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     DECLARE_NODE_FACTORY(HTMLTableRowElement);
 
@@ -42,10 +44,10 @@ public:
 
     int sectionRowIndex() const;
 
-    PassRefPtrWillBeRawPtr<HTMLElement> insertCell(int index, ExceptionState&);
+    HTMLElement* insertCell(int index, ExceptionState&);
     void deleteCell(int index, ExceptionState&);
 
-    PassRefPtrWillBeRawPtr<HTMLCollection> cells();
+    HTMLCollection* cells();
 
 private:
     explicit HTMLTableRowElement(Document&);

@@ -10,7 +10,6 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
-<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -22,18 +21,6 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
-=======
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
->>>>>>> miniblink49
  */
 
 #ifndef PannerNode_h
@@ -41,17 +28,13 @@
 
 #include "modules/webaudio/AudioListener.h"
 #include "modules/webaudio/AudioNode.h"
-<<<<<<< HEAD
 #include "modules/webaudio/AudioParam.h"
-=======
->>>>>>> miniblink49
 #include "platform/audio/AudioBus.h"
 #include "platform/audio/Cone.h"
 #include "platform/audio/Distance.h"
 #include "platform/audio/Panner.h"
 #include "platform/geometry/FloatPoint3D.h"
 #include "wtf/HashMap.h"
-<<<<<<< HEAD
 #include <memory>
 
 namespace blink {
@@ -67,17 +50,6 @@ class PannerOptions;
 // listener.  A cone effect will attenuate the gain as the orientation moves
 // away from the listener.  All of these effects follow the OpenAL specification
 // very closely.
-=======
-
-namespace blink {
-
-// PannerNode is an AudioNode with one input and one output.
-// It positions a sound in 3D space, with the exact effect dependent on the panning model.
-// It has a position and an orientation in 3D space which is relative to the position and orientation of the context's AudioListener.
-// A distance effect will attenuate the gain as the position moves away from the listener.
-// A cone effect will attenuate the gain as the orientation moves away from the listener.
-// All of these effects follow the OpenAL specification very closely.
->>>>>>> miniblink49
 
 class PannerHandler final : public AudioHandler {
 public:
@@ -85,7 +57,6 @@ public:
     enum {
         AzimuthElevationDirty = 0x1,
         DistanceConeGainDirty = 0x2,
-<<<<<<< HEAD
     };
 
     static PassRefPtr<PannerHandler> create(AudioNode&,
@@ -97,23 +68,14 @@ public:
         AudioParamHandler& orientationY,
         AudioParamHandler& orientationZ);
 
-=======
-        DopplerRateDirty = 0x4,
-    };
-
-    static PassRefPtr<PannerHandler> create(AudioNode&, float sampleRate);
->>>>>>> miniblink49
     ~PannerHandler() override;
 
     // AudioHandler
     void process(size_t framesToProcess) override;
-<<<<<<< HEAD
     void processSampleAccurateValues(AudioBus* destination,
         const AudioBus* source,
         size_t framesToProcess);
     void processOnlyAudioParams(size_t framesToProcess) override;
-=======
->>>>>>> miniblink49
     void initialize() override;
     void uninitialize() override;
 
@@ -121,16 +83,9 @@ public:
     String panningModel() const;
     void setPanningModel(const String&);
 
-<<<<<<< HEAD
     // Position and orientation
     void setPosition(float x, float y, float z);
     void setOrientation(float x, float y, float z);
-=======
-    // Position, orientation and velocity
-    void setPosition(float x, float y, float z);
-    void setOrientation(float x, float y, float z);
-    void setVelocity(float x, float y, float z);
->>>>>>> miniblink49
 
     // Distance parameters
     String distanceModel() const;
@@ -157,7 +112,6 @@ public:
 
     void markPannerAsDirty(unsigned);
 
-<<<<<<< HEAD
     double tailTime() const override
     {
         return m_panner ? m_panner->tailTime() : 0;
@@ -166,19 +120,11 @@ public:
     {
         return m_panner ? m_panner->latencyTime() : 0;
     }
-=======
-    // It must be called on audio thread, currently called only process() in AudioBufferSourceNode.
-    double dopplerRate();
-
-    double tailTime() const override { return m_panner ? m_panner->tailTime() : 0; }
-    double latencyTime() const override { return m_panner ? m_panner->latencyTime() : 0; }
->>>>>>> miniblink49
 
     void setChannelCount(unsigned long, ExceptionState&) final;
     void setChannelCountMode(const String&, ExceptionState&) final;
 
 private:
-<<<<<<< HEAD
     PannerHandler(AudioNode&,
         float sampleRate,
         AudioParamHandler& positionX,
@@ -189,16 +135,11 @@ private:
         AudioParamHandler& orientationZ);
 
     // BaseAudioContext's listener
-=======
-    PannerHandler(AudioNode&, float sampleRate);
-    // AudioContext's listener
->>>>>>> miniblink49
     AudioListener* listener();
 
     bool setPanningModel(unsigned); // Returns true on success.
     bool setDistanceModel(unsigned); // Returns true on success.
 
-<<<<<<< HEAD
     void calculateAzimuthElevation(double* outAzimuth,
         double* outElevation,
         const FloatPoint3D& position,
@@ -210,47 +151,23 @@ private:
     float calculateDistanceConeGain(const FloatPoint3D& position,
         const FloatPoint3D& orientation,
         const FloatPoint3D& listenerPosition);
-=======
-    void calculateAzimuthElevation(double* outAzimuth, double* outElevation);
-    float calculateDistanceConeGain(); // Returns the combined distance and cone gain attenuation.
-    double calculateDopplerRate();
->>>>>>> miniblink49
 
     void azimuthElevation(double* outAzimuth, double* outElevation);
     float distanceConeGain();
 
     bool isAzimuthElevationDirty() const { return m_isAzimuthElevationDirty; }
     bool isDistanceConeGainDirty() const { return m_isDistanceConeGainDirty; }
-<<<<<<< HEAD
     void updateDirtyState();
-=======
-    bool isDopplerRateDirty() const { return m_isDopplerRateDirty; }
->>>>>>> miniblink49
 
     // This Persistent doesn't make a reference cycle including the owner
     // PannerNode.
     Persistent<AudioListener> m_listener;
-<<<<<<< HEAD
     std::unique_ptr<Panner> m_panner;
     unsigned m_panningModel;
     unsigned m_distanceModel;
 
     bool m_isAzimuthElevationDirty;
     bool m_isDistanceConeGainDirty;
-=======
-    OwnPtr<Panner> m_panner;
-    unsigned m_panningModel;
-    unsigned m_distanceModel;
-
-    // Current source location information
-    FloatPoint3D m_position;
-    FloatPoint3D m_orientation;
-    FloatPoint3D m_velocity;
-
-    bool m_isAzimuthElevationDirty;
-    bool m_isDistanceConeGainDirty;
-    bool m_isDopplerRateDirty;
->>>>>>> miniblink49
 
     // Gain
     DistanceEffect m_distanceEffect;
@@ -261,7 +178,6 @@ private:
     double m_cachedAzimuth;
     double m_cachedElevation;
     float m_cachedDistanceConeGain;
-<<<<<<< HEAD
 
     const FloatPoint3D position() const
     {
@@ -291,17 +207,11 @@ private:
 
     // Synchronize process() with setting of the panning model, source's location
     // information, listener, distance parameters and sound cones.
-=======
-    double m_cachedDopplerRate;
-
-    // Synchronize process() with setting of the panning model, source's location information, listener, distance parameters and sound cones.
->>>>>>> miniblink49
     mutable Mutex m_processLock;
 };
 
 class PannerNode final : public AudioNode {
     DEFINE_WRAPPERTYPEINFO();
-<<<<<<< HEAD
 
 public:
     static PannerNode* create(BaseAudioContext&, ExceptionState&);
@@ -321,32 +231,16 @@ public:
     AudioParam* orientationY() const { return m_orientationY; };
     AudioParam* orientationZ() const { return m_orientationZ; };
 
-=======
-public:
-    static PannerNode* create(AudioContext&, float sampleRate);
-    PannerHandler& pannerHandler() const;
-
->>>>>>> miniblink49
     String panningModel() const;
     void setPanningModel(const String&);
     void setPosition(float x, float y, float z);
     void setOrientation(float x, float y, float z);
-<<<<<<< HEAD
     String distanceModel() const;
     void setDistanceModel(const String&);
     double refDistance() const;
     void setRefDistance(double, ExceptionState&);
     double maxDistance() const;
     void setMaxDistance(double, ExceptionState&);
-=======
-    void setVelocity(float x, float y, float z);
-    String distanceModel() const;
-    void setDistanceModel(const String&);
-    double refDistance() const;
-    void setRefDistance(double);
-    double maxDistance() const;
-    void setMaxDistance(double);
->>>>>>> miniblink49
     double rolloffFactor() const;
     void setRolloffFactor(double);
     double coneInnerAngle() const;
@@ -357,7 +251,6 @@ public:
     void setConeOuterGain(double);
 
 private:
-<<<<<<< HEAD
     PannerNode(BaseAudioContext&);
 
     Member<AudioParam> m_positionX;
@@ -367,9 +260,6 @@ private:
     Member<AudioParam> m_orientationX;
     Member<AudioParam> m_orientationY;
     Member<AudioParam> m_orientationZ;
-=======
-    PannerNode(AudioContext&, float sampleRate);
->>>>>>> miniblink49
 };
 
 } // namespace blink

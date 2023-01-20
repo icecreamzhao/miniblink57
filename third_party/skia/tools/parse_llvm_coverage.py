@@ -59,7 +59,6 @@ def _get_per_file_per_line_coverage(report):
 
   Values are lists which take the form (lineno, coverage, code).
   """
-<<<<<<< HEAD
   all_files = []
   for root, dirs, files in os.walk(os.getcwd()):
     if 'third_party/externals' in root:
@@ -70,9 +69,6 @@ def _get_per_file_per_line_coverage(report):
       all_files.append(os.path.join(root[(len(os.getcwd()) + 1):], name))
   all_files.sort()
 
-=======
-  all_files = subprocess.check_output(['git', 'ls-files']).splitlines()
->>>>>>> miniblink49
   lines = report.splitlines()
   current_file = None
   file_lines = []

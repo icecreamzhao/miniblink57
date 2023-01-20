@@ -41,78 +41,91 @@ namespace skia {
 // AdoptRef() the raw pointer immediately into a skia::RefPtr and always work
 // with skia::RefPtr instances instead, the ref-counting will be taken care of
 // for you.
-template<typename T>
+template <typename T>
 class RefPtr {
- public:
-  RefPtr() : ptr_(NULL) {}
+public:
+    RefPtr()
+        : ptr_(NULL)
+    {
+    }
 
-  RefPtr(const RefPtr& other)
-      : ptr_(other.get()) {
-    SkSafeRef(ptr_);
-  }
+    RefPtr(const RefPtr& other)
+        : ptr_(other.get())
+    {
+        SkSafeRef(ptr_);
+    }
 
-  template<typename U>
-  RefPtr(const RefPtr<U>& other)
-      : ptr_(other.get()) {
-    SkSafeRef(ptr_);
-  }
+    template <typename U>
+    RefPtr(const RefPtr<U>& other)
+        : ptr_(other.get())
+    {
+        SkSafeRef(ptr_);
+    }
 
-  ~RefPtr() {
-    clear();
-  }
+    ~RefPtr()
+    {
+        clear();
+    }
 
-  RefPtr& operator=(const RefPtr& other) {
-    SkRefCnt_SafeAssign(ptr_, other.get());
-    return *this;
-  }
+    RefPtr& operator=(const RefPtr& other)
+    {
+        SkRefCnt_SafeAssign(ptr_, other.get());
+        return *this;
+    }
 
-  template<typename U>
-  RefPtr& operator=(const RefPtr<U>& other) {
-    SkRefCnt_SafeAssign(ptr_, other.get());
-    return *this;
-  }
+    template <typename U>
+    RefPtr& operator=(const RefPtr<U>& other)
+    {
+        SkRefCnt_SafeAssign(ptr_, other.get());
+        return *this;
+    }
 
-  void clear() {
-    T* to_unref = ptr_;
-    ptr_ = NULL;
-    SkSafeUnref(to_unref);
-  }
+    void clear()
+    {
+        T* to_unref = ptr_;
+        ptr_ = NULL;
+        SkSafeUnref(to_unref);
+    }
 
-  T* get() const { return ptr_; }
-  T& operator*() const { return *ptr_; }
-  T* operator->() const { return ptr_; }
+    T* get() const { return ptr_; }
+    T& operator*() const { return *ptr_; }
+    T* operator->() const { return ptr_; }
 
-  typedef T* RefPtr::*unspecified_bool_type;
-  operator unspecified_bool_type() const {
-    return ptr_ ? &RefPtr::ptr_ : NULL;
-  }
+    typedef T* RefPtr::*unspecified_bool_type;
+    operator unspecified_bool_type() const
+    {
+        return ptr_ ? &RefPtr::ptr_ : NULL;
+    }
 
- private:
-  T* ptr_;
+private:
+    T* ptr_;
 
-  // This function cannot be public because Skia starts its ref-counted
-  // objects at refcnt=1.  This makes it impossible to differentiate
-  // between a newly created object (that doesn't need to be ref'd) or an
-  // already existing object with one owner (that does need to be ref'd so that
-  // this RefPtr can also manage its lifetime).
-  explicit RefPtr(T* ptr) : ptr_(ptr) {}
+    // This function cannot be public because Skia starts its ref-counted
+    // objects at refcnt=1.  This makes it impossible to differentiate
+    // between a newly created object (that doesn't need to be ref'd) or an
+    // already existing object with one owner (that does need to be ref'd so that
+    // this RefPtr can also manage its lifetime).
+    explicit RefPtr(T* ptr)
+        : ptr_(ptr)
+    {
+    }
 
-  template<typename U>
-  friend RefPtr<U> AdoptRef(U* ptr);
+    template <typename U>
+    friend RefPtr<U> AdoptRef(U* ptr);
 
-  template<typename U>
-  friend RefPtr<U> SharePtr(U* ptr);
+    template <typename U>
+    friend RefPtr<U> SharePtr(U* ptr);
 };
 
 // For objects that have an unowned reference (such as newly created objects).
-template<typename T>
+template <typename T>
 RefPtr<T> AdoptRef(T* ptr) { return RefPtr<T>(ptr); }
 
 // For objects that are already owned. This doesn't take ownership of existing
 // references and adds a new one.
-template<typename T>
+template <typename T>
 RefPtr<T> SharePtr(T* ptr) { return RefPtr<T>(SkSafeRef(ptr)); }
 
-}  // namespace skia
+} // namespace skia
 
-#endif  // SKIA_EXT_REFPTR_H_
+#endif // SKIA_EXT_REFPTR_H_

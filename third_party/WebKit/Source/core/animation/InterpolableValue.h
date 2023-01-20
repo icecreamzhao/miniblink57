@@ -8,35 +8,41 @@
 #include "core/CoreExport.h"
 #include "core/animation/animatable/AnimatableValue.h"
 #include "platform/heap/Handle.h"
-#include "wtf/OwnPtr.h"
-#include "wtf/PassOwnPtr.h"
+#include "wtf/PtrUtil.h"
 #include "wtf/Vector.h"
+#include <memory>
 
 namespace blink {
 
-class CORE_EXPORT InterpolableValue : public NoBaseWillBeGarbageCollected<InterpolableValue> {
-    DECLARE_EMPTY_VIRTUAL_DESTRUCTOR_WILL_BE_REMOVED(InterpolableValue);
+// Represents the components of a PropertySpecificKeyframe's value that change
+// smoothly as it interpolates to an adjacent value.
+class CORE_EXPORT InterpolableValue {
+    USING_FAST_MALLOC(InterpolableValue);
+
 public:
+    virtual ~InterpolableValue() { }
+
     virtual bool isNumber() const { return false; }
     virtual bool isBool() const { return false; }
     virtual bool isList() const { return false; }
     virtual bool isAnimatableValue() const { return false; }
 
-    virtual PassOwnPtrWillBeRawPtr<InterpolableValue> clone() const = 0;
-
-    DEFINE_INLINE_VIRTUAL_TRACE() { }
+    virtual bool equals(const InterpolableValue&) const = 0;
+    virtual std::unique_ptr<InterpolableValue> clone() const = 0;
+    virtual std::unique_ptr<InterpolableValue> cloneAndZero() const = 0;
+    virtual void scale(double scale) = 0;
+    virtual void scaleAndAdd(double scale, const InterpolableValue& other) = 0;
 
 private:
-    virtual void interpolate(const InterpolableValue& to, const double progress, InterpolableValue& result) const = 0;
-    virtual void add(const InterpolableValue& rhs, InterpolableValue& result) const = 0;
-    virtual void multiply(double scalar, InterpolableValue& result) const = 0;
+    virtual void interpolate(const InterpolableValue& to,
+        const double progress,
+        InterpolableValue& result) const = 0;
 
-    friend class Interpolation;
+    friend class LegacyStyleInterpolation;
     friend class PairwisePrimitiveInterpolation;
 
     // Keep interpolate private, but allow calls within the hierarchy without
     // knowledge of type.
-    friend class DeferredLegacyStyleInterpolation;
     friend class InterpolableNumber;
     friend class InterpolableBool;
     friend class InterpolableList;
@@ -46,50 +52,36 @@ private:
 
 class CORE_EXPORT InterpolableNumber final : public InterpolableValue {
 public:
-    static PassOwnPtrWillBeRawPtr<InterpolableNumber> create(double value)
+    static std::unique_ptr<InterpolableNumber> create(double value)
     {
-        return adoptPtrWillBeNoop(new InterpolableNumber(value));
+        return WTF::wrapUnique(new InterpolableNumber(value));
     }
 
-    virtual bool isNumber() const override final { return true; }
+    bool isNumber() const final { return true; }
     double value() const { return m_value; }
-    virtual PassOwnPtrWillBeRawPtr<InterpolableValue> clone() const override final { return create(m_value); }
+    bool equals(const InterpolableValue& other) const final;
+    std::unique_ptr<InterpolableValue> clone() const final
+    {
+        return create(m_value);
+    }
+    std::unique_ptr<InterpolableValue> cloneAndZero() const final
+    {
+        return create(0);
+    }
+    void scale(double scale) final;
+    void scaleAndAdd(double scale, const InterpolableValue& other) final;
+    void set(double value) { m_value = value; }
 
 private:
-    virtual void interpolate(const InterpolableValue& to, const double progress, InterpolableValue& result) const override final;
-    virtual void add(const InterpolableValue& rhs, InterpolableValue& result) const override final;
-    virtual void multiply(double scalar, InterpolableValue& result) const override final;
+    void interpolate(const InterpolableValue& to,
+        const double progress,
+        InterpolableValue& result) const final;
     double m_value;
 
     explicit InterpolableNumber(double value)
         : m_value(value)
     {
     }
-
-};
-
-class CORE_EXPORT InterpolableBool final : public InterpolableValue {
-public:
-    static PassOwnPtrWillBeRawPtr<InterpolableBool> create(bool value)
-    {
-        return adoptPtrWillBeNoop(new InterpolableBool(value));
-    }
-
-    virtual bool isBool() const override final { return true; }
-    bool value() const { return m_value; }
-    virtual PassOwnPtrWillBeRawPtr<InterpolableValue> clone() const override final { return create(m_value); }
-
-private:
-    virtual void interpolate(const InterpolableValue& to, const double progress, InterpolableValue& result) const override final;
-    virtual void add(const InterpolableValue& rhs, InterpolableValue& result) const override final;
-    virtual void multiply(double scalar, InterpolableValue& result) const override final { ASSERT_NOT_REACHED(); }
-    bool m_value;
-
-    explicit InterpolableBool(bool value)
-        : m_value(value)
-    {
-    }
-
 };
 
 class CORE_EXPORT InterpolableList : public InterpolableValue {
@@ -102,85 +94,118 @@ public:
     // has its own copy constructor. So just delete operator= here.
     InterpolableList& operator=(const InterpolableList&) = delete;
 
-    static PassOwnPtrWillBeRawPtr<InterpolableList> create(const InterpolableList &other)
+    static std::unique_ptr<InterpolableList> create(
+        const InterpolableList& other)
     {
-        return adoptPtrWillBeNoop(new InterpolableList(other));
+        return WTF::wrapUnique(new InterpolableList(other));
     }
 
-    static PassOwnPtrWillBeRawPtr<InterpolableList> create(size_t size)
+    static std::unique_ptr<InterpolableList> create(size_t size)
     {
-        return adoptPtrWillBeNoop(new InterpolableList(size));
+        return WTF::wrapUnique(new InterpolableList(size));
     }
 
-    virtual bool isList() const override final { return true; }
-    void set(size_t position, PassOwnPtrWillBeRawPtr<InterpolableValue> value)
+    bool isList() const final { return true; }
+    void set(size_t position, std::unique_ptr<InterpolableValue> value)
     {
-        ASSERT(position < m_size);
-        m_values[position] = value;
+        m_values[position] = std::move(value);
     }
     const InterpolableValue* get(size_t position) const
     {
-        ASSERT(position < m_size);
         return m_values[position].get();
     }
-    size_t length() const { return m_size; }
-    virtual PassOwnPtrWillBeRawPtr<InterpolableValue> clone() const override final { return create(*this); }
-
-    DECLARE_VIRTUAL_TRACE();
+    std::unique_ptr<InterpolableValue>& getMutable(size_t position)
+    {
+        return m_values[position];
+    }
+    size_t length() const { return m_values.size(); }
+    bool equals(const InterpolableValue& other) const final;
+    std::unique_ptr<InterpolableValue> clone() const final
+    {
+        return create(*this);
+    }
+    std::unique_ptr<InterpolableValue> cloneAndZero() const final;
+    void scale(double scale) final;
+    void scaleAndAdd(double scale, const InterpolableValue& other) final;
 
 private:
-    virtual void interpolate(const InterpolableValue& to, const double progress, InterpolableValue& result) const override final;
-    virtual void add(const InterpolableValue& rhs, InterpolableValue& result) const override final;
-    virtual void multiply(double scalar, InterpolableValue& result) const override final;
+    void interpolate(const InterpolableValue& to,
+        const double progress,
+        InterpolableValue& result) const final;
     explicit InterpolableList(size_t size)
-        : m_size(size)
-        , m_values(m_size)
+        : m_values(size)
     {
     }
 
     InterpolableList(const InterpolableList& other)
-        : m_size(other.m_size)
-        , m_values(m_size)
+        : m_values(other.length())
     {
-        for (size_t i = 0; i < m_size; i++)
+        for (size_t i = 0; i < length(); i++)
             set(i, other.m_values[i]->clone());
     }
 
-    size_t m_size;
-    WillBeHeapVector<OwnPtrWillBeMember<InterpolableValue>> m_values;
+    Vector<std::unique_ptr<InterpolableValue>> m_values;
 };
 
 // FIXME: Remove this when we can.
 class InterpolableAnimatableValue : public InterpolableValue {
 public:
-    static PassOwnPtrWillBeRawPtr<InterpolableAnimatableValue> create(PassRefPtrWillBeRawPtr<AnimatableValue> value)
+    static std::unique_ptr<InterpolableAnimatableValue> create(
+        PassRefPtr<AnimatableValue> value)
     {
-        return adoptPtrWillBeNoop(new InterpolableAnimatableValue(value));
+        return WTF::wrapUnique(new InterpolableAnimatableValue(std::move(value)));
     }
 
-    virtual bool isAnimatableValue() const override final { return true; }
+    bool isAnimatableValue() const final { return true; }
     AnimatableValue* value() const { return m_value.get(); }
-    virtual PassOwnPtrWillBeRawPtr<InterpolableValue> clone() const override final { return create(m_value); }
-
-    DECLARE_VIRTUAL_TRACE();
+    bool equals(const InterpolableValue&) const final
+    {
+        NOTREACHED();
+        return false;
+    }
+    std::unique_ptr<InterpolableValue> clone() const final
+    {
+        return create(m_value);
+    }
+    std::unique_ptr<InterpolableValue> cloneAndZero() const final
+    {
+        NOTREACHED();
+        return nullptr;
+    }
+    void scale(double scale) final { NOTREACHED(); }
+    void scaleAndAdd(double scale, const InterpolableValue& other) final
+    {
+        NOTREACHED();
+    }
 
 private:
-    virtual void interpolate(const InterpolableValue &to, const double progress, InterpolableValue& result) const override final;
-    virtual void add(const InterpolableValue& rhs, InterpolableValue& result) const override final { ASSERT_NOT_REACHED(); }
-    virtual void multiply(double scalar, InterpolableValue& result) const override final { ASSERT_NOT_REACHED(); }
-    RefPtrWillBeMember<AnimatableValue> m_value;
+    void interpolate(const InterpolableValue& to,
+        const double progress,
+        InterpolableValue& result) const final;
+    RefPtr<AnimatableValue> m_value;
 
-    InterpolableAnimatableValue(PassRefPtrWillBeRawPtr<AnimatableValue> value)
+    InterpolableAnimatableValue(PassRefPtr<AnimatableValue> value)
         : m_value(value)
     {
     }
 };
 
-DEFINE_TYPE_CASTS(InterpolableNumber, InterpolableValue, value, value->isNumber(), value.isNumber());
-DEFINE_TYPE_CASTS(InterpolableBool, InterpolableValue, value, value->isBool(), value.isBool());
-DEFINE_TYPE_CASTS(InterpolableList, InterpolableValue, value, value->isList(), value.isList());
-DEFINE_TYPE_CASTS(InterpolableAnimatableValue, InterpolableValue, value, value->isAnimatableValue(), value.isAnimatableValue());
+DEFINE_TYPE_CASTS(InterpolableNumber,
+    InterpolableValue,
+    value,
+    value->isNumber(),
+    value.isNumber());
+DEFINE_TYPE_CASTS(InterpolableList,
+    InterpolableValue,
+    value,
+    value->isList(),
+    value.isList());
+DEFINE_TYPE_CASTS(InterpolableAnimatableValue,
+    InterpolableValue,
+    value,
+    value->isAnimatableValue(),
+    value.isAnimatableValue());
 
-}
+} // namespace blink
 
 #endif

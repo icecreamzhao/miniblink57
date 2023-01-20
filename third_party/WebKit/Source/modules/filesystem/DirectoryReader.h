@@ -44,15 +44,10 @@ class ErrorCallback;
 
 class DirectoryReader : public DirectoryReaderBase, public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
-<<<<<<< HEAD
 
 public:
     static DirectoryReader* create(DOMFileSystemBase* fileSystem,
         const String& fullPath)
-=======
-public:
-    static DirectoryReader* create(DOMFileSystemBase* fileSystem, const String& fullPath)
->>>>>>> miniblink49
     {
         return new DirectoryReader(fileSystem, fullPath);
     }
@@ -61,14 +56,10 @@ public:
 
     void readEntries(EntriesCallback*, ErrorCallback* = nullptr);
 
-<<<<<<< HEAD
     DOMFileSystem* filesystem() const
     {
         return static_cast<DOMFileSystem*>(m_fileSystem.get());
     }
-=======
-    DOMFileSystem* filesystem() const { return static_cast<DOMFileSystem*>(m_fileSystem.get()); }
->>>>>>> miniblink49
 
     DECLARE_VIRTUAL_TRACE();
 
@@ -80,19 +71,11 @@ private:
 
     void addEntries(const EntryHeapVector& entries);
 
-<<<<<<< HEAD
     void onError(FileError::ErrorCode);
 
     bool m_isReading;
     EntryHeapVector m_entries;
     FileError::ErrorCode m_error = FileError::ErrorCode::kOK;
-=======
-    void onError(FileError*);
-
-    bool m_isReading;
-    EntryHeapVector m_entries;
-    Member<FileError> m_error;
->>>>>>> miniblink49
     Member<EntriesCallback> m_entriesCallback;
     Member<ErrorCallback> m_errorCallback;
 };

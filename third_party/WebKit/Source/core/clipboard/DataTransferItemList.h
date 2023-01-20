@@ -34,8 +34,6 @@
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
-#include "wtf/RefCounted.h"
-#include "wtf/RefPtr.h"
 
 namespace blink {
 
@@ -46,8 +44,11 @@ class File;
 
 class ExceptionState;
 
-class DataTransferItemList final : public GarbageCollected<DataTransferItemList>, public ScriptWrappable {
+class DataTransferItemList final
+    : public GarbageCollected<DataTransferItemList>,
+      public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     static DataTransferItemList* create(DataTransfer*, DataObject*);
 
@@ -55,7 +56,9 @@ public:
     DataTransferItem* item(unsigned long index);
     void deleteItem(unsigned long index, ExceptionState&);
     void clear();
-    DataTransferItem* add(const String& data, const String& type, ExceptionState&);
+    DataTransferItem* add(const String& data,
+        const String& type,
+        ExceptionState&);
     DataTransferItem* add(File*);
 
     DECLARE_TRACE();

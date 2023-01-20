@@ -44,11 +44,7 @@ public:
     WebHTTPLoadInfo() { initialize(); }
     ~WebHTTPLoadInfo() { reset(); }
     WebHTTPLoadInfo(const WebHTTPLoadInfo& r) { assign(r); }
-<<<<<<< HEAD
     WebHTTPLoadInfo& operator=(const WebHTTPLoadInfo& r)
-=======
-    WebHTTPLoadInfo& operator =(const WebHTTPLoadInfo& r)
->>>>>>> miniblink49
     {
         assign(r);
         return *this;
@@ -64,18 +60,10 @@ public:
     BLINK_PLATFORM_EXPORT WebString httpStatusText() const;
     BLINK_PLATFORM_EXPORT void setHTTPStatusText(const WebString&);
 
-<<<<<<< HEAD
     BLINK_PLATFORM_EXPORT void addRequestHeader(const WebString& name,
         const WebString& value);
     BLINK_PLATFORM_EXPORT void addResponseHeader(const WebString& name,
         const WebString& value);
-=======
-    BLINK_PLATFORM_EXPORT long long encodedDataLength() const;
-    BLINK_PLATFORM_EXPORT void setEncodedDataLength(long long);
-
-    BLINK_PLATFORM_EXPORT void addRequestHeader(const WebString& name, const WebString& value);
-    BLINK_PLATFORM_EXPORT void addResponseHeader(const WebString& name, const WebString& value);
->>>>>>> miniblink49
 
     BLINK_PLATFORM_EXPORT WebString requestHeadersText() const;
     BLINK_PLATFORM_EXPORT void setRequestHeadersText(const WebString&);

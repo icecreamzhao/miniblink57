@@ -36,7 +36,6 @@ namespace blink {
 class WebIDBKeyPath {
 public:
     // FIXME: Update callers use constructors directly, and remove these.
-<<<<<<< HEAD
     static WebIDBKeyPath create(const WebString& string)
     {
         return WebIDBKeyPath(string);
@@ -51,13 +50,6 @@ public:
         : m_type(WebIDBKeyPathTypeNull)
     {
     }
-=======
-    static WebIDBKeyPath create(const WebString& string) { return WebIDBKeyPath(string); }
-    static WebIDBKeyPath create(const WebVector<WebString>& array) { return WebIDBKeyPath(array); }
-    static WebIDBKeyPath createNull() { return WebIDBKeyPath(); }
-
-    WebIDBKeyPath() : m_type(WebIDBKeyPathTypeNull) { }
->>>>>>> miniblink49
 
     explicit WebIDBKeyPath(const WebString& string)
         : m_type(WebIDBKeyPathTypeString)
@@ -89,7 +81,6 @@ public:
     }
 
     WebIDBKeyPathType keyPathType() const { return m_type; }
-<<<<<<< HEAD
     const WebVector<WebString>& array() const
     {
         return m_array;
@@ -98,10 +89,6 @@ public:
     {
         return m_string;
     } // Only valid for StringType.
-=======
-    const WebVector<WebString>& array() const { return m_array; } // Only valid for ArrayType.
-    const WebString& string() const { return m_string; } // Only valid for StringType.
->>>>>>> miniblink49
 
 private:
     WebIDBKeyPathType m_type;

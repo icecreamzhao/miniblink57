@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "core/page/PageAnimator.h"
 
 #include "core/animation/DocumentAnimations.h"
@@ -11,7 +10,8 @@
 #include "core/page/ChromeClient.h"
 #include "core/page/Page.h"
 #include "core/svg/SVGDocumentExtensions.h"
-#include "platform/Logging.h"
+#include "platform/instrumentation/tracing/TraceEvent.h"
+#include "wtf/AutoReset.h"
 
 namespace blink {
 
@@ -22,9 +22,9 @@ PageAnimator::PageAnimator(Page& page)
 {
 }
 
-PassRefPtrWillBeRawPtr<PageAnimator> PageAnimator::create(Page& page)
+PageAnimator* PageAnimator::create(Page& page)
 {
-    return adoptRefWillBeNoop(new PageAnimator(page));
+    return new PageAnimator(page);
 }
 
 DEFINE_TRACE(PageAnimator)
@@ -32,69 +32,63 @@ DEFINE_TRACE(PageAnimator)
     visitor->trace(m_page);
 }
 
-void PageAnimator::serviceScriptedAnimations(double monotonicAnimationStartTime)
+void PageAnimator::serviceScriptedAnimations(
+    double monotonicAnimationStartTime)
 {
-    RefPtrWillBeRawPtr<PageAnimator> protector(this);
-    TemporaryChange<bool> servicing(m_servicingAnimations, true);
+    AutoReset<bool> servicing(&m_servicingAnimations, true);
+    clock().updateTime(monotonicAnimationStartTime);
 
-    WillBeHeapVector<RefPtrWillBeMember<Document>> documents;
-    for (Frame* frame = m_page->mainFrame(); frame; frame = frame->tree().traverseNext()) {
+    HeapVector<Member<Document>, 32> documents;
+    for (Frame* frame = m_page->mainFrame(); frame;
+         frame = frame->tree().traverseNext()) {
         if (frame->isLocalFrame())
-            documents.append(toLocalFrame(frame)->document());
+            documents.push_back(toLocalFrame(frame)->document());
     }
 
-    for (size_t i = 0; i < documents.size(); ++i) {
-        if (documents[i]->view()) {
-            documents[i]->view()->scrollableArea()->serviceScrollAnimations(monotonicAnimationStartTime);
+    for (auto& document : documents) {
+        ScopedFrameBlamer frameBlamer(document->frame());
+        TRACE_EVENT0("blink,rail", "PageAnimator::serviceScriptedAnimations");
+        DocumentAnimations::updateAnimationTimingForAnimationFrame(*document);
+        if (document->view()) {
+            if (document->view()->shouldThrottleRendering())
+                continue;
+            // Disallow throttling in case any script needs to do a synchronous
+            // lifecycle update in other frames which are throttled.
+            DocumentLifecycle::DisallowThrottlingScope noThrottlingScope(
+                document->lifecycle());
+            if (ScrollableArea* scrollableArea = document->view()->getScrollableArea())
+                scrollableArea->serviceScrollAnimations(monotonicAnimationStartTime);
 
-            if (const FrameView::ScrollableAreaSet* animatingScrollableAreas = documents[i]->view()->animatingScrollableAreas()) {
+            if (const FrameView::ScrollableAreaSet* animatingScrollableAreas = document->view()->animatingScrollableAreas()) {
                 // Iterate over a copy, since ScrollableAreas may deregister
                 // themselves during the iteration.
-                Vector<ScrollableArea*> animatingScrollableAreasCopy;
+                HeapVector<Member<ScrollableArea>> animatingScrollableAreasCopy;
                 copyToVector(*animatingScrollableAreas, animatingScrollableAreasCopy);
                 for (ScrollableArea* scrollableArea : animatingScrollableAreasCopy)
                     scrollableArea->serviceScrollAnimations(monotonicAnimationStartTime);
             }
+            SVGDocumentExtensions::serviceOnAnimationFrame(*document);
         }
+        // TODO(skyostil): This function should not run for documents without views.
+        DocumentLifecycle::DisallowThrottlingScope noThrottlingScope(
+            document->lifecycle());
+        document->serviceScriptedAnimations(monotonicAnimationStartTime);
     }
-
-    for (size_t i = 0; i < documents.size(); ++i) {
-        DocumentAnimations::updateAnimationTimingForAnimationFrame(*documents[i], monotonicAnimationStartTime);
-        SVGDocumentExtensions::serviceOnAnimationFrame(*documents[i], monotonicAnimationStartTime);
-    }
-
-    for (size_t i = 0; i < documents.size(); ++i)
-        documents[i]->serviceScriptedAnimations(monotonicAnimationStartTime);
-
-#if ENABLE(OILPAN)
-    documents.clear();
-#endif
 }
 
+DISABLE_CFI_PERF
 void PageAnimator::scheduleVisualUpdate(LocalFrame* frame)
 {
     if (m_servicingAnimations || m_updatingLayoutAndStyleForPainting)
         return;
-    // FIXME: The frame-specific version of scheduleAnimation() is for
-    // out-of-process iframes. Passing 0 or the top-level frame to this method
-    // causes scheduleAnimation() to be called for the page, which still uses
-    // a page-level WebWidget (the WebViewImpl).
-    if (frame && !frame->isMainFrame() && frame->isLocalRoot()) {
-        m_page->chromeClient().scheduleAnimationForFrame(frame);
-    } else {
-        m_page->chromeClient().scheduleAnimation();
-    }
+    m_page->chromeClient().scheduleAnimation(frame->view());
 }
 
-void PageAnimator::updateLayoutAndStyleForPainting(LocalFrame* rootFrame)
+void PageAnimator::updateAllLifecyclePhases(LocalFrame& rootFrame)
 {
-    RefPtrWillBeRawPtr<FrameView> view = rootFrame->view();
-
-    TemporaryChange<bool> servicing(m_updatingLayoutAndStyleForPainting, true);
-
-    // setFrameRect may have the side-effect of causing existing page layout to
-    // be invalidated, so layout needs to be called last.
+    FrameView* view = rootFrame.view();
+    AutoReset<bool> servicing(&m_updatingLayoutAndStyleForPainting, true);
     view->updateAllLifecyclePhases();
 }
 
-}
+} // namespace blink

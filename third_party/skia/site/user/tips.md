@@ -1,7 +1,6 @@
 Tips & FAQ
 ==========
 
-<<<<<<< HEAD
 +   [Gyp Options](#gypdefines)
 +   [Bitmap Subsetting](#bitmap-subsetting)
 +   [Capture a `.skp` file on a web page in Chromium](#skp-capture)
@@ -78,14 +77,6 @@ two different compilers:
 
 Bitmap Subsetting
 -----------------
-=======
-Tips and Tricks
----------------
-
-<span id="bitmap-subsetting"></span>
-
-### Bitmap Subsetting
->>>>>>> miniblink49
 
 Taking a subset of a bitmap is effectively free - no pixels are copied or
 memory is allocated. This allows Skia to offer an API that typically operates
@@ -97,23 +88,15 @@ drawBitmapNine():
     bitmap.extractSubset(&subset, rect);
     canvas->drawBitmapNine(subset, ...);
 
-<<<<<<< HEAD
 [An example](https://fiddle.skia.org/c/@subset_example)
 
 
-=======
->>>>>>> miniblink49
 * * *
 
 <span id="skp-capture"></span>
 
-<<<<<<< HEAD
 Capture a `.skp` file on a web page in Chromium
 -----------------------------------------------
-=======
-### Capturing a `.skp` file on a web page in Chromium.
-
->>>>>>> miniblink49
 
 1.  Launch Chrome or Chromium with `--no-sandbox --enable-gpu-benchmarking`
 2.  Open the JS console (ctrl-shift-J)
@@ -134,7 +117,6 @@ or use Skia's `SampleApp` to view it:
     ls -l /tmp/*/skp/layer_0.skp.*
 
     out/Release/SampleApp --picture /tmp/layer_0.skp
-<<<<<<< HEAD
 
 * * *
 
@@ -157,39 +139,11 @@ There are two ways Skia takes advantage of specific hardware.
     that can be replace on a platform in order to take advantage of
     specific CPU features. One such example is the NEON SIMD
     instructions on ARM v7 devices. See src/opts/
-=======
-    # On MacOS, SampleApp is a bundle:
-    open out/Release/SampleApp.app --args --picture /tmp/layer_0.skp
-
-* * *
-
-FAQ
----
-
-<span id="hw-acceleration"></span>
-
-### Does Skia support HW acceleration?
-
-There are two ways Skia can take advantage of HW.
-
-1. Subclass SkCanvas
-
-Since all drawing calls go through SkCanvas, those calls can be redirected to
-a different graphics API. SkGLCanvas has been written to direct its drawing
-calls to OpenGL. See src/gl/
-
-2. Custom bottleneck routines
-
-There are sets of bottleneck routines inside the blits of Skia that can be
-replace on a platform in order to take advantage of specific CPU features. One
-such example is the NEON SIMD instructions on ARM v7 devices. See src/opts/
->>>>>>> miniblink49
 
 * * *
 
 <span id="font-hinting"></span>
 
-<<<<<<< HEAD
 Does Skia support Font hinting?
 -------------------------------
 
@@ -256,15 +210,3 @@ How do I add drop shadow on text?
 * * *
 
 <div style="margin-bottom:99%"></div>
-=======
-### Does Skia support Font hinting?
-
-Skia has a built-in font cache, but it does not know how to actual render font
-files like TrueType? into its cache. For that it relies on the platform to
-supply an instance of SkScalerContext?. This is Skia's abstract interface for
-communicating with a font scaler engine. In src/ports you can see support
-files for FreeType?, Mac OS X, and Windows GDI font engines. Other font
-engines can easily be supported in a like manner.
-
-
->>>>>>> miniblink49

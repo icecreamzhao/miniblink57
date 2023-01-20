@@ -23,11 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
-
->>>>>>> miniblink49
 #include "modules/speech/SpeechRecognition.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -46,13 +41,7 @@ SpeechRecognition* SpeechRecognition::create(ExecutionContext* context)
     ASSERT(context && context->isDocument());
     Document* document = toDocument(context);
     ASSERT(document);
-<<<<<<< HEAD
     return new SpeechRecognition(document->page(), context);
-=======
-    SpeechRecognition* speechRecognition = new SpeechRecognition(document->page(), context);
-    speechRecognition->suspendIfNeeded();
-    return speechRecognition;
->>>>>>> miniblink49
 }
 
 void SpeechRecognition::start(ExceptionState& exceptionState)
@@ -61,22 +50,14 @@ void SpeechRecognition::start(ExceptionState& exceptionState)
         return;
 
     if (m_started) {
-<<<<<<< HEAD
         exceptionState.throwDOMException(InvalidStateError,
             "recognition has already started.");
-=======
-        exceptionState.throwDOMException(InvalidStateError, "recognition has already started.");
->>>>>>> miniblink49
         return;
     }
 
     m_finalResults.clear();
-<<<<<<< HEAD
     m_controller->start(this, m_grammars, m_lang, m_continuous, m_interimResults,
         m_maxAlternatives, m_audioTrack);
-=======
-    m_controller->start(this, m_grammars, m_lang, m_serviceURI, m_continuous, m_interimResults, m_maxAlternatives, m_audioTrack);
->>>>>>> miniblink49
     m_started = true;
 }
 
@@ -132,30 +113,18 @@ void SpeechRecognition::didEndAudio()
     dispatchEvent(Event::create(EventTypeNames::audioend));
 }
 
-<<<<<<< HEAD
 void SpeechRecognition::didReceiveResults(
     const HeapVector<Member<SpeechRecognitionResult>>& newFinalResults,
     const HeapVector<Member<SpeechRecognitionResult>>& currentInterimResults)
-=======
-void SpeechRecognition::didReceiveResults(const HeapVector<Member<SpeechRecognitionResult>>& newFinalResults, const HeapVector<Member<SpeechRecognitionResult>>& currentInterimResults)
->>>>>>> miniblink49
 {
     size_t resultIndex = m_finalResults.size();
 
     for (size_t i = 0; i < newFinalResults.size(); ++i)
-<<<<<<< HEAD
         m_finalResults.push_back(newFinalResults[i]);
 
     HeapVector<Member<SpeechRecognitionResult>> results = m_finalResults;
     for (size_t i = 0; i < currentInterimResults.size(); ++i)
         results.push_back(currentInterimResults[i]);
-=======
-        m_finalResults.append(newFinalResults[i]);
-
-    HeapVector<Member<SpeechRecognitionResult>> results = m_finalResults;
-    for (size_t i = 0; i < currentInterimResults.size(); ++i)
-        results.append(currentInterimResults[i]);
->>>>>>> miniblink49
 
     dispatchEvent(SpeechRecognitionEvent::createResult(resultIndex, results));
 }
@@ -165,11 +134,7 @@ void SpeechRecognition::didReceiveNoMatch(SpeechRecognitionResult* result)
     dispatchEvent(SpeechRecognitionEvent::createNoMatch(result));
 }
 
-<<<<<<< HEAD
 void SpeechRecognition::didReceiveError(SpeechRecognitionError* error)
-=======
-void SpeechRecognition::didReceiveError(PassRefPtrWillBeRawPtr<SpeechRecognitionError> error)
->>>>>>> miniblink49
 {
     dispatchEvent(error);
     m_started = false;
@@ -184,13 +149,9 @@ void SpeechRecognition::didEnd()
 {
     m_started = false;
     m_stopping = false;
-<<<<<<< HEAD
     // If m_controller is null, this is being aborted from the ExecutionContext
     // being detached, so don't dispatch an event.
     if (m_controller)
-=======
-    if (!m_stoppedByActiveDOMObject)
->>>>>>> miniblink49
         dispatchEvent(Event::create(EventTypeNames::end));
 }
 
@@ -199,7 +160,6 @@ const AtomicString& SpeechRecognition::interfaceName() const
     return EventTargetNames::SpeechRecognition;
 }
 
-<<<<<<< HEAD
 ExecutionContext* SpeechRecognition::getExecutionContext() const
 {
     return ContextLifecycleObserver::getExecutionContext();
@@ -208,16 +168,6 @@ ExecutionContext* SpeechRecognition::getExecutionContext() const
 void SpeechRecognition::contextDestroyed(ExecutionContext*)
 {
     m_controller = nullptr;
-=======
-ExecutionContext* SpeechRecognition::executionContext() const
-{
-    return ActiveDOMObject::executionContext();
-}
-
-void SpeechRecognition::stop()
-{
-    m_stoppedByActiveDOMObject = true;
->>>>>>> miniblink49
     if (hasPendingActivity())
         abort();
 }
@@ -228,24 +178,16 @@ bool SpeechRecognition::hasPendingActivity() const
 }
 
 SpeechRecognition::SpeechRecognition(Page* page, ExecutionContext* context)
-<<<<<<< HEAD
     : ContextLifecycleObserver(context)
     , m_grammars(SpeechGrammarList::create())
     , // FIXME: The spec is not clear
     // on the default value for the
     // grammars attribute.
     m_audioTrack(nullptr)
-=======
-    : PageLifecycleObserver(page)
-    , ActiveDOMObject(context)
-    , m_grammars(SpeechGrammarList::create()) // FIXME: The spec is not clear on the default value for the grammars attribute.
-    , m_audioTrack(nullptr)
->>>>>>> miniblink49
     , m_continuous(false)
     , m_interimResults(false)
     , m_maxAlternatives(1)
     , m_controller(SpeechRecognitionController::from(page))
-<<<<<<< HEAD
     , m_started(false)
     , m_stopping(false)
 {
@@ -254,43 +196,15 @@ SpeechRecognition::SpeechRecognition(Page* page, ExecutionContext* context)
 }
 
 SpeechRecognition::~SpeechRecognition() { }
-=======
-    , m_stoppedByActiveDOMObject(false)
-    , m_started(false)
-    , m_stopping(false)
-{
-    // FIXME: Need to hook up with Page to get notified when the visibility changes.
-}
-
-SpeechRecognition::~SpeechRecognition()
-{
-}
-
-void SpeechRecognition::contextDestroyed()
-{
-    m_controller = nullptr;
-    PageLifecycleObserver::contextDestroyed();
-}
->>>>>>> miniblink49
 
 DEFINE_TRACE(SpeechRecognition)
 {
     visitor->trace(m_grammars);
     visitor->trace(m_audioTrack);
-<<<<<<< HEAD
     visitor->trace(m_controller);
     visitor->trace(m_finalResults);
     EventTargetWithInlineData::trace(visitor);
     ContextLifecycleObserver::trace(visitor);
-=======
-#if ENABLE(OILPAN)
-    visitor->trace(m_controller);
-#endif
-    visitor->trace(m_finalResults);
-    RefCountedGarbageCollectedEventTargetWithInlineData<SpeechRecognition>::trace(visitor);
-    PageLifecycleObserver::trace(visitor);
-    ActiveDOMObject::trace(visitor);
->>>>>>> miniblink49
 }
 
 } // namespace blink

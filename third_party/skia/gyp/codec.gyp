@@ -18,7 +18,6 @@
       'dependencies': [
         'core.gyp:*',
         'giflib.gyp:giflib',
-<<<<<<< HEAD
         'libjpeg-turbo-selector.gyp:libjpeg-turbo-selector',
         'libpng.gyp:libpng',
         'libwebp.gyp:libwebp',
@@ -104,44 +103,12 @@
       'include_dirs': [
         '../include/codec',
         '../include/private',
-=======
-        'libjpeg-turbo.gyp:libjpeg-turbo',
-        'libwebp.gyp:libwebp',
-      ],
-      'export_dependent_settings': [
-        'libjpeg-turbo.gyp:libjpeg-turbo',
-      ],
-      'cflags':[
-        # FIXME: This gets around a longjmp warning. See
-        # http://build.chromium.org/p/client.skia.compile/builders/Build-Ubuntu-GCC-x86_64-Release-Trybot/builds/113/steps/build%20most/logs/stdio
-        '-Wno-clobbered',
-      ],
-      'include_dirs': [
-        '../include/codec',
->>>>>>> miniblink49
         '../src/codec',
         '../src/core',
       ],
       'sources': [
-<<<<<<< HEAD
         '../src/codec/SkRawAdapterCodec.cpp',
         '../src/codec/SkRawCodec.cpp',
-=======
-        '../src/codec/SkCodec.cpp',
-        '../src/codec/SkCodec_libbmp.cpp',
-        '../src/codec/SkCodec_libgif.cpp',
-        '../src/codec/SkCodec_libico.cpp',
-        '../src/codec/SkCodec_libpng.cpp',
-        '../src/codec/SkCodec_wbmp.cpp',
-        '../src/codec/SkGifInterlaceIter.cpp',
-        '../src/codec/SkJpegCodec.cpp',
-        '../src/codec/SkJpegDecoderMgr.cpp',
-        '../src/codec/SkJpegUtility_codec.cpp',
-        '../src/codec/SkMaskSwizzler.cpp',
-        '../src/codec/SkMasks.cpp',
-        '../src/codec/SkSwizzler.cpp',
-        '../src/codec/SkWebpCodec.cpp',
->>>>>>> miniblink49
       ],
       'direct_dependent_settings': {
         'include_dirs': [
@@ -149,7 +116,6 @@
         ],
       },
       'conditions': [
-<<<<<<< HEAD
         ['skia_arch_type == "x86" or skia_arch_type == "arm"', {
           'defines': [
             'qDNGBigEndian=0',
@@ -162,35 +128,6 @@
           },
         }],
       ],
-=======
-        [ 'skia_android_framework == 1',
-          {
-            # TODO(djsollen): this is a temporary dependency until we can update
-            # the android framework to a more recent version of libpng.
-            'dependencies': [
-              'libpng.gyp:libpng',
-            ],
-            # TODO(msarett): update libjpeg-turbo on Android so we can compile SkJpegCodec
-            # for the framework.
-            'sources!': [
-              '../src/codec/SkJpegCodec.cpp',
-              '../src/codec/SkJpegDecoderMgr.cpp',
-              '../src/codec/SkJpegUtility_codec.cpp',
-            ],
-            'dependencies!': [
-              'libjpeg-turbo.gyp:libjpeg-turbo',
-            ],
-          }, {  # !skia_android_framework
-            'dependencies': [
-              'libpng.gyp:libpng_static',
-            ],
-            'cflags': [
-              '-DTURBO_HAS_SKIP',
-            ],
-          }
-        ]
-      ]
->>>>>>> miniblink49
     },
   ],
 }

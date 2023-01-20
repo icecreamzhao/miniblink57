@@ -8,7 +8,6 @@
 #ifndef GrLayerHoister_DEFINED
 #define GrLayerHoister_DEFINED
 
-<<<<<<< HEAD
 #define SK_IGNORE_GPU_LAYER_HOISTING
 
 #include "SkPicture.h"
@@ -16,11 +15,6 @@
 
 #if !defined(SK_IGNORE_GPU_LAYER_HOISTING) && SK_SUPPORT_GPU
 
-=======
-#include "SkPicture.h"
-#include "SkTDArray.h"
-
->>>>>>> miniblink49
 struct GrCachedLayer;
 class GrReplacements;
 class SkGpuDevice;
@@ -28,21 +22,12 @@ struct SkRect;
 
 class GrHoistedLayer {
 public:
-<<<<<<< HEAD
     const SkPicture* fPicture; // the picture that actually contains the layer
         // (not necessarily the top-most picture)
     GrCachedLayer* fLayer;
     SkMatrix fInitialMat;
     SkMatrix fPreMat;
     SkMatrix fLocalMat;
-=======
-    const SkPicture* fPicture;  // the picture that actually contains the layer
-                                // (not necessarily the top-most picture)
-    GrCachedLayer*   fLayer;
-    SkMatrix         fInitialMat;
-    SkMatrix         fPreMat;
-    SkMatrix         fLocalMat;
->>>>>>> miniblink49
 };
 
 // This class collects the layer hoisting functionality in one place.
@@ -52,7 +37,6 @@ public:
 //  UnlockLayers should be called once to allow the texture resources to be recycled
 class GrLayerHoister {
 public:
-<<<<<<< HEAD
     /** Attempt to reattach layers that may have been atlased in the past
      */
     static void Begin(GrContext* context);
@@ -60,8 +44,6 @@ public:
     /** Release cache resources
      */
     static void End(GrContext* context);
-=======
->>>>>>> miniblink49
 
     /** Find the layers in 'topLevelPicture' that can be atlased. Note that the discovered
         layers can be inside nested sub-pictures.
@@ -69,31 +51,18 @@ public:
         @param topLevelPicture The top-level picture that is about to be rendered
         @param initialMat  The CTM of the canvas into which the layers will be drawn
         @param query       The rectangle that is about to be drawn.
-<<<<<<< HEAD
         @param atlasedNeedRendering Out parameter storing the layers that
-=======
-        @param atlasedNeedRendering Out parameter storing the layers that 
->>>>>>> miniblink49
                                     should be hoisted to the atlas
         @param recycled    Out parameter storing layers that are atlased but do not need rendering
         @param numSamples  The number if MSAA samples required
         */
     static void FindLayersToAtlas(GrContext* context,
-<<<<<<< HEAD
         const SkPicture* topLevelPicture,
         const SkMatrix& initialMat,
         const SkRect& query,
         SkTDArray<GrHoistedLayer>* atlasedNeedRendering,
         SkTDArray<GrHoistedLayer>* recycled,
         int numSamples);
-=======
-                                  const SkPicture* topLevelPicture,
-                                  const SkMatrix& initialMat,
-                                  const SkRect& query,
-                                  SkTDArray<GrHoistedLayer>* atlasedNeedRendering,
-                                  SkTDArray<GrHoistedLayer>* recycled,
-                                  int numSamples);
->>>>>>> miniblink49
 
     /** Find the layers in 'topLevelPicture' that need hoisting. Note that the discovered
         layers can be inside nested sub-pictures.
@@ -107,21 +76,12 @@ public:
         @param numSamples  The number if MSAA samples required
     */
     static void FindLayersToHoist(GrContext* context,
-<<<<<<< HEAD
         const SkPicture* topLevelPicture,
         const SkMatrix& initialMat,
         const SkRect& query,
         SkTDArray<GrHoistedLayer>* needRendering,
         SkTDArray<GrHoistedLayer>* recycled,
         int numSamples);
-=======
-                                  const SkPicture* topLevelPicture,
-                                  const SkMatrix& initialMat,
-                                  const SkRect& query,
-                                  SkTDArray<GrHoistedLayer>* needRendering,
-                                  SkTDArray<GrHoistedLayer>* recycled,
-                                  int numSamples);
->>>>>>> miniblink49
 
     /** Draw the specified layers into the atlas.
         @param context      Owner of the layer cache (and thus the layers)
@@ -139,15 +99,9 @@ public:
         @param layers       The hoisted layers
         @param replacements Replacement object that will be used for a replacement draw
     */
-<<<<<<< HEAD
     static void ConvertLayersToReplacements(const SkPicture* topLevelPicture,
         const SkTDArray<GrHoistedLayer>& layers,
         GrReplacements* replacements);
-=======
-    static void ConvertLayersToReplacements(const SkPicture* topLevelPicture, 
-                                            const SkTDArray<GrHoistedLayer>& layers,
-                                            GrReplacements* replacements);
->>>>>>> miniblink49
 
     /** Unlock a group of layers in the layer cache.
         @param context    Owner of the layer cache (and thus the layers)
@@ -164,20 +118,11 @@ public:
 private:
     /** Update the GrTexture in 'layer' with its filtered version
         @param context    Owner of the layer cache (and thus the layers)
-<<<<<<< HEAD
         @param props      Surface properties
         @param info       Layer info for a layer needing filtering prior to being composited
      */
     static void FilterLayer(GrContext* context, const SkSurfaceProps*, const GrHoistedLayer& info);
 };
 #endif
-=======
-        @param device     Required by the filtering code
-        @param info       Layer info for a layer needing filtering prior to being composited
-     */
-    static void FilterLayer(GrContext* context, SkGpuDevice* device, const GrHoistedLayer& info);
-
-};
->>>>>>> miniblink49
 
 #endif

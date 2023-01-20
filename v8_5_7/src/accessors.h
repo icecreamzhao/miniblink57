@@ -59,43 +59,25 @@ class Accessors : public AllStatic {
  public:
   // Accessor descriptors.
 #define ACCESSOR_INFO_DECLARATION(name)                   \
-<<<<<<< HEAD
   static void V8CALL name##Getter(                        \
       v8::Local<v8::Name> name,                           \
       const v8::PropertyCallbackInfo<v8::Value>& info);   \
   static Handle<AccessorInfo> V8CALL name##Info(          \
-=======
-  static void name##Getter(                               \
-      v8::Local<v8::Name> name,                           \
-      const v8::PropertyCallbackInfo<v8::Value>& info);   \
-  static Handle<AccessorInfo> name##Info(                 \
->>>>>>> miniblink49
       Isolate* isolate,                                   \
       PropertyAttributes attributes);
   ACCESSOR_INFO_LIST(ACCESSOR_INFO_DECLARATION)
 #undef ACCESSOR_INFO_DECLARATION
 
 #define ACCESSOR_SETTER_DECLARATION(name)                                \
-<<<<<<< HEAD
   static void V8CALL name(v8::Local<v8::Name> name, v8::Local<v8::Value> value, \
-=======
-  static void name(v8::Local<v8::Name> name, v8::Local<v8::Value> value, \
->>>>>>> miniblink49
                    const v8::PropertyCallbackInfo<v8::Boolean>& info);
   ACCESSOR_SETTER_LIST(ACCESSOR_SETTER_DECLARATION)
 #undef ACCESSOR_SETTER_DECLARATION
 
-<<<<<<< HEAD
   static void V8CALL ModuleNamespaceEntryGetter(
       v8::Local<v8::Name> name,
       const v8::PropertyCallbackInfo<v8::Value>& info);
   static Handle<AccessorInfo> V8CALL ModuleNamespaceEntryInfo(
-=======
-  static void ModuleNamespaceEntryGetter(
-      v8::Local<v8::Name> name,
-      const v8::PropertyCallbackInfo<v8::Value>& info);
-  static Handle<AccessorInfo> ModuleNamespaceEntryInfo(
->>>>>>> miniblink49
       Isolate* isolate, Handle<String> name, PropertyAttributes attributes);
 
   enum DescriptorId {
@@ -125,19 +107,11 @@ class Accessors : public AllStatic {
   // conventions as many of the internal methods in objects.cc:
   // - The return value is unset iff there was an exception.
   // - If the ShouldThrow argument is true, the return value must not be false.
-<<<<<<< HEAD
   typedef void (V8CALL*AccessorNameBooleanSetterCallback)(
       Local<v8::Name> property, Local<v8::Value> value,
       const PropertyCallbackInfo<v8::Boolean>& info);
 
   static Handle<AccessorInfo> V8CALL MakeAccessor(
-=======
-  typedef void (*AccessorNameBooleanSetterCallback)(
-      Local<v8::Name> property, Local<v8::Value> value,
-      const PropertyCallbackInfo<v8::Boolean>& info);
-
-  static Handle<AccessorInfo> MakeAccessor(
->>>>>>> miniblink49
       Isolate* isolate, Handle<Name> name, AccessorNameGetterCallback getter,
       AccessorNameBooleanSetterCallback setter, PropertyAttributes attributes);
 };

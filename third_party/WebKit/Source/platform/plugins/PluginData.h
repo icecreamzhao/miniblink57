@@ -21,21 +21,14 @@
 #define PluginData_h
 
 #include "platform/PlatformExport.h"
-<<<<<<< HEAD
 #include "platform/weborigin/SecurityOrigin.h"
 #include "wtf/Noncopyable.h"
-=======
->>>>>>> miniblink49
 #include "wtf/RefCounted.h"
 #include "wtf/Vector.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
-<<<<<<< HEAD
-=======
-class Page;
->>>>>>> miniblink49
 struct PluginInfo;
 
 struct MimeClassInfo {
@@ -57,7 +50,6 @@ struct PluginInfo {
 };
 
 class PLATFORM_EXPORT PluginData : public RefCounted<PluginData> {
-<<<<<<< HEAD
     WTF_MAKE_NONCOPYABLE(PluginData);
 
 public:
@@ -73,50 +65,24 @@ public:
         return m_mimePluginIndices;
     }
     const SecurityOrigin* origin() const { return m_mainFrameOrigin.get(); }
-=======
-public:
-    static PassRefPtr<PluginData> create(const Page* page) { return adoptRef(new PluginData(page)); }
-
-    const Vector<PluginInfo>& plugins() const { return m_plugins; }
-    const Vector<MimeClassInfo>& mimes() const { return m_mimes; }
-    const Vector<size_t>& mimePluginIndices() const { return m_mimePluginIndices; }
->>>>>>> miniblink49
 
     bool supportsMimeType(const String& mimeType) const;
     String pluginNameForMimeType(const String& mimeType) const;
 
-<<<<<<< HEAD
     // refreshBrowserSidePluginCache doesn't update existent instances of
     // PluginData.
     static void refreshBrowserSidePluginCache();
 
 private:
     explicit PluginData(SecurityOrigin* mainFrameOrigin);
-=======
-    static void refresh();
-
-private:
-    explicit PluginData(const Page*);
-    void initPlugins(const Page*);
->>>>>>> miniblink49
     const PluginInfo* pluginInfoForMimeType(const String& mimeType) const;
 
     Vector<PluginInfo> m_plugins;
     Vector<MimeClassInfo> m_mimes;
     Vector<size_t> m_mimePluginIndices;
-<<<<<<< HEAD
     RefPtr<SecurityOrigin> m_mainFrameOrigin;
 };
 
 } // namespace blink
-=======
-};
-
-// Checks if any of the plugins handle this extension, and if so returns the
-// plugin's mime type for this extension. Otherwise returns an empty string.
-PLATFORM_EXPORT String getPluginMimeTypeFromExtension(const String& extension);
-
-}
->>>>>>> miniblink49
 
 #endif

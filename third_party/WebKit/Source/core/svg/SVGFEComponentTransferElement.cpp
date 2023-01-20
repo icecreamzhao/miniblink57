@@ -18,8 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
-
 #include "core/svg/SVGFEComponentTransferElement.h"
 
 #include "core/SVGNames.h"
@@ -29,13 +27,15 @@
 #include "core/svg/SVGFEFuncGElement.h"
 #include "core/svg/SVGFEFuncRElement.h"
 #include "core/svg/graphics/filters/SVGFilterBuilder.h"
-#include "platform/graphics/filters/FilterEffect.h"
+#include "platform/graphics/filters/FEComponentTransfer.h"
 
 namespace blink {
 
-inline SVGFEComponentTransferElement::SVGFEComponentTransferElement(Document& document)
-    : SVGFilterPrimitiveStandardAttributes(SVGNames::feComponentTransferTag, document)
-    , m_in1(SVGAnimatedString::create(this, SVGNames::inAttr, SVGString::create()))
+inline SVGFEComponentTransferElement::SVGFEComponentTransferElement(
+    Document& document)
+    : SVGFilterPrimitiveStandardAttributes(SVGNames::feComponentTransferTag,
+        document)
+    , m_in1(SVGAnimatedString::create(this, SVGNames::inAttr))
 {
     addToPropertyMap(m_in1);
 }
@@ -48,7 +48,8 @@ DEFINE_TRACE(SVGFEComponentTransferElement)
 
 DEFINE_NODE_FACTORY(SVGFEComponentTransferElement)
 
-void SVGFEComponentTransferElement::svgAttributeChanged(const QualifiedName& attrName)
+void SVGFEComponentTransferElement::svgAttributeChanged(
+    const QualifiedName& attrName)
 {
     if (attrName == SVGNames::inAttr) {
         SVGElement::InvalidationGuard invalidationGuard(this);
@@ -59,19 +60,21 @@ void SVGFEComponentTransferElement::svgAttributeChanged(const QualifiedName& att
     SVGFilterPrimitiveStandardAttributes::svgAttributeChanged(attrName);
 }
 
-PassRefPtrWillBeRawPtr<FilterEffect> SVGFEComponentTransferElement::build(SVGFilterBuilder* filterBuilder, Filter* filter)
+FilterEffect* SVGFEComponentTransferElement::build(
+    SVGFilterBuilder* filterBuilder,
+    Filter* filter)
 {
-    FilterEffect* input1 = filterBuilder->getEffectById(AtomicString(m_in1->currentValue()->value()));
-
-    if (!input1)
-        return nullptr;
+    FilterEffect* input1 = filterBuilder->getEffectById(
+        AtomicString(m_in1->currentValue()->value()));
+    ASSERT(input1);
 
     ComponentTransferFunction red;
     ComponentTransferFunction green;
     ComponentTransferFunction blue;
     ComponentTransferFunction alpha;
 
-    for (SVGElement* element = Traversal<SVGElement>::firstChild(*this); element; element = Traversal<SVGElement>::nextSibling(*element)) {
+    for (SVGElement* element = Traversal<SVGElement>::firstChild(*this); element;
+         element = Traversal<SVGElement>::nextSibling(*element)) {
         if (isSVGFEFuncRElement(*element))
             red = toSVGFEFuncRElement(*element).transferFunction();
         else if (isSVGFEFuncGElement(*element))
@@ -82,9 +85,9 @@ PassRefPtrWillBeRawPtr<FilterEffect> SVGFEComponentTransferElement::build(SVGFil
             alpha = toSVGFEFuncAElement(*element).transferFunction();
     }
 
-    RefPtrWillBeRawPtr<FilterEffect> effect = FEComponentTransfer::create(filter, red, green, blue, alpha);
-    effect->inputEffects().append(input1);
-    return effect.release();
+    FilterEffect* effect = FEComponentTransfer::create(filter, red, green, blue, alpha);
+    effect->inputEffects().push_back(input1);
+    return effect;
 }
 
-}
+} // namespace blink

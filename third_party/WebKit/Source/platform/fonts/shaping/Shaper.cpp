@@ -28,15 +28,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "platform/fonts/shaping/Shaper.h"
 
 #include "platform/fonts/Font.h"
-=======
-#include "config.h"
-#include "platform/fonts/shaping/Shaper.h"
-
->>>>>>> miniblink49
 #include "platform/fonts/GlyphBuffer.h"
 #include "platform/fonts/GlyphPage.h"
 #include "platform/text/TextRun.h"
@@ -80,7 +74,6 @@ void Shaper::addEmphasisMark(GlyphBuffer* buffer, float midGlyphOffset) const
     }
 }
 
-<<<<<<< HEAD
 void Shaper::trackNonPrimaryFallbackFont(const SimpleFontData* fontData)
 {
     ASSERT(m_fallbackFonts);
@@ -91,6 +84,4 @@ void Shaper::trackNonPrimaryFallbackFont(const SimpleFontData* fontData)
     m_fallbackFonts->add(fontData);
 }
 
-=======
->>>>>>> miniblink49
 } // namespace blink

@@ -8,13 +8,8 @@
 #ifndef Sk1DPathEffect_DEFINED
 #define Sk1DPathEffect_DEFINED
 
-<<<<<<< HEAD
 #include "SkPath.h"
 #include "SkPathEffect.h"
-=======
-#include "SkPathEffect.h"
-#include "SkPath.h"
->>>>>>> miniblink49
 
 class SkPathMeasure;
 
@@ -22,11 +17,7 @@ class SkPathMeasure;
 class SK_API Sk1DPathEffect : public SkPathEffect {
 public:
     virtual bool filterPath(SkPath* dst, const SkPath& src,
-<<<<<<< HEAD
         SkStrokeRec*, const SkRect*) const override;
-=======
-                            SkStrokeRec*, const SkRect*) const override;
->>>>>>> miniblink49
 
 protected:
     /** Called at the start of each contour, returns the initial offset
@@ -41,14 +32,10 @@ protected:
     virtual SkScalar next(SkPath* dst, SkScalar dist, SkPathMeasure&) const = 0;
 
 #ifdef SK_BUILD_FOR_ANDROID_FRAMEWORK
-<<<<<<< HEAD
     bool exposedInAndroidJavaAPI() const override
     {
         return true;
     }
-=======
-    bool exposedInAndroidJavaAPI() const override { return true; }
->>>>>>> miniblink49
 #endif
 
 private:
@@ -58,19 +45,11 @@ private:
 class SK_API SkPath1DPathEffect : public Sk1DPathEffect {
 public:
     enum Style {
-<<<<<<< HEAD
         kTranslate_Style, // translate the shape to each position
         kRotate_Style, // rotate the shape about its center
         kMorph_Style, // transform each point, and turn lines into curves
 
         kLastEnum_Style = kMorph_Style,
-=======
-        kTranslate_Style,   // translate the shape to each position
-        kRotate_Style,      // rotate the shape about its center
-        kMorph_Style,       // transform each point, and turn lines into curves
-
-        kStyleCount
->>>>>>> miniblink49
     };
 
     /** Dash by replicating the specified path.
@@ -80,7 +59,6 @@ public:
         @param style how to transform path at each point (based on the current
                      position and tangent)
     */
-<<<<<<< HEAD
     static sk_sp<SkPathEffect> Make(const SkPath& path, SkScalar advance, SkScalar phase, Style);
 
 #ifdef SK_SUPPORT_LEGACY_PATHEFFECT_PTR
@@ -92,15 +70,6 @@ public:
 
     virtual bool filterPath(SkPath*, const SkPath&,
         SkStrokeRec*, const SkRect*) const override;
-=======
-    static SkPath1DPathEffect* Create(const SkPath& path, SkScalar advance, SkScalar phase,
-                                      Style style) {
-        return SkNEW_ARGS(SkPath1DPathEffect, (path, advance, phase, style));
-    }
-
-    virtual bool filterPath(SkPath*, const SkPath&,
-                            SkStrokeRec*, const SkRect*) const override;
->>>>>>> miniblink49
 
     SK_TO_STRING_OVERRIDE()
     SK_DECLARE_PUBLIC_FLATTENABLE_DESERIALIZATION_PROCS(SkPath1DPathEffect)
@@ -114,17 +83,10 @@ protected:
     SkScalar next(SkPath*, SkScalar, SkPathMeasure&) const override;
 
 private:
-<<<<<<< HEAD
     SkPath fPath; // copied from constructor
     SkScalar fAdvance; // copied from constructor
     SkScalar fInitialOffset; // computed from phase
     Style fStyle; // copied from constructor
-=======
-    SkPath      fPath;          // copied from constructor
-    SkScalar    fAdvance;       // copied from constructor
-    SkScalar    fInitialOffset; // computed from phase
-    Style       fStyle;         // copied from constructor
->>>>>>> miniblink49
 
     typedef Sk1DPathEffect INHERITED;
 };

@@ -8,11 +8,8 @@
 #ifndef SkStringUtils_DEFINED
 #define SkStringUtils_DEFINED
 
-<<<<<<< HEAD
 #include "SkScalar.h"
 
-=======
->>>>>>> miniblink49
 class SkString;
 
 /**
@@ -22,12 +19,7 @@ class SkString;
  * methods.
  */
 void SkAddFlagToString(SkString* string, bool flag,
-<<<<<<< HEAD
     const char* flagStr, bool* needSeparator);
-=======
-                       const char* flagStr, bool* needSeparator);
-
->>>>>>> miniblink49
 
 enum SkScalarAsStringType {
     kDec_SkScalarAsStringType,
@@ -36,7 +28,6 @@ enum SkScalarAsStringType {
 
 void SkAppendScalar(SkString*, SkScalar, SkScalarAsStringType);
 
-<<<<<<< HEAD
 static inline void SkAppendScalarDec(SkString* str, SkScalar value)
 {
     SkAppendScalar(str, value, kDec_SkScalarAsStringType);
@@ -50,14 +41,4 @@ static inline void SkAppendScalarHex(SkString* str, SkScalar value)
 /** Indents every non-empty line of the string by tabCnt tabs */
 SkString SkTabString(const SkString& string, int tabCnt);
 
-=======
-static inline void SkAppendScalarDec(SkString* str, SkScalar value) {
-    SkAppendScalar(str, value, kDec_SkScalarAsStringType);
-}
-
-static inline void SkAppendScalarHex(SkString* str, SkScalar value) {
-    SkAppendScalar(str, value, kHex_SkScalarAsStringType);
-}
-
->>>>>>> miniblink49
 #endif

@@ -21,13 +21,8 @@
 #ifndef ULOC_H
 #define ULOC_H
 
-<<<<<<< HEAD
 #include "unicode/uenum.h"
 #include "unicode/utypes.h"
-=======
-#include "unicode/utypes.h"
-#include "unicode/uenum.h"
->>>>>>> miniblink49
 
 /**    
  * \file
@@ -203,7 +198,6 @@
  */
 
 /** Useful constant for this language. @stable ICU 2.0 */
-<<<<<<< HEAD
 #define ULOC_CHINESE "zh"
 /** Useful constant for this language. @stable ICU 2.0 */
 #define ULOC_ENGLISH "en"
@@ -217,28 +211,12 @@
 #define ULOC_JAPANESE "ja"
 /** Useful constant for this language. @stable ICU 2.0 */
 #define ULOC_KOREAN "ko"
-=======
-#define ULOC_CHINESE            "zh"
-/** Useful constant for this language. @stable ICU 2.0 */
-#define ULOC_ENGLISH            "en"
-/** Useful constant for this language. @stable ICU 2.0 */
-#define ULOC_FRENCH             "fr"
-/** Useful constant for this language. @stable ICU 2.0 */
-#define ULOC_GERMAN             "de"
-/** Useful constant for this language. @stable ICU 2.0 */
-#define ULOC_ITALIAN            "it"
-/** Useful constant for this language. @stable ICU 2.0 */
-#define ULOC_JAPANESE           "ja"
-/** Useful constant for this language. @stable ICU 2.0 */
-#define ULOC_KOREAN             "ko"
->>>>>>> miniblink49
 /** Useful constant for this language. @stable ICU 2.0 */
 #define ULOC_SIMPLIFIED_CHINESE "zh_CN"
 /** Useful constant for this language. @stable ICU 2.0 */
 #define ULOC_TRADITIONAL_CHINESE "zh_TW"
 
 /** Useful constant for this country/region. @stable ICU 2.0 */
-<<<<<<< HEAD
 #define ULOC_CANADA "en_CA"
 /** Useful constant for this country/region. @stable ICU 2.0 */
 #define ULOC_CANADA_FRENCH "fr_CA"
@@ -262,31 +240,6 @@
 #define ULOC_UK "en_GB"
 /** Useful constant for this country/region. @stable ICU 2.0 */
 #define ULOC_US "en_US"
-=======
-#define ULOC_CANADA         "en_CA"
-/** Useful constant for this country/region. @stable ICU 2.0 */
-#define ULOC_CANADA_FRENCH  "fr_CA"
-/** Useful constant for this country/region. @stable ICU 2.0 */
-#define ULOC_CHINA          "zh_CN"
-/** Useful constant for this country/region. @stable ICU 2.0 */
-#define ULOC_PRC            "zh_CN"
-/** Useful constant for this country/region. @stable ICU 2.0 */
-#define ULOC_FRANCE         "fr_FR"
-/** Useful constant for this country/region. @stable ICU 2.0 */
-#define ULOC_GERMANY        "de_DE"
-/** Useful constant for this country/region. @stable ICU 2.0 */
-#define ULOC_ITALY          "it_IT"
-/** Useful constant for this country/region. @stable ICU 2.0 */
-#define ULOC_JAPAN          "ja_JP"
-/** Useful constant for this country/region. @stable ICU 2.0 */
-#define ULOC_KOREA          "ko_KR"
-/** Useful constant for this country/region. @stable ICU 2.0 */
-#define ULOC_TAIWAN         "zh_TW"
-/** Useful constant for this country/region. @stable ICU 2.0 */
-#define ULOC_UK             "en_GB"
-/** Useful constant for this country/region. @stable ICU 2.0 */
-#define ULOC_US             "en_US"
->>>>>>> miniblink49
 
 /**
  * Useful constant for the maximum size of the language part of a locale ID.
@@ -381,7 +334,6 @@
  * @stable ICU 2.1
  */
 typedef enum {
-<<<<<<< HEAD
     /** This is locale the data actually comes from 
    * @stable ICU 2.1
    */
@@ -400,26 +352,6 @@ typedef enum {
 
     ULOC_DATA_LOCALE_TYPE_LIMIT = 3
 } ULocDataLocaleType;
-=======
-  /** This is locale the data actually comes from 
-   * @stable ICU 2.1
-   */
-  ULOC_ACTUAL_LOCALE    = 0,
-  /** This is the most specific locale supported by ICU 
-   * @stable ICU 2.1
-   */
-  ULOC_VALID_LOCALE    = 1,
-
-#ifndef U_HIDE_DEPRECATED_API
-  /** This is the requested locale
-   *  @deprecated ICU 2.8 
-   */
-  ULOC_REQUESTED_LOCALE = 2,
-#endif /* U_HIDE_DEPRECATED_API */
-
-  ULOC_DATA_LOCALE_TYPE_LIMIT = 3
-} ULocDataLocaleType ;
->>>>>>> miniblink49
 
 #ifndef U_HIDE_SYSTEM_API
 /**
@@ -455,13 +387,8 @@ uloc_getDefault(void);
  */
 U_STABLE void U_EXPORT2
 uloc_setDefault(const char* localeID,
-<<<<<<< HEAD
     UErrorCode* status);
 #endif /* U_HIDE_SYSTEM_API */
-=======
-        UErrorCode*       status);
-#endif  /* U_HIDE_SYSTEM_API */
->>>>>>> miniblink49
 
 /**
  * Gets the language code for the specified locale.
@@ -476,17 +403,10 @@ uloc_setDefault(const char* localeID,
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 uloc_getLanguage(const char* localeID,
     char* language,
     int32_t languageCapacity,
     UErrorCode* err);
-=======
-uloc_getLanguage(const char*    localeID,
-         char* language,
-         int32_t languageCapacity,
-         UErrorCode* err);
->>>>>>> miniblink49
 
 /**
  * Gets the script code for the specified locale.
@@ -501,17 +421,10 @@ uloc_getLanguage(const char*    localeID,
  * @stable ICU 2.8
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 uloc_getScript(const char* localeID,
     char* script,
     int32_t scriptCapacity,
     UErrorCode* err);
-=======
-uloc_getScript(const char*    localeID,
-         char* script,
-         int32_t scriptCapacity,
-         UErrorCode* err);
->>>>>>> miniblink49
 
 /**
  * Gets the  country code for the specified locale.
@@ -526,17 +439,10 @@ uloc_getScript(const char*    localeID,
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 uloc_getCountry(const char* localeID,
     char* country,
     int32_t countryCapacity,
     UErrorCode* err);
-=======
-uloc_getCountry(const char*    localeID,
-        char* country,
-        int32_t countryCapacity,
-        UErrorCode* err);
->>>>>>> miniblink49
 
 /**
  * Gets the variant code for the specified locale.
@@ -551,18 +457,10 @@ uloc_getCountry(const char*    localeID,
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 uloc_getVariant(const char* localeID,
     char* variant,
     int32_t variantCapacity,
     UErrorCode* err);
-=======
-uloc_getVariant(const char*    localeID,
-        char* variant,
-        int32_t variantCapacity,
-        UErrorCode* err);
-
->>>>>>> miniblink49
 
 /**
  * Gets the full name for the specified locale.
@@ -581,17 +479,10 @@ uloc_getVariant(const char*    localeID,
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 uloc_getName(const char* localeID,
     char* name,
     int32_t nameCapacity,
     UErrorCode* err);
-=======
-uloc_getName(const char*    localeID,
-         char* name,
-         int32_t nameCapacity,
-         UErrorCode* err);
->>>>>>> miniblink49
 
 /**
  * Gets the full name for the specified locale.
@@ -611,17 +502,10 @@ uloc_getName(const char*    localeID,
  * @stable ICU 2.8
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 uloc_canonicalize(const char* localeID,
     char* name,
     int32_t nameCapacity,
     UErrorCode* err);
-=======
-uloc_canonicalize(const char*    localeID,
-         char* name,
-         int32_t nameCapacity,
-         UErrorCode* err);
->>>>>>> miniblink49
 
 /**
  * Gets the ISO language code for the specified locale.
@@ -633,10 +517,6 @@ uloc_canonicalize(const char*    localeID,
 U_STABLE const char* U_EXPORT2
 uloc_getISO3Language(const char* localeID);
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /**
  * Gets the ISO country code for the specified locale.
  *
@@ -676,17 +556,10 @@ uloc_getLCID(const char* localeID);
  */
 U_STABLE int32_t U_EXPORT2
 uloc_getDisplayLanguage(const char* locale,
-<<<<<<< HEAD
     const char* displayLocale,
     UChar* language,
     int32_t languageCapacity,
     UErrorCode* status);
-=======
-            const char* displayLocale,
-            UChar* language,
-            int32_t languageCapacity,
-            UErrorCode* status);
->>>>>>> miniblink49
 
 /**
  * Gets the script name suitable for display for the specified locale.
@@ -706,17 +579,10 @@ uloc_getDisplayLanguage(const char* locale,
  */
 U_STABLE int32_t U_EXPORT2
 uloc_getDisplayScript(const char* locale,
-<<<<<<< HEAD
     const char* displayLocale,
     UChar* script,
     int32_t scriptCapacity,
     UErrorCode* status);
-=======
-            const char* displayLocale,
-            UChar* script,
-            int32_t scriptCapacity,
-            UErrorCode* status);
->>>>>>> miniblink49
 
 /**
  * Gets the country name suitable for display for the specified locale.
@@ -736,18 +602,10 @@ uloc_getDisplayScript(const char* locale,
  */
 U_STABLE int32_t U_EXPORT2
 uloc_getDisplayCountry(const char* locale,
-<<<<<<< HEAD
     const char* displayLocale,
     UChar* country,
     int32_t countryCapacity,
     UErrorCode* status);
-=======
-                       const char* displayLocale,
-                       UChar* country,
-                       int32_t countryCapacity,
-                       UErrorCode* status);
-
->>>>>>> miniblink49
 
 /**
  * Gets the variant name suitable for display for the specified locale.
@@ -767,17 +625,10 @@ uloc_getDisplayCountry(const char* locale,
  */
 U_STABLE int32_t U_EXPORT2
 uloc_getDisplayVariant(const char* locale,
-<<<<<<< HEAD
     const char* displayLocale,
     UChar* variant,
     int32_t variantCapacity,
     UErrorCode* status);
-=======
-                       const char* displayLocale,
-                       UChar* variant,
-                       int32_t variantCapacity,
-                       UErrorCode* status);
->>>>>>> miniblink49
 
 /**
  * Gets the keyword name suitable for display for the specified locale.
@@ -821,17 +672,10 @@ uloc_getDisplayVariant(const char* locale,
  */
 U_STABLE int32_t U_EXPORT2
 uloc_getDisplayKeyword(const char* keyword,
-<<<<<<< HEAD
     const char* displayLocale,
     UChar* dest,
     int32_t destCapacity,
     UErrorCode* status);
-=======
-                       const char* displayLocale,
-                       UChar* dest,
-                       int32_t destCapacity,
-                       UErrorCode* status);
->>>>>>> miniblink49
 /**
  * Gets the value of the keyword suitable for display for the specified locale.
  * E.g: for the locale string de_DE\@collation=PHONEBOOK, this API gets the display 
@@ -853,21 +697,12 @@ uloc_getDisplayKeyword(const char* keyword,
  * @stable ICU 2.8
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 uloc_getDisplayKeywordValue(const char* locale,
     const char* keyword,
     const char* displayLocale,
     UChar* dest,
     int32_t destCapacity,
     UErrorCode* status);
-=======
-uloc_getDisplayKeywordValue(   const char* locale,
-                               const char* keyword,
-                               const char* displayLocale,
-                               UChar* dest,
-                               int32_t destCapacity,
-                               UErrorCode* status);
->>>>>>> miniblink49
 /**
  * Gets the full name suitable for display for the specified locale.
  *
@@ -886,18 +721,10 @@ uloc_getDisplayKeywordValue(   const char* locale,
  */
 U_STABLE int32_t U_EXPORT2
 uloc_getDisplayName(const char* localeID,
-<<<<<<< HEAD
     const char* inLocaleID,
     UChar* result,
     int32_t maxResultSize,
     UErrorCode* err);
-=======
-            const char* inLocaleID,
-            UChar* result,
-            int32_t maxResultSize,
-            UErrorCode* err);
-
->>>>>>> miniblink49
 
 /**
  * Gets the specified locale from a list of all available locales.  
@@ -960,20 +787,10 @@ uloc_getISOCountries(void);
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 uloc_getParent(const char* localeID,
     char* parent,
     int32_t parentCapacity,
     UErrorCode* err);
-=======
-uloc_getParent(const char*    localeID,
-                 char* parent,
-                 int32_t parentCapacity,
-                 UErrorCode* err);
-
-
-
->>>>>>> miniblink49
 
 /**
  * Gets the full name for the specified locale, like uloc_getName(),
@@ -998,17 +815,10 @@ uloc_getParent(const char*    localeID,
  * @stable ICU 2.8
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 uloc_getBaseName(const char* localeID,
     char* name,
     int32_t nameCapacity,
     UErrorCode* err);
-=======
-uloc_getBaseName(const char*    localeID,
-         char* name,
-         int32_t nameCapacity,
-         UErrorCode* err);
->>>>>>> miniblink49
 
 /**
  * Gets an enumeration of keywords for the specified locale. Enumeration
@@ -1021,11 +831,7 @@ uloc_getBaseName(const char*    localeID,
  */
 U_STABLE UEnumeration* U_EXPORT2
 uloc_openKeywords(const char* localeID,
-<<<<<<< HEAD
     UErrorCode* status);
-=======
-                        UErrorCode* status);
->>>>>>> miniblink49
 
 /**
  * Get the value for a keyword. Locale name does not need to be normalized.
@@ -1040,16 +846,9 @@ uloc_openKeywords(const char* localeID,
  */
 U_STABLE int32_t U_EXPORT2
 uloc_getKeywordValue(const char* localeID,
-<<<<<<< HEAD
     const char* keywordName,
     char* buffer, int32_t bufferCapacity,
     UErrorCode* status);
-=======
-                     const char* keywordName,
-                     char* buffer, int32_t bufferCapacity,
-                     UErrorCode* status);
-
->>>>>>> miniblink49
 
 /**
  * Sets or removes the value of the specified keyword.
@@ -1075,15 +874,9 @@ uloc_getKeywordValue(const char* localeID,
  */
 U_STABLE int32_t U_EXPORT2
 uloc_setKeywordValue(const char* keywordName,
-<<<<<<< HEAD
     const char* keywordValue,
     char* buffer, int32_t bufferCapacity,
     UErrorCode* status);
-=======
-                     const char* keywordValue,
-                     char* buffer, int32_t bufferCapacity,
-                     UErrorCode* status);
->>>>>>> miniblink49
 
 #ifndef U_HIDE_DRAFT_API
 /**
@@ -1101,13 +894,8 @@ uloc_setKeywordValue(const char* keywordName,
  * @draft ICU 54
  */
 U_DRAFT UBool U_EXPORT2
-<<<<<<< HEAD
 uloc_isRightToLeft(const char* locale);
 #endif /* U_HIDE_DRAFT_API */
-=======
-uloc_isRightToLeft(const char *locale);
-#endif  /* U_HIDE_DRAFT_API */
->>>>>>> miniblink49
 
 /**
  * enums for the  return value for the character and line orientation
@@ -1115,19 +903,11 @@ uloc_isRightToLeft(const char *locale);
  * @stable ICU 4.0
  */
 typedef enum {
-<<<<<<< HEAD
     ULOC_LAYOUT_LTR = 0, /* left-to-right. */
     ULOC_LAYOUT_RTL = 1, /* right-to-left. */
     ULOC_LAYOUT_TTB = 2, /* top-to-bottom. */
     ULOC_LAYOUT_BTT = 3, /* bottom-to-top. */
     ULOC_LAYOUT_UNKNOWN
-=======
-  ULOC_LAYOUT_LTR   = 0,  /* left-to-right. */
-  ULOC_LAYOUT_RTL    = 1,  /* right-to-left. */
-  ULOC_LAYOUT_TTB    = 2,  /* top-to-bottom. */
-  ULOC_LAYOUT_BTT    = 3,   /* bottom-to-top. */
-  ULOC_LAYOUT_UNKNOWN
->>>>>>> miniblink49
 } ULayoutType;
 
 /**
@@ -1140,11 +920,7 @@ typedef enum {
  */
 U_STABLE ULayoutType U_EXPORT2
 uloc_getCharacterOrientation(const char* localeId,
-<<<<<<< HEAD
     UErrorCode* status);
-=======
-                             UErrorCode *status);
->>>>>>> miniblink49
 
 /**
  * Get the layout line orientation for the specified locale.
@@ -1156,11 +932,7 @@ uloc_getCharacterOrientation(const char* localeId,
  */
 U_STABLE ULayoutType U_EXPORT2
 uloc_getLineOrientation(const char* localeId,
-<<<<<<< HEAD
     UErrorCode* status);
-=======
-                        UErrorCode *status);
->>>>>>> miniblink49
 
 /**
  * enums for the 'outResult' parameter return value
@@ -1169,23 +941,13 @@ uloc_getLineOrientation(const char* localeId,
  * @stable ICU 3.2
  */
 typedef enum {
-<<<<<<< HEAD
     ULOC_ACCEPT_FAILED = 0, /* No exact match was found. */
     ULOC_ACCEPT_VALID = 1, /* An exact match was found. */
     ULOC_ACCEPT_FALLBACK = 2 /* A fallback was found, for example, 
-=======
-  ULOC_ACCEPT_FAILED   = 0,  /* No exact match was found. */
-  ULOC_ACCEPT_VALID    = 1,  /* An exact match was found. */
-  ULOC_ACCEPT_FALLBACK = 2   /* A fallback was found, for example, 
->>>>>>> miniblink49
                                 Accept list contained 'ja_JP'
                                 which matched available locale 'ja'. */
 } UAcceptResult;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /**
  * Based on a HTTP header from a web browser and a list of available locales,
  * determine an acceptable locale for the user.
@@ -1199,19 +961,11 @@ typedef enum {
  * @stable ICU 3.2
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 uloc_acceptLanguageFromHTTP(char* result, int32_t resultAvailable,
     UAcceptResult* outResult,
     const char* httpAcceptLanguage,
     UEnumeration* availableLocales,
     UErrorCode* status);
-=======
-uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable,
-                            UAcceptResult *outResult,
-                            const char *httpAcceptLanguage,
-                            UEnumeration* availableLocales,
-                            UErrorCode *status);
->>>>>>> miniblink49
 
 /**
  * Based on a list of available locales,
@@ -1227,20 +981,11 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable,
  * @stable ICU 3.2
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 uloc_acceptLanguage(char* result, int32_t resultAvailable,
     UAcceptResult* outResult, const char** acceptList,
     int32_t acceptListCount,
     UEnumeration* availableLocales,
     UErrorCode* status);
-=======
-uloc_acceptLanguage(char *result, int32_t resultAvailable, 
-                    UAcceptResult *outResult, const char **acceptList,
-                    int32_t acceptListCount,
-                    UEnumeration* availableLocales,
-                    UErrorCode *status);
-
->>>>>>> miniblink49
 
 /**
  * Gets the ICU locale ID for the specified Win32 LCID value.
@@ -1255,14 +1000,8 @@ uloc_acceptLanguage(char *result, int32_t resultAvailable,
  * @stable ICU 3.8
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 uloc_getLocaleForLCID(uint32_t hostID, char* locale, int32_t localeCapacity,
     UErrorCode* status);
-=======
-uloc_getLocaleForLCID(uint32_t hostID, char *locale, int32_t localeCapacity,
-                    UErrorCode *status);
-
->>>>>>> miniblink49
 
 /**
  * Add the likely subtags for a provided locale ID, per the algorithm described
@@ -1298,18 +1037,10 @@ uloc_getLocaleForLCID(uint32_t hostID, char *locale, int32_t localeCapacity,
  * @stable ICU 4.0
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 uloc_addLikelySubtags(const char* localeID,
     char* maximizedLocaleID,
     int32_t maximizedLocaleIDCapacity,
     UErrorCode* err);
-=======
-uloc_addLikelySubtags(const char*    localeID,
-         char* maximizedLocaleID,
-         int32_t maximizedLocaleIDCapacity,
-         UErrorCode* err);
-
->>>>>>> miniblink49
 
 /**
  * Minimize the subtags for a provided locale ID, per the algorithm described
@@ -1345,17 +1076,10 @@ uloc_addLikelySubtags(const char*    localeID,
  * @stable ICU 4.0
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 uloc_minimizeSubtags(const char* localeID,
     char* minimizedLocaleID,
     int32_t minimizedLocaleIDCapacity,
     UErrorCode* err);
-=======
-uloc_minimizeSubtags(const char*    localeID,
-         char* minimizedLocaleID,
-         int32_t minimizedLocaleIDCapacity,
-         UErrorCode* err);
->>>>>>> miniblink49
 
 /**
  * Returns a locale ID for the specified BCP47 language tag string.
@@ -1382,17 +1106,10 @@ uloc_minimizeSubtags(const char*    localeID,
  */
 U_STABLE int32_t U_EXPORT2
 uloc_forLanguageTag(const char* langtag,
-<<<<<<< HEAD
     char* localeID,
     int32_t localeIDCapacity,
     int32_t* parsedLength,
     UErrorCode* err);
-=======
-                    char* localeID,
-                    int32_t localeIDCapacity,
-                    int32_t* parsedLength,
-                    UErrorCode* err);
->>>>>>> miniblink49
 
 /**
  * Returns a well-formed language tag for this locale ID. 
@@ -1417,17 +1134,10 @@ uloc_forLanguageTag(const char* langtag,
  */
 U_STABLE int32_t U_EXPORT2
 uloc_toLanguageTag(const char* localeID,
-<<<<<<< HEAD
     char* langtag,
     int32_t langtagCapacity,
     UBool strict,
     UErrorCode* err);
-=======
-                   char* langtag,
-                   int32_t langtagCapacity,
-                   UBool strict,
-                   UErrorCode* err);
->>>>>>> miniblink49
 
 #ifndef U_HIDE_DRAFT_API
 /**
@@ -1529,10 +1239,6 @@ uloc_toLegacyKey(const char* keyword);
 U_DRAFT const char* U_EXPORT2
 uloc_toLegacyType(const char* keyword, const char* value);
 
-<<<<<<< HEAD
 #endif /* U_HIDE_DRAFT_API */
-=======
-#endif  /* U_HIDE_DRAFT_API */
->>>>>>> miniblink49
 
 #endif /*_ULOC*/

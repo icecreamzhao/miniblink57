@@ -8,13 +8,9 @@
 #include "core/events/EventFactory.h"
 #include "platform/heap/Handle.h"
 #include "wtf/PassRefPtr.h"
-<<<<<<< HEAD
 #include "wtf/PtrUtil.h"
 #include "wtf/text/AtomicString.h"
 #include <memory>
-=======
-#include "wtf/text/AtomicString.h"
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -22,7 +18,6 @@ class Event;
 
 class EventModulesFactory final : public EventFactoryBase {
 public:
-<<<<<<< HEAD
     static std::unique_ptr<EventModulesFactory> create()
     {
         return WTF::makeUnique<EventModulesFactory>();
@@ -32,16 +27,5 @@ public:
 };
 
 } // namespace blink
-=======
-    static PassOwnPtr<EventModulesFactory> create()
-    {
-        return adoptPtr(new EventModulesFactory());
-    }
-
-    PassRefPtrWillBeRawPtr<Event> create(const String& eventType) override;
-};
-
-}
->>>>>>> miniblink49
 
 #endif

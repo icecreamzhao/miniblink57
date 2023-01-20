@@ -12,18 +12,10 @@
 class SkString;
 
 void print_diff_page(const int matchCount,
-<<<<<<< HEAD
     const int colorThreshold,
     const RecordArray& differences,
     const SkString& baseDir,
     const SkString& comparisonDir,
     const SkString& outputDir);
-=======
-                     const int colorThreshold,
-                     const RecordArray& differences,
-                     const SkString& baseDir,
-                     const SkString& comparisonDir,
-                     const SkString& outputDir);
->>>>>>> miniblink49
 
 #endif

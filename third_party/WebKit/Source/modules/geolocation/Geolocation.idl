@@ -25,10 +25,6 @@
 
 // http://www.w3.org/TR/geolocation-API/#geolocation_interface
 [
-<<<<<<< HEAD
-=======
-    GarbageCollected,
->>>>>>> miniblink49
     NoInterfaceObject,
 ] interface Geolocation {
     [LogActivity] void getCurrentPosition(PositionCallback successCallback,

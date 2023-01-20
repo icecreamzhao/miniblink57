@@ -9,10 +9,7 @@
     'component_libs': [
       'core.gyp:core',
       'codec.gyp:codec',
-<<<<<<< HEAD
       'codec_android.gyp:codec_android',
-=======
->>>>>>> miniblink49
       'effects.gyp:effects',
       'images.gyp:images',
       'opts.gyp:opts',

@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -9,10 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #include "SkSVGRect.h"
 #include "SkSVGParser.h"
 
@@ -25,22 +17,14 @@ const SkSVGAttribute SkSVGRect::gAttributes[] = {
 
 DEFINE_SVG_INFO(Rect)
 
-<<<<<<< HEAD
 SkSVGRect::SkSVGRect()
 {
-=======
-SkSVGRect::SkSVGRect() {
->>>>>>> miniblink49
     f_x.set("0");
     f_y.set("0");
 }
 
-<<<<<<< HEAD
 void SkSVGRect::translate(SkSVGParser& parser, bool defState)
 {
-=======
-void SkSVGRect::translate(SkSVGParser& parser, bool defState) {
->>>>>>> miniblink49
     parser._startElement("rect");
     INHERITED::translate(parser, defState);
     SVG_ADD_ATTRIBUTE_ALIAS(left, x);

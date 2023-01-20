@@ -27,13 +27,14 @@
 #define BitStack_h
 
 #include "core/CoreExport.h"
+#include "wtf/Allocator.h"
 #include "wtf/Vector.h"
 
 namespace blink {
 
-class Node;
-
 class CORE_EXPORT BitStack {
+    STACK_ALLOCATED();
+
 public:
     BitStack();
     ~BitStack();

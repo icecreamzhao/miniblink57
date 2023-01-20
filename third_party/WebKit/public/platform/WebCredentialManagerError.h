@@ -7,7 +7,6 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 // FIXME: This is a placeholder list of error conditions. We'll likely expand
 // the list as the API evolves.
 enum WebCredentialManagerError {
@@ -17,24 +16,6 @@ enum WebCredentialManagerError {
     WebCredentialManagerPasswordStoreUnavailableError,
     WebCredentialManagerUnknownError,
     WebCredentialManagerErrorLastType = WebCredentialManagerUnknownError,
-=======
-struct WebCredentialManagerError {
-    // FIXME: This is a placeholder list of error conditions. We'll likely expand the
-    // list as the API evolves.
-    enum ErrorType {
-        ErrorTypeDisabled = 0,
-        ErrorTypePendingRequest,
-        ErrorTypePasswordStoreUnavailable,
-        ErrorTypeUnknown,
-        ErrorTypeLast = ErrorTypeUnknown
-    };
-
-    // FIXME: We need this to be an object for the moment to make the WebCallbacks templates
-    // happy. But, really, we probably just need the enum. We should fix that.
-    explicit WebCredentialManagerError(ErrorType type) : errorType(type) { }
-
-    ErrorType errorType;
->>>>>>> miniblink49
 };
 
 } // namespace blink

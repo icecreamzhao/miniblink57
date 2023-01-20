@@ -8,11 +8,8 @@
 #include "SampleCode.h"
 #include "SkCanvas.h"
 #include "SkInterpolator.h"
-<<<<<<< HEAD
 #include "SkPath.h"
 #include "SkRRect.h"
-=======
->>>>>>> miniblink49
 #include "SkTime.h"
 
 // This slide tests out the match up between BW clipping and rendering. It can
@@ -45,45 +42,29 @@ static const float kMax = 299.5f;
 // (i.e., kRectAndRect through kRectAndConcave)
 static const float kXlate = 100.0f;
 
-<<<<<<< HEAD
 SkRect create_rect(const SkPoint& offset)
 {
-=======
-SkRect create_rect(const SkPoint& offset) {
->>>>>>> miniblink49
     SkRect r = SkRect::MakeLTRB(kMin, kMin, kMax, kMax);
     r.offset(offset);
     return r;
 }
 
-<<<<<<< HEAD
 SkRRect create_rrect(const SkPoint& offset)
 {
-=======
-SkRRect create_rrect(const SkPoint& offset) {
->>>>>>> miniblink49
     SkRRect rrect;
     rrect.setRectXY(create_rect(offset), 10, 10);
     return rrect;
 }
 
-<<<<<<< HEAD
 SkRRect create_circle(const SkPoint& offset)
 {
-=======
-SkRRect create_circle(const SkPoint& offset) {
->>>>>>> miniblink49
     SkRRect circle;
     circle.setOval(create_rect(offset));
     return circle;
 }
 
-<<<<<<< HEAD
 SkPath create_convex_path(const SkPoint& offset)
 {
-=======
-SkPath create_convex_path(const SkPoint& offset) {
->>>>>>> miniblink49
     SkPath convexPath;
     convexPath.moveTo(kMin, kMin);
     convexPath.lineTo(kMax, kMax);
@@ -93,12 +74,8 @@ SkPath create_convex_path(const SkPoint& offset) {
     return convexPath;
 }
 
-<<<<<<< HEAD
 SkPath create_concave_path(const SkPoint& offset)
 {
-=======
-SkPath create_concave_path(const SkPoint& offset) {
->>>>>>> miniblink49
     SkPath concavePath;
     concavePath.moveTo(kMin, kMin);
     concavePath.lineTo(kMid, 105.0f);
@@ -114,37 +91,24 @@ SkPath create_concave_path(const SkPoint& offset) {
     return concavePath;
 }
 
-<<<<<<< HEAD
 static void draw_normal_geom(SkCanvas* canvas, const SkPoint& offset, int geom, bool useAA)
 {
-=======
-static void draw_normal_geom(SkCanvas* canvas, const SkPoint& offset, int geom, bool useAA) {
->>>>>>> miniblink49
     SkPaint p;
     p.setAntiAlias(useAA);
     p.setColor(SK_ColorBLACK);
 
     switch (geom) {
-<<<<<<< HEAD
     case kRect_Geometry: // fall thru
     case kRectAndRect_Geometry:
         canvas->drawRect(create_rect(offset), p);
         break;
     case kRRect_Geometry: // fall thru
-=======
-    case kRect_Geometry:                // fall thru
-    case kRectAndRect_Geometry:
-        canvas->drawRect(create_rect(offset), p);
-        break;
-    case kRRect_Geometry:               // fall thru
->>>>>>> miniblink49
     case kRectAndRRect_Geometry:
         canvas->drawRRect(create_rrect(offset), p);
         break;
     case kCircle_Geometry:
         canvas->drawRRect(create_circle(offset), p);
         break;
-<<<<<<< HEAD
     case kConvexPath_Geometry: // fall thru
     case kRectAndConvex_Geometry:
         canvas->drawPath(create_convex_path(offset), p);
@@ -154,36 +118,20 @@ static void draw_normal_geom(SkCanvas* canvas, const SkPoint& offset, int geom, 
         canvas->drawPath(create_concave_path(offset), p);
         break;
     }
-=======
-    case kConvexPath_Geometry:          // fall thru
-    case kRectAndConvex_Geometry:
-        canvas->drawPath(create_convex_path(offset), p);
-        break;
-    case kConcavePath_Geometry:         // fall thru
-    case kRectAndConcave_Geometry:
-        canvas->drawPath(create_concave_path(offset), p);
-        break;
-    } 
->>>>>>> miniblink49
 }
 
 class ClipDrawMatchView : public SampleView {
 public:
-<<<<<<< HEAD
     ClipDrawMatchView()
         : fTrans(2, 5)
         , fGeom(kRect_Geometry)
         , fClipFirst(true)
         , fSign(1)
     {
-=======
-    ClipDrawMatchView() : fTrans(2, 5), fGeom(kRect_Geometry), fClipFirst(true), fSign(1) {
->>>>>>> miniblink49
         SkScalar values[2];
 
         fTrans.setRepeatCount(999);
         values[0] = values[1] = 0;
-<<<<<<< HEAD
         fTrans.setKeyFrame(0, GetMSecs() + 1000, values);
         values[1] = 1;
         fTrans.setKeyFrame(1, GetMSecs() + 2000, values);
@@ -198,21 +146,6 @@ public:
 protected:
     bool onQuery(SkEvent* evt) override
     {
-=======
-        fTrans.setKeyFrame(0, SkTime::GetMSecs() + 1000, values);
-        values[1] = 1;
-        fTrans.setKeyFrame(1, SkTime::GetMSecs() + 2000, values);
-        values[0] = values[1] = 1;
-        fTrans.setKeyFrame(2, SkTime::GetMSecs() + 3000, values);
-        values[1] = 0;
-        fTrans.setKeyFrame(3, SkTime::GetMSecs() + 4000, values);
-        values[0] = 0;
-        fTrans.setKeyFrame(4, SkTime::GetMSecs() + 5000, values);
-    }
-
-protected:
-    bool onQuery(SkEvent* evt) override {
->>>>>>> miniblink49
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "ClipDrawMatch");
             return true;
@@ -220,7 +153,6 @@ protected:
         SkUnichar uni;
         if (SampleCode::CharQ(*evt, &uni)) {
             switch (uni) {
-<<<<<<< HEAD
             case '1':
                 fGeom = kRect_Geometry;
                 this->inval(nullptr);
@@ -267,31 +199,13 @@ protected:
                 return true;
             default:
                 break;
-=======
-                case '1': fGeom = kRect_Geometry; this->inval(NULL); return true;
-                case '2': fGeom = kRRect_Geometry; this->inval(NULL); return true;
-                case '3': fGeom = kCircle_Geometry; this->inval(NULL); return true;
-                case '4': fGeom = kConvexPath_Geometry; this->inval(NULL); return true;
-                case '5': fGeom = kConcavePath_Geometry; this->inval(NULL); return true;
-                case '6': fGeom = kRectAndRect_Geometry; this->inval(NULL); return true;
-                case '7': fGeom = kRectAndRRect_Geometry; this->inval(NULL); return true;
-                case '8': fGeom = kRectAndConvex_Geometry; this->inval(NULL); return true;
-                case '9': fGeom = kRectAndConcave_Geometry; this->inval(NULL); return true;
-                case 'f': fSign = -fSign; this->inval(NULL); return true;
-                case 't': fClipFirst = !fClipFirst; this->inval(NULL); return true;
-                default: break;
->>>>>>> miniblink49
             }
         }
         return this->INHERITED::onQuery(evt);
     }
 
-<<<<<<< HEAD
     void drawClippedGeom(SkCanvas* canvas, const SkPoint& offset, bool useAA)
     {
-=======
-    void drawClippedGeom(SkCanvas* canvas, const SkPoint& offset, bool useAA) {
->>>>>>> miniblink49
 
         int count = canvas->save();
 
@@ -316,43 +230,26 @@ protected:
             r.offset(fSign * kXlate, fSign * kXlate);
             canvas->clipRect(r, SkRegion::kReplace_Op, true); // AA here forces shader clips
             canvas->clipRect(create_rect(offset), SkRegion::kIntersect_Op, useAA);
-<<<<<<< HEAD
         } break;
-=======
-            } break;
->>>>>>> miniblink49
         case kRectAndRRect_Geometry: {
             SkRect r = create_rect(offset);
             r.offset(fSign * kXlate, fSign * kXlate);
             canvas->clipRect(r, SkRegion::kReplace_Op, true); // AA here forces shader clips
             canvas->clipRRect(create_rrect(offset), SkRegion::kIntersect_Op, useAA);
-<<<<<<< HEAD
         } break;
-=======
-            } break;
->>>>>>> miniblink49
         case kRectAndConvex_Geometry: {
             SkRect r = create_rect(offset);
             r.offset(fSign * kXlate, fSign * kXlate);
             canvas->clipRect(r, SkRegion::kReplace_Op, true); // AA here forces shader clips
             canvas->clipPath(create_convex_path(offset), SkRegion::kIntersect_Op, useAA);
-<<<<<<< HEAD
         } break;
-=======
-            } break;
->>>>>>> miniblink49
         case kRectAndConcave_Geometry: {
             SkRect r = create_rect(offset);
             r.offset(fSign * kXlate, fSign * kXlate);
             canvas->clipRect(r, SkRegion::kReplace_Op, true); // AA here forces shader clips
             canvas->clipPath(create_concave_path(offset), SkRegion::kIntersect_Op, useAA);
-<<<<<<< HEAD
         } break;
         }
-=======
-            } break;
-        } 
->>>>>>> miniblink49
 
         SkISize size = canvas->getDeviceSize();
         SkRect bigR = SkRect::MakeWH(SkIntToScalar(size.width()), SkIntToScalar(size.height()));
@@ -367,12 +264,8 @@ protected:
     // Draw a big red rect through some clip geometry and also draw that same
     // geometry in black. The order in which they are drawn can be swapped.
     // This tests whether the clip and normally drawn geometry match up.
-<<<<<<< HEAD
     void drawGeometry(SkCanvas* canvas, const SkPoint& offset, bool useAA)
     {
-=======
-    void drawGeometry(SkCanvas* canvas, const SkPoint& offset, bool useAA) {
->>>>>>> miniblink49
         if (fClipFirst) {
             this->drawClippedGeom(canvas, offset, useAA);
         }
@@ -384,16 +277,10 @@ protected:
         }
     }
 
-<<<<<<< HEAD
     void onDrawContent(SkCanvas* canvas) override
     {
         SkScalar trans[2];
         fTrans.timeToValues(GetMSecs(), trans);
-=======
-    void onDrawContent(SkCanvas* canvas) override {
-        SkScalar trans[2];
-        fTrans.timeToValues(SkTime::GetMSecs(), trans);
->>>>>>> miniblink49
 
         SkPoint offset;
         offset.set(trans[0], trans[1]);
@@ -402,7 +289,6 @@ protected:
         this->drawGeometry(canvas, offset, false);
         canvas->restoreToCount(saveCount);
 
-<<<<<<< HEAD
         this->inval(nullptr);
     }
 
@@ -417,16 +303,6 @@ private:
     bool fClipFirst;
     int fSign;
     const double fStart = SkTime::GetMSecs();
-=======
-        this->inval(NULL);
-    }
-
-private:
-    SkInterpolator  fTrans;
-    Geometry        fGeom;
-    bool            fClipFirst;
-    int             fSign;
->>>>>>> miniblink49
 
     typedef SampleView INHERITED;
 };

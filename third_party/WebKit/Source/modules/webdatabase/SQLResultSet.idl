@@ -28,10 +28,6 @@
 
 [
     NoInterfaceObject,
-<<<<<<< HEAD
-=======
-    GarbageCollected,
->>>>>>> miniblink49
 ] interface SQLResultSet {
     readonly attribute SQLResultSetRowList rows;
 

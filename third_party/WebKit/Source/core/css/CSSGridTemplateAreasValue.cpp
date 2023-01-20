@@ -28,14 +28,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/css/CSSGridTemplateAreasValue.h"
 
 #include "wtf/text/StringBuilder.h"
 
 namespace blink {
 
-CSSGridTemplateAreasValue::CSSGridTemplateAreasValue(const NamedGridAreaMap& gridAreaMap, size_t rowCount, size_t columnCount)
+CSSGridTemplateAreasValue::CSSGridTemplateAreasValue(
+    const NamedGridAreaMap& gridAreaMap,
+    size_t rowCount,
+    size_t columnCount)
     : CSSValue(GridTemplateAreasClass)
     , m_gridAreaMap(gridAreaMap)
     , m_rowCount(rowCount)
@@ -45,19 +47,13 @@ CSSGridTemplateAreasValue::CSSGridTemplateAreasValue(const NamedGridAreaMap& gri
     ASSERT(m_columnCount);
 }
 
-static String stringForPosition(const NamedGridAreaMap& gridAreaMap, size_t row, size_t column)
+static String stringForPosition(const NamedGridAreaMap& gridAreaMap,
+    size_t row,
+    size_t column)
 {
-    Vector<String> candidates;
-
     for (const auto& item : gridAreaMap) {
-        const GridCoordinate& coordinate = item.value;
-        if (row >= coordinate.rows.resolvedInitialPosition.toInt() && row <= coordinate.rows.resolvedFinalPosition.toInt())
-            candidates.append(item.key);
-    }
-
-    for (const auto& item : gridAreaMap) {
-        const GridCoordinate& coordinate = item.value;
-        if (column >= coordinate.columns.resolvedInitialPosition.toInt() && column <= coordinate.columns.resolvedFinalPosition.toInt() && candidates.contains(item.key))
+        const GridArea& area = item.value;
+        if (row >= area.rows.startLine() && row < area.rows.endLine() && column >= area.columns.startLine() && column < area.columns.endLine())
             return item.key;
     }
 
@@ -68,20 +64,21 @@ String CSSGridTemplateAreasValue::customCSSText() const
 {
     StringBuilder builder;
     for (size_t row = 0; row < m_rowCount; ++row) {
-        builder.append('\"');
+        builder.append('"');
         for (size_t column = 0; column < m_columnCount; ++column) {
             builder.append(stringForPosition(m_gridAreaMap, row, column));
             if (column != m_columnCount - 1)
                 builder.append(' ');
         }
-        builder.append('\"');
+        builder.append('"');
         if (row != m_rowCount - 1)
             builder.append(' ');
     }
     return builder.toString();
 }
 
-bool CSSGridTemplateAreasValue::equals(const CSSGridTemplateAreasValue& other) const
+bool CSSGridTemplateAreasValue::equals(
+    const CSSGridTemplateAreasValue& other) const
 {
     return m_gridAreaMap == other.m_gridAreaMap && m_rowCount == other.m_rowCount && m_columnCount == other.m_columnCount;
 }

@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2014 Google Inc.
  *
@@ -13,13 +9,8 @@
 #define GrGLPathRange_DEFINED
 
 #include "../GrPathRange.h"
-<<<<<<< HEAD
 #include "GrStyle.h"
 #include "gl/GrGLTypes.h"
-=======
-#include "GrStrokeInfo.h"
-#include "gl/GrGLFunctions.h"
->>>>>>> miniblink49
 
 class GrGLGpu;
 
@@ -35,11 +26,7 @@ public:
      * Initialize a GL path range from a PathGenerator. This class will allocate
      * the GPU path objects and initialize them lazily.
      */
-<<<<<<< HEAD
     GrGLPathRange(GrGLGpu*, PathGenerator*, const GrStyle&);
-=======
-    GrGLPathRange(GrGLGpu*, PathGenerator*, const GrStrokeInfo&);
->>>>>>> miniblink49
 
     /**
      * Initialize a GL path range from an existing range of pre-initialized GPU
@@ -47,17 +34,10 @@ public:
      * will delete them when done.
      */
     GrGLPathRange(GrGLGpu*,
-<<<<<<< HEAD
         GrGLuint basePathID,
         int numPaths,
         size_t gpuMemorySize,
         const GrStyle&);
-=======
-                  GrGLuint basePathID,
-                  int numPaths,
-                  size_t gpuMemorySize,
-                  const GrStrokeInfo&);
->>>>>>> miniblink49
 
     GrGLuint basePathID() const { return fBasePathID; }
 
@@ -74,11 +54,7 @@ private:
     void init();
     size_t onGpuMemorySize() const override { return fGpuMemorySize; }
 
-<<<<<<< HEAD
     const GrStyle fStyle;
-=======
-    const GrStrokeInfo fStroke;
->>>>>>> miniblink49
     GrGLuint fBasePathID;
     mutable size_t fGpuMemorySize;
     bool fShouldStroke;

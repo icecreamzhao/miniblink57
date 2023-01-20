@@ -42,7 +42,6 @@
 #ifndef QCHAR_H
 #define QCHAR_H
 
-<<<<<<< HEAD
 #include "base/basictypes.h"
 #include "QtGlobal.h"
 
@@ -63,19 +62,6 @@ public:
     {
         return ch;
     }
-=======
-#include "QtGlobal.h"
-
-struct QLatin1Char
-{
-public:
-    inline explicit QLatin1Char(char c) : ch(c) {}
-#ifdef Q_COMPILER_MANGLES_RETURN_TYPE
-    inline const char toLatin1() const { return ch; }
-    inline const ushort unicode() const { return ushort(uchar(ch)); }
-#else
-    inline char toLatin1() const { return ch; }
->>>>>>> miniblink49
     inline ushort unicode() const { return ushort(uchar(ch)); }
 #endif
 
@@ -83,10 +69,6 @@ private:
     char ch;
 };
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 class Q_CORE_EXPORT QChar {
 public:
     QChar();
@@ -96,14 +78,10 @@ public:
 #endif
     QChar(QLatin1Char ch);
     QChar(uchar c, uchar r);
-<<<<<<< HEAD
     inline QChar(ushort rc)
         : ucs(rc)
     {
     }
-=======
-    inline QChar(ushort rc) : ucs(rc){}
->>>>>>> miniblink49
     QChar(short rc);
     QChar(uint rc);
     QChar(int rc);
@@ -128,7 +106,6 @@ public:
 
     // Unicode information
 
-<<<<<<< HEAD
     enum Category {
         NoCategory, // ### Qt 5: replace with Other_NotAssigned
 
@@ -168,53 +145,10 @@ public:
         Symbol_Currency, //   Sc
         Symbol_Modifier, //   Sk
         Symbol_Other, //   So
-=======
-    enum Category
-    {
-        NoCategory,    // ### Qt 5: replace with Other_NotAssigned
-
-        Mark_NonSpacing,          //   Mn
-        Mark_SpacingCombining,    //   Mc
-        Mark_Enclosing,           //   Me
-
-        Number_DecimalDigit,      //   Nd
-        Number_Letter,            //   Nl
-        Number_Other,             //   No
-
-        Separator_Space,          //   Zs
-        Separator_Line,           //   Zl
-        Separator_Paragraph,      //   Zp
-
-        Other_Control,            //   Cc
-        Other_Format,             //   Cf
-        Other_Surrogate,          //   Cs
-        Other_PrivateUse,         //   Co
-        Other_NotAssigned,        //   Cn
-
-        Letter_Uppercase,         //   Lu
-        Letter_Lowercase,         //   Ll
-        Letter_Titlecase,         //   Lt
-        Letter_Modifier,          //   Lm
-        Letter_Other,             //   Lo
-
-        Punctuation_Connector,    //   Pc
-        Punctuation_Dash,         //   Pd
-        Punctuation_Open,         //   Ps
-        Punctuation_Close,        //   Pe
-        Punctuation_InitialQuote, //   Pi
-        Punctuation_FinalQuote,   //   Pf
-        Punctuation_Other,        //   Po
-
-        Symbol_Math,              //   Sm
-        Symbol_Currency,          //   Sc
-        Symbol_Modifier,          //   Sk
-        Symbol_Other,             //   So
->>>>>>> miniblink49
 
         Punctuation_Dask = Punctuation_Dash // ### Qt 5: remove
     };
 
-<<<<<<< HEAD
     enum Direction {
         DirL,
         DirR,
@@ -238,16 +172,6 @@ public:
     };
 
     enum Decomposition {
-=======
-    enum Direction
-    {
-        DirL, DirR, DirEN, DirES, DirET, DirAN, DirCS, DirB, DirS, DirWS, DirON,
-        DirLRE, DirLRO, DirAL, DirRLE, DirRLO, DirPDF, DirNSM, DirBN
-    };
-
-    enum Decomposition
-    {
->>>>>>> miniblink49
         NoDecomposition,
         Canonical,
         Font,
@@ -268,7 +192,6 @@ public:
         Fraction
 
 #ifdef QT3_SUPPORT
-<<<<<<< HEAD
         ,
         Single = NoDecomposition
 #endif
@@ -307,44 +230,6 @@ public:
 
     enum UnicodeVersion {
         Unicode_Unassigned, // ### Qt 5: assign with some constantly big value
-=======
-        , Single = NoDecomposition
-#endif
-    };
-
-    enum Joining
-    {
-        OtherJoining, Dual, Right, Center
-    };
-
-    enum CombiningClass
-    {
-        Combining_BelowLeftAttached       = 200,
-        Combining_BelowAttached           = 202,
-        Combining_BelowRightAttached      = 204,
-        Combining_LeftAttached            = 208,
-        Combining_RightAttached           = 210,
-        Combining_AboveLeftAttached       = 212,
-        Combining_AboveAttached           = 214,
-        Combining_AboveRightAttached      = 216,
-
-        Combining_BelowLeft               = 218,
-        Combining_Below                   = 220,
-        Combining_BelowRight              = 222,
-        Combining_Left                    = 224,
-        Combining_Right                   = 226,
-        Combining_AboveLeft               = 228,
-        Combining_Above                   = 230,
-        Combining_AboveRight              = 232,
-
-        Combining_DoubleBelow             = 233,
-        Combining_DoubleAbove             = 234,
-        Combining_IotaSubscript           = 240
-    };
-
-    enum UnicodeVersion {
-        Unicode_Unassigned,    // ### Qt 5: assign with some constantly big value
->>>>>>> miniblink49
         Unicode_1_1,
         Unicode_2_0,
         Unicode_2_1_2,
@@ -386,7 +271,6 @@ public:
     inline ushort unicode() const { return ucs; }
 #endif
 #ifdef Q_NO_PACKED_REFERENCE
-<<<<<<< HEAD
     inline ushort& unicode()
     {
         return const_cast<ushort&>(ucs);
@@ -396,11 +280,6 @@ public:
     {
         return ucs;
     }
-=======
-    inline ushort &unicode() { return const_cast<ushort&>(ucs); }
-#else
-    inline ushort &unicode() { return ucs; }
->>>>>>> miniblink49
 #endif
 
     static QChar fromAscii(char c);
@@ -420,24 +299,16 @@ public:
     inline bool isUpper() const { return category() == Letter_Uppercase; }
     inline bool isTitleCase() const { return category() == Letter_Titlecase; }
 
-<<<<<<< HEAD
     inline bool isHighSurrogate() const
     {
         return ((ucs & 0xfc00) == 0xd800);
     }
     inline bool isLowSurrogate() const
     {
-=======
-    inline bool isHighSurrogate() const {
-        return ((ucs & 0xfc00) == 0xd800);
-    }
-    inline bool isLowSurrogate() const {
->>>>>>> miniblink49
         return ((ucs & 0xfc00) == 0xdc00);
     }
 
     inline uchar cell() const { return uchar(ucs & 0xff); }
-<<<<<<< HEAD
     inline uchar row() const { return uchar((ucs >> 8) & 0xff); }
     inline void setCell(uchar cell);
     inline void setRow(uchar row);
@@ -469,32 +340,6 @@ public:
     static inline ushort lowSurrogate(uint ucs4)
     {
         return ushort(ucs4 % 0x400 + 0xdc00);
-=======
-    inline uchar row() const { return uchar((ucs>>8)&0xff); }
-    inline void setCell(uchar cell);
-    inline void setRow(uchar row);
-
-    static inline bool isHighSurrogate(uint ucs4) {
-        return ((ucs4 & 0xfffffc00) == 0xd800);
-    }
-    static inline bool isLowSurrogate(uint ucs4) {
-        return ((ucs4 & 0xfffffc00) == 0xdc00);
-    }
-    static inline bool requiresSurrogates(uint ucs4) {
-        return (ucs4 >= 0x10000);
-    }
-    static inline uint surrogateToUcs4(ushort high, ushort low) {
-        return (uint(high)<<10) + low - 0x35fdc00;
-    }
-    static inline uint surrogateToUcs4(QChar high, QChar low) {
-        return (uint(high.ucs)<<10) + low.ucs - 0x35fdc00;
-    }
-    static inline ushort highSurrogate(uint ucs4) {
-        return ushort((ucs4>>10) + 0xd7c0);
-    }
-    static inline ushort lowSurrogate(uint ucs4) {
-        return ushort(ucs4%0x400 + 0xdc00);
->>>>>>> miniblink49
     }
 
     static Category QT_FASTCALL category(uint ucs4);
@@ -529,21 +374,16 @@ public:
     //static QString QT_FASTCALL decomposition(uint ucs4);
 
 #ifdef QT3_SUPPORT
-<<<<<<< HEAD
     inline QT3_SUPPORT bool mirrored() const
     {
         return hasMirrored();
     }
-=======
-    inline QT3_SUPPORT bool mirrored() const { return hasMirrored(); }
->>>>>>> miniblink49
     inline QT3_SUPPORT QChar lower() const { return toLower(); }
     inline QT3_SUPPORT QChar upper() const { return toUpper(); }
 //     static inline QT3_SUPPORT bool networkOrdered() {
 //         return QSysInfo::ByteOrder == QSysInfo::BigEndian;
 //     }
 #ifdef Q_COMPILER_MANGLES_RETURN_TYPE
-<<<<<<< HEAD
     inline QT3_SUPPORT const char latin1() const
     {
         return toLatin1();
@@ -554,12 +394,6 @@ public:
     {
         return toLatin1();
     }
-=======
-    inline QT3_SUPPORT const char latin1() const { return toLatin1(); }
-    inline QT3_SUPPORT const char ascii() const { return toAscii(); }
-#else
-    inline QT3_SUPPORT char latin1() const { return toLatin1(); }
->>>>>>> miniblink49
     inline QT3_SUPPORT char ascii() const { return toAscii(); }
 #endif
 #endif
@@ -574,7 +408,6 @@ private:
 
 //Q_DECLARE_TYPEINFO(QChar, Q_MOVABLE_TYPE);
 
-<<<<<<< HEAD
 inline QChar::QChar()
     : ucs(0)
 {
@@ -629,28 +462,6 @@ inline void QChar::setRow(uchar arow)
 {
     ucs = ushort((ushort(arow) << 8) + (ucs & 0xff));
 }
-=======
-inline QChar::QChar() : ucs(0) {}
-
-#ifdef Q_COMPILER_MANGLES_RETURN_TYPE
-inline const char QChar::toLatin1() const { return ucs > 0xff ? '\0' : char(ucs); }
-#else
-inline char QChar::toLatin1() const { return ucs > 0xff ? '\0' : char(ucs); }
-#endif
-inline QChar QChar::fromLatin1(char c) { return QChar(ushort(uchar(c))); }
-
-inline QChar::QChar(uchar c, uchar r) : ucs(ushort((r << 8) | c)){}
-inline QChar::QChar(short rc) : ucs(ushort(rc)){}
-inline QChar::QChar(uint rc) : ucs(ushort(rc & 0xffff)){}
-inline QChar::QChar(int rc) : ucs(ushort(rc & 0xffff)){}
-inline QChar::QChar(SpecialCharacter s) : ucs(ushort(s)) {}
-inline QChar::QChar(QLatin1Char ch) : ucs(ch.unicode()) {}
-
-inline void QChar::setCell(uchar acell)
-{ ucs = ushort((ucs & 0xff00) + acell); }
-inline void QChar::setRow(uchar arow)
-{ ucs = ushort((ushort(arow)<<8) + (ucs&0xff)); }
->>>>>>> miniblink49
 
 inline bool operator==(QChar c1, QChar c2) { return c1.unicode() == c2.unicode(); }
 inline bool operator!=(QChar c1, QChar c2) { return c1.unicode() != c2.unicode(); }

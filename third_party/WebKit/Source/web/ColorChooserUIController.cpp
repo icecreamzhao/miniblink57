@@ -23,10 +23,6 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "web/ColorChooserUIController.h"
 
 #include "core/html/forms/ColorChooserClient.h"
@@ -36,20 +32,12 @@
 #include "public/web/WebColorSuggestion.h"
 #include "public/web/WebFrameClient.h"
 #include "web/WebLocalFrameImpl.h"
-<<<<<<< HEAD
 #include "wtf/PtrUtil.h"
 
 namespace blink {
 
 ColorChooserUIController::ColorChooserUIController(LocalFrame* frame,
     ColorChooserClient* client)
-=======
-
-namespace blink {
-
-
-ColorChooserUIController::ColorChooserUIController(LocalFrame* frame, ColorChooserClient* client)
->>>>>>> miniblink49
     : m_client(client)
     , m_frame(frame)
 {
@@ -93,11 +81,7 @@ AXObject* ColorChooserUIController::rootAXObject()
 
 void ColorChooserUIController::didChooseColor(const WebColor& color)
 {
-<<<<<<< HEAD
     DCHECK(m_client);
-=======
-    ASSERT(m_client);
->>>>>>> miniblink49
     m_client->didChooseColor(Color(static_cast<RGBA32>(color)));
 }
 
@@ -110,23 +94,14 @@ void ColorChooserUIController::didEndChooser()
 
 void ColorChooserUIController::openColorChooser()
 {
-<<<<<<< HEAD
     DCHECK(!m_chooser);
-=======
-    ASSERT(!m_chooser);
->>>>>>> miniblink49
     WebLocalFrameImpl* frame = WebLocalFrameImpl::fromFrame(m_frame);
     WebFrameClient* webFrameClient = frame->client();
     if (!webFrameClient)
         return;
-<<<<<<< HEAD
     m_chooser = WTF::wrapUnique(webFrameClient->createColorChooser(
         this, static_cast<WebColor>(m_client->currentColor().rgb()),
         m_client->suggestions()));
-=======
-    m_chooser = adoptPtr(webFrameClient->createColorChooser(
-        this, static_cast<WebColor>(m_client->currentColor().rgb()), m_client->suggestions()));
->>>>>>> miniblink49
 }
 
 } // namespace blink

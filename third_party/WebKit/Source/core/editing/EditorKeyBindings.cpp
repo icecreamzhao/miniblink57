@@ -24,27 +24,27 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/editing/Editor.h"
 
+#include "core/editing/EditingUtilities.h"
 #include "core/events/KeyboardEvent.h"
 #include "core/frame/LocalFrame.h"
 #include "core/page/EditorClient.h"
-#include "platform/PlatformKeyboardEvent.h"
+#include "public/platform/WebInputEvent.h"
 
 namespace blink {
 
 bool Editor::handleEditingKeyboardEvent(KeyboardEvent* evt)
 {
-    const PlatformKeyboardEvent* keyEvent = evt->keyEvent();
+    const WebKeyboardEvent* keyEvent = evt->keyEvent();
     // do not treat this as text input if it's a system key event
-    if (!keyEvent || keyEvent->isSystemKey())
+    if (!keyEvent || keyEvent->isSystemKey)
         return false;
 
     String commandName = behavior().interpretKeyEvent(*evt);
-    Command command = this->command(commandName);
+    Command command = this->createCommand(commandName);
 
-    if (keyEvent->type() == PlatformEvent::RawKeyDown) {
+    if (keyEvent->type() == WebInputEvent::RawKeyDown) {
         // WebKit doesn't have enough information about mode to decide how
         // commands that just insert text if executed via Editor should be treated,
         // so we leave it upon WebCore to either handle them immediately
@@ -61,13 +61,29 @@ bool Editor::handleEditingKeyboardEvent(KeyboardEvent* evt)
     if (!behavior().shouldInsertCharacter(*evt) || !canEdit())
         return false;
 
-    return insertText(evt->keyEvent()->text(), evt);
+    const Element* const focusedElement = m_frame->document()->focusedElement();
+    if (!focusedElement) {
+        // We may lose focused element by |command.execute(evt)|.
+        return false;
+    }
+    if (!focusedElement->containsIncludingHostElements(
+            *m_frame->selection().start().computeContainerNode())) {
+        // We should not insert text at selection start if selection doesn't have
+        // focus. See http://crbug.com/89026
+        return false;
+    }
+
+    // Return true to prevent default action. e.g. Space key scroll.
+    if (dispatchBeforeInputInsertText(evt->target(), keyEvent->text) != DispatchEventResult::NotCanceled)
+        return true;
+
+    return insertText(keyEvent->text, evt);
 }
 
 void Editor::handleKeyboardEvent(KeyboardEvent* evt)
 {
     // Give the embedder a chance to handle the keyboard event.
-    if (client().handleKeyboardEvent() || handleEditingKeyboardEvent(evt))
+    if (client().handleKeyboardEvent(m_frame) || handleEditingKeyboardEvent(evt))
         evt->setDefaultHandled();
 }
 

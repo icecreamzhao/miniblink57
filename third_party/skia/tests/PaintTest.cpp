@@ -18,12 +18,8 @@
 #include "SkXfermode.h"
 #include "Test.h"
 
-<<<<<<< HEAD
 static size_t uni_to_utf8(const SkUnichar src[], void* dst, int count)
 {
-=======
-static size_t uni_to_utf8(const SkUnichar src[], void* dst, int count) {
->>>>>>> miniblink49
     char* u8 = (char*)dst;
     for (int i = 0; i < count; ++i) {
         int n = SkToInt(SkUTF8_FromUnichar(src[i], u8));
@@ -32,12 +28,8 @@ static size_t uni_to_utf8(const SkUnichar src[], void* dst, int count) {
     return u8 - (char*)dst;
 }
 
-<<<<<<< HEAD
 static size_t uni_to_utf16(const SkUnichar src[], void* dst, int count)
 {
-=======
-static size_t uni_to_utf16(const SkUnichar src[], void* dst, int count) {
->>>>>>> miniblink49
     uint16_t* u16 = (uint16_t*)dst;
     for (int i = 0; i < count; ++i) {
         int n = SkToInt(SkUTF16_FromUnichar(src[i], u16));
@@ -46,12 +38,8 @@ static size_t uni_to_utf16(const SkUnichar src[], void* dst, int count) {
     return (char*)u16 - (char*)dst;
 }
 
-<<<<<<< HEAD
 static size_t uni_to_utf32(const SkUnichar src[], void* dst, int count)
 {
-=======
-static size_t uni_to_utf32(const SkUnichar src[], void* dst, int count) {
->>>>>>> miniblink49
     SkUnichar* u32 = (SkUnichar*)dst;
     if (src != u32) {
         memcpy(u32, src, count * sizeof(SkUnichar));
@@ -59,23 +47,15 @@ static size_t uni_to_utf32(const SkUnichar src[], void* dst, int count) {
     return count * sizeof(SkUnichar);
 }
 
-<<<<<<< HEAD
 static SkTypeface::Encoding paint2encoding(const SkPaint& paint)
 {
-=======
-static SkTypeface::Encoding paint2encoding(const SkPaint& paint) {
->>>>>>> miniblink49
     SkPaint::TextEncoding enc = paint.getTextEncoding();
     SkASSERT(SkPaint::kGlyphID_TextEncoding != enc);
     return (SkTypeface::Encoding)enc;
 }
 
-<<<<<<< HEAD
 static int find_first_zero(const uint16_t glyphs[], int count)
 {
-=======
-static int find_first_zero(const uint16_t glyphs[], int count) {
->>>>>>> miniblink49
     for (int i = 0; i < count; ++i) {
         if (0 == glyphs[i]) {
             return i;
@@ -84,12 +64,8 @@ static int find_first_zero(const uint16_t glyphs[], int count) {
     return count;
 }
 
-<<<<<<< HEAD
 DEF_TEST(Paint_cmap, reporter)
 {
-=======
-DEF_TEST(Paint_cmap, reporter) {
->>>>>>> miniblink49
     // need to implement charsToGlyphs on other backends (e.g. linux, win)
     // before we can run this tests everywhere
     return;
@@ -101,26 +77,16 @@ DEF_TEST(Paint_cmap, reporter) {
 
     static const struct {
         size_t (*fSeedTextProc)(const SkUnichar[], void* dst, int count);
-<<<<<<< HEAD
         SkPaint::TextEncoding fEncoding;
     } gRec[] = {
         { uni_to_utf8, SkPaint::kUTF8_TextEncoding },
-=======
-        SkPaint::TextEncoding   fEncoding;
-    } gRec[] = {
-        { uni_to_utf8,  SkPaint::kUTF8_TextEncoding },
->>>>>>> miniblink49
         { uni_to_utf16, SkPaint::kUTF16_TextEncoding },
         { uni_to_utf32, SkPaint::kUTF32_TextEncoding },
     };
 
     SkRandom rand;
     SkPaint paint;
-<<<<<<< HEAD
     paint.setTypeface(SkTypeface::MakeDefault());
-=======
-    paint.setTypeface(SkTypeface::RefDefault())->unref();
->>>>>>> miniblink49
     SkTypeface* face = paint.getTypeface();
 
     for (int i = 0; i < 1000; ++i) {
@@ -136,11 +102,7 @@ DEF_TEST(Paint_cmap, reporter) {
 
             size_t len = gRec[k].fSeedTextProc(src, dst, NGLYPHS);
 
-<<<<<<< HEAD
             uint16_t glyphs0[NGLYPHS], glyphs1[NGLYPHS];
-=======
-            uint16_t    glyphs0[NGLYPHS], glyphs1[NGLYPHS];
->>>>>>> miniblink49
 
             bool contains = paint.containsText(dst, len);
             int nglyphs = paint.textToGlyphs(dst, len, glyphs0);
@@ -160,12 +122,8 @@ DEF_TEST(Paint_cmap, reporter) {
 }
 
 // temparary api for bicubic, just be sure we can set/clear it
-<<<<<<< HEAD
 DEF_TEST(Paint_filterQuality, reporter)
 {
-=======
-DEF_TEST(Paint_filterQuality, reporter) {
->>>>>>> miniblink49
     SkPaint p0, p1;
 
     REPORTER_ASSERT(reporter, kNone_SkFilterQuality == p0.getFilterQuality());
@@ -187,12 +145,8 @@ DEF_TEST(Paint_filterQuality, reporter) {
     }
 }
 
-<<<<<<< HEAD
 DEF_TEST(Paint_copy, reporter)
 {
-=======
-DEF_TEST(Paint_copy, reporter) {
->>>>>>> miniblink49
     SkPaint paint;
     // set a few member variables
     paint.setStyle(SkPaint::kStrokeAndFill_Style);
@@ -200,17 +154,9 @@ DEF_TEST(Paint_copy, reporter) {
     paint.setStrokeWidth(SkIntToScalar(2));
     // set a few pointers
     SkLayerDrawLooper::Builder looperBuilder;
-<<<<<<< HEAD
     paint.setLooper(looperBuilder.detach());
     paint.setMaskFilter(SkBlurMaskFilter::Make(kNormal_SkBlurStyle,
         SkBlurMask::ConvertRadiusToSigma(1)));
-=======
-    SkLayerDrawLooper* looper = looperBuilder.detachLooper();
-    paint.setLooper(looper)->unref();
-    SkMaskFilter* mask = SkBlurMaskFilter::Create(kNormal_SkBlurStyle,
-                                      SkBlurMask::ConvertRadiusToSigma(SkIntToScalar(1)));
-    paint.setMaskFilter(mask)->unref();
->>>>>>> miniblink49
 
     // copy the paint using the copy constructor and check they are the same
     SkPaint copiedPaint = paint;
@@ -230,17 +176,12 @@ DEF_TEST(Paint_copy, reporter) {
 
 // found and fixed for webkit: mishandling when we hit recursion limit on
 // mostly degenerate cubic flatness test
-<<<<<<< HEAD
 DEF_TEST(Paint_regression_cubic, reporter)
 {
-=======
-DEF_TEST(Paint_regression_cubic, reporter) {
->>>>>>> miniblink49
     SkPath path, stroke;
     SkPaint paint;
 
     path.moveTo(460.2881309415525f,
-<<<<<<< HEAD
         303.250847066498f);
     path.cubicTo(463.36378422175284f,
         302.1169735073363f,
@@ -248,15 +189,6 @@ DEF_TEST(Paint_regression_cubic, reporter) {
         304.720354932878f,
         453.15255460013304f,
         305.788586869862f);
-=======
-                303.250847066498f);
-    path.cubicTo(463.36378422175284f,
-                 302.1169735073363f,
-                 456.32239330810046f,
-                 304.720354932878f,
-                 453.15255460013304f,
-                 305.788586869862f);
->>>>>>> miniblink49
 
     SkRect fillR, strokeR;
     fillR = path.getBounds();
@@ -268,25 +200,15 @@ DEF_TEST(Paint_regression_cubic, reporter) {
 
     SkRect maxR = fillR;
     SkScalar miter = SkMaxScalar(SK_Scalar1, paint.getStrokeMiter());
-<<<<<<< HEAD
     SkScalar inset = paint.getStrokeJoin() == SkPaint::kMiter_Join ? SkScalarMul(paint.getStrokeWidth(), miter) : paint.getStrokeWidth();
-=======
-    SkScalar inset = paint.getStrokeJoin() == SkPaint::kMiter_Join ?
-                            SkScalarMul(paint.getStrokeWidth(), miter) :
-                            paint.getStrokeWidth();
->>>>>>> miniblink49
     maxR.inset(-inset, -inset);
 
     // test that our stroke didn't explode
     REPORTER_ASSERT(reporter, maxR.contains(strokeR));
 }
 
-<<<<<<< HEAD
 DEF_TEST(Paint_flattening, reporter)
 {
-=======
-DEF_TEST(Paint_flattening, reporter) {
->>>>>>> miniblink49
     const SkFilterQuality levels[] = {
         kNone_SkFilterQuality,
         kLow_SkFilterQuality,
@@ -326,15 +248,9 @@ DEF_TEST(Paint_flattening, reporter) {
         SkPaint::kStrokeAndFill_Style,
     };
 
-<<<<<<< HEAD
 #define FOR_SETUP(index, array, setter)                              \
     for (size_t index = 0; index < SK_ARRAY_COUNT(array); ++index) { \
         paint.setter(array[index]);
-=======
-#define FOR_SETUP(index, array, setter)                                 \
-    for (size_t index = 0; index < SK_ARRAY_COUNT(array); ++index) {    \
-        paint.setter(array[index]);                                     \
->>>>>>> miniblink49
 
     SkPaint paint;
     paint.setFlags(0x1234);
@@ -347,25 +263,16 @@ DEF_TEST(Paint_flattening, reporter) {
     FOR_SETUP(n, encodings, setTextEncoding)
     FOR_SETUP(p, styles, setStyle)
 
-<<<<<<< HEAD
     SkBinaryWriteBuffer writer;
     paint.flatten(writer);
 
     SkAutoMalloc buf(writer.bytesWritten());
     writer.writeToMemory(buf.get());
     SkReadBuffer reader(buf.get(), writer.bytesWritten());
-=======
-    SkWriteBuffer writer;
-    paint.flatten(writer);
-
-    const uint32_t* written = writer.getWriter32()->contiguousArray();
-    SkReadBuffer reader(written, writer.bytesWritten());
->>>>>>> miniblink49
 
     SkPaint paint2;
     paint2.unflatten(reader);
     REPORTER_ASSERT(reporter, paint2 == paint);
-<<<<<<< HEAD
 }
 }
 }
@@ -379,16 +286,6 @@ DEF_TEST(Paint_flattening, reporter) {
 // found and fixed for android: not initializing rect for string's of length 0
 DEF_TEST(Paint_regression_measureText, reporter)
 {
-=======
-
-    }}}}}}}
-#undef FOR_SETUP
-
-}
-
-// found and fixed for android: not initializing rect for string's of length 0
-DEF_TEST(Paint_regression_measureText, reporter) {
->>>>>>> miniblink49
 
     SkPaint paint;
     paint.setTextSize(12.0f);
@@ -403,7 +300,6 @@ DEF_TEST(Paint_regression_measureText, reporter) {
 
 #define ASSERT(expr) REPORTER_ASSERT(r, expr)
 
-<<<<<<< HEAD
 DEF_TEST(Paint_MoreFlattening, r)
 {
     SkPaint paint;
@@ -420,36 +316,15 @@ DEF_TEST(Paint_MoreFlattening, r)
     writer.writeToMemory(buf.get());
     SkReadBuffer reader(buf.get(), writer.bytesWritten());
 
-=======
-DEF_TEST(Paint_MoreFlattening, r) {
-    SkPaint paint;
-    paint.setColor(0x00AABBCC);
-    paint.setTextScaleX(1.0f);  // Default value, ignored.
-    paint.setTextSize(19);
-    paint.setXfermode(SkXfermode::Create(SkXfermode::kModulate_Mode))->unref();
-    paint.setLooper(NULL);  // Default value, ignored.
-
-    SkWriteBuffer writer;
-    paint.flatten(writer);
-
-    SkReadBuffer reader(writer.getWriter32()->contiguousArray(), writer.bytesWritten());
->>>>>>> miniblink49
     SkPaint other;
     other.unflatten(reader);
     ASSERT(reader.offset() == writer.bytesWritten());
 
     // No matter the encoding, these must always hold.
-<<<<<<< HEAD
     ASSERT(other.getColor() == paint.getColor());
     ASSERT(other.getTextScaleX() == paint.getTextScaleX());
     ASSERT(other.getTextSize() == paint.getTextSize());
     ASSERT(other.getLooper() == paint.getLooper());
-=======
-    ASSERT(other.getColor()      == paint.getColor());
-    ASSERT(other.getTextScaleX() == paint.getTextScaleX());
-    ASSERT(other.getTextSize()   == paint.getTextSize());
-    ASSERT(other.getLooper()     == paint.getLooper());
->>>>>>> miniblink49
 
     // We have to be a little looser and compare just the modes.  Pointers might not be the same.
     SkXfermode::Mode otherMode, paintMode;
@@ -458,12 +333,8 @@ DEF_TEST(Paint_MoreFlattening, r) {
     ASSERT(otherMode == paintMode);
 }
 
-<<<<<<< HEAD
 DEF_TEST(Paint_getHash, r)
 {
-=======
-DEF_TEST(Paint_getHash, r) {
->>>>>>> miniblink49
     // Try not to inspect the actual hash values in here.
     // We might want to change the hash function.
 
@@ -473,7 +344,6 @@ DEF_TEST(Paint_getHash, r) {
     // Check that some arbitrary field affects the hash.
     paint.setColor(0xFF00FF00);
     REPORTER_ASSERT(r, paint.getHash() != defaultHash);
-<<<<<<< HEAD
     paint.setColor(SK_ColorBLACK); // Reset to default value.
     REPORTER_ASSERT(r, paint.getHash() == defaultHash);
 
@@ -481,15 +351,6 @@ DEF_TEST(Paint_getHash, r) {
     paint.setTypeface(SkTypeface::MakeDefault());
     REPORTER_ASSERT(r, paint.getHash() != defaultHash);
     paint.setTypeface(nullptr);
-=======
-    paint.setColor(SK_ColorBLACK);  // Reset to default value.
-    REPORTER_ASSERT(r, paint.getHash() == defaultHash);
-
-    // SkTypeface is the first field we hash, so test it specially.
-    paint.setTypeface(SkTypeface::RefDefault())->unref();
-    REPORTER_ASSERT(r, paint.getHash() != defaultHash);
-    paint.setTypeface(NULL);
->>>>>>> miniblink49
     REPORTER_ASSERT(r, paint.getHash() == defaultHash);
 
     // This is part of fBitfields, the last field we hash.
@@ -501,12 +362,8 @@ DEF_TEST(Paint_getHash, r) {
 
 #include "SkColorMatrixFilter.h"
 
-<<<<<<< HEAD
 DEF_TEST(Paint_nothingToDraw, r)
 {
-=======
-DEF_TEST(Paint_nothingToDraw, r) {
->>>>>>> miniblink49
     SkPaint paint;
 
     REPORTER_ASSERT(r, !paint.nothingToDraw());
@@ -521,7 +378,6 @@ DEF_TEST(Paint_nothingToDraw, r) {
     paint.setXfermodeMode(SkXfermode::kSrcOver_Mode);
 
     SkColorMatrix cm;
-<<<<<<< HEAD
     cm.setIdentity(); // does not change alpha
     paint.setColorFilter(SkColorFilter::MakeMatrixFilterRowMajor255(cm.fMat));
     REPORTER_ASSERT(r, paint.nothingToDraw());
@@ -530,14 +386,3 @@ DEF_TEST(Paint_nothingToDraw, r) {
     paint.setColorFilter(SkColorFilter::MakeMatrixFilterRowMajor255(cm.fMat));
     REPORTER_ASSERT(r, !paint.nothingToDraw());
 }
-=======
-    cm.setIdentity();   // does not change alpha
-    paint.setColorFilter(SkColorMatrixFilter::Create(cm))->unref();
-    REPORTER_ASSERT(r, paint.nothingToDraw());
-
-    cm.postTranslate(0, 0, 0, 1);    // wacks alpha
-    paint.setColorFilter(SkColorMatrixFilter::Create(cm))->unref();
-    REPORTER_ASSERT(r, !paint.nothingToDraw());
-}
-
->>>>>>> miniblink49

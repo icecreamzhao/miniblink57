@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 #include "ReaderView.h"
-<<<<<<< HEAD
 #include "SkCanvas.h"
 #include "SkGPipe.h"
 
@@ -15,35 +14,18 @@
 #define FILE_PATH "/Users/yangsu/Code/test/test.a"
 ReaderView::ReaderView()
 {
-=======
-#include "SkGPipe.h"
-#include "SkCanvas.h"
-
-#include <stdio.h>
-
-#define FILE_PATH   "/Users/yangsu/Code/test/test.a"
-ReaderView::ReaderView() {
->>>>>>> miniblink49
     fBGColor = 0xFFDDDDDD;
     fFilePos = 0;
     fBufferBitmaps[0].setConfig(SkBitmap::kARGB_8888_Config, 640, 480);
     fBufferBitmaps[0].allocPixels(NULL);
     fBufferBitmaps[1].setConfig(SkBitmap::kARGB_8888_Config, 640, 480);
     fBufferBitmaps[1].allocPixels(NULL);
-<<<<<<< HEAD
     fFront = 0;
     fBack = 1;
 }
 
 void ReaderView::draw(SkCanvas* canvas)
 {
-=======
-    fFront  = 0;
-    fBack   = 1;
-}
-
-void ReaderView::draw(SkCanvas* canvas) {
->>>>>>> miniblink49
     canvas->drawColor(fBGColor);
 
     SkAutoCanvasRestore acr(canvas, true);

@@ -33,7 +33,6 @@
 
 #include "platform/graphics/ImageBufferSurface.h"
 #include "public/platform/WebGraphicsContext3DProvider.h"
-<<<<<<< HEAD
 #include "third_party/skia/include/core/SkRefCnt.h"
 #include "third_party/skia/include/core/SkSurface.h"
 #include <memory>
@@ -66,31 +65,6 @@ private:
     sk_sp<SkSurface> m_surface; // Uses m_contextProvider.
 };
 
-=======
-#include "third_party/skia/include/core/SkSurface.h"
-#include "wtf/OwnPtr.h"
-
-namespace blink {
-
-class PLATFORM_EXPORT AcceleratedImageBufferSurface : public ImageBufferSurface {
-    WTF_MAKE_NONCOPYABLE(AcceleratedImageBufferSurface); WTF_MAKE_FAST_ALLOCATED(AcceleratedImageBufferSurface);
-public:
-    AcceleratedImageBufferSurface(const IntSize&, OpacityMode = NonOpaque);
-    ~AcceleratedImageBufferSurface() override { }
-
-    SkCanvas* canvas() const override { return m_surface ? m_surface->getCanvas() : 0; }
-    bool isValid() const override { return m_surface; }
-    bool isAccelerated() const override { return true; }
-    PassRefPtr<SkImage> newImageSnapshot() const override;
-    Platform3DObject getBackingTextureHandleForOverwrite() override;
-
-private:
-    OwnPtr<SkSurface> m_surface;
-    OwnPtr<WebGraphicsContext3DProvider> m_contextProvider;
-};
-
-
->>>>>>> miniblink49
 } // namespace blink
 
 #endif

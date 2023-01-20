@@ -33,10 +33,7 @@
 
 #include "core/workers/WorkerClients.h"
 #include "wtf/Forward.h"
-<<<<<<< HEAD
 #include <memory>
-=======
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -44,7 +41,6 @@ class ExecutionContext;
 class WebString;
 class WebWorkerContentSettingsClientProxy;
 
-<<<<<<< HEAD
 class WorkerContentSettingsClient final
     : public GarbageCollectedFinalized<WorkerContentSettingsClient>,
       public Supplement<WorkerClients> {
@@ -53,12 +49,6 @@ class WorkerContentSettingsClient final
 public:
     static WorkerContentSettingsClient* create(
         std::unique_ptr<WebWorkerContentSettingsClientProxy>);
-=======
-class WorkerContentSettingsClient final : public NoBaseWillBeGarbageCollectedFinalized<WorkerContentSettingsClient>, public WillBeHeapSupplement<WorkerClients> {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(WorkerContentSettingsClient);
-public:
-    static PassOwnPtrWillBeRawPtr<WorkerContentSettingsClient> create(PassOwnPtr<WebWorkerContentSettingsClientProxy>);
->>>>>>> miniblink49
     virtual ~WorkerContentSettingsClient();
 
     bool requestFileSystemAccessSync();
@@ -67,7 +57,6 @@ public:
     static const char* supplementName();
     static WorkerContentSettingsClient* from(ExecutionContext&);
 
-<<<<<<< HEAD
     DEFINE_INLINE_VIRTUAL_TRACE() { Supplement<WorkerClients>::trace(visitor); }
 
 private:
@@ -80,17 +69,6 @@ private:
 void provideContentSettingsClientToWorker(
     WorkerClients*,
     std::unique_ptr<WebWorkerContentSettingsClientProxy>);
-=======
-    DEFINE_INLINE_VIRTUAL_TRACE() { WillBeHeapSupplement<WorkerClients>::trace(visitor); }
-
-private:
-    explicit WorkerContentSettingsClient(PassOwnPtr<WebWorkerContentSettingsClientProxy>);
-
-    OwnPtr<WebWorkerContentSettingsClientProxy> m_proxy;
-};
-
-void provideContentSettingsClientToWorker(WorkerClients*, PassOwnPtr<WebWorkerContentSettingsClientProxy>);
->>>>>>> miniblink49
 
 } // namespace blink
 

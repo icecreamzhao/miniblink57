@@ -29,23 +29,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/html/forms/SubmitInputType.h"
 
 #include "core/InputTypeNames.h"
 #include "core/events/Event.h"
-#include "core/html/FormDataList.h"
+#include "core/html/FormData.h"
 #include "core/html/HTMLFormElement.h"
 #include "core/html/HTMLInputElement.h"
 #include "platform/text/PlatformLocale.h"
-#include "wtf/PassOwnPtr.h"
 
 namespace blink {
 
-PassRefPtrWillBeRawPtr<InputType> SubmitInputType::create(HTMLInputElement& element)
+InputType* SubmitInputType::create(HTMLInputElement& element)
 {
     UseCounter::count(element.document(), UseCounter::InputTypeSubmit);
-    return adoptRefWillBeNoop(new SubmitInputType(element));
+    return new SubmitInputType(element);
 }
 
 const AtomicString& SubmitInputType::formControlType() const
@@ -53,12 +51,10 @@ const AtomicString& SubmitInputType::formControlType() const
     return InputTypeNames::submit;
 }
 
-bool SubmitInputType::appendFormData(FormDataList& encoding, bool) const
+void SubmitInputType::appendToFormData(FormData& formData) const
 {
-    if (!element().isActivatedSubmit())
-        return false;
-    encoding.appendData(element().name(), element().valueWithDefault());
-    return true;
+    if (element().isActivatedSubmit())
+        formData.append(element().name(), element().valueOrDefaultLabel());
 }
 
 bool SubmitInputType::supportsRequired() const
@@ -68,12 +64,10 @@ bool SubmitInputType::supportsRequired() const
 
 void SubmitInputType::handleDOMActivateEvent(Event* event)
 {
-    RefPtrWillBeRawPtr<HTMLInputElement> element(this->element());
-    if (element->isDisabledFormControl() || !element->form())
+    if (element().isDisabledFormControl() || !element().form())
         return;
-    element->setActivatedSubmit(true);
-    element->form()->prepareForSubmission(event); // Event handlers can run.
-    element->setActivatedSubmit(false);
+    element().form()->prepareForSubmission(
+        event, &element()); // Event handlers can run.
     event->setDefaultHandled();
 }
 
@@ -82,7 +76,7 @@ bool SubmitInputType::canBeSuccessfulSubmitButton()
     return true;
 }
 
-String SubmitInputType::defaultValue() const
+String SubmitInputType::defaultLabel() const
 {
     return locale().queryString(WebLocalizedString::SubmitButtonDefaultLabel);
 }

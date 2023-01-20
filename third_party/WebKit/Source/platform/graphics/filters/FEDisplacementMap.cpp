@@ -22,10 +22,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/graphics/filters/FEDisplacementMap.h"
 
 #include "SkDisplacementMapEffect.h"
@@ -35,14 +31,10 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 FEDisplacementMap::FEDisplacementMap(Filter* filter,
     ChannelSelectorType xChannelSelector,
     ChannelSelectorType yChannelSelector,
     float scale)
-=======
-FEDisplacementMap::FEDisplacementMap(Filter* filter, ChannelSelectorType xChannelSelector, ChannelSelectorType yChannelSelector, float scale)
->>>>>>> miniblink49
     : FilterEffect(filter)
     , m_xChannelSelector(xChannelSelector)
     , m_yChannelSelector(yChannelSelector)
@@ -50,7 +42,6 @@ FEDisplacementMap::FEDisplacementMap(Filter* filter, ChannelSelectorType xChanne
 {
 }
 
-<<<<<<< HEAD
 FEDisplacementMap* FEDisplacementMap::create(
     Filter* filter,
     ChannelSelectorType xChannelSelector,
@@ -74,33 +65,13 @@ FloatRect FEDisplacementMap::mapInputs(const FloatRect& rect) const
     return inputEffect(0)->mapRect(rect);
 }
 
-=======
-PassRefPtrWillBeRawPtr<FEDisplacementMap> FEDisplacementMap::create(Filter* filter, ChannelSelectorType xChannelSelector,
-    ChannelSelectorType yChannelSelector, float scale)
-{
-    return adoptRefWillBeNoop(new FEDisplacementMap(filter, xChannelSelector, yChannelSelector, scale));
-}
-
-FloatRect FEDisplacementMap::mapPaintRect(const FloatRect& rect, bool)
-{
-    FloatRect result = rect;
-    result.inflateX(filter()->applyHorizontalScale(m_scale / 2));
-    result.inflateY(filter()->applyVerticalScale(m_scale / 2));
-    return result;
-}
-
->>>>>>> miniblink49
 ChannelSelectorType FEDisplacementMap::xChannelSelector() const
 {
     return m_xChannelSelector;
 }
 
-<<<<<<< HEAD
 bool FEDisplacementMap::setXChannelSelector(
     const ChannelSelectorType xChannelSelector)
-=======
-bool FEDisplacementMap::setXChannelSelector(const ChannelSelectorType xChannelSelector)
->>>>>>> miniblink49
 {
     if (m_xChannelSelector == xChannelSelector)
         return false;
@@ -113,12 +84,8 @@ ChannelSelectorType FEDisplacementMap::yChannelSelector() const
     return m_yChannelSelector;
 }
 
-<<<<<<< HEAD
 bool FEDisplacementMap::setYChannelSelector(
     const ChannelSelectorType yChannelSelector)
-=======
-bool FEDisplacementMap::setYChannelSelector(const ChannelSelectorType yChannelSelector)
->>>>>>> miniblink49
 {
     if (m_yChannelSelector == yChannelSelector)
         return false;
@@ -139,12 +106,8 @@ bool FEDisplacementMap::setScale(float scale)
     return true;
 }
 
-<<<<<<< HEAD
 static SkDisplacementMapEffect::ChannelSelectorType toSkiaMode(
     ChannelSelectorType type)
-=======
-static SkDisplacementMapEffect::ChannelSelectorType toSkiaMode(ChannelSelectorType type)
->>>>>>> miniblink49
 {
     switch (type) {
     case CHANNEL_R:
@@ -161,7 +124,6 @@ static SkDisplacementMapEffect::ChannelSelectorType toSkiaMode(ChannelSelectorTy
     }
 }
 
-<<<<<<< HEAD
 sk_sp<SkImageFilter> FEDisplacementMap::createImageFilter()
 {
     sk_sp<SkImageFilter> color = SkiaImageFilterBuilder::build(inputEffect(0), operatingColorSpace());
@@ -175,18 +137,6 @@ sk_sp<SkImageFilter> FEDisplacementMap::createImageFilter()
     return SkDisplacementMapEffect::Make(
         typeX, typeY, SkFloatToScalar(getFilter()->applyHorizontalScale(m_scale)),
         std::move(displ), std::move(color), &cropRect);
-=======
-PassRefPtr<SkImageFilter> FEDisplacementMap::createImageFilter(SkiaImageFilterBuilder* builder)
-{
-    RefPtr<SkImageFilter> color = builder->build(inputEffect(0), operatingColorSpace());
-    RefPtr<SkImageFilter> displ = builder->build(inputEffect(1), operatingColorSpace());
-    SkDisplacementMapEffect::ChannelSelectorType typeX = toSkiaMode(m_xChannelSelector);
-    SkDisplacementMapEffect::ChannelSelectorType typeY = toSkiaMode(m_yChannelSelector);
-    SkImageFilter::CropRect cropRect = getCropRect(builder->cropOffset());
-    // FIXME : Only applyHorizontalScale is used and applyVerticalScale is ignored
-    // This can be fixed by adding a 2nd scale parameter to SkDisplacementMapEffect
-    return adoptRef(SkDisplacementMapEffect::Create(typeX, typeY, SkFloatToScalar(filter()->applyHorizontalScale(m_scale)), displ.get(), color.get(), &cropRect));
->>>>>>> miniblink49
 }
 
 static TextStream& operator<<(TextStream& ts, const ChannelSelectorType& type)
@@ -211,12 +161,8 @@ static TextStream& operator<<(TextStream& ts, const ChannelSelectorType& type)
     return ts;
 }
 
-<<<<<<< HEAD
 TextStream& FEDisplacementMap::externalRepresentation(TextStream& ts,
     int indent) const
-=======
-TextStream& FEDisplacementMap::externalRepresentation(TextStream& ts, int indent) const
->>>>>>> miniblink49
 {
     writeIndent(ts, indent);
     ts << "[feDisplacementMap";
@@ -229,25 +175,4 @@ TextStream& FEDisplacementMap::externalRepresentation(TextStream& ts, int indent
     return ts;
 }
 
-<<<<<<< HEAD
-=======
-FloatRect FEDisplacementMap::determineAbsolutePaintRect(const FloatRect& requestedRect)
-{
-    FloatRect rect = requestedRect;
-    if (clipsToBounds())
-        rect.intersect(maxEffectRect());
-
-    if (absolutePaintRect().contains(enclosingIntRect(rect)))
-        return rect;
-
-    rect = mapPaintRect(rect, false);
-    rect = inputEffect(0)->determineAbsolutePaintRect(rect);
-    rect = mapPaintRect(rect, true);
-    rect.intersect(requestedRect);
-
-    addAbsolutePaintRect(rect);
-    return rect;
-}
-
->>>>>>> miniblink49
 } // namespace blink

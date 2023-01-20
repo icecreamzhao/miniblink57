@@ -30,11 +30,10 @@
 
 [
     Exposed=Worker,
-    GarbageCollected,
 ] interface WorkerNavigator {
 };
 
 WorkerNavigator implements NavigatorCPU;
 WorkerNavigator implements NavigatorID;
-// TODO(philipj): WorkerNavigator implements NavigatorLanguage;
+// TODO(foolip): WorkerNavigator implements NavigatorLanguage;
 WorkerNavigator implements NavigatorOnLine;

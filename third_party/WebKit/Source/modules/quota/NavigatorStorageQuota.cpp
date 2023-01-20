@@ -28,33 +28,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "modules/quota/NavigatorStorageQuota.h"
 
 #include "core/frame/Navigator.h"
 #include "modules/quota/DeprecatedStorageQuota.h"
-<<<<<<< HEAD
 #include "modules/quota/StorageManager.h"
-=======
->>>>>>> miniblink49
 #include "modules/quota/StorageQuota.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 NavigatorStorageQuota::NavigatorStorageQuota(Navigator& navigator)
     : Supplement<Navigator>(navigator)
-=======
-NavigatorStorageQuota::NavigatorStorageQuota(LocalFrame* frame)
-    : DOMWindowProperty(frame)
-{
-}
-
-NavigatorStorageQuota::~NavigatorStorageQuota()
->>>>>>> miniblink49
 {
 }
 
@@ -65,16 +49,10 @@ const char* NavigatorStorageQuota::supplementName()
 
 NavigatorStorageQuota& NavigatorStorageQuota::from(Navigator& navigator)
 {
-<<<<<<< HEAD
     NavigatorStorageQuota* supplement = static_cast<NavigatorStorageQuota*>(
         Supplement<Navigator>::from(navigator, supplementName()));
     if (!supplement) {
         supplement = new NavigatorStorageQuota(navigator);
-=======
-    NavigatorStorageQuota* supplement = static_cast<NavigatorStorageQuota*>(HeapSupplement<Navigator>::from(navigator, supplementName()));
-    if (!supplement) {
-        supplement = new NavigatorStorageQuota(navigator.frame());
->>>>>>> miniblink49
         provideTo(navigator, supplementName(), supplement);
     }
     return *supplement;
@@ -85,27 +63,18 @@ StorageQuota* NavigatorStorageQuota::storageQuota(Navigator& navigator)
     return NavigatorStorageQuota::from(navigator).storageQuota();
 }
 
-<<<<<<< HEAD
 DeprecatedStorageQuota* NavigatorStorageQuota::webkitTemporaryStorage(
     Navigator& navigator)
-=======
-DeprecatedStorageQuota* NavigatorStorageQuota::webkitTemporaryStorage(Navigator& navigator)
->>>>>>> miniblink49
 {
     return NavigatorStorageQuota::from(navigator).webkitTemporaryStorage();
 }
 
-<<<<<<< HEAD
 DeprecatedStorageQuota* NavigatorStorageQuota::webkitPersistentStorage(
     Navigator& navigator)
-=======
-DeprecatedStorageQuota* NavigatorStorageQuota::webkitPersistentStorage(Navigator& navigator)
->>>>>>> miniblink49
 {
     return NavigatorStorageQuota::from(navigator).webkitPersistentStorage();
 }
 
-<<<<<<< HEAD
 StorageManager* NavigatorStorageQuota::storage(Navigator& navigator)
 {
     return NavigatorStorageQuota::from(navigator).storage();
@@ -114,38 +83,24 @@ StorageManager* NavigatorStorageQuota::storage(Navigator& navigator)
 StorageQuota* NavigatorStorageQuota::storageQuota() const
 {
     if (!m_storageQuota)
-=======
-StorageQuota* NavigatorStorageQuota::storageQuota() const
-{
-    if (!m_storageQuota && frame())
->>>>>>> miniblink49
         m_storageQuota = StorageQuota::create();
     return m_storageQuota.get();
 }
 
 DeprecatedStorageQuota* NavigatorStorageQuota::webkitTemporaryStorage() const
 {
-<<<<<<< HEAD
     if (!m_temporaryStorage)
-=======
-    if (!m_temporaryStorage && frame())
->>>>>>> miniblink49
         m_temporaryStorage = DeprecatedStorageQuota::create(DeprecatedStorageQuota::Temporary);
     return m_temporaryStorage.get();
 }
 
 DeprecatedStorageQuota* NavigatorStorageQuota::webkitPersistentStorage() const
 {
-<<<<<<< HEAD
     if (!m_persistentStorage)
-=======
-    if (!m_persistentStorage && frame())
->>>>>>> miniblink49
         m_persistentStorage = DeprecatedStorageQuota::create(DeprecatedStorageQuota::Persistent);
     return m_persistentStorage.get();
 }
 
-<<<<<<< HEAD
 StorageManager* NavigatorStorageQuota::storage() const
 {
     if (!m_storageManager)
@@ -153,20 +108,13 @@ StorageManager* NavigatorStorageQuota::storage() const
     return m_storageManager.get();
 }
 
-=======
->>>>>>> miniblink49
 DEFINE_TRACE(NavigatorStorageQuota)
 {
     visitor->trace(m_storageQuota);
     visitor->trace(m_temporaryStorage);
     visitor->trace(m_persistentStorage);
-<<<<<<< HEAD
     visitor->trace(m_storageManager);
     Supplement<Navigator>::trace(visitor);
-=======
-    HeapSupplement<Navigator>::trace(visitor);
-    DOMWindowProperty::trace(visitor);
->>>>>>> miniblink49
 }
 
 } // namespace blink

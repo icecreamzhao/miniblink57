@@ -18,12 +18,8 @@
 struct SkIPoint16 {
     int16_t fX, fY;
 
-<<<<<<< HEAD
     static SkIPoint16 Make(int x, int y)
     {
-=======
-    static SkIPoint16 Make(int x, int y) {
->>>>>>> miniblink49
         SkIPoint16 pt;
         pt.set(x, y);
         return pt;
@@ -32,12 +28,8 @@ struct SkIPoint16 {
     int16_t x() const { return fX; }
     int16_t y() const { return fY; }
 
-<<<<<<< HEAD
     void set(int x, int y)
     {
-=======
-    void set(int x, int y) {
->>>>>>> miniblink49
         fX = SkToS16(x);
         fY = SkToS16(y);
     }
@@ -50,12 +42,8 @@ struct SkIPoint16 {
 struct SkIPoint {
     int32_t fX, fY;
 
-<<<<<<< HEAD
     static SkIPoint Make(int32_t x, int32_t y)
     {
-=======
-    static SkIPoint Make(int32_t x, int32_t y) {
->>>>>>> miniblink49
         SkIPoint pt;
         pt.set(x, y);
         return pt;
@@ -77,15 +65,11 @@ struct SkIPoint {
     void setZero() { fX = fY = 0; }
 
     /** Set the x and y values of the point. */
-<<<<<<< HEAD
     void set(int32_t x, int32_t y)
     {
         fX = x;
         fY = y;
     }
-=======
-    void set(int32_t x, int32_t y) { fX = x; fY = y; }
->>>>>>> miniblink49
 
     /** Rotate the point clockwise, writing the new point into dst
         It is legal for dst == this
@@ -109,25 +93,17 @@ struct SkIPoint {
 
     /** Negate the X and Y coordinates of the point.
     */
-<<<<<<< HEAD
     void negate()
     {
         fX = -fX;
         fY = -fY;
     }
-=======
-    void negate() { fX = -fX; fY = -fY; }
->>>>>>> miniblink49
 
     /** Return a new point whose X and Y coordinates are the negative of the
         original point's
     */
-<<<<<<< HEAD
     SkIPoint operator-() const
     {
-=======
-    SkIPoint operator-() const {
->>>>>>> miniblink49
         SkIPoint neg;
         neg.fX = -fX;
         neg.fY = -fY;
@@ -135,29 +111,20 @@ struct SkIPoint {
     }
 
     /** Add v's coordinates to this point's */
-<<<<<<< HEAD
     void operator+=(const SkIPoint& v)
     {
-=======
-    void operator+=(const SkIPoint& v) {
->>>>>>> miniblink49
         fX += v.fX;
         fY += v.fY;
     }
 
     /** Subtract v's coordinates from this point's */
-<<<<<<< HEAD
     void operator-=(const SkIPoint& v)
     {
-=======
-    void operator-=(const SkIPoint& v) {
->>>>>>> miniblink49
         fX -= v.fX;
         fY -= v.fY;
     }
 
     /** Returns true if the point's coordinates equal (x,y) */
-<<<<<<< HEAD
     bool equals(int32_t x, int32_t y) const
     {
         return fX == x && fY == y;
@@ -170,29 +137,14 @@ struct SkIPoint {
 
     friend bool operator!=(const SkIPoint& a, const SkIPoint& b)
     {
-=======
-    bool equals(int32_t x, int32_t y) const {
-        return fX == x && fY == y;
-    }
-
-    friend bool operator==(const SkIPoint& a, const SkIPoint& b) {
-        return a.fX == b.fX && a.fY == b.fY;
-    }
-
-    friend bool operator!=(const SkIPoint& a, const SkIPoint& b) {
->>>>>>> miniblink49
         return a.fX != b.fX || a.fY != b.fY;
     }
 
     /** Returns a new point whose coordinates are the difference between
         a and b (i.e. a - b)
     */
-<<<<<<< HEAD
     friend SkIPoint operator-(const SkIPoint& a, const SkIPoint& b)
     {
-=======
-    friend SkIPoint operator-(const SkIPoint& a, const SkIPoint& b) {
->>>>>>> miniblink49
         SkIPoint v;
         v.set(a.fX - b.fX, a.fY - b.fY);
         return v;
@@ -200,12 +152,8 @@ struct SkIPoint {
 
     /** Returns a new point whose coordinates are the sum of a and b (a + b)
     */
-<<<<<<< HEAD
     friend SkIPoint operator+(const SkIPoint& a, const SkIPoint& b)
     {
-=======
-    friend SkIPoint operator+(const SkIPoint& a, const SkIPoint& b) {
->>>>>>> miniblink49
         SkIPoint v;
         v.set(a.fX + b.fX, a.fY + b.fY);
         return v;
@@ -213,38 +161,24 @@ struct SkIPoint {
 
     /** Returns the dot product of a and b, treating them as 2D vectors
     */
-<<<<<<< HEAD
     static int32_t DotProduct(const SkIPoint& a, const SkIPoint& b)
     {
-=======
-    static int32_t DotProduct(const SkIPoint& a, const SkIPoint& b) {
->>>>>>> miniblink49
         return a.fX * b.fX + a.fY * b.fY;
     }
 
     /** Returns the cross product of a and b, treating them as 2D vectors
     */
-<<<<<<< HEAD
     static int32_t CrossProduct(const SkIPoint& a, const SkIPoint& b)
     {
-=======
-    static int32_t CrossProduct(const SkIPoint& a, const SkIPoint& b) {
->>>>>>> miniblink49
         return a.fX * b.fY - a.fY * b.fX;
     }
 };
 
 struct SK_API SkPoint {
-<<<<<<< HEAD
     SkScalar fX, fY;
 
     static SkPoint Make(SkScalar x, SkScalar y)
     {
-=======
-    SkScalar    fX, fY;
-
-    static SkPoint Make(SkScalar x, SkScalar y) {
->>>>>>> miniblink49
         SkPoint pt;
         pt.set(x, y);
         return pt;
@@ -259,25 +193,17 @@ struct SK_API SkPoint {
     bool isZero() const { return (0 == fX) & (0 == fY); }
 
     /** Set the point's X and Y coordinates */
-<<<<<<< HEAD
     void set(SkScalar x, SkScalar y)
     {
         fX = x;
         fY = y;
     }
-=======
-    void set(SkScalar x, SkScalar y) { fX = x; fY = y; }
->>>>>>> miniblink49
 
     /** Set the point's X and Y coordinates by automatically promoting (x,y) to
         SkScalar values.
     */
-<<<<<<< HEAD
     void iset(int32_t x, int32_t y)
     {
-=======
-    void iset(int32_t x, int32_t y) {
->>>>>>> miniblink49
         fX = SkIntToScalar(x);
         fY = SkIntToScalar(y);
     }
@@ -285,33 +211,21 @@ struct SK_API SkPoint {
     /** Set the point's X and Y coordinates by automatically promoting p's
         coordinates to SkScalar values.
     */
-<<<<<<< HEAD
     void iset(const SkIPoint& p)
     {
-=======
-    void iset(const SkIPoint& p) {
->>>>>>> miniblink49
         fX = SkIntToScalar(p.fX);
         fY = SkIntToScalar(p.fY);
     }
 
-<<<<<<< HEAD
     void setAbs(const SkPoint& pt)
     {
-=======
-    void setAbs(const SkPoint& pt) {
->>>>>>> miniblink49
         fX = SkScalarAbs(pt.fX);
         fY = SkScalarAbs(pt.fY);
     }
 
     // counter-clockwise fan
-<<<<<<< HEAD
     void setIRectFan(int l, int t, int r, int b)
     {
-=======
-    void setIRectFan(int l, int t, int r, int b) {
->>>>>>> miniblink49
         SkPoint* v = this;
         v[0].set(SkIntToScalar(l), SkIntToScalar(t));
         v[1].set(SkIntToScalar(l), SkIntToScalar(b));
@@ -321,12 +235,8 @@ struct SK_API SkPoint {
     void setIRectFan(int l, int t, int r, int b, size_t stride);
 
     // counter-clockwise fan
-<<<<<<< HEAD
     void setRectFan(SkScalar l, SkScalar t, SkScalar r, SkScalar b)
     {
-=======
-    void setRectFan(SkScalar l, SkScalar t, SkScalar r, SkScalar b) {
->>>>>>> miniblink49
         SkPoint* v = this;
         v[0].set(l, t);
         v[1].set(l, b);
@@ -334,22 +244,15 @@ struct SK_API SkPoint {
         v[3].set(r, t);
     }
 
-<<<<<<< HEAD
     void setRectFan(SkScalar l, SkScalar t, SkScalar r, SkScalar b, size_t stride)
     {
         SkASSERT(stride >= sizeof(SkPoint));
 
-=======
-    void setRectFan(SkScalar l, SkScalar t, SkScalar r, SkScalar b, size_t stride) {
-        SkASSERT(stride >= sizeof(SkPoint));
-        
->>>>>>> miniblink49
         ((SkPoint*)((intptr_t)this + 0 * stride))->set(l, t);
         ((SkPoint*)((intptr_t)this + 1 * stride))->set(l, b);
         ((SkPoint*)((intptr_t)this + 2 * stride))->set(r, b);
         ((SkPoint*)((intptr_t)this + 3 * stride))->set(r, t);
     }
-<<<<<<< HEAD
 
     static void Offset(SkPoint points[], int count, const SkPoint& offset)
     {
@@ -358,26 +261,13 @@ struct SK_API SkPoint {
 
     static void Offset(SkPoint points[], int count, SkScalar dx, SkScalar dy)
     {
-=======
-    
-
-    static void Offset(SkPoint points[], int count, const SkPoint& offset) {
-        Offset(points, count, offset.fX, offset.fY);
-    }
-
-    static void Offset(SkPoint points[], int count, SkScalar dx, SkScalar dy) {
->>>>>>> miniblink49
         for (int i = 0; i < count; ++i) {
             points[i].offset(dx, dy);
         }
     }
 
-<<<<<<< HEAD
     void offset(SkScalar dx, SkScalar dy)
     {
-=======
-    void offset(SkScalar dx, SkScalar dy) {
->>>>>>> miniblink49
         fX += dx;
         fY += dy;
     }
@@ -391,7 +281,6 @@ struct SK_API SkPoint {
      *  Return true if the computed length of the vector is >= the internal
      *  tolerance (used to avoid dividing by tiny values).
      */
-<<<<<<< HEAD
     static bool CanNormalize(SkScalar dx, SkScalar dy)
     {
         // Simple enough (and performance critical sometimes) so we inline it.
@@ -400,14 +289,6 @@ struct SK_API SkPoint {
 
     bool canNormalize() const
     {
-=======
-    static bool CanNormalize(SkScalar dx, SkScalar dy) {
-        // Simple enough (and performance critical sometimes) so we inline it.
-        return (dx*dx + dy*dy) > (SK_ScalarNearlyZero * SK_ScalarNearlyZero);
-    }
-
-    bool canNormalize() const {
->>>>>>> miniblink49
         return CanNormalize(fX, fY);
     }
 
@@ -475,24 +356,16 @@ struct SK_API SkPoint {
 
     /** Negate the point's coordinates
     */
-<<<<<<< HEAD
     void negate()
     {
-=======
-    void negate() {
->>>>>>> miniblink49
         fX = -fX;
         fY = -fY;
     }
 
     /** Returns a new point whose coordinates are the negative of the point's
     */
-<<<<<<< HEAD
     SkPoint operator-() const
     {
-=======
-    SkPoint operator-() const {
->>>>>>> miniblink49
         SkPoint neg;
         neg.fX = -fX;
         neg.fY = -fY;
@@ -501,29 +374,20 @@ struct SK_API SkPoint {
 
     /** Add v's coordinates to the point's
     */
-<<<<<<< HEAD
     void operator+=(const SkPoint& v)
     {
-=======
-    void operator+=(const SkPoint& v) {
->>>>>>> miniblink49
         fX += v.fX;
         fY += v.fY;
     }
 
     /** Subtract v's coordinates from the point's
     */
-<<<<<<< HEAD
     void operator-=(const SkPoint& v)
     {
-=======
-    void operator-=(const SkPoint& v) {
->>>>>>> miniblink49
         fX -= v.fX;
         fY -= v.fY;
     }
 
-<<<<<<< HEAD
     SkPoint operator*(SkScalar scale) const
     {
         return Make(fX * scale, fY * scale);
@@ -531,31 +395,16 @@ struct SK_API SkPoint {
 
     SkPoint& operator*=(SkScalar scale)
     {
-=======
-    SkPoint operator*(SkScalar scale) const {
-        return Make(fX * scale, fY * scale);
-    }
-    
-    SkPoint& operator*=(SkScalar scale) {
->>>>>>> miniblink49
         fX *= scale;
         fY *= scale;
         return *this;
     }
-<<<<<<< HEAD
 
     /**
      *  Returns true if both X and Y are finite (not infinity or NaN)
      */
     bool isFinite() const
     {
-=======
-    
-    /**
-     *  Returns true if both X and Y are finite (not infinity or NaN)
-     */
-    bool isFinite() const {
->>>>>>> miniblink49
         SkScalar accum = 0;
         accum *= fX;
         accum *= fY;
@@ -571,7 +420,6 @@ struct SK_API SkPoint {
     /**
      *  Returns true if the point's coordinates equal (x,y)
      */
-<<<<<<< HEAD
     bool equals(SkScalar x, SkScalar y) const
     {
         return fX == x && fY == y;
@@ -584,17 +432,6 @@ struct SK_API SkPoint {
 
     friend bool operator!=(const SkPoint& a, const SkPoint& b)
     {
-=======
-    bool equals(SkScalar x, SkScalar y) const {
-        return fX == x && fY == y;
-    }
-
-    friend bool operator==(const SkPoint& a, const SkPoint& b) {
-        return a.fX == b.fX && a.fY == b.fY;
-    }
-
-    friend bool operator!=(const SkPoint& a, const SkPoint& b) {
->>>>>>> miniblink49
         return a.fX != b.fX || a.fY != b.fY;
     }
 
@@ -607,12 +444,8 @@ struct SK_API SkPoint {
         degeneracy ("points A and B are so close that the vector between them
         is essentially zero").
     */
-<<<<<<< HEAD
     bool equalsWithinTolerance(const SkPoint& p) const
     {
-=======
-    bool equalsWithinTolerance(const SkPoint& p) const {
->>>>>>> miniblink49
         return !CanNormalize(fX - p.fX, fY - p.fY);
     }
 
@@ -620,27 +453,17 @@ struct SK_API SkPoint {
         elsewhere regarding degeneracy ("points A and B are so close that the
         vector between them is essentially zero").
     */
-<<<<<<< HEAD
     bool equalsWithinTolerance(const SkPoint& p, SkScalar tol) const
     {
         return SkScalarNearlyZero(fX - p.fX, tol)
             && SkScalarNearlyZero(fY - p.fY, tol);
-=======
-    bool equalsWithinTolerance(const SkPoint& p, SkScalar tol) const {
-        return SkScalarNearlyZero(fX - p.fX, tol)
-               && SkScalarNearlyZero(fY - p.fY, tol);
->>>>>>> miniblink49
     }
 
     /** Returns a new point whose coordinates are the difference between
         a's and b's (a - b)
     */
-<<<<<<< HEAD
     friend SkPoint operator-(const SkPoint& a, const SkPoint& b)
     {
-=======
-    friend SkPoint operator-(const SkPoint& a, const SkPoint& b) {
->>>>>>> miniblink49
         SkPoint v;
         v.set(a.fX - b.fX, a.fY - b.fY);
         return v;
@@ -648,12 +471,8 @@ struct SK_API SkPoint {
 
     /** Returns a new point whose coordinates are the sum of a's and b's (a + b)
     */
-<<<<<<< HEAD
     friend SkPoint operator+(const SkPoint& a, const SkPoint& b)
     {
-=======
-    friend SkPoint operator+(const SkPoint& a, const SkPoint& b) {
->>>>>>> miniblink49
         SkPoint v;
         v.set(a.fX + b.fX, a.fY + b.fY);
         return v;
@@ -676,29 +495,20 @@ struct SK_API SkPoint {
 
     /** Returns the euclidian distance between a and b
     */
-<<<<<<< HEAD
     static SkScalar Distance(const SkPoint& a, const SkPoint& b)
     {
-=======
-    static SkScalar Distance(const SkPoint& a, const SkPoint& b) {
->>>>>>> miniblink49
         return Length(a.fX - b.fX, a.fY - b.fY);
     }
 
     /** Returns the dot product of a and b, treating them as 2D vectors
     */
-<<<<<<< HEAD
     static SkScalar DotProduct(const SkPoint& a, const SkPoint& b)
     {
-=======
-    static SkScalar DotProduct(const SkPoint& a, const SkPoint& b) {
->>>>>>> miniblink49
         return a.fX * b.fX + a.fY * b.fY;
     }
 
     /** Returns the cross product of a and b, treating them as 2D vectors
     */
-<<<<<<< HEAD
     static SkScalar CrossProduct(const SkPoint& a, const SkPoint& b)
     {
         return a.fX * b.fY - a.fY * b.fX;
@@ -721,25 +531,6 @@ struct SK_API SkPoint {
 
     SkScalar distanceToSqd(const SkPoint& pt) const
     {
-=======
-    static SkScalar CrossProduct(const SkPoint& a, const SkPoint& b) {
-        return a.fX * b.fY - a.fY * b.fX;
-    }
-
-    SkScalar cross(const SkPoint& vec) const {
-        return CrossProduct(*this, vec);
-    }
-
-    SkScalar dot(const SkPoint& vec) const {
-        return DotProduct(*this, vec);
-    }
-
-    SkScalar lengthSqd() const {
-        return DotProduct(*this, *this);
-    }
-
-    SkScalar distanceToSqd(const SkPoint& pt) const {
->>>>>>> miniblink49
         SkScalar dx = fX - pt.fX;
         SkScalar dy = fY - pt.fY;
         return dx * dx + dy * dy;
@@ -750,15 +541,9 @@ struct SK_API SkPoint {
      * the values are consistent with the sign of (b-a) cross (pt-a)
      */
     enum Side {
-<<<<<<< HEAD
         kLeft_Side = -1,
         kOn_Side = 0,
         kRight_Side = 1
-=======
-        kLeft_Side  = -1,
-        kOn_Side    =  0,
-        kRight_Side =  1
->>>>>>> miniblink49
     };
 
     /**
@@ -767,13 +552,8 @@ struct SK_API SkPoint {
      * along line from a to b)
      */
     SkScalar distanceToLineBetweenSqd(const SkPoint& a,
-<<<<<<< HEAD
         const SkPoint& b,
         Side* side = NULL) const;
-=======
-                                      const SkPoint& b,
-                                      Side* side = NULL) const;
->>>>>>> miniblink49
 
     /**
      * Returns the distance to the infinite line between two pts. Also
@@ -781,14 +561,9 @@ struct SK_API SkPoint {
      * along the line from a to b)
      */
     SkScalar distanceToLineBetween(const SkPoint& a,
-<<<<<<< HEAD
         const SkPoint& b,
         Side* side = NULL) const
     {
-=======
-                                   const SkPoint& b,
-                                   Side* side = NULL) const {
->>>>>>> miniblink49
         return SkScalarSqrt(this->distanceToLineBetweenSqd(a, b, side));
     }
 
@@ -796,22 +571,14 @@ struct SK_API SkPoint {
      * Returns the squared distance to the line segment between pts a and b
      */
     SkScalar distanceToLineSegmentBetweenSqd(const SkPoint& a,
-<<<<<<< HEAD
         const SkPoint& b) const;
-=======
-                                             const SkPoint& b) const;
->>>>>>> miniblink49
 
     /**
      * Returns the distance to the line segment between pts a and b.
      */
     SkScalar distanceToLineSegmentBetween(const SkPoint& a,
-<<<<<<< HEAD
         const SkPoint& b) const
     {
-=======
-                                          const SkPoint& b) const {
->>>>>>> miniblink49
         return SkScalarSqrt(this->distanceToLineSegmentBetweenSqd(a, b));
     }
 
@@ -820,12 +587,8 @@ struct SK_API SkPoint {
      * new vector will point in direction indicated by side (which
      * must be kLeft_Side or kRight_Side).
      */
-<<<<<<< HEAD
     void setOrthog(const SkPoint& vec, Side side = kLeft_Side)
     {
-=======
-    void setOrthog(const SkPoint& vec, Side side = kLeft_Side) {
->>>>>>> miniblink49
         // vec could be this
         SkScalar tmp = vec.fX;
         if (kRight_Side == side) {
@@ -846,12 +609,9 @@ struct SK_API SkPoint {
 
 typedef SkPoint SkVector;
 
-<<<<<<< HEAD
 static inline bool SkPointsAreFinite(const SkPoint array[], int count)
 {
     return SkScalarsAreFinite(&array[0].fX, count << 1);
 }
 
-=======
->>>>>>> miniblink49
 #endif

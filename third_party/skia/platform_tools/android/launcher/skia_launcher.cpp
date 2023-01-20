@@ -8,23 +8,15 @@
 #include <dlfcn.h>
 #include <stdio.h>
 
-<<<<<<< HEAD
 void usage()
 {
-=======
-void usage() {
->>>>>>> miniblink49
     printf("[USAGE] skia_launcher program_name [options]\n");
     printf("  program_name: the skia program you want to launch (e.g. tests, bench)\n");
     printf("  options: options specific to the program you are launching\n");
 }
 
-<<<<<<< HEAD
 bool file_exists(const char* fileName)
 {
-=======
-bool file_exists(const char* fileName) {
->>>>>>> miniblink49
     FILE* file = fopen(fileName, "r");
     if (file) {
         fclose(file);
@@ -34,22 +26,14 @@ bool file_exists(const char* fileName) {
 }
 
 int launch_app(int (*app_main)(int, const char**), int argc,
-<<<<<<< HEAD
     const char** argv)
 {
-=======
-        const char** argv) {
->>>>>>> miniblink49
     return (*app_main)(argc, argv);
 }
 
 void* load_library(const char* appLocation, const char* libraryName)
 {
-<<<<<<< HEAD
     // attempt to lookup the location of the shared libraries
-=======
-     // attempt to lookup the location of the shared libraries
->>>>>>> miniblink49
     char libraryLocation[100];
     sprintf(libraryLocation, "%s/lib%s.so", appLocation, libraryName);
     if (!file_exists(libraryLocation)) {
@@ -70,12 +54,8 @@ void* load_library(const char* appLocation, const char* libraryName)
     return appLibrary;
 }
 
-<<<<<<< HEAD
 int main(int argc, const char** argv)
 {
-=======
-int main(int argc, const char** argv) {
->>>>>>> miniblink49
 
     // check that the program name was specified
     if (argc < 2) {
@@ -91,20 +71,10 @@ int main(int argc, const char** argv) {
         return -1;
     }
 
-<<<<<<< HEAD
 #if defined(SKIA_DLL)
     // load the local skia shared library
     void* skiaLibrary = load_library(appLocation, "skia_android");
     if (NULL == skiaLibrary) {
-=======
-    void* skiaLibrary;
-
-#if defined(SKIA_DLL)
-    // load the local skia shared library
-    skiaLibrary = load_library(appLocation, "skia_android");
-    if (NULL == skiaLibrary)
-    {
->>>>>>> miniblink49
         return -1;
     }
 #endif
@@ -115,19 +85,9 @@ int main(int argc, const char** argv) {
         return -1;
     }
 
-<<<<<<< HEAD
     // find the address of the main function
     int (*app_main)(int, const char**);
     *(void**)(&app_main) = dlsym(appLibrary, "main");
-=======
-#if !defined(SKIA_DLL)
-    skiaLibrary = appLibrary;
-#endif
-
-    // find the address of the main function
-    int (*app_main)(int, const char**);
-    *(void **) (&app_main) = dlsym(appLibrary, "main");
->>>>>>> miniblink49
 
     if (!app_main) {
         printf("ERROR: Unable to load the main function of the selected program.\n");

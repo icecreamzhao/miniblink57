@@ -27,18 +27,12 @@
 #define PNGImageDecoder_h
 
 #include "platform/image-decoders/ImageDecoder.h"
-<<<<<<< HEAD
 #include <memory>
-=======
-#include "wtf/Noncopyable.h"
-#include "wtf/OwnPtr.h"
->>>>>>> miniblink49
 
 namespace blink {
 
 class PNGImageReader;
 
-<<<<<<< HEAD
 class PLATFORM_EXPORT PNGImageDecoder final : public ImageDecoder {
     WTF_MAKE_NONCOPYABLE(PNGImageDecoder);
 
@@ -47,20 +41,10 @@ public:
         const ColorBehavior&,
         size_t maxDecodedBytes,
         size_t offset = 0);
-=======
-class PLATFORM_EXPORT PNGImageDecoder : public ImageDecoder {
-    WTF_MAKE_NONCOPYABLE(PNGImageDecoder);
-public:
-    PNGImageDecoder(ImageSource::AlphaOption, ImageSource::GammaAndColorProfileOption, size_t maxDecodedBytes);
->>>>>>> miniblink49
     ~PNGImageDecoder() override;
 
     // ImageDecoder:
     String filenameExtension() const override { return "png"; }
-<<<<<<< HEAD
-=======
-    bool hasColorProfile() const override { return m_hasColorProfile; }
->>>>>>> miniblink49
 
     // Callbacks from libpng
     void headerAvailable();
@@ -77,13 +61,8 @@ private:
     // data coming, sets the "decode failure" flag.
     void decode(bool onlySize);
 
-<<<<<<< HEAD
     std::unique_ptr<PNGImageReader> m_reader;
     const unsigned m_offset;
-=======
-    OwnPtr<PNGImageReader> m_reader;
-    bool m_hasColorProfile;
->>>>>>> miniblink49
 };
 
 } // namespace blink

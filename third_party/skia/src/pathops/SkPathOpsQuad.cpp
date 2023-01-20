@@ -4,18 +4,11 @@
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-<<<<<<< HEAD
 #include "SkPathOpsQuad.h"
-=======
->>>>>>> miniblink49
 #include "SkIntersections.h"
 #include "SkLineParameters.h"
 #include "SkPathOpsCubic.h"
 #include "SkPathOpsCurve.h"
-<<<<<<< HEAD
-=======
-#include "SkPathOpsQuad.h"
->>>>>>> miniblink49
 
 /* started with at_most_end_pts_in_common from SkDQuadIntersection.cpp */
 // Do a quick reject by rotating all points relative to a line formed by
@@ -25,12 +18,8 @@
 /* if returning true, check contains true if quad's hull collapsed, making the cubic linear
    if returning false, check contains true if the the quad pair have only the end point in common
 */
-<<<<<<< HEAD
 bool SkDQuad::hullIntersects(const SkDQuad& q2, bool* isLinear) const
 {
-=======
-bool SkDQuad::hullIntersects(const SkDQuad& q2, bool* isLinear) const {
->>>>>>> miniblink49
     bool linear = true;
     for (int oddMan = 0; oddMan < kPointCount; ++oddMan) {
         const SkDPoint* endPt[2];
@@ -60,7 +49,6 @@ bool SkDQuad::hullIntersects(const SkDQuad& q2, bool* isLinear) const {
     return true;
 }
 
-<<<<<<< HEAD
 bool SkDQuad::hullIntersects(const SkDConic& conic, bool* isLinear) const
 {
     return conic.hullIntersects(*this, isLinear);
@@ -68,13 +56,6 @@ bool SkDQuad::hullIntersects(const SkDConic& conic, bool* isLinear) const
 
 bool SkDQuad::hullIntersects(const SkDCubic& cubic, bool* isLinear) const
 {
-=======
-bool SkDQuad::hullIntersects(const SkDConic& conic, bool* isLinear) const {
-    return conic.hullIntersects(*this, isLinear);
-}
-
-bool SkDQuad::hullIntersects(const SkDCubic& cubic, bool* isLinear) const {
->>>>>>> miniblink49
     return cubic.hullIntersects(*this, isLinear);
 }
 
@@ -87,28 +68,17 @@ oddMan    opp   x=oddMan^opp  x=x-oddMan  m=x>>2   x&~m
     2       1         3            1         0       1
             2         0           -2        -1       0
 */
-<<<<<<< HEAD
 void SkDQuad::otherPts(int oddMan, const SkDPoint* endPt[2]) const
 {
     for (int opp = 1; opp < kPointCount; ++opp) {
         int end = (oddMan ^ opp) - oddMan; // choose a value not equal to oddMan
         end &= ~(end >> 2); // if the value went negative, set it to zero
-=======
-void SkDQuad::otherPts(int oddMan, const SkDPoint* endPt[2]) const {
-    for (int opp = 1; opp < kPointCount; ++opp) {
-        int end = (oddMan ^ opp) - oddMan;  // choose a value not equal to oddMan
-        end &= ~(end >> 2);  // if the value went negative, set it to zero
->>>>>>> miniblink49
         endPt[opp - 1] = &fPts[end];
     }
 }
 
-<<<<<<< HEAD
 int SkDQuad::AddValidTs(double s[], int realRoots, double* t)
 {
-=======
-int SkDQuad::AddValidTs(double s[], int realRoots, double* t) {
->>>>>>> miniblink49
     int foundRoots = 0;
     for (int index = 0; index < realRoots; ++index) {
         double tValue = s[index];
@@ -125,13 +95,8 @@ int SkDQuad::AddValidTs(double s[], int realRoots, double* t) {
             }
             t[foundRoots++] = tValue;
         }
-<<<<<<< HEAD
     nextRoot : {
     }
-=======
-nextRoot:
-        {}
->>>>>>> miniblink49
     }
     return foundRoots;
 }
@@ -141,12 +106,8 @@ nextRoot:
 //  analysis of the quadratic equation, suggesting why the following looks at
 //  the sign of B -- and further suggesting that the greatest loss of precision
 //  is in b squared less two a c
-<<<<<<< HEAD
 int SkDQuad::RootsValidT(double A, double B, double C, double t[2])
 {
-=======
-int SkDQuad::RootsValidT(double A, double B, double C, double t[2]) {
->>>>>>> miniblink49
     double s[2];
     int realRoots = RootsReal(A, B, C, s);
     int foundRoots = AddValidTs(s, realRoots, t);
@@ -161,18 +122,11 @@ and using the roots
       t2 = C / Q
 */
 // this does not discard real roots <= 0 or >= 1
-<<<<<<< HEAD
 int SkDQuad::RootsReal(const double A, const double B, const double C, double s[2])
 {
     const double p = B / (2 * A);
     const double q = C / A;
     if (!A || (approximately_zero(A) && (approximately_zero_inverse(p) || approximately_zero_inverse(q)))) {
-=======
-int SkDQuad::RootsReal(const double A, const double B, const double C, double s[2]) {
-    const double p = B / (2 * A);
-    const double q = C / A;
-    if (approximately_zero(A) && (approximately_zero_inverse(p) || approximately_zero_inverse(q))) {
->>>>>>> miniblink49
         if (approximately_zero(B)) {
             s[0] = 0;
             return C == 0;
@@ -194,19 +148,14 @@ int SkDQuad::RootsReal(const double A, const double B, const double C, double s[
     return 1 + !AlmostDequalUlps(s[0], s[1]);
 }
 
-<<<<<<< HEAD
 bool SkDQuad::isLinear(int startIndex, int endIndex) const
 {
-=======
-bool SkDQuad::isLinear(int startIndex, int endIndex) const {
->>>>>>> miniblink49
     SkLineParameters lineParameters;
     lineParameters.quadEndPoints(*this, startIndex, endIndex);
     // FIXME: maybe it's possible to avoid this and compare non-normalized
     lineParameters.normalize();
     double distance = lineParameters.controlPtDistance(*this);
     double tiniest = SkTMin(SkTMin(SkTMin(SkTMin(SkTMin(fPts[0].fX, fPts[0].fY),
-<<<<<<< HEAD
                                               fPts[1].fX),
                                        fPts[1].fY),
                                 fPts[2].fX),
@@ -216,26 +165,16 @@ bool SkDQuad::isLinear(int startIndex, int endIndex) const {
                                        fPts[1].fY),
                                 fPts[2].fX),
         fPts[2].fY);
-=======
-            fPts[1].fX), fPts[1].fY), fPts[2].fX), fPts[2].fY);
-    double largest = SkTMax(SkTMax(SkTMax(SkTMax(SkTMax(fPts[0].fX, fPts[0].fY),
-            fPts[1].fX), fPts[1].fY), fPts[2].fX), fPts[2].fY);
->>>>>>> miniblink49
     largest = SkTMax(largest, -tiniest);
     return approximately_zero_when_compared_to(distance, largest);
 }
 
-<<<<<<< HEAD
 SkDVector SkDQuad::dxdyAtT(double t) const
 {
-=======
-SkDVector SkDQuad::dxdyAtT(double t) const {
->>>>>>> miniblink49
     double a = t - 1;
     double b = 1 - 2 * t;
     double c = t;
     SkDVector result = { a * fPts[0].fX + b * fPts[1].fX + c * fPts[2].fX,
-<<<<<<< HEAD
         a * fPts[0].fY + b * fPts[1].fY + c * fPts[2].fY };
     if (result.fX == 0 && result.fY == 0) {
         if (zero_or_one(t)) {
@@ -245,19 +184,12 @@ SkDVector SkDQuad::dxdyAtT(double t) const {
             SkDebugf("!q");
         }
     }
-=======
-            a * fPts[0].fY + b * fPts[1].fY + c * fPts[2].fY };
->>>>>>> miniblink49
     return result;
 }
 
 // OPTIMIZE: assert if caller passes in t == 0 / t == 1 ?
-<<<<<<< HEAD
 SkDPoint SkDQuad::ptAtT(double t) const
 {
-=======
-SkDPoint SkDQuad::ptAtT(double t) const {
->>>>>>> miniblink49
     if (0 == t) {
         return fPts[0];
     }
@@ -269,27 +201,18 @@ SkDPoint SkDQuad::ptAtT(double t) const {
     double b = 2 * one_t * t;
     double c = t * t;
     SkDPoint result = { a * fPts[0].fX + b * fPts[1].fX + c * fPts[2].fX,
-<<<<<<< HEAD
         a * fPts[0].fY + b * fPts[1].fY + c * fPts[2].fY };
     return result;
 }
 
 static double interp_quad_coords(const double* src, double t)
 {
-=======
-            a * fPts[0].fY + b * fPts[1].fY + c * fPts[2].fY };
-    return result;
-}
-
-static double interp_quad_coords(const double* src, double t) {
->>>>>>> miniblink49
     double ab = SkDInterp(src[0], src[2], t);
     double bc = SkDInterp(src[2], src[4], t);
     double abc = SkDInterp(ab, bc, t);
     return abc;
 }
 
-<<<<<<< HEAD
 bool SkDQuad::monotonicInX() const
 {
     return between(fPts[0].fX, fPts[1].fX, fPts[2].fX);
@@ -297,13 +220,6 @@ bool SkDQuad::monotonicInX() const
 
 bool SkDQuad::monotonicInY() const
 {
-=======
-bool SkDQuad::monotonicInX() const {
-    return between(fPts[0].fX, fPts[1].fX, fPts[2].fX);
-}
-
-bool SkDQuad::monotonicInY() const {
->>>>>>> miniblink49
     return between(fPts[0].fY, fPts[1].fY, fPts[2].fY);
 }
 
@@ -330,14 +246,9 @@ Group the known values on one side:
 B   = D*2 - A/2 - C/2
 */
 
-<<<<<<< HEAD
 // OPTIMIZE : special case either or both of t1 = 0, t2 = 1
 SkDQuad SkDQuad::subDivide(double t1, double t2) const
 {
-=======
-// OPTIMIZE : special case either or both of t1 = 0, t2 = 1 
-SkDQuad SkDQuad::subDivide(double t1, double t2) const {
->>>>>>> miniblink49
     SkDQuad dst;
     double ax = dst[0].fX = interp_quad_coords(&fPts[0].fX, t1);
     double ay = dst[0].fY = interp_quad_coords(&fPts[0].fY, t1);
@@ -350,12 +261,8 @@ SkDQuad SkDQuad::subDivide(double t1, double t2) const {
     return dst;
 }
 
-<<<<<<< HEAD
 void SkDQuad::align(int endIndex, SkDPoint* dstPt) const
 {
-=======
-void SkDQuad::align(int endIndex, SkDPoint* dstPt) const {
->>>>>>> miniblink49
     if (fPts[endIndex].fX == fPts[1].fX) {
         dstPt->fX = fPts[endIndex].fX;
     }
@@ -364,7 +271,6 @@ void SkDQuad::align(int endIndex, SkDPoint* dstPt) const {
     }
 }
 
-<<<<<<< HEAD
 SkDPoint SkDQuad::subDivide(const SkDPoint& a, const SkDPoint& c, double t1, double t2) const
 {
     SkASSERT(t1 != t2);
@@ -372,14 +278,6 @@ SkDPoint SkDQuad::subDivide(const SkDPoint& a, const SkDPoint& c, double t1, dou
     SkDQuad sub = subDivide(t1, t2);
     SkDLine b0 = { { a, sub[1] + (a - sub[0]) } };
     SkDLine b1 = { { c, sub[1] + (c - sub[2]) } };
-=======
-SkDPoint SkDQuad::subDivide(const SkDPoint& a, const SkDPoint& c, double t1, double t2) const {
-    SkASSERT(t1 != t2);
-    SkDPoint b;
-    SkDQuad sub = subDivide(t1, t2);
-    SkDLine b0 = {{a, sub[1] + (a - sub[0])}};
-    SkDLine b1 = {{c, sub[1] + (c - sub[2])}};
->>>>>>> miniblink49
     SkIntersections i;
     i.intersectRay(b0, b1);
     if (i.used() == 1 && i[0][0] >= 0 && i[1][0] >= 0) {
@@ -408,12 +306,8 @@ SkDPoint SkDQuad::subDivide(const SkDPoint& a, const SkDPoint& c, double t1, dou
 }
 
 /* classic one t subdivision */
-<<<<<<< HEAD
 static void interp_quad_coords(const double* src, double* dst, double t)
 {
-=======
-static void interp_quad_coords(const double* src, double* dst, double t) {
->>>>>>> miniblink49
     double ab = SkDInterp(src[0], src[2], t);
     double bc = SkDInterp(src[2], src[4], t);
     dst[0] = src[0];
@@ -441,11 +335,7 @@ static int valid_unit_divide(double numer, double denom, double* ratio)
         return 0;
     }
     double r = numer / denom;
-<<<<<<< HEAD
     if (r == 0) { // catch underflow if numer <<<< denom
-=======
-    if (r == 0) {  // catch underflow if numer <<<< denom
->>>>>>> miniblink49
         return 0;
     }
     *ratio = r;
@@ -457,12 +347,8 @@ static int valid_unit_divide(double numer, double denom, double* ratio)
     B = 2(b - a)
     Solve for t, only if it fits between 0 < t < 1
 */
-<<<<<<< HEAD
 int SkDQuad::FindExtrema(const double src[], double tValue[1])
 {
-=======
-int SkDQuad::FindExtrema(const double src[], double tValue[1]) {
->>>>>>> miniblink49
     /*  At + B == 0
         t = -B / A
     */
@@ -478,7 +364,6 @@ int SkDQuad::FindExtrema(const double src[], double tValue[1]) {
  * b =     2*B - 2*C
  * c =             C
  */
-<<<<<<< HEAD
 void SkDQuad::SetABC(const double* quad, double* a, double* b, double* c)
 {
     *a = quad[0]; // a = A
@@ -487,13 +372,4 @@ void SkDQuad::SetABC(const double* quad, double* a, double* b, double* c)
     *b -= *c; // b =     2*B -   C
     *a -= *b; // a = A - 2*B +   C
     *b -= *c; // b =     2*B - 2*C
-=======
-void SkDQuad::SetABC(const double* quad, double* a, double* b, double* c) {
-    *a = quad[0];      // a = A
-    *b = 2 * quad[2];  // b =     2*B
-    *c = quad[4];      // c =             C
-    *b -= *c;          // b =     2*B -   C
-    *a -= *b;          // a = A - 2*B +   C
-    *b -= *c;          // b =     2*B - 2*C
->>>>>>> miniblink49
 }

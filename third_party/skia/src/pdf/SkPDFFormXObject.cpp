@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2010 The Android Open Source Project
  *
@@ -9,10 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #include "SkPDFFormXObject.h"
 
 #include "SkMatrix.h"
@@ -21,7 +13,6 @@
 #include "SkStream.h"
 #include "SkTypes.h"
 
-<<<<<<< HEAD
 SkPDFFormXObject::SkPDFFormXObject(SkPDFDevice* device)
 {
     // We don't want to keep around device because we'd have two copies
@@ -34,19 +25,6 @@ SkPDFFormXObject::SkPDFFormXObject(SkPDFDevice* device)
 
     sk_sp<SkPDFArray> bboxArray(device->copyMediaBox());
     this->init(nullptr, resourceDict.get(), bboxArray.get());
-=======
-SkPDFFormXObject::SkPDFFormXObject(SkPDFDevice* device) {
-    // We don't want to keep around device because we'd have two copies
-    // of content, so reference or copy everything we need (content and
-    // resources).
-    SkAutoTUnref<SkPDFDict> resourceDict(device->createResourceDict());
-
-    SkAutoTDelete<SkStreamAsset> content(device->content());
-    this->setData(content.get());
-
-    SkAutoTUnref<SkPDFArray> bboxArray(device->copyMediaBox());
-    this->init(NULL, resourceDict.get(), bboxArray);
->>>>>>> miniblink49
 
     // We invert the initial transform and apply that to the xobject so that
     // it doesn't get applied twice. We can't just undo it because it's
@@ -65,7 +43,6 @@ SkPDFFormXObject::SkPDFFormXObject(SkPDFDevice* device) {
 /**
  * Creates a FormXObject from a content stream and associated resources.
  */
-<<<<<<< HEAD
 SkPDFFormXObject::SkPDFFormXObject(SkStreamAsset* content, SkRect bbox,
     SkPDFDict* resourceDict)
 {
@@ -73,14 +50,6 @@ SkPDFFormXObject::SkPDFFormXObject(SkStreamAsset* content, SkRect bbox,
 
     sk_sp<SkPDFArray> bboxArray(SkPDFUtils::RectToArray(bbox));
     this->init("DeviceRGB", resourceDict, bboxArray.get());
-=======
-SkPDFFormXObject::SkPDFFormXObject(SkStream* content, SkRect bbox,
-                                   SkPDFDict* resourceDict) {
-    setData(content);
-
-    SkAutoTUnref<SkPDFArray> bboxArray(SkPDFUtils::RectToArray(bbox));
-    init("DeviceRGB", resourceDict, bboxArray);
->>>>>>> miniblink49
 }
 
 /**
@@ -88,7 +57,6 @@ SkPDFFormXObject::SkPDFFormXObject(SkStream* content, SkRect bbox,
  * Note that bbox is unreferenced here, so calling code does not need worry.
  */
 void SkPDFFormXObject::init(const char* colorSpace,
-<<<<<<< HEAD
     SkPDFDict* resourceDict, SkPDFArray* bbox)
 {
     this->insertName("Type", "XObject");
@@ -109,24 +77,3 @@ void SkPDFFormXObject::init(const char* colorSpace,
 }
 
 SkPDFFormXObject::~SkPDFFormXObject() { }
-=======
-                            SkPDFDict* resourceDict, SkPDFArray* bbox) {
-    this->insertName("Type", "XObject");
-    this->insertName("Subtype", "Form");
-    this->insertObject("Resources", SkRef(resourceDict));
-    this->insertObject("BBox", SkRef(bbox));
-
-    // Right now SkPDFFormXObject is only used for saveLayer, which implies
-    // isolated blending.  Do this conditionally if that changes.
-    SkAutoTUnref<SkPDFDict> group(new SkPDFDict("Group"));
-    group->insertName("S", "Transparency");
-
-    if (colorSpace != NULL) {
-        group->insertName("CS", colorSpace);
-    }
-    group->insertBool("I", true);  // Isolated.
-    this->insertObject("Group", group.detach());
-}
-
-SkPDFFormXObject::~SkPDFFormXObject() {}
->>>>>>> miniblink49

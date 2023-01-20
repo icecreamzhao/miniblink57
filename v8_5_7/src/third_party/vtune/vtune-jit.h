@@ -68,11 +68,7 @@ namespace internal {
 using namespace v8;
 class VTUNEJITInterface {
  public:
-<<<<<<< HEAD
   static void V8CALL event_handler(const v8::JitCodeEvent* event);
-=======
-  static void event_handler(const v8::JitCodeEvent* event);
->>>>>>> miniblink49
 
  private:
   //static Mutex* vtunemutex_;

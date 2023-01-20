@@ -29,6 +29,8 @@
 #ifndef WindowFeatures_h
 #define WindowFeatures_h
 
+#include "core/CoreExport.h"
+#include "wtf/Allocator.h"
 #include "wtf/HashMap.h"
 #include "wtf/text/WTFString.h"
 
@@ -36,7 +38,8 @@ namespace blink {
 
 class IntRect;
 
-struct WindowFeatures {
+struct CORE_EXPORT WindowFeatures {
+    DISALLOW_NEW();
     WindowFeatures()
         : x(0)
         , xSet(false)
@@ -54,10 +57,12 @@ struct WindowFeatures {
         , resizable(true)
         , fullscreen(false)
         , dialog(false)
+        , noopener(false)
     {
     }
     explicit WindowFeatures(const String& windowFeaturesString);
-    WindowFeatures(const String& dialogFeaturesString, const IntRect& screenAvailableRect);
+    WindowFeatures(const String& dialogFeaturesString,
+        const IntRect& screenAvailableRect);
 
     int x;
     bool xSet;
@@ -78,13 +83,21 @@ struct WindowFeatures {
     bool fullscreen;
     bool dialog;
 
+    bool noopener;
+
     Vector<String> additionalFeatures;
 
 private:
     using DialogFeaturesMap = HashMap<String, String>;
     static void parseDialogFeatures(const String&, HashMap<String, String>&);
-    static bool boolFeature(const DialogFeaturesMap&, const char* key, bool defaultValue = false);
-    static int intFeature(const DialogFeaturesMap&, const char* key, int min, int max, int defaultValue);
+    static bool boolFeature(const DialogFeaturesMap&,
+        const char* key,
+        bool defaultValue = false);
+    static int intFeature(const DialogFeaturesMap&,
+        const char* key,
+        int min,
+        int max,
+        int defaultValue);
     void setWindowFeature(const String& keyString, const String& valueString);
 };
 

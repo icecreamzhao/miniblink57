@@ -1,5 +1,4 @@
 {
-<<<<<<< HEAD
   "Perf-Android-GCC-GalaxyS3-GPU-Mali400-Arm7-Release": [
     "--pre_log", 
     "--images", 
@@ -185,9 +184,6 @@
     "true", 
     "--useThermalManager", 
     "1,1,10,1000", 
-=======
-  "Perf-Android-GCC-NexusPlayer-GPU-PowerVR-x86-Release": [
->>>>>>> miniblink49
     "--scales", 
     "1.0", 
     "1.1", 
@@ -202,7 +198,6 @@
     "~blurroundrect", 
     "~patch_grid", 
     "~desk_carsvg", 
-<<<<<<< HEAD
     "~desk_unicodetable", 
     "~interlaced1.png", 
     "~interlaced2.png", 
@@ -229,11 +224,6 @@
   ], 
   "Perf-Android-Nexus7-Tegra3-Arm7-Release": [
     "--pre_log", 
-=======
-    "~desk_unicodetable"
-  ], 
-  "Perf-Android-Nexus7-Tegra3-Arm7-Release": [
->>>>>>> miniblink49
     "--scales", 
     "1.0", 
     "1.1", 
@@ -245,7 +235,6 @@
     "angle", 
     "hwui", 
     "msaa4", 
-<<<<<<< HEAD
     "nvpr4", 
     "nvprdit4", 
     "--match", 
@@ -337,13 +326,6 @@
     "--images", 
     "--gpuStatsDump", 
     "true", 
-=======
-    "nvprmsaa4", 
-    "--match", 
-    "skp"
-  ], 
-  "Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind": [
->>>>>>> miniblink49
     "--scales", 
     "1.0", 
     "1.1", 
@@ -355,7 +337,6 @@
     "angle", 
     "hwui", 
     "msaa16", 
-<<<<<<< HEAD
     "nvpr16", 
     "nvprdit16", 
     "--loops", 
@@ -393,15 +374,6 @@
     "--images", 
     "--gpuStatsDump", 
     "true", 
-=======
-    "nvprmsaa16", 
-    "--loops", 
-    "1", 
-    "--samples", 
-    "1"
-  ], 
-  "Test-Win7-MSVC-ShuttleA-GPU-HD2000-x86-Debug-ANGLE": [
->>>>>>> miniblink49
     "--scales", 
     "1.0", 
     "1.1", 
@@ -413,19 +385,14 @@
     "angle", 
     "hwui", 
     "msaa16", 
-<<<<<<< HEAD
     "nvpr16", 
     "nvprdit16", 
-=======
-    "nvprmsaa16", 
->>>>>>> miniblink49
     "--GPUbenchTileW", 
     "256", 
     "--GPUbenchTileH", 
     "256", 
     "--match", 
     "~gradient", 
-<<<<<<< HEAD
     "~etc1bitmap", 
     "~interlaced1.png", 
     "~interlaced2.png", 
@@ -455,11 +422,6 @@
     "--images", 
     "--gpuStatsDump", 
     "true", 
-=======
-    "~etc1bitmap"
-  ], 
-  "Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug": [
->>>>>>> miniblink49
     "--scales", 
     "1.0", 
     "1.1", 
@@ -473,18 +435,13 @@
     "angle", 
     "hwui", 
     "msaa16", 
-<<<<<<< HEAD
     "nvpr16", 
     "nvprdit16", 
-=======
-    "nvprmsaa16", 
->>>>>>> miniblink49
     "--match", 
     "~blurroundrect", 
     "~patch_grid", 
     "~desk_carsvg", 
     "~keymobi", 
-<<<<<<< HEAD
     "~path_hairline", 
     "~GLInstancedArraysBench", 
     "~inc0.gif", 
@@ -506,8 +463,5 @@
     "~inc14.png", 
     "~inc0.webp", 
     "~inc1.webp"
-=======
-    "~path_hairline"
->>>>>>> miniblink49
   ]
 }

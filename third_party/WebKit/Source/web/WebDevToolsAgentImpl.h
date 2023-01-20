@@ -31,20 +31,13 @@
 #ifndef WebDevToolsAgentImpl_h
 #define WebDevToolsAgentImpl_h
 
-<<<<<<< HEAD
 #include "core/inspector/InspectorPageAgent.h"
 #include "core/inspector/InspectorSession.h"
-=======
-#include "core/inspector/InspectorFrontendChannel.h"
-#include "core/inspector/InspectorRuntimeAgent.h"
-#include "core/inspector/InspectorStateClient.h"
->>>>>>> miniblink49
 #include "core/inspector/InspectorTracingAgent.h"
 #include "platform/heap/Handle.h"
 #include "public/platform/WebSize.h"
 #include "public/platform/WebThread.h"
 #include "public/web/WebDevToolsAgent.h"
-<<<<<<< HEAD
 #include "web/InspectorEmulationAgent.h"
 #include "wtf/Forward.h"
 #include "wtf/Vector.h"
@@ -75,74 +68,20 @@ public:
     static WebDevToolsAgentImpl* create(WebLocalFrameImpl*,
         WebDevToolsAgentClient*);
     ~WebDevToolsAgentImpl() override;
-=======
-#include "wtf/Forward.h"
-#include "wtf/OwnPtr.h"
-#include "wtf/Vector.h"
-
-namespace blink {
-
-class DebuggerTask;
-class GraphicsLayer;
-class InspectorInspectorAgent;
-class InspectorOverlay;
-class InspectorPageAgent;
-class InspectorResourceContentLoader;
-class LocalFrame;
-class Page;
-class PageConsoleAgent;
-class PlatformGestureEvent;
-class PlatformKeyboardEvent;
-class PlatformMouseEvent;
-class PlatformTouchEvent;
-class WebDevToolsAgentClient;
-class WebFrameWidgetImpl;
-class WebInputEvent;
-class WebLayerTreeView;
-class WebLocalFrameImpl;
-class WebString;
-class WebViewImpl;
-
-class WebDevToolsAgentImpl final
-    : public NoBaseWillBeGarbageCollectedFinalized<WebDevToolsAgentImpl>
-    , public WebDevToolsAgent
-    , public InspectorStateClient
-    , public InspectorTracingAgent::Client
-    , public InspectorRuntimeAgent::Client
-    , public InspectorFrontendChannel
-    , private WebThread::TaskObserver {
-public:
-    static PassOwnPtrWillBeRawPtr<WebDevToolsAgentImpl> create(WebLocalFrameImpl*, WebDevToolsAgentClient*);
-    ~WebDevToolsAgentImpl() override;
-    void dispose();
->>>>>>> miniblink49
     DECLARE_VIRTUAL_TRACE();
 
     void willBeDestroyed();
     WebDevToolsAgentClient* client() { return m_client; }
-<<<<<<< HEAD
     InspectorOverlay* overlay() const { return m_overlay.get(); }
     void flushProtocolNotifications();
 
     // Instrumentation from web/ layer.
     void didCommitLoadForLocalFrame(LocalFrame*);
     void didStartProvisionalLoad(LocalFrame*);
-=======
-    bool handleInputEvent(const WebInputEvent&);
-    void flushPendingProtocolNotifications();
-    void dispatchMessageFromFrontend(const String& message);
-    void registerAgent(PassOwnPtrWillBeRawPtr<InspectorAgent>);
-    static void webViewImplClosed(WebViewImpl*);
-    static void webFrameWidgetImplClosed(WebFrameWidgetImpl*);
-
-    // Instrumentation from web/ layer.
-    void didCommitLoadForLocalFrame(LocalFrame*);
->>>>>>> miniblink49
     bool screencastEnabled();
     void willAddPageOverlay(const GraphicsLayer*);
     void didRemovePageOverlay(const GraphicsLayer*);
     void layerTreeViewChanged(WebLayerTreeView*);
-<<<<<<< HEAD
     void rootLayerCleared();
 
     // WebDevToolsAgent implementation.
@@ -166,28 +105,10 @@ private:
         WebDevToolsAgentClient*,
         InspectorOverlay*,
         bool includeViewAgents);
-=======
-
-    // WebDevToolsAgent implementation.
-    void attach(const WebString& hostId) override;
-    void reattach(const WebString& hostId, const WebString& savedState) override;
-    void detach() override;
-    void continueProgram() override;
-    void dispatchOnInspectorBackend(const WebString& message) override;
-    void inspectElementAt(const WebPoint&) override;
-    void evaluateInWebInspector(long callId, const WebString& script) override;
-
-private:
-    WebDevToolsAgentImpl(WebLocalFrameImpl*, WebDevToolsAgentClient*, InspectorOverlay*);
-
-    // InspectorStateClient implementation.
-    void updateInspectorStateCookie(const WTF::String&) override;
->>>>>>> miniblink49
 
     // InspectorTracingAgent::Client implementation.
     void enableTracing(const WTF::String& categoryFilter) override;
     void disableTracing() override;
-<<<<<<< HEAD
     void showReloadingBlanket() override;
     void hideReloadingBlanket() override;
 
@@ -204,22 +125,11 @@ private:
         int callId,
         const String& response,
         const String& state) override;
-=======
-
-    // InspectorRuntimeAgent::Client implementation.
-    void resumeStartup() override;
-
-    // InspectorFrontendChannel implementation.
-    void sendProtocolResponse(int callId, PassRefPtr<JSONObject> message) override;
-    void sendProtocolNotification(PassRefPtr<JSONObject> message) override;
-    void flush() override;
->>>>>>> miniblink49
 
     // WebThread::TaskObserver implementation.
     void willProcessTask() override;
     void didProcessTask() override;
 
-<<<<<<< HEAD
     void initializeSession(int sessionId, const String& hostId, String* state);
     void destroySession();
     void dispatchMessageFromFrontend(int sessionId,
@@ -251,49 +161,6 @@ private:
     Member<InspectorSession> m_session;
     bool m_includeViewAgents;
     int m_layerTreeId;
-=======
-    void initializeDeferredAgents();
-    bool handleGestureEvent(LocalFrame*, const PlatformGestureEvent&);
-    bool handleMouseEvent(LocalFrame*, const PlatformMouseEvent&);
-    bool handleTouchEvent(LocalFrame*, const PlatformTouchEvent&);
-
-    WebDevToolsAgentClient* m_client;
-    WebLocalFrameImpl* m_webLocalFrameImpl;
-    bool m_attached;
-#if ENABLE(ASSERT)
-    bool m_hasBeenDisposed;
-#endif
-#ifndef MINIBLINK_NO_DEVTOOLS
-    RefPtrWillBeMember<InstrumentingAgents> m_instrumentingAgents;
-    OwnPtrWillBeMember<InjectedScriptManager> m_injectedScriptManager;
-    OwnPtrWillBeMember<InspectorResourceContentLoader> m_resourceContentLoader;
-    OwnPtrWillBeMember<InspectorCompositeState> m_state;
-    RawPtrWillBeMember<InspectorOverlay> m_overlay;
-
-    RawPtrWillBeMember<InspectorInspectorAgent> m_inspectorAgent;
-    RawPtrWillBeMember<InspectorDOMAgent> m_domAgent;
-    RawPtrWillBeMember<InspectorPageAgent> m_pageAgent;
-    RawPtrWillBeMember<InspectorCSSAgent> m_cssAgent;
-    RawPtrWillBeMember<InspectorResourceAgent> m_resourceAgent;
-    RawPtrWillBeMember<InspectorLayerTreeAgent> m_layerTreeAgent;
-    RawPtrWillBeMember<InspectorTracingAgent> m_tracingAgent;
-    RawPtrWillBeMember<PageRuntimeAgent> m_pageRuntimeAgent;
-    RawPtrWillBeMember<PageConsoleAgent> m_pageConsoleAgent;
-
-    RefPtrWillBeMember<InspectorBackendDispatcher> m_inspectorBackendDispatcher;
-    OwnPtr<InspectorFrontend> m_inspectorFrontend;
-
-    InspectorAgentRegistry m_agents;
-
-    OwnPtrWillBeMember<AsyncCallTracker> m_asyncCallTracker;
-    bool m_deferredAgentsInitialized;
-
-    typedef Vector<RefPtr<JSONObject>> NotificationQueue;
-    NotificationQueue m_notificationQueue;
-    String m_stateCookie;
-#endif // IMPLEMENTED_NEWEST_BLINK
-    friend class DebuggerTask;
->>>>>>> miniblink49
 };
 
 } // namespace blink

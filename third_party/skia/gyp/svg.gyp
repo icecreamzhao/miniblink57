@@ -14,10 +14,7 @@
         'xml.gyp:*',
       ],
       'include_dirs': [
-<<<<<<< HEAD
         '../include/private',
-=======
->>>>>>> miniblink49
         '../include/svg',
         '../src/core',
       ],

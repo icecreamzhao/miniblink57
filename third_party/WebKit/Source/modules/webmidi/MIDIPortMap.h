@@ -14,7 +14,6 @@
 namespace blink {
 
 template <typename T>
-<<<<<<< HEAD
 class MIDIPortMap : public GarbageCollected<MIDIPortMap<T>>,
                     public Maplike<String, T*> {
 public:
@@ -22,48 +21,28 @@ public:
         : m_entries(entries)
     {
     }
-=======
-class MIDIPortMap : public GarbageCollected<MIDIPortMap<T>>, public Maplike<String, T*> {
-public:
-    explicit MIDIPortMap(const HeapVector<Member<T>>& entries) : m_entries(entries) { }
->>>>>>> miniblink49
 
     // IDL attributes / methods
     size_t size() const { return m_entries.size(); }
 
-<<<<<<< HEAD
     DEFINE_INLINE_VIRTUAL_TRACE() { visitor->trace(m_entries); }
-=======
-    DEFINE_INLINE_VIRTUAL_TRACE()
-    {
-        visitor->trace(m_entries);
-    }
->>>>>>> miniblink49
 
 private:
     // We use HeapVector here to keep the entry order.
     using Entries = HeapVector<Member<T>>;
     using IteratorType = typename Entries::const_iterator;
 
-<<<<<<< HEAD
     typename PairIterable<String, T*>::IterationSource* startIteration(
         ScriptState*,
         ExceptionState&) override
-=======
-    typename PairIterable<String, T*>::IterationSource* startIteration(ScriptState*, ExceptionState&) override
->>>>>>> miniblink49
     {
         return new MapIterationSource(this, m_entries.begin(), m_entries.end());
     }
 
-<<<<<<< HEAD
     bool getMapEntry(ScriptState*,
         const String& key,
         T*& value,
         ExceptionState&) override
-=======
-    bool getMapEntry(ScriptState*, const String& key, T*& value, ExceptionState&) override
->>>>>>> miniblink49
     {
         // FIXME: This function is not O(1). Perhaps it's OK because in typical
         // cases not so many ports are connected.
@@ -78,32 +57,22 @@ private:
 
     // Note: This template class relies on the fact that m_map.m_entries will
     // never be modified once it is created.
-<<<<<<< HEAD
     class MapIterationSource final
         : public PairIterable<String, T*>::IterationSource {
     public:
         MapIterationSource(MIDIPortMap<T>* map,
             IteratorType iterator,
             IteratorType end)
-=======
-    class MapIterationSource final : public PairIterable<String, T*>::IterationSource {
-    public:
-        MapIterationSource(MIDIPortMap<T>* map, IteratorType iterator, IteratorType end)
->>>>>>> miniblink49
             : m_map(map)
             , m_iterator(iterator)
             , m_end(end)
         {
         }
 
-<<<<<<< HEAD
         bool next(ScriptState* scriptState,
             String& key,
             T*& value,
             ExceptionState&) override
-=======
-        bool next(ScriptState* scriptState, String& key, T*& value, ExceptionState&) override
->>>>>>> miniblink49
         {
             if (m_iterator == m_end)
                 return false;

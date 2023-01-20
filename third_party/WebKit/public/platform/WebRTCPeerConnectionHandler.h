@@ -31,21 +31,14 @@
 #ifndef WebRTCPeerConnectionHandler_h
 #define WebRTCPeerConnectionHandler_h
 
-<<<<<<< HEAD
 #include "WebRTCStats.h"
 
-=======
->>>>>>> miniblink49
 namespace blink {
 
 class WebMediaConstraints;
 class WebMediaStream;
 class WebMediaStreamTrack;
-<<<<<<< HEAD
 class WebRTCAnswerOptions;
-=======
-class WebRTCConfiguration;
->>>>>>> miniblink49
 class WebRTCDTMFSenderHandler;
 class WebRTCDataChannelHandler;
 class WebRTCICECandidate;
@@ -55,17 +48,13 @@ class WebRTCSessionDescriptionRequest;
 class WebRTCStatsRequest;
 class WebRTCVoidRequest;
 class WebString;
-<<<<<<< HEAD
 struct WebRTCConfiguration;
-=======
->>>>>>> miniblink49
 struct WebRTCDataChannelInit;
 
 class WebRTCPeerConnectionHandler {
 public:
     virtual ~WebRTCPeerConnectionHandler() { }
 
-<<<<<<< HEAD
     virtual bool initialize(const WebRTCConfiguration&,
         const WebMediaConstraints&)
         = 0;
@@ -91,23 +80,10 @@ public:
     virtual WebRTCSessionDescription localDescription() = 0;
     virtual WebRTCSessionDescription remoteDescription() = 0;
     virtual bool setConfiguration(const WebRTCConfiguration&) = 0;
-=======
-    virtual bool initialize(const WebRTCConfiguration&, const WebMediaConstraints&) = 0;
-
-    virtual void createOffer(const WebRTCSessionDescriptionRequest&, const WebMediaConstraints&) = 0;
-    virtual void createOffer(const WebRTCSessionDescriptionRequest&, const WebRTCOfferOptions&) { }
-    virtual void createAnswer(const WebRTCSessionDescriptionRequest&, const WebMediaConstraints&) = 0;
-    virtual void setLocalDescription(const WebRTCVoidRequest&, const WebRTCSessionDescription&) = 0;
-    virtual void setRemoteDescription(const WebRTCVoidRequest&, const WebRTCSessionDescription&) = 0;
-    virtual WebRTCSessionDescription localDescription() = 0;
-    virtual WebRTCSessionDescription remoteDescription() = 0;
-    virtual bool updateICE(const WebRTCConfiguration&, const WebMediaConstraints&) = 0;
->>>>>>> miniblink49
 
     // DEPRECATED
     virtual bool addICECandidate(const WebRTCICECandidate&) { return false; }
 
-<<<<<<< HEAD
     virtual bool addICECandidate(const WebRTCVoidRequest&,
         const WebRTCICECandidate&)
     {
@@ -127,14 +103,6 @@ public:
     virtual WebRTCDTMFSenderHandler* createDTMFSender(
         const WebMediaStreamTrack&)
         = 0;
-=======
-    virtual bool addICECandidate(const WebRTCVoidRequest&, const WebRTCICECandidate&) { return false; }
-    virtual bool addStream(const WebMediaStream&, const WebMediaConstraints&) = 0;
-    virtual void removeStream(const WebMediaStream&) = 0;
-    virtual void getStats(const WebRTCStatsRequest&) = 0;
-    virtual WebRTCDataChannelHandler* createDataChannel(const WebString& label, const WebRTCDataChannelInit&) = 0;
-    virtual WebRTCDTMFSenderHandler* createDTMFSender(const WebMediaStreamTrack&) = 0;
->>>>>>> miniblink49
     virtual void stop() = 0;
 };
 

@@ -28,10 +28,7 @@
 
 #include "modules/ModulesExport.h"
 #include "wtf/text/WTFString.h"
-<<<<<<< HEAD
 #include <memory>
-=======
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -42,7 +39,6 @@ class MediaStreamTrack;
 
 class SpeechRecognitionClient {
 public:
-<<<<<<< HEAD
     virtual void start(SpeechRecognition*,
         const SpeechGrammarList*,
         const String& lang,
@@ -51,22 +47,15 @@ public:
         unsigned long maxAlternatives,
         MediaStreamTrack* audioTrack)
         = 0;
-=======
-    virtual void start(SpeechRecognition*, const SpeechGrammarList*, const String& lang, const String& serviceURI, bool continuous, bool interimResults, unsigned long maxAlternatives, MediaStreamTrack* audioTrack) = 0;
->>>>>>> miniblink49
     virtual void stop(SpeechRecognition*) = 0;
     virtual void abort(SpeechRecognition*) = 0;
 
     virtual ~SpeechRecognitionClient() { }
 };
 
-<<<<<<< HEAD
 MODULES_EXPORT void provideSpeechRecognitionTo(
     Page&,
     std::unique_ptr<SpeechRecognitionClient>);
-=======
-MODULES_EXPORT void provideSpeechRecognitionTo(Page&, PassOwnPtr<SpeechRecognitionClient>);
->>>>>>> miniblink49
 
 } // namespace blink
 

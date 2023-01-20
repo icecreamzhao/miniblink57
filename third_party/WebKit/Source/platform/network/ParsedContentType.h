@@ -33,10 +33,7 @@
 #define ParsedContentType_h
 
 #include "platform/PlatformExport.h"
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
-=======
->>>>>>> miniblink49
 #include "wtf/HashMap.h"
 #include "wtf/text/StringHash.h"
 
@@ -47,34 +44,22 @@ typedef std::pair<unsigned, unsigned> SubstringRange;
 PLATFORM_EXPORT bool isValidContentType(const String&);
 
 // FIXME: add support for comments.
-<<<<<<< HEAD
 class PLATFORM_EXPORT ParsedContentType final {
     STACK_ALLOCATED();
 
-=======
-class PLATFORM_EXPORT ParsedContentType {
->>>>>>> miniblink49
 public:
     explicit ParsedContentType(const String&);
 
     String mimeType() const { return m_mimeType; }
     String charset() const;
 
-<<<<<<< HEAD
     // Note that in the case of multiple values for the same name, the last value
     // is returned.
-=======
-    // Note that in the case of multiple values for the same name, the last value is returned.
->>>>>>> miniblink49
     String parameterValueForName(const String&) const;
     size_t parameterCount() const;
 
 private:
-<<<<<<< HEAD
     template <class ReceiverType>
-=======
-    template<class ReceiverType>
->>>>>>> miniblink49
     friend bool parseContentType(const String&, ReceiverType&);
     void setContentType(const SubstringRange&);
     void setContentTypeParameter(const SubstringRange&, const SubstringRange&);
@@ -85,10 +70,6 @@ private:
     String m_mimeType;
 };
 
-<<<<<<< HEAD
 } // namespace blink
-=======
-}
->>>>>>> miniblink49
 
 #endif

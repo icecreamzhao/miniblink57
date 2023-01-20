@@ -23,34 +23,34 @@ typedef base::Callback<v8::Local<v8::Value>(v8::Isolate*)> ModuleGetterCallback;
 // that inherits from ModuleRunnerDelegate. ModuleRunnerDelegate lets embedders
 // register built-in modules and routes module requests to FileModuleProvider.
 class GIN_EXPORT ModuleRunnerDelegate : public ShellRunnerDelegate {
- public:
-  explicit ModuleRunnerDelegate(
-      const std::vector<base::FilePath>& search_paths);
-  ~ModuleRunnerDelegate() override;
+public:
+    explicit ModuleRunnerDelegate(
+        const std::vector<base::FilePath>& search_paths);
+    ~ModuleRunnerDelegate() override;
 
-  void AddBuiltinModule(const std::string& id, ModuleGetter getter);
-  void AddBuiltinModule(const std::string& id,
-                        const ModuleGetterCallback& getter);
+    void AddBuiltinModule(const std::string& id, ModuleGetter getter);
+    void AddBuiltinModule(const std::string& id,
+        const ModuleGetterCallback& getter);
 
- protected:
-  void AttemptToLoadMoreModules(Runner* runner);
+protected:
+    void AttemptToLoadMoreModules(Runner* runner);
 
- private:
-  typedef std::map<std::string, ModuleGetterCallback> BuiltinModuleMap;
+private:
+    typedef std::map<std::string, ModuleGetterCallback> BuiltinModuleMap;
 
-  // From ShellRunnerDelegate:
-  v8::Local<v8::ObjectTemplate> GetGlobalTemplate(
-      ShellRunner* runner,
-      v8::Isolate* isolate) override;
-  void DidCreateContext(ShellRunner* runner) override;
-  void DidRunScript(ShellRunner* runner) override;
+    // From ShellRunnerDelegate:
+    v8::Local<v8::ObjectTemplate> GetGlobalTemplate(
+        ShellRunner* runner,
+        v8::Isolate* isolate) override;
+    void DidCreateContext(ShellRunner* runner) override;
+    void DidRunScript(ShellRunner* runner) override;
 
-  BuiltinModuleMap builtin_modules_;
-  FileModuleProvider module_provider_;
+    BuiltinModuleMap builtin_modules_;
+    FileModuleProvider module_provider_;
 
-  DISALLOW_COPY_AND_ASSIGN(ModuleRunnerDelegate);
+    DISALLOW_COPY_AND_ASSIGN(ModuleRunnerDelegate);
 };
 
-}  // namespace gin
+} // namespace gin
 
-#endif  // GIN_MODULES_MODULE_RUNNER_DELEGATE_H_
+#endif // GIN_MODULES_MODULE_RUNNER_DELEGATE_H_

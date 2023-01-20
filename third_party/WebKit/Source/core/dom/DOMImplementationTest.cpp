@@ -27,11 +27,10 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/dom/DOMImplementation.h"
 
+#include "testing/gtest/include/gtest/gtest.h"
 #include "wtf/text/WTFString.h"
-#include <gtest/gtest.h>
 
 namespace blink {
 
@@ -45,20 +44,26 @@ TEST(DOMImplementationTest, TextMIMEType)
     EXPECT_TRUE(DOMImplementation::isTextMIMEType("application/json;foo=2"));
     EXPECT_TRUE(DOMImplementation::isTextMIMEType("application/json  "));
     EXPECT_TRUE(DOMImplementation::isTextMIMEType("application/+json"));
-    EXPECT_TRUE(DOMImplementation::isTextMIMEType("application/x-javascript-like+json;a=2;c=4"));
+    EXPECT_TRUE(DOMImplementation::isTextMIMEType(
+        "application/x-javascript-like+json;a=2;c=4"));
     EXPECT_TRUE(DOMImplementation::isTextMIMEType("application/javascript"));
     EXPECT_TRUE(DOMImplementation::isTextMIMEType("Application/Javascript"));
-    EXPECT_TRUE(DOMImplementation::isTextMIMEType("application/x-custom+json;b=3"));
+    EXPECT_TRUE(
+        DOMImplementation::isTextMIMEType("application/x-custom+json;b=3"));
     EXPECT_TRUE(DOMImplementation::isTextMIMEType("application/x-custom+json"));
     // Outside of RFC-2045 grammar, but robustly accept/allow.
     EXPECT_TRUE(DOMImplementation::isTextMIMEType("application/x-what+json;"));
     EXPECT_TRUE(DOMImplementation::isTextMIMEType("application/json;"));
     EXPECT_TRUE(DOMImplementation::isTextMIMEType("application/json "));
 
-    EXPECT_FALSE(DOMImplementation::isTextMIMEType("application/x-custom;a=a+json"));
-    EXPECT_FALSE(DOMImplementation::isTextMIMEType("application/x-custom;a=a+json ;"));
-    EXPECT_FALSE(DOMImplementation::isTextMIMEType("application/x-custom+jsonsoup"));
-    EXPECT_FALSE(DOMImplementation::isTextMIMEType("application/x-custom+jsonsoup  "));
+    EXPECT_FALSE(
+        DOMImplementation::isTextMIMEType("application/x-custom;a=a+json"));
+    EXPECT_FALSE(
+        DOMImplementation::isTextMIMEType("application/x-custom;a=a+json ;"));
+    EXPECT_FALSE(
+        DOMImplementation::isTextMIMEType("application/x-custom+jsonsoup"));
+    EXPECT_FALSE(
+        DOMImplementation::isTextMIMEType("application/x-custom+jsonsoup  "));
     EXPECT_FALSE(DOMImplementation::isTextMIMEType("text/html"));
     EXPECT_FALSE(DOMImplementation::isTextMIMEType("text/xml"));
     EXPECT_FALSE(DOMImplementation::isTextMIMEType("text/xsl"));
@@ -79,8 +84,10 @@ TEST(DOMImplementationTest, TextXMLType)
     EXPECT_TRUE(DOMImplementation::isXMLMIMEType("text/XSL"));
     EXPECT_TRUE(DOMImplementation::isXMLMIMEType("application/x+xml"));
 
-    EXPECT_FALSE(DOMImplementation::isXMLMIMEType("application/x-custom;a=a+xml"));
-    EXPECT_FALSE(DOMImplementation::isXMLMIMEType("application/x-custom;a=a+xml ;"));
+    EXPECT_FALSE(
+        DOMImplementation::isXMLMIMEType("application/x-custom;a=a+xml"));
+    EXPECT_FALSE(
+        DOMImplementation::isXMLMIMEType("application/x-custom;a=a+xml ;"));
     EXPECT_FALSE(DOMImplementation::isXMLMIMEType("application/x-custom+xml2"));
     EXPECT_FALSE(DOMImplementation::isXMLMIMEType("application/x-custom+xml2  "));
     EXPECT_FALSE(DOMImplementation::isXMLMIMEType("application/x-custom+exml"));

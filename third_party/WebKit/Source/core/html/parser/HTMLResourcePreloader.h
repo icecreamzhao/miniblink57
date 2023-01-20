@@ -26,30 +26,41 @@
 #ifndef HTMLResourcePreloader_h
 #define HTMLResourcePreloader_h
 
-#include "core/fetch/FetchRequest.h"
-#include "core/fetch/Resource.h"
+#include "core/html/parser/CSSPreloadScanner.h"
 #include "core/html/parser/PreloadRequest.h"
 #include "core/html/parser/ResourcePreloader.h"
+#include "core/loader/NetworkHintsInterface.h"
+#include "platform/heap/Heap.h"
 #include "wtf/CurrentTime.h"
 #include "wtf/text/TextPosition.h"
+#include <memory>
 
 namespace blink {
 
-class HTMLResourcePreloader final : public NoBaseWillBeGarbageCollected<HTMLResourcePreloader>, public ResourcePreloader {
-    WTF_MAKE_NONCOPYABLE(HTMLResourcePreloader); WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(HTMLResourcePreloader);
+class Document;
+
+class CORE_EXPORT HTMLResourcePreloader
+    : public GarbageCollected<HTMLResourcePreloader>,
+      public ResourcePreloader {
+    WTF_MAKE_NONCOPYABLE(HTMLResourcePreloader);
+    friend class HTMLResourcePreloaderTest;
+
 public:
-    static PassOwnPtrWillBeRawPtr<HTMLResourcePreloader> create(Document&);
+    static HTMLResourcePreloader* create(Document&);
+    int countPreloads();
+    Document* document() { return m_document.get(); }
     DECLARE_TRACE();
 
 protected:
-    void preload(PassOwnPtr<PreloadRequest>) override;
-
-private:
+    void preload(std::unique_ptr<PreloadRequest>,
+        const NetworkHintsInterface&) override;
     explicit HTMLResourcePreloader(Document&);
 
-    RawPtrWillBeMember<Document> m_document;
+private:
+    Member<Document> m_document;
+    HeapHashSet<Member<CSSPreloaderResourceClient>> m_cssPreloaders;
 };
 
-}
+} // namespace blink
 
 #endif

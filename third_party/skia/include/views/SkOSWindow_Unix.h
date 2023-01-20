@@ -16,19 +16,11 @@
 class SkEvent;
 
 struct SkUnixWindow {
-<<<<<<< HEAD
     Display* fDisplay;
     Window fWin;
     size_t fOSWin;
     GC fGc;
     GLXContext fGLContext;
-=======
-  Display* fDisplay;
-  Window fWin;
-  size_t fOSWin;
-  GC fGc;
-  GLXContext fGLContext;
->>>>>>> miniblink49
 };
 
 class SkOSWindow : public SkWindow {
@@ -44,7 +36,6 @@ public:
     enum SkBackEndTypes {
         kNone_BackEndType,
         kNativeGL_BackEndType,
-<<<<<<< HEAD
 #if SK_ANGLE
         kANGLE_BackEndType,
 #endif // SK_ANGLE
@@ -52,12 +43,6 @@ public:
 
     bool attach(SkBackEndTypes attachType, int msaaSampleCount, bool deepColor, AttachmentInfo*);
     void release();
-=======
-    };
-
-    bool attach(SkBackEndTypes attachType, int msaaSampleCount, AttachmentInfo*);
-    void detach();
->>>>>>> miniblink49
     void present();
 
     int getMSAASampleCount() const { return fMSAASampleCount; }

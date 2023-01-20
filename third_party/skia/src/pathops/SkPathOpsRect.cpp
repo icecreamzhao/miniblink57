@@ -4,23 +4,14 @@
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-<<<<<<< HEAD
 #include "SkPathOpsRect.h"
-=======
->>>>>>> miniblink49
 #include "SkPathOpsConic.h"
 #include "SkPathOpsCubic.h"
 #include "SkPathOpsLine.h"
 #include "SkPathOpsQuad.h"
-<<<<<<< HEAD
 
 void SkDRect::setBounds(const SkDQuad& curve, const SkDQuad& sub, double startT, double endT)
 {
-=======
-#include "SkPathOpsRect.h"
-
-void SkDRect::setBounds(const SkDQuad& curve, const SkDQuad& sub, double startT, double endT) {
->>>>>>> miniblink49
     set(sub[0]);
     add(sub[2]);
     double tValues[2];
@@ -37,12 +28,8 @@ void SkDRect::setBounds(const SkDQuad& curve, const SkDQuad& sub, double startT,
     }
 }
 
-<<<<<<< HEAD
 void SkDRect::setBounds(const SkDConic& curve, const SkDConic& sub, double startT, double endT)
 {
-=======
-void SkDRect::setBounds(const SkDConic& curve, const SkDConic& sub, double startT, double endT) {
->>>>>>> miniblink49
     set(sub[0]);
     add(sub[2]);
     double tValues[2];
@@ -59,12 +46,8 @@ void SkDRect::setBounds(const SkDConic& curve, const SkDConic& sub, double start
     }
 }
 
-<<<<<<< HEAD
 void SkDRect::setBounds(const SkDCubic& curve, const SkDCubic& sub, double startT, double endT)
 {
-=======
-void SkDRect::setBounds(const SkDCubic& curve, const SkDCubic& sub, double startT, double endT) {
->>>>>>> miniblink49
     set(sub[0]);
     add(sub[3]);
     double tValues[4];

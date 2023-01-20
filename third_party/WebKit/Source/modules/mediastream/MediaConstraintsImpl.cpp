@@ -28,26 +28,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
-
->>>>>>> miniblink49
 #include "modules/mediastream/MediaConstraintsImpl.h"
 
 #include "bindings/core/v8/ArrayValue.h"
 #include "bindings/core/v8/Dictionary.h"
 #include "bindings/core/v8/ExceptionState.h"
-<<<<<<< HEAD
 #include "core/dom/ExecutionContext.h"
 #include "core/frame/UseCounter.h"
 #include "core/inspector/ConsoleMessage.h"
 #include "modules/mediastream/MediaTrackConstraints.h"
 #include "platform/RuntimeEnabledFeatures.h"
 #include "wtf/Assertions.h"
-=======
-#include "core/dom/ExceptionCode.h"
->>>>>>> miniblink49
 #include "wtf/HashMap.h"
 #include "wtf/Vector.h"
 #include "wtf/text/StringHash.h"
@@ -56,7 +47,6 @@ namespace blink {
 
 namespace MediaConstraintsImpl {
 
-<<<<<<< HEAD
     // A naked value is treated as an "ideal" value in the basic constraints,
     // but as an exact value in "advanced" constraints.
     // https://w3c.github.io/mediacapture-main/#constrainable-interface
@@ -941,97 +931,6 @@ namespace MediaConstraintsImpl {
         if (!advancedVector.isEmpty())
             output.setAdvanced(advancedVector);
     }
-=======
-static bool parse(const Dictionary& constraintsDictionary, WebVector<WebMediaConstraint>& optional, WebVector<WebMediaConstraint>& mandatory)
-{
-    if (constraintsDictionary.isUndefinedOrNull())
-        return true;
-
-    Vector<String> names;
-    constraintsDictionary.getPropertyNames(names);
-
-    String mandatoryName("mandatory");
-    String optionalName("optional");
-
-    for (Vector<String>::iterator it = names.begin(); it != names.end(); ++it) {
-        if (*it != mandatoryName && *it != optionalName)
-            return false;
-    }
-
-    Vector<WebMediaConstraint> mandatoryConstraintsVector;
-    if (names.contains(mandatoryName)) {
-        Dictionary mandatoryConstraintsDictionary;
-        bool ok = constraintsDictionary.get(mandatoryName, mandatoryConstraintsDictionary);
-        if (!ok || mandatoryConstraintsDictionary.isUndefinedOrNull())
-            return false;
-
-        HashMap<String, String> mandatoryConstraintsHashMap;
-        ok = mandatoryConstraintsDictionary.getOwnPropertiesAsStringHashMap(mandatoryConstraintsHashMap);
-        if (!ok)
-            return false;
-
-        HashMap<String, String>::const_iterator iter = mandatoryConstraintsHashMap.begin();
-        for (; iter != mandatoryConstraintsHashMap.end(); ++iter)
-            mandatoryConstraintsVector.append(WebMediaConstraint(iter->key, iter->value));
-    }
-
-    Vector<WebMediaConstraint> optionalConstraintsVector;
-    if (names.contains(optionalName)) {
-        ArrayValue optionalConstraints;
-        bool ok = DictionaryHelper::get(constraintsDictionary, optionalName, optionalConstraints);
-        if (!ok || optionalConstraints.isUndefinedOrNull())
-            return false;
-
-        size_t numberOfConstraints;
-        ok = optionalConstraints.length(numberOfConstraints);
-        if (!ok)
-            return false;
-
-        for (size_t i = 0; i < numberOfConstraints; ++i) {
-            Dictionary constraint;
-            ok = optionalConstraints.get(i, constraint);
-            if (!ok || constraint.isUndefinedOrNull())
-                return false;
-            Vector<String> localNames;
-            constraint.getPropertyNames(localNames);
-            if (localNames.size() != 1)
-                return false;
-            String key = localNames[0];
-            String value;
-            ok = DictionaryHelper::get(constraint, key, value);
-            if (!ok)
-                return false;
-            optionalConstraintsVector.append(WebMediaConstraint(key, value));
-        }
-    }
-
-    optional.assign(optionalConstraintsVector);
-    mandatory.assign(mandatoryConstraintsVector);
-    return true;
-}
-
-
-WebMediaConstraints create(const Dictionary& constraintsDictionary, ExceptionState& exceptionState)
-{
-    WebVector<WebMediaConstraint> optional;
-    WebVector<WebMediaConstraint> mandatory;
-    if (!parse(constraintsDictionary, optional, mandatory)) {
-        exceptionState.throwTypeError("Malformed constraints object.");
-        return WebMediaConstraints();
-    }
-
-    WebMediaConstraints constraints;
-    constraints.initialize(optional, mandatory);
-    return constraints;
-}
-
-WebMediaConstraints create()
-{
-    WebMediaConstraints constraints;
-    constraints.initialize();
-    return constraints;
-}
->>>>>>> miniblink49
 
 } // namespace MediaConstraintsImpl
 } // namespace blink

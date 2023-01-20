@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -9,15 +5,10 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #include "SkRasterizer.h"
 #include "SkDraw.h"
 #include "SkMaskFilter.h"
 #include "SkPath.h"
-<<<<<<< HEAD
 #include "SkStrokeRec.h"
 
 bool SkRasterizer::rasterize(const SkPath& fillPath, const SkMatrix& matrix,
@@ -32,21 +23,6 @@ bool SkRasterizer::rasterize(const SkPath& fillPath, const SkMatrix& matrix,
 
         srcM.fFormat = SkMask::kA8_Format;
         srcM.fBounds.set(0, 0, 1, 1);
-=======
-
-bool SkRasterizer::rasterize(const SkPath& fillPath, const SkMatrix& matrix,
-                             const SkIRect* clipBounds, SkMaskFilter* filter,
-                             SkMask* mask, SkMask::CreateMode mode) const {
-    SkIRect storage;
-
-    if (clipBounds && filter && SkMask::kJustRenderImage_CreateMode != mode) {
-        SkIPoint    margin;
-        SkMask      srcM, dstM;
-
-        srcM.fFormat = SkMask::kA8_Format;
-        srcM.fBounds.set(0, 0, 1, 1);
-        srcM.fImage = NULL;
->>>>>>> miniblink49
         if (!filter->filterMask(&dstM, srcM, matrix, &margin)) {
             return false;
         }
@@ -60,7 +36,6 @@ bool SkRasterizer::rasterize(const SkPath& fillPath, const SkMatrix& matrix,
 /*  Our default implementation of the virtual method just scan converts
 */
 bool SkRasterizer::onRasterize(const SkPath& fillPath, const SkMatrix& matrix,
-<<<<<<< HEAD
     const SkIRect* clipBounds,
     SkMask* mask, SkMask::CreateMode mode) const
 {
@@ -69,13 +44,4 @@ bool SkRasterizer::onRasterize(const SkPath& fillPath, const SkMatrix& matrix,
     fillPath.transform(matrix, &devPath);
     return SkDraw::DrawToMask(devPath, clipBounds, nullptr, nullptr, mask, mode,
         SkStrokeRec::kFill_InitStyle);
-=======
-                             const SkIRect* clipBounds,
-                             SkMask* mask, SkMask::CreateMode mode) const {
-    SkPath  devPath;
-
-    fillPath.transform(matrix, &devPath);
-    return SkDraw::DrawToMask(devPath, clipBounds, NULL, NULL, mask, mode,
-                              SkPaint::kFill_Style);
->>>>>>> miniblink49
 }

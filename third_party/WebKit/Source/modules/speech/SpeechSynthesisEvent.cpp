@@ -23,15 +23,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "modules/speech/SpeechSynthesisEvent.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 SpeechSynthesisEvent* SpeechSynthesisEvent::create()
 {
     return new SpeechSynthesisEvent;
@@ -55,23 +50,6 @@ SpeechSynthesisEvent::SpeechSynthesisEvent(const AtomicString& type,
     unsigned charIndex,
     float elapsedTime,
     const String& name)
-=======
-PassRefPtrWillBeRawPtr<SpeechSynthesisEvent> SpeechSynthesisEvent::create()
-{
-    return adoptRefWillBeNoop(new SpeechSynthesisEvent);
-}
-
-PassRefPtrWillBeRawPtr<SpeechSynthesisEvent> SpeechSynthesisEvent::create(const AtomicString& type, SpeechSynthesisUtterance* utterance, unsigned charIndex, float elapsedTime, const String& name)
-{
-    return adoptRefWillBeNoop(new SpeechSynthesisEvent(type, utterance, charIndex, elapsedTime, name));
-}
-
-SpeechSynthesisEvent::SpeechSynthesisEvent()
-{
-}
-
-SpeechSynthesisEvent::SpeechSynthesisEvent(const AtomicString& type, SpeechSynthesisUtterance* utterance, unsigned charIndex, float elapsedTime, const String& name)
->>>>>>> miniblink49
     : Event(type, false, false)
     , m_utterance(utterance)
     , m_charIndex(charIndex)

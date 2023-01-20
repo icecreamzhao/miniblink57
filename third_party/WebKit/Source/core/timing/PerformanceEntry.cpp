@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/timing/PerformanceEntry.h"
 
 #include "bindings/core/v8/ScriptValue.h"
@@ -36,17 +35,19 @@
 
 namespace blink {
 
-PerformanceEntry::PerformanceEntry(const String& name, const String& entryType, double startTime, double finishTime)
+PerformanceEntry::PerformanceEntry(const String& name,
+    const String& entryType,
+    double startTime,
+    double finishTime)
     : m_name(name)
     , m_entryType(entryType)
     , m_startTime(startTime)
     , m_duration(finishTime - startTime)
+    , m_entryTypeEnum(toEntryTypeEnum(entryType))
 {
 }
 
-PerformanceEntry::~PerformanceEntry()
-{
-}
+PerformanceEntry::~PerformanceEntry() { }
 
 String PerformanceEntry::name() const
 {
@@ -58,24 +59,53 @@ String PerformanceEntry::entryType() const
     return m_entryType;
 }
 
-double PerformanceEntry::startTime() const
+DOMHighResTimeStamp PerformanceEntry::startTime() const
 {
     return m_startTime;
 }
 
-double PerformanceEntry::duration() const
+DOMHighResTimeStamp PerformanceEntry::duration() const
 {
     return m_duration;
+}
+
+PerformanceEntry::EntryType PerformanceEntry::toEntryTypeEnum(
+    const String& entryType)
+{
+    if (entryType == "composite")
+        return Composite;
+    if (entryType == "longtask")
+        return LongTask;
+    if (entryType == "mark")
+        return Mark;
+    if (entryType == "measure")
+        return Measure;
+    if (entryType == "render")
+        return Render;
+    if (entryType == "resource")
+        return Resource;
+    if (entryType == "navigation")
+        return Navigation;
+    if (entryType == "taskattribution")
+        return TaskAttribution;
+    if (entryType == "paint")
+        return Paint;
+    return Invalid;
 }
 
 ScriptValue PerformanceEntry::toJSONForBinding(ScriptState* scriptState) const
 {
     V8ObjectBuilder result(scriptState);
-    result.addString("name", name());
-    result.addString("entryType", entryType());
-    result.addNumber("startTime", startTime());
-    result.addNumber("duration", duration());
+    buildJSONValue(result);
     return result.scriptValue();
+}
+
+void PerformanceEntry::buildJSONValue(V8ObjectBuilder& builder) const
+{
+    builder.addString("name", name());
+    builder.addString("entryType", entryType());
+    builder.addNumber("startTime", startTime());
+    builder.addNumber("duration", duration());
 }
 
 } // namespace blink

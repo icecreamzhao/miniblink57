@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2012 The Android Open Source Project
  *
@@ -12,10 +8,6 @@
 #include "Benchmark.h"
 #include "SkCanvas.h"
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /**
  * This bench mark tests the use case where the user writes the a canvas
  * and then reads small chunks from it repeatedly. This can cause trouble
@@ -23,7 +15,6 @@
  */
 class ReadPixBench : public Benchmark {
 public:
-<<<<<<< HEAD
     ReadPixBench() { }
 
 protected:
@@ -34,16 +25,6 @@ protected:
 
     void onDraw(int loops, SkCanvas* canvas) override
     {
-=======
-    ReadPixBench() {}
-
-protected:
-    const char* onGetName() override {
-        return "readpix";
-    }
-
-    void onDraw(const int loops, SkCanvas* canvas) override {
->>>>>>> miniblink49
         canvas->clear(SK_ColorBLACK);
 
         SkISize size = canvas->getDeviceSize();
@@ -55,17 +36,10 @@ protected:
 
         paint.setColor(SK_ColorBLUE);
 
-<<<<<<< HEAD
         canvas->drawCircle(SkIntToScalar(size.width() / 2),
             SkIntToScalar(size.height() / 2),
             SkIntToScalar(size.width() / 2),
             paint);
-=======
-        canvas->drawCircle(SkIntToScalar(size.width()/2),
-                           SkIntToScalar(size.height()/2),
-                           SkIntToScalar(size.width()/2),
-                           paint);
->>>>>>> miniblink49
 
         SkBitmap bitmap;
 
@@ -90,8 +64,4 @@ private:
 
 ////////////////////////////////////////////////////////////////////////////////
 
-<<<<<<< HEAD
 DEF_BENCH(return new ReadPixBench();)
-=======
-DEF_BENCH( return new ReadPixBench(); )
->>>>>>> miniblink49

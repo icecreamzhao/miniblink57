@@ -6,24 +6,15 @@
  */
 
 #include "SampleCode.h"
-<<<<<<< HEAD
 #include "SkCanvas.h"
 #include "SkColorFilter.h"
 #include "SkColorPriv.h"
 #include "SkGradientShader.h"
 #include "SkGraphics.h"
-=======
-#include "SkView.h"
-#include "SkCanvas.h"
-#include "SkGradientShader.h"
-#include "SkGraphics.h"
-#include "SkImageDecoder.h"
->>>>>>> miniblink49
 #include "SkPath.h"
 #include "SkRandom.h"
 #include "SkRegion.h"
 #include "SkShader.h"
-<<<<<<< HEAD
 #include "SkTime.h"
 #include "SkTypeface.h"
 #include "SkUtils.h"
@@ -40,25 +31,6 @@ protected:
     // overrides from SkEventSink
     virtual bool onQuery(SkEvent* evt)
     {
-=======
-#include "SkUtils.h"
-#include "SkColorPriv.h"
-#include "SkColorFilter.h"
-#include "SkTime.h"
-#include "SkTypeface.h"
-#include "SkXfermode.h"
-
-#include "SkStream.h"
-#include "SkXMLParser.h"
-
-class PointsView : public SampleView {
-public:
-    PointsView() {}
-
-protected:
-    // overrides from SkEventSink
-    virtual bool onQuery(SkEvent* evt) {
->>>>>>> miniblink49
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "Points");
             return true;
@@ -66,30 +38,18 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-<<<<<<< HEAD
     static void fill_pts(SkPoint pts[], size_t n, SkRandom* rand)
     {
-=======
-    static void fill_pts(SkPoint pts[], size_t n, SkRandom* rand) {
->>>>>>> miniblink49
         for (size_t i = 0; i < n; i++)
             pts[i].set(rand->nextUScalar1() * 640, rand->nextUScalar1() * 480);
     }
 
-<<<<<<< HEAD
     virtual void onDrawContent(SkCanvas* canvas)
     {
         canvas->translate(SK_Scalar1, SK_Scalar1);
 
         SkRandom rand;
         SkPaint p0, p1, p2, p3;
-=======
-    virtual void onDrawContent(SkCanvas* canvas) {
-        canvas->translate(SK_Scalar1, SK_Scalar1);
-
-        SkRandom rand;
-        SkPaint  p0, p1, p2, p3;
->>>>>>> miniblink49
         const size_t n = 99;
 
         p0.setColor(SK_ColorRED);
@@ -113,10 +73,6 @@ protected:
     }
 
 private:
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
     typedef SampleView INHERITED;
 };
 

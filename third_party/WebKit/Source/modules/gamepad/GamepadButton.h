@@ -11,15 +11,10 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 class GamepadButton final : public GarbageCollected<GamepadButton>,
                             public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
 
-=======
-class GamepadButton final : public GarbageCollected<GamepadButton>, public ScriptWrappable {
-    DEFINE_WRAPPERTYPEINFO();
->>>>>>> miniblink49
 public:
     static GamepadButton* create();
 
@@ -29,22 +24,16 @@ public:
     bool pressed() const { return m_pressed; }
     void setPressed(bool val) { m_pressed = val; }
 
-<<<<<<< HEAD
     bool touched() const { return m_touched; }
     void setTouched(bool val) { m_touched = val; }
 
-=======
->>>>>>> miniblink49
     DEFINE_INLINE_TRACE() { }
 
 private:
     GamepadButton();
     double m_value;
     bool m_pressed;
-<<<<<<< HEAD
     bool m_touched;
-=======
->>>>>>> miniblink49
 };
 
 typedef HeapVector<Member<GamepadButton>> GamepadButtonVector;

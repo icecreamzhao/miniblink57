@@ -13,14 +13,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 static void S32_D565_Opaque(uint16_t* SK_RESTRICT dst,
-<<<<<<< HEAD
     const SkPMColor* SK_RESTRICT src, int count,
     U8CPU alpha, int /*x*/, int /*y*/)
 {
-=======
-                            const SkPMColor* SK_RESTRICT src, int count,
-                            U8CPU alpha, int /*x*/, int /*y*/) {
->>>>>>> miniblink49
     SkASSERT(255 == alpha);
 
     if (count > 0) {
@@ -33,14 +28,9 @@ static void S32_D565_Opaque(uint16_t* SK_RESTRICT dst,
 }
 
 static void S32_D565_Blend(uint16_t* SK_RESTRICT dst,
-<<<<<<< HEAD
     const SkPMColor* SK_RESTRICT src, int count,
     U8CPU alpha, int /*x*/, int /*y*/)
 {
-=======
-                             const SkPMColor* SK_RESTRICT src, int count,
-                             U8CPU alpha, int /*x*/, int /*y*/) {
->>>>>>> miniblink49
     SkASSERT(255 > alpha);
 
     if (count > 0) {
@@ -50,39 +40,24 @@ static void S32_D565_Blend(uint16_t* SK_RESTRICT dst,
             SkPMColorAssert(c);
             uint16_t d = *dst;
             *dst++ = SkPackRGB16(
-<<<<<<< HEAD
                 SkAlphaBlend(SkPacked32ToR16(c), SkGetPackedR16(d), scale),
                 SkAlphaBlend(SkPacked32ToG16(c), SkGetPackedG16(d), scale),
                 SkAlphaBlend(SkPacked32ToB16(c), SkGetPackedB16(d), scale));
-=======
-                    SkAlphaBlend(SkPacked32ToR16(c), SkGetPackedR16(d), scale),
-                    SkAlphaBlend(SkPacked32ToG16(c), SkGetPackedG16(d), scale),
-                    SkAlphaBlend(SkPacked32ToB16(c), SkGetPackedB16(d), scale));
->>>>>>> miniblink49
         } while (--count != 0);
     }
 }
 
 static void S32A_D565_Opaque(uint16_t* SK_RESTRICT dst,
-<<<<<<< HEAD
     const SkPMColor* SK_RESTRICT src, int count,
     U8CPU alpha, int /*x*/, int /*y*/)
 {
-=======
-                               const SkPMColor* SK_RESTRICT src, int count,
-                               U8CPU alpha, int /*x*/, int /*y*/) {
->>>>>>> miniblink49
     SkASSERT(255 == alpha);
 
     if (count > 0) {
         do {
             SkPMColor c = *src++;
             SkPMColorAssert(c);
-<<<<<<< HEAD
             //            if (__builtin_expect(c!=0, 1))
-=======
-//            if (__builtin_expect(c!=0, 1))
->>>>>>> miniblink49
             if (c) {
                 *dst = SkSrcOver32To16(c, *dst);
             }
@@ -92,14 +67,9 @@ static void S32A_D565_Opaque(uint16_t* SK_RESTRICT dst,
 }
 
 static void S32A_D565_Blend(uint16_t* SK_RESTRICT dst,
-<<<<<<< HEAD
     const SkPMColor* SK_RESTRICT src, int count,
     U8CPU alpha, int /*x*/, int /*y*/)
 {
-=======
-                              const SkPMColor* SK_RESTRICT src, int count,
-                               U8CPU alpha, int /*x*/, int /*y*/) {
->>>>>>> miniblink49
     SkASSERT(255 > alpha);
 
     if (count > 0) {
@@ -119,14 +89,9 @@ static void S32A_D565_Blend(uint16_t* SK_RESTRICT dst,
 /////////////////////////////////////////////////////////////////////////////
 
 static void S32_D565_Opaque_Dither(uint16_t* SK_RESTRICT dst,
-<<<<<<< HEAD
     const SkPMColor* SK_RESTRICT src,
     int count, U8CPU alpha, int x, int y)
 {
-=======
-                                     const SkPMColor* SK_RESTRICT src,
-                                     int count, U8CPU alpha, int x, int y) {
->>>>>>> miniblink49
     SkASSERT(255 == alpha);
 
     if (count > 0) {
@@ -143,14 +108,9 @@ static void S32_D565_Opaque_Dither(uint16_t* SK_RESTRICT dst,
 }
 
 static void S32_D565_Blend_Dither(uint16_t* SK_RESTRICT dst,
-<<<<<<< HEAD
     const SkPMColor* SK_RESTRICT src,
     int count, U8CPU alpha, int x, int y)
 {
-=======
-                                    const SkPMColor* SK_RESTRICT src,
-                                    int count, U8CPU alpha, int x, int y) {
->>>>>>> miniblink49
     SkASSERT(255 > alpha);
 
     if (count > 0) {
@@ -170,27 +130,17 @@ static void S32_D565_Blend_Dither(uint16_t* SK_RESTRICT dst,
 
             uint16_t d = *dst;
             *dst++ = SkPackRGB16(SkAlphaBlend(sr, SkGetPackedR16(d), scale),
-<<<<<<< HEAD
                 SkAlphaBlend(sg, SkGetPackedG16(d), scale),
                 SkAlphaBlend(sb, SkGetPackedB16(d), scale));
-=======
-                                 SkAlphaBlend(sg, SkGetPackedG16(d), scale),
-                                 SkAlphaBlend(sb, SkGetPackedB16(d), scale));
->>>>>>> miniblink49
             DITHER_INC_X(x);
         } while (--count != 0);
     }
 }
 
 static void S32A_D565_Opaque_Dither(uint16_t* SK_RESTRICT dst,
-<<<<<<< HEAD
     const SkPMColor* SK_RESTRICT src,
     int count, U8CPU alpha, int x, int y)
 {
-=======
-                                      const SkPMColor* SK_RESTRICT src,
-                                      int count, U8CPU alpha, int x, int y) {
->>>>>>> miniblink49
     SkASSERT(255 == alpha);
 
     if (count > 0) {
@@ -223,14 +173,9 @@ static void S32A_D565_Opaque_Dither(uint16_t* SK_RESTRICT dst,
 }
 
 static void S32A_D565_Blend_Dither(uint16_t* SK_RESTRICT dst,
-<<<<<<< HEAD
     const SkPMColor* SK_RESTRICT src,
     int count, U8CPU alpha, int x, int y)
 {
-=======
-                                     const SkPMColor* SK_RESTRICT src,
-                                     int count, U8CPU alpha, int x, int y) {
->>>>>>> miniblink49
     SkASSERT(255 > alpha);
 
     if (count > 0) {
@@ -239,12 +184,7 @@ static void S32A_D565_Blend_Dither(uint16_t* SK_RESTRICT dst,
         do {
             SkPMColor c = *src++;
             SkPMColorAssert(c);
-<<<<<<< HEAD
             if (c) {
-=======
-            if (c)
-            {
->>>>>>> miniblink49
                 unsigned d = *dst;
                 int sa = SkGetPackedA32(c);
                 int dst_scale = SkAlpha255To256(255 - SkAlphaMul(sa, src_scale));
@@ -271,24 +211,16 @@ static void S32A_D565_Blend_Dither(uint16_t* SK_RESTRICT dst,
 
 ///////////////////////////////////////////////////////////////////////////////
 
-<<<<<<< HEAD
 static uint32_t pmcolor_to_expand16(SkPMColor c)
 {
-=======
-static uint32_t pmcolor_to_expand16(SkPMColor c) {
->>>>>>> miniblink49
     unsigned r = SkGetPackedR32(c);
     unsigned g = SkGetPackedG32(c);
     unsigned b = SkGetPackedB32(c);
     return (g << 24) | (r << 13) | (b << 2);
 }
 
-<<<<<<< HEAD
 static void Color32A_D565(uint16_t dst[], SkPMColor src, int count, int x, int y)
 {
-=======
-static void Color32A_D565(uint16_t dst[], SkPMColor src, int count, int x, int y) {
->>>>>>> miniblink49
     SkASSERT(count > 0);
     uint32_t src_expand = pmcolor_to_expand16(src);
     unsigned scale = SkAlpha255To256(0xFF - SkGetPackedA32(src)) >> 3;
@@ -317,22 +249,14 @@ static const SkBlitRow::Proc16 gDefault_565_Procs[] = {
     S32A_D565_Blend_Dither
 };
 
-<<<<<<< HEAD
 SkBlitRow::Proc16 SkBlitRow::Factory16(unsigned flags)
 {
-=======
-SkBlitRow::Proc16 SkBlitRow::Factory16(unsigned flags) {
->>>>>>> miniblink49
     SkASSERT(flags < SK_ARRAY_COUNT(gDefault_565_Procs));
     // just so we don't crash
     flags &= kFlags16_Mask;
 
     SkBlitRow::Proc16 proc = PlatformFactory565(flags);
-<<<<<<< HEAD
     if (nullptr == proc) {
-=======
-    if (NULL == proc) {
->>>>>>> miniblink49
         proc = gDefault_565_Procs[flags];
     }
     return proc;
@@ -349,12 +273,8 @@ static const SkBlitRow::ColorProc16 gDefault_565_ColorProcs[] = {
 #endif
 };
 
-<<<<<<< HEAD
 SkBlitRow::ColorProc16 SkBlitRow::ColorFactory16(unsigned flags)
 {
-=======
-SkBlitRow::ColorProc16 SkBlitRow::ColorFactory16(unsigned flags) {
->>>>>>> miniblink49
     SkASSERT((flags & ~kFlags16_Mask) == 0);
     // just so we don't crash
     flags &= kFlags16_Mask;
@@ -365,11 +285,7 @@ SkBlitRow::ColorProc16 SkBlitRow::ColorFactory16(unsigned flags) {
     SkASSERT(flags < SK_ARRAY_COUNT(gDefault_565_ColorProcs));
 
     SkBlitRow::ColorProc16 proc = PlatformColorFactory565(flags);
-<<<<<<< HEAD
     if (nullptr == proc) {
-=======
-    if (NULL == proc) {
->>>>>>> miniblink49
         proc = gDefault_565_ColorProcs[flags];
     }
     return proc;

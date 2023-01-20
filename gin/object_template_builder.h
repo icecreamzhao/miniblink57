@@ -7,8 +7,8 @@
 
 #include <type_traits>
 
-#include "cef/include/base/cef_bind.h"
-#include "cef/include/base/cef_callback.h"
+#include "base/bind.h"
+#include "base/callback.h"
 #include "base/strings/string_piece.h"
 #include "gin/converter.h"
 #include "gin/function_template.h"

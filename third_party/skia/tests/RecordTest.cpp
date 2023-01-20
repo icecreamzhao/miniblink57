@@ -5,7 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "RecordTestUtils.h"
 #include "SkBitmap.h"
 #include "SkImageInfo.h"
@@ -13,20 +12,10 @@
 #include "SkRecords.h"
 #include "SkShader.h"
 #include "Test.h"
-=======
-#include "Test.h"
-
-#include "SkBitmap.h"
-#include "SkImageInfo.h"
-#include "SkShader.h"
-#include "SkRecord.h"
-#include "SkRecords.h"
->>>>>>> miniblink49
 
 // Sums the area of any DrawRect command it sees.
 class AreaSummer {
 public:
-<<<<<<< HEAD
     AreaSummer()
         : fArea(0)
     {
@@ -37,28 +26,15 @@ public:
 
     void operator()(const SkRecords::DrawRect& draw)
     {
-=======
-    AreaSummer() : fArea(0) {}
-
-    template <typename T> void operator()(const T&) { }
-
-    void operator()(const SkRecords::DrawRect& draw) {
->>>>>>> miniblink49
         fArea += (int)(draw.rect.width() * draw.rect.height());
     }
 
     int area() const { return fArea; }
 
-<<<<<<< HEAD
     void apply(const SkRecord& record)
     {
         for (int i = 0; i < record.count(); i++) {
             record.visit(i, *this);
-=======
-    void apply(const SkRecord& record) {
-        for (unsigned i = 0; i < record.count(); i++) {
-            record.visit<void>(i, *this);
->>>>>>> miniblink49
         }
     }
 
@@ -68,46 +44,28 @@ private:
 
 // Scales out the bottom-right corner of any DrawRect command it sees by 2x.
 struct Stretch {
-<<<<<<< HEAD
     template <typename T>
     void operator()(T*) { }
     void operator()(SkRecords::DrawRect* draw)
     {
-=======
-    template <typename T> void operator()(T*) {}
-    void operator()(SkRecords::DrawRect* draw) {
->>>>>>> miniblink49
         draw->rect.fRight *= 2;
         draw->rect.fBottom *= 2;
     }
 
-<<<<<<< HEAD
     void apply(SkRecord* record)
     {
         for (int i = 0; i < record->count(); i++) {
             record->mutate(i, *this);
-=======
-    void apply(SkRecord* record) {
-        for (unsigned i = 0; i < record->count(); i++) {
-            record->mutate<void>(i, *this);
->>>>>>> miniblink49
         }
     }
 };
 
-<<<<<<< HEAD
 #define APPEND(record, type, ...) \
     new (record.append<type>()) type { __VA_ARGS__ }
 
 // Basic tests for the low-level SkRecord code.
 DEF_TEST(Record, r)
 {
-=======
-#define APPEND(record, type, ...) SkNEW_PLACEMENT_ARGS(record.append<type>(), type, (__VA_ARGS__))
-
-// Basic tests for the low-level SkRecord code.
-DEF_TEST(Record, r) {
->>>>>>> miniblink49
     SkRecord record;
 
     // Add a simple DrawRect command.
@@ -129,7 +87,6 @@ DEF_TEST(Record, r) {
     REPORTER_ASSERT(r, summer.area() == 500);
 }
 
-<<<<<<< HEAD
 DEF_TEST(Record_defrag, r)
 {
     SkRecord record;
@@ -160,16 +117,6 @@ static bool is_aligned(const T* p)
 
 DEF_TEST(Record_Alignment, r)
 {
-=======
-#undef APPEND
-
-template <typename T>
-static bool is_aligned(const T* p) {
-    return (((uintptr_t)p) & (sizeof(T) - 1)) == 0;
-}
-
-DEF_TEST(Record_Alignment, r) {
->>>>>>> miniblink49
     SkRecord record;
     REPORTER_ASSERT(r, is_aligned(record.alloc<uint8_t>()));
     REPORTER_ASSERT(r, is_aligned(record.alloc<uint16_t>()));
@@ -182,7 +129,3 @@ DEF_TEST(Record_Alignment, r) {
         REPORTER_ASSERT(r, is_aligned(record.alloc<uint64_t>()));
     }
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49

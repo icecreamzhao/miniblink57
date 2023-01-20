@@ -38,7 +38,6 @@ class WebIDBKeyRange {
 public:
     ~WebIDBKeyRange() { reset(); }
 
-<<<<<<< HEAD
     WebIDBKeyRange() { }
     WebIDBKeyRange(const WebIDBKeyRange& keyRange) { assign(keyRange); }
     WebIDBKeyRange(const WebIDBKey& lower,
@@ -48,10 +47,6 @@ public:
     {
         assign(lower, upper, lowerOpen, upperOpen);
     }
-=======
-    WebIDBKeyRange(const WebIDBKeyRange& keyRange) { assign(keyRange); }
-    WebIDBKeyRange(const WebIDBKey& lower, const WebIDBKey& upper, bool lowerOpen, bool upperOpen) { assign(lower, upper, lowerOpen, upperOpen); }
->>>>>>> miniblink49
 
     BLINK_EXPORT WebIDBKey lower() const;
     BLINK_EXPORT WebIDBKey upper() const;
@@ -59,7 +54,6 @@ public:
     BLINK_EXPORT bool upperOpen() const;
 
     BLINK_EXPORT void assign(const WebIDBKeyRange&);
-<<<<<<< HEAD
     BLINK_EXPORT void assign(const WebIDBKey& lower,
         const WebIDBKey& upper,
         bool lowerOpen,
@@ -74,12 +68,6 @@ public:
 // FIXME: when compiling core or modules, use inline for reset.
 // when compiling WebIDBKeyRange.cpp, don't use inline to avoid redefinition.
 #if !BLINK_WEB_IMPLEMENTATION && BLINK_IMPLEMENTATION && defined(COMPONENT_BUILD)
-=======
-    BLINK_EXPORT void assign(const WebIDBKey& lower, const WebIDBKey& upper, bool lowerOpen, bool upperOpen);
-// FIXME: when compiling core or modules, use inline for reset.
-// when compiling WebIDBKeyRange.cpp, don't use inline to avoid redefinition.
-#if !BLINK_WEB_IMPLEMENTATION && LINK_CORE_MODULES_SEPARATELY
->>>>>>> miniblink49
     BLINK_EXPORT void reset()
     {
         m_private.reset();
@@ -91,25 +79,14 @@ public:
 #if BLINK_IMPLEMENTATION
     WebIDBKeyRange(IDBKeyRange* value)
         : m_private(value)
-<<<<<<< HEAD
     {
     }
-=======
-    { }
->>>>>>> miniblink49
     WebIDBKeyRange& operator=(IDBKeyRange* value)
     {
         m_private = value;
         return *this;
     }
-<<<<<<< HEAD
     operator IDBKeyRange*() const { return m_private.get(); }
-=======
-    operator IDBKeyRange*() const
-    {
-        return m_private.get();
-    }
->>>>>>> miniblink49
 #endif
 
 private:

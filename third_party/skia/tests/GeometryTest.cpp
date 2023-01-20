@@ -6,7 +6,6 @@
  */
 
 #include "SkGeometry.h"
-<<<<<<< HEAD
 #include "SkRandom.h"
 #include "Test.h"
 
@@ -17,16 +16,6 @@ static bool nearly_equal(const SkPoint& a, const SkPoint& b)
 
 static void testChopCubic(skiatest::Reporter* reporter)
 {
-=======
-#include "Test.h"
-#include "SkRandom.h"
-
-static bool nearly_equal(const SkPoint& a, const SkPoint& b) {
-    return SkScalarNearlyEqual(a.fX, b.fX) && SkScalarNearlyEqual(a.fY, b.fY);
-}
-
-static void testChopCubic(skiatest::Reporter* reporter) {
->>>>>>> miniblink49
     /*
         Inspired by this test, which used to assert that the tValues had dups
 
@@ -48,30 +37,18 @@ static void testChopCubic(skiatest::Reporter* reporter) {
 }
 
 static void check_pairs(skiatest::Reporter* reporter, int index, SkScalar t, const char name[],
-<<<<<<< HEAD
     SkScalar x0, SkScalar y0, SkScalar x1, SkScalar y1)
 {
     bool eq = SkScalarNearlyEqual(x0, x1) && SkScalarNearlyEqual(y0, y1);
     if (!eq) {
         SkDebugf("%s [%d %g] p0 [%10.8f %10.8f] p1 [%10.8f %10.8f]\n",
             name, index, t, x0, y0, x1, y1);
-=======
-                        SkScalar x0, SkScalar y0, SkScalar x1, SkScalar y1) {
-    bool eq = SkScalarNearlyEqual(x0, x1) && SkScalarNearlyEqual(y0, y1);
-    if (!eq) {
-        SkDebugf("%s [%d %g] p0 [%10.8f %10.8f] p1 [%10.8f %10.8f]\n",
-                 name, index, t, x0, y0, x1, y1);
->>>>>>> miniblink49
         REPORTER_ASSERT(reporter, eq);
     }
 }
 
-<<<<<<< HEAD
 static void test_evalquadat(skiatest::Reporter* reporter)
 {
-=======
-static void test_evalquadat(skiatest::Reporter* reporter) {
->>>>>>> miniblink49
     SkRandom rand;
     for (int i = 0; i < 1000; ++i) {
         SkPoint pts[3];
@@ -85,15 +62,9 @@ static void test_evalquadat(skiatest::Reporter* reporter) {
             SkEvalQuadAt(pts, t, &r0);
             SkPoint r1 = SkEvalQuadAt(pts, t);
             check_pairs(reporter, i, t, "quad-pos", r0.fX, r0.fY, r1.fX, r1.fY);
-<<<<<<< HEAD
 
             SkVector v0;
             SkEvalQuadAt(pts, t, nullptr, &v0);
-=======
-            
-            SkVector v0;
-            SkEvalQuadAt(pts, t, NULL, &v0);
->>>>>>> miniblink49
             SkVector v1 = SkEvalQuadTangentAt(pts, t);
             check_pairs(reporter, i, t, "quad-tan", v0.fX, v0.fY, v1.fX, v1.fY);
 
@@ -102,40 +73,24 @@ static void test_evalquadat(skiatest::Reporter* reporter) {
     }
 }
 
-<<<<<<< HEAD
 static void test_conic_eval_pos(skiatest::Reporter* reporter, const SkConic& conic, SkScalar t)
 {
     SkPoint p0, p1;
     conic.evalAt(t, &p0, nullptr);
-=======
-static void test_conic_eval_pos(skiatest::Reporter* reporter, const SkConic& conic, SkScalar t) {
-    SkPoint p0, p1;
-    conic.evalAt(t, &p0, NULL);
->>>>>>> miniblink49
     p1 = conic.evalAt(t);
     check_pairs(reporter, 0, t, "conic-pos", p0.fX, p0.fY, p1.fX, p1.fY);
 }
 
-<<<<<<< HEAD
 static void test_conic_eval_tan(skiatest::Reporter* reporter, const SkConic& conic, SkScalar t)
 {
     SkVector v0, v1;
     conic.evalAt(t, nullptr, &v0);
-=======
-static void test_conic_eval_tan(skiatest::Reporter* reporter, const SkConic& conic, SkScalar t) {
-    SkVector v0, v1;
-    conic.evalAt(t, NULL, &v0);
->>>>>>> miniblink49
     v1 = conic.evalTangentAt(t);
     check_pairs(reporter, 0, t, "conic-tan", v0.fX, v0.fY, v1.fX, v1.fY);
 }
 
-<<<<<<< HEAD
 static void test_conic(skiatest::Reporter* reporter)
 {
-=======
-static void test_conic(skiatest::Reporter* reporter) {
->>>>>>> miniblink49
     SkRandom rand;
     for (int i = 0; i < 1000; ++i) {
         SkPoint pts[3];
@@ -157,7 +112,6 @@ static void test_conic(skiatest::Reporter* reporter) {
     }
 }
 
-<<<<<<< HEAD
 static void test_quad_tangents(skiatest::Reporter* reporter)
 {
     SkPoint pts[] = {
@@ -288,9 +242,6 @@ static void test_cubic_tangents(skiatest::Reporter* reporter)
 
 DEF_TEST(Geometry, reporter)
 {
-=======
-DEF_TEST(Geometry, reporter) {
->>>>>>> miniblink49
     SkPoint pts[3], dst[5];
 
     pts[0].set(0, 0);
@@ -305,7 +256,6 @@ DEF_TEST(Geometry, reporter) {
     pts[2].set(3, 3);
     SkConvertQuadToCubic(pts, dst);
     const SkPoint cubic[] = {
-<<<<<<< HEAD
         {
             0,
             0,
@@ -319,9 +269,6 @@ DEF_TEST(Geometry, reporter) {
             1,
         },
         { 3, 3 },
-=======
-        { 0, 0, }, { 2, 0, }, { 3, 1, }, { 3, 3 },
->>>>>>> miniblink49
     };
     for (int i = 0; i < 4; ++i) {
         REPORTER_ASSERT(reporter, nearly_equal(cubic[i], dst[i]));
@@ -330,11 +277,8 @@ DEF_TEST(Geometry, reporter) {
     testChopCubic(reporter);
     test_evalquadat(reporter);
     test_conic(reporter);
-<<<<<<< HEAD
     test_cubic_tangents(reporter);
     test_quad_tangents(reporter);
     test_conic_tangents(reporter);
     test_conic_to_quads(reporter);
-=======
->>>>>>> miniblink49
 }

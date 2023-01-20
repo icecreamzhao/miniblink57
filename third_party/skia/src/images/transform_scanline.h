@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2012 The Android Open Source Project
  *
@@ -25,22 +21,14 @@
  * repacking color channel data as appropriate for the given transformation.
  */
 typedef void (*transform_scanline_proc)(const char* SK_RESTRICT src,
-<<<<<<< HEAD
     int width, char* SK_RESTRICT dst);
-=======
-                                        int width, char* SK_RESTRICT dst);
->>>>>>> miniblink49
 
 /**
  * Identity transformation: just copy bytes from src to dst.
  */
 static void transform_scanline_memcpy(const char* SK_RESTRICT src, int width,
-<<<<<<< HEAD
     char* SK_RESTRICT dst)
 {
-=======
-                                      char* SK_RESTRICT dst) {
->>>>>>> miniblink49
     memcpy(dst, src, width);
 }
 
@@ -50,12 +38,8 @@ static void transform_scanline_memcpy(const char* SK_RESTRICT src, int width,
  * alpha channel data to preserve.
  */
 static void transform_scanline_565(const char* SK_RESTRICT src, int width,
-<<<<<<< HEAD
     char* SK_RESTRICT dst)
 {
-=======
-                                   char* SK_RESTRICT dst) {
->>>>>>> miniblink49
     const uint16_t* SK_RESTRICT srcP = (const uint16_t*)src;
     for (int i = 0; i < width; i++) {
         unsigned c = *srcP++;
@@ -70,12 +54,8 @@ static void transform_scanline_565(const char* SK_RESTRICT src, int width,
  * Alpha channel data, if any, is abandoned.
  */
 static void transform_scanline_888(const char* SK_RESTRICT src, int width,
-<<<<<<< HEAD
     char* SK_RESTRICT dst)
 {
-=======
-                                   char* SK_RESTRICT dst) {
->>>>>>> miniblink49
     const SkPMColor* SK_RESTRICT srcP = (const SkPMColor*)src;
     for (int i = 0; i < width; i++) {
         SkPMColor c = *srcP++;
@@ -90,12 +70,8 @@ static void transform_scanline_888(const char* SK_RESTRICT src, int width,
  * Alpha channel data, if any, is abandoned.
  */
 static void transform_scanline_444(const char* SK_RESTRICT src, int width,
-<<<<<<< HEAD
     char* SK_RESTRICT dst)
 {
-=======
-                                   char* SK_RESTRICT dst) {
->>>>>>> miniblink49
     const SkPMColor16* SK_RESTRICT srcP = (const SkPMColor16*)src;
     for (int i = 0; i < width; i++) {
         SkPMColor16 c = *srcP++;
@@ -111,17 +87,10 @@ static void transform_scanline_444(const char* SK_RESTRICT src, int width,
  * scaling of RGB based on alpha channel).
  */
 static void transform_scanline_8888(const char* SK_RESTRICT src, int width,
-<<<<<<< HEAD
     char* SK_RESTRICT dst)
 {
     const SkPMColor* SK_RESTRICT srcP = (const SkPMColor*)src;
     const SkUnPreMultiply::Scale* SK_RESTRICT table = SkUnPreMultiply::GetScaleTable();
-=======
-                                    char* SK_RESTRICT dst) {
-    const SkPMColor* SK_RESTRICT srcP = (const SkPMColor*)src;
-    const SkUnPreMultiply::Scale* SK_RESTRICT table =
-                                              SkUnPreMultiply::GetScaleTable();
->>>>>>> miniblink49
 
     for (int i = 0; i < width; i++) {
         SkPMColor c = *srcP++;
@@ -148,17 +117,10 @@ static void transform_scanline_8888(const char* SK_RESTRICT src, int width,
  * with scaling of RGB based on alpha channel.
  */
 static void transform_scanline_4444(const char* SK_RESTRICT src, int width,
-<<<<<<< HEAD
     char* SK_RESTRICT dst)
 {
     const SkPMColor16* SK_RESTRICT srcP = (const SkPMColor16*)src;
     const SkUnPreMultiply::Scale* SK_RESTRICT table = SkUnPreMultiply::GetScaleTable();
-=======
-                                    char* SK_RESTRICT dst) {
-    const SkPMColor16* SK_RESTRICT srcP = (const SkPMColor16*)src;
-    const SkUnPreMultiply::Scale* SK_RESTRICT table =
-                                              SkUnPreMultiply::GetScaleTable();
->>>>>>> miniblink49
 
     for (int i = 0; i < width; i++) {
         SkPMColor16 c = *srcP++;

@@ -4,16 +4,9 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "wtf/text/StringBuffer.h"
 
 #include "testing/gtest/include/gtest/gtest.h"
-=======
-#include "config.h"
-#include "wtf/text/StringBuffer.h"
-
-#include <gtest/gtest.h>
->>>>>>> miniblink49
 
 namespace WTF {
 

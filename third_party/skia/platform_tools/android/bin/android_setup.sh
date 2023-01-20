@@ -11,12 +11,8 @@
 # Fail-fast if anything in the script fails.
 set -e
 
-<<<<<<< HEAD
 BUILDTYPE=${BUILDTYPE-Release_Developer}
 USE_CLANG="true"
-=======
-BUILDTYPE=${BUILDTYPE-Debug}
->>>>>>> miniblink49
 
 while (( "$#" )); do
   if [[ "$1" == "-d" ]]; then
@@ -32,7 +28,6 @@ while (( "$#" )); do
   elif [[ "$1" == "-t" ]]; then
     BUILDTYPE=$2
     shift
-<<<<<<< HEAD
   elif [[ "$1" == "--debug" ]]; then
     BUILDTYPE=Debug
   elif [[ "$1" == "--release" ]]; then
@@ -41,35 +36,22 @@ while (( "$#" )); do
     USE_CLANG="false"
   elif [[ "$1" == "--clang" ]]; then
     USE_CLANG="true"
-=======
-  elif [[ "$1" == "--release" ]]; then
-    BUILDTYPE=Release
-  elif [[ "$1" == "--clang" ]]; then
-    USE_CLANG="true"
-    export GYP_DEFINES="skia_clang_build=1 $GYP_DEFINES"
->>>>>>> miniblink49
   elif [[ "$1" == "--logcat" ]]; then
     LOGCAT=1
   elif [[ "$1" == "--verbose" ]]; then
     VERBOSE="true"
-<<<<<<< HEAD
   elif [[ "$1" == "--vulkan" ]]; then
     SKIA_VULKAN="true"
-=======
->>>>>>> miniblink49
   else
     APP_ARGS=("${APP_ARGS[@]}" "${1}")
   fi
   shift
 done
 
-<<<<<<< HEAD
 if [ "$USE_CLANG" == "true" ]; then
   export GYP_DEFINES="skia_clang_build=1 $GYP_DEFINES"
 fi
 
-=======
->>>>>>> miniblink49
 function verbose {
   if [[ -n $VERBOSE ]]; then
     echo $@
@@ -98,7 +80,6 @@ if [ -z "$ANDROID_SDK_ROOT" ]; then
   fi
 fi
 
-<<<<<<< HEAD
 if [ -z "$ANDROID_HOME" ]; then
   echo "ANDROID_HOME not set so we are setting it to a default value of ANDROID_SDK_ROOT"
   exportVar ANDROID_HOME $ANDROID_SDK_ROOT
@@ -106,17 +87,6 @@ fi
 
 if [ "$SKIA_VULKAN" == "true" ]; then
   export GYP_DEFINES="skia_vulkan=1 $GYP_DEFINES"
-=======
-# check to see that gclient sync ran successfully
-THIRD_PARTY_EXTERNAL_DIR=${SCRIPT_DIR}/../third_party/externals
-if [ ! -d "$THIRD_PARTY_EXTERNAL_DIR" ]; then
-	echo ""
-	echo "ERROR: Unable to find the required third_party dependencies needed to build."
-	echo "       To fix this add the following line to your .gclient file and run 'gclient sync'"
-	echo "        target_os = ['android']"
-	echo ""
-	exit 1;
->>>>>>> miniblink49
 fi
 
 # Helper function to configure the GYP defines to the appropriate values
@@ -149,11 +119,7 @@ setup_device() {
       ANDROID_ARCH="arm"
       ;;
     arm_v7 | xoom)
-<<<<<<< HEAD
       DEFINES="${DEFINES} skia_arch_type=arm arm_neon=0 arm_version=7"
-=======
-      DEFINES="${DEFINES} skia_arch_type=arm arm_neon_optional=1 arm_version=7"
->>>>>>> miniblink49
       ANDROID_ARCH="arm"
       ;;
     arm_v7_neon | nexus_4 | nexus_5 | nexus_6 | nexus_7 | nexus_10)
@@ -161,11 +127,7 @@ setup_device() {
       ANDROID_ARCH="arm"
       ;;
     arm64 | nexus_9)
-<<<<<<< HEAD
       DEFINES="${DEFINES} skia_arch_type=arm64 arm_version=8"
-=======
-      DEFINES="${DEFINES} skia_arch_type=arm64 skia_arch_width=64"
->>>>>>> miniblink49
       ANDROID_ARCH="arm64"
       ;;
     x86)
@@ -177,29 +139,17 @@ setup_device() {
       ANDROID_ARCH="x86_64"
       ;;
     mips)
-<<<<<<< HEAD
       DEFINES="${DEFINES} skia_arch_type=mips32"
-=======
-      DEFINES="${DEFINES} skia_arch_type=mips skia_arch_width=32"
->>>>>>> miniblink49
       DEFINES="${DEFINES} skia_resource_cache_mb_limit=32"
       ANDROID_ARCH="mips"
       ;;
     mips_dsp2)
-<<<<<<< HEAD
       DEFINES="${DEFINES} skia_arch_type=mips32"
-=======
-      DEFINES="${DEFINES} skia_arch_type=mips skia_arch_width=32"
->>>>>>> miniblink49
       DEFINES="${DEFINES} mips_arch_variant=mips32r2 mips_dsp=2"
       ANDROID_ARCH="mips"
       ;;
     mips64)
-<<<<<<< HEAD
       DEFINES="${DEFINES} skia_arch_type=mips64"
-=======
-      DEFINES="${DEFINES} skia_arch_type=mips skia_arch_width=64"
->>>>>>> miniblink49
       ANDROID_ARCH="mips64"
       ;;
     *)
@@ -220,7 +170,6 @@ setup_device() {
   verbose "The build is targeting the device: $TARGET_DEVICE"
   exportVar DEVICE_ID $TARGET_DEVICE
 
-<<<<<<< HEAD
   if [ -z "$SKIP_TOOLCHAIN_SETUP" ]; then
     # setup the appropriate cross compiling toolchains
     source $SCRIPT_DIR/utils/setup_toolchain.sh
@@ -228,12 +177,6 @@ setup_device() {
 
   DEFINES="${DEFINES} android_toolchain=${ANDROID_TOOLCHAIN}"
   DEFINES="${DEFINES} android_buildtype=${BUILDTYPE}"
-=======
-  # setup the appropriate cross compiling toolchains
-  source $SCRIPT_DIR/utils/setup_toolchain.sh
-
-  DEFINES="${DEFINES} android_toolchain=${TOOLCHAIN_TYPE}"
->>>>>>> miniblink49
   exportVar GYP_DEFINES "$DEFINES $GYP_DEFINES"
 
   SKIA_SRC_DIR=$(cd "${SCRIPT_DIR}/../../.."; pwd)
@@ -286,14 +229,11 @@ adb_push_if_needed() {
   local HOST_SRC="$1"
   local ANDROID_DST="$2"
 
-<<<<<<< HEAD
   # disable crashing on failed commands since newer (N+) versions of Android
   # return an error when attempting to run ls on a directory or file that does
   # not exist.
   set +e
 
-=======
->>>>>>> miniblink49
   ANDROID_LS=`$ADB $DEVICE_SERIAL shell ls -ld $ANDROID_DST`
   HOST_LS=`ls -ld $HOST_SRC`
   if [ "${ANDROID_LS:0:1}" == "d" -a "${HOST_LS:0:1}" == "-" ];
@@ -301,20 +241,11 @@ adb_push_if_needed() {
     ANDROID_DST="${ANDROID_DST}/$(basename ${HOST_SRC})"
   fi
 
-<<<<<<< HEAD
   ANDROID_LS=`$ADB $DEVICE_SERIAL shell ls -ld $ANDROID_DST 2> /dev/null`
   if [ "${ANDROID_LS:0:1}" == "-" ]; then
     #get the MD5 for dst and src depending on OS and/or OS revision
     ANDROID_MD5_SUPPORT=`$ADB $DEVICE_SERIAL shell ls -ld /system/bin/md5 2> /dev/null`
     if [ "${ANDROID_MD5_SUPPORT:0:1}" == "-" ]; then
-=======
-
-  ANDROID_LS=`$ADB $DEVICE_SERIAL shell ls -ld $ANDROID_DST`
-  if [ "${ANDROID_LS:0:1}" == "-" ]; then
-    #get the MD5 for dst and src depending on OS and/or OS revision
-    ANDROID_MD5_SUPPORT=`$ADB $DEVICE_SERIAL shell ls -ld /system/bin/md5`
-    if [ "${ANDROID_MD5_SUPPORT:0:15}" != "/system/bin/md5" ]; then
->>>>>>> miniblink49
       ANDROID_MD5=`$ADB $DEVICE_SERIAL shell md5 $ANDROID_DST`
     else
       ANDROID_MD5=`$ADB $DEVICE_SERIAL shell md5sum $ANDROID_DST`
@@ -345,12 +276,9 @@ adb_push_if_needed() {
       $ADB $DEVICE_SERIAL push $HOST_SRC $ANDROID_DST
     fi
   fi
-<<<<<<< HEAD
 
   # turn error checking back on
   set -e
-=======
->>>>>>> miniblink49
 }
 
 setup_device "${DEVICE_ID}"

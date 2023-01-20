@@ -6,7 +6,6 @@
 
 namespace v8 {
 namespace internal {
-<<<<<<< HEAD
     namespace torque {
 
         DEFINE_CONTEXTUAL_VARIABLE(TypeOracle)
@@ -14,12 +13,3 @@ namespace internal {
     } // namespace torque
 } // namespace internal
 } // namespace v8
-=======
-namespace torque {
-
-DEFINE_CONTEXTUAL_VARIABLE(TypeOracle)
-
-}  // namespace torque
-}  // namespace internal
-}  // namespace v8
->>>>>>> miniblink49

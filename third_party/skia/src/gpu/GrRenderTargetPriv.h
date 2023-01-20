@@ -8,16 +8,11 @@
 #ifndef GrRenderTargetPriv_DEFINED
 #define GrRenderTargetPriv_DEFINED
 
-<<<<<<< HEAD
 #include "GrGpu.h"
 #include "GrRenderTarget.h"
 
 class GrStencilSettings;
 
-=======
-#include "GrRenderTarget.h"
-
->>>>>>> miniblink49
 /** Class that adds methods to GrRenderTarget that are only intended for use internal to Skia.
     This class is purely a privileged window into GrRenderTarget. It should never have additional
     data members or virtual methods. */
@@ -29,7 +24,6 @@ public:
     GrStencilAttachment* getStencilAttachment() const { return fRenderTarget->fStencilAttachment; }
 
     /**
-<<<<<<< HEAD
      * Attaches the GrStencilAttachment onto the render target. If stencil is a nullptr then the
      * currently attached GrStencilAttachment will be removed if one was previously attached. This
      * function returns false if there were any failure in attaching the GrStencilAttachment.
@@ -48,18 +42,6 @@ private:
     {
     }
     GrRenderTargetPriv(const GrRenderTargetPriv&) { } // unimpl
-=======
-     * If this render target already has a stencil buffer, return it. Otherwise attempt to attach
-     * one.
-     */
-    GrStencilAttachment* attachStencilAttachment() const;
-
-    void didAttachStencilAttachment(GrStencilAttachment*);
-
-private:
-    explicit GrRenderTargetPriv(GrRenderTarget* renderTarget) : fRenderTarget(renderTarget) {}
-    GrRenderTargetPriv(const GrRenderTargetPriv&) {} // unimpl
->>>>>>> miniblink49
     GrRenderTargetPriv& operator=(const GrRenderTargetPriv&); // unimpl
 
     // No taking addresses of this type.
@@ -67,22 +49,14 @@ private:
     GrRenderTargetPriv* operator&();
 
     GrRenderTarget* fRenderTarget;
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> miniblink49
     friend class GrRenderTarget; // to construct/copy this type.
 };
 
 inline GrRenderTargetPriv GrRenderTarget::renderTargetPriv() { return GrRenderTargetPriv(this); }
 
-<<<<<<< HEAD
 inline const GrRenderTargetPriv GrRenderTarget::renderTargetPriv() const
 {
-=======
-inline const GrRenderTargetPriv GrRenderTarget::renderTargetPriv () const {
->>>>>>> miniblink49
     return GrRenderTargetPriv(const_cast<GrRenderTarget*>(this));
 }
 

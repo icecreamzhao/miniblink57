@@ -2,29 +2,29 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "core/editing/GranularityStrategy.h"
 
+#include "core/editing/EditingUtilities.h"
 #include "core/editing/FrameSelection.h"
-#include "core/editing/htmlediting.h"
 
 namespace blink {
 
-enum class BoundAdjust {CurrentPosIfOnBound, NextBoundIfOnBound};
-enum class SearchDirection {SearchBackwards, SearchForward};
+enum class BoundAdjust { CurrentPosIfOnBound,
+    NextBoundIfOnBound };
+enum class SearchDirection { SearchBackwards,
+    SearchForward };
 
-// We use the bottom-left corner of the caret rect to represent the
+// We use the bottom-left corner of the selection rect to represent the
 // location of a VisiblePosition. This way locations corresponding to
 // VisiblePositions on the same line will all have the same y coordinate
 // unless the text is transformed.
 static IntPoint positionLocation(const VisiblePosition& vp)
 {
-    return vp.absoluteCaretBounds().minXMaxYCorner();
+    return absoluteSelectionBoundsOf(vp).minXMaxYCorner();
 }
 
 // Order is specified using the same contract as comparePositions.
-static bool arePositionsInSpecifiedOrder(
-    const VisiblePosition& vp1,
+static bool arePositionsInSpecifiedOrder(const VisiblePosition& vp1,
     const VisiblePosition& vp2,
     int specifiedOrder)
 {
@@ -38,12 +38,11 @@ static bool arePositionsInSpecifiedOrder(
 // the direction in which to search for the next bound. nextIfOnBound
 // controls whether |pos| or the next boundary is returned when |pos| is
 // located exactly on word boundary.
-static VisiblePosition nextWordBound(
-    const VisiblePosition& pos,
+static VisiblePosition nextWordBound(const VisiblePosition& pos,
     SearchDirection direction,
     BoundAdjust wordBoundAdjust)
 {
-    bool nextBoundIfOnBound = wordBoundAdjust ==  BoundAdjust::NextBoundIfOnBound;
+    bool nextBoundIfOnBound = wordBoundAdjust == BoundAdjust::NextBoundIfOnBound;
     if (direction == SearchDirection::SearchForward) {
         EWordSide wordSide = nextBoundIfOnBound ? RightWordIfOnBoundary : LeftWordIfOnBoundary;
         return endOfWord(pos, wordSide);
@@ -67,19 +66,27 @@ SelectionStrategy CharacterGranularityStrategy::GetType() const
 
 void CharacterGranularityStrategy::Clear() { }
 
-VisibleSelection CharacterGranularityStrategy::updateExtent(const IntPoint& extentPoint, LocalFrame* frame)
+VisibleSelection CharacterGranularityStrategy::updateExtent(
+    const IntPoint& extentPoint,
+    LocalFrame* frame)
 {
     const VisiblePosition& extentPosition = visiblePositionForContentsPoint(extentPoint, frame);
     const VisibleSelection& selection = frame->selection().selection();
-    if (selection.visibleBase() == extentPosition)
+    if (selection.visibleBase().deepEquivalent() == extentPosition.deepEquivalent())
         return selection;
-    return VisibleSelection(selection.visibleBase(), extentPosition);
+    return createVisibleSelection(SelectionInDOMTree::Builder()
+                                      .collapse(selection.base())
+                                      .extend(extentPosition.deepEquivalent())
+                                      .setAffinity(selection.affinity())
+                                      .build());
 }
 
 DirectionGranularityStrategy::DirectionGranularityStrategy()
     : m_state(StrategyState::Cleared)
     , m_granularity(CharacterGranularity)
-    , m_offset(0) { }
+    , m_offset(0)
+{
+}
 
 DirectionGranularityStrategy::~DirectionGranularityStrategy() { }
 
@@ -96,7 +103,9 @@ void DirectionGranularityStrategy::Clear()
     m_diffExtentPointFromExtentPosition = IntSize();
 }
 
-VisibleSelection DirectionGranularityStrategy::updateExtent(const IntPoint& extentPoint, LocalFrame* frame)
+VisibleSelection DirectionGranularityStrategy::updateExtent(
+    const IntPoint& extentPoint,
+    LocalFrame* frame)
 {
     const VisibleSelection& selection = frame->selection().selection();
 
@@ -136,7 +145,7 @@ VisibleSelection DirectionGranularityStrategy::updateExtent(const IntPoint& exte
     const VisiblePosition base = selection.visibleBase();
 
     // Do not allow empty selection.
-    if (newOffsetExtentPosition == base)
+    if (newOffsetExtentPosition.deepEquivalent() == base.deepEquivalent())
         return selection;
 
     // The direction granularity strategy, particularly the "offset" feature
@@ -144,14 +153,20 @@ VisibleSelection DirectionGranularityStrategy::updateExtent(const IntPoint& exte
     // So revert to the behavior equivalent to the character granularity
     // strategy if we detect that the text's baseline coordinate changed
     // without a line change.
-    if (verticalChange && inSameLine(newOffsetExtentPosition, oldOffsetExtentPosition))
-        return VisibleSelection(selection.visibleBase(), newOffsetExtentPosition);
+    if (verticalChange && inSameLine(newOffsetExtentPosition, oldOffsetExtentPosition)) {
+        return createVisibleSelection(
+            SelectionInDOMTree::Builder()
+                .collapse(selection.base())
+                .extend(newOffsetExtentPosition.deepEquivalent())
+                .setAffinity(selection.affinity())
+                .build());
+    }
 
     int oldExtentBaseOrder = selection.isBaseFirst() ? 1 : -1;
 
     int newExtentBaseOrder;
     bool thisMoveShrunkSelection;
-    if (newOffsetExtentPosition == oldOffsetExtentPosition) {
+    if (newOffsetExtentPosition.deepEquivalent() == oldOffsetExtentPosition.deepEquivalent()) {
         if (m_granularity == CharacterGranularity)
             return selection;
 
@@ -161,8 +176,12 @@ VisibleSelection DirectionGranularityStrategy::updateExtent(const IntPoint& exte
         thisMoveShrunkSelection = false;
         newExtentBaseOrder = oldExtentBaseOrder;
     } else {
-        bool selectionExpanded = arePositionsInSpecifiedOrder(newOffsetExtentPosition, oldOffsetExtentPosition, oldExtentBaseOrder);
-        bool extentBaseOrderSwitched = selectionExpanded ? false : !arePositionsInSpecifiedOrder(newOffsetExtentPosition, base, oldExtentBaseOrder);
+        bool selectionExpanded = arePositionsInSpecifiedOrder(
+            newOffsetExtentPosition, oldOffsetExtentPosition, oldExtentBaseOrder);
+        bool extentBaseOrderSwitched = selectionExpanded
+            ? false
+            : !arePositionsInSpecifiedOrder(newOffsetExtentPosition, base,
+                oldExtentBaseOrder);
         newExtentBaseOrder = extentBaseOrderSwitched ? -oldExtentBaseOrder : oldExtentBaseOrder;
 
         // Determine the word boundary, i.e. the boundary extending beyond which
@@ -174,9 +193,7 @@ VisibleSelection DirectionGranularityStrategy::updateExtent(const IntPoint& exte
             // expanding in a different direction than before. Therefore we
             // calculate the word boundary in this new direction and based on
             // the |base| position.
-            wordBoundary = nextWordBound(
-                base,
-                newExtentBaseOrder > 0 ? SearchDirection::SearchForward : SearchDirection::SearchBackwards,
+            wordBoundary = nextWordBound(base, newExtentBaseOrder > 0 ? SearchDirection::SearchForward : SearchDirection::SearchBackwards,
                 BoundAdjust::NextBoundIfOnBound);
             m_granularity = CharacterGranularity;
         } else {
@@ -184,17 +201,22 @@ VisibleSelection DirectionGranularityStrategy::updateExtent(const IntPoint& exte
             // If selection was shrunk in the last update and the extent is now
             // exactly on the word boundary - we need to take the next bound as
             // the bound of the current word.
-            wordBoundary = nextWordBound(
-                oldOffsetExtentPosition,
-                oldExtentBaseOrder > 0 ? SearchDirection::SearchForward : SearchDirection::SearchBackwards,
-                m_state == StrategyState::Shrinking ? BoundAdjust::NextBoundIfOnBound : BoundAdjust::CurrentPosIfOnBound);
+            wordBoundary = nextWordBound(oldOffsetExtentPosition,
+                oldExtentBaseOrder > 0
+                    ? SearchDirection::SearchForward
+                    : SearchDirection::SearchBackwards,
+                m_state == StrategyState::Shrinking
+                    ? BoundAdjust::NextBoundIfOnBound
+                    : BoundAdjust::CurrentPosIfOnBound);
         }
 
         bool expandedBeyondWordBoundary;
         if (selectionExpanded)
-            expandedBeyondWordBoundary = arePositionsInSpecifiedOrder(newOffsetExtentPosition, wordBoundary, newExtentBaseOrder);
+            expandedBeyondWordBoundary = arePositionsInSpecifiedOrder(
+                newOffsetExtentPosition, wordBoundary, newExtentBaseOrder);
         else if (extentBaseOrderSwitched)
-            expandedBeyondWordBoundary = arePositionsInSpecifiedOrder(newOffsetExtentPosition, wordBoundary, newExtentBaseOrder);
+            expandedBeyondWordBoundary = arePositionsInSpecifiedOrder(
+                newOffsetExtentPosition, wordBoundary, newExtentBaseOrder);
         else
             expandedBeyondWordBoundary = false;
 
@@ -213,27 +235,31 @@ VisibleSelection DirectionGranularityStrategy::updateExtent(const IntPoint& exte
         // Determine the bounds of the word where the extent is located.
         // Set the selection extent to one of the two bounds depending on
         // whether the extent is passed the middle of the word.
-        VisiblePosition boundBeforeExtent = nextWordBound(newOffsetExtentPosition, SearchDirection::SearchBackwards, BoundAdjust::CurrentPosIfOnBound);
-        VisiblePosition boundAfterExtent = nextWordBound(newOffsetExtentPosition, SearchDirection::SearchForward, BoundAdjust::CurrentPosIfOnBound);
+        VisiblePosition boundBeforeExtent = nextWordBound(newOffsetExtentPosition, SearchDirection::SearchBackwards,
+            BoundAdjust::CurrentPosIfOnBound);
+        VisiblePosition boundAfterExtent = nextWordBound(newOffsetExtentPosition, SearchDirection::SearchForward,
+            BoundAdjust::CurrentPosIfOnBound);
         int xMiddleBetweenBounds = (positionLocation(boundAfterExtent).x() + positionLocation(boundBeforeExtent).x()) / 2;
         bool offsetExtentBeforeMiddle = newOffsetExtentPoint.x() < xMiddleBetweenBounds;
         newSelectionExtent = offsetExtentBeforeMiddle ? boundBeforeExtent : boundAfterExtent;
         // Update the offset if selection expanded in word granularity.
-        if (newSelectionExtent != selection.visibleExtent()
-            && ((newExtentBaseOrder > 0 && !offsetExtentBeforeMiddle) || (newExtentBaseOrder < 0 && offsetExtentBeforeMiddle))) {
+        if (newSelectionExtent.deepEquivalent() != selection.visibleExtent().deepEquivalent() && ((newExtentBaseOrder > 0 && !offsetExtentBeforeMiddle) || (newExtentBaseOrder < 0 && offsetExtentBeforeMiddle))) {
             m_offset = positionLocation(newSelectionExtent).x() - extentPoint.x();
         }
     }
 
     // Only update the state if the selection actually changed as a result of
     // this move.
-    if (newSelectionExtent != selection.visibleExtent())
-        m_state = thisMoveShrunkSelection ? StrategyState::Shrinking : StrategyState::Expanding;
+    if (newSelectionExtent.deepEquivalent() != selection.visibleExtent().deepEquivalent())
+        m_state = thisMoveShrunkSelection ? StrategyState::Shrinking
+                                          : StrategyState::Expanding;
 
     m_diffExtentPointFromExtentPosition = extentPoint + IntSize(m_offset, 0) - positionLocation(newSelectionExtent);
-    VisibleSelection newSelection = selection;
-    newSelection.setExtent(newSelectionExtent);
-    return newSelection;
+    return createVisibleSelection(
+        SelectionInDOMTree::Builder(selection.asSelection())
+            .collapse(selection.base())
+            .extend(newSelectionExtent.deepEquivalent())
+            .build());
 }
 
 } // namespace blink

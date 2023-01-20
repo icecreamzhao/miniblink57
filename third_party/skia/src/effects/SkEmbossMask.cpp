@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -9,20 +5,12 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "SkEmbossMask.h"
 #include "SkFixed.h"
 #include "SkMath.h"
 
 static inline int nonzero_to_one(int x)
 {
-=======
-
-#include "SkEmbossMask.h"
-#include "SkMath.h"
-
-static inline int nonzero_to_one(int x) {
->>>>>>> miniblink49
 #if 0
     return x != 0;
 #else
@@ -30,12 +18,8 @@ static inline int nonzero_to_one(int x) {
 #endif
 }
 
-<<<<<<< HEAD
 static inline int neq_to_one(int x, int max)
 {
-=======
-static inline int neq_to_one(int x, int max) {
->>>>>>> miniblink49
 #if 0
     return x != max;
 #else
@@ -44,12 +28,8 @@ static inline int neq_to_one(int x, int max) {
 #endif
 }
 
-<<<<<<< HEAD
 static inline int neq_to_mask(int x, int max)
 {
-=======
-static inline int neq_to_mask(int x, int max) {
->>>>>>> miniblink49
 #if 0
     return -(x != max);
 #else
@@ -58,7 +38,6 @@ static inline int neq_to_mask(int x, int max) {
 #endif
 }
 
-<<<<<<< HEAD
 static inline unsigned div255(unsigned x)
 {
     SkASSERT(x <= (255 * 255));
@@ -66,14 +45,6 @@ static inline unsigned div255(unsigned x)
 }
 
 #define kDelta 32 // small enough to show off angle differences
-=======
-static inline unsigned div255(unsigned x) {
-    SkASSERT(x <= (255*255));
-    return x * ((1 << 24) / 255) >> 24;
-}
-
-#define kDelta  32  // small enough to show off angle differences
->>>>>>> miniblink49
 
 #include "SkEmbossMask_Table.h"
 
@@ -81,21 +52,14 @@ static inline unsigned div255(unsigned x) {
 
 #include <stdio.h>
 
-<<<<<<< HEAD
 void SkEmbossMask_BuildTable()
 {
     // build it 0..127 x 0..127, so we use 2^15 - 1 in the numerator for our "fixed" table
 
-=======
-void SkEmbossMask_BuildTable() {
-    // build it 0..127 x 0..127, so we use 2^15 - 1 in the numerator for our "fixed" table
-#ifdef MINIBLINK_NOT_IMPLEMENTED
->>>>>>> miniblink49
     FILE* file = ::fopen("SkEmbossMask_Table.h", "w");
     SkASSERT(file);
     ::fprintf(file, "#include \"SkTypes.h\"\n\n");
     ::fprintf(file, "static const U16 gInvSqrtTable[128 * 128] = {\n");
-<<<<<<< HEAD
     for (int dx = 0; dx <= 255 / 2; dx++) {
         for (int dy = 0; dy <= 255 / 2; dy++) {
             if ((dy & 15) == 0)
@@ -105,17 +69,6 @@ void SkEmbossMask_BuildTable() {
 
             ::fprintf(file, "0x%04X", value);
             if (dx * 128 + dy < 128 * 128 - 1) {
-=======
-    for (int dx = 0; dx <= 255/2; dx++) {
-        for (int dy = 0; dy <= 255/2; dy++) {
-            if ((dy & 15) == 0)
-                ::fprintf(file, "\t");
-
-            uint16_t value = SkToU16((1 << 15) / SkSqrt32(dx * dx + dy * dy + kDelta*kDelta/4));
-
-            ::fprintf(file, "0x%04X", value);
-            if (dx * 128 + dy < 128*128-1) {
->>>>>>> miniblink49
                 ::fprintf(file, ", ");
             }
             if ((dy & 15) == 15) {
@@ -125,51 +78,28 @@ void SkEmbossMask_BuildTable() {
     }
     ::fprintf(file, "};\n#define kDeltaUsedToBuildTable\t%d\n", kDelta);
     ::fclose(file);
-<<<<<<< HEAD
-=======
-#endif // MINIBLINK_NOT_IMPLEMENTED
-	DebugBreak();
->>>>>>> miniblink49
 }
 
 #endif
 
-<<<<<<< HEAD
 void SkEmbossMask::Emboss(SkMask* mask, const SkEmbossMaskFilter::Light& light)
 {
-=======
-void SkEmbossMask::Emboss(SkMask* mask, const SkEmbossMaskFilter::Light& light) {
->>>>>>> miniblink49
     SkASSERT(kDelta == kDeltaUsedToBuildTable);
 
     SkASSERT(mask->fFormat == SkMask::k3D_Format);
 
-<<<<<<< HEAD
     int specular = light.fSpecular;
     int ambient = light.fAmbient;
-=======
-    int     specular = light.fSpecular;
-    int     ambient = light.fAmbient;
->>>>>>> miniblink49
     SkFixed lx = SkScalarToFixed(light.fDirection[0]);
     SkFixed ly = SkScalarToFixed(light.fDirection[1]);
     SkFixed lz = SkScalarToFixed(light.fDirection[2]);
     SkFixed lz_dot_nz = lz * kDelta;
-<<<<<<< HEAD
     int lz_dot8 = lz >> 8;
 
     size_t planeSize = mask->computeImageSize();
     uint8_t* alpha = mask->fImage;
     uint8_t* multiply = (uint8_t*)alpha + planeSize;
     uint8_t* additive = multiply + planeSize;
-=======
-    int     lz_dot8 = lz >> 8;
-
-    size_t      planeSize = mask->computeImageSize();
-    uint8_t*    alpha = mask->fImage;
-    uint8_t*    multiply = (uint8_t*)alpha + planeSize;
-    uint8_t*    additive = multiply + planeSize;
->>>>>>> miniblink49
 
     int rowBytes = mask->fRowBytes;
     int maxy = mask->fBounds.height() - 1;
@@ -185,17 +115,10 @@ void SkEmbossMask::Emboss(SkMask* mask, const SkEmbossMaskFilter::Light& light) 
                 int ny = alpha[x + next_row] - alpha[x - prev_row];
 
                 SkFixed numer = lx * nx + ly * ny + lz_dot_nz;
-<<<<<<< HEAD
                 int mul = ambient;
                 int add = 0;
 
                 if (numer > 0) { // preflight when numer/denom will be <= 0
-=======
-                int     mul = ambient;
-                int     add = 0;
-
-                if (numer > 0) {  // preflight when numer/denom will be <= 0
->>>>>>> miniblink49
 #if 0
                     int denom = SkSqrt32(nx * nx + ny * ny + kDelta*kDelta);
                     SkFixed dot = numer / denom;
@@ -232,15 +155,9 @@ void SkEmbossMask::Emboss(SkMask* mask, const SkEmbossMaskFilter::Light& light) 
                 multiply[x] = SkToU8(mul);
                 additive[x] = SkToU8(add);
 
-<<<<<<< HEAD
                 //  multiply[x] = 0xFF;
                 //  additive[x] = 0;
                 //  ((uint8_t*)alpha)[x] = alpha[x] * multiply[x] >> 8;
-=======
-            //  multiply[x] = 0xFF;
-            //  additive[x] = 0;
-            //  ((uint8_t*)alpha)[x] = alpha[x] * multiply[x] >> 8;
->>>>>>> miniblink49
             }
         }
         alpha += rowBytes;

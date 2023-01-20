@@ -22,16 +22,11 @@
  * Boston, MA 02110-1301, USA.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/graphics/filters/FEConvolveMatrix.h"
 
 #include "SkMatrixConvolutionImageFilter.h"
 #include "platform/graphics/filters/SkiaImageFilterBuilder.h"
 #include "platform/text/TextStream.h"
-<<<<<<< HEAD
 #include "wtf/CheckedNumeric.h"
 #include "wtf/PtrUtil.h"
 #include <memory>
@@ -46,22 +41,12 @@ FEConvolveMatrix::FEConvolveMatrix(Filter* filter,
     EdgeModeType edgeMode,
     bool preserveAlpha,
     const Vector<float>& kernelMatrix)
-=======
-#include "wtf/OwnPtr.h"
-
-namespace blink {
-
-FEConvolveMatrix::FEConvolveMatrix(Filter* filter, const IntSize& kernelSize,
-    float divisor, float bias, const IntPoint& targetOffset, EdgeModeType edgeMode,
-    const FloatPoint& kernelUnitLength, bool preserveAlpha, const Vector<float>& kernelMatrix)
->>>>>>> miniblink49
     : FilterEffect(filter)
     , m_kernelSize(kernelSize)
     , m_divisor(divisor)
     , m_bias(bias)
     , m_targetOffset(targetOffset)
     , m_edgeMode(edgeMode)
-<<<<<<< HEAD
     , m_preserveAlpha(preserveAlpha)
     , m_kernelMatrix(kernelMatrix)
 {
@@ -92,77 +77,12 @@ FloatRect FEConvolveMatrix::mapEffect(const FloatRect& rect) const
 
 bool FEConvolveMatrix::setDivisor(float divisor)
 {
-=======
-    , m_kernelUnitLength(kernelUnitLength)
-    , m_preserveAlpha(preserveAlpha)
-    , m_kernelMatrix(kernelMatrix)
-{
-    ASSERT(m_kernelSize.width() > 0);
-    ASSERT(m_kernelSize.height() > 0);
-}
-
-PassRefPtrWillBeRawPtr<FEConvolveMatrix> FEConvolveMatrix::create(Filter* filter, const IntSize& kernelSize,
-    float divisor, float bias, const IntPoint& targetOffset, EdgeModeType edgeMode,
-    const FloatPoint& kernelUnitLength, bool preserveAlpha, const Vector<float>& kernelMatrix)
-{
-    return adoptRefWillBeNoop(new FEConvolveMatrix(filter, kernelSize, divisor, bias, targetOffset, edgeMode, kernelUnitLength,
-        preserveAlpha, kernelMatrix));
-}
-
-FloatRect FEConvolveMatrix::mapPaintRect(const FloatRect& rect, bool forward)
-{
-    FloatRect result = rect;
-
-    result.moveBy(forward ? -m_targetOffset : m_targetOffset - m_kernelSize);
-    result.expand(m_kernelSize);
-    return result;
-}
-
-IntSize FEConvolveMatrix::kernelSize() const
-{
-    return m_kernelSize;
-}
-
-void FEConvolveMatrix::setKernelSize(const IntSize& kernelSize)
-{
-    ASSERT(kernelSize.width() > 0);
-    ASSERT(kernelSize.height() > 0);
-    m_kernelSize = kernelSize;
-}
-
-const Vector<float>& FEConvolveMatrix::kernel() const
-{
-    return m_kernelMatrix;
-}
-
-void FEConvolveMatrix::setKernel(const Vector<float>& kernel)
-{
-    m_kernelMatrix = kernel;
-}
-
-float FEConvolveMatrix::divisor() const
-{
-    return m_divisor;
-}
-
-bool FEConvolveMatrix::setDivisor(float divisor)
-{
-    ASSERT(divisor);
->>>>>>> miniblink49
     if (m_divisor == divisor)
         return false;
     m_divisor = divisor;
     return true;
 }
 
-<<<<<<< HEAD
-=======
-float FEConvolveMatrix::bias() const
-{
-    return m_bias;
-}
-
->>>>>>> miniblink49
 bool FEConvolveMatrix::setBias(float bias)
 {
     if (m_bias == bias)
@@ -171,14 +91,6 @@ bool FEConvolveMatrix::setBias(float bias)
     return true;
 }
 
-<<<<<<< HEAD
-=======
-IntPoint FEConvolveMatrix::targetOffset() const
-{
-    return m_targetOffset;
-}
-
->>>>>>> miniblink49
 bool FEConvolveMatrix::setTargetOffset(const IntPoint& targetOffset)
 {
     if (m_targetOffset == targetOffset)
@@ -187,14 +99,6 @@ bool FEConvolveMatrix::setTargetOffset(const IntPoint& targetOffset)
     return true;
 }
 
-<<<<<<< HEAD
-=======
-EdgeModeType FEConvolveMatrix::edgeMode() const
-{
-    return m_edgeMode;
-}
-
->>>>>>> miniblink49
 bool FEConvolveMatrix::setEdgeMode(EdgeModeType edgeMode)
 {
     if (m_edgeMode == edgeMode)
@@ -203,29 +107,6 @@ bool FEConvolveMatrix::setEdgeMode(EdgeModeType edgeMode)
     return true;
 }
 
-<<<<<<< HEAD
-=======
-FloatPoint FEConvolveMatrix::kernelUnitLength() const
-{
-    return m_kernelUnitLength;
-}
-
-bool FEConvolveMatrix::setKernelUnitLength(const FloatPoint& kernelUnitLength)
-{
-    ASSERT(kernelUnitLength.x() > 0);
-    ASSERT(kernelUnitLength.y() > 0);
-    if (m_kernelUnitLength == kernelUnitLength)
-        return false;
-    m_kernelUnitLength = kernelUnitLength;
-    return true;
-}
-
-bool FEConvolveMatrix::preserveAlpha() const
-{
-    return m_preserveAlpha;
-}
-
->>>>>>> miniblink49
 bool FEConvolveMatrix::setPreserveAlpha(bool preserveAlpha)
 {
     if (m_preserveAlpha == preserveAlpha)
@@ -248,7 +129,6 @@ SkMatrixConvolutionImageFilter::TileMode toSkiaTileMode(EdgeModeType edgeMode)
     }
 }
 
-<<<<<<< HEAD
 bool FEConvolveMatrix::parametersValid() const
 {
     if (m_kernelSize.isEmpty())
@@ -278,20 +158,11 @@ sk_sp<SkImageFilter> FEConvolveMatrix::createImageFilter()
         SkISize::Make(m_kernelSize.width(), m_kernelSize.height()));
     // parametersValid() above checks that the kernel area fits in int.
     int numElements = safeCast<int>(m_kernelSize.area());
-=======
-PassRefPtr<SkImageFilter> FEConvolveMatrix::createImageFilter(SkiaImageFilterBuilder* builder)
-{
-    RefPtr<SkImageFilter> input(builder->build(inputEffect(0), operatingColorSpace()));
-
-    SkISize kernelSize(SkISize::Make(m_kernelSize.width(), m_kernelSize.height()));
-    int numElements = kernelSize.width() * kernelSize.height();
->>>>>>> miniblink49
     SkScalar gain = SkFloatToScalar(1.0f / m_divisor);
     SkScalar bias = SkFloatToScalar(m_bias * 255);
     SkIPoint target = SkIPoint::Make(m_targetOffset.x(), m_targetOffset.y());
     SkMatrixConvolutionImageFilter::TileMode tileMode = toSkiaTileMode(m_edgeMode);
     bool convolveAlpha = !m_preserveAlpha;
-<<<<<<< HEAD
     std::unique_ptr<SkScalar[]> kernel = wrapArrayUnique(new SkScalar[numElements]);
     for (int i = 0; i < numElements; ++i)
         kernel[i] = SkFloatToScalar(m_kernelMatrix[numElements - 1 - i]);
@@ -299,13 +170,6 @@ PassRefPtr<SkImageFilter> FEConvolveMatrix::createImageFilter(SkiaImageFilterBui
     return SkMatrixConvolutionImageFilter::Make(
         kernelSize, kernel.get(), gain, bias, target, tileMode, convolveAlpha,
         std::move(input), &cropRect);
-=======
-    OwnPtr<SkScalar[]> kernel = adoptArrayPtr(new SkScalar[numElements]);
-    for (int i = 0; i < numElements; ++i)
-        kernel[i] = SkFloatToScalar(m_kernelMatrix[numElements - 1 - i]);
-    SkImageFilter::CropRect cropRect = getCropRect(builder->cropOffset());
-    return adoptRef(SkMatrixConvolutionImageFilter::Create(kernelSize, kernel.get(), gain, bias, target, tileMode, convolveAlpha, input.get(), &cropRect));
->>>>>>> miniblink49
 }
 
 static TextStream& operator<<(TextStream& ts, const EdgeModeType& type)
@@ -327,31 +191,18 @@ static TextStream& operator<<(TextStream& ts, const EdgeModeType& type)
     return ts;
 }
 
-<<<<<<< HEAD
 TextStream& FEConvolveMatrix::externalRepresentation(TextStream& ts,
     int indent) const
-=======
-TextStream& FEConvolveMatrix::externalRepresentation(TextStream& ts, int indent) const
->>>>>>> miniblink49
 {
     writeIndent(ts, indent);
     ts << "[feConvolveMatrix";
     FilterEffect::externalRepresentation(ts);
-<<<<<<< HEAD
     ts << " order=\"" << FloatSize(m_kernelSize) << "\" "
        << "kernelMatrix=\"" << m_kernelMatrix << "\" "
-=======
-    ts << " order=\"" << m_kernelSize << "\" "
-       << "kernelMatrix=\"" << m_kernelMatrix  << "\" "
->>>>>>> miniblink49
        << "divisor=\"" << m_divisor << "\" "
        << "bias=\"" << m_bias << "\" "
        << "target=\"" << m_targetOffset << "\" "
        << "edgeMode=\"" << m_edgeMode << "\" "
-<<<<<<< HEAD
-=======
-       << "kernelUnitLength=\"" << m_kernelUnitLength << "\" "
->>>>>>> miniblink49
        << "preserveAlpha=\"" << m_preserveAlpha << "\"]\n";
     inputEffect(0)->externalRepresentation(ts, indent + 1);
     return ts;

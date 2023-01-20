@@ -32,6 +32,7 @@
 #define BorderImageLength_h
 
 #include "platform/Length.h"
+#include "wtf/Allocator.h"
 
 namespace blink {
 
@@ -40,6 +41,8 @@ namespace blink {
 // http://www.w3.org/TR/css3-background/#border-image-width
 // http://www.w3.org/TR/css3-background/#border-image-outset
 class BorderImageLength {
+    DISALLOW_NEW();
+
 public:
     BorderImageLength(double number)
         : m_number(number)
@@ -57,10 +60,22 @@ public:
     bool isNumber() const { return m_type == NumberType; }
     bool isLength() const { return m_type == LengthType; }
 
-    const Length& length() const { ASSERT(isLength()); return m_length; }
-    Length& length() { ASSERT(isLength()); return m_length; }
+    const Length& length() const
+    {
+        ASSERT(isLength());
+        return m_length;
+    }
+    Length& length()
+    {
+        ASSERT(isLength());
+        return m_length;
+    }
 
-    double number() const { ASSERT(isNumber()); return m_number; }
+    double number() const
+    {
+        ASSERT(isNumber());
+        return m_number;
+    }
 
     bool operator==(const BorderImageLength& other) const
     {
@@ -77,14 +92,12 @@ public:
     }
 
 private:
-    // Ideally we would put the 2 following fields in a union, but Length has a constructor,
-    // a destructor and a copy assignment which isn't allowed.
+    // Ideally we would put the 2 following fields in a union, but Length has a
+    // constructor, a destructor and a copy assignment which isn't allowed.
     Length m_length;
     double m_number;
-    enum {
-        LengthType,
-        NumberType
-    } m_type;
+    enum { LengthType,
+        NumberType } m_type;
 };
 
 } // namespace blink

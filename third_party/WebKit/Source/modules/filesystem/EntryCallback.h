@@ -44,10 +44,6 @@ public:
     virtual void handleEvent(Entry*) = 0;
 };
 
-<<<<<<< HEAD
 } // namespace blink
-=======
-} // namespace
->>>>>>> miniblink49
 
 #endif // EntryCallback_h

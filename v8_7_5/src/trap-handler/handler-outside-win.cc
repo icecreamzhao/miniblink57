@@ -26,7 +26,6 @@
 
 namespace v8 {
 namespace internal {
-<<<<<<< HEAD
     namespace trap_handler {
 
 #if V8_TRAP_HANDLER_SUPPORTED
@@ -62,37 +61,3 @@ namespace internal {
     } // namespace trap_handler
 } // namespace internal
 } // namespace v8
-=======
-namespace trap_handler {
-
-#if V8_TRAP_HANDLER_SUPPORTED
-
-namespace {
-
-// A handle to our registered exception handler, so that we can remove it
-// again later.
-void* g_registered_handler = nullptr;
-
-}  // namespace
-
-bool RegisterDefaultTrapHandler() {
-  constexpr ULONG first = TRUE;
-  CHECK_NULL(g_registered_handler);
-  g_registered_handler = AddVectoredExceptionHandler(first, HandleWasmTrap);
-
-  return nullptr != g_registered_handler;
-}
-
-void RemoveTrapHandler() {
-  if (!g_registered_handler) return;
-
-  RemoveVectoredExceptionHandler(g_registered_handler);
-  g_registered_handler = nullptr;
-}
-
-#endif  // V8_TRAP_HANDLER_SUPPORTED
-
-}  // namespace trap_handler
-}  // namespace internal
-}  // namespace v8
->>>>>>> miniblink49

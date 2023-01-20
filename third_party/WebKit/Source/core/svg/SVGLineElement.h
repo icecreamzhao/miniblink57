@@ -22,7 +22,6 @@
 #define SVGLineElement_h
 
 #include "core/SVGNames.h"
-#include "core/svg/SVGAnimatedBoolean.h"
 #include "core/svg/SVGAnimatedLength.h"
 #include "core/svg/SVGGeometryElement.h"
 #include "platform/heap/Handle.h"
@@ -31,6 +30,7 @@ namespace blink {
 
 class SVGLineElement final : public SVGGeometryElement {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     DECLARE_NODE_FACTORY(SVGLineElement);
 
@@ -50,10 +50,10 @@ private:
 
     bool selfHasRelativeLengths() const override;
 
-    RefPtrWillBeMember<SVGAnimatedLength> m_x1;
-    RefPtrWillBeMember<SVGAnimatedLength> m_y1;
-    RefPtrWillBeMember<SVGAnimatedLength> m_x2;
-    RefPtrWillBeMember<SVGAnimatedLength> m_y2;
+    Member<SVGAnimatedLength> m_x1;
+    Member<SVGAnimatedLength> m_y1;
+    Member<SVGAnimatedLength> m_x2;
+    Member<SVGAnimatedLength> m_y2;
 };
 
 } // namespace blink

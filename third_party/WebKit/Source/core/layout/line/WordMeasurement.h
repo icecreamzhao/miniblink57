@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2000 Lars Knoll (knoll@kde.org)
- * Copyright (C) 2003, 2004, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc. All right reserved.
+ * Copyright (C) 2003, 2004, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc.
+ *               All right reserved.
  * Copyright (C) 2010 Google Inc. All rights reserved.
  * Copyright (C) 2013 Adobe Systems Incorporated.
  *
@@ -25,13 +26,14 @@
 #define WordMeasurement_h
 
 #include "platform/fonts/SimpleFontData.h"
+#include "wtf/Allocator.h"
 #include "wtf/HashSet.h"
 
 namespace blink {
 
-class LayoutText;
-
 class WordMeasurement {
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
+
 public:
     WordMeasurement()
         : layoutText(nullptr)
@@ -41,7 +43,7 @@ public:
     {
     }
 
-    LayoutText* layoutText;
+    LineLayoutText layoutText;
     float width;
     int startOffset;
     int endOffset;

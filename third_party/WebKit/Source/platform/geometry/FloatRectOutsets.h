@@ -6,10 +6,7 @@
 #define FloatRectOutsets_h
 
 #include "platform/PlatformExport.h"
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
-=======
->>>>>>> miniblink49
 #include <algorithm>
 
 namespace blink {
@@ -20,7 +17,6 @@ namespace blink {
 //
 // Negative lengths can be used to express insets.
 class PLATFORM_EXPORT FloatRectOutsets {
-<<<<<<< HEAD
     STACK_ALLOCATED();
 
 public:
@@ -31,10 +27,6 @@ public:
         , m_left(0)
     {
     }
-=======
-public:
-    FloatRectOutsets() : m_top(0), m_right(0), m_bottom(0), m_left(0) { }
->>>>>>> miniblink49
 
     FloatRectOutsets(float top, float right, float bottom, float left)
         : m_top(top)

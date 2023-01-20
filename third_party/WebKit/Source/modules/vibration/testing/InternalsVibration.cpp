@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "modules/vibration/testing/InternalsVibration.h"
 
 #include "core/frame/Navigator.h"
@@ -54,27 +53,6 @@ Vector<unsigned> InternalsVibration::pendingVibrationPattern(
     return NavigatorVibration::from(*navigator)
         .controller(*navigator->frame())
         ->pattern();
-=======
-#include "config.h"
-#include "InternalsVibration.h"
-
-#include "core/dom/Document.h"
-#include "core/testing/Internals.h"
-#include "modules/vibration/NavigatorVibration.h"
-
-namespace blink {
-
-bool InternalsVibration::isVibrating(Internals&, Document* document)
-{
-    ASSERT(document && document->page());
-    return NavigatorVibration::from(*document->page()).isVibrating();
-}
-
-Vector<unsigned> InternalsVibration::pendingVibrationPattern(Internals&, Document* document)
-{
-    ASSERT(document && document->page());
-    return NavigatorVibration::from(*document->page()).pattern();
->>>>>>> miniblink49
 }
 
 } // namespace blink

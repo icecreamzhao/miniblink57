@@ -27,7 +27,6 @@ def lineno():
 
 cov_start = lineno()+1   # We care about coverage starting just past this def.
 def get_args(bot):
-<<<<<<< HEAD
   args = ['--pre_log']
 
   if 'GPU' in bot:
@@ -39,16 +38,10 @@ def get_args(bot):
 
   if 'Appurify' not in bot:
     args.extend(['--scales', '1.0', '1.1'])
-=======
-  args = []
-
-  args.extend(['--scales', '1.0', '1.1'])
->>>>>>> miniblink49
 
   if 'iOS' in bot:
     args.extend(['--skps', 'ignore_skps'])
 
-<<<<<<< HEAD
   if 'Appurify' not in bot:
     config = ['565', '8888', 'gpu', 'nonrendering', 'angle', 'hwui']
     # The S4 crashes and the NP produces a long error stream when we run with
@@ -67,29 +60,13 @@ def get_args(bot):
         config.extend(['msaa16', 'nvpr16', 'nvprdit16'])
     args.append('--config')
     args.extend(config)
-=======
-  config = ['565', '8888', 'gpu', 'nonrendering', 'angle', 'hwui']
-  # The S4 crashes and the NP produces a long error stream when we run with
-  # MSAA.
-  if ('GalaxyS4'    not in bot and
-      'NexusPlayer' not in bot):
-    if 'Android' in bot:
-      config.extend(['msaa4', 'nvprmsaa4'])
-    else:
-      config.extend(['msaa16', 'nvprmsaa16'])
-  args.append('--config')
-  args.extend(config)
->>>>>>> miniblink49
 
   if 'Valgrind' in bot:
     # Don't care about Valgrind performance.
     args.extend(['--loops',   '1'])
     args.extend(['--samples', '1'])
-<<<<<<< HEAD
     # Ensure that the bot framework does not think we have timed out.
     args.extend(['--keepAlive', 'true'])
-=======
->>>>>>> miniblink49
 
   if 'HD2000' in bot:
     args.extend(['--GPUbenchTileW', '256'])
@@ -103,27 +80,18 @@ def get_args(bot):
     match.append('~desk_carsvg')
   if 'HD2000' in bot:
     match.extend(['~gradient', '~etc1bitmap'])  # skia:2895
-<<<<<<< HEAD
   if 'NexusPlayer' in bot:
     match.append('~desk_unicodetable')
   if 'GalaxyS4' in bot:
     match.append('~GLInstancedArraysBench')  # skia:4371
   if 'Nexus5' in bot:
     match.append('~keymobi_shop_mobileweb_ebay_com.skp')  # skia:5178
-=======
-  if 'Nexus7' in bot:
-    match = ['skp']  # skia:2774
-  if 'NexusPlayer' in bot:
-    match.append('~desk_unicodetable')
-
->>>>>>> miniblink49
   if 'iOS' in bot:
     match.append('~blurroundrect')
     match.append('~patch_grid')  # skia:2847
     match.append('~desk_carsvg')
     match.append('~keymobi')
     match.append('~path_hairline')
-<<<<<<< HEAD
     match.append('~GLInstancedArraysBench') # skia:4714
 
   # the 32-bit GCE bots run out of memory in DM when running these large images
@@ -167,8 +135,6 @@ def get_args(bot):
   # As an experiment, skip nanobench on Debug trybots.
   if 'Debug' in bot and 'CPU' in bot and 'Trybot' in bot:
     match = ['nothing_will_match_this']
-=======
->>>>>>> miniblink49
 
   if match:
     args.append('--match')
@@ -182,7 +148,6 @@ def self_test():
   import coverage  # This way the bots don't need coverage.py to be installed.
   args = {}
   cases = [
-<<<<<<< HEAD
     'Perf-Android-GCC-Nexus6-GPU-Adreno420-Arm7-Release',
     'Perf-Android-Nexus7-Tegra3-Arm7-Release',
     'Perf-Android-GCC-NexusPlayer-GPU-PowerVR-x86-Release',
@@ -194,13 +159,6 @@ def self_test():
     'Test-Ubuntu-GCC-GCE-CPU-AVX2-x86_64-Debug-Trybot',
     'Perf-Android-GCC-NVIDIA_Shield-GPU-TegraX1-Arm64-Release',
     'Perf-Android-GCC-Nexus5-GPU-Adreno330-Arm7-Release',
-=======
-    'Perf-Android-Nexus7-Tegra3-Arm7-Release',
-    'Perf-Android-GCC-NexusPlayer-GPU-PowerVR-x86-Release',
-    'Test-Ubuntu-GCC-ShuttleA-GPU-GTX550Ti-x86_64-Release-Valgrind',
-    'Test-Win7-MSVC-ShuttleA-GPU-HD2000-x86-Debug-ANGLE',
-    'Test-iOS-Clang-iPad4-GPU-SGX554-Arm7-Debug',
->>>>>>> miniblink49
   ]
 
   cov = coverage.coverage()

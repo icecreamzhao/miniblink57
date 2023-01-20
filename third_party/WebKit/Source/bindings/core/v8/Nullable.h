@@ -10,25 +10,39 @@
 
 namespace blink {
 
+enum class UnionTypeConversionMode {
+    Nullable,
+    NotNullable,
+};
+
 template <typename T>
 class Nullable {
-    DISALLOW_ALLOCATION();
+    DISALLOW_NEW();
+
 public:
     Nullable()
         : m_value()
-        , m_isNull(true) { }
+        , m_isNull(true)
+    {
+    }
 
     Nullable(std::nullptr_t)
         : m_value()
-        , m_isNull(true) { }
+        , m_isNull(true)
+    {
+    }
 
     Nullable(const T& value)
         : m_value(value)
-        , m_isNull(false) { }
+        , m_isNull(false)
+    {
+    }
 
     Nullable(const Nullable& other)
         : m_value(other.m_value)
-        , m_isNull(other.m_isNull) { }
+        , m_isNull(other.m_isNull)
+    {
+    }
 
     Nullable& operator=(const Nullable& other)
     {
@@ -56,23 +70,26 @@ public:
         m_isNull = true;
     }
 
-    const T& get() const { ASSERT(!m_isNull); return m_value; }
-    T& get() { ASSERT(!m_isNull); return m_value; }
+    const T& get() const
+    {
+        ASSERT(!m_isNull);
+        return m_value;
+    }
+    T& get()
+    {
+        ASSERT(!m_isNull);
+        return m_value;
+    }
     bool isNull() const { return m_isNull; }
 
-    // See comment in RefPtr.h about what UnspecifiedBoolType is.
-    typedef const T* UnspecifiedBoolType;
-    operator UnspecifiedBoolType() const { return m_isNull ? 0 : &m_value; }
+    explicit operator bool() const { return !m_isNull; }
 
     bool operator==(const Nullable& other) const
     {
         return (m_isNull && other.m_isNull) || (!m_isNull && !other.m_isNull && m_value == other.m_value);
     }
 
-    DEFINE_INLINE_TRACE()
-    {
-        TraceIfNeeded<T>::trace(visitor, m_value);
-    }
+    DEFINE_INLINE_TRACE() { TraceIfNeeded<T>::trace(visitor, m_value); }
 
 private:
     T m_value;

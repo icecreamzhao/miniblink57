@@ -1,4 +1,0 @@
-*%(basename)s:8: SyntaxError: Identifier '*default*' has already been declared
-export default x = 1;
-       ^^^^^^^^^^^^^
-SyntaxError: Identifier '*default*' has already been declared

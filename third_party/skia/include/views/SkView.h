@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #ifndef SkView_DEFINED
 #define SkView_DEFINED
 
@@ -16,18 +15,6 @@
 #include "SkMatrix.h"
 #include "SkMetaData.h"
 #include "SkRect.h"
-=======
-
-#ifndef SkView_DEFINED
-#define SkView_DEFINED
-
-#include "SkEventSink.h"
-#include "SkRect.h"
-#include "SkDOM.h"
-#include "SkTDict.h"
-#include "SkMatrix.h"
-#include "SkMetaData.h"
->>>>>>> miniblink49
 
 class SkCanvas;
 class SkLayerView;
@@ -50,7 +37,6 @@ public:
         kFlagShiftCount
     };
     enum Flag_Mask {
-<<<<<<< HEAD
         kVisible_Mask = 1 << kVisible_Shift, //!< set if the view is visible
         kEnabled_Mask = 1 << kEnabled_Shift, //!< set if the view is enabled
         kFocusable_Mask = 1 << kFocusable_Shift, //!< set if the view can receive focus
@@ -94,51 +80,6 @@ public:
     void setHeight(SkScalar height) { this->setSize(fWidth, height); }
     /** Return a rectangle set to [0, 0, width, height] */
     void getLocalBounds(SkRect* bounds) const;
-=======
-        kVisible_Mask   = 1 << kVisible_Shift,      //!< set if the view is visible
-        kEnabled_Mask   = 1 << kEnabled_Shift,      //!< set if the view is enabled
-        kFocusable_Mask = 1 << kFocusable_Shift,    //!< set if the view can receive focus
-        kFlexH_Mask     = 1 << kFlexH_Shift,        //!< set if the view's width is stretchable
-        kFlexV_Mask     = 1 << kFlexV_Shift,        //!< set if the view's height is stretchable
-        kNoClip_Mask    = 1 << kNoClip_Shift,        //!< set if the view is not clipped to its bounds
-
-        kAllFlagMasks   = (uint32_t)(0 - 1) >> (32 - kFlagShiftCount)
-    };
-
-                SkView(uint32_t flags = 0);
-    virtual     ~SkView();
-
-    /** Return the flags associated with the view
-    */
-    uint32_t    getFlags() const { return fFlags; }
-    /** Set the flags associated with the view
-    */
-    void        setFlags(uint32_t flags);
-
-    /** Helper that returns non-zero if the kVisible_Mask bit is set in the view's flags
-    */
-    int         isVisible() const { return fFlags & kVisible_Mask; }
-    int         isEnabled() const { return fFlags & kEnabled_Mask; }
-    int         isFocusable() const { return fFlags & kFocusable_Mask; }
-    int         isClipToBounds() const { return !(fFlags & kNoClip_Mask); }
-    /** Helper to set/clear the view's kVisible_Mask flag */
-    void        setVisibleP(bool);
-    void        setEnabledP(bool);
-    void        setFocusableP(bool);
-    void        setClipToBounds(bool);
-
-    /** Return the view's width */
-    SkScalar    width() const { return fWidth; }
-    /** Return the view's height */
-    SkScalar    height() const { return fHeight; }
-    /** Set the view's width and height. These must both be >= 0. This does not affect the view's loc */
-    void        setSize(SkScalar width, SkScalar height);
-    void        setSize(const SkPoint& size) { this->setSize(size.fX, size.fY); }
-    void        setWidth(SkScalar width) { this->setSize(width, fHeight); }
-    void        setHeight(SkScalar height) { this->setSize(fWidth, height); }
-    /** Return a rectangle set to [0, 0, width, height] */
-    void        getLocalBounds(SkRect* bounds) const;
->>>>>>> miniblink49
 
     /** Loc - the view's offset with respect to its parent in its view hiearchy.
         NOTE: For more complex transforms, use Local Matrix. The tranformations
@@ -147,7 +88,6 @@ public:
              canvas->concat(fMatrix);
     */
     /** Return the view's left edge */
-<<<<<<< HEAD
     SkScalar locX() const { return fLoc.fX; }
     /** Return the view's top edge */
     SkScalar locY() const { return fLoc.fY; }
@@ -156,16 +96,6 @@ public:
     void setLoc(const SkPoint& loc) { this->setLoc(loc.fX, loc.fY); }
     void setLocX(SkScalar x) { this->setLoc(x, fLoc.fY); }
     void setLocY(SkScalar y) { this->setLoc(fLoc.fX, y); }
-=======
-    SkScalar    locX() const { return fLoc.fX; }
-    /** Return the view's top edge */
-    SkScalar    locY() const { return fLoc.fY; }
-    /** Set the view's left and top edge. This does not affect the view's size */
-    void        setLoc(SkScalar x, SkScalar y);
-    void        setLoc(const SkPoint& loc) { this->setLoc(loc.fX, loc.fY); }
-    void        setLocX(SkScalar x) { this->setLoc(x, fLoc.fY); }
-    void        setLocY(SkScalar y) { this->setLoc(fLoc.fX, y); }
->>>>>>> miniblink49
 
     /** Local Matrix - matrix used to tranform the view with respect to its
         parent in its view hiearchy. Use setLocalMatrix to apply matrix
@@ -176,17 +106,10 @@ public:
              canvas->concat(fMatrix);
     */
     const SkMatrix& getLocalMatrix() const { return fMatrix; }
-<<<<<<< HEAD
     void setLocalMatrix(const SkMatrix& matrix);
 
     /** Offset (move) the view by the specified dx and dy. This does not affect the view's size */
     void offset(SkScalar dx, SkScalar dy);
-=======
-    void            setLocalMatrix(const SkMatrix& matrix);
-
-    /** Offset (move) the view by the specified dx and dy. This does not affect the view's size */
-    void        offset(SkScalar dx, SkScalar dy);
->>>>>>> miniblink49
 
     /** Call this to have the view draw into the specified canvas. */
     virtual void draw(SkCanvas* canvas);
@@ -195,20 +118,12 @@ public:
         draw method be called. The rectangle parameter specifies the part of the view
         that should be redrawn. If it is null, it specifies the entire view bounds.
     */
-<<<<<<< HEAD
     void inval(SkRect* rectOrNull);
-=======
-    void        inval(SkRect* rectOrNull);
->>>>>>> miniblink49
 
     //  Focus management
 
     SkView* getFocusView() const;
-<<<<<<< HEAD
     bool hasFocus() const;
-=======
-    bool    hasFocus() const;
->>>>>>> miniblink49
 
     enum FocusDirection {
         kNext_FocusDirection,
@@ -216,11 +131,7 @@ public:
 
         kFocusDirectionCount
     };
-<<<<<<< HEAD
     bool acceptFocus();
-=======
-    bool    acceptFocus();
->>>>>>> miniblink49
     SkView* moveFocus(FocusDirection);
 
     //  Click handling
@@ -231,22 +142,15 @@ public:
         virtual ~Click();
 
         const char* getType() const { return fType; }
-<<<<<<< HEAD
         bool isType(const char type[]) const;
         void setType(const char type[]); // does NOT make a copy of the string
         void copyType(const char type[]); // makes a copy of the string
-=======
-        bool        isType(const char type[]) const;
-        void        setType(const char type[]);     // does NOT make a copy of the string
-        void        copyType(const char type[]);    // makes a copy of the string
->>>>>>> miniblink49
 
         enum State {
             kDown_State,
             kMoved_State,
             kUp_State
         };
-<<<<<<< HEAD
         SkPoint fOrig, fPrev, fCurr;
         SkIPoint fIOrig, fIPrev, fICurr;
         State fState;
@@ -259,29 +163,12 @@ public:
         SkEventSinkID fTargetID;
         char* fType;
         bool fWeOwnTheType;
-=======
-        SkPoint     fOrig, fPrev, fCurr;
-        SkIPoint    fIOrig, fIPrev, fICurr;
-        State       fState;
-        void*       fOwner;
-        unsigned    fModifierKeys;
-
-        SkMetaData  fMeta;
-    private:
-        SkEventSinkID   fTargetID;
-        char*           fType;
-        bool            fWeOwnTheType;
->>>>>>> miniblink49
 
         void resetType();
 
         friend class SkView;
     };
-<<<<<<< HEAD
     Click* findClickHandler(SkScalar x, SkScalar y, unsigned modifierKeys);
-=======
-    Click*  findClickHandler(SkScalar x, SkScalar y, unsigned modifierKeys);
->>>>>>> miniblink49
 
     static void DoClickDown(Click*, int x, int y, unsigned modi);
     static void DoClickMoved(Click*, int x, int y, unsigned modi);
@@ -291,11 +178,7 @@ public:
         returns true from its onEvent call. This view is returned. If no parent handles
         the event, null is returned.
      */
-<<<<<<< HEAD
     SkView* sendEventToParents(const SkEvent&);
-=======
-    SkView*     sendEventToParents(const SkEvent&);
->>>>>>> miniblink49
     /** Send the query to the view's parent, and its parent etc. until one of them
         returns true from its onQuery call. This view is returned. If no parent handles
         the query, null is returned.
@@ -305,67 +188,38 @@ public:
     //  View hierarchy management
 
     /** Return the view's parent, or null if it has none. This does not affect the parent's reference count. */
-<<<<<<< HEAD
     SkView* getParent() const { return fParent; }
     SkView* attachChildToFront(SkView* child);
-=======
-    SkView*     getParent() const { return fParent; }
-    SkView*     attachChildToFront(SkView* child);
->>>>>>> miniblink49
     /** Attach the child view to this view, and increment the child's reference count. The child view is added
         such that it will be drawn before all other child views.
         The child view parameter is returned.
     */
-<<<<<<< HEAD
     SkView* attachChildToBack(SkView* child);
     /** If the view has a parent, detach the view from its parent and decrement the view's reference count.
         If the parent was the only owner of the view, this will cause the view to be deleted.
     */
     void detachFromParent();
-=======
-    SkView*     attachChildToBack(SkView* child);
-    /** If the view has a parent, detach the view from its parent and decrement the view's reference count.
-        If the parent was the only owner of the view, this will cause the view to be deleted.
-    */
-    void        detachFromParent();
->>>>>>> miniblink49
     /** Attach the child view to this view, and increment the child's reference count. The child view is added
         such that it will be drawn after all other child views.
         The child view parameter is returned.
     */
     /** Detach all child views from this view. */
-<<<<<<< HEAD
     void detachAllChildren();
-=======
-    void        detachAllChildren();
->>>>>>> miniblink49
 
     /** Convert the specified point from global coordinates into view-local coordinates
      *  Return true on success; false on failure
      */
-<<<<<<< HEAD
     bool globalToLocal(SkPoint* pt) const
     {
         if (pt) {
             return this->globalToLocal(pt->fX, pt->fY, pt);
         }
         return true; // nothing to do so return true
-=======
-    bool        globalToLocal(SkPoint* pt) const {
-        if (pt) {
-            return this->globalToLocal(pt->fX, pt->fY, pt);
-        }
-        return true;  // nothing to do so return true
->>>>>>> miniblink49
     }
     /** Convert the specified x,y from global coordinates into view-local coordinates, returning
         the answer in the local parameter.
     */
-<<<<<<< HEAD
     bool globalToLocal(SkScalar globalX, SkScalar globalY, SkPoint* local) const;
-=======
-    bool        globalToLocal(SkScalar globalX, SkScalar globalY, SkPoint* local) const;
->>>>>>> miniblink49
 
     /** \class F2BIter
 
@@ -378,14 +232,9 @@ public:
     public:
         F2BIter(const SkView* parent);
         SkView* next();
-<<<<<<< HEAD
 
     private:
         SkView *fFirstChild, *fChild;
-=======
-    private:
-        SkView* fFirstChild, *fChild;
->>>>>>> miniblink49
     };
 
     /** \class B2FIter
@@ -399,14 +248,9 @@ public:
     public:
         B2FIter(const SkView* parent);
         SkView* next();
-<<<<<<< HEAD
 
     private:
         SkView *fFirstChild, *fChild;
-=======
-    private:
-        SkView* fFirstChild, *fChild;
->>>>>>> miniblink49
     };
 
     /** \class Artist
@@ -417,7 +261,6 @@ public:
     */
     class Artist : public SkRefCnt {
     public:
-<<<<<<< HEAD
         void draw(SkView*, SkCanvas*);
         void inflate(const SkDOM&, const SkDOM::Node*);
 
@@ -425,15 +268,6 @@ public:
         virtual void onDraw(SkView*, SkCanvas*) = 0;
         virtual void onInflate(const SkDOM&, const SkDOM::Node*);
 
-=======
-        
-
-        void draw(SkView*, SkCanvas*);
-        void inflate(const SkDOM&, const SkDOM::Node*);
-    protected:
-        virtual void onDraw(SkView*, SkCanvas*) = 0;
-        virtual void onInflate(const SkDOM&, const SkDOM::Node*);
->>>>>>> miniblink49
     private:
         typedef SkRefCnt INHERITED;
     };
@@ -455,7 +289,6 @@ public:
     */
     class Layout : public SkRefCnt {
     public:
-<<<<<<< HEAD
         void layoutChildren(SkView* parent);
         void inflate(const SkDOM&, const SkDOM::Node*);
 
@@ -463,15 +296,6 @@ public:
         virtual void onLayoutChildren(SkView* parent) = 0;
         virtual void onInflate(const SkDOM&, const SkDOM::Node*);
 
-=======
-        
-
-        void layoutChildren(SkView* parent);
-        void inflate(const SkDOM&, const SkDOM::Node*);
-    protected:
-        virtual void onLayoutChildren(SkView* parent) = 0;
-        virtual void onInflate(const SkDOM&, const SkDOM::Node*);
->>>>>>> miniblink49
     private:
         typedef SkRefCnt INHERITED;
     };
@@ -487,19 +311,11 @@ public:
     Layout* setLayout(Layout*, bool invokeLayoutNow = true);
     /** If a layout is attached to this view, call its layoutChildren() method
     */
-<<<<<<< HEAD
     void invokeLayout();
 
     /** Call this to initialize this view based on the specified XML node
     */
     void inflate(const SkDOM& dom, const SkDOM::Node* node);
-=======
-    void    invokeLayout();
-
-    /** Call this to initialize this view based on the specified XML node
-    */
-    void    inflate(const SkDOM& dom, const SkDOM::Node* node);
->>>>>>> miniblink49
     /** After a view hierarchy is inflated, this may be called with a dictionary
         containing pairs of <name, view*>, where the name string was the view's
         "id" attribute when it was inflated.
@@ -507,7 +323,6 @@ public:
         This will call the virtual onPostInflate for this view, and the recursively
         call postInflate on all of the view's children.
     */
-<<<<<<< HEAD
     void postInflate(const SkTDict<SkView*>& ids);
 
     SkDEBUGCODE(void dump(bool recurse) const;)
@@ -517,22 +332,10 @@ public:
         virtual void onDraw(SkCanvas*);
     /** Override this to be notified when the view's size changes. Be sure to call the inherited version too */
     virtual void onSizeChange();
-=======
-    void    postInflate(const SkTDict<SkView*>& ids);
-
-    SkDEBUGCODE(void dump(bool recurse) const;)
-
-protected:
-    /** Override this to draw inside the view. Be sure to call the inherited version too */
-    virtual void    onDraw(SkCanvas*);
-    /** Override this to be notified when the view's size changes. Be sure to call the inherited version too */
-    virtual void    onSizeChange();
->>>>>>> miniblink49
     /** Override this if you want to handle an inval request from this view or one of its children.
         Tyically this is only overridden by the by the "window". If your subclass does handle the
         request, return true so the request will not continue to propogate to the parent.
     */
-<<<<<<< HEAD
     virtual bool handleInval(const SkRect*);
     //! called once before all of the children are drawn (or clipped/translated)
     virtual SkCanvas* beforeChildren(SkCanvas* c) { return c; }
@@ -543,18 +346,6 @@ protected:
     virtual void beforeChild(SkView* /*child*/, SkCanvas*) { }
     //! called right after this child's onDraw is called
     virtual void afterChild(SkView* /*child*/, SkCanvas*) { }
-=======
-    virtual bool    handleInval(const SkRect*);
-    //! called once before all of the children are drawn (or clipped/translated)
-    virtual SkCanvas* beforeChildren(SkCanvas* c) { return c; }
-    //! called once after all of the children are drawn (or clipped/translated)
-    virtual void afterChildren(SkCanvas*) {}
-
-    //! called right before this child's onDraw is called
-    virtual void beforeChild(SkView* /*child*/, SkCanvas*) {}
-    //! called right after this child's onDraw is called
-    virtual void afterChild(SkView* /*child*/, SkCanvas*) {}
->>>>>>> miniblink49
 
     /** Override this if you might handle the click
     */
@@ -568,7 +359,6 @@ protected:
     /** Override this to track clicks, returning true as long as you want to track
         the pen/mouse.
     */
-<<<<<<< HEAD
     virtual bool onClick(Click*);
     /** Override this to initialize your subclass from the XML node. Be sure to call the inherited version too */
     virtual void onInflate(const SkDOM& dom, const SkDOM::Node* node);
@@ -576,21 +366,11 @@ protected:
         during XML parsing. Be sure to call the inherited version too.
     */
     virtual void onPostInflate(const SkTDict<SkView*>&);
-=======
-    virtual bool    onClick(Click*);
-    /** Override this to initialize your subclass from the XML node. Be sure to call the inherited version too */
-    virtual void    onInflate(const SkDOM& dom, const SkDOM::Node* node);
-    /** Override this if you want to perform post initialization work based on the ID dictionary built
-        during XML parsing. Be sure to call the inherited version too.
-    */
-    virtual void    onPostInflate(const SkTDict<SkView*>&);
->>>>>>> miniblink49
 
 public:
 #ifdef SK_DEBUG
     void validate() const;
 #else
-<<<<<<< HEAD
     void validate() const
     {
     }
@@ -613,48 +393,17 @@ private:
     SkView* fPrevSibling;
     uint8_t fFlags;
     uint8_t fContainsFocus;
-=======
-    void validate() const {}
-#endif
-    // default action is to inval the view
-    virtual void    onFocusChange(bool gainFocusP);
-
-protected:
-
-    // override these if you're acting as a layer/host
-    virtual bool    onGetFocusView(SkView**) const { return false; }
-    virtual bool    onSetFocusView(SkView*) { return false; }
-
-private:
-    SkScalar    fWidth, fHeight;
-    SkMatrix    fMatrix;
-    SkPoint     fLoc;
-    SkView*     fParent;
-    SkView*     fFirstChild;
-    SkView*     fNextSibling;
-    SkView*     fPrevSibling;
-    uint8_t     fFlags;
-    uint8_t     fContainsFocus;
->>>>>>> miniblink49
 
     friend class B2FIter;
     friend class F2BIter;
 
     friend class SkLayerView;
 
-<<<<<<< HEAD
     bool setFocusView(SkView* fvOrNull);
     SkView* acceptFocus(FocusDirection);
     void detachFromParent_NoLayout();
     /** Compute the matrix to transform view-local coordinates into global ones */
     void localToGlobal(SkMatrix* matrix) const;
-=======
-    bool    setFocusView(SkView* fvOrNull);
-    SkView* acceptFocus(FocusDirection);
-    void    detachFromParent_NoLayout();
-    /** Compute the matrix to transform view-local coordinates into global ones */
-    void    localToGlobal(SkMatrix* matrix) const;
->>>>>>> miniblink49
 };
 
 #endif

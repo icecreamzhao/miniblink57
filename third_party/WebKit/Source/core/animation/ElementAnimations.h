@@ -31,7 +31,8 @@
 #ifndef ElementAnimations_h
 #define ElementAnimations_h
 
-#include "core/animation/AnimationStack.h"
+#include "core/animation/CustomCompositorAnimations.h"
+#include "core/animation/EffectStack.h"
 #include "core/animation/css/CSSAnimations.h"
 #include "wtf/HashCountedSet.h"
 #include "wtf/HashMap.h"
@@ -42,63 +43,70 @@ namespace blink {
 
 class CSSAnimations;
 
-using AnimationCountedSet = WillBeHeapHashCountedSet<RawPtrWillBeWeakMember<Animation>>;
+using AnimationCountedSet = HeapHashCountedSet<WeakMember<Animation>>;
 
-class ElementAnimations : public NoBaseWillBeGarbageCollectedFinalized<ElementAnimations> {
+class ElementAnimations : public GarbageCollectedFinalized<ElementAnimations> {
     WTF_MAKE_NONCOPYABLE(ElementAnimations);
+
 public:
     ElementAnimations();
     ~ElementAnimations();
 
-    // Animations that are currently active for this element, their effects will be applied
-    // during a style recalc. CSS Transitions are included in this stack.
-    AnimationStack& defaultStack() { return m_defaultStack; }
-    const AnimationStack& defaultStack() const { return m_defaultStack; }
-    // Tracks the state of active CSS Animations and Transitions. The individual animations
-    // will also be part of the default stack, but the mapping betwen animation name and
-    // animation is kept here.
+    // Animations that are currently active for this element, their effects will
+    // be applied during a style recalc. CSS Transitions are included in this
+    // stack.
+    EffectStack& effectStack() { return m_effectStack; }
+    const EffectStack& effectStack() const { return m_effectStack; }
+    // Tracks long running animations that are responsible for applying mutations
+    // from compositor worker.
+    CustomCompositorAnimations& customCompositorAnimations()
+    {
+        return m_customCompositorAnimations;
+    }
+    const CustomCompositorAnimations& customCompositorAnimations() const
+    {
+        return m_customCompositorAnimations;
+    }
+    // Tracks the state of active CSS Animations and Transitions. The individual
+    // animations will also be part of the animation stack, but the mapping
+    // between animation name and animation is kept here.
     CSSAnimations& cssAnimations() { return m_cssAnimations; }
     const CSSAnimations& cssAnimations() const { return m_cssAnimations; }
 
     // Animations which have effects targeting this element.
     AnimationCountedSet& animations() { return m_animations; }
 
-    bool isEmpty() const { return m_defaultStack.isEmpty() && m_cssAnimations.isEmpty() && m_animations.isEmpty(); }
+    bool isEmpty() const
+    {
+        return m_effectStack.isEmpty() && m_cssAnimations.isEmpty() && m_animations.isEmpty();
+    }
 
     void restartAnimationOnCompositor();
 
     void updateAnimationFlags(ComputedStyle&);
-    void setAnimationStyleChange(bool animationStyleChange) { m_animationStyleChange = animationStyleChange; }
+    void setAnimationStyleChange(bool animationStyleChange)
+    {
+        m_animationStyleChange = animationStyleChange;
+    }
 
     const ComputedStyle* baseComputedStyle() const;
     void updateBaseComputedStyle(const ComputedStyle*);
     void clearBaseComputedStyle();
-
-#if !ENABLE(OILPAN)
-    void addEffect(KeyframeEffect* effect) { m_effects.append(effect); }
-    void notifyEffectDestroyed(KeyframeEffect* effect) { m_effects.remove(m_effects.find(effect)); }
-#endif
 
     DECLARE_TRACE();
 
 private:
     bool isAnimationStyleChange() const;
 
-    AnimationStack m_defaultStack;
+    EffectStack m_effectStack;
+    CustomCompositorAnimations m_customCompositorAnimations;
     CSSAnimations m_cssAnimations;
     AnimationCountedSet m_animations;
     bool m_animationStyleChange;
     RefPtr<ComputedStyle> m_baseComputedStyle;
 
-#if !ENABLE(OILPAN)
-    // FIXME: Oilpan: This is to avoid a reference cycle that keeps Elements alive
-    // and won't be needed once the Node hierarchy becomes traceable.
-    Vector<KeyframeEffect*> m_effects;
-#endif
-
-    // CSSAnimations and DeferredLegacyStyleInterpolation checks if a style change is due to animation.
+    // CSSAnimations checks if a style change is due to animation.
     friend class CSSAnimations;
-    friend class DeferredLegacyStyleInterpolation;
 };
 
 } // namespace blink

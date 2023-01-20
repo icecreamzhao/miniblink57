@@ -26,7 +26,6 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/frame/BarProp.h"
 
 #include "core/frame/FrameHost.h"
@@ -36,38 +35,36 @@
 namespace blink {
 
 BarProp::BarProp(LocalFrame* frame, Type type)
-    : DOMWindowProperty(frame)
+    : DOMWindowClient(frame)
     , m_type(type)
 {
 }
 
 DEFINE_TRACE(BarProp)
 {
-    DOMWindowProperty::trace(visitor);
+    DOMWindowClient::trace(visitor);
 }
 
 bool BarProp::visible() const
 {
-    if (!m_frame)
+    if (!frame())
         return false;
-    FrameHost* host = m_frame->host();
-    if (!host)
-        return false;
+    DCHECK(frame()->host());
 
     switch (m_type) {
     case Locationbar:
     case Personalbar:
     case Toolbar:
-        return host->chromeClient().toolbarsVisible();
+        return frame()->host()->chromeClient().toolbarsVisible();
     case Menubar:
-        return host->chromeClient().menubarVisible();
+        return frame()->host()->chromeClient().menubarVisible();
     case Scrollbars:
-        return host->chromeClient().scrollbarsVisible();
+        return frame()->host()->chromeClient().scrollbarsVisible();
     case Statusbar:
-        return host->chromeClient().statusbarVisible();
+        return frame()->host()->chromeClient().statusbarVisible();
     }
 
-    ASSERT_NOT_REACHED();
+    NOTREACHED();
     return false;
 }
 

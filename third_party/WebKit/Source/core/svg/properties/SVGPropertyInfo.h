@@ -23,6 +23,7 @@
 namespace blink {
 
 enum AnimatedPropertyType {
+    AnimatedUnknown = 0,
     AnimatedAngle,
     AnimatedBoolean,
     AnimatedColor,
@@ -43,9 +44,9 @@ enum AnimatedPropertyType {
     AnimatedStringList,
     AnimatedTransform,
     AnimatedTransformList,
-    AnimatedUnknown
+    NumberOfAnimatedPropertyTypes
 };
 
-}
+} // namespace blink
 
 #endif // SVGPropertyInfo_h

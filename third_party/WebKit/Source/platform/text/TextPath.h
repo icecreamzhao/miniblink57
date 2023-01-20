@@ -33,12 +33,8 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 enum CodePath { SimplePath,
     ComplexPath };
-=======
-enum CodePath { SimplePath, ComplexPath };
->>>>>>> miniblink49
 
 }
 

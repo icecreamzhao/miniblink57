@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "platform/weborigin/SecurityOrigin.h"
 
 #include "platform/RuntimeEnabledFeatures.h"
@@ -40,22 +39,11 @@
 #include "url/url_util.h"
 #include "wtf/text/StringBuilder.h"
 #include "wtf/text/WTFString.h"
-=======
-#include "config.h"
-#include "platform/weborigin/SecurityOrigin.h"
-
-#include "platform/RuntimeEnabledFeatures.h"
-#include "platform/weborigin/KURL.h"
-#include "wtf/text/StringBuilder.h"
-#include "wtf/text/WTFString.h"
-#include <gtest/gtest.h>
->>>>>>> miniblink49
 
 namespace blink {
 
 const int MaxAllowedPort = 65535;
 
-<<<<<<< HEAD
 class SecurityOriginTest : public ::testing::Test {
 public:
     void SetUp() override
@@ -64,24 +52,15 @@ public:
         url::AddStandardScheme("https-so", url::SCHEME_WITH_PORT);
     }
 };
-=======
-class SecurityOriginTest : public ::testing::Test { };
->>>>>>> miniblink49
 
 TEST_F(SecurityOriginTest, InvalidPortsCreateUniqueOrigins)
 {
     int ports[] = { -100, -1, MaxAllowedPort + 1, 1000000 };
 
-<<<<<<< HEAD
     for (size_t i = 0; i < WTF_ARRAY_LENGTH(ports); ++i) {
         RefPtr<SecurityOrigin> origin = SecurityOrigin::create("http", "example.com", ports[i]);
         EXPECT_TRUE(origin->isUnique())
             << "Port " << ports[i] << " should have generated a unique origin.";
-=======
-    for (size_t i = 0; i < arraysize(ports); ++i) {
-        RefPtr<SecurityOrigin> origin = SecurityOrigin::create("http", "example.com", ports[i]);
-        EXPECT_TRUE(origin->isUnique()) << "Port " << ports[i] << " should have generated a unique origin.";
->>>>>>> miniblink49
     }
 }
 
@@ -89,7 +68,6 @@ TEST_F(SecurityOriginTest, ValidPortsCreateNonUniqueOrigins)
 {
     int ports[] = { 0, 80, 443, 5000, MaxAllowedPort };
 
-<<<<<<< HEAD
     for (size_t i = 0; i < WTF_ARRAY_LENGTH(ports); ++i) {
         RefPtr<SecurityOrigin> origin = SecurityOrigin::create("http", "example.com", ports[i]);
         EXPECT_FALSE(origin->isUnique())
@@ -122,14 +100,6 @@ TEST_F(SecurityOriginTest, LocalAccess)
     EXPECT_FALSE(file2->canAccess(file1.get()));
 }
 
-=======
-    for (size_t i = 0; i < arraysize(ports); ++i) {
-        RefPtr<SecurityOrigin> origin = SecurityOrigin::create("http", "example.com", ports[i]);
-        EXPECT_FALSE(origin->isUnique()) << "Port " << ports[i] << " should not have generated a unique origin.";
-    }
-}
-
->>>>>>> miniblink49
 TEST_F(SecurityOriginTest, IsPotentiallyTrustworthy)
 {
     struct TestCase {
@@ -194,36 +164,21 @@ TEST_F(SecurityOriginTest, IsPotentiallyTrustworthy)
         { false, "filesystem:ftp://evil:99/foo" },
     };
 
-<<<<<<< HEAD
     for (size_t i = 0; i < WTF_ARRAY_LENGTH(inputs); ++i) {
         SCOPED_TRACE(i);
         RefPtr<SecurityOrigin> origin = SecurityOrigin::createFromString(inputs[i].url);
         String errorMessage;
         EXPECT_EQ(inputs[i].accessGranted, origin->isPotentiallyTrustworthy());
-=======
-    for (size_t i = 0; i < arraysize(inputs); ++i) {
-        SCOPED_TRACE(i);
-        RefPtr<SecurityOrigin> origin = SecurityOrigin::createFromString(inputs[i].url);
-        String errorMessage;
-        EXPECT_EQ(inputs[i].accessGranted, origin->isPotentiallyTrustworthy(errorMessage));
-        EXPECT_EQ(inputs[i].accessGranted, errorMessage.isEmpty());
->>>>>>> miniblink49
     }
 
     // Unique origins are not considered secure.
     RefPtr<SecurityOrigin> uniqueOrigin = SecurityOrigin::createUnique();
-<<<<<<< HEAD
     EXPECT_FALSE(uniqueOrigin->isPotentiallyTrustworthy());
     // ... unless they are specially marked as such.
     uniqueOrigin->setUniqueOriginIsPotentiallyTrustworthy(true);
     EXPECT_TRUE(uniqueOrigin->isPotentiallyTrustworthy());
     uniqueOrigin->setUniqueOriginIsPotentiallyTrustworthy(false);
     EXPECT_FALSE(uniqueOrigin->isPotentiallyTrustworthy());
-=======
-    String errorMessage;
-    EXPECT_FALSE(uniqueOrigin->isPotentiallyTrustworthy(errorMessage));
-    EXPECT_EQ("Only secure origins are allowed (see: https://goo.gl/Y0ZkNV).", errorMessage);
->>>>>>> miniblink49
 }
 
 TEST_F(SecurityOriginTest, IsSecure)
@@ -248,18 +203,13 @@ TEST_F(SecurityOriginTest, IsSecure)
     };
 
     for (auto test : inputs)
-<<<<<<< HEAD
         EXPECT_EQ(test.isSecure,
             SecurityOrigin::isSecure(KURL(ParsedURLString, test.url)))
             << "URL: '" << test.url << "'";
-=======
-        EXPECT_EQ(test.isSecure, SecurityOrigin::isSecure(KURL(ParsedURLString, test.url))) << "URL: '" << test.url << "'";
->>>>>>> miniblink49
 
     EXPECT_FALSE(SecurityOrigin::isSecure(KURL()));
 }
 
-<<<<<<< HEAD
 TEST_F(SecurityOriginTest, IsSecureViaTrustworthy)
 {
     const char* urls[] = { "http://localhost/", "http://localhost:8080/",
@@ -274,14 +224,11 @@ TEST_F(SecurityOriginTest, IsSecureViaTrustworthy)
     }
 }
 
-=======
->>>>>>> miniblink49
 TEST_F(SecurityOriginTest, Suborigins)
 {
     RuntimeEnabledFeatures::setSuboriginsEnabled(true);
 
     RefPtr<SecurityOrigin> origin = SecurityOrigin::createFromString("https://test.com");
-<<<<<<< HEAD
     Suborigin suborigin;
     suborigin.setName("foobar");
     EXPECT_FALSE(origin->hasSuborigin());
@@ -297,26 +244,10 @@ TEST_F(SecurityOriginTest, Suborigins)
     origin = SecurityOrigin::createFromString("https-so://foobar.test.com");
     EXPECT_TRUE(origin->hasSuborigin());
     EXPECT_EQ("foobar", origin->suborigin()->name());
-=======
-    EXPECT_FALSE(origin->hasSuborigin());
-    origin->addSuborigin("foobar");
-    EXPECT_TRUE(origin->hasSuborigin());
-    EXPECT_EQ("foobar", origin->suboriginName());
-
-    origin = SecurityOrigin::createFromString("https://foobar_test.com");
-    EXPECT_EQ("https", origin->protocol());
-    EXPECT_EQ("test.com", origin->host());
-    EXPECT_EQ("foobar", origin->suboriginName());
-
-    origin = SecurityOrigin::createFromString("https://foobar_test.com");
-    EXPECT_TRUE(origin->hasSuborigin());
-    EXPECT_EQ("foobar", origin->suboriginName());
->>>>>>> miniblink49
 
     origin = SecurityOrigin::createFromString("https://foobar+test.com");
     EXPECT_FALSE(origin->hasSuborigin());
 
-<<<<<<< HEAD
     origin = SecurityOrigin::createFromString("https.so://foobar+test.com");
     EXPECT_FALSE(origin->hasSuborigin());
 
@@ -336,22 +267,11 @@ TEST_F(SecurityOriginTest, Suborigins)
     origin = SecurityOrigin::createFromString("https-so://foobar.test.com");
     Suborigin emptySuborigin;
     EXPECT_DEATH(origin->addSuborigin(emptySuborigin), "");
-=======
-    origin = SecurityOrigin::createFromString("https://_test.com");
-    EXPECT_FALSE(origin->hasSuborigin());
-
-    origin = adoptRef<SecurityOrigin>(new SecurityOrigin);
-    EXPECT_FALSE(origin->hasSuborigin());
-
-    origin = SecurityOrigin::createFromString("https://foobar_test.com");
-    EXPECT_DEATH(origin->addSuborigin("shouldhitassert"), "");
->>>>>>> miniblink49
 }
 
 TEST_F(SecurityOriginTest, SuboriginsParsing)
 {
     RuntimeEnabledFeatures::setSuboriginsEnabled(true);
-<<<<<<< HEAD
     String protocol, realProtocol, host, realHost, suborigin;
     protocol = "https";
     host = "test.com";
@@ -363,21 +283,12 @@ TEST_F(SecurityOriginTest, SuboriginsParsing)
     EXPECT_TRUE(SecurityOrigin::deserializeSuboriginAndProtocolAndHost(
         protocol, host, suborigin, realProtocol, realHost));
     EXPECT_EQ("https", realProtocol);
-=======
-    String host, realHost, suborigin;
-    host = "test.com";
-    EXPECT_FALSE(SecurityOrigin::deserializeSuboriginAndHost(host, suborigin, realHost));
-
-    host = "foobar_test.com";
-    EXPECT_TRUE(SecurityOrigin::deserializeSuboriginAndHost(host, suborigin, realHost));
->>>>>>> miniblink49
     EXPECT_EQ("test.com", realHost);
     EXPECT_EQ("foobar", suborigin);
 
     RefPtr<SecurityOrigin> origin;
     StringBuilder builder;
 
-<<<<<<< HEAD
     origin = SecurityOrigin::createFromString("https-so://foobar.test.com");
     origin->buildRawString(builder, true);
     EXPECT_EQ("https-so://foobar.test.com", builder.toString());
@@ -399,33 +310,15 @@ TEST_F(SecurityOriginTest, SuboriginsParsing)
     origin->buildRawString(builder, false);
     EXPECT_EQ("https://test.com", builder.toString());
     EXPECT_EQ("https://test.com", origin->toPhysicalOriginString());
-=======
-    origin = SecurityOrigin::createFromString("https://foobar_test.com");
-    origin->buildRawString(builder);
-    EXPECT_EQ("https://foobar_test.com", builder.toString());
-
-    builder.clear();
-    origin = SecurityOrigin::createFromString("https://test.com");
-    origin->addSuborigin("foobar");
-    origin->buildRawString(builder);
-    EXPECT_EQ("https://foobar_test.com", builder.toString());
->>>>>>> miniblink49
 }
 
 TEST_F(SecurityOriginTest, SuboriginsIsSameSchemeHostPortAndSuborigin)
 {
     blink::RuntimeEnabledFeatures::setSuboriginsEnabled(true);
-<<<<<<< HEAD
     RefPtr<SecurityOrigin> origin = SecurityOrigin::createFromString("https-so://foobar.test.com");
     RefPtr<SecurityOrigin> other1 = SecurityOrigin::createFromString("https-so://bazbar.test.com");
     RefPtr<SecurityOrigin> other2 = SecurityOrigin::createFromString("http-so://foobar.test.com");
     RefPtr<SecurityOrigin> other3 = SecurityOrigin::createFromString("https-so://foobar.test.com:1234");
-=======
-    RefPtr<SecurityOrigin> origin = SecurityOrigin::createFromString("https://foobar_test.com");
-    RefPtr<SecurityOrigin> other1 = SecurityOrigin::createFromString("https://bazbar_test.com");
-    RefPtr<SecurityOrigin> other2 = SecurityOrigin::createFromString("http://foobar_test.com");
-    RefPtr<SecurityOrigin> other3 = SecurityOrigin::createFromString("https://foobar_test.com:1234");
->>>>>>> miniblink49
     RefPtr<SecurityOrigin> other4 = SecurityOrigin::createFromString("https://test.com");
 
     EXPECT_TRUE(origin->isSameSchemeHostPortAndSuborigin(origin.get()));
@@ -449,7 +342,6 @@ TEST_F(SecurityOriginTest, CanAccess)
     TestCase tests[] = {
         { true, true, "https://foobar.com", "https://foobar.com" },
         { false, false, "https://foobar.com", "https://bazbar.com" },
-<<<<<<< HEAD
         { true, false, "https://foobar.com", "https-so://name.foobar.com" },
         { true, false, "https-so://name.foobar.com", "https://foobar.com" },
         { true, true, "https-so://name.foobar.com", "https-so://name.foobar.com" },
@@ -461,18 +353,6 @@ TEST_F(SecurityOriginTest, CanAccess)
         EXPECT_EQ(tests[i].canAccess, origin1->canAccess(origin2.get()));
         EXPECT_EQ(tests[i].canAccessCheckSuborigins,
             origin1->canAccessCheckSuborigins(origin2.get()));
-=======
-        { true, false, "https://foobar.com", "https://name_foobar.com" },
-        { true, false, "https://name_foobar.com", "https://foobar.com" },
-        { true, true, "https://name_foobar.com", "https://name_foobar.com" },
-    };
-
-    for (size_t i = 0; i < arraysize(tests); ++i) {
-        RefPtr<SecurityOrigin> origin1 = SecurityOrigin::createFromString(tests[i].origin1);
-        RefPtr<SecurityOrigin> origin2 = SecurityOrigin::createFromString(tests[i].origin2);
-        EXPECT_EQ(tests[i].canAccess, origin1->canAccess(origin2.get()));
-        EXPECT_EQ(tests[i].canAccessCheckSuborigins, origin1->canAccessCheckSuborigins(origin2.get()));
->>>>>>> miniblink49
     }
 }
 
@@ -490,7 +370,6 @@ TEST_F(SecurityOriginTest, CanRequest)
     TestCase tests[] = {
         { true, true, "https://foobar.com", "https://foobar.com" },
         { false, false, "https://foobar.com", "https://bazbar.com" },
-<<<<<<< HEAD
         { true, false, "https-so://name.foobar.com", "https://foobar.com" },
         { false, false, "https-so://name.foobar.com", "https://bazbar.com" },
     };
@@ -647,17 +526,6 @@ TEST_F(SecurityOriginTest, CanonicalizeHost)
         String canonicalHost = SecurityOrigin::canonicalizeHost(host, &success);
         EXPECT_EQ(test.canonicalOutput, canonicalHost);
         EXPECT_EQ(test.expectedSuccess, success);
-=======
-        { true, false, "https://name_foobar.com", "https://foobar.com" },
-        { false, false, "https://name_foobar.com", "https://bazbar.com" },
-    };
-
-    for (size_t i = 0; i < arraysize(tests); ++i) {
-        RefPtr<SecurityOrigin> origin = SecurityOrigin::createFromString(tests[i].origin);
-        blink::KURL url(blink::ParsedURLString, tests[i].url);
-        EXPECT_EQ(tests[i].canRequest, origin->canRequest(url));
-        EXPECT_EQ(tests[i].canRequestNoSuborigin, origin->canRequestNoSuborigin(url));
->>>>>>> miniblink49
     }
 }
 

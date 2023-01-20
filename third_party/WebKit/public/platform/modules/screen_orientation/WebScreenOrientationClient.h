@@ -6,10 +6,7 @@
 #define WebScreenOrientationClient_h
 
 #include "public/platform/modules/screen_orientation/WebScreenOrientationLockType.h"
-<<<<<<< HEAD
 #include <memory>
-=======
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -20,7 +17,6 @@ class WebScreenOrientationClient {
 public:
     virtual ~WebScreenOrientationClient() { }
 
-<<<<<<< HEAD
     // Request a screen orientation lock. The implementation will own the
     // callback.
     virtual void lockOrientation(WebScreenOrientationLockType,
@@ -29,12 +25,6 @@ public:
 
     // Unlock the screen orientation. No-op if the screen orientation was not
     // locked.
-=======
-    // Request a screen orientation lock. The implementation will own the callback.
-    virtual void lockOrientation(WebScreenOrientationLockType, WebLockOrientationCallback*) = 0;
-
-    // Unlock the screen orientation. No-op if the screen orientation was not locked.
->>>>>>> miniblink49
     virtual void unlockOrientation() = 0;
 };
 

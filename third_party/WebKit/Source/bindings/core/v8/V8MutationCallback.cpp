@@ -23,75 +23,66 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "bindings/core/v8/V8MutationCallback.h"
 
 #include "bindings/core/v8/ScriptController.h"
+#include "bindings/core/v8/ScriptState.h"
 #include "bindings/core/v8/V8Binding.h"
-#include "bindings/core/v8/V8HiddenValue.h"
 #include "bindings/core/v8/V8MutationObserver.h"
 #include "bindings/core/v8/V8MutationRecord.h"
+#include "bindings/core/v8/V8PrivateProperty.h"
 #include "core/dom/ExecutionContext.h"
 #include "wtf/Assertions.h"
 
 namespace blink {
 
-V8MutationCallback::V8MutationCallback(v8::Local<v8::Function> callback, v8::Local<v8::Object> owner, ScriptState* scriptState)
-    : ActiveDOMCallback(scriptState->executionContext())
-    , m_callback(scriptState->isolate(), callback)
+V8MutationCallback::V8MutationCallback(v8::Local<v8::Function> callback,
+    v8::Local<v8::Object> owner,
+    ScriptState* scriptState)
+    : m_callback(scriptState->isolate(), callback)
     , m_scriptState(scriptState)
 {
-    V8HiddenValue::setHiddenValue(scriptState->isolate(), owner, V8HiddenValue::callback(scriptState->isolate()), callback);
-    m_callback.setWeak(this, &setWeakCallback);
+    V8PrivateProperty::getMutationObserverCallback(scriptState->isolate())
+        .set(scriptState->context(), owner, callback);
+    m_callback.setPhantom();
 }
 
-V8MutationCallback::~V8MutationCallback()
-{
-}
+V8MutationCallback::~V8MutationCallback() { }
 
-void V8MutationCallback::call(const WillBeHeapVector<RefPtrWillBeMember<MutationRecord>>& mutations, MutationObserver* observer)
+void V8MutationCallback::call(
+    const HeapVector<Member<MutationRecord>>& mutations,
+    MutationObserver* observer)
 {
-    if (!canInvokeCallback())
-        return;
-
     v8::Isolate* isolate = m_scriptState->isolate();
-
+    ExecutionContext* executionContext = m_scriptState->getExecutionContext();
+    if (!executionContext || executionContext->isContextSuspended() || executionContext->isContextDestroyed())
+        return;
     if (!m_scriptState->contextIsValid())
         return;
     ScriptState::Scope scope(m_scriptState.get());
 
     if (m_callback.isEmpty())
         return;
-    v8::Local<v8::Value> observerHandle = toV8(observer, m_scriptState->context()->Global(), isolate);
-    if (observerHandle.IsEmpty()) {
-        if (!isScriptControllerTerminating())
-            CRASH();
-        return;
-    }
-
+    v8::Local<v8::Value> observerHandle = ToV8(observer, m_scriptState->context()->Global(), isolate);
     if (!observerHandle->IsObject())
         return;
 
     v8::Local<v8::Object> thisObject = v8::Local<v8::Object>::Cast(observerHandle);
-    v8::Local<v8::Value> v8Mutations = toV8(mutations, m_scriptState->context()->Global(), isolate);
+    v8::Local<v8::Value> v8Mutations = ToV8(mutations, m_scriptState->context()->Global(), isolate);
     if (v8Mutations.IsEmpty())
         return;
     v8::Local<v8::Value> argv[] = { v8Mutations, observerHandle };
 
     v8::TryCatch exceptionCatcher(isolate);
     exceptionCatcher.SetVerbose(true);
-    ScriptController::callFunction(executionContext(), m_callback.newLocal(isolate), thisObject, WTF_ARRAY_LENGTH(argv), argv, isolate);
-}
-
-void V8MutationCallback::setWeakCallback(const v8::WeakCallbackInfo<V8MutationCallback>& data)
-{
-    data.GetParameter()->m_callback.clear();
+    V8ScriptRunner::callFunction(m_callback.newLocal(isolate),
+        getExecutionContext(), thisObject,
+        WTF_ARRAY_LENGTH(argv), argv, isolate);
 }
 
 DEFINE_TRACE(V8MutationCallback)
 {
     MutationCallback::trace(visitor);
-    ActiveDOMCallback::trace(visitor);
 }
 
 } // namespace blink

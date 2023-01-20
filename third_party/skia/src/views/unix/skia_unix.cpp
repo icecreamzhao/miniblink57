@@ -9,7 +9,6 @@
 #include "SkEvent.h"
 #include "SkWindow.h"
 
-<<<<<<< HEAD
 int main(int argc, char** argv)
 {
     SkOSWindow* window = create_sk_window(nullptr, argc, argv);
@@ -17,13 +16,6 @@ int main(int argc, char** argv)
     // drain any events that occurred before |window| was assigned.
     while (SkEvent::ProcessEvent())
         ;
-=======
-int main(int argc, char** argv){
-    SkOSWindow* window = create_sk_window(NULL, argc, argv);
-
-    // drain any events that occurred before |window| was assigned.
-    while (SkEvent::ProcessEvent());
->>>>>>> miniblink49
 
     // Start normal Skia sequence
     application_init();

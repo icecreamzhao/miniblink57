@@ -1,7 +1,4 @@
-<<<<<<< HEAD
 per-file *.mojom=set noparent
 per-file *.mojom=file://ipc/SECURITY_OWNERS
 
-=======
->>>>>>> miniblink49
 mlamouri@chromium.org

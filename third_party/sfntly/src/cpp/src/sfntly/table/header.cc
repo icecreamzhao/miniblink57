@@ -54,20 +54,12 @@ Header::Header(int32_t tag, int64_t checksum, int32_t offset, int32_t length)
 Header::~Header() {}
 
 bool HeaderComparatorByOffset::operator() (const HeaderPtr lhs,
-<<<<<<< HEAD
 	const HeaderPtr rhs) const {
-=======
-                                           const HeaderPtr rhs) {
->>>>>>> miniblink49
   return lhs->offset_ > rhs->offset_;
 }
 
 bool HeaderComparatorByTag::operator() (const HeaderPtr lhs,
-<<<<<<< HEAD
                                         const HeaderPtr rhs) const {
-=======
-                                        const HeaderPtr rhs) {
->>>>>>> miniblink49
   return lhs->tag_ > rhs->tag_;
 }
 

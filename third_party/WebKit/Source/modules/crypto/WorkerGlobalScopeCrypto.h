@@ -40,7 +40,6 @@ namespace blink {
 class Crypto;
 class WorkerGlobalScope;
 
-<<<<<<< HEAD
 class WorkerGlobalScopeCrypto final
     : public GarbageCollected<WorkerGlobalScopeCrypto>,
       public Supplement<WorkerGlobalScope> {
@@ -49,13 +48,6 @@ class WorkerGlobalScopeCrypto final
 public:
     static WorkerGlobalScopeCrypto& from(Supplementable<WorkerGlobalScope>&);
     static Crypto* crypto(Supplementable<WorkerGlobalScope>&);
-=======
-class WorkerGlobalScopeCrypto final : public NoBaseWillBeGarbageCollected<WorkerGlobalScopeCrypto>, public WillBeHeapSupplement<WorkerGlobalScope> {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(WorkerGlobalScopeCrypto);
-public:
-    static WorkerGlobalScopeCrypto& from(WillBeHeapSupplementable<WorkerGlobalScope>&);
-    static Crypto* crypto(WillBeHeapSupplementable<WorkerGlobalScope>&);
->>>>>>> miniblink49
     Crypto* crypto() const;
 
     DECLARE_VIRTUAL_TRACE();
@@ -64,11 +56,7 @@ private:
     WorkerGlobalScopeCrypto();
     static const char* supplementName();
 
-<<<<<<< HEAD
     mutable Member<Crypto> m_crypto;
-=======
-    mutable PersistentWillBeMember<Crypto> m_crypto;
->>>>>>> miniblink49
 };
 
 } // namespace blink

@@ -32,24 +32,26 @@
 #define MutationCallback_h
 
 #include "platform/heap/Handle.h"
-#include "wtf/RefPtr.h"
 #include "wtf/Vector.h"
 
 namespace blink {
 
+class ExecutionContext;
 class MutationRecord;
 class MutationObserver;
 
-class MutationCallback : public NoBaseWillBeGarbageCollectedFinalized<MutationCallback> {
+class MutationCallback : public GarbageCollectedFinalized<MutationCallback> {
 public:
     virtual ~MutationCallback() { }
 
-    virtual void call(const WillBeHeapVector<RefPtrWillBeMember<MutationRecord>>&, MutationObserver*) = 0;
-    virtual ExecutionContext* executionContext() const = 0;
+    virtual void call(const HeapVector<Member<MutationRecord>>&,
+        MutationObserver*)
+        = 0;
+    virtual ExecutionContext* getExecutionContext() const = 0;
 
     DEFINE_INLINE_VIRTUAL_TRACE() { }
 };
 
-}
+} // namespace blink
 
 #endif // MutationCallback_h

@@ -31,11 +31,7 @@
 #ifndef InspectorDatabaseResource_h
 #define InspectorDatabaseResource_h
 
-<<<<<<< HEAD
 #include "core/inspector/protocol/Database.h"
-=======
-#include "core/InspectorFrontend.h"
->>>>>>> miniblink49
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
 #include "wtf/text/WTFString.h"
@@ -43,7 +39,6 @@
 namespace blink {
 class Database;
 
-<<<<<<< HEAD
 class InspectorDatabaseResource
     : public GarbageCollectedFinalized<InspectorDatabaseResource> {
 public:
@@ -54,27 +49,15 @@ public:
     DECLARE_TRACE();
 
     void bind(protocol::Database::Frontend*);
-=======
-class InspectorDatabaseResource : public GarbageCollectedFinalized<InspectorDatabaseResource> {
-public:
-    static InspectorDatabaseResource* create(Database*, const String& domain, const String& name, const String& version);
-    DECLARE_TRACE();
-
-    void bind(InspectorFrontend::Database*);
->>>>>>> miniblink49
     Database* database() { return m_database.get(); }
     void setDatabase(Database* database) { m_database = database; }
     String id() const { return m_id; }
 
 private:
-<<<<<<< HEAD
     InspectorDatabaseResource(Database*,
         const String& domain,
         const String& name,
         const String& version);
-=======
-    InspectorDatabaseResource(Database*, const String& domain, const String& name, const String& version);
->>>>>>> miniblink49
 
     Member<Database> m_database;
     String m_id;

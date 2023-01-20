@@ -5,17 +5,11 @@
 #ifndef PresentationController_h
 #define PresentationController_h
 
-<<<<<<< HEAD
 #include "core/dom/ContextLifecycleObserver.h"
 #include "core/frame/LocalFrame.h"
 #include "modules/ModulesExport.h"
 #include "modules/presentation/Presentation.h"
 #include "modules/presentation/PresentationRequest.h"
-=======
-#include "core/frame/LocalFrameLifecycleObserver.h"
-#include "modules/ModulesExport.h"
-#include "modules/presentation/Presentation.h"
->>>>>>> miniblink49
 #include "platform/Supplementable.h"
 #include "platform/heap/Handle.h"
 #include "public/platform/modules/presentation/WebPresentationClient.h"
@@ -23,19 +17,11 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 class PresentationConnection;
-=======
-class LocalFrame;
-class WebPresentationAvailabilityCallback;
-class WebPresentationSessionClient;
-enum class WebPresentationSessionState;
->>>>>>> miniblink49
 
 // The coordinator between the various page exposed properties and the content
 // layer represented via |WebPresentationClient|.
 class MODULES_EXPORT PresentationController final
-<<<<<<< HEAD
     : public GarbageCollectedFinalized<PresentationController>,
       public Supplement<LocalFrame>,
       public ContextLifecycleObserver,
@@ -47,18 +33,6 @@ public:
     ~PresentationController() override;
 
     static PresentationController* create(LocalFrame&, WebPresentationClient*);
-=======
-    : public NoBaseWillBeGarbageCollectedFinalized<PresentationController>
-    , public WillBeHeapSupplement<LocalFrame>
-    , public LocalFrameLifecycleObserver
-    , public WebPresentationController {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(PresentationController);
-    WTF_MAKE_NONCOPYABLE(PresentationController);
-public:
-    ~PresentationController() override;
-
-    static PassOwnPtrWillBeRawPtr<PresentationController> create(LocalFrame&, WebPresentationClient*);
->>>>>>> miniblink49
 
     static const char* supplementName();
     static PresentationController* from(LocalFrame&);
@@ -67,7 +41,6 @@ public:
 
     WebPresentationClient* client();
 
-<<<<<<< HEAD
     // Implementation of Supplement.
     DECLARE_VIRTUAL_TRACE();
 
@@ -129,28 +102,6 @@ private:
     // connections alive until the frame is detached. These should be weak ptr
     // so that the connection can be GC'd.
     HeapHashSet<Member<PresentationConnection>> m_connections;
-=======
-    // Implementation of HeapSupplement.
-    DECLARE_VIRTUAL_TRACE();
-
-    // Implementation of WebPresentationController.
-    void didStartDefaultSession(WebPresentationSessionClient*) override;
-    void didChangeSessionState(WebPresentationSessionClient*, WebPresentationSessionState) override;
-    void didReceiveSessionTextMessage(WebPresentationSessionClient*, const WebString&) override;
-    void didReceiveSessionBinaryMessage(WebPresentationSessionClient*, const uint8_t* data, size_t length) override;
-
-    // Connects the |Presentation| object with this controller.
-    void setPresentation(Presentation*);
-
-private:
-    PresentationController(LocalFrame&, WebPresentationClient*);
-
-    // Implementation of LocalFrameLifecycleObserver.
-    void willDetachFrameHost() override;
-
-    WebPresentationClient* m_client;
-    PersistentWillBeMember<Presentation> m_presentation;
->>>>>>> miniblink49
 };
 
 } // namespace blink

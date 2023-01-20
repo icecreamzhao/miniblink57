@@ -29,10 +29,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "public/web/WebElementCollection.h"
 
 #include "core/dom/Element.h"
@@ -52,20 +48,12 @@ void WebElementCollection::assign(const WebElementCollection& other)
     m_private = other.m_private;
 }
 
-<<<<<<< HEAD
 WebElementCollection::WebElementCollection(HTMLCollection* col)
-=======
-WebElementCollection::WebElementCollection(const PassRefPtrWillBeRawPtr<HTMLCollection>& col)
->>>>>>> miniblink49
     : m_private(col)
 {
 }
 
-<<<<<<< HEAD
 WebElementCollection& WebElementCollection::operator=(HTMLCollection* col)
-=======
-WebElementCollection& WebElementCollection::operator=(const PassRefPtrWillBeRawPtr<HTMLCollection>& col)
->>>>>>> miniblink49
 {
     m_private = col;
     return *this;

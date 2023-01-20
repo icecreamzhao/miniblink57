@@ -9,7 +9,6 @@
 #include "SkBitmap.h"
 #include "SkMipMap.h"
 
-<<<<<<< HEAD
 class MipMapBench : public Benchmark {
     SkBitmap fBitmap;
     SkString fName;
@@ -44,29 +43,6 @@ protected:
     {
         for (int i = 0; i < loops * 4; i++) {
             SkMipMap::Build(fBitmap, fTreatment, nullptr)->unref();
-=======
-class MipMapBench: public Benchmark {
-    SkBitmap fBitmap;
-
-public:
-    MipMapBench() {}
-
-protected:
-    bool isSuitableFor(Backend backend) override {
-        return kNonRendering_Backend == backend;
-    }
-
-    const char* onGetName() override { return "mipmap_build"; }
-
-    void onPreDraw() override {
-        fBitmap.allocN32Pixels(1000, 1000, true);
-        fBitmap.eraseColor(SK_ColorWHITE);  // so we don't read uninitialized memory
-    }
-
-    void onDraw(const int loops, SkCanvas*) override {
-        for (int i = 0; i < loops; i++) {
-            SkMipMap::Build(fBitmap, NULL)->unref();
->>>>>>> miniblink49
         }
     }
 
@@ -74,7 +50,6 @@ private:
     typedef Benchmark INHERITED;
 };
 
-<<<<<<< HEAD
 // Build variants that exercise the width and heights being even or odd at each level, as the
 // impl specializes on each of these.
 //
@@ -83,6 +58,3 @@ DEF_BENCH(return new MipMapBench(512, 511, SkSourceGammaTreatment::kIgnore);)
 DEF_BENCH(return new MipMapBench(511, 512, SkSourceGammaTreatment::kIgnore);)
 DEF_BENCH(return new MipMapBench(512, 512, SkSourceGammaTreatment::kIgnore);)
 DEF_BENCH(return new MipMapBench(512, 512, SkSourceGammaTreatment::kRespect);)
-=======
-DEF_BENCH( return new MipMapBench; )
->>>>>>> miniblink49

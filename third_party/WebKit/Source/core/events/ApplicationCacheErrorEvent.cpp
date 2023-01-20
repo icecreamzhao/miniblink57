@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "core/events/ApplicationCacheErrorEvent.h"
 
 namespace blink {
 
-static const String& errorReasonToString(WebApplicationCacheHost::ErrorReason reason)
+static const String& errorReasonToString(
+    WebApplicationCacheHost::ErrorReason reason)
 {
     DEFINE_STATIC_LOCAL(String, errorManifest, ("manifest"));
     DEFINE_STATIC_LOCAL(String, errorSignature, ("signature"));
@@ -36,15 +36,15 @@ static const String& errorReasonToString(WebApplicationCacheHost::ErrorReason re
     case WebApplicationCacheHost::UnknownError:
         return errorUnknown;
     }
-    ASSERT_NOT_REACHED();
+    NOTREACHED();
     return emptyString();
 }
 
-ApplicationCacheErrorEvent::ApplicationCacheErrorEvent()
-{
-}
-
-ApplicationCacheErrorEvent::ApplicationCacheErrorEvent(WebApplicationCacheHost::ErrorReason reason, const String& url, int status, const String& message)
+ApplicationCacheErrorEvent::ApplicationCacheErrorEvent(
+    WebApplicationCacheHost::ErrorReason reason,
+    const String& url,
+    int status,
+    const String& message)
     : Event(EventTypeNames::error, false, false)
     , m_reason(errorReasonToString(reason))
     , m_url(url)
@@ -53,7 +53,9 @@ ApplicationCacheErrorEvent::ApplicationCacheErrorEvent(WebApplicationCacheHost::
 {
 }
 
-ApplicationCacheErrorEvent::ApplicationCacheErrorEvent(const AtomicString& eventType, const ApplicationCacheErrorEventInit& initializer)
+ApplicationCacheErrorEvent::ApplicationCacheErrorEvent(
+    const AtomicString& eventType,
+    const ApplicationCacheErrorEventInit& initializer)
     : Event(eventType, initializer)
     , m_status(0)
 {
@@ -67,9 +69,7 @@ ApplicationCacheErrorEvent::ApplicationCacheErrorEvent(const AtomicString& event
         m_message = initializer.message();
 }
 
-ApplicationCacheErrorEvent::~ApplicationCacheErrorEvent()
-{
-}
+ApplicationCacheErrorEvent::~ApplicationCacheErrorEvent() { }
 
 DEFINE_TRACE(ApplicationCacheErrorEvent)
 {

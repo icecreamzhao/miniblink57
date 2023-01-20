@@ -32,16 +32,10 @@
 #define BlobRegistry_h
 
 #include "platform/PlatformExport.h"
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/Forward.h"
 #include "wtf/PassRefPtr.h"
 #include <memory>
-=======
-#include "wtf/Forward.h"
-#include "wtf/PassOwnPtr.h"
-#include "wtf/PassRefPtr.h"
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -53,7 +47,6 @@ class SecurityOrigin;
 
 // A bridging class for calling blink::WebBlobRegistry methods.
 class PLATFORM_EXPORT BlobRegistry {
-<<<<<<< HEAD
     STATIC_ONLY(BlobRegistry);
 
 public:
@@ -64,25 +57,13 @@ public:
     static void registerPublicBlobURL(SecurityOrigin*,
         const KURL&,
         PassRefPtr<BlobDataHandle>);
-=======
-public:
-    // Methods for controlling Blobs.
-    static void registerBlobData(const String& uuid, PassOwnPtr<BlobData>);
-    static void addBlobDataRef(const String& uuid);
-    static void removeBlobDataRef(const String& uuid);
-    static void registerPublicBlobURL(SecurityOrigin*, const KURL&, PassRefPtr<BlobDataHandle>);
->>>>>>> miniblink49
     static void revokePublicBlobURL(const KURL&);
 
     // Methods for controlling Streams.
     static void registerStreamURL(const KURL&, const String&);
-<<<<<<< HEAD
     static void registerStreamURL(SecurityOrigin*,
         const KURL&,
         const KURL& srcURL);
-=======
-    static void registerStreamURL(SecurityOrigin*, const KURL&, const KURL& srcURL);
->>>>>>> miniblink49
     static void addDataToStream(const KURL&, PassRefPtr<RawData>);
     static void flushStream(const KURL&);
     static void finalizeStream(const KURL&);

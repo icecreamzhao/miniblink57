@@ -6,22 +6,12 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #ifndef SkAnimator_DEFINED
 #define SkAnimator_DEFINED
 
 #include "SkEventSink.h"
 #include "SkKey.h"
 #include "SkScalar.h"
-=======
-
-#ifndef SkAnimator_DEFINED
-#define SkAnimator_DEFINED
-
-#include "SkScalar.h"
-#include "SkKey.h"
-#include "SkEventSink.h"
->>>>>>> miniblink49
 
 class SkAnimateMaker;
 class SkCanvas;
@@ -214,10 +204,6 @@ public:
     */
     bool findClickEvent(SkScalar x, SkScalar y);
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
     /** Get the nested animator associated with this element, if any.
         Use this to access a movie's event sink, to send events to movies.
         @param element the value returned by getElement
@@ -438,12 +424,8 @@ public:
 
     typedef void* Handler;
     // This guy needs to be exported to java, so don't make it virtual
-<<<<<<< HEAD
     void setHostHandler(Handler handler)
     {
-=======
-    void setHostHandler(Handler handler) {
->>>>>>> miniblink49
         this->onSetHostHandler(handler);
     }
 
@@ -453,29 +435,18 @@ public:
     */
     class Timeline {
     public:
-<<<<<<< HEAD
         virtual ~Timeline() { }
-=======
-        virtual ~Timeline() {}
->>>>>>> miniblink49
 
         /** Returns the current time in milliseconds */
         virtual SkMSec getMSecs() const = 0;
     };
 
     /** Sets a user class to return the current time to the animator.
-<<<<<<< HEAD
         Optional; if not called, the system clock will be used by calling
         SkEvent::GetMSecsSinceStartup instead.
         @param callBack the time function
     */
     void setTimeline(const Timeline&);
-=======
-        Optional; if not called, the system clock will be used by calling SkTime::GetMSecs instead.
-        @param callBack the time function
-    */
-    void setTimeline(const Timeline& );
->>>>>>> miniblink49
 
     static void Init(bool runUnitTests);
     static void Term();
@@ -489,12 +460,8 @@ public:
     SkEventSinkID getHostEventSinkID() const;
 
     // helper
-<<<<<<< HEAD
     void setHostEventSink(SkEventSink* sink)
     {
-=======
-    void setHostEventSink(SkEventSink* sink) {
->>>>>>> miniblink49
         this->setHostEventSinkID(sink ? sink->getSinkID() : 0);
     }
 
@@ -512,11 +479,7 @@ protected:
     virtual void onEventPostTime(SkEvent*, SkEventSinkID, SkMSec time);
 
 private:
-<<<<<<< HEAD
     // helper functions for setters
-=======
-// helper functions for setters
->>>>>>> miniblink49
     bool setArray(SkDisplayable* element, const SkMemberInfo* field, SkTypedArray array);
     bool setArray(const char* elementID, const char* fieldName, SkTypedArray array);
     bool setInt(SkDisplayable* element, const SkMemberInfo* field, int32_t data);

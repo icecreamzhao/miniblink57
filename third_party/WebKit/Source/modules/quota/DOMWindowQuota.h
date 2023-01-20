@@ -31,10 +31,6 @@
 #ifndef DOMWindowQuota_h
 #define DOMWindowQuota_h
 
-<<<<<<< HEAD
-=======
-#include "core/frame/DOMWindowProperty.h"
->>>>>>> miniblink49
 #include "platform/Supplementable.h"
 #include "platform/heap/Handle.h"
 
@@ -42,19 +38,12 @@ namespace blink {
 
 class DeprecatedStorageInfo;
 class DOMWindow;
-<<<<<<< HEAD
 class LocalDOMWindow;
 
 class DOMWindowQuota final : public GarbageCollected<DOMWindowQuota>,
                              public Supplement<LocalDOMWindow> {
     USING_GARBAGE_COLLECTED_MIXIN(DOMWindowQuota);
 
-=======
-
-class DOMWindowQuota final : public NoBaseWillBeGarbageCollected<DOMWindowQuota>, public WillBeHeapSupplement<LocalDOMWindow>, public DOMWindowProperty {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(DOMWindowQuota);
-    DECLARE_EMPTY_VIRTUAL_DESTRUCTOR_WILL_BE_REMOVED(DOMWindowQuota);
->>>>>>> miniblink49
 public:
     static DOMWindowQuota& from(LocalDOMWindow&);
     static DeprecatedStorageInfo* webkitStorageInfo(DOMWindow&);
@@ -66,11 +55,7 @@ private:
     explicit DOMWindowQuota(LocalDOMWindow&);
     static const char* supplementName();
 
-<<<<<<< HEAD
     mutable Member<DeprecatedStorageInfo> m_storageInfo;
-=======
-    mutable PersistentWillBeMember<DeprecatedStorageInfo> m_storageInfo;
->>>>>>> miniblink49
 };
 
 } // namespace blink

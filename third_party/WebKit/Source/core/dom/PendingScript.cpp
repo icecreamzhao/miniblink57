@@ -23,83 +23,79 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/dom/PendingScript.h"
 
 #include "bindings/core/v8/ScriptSourceCode.h"
-#include "bindings/core/v8/ScriptStreamer.h"
 #include "core/dom/Element.h"
-#include "core/fetch/ScriptResource.h"
+#include "core/frame/SubresourceIntegrity.h"
+#include "platform/SharedBuffer.h"
+#include "wtf/CurrentTime.h"
 
 namespace blink {
 
-PendingScript::PendingScript()
-    : m_watchingForLoad(false)
-    , m_startingPosition(TextPosition::belowRangePosition())
+PendingScript* PendingScript::create(Element* element,
+    ScriptResource* resource)
 {
+    return new PendingScript(element, resource);
 }
 
 PendingScript::PendingScript(Element* element, ScriptResource* resource)
     : m_watchingForLoad(false)
     , m_element(element)
+    , m_integrityFailure(false)
+    , m_parserBlockingLoadStartTime(0)
+    , m_client(nullptr)
 {
     setScriptResource(resource);
+    MemoryCoordinator::instance().registerClient(this);
 }
 
-PendingScript::PendingScript(const PendingScript& other)
-    : ResourceOwner(other)
-    , m_watchingForLoad(other.m_watchingForLoad)
-    , m_element(other.m_element)
-    , m_startingPosition(other.m_startingPosition)
-    , m_streamer(other.m_streamer)
+PendingScript::~PendingScript() { }
+
+void PendingScript::dispose()
 {
-    setScriptResource(other.resource());
+    stopWatchingForLoad();
+    DCHECK(!m_client);
+    DCHECK(!m_watchingForLoad);
+
+    setScriptResource(nullptr);
+    m_startingPosition = TextPosition::belowRangePosition();
+    m_integrityFailure = false;
+    m_parserBlockingLoadStartTime = 0;
+    if (m_streamer)
+        m_streamer->cancel();
+    m_streamer = nullptr;
+    m_element = nullptr;
 }
 
-PendingScript::~PendingScript()
+void PendingScript::watchForLoad(PendingScriptClient* client)
 {
-}
-
-PendingScript& PendingScript::operator=(const PendingScript& other)
-{
-    if (this == &other)
-        return *this;
-
-    m_watchingForLoad = other.m_watchingForLoad;
-    m_element = other.m_element;
-    m_startingPosition = other.m_startingPosition;
-    m_streamer = other.m_streamer;
-    this->ResourceOwner<ScriptResource, ScriptResourceClient>::operator=(other);
-    return *this;
-}
-
-void PendingScript::watchForLoad(ScriptResourceClient* client)
-{
-    ASSERT(!m_watchingForLoad);
-    // addClient() will call notifyFinished() if the load is complete. Callers
+    DCHECK(!m_watchingForLoad);
+    // addClient() will call streamingFinished() if the load is complete. Callers
     // who do not expect to be re-entered from this call should not call
     // watchForLoad for a PendingScript which isReady. We also need to set
     // m_watchingForLoad early, since addClient() can result in calling
     // notifyFinished and further stopWatchingForLoad().
     m_watchingForLoad = true;
-    if (m_streamer) {
-        m_streamer->addClient(client);
-    } else {
-        resource()->addClient(client);
-    }
+    m_client = client;
+    if (isReady())
+        m_client->pendingScriptFinished(this);
 }
 
-void PendingScript::stopWatchingForLoad(ScriptResourceClient* client)
+void PendingScript::stopWatchingForLoad()
 {
     if (!m_watchingForLoad)
         return;
-    ASSERT(resource());
-    if (m_streamer) {
-        m_streamer->removeClient(client);
-    } else {
-        resource()->removeClient(client);
-    }
+    DCHECK(resource());
+    m_client = nullptr;
     m_watchingForLoad = false;
+}
+
+void PendingScript::streamingFinished()
+{
+    DCHECK(resource());
+    if (m_client)
+        m_client->pendingScriptFinished(this);
 }
 
 void PendingScript::setElement(Element* element)
@@ -107,26 +103,76 @@ void PendingScript::setElement(Element* element)
     m_element = element;
 }
 
-PassRefPtrWillBeRawPtr<Element> PendingScript::releaseElementAndClear()
-{
-    setScriptResource(0);
-    m_watchingForLoad = false;
-    m_startingPosition = TextPosition::belowRangePosition();
-    if (m_streamer)
-        m_streamer->cancel();
-    m_streamer.release();
-    return m_element.release();
-}
-
 void PendingScript::setScriptResource(ScriptResource* resource)
 {
     setResource(resource);
 }
 
+void PendingScript::markParserBlockingLoadStartTime()
+{
+    DCHECK_EQ(m_parserBlockingLoadStartTime, 0.0);
+    m_parserBlockingLoadStartTime = monotonicallyIncreasingTime();
+}
+
 void PendingScript::notifyFinished(Resource* resource)
 {
+    // The following SRI checks need to be here because, unfortunately, fetches
+    // are not done purely according to the Fetch spec. In particular,
+    // different requests for the same resource do not have different
+    // responses; the memory cache can (and will) return the exact same
+    // Resource object.
+    //
+    // For different requests, the same Resource object will be returned and
+    // will not be associated with the particular request.  Therefore, when the
+    // body of the response comes in, there's no way to validate the integrity
+    // of the Resource object against a particular request (since there may be
+    // several pending requests all tied to the identical object, and the
+    // actual requests are not stored).
+    //
+    // In order to simulate the correct behavior, Blink explicitly does the SRI
+    // checks here, when a PendingScript tied to a particular request is
+    // finished (and in the case of a StyleSheet, at the point of execution),
+    // while having proper Fetch checks in the fetch module for use in the
+    // fetch JavaScript API. In a future world where the ResourceFetcher uses
+    // the Fetch algorithm, this should be fixed by having separate Response
+    // objects (perhaps attached to identical Resource objects) per request.
+    //
+    // See https://crbug.com/500701 for more information.
+    if (m_element) {
+        DCHECK_EQ(resource->getType(), Resource::Script);
+        ScriptResource* scriptResource = toScriptResource(resource);
+        String integrityAttr = m_element->fastGetAttribute(HTMLNames::integrityAttr);
+
+        // It is possible to get back a script resource with integrity metadata
+        // for a request with an empty integrity attribute. In that case, the
+        // integrity check should be skipped, so this check ensures that the
+        // integrity attribute isn't empty in addition to checking if the
+        // resource has empty integrity metadata.
+        if (!integrityAttr.isEmpty() && !scriptResource->integrityMetadata().isEmpty()) {
+            ResourceIntegrityDisposition disposition = scriptResource->integrityDisposition();
+            if (disposition == ResourceIntegrityDisposition::Failed) {
+                // TODO(jww): This should probably also generate a console
+                // message identical to the one produced by
+                // CheckSubresourceIntegrity below. See https://crbug.com/585267.
+                m_integrityFailure = true;
+            } else if (disposition == ResourceIntegrityDisposition::NotChecked && resource->resourceBuffer()) {
+                m_integrityFailure = !SubresourceIntegrity::CheckSubresourceIntegrity(
+                    scriptResource->integrityMetadata(), *m_element,
+                    resource->resourceBuffer()->data(),
+                    resource->resourceBuffer()->size(), resource->url(), *resource);
+                scriptResource->setIntegrityDisposition(
+                    m_integrityFailure ? ResourceIntegrityDisposition::Failed
+                                       : ResourceIntegrityDisposition::Passed);
+            }
+        }
+    }
+
+    // If script streaming is in use, the client will be notified in
+    // streamingFinished.
     if (m_streamer)
         m_streamer->notifyFinished(resource);
+    else if (m_client)
+        m_client->pendingScriptFinished(this);
 }
 
 void PendingScript::notifyAppendData(ScriptResource* resource)
@@ -139,25 +185,30 @@ DEFINE_TRACE(PendingScript)
 {
     visitor->trace(m_element);
     visitor->trace(m_streamer);
+    visitor->trace(m_client);
+    ResourceOwner<ScriptResource>::trace(visitor);
+    MemoryCoordinatorClient::trace(visitor);
 }
 
-ScriptSourceCode PendingScript::getSource(const KURL& documentURL, bool& errorOccurred) const
+ScriptSourceCode PendingScript::getSource(const KURL& documentURL,
+    bool& errorOccurred) const
 {
     if (resource()) {
-        errorOccurred = resource()->errorOccurred();
-        ASSERT(resource()->isLoaded());
+        errorOccurred = resource()->errorOccurred() || m_integrityFailure;
+        DCHECK(resource()->isLoaded());
         if (m_streamer && !m_streamer->streamingSuppressed())
             return ScriptSourceCode(m_streamer, resource());
         return ScriptSourceCode(resource());
     }
     errorOccurred = false;
-    return ScriptSourceCode(m_element->textContent(), documentURL, startingPosition());
+    return ScriptSourceCode(m_element->textContent(), documentURL,
+        startingPosition());
 }
 
-void PendingScript::setStreamer(PassRefPtrWillBeRawPtr<ScriptStreamer> streamer)
+void PendingScript::setStreamer(ScriptStreamer* streamer)
 {
-    ASSERT(!m_streamer);
-    ASSERT(!m_watchingForLoad);
+    DCHECK(!m_streamer);
+    DCHECK(!m_watchingForLoad);
     m_streamer = streamer;
 }
 
@@ -170,4 +221,23 @@ bool PendingScript::isReady() const
     return true;
 }
 
+bool PendingScript::errorOccurred() const
+{
+    if (resource())
+        return resource()->errorOccurred();
+    if (m_streamer && m_streamer->resource())
+        return m_streamer->resource()->errorOccurred();
+    return false;
 }
+
+void PendingScript::onMemoryStateChange(MemoryState state)
+{
+    if (state != MemoryState::SUSPENDED)
+        return;
+    if (!m_streamer)
+        return;
+    m_streamer->cancel();
+    m_streamer = nullptr;
+}
+
+} // namespace blink

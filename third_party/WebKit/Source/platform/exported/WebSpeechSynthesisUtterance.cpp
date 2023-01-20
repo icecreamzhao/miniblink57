@@ -23,11 +23,6 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
-
->>>>>>> miniblink49
 #include "public/platform/WebSpeechSynthesisUtterance.h"
 
 #include "platform/speech/PlatformSpeechSynthesisUtterance.h"
@@ -36,33 +31,21 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 WebSpeechSynthesisUtterance::WebSpeechSynthesisUtterance(
     PlatformSpeechSynthesisUtterance* utterance)
-=======
-WebSpeechSynthesisUtterance::WebSpeechSynthesisUtterance(PlatformSpeechSynthesisUtterance* utterance)
->>>>>>> miniblink49
     : m_private(utterance)
 {
 }
 
-<<<<<<< HEAD
 WebSpeechSynthesisUtterance& WebSpeechSynthesisUtterance::operator=(
     PlatformSpeechSynthesisUtterance* utterance)
-=======
-WebSpeechSynthesisUtterance& WebSpeechSynthesisUtterance::operator=(PlatformSpeechSynthesisUtterance* utterance)
->>>>>>> miniblink49
 {
     m_private = utterance;
     return *this;
 }
 
-<<<<<<< HEAD
 void WebSpeechSynthesisUtterance::assign(
     const WebSpeechSynthesisUtterance& other)
-=======
-void WebSpeechSynthesisUtterance::assign(const WebSpeechSynthesisUtterance& other)
->>>>>>> miniblink49
 {
     m_private = other.m_private;
 }
@@ -72,12 +55,8 @@ void WebSpeechSynthesisUtterance::reset()
     m_private.reset();
 }
 
-<<<<<<< HEAD
 WebSpeechSynthesisUtterance::operator PlatformSpeechSynthesisUtterance*()
     const
-=======
-WebSpeechSynthesisUtterance::operator PlatformSpeechSynthesisUtterance*() const
->>>>>>> miniblink49
 {
     return m_private.get();
 }
@@ -94,12 +73,8 @@ WebString WebSpeechSynthesisUtterance::lang() const
 
 WebString WebSpeechSynthesisUtterance::voice() const
 {
-<<<<<<< HEAD
     return m_private->voice() ? WebString(m_private->voice()->name())
                               : WebString();
-=======
-    return m_private->voice() ? WebString(m_private->voice()->name()) : WebString();
->>>>>>> miniblink49
 }
 
 float WebSpeechSynthesisUtterance::volume() const

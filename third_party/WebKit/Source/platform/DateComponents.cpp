@@ -28,23 +28,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "platform/DateComponents.h"
 
-=======
-#include "config.h"
-#include "platform/DateComponents.h"
-
-#include <limits.h>
->>>>>>> miniblink49
 #include "wtf/ASCIICType.h"
 #include "wtf/DateMath.h"
 #include "wtf/MathExtras.h"
 #include "wtf/text/WTFString.h"
-<<<<<<< HEAD
 #include <limits.h>
-=======
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -58,12 +48,8 @@ static const int maximumMonthInMaximumYear = 8; // This is September, since mont
 static const int maximumDayInMaximumMonth = 13;
 static const int maximumWeekInMaximumYear = 37; // The week of 275760-09-13
 
-<<<<<<< HEAD
 static const int daysInMonth[12] = { 31, 28, 31, 30, 31, 30,
     31, 31, 30, 31, 30, 31 };
-=======
-static const int daysInMonth[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
->>>>>>> miniblink49
 
 // 'month' is 0-based.
 static int maxDayOfMonth(int year, int month)
@@ -101,13 +87,9 @@ int DateComponents::weekDay() const
 int DateComponents::maxWeekNumberInYear() const
 {
     int day = dayOfWeek(m_year, 0, 1); // January 1.
-<<<<<<< HEAD
     return day == Thursday || (day == Wednesday && isLeapYear(m_year))
         ? maximumWeekNumber
         : maximumWeekNumber - 1;
-=======
-    return day == Thursday || (day == Wednesday && isLeapYear(m_year)) ? maximumWeekNumber : maximumWeekNumber - 1;
->>>>>>> miniblink49
 }
 
 static unsigned countDigits(const String& src, unsigned start)
@@ -120,17 +102,12 @@ static unsigned countDigits(const String& src, unsigned start)
     return index - start;
 }
 
-<<<<<<< HEAD
 // Very strict integer parser. Do not allow leading or trailing whitespace
 // unlike charactersToIntStrict().
 static bool toInt(const String& src,
     unsigned parseStart,
     unsigned parseLength,
     int& out)
-=======
-// Very strict integer parser. Do not allow leading or trailing whitespace unlike charactersToIntStrict().
-static bool toInt(const String& src, unsigned parseStart, unsigned parseLength, int& out)
->>>>>>> miniblink49
 {
     if (parseStart + parseLength > src.length() || !parseLength)
         return false;
@@ -151,13 +128,9 @@ static bool toInt(const String& src, unsigned parseStart, unsigned parseLength, 
     return true;
 }
 
-<<<<<<< HEAD
 bool DateComponents::parseYear(const String& src,
     unsigned start,
     unsigned& end)
-=======
-bool DateComponents::parseYear(const String& src, unsigned start, unsigned& end)
->>>>>>> miniblink49
 {
     unsigned digitsLength = countDigits(src, start);
     // Needs at least 4 digits according to the standard.
@@ -193,7 +166,6 @@ static bool withinHTMLDateLimits(int year, int month, int monthDay)
     return monthDay <= maximumDayInMaximumMonth;
 }
 
-<<<<<<< HEAD
 static bool withinHTMLDateLimits(int year,
     int month,
     int monthDay,
@@ -201,9 +173,6 @@ static bool withinHTMLDateLimits(int year,
     int minute,
     int second,
     int millisecond)
-=======
-static bool withinHTMLDateLimits(int year, int month, int monthDay, int hour, int minute, int second, int millisecond)
->>>>>>> miniblink49
 {
     if (year < DateComponents::minimumYear())
         return false;
@@ -215,12 +184,8 @@ static bool withinHTMLDateLimits(int year, int month, int monthDay, int hour, in
         return true;
     if (monthDay > maximumDayInMaximumMonth)
         return false;
-<<<<<<< HEAD
     // (year, month, monthDay) =
     // (maximumYear, maximumMonthInMaximumYear, maximumDayInMaximumMonth)
-=======
-    // (year, month, monthDay) = (maximumYear, maximumMonthInMaximumYear, maximumDayInMaximumMonth)
->>>>>>> miniblink49
     return !hour && !minute && !second && !millisecond;
 }
 
@@ -295,12 +260,8 @@ bool DateComponents::addMinute(int minute)
         carry = -carry;
         ASSERT(minute >= 0 && minute <= 59);
     } else {
-<<<<<<< HEAD
         if (!withinHTMLDateLimits(m_year, m_month, m_monthDay, m_hour, minute,
                 m_second, m_millisecond))
-=======
-        if (!withinHTMLDateLimits(m_year, m_month, m_monthDay, m_hour, minute, m_second, m_millisecond))
->>>>>>> miniblink49
             return false;
         m_minute = minute;
         return true;
@@ -316,12 +277,8 @@ bool DateComponents::addMinute(int minute)
         carry = -carry;
         ASSERT(hour >= 0 && hour <= 23);
     } else {
-<<<<<<< HEAD
         if (!withinHTMLDateLimits(m_year, m_month, m_monthDay, hour, minute,
                 m_second, m_millisecond))
-=======
-        if (!withinHTMLDateLimits(m_year, m_month, m_monthDay, hour, minute, m_second, m_millisecond))
->>>>>>> miniblink49
             return false;
         m_minute = minute;
         m_hour = hour;
@@ -329,28 +286,19 @@ bool DateComponents::addMinute(int minute)
     }
     if (!addDay(carry))
         return false;
-<<<<<<< HEAD
     if (!withinHTMLDateLimits(m_year, m_month, m_monthDay, hour, minute, m_second,
             m_millisecond))
-=======
-    if (!withinHTMLDateLimits(m_year, m_month, m_monthDay, hour, minute, m_second, m_millisecond))
->>>>>>> miniblink49
         return false;
     m_minute = minute;
     m_hour = hour;
     return true;
 }
 
-<<<<<<< HEAD
 // Parses a timezone part, and adjust year, month, monthDay, hour, minute,
 // second, millisecond.
 bool DateComponents::parseTimeZone(const String& src,
     unsigned start,
     unsigned& end)
-=======
-// Parses a timezone part, and adjust year, month, monthDay, hour, minute, second, millisecond.
-bool DateComponents::parseTimeZone(const String& src, unsigned start, unsigned& end)
->>>>>>> miniblink49
 {
     if (start >= src.length())
         return false;
@@ -395,13 +343,9 @@ bool DateComponents::parseTimeZone(const String& src, unsigned start, unsigned& 
     return true;
 }
 
-<<<<<<< HEAD
 bool DateComponents::parseMonth(const String& src,
     unsigned start,
     unsigned& end)
-=======
-bool DateComponents::parseMonth(const String& src, unsigned start, unsigned& end)
->>>>>>> miniblink49
 {
     unsigned index;
     if (!parseYear(src, start, index))
@@ -422,13 +366,9 @@ bool DateComponents::parseMonth(const String& src, unsigned start, unsigned& end
     return true;
 }
 
-<<<<<<< HEAD
 bool DateComponents::parseDate(const String& src,
     unsigned start,
     unsigned& end)
-=======
-bool DateComponents::parseDate(const String& src, unsigned start, unsigned& end)
->>>>>>> miniblink49
 {
     unsigned index;
     if (!parseMonth(src, start, index))
@@ -451,13 +391,9 @@ bool DateComponents::parseDate(const String& src, unsigned start, unsigned& end)
     return true;
 }
 
-<<<<<<< HEAD
 bool DateComponents::parseWeek(const String& src,
     unsigned start,
     unsigned& end)
-=======
-bool DateComponents::parseWeek(const String& src, unsigned start, unsigned& end)
->>>>>>> miniblink49
 {
     unsigned index;
     if (!parseYear(src, start, index))
@@ -484,13 +420,9 @@ bool DateComponents::parseWeek(const String& src, unsigned start, unsigned& end)
     return true;
 }
 
-<<<<<<< HEAD
 bool DateComponents::parseTime(const String& src,
     unsigned start,
     unsigned& end)
-=======
-bool DateComponents::parseTime(const String& src, unsigned start, unsigned& end)
->>>>>>> miniblink49
 {
     int hour;
     if (!toInt(src, start, 2, hour) || hour < 0 || hour > 23)
@@ -518,11 +450,7 @@ bool DateComponents::parseTime(const String& src, unsigned start, unsigned& end)
             // Optional fractional second part.
             if (index < src.length() && src[index] == '.') {
                 unsigned digitsLength = countDigits(src, index + 1);
-<<<<<<< HEAD
                 if (digitsLength > 0) {
-=======
-                if (digitsLength >  0) {
->>>>>>> miniblink49
                     ++index;
                     bool ok;
                     if (digitsLength == 1) {
@@ -534,11 +462,7 @@ bool DateComponents::parseTime(const String& src, unsigned start, unsigned& end)
                     } else { // digitsLength >= 3
                         ok = toInt(src, index, 3, millisecond);
                     }
-<<<<<<< HEAD
                     DCHECK(ok);
-=======
-                    ASSERT_UNUSED(ok, ok);
->>>>>>> miniblink49
                     index += digitsLength;
                 }
             }
@@ -553,13 +477,9 @@ bool DateComponents::parseTime(const String& src, unsigned start, unsigned& end)
     return true;
 }
 
-<<<<<<< HEAD
 bool DateComponents::parseDateTimeLocal(const String& src,
     unsigned start,
     unsigned& end)
-=======
-bool DateComponents::parseDateTimeLocal(const String& src, unsigned start, unsigned& end)
->>>>>>> miniblink49
 {
     unsigned index;
     if (!parseDate(src, start, index))
@@ -571,12 +491,8 @@ bool DateComponents::parseDateTimeLocal(const String& src, unsigned start, unsig
     ++index;
     if (!parseTime(src, index, end))
         return false;
-<<<<<<< HEAD
     if (!withinHTMLDateLimits(m_year, m_month, m_monthDay, m_hour, m_minute,
             m_second, m_millisecond))
-=======
-    if (!withinHTMLDateLimits(m_year, m_month, m_monthDay, m_hour, m_minute, m_second, m_millisecond))
->>>>>>> miniblink49
         return false;
     m_type = DateTimeLocal;
     return true;
@@ -611,11 +527,7 @@ bool DateComponents::setMillisecondsSinceEpochForDateInternal(double ms)
 bool DateComponents::setMillisecondsSinceEpochForDate(double ms)
 {
     m_type = Invalid;
-<<<<<<< HEAD
     if (!std_isfinite(ms))
-=======
-    if (!std::isfinite(ms))
->>>>>>> miniblink49
         return false;
     if (!setMillisecondsSinceEpochForDateInternal(round(ms)))
         return false;
@@ -628,22 +540,14 @@ bool DateComponents::setMillisecondsSinceEpochForDate(double ms)
 bool DateComponents::setMillisecondsSinceEpochForDateTime(double ms)
 {
     m_type = Invalid;
-<<<<<<< HEAD
     if (!std_isfinite(ms))
-=======
-    if (!std::isfinite(ms))
->>>>>>> miniblink49
         return false;
     ms = round(ms);
     setMillisecondsSinceMidnightInternal(positiveFmod(ms, msPerDay));
     if (!setMillisecondsSinceEpochForDateInternal(ms))
         return false;
-<<<<<<< HEAD
     if (!withinHTMLDateLimits(m_year, m_month, m_monthDay, m_hour, m_minute,
             m_second, m_millisecond))
-=======
-    if (!withinHTMLDateLimits(m_year, m_month, m_monthDay, m_hour, m_minute, m_second, m_millisecond))
->>>>>>> miniblink49
         return false;
     m_type = DateTime;
     return true;
@@ -651,12 +555,8 @@ bool DateComponents::setMillisecondsSinceEpochForDateTime(double ms)
 
 bool DateComponents::setMillisecondsSinceEpochForDateTimeLocal(double ms)
 {
-<<<<<<< HEAD
     // Internal representation of DateTimeLocal is the same as DateTime except
     // m_type.
-=======
-    // Internal representation of DateTimeLocal is the same as DateTime except m_type.
->>>>>>> miniblink49
     if (!setMillisecondsSinceEpochForDateTime(ms))
         return false;
     m_type = DateTimeLocal;
@@ -666,11 +566,7 @@ bool DateComponents::setMillisecondsSinceEpochForDateTimeLocal(double ms)
 bool DateComponents::setMillisecondsSinceEpochForMonth(double ms)
 {
     m_type = Invalid;
-<<<<<<< HEAD
     if (!std_isfinite(ms))
-=======
-    if (!std::isfinite(ms))
->>>>>>> miniblink49
         return false;
     if (!setMillisecondsSinceEpochForDateInternal(round(ms)))
         return false;
@@ -683,11 +579,7 @@ bool DateComponents::setMillisecondsSinceEpochForMonth(double ms)
 bool DateComponents::setMillisecondsSinceMidnight(double ms)
 {
     m_type = Invalid;
-<<<<<<< HEAD
     if (!std_isfinite(ms))
-=======
-    if (!std::isfinite(ms))
->>>>>>> miniblink49
         return false;
     setMillisecondsSinceMidnightInternal(positiveFmod(round(ms), msPerDay));
     m_type = Time;
@@ -696,11 +588,7 @@ bool DateComponents::setMillisecondsSinceMidnight(double ms)
 
 bool DateComponents::setMonthsSinceEpoch(double months)
 {
-<<<<<<< HEAD
     if (!std_isfinite(months))
-=======
-    if (!std::isfinite(months))
->>>>>>> miniblink49
         return false;
     months = round(months);
     double doubleMonth = positiveFmod(months, 12);
@@ -730,11 +618,7 @@ static int offsetTo1stWeekStart(int year)
 bool DateComponents::setMillisecondsSinceEpochForWeek(double ms)
 {
     m_type = Invalid;
-<<<<<<< HEAD
     if (!std_isfinite(ms))
-=======
-    if (!std::isfinite(ms))
->>>>>>> miniblink49
         return false;
     ms = round(ms);
 
@@ -821,22 +705,14 @@ String DateComponents::toStringForTime(SecondFormat format) const
     switch (effectiveFormat) {
     default:
         ASSERT_NOT_REACHED();
-<<<<<<< HEAD
     // Fallback to None.
-=======
-        // Fallback to None.
->>>>>>> miniblink49
     case None:
         return String::format("%02d:%02d", m_hour, m_minute);
     case Second:
         return String::format("%02d:%02d:%02d", m_hour, m_minute, m_second);
     case Millisecond:
-<<<<<<< HEAD
         return String::format("%02d:%02d:%02d.%03d", m_hour, m_minute, m_second,
             m_millisecond);
-=======
-        return String::format("%02d:%02d:%02d.%03d", m_hour, m_minute, m_second, m_millisecond);
->>>>>>> miniblink49
     }
 }
 
@@ -846,19 +722,12 @@ String DateComponents::toString(SecondFormat format) const
     case Date:
         return String::format("%04d-%02d-%02d", m_year, m_month + 1, m_monthDay);
     case DateTime:
-<<<<<<< HEAD
         return String::format("%04d-%02d-%02dT", m_year, m_month + 1,
                    m_monthDay)
             + toStringForTime(format) + String("Z");
     case DateTimeLocal:
         return String::format("%04d-%02d-%02dT", m_year, m_month + 1,
                    m_monthDay)
-=======
-        return String::format("%04d-%02d-%02dT", m_year, m_month + 1, m_monthDay)
-            + toStringForTime(format) + String("Z");
-    case DateTimeLocal:
-        return String::format("%04d-%02d-%02dT", m_year, m_month + 1, m_monthDay)
->>>>>>> miniblink49
             + toStringForTime(format);
     case Month:
         return String::format("%04d-%02d", m_year, m_month + 1);

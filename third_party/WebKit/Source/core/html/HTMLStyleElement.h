@@ -23,40 +23,38 @@
 #ifndef HTMLStyleElement_h
 #define HTMLStyleElement_h
 
+#include "core/dom/IncrementLoadEventDelayCount.h"
 #include "core/dom/StyleElement.h"
 #include "core/html/HTMLElement.h"
+#include <memory>
 
 namespace blink {
 
-class HTMLStyleElement;
-
-template<typename T> class EventSender;
-typedef EventSender<HTMLStyleElement> StyleEventSender;
-
-class HTMLStyleElement final : public HTMLElement, private StyleElement {
+class CORE_EXPORT HTMLStyleElement final : public HTMLElement,
+                                           private StyleElement {
     DEFINE_WRAPPERTYPEINFO();
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(HTMLStyleElement);
-public:
-    static PassRefPtrWillBeRawPtr<HTMLStyleElement> create(Document&, bool createdByParser);
-    ~HTMLStyleElement() override;
+    USING_GARBAGE_COLLECTED_MIXIN(HTMLStyleElement);
 
-    ContainerNode* scopingNode();
+public:
+    static HTMLStyleElement* create(Document&, bool createdByParser);
+    ~HTMLStyleElement() override;
 
     using StyleElement::sheet;
 
     bool disabled() const;
     void setDisabled(bool);
 
-    void dispatchPendingEvent(StyleEventSender*);
-    static void dispatchPendingLoadEvents();
-
     DECLARE_VIRTUAL_TRACE();
 
 private:
     HTMLStyleElement(Document&, bool createdByParser);
 
+    // Always call this asynchronously because this can cause synchronous
+    // Document load event and JavaScript execution.
+    void dispatchPendingEvent(std::unique_ptr<IncrementLoadEventDelayCount>);
+
     // overload from HTMLElement
-    void parseAttribute(const QualifiedName&, const AtomicString&) override;
+    void parseAttribute(const AttributeModificationParams&) override;
     InsertionNotificationRequest insertedInto(ContainerNode*) override;
     void didNotifySubtreeInsertionsToDocument() override;
     void removedFrom(ContainerNode*) override;
@@ -65,8 +63,12 @@ private:
     void finishParsingChildren() override;
 
     bool sheetLoaded() override { return StyleElement::sheetLoaded(document()); }
-    void notifyLoadedSheetAndAllCriticalSubresources(LoadedSheetErrorStatus) override;
-    void startLoadingDynamicSheet() override { StyleElement::startLoadingDynamicSheet(document()); }
+    void notifyLoadedSheetAndAllCriticalSubresources(
+        LoadedSheetErrorStatus) override;
+    void startLoadingDynamicSheet() override
+    {
+        StyleElement::startLoadingDynamicSheet(document());
+    }
 
     const AtomicString& media() const override;
     const AtomicString& type() const override;

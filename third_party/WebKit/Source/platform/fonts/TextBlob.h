@@ -13,11 +13,7 @@ namespace blink {
 
 // Holds a (mutable) reference to an immutable SkTextBlob.
 // Typedefs are used only to insulate core/ from Skia type names.
-<<<<<<< HEAD
 typedef sk_sp<SkTextBlob> TextBlobPtr;
-=======
-typedef RefPtr<const SkTextBlob> TextBlobPtr;
->>>>>>> miniblink49
 typedef PassRefPtr<const SkTextBlob> PassTextBlobPtr;
 
 } // namespace blink

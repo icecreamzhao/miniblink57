@@ -5,22 +5,16 @@
 #ifndef MediaKeysClient_h
 #define MediaKeysClient_h
 
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
 
-=======
->>>>>>> miniblink49
 namespace blink {
 
 class ExecutionContext;
 class WebEncryptedMediaClient;
 
 class MediaKeysClient {
-<<<<<<< HEAD
     USING_FAST_MALLOC(MediaKeysClient);
 
-=======
->>>>>>> miniblink49
 public:
     virtual WebEncryptedMediaClient* encryptedMediaClient(ExecutionContext*) = 0;
 

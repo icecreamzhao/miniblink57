@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -9,10 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #ifndef SkSVGG_DEFINED
 #define SkSVGG_DEFINED
 
@@ -20,10 +12,7 @@
 
 class SkSVGG : public SkSVGGroup {
     DECLARE_SVG_INFO(G);
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 private:
     typedef SkSVGGroup INHERITED;
 };

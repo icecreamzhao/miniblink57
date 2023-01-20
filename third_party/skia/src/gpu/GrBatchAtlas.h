@@ -13,7 +13,6 @@
 #include "SkTDArray.h"
 #include "SkTInternalLList.h"
 
-<<<<<<< HEAD
 #include "batches/GrDrawBatch.h"
 
 class GrRectanizer;
@@ -31,17 +30,6 @@ struct GrBatchAtlasConfig {
 
 class GrBatchAtlas {
 public:
-=======
-class BatchPlot;
-class GrBatchTarget;
-class GrRectanizer;
-
-typedef SkTInternalLList<BatchPlot> GrBatchPlotList;
-
-class GrBatchAtlas {
-public:
-    typedef uint64_t BatchToken;
->>>>>>> miniblink49
     // An AtlasID is an opaque handle which callers can use to determine if the atlas contains
     // a specific piece of data
     typedef uint64_t AtlasID;
@@ -58,27 +46,17 @@ public:
 
     // Adds a width x height subimage to the atlas. Upon success it returns
     // the containing GrPlot and absolute location in the backing texture.
-<<<<<<< HEAD
     // nullptr is returned if the subimage cannot fit in the atlas.
-=======
-    // NULL is returned if the subimage cannot fit in the atlas.
->>>>>>> miniblink49
     // If provided, the image data will be written to the CPU-side backing bitmap.
     // NOTE: If the client intends to refer to the atlas, they should immediately call 'setUseToken'
     // with the currentToken from the batch target, otherwise the next call to addToAtlas might
     // cause an eviction
-<<<<<<< HEAD
     bool addToAtlas(AtlasID*, GrDrawBatch::Target*, int width, int height, const void* image,
         SkIPoint16* loc);
-=======
-    bool addToAtlas(AtlasID*, GrBatchTarget*, int width, int height, const void* image,
-                    SkIPoint16* loc);
->>>>>>> miniblink49
 
     GrTexture* getTexture() const { return fTexture; }
 
     uint64_t atlasGeneration() const { return fAtlasGeneration; }
-<<<<<<< HEAD
 
     inline bool hasID(AtlasID id)
     {
@@ -99,13 +77,6 @@ public:
 
     inline void registerEvictionCallback(EvictionFunc func, void* userData)
     {
-=======
-    bool hasID(AtlasID id);
-
-    // To ensure the atlas does not evict a given entry, the client must set the last use token
-    void setLastUseToken(AtlasID id, BatchToken batchToken);
-    void registerEvictionCallback(EvictionFunc func, void* userData) {
->>>>>>> miniblink49
         EvictionData* data = fEvictionCallbacks.append();
         data->fFunc = func;
         data->fData = userData;
@@ -118,7 +89,6 @@ public:
      */
     class BulkUseTokenUpdater {
     public:
-<<<<<<< HEAD
         BulkUseTokenUpdater()
             : fPlotAlreadyUpdated(0)
         {
@@ -131,48 +101,27 @@ public:
 
         void add(AtlasID id)
         {
-=======
-        BulkUseTokenUpdater() : fPlotAlreadyUpdated(0) {}
-        BulkUseTokenUpdater(const BulkUseTokenUpdater& that)
-        : fPlotsToUpdate(that.fPlotsToUpdate)
-        , fPlotAlreadyUpdated(that.fPlotAlreadyUpdated) {
-        }
-
-        void add(AtlasID id) {
->>>>>>> miniblink49
             int index = GrBatchAtlas::GetIndexFromID(id);
             if (!this->find(index)) {
                 this->set(index);
             }
         }
 
-<<<<<<< HEAD
         void reset()
         {
-=======
-        void reset() {
->>>>>>> miniblink49
             fPlotsToUpdate.reset();
             fPlotAlreadyUpdated = 0;
         }
 
     private:
-<<<<<<< HEAD
         bool find(int index) const
         {
-=======
-        bool find(int index) const {
->>>>>>> miniblink49
             SkASSERT(index < kMaxPlots);
             return (fPlotAlreadyUpdated >> index) & 1;
         }
 
-<<<<<<< HEAD
         void set(int index)
         {
-=======
-        void set(int index) {
->>>>>>> miniblink49
             SkASSERT(!this->find(index));
             fPlotAlreadyUpdated = fPlotAlreadyUpdated | (1 << index);
             fPlotsToUpdate.push_back(index);
@@ -186,7 +135,6 @@ public:
         friend class GrBatchAtlas;
     };
 
-<<<<<<< HEAD
     void setLastUseTokenBulk(const BulkUseTokenUpdater& updater, GrBatchDrawToken batchToken)
     {
         int count = updater.fPlotsToUpdate.count();
@@ -200,17 +148,10 @@ public:
     static const int kGlyphMaxDim = 256;
     static bool GlyphTooLargeForAtlas(int width, int height)
     {
-=======
-    void setLastUseTokenBulk(const BulkUseTokenUpdater& reffer, BatchToken);
-
-    static const int kGlyphMaxDim = 256;
-    static bool GlyphTooLargeForAtlas(int width, int height) {
->>>>>>> miniblink49
         return width > kGlyphMaxDim || height > kGlyphMaxDim;
     }
 
 private:
-<<<<<<< HEAD
     // The backing GrTexture for a GrBatchAtlas is broken into a spatial grid of BatchPlots.
     // The BatchPlots keep track of subimage placement via their GrRectanizer. A BatchPlot
     // manages the lifetime of its data using two tokens, a last use token and a last upload token.
@@ -295,14 +236,10 @@ private:
 
     static uint32_t GetIndexFromID(AtlasID id)
     {
-=======
-    static uint32_t GetIndexFromID(AtlasID id) {
->>>>>>> miniblink49
         return id & 0xffff;
     }
 
     // top 48 bits are reserved for the generation ID
-<<<<<<< HEAD
     static uint64_t GetGenerationFromID(AtlasID id)
     {
         return (id >> 16) & 0xffffffffffff;
@@ -319,33 +256,15 @@ private:
         fPlotList.remove(plot);
         fPlotList.addToHead(plot);
     }
-=======
-    static uint64_t GetGenerationFromID(AtlasID id) {
-        return (id >> 16) & 0xffffffffffff;
-    }
-
-    inline void updatePlot(GrBatchTarget*, AtlasID*, BatchPlot*);
-
-    inline void makeMRU(BatchPlot* plot);
->>>>>>> miniblink49
 
     inline void processEviction(AtlasID);
 
     GrTexture* fTexture;
-<<<<<<< HEAD
     int fPlotWidth;
     int fPlotHeight;
     SkDEBUGCODE(uint32_t fNumPlots;)
 
         uint64_t fAtlasGeneration;
-=======
-    uint32_t fNumPlotsX;
-    uint32_t fNumPlotsY;
-    uint32_t fPlotWidth;
-    uint32_t fPlotHeight;
-    size_t fBPP;
-    uint64_t fAtlasGeneration;
->>>>>>> miniblink49
 
     struct EvictionData {
         EvictionFunc fFunc;

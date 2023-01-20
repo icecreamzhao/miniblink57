@@ -2,13 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "bindings/modules/v8/ModuleBindingsInitializer.h"
 
-#include "bindings/core/v8/ModuleProxy.h"
 #include "bindings/core/v8/V8PerIsolateData.h"
+#include "bindings/modules/v8/ConditionalFeaturesForModules.h"
 #include "bindings/modules/v8/SerializedScriptValueForModulesFactory.h"
-#include "core/dom/ExecutionContext.h"
 
 namespace blink {
 
@@ -18,10 +16,9 @@ void initPartialInterfacesInModules();
 
 void ModuleBindingsInitializer::init()
 {
+    registerInstallConditionalFeaturesForModules();
     initPartialInterfacesInModules();
-//#ifdef MINIBLINK_NOT_IMPLEMENTED
     SerializedScriptValueFactory::initialize(new SerializedScriptValueForModulesFactory);
-//#endif // MINIBLINK_NOT_IMPLEMENTED
 }
 
 } // namespace blink

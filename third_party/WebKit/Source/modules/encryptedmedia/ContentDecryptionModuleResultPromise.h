@@ -11,19 +11,14 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 ExceptionCode WebCdmExceptionToExceptionCode(
     WebContentDecryptionModuleException);
-=======
-ExceptionCode WebCdmExceptionToExceptionCode(WebContentDecryptionModuleException);
->>>>>>> miniblink49
 
 // This class wraps the promise resolver to simplify creation of
 // ContentDecryptionModuleResult objects. The default implementations of the
 // complete(), completeWithSession(), etc. methods will reject the promise
 // with an error. It needs to be subclassed and the appropriate complete()
 // method overridden to resolve the promise as needed.
-<<<<<<< HEAD
 //
 // Subclasses need to keep a Member<> to the object that created them so
 // that the creator remains around as long as this promise is pending. This
@@ -35,15 +30,11 @@ ExceptionCode WebCdmExceptionToExceptionCode(WebContentDecryptionModuleException
 // the promise.
 class ContentDecryptionModuleResultPromise
     : public ContentDecryptionModuleResult {
-=======
-class ContentDecryptionModuleResultPromise : public ContentDecryptionModuleResult {
->>>>>>> miniblink49
 public:
     ~ContentDecryptionModuleResultPromise() override;
 
     // ContentDecryptionModuleResult implementation.
     void complete() override;
-<<<<<<< HEAD
     void completeWithContentDecryptionModule(
         WebContentDecryptionModule*) override;
     void completeWithSession(
@@ -51,11 +42,6 @@ public:
     void completeWithError(WebContentDecryptionModuleException,
         unsigned long systemCode,
         const WebString&) override;
-=======
-    void completeWithContentDecryptionModule(WebContentDecryptionModule*) override;
-    void completeWithSession(WebContentDecryptionModuleResult::SessionStatus) override;
-    void completeWithError(WebContentDecryptionModuleException, unsigned long systemCode, const WebString&) final;
->>>>>>> miniblink49
 
     // It is only valid to call this before completion.
     ScriptPromise promise();
@@ -70,11 +56,8 @@ protected:
     template <typename... T>
     void resolve(T... value)
     {
-<<<<<<< HEAD
         DCHECK(isValidToFulfillPromise());
 
-=======
->>>>>>> miniblink49
         m_resolver->resolve(value...);
         m_resolver.clear();
     }
@@ -82,7 +65,6 @@ protected:
     // Rejects the promise with a DOMException.
     void reject(ExceptionCode, const String& errorMessage);
 
-<<<<<<< HEAD
     ExecutionContext* getExecutionContext() const;
 
     // Determine if it's OK to resolve/reject this promise.
@@ -90,12 +72,6 @@ protected:
 
 private:
     Member<ScriptPromiseResolver> m_resolver;
-=======
-    ExecutionContext* executionContext() const;
-
-private:
-    RefPtrWillBeMember<ScriptPromiseResolver> m_resolver;
->>>>>>> miniblink49
 };
 
 } // namespace blink

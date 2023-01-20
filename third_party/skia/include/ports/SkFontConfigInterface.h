@@ -11,16 +11,9 @@
 #include "SkDataTable.h"
 #include "SkFontStyle.h"
 #include "SkRefCnt.h"
-<<<<<<< HEAD
 #include "SkTypeface.h"
 
 class SkFontMgr;
-=======
-#include "SkTArray.h"
-#include "SkTypeface.h"
-
-struct SkBaseMutex;
->>>>>>> miniblink49
 
 /**
  *  \class SkFontConfigInterface
@@ -30,11 +23,6 @@ struct SkBaseMutex;
  */
 class SK_API SkFontConfigInterface : public SkRefCnt {
 public:
-<<<<<<< HEAD
-=======
-    
-
->>>>>>> miniblink49
     /**
      *  Returns the global SkFontConfigInterface instance, and if it is not
      *  NULL, calls ref() on it. The caller must balance this with a call to
@@ -55,7 +43,6 @@ public:
      *  to be a union of possible storage types to aid the impl.
      */
     struct FontIdentity {
-<<<<<<< HEAD
         FontIdentity()
             : fID(0)
             , fTTCIndex(0)
@@ -74,22 +61,6 @@ public:
         uint32_t fID;
         int32_t fTTCIndex;
         SkString fString;
-=======
-        FontIdentity() : fID(0), fTTCIndex(0) {}
-
-        bool operator==(const FontIdentity& other) const {
-            return fID == other.fID &&
-                   fTTCIndex == other.fTTCIndex &&
-                   fString == other.fString;
-        }
-        bool operator!=(const FontIdentity& other) const {
-            return !(*this == other);
-        }
-
-        uint32_t    fID;
-        int32_t     fTTCIndex;
-        SkString    fString;
->>>>>>> miniblink49
         SkFontStyle fStyle;
 
         // If buffer is NULL, just return the number of bytes that would have
@@ -112,18 +83,11 @@ public:
      *  If a match is not found, return false, and ignore all out parameters.
      */
     virtual bool matchFamilyName(const char familyName[],
-<<<<<<< HEAD
         SkFontStyle requested,
         FontIdentity* outFontIdentifier,
         SkString* outFamilyName,
         SkFontStyle* outStyle)
         = 0;
-=======
-                                 SkTypeface::Style requested,
-                                 FontIdentity* outFontIdentifier,
-                                 SkString* outFamilyName,
-                                 SkTypeface::Style* outStyle) = 0;
->>>>>>> miniblink49
 
     /**
      *  Given a FontRef, open a stream to access its data, or return null
@@ -133,7 +97,6 @@ public:
     virtual SkStreamAsset* openStream(const FontIdentity&) = 0;
 
     /**
-<<<<<<< HEAD
      *  Return an SkTypeface for the given FontIdentity.
      *
      *  The default implementation simply returns a new typeface built using data obtained from
@@ -145,36 +108,19 @@ public:
     }
 
     /**
-=======
->>>>>>> miniblink49
      *  Return a singleton instance of a direct subclass that calls into
      *  libfontconfig. This does not affect the refcnt of the returned instance.
      *  The mutex may be used to guarantee the singleton is only constructed once.
      */
-<<<<<<< HEAD
     static SkFontConfigInterface* GetSingletonDirectInterface();
-=======
-    static SkFontConfigInterface* GetSingletonDirectInterface(SkBaseMutex* mutex = NULL);
->>>>>>> miniblink49
 
     // New APIS, which have default impls for now (which do nothing)
 
     virtual SkDataTable* getFamilyNames() { return SkDataTable::NewEmpty(); }
-<<<<<<< HEAD
     typedef SkRefCnt INHERITED;
 };
 
 /** Creates a SkFontMgr which wraps a SkFontConfigInterface. */
 SK_API SkFontMgr* SkFontMgr_New_FCI(SkFontConfigInterface* fci);
 
-=======
-    virtual bool matchFamilySet(const char[] /*inFamilyName*/,
-                                SkString* /*outFamilyName*/,
-                                SkTArray<FontIdentity>*) {
-        return false;
-    }
-    typedef SkRefCnt INHERITED;
-};
-
->>>>>>> miniblink49
 #endif

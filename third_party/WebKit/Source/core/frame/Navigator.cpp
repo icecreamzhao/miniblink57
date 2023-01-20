@@ -17,10 +17,10 @@
  *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ *  MA 02110-1301, USA
  */
 
-#include "config.h"
 #include "core/frame/Navigator.h"
 
 #include "bindings/core/v8/ScriptController.h"
@@ -37,26 +37,13 @@
 namespace blink {
 
 Navigator::Navigator(LocalFrame* frame)
-    : DOMWindowProperty(frame)
-    , NavigatorLanguage(frame)
-{
-
-}
-
-Navigator::~Navigator()
+    : DOMWindowClient(frame)
 {
 }
 
 String Navigator::productSub() const
 {
-    if (!m_frame)
-        return "20030107";
-
-    Settings* settings = m_frame->settings();
-    if (!settings)
-        return "20030107";
-
-    return settings->productSub();
+    return "20030107";
 }
 
 String Navigator::vendor() const
@@ -65,14 +52,7 @@ String Navigator::vendor() const
     // https://code.google.com/p/chromium/issues/detail?id=276813
     // https://www.w3.org/Bugs/Public/show_bug.cgi?id=27786
     // https://groups.google.com/a/chromium.org/forum/#!topic/blink-dev/QrgyulnqvmE
-    if (!m_frame)
-        return "Google Inc.";
-
-    Settings* settings = m_frame->settings();
-    if (!settings)
-        return "Google Inc.";
-
-    return settings->Vendor();
+    return "Google Inc.";
 }
 
 String Navigator::vendorSub() const
@@ -83,39 +63,34 @@ String Navigator::vendorSub() const
 String Navigator::userAgent() const
 {
     // If the frame is already detached it no longer has a meaningful useragent.
-    if (!m_frame || !m_frame->page())
+    if (!frame() || !frame()->page())
         return String();
 
-    return m_frame->loader().userAgent(m_frame->document()->url());
+    return frame()->loader().userAgent();
 }
 
 bool Navigator::cookieEnabled() const
 {
-    if (!m_frame)
+    if (!frame())
         return false;
 
-    Settings* settings = m_frame->settings();
-    if (!settings || !settings->cookieEnabled())
+    Settings* settings = frame()->settings();
+    if (!settings || !settings->getCookieEnabled())
         return false;
 
-    return cookiesEnabled(m_frame->document());
-}
-
-void Navigator::getStorageUpdates()
-{
-    // FIXME: Remove this method or rename to yieldForStorageUpdates.
+    return cookiesEnabled(frame()->document());
 }
 
 Vector<String> Navigator::languages()
 {
     Vector<String> languages;
 
-    if (!m_frame || !m_frame->host()) {
-        languages.append(defaultLanguage());
+    if (!frame() || !frame()->host()) {
+        languages.push_back(defaultLanguage());
         return languages;
     }
 
-    String acceptLanguages = m_frame->host()->chromeClient().acceptLanguages();
+    String acceptLanguages = frame()->host()->chromeClient().acceptLanguages();
     acceptLanguages.split(',', languages);
 
     // Sanitizing tokens. We could do that more extensively but we should assume
@@ -133,8 +108,8 @@ Vector<String> Navigator::languages()
 
 DEFINE_TRACE(Navigator)
 {
-    HeapSupplementable<Navigator>::trace(visitor);
-    DOMWindowProperty::trace(visitor);
+    DOMWindowClient::trace(visitor);
+    Supplementable<Navigator>::trace(visitor);
 }
 
 } // namespace blink

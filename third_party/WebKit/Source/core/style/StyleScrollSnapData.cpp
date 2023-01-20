@@ -23,8 +23,7 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-#include "StyleScrollSnapData.h"
+#include "core/style/StyleScrollSnapData.h"
 
 #include "core/style/ComputedStyle.h"
 
@@ -39,9 +38,7 @@ ScrollSnapPoints::ScrollSnapPoints()
 
 bool operator==(const ScrollSnapPoints& a, const ScrollSnapPoints& b)
 {
-    return a.repeatOffset == b.repeatOffset
-        && a.hasRepeat == b.hasRepeat
-        && a.usesElements == b.usesElements;
+    return a.repeatOffset == b.repeatOffset && a.hasRepeat == b.hasRepeat && a.usesElements == b.usesElements;
 }
 
 StyleScrollSnapData::StyleScrollSnapData()
@@ -62,10 +59,7 @@ StyleScrollSnapData::StyleScrollSnapData(const StyleScrollSnapData& other)
 
 bool operator==(const StyleScrollSnapData& a, const StyleScrollSnapData& b)
 {
-    return a.m_xPoints == b.m_xPoints
-        && a.m_yPoints == b.m_yPoints
-        && a.m_destination == b.m_destination
-        && a.m_coordinates == b.m_coordinates;
+    return a.m_xPoints == b.m_xPoints && a.m_yPoints == b.m_yPoints && a.m_destination == b.m_destination && a.m_coordinates == b.m_coordinates;
 }
 
 } // namespace blink

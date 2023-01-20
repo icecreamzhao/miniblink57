@@ -8,25 +8,16 @@
 #ifndef SkBitmapCache_DEFINED
 #define SkBitmapCache_DEFINED
 
-<<<<<<< HEAD
 #include "SkBitmap.h"
 #include "SkMipMap.h"
 
 class SkImage;
 class SkResourceCache;
-=======
-#include "SkScalar.h"
-#include "SkBitmap.h"
-
-class SkResourceCache;
-class SkMipMap;
->>>>>>> miniblink49
 
 uint64_t SkMakeResourceCacheSharedIDForBitmap(uint32_t bitmapGenID);
 
 void SkNotifyBitmapGenIDIsStale(uint32_t bitmapGenID);
 
-<<<<<<< HEAD
 struct SkBitmapCacheDesc {
     uint32_t fImageID;
     int32_t fWidth;
@@ -39,84 +30,52 @@ struct SkBitmapCacheDesc {
     static SkBitmapCacheDesc Make(const SkImage*);
 };
 
-=======
->>>>>>> miniblink49
 class SkBitmapCache {
 public:
     /**
      * Use this allocator for bitmaps, so they can use ashmem when available.
-<<<<<<< HEAD
      * Returns nullptr if the ResourceCache has not been initialized with a DiscardableFactory.
-=======
-     * Returns NULL if the ResourceCache has not been initialized with a DiscardableFactory.
->>>>>>> miniblink49
      */
     static SkBitmap::Allocator* GetAllocator();
 
     /**
-<<<<<<< HEAD
      *  Search based on the desc. If found, returns true and
      *  result will be set to the matching bitmap with its pixels already locked.
      */
     static bool FindWH(const SkBitmapCacheDesc&, SkBitmap* result,
         SkResourceCache* localCache = nullptr);
-=======
-     *  Search based on the src bitmap and inverse scales in X and Y. If found, returns true and
-     *  result will be set to the matching bitmap with its pixels already locked.
-     */
-    static bool Find(const SkBitmap& src, SkScalar invScaleX, SkScalar invScaleY, SkBitmap* result,
-                     SkResourceCache* localCache = NULL);
->>>>>>> miniblink49
 
     /*
      *  result must be marked isImmutable()
      */
-<<<<<<< HEAD
     static bool AddWH(const SkBitmapCacheDesc&, const SkBitmap& result,
         SkResourceCache* localCache = nullptr);
-=======
-    static void Add(const SkBitmap& src, SkScalar invScaleX, SkScalar invScaleY,
-            const SkBitmap& result, SkResourceCache* localCache = NULL);
->>>>>>> miniblink49
 
     /**
      *  Search based on the bitmap's genID and subset. If found, returns true and
      *  result will be set to the matching bitmap with its pixels already locked.
      */
     static bool Find(uint32_t genID, const SkIRect& subset, SkBitmap* result,
-<<<<<<< HEAD
         SkResourceCache* localCache = nullptr);
-=======
-                     SkResourceCache* localCache = NULL);
->>>>>>> miniblink49
 
     /**
      * The width and the height of the provided subset must be the same as the result bitmap ones.
      * result must be marked isImmutable()
      */
     static bool Add(SkPixelRef*, const SkIRect& subset, const SkBitmap& result,
-<<<<<<< HEAD
         SkResourceCache* localCache = nullptr);
 
     static bool Find(uint32_t genID, SkBitmap* result, SkResourceCache* localCache = nullptr);
     // todo: eliminate the need to specify ID, since it should == the bitmap's
     static void Add(uint32_t genID, const SkBitmap&, SkResourceCache* localCache = nullptr);
-=======
-                    SkResourceCache* localCache = NULL);
->>>>>>> miniblink49
 };
 
 class SkMipMapCache {
 public:
-<<<<<<< HEAD
     static const SkMipMap* FindAndRef(const SkBitmapCacheDesc&, SkSourceGammaTreatment,
         SkResourceCache* localCache = nullptr);
     static const SkMipMap* AddAndRef(const SkBitmap& src, SkSourceGammaTreatment,
         SkResourceCache* localCache = nullptr);
-=======
-    static const SkMipMap* FindAndRef(const SkBitmap& src, SkResourceCache* localCache = NULL);
-    static const SkMipMap* AddAndRef(const SkBitmap& src, SkResourceCache* localCache = NULL);
->>>>>>> miniblink49
 };
 
 #endif

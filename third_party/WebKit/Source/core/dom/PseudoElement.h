@@ -35,15 +35,15 @@ namespace blink {
 
 class CORE_EXPORT PseudoElement : public Element {
 public:
-    static PassRefPtrWillBeRawPtr<PseudoElement> create(Element* parent, PseudoId);
+    static PseudoElement* create(Element* parent, PseudoId);
 
     PassRefPtr<ComputedStyle> customStyleForLayoutObject() override;
-    void attach(const AttachContext& = AttachContext()) override;
+    void attachLayoutTree(const AttachContext& = AttachContext()) override;
     bool layoutObjectIsNeeded(const ComputedStyle&) override;
 
     bool canStartSelection() const override { return false; }
     bool canContainRangeEndPoint() const override { return false; }
-    PseudoId pseudoId() const override { return m_pseudoId; }
+    PseudoId getPseudoId() const override { return m_pseudoId; }
 
     static String pseudoElementNameForEvents(PseudoId);
 
@@ -66,15 +66,15 @@ inline bool pseudoElementLayoutObjectIsNeeded(const ComputedStyle* style)
 {
     if (!style)
         return false;
-    if (style->display() == NONE)
+    if (style->display() == EDisplay::None)
         return false;
-    if (style->styleType() == FIRST_LETTER || style->styleType() == BACKDROP)
+    if (style->styleType() == PseudoIdFirstLetter || style->styleType() == PseudoIdBackdrop)
         return true;
     return style->contentData();
 }
 
 DEFINE_ELEMENT_TYPE_CASTS(PseudoElement, isPseudoElement());
 
-} // namespace
+} // namespace blink
 
 #endif

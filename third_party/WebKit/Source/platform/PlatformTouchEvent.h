@@ -30,7 +30,6 @@ class PlatformTouchEvent : public PlatformEvent {
 public:
     PlatformTouchEvent()
         : PlatformEvent(PlatformEvent::TouchStart)
-<<<<<<< HEAD
         , m_dispatchType(PlatformEvent::Blocking)
         , m_causesScrollingIfUncanceled(false)
         , m_touchStartOrFirstTouchMove(false)
@@ -63,23 +62,5 @@ protected:
 };
 
 } // namespace blink
-=======
-        , m_cancelable(true)
-    {
-    }
-
-    const Vector<PlatformTouchPoint>& touchPoints() const { return m_touchPoints; }
-
-    bool cancelable() const { return m_cancelable; }
-    bool causesScrollingIfUncanceled() const { return m_causesScrollingIfUncanceled; }
-
-protected:
-    Vector<PlatformTouchPoint> m_touchPoints;
-    bool m_cancelable;
-    bool m_causesScrollingIfUncanceled;
-};
-
-}
->>>>>>> miniblink49
 
 #endif // PlatformTouchEvent_h

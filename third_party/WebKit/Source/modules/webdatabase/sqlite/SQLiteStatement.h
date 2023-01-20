@@ -35,13 +35,9 @@ namespace blink {
 class SQLValue;
 
 class SQLiteStatement {
-<<<<<<< HEAD
     WTF_MAKE_NONCOPYABLE(SQLiteStatement);
     USING_FAST_MALLOC(SQLiteStatement);
 
-=======
-    WTF_MAKE_NONCOPYABLE(SQLiteStatement); WTF_MAKE_FAST_ALLOCATED(SQLiteStatement);
->>>>>>> miniblink49
 public:
     SQLiteStatement(SQLiteDatabase&, const String&);
     ~SQLiteStatement();
@@ -56,16 +52,12 @@ public:
     int step();
     int finalize();
 
-<<<<<<< HEAD
     int prepareAndStep()
     {
         if (int error = prepare())
             return error;
         return step();
     }
-=======
-    int prepareAndStep() { if (int error = prepare()) return error; return step(); }
->>>>>>> miniblink49
 
     // prepares, steps, and finalizes the query.
     // returns true if all 3 steps succeed with step() returning SQLITE_DONE
@@ -86,13 +78,8 @@ private:
     SQLiteDatabase& m_database;
     String m_query;
     sqlite3_stmt* m_statement;
-<<<<<<< HEAD
 #if DCHECK_IS_ON()
     bool m_isPrepared = false;
-=======
-#if ENABLE(ASSERT)
-    bool m_isPrepared;
->>>>>>> miniblink49
 #endif
 };
 

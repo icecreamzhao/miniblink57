@@ -40,17 +40,19 @@ class CSSStyleDeclaration;
 class StyleRuleViewport;
 class StyleRuleCSSStyleDeclaration;
 
-class CSSViewportRule final: public CSSRule {
+class CSSViewportRule final : public CSSRule {
     DEFINE_WRAPPERTYPEINFO();
-public:
-    static PassRefPtrWillBeRawPtr<CSSViewportRule> create(StyleRuleViewport* viewportRule, CSSStyleSheet* sheet)
-    {
-        return adoptRefWillBeNoop(new CSSViewportRule(viewportRule, sheet));
-    }
-    virtual ~CSSViewportRule();
 
-    virtual String cssText() const override;
-    virtual void reattach(StyleRuleBase*) override;
+public:
+    static CSSViewportRule* create(StyleRuleViewport* viewportRule,
+        CSSStyleSheet* sheet)
+    {
+        return new CSSViewportRule(viewportRule, sheet);
+    }
+    ~CSSViewportRule() override;
+
+    String cssText() const override;
+    void reattach(StyleRuleBase*) override;
 
     CSSStyleDeclaration* style() const;
 
@@ -59,13 +61,13 @@ public:
 private:
     CSSViewportRule(StyleRuleViewport*, CSSStyleSheet*);
 
-    virtual CSSRule::Type type() const override { return VIEWPORT_RULE; }
+    CSSRule::Type type() const override { return kViewportRule; }
 
-    RefPtrWillBeMember<StyleRuleViewport> m_viewportRule;
-    mutable RefPtrWillBeMember<StyleRuleCSSStyleDeclaration> m_propertiesCSSOMWrapper;
+    Member<StyleRuleViewport> m_viewportRule;
+    mutable Member<StyleRuleCSSStyleDeclaration> m_propertiesCSSOMWrapper;
 };
 
-DEFINE_CSS_RULE_TYPE_CASTS(CSSViewportRule, VIEWPORT_RULE);
+DEFINE_CSS_RULE_TYPE_CASTS(CSSViewportRule, kViewportRule);
 
 } // namespace blink
 

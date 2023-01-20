@@ -9,11 +9,8 @@
 #define SkLayerInfo_DEFINED
 
 #include "SkBigPicture.h"
-<<<<<<< HEAD
 #include "SkMatrix.h"
 #include "SkPaint.h"
-=======
->>>>>>> miniblink49
 #include "SkTArray.h"
 
 // This class stores information about the saveLayer/restore pairs found
@@ -23,7 +20,6 @@ public:
     // Information about a given saveLayer/restore block in an SkPicture
     class BlockInfo {
     public:
-<<<<<<< HEAD
         BlockInfo()
             : fPicture(nullptr)
             , fPaint(nullptr)
@@ -42,15 +38,6 @@ public:
         // one (i.e., the picture for which this SkLayerInfo was created) then
         // this pointer is nullptr. If it is a nested picture then the pointer
         // is non-nullptr and owns a ref on the picture.
-=======
-        BlockInfo() : fPicture(NULL), fPaint(NULL), fKey(NULL), fKeySize(0) {}
-        ~BlockInfo() { SkSafeUnref(fPicture); SkDELETE(fPaint); SkDELETE_ARRAY(fKey); }
-
-        // The picture owning the layer. If the owning picture is the top-most
-        // one (i.e., the picture for which this SkLayerInfo was created) then
-        // this pointer is NULL. If it is a nested picture then the pointer
-        // is non-NULL and owns a ref on the picture.
->>>>>>> miniblink49
         const SkPicture* fPicture;
         // The device space bounds of this layer.
         SkRect fBounds;
@@ -68,7 +55,6 @@ public:
         // layer's top-left point to the origin (which must be part of the
         // initial matrix).
         SkMatrix fLocalMat;
-<<<<<<< HEAD
         // The paint to use on restore. Can be nullptr since it is optional.
         const SkPaint* fPaint;
         // The index of this saveLayer in the picture.
@@ -88,38 +74,13 @@ public:
     };
 
     SkLayerInfo() { }
-=======
-        // The paint to use on restore. Can be NULL since it is optional.
-        const SkPaint* fPaint;
-        // The index of this saveLayer in the picture.
-        size_t  fSaveLayerOpID;
-        // The index of the matching restore in the picture.
-        size_t  fRestoreOpID;
-        // True if this saveLayer has at least one other saveLayer nested within it.
-        // False otherwise.
-        bool    fHasNestedLayers;
-        // True if this saveLayer is nested within another. False otherwise.
-        bool    fIsNested;
-        // The variable length key for this saveLayer block. It stores the
-        // thread of drawPicture and saveLayer operation indices that lead to this
-        // saveLayer (including its own op index). The BlockInfo owns this memory.
-        unsigned* fKey;
-        int     fKeySize;  // # of ints
-    };
-
-    SkLayerInfo() {}
->>>>>>> miniblink49
 
     BlockInfo& addBlock() { return fBlocks.push_back(); }
 
     int numBlocks() const { return fBlocks.count(); }
 
-<<<<<<< HEAD
     const BlockInfo& block(int index) const
     {
-=======
-    const BlockInfo& block(int index) const {
->>>>>>> miniblink49
         SkASSERT(index < fBlocks.count());
 
         return fBlocks[index];

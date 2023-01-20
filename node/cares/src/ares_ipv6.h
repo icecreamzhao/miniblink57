@@ -22,27 +22,25 @@
 #endif
 
 #ifndef HAVE_STRUCT_SOCKADDR_IN6
-struct sockaddr_in6
-{
-  unsigned short       sin6_family;
-  unsigned short       sin6_port;
-  unsigned long        sin6_flowinfo;
-  struct ares_in6_addr sin6_addr;
-  unsigned int         sin6_scope_id;
+struct sockaddr_in6 {
+    unsigned short sin6_family;
+    unsigned short sin6_port;
+    unsigned long sin6_flowinfo;
+    struct ares_in6_addr sin6_addr;
+    unsigned int sin6_scope_id;
 };
 #endif
 
 #ifndef HAVE_STRUCT_ADDRINFO
-struct addrinfo
-{
-  int              ai_flags;
-  int              ai_family;
-  int              ai_socktype;
-  int              ai_protocol;
-  ares_socklen_t   ai_addrlen;   /* Follow rfc3493 struct addrinfo */
-  char            *ai_canonname;
-  struct sockaddr *ai_addr;
-  struct addrinfo *ai_next;
+struct addrinfo {
+    int ai_flags;
+    int ai_family;
+    int ai_socktype;
+    int ai_protocol;
+    ares_socklen_t ai_addrlen; /* Follow rfc3493 struct addrinfo */
+    char* ai_canonname;
+    struct sockaddr* ai_addr;
+    struct addrinfo* ai_next;
 };
 #endif
 

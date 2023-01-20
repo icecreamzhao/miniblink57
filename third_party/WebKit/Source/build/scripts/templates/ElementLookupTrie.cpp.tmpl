@@ -1,45 +1,42 @@
-{% from 'macros.tmpl' import license %}
-{{license()}}
-{% macro trie_switch(trie, index) %}
-{# FIXME: No need to switch if there's only a single item in the subtrie:
-   can just have an if statement as we're currently doing for leaves. #}
-switch (data[{{index}}]) {
-{% for char, subtrie, tag, conditions in trie %}
-case '{{char}}':
-    {% if subtrie %}{# Recurse on subtrie #}
-    {{trie_switch(subtrie, index + 1) | indent}}
-    {% elif conditions %}{# Check suffix #}
-    if ({{conditions | join(' && ')}})
-        return {{tag}}Tag.localName().impl();
-    return 0;
-    {% else %}{# Terminal node (no suffix) #}
-    return {{tag}}Tag.localName().impl();
-    {% endif %}
-{% endfor %}
+{
+    % from 'macros.tmpl' import trie_length_switch %
 }
-return 0;
-{% endmacro %}
+// Copyright (c) 2016 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
 
-#include "config.h"
 #include "{{namespace}}ElementLookupTrie.h"
 
 #include "{{namespace}}Names.h"
 
 namespace blink {
 
-using namespace {{namespace}}Names;
-
-StringImpl* lookup{{namespace}}Tag(const UChar* data, unsigned length)
+using namespace
 {
-    ASSERT(data);
-    ASSERT(length);
-    switch (length) {
-    {% for length, trie in length_tries %}
-    case {{length}}:
-        {{trie_switch(trie, 0) | indent(8)}}
-    {% endfor %}
+    {namespace}
+}
+Names;
+
+StringImpl* lookup
+{
+    {namespace}
+}
+Tag(const UChar* data, unsigned length)
+{
+    DCHECK(data);
+    DCHECK(length);
+    { % macro trie_return_statement(tag) % } {
+        {
+            tag
+        }
     }
-    return 0;
+    Tag.localName().impl() { % endmacro % }
+    {
+        {
+            trie_length_switch(length_tries, trie_return_statement, false) | indent(4)
+        }
+    }
+    return nullptr;
 }
 
 } // namespace blink

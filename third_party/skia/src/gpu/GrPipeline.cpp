@@ -8,7 +8,6 @@
 #include "GrPipeline.h"
 
 #include "GrCaps.h"
-<<<<<<< HEAD
 #include "GrDrawContext.h"
 #include "GrDrawTarget.h"
 #include "GrGpu.h"
@@ -94,39 +93,6 @@ GrPipeline* GrPipeline::CreateAt(void* memory, const CreateArgs& args,
     if (GrXferProcessor::kSkipDraw_OptFlag & optFlags) {
         pipeline->~GrPipeline();
         return nullptr;
-=======
-#include "GrBatch.h"
-#include "GrGpu.h"
-#include "GrPipelineBuilder.h"
-#include "GrProcOptInfo.h"
-#include "GrXferProcessor.h"
-
-GrPipeline::GrPipeline(const GrPipelineBuilder& pipelineBuilder,
-                       const GrProcOptInfo& colorPOI,
-                       const GrProcOptInfo& coveragePOI,
-                       const GrCaps& caps,
-                       const GrScissorState& scissorState,
-                       const GrXferProcessor::DstTexture* dstTexture) {
-    // Create XferProcessor from DS's XPFactory
-    SkAutoTUnref<GrXferProcessor> xferProcessor(
-        pipelineBuilder.getXPFactory()->createXferProcessor(
-            colorPOI, coveragePOI, pipelineBuilder.hasMixedSamples(), dstTexture, caps));
-
-    GrColor overrideColor = GrColor_ILLEGAL;
-    if (colorPOI.firstEffectiveStageIndex() != 0) {
-        overrideColor = colorPOI.inputColorToEffectiveStage();
-    }
-
-    GrXferProcessor::OptFlags optFlags = GrXferProcessor::kNone_OptFlags;
-    if (xferProcessor) {
-        fXferProcessor.reset(xferProcessor.get());
-
-        optFlags = xferProcessor->getOptimizations(colorPOI,
-                                                   coveragePOI,
-                                                   pipelineBuilder.getStencil().doesWrite(),
-                                                   &overrideColor,
-                                                   caps);
->>>>>>> miniblink49
     }
 
     // No need to have an override color if it isn't even going to be used.
@@ -134,7 +100,6 @@ GrPipeline::GrPipeline(const GrPipelineBuilder& pipelineBuilder,
         overrideColor = GrColor_ILLEGAL;
     }
 
-<<<<<<< HEAD
     pipeline->fXferProcessor.reset(xferProcessor);
 
     int firstColorProcessorIdx = args.fOpts.fColorPOI.firstEffectiveProcessorIndex();
@@ -230,88 +195,10 @@ void GrPipeline::addDependenciesTo(GrRenderTarget* rt) const
         GrTexture* texture = xfer.textureAccess(i).getTexture();
         SkASSERT(rt->getLastDrawTarget());
         rt->getLastDrawTarget()->addDependency(texture);
-=======
-    // When path rendering the stencil settings are not always set on the GrPipelineBuilder
-    // so we must check the draw type. In cases where we will skip drawing we simply return a
-    // null GrPipeline.
-    if (!xferProcessor || (GrXferProcessor::kSkipDraw_OptFlag & optFlags)) {
-        // Set the fields that don't default init and return. The lack of a render target will
-        // indicate that this can be skipped.
-        fFlags = 0;
-        fDrawFace = GrPipelineBuilder::kInvalid_DrawFace;
-        return;
-    }
-
-    fRenderTarget.reset(pipelineBuilder.fRenderTarget.get());
-    SkASSERT(fRenderTarget);
-    fScissorState = scissorState;
-    fStencilSettings = pipelineBuilder.getStencil();
-    fDrawFace = pipelineBuilder.getDrawFace();
-
-    fFlags = 0;
-    if (pipelineBuilder.isHWAntialias()) {
-        fFlags |= kHWAA_Flag;
-    }
-    if (pipelineBuilder.isDither()) {
-        fFlags |= kDither_Flag;
-    }
-    if (pipelineBuilder.snapVerticesToPixelCenters()) {
-        fFlags |= kSnapVertices_Flag;
-    }
-
-    int firstColorStageIdx = colorPOI.firstEffectiveStageIndex();
-
-    // TODO: Once we can handle single or four channel input into coverage stages then we can use
-    // GrPipelineBuilder's coverageProcInfo (like color above) to set this initial information.
-    int firstCoverageStageIdx = 0;
-
-    this->adjustProgramFromOptimizations(pipelineBuilder, optFlags, colorPOI, coveragePOI,
-                                         &firstColorStageIdx, &firstCoverageStageIdx);
-
-    bool usesLocalCoords = false;
-
-    // Copy Stages from PipelineBuilder to Pipeline
-    for (int i = firstColorStageIdx; i < pipelineBuilder.numColorFragmentStages(); ++i) {
-        SkNEW_APPEND_TO_TARRAY(&fFragmentStages,
-                               GrPendingFragmentStage,
-                               (pipelineBuilder.fColorStages[i]));
-        usesLocalCoords = usesLocalCoords ||
-                          pipelineBuilder.fColorStages[i].processor()->usesLocalCoords();
-    }
-
-    fNumColorStages = fFragmentStages.count();
-    for (int i = firstCoverageStageIdx; i < pipelineBuilder.numCoverageFragmentStages(); ++i) {
-        SkNEW_APPEND_TO_TARRAY(&fFragmentStages,
-                               GrPendingFragmentStage,
-                               (pipelineBuilder.fCoverageStages[i]));
-        usesLocalCoords = usesLocalCoords ||
-                          pipelineBuilder.fCoverageStages[i].processor()->usesLocalCoords();
-    }
-
-    // Setup info we need to pass to GrPrimitiveProcessors that are used with this GrPipeline.
-    fInfoForPrimitiveProcessor.fFlags = 0;
-    if (!SkToBool(optFlags & GrXferProcessor::kIgnoreColor_OptFlag)) {
-        fInfoForPrimitiveProcessor.fFlags |= GrPipelineInfo::kReadsColor_GrPipelineInfoFlag;
-    }
-    if (GrColor_ILLEGAL != overrideColor) {
-        fInfoForPrimitiveProcessor.fFlags |= GrPipelineInfo::kUseOverrideColor_GrPipelineInfoFlag;
-        fInfoForPrimitiveProcessor.fOverrideColor = overrideColor;
-    }
-    if (!SkToBool(optFlags & GrXferProcessor::kIgnoreCoverage_OptFlag)) {
-        fInfoForPrimitiveProcessor.fFlags |= GrPipelineInfo::kReadsCoverage_GrPipelineInfoFlag;
-    }
-    if (usesLocalCoords) {
-        fInfoForPrimitiveProcessor.fFlags |= GrPipelineInfo::kReadsLocalCoords_GrPipelineInfoFlag;
-    }
-    if (SkToBool(optFlags & GrXferProcessor::kCanTweakAlphaForCoverage_OptFlag)) {
-       fInfoForPrimitiveProcessor.fFlags |=
-           GrPipelineInfo::kCanTweakAlphaForCoverage_GrPipelineInfoFlag; 
->>>>>>> miniblink49
     }
 }
 
 void GrPipeline::adjustProgramFromOptimizations(const GrPipelineBuilder& pipelineBuilder,
-<<<<<<< HEAD
     GrXferProcessor::OptFlags flags,
     const GrProcOptInfo& colorPOI,
     const GrProcOptInfo& coveragePOI,
@@ -326,36 +213,11 @@ void GrPipeline::adjustProgramFromOptimizations(const GrPipelineBuilder& pipelin
 
     if (flags & GrXferProcessor::kIgnoreCoverage_OptFlag) {
         *firstCoverageProcessorIdx = pipelineBuilder.numCoverageFragmentProcessors();
-=======
-                                                GrXferProcessor::OptFlags flags,
-                                                const GrProcOptInfo& colorPOI,
-                                                const GrProcOptInfo& coveragePOI,
-                                                int* firstColorStageIdx,
-                                                int* firstCoverageStageIdx) {
-    fReadsFragPosition = fXferProcessor->willReadFragmentPosition();
-
-    if ((flags & GrXferProcessor::kIgnoreColor_OptFlag) ||
-        (flags & GrXferProcessor::kOverrideColor_OptFlag)) {
-        *firstColorStageIdx = pipelineBuilder.numColorFragmentStages();
-    } else {
-        if (coveragePOI.readsFragPosition()) {
-            fReadsFragPosition = true;
-        }
-    }
-
-    if (flags & GrXferProcessor::kIgnoreCoverage_OptFlag) {
-        *firstCoverageStageIdx = pipelineBuilder.numCoverageFragmentStages();
-    } else {
-        if (coveragePOI.readsFragPosition()) {
-            fReadsFragPosition = true;
-        }
->>>>>>> miniblink49
     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-<<<<<<< HEAD
 bool GrPipeline::AreEqual(const GrPipeline& a, const GrPipeline& b,
     bool ignoreCoordTransforms)
 {
@@ -374,34 +236,8 @@ bool GrPipeline::AreEqual(const GrPipeline& a, const GrPipeline& b,
 
     for (int i = 0; i < a.numFragmentProcessors(); i++) {
         if (!a.getFragmentProcessor(i).isEqual(b.getFragmentProcessor(i), ignoreCoordTransforms)) {
-=======
-bool GrPipeline::isEqual(const GrPipeline& that) const {
-    if (this->getRenderTarget() != that.getRenderTarget() ||
-        this->fFragmentStages.count() != that.fFragmentStages.count() ||
-        this->fNumColorStages != that.fNumColorStages ||
-        this->fScissorState != that.fScissorState ||
-        this->fFlags != that.fFlags ||
-        this->fStencilSettings != that.fStencilSettings ||
-        this->fDrawFace != that.fDrawFace) {
-        return false;
-    }
-
-    if (!this->getXferProcessor()->isEqual(*that.getXferProcessor())) {
-        return false;
-    }
-
-    // The program desc comparison should have already assured that the stage counts match.
-    SkASSERT(this->numFragmentStages() == that.numFragmentStages());
-    for (int i = 0; i < this->numFragmentStages(); i++) {
-
-        if (this->getFragmentStage(i) != that.getFragmentStage(i)) {
->>>>>>> miniblink49
             return false;
         }
     }
     return true;
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49

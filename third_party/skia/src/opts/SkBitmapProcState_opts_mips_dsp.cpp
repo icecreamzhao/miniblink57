@@ -5,17 +5,12 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #include "SkBitmapProcState.h"
 #include "SkBitmapScaler.h"
 #include "SkColorPriv.h"
 #include "SkPaint.h"
 #include "SkUtils.h"
 
-<<<<<<< HEAD
 static void SI8_opaque_D32_nofilter_DX_mips_dsp(const SkBitmapProcState& s,
     const uint32_t* SK_RESTRICT xy,
     int count, SkPMColor* SK_RESTRICT colors)
@@ -23,146 +18,6 @@ static void SI8_opaque_D32_nofilter_DX_mips_dsp(const SkBitmapProcState& s,
     SkASSERT(count > 0 && colors != nullptr);
     SkASSERT(s.fInvType <= (SkMatrix::kTranslate_Mask | SkMatrix::kScale_Mask));
     SkASSERT(kNone_SkFilterQuality == s.fFilterQuality);
-=======
-static void SI8_D16_nofilter_DX_mips_dsp(const SkBitmapProcState& s,
-                                         const uint32_t* SK_RESTRICT xy,
-                                         int count, uint16_t* SK_RESTRICT colors) {
-    SkASSERT(count > 0 && colors != NULL);
-    SkASSERT(s.fInvType <= (SkMatrix::kTranslate_Mask | SkMatrix::kScale_Mask));
-    SkASSERT(kNone_SkFilterQuality == s.fFilterLevel);
-    const uint16_t* SK_RESTRICT table = s.fPixmap.ctable()->read16BitCache();
-    const uint8_t* SK_RESTRICT srcAddr = (const uint8_t*)s.fPixmap.addr();
-    SkASSERT((unsigned)xy[0] < (unsigned)s.fPixmap.height());
-    srcAddr = (const uint8_t*)((const char*)srcAddr + xy[0] * s.fPixmap.rowBytes());
-    uint8_t src;
-
-    if (1 == s.fPixmap.width()) {
-        src = srcAddr[0];
-        uint16_t dstValue = table[src];
-        sk_memset16(colors, dstValue, count);
-    } else {
-        int count8;
-        const uint16_t* SK_RESTRICT xx = (const uint16_t*)(xy + 1);
-
-        __asm__ volatile (
-            ".set    push                                \n\t"
-            ".set    noreorder                           \n\t"
-            ".set    noat                                \n\t"
-            "sra     %[count8], %[count],      3         \n\t"
-            "beqz    %[count8], 3f                       \n\t"
-            " addiu  %[count8], %[count8],     -1        \n\t"
-        "1:                                              \n\t"
-            "beqz    %[count8], 2f                       \n\t"
-            " addiu  %[count8], %[count8],     -1        \n\t"
-            "pref    0,         16(%[xx])                \n\t"
-            "lhu     $t0,       0(%[xx])                 \n\t"
-            "lhu     $t1,       2(%[xx])                 \n\t"
-            "lhu     $t2,       4(%[xx])                 \n\t"
-            "lhu     $t3,       6(%[xx])                 \n\t"
-            "lhu     $t4,       8(%[xx])                 \n\t"
-            "lhu     $t5,       10(%[xx])                \n\t"
-            "lhu     $t6,       12(%[xx])                \n\t"
-            "lhu     $t7,       14(%[xx])                \n\t"
-            "pref    0,         8(%[srcAddr])            \n\t"
-            "lbux    $t0,       $t0(%[srcAddr])          \n\t"
-            "lbux    $t1,       $t1(%[srcAddr])          \n\t"
-            "lbux    $t2,       $t2(%[srcAddr])          \n\t"
-            "lbux    $t3,       $t3(%[srcAddr])          \n\t"
-            "lbux    $t4,       $t4(%[srcAddr])          \n\t"
-            "lbux    $t5,       $t5(%[srcAddr])          \n\t"
-            "lbux    $t6,       $t6(%[srcAddr])          \n\t"
-            "lbux    $t7,       $t7(%[srcAddr])          \n\t"
-            "addu    $t0,       $t0,           $t0       \n\t"
-            "addu    $t1,       $t1,           $t1       \n\t"
-            "addu    $t2,       $t2,           $t2       \n\t"
-            "addu    $t3,       $t3,           $t3       \n\t"
-            "addu    $t4,       $t4,           $t4       \n\t"
-            "addu    $t5,       $t5,           $t5       \n\t"
-            "addu    $t6,       $t6,           $t6       \n\t"
-            "addu    $t7,       $t7,           $t7       \n\t"
-            "pref    0,         16(%[table])             \n\t"
-            "lhx     $t0,       $t0(%[table])            \n\t"
-            "lhx     $t1,       $t1(%[table])            \n\t"
-            "lhx     $t2,       $t2(%[table])            \n\t"
-            "lhx     $t3,       $t3(%[table])            \n\t"
-            "lhx     $t4,       $t4(%[table])            \n\t"
-            "lhx     $t5,       $t5(%[table])            \n\t"
-            "lhx     $t6,       $t6(%[table])            \n\t"
-            "lhx     $t7,       $t7(%[table])            \n\t"
-            "sh      $t0,       0(%[colors])             \n\t"
-            "sh      $t1,       2(%[colors])             \n\t"
-            "sh      $t2,       4(%[colors])             \n\t"
-            "sh      $t3,       6(%[colors])             \n\t"
-            "sh      $t4,       8(%[colors])             \n\t"
-            "sh      $t5,       10(%[colors])            \n\t"
-            "sh      $t6,       12(%[colors])            \n\t"
-            "sh      $t7,       14(%[colors])            \n\t"
-            "addiu   %[xx],     %[xx],         16        \n\t"
-            "bgtz    %[count8], 1b                       \n\t"
-            " addiu  %[colors], %[colors],     16        \n\t"
-        "2:                                              \n\t"
-            "lhu     $t0,       0(%[xx])                 \n\t"
-            "lhu     $t1,       2(%[xx])                 \n\t"
-            "lhu     $t2,       4(%[xx])                 \n\t"
-            "lhu     $t3,       6(%[xx])                 \n\t"
-            "lhu     $t4,       8(%[xx])                 \n\t"
-            "lhu     $t5,       10(%[xx])                \n\t"
-            "lhu     $t6,       12(%[xx])                \n\t"
-            "lhu     $t7,       14(%[xx])                \n\t"
-            "lbux    $t0,       $t0(%[srcAddr])          \n\t"
-            "lbux    $t1,       $t1(%[srcAddr])          \n\t"
-            "lbux    $t2,       $t2(%[srcAddr])          \n\t"
-            "lbux    $t3,       $t3(%[srcAddr])          \n\t"
-            "lbux    $t4,       $t4(%[srcAddr])          \n\t"
-            "lbux    $t5,       $t5(%[srcAddr])          \n\t"
-            "lbux    $t6,       $t6(%[srcAddr])          \n\t"
-            "lbux    $t7,       $t7(%[srcAddr])          \n\t"
-            "addu    $t0,       $t0,           $t0       \n\t"
-            "addu    $t1,       $t1,           $t1       \n\t"
-            "addu    $t2,       $t2,           $t2       \n\t"
-            "addu    $t3,       $t3,           $t3       \n\t"
-            "addu    $t4,       $t4,           $t4       \n\t"
-            "addu    $t5,       $t5,           $t5       \n\t"
-            "addu    $t6,       $t6,           $t6       \n\t"
-            "addu    $t7,       $t7,           $t7       \n\t"
-            "lhx     $t0,       $t0(%[table])            \n\t"
-            "lhx     $t1,       $t1(%[table])            \n\t"
-            "lhx     $t2,       $t2(%[table])            \n\t"
-            "lhx     $t3,       $t3(%[table])            \n\t"
-            "lhx     $t4,       $t4(%[table])            \n\t"
-            "lhx     $t5,       $t5(%[table])            \n\t"
-            "lhx     $t6,       $t6(%[table])            \n\t"
-            "lhx     $t7,       $t7(%[table])            \n\t"
-            "sh      $t0,       0(%[colors])             \n\t"
-            "sh      $t1,       2(%[colors])             \n\t"
-            "sh      $t2,       4(%[colors])             \n\t"
-            "sh      $t3,       6(%[colors])             \n\t"
-            "sh      $t4,       8(%[colors])             \n\t"
-            "sh      $t5,       10(%[colors])            \n\t"
-            "sh      $t6,       12(%[colors])            \n\t"
-            "sh      $t7,       14(%[colors])            \n\t"
-            "addiu   %[xx],     %[xx],         16        \n\t"
-            "addiu   %[colors], %[colors],     16        \n\t"
-        "3:                                              \n\t"
-            ".set    pop                                 \n\t"
-            : [xx]"+r"(xx), [count8]"=&r"(count8), [colors]"+r"(colors)
-            : [table]"r"(table), [srcAddr]"r"(srcAddr), [count]"r"(count)
-            : "memory","t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7"
-        );
-
-        for (int i = (count & 7); i > 0; --i) {
-            src = srcAddr[*xx++]; *colors++ = table[src];
-        }
-    }
-}
-
-static void SI8_opaque_D32_nofilter_DX_mips_dsp(const SkBitmapProcState& s,
-                                                const uint32_t* SK_RESTRICT xy,
-                                                int count, SkPMColor* SK_RESTRICT colors) {
-    SkASSERT(count > 0 && colors != NULL);
-    SkASSERT(s.fInvType <= (SkMatrix::kTranslate_Mask | SkMatrix::kScale_Mask));
-    SkASSERT(kNone_SkFilterQuality == s.fFilterLevel);
->>>>>>> miniblink49
     const SkPMColor* SK_RESTRICT table = s.fPixmap.ctable()->readColors();
     const uint8_t* SK_RESTRICT srcAddr = (const uint8_t*)s.fPixmap.addr();
     srcAddr = (const uint8_t*)((const char*)srcAddr + xy[0] * s.fPixmap.rowBytes());
@@ -174,22 +29,14 @@ static void SI8_opaque_D32_nofilter_DX_mips_dsp(const SkBitmapProcState& s,
     } else {
         const uint16_t* xx = (const uint16_t*)(xy + 1);
         int s0, s1, s2, s3, s4, s5, s6, s7;
-<<<<<<< HEAD
         __asm__ volatile(
-=======
-        __asm__ volatile (
->>>>>>> miniblink49
             ".set    push                                \n\t"
             ".set    noreorder                           \n\t"
             ".set    noat                                \n\t"
             "srl     $t8,       %[count],    4           \n\t"
             "beqz    $t8,       3f                       \n\t"
             " nop                                        \n\t"
-<<<<<<< HEAD
             "1:                                              \n\t"
-=======
-        "1:                                              \n\t"
->>>>>>> miniblink49
             "addiu   $t8,       $t8,         -1          \n\t"
             "beqz    $t8,       2f                       \n\t"
             " addiu  %[count],  %[count],    -16         \n\t"
@@ -279,11 +126,7 @@ static void SI8_opaque_D32_nofilter_DX_mips_dsp(const SkBitmapProcState& s,
             "addiu   %[xx],     %[xx],       32          \n\t"
             "b       1b                                  \n\t"
             " addiu  %[colors], %[colors],   64          \n\t"
-<<<<<<< HEAD
             "2:                                              \n\t"
-=======
-        "2:                                              \n\t"
->>>>>>> miniblink49
             "lhu     $t0,       0(%[xx])                 \n\t"
             "lhu     $t1,       2(%[xx])                 \n\t"
             "lhu     $t2,       4(%[xx])                 \n\t"
@@ -367,11 +210,7 @@ static void SI8_opaque_D32_nofilter_DX_mips_dsp(const SkBitmapProcState& s,
             "addiu   %[xx],     %[xx],       32          \n\t"
             "beqz    %[count],  4f                       \n\t"
             " addiu  %[colors], %[colors],   64          \n\t"
-<<<<<<< HEAD
             "3:                                              \n\t"
-=======
-        "3:                                              \n\t"
->>>>>>> miniblink49
             "addiu   %[count],  %[count],    -1          \n\t"
             "lhu     $t0,       0(%[xx])                 \n\t"
             "lbux    $t1,       $t0(%[srcAddr])          \n\t"
@@ -381,7 +220,6 @@ static void SI8_opaque_D32_nofilter_DX_mips_dsp(const SkBitmapProcState& s,
             "addiu   %[xx],     %[xx],       2           \n\t"
             "bnez    %[count],  3b                       \n\t"
             " addiu  %[colors], %[colors],   4           \n\t"
-<<<<<<< HEAD
             "4:                                              \n\t"
             ".set    pop                                 \n\t"
             : [xx] "+r"(xx), [count] "+r"(count), [colors] "+r"(colors),
@@ -390,17 +228,6 @@ static void SI8_opaque_D32_nofilter_DX_mips_dsp(const SkBitmapProcState& s,
             : [table] "r"(table), [srcAddr] "r"(srcAddr)
             : "memory", "t0", "t1", "t2", "t3",
             "t4", "t5", "t6", "t7", "t8");
-=======
-        "4:                                              \n\t"
-            ".set    pop                                 \n\t"
-            : [xx]"+r"(xx), [count]"+r"(count), [colors]"+r"(colors),
-              [s0]"=&r"(s0), [s1]"=&r"(s1), [s2]"=&r"(s2), [s3]"=&r"(s3),
-              [s4]"=&r"(s4), [s5]"=&r"(s5), [s6]"=&r"(s6), [s7]"=&r"(s7)
-            : [table]"r"(table), [srcAddr]"r"(srcAddr)
-            : "memory", "t0", "t1", "t2", "t3",
-              "t4", "t5", "t6", "t7", "t8"
-        );
->>>>>>> miniblink49
     }
 }
 
@@ -408,12 +235,8 @@ static void SI8_opaque_D32_nofilter_DX_mips_dsp(const SkBitmapProcState& s,
     otherwise the shader won't even look at the matrix/sampler
  */
 
-<<<<<<< HEAD
 void SkBitmapProcState::platformProcs()
 {
-=======
-void SkBitmapProcState::platformProcs() {
->>>>>>> miniblink49
     bool isOpaque = 256 == fAlphaScale;
     bool justDx = false;
 
@@ -422,7 +245,6 @@ void SkBitmapProcState::platformProcs() {
     }
 
     switch (fPixmap.colorType()) {
-<<<<<<< HEAD
     case kIndex_8_SkColorType:
         if (justDx && kNone_SkFilterQuality == fFilterQuality) {
             if (isOpaque) {
@@ -437,21 +259,3 @@ void SkBitmapProcState::platformProcs() {
 }
 
 void SkBitmapScaler::PlatformConvolutionProcs(SkConvolutionProcs*) { }
-=======
-        case kIndex_8_SkColorType:
-            if (justDx && kNone_SkFilterQuality == fFilterLevel) {
-                fSampleProc16 = SI8_D16_nofilter_DX_mips_dsp;
-                fShaderProc16 = NULL;
-                if (isOpaque) {
-                    fSampleProc32 = SI8_opaque_D32_nofilter_DX_mips_dsp;
-                    fShaderProc32 = NULL;
-                }
-            }
-            break;
-        default:
-            break;
-    }
-}
-
-void SkBitmapScaler::PlatformConvolutionProcs(SkConvolutionProcs*) {}
->>>>>>> miniblink49

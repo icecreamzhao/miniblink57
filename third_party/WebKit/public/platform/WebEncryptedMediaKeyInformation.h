@@ -15,14 +15,9 @@ public:
     enum class KeyStatus {
         Usable,
         Expired,
-<<<<<<< HEAD
         Released,
         OutputRestricted,
         OutputDownscaled,
-=======
-        OutputDownscaled,
-        OutputNotAllowed,
->>>>>>> miniblink49
         StatusPending,
         InternalError
     };

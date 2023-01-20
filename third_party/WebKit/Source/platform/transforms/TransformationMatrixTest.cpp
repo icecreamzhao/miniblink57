@@ -2,46 +2,27 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
 #include "platform/transforms/TransformationMatrix.h"
 
 #include "testing/gtest/include/gtest/gtest.h"
 #include "wtf/text/WTFString.h"
-=======
-#include "config.h"
-#include "platform/transforms/TransformationMatrix.h"
-
-#include <gtest/gtest.h>
->>>>>>> miniblink49
 
 namespace blink {
 
 TEST(TransformationMatrixTest, NonInvertableBlendTest)
 {
     TransformationMatrix from;
-<<<<<<< HEAD
     TransformationMatrix to(2.7133590938, 0.0, 0.0, 0.0, 0.0, 2.4645137761, 0.0,
         0.0, 0.0, 0.0, 0.00, 0.01, 0.02, 0.03, 0.04, 0.05);
-=======
-    TransformationMatrix to(2.7133590938, 0.0, 0.0, 0.0, 0.0, 2.4645137761, 0.0, 0.0, 0.0, 0.0, 0.00, 0.01, 0.02, 0.03, 0.04, 0.05);
->>>>>>> miniblink49
     TransformationMatrix result;
 
     result = to;
     result.blend(from, 0.25);
-<<<<<<< HEAD
     EXPECT_EQ(result, from);
 
     result = to;
     result.blend(from, 0.75);
     EXPECT_EQ(result, to);
-=======
-    EXPECT_TRUE(result == from);
-
-    result = to;
-    result.blend(from, 0.75);
-    EXPECT_TRUE(result == to);
->>>>>>> miniblink49
 }
 
 TEST(TransformationMatrixTest, IsIdentityOr2DTranslation)
@@ -78,7 +59,6 @@ TEST(TransformationMatrixTest, To2DTranslation)
     EXPECT_EQ(FloatSize(30, -40), matrix.to2DTranslation());
 }
 
-<<<<<<< HEAD
 TEST(TransformationMatrixTest, ApplyTransformOrigin)
 {
     TransformationMatrix matrix;
@@ -155,6 +135,4 @@ TEST(TransformationMatrixTest, ToString)
         columnMajorConstructor.toString(true));
 }
 
-=======
->>>>>>> miniblink49
 } // namespace blink

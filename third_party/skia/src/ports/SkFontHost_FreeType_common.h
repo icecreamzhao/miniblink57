@@ -15,11 +15,8 @@
 #include "SkTypeface.h"
 #include "SkTypes.h"
 
-<<<<<<< HEAD
 #include "SkFontMgr.h"
 
-=======
->>>>>>> miniblink49
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
@@ -29,17 +26,11 @@ protected:
     // This value was chosen by eyeballing the result in Firefox and trying to match it.
     static const FT_Pos kBitmapEmboldenStrength = 1 << 6;
 
-<<<<<<< HEAD
     SkScalerContext_FreeType_Base(SkTypeface* typeface, const SkScalerContextEffects& effects,
         const SkDescriptor* desc)
         : INHERITED(typeface, effects, desc)
     {
     }
-=======
-    SkScalerContext_FreeType_Base(SkTypeface* typeface, const SkDescriptor *desc)
-    : INHERITED(typeface, desc)
-    {}
->>>>>>> miniblink49
 
     void generateGlyphImage(FT_Face face, const SkGlyph& glyph);
     void generateGlyphPath(FT_Face face, SkPath* path);
@@ -66,7 +57,6 @@ public:
         using AxisDefinitions = SkSTArray<4, AxisDefinition, true>;
         bool recognizedFont(SkStream* stream, int* numFonts) const;
         bool scanFont(SkStream* stream, int ttcIndex,
-<<<<<<< HEAD
             SkString* name, SkFontStyle* style, bool* isFixedPitch,
             AxisDefinitions* axes) const;
         static void computeAxisValues(
@@ -75,10 +65,6 @@ public:
             SkFixed* axisValues,
             const SkString& name);
 
-=======
-                      SkString* name, SkFontStyle* style, bool* isFixedPitch,
-                      AxisDefinitions* axes) const;
->>>>>>> miniblink49
     private:
         FT_Face openFace(SkStream* stream, int ttcIndex, FT_Stream ftStream) const;
         FT_Library fLibrary;
@@ -88,7 +74,6 @@ public:
 protected:
     SkTypeface_FreeType(const SkFontStyle& style, SkFontID uniqueID, bool isFixedPitch)
         : INHERITED(style, uniqueID, isFixedPitch)
-<<<<<<< HEAD
     {
     }
 
@@ -102,38 +87,15 @@ protected:
         int32_t adjustments[]) const override;
     virtual int onCharsToGlyphs(const void* chars, Encoding, uint16_t glyphs[],
         int glyphCount) const override;
-=======
-        , fGlyphCount(-1)
-    {}
-
-    virtual SkScalerContext* onCreateScalerContext(
-                                        const SkDescriptor*) const override;
-    void onFilterRec(SkScalerContextRec*) const override;
-    SkAdvancedTypefaceMetrics* onGetAdvancedTypefaceMetrics(
-                        PerGlyphInfo, const uint32_t*, uint32_t) const override;
-    int onGetUPEM() const override;
-    virtual bool onGetKerningPairAdjustments(const uint16_t glyphs[], int count,
-                                       int32_t adjustments[]) const override;
-    virtual int onCharsToGlyphs(const void* chars, Encoding, uint16_t glyphs[],
-                                int glyphCount) const override;
->>>>>>> miniblink49
     int onCountGlyphs() const override;
 
     LocalizedStrings* onCreateFamilyNameIterator() const override;
 
     int onGetTableTags(SkFontTableTag tags[]) const override;
     virtual size_t onGetTableData(SkFontTableTag, size_t offset,
-<<<<<<< HEAD
         size_t length, void* data) const override;
 
 private:
-=======
-                                  size_t length, void* data) const override;
-
-private:
-    mutable int fGlyphCount;
-
->>>>>>> miniblink49
     typedef SkTypeface INHERITED;
 };
 

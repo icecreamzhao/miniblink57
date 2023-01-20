@@ -28,26 +28,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "modules/webdatabase/sqlite/SQLiteFileSystem.h"
 
 #include "platform/heap/Handle.h"
 #include "platform/heap/SafePoint.h"
-<<<<<<< HEAD
 #include "third_party/sqlite/sqlite3.h"
-=======
-#include <sqlite3.h>
->>>>>>> miniblink49
 #include "wtf/text/CString.h"
 
 // SQLiteFileSystem::registerSQLiteVFS() is implemented in the
 // platform-specific files SQLiteFileSystemChromium{Win|Posix}.cpp
 namespace blink {
 
-<<<<<<< HEAD
 SQLiteFileSystem::SQLiteFileSystem() { }
 
 int SQLiteFileSystem::openDatabase(const String& filename, sqlite3** database)
@@ -56,16 +47,6 @@ int SQLiteFileSystem::openDatabase(const String& filename, sqlite3** database)
     return sqlite3_open_v2(filename.utf8().data(), database,
         SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE,
         "chromium_vfs");
-=======
-SQLiteFileSystem::SQLiteFileSystem()
-{
-}
-
-int SQLiteFileSystem::openDatabase(const String& filename, sqlite3** database)
-{
-    SafePointScope scope(ThreadState::HeapPointersOnStack);
-    return sqlite3_open_v2(filename.utf8().data(), database, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, "chromium_vfs");
->>>>>>> miniblink49
 }
 
 } // namespace blink

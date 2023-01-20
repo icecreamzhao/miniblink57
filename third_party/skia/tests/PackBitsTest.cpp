@@ -16,28 +16,17 @@ static const uint8_t gTest82[] = { 0, 0, 0, 1, 2, 3, 3, 3 };
 static const uint8_t gTest83[] = { 0, 0, 0, 0, 0, 0, 1, 2, 3, 3, 3, 0, 0, 1 };
 static const uint8_t gTest84[] = { 1, 0, 3, 0, 0, 0, 2, 1, 1, 2 };
 
-<<<<<<< HEAD
 static void rand_fill(uint8_t buffer[], int count)
 {
-=======
-static void rand_fill(uint8_t buffer[], int count) {
->>>>>>> miniblink49
     for (int i = 0; i < count; i++)
         buffer[i] = (uint8_t)((gRand.nextU() >> 8) & 0x3);
 }
 
-<<<<<<< HEAD
 static void test_pack8(skiatest::Reporter* reporter)
 {
     static const struct {
         const uint8_t* fSrc;
         int fCount;
-=======
-static void test_pack8(skiatest::Reporter* reporter) {
-    static const struct {
-        const uint8_t* fSrc;
-        int             fCount;
->>>>>>> miniblink49
     } gTests[] = {
         { gTest80, SK_ARRAY_COUNT(gTest80) },
         { gTest81, SK_ARRAY_COUNT(gTest81) },
@@ -50,29 +39,16 @@ static void test_pack8(skiatest::Reporter* reporter) {
         uint8_t dst[100];
         size_t maxSize = SkPackBits::ComputeMaxSize8(gTests[i].fCount);
         size_t dstSize = SkPackBits::Pack8(gTests[i].fSrc,
-<<<<<<< HEAD
             gTests[i].fCount, dst, maxSize - 1);
         REPORTER_ASSERT(reporter, dstSize == 0);
         dstSize = SkPackBits::Pack8(gTests[i].fSrc,
             gTests[i].fCount, dst, sizeof(dst));
-=======
-                                           gTests[i].fCount, dst, maxSize - 1);
-        REPORTER_ASSERT(reporter, dstSize == 0);
-        dstSize = SkPackBits::Pack8(gTests[i].fSrc,
-                                           gTests[i].fCount, dst, sizeof(dst));
->>>>>>> miniblink49
         REPORTER_ASSERT(reporter, dstSize <= maxSize);
         uint8_t src[100];
         int srcCount = SkPackBits::Unpack8(dst, dstSize, src, gTests[i].fCount - 1);
         REPORTER_ASSERT(reporter, srcCount == 0);
         srcCount = SkPackBits::Unpack8(dst, dstSize, src, sizeof(src));
-<<<<<<< HEAD
         bool match = gTests[i].fCount == srcCount && memcmp(gTests[i].fSrc, src, gTests[i].fCount * sizeof(uint8_t)) == 0;
-=======
-        bool match = gTests[i].fCount == srcCount &&
-                    memcmp(gTests[i].fSrc, src,
-                           gTests[i].fCount * sizeof(uint8_t)) == 0;
->>>>>>> miniblink49
         REPORTER_ASSERT(reporter, match);
     }
 
@@ -94,11 +70,7 @@ static void test_pack8(skiatest::Reporter* reporter) {
     }
 }
 
-<<<<<<< HEAD
 DEF_TEST(PackBits, reporter)
 {
-=======
-DEF_TEST(PackBits, reporter) {
->>>>>>> miniblink49
     test_pack8(reporter);
 }

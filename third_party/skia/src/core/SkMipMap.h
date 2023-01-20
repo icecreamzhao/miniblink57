@@ -9,21 +9,16 @@
 #define SkMipMap_DEFINED
 
 #include "SkCachedData.h"
-<<<<<<< HEAD
 #include "SkPixmap.h"
 #include "SkScalar.h"
 #include "SkShader.h"
 #include "SkSize.h"
-=======
-#include "SkScalar.h"
->>>>>>> miniblink49
 
 class SkBitmap;
 class SkDiscardableMemory;
 
 typedef SkDiscardableMemory* (*SkDiscardableFactoryProc)(size_t bytes);
 
-<<<<<<< HEAD
 /*
  * SkMipMap will generate mipmap levels when given a base mipmap level image.
  *
@@ -85,33 +80,6 @@ private:
         : INHERITED(size, dm)
     {
     }
-=======
-class SkMipMap : public SkCachedData {
-public:
-    static SkMipMap* Build(const SkBitmap& src, SkDiscardableFactoryProc);
-
-    struct Level {
-        void*       fPixels;
-        uint32_t    fRowBytes;
-        uint32_t    fWidth, fHeight;
-        float       fScale; // < 1.0
-    };
-
-    bool extractLevel(SkScalar scale, Level*) const;
-
-protected:
-    void onDataChange(void* oldData, void* newData) override {
-        fLevels = (Level*)newData; // could be NULL
-    }
-
-private:
-    Level*  fLevels;
-    int     fCount;
-
-    // we take ownership of levels, and will free it with sk_free()
-    SkMipMap(void* malloc, size_t size) : INHERITED(malloc, size) {}
-    SkMipMap(size_t size, SkDiscardableMemory* dm) : INHERITED(size, dm) {}
->>>>>>> miniblink49
 
     static size_t AllocLevelsSize(int levelCount, size_t pixelSize);
 

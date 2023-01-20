@@ -2,8 +2,13 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import v8_types
 import v8_utilities
 
+
+UNION_CPP_INCLUDES = frozenset([
+    'bindings/core/v8/ToV8.h',
+])
 
 UNION_H_INCLUDES = frozenset([
     'bindings/core/v8/Dictionary.h',
@@ -25,42 +30,15 @@ UNION_CPP_INCLUDES_BLACKLIST = frozenset([
 
 cpp_includes = set()
 header_forward_decls = set()
-
-
-def union_context(union_types, interfaces_info):
-    cpp_includes.clear()
-    header_forward_decls.clear()
-
-    # For container classes we strip nullable wrappers. For example,
-    # both (A or B)? and (A? or B) will become AOrB. This should be OK
-    # because container classes can handle null and it seems that
-    # distinguishing (A or B)? and (A? or B) doesn't make sense.
-    container_cpp_types = set()
-    union_types_for_containers = set()
-    nullable_cpp_types = set()
-    for union_type in union_types:
-        cpp_type = union_type.cpp_type
-        if cpp_type not in container_cpp_types:
-            union_types_for_containers.add(union_type)
-            container_cpp_types.add(cpp_type)
-        if union_type.includes_nullable_type:
-            nullable_cpp_types.add(cpp_type)
-
-    union_types_for_containers = sorted(union_types_for_containers,
-                                        key=lambda union_type: union_type.cpp_type)
-    nullable_cpp_types = sorted(nullable_cpp_types)
-
-    return {
-        'containers': [container_context(union_type, interfaces_info)
-                       for union_type in union_types_for_containers],
-        'cpp_includes': sorted(cpp_includes - UNION_CPP_INCLUDES_BLACKLIST),
-        'header_forward_decls': sorted(header_forward_decls),
-        'header_includes': sorted(UNION_H_INCLUDES),
-        'nullable_cpp_types': nullable_cpp_types,
-    }
+header_includes = set()
 
 
 def container_context(union_type, interfaces_info):
+    cpp_includes.clear()
+    header_forward_decls.clear()
+    header_includes.clear()
+    cpp_includes.update(UNION_CPP_INCLUDES)
+    header_includes.update(UNION_H_INCLUDES)
     members = []
 
     # These variables refer to member contexts if the given union type has
@@ -72,6 +50,7 @@ def container_context(union_type, interfaces_info):
     dictionary_type = None
     interface_types = []
     numeric_type = None
+    object_type = None
     string_type = None
     for member in union_type.member_types:
         context = member_context(member, interfaces_info)
@@ -84,8 +63,7 @@ def container_context(union_type, interfaces_info):
             if array_buffer_view_type:
                 raise Exception('%s is ambiguous.' % union_type.name)
             array_buffer_view_type = context
-        # FIXME: Remove generic Dictionary special casing.
-        elif member.is_dictionary or member.base_type == 'Dictionary':
+        elif member.is_dictionary:
             if dictionary_type:
                 raise Exception('%s is ambiguous.' % union_type.name)
             dictionary_type = context
@@ -93,6 +71,11 @@ def container_context(union_type, interfaces_info):
             if array_or_sequence_type:
                 raise Exception('%s is ambiguous.' % union_type.name)
             array_or_sequence_type = context
+        # "Dictionary" is an object, rather than an IDL dictionary.
+        elif member.base_type == 'Dictionary':
+            if object_type:
+                raise Exception('%s is ambiguous.' % union_type.name)
+            object_type = context
         elif member.is_interface_type:
             interface_types.append(context)
         elif member is union_type.boolean_member_type:
@@ -111,28 +94,45 @@ def container_context(union_type, interfaces_info):
     if dictionary_type and nullable_members == 1:
         raise Exception('%s has a dictionary and a nullable member' % union_type.name)
 
+    cpp_class = union_type.cpp_type
     return {
         'array_buffer_type': array_buffer_type,
         'array_buffer_view_type': array_buffer_view_type,
         'array_or_sequence_type': array_or_sequence_type,
         'boolean_type': boolean_type,
-        'cpp_class': union_type.cpp_type,
+        'cpp_class': cpp_class,
+        'cpp_includes': sorted(cpp_includes - UNION_CPP_INCLUDES_BLACKLIST),
         'dictionary_type': dictionary_type,
+        'header_includes': sorted(header_includes),
+        'header_forward_decls': sorted(header_forward_decls),
         'includes_nullable_type': union_type.includes_nullable_type,
         'interface_types': interface_types,
         'members': members,
         'numeric_type': numeric_type,
+        'object_type': object_type,
         'string_type': string_type,
         'type_string': str(union_type),
+        'v8_class': v8_types.v8_type(cpp_class),
     }
 
 
-def member_context(member, interfaces_info):
-    cpp_includes.update(member.includes_for_type())
-    interface_info = interfaces_info.get(member.name, None)
+def _update_includes_and_forward_decls(member, interface_info):
     if interface_info:
-        cpp_includes.update(interface_info.get('dependencies_include_paths', []))
-        header_forward_decls.add(member.implemented_as)
+        cpp_includes.update(interface_info.get(
+            'dependencies_include_paths', []))
+        # We need complete types for IDL dictionaries in union containers.
+        if member.is_dictionary or member.is_typed_array:
+            header_includes.update(member.includes_for_type())
+        else:
+            cpp_includes.update(member.includes_for_type())
+            header_forward_decls.add(member.implemented_as)
+    else:
+        cpp_includes.update(member.includes_for_type())
+
+
+def member_context(member, interfaces_info):
+    interface_info = interfaces_info.get(member.name, None)
+    _update_includes_and_forward_decls(member, interface_info)
     if member.is_nullable:
         member = member.inner_type
     return {
@@ -143,6 +143,7 @@ def member_context(member, interfaces_info):
             cpp_value='impl.getAs%s()' % member.name, isolate='isolate',
             creation_context='creationContext'),
         'enum_values': member.enum_values,
+        'is_array_buffer_or_view_type': member.is_array_buffer_or_view,
         'is_traceable': member.is_traceable,
         'rvalue_cpp_type': member.cpp_type_args(used_as_rvalue_type=True),
         'specific_type_enum': 'SpecificType' + member.name,

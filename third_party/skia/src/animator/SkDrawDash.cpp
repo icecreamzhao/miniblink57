@@ -6,10 +6,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #include "SkDrawDash.h"
 #include "SkDashPathEffect.h"
 
@@ -24,7 +20,6 @@ const SkMemberInfo SkDash::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkDash);
 
-<<<<<<< HEAD
 SkDash::SkDash()
     : phase(0)
 {
@@ -40,17 +35,4 @@ SkPathEffect* SkDash::getPathEffect()
     if (count == 0)
         return nullptr;
     return SkDashPathEffect::Make(intervals.begin(), count, phase).release();
-=======
-SkDash::SkDash() : phase(0) {
-}
-
-SkDash::~SkDash() {
-}
-
-SkPathEffect* SkDash::getPathEffect() {
-    int count = intervals.count();
-    if (count == 0)
-        return NULL;
-    return SkDashPathEffect::Create(intervals.begin(), count, phase);
->>>>>>> miniblink49
 }

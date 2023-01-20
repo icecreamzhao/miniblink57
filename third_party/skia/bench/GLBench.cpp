@@ -8,7 +8,6 @@
 #include "GLBench.h"
 
 #if SK_SUPPORT_GPU
-<<<<<<< HEAD
 #include "GrGpu.h"
 #include "GrTest.h"
 #include "gl/GrGLContext.h"
@@ -31,40 +30,13 @@ const GrGLContext* GLBench::getGLContext(SkCanvas* canvas)
     if (!ctx) {
         SkDebugf("Couldn't get an interface\n");
         return nullptr;
-=======
-#include "GrTest.h"
-#include <stdio.h>
-
-const GrGLContext* GLBench::getGLContext(SkCanvas* canvas) {
-    // This bench exclusively tests GL calls directly
-    if (NULL == canvas->getGrContext()) {
-        return NULL;
-    }
-    GrContext* context = canvas->getGrContext();
-
-    GrTestTarget tt;
-    context->getTestTarget(&tt);
-    if (!tt.target()) {
-        SkDebugf("Couldn't get Gr test target.");
-        return NULL;
-    }
-
-    const GrGLContext* ctx = tt.glContext();
-    if (!ctx) {
-        SkDebugf("Couldn't get an interface\n");
-        return NULL;
->>>>>>> miniblink49
     }
 
     return this->onGetGLContext(ctx);
 }
 
-<<<<<<< HEAD
 void GLBench::onPreDraw(SkCanvas* canvas)
 {
-=======
-void GLBench::onPerCanvasPreDraw(SkCanvas* canvas) {
->>>>>>> miniblink49
     // This bench exclusively tests GL calls directly
     const GrGLContext* ctx = this->getGLContext(canvas);
     if (!ctx) {
@@ -73,12 +45,8 @@ void GLBench::onPerCanvasPreDraw(SkCanvas* canvas) {
     this->setup(ctx);
 }
 
-<<<<<<< HEAD
 void GLBench::onPostDraw(SkCanvas* canvas)
 {
-=======
-void GLBench::onPerCanvasPostDraw(SkCanvas* canvas) {
->>>>>>> miniblink49
     // This bench exclusively tests GL calls directly
     const GrGLContext* ctx = this->getGLContext(canvas);
     if (!ctx) {
@@ -87,68 +55,42 @@ void GLBench::onPerCanvasPostDraw(SkCanvas* canvas) {
     this->teardown(ctx->interface());
 }
 
-<<<<<<< HEAD
 void GLBench::onDraw(int loops, SkCanvas* canvas)
 {
-=======
-void GLBench::onDraw(const int loops, SkCanvas* canvas) {
->>>>>>> miniblink49
     const GrGLContext* ctx = this->getGLContext(canvas);
     if (!ctx) {
         return;
     }
     this->glDraw(loops, ctx);
-<<<<<<< HEAD
     canvas->getGrContext()->resetContext();
 }
 
 GrGLuint GLBench::CompileShader(const GrGLInterface* gl, const char* shaderSrc, GrGLenum type)
 {
-=======
-}
-
-GrGLuint GLBench::CompileShader(const GrGLInterface* gl, const char* shaderSrc, GrGLenum type) {
->>>>>>> miniblink49
     GrGLuint shader;
     // Create the shader object
     GR_GL_CALL_RET(gl, shader, CreateShader(type));
 
     // Load the shader source
-<<<<<<< HEAD
     GR_GL_CALL(gl, ShaderSource(shader, 1, &shaderSrc, nullptr));
-=======
-    GR_GL_CALL(gl, ShaderSource(shader, 1, &shaderSrc, NULL));
->>>>>>> miniblink49
 
     // Compile the shader
     GR_GL_CALL(gl, CompileShader(shader));
 
     // Check for compile time errors
-<<<<<<< HEAD
     GrGLint success = GR_GL_INIT_ZERO;
     GrGLchar infoLog[512];
     GR_GL_CALL(gl, GetShaderiv(shader, GR_GL_COMPILE_STATUS, &success));
     if (!success) {
         GR_GL_CALL(gl, GetShaderInfoLog(shader, 512, nullptr, infoLog));
-=======
-    GrGLint success;
-    GrGLchar infoLog[512];
-    GR_GL_CALL(gl, GetShaderiv(shader, GR_GL_COMPILE_STATUS, &success));
-    if (!success) {
-        GR_GL_CALL(gl, GetShaderInfoLog(shader, 512, NULL, infoLog));
->>>>>>> miniblink49
         SkDebugf("ERROR::SHADER::COMPLIATION_FAILED: %s\n", infoLog);
     }
 
     return shader;
 }
 
-<<<<<<< HEAD
 GrGLuint GLBench::CreateProgram(const GrGLInterface* gl, const char* vshader, const char* fshader)
 {
-=======
-GrGLuint GLBench::CreateProgram(const GrGLInterface* gl, const char* vshader, const char* fshader) {
->>>>>>> miniblink49
 
     GrGLuint vertexShader = CompileShader(gl, vshader, GR_GL_VERTEX_SHADER);
     GrGLuint fragmentShader = CompileShader(gl, fshader, GR_GL_FRAGMENT_SHADER);
@@ -160,19 +102,11 @@ GrGLuint GLBench::CreateProgram(const GrGLInterface* gl, const char* vshader, co
     GR_GL_CALL(gl, LinkProgram(shaderProgram));
 
     // Check for linking errors
-<<<<<<< HEAD
     GrGLint success = GR_GL_INIT_ZERO;
     GrGLchar infoLog[512];
     GR_GL_CALL(gl, GetProgramiv(shaderProgram, GR_GL_LINK_STATUS, &success));
     if (!success) {
         GR_GL_CALL(gl, GetProgramInfoLog(shaderProgram, 512, nullptr, infoLog));
-=======
-    GrGLint success;
-    GrGLchar infoLog[512];
-    GR_GL_CALL(gl, GetProgramiv(shaderProgram, GR_GL_LINK_STATUS, &success));
-    if (!success) {
-        GR_GL_CALL(gl, GetProgramInfoLog(shaderProgram, 512, NULL, infoLog));
->>>>>>> miniblink49
         SkDebugf("Linker Error: %s\n", infoLog);
     }
     GR_GL_CALL(gl, DeleteShader(vertexShader));
@@ -181,27 +115,18 @@ GrGLuint GLBench::CreateProgram(const GrGLInterface* gl, const char* vshader, co
     return shaderProgram;
 }
 
-<<<<<<< HEAD
 GrGLuint GLBench::SetupFramebuffer(const GrGLInterface* gl, int screenWidth, int screenHeight)
 {
     //Setup framebuffer
     GrGLuint texture;
     GR_GL_CALL(gl, GenTextures(1, &texture));
     GR_GL_CALL(gl, ActiveTexture(GR_GL_TEXTURE7));
-=======
-GrGLuint GLBench::SetupFramebuffer(const GrGLInterface* gl, int screenWidth, int screenHeight) {
-    //Setup framebuffer
-    GrGLuint texture;
-    GR_GL_CALL(gl, GenTextures(1, &texture));
-    GR_GL_CALL(gl, ActiveTexture(GR_GL_TEXTURE15));
->>>>>>> miniblink49
     GR_GL_CALL(gl, BindTexture(GR_GL_TEXTURE_2D, texture));
     GR_GL_CALL(gl, TexParameteri(GR_GL_TEXTURE_2D, GR_GL_TEXTURE_MAG_FILTER, GR_GL_NEAREST));
     GR_GL_CALL(gl, TexParameteri(GR_GL_TEXTURE_2D, GR_GL_TEXTURE_MIN_FILTER, GR_GL_NEAREST));
     GR_GL_CALL(gl, TexParameteri(GR_GL_TEXTURE_2D, GR_GL_TEXTURE_WRAP_S, GR_GL_CLAMP_TO_EDGE));
     GR_GL_CALL(gl, TexParameteri(GR_GL_TEXTURE_2D, GR_GL_TEXTURE_WRAP_T, GR_GL_CLAMP_TO_EDGE));
     GR_GL_CALL(gl, TexImage2D(GR_GL_TEXTURE_2D,
-<<<<<<< HEAD
                        0, //level
                        GR_GL_RGBA, //internal format
                        screenWidth, // width
@@ -210,36 +135,18 @@ GrGLuint GLBench::SetupFramebuffer(const GrGLInterface* gl, int screenWidth, int
                        GR_GL_RGBA, //format
                        GR_GL_UNSIGNED_BYTE, // type
                        nullptr));
-=======
-                              0, //level
-                              GR_GL_RGBA, //internal format
-                              screenWidth, // width
-                              screenHeight, // height
-                              0, //border
-                              GR_GL_RGBA, //format
-                              GR_GL_UNSIGNED_BYTE, // type
-                              NULL));
->>>>>>> miniblink49
 
     // bind framebuffer
     GrGLuint framebuffer;
     GR_GL_CALL(gl, BindTexture(GR_GL_TEXTURE_2D, 0));
     GR_GL_CALL(gl, GenFramebuffers(1, &framebuffer));
     GR_GL_CALL(gl, BindFramebuffer(GR_GL_FRAMEBUFFER, framebuffer));
-<<<<<<< HEAD
     GR_GL_CALL(gl, FramebufferTexture2D(GR_GL_FRAMEBUFFER, GR_GL_COLOR_ATTACHMENT0, GR_GL_TEXTURE_2D, texture, 0));
-=======
-    GR_GL_CALL(gl, FramebufferTexture2D(GR_GL_FRAMEBUFFER,
-                                        GR_GL_COLOR_ATTACHMENT0,
-                                        GR_GL_TEXTURE_2D,
-                                        texture, 0));
->>>>>>> miniblink49
     GR_GL_CALL(gl, CheckFramebufferStatus(GR_GL_FRAMEBUFFER));
     GR_GL_CALL(gl, Viewport(0, 0, screenWidth, screenHeight));
     return texture;
 }
 
-<<<<<<< HEAD
 void GLBench::DumpImage(const GrGLInterface* gl, uint32_t screenWidth, uint32_t screenHeight,
     const char* filename)
 {
@@ -252,20 +159,6 @@ void GLBench::DumpImage(const GrGLInterface* gl, uint32_t screenWidth, uint32_t 
                        GR_GL_RGBA, //format
                        GR_GL_UNSIGNED_BYTE, //type
                        readback.get()));
-=======
-
-void GLBench::DumpImage(const GrGLInterface* gl, uint32_t screenWidth, uint32_t screenHeight,
-                        const char* filename) {
-    // read back pixels
-    SkAutoTArray<uint32_t> readback(screenWidth * screenHeight);
-    GR_GL_CALL(gl, ReadPixels(0, // x
-                              0, // y
-                              screenWidth, // width
-                              screenHeight, // height
-                              GR_GL_RGBA, //format
-                              GR_GL_UNSIGNED_BYTE, //type
-                              readback.get()));
->>>>>>> miniblink49
 
     // dump png
     SkBitmap bm;
@@ -278,11 +171,7 @@ void GLBench::DumpImage(const GrGLInterface* gl, uint32_t screenWidth, uint32_t 
 
     if (!SkImageEncoder::EncodeFile(filename, bm, SkImageEncoder::kPNG_Type, 100)) {
         SkDebugf("------ failed to encode %s\n", filename);
-<<<<<<< HEAD
         remove(filename); // remove any partial file
-=======
-        remove(filename);   // remove any partial file
->>>>>>> miniblink49
         return;
     }
 }

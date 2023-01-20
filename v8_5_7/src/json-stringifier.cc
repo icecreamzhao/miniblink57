@@ -381,11 +381,7 @@ JsonStringifier::Result JsonStringifier::SerializeSmi(Smi* object) {
 }
 
 JsonStringifier::Result JsonStringifier::SerializeDouble(double number) {
-<<<<<<< HEAD
   if (std_isinf(number) || std_isnan(number)) {
-=======
-  if (std::isinf(number) || std::isnan(number)) {
->>>>>>> miniblink49
     builder_.AppendCString("null");
     return SUCCESS;
   }

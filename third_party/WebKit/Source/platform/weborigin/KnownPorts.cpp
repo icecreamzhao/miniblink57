@@ -24,7 +24,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "platform/weborigin/KnownPorts.h"
 
 //#include "net/base/port_util.h"
@@ -36,36 +35,15 @@ namespace blink {
 
 bool isDefaultPortForProtocol(unsigned short port,
     const WTF::String& protocol)
-=======
-#include "config.h"
-#include "platform/weborigin/KnownPorts.h"
-
-#include "platform/weborigin/KURL.h"
-#include "wtf/HashMap.h"
-#include "wtf/StdLibExtras.h"
-#include "wtf/Threading.h"
-#include "wtf/text/StringHash.h"
-#include <algorithm>
-
-namespace blink {
-
-bool isDefaultPortForProtocol(unsigned short port, const String& protocol)
->>>>>>> miniblink49
 {
     if (protocol.isEmpty())
         return false;
 
     switch (port) {
     case 80:
-<<<<<<< HEAD
         return protocol == "http" || protocol == "ws";
     case 443:
         return protocol == "https" || protocol == "wss";
-=======
-        return protocol == "http";
-    case 443:
-        return protocol == "https";
->>>>>>> miniblink49
     case 21:
         return protocol == "ftp";
     case 990:
@@ -74,7 +52,6 @@ bool isDefaultPortForProtocol(unsigned short port, const String& protocol)
     return false;
 }
 
-<<<<<<< HEAD
 unsigned short defaultPortForProtocol(const WTF::String& protocol)
 {
     if (protocol == "http" || protocol == "ws")
@@ -107,6 +84,3 @@ bool isPortAllowedForScheme(const KURL& url)
 }
 
 } // namespace blink
-=======
-}
->>>>>>> miniblink49

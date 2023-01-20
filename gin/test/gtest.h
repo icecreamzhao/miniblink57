@@ -13,11 +13,11 @@ namespace gin {
 // JavaScript testing API, but this module is available for tests that need a
 // low-level integration with gtest.
 class GTest {
- public:
-  static const char kModuleName[];
-  static v8::Local<v8::Value> GetModule(v8::Isolate* isolate);
+public:
+    static const char kModuleName[];
+    static v8::Local<v8::Value> GetModule(v8::Isolate* isolate);
 };
 
-}  // namespace gin
+} // namespace gin
 
-#endif  // GIN_TEST_GTEST_H_
+#endif // GIN_TEST_GTEST_H_

@@ -1,18 +1,10 @@
 include_rules = [
     "+bindings",
     "+core",
-<<<<<<< HEAD
-=======
-    "+heap",
->>>>>>> miniblink49
     "-modules",
     "+modules/EventModules.h",
     "+modules/EventTargetModules.h",
     "+modules/ModulesExport.h",
-<<<<<<< HEAD
-=======
-    "+modules/cachestorage",
->>>>>>> miniblink49
     "+modules/fetch",
     "+modules/serviceworkers",
     "+platform",

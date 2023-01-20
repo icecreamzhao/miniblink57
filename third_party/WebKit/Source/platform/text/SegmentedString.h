@@ -21,10 +21,7 @@
 #define SegmentedString_h
 
 #include "platform/PlatformExport.h"
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
-=======
->>>>>>> miniblink49
 #include "wtf/Deque.h"
 #include "wtf/text/StringBuilder.h"
 #include "wtf/text/TextPosition.h"
@@ -35,11 +32,8 @@ namespace blink {
 class SegmentedString;
 
 class PLATFORM_EXPORT SegmentedSubstring {
-<<<<<<< HEAD
     DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-=======
->>>>>>> miniblink49
 public:
     SegmentedSubstring()
         : m_length(0)
@@ -64,7 +58,6 @@ public:
             }
         } else {
             m_is8Bit = false;
-<<<<<<< HEAD
             m_data.string8Ptr = nullptr;
         }
     }
@@ -75,12 +68,6 @@ public:
         m_data.string16Ptr = nullptr;
         m_is8Bit = false;
     }
-=======
-        }
-    }
-
-    void clear() { m_length = 0; m_data.string16Ptr = 0; m_is8Bit = false;}
->>>>>>> miniblink49
 
     bool is8Bit() { return m_is8Bit; }
 
@@ -89,14 +76,10 @@ public:
 
     void setExcludeLineNumbers() { m_doNotExcludeLineNumbers = false; }
 
-<<<<<<< HEAD
     int numberOfCharactersConsumed() const
     {
         return m_string.length() - m_length;
     }
-=======
-    int numberOfCharactersConsumed() const { return m_string.length() - m_length; }
->>>>>>> miniblink49
 
     void appendTo(StringBuilder& builder) const
     {
@@ -110,7 +93,6 @@ public:
         }
     }
 
-<<<<<<< HEAD
     bool pushIfPossible(UChar c)
     {
         if (!m_length)
@@ -141,13 +123,6 @@ public:
 
     UChar getCurrentChar8() { return *m_data.string8Ptr; }
 
-=======
-    UChar getCurrentChar8()
-    {
-        return *m_data.string8Ptr;
-    }
-
->>>>>>> miniblink49
     UChar getCurrentChar16()
     {
         return m_data.string16Ptr ? *m_data.string16Ptr : 0;
@@ -187,7 +162,6 @@ public:
         return incrementAndGetCurrentChar16();
     }
 
-<<<<<<< HEAD
     ALWAYS_INLINE bool haveOneCharacterLeft() const { return m_length == 1; }
 
     ALWAYS_INLINE void decrementLength() { --m_length; }
@@ -195,38 +169,22 @@ public:
     ALWAYS_INLINE int length() const { return m_length; }
 
 private:
-=======
-public:
->>>>>>> miniblink49
     union {
         const LChar* string8Ptr;
         const UChar* string16Ptr;
     } m_data;
     int m_length;
-<<<<<<< HEAD
-=======
-
-private:
->>>>>>> miniblink49
     bool m_doNotExcludeLineNumbers;
     bool m_is8Bit;
     String m_string;
 };
 
 class PLATFORM_EXPORT SegmentedString {
-<<<<<<< HEAD
     DISALLOW_NEW();
 
 public:
     SegmentedString()
         : m_currentChar(0)
-=======
-public:
-    SegmentedString()
-        : m_pushedChar1(0)
-        , m_pushedChar2(0)
-        , m_currentChar(0)
->>>>>>> miniblink49
         , m_numberOfCharactersConsumedPriorToCurrentString(0)
         , m_numberOfCharactersConsumedPriorToCurrentLine(0)
         , m_currentLine(0)
@@ -239,13 +197,7 @@ public:
     }
 
     SegmentedString(const String& str)
-<<<<<<< HEAD
         : m_currentString(str)
-=======
-        : m_pushedChar1(0)
-        , m_pushedChar2(0)
-        , m_currentString(str)
->>>>>>> miniblink49
         , m_currentChar(0)
         , m_numberOfCharactersConsumedPriorToCurrentString(0)
         , m_numberOfCharactersConsumedPriorToCurrentLine(0)
@@ -254,11 +206,7 @@ public:
         , m_empty(!str.length())
         , m_fastPathFlags(NoFastPath)
     {
-<<<<<<< HEAD
         if (m_currentString.length())
-=======
-        if (m_currentString.m_length)
->>>>>>> miniblink49
             m_currentChar = m_currentString.getCurrentChar();
         updateAdvanceFunctionPointers();
     }
@@ -267,7 +215,6 @@ public:
     void close();
 
     void append(const SegmentedString&);
-<<<<<<< HEAD
     enum class PrependType {
         NewInput = 0,
         Unconsume = 1,
@@ -281,24 +228,6 @@ public:
     void setExcludeLineNumbers();
 
     void push(UChar);
-=======
-    void prepend(const SegmentedString&);
-
-    bool excludeLineNumbers() const { return m_currentString.excludeLineNumbers(); }
-    void setExcludeLineNumbers();
-
-    void push(UChar c)
-    {
-        if (!m_pushedChar1) {
-            m_pushedChar1 = c;
-            m_currentChar = m_pushedChar1 ? m_pushedChar1 : m_currentString.getCurrentChar();
-            updateSlowCaseFunctionPointers();
-        } else {
-            ASSERT(!m_pushedChar2);
-            m_pushedChar2 = c;
-        }
-    }
->>>>>>> miniblink49
 
     bool isEmpty() const { return m_empty; }
     unsigned length() const;
@@ -311,7 +240,6 @@ public:
         NotEnoughCharacters,
     };
 
-<<<<<<< HEAD
     LookAheadResult lookAhead(const String& string)
     {
         return lookAheadInline(string, TextCaseSensitive);
@@ -320,28 +248,12 @@ public:
     {
         return lookAheadInline(string, TextCaseASCIIInsensitive);
     }
-=======
-    LookAheadResult lookAhead(const String& string) { return lookAheadInline(string, TextCaseSensitive); }
-    LookAheadResult lookAheadIgnoringCase(const String& string) { return lookAheadInline(string, TextCaseInsensitive); }
->>>>>>> miniblink49
 
     void advance()
     {
         if (m_fastPathFlags & Use8BitAdvance) {
-<<<<<<< HEAD
             m_currentChar = m_currentString.incrementAndGetCurrentChar8();
             decrementAndCheckLength();
-=======
-            ASSERT(!m_pushedChar1);
-            bool haveOneCharacterLeft = (--m_currentString.m_length == 1);
-            m_currentChar = m_currentString.incrementAndGetCurrentChar8();
-
-            if (!haveOneCharacterLeft)
-                return;
-
-            updateSlowCaseFunctionPointers();
-
->>>>>>> miniblink49
             return;
         }
 
@@ -351,7 +263,6 @@ public:
     inline void advanceAndUpdateLineNumber()
     {
         if (m_fastPathFlags & Use8BitAdvance) {
-<<<<<<< HEAD
             bool haveNewLine = (m_currentChar == '\n') & !!(m_fastPathFlags & Use8BitAdvanceAndUpdateLineNumbers);
             m_currentChar = m_currentString.incrementAndGetCurrentChar8();
             decrementAndCheckLength();
@@ -361,26 +272,6 @@ public:
                 m_numberOfCharactersConsumedPriorToCurrentLine = m_numberOfCharactersConsumedPriorToCurrentString + m_currentString.numberOfCharactersConsumed();
             }
 
-=======
-            ASSERT(!m_pushedChar1);
-
-            bool haveNewLine = (m_currentChar == '\n') & !!(m_fastPathFlags & Use8BitAdvanceAndUpdateLineNumbers);
-            bool haveOneCharacterLeft = (--m_currentString.m_length == 1);
-
-            m_currentChar = m_currentString.incrementAndGetCurrentChar8();
-
-            if (!(haveNewLine | haveOneCharacterLeft))
-                return;
-
-            if (haveNewLine) {
-                ++m_currentLine;
-                m_numberOfCharactersConsumedPriorToCurrentLine =  m_numberOfCharactersConsumedPriorToCurrentString + m_currentString.numberOfCharactersConsumed();
-            }
-
-            if (haveOneCharacterLeft)
-                updateSlowCaseFunctionPointers();
-
->>>>>>> miniblink49
             return;
         }
 
@@ -389,22 +280,14 @@ public:
 
     void advanceAndASSERT(UChar expectedCharacter)
     {
-<<<<<<< HEAD
         DCHECK_EQ(expectedCharacter, currentChar());
-=======
-        ASSERT_UNUSED(expectedCharacter, currentChar() == expectedCharacter);
->>>>>>> miniblink49
         advance();
     }
 
     void advanceAndASSERTIgnoringCase(UChar expectedCharacter)
     {
-<<<<<<< HEAD
         DCHECK_EQ(WTF::Unicode::foldCase(currentChar()),
             WTF::Unicode::foldCase(expectedCharacter));
-=======
-        ASSERT_UNUSED(expectedCharacter, WTF::Unicode::foldCase(currentChar()) == WTF::Unicode::foldCase(expectedCharacter));
->>>>>>> miniblink49
         advance();
     }
 
@@ -417,11 +300,7 @@ public:
     void advancePastNewlineAndUpdateLineNumber()
     {
         ASSERT(currentChar() == '\n');
-<<<<<<< HEAD
         if (m_currentString.length() > 1) {
-=======
-        if (!m_pushedChar1 && m_currentString.m_length > 1) {
->>>>>>> miniblink49
             int newLineFlag = m_currentString.doNotExcludeLineNumbers();
             m_currentLine += newLineFlag;
             if (newLineFlag)
@@ -437,22 +316,9 @@ public:
     // have space for at least |count| characters.
     void advance(unsigned count, UChar* consumedCharacters);
 
-<<<<<<< HEAD
     int numberOfCharactersConsumed() const
     {
         int numberOfPushedCharacters = 0;
-=======
-    bool escaped() const { return m_pushedChar1; }
-
-    int numberOfCharactersConsumed() const
-    {
-        int numberOfPushedCharacters = 0;
-        if (m_pushedChar1) {
-            ++numberOfPushedCharacters;
-            if (m_pushedChar2)
-                ++numberOfPushedCharacters;
-        }
->>>>>>> miniblink49
         return m_numberOfCharactersConsumedPriorToCurrentString + m_currentString.numberOfCharactersConsumed() - numberOfPushedCharacters;
     }
 
@@ -463,18 +329,12 @@ public:
     // The method is moderately slow, comparing to currentLine method.
     OrdinalNumber currentColumn() const;
     OrdinalNumber currentLine() const;
-<<<<<<< HEAD
     // Sets value of line/column variables. Column is specified indirectly by a
     // parameter columnAftreProlog which is a value of column that we should get
     // after a prolog (first prologLength characters) has been consumed.
     void setCurrentPosition(OrdinalNumber line,
         OrdinalNumber columnAftreProlog,
         int prologLength);
-=======
-    // Sets value of line/column variables. Column is specified indirectly by a parameter columnAftreProlog
-    // which is a value of column that we should get after a prolog (first prologLength characters) has been consumed.
-    void setCurrentPosition(OrdinalNumber line, OrdinalNumber columnAftreProlog, int prologLength);
->>>>>>> miniblink49
 
 private:
     enum FastPathFlags {
@@ -484,11 +344,7 @@ private:
     };
 
     void append(const SegmentedSubstring&);
-<<<<<<< HEAD
     void prepend(const SegmentedSubstring&, PrependType);
-=======
-    void prepend(const SegmentedSubstring&);
->>>>>>> miniblink49
 
     void advance8();
     void advance16();
@@ -503,24 +359,15 @@ private:
 
     void decrementAndCheckLength()
     {
-<<<<<<< HEAD
         ASSERT(m_currentString.length() > 1);
         m_currentString.decrementLength();
         if (m_currentString.haveOneCharacterLeft())
-=======
-        ASSERT(m_currentString.m_length > 1);
-        if (--m_currentString.m_length == 1)
->>>>>>> miniblink49
             updateSlowCaseFunctionPointers();
     }
 
     void updateAdvanceFunctionPointers()
     {
-<<<<<<< HEAD
         if (m_currentString.length() > 1) {
-=======
-        if ((m_currentString.m_length > 1) && !m_pushedChar1) {
->>>>>>> miniblink49
             if (m_currentString.is8Bit()) {
                 m_advanceFunc = &SegmentedString::advance8;
                 m_fastPathFlags = Use8BitAdvance;
@@ -542,11 +389,7 @@ private:
             return;
         }
 
-<<<<<<< HEAD
         if (!m_currentString.length() && !isComposite()) {
-=======
-        if (!m_currentString.m_length && !isComposite()) {
->>>>>>> miniblink49
             m_advanceFunc = &SegmentedString::advanceEmpty;
             m_fastPathFlags = NoFastPath;
             m_advanceAndUpdateLineNumberFunc = &SegmentedString::advanceEmpty;
@@ -555,16 +398,10 @@ private:
         updateSlowCaseFunctionPointers();
     }
 
-<<<<<<< HEAD
     inline LookAheadResult lookAheadInline(const String& string,
         TextCaseSensitivity caseSensitivity)
     {
         if (string.length() <= static_cast<unsigned>(m_currentString.length())) {
-=======
-    inline LookAheadResult lookAheadInline(const String& string, TextCaseSensitivity caseSensitivity)
-    {
-        if (!m_pushedChar1 && string.length() <= static_cast<unsigned>(m_currentString.m_length)) {
->>>>>>> miniblink49
             String currentSubstring = m_currentString.currentSubString(string.length());
             if (currentSubstring.startsWith(string, caseSensitivity))
                 return DidMatch;
@@ -573,12 +410,8 @@ private:
         return lookAheadSlowCase(string, caseSensitivity);
     }
 
-<<<<<<< HEAD
     LookAheadResult lookAheadSlowCase(const String& string,
         TextCaseSensitivity caseSensitivity)
-=======
-    LookAheadResult lookAheadSlowCase(const String& string, TextCaseSensitivity caseSensitivity)
->>>>>>> miniblink49
     {
         unsigned count = string.length();
         if (count > length())
@@ -589,21 +422,12 @@ private:
         LookAheadResult result = DidNotMatch;
         if (consumedString.startsWith(string, caseSensitivity))
             result = DidMatch;
-<<<<<<< HEAD
         prepend(SegmentedString(consumedString), PrependType::Unconsume);
-=======
-        prepend(SegmentedString(consumedString));
->>>>>>> miniblink49
         return result;
     }
 
     bool isComposite() const { return !m_substrings.isEmpty(); }
 
-<<<<<<< HEAD
-=======
-    UChar m_pushedChar1;
-    UChar m_pushedChar2;
->>>>>>> miniblink49
     SegmentedSubstring m_currentString;
     UChar m_currentChar;
     int m_numberOfCharactersConsumedPriorToCurrentString;
@@ -617,10 +441,6 @@ private:
     void (SegmentedString::*m_advanceAndUpdateLineNumberFunc)();
 };
 
-<<<<<<< HEAD
 } // namespace blink
-=======
-}
->>>>>>> miniblink49
 
 #endif

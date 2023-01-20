@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2012 Google Inc.
  *
@@ -13,16 +9,10 @@
 #define GrGLPath_DEFINED
 
 #include "../GrPath.h"
-<<<<<<< HEAD
 #include "gl/GrGLTypes.h"
 
 class GrGLGpu;
 class GrStyle;
-=======
-#include "gl/GrGLFunctions.h"
-
-class GrGLGpu;
->>>>>>> miniblink49
 
 /**
  * Currently this represents a path built using GL_NV_path_rendering. If we
@@ -32,7 +22,6 @@ class GrGLGpu;
 
 class GrGLPath : public GrPath {
 public:
-<<<<<<< HEAD
     static bool InitPathObjectPathDataCheckingDegenerates(GrGLGpu*,
         GrGLuint pathID,
         const SkPath&);
@@ -44,22 +33,11 @@ public:
     static void InitPathObjectEmptyPath(GrGLGpu*, GrGLuint pathID);
 
     GrGLPath(GrGLGpu*, const SkPath&, const GrStyle&);
-=======
-    static void InitPathObject(GrGLGpu*,
-                               GrGLuint pathID,
-                               const SkPath&,
-                               const GrStrokeInfo&);
-
-    GrGLPath(GrGLGpu* gpu, const SkPath& path, const GrStrokeInfo& stroke);
->>>>>>> miniblink49
     GrGLuint pathID() const { return fPathID; }
 
     bool shouldStroke() const { return fShouldStroke; }
     bool shouldFill() const { return fShouldFill; }
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 protected:
     void onRelease() override;
     void onAbandon() override;

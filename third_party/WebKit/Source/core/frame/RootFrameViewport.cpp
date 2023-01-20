@@ -2,48 +2,164 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "core/frame/RootFrameViewport.h"
 
 #include "core/frame/FrameView.h"
 #include "core/layout/ScrollAlignment.h"
+#include "core/layout/ScrollAnchor.h"
 #include "platform/geometry/DoubleRect.h"
 #include "platform/geometry/FloatRect.h"
 #include "platform/geometry/LayoutRect.h"
 
 namespace blink {
 
-RootFrameViewport::RootFrameViewport(ScrollableArea& visualViewport, ScrollableArea& layoutViewport)
+RootFrameViewport::RootFrameViewport(ScrollableArea& visualViewport,
+    ScrollableArea& layoutViewport)
     : m_visualViewport(visualViewport)
-    , m_layoutViewport(layoutViewport)
 {
+    setLayoutViewport(layoutViewport);
+}
+
+void RootFrameViewport::setLayoutViewport(ScrollableArea& newLayoutViewport)
+{
+    if (m_layoutViewport.get() == &newLayoutViewport)
+        return;
+
+    if (m_layoutViewport && m_layoutViewport->scrollAnchor())
+        m_layoutViewport->scrollAnchor()->setScroller(m_layoutViewport.get());
+
+    m_layoutViewport = &newLayoutViewport;
+
+    if (m_layoutViewport->scrollAnchor())
+        m_layoutViewport->scrollAnchor()->setScroller(this);
+}
+
+ScrollableArea& RootFrameViewport::layoutViewport() const
+{
+    DCHECK(m_layoutViewport);
+    return *m_layoutViewport;
+}
+
+LayoutRect RootFrameViewport::rootContentsToLayoutViewportContents(
+    FrameView& rootFrameView,
+    const LayoutRect& rect) const
+{
+    LayoutRect ret(rect);
+
+    // If the root FrameView is the layout viewport then coordinates in the
+    // root FrameView's content space are already in the layout viewport's
+    // content space.
+    if (rootFrameView.layoutViewportScrollableArea() == &layoutViewport())
+        return ret;
+
+    // Make the given rect relative to the top of the layout viewport's content
+    // by adding the scroll position.
+    // TODO(bokan): This will have to be revisited if we ever remove the
+    // restriction that a root scroller must be exactly screen filling.
+    ret.move(LayoutSize(layoutViewport().getScrollOffset()));
+
+    return ret;
+}
+
+void RootFrameViewport::restoreToAnchor(const ScrollOffset& targetOffset)
+{
+    // Clamp the scroll offset of each viewport now so that we force any invalid
+    // offsets to become valid so we can compute the correct deltas.
+    visualViewport().setScrollOffset(visualViewport().getScrollOffset(),
+        ProgrammaticScroll);
+    layoutViewport().setScrollOffset(layoutViewport().getScrollOffset(),
+        ProgrammaticScroll);
+
+    ScrollOffset delta = targetOffset - getScrollOffset();
+
+    visualViewport().setScrollOffset(visualViewport().getScrollOffset() + delta,
+        ProgrammaticScroll);
+
+    delta = targetOffset - getScrollOffset();
+
+    // Since the main thread FrameView has integer scroll offsets, scroll it to
+    // the next pixel and then we'll scroll the visual viewport again to
+    // compensate for the sub-pixel offset. We need this "overscroll" to ensure
+    // the pixel of which we want to be partially in appears fully inside the
+    // FrameView since the VisualViewport is bounded by the FrameView.
+    IntSize layoutDelta = IntSize(
+        delta.width() < 0 ? floor(delta.width()) : ceil(delta.width()),
+        delta.height() < 0 ? floor(delta.height()) : ceil(delta.height()));
+
+    layoutViewport().setScrollOffset(
+        ScrollOffset(layoutViewport().scrollOffsetInt() + layoutDelta),
+        ProgrammaticScroll);
+
+    delta = targetOffset - getScrollOffset();
+    visualViewport().setScrollOffset(visualViewport().getScrollOffset() + delta,
+        ProgrammaticScroll);
+}
+
+void RootFrameViewport::didUpdateVisualViewport()
+{
+    if (RuntimeEnabledFeatures::scrollAnchoringEnabled()) {
+        if (ScrollAnchor* anchor = layoutViewport().scrollAnchor())
+            anchor->clear();
+    }
+}
+
+LayoutBox* RootFrameViewport::layoutBox() const
+{
+    return layoutViewport().layoutBox();
+}
+
+FloatQuad RootFrameViewport::localToVisibleContentQuad(
+    const FloatQuad& quad,
+    const LayoutObject* localObject,
+    unsigned flags) const
+{
+    if (!m_layoutViewport)
+        return quad;
+    FloatQuad viewportQuad = m_layoutViewport->localToVisibleContentQuad(quad, localObject, flags);
+    if (m_visualViewport) {
+        viewportQuad = m_visualViewport->localToVisibleContentQuad(
+            viewportQuad, localObject, flags);
+    }
+    return viewportQuad;
+}
+
+int RootFrameViewport::horizontalScrollbarHeight(
+    OverlayScrollbarClipBehavior behavior) const
+{
+    return layoutViewport().horizontalScrollbarHeight(behavior);
+}
+
+int RootFrameViewport::verticalScrollbarWidth(
+    OverlayScrollbarClipBehavior behavior) const
+{
+    return layoutViewport().verticalScrollbarWidth(behavior);
 }
 
 void RootFrameViewport::updateScrollAnimator()
 {
-    scrollAnimator()->setCurrentPosition(toFloatPoint(scrollOffsetFromScrollAnimators()));
+    scrollAnimator().setCurrentOffset(
+        toFloatSize(scrollOffsetFromScrollAnimators()));
 }
 
-DoublePoint RootFrameViewport::scrollOffsetFromScrollAnimators() const
+ScrollOffset RootFrameViewport::scrollOffsetFromScrollAnimators() const
 {
-    return visualViewport().scrollAnimator()->currentPosition() + layoutViewport().scrollAnimator()->currentPosition();
+    return visualViewport().scrollAnimator().currentOffset() + layoutViewport().scrollAnimator().currentOffset();
 }
 
-DoubleRect RootFrameViewport::visibleContentRectDouble(IncludeScrollbarsInRect scrollbarInclusion) const
+IntRect RootFrameViewport::visibleContentRect(
+    IncludeScrollbarsInRect scrollbarInclusion) const
 {
-    return DoubleRect(scrollPositionDouble(), visualViewport().visibleContentRectDouble(scrollbarInclusion).size());
-}
-
-IntRect RootFrameViewport::visibleContentRect(IncludeScrollbarsInRect scrollbarInclusion) const
-{
-    return enclosingIntRect(visibleContentRectDouble(scrollbarInclusion));
+    return IntRect(
+        IntPoint(scrollOffsetInt()),
+        visualViewport().visibleContentRect(scrollbarInclusion).size());
 }
 
 bool RootFrameViewport::shouldUseIntegerScrollOffset() const
 {
-    // Fractionals are floored in the ScrollAnimator but it's important that the ScrollAnimators of the
-    // visual and layout viewports get the precise fractional number so never use integer scrolling for
-    // RootFrameViewport, we'll let the truncation happen in the subviewports.
+    // Fractionals are floored in the ScrollAnimatorBase but it's important that
+    // the ScrollAnimators of the visual and layout viewports get the precise
+    // fractional number so never use integer scrolling for RootFrameViewport,
+    // we'll let the truncation happen in the subviewports.
     return false;
 }
 
@@ -54,8 +170,9 @@ bool RootFrameViewport::isActive() const
 
 int RootFrameViewport::scrollSize(ScrollbarOrientation orientation) const
 {
-    IntSize scrollDimensions = maximumScrollPosition() - minimumScrollPosition();
-    return (orientation == HorizontalScrollbar) ? scrollDimensions.width() : scrollDimensions.height();
+    IntSize scrollDimensions = maximumScrollOffsetInt() - minimumScrollOffsetInt();
+    return (orientation == HorizontalScrollbar) ? scrollDimensions.width()
+                                                : scrollDimensions.height();
 }
 
 bool RootFrameViewport::isScrollCornerVisible() const
@@ -68,23 +185,32 @@ IntRect RootFrameViewport::scrollCornerRect() const
     return layoutViewport().scrollCornerRect();
 }
 
-void RootFrameViewport::setScrollPosition(const DoublePoint& position, ScrollType scrollType, ScrollBehavior scrollBehavior)
+void RootFrameViewport::setScrollOffset(const ScrollOffset& offset,
+    ScrollType scrollType,
+    ScrollBehavior scrollBehavior)
 {
     updateScrollAnimator();
 
-    // TODO(bokan): Support smooth scrolling the visual viewport.
     if (scrollBehavior == ScrollBehaviorAuto)
         scrollBehavior = scrollBehaviorStyle();
-    if (scrollBehavior == ScrollBehaviorSmooth) {
-        layoutViewport().setScrollPosition(position, scrollType, scrollBehavior);
-        return;
-    }
 
     if (scrollType == ProgrammaticScroll && !layoutViewport().isProgrammaticallyScrollable())
         return;
 
-    DoublePoint clampedPosition = clampScrollPosition(position);
-    ScrollableArea::setScrollPosition(clampedPosition, scrollType, scrollBehavior);
+    if (scrollType == AnchoringScroll) {
+        distributeScrollBetweenViewports(offset, scrollType, scrollBehavior,
+            LayoutViewport);
+        return;
+    }
+
+    if (scrollBehavior == ScrollBehaviorSmooth) {
+        distributeScrollBetweenViewports(offset, scrollType, scrollBehavior,
+            VisualViewport);
+        return;
+    }
+
+    ScrollOffset clampedOffset = clampScrollOffset(offset);
+    ScrollableArea::setScrollOffset(clampedOffset, scrollType, scrollBehavior);
 }
 
 ScrollBehavior RootFrameViewport::scrollBehaviorStyle() const
@@ -92,140 +218,106 @@ ScrollBehavior RootFrameViewport::scrollBehaviorStyle() const
     return layoutViewport().scrollBehaviorStyle();
 }
 
-ScrollResult RootFrameViewport::handleWheel(const PlatformWheelEvent& event)
+LayoutRect RootFrameViewport::scrollIntoView(const LayoutRect& rectInContent,
+    const ScrollAlignment& alignX,
+    const ScrollAlignment& alignY,
+    ScrollType scrollType)
 {
-    updateScrollAnimator();
+    // We want to move the rect into the viewport that excludes the scrollbars so
+    // we intersect the visual viewport with the scrollbar-excluded frameView
+    // content rect. However, we don't use visibleContentRect directly since it
+    // floors the scroll offset. Instead, we use ScrollAnimatorBase::currentOffset
+    // and construct a LayoutRect from that.
+    LayoutRect frameRectInContent = LayoutRect(FloatPoint(layoutViewport().scrollAnimator().currentOffset()),
+        FloatSize(layoutViewport().visibleContentRect().size()));
+    LayoutRect visualRectInContent = LayoutRect(FloatPoint(scrollOffsetFromScrollAnimators()),
+        FloatSize(visualViewport().visibleContentRect().size()));
 
-    ScrollResult viewScrollResult = layoutViewport().handleWheel(event);
-
-    // The visual viewport will only accept pixel scrolls.
-    if (!event.canScroll() || event.granularity() == ScrollByPageWheelEvent)
-        return viewScrollResult;
-
-    // TODO(sataya.m) : The delta in PlatformWheelEvent is negative when scrolling the
-    // wheel towards the user, so negate it to get the scroll delta that should be applied
-    // to the page. unusedScrollDelta computed in the ScrollResult is also negative. Say
-    // there is WheelEvent({0, -10} and page scroll by 2px and unusedScrollDelta computed
-    // is {0, -8}. Due to which we have to negate the unusedScrollDelta to obtain the expected
-    // animation.Please address http://crbug.com/504389.
-    DoublePoint oldOffset = visualViewport().scrollPositionDouble();
-    DoublePoint locationDelta;
-    if (viewScrollResult.didScroll()) {
-        locationDelta = -DoublePoint(viewScrollResult.unusedScrollDeltaX, viewScrollResult.unusedScrollDeltaY);
-    } else {
-        if (event.railsMode() != PlatformEvent::RailsModeVertical)
-            locationDelta.setX(-event.deltaX());
-        if (event.railsMode() != PlatformEvent::RailsModeHorizontal)
-            locationDelta.setY(-event.deltaY());
+    // Intersect layout and visual rects to exclude the scrollbar from the view
+    // rect.
+    LayoutRect viewRectInContent = intersection(visualRectInContent, frameRectInContent);
+    LayoutRect targetViewport = ScrollAlignment::getRectToExpose(
+        viewRectInContent, rectInContent, alignX, alignY);
+    if (targetViewport != viewRectInContent) {
+        setScrollOffset(ScrollOffset(targetViewport.x(), targetViewport.y()),
+            scrollType);
     }
 
-    DoublePoint targetPosition = visualViewport().clampScrollPosition(
-        visualViewport().scrollPositionDouble() + toDoubleSize(locationDelta));
-    visualViewport().setScrollPosition(targetPosition, UserScroll);
-
-    DoublePoint usedLocationDelta(visualViewport().scrollPositionDouble() - oldOffset);
-
-    bool didScrollX = viewScrollResult.didScrollX || usedLocationDelta.x();
-    bool didScrollY = viewScrollResult.didScrollY || usedLocationDelta.y();
-    return ScrollResult(didScrollX, didScrollY, -viewScrollResult.unusedScrollDeltaX - usedLocationDelta.x(), -viewScrollResult.unusedScrollDeltaY - usedLocationDelta.y());
-}
-
-LayoutRect RootFrameViewport::scrollIntoView(const LayoutRect& rectInContent, const ScrollAlignment& alignX, const ScrollAlignment& alignY)
-{
-    // We want to move the rect into the viewport that excludes the scrollbars so we intersect
-    // the pinch viewport with the scrollbar-excluded frameView content rect. However, we don't
-    // use visibleContentRect directly since it floors the scroll position. Instead, we use
-    // FrameView::scrollPositionDouble and construct a LayoutRect from that (the FrameView size
-    // is always integer sized.
-
-    LayoutRect frameRectInContent = LayoutRect(
-        layoutViewport().scrollPositionDouble(),
-        layoutViewport().visibleContentRect().size());
-    LayoutRect pinchRectInContent = LayoutRect(
-        layoutViewport().scrollPositionDouble() + toDoubleSize(visualViewport().scrollPositionDouble()),
-        visualViewport().visibleContentRect().size());
-
-    LayoutRect viewRectInContent = intersection(pinchRectInContent, frameRectInContent);
-    LayoutRect targetViewport =
-        ScrollAlignment::getRectToExpose(viewRectInContent, rectInContent, alignX, alignY);
-
-    // pinchViewport.scrollIntoView will attempt to center the given rect within the viewport
-    // so to prevent it from adjusting r's coordinates the rect must match the viewport's size
-    // i.e. add the subtracted scrollbars from above back in.
-    // FIXME: This is hacky and required because getRectToExpose doesn't naturally account
-    // for the two viewports. crbug.com/449340.
-    targetViewport.setSize(LayoutSize(visualViewport().visibleContentRect().size()));
-
-    // Snap the visible rect to layout units to match the calculated target viewport rect.
-    FloatRect visible =
-        LayoutRect(visualViewport().scrollPositionDouble(), visualViewport().visibleContentRect().size());
-
-    float centeringOffsetX = (visible.width() - targetViewport.width()) / 2;
-    float centeringOffsetY = (visible.height() - targetViewport.height()) / 2;
-
-    DoublePoint targetOffset(
-        targetViewport.x() - centeringOffsetX,
-        targetViewport.y() - centeringOffsetY);
-
-    setScrollPosition(targetOffset, ProgrammaticScroll);
-
-    // RootFrameViewport only changes the viewport relative to the document so we can't change the input
-    // rect's location relative to the document origin.
+    // RootFrameViewport only changes the viewport relative to the document so we
+    // can't change the input rect's location relative to the document origin.
     return rectInContent;
 }
 
-void RootFrameViewport::setScrollOffset(const IntPoint& offset, ScrollType scrollType)
+void RootFrameViewport::updateScrollOffset(const ScrollOffset& offset,
+    ScrollType scrollType)
 {
-    setScrollOffset(DoublePoint(offset), scrollType);
+    distributeScrollBetweenViewports(offset, scrollType, ScrollBehaviorInstant,
+        VisualViewport);
 }
 
-void RootFrameViewport::setScrollOffset(const DoublePoint& offset, ScrollType scrollType)
+void RootFrameViewport::distributeScrollBetweenViewports(
+    const ScrollOffset& offset,
+    ScrollType scrollType,
+    ScrollBehavior behavior,
+    ViewportToScrollFirst scrollFirst)
 {
-    // Make sure we use the scroll positions as reported by each viewport's ScrollAnimator, since its
-    // ScrollableArea's position may have the fractional part truncated off.
-    DoublePoint oldPosition = scrollOffsetFromScrollAnimators();
+    // Make sure we use the scroll offsets as reported by each viewport's
+    // ScrollAnimatorBase, since its ScrollableArea's offset may have the
+    // fractional part truncated off.
+    // TODO(szager): Now that scroll offsets are stored as floats, can we take the
+    // scroll offset directly from the ScrollableArea's rather than the animators?
+    ScrollOffset oldOffset = scrollOffsetFromScrollAnimators();
 
-    DoubleSize delta = offset - oldPosition;
+    ScrollOffset delta = offset - oldOffset;
 
     if (delta.isZero())
         return;
 
-    DoublePoint targetPosition = layoutViewport().clampScrollPosition(layoutViewport().scrollAnimator()->currentPosition() + delta);
-    layoutViewport().setScrollPosition(targetPosition, scrollType);
+    ScrollableArea& primary = scrollFirst == VisualViewport ? visualViewport() : layoutViewport();
+    ScrollableArea& secondary = scrollFirst == VisualViewport ? layoutViewport() : visualViewport();
 
-    DoubleSize applied = scrollOffsetFromScrollAnimators() - oldPosition;
+    ScrollOffset targetOffset = primary.clampScrollOffset(
+        primary.scrollAnimator().currentOffset() + delta);
+
+    primary.setScrollOffset(targetOffset, scrollType, behavior);
+
+    // Scroll the secondary viewport if all of the scroll was not applied to the
+    // primary viewport.
+    ScrollOffset updatedOffset = secondary.scrollAnimator().currentOffset() + FloatSize(targetOffset);
+    ScrollOffset applied = updatedOffset - oldOffset;
     delta -= applied;
 
     if (delta.isZero())
         return;
 
-    targetPosition = visualViewport().clampScrollPosition(visualViewport().scrollAnimator()->currentPosition() + delta);
-    visualViewport().setScrollPosition(targetPosition, scrollType);
+    targetOffset = secondary.clampScrollOffset(
+        secondary.scrollAnimator().currentOffset() + delta);
+    secondary.setScrollOffset(targetOffset, scrollType, behavior);
 }
 
-IntPoint RootFrameViewport::scrollPosition() const
+IntSize RootFrameViewport::scrollOffsetInt() const
 {
-    return flooredIntPoint(scrollPositionDouble());
+    return flooredIntSize(getScrollOffset());
 }
 
-DoublePoint RootFrameViewport::scrollPositionDouble() const
+ScrollOffset RootFrameViewport::getScrollOffset() const
 {
-    return layoutViewport().scrollPositionDouble() + toDoubleSize(visualViewport().scrollPositionDouble());
+    return layoutViewport().getScrollOffset() + visualViewport().getScrollOffset();
 }
 
-IntPoint RootFrameViewport::minimumScrollPosition() const
+IntSize RootFrameViewport::minimumScrollOffsetInt() const
 {
-    return IntPoint(layoutViewport().minimumScrollPosition() - visualViewport().minimumScrollPosition());
+    return IntSize(layoutViewport().minimumScrollOffsetInt() + visualViewport().minimumScrollOffsetInt());
 }
 
-IntPoint RootFrameViewport::maximumScrollPosition() const
+IntSize RootFrameViewport::maximumScrollOffsetInt() const
 {
-    return layoutViewport().maximumScrollPosition() + visualViewport().maximumScrollPosition();
+    return layoutViewport().maximumScrollOffsetInt() + visualViewport().maximumScrollOffsetInt();
 }
 
-DoublePoint RootFrameViewport::maximumScrollPositionDouble() const
+ScrollOffset RootFrameViewport::maximumScrollOffset() const
 {
-    return layoutViewport().maximumScrollPositionDouble() + toDoubleSize(visualViewport().maximumScrollPositionDouble());
+    return layoutViewport().maximumScrollOffset() + visualViewport().maximumScrollOffset();
 }
 
 IntSize RootFrameViewport::contentsSize() const
@@ -243,7 +335,8 @@ IntRect RootFrameViewport::scrollableAreaBoundingBox() const
     return layoutViewport().scrollableAreaBoundingBox();
 }
 
-bool RootFrameViewport::userInputScrollable(ScrollbarOrientation orientation) const
+bool RootFrameViewport::userInputScrollable(
+    ScrollbarOrientation orientation) const
 {
     return visualViewport().userInputScrollable(orientation) || layoutViewport().userInputScrollable(orientation);
 }
@@ -253,14 +346,9 @@ bool RootFrameViewport::shouldPlaceVerticalScrollbarOnLeft() const
     return layoutViewport().shouldPlaceVerticalScrollbarOnLeft();
 }
 
-void RootFrameViewport::invalidateScrollbarRect(Scrollbar* scrollbar, const IntRect& rect)
+void RootFrameViewport::scrollControlWasSetNeedsPaintInvalidation()
 {
-    layoutViewport().invalidateScrollbarRect(scrollbar, rect);
-}
-
-void RootFrameViewport::invalidateScrollCornerRect(const IntRect& rect)
-{
-    layoutViewport().invalidateScrollCornerRect(rect);
+    layoutViewport().scrollControlWasSetNeedsPaintInvalidation();
 }
 
 GraphicsLayer* RootFrameViewport::layerForContainer() const
@@ -283,27 +371,75 @@ GraphicsLayer* RootFrameViewport::layerForVerticalScrollbar() const
     return layoutViewport().layerForVerticalScrollbar();
 }
 
-ScrollResultOneDimensional RootFrameViewport::userScroll(ScrollDirectionPhysical direction, ScrollGranularity granularity, float delta)
+GraphicsLayer* RootFrameViewport::layerForScrollCorner() const
 {
+    return layoutViewport().layerForScrollCorner();
+}
+
+ScrollResult RootFrameViewport::userScroll(ScrollGranularity granularity,
+    const FloatSize& delta)
+{
+    // TODO(bokan/ymalik): Once smooth scrolling is permanently enabled we
+    // should be able to remove this method override and use the base class
+    // version: ScrollableArea::userScroll.
+
     updateScrollAnimator();
 
-    ScrollbarOrientation orientation;
+    // Distribute the scroll between the visual and layout viewport.
 
-    if (direction == ScrollUp || direction == ScrollDown)
-        orientation = VerticalScrollbar;
-    else
-        orientation = HorizontalScrollbar;
+    float stepX = scrollStep(granularity, HorizontalScrollbar);
+    float stepY = scrollStep(granularity, VerticalScrollbar);
 
-    if (layoutViewport().userInputScrollable(orientation) && visualViewport().userInputScrollable(orientation))
-        return ScrollableArea::userScroll(direction, granularity, delta);
+    FloatSize pixelDelta(delta);
+    pixelDelta.scale(stepX, stepY);
 
-    if (visualViewport().userInputScrollable(orientation))
-        return visualViewport().userScroll(direction, granularity, delta);
+    // Precompute the amount of possible scrolling since, when animated,
+    // ScrollAnimator::userScroll will report having consumed the total given
+    // scroll delta, regardless of how much will actually scroll, but we need to
+    // know how much to leave for the layout viewport.
+    FloatSize visualConsumedDelta = visualViewport().scrollAnimator().computeDeltaToConsume(pixelDelta);
 
-    if (layoutViewport().userInputScrollable(orientation))
-        return layoutViewport().userScroll(direction, granularity, delta);
+    // Split the remaining delta between scrollable and unscrollable axes of the
+    // layout viewport. We only pass a delta to the scrollable axes and remember
+    // how much was held back so we can add it to the unused delta in the
+    // result.
+    FloatSize layoutDelta = pixelDelta - visualConsumedDelta;
+    FloatSize scrollableAxisDelta(
+        layoutViewport().userInputScrollable(HorizontalScrollbar)
+            ? layoutDelta.width()
+            : 0,
+        layoutViewport().userInputScrollable(VerticalScrollbar)
+            ? layoutDelta.height()
+            : 0);
 
-    return ScrollResultOneDimensional(false, delta);
+    // If there won't be any scrolling, bail early so we don't produce any side
+    // effects like cancelling existing animations.
+    if (visualConsumedDelta.isZero() && scrollableAxisDelta.isZero()) {
+        return ScrollResult(false, false, pixelDelta.width(), pixelDelta.height());
+    }
+
+    cancelProgrammaticScrollAnimation();
+
+    // TODO(bokan): Why do we call userScroll on the animators directly and
+    // not through the ScrollableAreas?
+    ScrollResult visualResult = visualViewport().scrollAnimator().userScroll(
+        granularity, visualConsumedDelta);
+
+    if (visualConsumedDelta == pixelDelta)
+        return visualResult;
+
+    ScrollResult layoutResult = layoutViewport().scrollAnimator().userScroll(
+        granularity, scrollableAxisDelta);
+
+    // Remember to add any delta not used because of !userInputScrollable to the
+    // unusedScrollDelta in the result.
+    FloatSize unscrollableAxisDelta = layoutDelta - scrollableAxisDelta;
+
+    return ScrollResult(
+        visualResult.didScrollX || layoutResult.didScrollX,
+        visualResult.didScrollY || layoutResult.didScrollY,
+        layoutResult.unusedScrollDeltaX + unscrollableAxisDelta.width(),
+        layoutResult.unusedScrollDeltaY + unscrollableAxisDelta.height());
 }
 
 bool RootFrameViewport::scrollAnimatorEnabled() const
@@ -311,21 +447,42 @@ bool RootFrameViewport::scrollAnimatorEnabled() const
     return layoutViewport().scrollAnimatorEnabled();
 }
 
-HostWindow* RootFrameViewport::hostWindow() const
+HostWindow* RootFrameViewport::getHostWindow() const
 {
-    return layoutViewport().hostWindow();
+    return layoutViewport().getHostWindow();
 }
 
 void RootFrameViewport::serviceScrollAnimations(double monotonicTime)
 {
     ScrollableArea::serviceScrollAnimations(monotonicTime);
     layoutViewport().serviceScrollAnimations(monotonicTime);
+    visualViewport().serviceScrollAnimations(monotonicTime);
 }
 
 void RootFrameViewport::updateCompositorScrollAnimations()
 {
     ScrollableArea::updateCompositorScrollAnimations();
     layoutViewport().updateCompositorScrollAnimations();
+    visualViewport().updateCompositorScrollAnimations();
+}
+
+void RootFrameViewport::cancelProgrammaticScrollAnimation()
+{
+    ScrollableArea::cancelProgrammaticScrollAnimation();
+    layoutViewport().cancelProgrammaticScrollAnimation();
+    visualViewport().cancelProgrammaticScrollAnimation();
+}
+
+Widget* RootFrameViewport::getWidget()
+{
+    return visualViewport().getWidget();
+}
+
+void RootFrameViewport::clearScrollableArea()
+{
+    ScrollableArea::clearScrollableArea();
+    layoutViewport().clearScrollableArea();
+    visualViewport().clearScrollableArea();
 }
 
 DEFINE_TRACE(RootFrameViewport)

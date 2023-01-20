@@ -24,85 +24,74 @@
 #define ImageLoader_h
 
 #include "core/CoreExport.h"
-#include "core/fetch/ImageResource.h"
-#include "core/fetch/ImageResourceClient.h"
-#include "core/fetch/ResourcePtr.h"
+#include "core/loader/resource/ImageResource.h"
+#include "core/loader/resource/ImageResourceContent.h"
+#include "core/loader/resource/ImageResourceObserver.h"
 #include "platform/heap/Handle.h"
 #include "wtf/HashSet.h"
 #include "wtf/WeakPtr.h"
 #include "wtf/text/AtomicString.h"
+#include <memory>
 
 namespace blink {
 
 class IncrementLoadEventDelayCount;
-class FetchRequest;
-class Document;
-
-class CORE_EXPORT ImageLoaderClient : public WillBeGarbageCollectedMixin {
-public:
-    virtual void notifyImageSourceChanged() = 0;
-
-    // Determines whether the observed ImageResource should have higher priority in the decoded resources cache.
-    virtual bool requestsHighLiveResourceCachePriority() { return false; }
-
-    DEFINE_INLINE_VIRTUAL_TRACE() { }
-
-protected:
-    ImageLoaderClient() { }
-};
-
 class Element;
 class ImageLoader;
 class LayoutImageResource;
 
-template<typename T> class EventSender;
-typedef EventSender<ImageLoader> ImageEventSender;
+template <typename T>
+class EventSender;
+using ImageEventSender = EventSender<ImageLoader>;
 
-class CORE_EXPORT ImageLoader : public NoBaseWillBeGarbageCollectedFinalized<ImageLoader>, public ImageResourceClient {
+class CORE_EXPORT ImageLoader : public GarbageCollectedFinalized<ImageLoader>,
+                                public ImageResourceObserver {
+    USING_PRE_FINALIZER(ImageLoader, dispose);
+
 public:
     explicit ImageLoader(Element*);
     ~ImageLoader() override;
 
-    // We must run the destructor in the eager sweeping phase and call
-    // m_image->removeClient(this). Otherwise, the ImageResource can invoke
-    // didAddClient() for the ImageLoader that is about to die in the current
-    // lazy sweeping, and the didAddClient() can access on-heap objects that
-    // have already been finalized in the current lazy sweeping.
-    EAGERLY_FINALIZE();
     DECLARE_TRACE();
 
     enum UpdateFromElementBehavior {
-        // This should be the update behavior when the element is attached to a document, or when DOM mutations trigger a new load.
-        // Starts loading if a load hasn't already been started.
+        // This should be the update behavior when the element is attached to a
+        // document, or when DOM mutations trigger a new load. Starts loading if a
+        // load hasn't already been started.
         UpdateNormal,
-        // This should be the update behavior when the resource was changed (via 'src', 'srcset' or 'sizes').
-        // Starts a new load even if a previous load of the same resource have failed, to match Firefox's behavior.
+        // This should be the update behavior when the resource was changed (via
+        // 'src', 'srcset' or 'sizes'). Starts a new load even if a previous load of
+        // the same resource have failed, to match Firefox's behavior.
         // FIXME - Verify that this is the right behavior according to the spec.
         UpdateIgnorePreviousError,
-        // This forces the image to update its intrinsic size, even if the image source has not changed.
+        // This forces the image to update its intrinsic size, even if the image
+        // source has not changed.
         UpdateSizeChanged,
-        // This force the image to refetch and reload the image source, even if it has not changed.
+        // This force the image to refetch and reload the image source, even if it
+        // has not changed.
         UpdateForcedReload
     };
 
-    enum BypassMainWorldBehavior {
-        BypassMainWorldCSP,
-        DoNotBypassMainWorldCSP
-    };
+    enum BypassMainWorldBehavior { BypassMainWorldCSP,
+        DoNotBypassMainWorldCSP };
 
-    void updateFromElement(UpdateFromElementBehavior = UpdateNormal);
+    void updateFromElement(UpdateFromElementBehavior = UpdateNormal,
+        ReferrerPolicy = ReferrerPolicyDefault);
 
     void elementDidMoveToNewDocument();
 
     Element* element() const { return m_element; }
-    bool imageComplete() const
+    bool imageComplete() const { return m_imageComplete && !m_pendingTask; }
+
+    ImageResourceContent* image() const { return m_image.get(); }
+    ImageResource* imageResourceForImageDocument() const
     {
-        return m_imageComplete && !m_pendingTask;
+        return m_imageResourceForImageDocument;
     }
+    // Cancels pending load events, and doesn't dispatch new ones.
+    void setImage(ImageResourceContent*);
 
-    ImageResource* image() const { return m_image.get(); }
-    void setImage(ImageResource*); // Cancels pending load events, and doesn't dispatch new ones.
-
+    bool isLoadingImageDocument() { return m_loadingImageDocument; }
     void setLoadingImageDocument() { m_loadingImageDocument = true; }
 
     bool hasPendingActivity() const
@@ -110,23 +99,28 @@ public:
         return m_hasPendingLoadEvent || m_hasPendingErrorEvent || m_pendingTask;
     }
 
+    bool hasPendingError() const { return m_hasPendingErrorEvent; }
+
+    bool hadError() const { return !m_failedLoadURL.isEmpty(); }
+
     void dispatchPendingEvent(ImageEventSender*);
 
     static void dispatchPendingLoadEvents();
     static void dispatchPendingErrorEvents();
 
-    void addClient(ImageLoaderClient*);
-    void removeClient(ImageLoaderClient*);
+    bool getImageAnimationPolicy(ImageAnimationPolicy&) final;
 
-    bool getImageAnimationPolicy(ImageResource*, ImageAnimationPolicy&) final;
 protected:
-    void notifyFinished(Resource*) override;
+    void imageNotifyFinished(ImageResourceContent*) override;
 
 private:
     class Task;
 
     // Called from the task or from updateFromElement to initiate the load.
-    void doUpdateFromElement(BypassMainWorldBehavior, UpdateFromElementBehavior);
+    void doUpdateFromElement(BypassMainWorldBehavior,
+        UpdateFromElementBehavior,
+        const KURL&,
+        ReferrerPolicy = ReferrerPolicyDefault);
 
     virtual void dispatchLoadEvent() = 0;
     virtual void noImageResourceToLoad() { }
@@ -139,63 +133,47 @@ private:
     LayoutImageResource* layoutImageResource();
     void updateLayoutObject();
 
-    void setImageWithoutConsideringPendingLoadEvent(ImageResource*);
-    void sourceImageChanged();
+    void setImageWithoutConsideringPendingLoadEvent(ImageResourceContent*);
     void clearFailedLoadURL();
     void dispatchErrorEvent();
     void crossSiteOrCSPViolationOccurred(AtomicString);
-    void enqueueImageLoadingMicroTask(UpdateFromElementBehavior);
+    void enqueueImageLoadingMicroTask(UpdateFromElementBehavior, ReferrerPolicy);
 
-    void timerFired(Timer<ImageLoader>*);
+    void timerFired(TimerBase*);
 
     KURL imageSourceToKURL(AtomicString) const;
 
-    // Used to determine whether to immediately initiate the load
-    // or to schedule a microtask.
+    // Used to determine whether to immediately initiate the load or to schedule a
+    // microtask.
     bool shouldLoadImmediately(const KURL&) const;
 
-    void willRemoveClient(ImageLoaderClient&);
+    // For Oilpan, we must run dispose() as a prefinalizer and call
+    // m_image->removeClient(this) (and more.) Otherwise, the ImageResource can
+    // invoke didAddClient() for the ImageLoader that is about to die in the
+    // current lazy sweeping, and the didAddClient() can access on-heap objects
+    // that have already been finalized in the current lazy sweeping.
+    void dispose();
 
-    RawPtrWillBeMember<Element> m_element;
-    ResourcePtr<ImageResource> m_image;
+    Member<Element> m_element;
+    Member<ImageResourceContent> m_image;
+    Member<ImageResource> m_imageResourceForImageDocument;
     // FIXME: Oilpan: We might be able to remove this Persistent hack when
     // ImageResourceClient is traceable.
     GC_PLUGIN_IGNORE("http://crbug.com/383741")
-    RefPtrWillBePersistent<Element> m_keepAlive;
-#if ENABLE(OILPAN)
-    class ImageLoaderClientRemover {
-    public:
-        ImageLoaderClientRemover(ImageLoader& loader, ImageLoaderClient& client) : m_loader(loader), m_client(client) { }
-        ~ImageLoaderClientRemover();
+    Persistent<Element> m_keepAlive;
 
-    private:
-        ImageLoader& m_loader;
-        ImageLoaderClient& m_client;
-    };
-    friend class ImageLoaderClientRemover;
-    // Oilpan: This ImageLoader object must outlive its clients because they
-    // need to call ImageLoader::willRemoveClient before they
-    // die. Non-Persistent HeapHashMap doesn't work well because weak processing
-    // for HeapHashMap is not triggered when both of ImageLoader and
-    // ImageLoaderClient are unreachable.
-    GC_PLUGIN_IGNORE("http://crbug.com/383742")
-    PersistentHeapHashMap<WeakMember<ImageLoaderClient>, OwnPtr<ImageLoaderClientRemover>> m_clients;
-#else
-    HashSet<ImageLoaderClient*> m_clients;
-#endif
-    Timer<ImageLoader> m_derefElementTimer;
+    TaskRunnerTimer<ImageLoader> m_derefElementTimer;
     AtomicString m_failedLoadURL;
     WeakPtr<Task> m_pendingTask; // owned by Microtask
-    OwnPtr<IncrementLoadEventDelayCount> m_loadDelayCounter;
+    std::unique_ptr<IncrementLoadEventDelayCount> m_loadDelayCounter;
     bool m_hasPendingLoadEvent : 1;
     bool m_hasPendingErrorEvent : 1;
     bool m_imageComplete : 1;
     bool m_loadingImageDocument : 1;
     bool m_elementIsProtected : 1;
     bool m_suppressErrorEvents : 1;
-    unsigned m_highPriorityClientCount;
 };
 
-}
+} // namespace blink
 
 #endif

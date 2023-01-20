@@ -23,7 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/html/parser/HTMLSourceTracker.h"
 
 #include "core/html/parser/HTMLTokenizer.h"
@@ -36,7 +35,9 @@ HTMLSourceTracker::HTMLSourceTracker()
 {
 }
 
-void HTMLSourceTracker::start(SegmentedString& currentInput, HTMLTokenizer* tokenizer, HTMLToken& token)
+void HTMLSourceTracker::start(SegmentedString& currentInput,
+    HTMLTokenizer* tokenizer,
+    HTMLToken& token)
 {
     if (token.type() == HTMLToken::Uninitialized && !m_isStarted) {
         m_previousSource.clear();
@@ -50,7 +51,9 @@ void HTMLSourceTracker::start(SegmentedString& currentInput, HTMLTokenizer* toke
     token.setBaseOffset(m_currentSource.numberOfCharactersConsumed() - m_previousSource.length());
 }
 
-void HTMLSourceTracker::end(SegmentedString& currentInput, HTMLTokenizer* tokenizer, HTMLToken& token)
+void HTMLSourceTracker::end(SegmentedString& currentInput,
+    HTMLTokenizer* tokenizer,
+    HTMLToken& token)
 {
     m_isStarted = false;
 
@@ -67,7 +70,8 @@ String HTMLSourceTracker::sourceForToken(const HTMLToken& token)
 
     size_t length;
     if (token.type() == HTMLToken::EndOfFile) {
-        // Consume the remainder of the input, omitting the null character we use to mark the end of the file.
+        // Consume the remainder of the input, omitting the null character we use to
+        // mark the end of the file.
         length = m_previousSource.length() + m_currentSource.length() - 1;
     } else {
         ASSERT(!token.startIndex());
@@ -78,11 +82,11 @@ String HTMLSourceTracker::sourceForToken(const HTMLToken& token)
     source.reserveCapacity(length);
 
     size_t i = 0;
-    for ( ; i < length && !m_previousSource.isEmpty(); ++i) {
+    for (; i < length && !m_previousSource.isEmpty(); ++i) {
         source.append(m_previousSource.currentChar());
         m_previousSource.advance();
     }
-    for ( ; i < length; ++i) {
+    for (; i < length; ++i) {
         ASSERT(!m_currentSource.isEmpty());
         source.append(m_currentSource.currentChar());
         m_currentSource.advance();
@@ -92,4 +96,4 @@ String HTMLSourceTracker::sourceForToken(const HTMLToken& token)
     return m_cachedSourceForToken;
 }
 
-}
+} // namespace blink

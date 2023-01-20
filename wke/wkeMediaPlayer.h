@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 
 #ifndef wkeMediaPlayer_h
 #define wkeMediaPlayer_h
@@ -134,17 +133,6 @@ public:
 
     virtual bool didLoadingProgress() = 0;
 };
-=======
-
-#ifndef wkeMediaPlayer_h
-#define wkeMediaPlayer_h
-
-#include "wkedefine.h"
-
-typedef struct HDC__* HDC;
-
-namespace wke {
->>>>>>> miniblink49
 
 class WkeMediaPlayer {
 public:
@@ -193,7 +181,6 @@ public:
         kWkeLoadTypeMediaStream,
     };
 
-<<<<<<< HEAD
 //     struct MediaTimeRange {
 //         MediaTimeRange() : start(0), end(0) {}
 //         MediaTimeRange(double s, double e) : start(s), end(e) {}
@@ -205,17 +192,11 @@ public:
     struct TimeRange {
         TimeRange() : start(0), end(0) { }
         TimeRange(double s, double e) : start(s), end(e) { }
-=======
-    struct MediaTimeRange {
-        MediaTimeRange() : start(0), end(0) {}
-        MediaTimeRange(double s, double e) : start(s), end(e) {}
->>>>>>> miniblink49
 
         double start;
         double end;
     };
 
-<<<<<<< HEAD
     class TimeRanges {
     public:
         virtual void destroy() = 0;
@@ -223,18 +204,12 @@ public:
         virtual size_t size() = 0;
     };
 
-=======
->>>>>>> miniblink49
     typedef unsigned TrackId;
 
     ~WkeMediaPlayer() {}
     virtual void destroy() = 0;
 
-<<<<<<< HEAD
     virtual void load(LoadType, const char*, CORSMode, bool) = 0;
-=======
-    virtual void load(LoadType, const char*, CORSMode) = 0;
->>>>>>> miniblink49
 
     // Playback controls.
     virtual void play() = 0;
@@ -248,11 +223,7 @@ public:
     virtual void requestRemotePlaybackControl() {}
     virtual void setPreload(Preload) {}
     virtual wkeMemBuf* buffered() const = 0;
-<<<<<<< HEAD
     virtual TimeRanges* seekable() const = 0;
-=======
-    virtual wkeMemBuf* seekable() const = 0;
->>>>>>> miniblink49
 
     // Attempts to switch the audio output device.
     // Implementations of setSinkId take ownership of the WebCallbacks
@@ -408,20 +379,13 @@ public:
 
     virtual void didExitFullScreen() {};
 
-<<<<<<< HEAD
     // FFmpeg
     virtual DataSource* createDataSource(const char* url, int corsMode, wke::DataSource::DownloadingCB* downloadingCb) { return nullptr; };
 
-=======
->>>>>>> miniblink49
 protected:
     ~WkeMediaPlayerClient() {}
 };
 
 }
-<<<<<<< HEAD
 
-=======
-
->>>>>>> miniblink49
 #endif // wkeMediaPlayer_h

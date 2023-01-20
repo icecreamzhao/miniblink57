@@ -34,7 +34,6 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 class BaseAudioContext;
 class ChannelMergerOptions;
 
@@ -43,13 +42,6 @@ public:
     static PassRefPtr<ChannelMergerHandler> create(AudioNode&,
         float sampleRate,
         unsigned numberOfInputs);
-=======
-class AudioContext;
-
-class ChannelMergerHandler final : public AudioHandler {
-public:
-    static PassRefPtr<ChannelMergerHandler> create(AudioNode&, float sampleRate, unsigned numberOfInputs);
->>>>>>> miniblink49
 
     void process(size_t framesToProcess) override;
     void setChannelCount(unsigned long, ExceptionState&) final;
@@ -61,7 +53,6 @@ private:
 
 class ChannelMergerNode final : public AudioNode {
     DEFINE_WRAPPERTYPEINFO();
-<<<<<<< HEAD
 
 public:
     static ChannelMergerNode* create(BaseAudioContext&, ExceptionState&);
@@ -74,13 +65,6 @@ public:
 
 private:
     ChannelMergerNode(BaseAudioContext&, unsigned numberOfInputs);
-=======
-public:
-    static ChannelMergerNode* create(AudioContext&, float sampleRate, unsigned numberOfInputs);
-
-private:
-    ChannelMergerNode(AudioContext&, float sampleRate, unsigned numberOfInputs);
->>>>>>> miniblink49
 };
 
 } // namespace blink

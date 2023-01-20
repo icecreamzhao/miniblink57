@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "modules/mediasource/URLMediaSource.h"
 
 #include "core/dom/DOMURL.h"
@@ -47,24 +46,6 @@ String URLMediaSource::createObjectURL(ExecutionContext* executionContext,
     DCHECK(source);
 
     UseCounter::count(executionContext, UseCounter::CreateObjectURLMediaSource);
-=======
-#include "config.h"
-#include "modules/mediasource/URLMediaSource.h"
-
-#include "core/dom/DOMURL.h"
-#include "modules/mediasource/MediaSource.h"
-#include "wtf/MainThread.h"
-
-namespace blink {
-
-String URLMediaSource::createObjectURL(ExecutionContext* executionContext, MediaSource* source)
-{
-    // Since WebWorkers cannot obtain MediaSource objects, we should be on the main thread.
-    ASSERT(isMainThread());
-
-    if (!executionContext)
-        return String();
->>>>>>> miniblink49
     return DOMURL::createPublicURL(executionContext, source);
 }
 

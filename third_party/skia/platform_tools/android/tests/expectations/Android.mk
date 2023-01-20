@@ -34,7 +34,6 @@ LOCAL_PATH:= $(call my-dir)
 #       determine which build type to use.
 ###############################################################################
 
-<<<<<<< HEAD
 ###############################################################################
 # STATIC LIBRARY
 #
@@ -43,8 +42,6 @@ LOCAL_PATH:= $(call my-dir)
 #  (2) as an inclusion target for the libskia.so shared library
 ###############################################################################
 
-=======
->>>>>>> miniblink49
 include $(CLEAR_VARS)
 LOCAL_FDO_SUPPORT := true
 ifneq ($(strip $(TARGET_FDO_CFLAGS)),)
@@ -56,13 +53,6 @@ LOCAL_ARM_MODE := thumb
 # used for testing
 #LOCAL_CFLAGS += -g -O0
 
-<<<<<<< HEAD
-=======
-ifeq ($(NO_FALLBACK_FONT),true)
-	LOCAL_CFLAGS += -DNO_FALLBACK_FONT
-endif
-
->>>>>>> miniblink49
 LOCAL_CFLAGS += \
 	local_cflags
 
@@ -91,11 +81,7 @@ LOCAL_MODULE_TAGS := \
 	local_module_tags
 
 LOCAL_MODULE := \
-<<<<<<< HEAD
 	local_module_static
-=======
-	local_module
->>>>>>> miniblink49
 
 ifeq ($(COND), true)
 LOCAL_CFLAGS_foo += \
@@ -160,7 +146,6 @@ LOCAL_MODULE_TAGS_bar += \
 LOCAL_MODULE_bar += \
 	local_module_bar
 
-<<<<<<< HEAD
 LOCAL_MODULE_CLASS := STATIC_LIBRARIES
 include $(BUILD_STATIC_LIBRARY)
 
@@ -177,8 +162,6 @@ LOCAL_EXPORT_C_INCLUDE_DIRS := \
 	local_export_c_include_dirs
 
 include $(BASE_PATH)/skia_static_deps.mk
-=======
->>>>>>> miniblink49
 include $(BUILD_SHARED_LIBRARY)
 
 #############################################################

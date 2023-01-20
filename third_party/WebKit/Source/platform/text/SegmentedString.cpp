@@ -17,35 +17,18 @@
     Boston, MA 02110-1301, USA.
 */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/text/SegmentedString.h"
 
 namespace blink {
 
 unsigned SegmentedString::length() const
 {
-<<<<<<< HEAD
     unsigned length = m_currentString.length();
-=======
-    unsigned length = m_currentString.m_length;
-    if (m_pushedChar1) {
-        ++length;
-        if (m_pushedChar2)
-            ++length;
-    }
->>>>>>> miniblink49
     if (isComposite()) {
         Deque<SegmentedSubstring>::const_iterator it = m_substrings.begin();
         Deque<SegmentedSubstring>::const_iterator e = m_substrings.end();
         for (; it != e; ++it)
-<<<<<<< HEAD
             length += it->length();
-=======
-            length += it->m_length;
->>>>>>> miniblink49
     }
     return length;
 }
@@ -63,11 +46,6 @@ void SegmentedString::setExcludeLineNumbers()
 
 void SegmentedString::clear()
 {
-<<<<<<< HEAD
-=======
-    m_pushedChar1 = 0;
-    m_pushedChar2 = 0;
->>>>>>> miniblink49
     m_currentChar = 0;
     m_currentString.clear();
     m_numberOfCharactersConsumedPriorToCurrentString = 0;
@@ -84,17 +62,10 @@ void SegmentedString::clear()
 void SegmentedString::append(const SegmentedSubstring& s)
 {
     ASSERT(!m_closed);
-<<<<<<< HEAD
     if (!s.length())
         return;
 
     if (!m_currentString.length()) {
-=======
-    if (!s.m_length)
-        return;
-
-    if (!m_currentString.m_length) {
->>>>>>> miniblink49
         m_numberOfCharactersConsumedPriorToCurrentString += m_currentString.numberOfCharactersConsumed();
         m_currentString = s;
         updateAdvanceFunctionPointers();
@@ -104,7 +75,6 @@ void SegmentedString::append(const SegmentedSubstring& s)
     m_empty = false;
 }
 
-<<<<<<< HEAD
 void SegmentedString::push(UChar c)
 {
     ASSERT(c);
@@ -134,23 +104,6 @@ void SegmentedString::prepend(const SegmentedSubstring& s, PrependType type)
     if (type == PrependType::Unconsume)
         m_numberOfCharactersConsumedPriorToCurrentString -= s.length();
     if (!m_currentString.length()) {
-=======
-void SegmentedString::prepend(const SegmentedSubstring& s)
-{
-    ASSERT(!escaped());
-    ASSERT(!s.numberOfCharactersConsumed());
-    if (!s.m_length)
-        return;
-
-    // FIXME: We're assuming that the prepend were originally consumed by
-    //        this SegmentedString. We're also ASSERTing that s is a fresh
-    //        SegmentedSubstring. These assumptions are sufficient for our
-    //        current use, but we might need to handle the more elaborate
-    //        cases in the future.
-    m_numberOfCharactersConsumedPriorToCurrentString += m_currentString.numberOfCharactersConsumed();
-    m_numberOfCharactersConsumedPriorToCurrentString -= s.m_length;
-    if (!m_currentString.m_length) {
->>>>>>> miniblink49
         m_currentString = s;
         updateAdvanceFunctionPointers();
     } else {
@@ -172,16 +125,6 @@ void SegmentedString::close()
 void SegmentedString::append(const SegmentedString& s)
 {
     ASSERT(!m_closed);
-<<<<<<< HEAD
-=======
-    if (s.m_pushedChar1) {
-        Vector<UChar, 2> unconsumedData;
-        unconsumedData.append(s.m_pushedChar1);
-        if (s.m_pushedChar2)
-            unconsumedData.append(s.m_pushedChar2);
-        append(SegmentedSubstring(String(unconsumedData)));
-    }
->>>>>>> miniblink49
 
     append(s.m_currentString);
     if (s.isComposite()) {
@@ -190,36 +133,19 @@ void SegmentedString::append(const SegmentedString& s)
         for (; it != e; ++it)
             append(*it);
     }
-<<<<<<< HEAD
     m_currentChar = m_currentString.length() ? m_currentString.getCurrentChar() : 0;
 }
 
 void SegmentedString::prepend(const SegmentedString& s, PrependType type)
 {
-=======
-    m_currentChar = m_pushedChar1 ? m_pushedChar1 : (m_currentString.m_length ? m_currentString.getCurrentChar() : 0);
-}
-
-void SegmentedString::prepend(const SegmentedString& s)
-{
-    ASSERT(!escaped());
-    ASSERT(!s.escaped());
->>>>>>> miniblink49
     if (s.isComposite()) {
         Deque<SegmentedSubstring>::const_reverse_iterator it = s.m_substrings.rbegin();
         Deque<SegmentedSubstring>::const_reverse_iterator e = s.m_substrings.rend();
         for (; it != e; ++it)
-<<<<<<< HEAD
             prepend(*it, type);
     }
     prepend(s.m_currentString, type);
     m_currentChar = m_currentString.length() ? m_currentString.getCurrentChar() : 0;
-=======
-            prepend(*it);
-    }
-    prepend(s.m_currentString);
-    m_currentChar = m_currentString.m_length ? m_currentString.getCurrentChar() : 0;
->>>>>>> miniblink49
 }
 
 void SegmentedString::advanceSubstring()
@@ -244,14 +170,6 @@ void SegmentedString::advanceSubstring()
 String SegmentedString::toString() const
 {
     StringBuilder result;
-<<<<<<< HEAD
-=======
-    if (m_pushedChar1) {
-        result.append(m_pushedChar1);
-        if (m_pushedChar2)
-            result.append(m_pushedChar2);
-    }
->>>>>>> miniblink49
     m_currentString.appendTo(result);
     if (isComposite()) {
         Deque<SegmentedSubstring>::const_iterator it = m_substrings.begin();
@@ -264,11 +182,7 @@ String SegmentedString::toString() const
 
 void SegmentedString::advance(unsigned count, UChar* consumedCharacters)
 {
-<<<<<<< HEAD
     SECURITY_DCHECK(count <= length());
-=======
-    ASSERT_WITH_SECURITY_IMPLICATION(count <= length());
->>>>>>> miniblink49
     for (unsigned i = 0; i < count; ++i) {
         consumedCharacters[i] = currentChar();
         advance();
@@ -277,30 +191,18 @@ void SegmentedString::advance(unsigned count, UChar* consumedCharacters)
 
 void SegmentedString::advance8()
 {
-<<<<<<< HEAD
-=======
-    ASSERT(!m_pushedChar1);
->>>>>>> miniblink49
     decrementAndCheckLength();
     m_currentChar = m_currentString.incrementAndGetCurrentChar8();
 }
 
 void SegmentedString::advance16()
 {
-<<<<<<< HEAD
-=======
-    ASSERT(!m_pushedChar1);
->>>>>>> miniblink49
     decrementAndCheckLength();
     m_currentChar = m_currentString.incrementAndGetCurrentChar16();
 }
 
 void SegmentedString::advanceAndUpdateLineNumber8()
 {
-<<<<<<< HEAD
-=======
-    ASSERT(!m_pushedChar1);
->>>>>>> miniblink49
     ASSERT(m_currentString.getCurrentChar() == m_currentChar);
     if (m_currentChar == '\n') {
         ++m_currentLine;
@@ -312,10 +214,6 @@ void SegmentedString::advanceAndUpdateLineNumber8()
 
 void SegmentedString::advanceAndUpdateLineNumber16()
 {
-<<<<<<< HEAD
-=======
-    ASSERT(!m_pushedChar1);
->>>>>>> miniblink49
     ASSERT(m_currentString.getCurrentChar() == m_currentChar);
     if (m_currentChar == '\n') {
         ++m_currentLine;
@@ -327,24 +225,9 @@ void SegmentedString::advanceAndUpdateLineNumber16()
 
 void SegmentedString::advanceSlowCase()
 {
-<<<<<<< HEAD
     if (m_currentString.length()) {
         m_currentString.decrementLength();
         if (!m_currentString.length())
-=======
-    if (m_pushedChar1) {
-        m_pushedChar1 = m_pushedChar2;
-        m_pushedChar2 = 0;
-
-        if (m_pushedChar1) {
-            m_currentChar = m_pushedChar1;
-            return;
-        }
-
-        updateAdvanceFunctionPointers();
-    } else if (m_currentString.m_length) {
-        if (!--m_currentString.m_length)
->>>>>>> miniblink49
             advanceSubstring();
     } else if (!isComposite()) {
         m_currentString.clear();
@@ -353,16 +236,11 @@ void SegmentedString::advanceSlowCase()
         m_advanceFunc = &SegmentedString::advanceEmpty;
         m_advanceAndUpdateLineNumberFunc = &SegmentedString::advanceEmpty;
     }
-<<<<<<< HEAD
     m_currentChar = m_currentString.length() ? m_currentString.getCurrentChar() : 0;
-=======
-    m_currentChar = m_currentString.m_length ? m_currentString.getCurrentChar() : 0;
->>>>>>> miniblink49
 }
 
 void SegmentedString::advanceAndUpdateLineNumberSlowCase()
 {
-<<<<<<< HEAD
     if (m_currentString.length()) {
         if (m_currentString.getCurrentChar() == '\n' && m_currentString.doNotExcludeLineNumbers()) {
             ++m_currentLine;
@@ -372,25 +250,6 @@ void SegmentedString::advanceAndUpdateLineNumberSlowCase()
         }
         m_currentString.decrementLength();
         if (!m_currentString.length())
-=======
-    if (m_pushedChar1) {
-        m_pushedChar1 = m_pushedChar2;
-        m_pushedChar2 = 0;
-
-        if (m_pushedChar1) {
-            m_currentChar = m_pushedChar1;
-            return;
-        }
-
-        updateAdvanceFunctionPointers();
-    } else if (m_currentString.m_length) {
-        if (m_currentString.getCurrentChar() == '\n' && m_currentString.doNotExcludeLineNumbers()) {
-            ++m_currentLine;
-            // Plus 1 because numberOfCharactersConsumed value hasn't incremented yet; it does with m_length decrement below.
-            m_numberOfCharactersConsumedPriorToCurrentLine = numberOfCharactersConsumed() + 1;
-        }
-        if (!--m_currentString.m_length)
->>>>>>> miniblink49
             advanceSubstring();
         else
             m_currentString.incrementAndGetCurrentChar(); // Only need the ++
@@ -402,20 +261,12 @@ void SegmentedString::advanceAndUpdateLineNumberSlowCase()
         m_advanceAndUpdateLineNumberFunc = &SegmentedString::advanceEmpty;
     }
 
-<<<<<<< HEAD
     m_currentChar = m_currentString.length() ? m_currentString.getCurrentChar() : 0;
-=======
-    m_currentChar = m_currentString.m_length ? m_currentString.getCurrentChar() : 0;
->>>>>>> miniblink49
 }
 
 void SegmentedString::advanceEmpty()
 {
-<<<<<<< HEAD
     ASSERT(!m_currentString.length() && !isComposite());
-=======
-    ASSERT(!m_currentString.m_length && !isComposite());
->>>>>>> miniblink49
     m_currentChar = 0;
 }
 
@@ -437,20 +288,12 @@ OrdinalNumber SegmentedString::currentColumn() const
     return OrdinalNumber::fromZeroBasedInt(zeroBasedColumn);
 }
 
-<<<<<<< HEAD
 void SegmentedString::setCurrentPosition(OrdinalNumber line,
     OrdinalNumber columnAftreProlog,
     int prologLength)
-=======
-void SegmentedString::setCurrentPosition(OrdinalNumber line, OrdinalNumber columnAftreProlog, int prologLength)
->>>>>>> miniblink49
 {
     m_currentLine = line.zeroBasedInt();
     m_numberOfCharactersConsumedPriorToCurrentLine = numberOfCharactersConsumed() + prologLength - columnAftreProlog.zeroBasedInt();
 }
 
-<<<<<<< HEAD
 } // namespace blink
-=======
-}
->>>>>>> miniblink49

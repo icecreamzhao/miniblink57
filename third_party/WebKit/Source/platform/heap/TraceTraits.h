@@ -8,17 +8,11 @@
 #include "platform/heap/GCInfo.h"
 #include "platform/heap/Heap.h"
 #include "platform/heap/InlinedGlobalMarkingVisitor.h"
-<<<<<<< HEAD
 #include "platform/heap/StackFrameDepth.h"
 #include "platform/heap/Visitor.h"
 #include "platform/heap/WrapperVisitor.h"
 #include "wtf/Allocator.h"
 #include "wtf/Assertions.h"
-=======
-#include "platform/heap/Visitor.h"
-#include "wtf/Assertions.h"
-#include "wtf/Deque.h"
->>>>>>> miniblink49
 #include "wtf/HashCountedSet.h"
 #include "wtf/HashMap.h"
 #include "wtf/HashSet.h"
@@ -30,7 +24,6 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 template <typename T>
 class CrossThreadPersistent;
 template <typename T>
@@ -58,24 +51,6 @@ public:
     static void mark(VisitorDispatcher visitor, const T* t)
     {
 #if DCHECK_IS_ON()
-=======
-template<typename T> class CrossThreadPersistent;
-template<typename T> struct GCInfoTrait;
-class HeapObjectHeader;
-template<typename T> class Member;
-template<typename T> class TraceTrait;
-template<typename T> class WeakMember;
-
-template<typename T, bool = NeedsAdjustAndMark<T>::value> class AdjustAndMarkTrait;
-
-template<typename T>
-class AdjustAndMarkTrait<T, false> {
-public:
-    template<typename VisitorDispatcher>
-    static void mark(VisitorDispatcher visitor, const T* t)
-    {
-#if ENABLE(ASSERT)
->>>>>>> miniblink49
         assertObjectHasGCInfo(const_cast<T*>(t), GCInfoTrait<T>::index());
 #endif
         // Default mark method of the trait just calls the two-argument mark
@@ -93,7 +68,6 @@ public:
             // but test and appropriately handle them should they occur
             // in release builds.
             //
-<<<<<<< HEAD
             // If you hit this assert, it means that you're creating an object
             // graph that causes too many recursions, which might cause a stack
             // overflow. To break the recursions, you need to add
@@ -101,15 +75,6 @@ public:
             // that lead to many recursions.
             DCHECK(visitor->heap().stackFrameDepth().isAcceptableStackUse());
             if (LIKELY(visitor->heap().stackFrameDepth().isSafeToRecurse())) {
-=======
-            // ASan adds extra stack usage, so disable the assert when it is
-            // enabled so as to avoid testing against a much lower & too low,
-            // stack depth threshold.
-#if !defined(ADDRESS_SANITIZER)
-            ASSERT(!StackFrameDepth::isEnabled() || StackFrameDepth::isSafeToRecurse());
-#endif
-            if (LIKELY(StackFrameDepth::isSafeToRecurse())) {
->>>>>>> miniblink49
                 if (visitor->ensureMarked(t)) {
                     TraceTrait<T>::trace(visitor, const_cast<T*>(t));
                 }
@@ -120,19 +85,12 @@ public:
     }
 };
 
-<<<<<<< HEAD
 template <typename T>
 class AdjustAndMarkTrait<T, true> {
     STATIC_ONLY(AdjustAndMarkTrait);
 
 public:
     template <typename VisitorDispatcher>
-=======
-template<typename T>
-class AdjustAndMarkTrait<T, true> {
-public:
-    template<typename VisitorDispatcher>
->>>>>>> miniblink49
     static void mark(VisitorDispatcher visitor, const T* self)
     {
         if (!self)
@@ -143,18 +101,13 @@ public:
         // the dangling pointer.
         // Release builds don't have the ASSERT, but it is OK because
         // release builds will crash at the following self->adjustAndMark
-<<<<<<< HEAD
         // because all the entries of the orphaned arenas are zeroed out and
-=======
-        // because all the entries of the orphaned heaps are zeroed out and
->>>>>>> miniblink49
         // thus the item does not have a valid vtable.
         ASSERT(!pageFromObject(self)->orphaned());
         self->adjustAndMark(visitor);
     }
 };
 
-<<<<<<< HEAD
 template <typename T, bool isTraceable>
 struct TraceIfEnabled;
 
@@ -175,27 +128,10 @@ struct TraceIfEnabled<T, true> {
     static void trace(VisitorDispatcher visitor, T& t)
     {
         static_assert(WTF::IsTraceable<T>::value, "T should not be traced");
-=======
-template<typename T, bool needsTracing>
-struct TraceIfEnabled;
-
-template<typename T>
-struct TraceIfEnabled<T, false>  {
-    template<typename VisitorDispatcher>
-    static void trace(VisitorDispatcher, T&) { }
-};
-
-template<typename T>
-struct TraceIfEnabled<T, true> {
-    template<typename VisitorDispatcher>
-    static void trace(VisitorDispatcher visitor, T& t)
-    {
->>>>>>> miniblink49
         visitor->trace(t);
     }
 };
 
-<<<<<<< HEAD
 template <bool isTraceable,
     WTF::WeakHandlingFlag weakHandlingFlag,
     WTF::ShouldWeakPointersBeMarkedStrongly strongify,
@@ -235,22 +171,6 @@ struct TraceCollectionIfEnabled {
             "Traits should be traced");
         return WTF::TraceInCollectionTrait<weakHandlingFlag, strongify, T,
             Traits>::trace(visitor, t);
-=======
-template<bool needsTracing, WTF::WeakHandlingFlag weakHandlingFlag, WTF::ShouldWeakPointersBeMarkedStrongly strongify, typename T, typename Traits> struct TraceCollectionIfEnabled;
-
-template<WTF::ShouldWeakPointersBeMarkedStrongly strongify, typename T, typename Traits>
-struct TraceCollectionIfEnabled<false, WTF::NoWeakHandlingInCollections, strongify, T, Traits> {
-    template<typename VisitorDispatcher>
-    static bool trace(VisitorDispatcher, T&) { return false; }
-};
-
-template<bool needsTracing, WTF::WeakHandlingFlag weakHandlingFlag, WTF::ShouldWeakPointersBeMarkedStrongly strongify, typename T, typename Traits>
-struct TraceCollectionIfEnabled {
-    template<typename VisitorDispatcher>
-    static bool trace(VisitorDispatcher visitor, T& t)
-    {
-        return WTF::TraceInCollectionTrait<weakHandlingFlag, strongify, T, Traits>::trace(visitor, t);
->>>>>>> miniblink49
     }
 };
 
@@ -265,33 +185,23 @@ struct TraceCollectionIfEnabled {
 // needed is when multiple inheritance leads to pointers that are not
 // to the start of the object in the Blink garbage-collected heap. In
 // that case the pointer has to be adjusted before marking.
-<<<<<<< HEAD
 template <typename T>
 class TraceTrait {
     STATIC_ONLY(TraceTrait);
 
-=======
-template<typename T>
-class TraceTrait {
->>>>>>> miniblink49
 public:
     static void trace(Visitor*, void* self);
     static void trace(InlinedGlobalMarkingVisitor, void* self);
 
-<<<<<<< HEAD
     static void markWrapperNoTracing(const WrapperVisitor*, const void*);
     static void traceMarkedWrapper(const WrapperVisitor*, const void*);
     static HeapObjectHeader* heapObjectHeader(const void*);
 
     template <typename VisitorDispatcher>
-=======
-    template<typename VisitorDispatcher>
->>>>>>> miniblink49
     static void mark(VisitorDispatcher visitor, const T* t)
     {
         AdjustAndMarkTrait<T>::mark(visitor, t);
     }
-<<<<<<< HEAD
 
 private:
     static const T* ToWrapperTracingType(const void* t)
@@ -320,24 +230,11 @@ void TraceTrait<T>::trace(Visitor* visitor, void* self)
         // Switch to inlined global marking dispatch.
         static_cast<T*>(self)->trace(InlinedGlobalMarkingVisitor(
             visitor->state(), visitor->getMarkingMode()));
-=======
-};
-
-template<typename T> class TraceTrait<const T> : public TraceTrait<T> { };
-
-template<typename T>
-void TraceTrait<T>::trace(Visitor* visitor, void* self)
-{
-    if (visitor->markingMode() == Visitor::GlobalMarking) {
-        // Switch to inlined global marking dispatch.
-        static_cast<T*>(self)->trace(InlinedGlobalMarkingVisitor(visitor));
->>>>>>> miniblink49
     } else {
         static_cast<T*>(self)->trace(visitor);
     }
 }
 
-<<<<<<< HEAD
 template <typename T>
 void TraceTrait<T>::trace(InlinedGlobalMarkingVisitor visitor, void* self)
 {
@@ -390,27 +287,6 @@ struct TraceTrait<HeapVectorBacking<T, Traits>> {
     }
 
     template <typename VisitorDispatcher>
-=======
-template<typename T>
-void TraceTrait<T>::trace(InlinedGlobalMarkingVisitor visitor, void* self)
-{
-    static_cast<T*>(self)->trace(visitor);
-}
-
-template<typename T, typename Traits>
-struct TraceTrait<HeapVectorBacking<T, Traits>> {
-    using Backing = HeapVectorBacking<T, Traits>;
-
-    template<typename VisitorDispatcher>
-    static void trace(VisitorDispatcher visitor, void* self)
-    {
-        static_assert(!WTF::IsWeak<T>::value, "weakness in HeapVectors and Deques are not supported");
-        if (WTF::ShouldBeTraced<Traits>::value)
-            WTF::TraceInCollectionTrait<WTF::NoWeakHandlingInCollections, WTF::WeakPointersActWeak, HeapVectorBacking<T, Traits>, void>::trace(visitor, self);
-    }
-
-    template<typename VisitorDispatcher>
->>>>>>> miniblink49
     static void mark(VisitorDispatcher visitor, const Backing* backing)
     {
         AdjustAndMarkTrait<Backing>::mark(visitor, backing);
@@ -423,7 +299,6 @@ struct TraceTrait<HeapVectorBacking<T, Traits>> {
 // we disable weak processing of table entries.  When the backing is found
 // through the owning hash table we mark differently, in order to do weak
 // processing.
-<<<<<<< HEAD
 template <typename Table>
 struct TraceTrait<HeapHashTableBacking<Table>> {
     STATIC_ONLY(TraceTrait);
@@ -440,21 +315,6 @@ struct TraceTrait<HeapHashTableBacking<Table>> {
     }
 
     template <typename VisitorDispatcher>
-=======
-template<typename Table>
-struct TraceTrait<HeapHashTableBacking<Table>> {
-    using Backing = HeapHashTableBacking<Table>;
-    using Traits = typename Table::ValueTraits;
-
-    template<typename VisitorDispatcher>
-    static void trace(VisitorDispatcher visitor, void* self)
-    {
-        if (WTF::ShouldBeTraced<Traits>::value || Traits::weakHandlingFlag == WTF::WeakHandlingInCollections)
-            WTF::TraceInCollectionTrait<WTF::NoWeakHandlingInCollections, WTF::WeakPointersActStrong, Backing, void>::trace(visitor, self);
-    }
-
-    template<typename VisitorDispatcher>
->>>>>>> miniblink49
     static void mark(VisitorDispatcher visitor, const Backing* backing)
     {
         AdjustAndMarkTrait<Backing>::mark(visitor, backing);
@@ -464,7 +324,6 @@ struct TraceTrait<HeapHashTableBacking<Table>> {
 // This trace trait for std::pair will null weak members if their referent is
 // collected. If you have a collection that contain weakness it does not remove
 // entries from the collection that contain nulled weak members.
-<<<<<<< HEAD
 template <typename T, typename U>
 class TraceTrait<std::pair<T, U>> {
     STATIC_ONLY(TraceTrait);
@@ -477,18 +336,6 @@ public:
     {
         TraceIfEnabled<T, firstIsTraceable>::trace(visitor, pair->first);
         TraceIfEnabled<U, secondIsTraceable>::trace(visitor, pair->second);
-=======
-template<typename T, typename U>
-class TraceTrait<std::pair<T, U>> {
-public:
-    static const bool firstNeedsTracing = WTF::NeedsTracing<T>::value || WTF::IsWeak<T>::value;
-    static const bool secondNeedsTracing = WTF::NeedsTracing<U>::value || WTF::IsWeak<U>::value;
-    template<typename VisitorDispatcher>
-    static void trace(VisitorDispatcher visitor, std::pair<T, U>* pair)
-    {
-        TraceIfEnabled<T, firstNeedsTracing>::trace(visitor, pair->first);
-        TraceIfEnabled<U, secondNeedsTracing>::trace(visitor, pair->second);
->>>>>>> miniblink49
     }
 };
 
@@ -514,21 +361,15 @@ public:
 // and any of its subclasses, or just to the class T, but none of its
 // subclasses.
 //
-<<<<<<< HEAD
 template <typename T>
 class TraceEagerlyTrait {
     STATIC_ONLY(TraceEagerlyTrait);
 
-=======
-template<typename T>
-class TraceEagerlyTrait {
->>>>>>> miniblink49
 public:
     static const bool value = true;
 };
 
 // Disable eager tracing for TYPE, but not any of its subclasses.
-<<<<<<< HEAD
 #define WILL_NOT_BE_EAGERLY_TRACED_CLASS(TYPE) \
     template <>                                \
     class TraceEagerlyTrait<TYPE> {            \
@@ -542,22 +383,10 @@ template <typename T>
 class TraceEagerlyTrait<Member<T>> {
     STATIC_ONLY(TraceEagerlyTrait);
 
-=======
-#define WILL_NOT_BE_EAGERLY_TRACED_CLASS(TYPE)   \
-template<>                                       \
-class TraceEagerlyTrait<TYPE> {                  \
-public:                                          \
-    static const bool value = false;             \
-}
-
-template<typename T>
-class TraceEagerlyTrait<Member<T>> {
->>>>>>> miniblink49
 public:
     static const bool value = TraceEagerlyTrait<T>::value;
 };
 
-<<<<<<< HEAD
 template <typename T>
 class TraceEagerlyTrait<SameThreadCheckedMember<T>> {
     STATIC_ONLY(TraceEagerlyTrait);
@@ -578,28 +407,18 @@ template <typename T>
 class TraceEagerlyTrait<WeakMember<T>> {
     STATIC_ONLY(TraceEagerlyTrait);
 
-=======
-template<typename T>
-class TraceEagerlyTrait<WeakMember<T>> {
->>>>>>> miniblink49
 public:
     static const bool value = TraceEagerlyTrait<T>::value;
 };
 
-<<<<<<< HEAD
 template <typename T>
 class TraceEagerlyTrait<Persistent<T>> {
     STATIC_ONLY(TraceEagerlyTrait);
 
-=======
-template<typename T>
-class TraceEagerlyTrait<Persistent<T>> {
->>>>>>> miniblink49
 public:
     static const bool value = TraceEagerlyTrait<T>::value;
 };
 
-<<<<<<< HEAD
 template <typename T>
 class TraceEagerlyTrait<WeakPersistent<T>> {
     STATIC_ONLY(TraceEagerlyTrait);
@@ -612,15 +431,10 @@ template <typename T>
 class TraceEagerlyTrait<CrossThreadPersistent<T>> {
     STATIC_ONLY(TraceEagerlyTrait);
 
-=======
-template<typename T>
-class TraceEagerlyTrait<CrossThreadPersistent<T>> {
->>>>>>> miniblink49
 public:
     static const bool value = TraceEagerlyTrait<T>::value;
 };
 
-<<<<<<< HEAD
 template <typename T>
 class TraceEagerlyTrait<CrossThreadWeakPersistent<T>> {
     STATIC_ONLY(TraceEagerlyTrait);
@@ -636,34 +450,15 @@ class TraceEagerlyTrait<
     WTF::ListHashSetNode<T, HeapListHashSetAllocator<T, inlineCapacity>>> {
     STATIC_ONLY(TraceEagerlyTrait);
 
-=======
-template<typename ValueArg, size_t inlineCapacity> class HeapListHashSetAllocator;
-template<typename T, size_t inlineCapacity>
-class TraceEagerlyTrait<WTF::ListHashSetNode<T, HeapListHashSetAllocator<T, inlineCapacity>>> {
->>>>>>> miniblink49
 public:
     static const bool value = false;
 };
 
-<<<<<<< HEAD
 template <typename T>
 struct TraceIfNeeded : public TraceIfEnabled<T, WTF::IsTraceable<T>::value> {
     STATIC_ONLY(TraceIfNeeded);
 };
 
-=======
-template <typename T> struct RemoveHeapPointerWrapperTypes {
-    using Type = typename WTF::RemoveTemplate<typename WTF::RemoveTemplate<typename WTF::RemoveTemplate<T, Member>::Type, WeakMember>::Type, RawPtr>::Type;
-};
-
-// FIXME: Oilpan: TraceIfNeeded should be implemented ala:
-// NeedsTracing<T>::value || IsWeakMember<T>::value. It should not need to test
-// raw pointer types. To remove these tests, we may need support for
-// instantiating a template with a RawPtrOrMember'ish template.
-template<typename T>
-struct TraceIfNeeded : public TraceIfEnabled<T, WTF::NeedsTracing<T>::value || IsGarbageCollectedType<typename RemoveHeapPointerWrapperTypes<typename WTF::RemovePointer<T>::Type>::Type>::value> { };
-
->>>>>>> miniblink49
 } // namespace blink
 
 namespace WTF {
@@ -674,7 +469,6 @@ namespace WTF {
 // will not be removed from the collection.  This always happens for
 // things in vectors, which don't currently support special handling of
 // weak elements.
-<<<<<<< HEAD
 template <ShouldWeakPointersBeMarkedStrongly strongify,
     typename T,
     typename Traits>
@@ -686,30 +480,17 @@ struct TraceInCollectionTrait<NoWeakHandlingInCollections,
     static bool trace(VisitorDispatcher visitor, T& t)
     {
         DCHECK(IsTraceableInCollectionTrait<Traits>::value);
-=======
-template<ShouldWeakPointersBeMarkedStrongly strongify, typename T, typename Traits>
-struct TraceInCollectionTrait<NoWeakHandlingInCollections, strongify, T, Traits> {
-    template<typename VisitorDispatcher>
-    static bool trace(VisitorDispatcher visitor, T& t)
-    {
->>>>>>> miniblink49
         visitor->trace(t);
         return false;
     }
 };
 
 // Catch-all for things that have HashTrait support for tracing with weakness.
-<<<<<<< HEAD
 template <ShouldWeakPointersBeMarkedStrongly strongify,
     typename T,
     typename Traits>
 struct TraceInCollectionTrait<WeakHandlingInCollections, strongify, T, Traits> {
     template <typename VisitorDispatcher>
-=======
-template<ShouldWeakPointersBeMarkedStrongly strongify, typename T, typename Traits>
-struct TraceInCollectionTrait<WeakHandlingInCollections, strongify, T, Traits> {
-    template<typename VisitorDispatcher>
->>>>>>> miniblink49
     static bool trace(VisitorDispatcher visitor, T& t)
     {
         return Traits::traceInCollection(visitor, t, strongify);
@@ -718,7 +499,6 @@ struct TraceInCollectionTrait<WeakHandlingInCollections, strongify, T, Traits> {
 
 // This trace method is used only for on-stack HeapVectors found in
 // conservative scanning. On-heap HeapVectors are traced by Vector::trace.
-<<<<<<< HEAD
 template <ShouldWeakPointersBeMarkedStrongly strongify,
     typename T,
     typename Traits>
@@ -727,11 +507,6 @@ struct TraceInCollectionTrait<NoWeakHandlingInCollections,
     blink::HeapVectorBacking<T, Traits>,
     void> {
     template <typename VisitorDispatcher>
-=======
-template<ShouldWeakPointersBeMarkedStrongly strongify, typename T, typename Traits>
-struct TraceInCollectionTrait<NoWeakHandlingInCollections, strongify, blink::HeapVectorBacking<T, Traits>, void> {
-    template<typename VisitorDispatcher>
->>>>>>> miniblink49
     static bool trace(VisitorDispatcher visitor, void* self)
     {
         // HeapVectorBacking does not know the exact size of the vector
@@ -749,7 +524,6 @@ struct TraceInCollectionTrait<NoWeakHandlingInCollections, strongify, blink::Hea
         //   This is fine because the fact that the object can be initialized
         //   with memset indicates that it is safe to treat the zerod slot
         //   as a valid object.
-<<<<<<< HEAD
         static_assert(!IsTraceableInCollectionTrait<Traits>::value || Traits::canClearUnusedSlotsWithMemset || std::is_polymorphic<T>::value,
             "HeapVectorBacking doesn't support objects that cannot be "
             "cleared as unused with memset.");
@@ -759,15 +533,6 @@ struct TraceInCollectionTrait<NoWeakHandlingInCollections, strongify, blink::Hea
         // method should not be called. Thus we cannot static-assert
         // IsTraceableInCollectionTrait<Traits>::value but should runtime-assert it.
         DCHECK(IsTraceableInCollectionTrait<Traits>::value);
-=======
-        static_assert(!ShouldBeTraced<Traits>::value || Traits::canClearUnusedSlotsWithMemset || WTF::IsPolymorphic<T>::value, "HeapVectorBacking doesn't support objects that cannot be cleared as unused with memset.");
-
-        // This trace method is instantiated for vectors where
-        // ShouldBeTraced<Traits>::value is false, but the trace method
-        // should not be called. Thus we cannot static-assert
-        // ShouldBeTraced<Traits>::value but should runtime-assert it.
-        ASSERT(ShouldBeTraced<Traits>::value);
->>>>>>> miniblink49
 
         T* array = reinterpret_cast<T*>(self);
         blink::HeapObjectHeader* header = blink::HeapObjectHeader::fromPayload(self);
@@ -775,7 +540,6 @@ struct TraceInCollectionTrait<NoWeakHandlingInCollections, strongify, blink::Hea
         // Use the payload size as recorded by the heap to determine how many
         // elements to trace.
         size_t length = header->payloadSize() / sizeof(T);
-<<<<<<< HEAD
 #ifdef ANNOTATE_CONTIGUOUS_CONTAINER
         // As commented above, HeapVectorBacking can trace unused slots
         // (which are already zeroed out).
@@ -795,21 +559,6 @@ struct TraceInCollectionTrait<NoWeakHandlingInCollections, strongify, blink::Hea
                 blink::TraceIfEnabled<
                     T, IsTraceableInCollectionTrait<Traits>::value>::trace(visitor,
                     array[i]);
-=======
-        if (WTF::IsPolymorphic<T>::value) {
-            for (size_t i = 0; i < length; ++i) {
-                if (blink::vTableInitialized(&array[i]))
-                    blink::TraceIfEnabled<T, ShouldBeTraced<Traits>::value>::trace(visitor, array[i]);
-            }
-        } else {
-#ifdef ANNOTATE_CONTIGUOUS_CONTAINER
-            // As commented above, HeapVectorBacking can trace unused slots
-            // (which are already zeroed out).
-            ANNOTATE_CHANGE_SIZE(array, length, 0, length);
-#endif
-            for (size_t i = 0; i < length; ++i)
-                blink::TraceIfEnabled<T, ShouldBeTraced<Traits>::value>::trace(visitor, array[i]);
->>>>>>> miniblink49
         }
         return false;
     }
@@ -817,7 +566,6 @@ struct TraceInCollectionTrait<NoWeakHandlingInCollections, strongify, blink::Hea
 
 // This trace method is used only for on-stack HeapHashTables found in
 // conservative scanning. On-heap HeapHashTables are traced by HashTable::trace.
-<<<<<<< HEAD
 template <ShouldWeakPointersBeMarkedStrongly strongify, typename Table>
 struct TraceInCollectionTrait<NoWeakHandlingInCollections,
     strongify,
@@ -833,18 +581,6 @@ struct TraceInCollectionTrait<NoWeakHandlingInCollections,
             "An on-stack HeapHashTable needs to be visited strongly.");
 
         DCHECK(IsTraceableInCollectionTrait<Traits>::value || Traits::weakHandlingFlag == WeakHandlingInCollections);
-=======
-template<ShouldWeakPointersBeMarkedStrongly strongify, typename Table>
-struct TraceInCollectionTrait<NoWeakHandlingInCollections, strongify, blink::HeapHashTableBacking<Table>, void> {
-    using Value = typename Table::ValueType;
-    using Traits = typename Table::ValueTraits;
-
-    template<typename VisitorDispatcher>
-    static bool trace(VisitorDispatcher visitor, void* self)
-    {
-        static_assert(strongify == WTF::WeakPointersActStrong, "An on-stack HeapHashTable needs to be visited strongly.");
-
->>>>>>> miniblink49
         Value* array = reinterpret_cast<Value*>(self);
         blink::HeapObjectHeader* header = blink::HeapObjectHeader::fromPayload(self);
         ASSERT(header->checkHeader());
@@ -852,7 +588,6 @@ struct TraceInCollectionTrait<NoWeakHandlingInCollections, strongify, blink::Hea
         // elements to trace.
         size_t length = header->payloadSize() / sizeof(Value);
         for (size_t i = 0; i < length; ++i) {
-<<<<<<< HEAD
             if (!HashTableHelper<
                     Value, typename Table::ExtractorType,
                     typename Table::KeyTraitsType>::isEmptyOrDeletedBucket(array[i]))
@@ -860,10 +595,6 @@ struct TraceInCollectionTrait<NoWeakHandlingInCollections, strongify, blink::Hea
                     IsTraceableInCollectionTrait<Traits>::value,
                     Traits::weakHandlingFlag, strongify, Value,
                     Traits>::trace(visitor, array[i]);
-=======
-            if (!HashTableHelper<Value, typename Table::ExtractorType, typename Table::KeyTraitsType>::isEmptyOrDeletedBucket(array[i]))
-                blink::TraceCollectionIfEnabled<ShouldBeTraced<Traits>::value, Traits::weakHandlingFlag, strongify, Value, Traits>::trace(visitor, array[i]);
->>>>>>> miniblink49
         }
         return false;
     }
@@ -874,7 +605,6 @@ struct TraceInCollectionTrait<NoWeakHandlingInCollections, strongify, blink::Hea
 // backing from the stack.  That probably means we have a GC while we are in a
 // ListHashSet method since normal API use does not put pointers to the backing
 // on the stack.
-<<<<<<< HEAD
 template <ShouldWeakPointersBeMarkedStrongly strongify,
     typename NodeContents,
     size_t inlineCapacity,
@@ -902,14 +632,6 @@ struct TraceInCollectionTrait<
     using Table = HashTable<Node*, U, V, W, X, Y, blink::HeapAllocator>;
 
     template <typename VisitorDispatcher>
-=======
-template<ShouldWeakPointersBeMarkedStrongly strongify, typename NodeContents, size_t inlineCapacity, typename T, typename U, typename V, typename W, typename X, typename Y>
-struct TraceInCollectionTrait<NoWeakHandlingInCollections, strongify, blink::HeapHashTableBacking<HashTable<ListHashSetNode<NodeContents, blink::HeapListHashSetAllocator<T, inlineCapacity>>*, U, V, W, X, Y, blink::HeapAllocator>>, void> {
-    using Node = ListHashSetNode<NodeContents, blink::HeapListHashSetAllocator<T, inlineCapacity>>;
-    using Table = HashTable<Node*, U, V, W, X, Y, blink::HeapAllocator>;
-
-    template<typename VisitorDispatcher>
->>>>>>> miniblink49
     static bool trace(VisitorDispatcher visitor, void* self)
     {
         Node** array = reinterpret_cast<Node**>(self);
@@ -917,13 +639,9 @@ struct TraceInCollectionTrait<NoWeakHandlingInCollections, strongify, blink::Hea
         ASSERT(header->checkHeader());
         size_t length = header->payloadSize() / sizeof(Node*);
         for (size_t i = 0; i < length; ++i) {
-<<<<<<< HEAD
             if (!HashTableHelper<Node*, typename Table::ExtractorType,
                     typename Table::KeyTraitsType>::
                     isEmptyOrDeletedBucket(array[i])) {
-=======
-            if (!HashTableHelper<Node*, typename Table::ExtractorType, typename Table::KeyTraitsType>::isEmptyOrDeletedBucket(array[i])) {
->>>>>>> miniblink49
                 traceListHashSetValue(visitor, array[i]->m_value);
                 // Just mark the node without tracing because we already traced
                 // the contents, and there is no need to trace the next and
@@ -939,7 +657,6 @@ struct TraceInCollectionTrait<NoWeakHandlingInCollections, strongify, blink::Hea
 // Key value pairs, as used in HashMap.  To disambiguate template choice we have
 // to have two versions, first the one with no special weak handling, then the
 // one with weak handling.
-<<<<<<< HEAD
 template <ShouldWeakPointersBeMarkedStrongly strongify,
     typename Key,
     typename Value,
@@ -960,21 +677,10 @@ struct TraceInCollectionTrait<NoWeakHandlingInCollections,
             IsTraceableInCollectionTrait<typename Traits::ValueTraits>::value,
             NoWeakHandlingInCollections, strongify, Value,
             typename Traits::ValueTraits>::trace(visitor, self.value);
-=======
-template<ShouldWeakPointersBeMarkedStrongly strongify, typename Key, typename Value, typename Traits>
-struct TraceInCollectionTrait<NoWeakHandlingInCollections, strongify, KeyValuePair<Key, Value>, Traits>  {
-    template<typename VisitorDispatcher>
-    static bool trace(VisitorDispatcher visitor, KeyValuePair<Key, Value>& self)
-    {
-        ASSERT(ShouldBeTraced<Traits>::value);
-        blink::TraceCollectionIfEnabled<ShouldBeTraced<typename Traits::KeyTraits>::value, NoWeakHandlingInCollections, strongify, Key, typename Traits::KeyTraits>::trace(visitor, self.key);
-        blink::TraceCollectionIfEnabled<ShouldBeTraced<typename Traits::ValueTraits>::value, NoWeakHandlingInCollections, strongify, Value, typename Traits::ValueTraits>::trace(visitor, self.value);
->>>>>>> miniblink49
         return false;
     }
 };
 
-<<<<<<< HEAD
 template <ShouldWeakPointersBeMarkedStrongly strongify,
     typename Key,
     typename Value,
@@ -984,11 +690,6 @@ struct TraceInCollectionTrait<WeakHandlingInCollections,
     KeyValuePair<Key, Value>,
     Traits> {
     template <typename VisitorDispatcher>
-=======
-template<ShouldWeakPointersBeMarkedStrongly strongify, typename Key, typename Value, typename Traits>
-struct TraceInCollectionTrait<WeakHandlingInCollections, strongify, KeyValuePair<Key, Value>, Traits> {
-    template<typename VisitorDispatcher>
->>>>>>> miniblink49
     static bool trace(VisitorDispatcher visitor, KeyValuePair<Key, Value>& self)
     {
         // This is the core of the ephemeron-like functionality.  If there is
@@ -1008,7 +709,6 @@ struct TraceInCollectionTrait<WeakHandlingInCollections, strongify, KeyValuePair
         // reviewers, and we may relax it.
         const bool keyIsWeak = Traits::KeyTraits::weakHandlingFlag == WeakHandlingInCollections;
         const bool valueIsWeak = Traits::ValueTraits::weakHandlingFlag == WeakHandlingInCollections;
-<<<<<<< HEAD
         const bool keyHasStrongRefs = IsTraceableInCollectionTrait<typename Traits::KeyTraits>::value;
         const bool valueHasStrongRefs = IsTraceableInCollectionTrait<typename Traits::ValueTraits>::value;
         static_assert(
@@ -1038,29 +738,11 @@ struct TraceInCollectionTrait<WeakHandlingInCollections, strongify, KeyValuePair
             IsTraceableInCollectionTrait<typename Traits::ValueTraits>::value,
             Traits::ValueTraits::weakHandlingFlag, strongify, Value,
             typename Traits::ValueTraits>::trace(visitor, self.value);
-=======
-        const bool keyHasStrongRefs = ShouldBeTraced<typename Traits::KeyTraits>::value;
-        const bool valueHasStrongRefs = ShouldBeTraced<typename Traits::ValueTraits>::value;
-        static_assert(!keyIsWeak || !valueIsWeak || !keyHasStrongRefs || !valueHasStrongRefs, "this configuration is disallowed to avoid unexpected leaks");
-        if ((valueIsWeak && !keyIsWeak) || (valueIsWeak && keyIsWeak && !valueHasStrongRefs)) {
-            // Check value first.
-            bool deadWeakObjectsFoundOnValueSide = blink::TraceCollectionIfEnabled<ShouldBeTraced<typename Traits::ValueTraits>::value, Traits::ValueTraits::weakHandlingFlag, strongify, Value, typename Traits::ValueTraits>::trace(visitor, self.value);
-            if (deadWeakObjectsFoundOnValueSide)
-                return true;
-            return blink::TraceCollectionIfEnabled<ShouldBeTraced<typename Traits::KeyTraits>::value, Traits::KeyTraits::weakHandlingFlag, strongify, Key, typename Traits::KeyTraits>::trace(visitor, self.key);
-        }
-        // Check key first.
-        bool deadWeakObjectsFoundOnKeySide = blink::TraceCollectionIfEnabled<ShouldBeTraced<typename Traits::KeyTraits>::value, Traits::KeyTraits::weakHandlingFlag, strongify, Key, typename Traits::KeyTraits>::trace(visitor, self.key);
-        if (deadWeakObjectsFoundOnKeySide)
-            return true;
-        return blink::TraceCollectionIfEnabled<ShouldBeTraced<typename Traits::ValueTraits>::value, Traits::ValueTraits::weakHandlingFlag, strongify, Value, typename Traits::ValueTraits>::trace(visitor, self.value);
->>>>>>> miniblink49
     }
 };
 
 // Nodes used by LinkedHashSet.  Again we need two versions to disambiguate the
 // template.
-<<<<<<< HEAD
 template <ShouldWeakPointersBeMarkedStrongly strongify,
     typename Value,
     typename Allocator,
@@ -1095,30 +777,11 @@ struct TraceInCollectionTrait<WeakHandlingInCollections,
         return TraceInCollectionTrait<
             WeakHandlingInCollections, strongify, Value,
             typename Traits::ValueTraits>::trace(visitor, self.m_value);
-=======
-template<ShouldWeakPointersBeMarkedStrongly strongify, typename Value, typename Allocator, typename Traits>
-struct TraceInCollectionTrait<NoWeakHandlingInCollections, strongify, LinkedHashSetNode<Value, Allocator>, Traits> {
-    template<typename VisitorDispatcher>
-    static bool trace(VisitorDispatcher visitor, LinkedHashSetNode<Value, Allocator>& self)
-    {
-        ASSERT(ShouldBeTraced<Traits>::value);
-        return TraceInCollectionTrait<NoWeakHandlingInCollections, strongify, Value, typename Traits::ValueTraits>::trace(visitor, self.m_value);
-    }
-};
-
-template<ShouldWeakPointersBeMarkedStrongly strongify, typename Value, typename Allocator, typename Traits>
-struct TraceInCollectionTrait<WeakHandlingInCollections, strongify, LinkedHashSetNode<Value, Allocator>, Traits> {
-    template<typename VisitorDispatcher>
-    static bool trace(VisitorDispatcher visitor, LinkedHashSetNode<Value, Allocator>& self)
-    {
-        return TraceInCollectionTrait<WeakHandlingInCollections, strongify, Value, typename Traits::ValueTraits>::trace(visitor, self.m_value);
->>>>>>> miniblink49
     }
 };
 
 // ListHashSetNode pointers (a ListHashSet is implemented as a hash table of
 // these pointers).
-<<<<<<< HEAD
 template <ShouldWeakPointersBeMarkedStrongly strongify,
     typename Value,
     size_t inlineCapacity,
@@ -1136,15 +799,6 @@ struct TraceInCollectionTrait<
     static bool trace(VisitorDispatcher visitor, Node* node)
     {
         DCHECK(IsTraceableInCollectionTrait<Traits>::value);
-=======
-template<ShouldWeakPointersBeMarkedStrongly strongify, typename Value, size_t inlineCapacity, typename Traits>
-struct TraceInCollectionTrait<NoWeakHandlingInCollections, strongify, ListHashSetNode<Value, blink::HeapListHashSetAllocator<Value, inlineCapacity>>*, Traits> {
-    using Node = ListHashSetNode<Value, blink::HeapListHashSetAllocator<Value, inlineCapacity>>;
-
-    template<typename VisitorDispatcher>
-    static bool trace(VisitorDispatcher visitor, Node* node)
-    {
->>>>>>> miniblink49
         traceListHashSetValue(visitor, node->m_value);
         // Just mark the node without tracing because we already traced the
         // contents, and there is no need to trace the next and prev fields

@@ -6,7 +6,6 @@
 #define ServiceWorkerRegistrationNotifications_h
 
 #include "bindings/core/v8/ScriptPromise.h"
-<<<<<<< HEAD
 #include "core/dom/ContextLifecycleObserver.h"
 #include "platform/Supplementable.h"
 #include "platform/heap/GarbageCollected.h"
@@ -70,21 +69,6 @@ private:
 
     Member<ServiceWorkerRegistration> m_registration;
     HeapHashSet<Member<NotificationResourcesLoader>> m_loaders;
-=======
-#include "modules/serviceworkers/ServiceWorkerRegistration.h"
-
-namespace blink {
-
-class ExceptionState;
-class GetNotificationOptions;
-class NotificationOptions;
-class ScriptState;
-
-class ServiceWorkerRegistrationNotifications {
-public:
-    static ScriptPromise showNotification(ScriptState*, ServiceWorkerRegistration&, const String& title, const NotificationOptions&, ExceptionState&);
-    static ScriptPromise getNotifications(ScriptState*, ServiceWorkerRegistration&, const GetNotificationOptions&);
->>>>>>> miniblink49
 };
 
 } // namespace blink

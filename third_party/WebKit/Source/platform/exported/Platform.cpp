@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "base/threading/thread_task_runner_handle.h"
 #include "base/trace_event/memory_dump_manager.h"
 #include "platform/Histogram.h"
@@ -69,28 +68,15 @@ static void callOnMainThreadFunction(WTF::MainThreadFunction function,
         BLINK_FROM_HERE,
         crossThreadBind(function, crossThreadUnretained(context)));
 }
-=======
-#include "config.h"
-#include "platform/PartitionAllocMemoryDumpProvider.h"
-#include "public/platform/Platform.h"
-
-namespace blink {
-
-static Platform* s_platform = 0;
->>>>>>> miniblink49
 
 Platform::Platform()
     : m_mainThread(0)
 {
-<<<<<<< HEAD
     WTF::Partitions::initialize(maxObservedSizeFunction);
-=======
->>>>>>> miniblink49
 }
 
 void Platform::initialize(Platform* platform)
 {
-<<<<<<< HEAD
     ASSERT(!s_platform);
     ASSERT(platform);
     s_platform = platform;
@@ -121,20 +107,10 @@ void Platform::initialize(Platform* platform)
             MemoryCacheDumpProvider::instance(), "MemoryCache",
             base::ThreadTaskRunnerHandle::Get());
     }
-=======
-    s_platform = platform;
-    if (s_platform)
-        s_platform->m_mainThread = platform->currentThread();
-
-    // TODO(ssid): remove this check after fixing crbug.com/486782.
-    if (s_platform && s_platform->m_mainThread)
-        s_platform->registerMemoryDumpProvider(PartitionAllocMemoryDumpProvider::instance());
->>>>>>> miniblink49
 }
 
 void Platform::shutdown()
 {
-<<<<<<< HEAD
     ASSERT(isMainThread());
     if (s_platform->m_mainThread) {
         base::trace_event::MemoryDumpManager::GetInstance()->UnregisterDumpProvider(
@@ -168,14 +144,6 @@ void Platform::setCurrentPlatformForTesting(Platform* platform)
     ASSERT(platform);
     s_platform = platform;
     s_platform->m_mainThread = platform->currentThread();
-=======
-    if (s_platform->m_mainThread)
-        s_platform->unregisterMemoryDumpProvider(PartitionAllocMemoryDumpProvider::instance());
-
-    if (s_platform)
-        s_platform->m_mainThread = 0;
-    s_platform = 0;
->>>>>>> miniblink49
 }
 
 Platform* Platform::current()
@@ -188,7 +156,6 @@ WebThread* Platform::mainThread() const
     return m_mainThread;
 }
 
-<<<<<<< HEAD
 // InterfaceProvider* Platform::interfaceProvider() {
 //   return InterfaceProvider::getEmptyInterfaceProvider();
 // }
@@ -199,6 +166,4 @@ void Platform::bindServiceConnector(
 {
 }
 #endif
-=======
->>>>>>> miniblink49
 } // namespace blink

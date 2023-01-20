@@ -15,7 +15,6 @@
 
 SK_C_PLUS_PLUS_BEGIN_GUARD
 
-<<<<<<< HEAD
 /**
     Returns a new empty sk_data_t.  This call must be balanced with a call to
     sk_data_unref().
@@ -65,18 +64,6 @@ SK_API size_t sk_data_get_size(const sk_data_t*);
     Returns the pointer to the data.
  */
 SK_API const void* sk_data_get_data(const sk_data_t*);
-=======
-sk_data_t* sk_data_new_empty();
-sk_data_t* sk_data_new_with_copy(const void* src, size_t length);
-sk_data_t* sk_data_new_from_malloc(const void* memory, size_t length);
-sk_data_t* sk_data_new_subset(const sk_data_t* src, size_t offset, size_t length);
-
-void sk_data_ref(const sk_data_t*);
-void sk_data_unref(const sk_data_t*);
-
-size_t sk_data_get_size(const sk_data_t*);
-const void* sk_data_get_data(const sk_data_t*);
->>>>>>> miniblink49
 
 SK_C_PLUS_PLUS_END_GUARD
 

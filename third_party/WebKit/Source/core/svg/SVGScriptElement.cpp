@@ -18,8 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
-
 #include "core/svg/SVGScriptElement.h"
 
 #include "bindings/core/v8/ScriptEventListener.h"
@@ -32,24 +30,38 @@
 
 namespace blink {
 
-inline SVGScriptElement::SVGScriptElement(Document& document, bool wasInsertedByParser, bool alreadyStarted)
+inline SVGScriptElement::SVGScriptElement(Document& document,
+    bool wasInsertedByParser,
+    bool alreadyStarted)
     : SVGElement(SVGNames::scriptTag, document)
     , SVGURIReference(this)
-    , m_loader(ScriptLoader::create(this, wasInsertedByParser, alreadyStarted))
+    , m_loader(
+          ScriptLoader::create(this, wasInsertedByParser, alreadyStarted))
 {
+    if (fastHasAttribute(HTMLNames::nonceAttr)) {
+        m_nonce = fastGetAttribute(HTMLNames::nonceAttr);
+        if (RuntimeEnabledFeatures::hideNonceContentAttributeEnabled())
+            removeAttribute(HTMLNames::nonceAttr);
+    }
 }
 
-PassRefPtrWillBeRawPtr<SVGScriptElement> SVGScriptElement::create(Document& document, bool insertedByParser)
+SVGScriptElement* SVGScriptElement::create(Document& document,
+    bool insertedByParser)
 {
-    return adoptRefWillBeNoop(new SVGScriptElement(document, insertedByParser, false));
+    return new SVGScriptElement(document, insertedByParser, false);
 }
 
-void SVGScriptElement::parseAttribute(const QualifiedName& name, const AtomicString& value)
+void SVGScriptElement::parseAttribute(
+    const AttributeModificationParams& params)
 {
-    if (name == HTMLNames::onerrorAttr)
-        setAttributeEventListener(EventTypeNames::error, createAttributeEventListener(this, name, value, eventParameterName()));
-    else
-        SVGElement::parseAttribute(name, value);
+    if (params.name == HTMLNames::onerrorAttr) {
+        setAttributeEventListener(
+            EventTypeNames::error,
+            createAttributeEventListener(this, params.name, params.newValue,
+                eventParameterName()));
+    } else {
+        SVGElement::parseAttribute(params);
+    }
 }
 
 void SVGScriptElement::svgAttributeChanged(const QualifiedName& attrName)
@@ -63,7 +75,8 @@ void SVGScriptElement::svgAttributeChanged(const QualifiedName& attrName)
     SVGElement::svgAttributeChanged(attrName);
 }
 
-Node::InsertionNotificationRequest SVGScriptElement::insertedInto(ContainerNode* rootParent)
+Node::InsertionNotificationRequest SVGScriptElement::insertedInto(
+    ContainerNode* rootParent)
 {
     SVGElement::insertedInto(rootParent);
     return InsertionShouldCallDidNotifySubtreeInsertions;
@@ -85,7 +98,7 @@ void SVGScriptElement::childrenChanged(const ChildrenChange& change)
 
 void SVGScriptElement::didMoveToNewDocument(Document& oldDocument)
 {
-    ScriptRunner::movePendingAsyncScript(oldDocument, document(), m_loader.get());
+    ScriptRunner::movePendingScript(oldDocument, document(), m_loader.get());
     SVGElement::didMoveToNewDocument(oldDocument);
 }
 
@@ -117,7 +130,7 @@ String SVGScriptElement::charsetAttributeValue() const
 
 String SVGScriptElement::typeAttributeValue() const
 {
-    return getAttribute(SVGNames::typeAttr).string();
+    return getAttribute(SVGNames::typeAttr).getString();
 }
 
 String SVGScriptElement::languageAttributeValue() const
@@ -150,9 +163,9 @@ bool SVGScriptElement::hasSourceAttribute() const
     return href()->isSpecified();
 }
 
-PassRefPtrWillBeRawPtr<Element> SVGScriptElement::cloneElementWithoutAttributesAndChildren()
+Element* SVGScriptElement::cloneElementWithoutAttributesAndChildren()
 {
-    return adoptRefWillBeNoop(new SVGScriptElement(document(), false, m_loader->alreadyStarted()));
+    return new SVGScriptElement(document(), false, m_loader->alreadyStarted());
 }
 
 void SVGScriptElement::dispatchLoadEvent()
@@ -160,12 +173,11 @@ void SVGScriptElement::dispatchLoadEvent()
     dispatchEvent(Event::create(EventTypeNames::load));
 }
 
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
 bool SVGScriptElement::isAnimatableAttribute(const QualifiedName& name) const
 {
-    if (name == SVGNames::typeAttr)
+    if (name == SVGNames::typeAttr || name == SVGNames::hrefAttr || name == XLinkNames::hrefAttr)
         return false;
-
     return SVGElement::isAnimatableAttribute(name);
 }
 #endif

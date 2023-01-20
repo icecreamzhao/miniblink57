@@ -30,19 +30,14 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 // Scrollbar theme used in image snapshots, to eliminate appearance differences
 // between platforms.
-=======
-// Scrollbar theme used in image snapshots, to eliminate appearance differences between platforms.
->>>>>>> miniblink49
 class PLATFORM_EXPORT ScrollbarThemeMock : public ScrollbarTheme {
 public:
     int scrollbarThickness(ScrollbarControlSize = RegularScrollbar) override;
     bool usesOverlayScrollbars() const override;
 
 protected:
-<<<<<<< HEAD
     bool hasButtons(const ScrollbarThemeClient&) override { return false; }
     bool hasThumb(const ScrollbarThemeClient&) override { return true; }
 
@@ -69,25 +64,10 @@ protected:
     void paintScrollCorner(GraphicsContext&,
         const DisplayItemClient&,
         const IntRect& cornerRect) override;
-=======
-    bool hasButtons(ScrollbarThemeClient*) override { return false; }
-    bool hasThumb(ScrollbarThemeClient*) override { return true; }
-
-    IntRect backButtonRect(ScrollbarThemeClient*, ScrollbarPart, bool /*painting*/ = false) override { return IntRect(); }
-    IntRect forwardButtonRect(ScrollbarThemeClient*, ScrollbarPart, bool /*painting*/ = false) override { return IntRect(); }
-    IntRect trackRect(ScrollbarThemeClient*, bool painting = false) override;
-
-    void paintTrackBackground(GraphicsContext*, ScrollbarThemeClient*, const IntRect&) override;
-    void paintThumb(GraphicsContext*, ScrollbarThemeClient*, const IntRect&) override;
->>>>>>> miniblink49
 
 private:
     bool isMockTheme() const final { return true; }
 };
 
-<<<<<<< HEAD
 } // namespace blink
-=======
-}
->>>>>>> miniblink49
 #endif // ScrollbarThemeMock_h

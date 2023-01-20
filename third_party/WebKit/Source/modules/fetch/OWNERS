@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 hiroshige@chromium.org
 horo@chromium.org
 tyoshino@chromium.org
@@ -6,8 +5,3 @@ yhirano@chromium.org
 
 # TEAM: blink-network-stack@google.com
 # COMPONENT: Blink>Network>FetchAPI
-=======
-horo@chromium.org
-tyoshino@chromium.org
-yhirano@chromium.org
->>>>>>> miniblink49

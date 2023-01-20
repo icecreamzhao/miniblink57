@@ -24,16 +24,10 @@
  *
  */
 
-<<<<<<< HEAD
 #include "wtf/WTFThreadData.h"
 
 #include "wtf/StackUtil.h"
 #include "wtf/text/AtomicStringTable.h"
-=======
-#include "config.h"
-#include "wtf/WTFThreadData.h"
-
->>>>>>> miniblink49
 #include "wtf/text/TextCodecICU.h"
 
 namespace WTF {
@@ -41,7 +35,6 @@ namespace WTF {
 ThreadSpecific<WTFThreadData>* WTFThreadData::staticData;
 
 WTFThreadData::WTFThreadData()
-<<<<<<< HEAD
     : m_atomicStringTable(new AtomicStringTable)
     , m_cachedConverterICU(new ICUConverterWrapper)
     , m_threadId(internal::currentThreadSyscall())
@@ -64,18 +57,5 @@ size_t WTFThreadData::threadStackSize()
     return data.m_threadStackSize;
 }
 #endif
-=======
-    : m_atomicStringTable(0)
-    , m_atomicStringTableDestructor(0)
-    , m_cachedConverterICU(adoptPtr(new ICUConverterWrapper))
-{
-}
-
-WTFThreadData::~WTFThreadData()
-{
-    if (m_atomicStringTableDestructor)
-        m_atomicStringTableDestructor(m_atomicStringTable);
-}
->>>>>>> miniblink49
 
 } // namespace WTF

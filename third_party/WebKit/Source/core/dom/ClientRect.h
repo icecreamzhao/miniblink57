@@ -36,13 +36,12 @@ namespace blink {
 
 class IntRect;
 
-class CORE_EXPORT ClientRect final : public GarbageCollected<ClientRect>, public ScriptWrappable {
+class CORE_EXPORT ClientRect final : public GarbageCollected<ClientRect>,
+                                     public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static ClientRect* create()
-    {
-        return new ClientRect;
-    }
+    static ClientRect* create() { return new ClientRect; }
     static ClientRect* create(const IntRect& rect)
     {
         return new ClientRect(rect);

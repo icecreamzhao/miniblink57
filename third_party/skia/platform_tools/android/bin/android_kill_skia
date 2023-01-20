@@ -4,10 +4,7 @@
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-<<<<<<< HEAD
 SKIP_TOOLCHAIN_SETUP="true"
-=======
->>>>>>> miniblink49
 source $SCRIPT_DIR/android_setup.sh
 source $SCRIPT_DIR/utils/setup_adb.sh
 
@@ -18,8 +15,4 @@ elif [ $(uname) == "Darwin" ]; then
 else
     echo "Could not automatically determine OS!"
     exit 1;
-<<<<<<< HEAD
 fi
-=======
-fi
->>>>>>> miniblink49

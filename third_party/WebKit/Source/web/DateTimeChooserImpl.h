@@ -31,15 +31,9 @@
 #ifndef DateTimeChooserImpl_h
 #define DateTimeChooserImpl_h
 
-<<<<<<< HEAD
 #include "core/html/forms/DateTimeChooser.h"
 #include "core/page/PagePopupClient.h"
 #include <memory>
-=======
-#if ENABLE(INPUT_MULTIPLE_FIELDS_UI)
-#include "core/html/forms/DateTimeChooser.h"
-#include "core/page/PagePopupClient.h"
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -47,25 +41,18 @@ class ChromeClientImpl;
 class DateTimeChooserClient;
 class PagePopup;
 
-<<<<<<< HEAD
 class DateTimeChooserImpl final : public DateTimeChooser,
                                   public PagePopupClient {
 public:
     static DateTimeChooserImpl* create(ChromeClientImpl*,
         DateTimeChooserClient*,
         const DateTimeChooserParameters&);
-=======
-class DateTimeChooserImpl final : public DateTimeChooser, public PagePopupClient {
-public:
-    static PassRefPtr<DateTimeChooserImpl> create(ChromeClientImpl*, DateTimeChooserClient*, const DateTimeChooserParameters&);
->>>>>>> miniblink49
     ~DateTimeChooserImpl() override;
 
     // DateTimeChooser functions:
     void endChooser() override;
     AXObject* rootAXObject() override;
 
-<<<<<<< HEAD
     DECLARE_VIRTUAL_TRACE();
 
 private:
@@ -73,12 +60,6 @@ private:
         DateTimeChooserClient*,
         const DateTimeChooserParameters&);
     // PagePopupClient functions:
-=======
-private:
-    DateTimeChooserImpl(ChromeClientImpl*, DateTimeChooserClient*, const DateTimeChooserParameters&);
-    // PagePopupClient functions:
-    IntSize contentSize() override;
->>>>>>> miniblink49
     void writeDocument(SharedBuffer*) override;
     void selectFontsFromOwnerDocument(Document&) override { }
     Locale& locale() override;
@@ -88,7 +69,6 @@ private:
     Element& ownerElement() override;
     void didClosePopup() override;
 
-<<<<<<< HEAD
     Member<ChromeClientImpl> m_chromeClient;
     Member<DateTimeChooserClient> m_client;
     PagePopup* m_popup;
@@ -97,17 +77,5 @@ private:
 };
 
 } // namespace blink
-=======
-    ChromeClientImpl* m_chromeClient;
-    DateTimeChooserClient* m_client;
-    PagePopup* m_popup;
-    DateTimeChooserParameters m_parameters;
-    OwnPtr<Locale> m_locale;
-};
-
-}
-
-#endif // ENABLE(INPUT_MULTIPLE_FIELDS_UI)
->>>>>>> miniblink49
 
 #endif // DateTimeChooserImpl_h

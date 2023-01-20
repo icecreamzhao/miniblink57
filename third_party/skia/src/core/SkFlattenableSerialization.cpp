@@ -11,7 +11,6 @@
 #include "SkValidatingReadBuffer.h"
 #include "SkWriteBuffer.h"
 
-<<<<<<< HEAD
 SkData* SkValidatingSerializeFlattenable(SkFlattenable* flattenable)
 {
     SkBinaryWriteBuffer writer;
@@ -25,19 +24,6 @@ SkData* SkValidatingSerializeFlattenable(SkFlattenable* flattenable)
 SkFlattenable* SkValidatingDeserializeFlattenable(const void* data, size_t size,
     SkFlattenable::Type type)
 {
-=======
-SkData* SkValidatingSerializeFlattenable(SkFlattenable* flattenable) {
-    SkWriteBuffer writer(SkWriteBuffer::kValidation_Flag);
-    writer.writeFlattenable(flattenable);
-    size_t size = writer.bytesWritten();
-    SkData* data = SkData::NewUninitialized(size);
-    writer.writeToMemory(data->writable_data());
-    return data;
-}
-
-SkFlattenable* SkValidatingDeserializeFlattenable(const void* data, size_t size,
-                                                  SkFlattenable::Type type) {
->>>>>>> miniblink49
     SkValidatingReadBuffer buffer(data, size);
     return buffer.readFlattenable(type);
 }

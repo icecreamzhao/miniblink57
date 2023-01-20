@@ -30,16 +30,25 @@
 
 namespace blink {
 
-class SVGFEDiffuseLightingElement final : public SVGFilterPrimitiveStandardAttributes {
+class SVGFEDiffuseLightingElement final
+    : public SVGFilterPrimitiveStandardAttributes {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     DECLARE_NODE_FACTORY(SVGFEDiffuseLightingElement);
-    void lightElementAttributeChanged(const SVGFELightElement*, const QualifiedName&);
+    void lightElementAttributeChanged(const SVGFELightElement*,
+        const QualifiedName&);
 
     SVGAnimatedNumber* diffuseConstant() { return m_diffuseConstant.get(); }
     SVGAnimatedNumber* surfaceScale() { return m_surfaceScale.get(); }
-    SVGAnimatedNumber* kernelUnitLengthX() { return m_kernelUnitLength->firstNumber(); }
-    SVGAnimatedNumber* kernelUnitLengthY() { return m_kernelUnitLength->secondNumber(); }
+    SVGAnimatedNumber* kernelUnitLengthX()
+    {
+        return m_kernelUnitLength->firstNumber();
+    }
+    SVGAnimatedNumber* kernelUnitLengthY()
+    {
+        return m_kernelUnitLength->secondNumber();
+    }
     SVGAnimatedString* in1() { return m_in1.get(); }
 
     DECLARE_VIRTUAL_TRACE();
@@ -49,12 +58,12 @@ private:
 
     bool setFilterEffectAttribute(FilterEffect*, const QualifiedName&) override;
     void svgAttributeChanged(const QualifiedName&) override;
-    PassRefPtrWillBeRawPtr<FilterEffect> build(SVGFilterBuilder*, Filter*) override;
+    FilterEffect* build(SVGFilterBuilder*, Filter*) override;
 
-    RefPtrWillBeMember<SVGAnimatedNumber> m_diffuseConstant;
-    RefPtrWillBeMember<SVGAnimatedNumber> m_surfaceScale;
-    RefPtrWillBeMember<SVGAnimatedNumberOptionalNumber> m_kernelUnitLength;
-    RefPtrWillBeMember<SVGAnimatedString> m_in1;
+    Member<SVGAnimatedNumber> m_diffuseConstant;
+    Member<SVGAnimatedNumber> m_surfaceScale;
+    Member<SVGAnimatedNumberOptionalNumber> m_kernelUnitLength;
+    Member<SVGAnimatedString> m_in1;
 };
 
 } // namespace blink

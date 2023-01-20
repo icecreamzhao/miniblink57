@@ -33,28 +33,17 @@
 
 #include "wtf/Assertions.h"
 
-<<<<<<< HEAD
 #if DCHECK_IS_ON()
-=======
-#if ENABLE(ASSERT)
->>>>>>> miniblink49
 
 #include "wtf/Threading.h"
 
 namespace WTF {
 
-<<<<<<< HEAD
 // Verifies that a class is used in a way that respects its lack of
 // thread-safety.  The default mode is to verify that the object will only be
 // used on a single thread. The thread gets captured when setShared(true) is
 // called.  The mode may be changed by calling useMutexMode (or
 // turnOffVerification).
-=======
-// Verifies that a class is used in a way that respects its lack of thread-safety.
-// The default mode is to verify that the object will only be used on a single thread. The
-// thread gets captured when setShared(true) is called.
-// The mode may be changed by calling useMutexMode (or turnOffVerification).
->>>>>>> miniblink49
 class ThreadRestrictionVerifier {
 public:
     ThreadRestrictionVerifier()
@@ -63,7 +52,6 @@ public:
     {
     }
 
-<<<<<<< HEAD
     // Call onRef() before refCount is incremented in ref(). Returns whether the
     // ref() is safe.
     template <typename COUNTERTYPE>
@@ -102,8 +90,6 @@ public:
     }
 
 private:
-=======
->>>>>>> miniblink49
     // Indicates that the object may (or may not) be owned by more than one place.
     void setShared(bool shared)
     {
@@ -113,7 +99,6 @@ private:
         if (!m_shared)
             return;
 
-<<<<<<< HEAD
         DCHECK_NE(shared, previouslyShared);
         // Capture the current thread to verify that subsequent ref/deref happen on
         // this thread.
@@ -128,30 +113,4 @@ private:
 } // namespace WTF
 
 #endif // DCHECK_IS_ON()
-=======
-        ASSERT_UNUSED(previouslyShared, shared != previouslyShared);
-        // Capture the current thread to verify that subsequent ref/deref happen on this thread.
-        m_owningThread = currentThread();
-    }
-
-    // Is it OK to use the object at this moment on the current thread?
-    bool isSafeToUse() const
-    {
-        if (!m_shared)
-            return true;
-
-        return m_owningThread == currentThread();
-    }
-
-private:
-    bool m_shared;
-
-    // Used by SingleThreadVerificationMode
-    ThreadIdentifier m_owningThread;
-};
-
-}
-
-#endif // ENABLE(ASSERT)
->>>>>>> miniblink49
 #endif // ThreadRestrictionVerifier_h

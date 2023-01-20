@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2014 Google Inc.
  *
@@ -11,7 +7,6 @@
 
 #include "ktx.h"
 #include "SkBitmap.h"
-<<<<<<< HEAD
 #include "SkEndian.h"
 #include "SkStream.h"
 
@@ -40,35 +35,6 @@ static inline uint32_t compressed_fmt_to_gl_define(SkTextureCompressor::Format f
         GR_GL_COMPRESSED_RGBA_ASTC_10x10, // kASTC_10x10_Format
         GR_GL_COMPRESSED_RGBA_ASTC_12x10, // kASTC_12x10_Format
         GR_GL_COMPRESSED_RGBA_ASTC_12x12, // kASTC_12x12_Format
-=======
-#include "SkStream.h"
-#include "SkEndian.h"
-
-#include "gl/GrGLDefines.h"
-#include "GrConfig.h"
-
-#include "etc1.h"
-
-static inline uint32_t compressed_fmt_to_gl_define(SkTextureCompressor::Format fmt) {
-    static const uint32_t kGLDefineMap[SkTextureCompressor::kFormatCnt] = {
-        GR_GL_COMPRESSED_LUMINANCE_LATC1,      // kLATC_Format
-        GR_GL_COMPRESSED_R11_EAC,              // kR11_EAC_Format
-        GR_GL_COMPRESSED_ETC1_RGB8,            // kETC1_Format
-        GR_GL_COMPRESSED_RGBA_ASTC_4x4_KHR,    // kASTC_4x4_Format
-        GR_GL_COMPRESSED_RGBA_ASTC_5x4_KHR,    // kASTC_5x4_Format
-        GR_GL_COMPRESSED_RGBA_ASTC_5x5_KHR,    // kASTC_5x5_Format
-        GR_GL_COMPRESSED_RGBA_ASTC_6x5_KHR,    // kASTC_6x5_Format
-        GR_GL_COMPRESSED_RGBA_ASTC_6x6_KHR,    // kASTC_6x6_Format
-        GR_GL_COMPRESSED_RGBA_ASTC_8x5_KHR,    // kASTC_8x5_Format
-        GR_GL_COMPRESSED_RGBA_ASTC_8x6_KHR,    // kASTC_8x6_Format
-        GR_GL_COMPRESSED_RGBA_ASTC_8x8_KHR,    // kASTC_8x8_Format
-        GR_GL_COMPRESSED_RGBA_ASTC_10x5_KHR,   // kASTC_10x5_Format
-        GR_GL_COMPRESSED_RGBA_ASTC_10x6_KHR,   // kASTC_10x6_Format
-        GR_GL_COMPRESSED_RGBA_ASTC_10x8_KHR,   // kASTC_10x8_Format
-        GR_GL_COMPRESSED_RGBA_ASTC_10x10_KHR,  // kASTC_10x10_Format
-        GR_GL_COMPRESSED_RGBA_ASTC_12x10_KHR,  // kASTC_12x10_Format
-        GR_GL_COMPRESSED_RGBA_ASTC_12x12_KHR,  // kASTC_12x12_Format
->>>>>>> miniblink49
     };
 
     GR_STATIC_ASSERT(0 == SkTextureCompressor::kLATC_Format);
@@ -100,16 +66,10 @@ static const uint8_t KTX_FILE_IDENTIFIER[KTX_FILE_IDENTIFIER_SIZE] = {
 
 static const uint32_t kKTX_ENDIANNESS_CODE = 0x04030201;
 
-<<<<<<< HEAD
 bool SkKTXFile::KeyValue::readKeyAndValue(const uint8_t* data)
 {
     const char* key = reinterpret_cast<const char*>(data);
     const char* value = key;
-=======
-bool SkKTXFile::KeyValue::readKeyAndValue(const uint8_t* data) {
-    const char *key = reinterpret_cast<const char *>(data);
-    const char *value = key;
->>>>>>> miniblink49
 
     size_t bytesRead = 0;
     while (*value != '\0' && bytesRead < this->fDataSz) {
@@ -139,12 +99,8 @@ bool SkKTXFile::KeyValue::readKeyAndValue(const uint8_t* data) {
     return true;
 }
 
-<<<<<<< HEAD
 bool SkKTXFile::KeyValue::writeKeyAndValueForKTX(SkWStream* strm)
 {
-=======
-bool SkKTXFile::KeyValue::writeKeyAndValueForKTX(SkWStream* strm) {
->>>>>>> miniblink49
     size_t bytesWritten = 0;
     if (!strm->write(&(this->fDataSz), 4)) {
         return false;
@@ -180,12 +136,8 @@ bool SkKTXFile::KeyValue::writeKeyAndValueForKTX(SkWStream* strm) {
     return strm->write(nullBuf, padding);
 }
 
-<<<<<<< HEAD
 uint32_t SkKTXFile::readInt(const uint8_t** buf, size_t* bytesLeft) const
 {
-=======
-uint32_t SkKTXFile::readInt(const uint8_t** buf, size_t* bytesLeft) const {
->>>>>>> miniblink49
     SkASSERT(buf && bytesLeft);
 
     uint32_t result;
@@ -207,18 +159,11 @@ uint32_t SkKTXFile::readInt(const uint8_t** buf, size_t* bytesLeft) const {
     return result;
 }
 
-<<<<<<< HEAD
 SkString SkKTXFile::getValueForKey(const SkString& key) const
 {
     const KeyValue* begin = this->fKeyValuePairs.begin();
     const KeyValue* end = this->fKeyValuePairs.end();
     for (const KeyValue* kv = begin; kv != end; ++kv) {
-=======
-SkString SkKTXFile::getValueForKey(const SkString& key) const {
-    const KeyValue *begin = this->fKeyValuePairs.begin();
-    const KeyValue *end = this->fKeyValuePairs.end();
-    for (const KeyValue *kv = begin; kv != end; ++kv) {
->>>>>>> miniblink49
         if (kv->key() == key) {
             return kv->value();
         }
@@ -226,12 +171,8 @@ SkString SkKTXFile::getValueForKey(const SkString& key) const {
     return SkString();
 }
 
-<<<<<<< HEAD
 bool SkKTXFile::isCompressedFormat(SkTextureCompressor::Format fmt) const
 {
-=======
-bool SkKTXFile::isCompressedFormat(SkTextureCompressor::Format fmt) const {
->>>>>>> miniblink49
     if (!this->valid()) {
         return false;
     }
@@ -239,18 +180,12 @@ bool SkKTXFile::isCompressedFormat(SkTextureCompressor::Format fmt) const {
     // This has many aliases
     bool isFmt = false;
     if (fmt == SkTextureCompressor::kLATC_Format) {
-<<<<<<< HEAD
         isFmt = GR_GL_COMPRESSED_RED_RGTC1 == fHeader.fGLInternalFormat || GR_GL_COMPRESSED_3DC_X == fHeader.fGLInternalFormat;
-=======
-        isFmt = GR_GL_COMPRESSED_RED_RGTC1 == fHeader.fGLInternalFormat ||
-                GR_GL_COMPRESSED_3DC_X == fHeader.fGLInternalFormat;
->>>>>>> miniblink49
     }
 
     return isFmt || compressed_fmt_to_gl_define(fmt) == fHeader.fGLInternalFormat;
 }
 
-<<<<<<< HEAD
 bool SkKTXFile::isRGBA8() const
 {
     return this->valid() && GR_GL_RGBA8 == fHeader.fGLInternalFormat;
@@ -264,18 +199,6 @@ bool SkKTXFile::isRGB8() const
 bool SkKTXFile::readKTXFile(const uint8_t* data, size_t dataLen)
 {
     const uint8_t* buf = data;
-=======
-bool SkKTXFile::isRGBA8() const {
-    return this->valid() && GR_GL_RGBA8 == fHeader.fGLInternalFormat;
-}
-
-bool SkKTXFile::isRGB8() const {
-    return this->valid() && GR_GL_RGB8 == fHeader.fGLInternalFormat;
-}
-
-bool SkKTXFile::readKTXFile(const uint8_t* data, size_t dataLen) {
-    const uint8_t *buf = data;
->>>>>>> miniblink49
     size_t bytesLeft = dataLen;
 
     // Make sure original KTX header is there... this should have been checked
@@ -296,7 +219,6 @@ bool SkKTXFile::readKTXFile(const uint8_t* data, size_t dataLen) {
     fSwapBytes = kKTX_ENDIANNESS_CODE != endianness;
 
     // Read header values
-<<<<<<< HEAD
     fHeader.fGLType = this->readInt(&buf, &bytesLeft);
     fHeader.fGLTypeSize = this->readInt(&buf, &bytesLeft);
     fHeader.fGLFormat = this->readInt(&buf, &bytesLeft);
@@ -309,20 +231,6 @@ bool SkKTXFile::readKTXFile(const uint8_t* data, size_t dataLen) {
     fHeader.fNumberOfFaces = this->readInt(&buf, &bytesLeft);
     fHeader.fNumberOfMipmapLevels = this->readInt(&buf, &bytesLeft);
     fHeader.fBytesOfKeyValueData = this->readInt(&buf, &bytesLeft);
-=======
-    fHeader.fGLType                = this->readInt(&buf, &bytesLeft);
-    fHeader.fGLTypeSize            = this->readInt(&buf, &bytesLeft);
-    fHeader.fGLFormat              = this->readInt(&buf, &bytesLeft);
-    fHeader.fGLInternalFormat      = this->readInt(&buf, &bytesLeft);
-    fHeader.fGLBaseInternalFormat  = this->readInt(&buf, &bytesLeft);
-    fHeader.fPixelWidth            = this->readInt(&buf, &bytesLeft);
-    fHeader.fPixelHeight           = this->readInt(&buf, &bytesLeft);
-    fHeader.fPixelDepth            = this->readInt(&buf, &bytesLeft);
-    fHeader.fNumberOfArrayElements = this->readInt(&buf, &bytesLeft);
-    fHeader.fNumberOfFaces         = this->readInt(&buf, &bytesLeft);
-    fHeader.fNumberOfMipmapLevels  = this->readInt(&buf, &bytesLeft);
-    fHeader.fBytesOfKeyValueData   = this->readInt(&buf, &bytesLeft);
->>>>>>> miniblink49
 
     // Check for things that we understand...
     {
@@ -427,11 +335,7 @@ bool SkKTXFile::readKTXFile(const uint8_t* data, size_t dataLen) {
                 }
             }
         }
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> miniblink49
         uint32_t imgSizePadded = (imgSize + 3) & ~3;
         buf += imgSizePadded;
         bytesLeft -= imgSizePadded;
@@ -440,7 +344,6 @@ bool SkKTXFile::readKTXFile(const uint8_t* data, size_t dataLen) {
     return bytesLeft == 0;
 }
 
-<<<<<<< HEAD
 bool SkKTXFile::is_ktx(const uint8_t data[], size_t size)
 {
     return size >= KTX_FILE_IDENTIFIER_SIZE && 0 == memcmp(KTX_FILE_IDENTIFIER, data, KTX_FILE_IDENTIFIER_SIZE);
@@ -451,33 +354,15 @@ bool SkKTXFile::is_ktx(SkStreamRewindable* stream)
     // Read the KTX header and make sure it's valid.
     unsigned char buf[KTX_FILE_IDENTIFIER_SIZE];
     bool largeEnough = stream->read((void*)buf, KTX_FILE_IDENTIFIER_SIZE) == KTX_FILE_IDENTIFIER_SIZE;
-=======
-bool SkKTXFile::is_ktx(const uint8_t *data) {
-    return 0 == memcmp(KTX_FILE_IDENTIFIER, data, KTX_FILE_IDENTIFIER_SIZE);
-}
-
-bool SkKTXFile::is_ktx(SkStreamRewindable* stream) {
-    // Read the KTX header and make sure it's valid.
-    unsigned char buf[KTX_FILE_IDENTIFIER_SIZE];
-    bool largeEnough =
-        stream->read((void*)buf, KTX_FILE_IDENTIFIER_SIZE) == KTX_FILE_IDENTIFIER_SIZE;
->>>>>>> miniblink49
     stream->rewind();
     if (!largeEnough) {
         return false;
     }
-<<<<<<< HEAD
     return is_ktx(buf, KTX_FILE_IDENTIFIER_SIZE);
 }
 
 SkKTXFile::KeyValue SkKTXFile::CreateKeyValue(const char* cstrKey, const char* cstrValue)
 {
-=======
-    return is_ktx(buf);
-}
-
-SkKTXFile::KeyValue SkKTXFile::CreateKeyValue(const char *cstrKey, const char *cstrValue) {
->>>>>>> miniblink49
     SkString key(cstrKey);
     SkString value(cstrValue);
 
@@ -494,14 +379,9 @@ SkKTXFile::KeyValue SkKTXFile::CreateKeyValue(const char *cstrKey, const char *c
     return kv;
 }
 
-<<<<<<< HEAD
 bool SkKTXFile::WriteETC1ToKTX(SkWStream* stream, const uint8_t* etc1Data,
     uint32_t width, uint32_t height)
 {
-=======
-bool SkKTXFile::WriteETC1ToKTX(SkWStream* stream, const uint8_t *etc1Data,
-                               uint32_t width, uint32_t height) {
->>>>>>> miniblink49
     // First thing's first, write out the magic identifier and endianness...
     if (!stream->write(KTX_FILE_IDENTIFIER, KTX_FILE_IDENTIFIER_SIZE)) {
         return false;
@@ -510,11 +390,7 @@ bool SkKTXFile::WriteETC1ToKTX(SkWStream* stream, const uint8_t *etc1Data,
     if (!stream->write(&kKTX_ENDIANNESS_CODE, 4)) {
         return false;
     }
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> miniblink49
     Header hdr;
     hdr.fGLType = 0;
     hdr.fGLTypeSize = 1;
@@ -551,12 +427,8 @@ bool SkKTXFile::WriteETC1ToKTX(SkWStream* stream, const uint8_t *etc1Data,
     return true;
 }
 
-<<<<<<< HEAD
 bool SkKTXFile::WriteBitmapToKTX(SkWStream* stream, const SkBitmap& bitmap)
 {
-=======
-bool SkKTXFile::WriteBitmapToKTX(SkWStream* stream, const SkBitmap& bitmap) {
->>>>>>> miniblink49
     const SkColorType ct = bitmap.colorType();
     SkAutoLockPixels alp(bitmap);
 
@@ -568,12 +440,7 @@ bool SkKTXFile::WriteBitmapToKTX(SkWStream* stream, const SkBitmap& bitmap) {
     }
 
     // First thing's first, write out the magic identifier and endianness...
-<<<<<<< HEAD
     if (!stream->write(KTX_FILE_IDENTIFIER, KTX_FILE_IDENTIFIER_SIZE) || !stream->write(&kKTX_ENDIANNESS_CODE, 4)) {
-=======
-    if (!stream->write(KTX_FILE_IDENTIFIER, KTX_FILE_IDENTIFIER_SIZE) ||
-        !stream->write(&kKTX_ENDIANNESS_CODE, 4)) {
->>>>>>> miniblink49
         return false;
     }
 
@@ -583,7 +450,6 @@ bool SkKTXFile::WriteBitmapToKTX(SkWStream* stream, const SkBitmap& bitmap) {
     // Next, write the header based on the bitmap's config.
     Header hdr;
     switch (ct) {
-<<<<<<< HEAD
     case kIndex_8_SkColorType:
         // There is a compressed format for this, but we don't support it yet.
         SkDebugf("Writing indexed bitmap to KTX unsupported.\n");
@@ -626,50 +492,6 @@ bool SkKTXFile::WriteBitmapToKTX(SkWStream* stream, const SkBitmap& bitmap) {
         hdr.fGLBaseInternalFormat = GR_GL_RGBA;
         kvPairs.push_back(CreateKeyValue("KTXPremultipliedAlpha", "True"));
         break;
-=======
-        case kIndex_8_SkColorType:
-            // There is a compressed format for this, but we don't support it yet.
-            SkDebugf("Writing indexed bitmap to KTX unsupported.\n");
-            // VVV fall through VVV
-        default:
-        case kUnknown_SkColorType:
-            // Bitmap hasn't been configured.
-            return false;
-
-        case kAlpha_8_SkColorType:
-            hdr.fGLType = GR_GL_UNSIGNED_BYTE;
-            hdr.fGLTypeSize = 1;
-            hdr.fGLFormat = GR_GL_RED;
-            hdr.fGLInternalFormat = GR_GL_R8;
-            hdr.fGLBaseInternalFormat = GR_GL_RED;
-            break;
-
-        case kRGB_565_SkColorType:
-            hdr.fGLType = GR_GL_UNSIGNED_SHORT_5_6_5;
-            hdr.fGLTypeSize = 2;
-            hdr.fGLFormat = GR_GL_RGB;
-            hdr.fGLInternalFormat = GR_GL_RGB;
-            hdr.fGLBaseInternalFormat = GR_GL_RGB;
-            break;
-
-        case kARGB_4444_SkColorType:
-            hdr.fGLType = GR_GL_UNSIGNED_SHORT_4_4_4_4;
-            hdr.fGLTypeSize = 2;
-            hdr.fGLFormat = GR_GL_RGBA;
-            hdr.fGLInternalFormat = GR_GL_RGBA4;
-            hdr.fGLBaseInternalFormat = GR_GL_RGBA;
-            kvPairs.push_back(CreateKeyValue("KTXPremultipliedAlpha", "True"));
-            break;
-
-        case kN32_SkColorType:
-            hdr.fGLType = GR_GL_UNSIGNED_BYTE;
-            hdr.fGLTypeSize = 1;
-            hdr.fGLFormat = GR_GL_RGBA;
-            hdr.fGLInternalFormat = GR_GL_RGBA8;
-            hdr.fGLBaseInternalFormat = GR_GL_RGBA;
-            kvPairs.push_back(CreateKeyValue("KTXPremultipliedAlpha", "True"));
-            break;
->>>>>>> miniblink49
     }
 
     // Everything else in the header is shared.
@@ -681,11 +503,7 @@ bool SkKTXFile::WriteBitmapToKTX(SkWStream* stream, const SkBitmap& bitmap) {
 
     // Calculate the key value data size
     hdr.fBytesOfKeyValueData = 0;
-<<<<<<< HEAD
     for (KeyValue* kv = kvPairs.begin(); kv != kvPairs.end(); ++kv) {
-=======
-    for (KeyValue *kv = kvPairs.begin(); kv != kvPairs.end(); ++kv) {
->>>>>>> miniblink49
         // Key value size is the size of the key value data,
         // four bytes for saying how big the key value size is
         // and then additional bytes for padding to four byte boundary
@@ -701,11 +519,7 @@ bool SkKTXFile::WriteBitmapToKTX(SkWStream* stream, const SkBitmap& bitmap) {
     }
 
     // Write out each key value pair
-<<<<<<< HEAD
     for (KeyValue* kv = kvPairs.begin(); kv != kvPairs.end(); ++kv) {
-=======
-    for (KeyValue *kv = kvPairs.begin(); kv != kvPairs.end(); ++kv) {
->>>>>>> miniblink49
         if (!kv->writeKeyAndValueForKTX(stream)) {
             return false;
         }
@@ -744,20 +558,12 @@ bool SkKTXFile::WriteBitmapToKTX(SkWStream* stream, const SkBitmap& bitmap) {
         }
     } else {
         for (int i = 0; i < height; ++i) {
-<<<<<<< HEAD
             if (!stream->write(rowPtr, bpp * width)) {
-=======
-            if (!stream->write(rowPtr, bpp*width)) {
->>>>>>> miniblink49
                 return false;
             }
             rowPtr += bitmap.rowBytes();
         }
     }
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> miniblink49
     return true;
 }

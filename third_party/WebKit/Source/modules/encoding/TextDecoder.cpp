@@ -28,37 +28,23 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "modules/encoding/TextDecoder.h"
 
 #include "bindings/core/v8/ExceptionState.h"
 #include "core/dom/DOMArrayBuffer.h"
 #include "core/dom/DOMArrayBufferView.h"
-<<<<<<< HEAD
-=======
-#include "core/dom/ExceptionCode.h"
->>>>>>> miniblink49
 #include "modules/encoding/Encoding.h"
 #include "wtf/StringExtras.h"
 #include "wtf/text/TextEncodingRegistry.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 TextDecoder* TextDecoder::create(const String& label,
     const TextDecoderOptions& options,
     ExceptionState& exceptionState)
 {
     WTF::TextEncoding encoding(
         label.stripWhiteSpace(&Encoding::isASCIIWhiteSpace));
-=======
-TextDecoder* TextDecoder::create(const String& label, const TextDecoderOptions& options, ExceptionState& exceptionState)
-{
-    WTF::TextEncoding encoding(label.stripWhiteSpace(&Encoding::isASCIIWhiteSpace));
->>>>>>> miniblink49
     // The replacement encoding is not valid, but the Encoding API also
     // rejects aliases of the replacement encoding.
     if (!encoding.isValid() || !strcasecmp(encoding.name(), "replacement")) {
@@ -69,14 +55,9 @@ TextDecoder* TextDecoder::create(const String& label, const TextDecoderOptions& 
     return new TextDecoder(encoding, options.fatal(), options.ignoreBOM());
 }
 
-<<<<<<< HEAD
 TextDecoder::TextDecoder(const WTF::TextEncoding& encoding,
     bool fatal,
     bool ignoreBOM)
-=======
-
-TextDecoder::TextDecoder(const WTF::TextEncoding& encoding, bool fatal, bool ignoreBOM)
->>>>>>> miniblink49
     : m_encoding(encoding)
     , m_codec(newTextCodec(encoding))
     , m_fatal(fatal)
@@ -85,37 +66,22 @@ TextDecoder::TextDecoder(const WTF::TextEncoding& encoding, bool fatal, bool ign
 {
 }
 
-<<<<<<< HEAD
 TextDecoder::~TextDecoder() { }
-=======
-TextDecoder::~TextDecoder()
-{
-}
->>>>>>> miniblink49
 
 String TextDecoder::encoding() const
 {
     String name = String(m_encoding.name()).lower();
-<<<<<<< HEAD
     // Where possible, encoding aliases should be handled by changes to Chromium's
     // ICU or Blink's WTF.  The same codec is used, but WTF maintains a different
     // name/identity for these.
-=======
-    // Where possible, encoding aliases should be handled by changes to Chromium's ICU or Blink's WTF.
-    // The same codec is used, but WTF maintains a different name/identity for these.
->>>>>>> miniblink49
     if (name == "iso-8859-1" || name == "us-ascii")
         return "windows-1252";
     return name;
 }
 
-<<<<<<< HEAD
 String TextDecoder::decode(const BufferSource& input,
     const TextDecodeOptions& options,
     ExceptionState& exceptionState)
-=======
-String TextDecoder::decode(const BufferSource& input, const TextDecodeOptions& options, ExceptionState& exceptionState)
->>>>>>> miniblink49
 {
     ASSERT(!input.isNull());
     if (input.isArrayBufferView()) {
@@ -129,14 +95,10 @@ String TextDecoder::decode(const BufferSource& input, const TextDecodeOptions& o
     return decode(start, length, options, exceptionState);
 }
 
-<<<<<<< HEAD
 String TextDecoder::decode(const char* start,
     size_t length,
     const TextDecodeOptions& options,
     ExceptionState& exceptionState)
-=======
-String TextDecoder::decode(const char* start, size_t length, const TextDecodeOptions& options, ExceptionState& exceptionState)
->>>>>>> miniblink49
 {
     WTF::FlushBehavior flush = options.stream() ? WTF::DoNotFlush : WTF::DataEOF;
 

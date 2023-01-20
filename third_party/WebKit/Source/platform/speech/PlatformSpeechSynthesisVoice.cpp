@@ -23,15 +23,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/speech/PlatformSpeechSynthesisVoice.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 PassRefPtr<PlatformSpeechSynthesisVoice> PlatformSpeechSynthesisVoice::create(
     const String& voiceURI,
     const String& name,
@@ -55,19 +50,6 @@ PlatformSpeechSynthesisVoice::PlatformSpeechSynthesisVoice(
     const String& lang,
     bool localService,
     bool isDefault)
-=======
-PlatformSpeechSynthesisVoice* PlatformSpeechSynthesisVoice::create(const String& voiceURI, const String& name, const String& lang, bool localService, bool isDefault)
-{
-    return new PlatformSpeechSynthesisVoice(voiceURI, name, lang, localService, isDefault);
-}
-
-PlatformSpeechSynthesisVoice* PlatformSpeechSynthesisVoice::create()
-{
-    return new PlatformSpeechSynthesisVoice();
-}
-
-PlatformSpeechSynthesisVoice::PlatformSpeechSynthesisVoice(const String& voiceURI, const String& name, const String& lang, bool localService, bool isDefault)
->>>>>>> miniblink49
     : m_voiceURI(voiceURI)
     , m_name(name)
     , m_lang(lang)

@@ -12,12 +12,8 @@
 
 class GrCoordTransform;
 class GrGLSLCaps;
-<<<<<<< HEAD
 class GrGLSLFragmentProcessor;
 class GrInvariantOutput;
-=======
-class GrGLFragmentProcessor;
->>>>>>> miniblink49
 class GrProcessorKeyBuilder;
 
 /** Provides custom fragment shader code. Fragment processors receive an input color (vec4f) and
@@ -27,7 +23,6 @@ class GrProcessorKeyBuilder;
  */
 class GrFragmentProcessor : public GrProcessor {
 public:
-<<<<<<< HEAD
     /**
     *  In many instances (e.g. SkShader::asFragmentProcessor() implementations) it is desirable to
     *  only consider the input color's alpha. However, there is a competing desire to have reusable
@@ -88,25 +83,6 @@ public:
     int numBuffersExclChildren() const { return fNumBuffersExclChildren; }
 
     int numTransformsExclChildren() const { return fNumTransformsExclChildren; }
-=======
-    GrFragmentProcessor()
-        : INHERITED()
-        , fWillUseInputColor(true)
-        , fUsesLocalCoords(false) {}
-
-    /** Implemented using GLFragmentProcessor::GenKey as described in this class's comment. */
-    virtual void getGLProcessorKey(const GrGLSLCaps& caps,
-                                   GrProcessorKeyBuilder* b) const = 0;
-
-    /** Returns a new instance of the appropriate *GL* implementation class
-        for the given GrFragmentProcessor; caller is responsible for deleting
-        the object. */
-    virtual GrGLFragmentProcessor* createGLInstance() const = 0;
-
-    /** Human-meaningful string to identify this GrFragmentProcessor; may be embedded
-        in generated shader code. */
-    virtual const char* name() const = 0;
->>>>>>> miniblink49
 
     int numTransforms() const { return fCoordTransforms.count(); }
 
@@ -114,7 +90,6 @@ public:
         numTransforms(). */
     const GrCoordTransform& coordTransform(int index) const { return *fCoordTransforms[index]; }
 
-<<<<<<< HEAD
     const SkTArray<const GrCoordTransform*, true>& coordTransforms() const
     {
         return fCoordTransforms;
@@ -130,14 +105,6 @@ public:
     int numChildProcessors() const { return fChildProcessors.count(); }
 
     const GrFragmentProcessor& childProcessor(int index) const { return *fChildProcessors[index]; }
-=======
-    const SkTArray<const GrCoordTransform*, true>& coordTransforms() const {
-        return fCoordTransforms;
-    }
-
-    /** Will this prceossor read the source color value? */
-    bool willUseInputColor() const { return fWillUseInputColor; }
->>>>>>> miniblink49
 
     /** Do any of the coordtransforms for this processor require local coords? */
     bool usesLocalCoords() const { return fUsesLocalCoords; }
@@ -147,21 +114,9 @@ public:
         from getFactory()).
 
         A return value of true from isEqual() should not be used to test whether the processor would
-<<<<<<< HEAD
         generate the same shader code. To test for identical code generation use getGLSLProcessorKey
      */
     bool isEqual(const GrFragmentProcessor& that, bool ignoreCoordTransforms) const;
-=======
-        generate the same shader code. To test for identical code generation use getGLProcessorKey*/
-    bool isEqual(const GrFragmentProcessor& that) const {
-        if (this->classID() != that.classID() ||
-            !this->hasSameTransforms(that) ||
-            !this->hasSameTextureAccesses(that)) {
-            return false;
-        }
-        return this->onIsEqual(that);
-    }
->>>>>>> miniblink49
 
     /**
      * This function is used to perform optimizations. When called the invarientOuput param
@@ -171,7 +126,6 @@ public:
      * inout to indicate known values of its output. A component of the color member only has
      * meaning if the corresponding bit in validFlags is set.
      */
-<<<<<<< HEAD
     void computeInvariantOutput(GrInvariantOutput* inout) const
     {
         this->onComputeInvariantOutput(inout);
@@ -181,11 +135,6 @@ protected:
     void addTextureAccess(const GrTextureAccess* textureAccess) override;
     void addBufferAccess(const GrBufferAccess*) override;
 
-=======
-    void computeInvariantOutput(GrInvariantOutput* inout) const;
-
-protected:
->>>>>>> miniblink49
     /**
      * Fragment Processor subclasses call this from their constructor to register coordinate
      * transformations. Coord transforms provide a mechanism for a processor to receive coordinates
@@ -193,19 +142,11 @@ protected:
      * fragment the matrix will be applied to the local coordinate that maps to the fragment.
      *
      * When the transformation has perspective, the transformed coordinates will have
-<<<<<<< HEAD
      * 3 components. Otherwise they'll have 2.
      *
      * This must only be called from the constructor because GrProcessors are immutable. The
      * processor subclass manages the lifetime of the transformations (this function only stores a
      * pointer). The GrCoordTransform is typically a member field of the GrProcessor subclass.
-=======
-     * 3 components. Otherwise they'll have 2. 
-     *
-     * This must only be called from the constructor because GrProcessors are immutable. The
-     * processor subclass manages the lifetime of the transformations (this function only stores a
-     * pointer). The GrCoordTransform is typically a member field of the GrProcessor subclass. 
->>>>>>> miniblink49
      *
      * A processor subclass that has multiple methods of construction should always add its coord
      * transforms in a consistent order. The non-virtual implementation of isEqual() automatically
@@ -214,7 +155,6 @@ protected:
     void addCoordTransform(const GrCoordTransform*);
 
     /**
-<<<<<<< HEAD
      * FragmentProcessor subclasses call this from their constructor to register any child
      * FragmentProcessors they have. This must be called AFTER all texture accesses and coord
      * transforms have been added.
@@ -230,21 +170,10 @@ protected:
      *
      * Note: it's up to the subclass implementation to do any recursive call to compute the child
      * procs' output invariants; computeInvariantOutput will not be recursive.
-=======
-     * If the prceossor will generate a result that does not depend on the input color value then it
-     * must call this function from its constructor. Otherwise, when its generated backend-specific
-     * code might fail during variable binding due to unused variables.
-     */
-    void setWillNotUseInputColor() { fWillUseInputColor = false; }
-
-    /**
-     * Subclass implements this to support getConstantColorComponents(...).
->>>>>>> miniblink49
      */
     virtual void onComputeInvariantOutput(GrInvariantOutput* inout) const = 0;
 
 private:
-<<<<<<< HEAD
     void notifyRefCntIsZero() const final;
 
     /** Returns a new instance of the appropriate *GL* implementation class
@@ -256,8 +185,6 @@ private:
     virtual void onGetGLSLProcessorKey(const GrGLSLCaps& caps,
         GrProcessorKeyBuilder* b) const = 0;
 
-=======
->>>>>>> miniblink49
     /**
      * Subclass implements this to support isEqual(). It will only be called if it is known that
      * the two processors are of the same subclass (i.e. they return the same object from
@@ -268,7 +195,6 @@ private:
 
     bool hasSameTransforms(const GrFragmentProcessor&) const;
 
-<<<<<<< HEAD
     bool fUsesLocalCoords;
 
     /**
@@ -304,11 +230,6 @@ private:
      * references until notifyRefCntIsZero and then it holds pending executions.
      */
     SkSTArray<1, GrFragmentProcessor*, true> fChildProcessors;
-=======
-    SkSTArray<4, const GrCoordTransform*, true>  fCoordTransforms;
-    bool                                         fWillUseInputColor;
-    bool                                         fUsesLocalCoords;
->>>>>>> miniblink49
 
     typedef GrProcessor INHERITED;
 };

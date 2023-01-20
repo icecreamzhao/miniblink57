@@ -27,15 +27,12 @@
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "core/CoreExport.h"
 #include "core/clipboard/DataTransferAccessPolicy.h"
-#include "core/fetch/ImageResource.h"
-#include "core/fetch/ResourcePtr.h"
+#include "core/loader/resource/ImageResourceContent.h"
 #include "core/page/DragActions.h"
 #include "platform/geometry/IntPoint.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
-#include "wtf/RefCounted.h"
-#include "wtf/RefPtr.h"
-#include "wtf/Vector.h"
+#include <memory>
 
 namespace blink {
 
@@ -43,33 +40,47 @@ class DataObject;
 class DataTransferItemList;
 class DragImage;
 class Element;
-class ExceptionState;
 class FileList;
+class FrameSelection;
 class LocalFrame;
 class Node;
-class Range;
 
 // Used for drag and drop and copy/paste.
-// Drag and Drop: http://www.whatwg.org/specs/web-apps/current-work/multipage/dnd.html
-// Clipboard API (copy/paste): http://dev.w3.org/2006/webapi/clipops/clipops.html
-class CORE_EXPORT DataTransfer : public GarbageCollectedFinalized<DataTransfer>, public ScriptWrappable {
+// Drag and Drop:
+// http://www.whatwg.org/specs/web-apps/current-work/multipage/dnd.html
+// Clipboard API (copy/paste):
+// http://dev.w3.org/2006/webapi/clipops/clipops.html
+class CORE_EXPORT DataTransfer final
+    : public GarbageCollectedFinalized<DataTransfer>,
+      public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    // Whether this transfer is serving a drag-drop or copy-paste request.
+    // Whether this transfer is serving a drag-drop, copy-paste, spellcheck,
+    // auto-correct or similar request.
     enum DataTransferType {
         CopyAndPaste,
         DragAndDrop,
+        InsertReplacementText,
     };
 
-    static DataTransfer* create(DataTransferType, DataTransferAccessPolicy, DataObject*);
+    static DataTransfer* create(DataTransferType,
+        DataTransferAccessPolicy,
+        DataObject*);
     ~DataTransfer();
 
     bool isForCopyAndPaste() const { return m_transferType == CopyAndPaste; }
     bool isForDragAndDrop() const { return m_transferType == DragAndDrop; }
 
-    String dropEffect() const { return dropEffectIsUninitialized() ? "none" : m_dropEffect; }
+    String dropEffect() const
+    {
+        return dropEffectIsUninitialized() ? "none" : m_dropEffect;
+    }
     void setDropEffect(const String&);
-    bool dropEffectIsUninitialized() const { return m_dropEffect == "uninitialized"; }
+    bool dropEffectIsUninitialized() const
+    {
+        return m_dropEffect == "uninitialized";
+    }
     String effectAllowed() const { return m_effectAllowed; }
     void setEffectAllowed(const String&);
 
@@ -82,25 +93,26 @@ public:
     FileList* files() const;
 
     IntPoint dragLocation() const { return m_dragLoc; }
-    void setDragImage(Element*, int x, int y, ExceptionState&);
+    void setDragImage(Element*, int x, int y);
     void clearDragImage();
-    void setDragImageResource(ImageResource*, const IntPoint&);
+    void setDragImageResource(ImageResourceContent*, const IntPoint&);
     void setDragImageElement(Node*, const IntPoint&);
 
-    PassOwnPtr<DragImage> createDragImage(IntPoint& dragLocation, LocalFrame*) const;
+    std::unique_ptr<DragImage> createDragImage(IntPoint& dragLocation,
+        LocalFrame*) const;
     void declareAndWriteDragImage(Element*, const KURL&, const String& title);
-    void writeURL(const KURL&, const String&);
-    void writeRange(Range*, LocalFrame*);
-    void writePlainText(const String&);
+    void writeURL(Node*, const KURL&, const String&);
+    void writeSelection(const FrameSelection&);
 
     void setAccessPolicy(DataTransferAccessPolicy);
     bool canReadTypes() const;
     bool canReadData() const;
     bool canWriteData() const;
-    // Note that the spec doesn't actually allow drag image modification outside the dragstart
-    // event. This capability is maintained for backwards compatiblity for ports that have
-    // supported this in the past. On many ports, attempting to set a drag image outside the
-    // dragstart operation is a no-op anyway.
+    // Note that the spec doesn't actually allow drag image modification outside
+    // the dragstart event. This capability is maintained for backwards
+    // compatiblity for ports that have supported this in the past. On many ports,
+    // attempting to set a drag image outside the dragstart operation is a no-op
+    // anyway.
     bool canSetDragImage() const;
 
     DragOperation sourceOperation() const;
@@ -119,12 +131,13 @@ public:
 private:
     DataTransfer(DataTransferType, DataTransferAccessPolicy, DataObject*);
 
-    void setDragImage(ImageResource*, Node*, const IntPoint&);
+    void setDragImage(ImageResourceContent*, Node*, const IntPoint&);
 
     bool hasFileOfType(const String&) const;
     bool hasStringOfType(const String&) const;
 
-    // Instead of using this member directly, prefer to use the can*() methods above.
+    // Instead of using this member directly, prefer to use the can*() methods
+    // above.
     DataTransferAccessPolicy m_policy;
     String m_dropEffect;
     String m_effectAllowed;
@@ -132,11 +145,12 @@ private:
     Member<DataObject> m_dataObject;
 
     IntPoint m_dragLoc;
-    ResourcePtr<ImageResource> m_dragImage;
-    RefPtrWillBeMember<Node> m_dragImageElement;
+    Member<ImageResourceContent> m_dragImage;
+    Member<Node> m_dragImageElement;
 };
 
-DragOperation convertDropZoneOperationToDragOperation(const String& dragOperation);
+DragOperation convertDropZoneOperationToDragOperation(
+    const String& dragOperation);
 String convertDragOperationToDropZoneOperation(DragOperation);
 
 } // namespace blink

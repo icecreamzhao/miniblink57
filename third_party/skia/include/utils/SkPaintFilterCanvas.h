@@ -9,18 +9,11 @@
 #define SkPaintFilterCanvas_DEFINED
 
 #include "SkNWayCanvas.h"
-<<<<<<< HEAD
 #include "SkTLazy.h"
 
 /** \class SkPaintFilterCanvas
 
     A utility proxy base class for implementing draw/paint filters.
-=======
-
-/** \class SkPaintFilterCanvas
-
-    A utility proxy base class for implementing paint filters.
->>>>>>> miniblink49
 */
 class SK_API SkPaintFilterCanvas : public SkNWayCanvas {
 public:
@@ -56,7 +49,6 @@ public:
 protected:
     /**
      *  Called with the paint that will be used to draw the specified type.
-<<<<<<< HEAD
      *  The implementation may modify the paint as they wish (using SkTCopyOnFirstWrite::writable).
      *
      *  The result bool is used to determine whether the draw op is to be
@@ -67,15 +59,6 @@ protected:
      *        override the relevant methods (i.e. drawPicture, drawTextBlob).
      */
     virtual bool onFilter(SkTCopyOnFirstWrite<SkPaint>* paint, Type type) const = 0;
-=======
-     *  The implementation may modify the paint as they wish.
-     *
-     *  Note: The base implementation calls onFilterPaint() for top-level/explicit paints only.
-     *        To also filter encapsulated paints (e.g. SkPicture, SkTextBlob), clients may need to
-     *        override the relevant methods (i.e. drawPicture, drawTextBlob).
-     */
-    virtual void onFilterPaint(SkPaint* paint, Type type) const = 0;
->>>>>>> miniblink49
 
     void onDrawPaint(const SkPaint&) override;
     void onDrawPoints(PointMode, size_t count, const SkPoint pts[], const SkPaint&) override;
@@ -86,7 +69,6 @@ protected:
     void onDrawPath(const SkPath&, const SkPaint&) override;
     void onDrawBitmap(const SkBitmap&, SkScalar left, SkScalar top, const SkPaint*) override;
     void onDrawBitmapRect(const SkBitmap&, const SkRect* src, const SkRect& dst, const SkPaint*,
-<<<<<<< HEAD
         SrcRectConstraint) override;
     void onDrawBitmapNine(const SkBitmap&, const SkIRect& center, const SkRect& dst,
         const SkPaint*) override;
@@ -115,35 +97,6 @@ protected:
         const SkMatrix* matrix, const SkPaint&) override;
     void onDrawTextBlob(const SkTextBlob* blob, SkScalar x, SkScalar y,
         const SkPaint& paint) override;
-=======
-                          DrawBitmapRectFlags flags) override;
-    void onDrawImage(const SkImage*, SkScalar left, SkScalar top, const SkPaint*) override;
-    void onDrawImageRect(const SkImage*, const SkRect* src, const SkRect& dst,
-                         const SkPaint*) override;
-    void onDrawBitmapNine(const SkBitmap&, const SkIRect& center, const SkRect& dst,
-                          const SkPaint*) override;
-    void onDrawSprite(const SkBitmap&, int left, int top, const SkPaint*) override;
-    void onDrawVertices(VertexMode vmode, int vertexCount,
-                              const SkPoint vertices[], const SkPoint texs[],
-                              const SkColor colors[], SkXfermode* xmode,
-                              const uint16_t indices[], int indexCount,
-                              const SkPaint&) override;
-    void onDrawPatch(const SkPoint cubics[12], const SkColor colors[4],
-                             const SkPoint texCoords[4], SkXfermode* xmode,
-                             const SkPaint& paint) override;
-    void onDrawPicture(const SkPicture*, const SkMatrix*, const SkPaint*) override;
-
-    void onDrawText(const void* text, size_t byteLength, SkScalar x, SkScalar y,
-                    const SkPaint&) override;
-    void onDrawPosText(const void* text, size_t byteLength, const SkPoint pos[],
-                       const SkPaint&) override;
-    void onDrawPosTextH(const void* text, size_t byteLength, const SkScalar xpos[],
-                        SkScalar constY, const SkPaint&) override;
-    void onDrawTextOnPath(const void* text, size_t byteLength, const SkPath& path,
-                          const SkMatrix* matrix, const SkPaint&) override;
-    void onDrawTextBlob(const SkTextBlob* blob, SkScalar x, SkScalar y,
-                        const SkPaint& paint) override;
->>>>>>> miniblink49
 
 private:
     class AutoPaintFilter;

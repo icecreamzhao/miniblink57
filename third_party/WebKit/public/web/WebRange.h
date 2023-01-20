@@ -31,7 +31,6 @@
 #ifndef WebRange_h
 #define WebRange_h
 
-<<<<<<< HEAD
 #include "public/platform/WebCommon.h"
 #if BLINK_IMPLEMENTATION
 #include "core/editing/EphemeralRange.h"
@@ -67,49 +66,6 @@ private:
     // for easy conversion.
     int m_start = -1;
     int m_end = -1;
-=======
-#include "WebFrame.h"
-#include "public/platform/WebCommon.h"
-#include "public/platform/WebPrivatePtr.h"
-#include "public/platform/WebVector.h"
-
-namespace blink {
-
-class Range;
-class WebString;
-
-// Provides readonly access to some properties of a DOM range.
-class WebRange {
-public:
-    ~WebRange() { reset(); }
-
-    WebRange() { }
-    WebRange(const WebRange& r) { assign(r); }
-    WebRange& operator=(const WebRange& r)
-    {
-        assign(r);
-        return *this;
-    }
-
-    BLINK_EXPORT void reset();
-    BLINK_EXPORT void assign(const WebRange&);
-
-    bool isNull() const { return m_private.isNull(); }
-
-    BLINK_EXPORT int startOffset() const;
-    BLINK_EXPORT int endOffset() const;
-    BLINK_EXPORT WebString toPlainText() const;
-
-    BLINK_EXPORT static WebRange fromDocumentRange(WebLocalFrame*, int start, int length);
-
-#if BLINK_IMPLEMENTATION
-    WebRange(const PassRefPtrWillBeRawPtr<Range>&);
-    operator PassRefPtrWillBeRawPtr<Range>() const;
-#endif
-
-private:
-    WebPrivatePtr<Range> m_private;
->>>>>>> miniblink49
 };
 
 } // namespace blink

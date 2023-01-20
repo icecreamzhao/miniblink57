@@ -50,10 +50,10 @@ namespace blink {
 //         return self->bindToV8Function();
 //     }
 // };
-class CORE_EXPORT ScriptFunction : public GarbageCollectedFinalized<ScriptFunction> {
+class CORE_EXPORT ScriptFunction
+    : public GarbageCollectedFinalized<ScriptFunction> {
 public:
     virtual ~ScriptFunction() { }
-    ScriptState* scriptState() const { return m_scriptState.get(); }
     DEFINE_INLINE_VIRTUAL_TRACE() { }
 
 protected:
@@ -62,6 +62,8 @@ protected:
     {
     }
 
+    ScriptState* getScriptState() const { return m_scriptState.get(); }
+
     v8::Local<v8::Function> bindToV8Function();
 
 private:
@@ -69,6 +71,10 @@ private:
     static void callCallback(const v8::FunctionCallbackInfo<v8::Value>&);
 
     RefPtr<ScriptState> m_scriptState;
+#if DCHECK_IS_ON()
+    // bindToV8Function must not be called twice.
+    bool m_bindToV8FunctionAlreadyCalled = false;
+#endif
 };
 
 } // namespace blink

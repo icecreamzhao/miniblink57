@@ -10,11 +10,6 @@
 
 namespace blink {
 
-<<<<<<< HEAD
-=======
-class Visitor;
-class InlinedGlobalMarkingVisitor;
->>>>>>> miniblink49
 class WebFrame;
 
 // Small helper class to track the set of frames that a WebFrame has opened.
@@ -22,10 +17,7 @@ class WebFrame;
 // public/web/ cannot depend on wtf/.
 class OpenedFrameTracker {
     WTF_MAKE_NONCOPYABLE(OpenedFrameTracker);
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 public:
     OpenedFrameTracker();
     ~OpenedFrameTracker();
@@ -34,7 +26,6 @@ public:
     void add(WebFrame*);
     void remove(WebFrame*);
 
-<<<<<<< HEAD
     // Helper used when swapping a frame into the frame tree: this updates the
     // opener for opened frames to point to the new frame being swapped in.
     void transferTo(WebFrame*);
@@ -43,18 +34,6 @@ public:
     void dispose() { transferTo(nullptr); }
 
 private:
-=======
-    // Updates the opener for all tracked frames.
-    void updateOpener(WebFrame*);
-
-    void traceFrames(Visitor*);
-    void traceFrames(InlinedGlobalMarkingVisitor);
-
-private:
-    template <typename VisitorDispatcher>
-    void traceFramesImpl(VisitorDispatcher);
-
->>>>>>> miniblink49
     WTF::HashSet<WebFrame*> m_openedFrames;
 };
 

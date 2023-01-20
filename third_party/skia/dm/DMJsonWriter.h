@@ -23,7 +23,6 @@ public:
      *  Info describing a single run.
      */
     struct BitmapResult {
-<<<<<<< HEAD
         SkString name; // E.g. "ninepatch-stretch", "desk_gws.skp"
         SkString config; //      "gpu", "8888", "serialize", "pipe"
         SkString sourceType; //      "gm", "skp", "image"
@@ -31,14 +30,6 @@ public:
         SkString md5; // In ASCII, so 32 bytes long.
         SkString ext; // Extension of file we wrote: "png", "pdf", ...
         bool gammaCorrect; // Old configs are not gamma correct, some new ones are.
-=======
-        SkString name;            // E.g. "ninepatch-stretch", "desk_gws.skp"
-        SkString config;          //      "gpu", "8888", "serialize", "pipe"
-        SkString sourceType;      //      "gm", "skp", "image"
-        SkString sourceOptions;   //      "image", "codec", "subset", "scanline"
-        SkString md5;             // In ASCII, so 32 bytes long.
-        SkString ext;             // Extension of file we wrote: "png", "pdf", ...
->>>>>>> miniblink49
     };
 
     /**
@@ -60,15 +51,8 @@ public:
      * Read JSON file at path written by DumpJson, calling callback for each
      * BitmapResult recorded in the file.  Return success.
      */
-<<<<<<< HEAD
     static bool ReadJson(const char* path, void (*callback)(BitmapResult));
 };
 
-=======
-    static bool ReadJson(const char* path, void(*callback)(BitmapResult));
-};
-
-
->>>>>>> miniblink49
 } // namespace DM
 #endif // DMJsonWriter_DEFINED

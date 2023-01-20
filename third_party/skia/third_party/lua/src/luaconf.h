@@ -4,30 +4,18 @@
 ** See Copyright Notice in lua.h
 */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #ifndef lconfig_h
 #define lconfig_h
 
 #include <limits.h>
 #include <stddef.h>
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
 ** ==================================================================
 ** Search for "@@" to find all configurable definitions.
 ** ===================================================================
 */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
 @@ LUA_ANSI controls the use of non-ansi features.
 ** CHANGE it (define it) if you want Lua to avoid the use of any
@@ -37,19 +25,12 @@
 #define LUA_ANSI
 #endif
 
-<<<<<<< HEAD
 #if !defined(LUA_ANSI) && defined(_WIN32) && !defined(_WIN32_WCE)
 #define LUA_WIN /* enable goodies for regular Windows platforms */
-=======
-
-#if !defined(LUA_ANSI) && defined(_WIN32) && !defined(_WIN32_WCE)
-#define LUA_WIN		/* enable goodies for regular Windows platforms */
->>>>>>> miniblink49
 #endif
 
 #if defined(LUA_WIN)
 #define LUA_DL_DLL
-<<<<<<< HEAD
 #define LUA_USE_AFORMAT /* assume 'printf' handles 'aA' specifiers */
 #endif
 
@@ -60,25 +41,10 @@
 #define LUA_USE_STRTODHEX /* assume 'strtod' handles hex formats */
 #define LUA_USE_AFORMAT /* assume 'printf' handles 'aA' specifiers */
 #define LUA_USE_LONGLONG /* assume support for long long */
-=======
-#define LUA_USE_AFORMAT		/* assume 'printf' handles 'aA' specifiers */
-#endif
-
-
-
-#if defined(LUA_USE_LINUX)
-#define LUA_USE_POSIX
-#define LUA_USE_DLOPEN		/* needs an extra library: -ldl */
-#define LUA_USE_READLINE	/* needs some extra libraries */
-#define LUA_USE_STRTODHEX	/* assume 'strtod' handles hex formats */
-#define LUA_USE_AFORMAT		/* assume 'printf' handles 'aA' specifiers */
-#define LUA_USE_LONGLONG	/* assume support for long long */
->>>>>>> miniblink49
 #endif
 
 #if defined(LUA_USE_MACOSX)
 #define LUA_USE_POSIX
-<<<<<<< HEAD
 #define LUA_USE_DLOPEN /* does not need -ldl */
 #define LUA_USE_READLINE /* needs an extra library: -lreadline */
 #define LUA_USE_STRTODHEX /* assume 'strtod' handles hex formats */
@@ -86,17 +52,6 @@
 #define LUA_USE_LONGLONG /* assume support for long long */
 #endif
 
-=======
-#define LUA_USE_DLOPEN		/* does not need -ldl */
-#define LUA_USE_READLINE	/* needs an extra library: -lreadline */
-#define LUA_USE_STRTODHEX	/* assume 'strtod' handles hex formats */
-#define LUA_USE_AFORMAT		/* assume 'printf' handles 'aA' specifiers */
-#define LUA_USE_LONGLONG	/* assume support for long long */
-#endif
-
-
-
->>>>>>> miniblink49
 /*
 @@ LUA_USE_POSIX includes all functionality listed as X/Open System
 @* Interfaces Extension (XSI).
@@ -110,11 +65,6 @@
 #define LUA_USE_GMTIME_R
 #endif
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> miniblink49
 /*
 @@ LUA_PATH_DEFAULT is the default path that Lua uses to look for
 @* Lua libraries.
@@ -124,16 +74,11 @@
 ** hierarchy or if you want to install your libraries in
 ** non-conventional directories.
 */
-<<<<<<< HEAD
 #if defined(_WIN32) /* { */
-=======
-#if defined(_WIN32)	/* { */
->>>>>>> miniblink49
 /*
 ** In Windows, any exclamation mark ('!') in the path is replaced by the
 ** path of the directory of the executable file of the current process.
 */
-<<<<<<< HEAD
 #define LUA_LDIR "!\\lua\\"
 #define LUA_CDIR "!\\"
 #define LUA_PATH_DEFAULT                                                                \
@@ -156,29 +101,6 @@
     LUA_CDIR "?.so;" LUA_CDIR "loadall.so;" \
              "./?.so"
 #endif /* } */
-=======
-#define LUA_LDIR	"!\\lua\\"
-#define LUA_CDIR	"!\\"
-#define LUA_PATH_DEFAULT  \
-		LUA_LDIR"?.lua;"  LUA_LDIR"?\\init.lua;" \
-		LUA_CDIR"?.lua;"  LUA_CDIR"?\\init.lua;" ".\\?.lua"
-#define LUA_CPATH_DEFAULT \
-		LUA_CDIR"?.dll;" LUA_CDIR"loadall.dll;" ".\\?.dll"
-
-#else			/* }{ */
-
-#define LUA_VDIR	LUA_VERSION_MAJOR "." LUA_VERSION_MINOR "/"
-#define LUA_ROOT	"/usr/local/"
-#define LUA_LDIR	LUA_ROOT "share/lua/" LUA_VDIR
-#define LUA_CDIR	LUA_ROOT "lib/lua/" LUA_VDIR
-#define LUA_PATH_DEFAULT  \
-		LUA_LDIR"?.lua;"  LUA_LDIR"?/init.lua;" \
-		LUA_CDIR"?.lua;"  LUA_CDIR"?/init.lua;" "./?.lua"
-#define LUA_CPATH_DEFAULT \
-		LUA_CDIR"?.so;" LUA_CDIR"loadall.so;" "./?.so"
-#endif			/* } */
-
->>>>>>> miniblink49
 
 /*
 @@ LUA_DIRSEP is the directory separator (for submodules).
@@ -186,31 +108,17 @@
 ** and is not Windows. (On Windows Lua automatically uses "\".)
 */
 #if defined(_WIN32)
-<<<<<<< HEAD
 #define LUA_DIRSEP "\\"
 #else
 #define LUA_DIRSEP "/"
 #endif
 
-=======
-#define LUA_DIRSEP	"\\"
-#else
-#define LUA_DIRSEP	"/"
-#endif
-
-
->>>>>>> miniblink49
 /*
 @@ LUA_ENV is the name of the variable that holds the current
 @@ environment, used to access global names.
 ** CHANGE it if you do not like this name.
 */
-<<<<<<< HEAD
 #define LUA_ENV "_ENV"
-=======
-#define LUA_ENV		"_ENV"
-
->>>>>>> miniblink49
 
 /*
 @@ LUA_API is a mark for all core API functions.
@@ -221,7 +129,6 @@
 ** the libraries, you may want to use the following definition (define
 ** LUA_BUILD_AS_DLL to get it).
 */
-<<<<<<< HEAD
 #if defined(LUA_BUILD_AS_DLL) /* { */
 
 #if defined(LUA_CORE) || defined(LUA_LIB) /* { */
@@ -239,27 +146,6 @@
 /* more often than not the libs go together with the core */
 #define LUALIB_API LUA_API
 #define LUAMOD_API LUALIB_API
-=======
-#if defined(LUA_BUILD_AS_DLL)	/* { */
-
-#if defined(LUA_CORE) || defined(LUA_LIB)	/* { */
-#define LUA_API __declspec(dllexport)
-#else						/* }{ */
-#define LUA_API __declspec(dllimport)
-#endif						/* } */
-
-#else				/* }{ */
-
-#define LUA_API		extern
-
-#endif				/* } */
-
-
-/* more often than not the libs go together with the core */
-#define LUALIB_API	LUA_API
-#define LUAMOD_API	LUALIB_API
-
->>>>>>> miniblink49
 
 /*
 @@ LUAI_FUNC is a mark for all extern functions that are not to be
@@ -275,7 +161,6 @@
 ** give a warning about it. To avoid these warnings, change to the
 ** default definition.
 */
-<<<<<<< HEAD
 #if defined(__GNUC__) && ((__GNUC__ * 100 + __GNUC_MINOR__) >= 302) && defined(__ELF__) /* { */
 #define LUAI_FUNC __attribute__((visibility("hidden"))) extern
 #define LUAI_DDEC LUAI_FUNC
@@ -286,46 +171,20 @@
 #define LUAI_DDEC extern
 #define LUAI_DDEF /* empty */
 #endif /* } */
-=======
-#if defined(__GNUC__) && ((__GNUC__*100 + __GNUC_MINOR__) >= 302) && \
-    defined(__ELF__)		/* { */
-#define LUAI_FUNC	__attribute__((visibility("hidden"))) extern
-#define LUAI_DDEC	LUAI_FUNC
-#define LUAI_DDEF	/* empty */
-
-#else				/* }{ */
-#define LUAI_FUNC	extern
-#define LUAI_DDEC	extern
-#define LUAI_DDEF	/* empty */
-#endif				/* } */
-
-
->>>>>>> miniblink49
 
 /*
 @@ LUA_QL describes how error messages quote program elements.
 ** CHANGE it if you want a different appearance.
 */
-<<<<<<< HEAD
 #define LUA_QL(x) "'" x "'"
 #define LUA_QS LUA_QL("%s")
-=======
-#define LUA_QL(x)	"'" x "'"
-#define LUA_QS		LUA_QL("%s")
-
->>>>>>> miniblink49
 
 /*
 @@ LUA_IDSIZE gives the maximum size for the description of the source
 @* of a function in debug information.
 ** CHANGE it if you want a different size.
 */
-<<<<<<< HEAD
 #define LUA_IDSIZE 60
-=======
-#define LUA_IDSIZE	60
-
->>>>>>> miniblink49
 
 /*
 @@ luai_writestring/luai_writeline define how 'print' prints its results.
@@ -334,27 +193,16 @@
 */
 #if defined(LUA_LIB) || defined(lua_c)
 #include <stdio.h>
-<<<<<<< HEAD
 #define luai_writestring(s, l) fwrite((s), sizeof(char), (l), stdout)
 #define luai_writeline() (luai_writestring("\n", 1), fflush(stdout))
-=======
-#define luai_writestring(s,l)	fwrite((s), sizeof(char), (l), stdout)
-#define luai_writeline()	(luai_writestring("\n", 1), fflush(stdout))
->>>>>>> miniblink49
 #endif
 
 /*
 @@ luai_writestringerror defines how to print error messages.
 ** (A format string with one argument is enough for Lua...)
 */
-<<<<<<< HEAD
 #define luai_writestringerror(s, p) \
     (fprintf(stderr, (s), (p)), fflush(stderr))
-=======
-#define luai_writestringerror(s,p) \
-	(fprintf(stderr, (s), (p)), fflush(stderr))
-
->>>>>>> miniblink49
 
 /*
 @@ LUAI_MAXSHORTLEN is the maximum length for short strings, that is,
@@ -362,13 +210,7 @@
 ** or tags for metamethods, as these strings must be internalized;
 ** #("function") = 8, #("__newindex") = 10.)
 */
-<<<<<<< HEAD
 #define LUAI_MAXSHORTLEN 40
-=======
-#define LUAI_MAXSHORTLEN        40
-
-
->>>>>>> miniblink49
 
 /*
 ** {==================================================================
@@ -381,11 +223,7 @@
 ** You can define it to get all options, or change specific options
 ** to fit your specific needs.
 */
-<<<<<<< HEAD
 #if defined(LUA_COMPAT_ALL) /* { */
-=======
-#if defined(LUA_COMPAT_ALL)	/* { */
->>>>>>> miniblink49
 
 /*
 @@ LUA_COMPAT_UNPACK controls the presence of global 'unpack'.
@@ -403,18 +241,10 @@
 @@ macro 'lua_cpcall' emulates deprecated function lua_cpcall.
 ** You can call your C function directly (with light C functions).
 */
-<<<<<<< HEAD
 #define lua_cpcall(L, f, u)            \
     (lua_pushcfunction(L, (f)),        \
         lua_pushlightuserdata(L, (u)), \
         lua_pcall(L, 1, 0, 0))
-=======
-#define lua_cpcall(L,f,u)  \
-	(lua_pushcfunction(L, (f)), \
-	 lua_pushlightuserdata(L,(u)), \
-	 lua_pcall(L,1,0,0))
-
->>>>>>> miniblink49
 
 /*
 @@ LUA_COMPAT_LOG10 defines the function 'log10' in the math library.
@@ -438,21 +268,12 @@
 ** changes in the API. The macros themselves document how to
 ** change your code to avoid using them.
 */
-<<<<<<< HEAD
 #define lua_strlen(L, i) lua_rawlen(L, (i))
 
 #define lua_objlen(L, i) lua_rawlen(L, (i))
 
 #define lua_equal(L, idx1, idx2) lua_compare(L, (idx1), (idx2), LUA_OPEQ)
 #define lua_lessthan(L, idx1, idx2) lua_compare(L, (idx1), (idx2), LUA_OPLT)
-=======
-#define lua_strlen(L,i)		lua_rawlen(L, (i))
-
-#define lua_objlen(L,i)		lua_rawlen(L, (i))
-
-#define lua_equal(L,idx1,idx2)		lua_compare(L,(idx1),(idx2),LUA_OPEQ)
-#define lua_lessthan(L,idx1,idx2)	lua_compare(L,(idx1),(idx2),LUA_OPLT)
->>>>>>> miniblink49
 
 /*
 @@ LUA_COMPAT_MODULE controls compatibility with previous
@@ -460,26 +281,16 @@
 */
 #define LUA_COMPAT_MODULE
 
-<<<<<<< HEAD
 #endif /* } */
 
 /* }================================================================== */
 
-=======
-#endif				/* } */
-
-/* }================================================================== */
-
-
-
->>>>>>> miniblink49
 /*
 @@ LUAI_BITSINT defines the number of bits in an int.
 ** CHANGE here if Lua cannot automatically detect the number of bits of
 ** your machine. Probably you do not need to change this.
 */
 /* avoid overflows in comparison */
-<<<<<<< HEAD
 #if INT_MAX - 20 < 32760 /* { */
 #define LUAI_BITSINT 16
 #elif INT_MAX > 2147483640L /* }{ */
@@ -488,17 +299,6 @@
 #else /* }{ */
 #error "you must define LUA_BITSINT with number of bits in an integer"
 #endif /* } */
-=======
-#if INT_MAX-20 < 32760		/* { */
-#define LUAI_BITSINT	16
-#elif INT_MAX > 2147483640L	/* }{ */
-/* int has at least 32 bits */
-#define LUAI_BITSINT	32
-#else				/* }{ */
-#error "you must define LUA_BITSINT with number of bits in an integer"
-#endif				/* } */
-
->>>>>>> miniblink49
 
 /*
 @@ LUA_INT32 is an signed integer with exactly 32 bits.
@@ -510,7 +310,6 @@
 ** good enough for your machine. Probably you do not need to change
 ** this.
 */
-<<<<<<< HEAD
 #if LUAI_BITSINT >= 32 /* { */
 #define LUA_INT32 int
 #define LUAI_UMEM size_t
@@ -521,19 +320,6 @@
 #define LUAI_UMEM unsigned long
 #define LUAI_MEM long
 #endif /* } */
-=======
-#if LUAI_BITSINT >= 32		/* { */
-#define LUA_INT32	int
-#define LUAI_UMEM	size_t
-#define LUAI_MEM	ptrdiff_t
-#else				/* }{ */
-/* 16-bit ints */
-#define LUA_INT32	long
-#define LUAI_UMEM	unsigned long
-#define LUAI_MEM	long
-#endif				/* } */
-
->>>>>>> miniblink49
 
 /*
 @@ LUAI_MAXSTACK limits the size of the Lua stack.
@@ -542,7 +328,6 @@
 ** space (and to reserve some numbers for pseudo-indices).
 */
 #if LUAI_BITSINT >= 32
-<<<<<<< HEAD
 #define LUAI_MAXSTACK 1000000
 #else
 #define LUAI_MAXSTACK 15000
@@ -550,31 +335,12 @@
 
 /* reserve some space for error handling */
 #define LUAI_FIRSTPSEUDOIDX (-LUAI_MAXSTACK - 1000)
-=======
-#define LUAI_MAXSTACK		1000000
-#else
-#define LUAI_MAXSTACK		15000
-#endif
-
-/* reserve some space for error handling */
-#define LUAI_FIRSTPSEUDOIDX	(-LUAI_MAXSTACK - 1000)
-
-
-
->>>>>>> miniblink49
 
 /*
 @@ LUAL_BUFFERSIZE is the buffer size used by the lauxlib buffer system.
 ** CHANGE it if it uses too much C-stack space.
 */
-<<<<<<< HEAD
 #define LUAL_BUFFERSIZE BUFSIZ
-=======
-#define LUAL_BUFFERSIZE		BUFSIZ
-
-
-
->>>>>>> miniblink49
 
 /*
 ** {==================================================================
@@ -586,22 +352,13 @@
 */
 
 #define LUA_NUMBER_DOUBLE
-<<<<<<< HEAD
 #define LUA_NUMBER double
-=======
-#define LUA_NUMBER	double
->>>>>>> miniblink49
 
 /*
 @@ LUAI_UACNUMBER is the result of an 'usual argument conversion'
 @* over a number.
 */
-<<<<<<< HEAD
 #define LUAI_UACNUMBER double
-=======
-#define LUAI_UACNUMBER	double
-
->>>>>>> miniblink49
 
 /*
 @@ LUA_NUMBER_SCAN is the format for reading numbers.
@@ -609,28 +366,15 @@
 @@ lua_number2str converts a number to a string.
 @@ LUAI_MAXNUMBER2STR is maximum size of previous conversion.
 */
-<<<<<<< HEAD
 #define LUA_NUMBER_SCAN "%lf"
 #define LUA_NUMBER_FMT "%.14g"
 #define lua_number2str(s, n) sprintf((s), LUA_NUMBER_FMT, (n))
 #define LUAI_MAXNUMBER2STR 32 /* 16 digits, sign, point, and \0 */
-=======
-#define LUA_NUMBER_SCAN		"%lf"
-#define LUA_NUMBER_FMT		"%.14g"
-#define lua_number2str(s,n)	sprintf((s), LUA_NUMBER_FMT, (n))
-#define LUAI_MAXNUMBER2STR	32 /* 16 digits, sign, point, and \0 */
-
->>>>>>> miniblink49
 
 /*
 @@ l_mathop allows the addition of an 'l' or 'f' to all math operations
 */
-<<<<<<< HEAD
 #define l_mathop(x) (x)
-=======
-#define l_mathop(x)		(x)
-
->>>>>>> miniblink49
 
 /*
 @@ lua_str2number converts a decimal numeric string to a number.
@@ -640,22 +384,12 @@
 ** systems, you can leave 'lua_strx2number' undefined and Lua will
 ** provide its own implementation.
 */
-<<<<<<< HEAD
 #define lua_str2number(s, p) strtod((s), (p))
 
 #if defined(LUA_USE_STRTODHEX)
 #define lua_strx2number(s, p) strtod((s), (p))
 #endif
 
-=======
-#define lua_str2number(s,p)	strtod((s), (p))
-
-#if defined(LUA_USE_STRTODHEX)
-#define lua_strx2number(s,p)	strtod((s), (p))
-#endif
-
-
->>>>>>> miniblink49
 /*
 @@ The luai_num* macros define the primitive operations over numbers.
 */
@@ -663,18 +397,12 @@
 /* the following operations need the math library */
 #if defined(lobject_c) || defined(lvm_c)
 #include <math.h>
-<<<<<<< HEAD
 #define luai_nummod(L, a, b) ((a)-l_mathop(floor)((a) / (b)) * (b))
 #define luai_numpow(L, a, b) (l_mathop(pow)(a, b))
-=======
-#define luai_nummod(L,a,b)	((a) - l_mathop(floor)((a)/(b))*(b))
-#define luai_numpow(L,a,b)	(l_mathop(pow)(a,b))
->>>>>>> miniblink49
 #endif
 
 /* these are quite standard operations */
 #if defined(LUA_CORE)
-<<<<<<< HEAD
 #define luai_numadd(L, a, b) ((a) + (b))
 #define luai_numsub(L, a, b) ((a) - (b))
 #define luai_nummul(L, a, b) ((a) * (b))
@@ -686,53 +414,24 @@
 #define luai_numisnan(L, a) (!luai_numeq((a), (a)))
 #endif
 
-=======
-#define luai_numadd(L,a,b)	((a)+(b))
-#define luai_numsub(L,a,b)	((a)-(b))
-#define luai_nummul(L,a,b)	((a)*(b))
-#define luai_numdiv(L,a,b)	((a)/(b))
-#define luai_numunm(L,a)	(-(a))
-#define luai_numeq(a,b)		((a)==(b))
-#define luai_numlt(L,a,b)	((a)<(b))
-#define luai_numle(L,a,b)	((a)<=(b))
-#define luai_numisnan(L,a)	(!luai_numeq((a), (a)))
-#endif
-
-
-
->>>>>>> miniblink49
 /*
 @@ LUA_INTEGER is the integral type used by lua_pushinteger/lua_tointeger.
 ** CHANGE that if ptrdiff_t is not adequate on your machine. (On most
 ** machines, ptrdiff_t gives a good choice between int or long.)
 */
-<<<<<<< HEAD
 #define LUA_INTEGER ptrdiff_t
-=======
-#define LUA_INTEGER	ptrdiff_t
->>>>>>> miniblink49
 
 /*
 @@ LUA_UNSIGNED is the integral type used by lua_pushunsigned/lua_tounsigned.
 ** It must have at least 32 bits.
 */
-<<<<<<< HEAD
 #define LUA_UNSIGNED unsigned LUA_INT32
-=======
-#define LUA_UNSIGNED	unsigned LUA_INT32
-
-
->>>>>>> miniblink49
 
 /*
 ** Some tricks with doubles
 */
 
-<<<<<<< HEAD
 #if defined(LUA_NUMBER_DOUBLE) && !defined(LUA_ANSI) /* { */
-=======
-#if defined(LUA_NUMBER_DOUBLE) && !defined(LUA_ANSI)	/* { */
->>>>>>> miniblink49
 /*
 ** The next definitions activate some tricks to speed up the
 ** conversion from doubles to integer types, mainly to LUA_UNSIGNED.
@@ -759,28 +458,17 @@
 */
 
 /* Microsoft compiler on a Pentium (32 bit) ? */
-<<<<<<< HEAD
 #if defined(LUA_WIN) && defined(_MSC_VER) && defined(_M_IX86) /* { */
 
 #define LUA_MSASMTRICK
 #define LUA_IEEEENDIAN 0
 #define LUA_NANTRICK
 
-=======
-#if defined(LUA_WIN) && defined(_MSC_VER) && defined(_M_IX86)	/* { */
-
-#define LUA_MSASMTRICK
-#define LUA_IEEEENDIAN		0
-#define LUA_NANTRICK
-
-
->>>>>>> miniblink49
 /* pentium 32 bits? */
 #elif defined(__i386__) || defined(__i386) || defined(__X86__) /* }{ */
 
 #define LUA_IEEE754TRICK
 #define LUA_IEEELL
-<<<<<<< HEAD
 #define LUA_IEEEENDIAN 0
 #define LUA_NANTRICK
 
@@ -796,45 +484,16 @@
 #define LUA_IEEEENDIAN 1
 
 #else /* }{ */
-=======
-#define LUA_IEEEENDIAN		0
-#define LUA_NANTRICK
-
-/* pentium 64 bits? */
-#elif defined(__x86_64)						/* }{ */
-
-#define LUA_IEEE754TRICK
-#define LUA_IEEEENDIAN		0
-
-#elif defined(__POWERPC__) || defined(__ppc__)			/* }{ */
-
-#define LUA_IEEE754TRICK
-#define LUA_IEEEENDIAN		1
-
-#else								/* }{ */
->>>>>>> miniblink49
 
 /* assume IEEE754 and a 32-bit integer type */
 #define LUA_IEEE754TRICK
 
-<<<<<<< HEAD
 #endif /* } */
 
 #endif /* } */
 
 /* }================================================================== */
 
-=======
-#endif								/* } */
-
-#endif							/* } */
-
-/* }================================================================== */
-
-
-
-
->>>>>>> miniblink49
 /* =================================================================== */
 
 /*
@@ -842,11 +501,4 @@
 ** without modifying the main part of the file.
 */
 
-<<<<<<< HEAD
 #endif
-=======
-
-
-#endif
-
->>>>>>> miniblink49

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 esprehn@chromium.org
 haraken@chromium.org
 mkwst@chromium.org
@@ -12,14 +11,3 @@ per-file modules.gypi=*
 
 # TEAM: platform-architecture-dev@chromium.org
 # COMPONENT: Blink>Internals>Modularization
-=======
-mkwst@chromium.org
-
-# Reviewer for idl files:
-haraken@chromium.org
-
-# Reviewer for inspector-related code:
-pfeldman@chromium.org
-
-per-file modules.gypi=*
->>>>>>> miniblink49

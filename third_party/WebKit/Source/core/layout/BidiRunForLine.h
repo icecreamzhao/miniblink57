@@ -24,17 +24,22 @@
 #ifndef BidiRunForLine_h
 #define BidiRunForLine_h
 
+#include "core/layout/api/LineLayoutInline.h"
 #include "core/layout/line/TrailingObjects.h"
 #include "platform/text/BidiResolver.h"
 
 namespace blink {
 
-TextDirection determinePlaintextDirectionality(LayoutObject* root,
-    LayoutObject* current = nullptr, unsigned pos = 0);
+TextDirection determinePlaintextDirectionality(LineLayoutItem root,
+    LineLayoutItem current = nullptr,
+    unsigned pos = 0);
 
-void constructBidiRunsForLine(InlineBidiResolver&, BidiRunList<BidiRun>&,
-    const InlineIterator& endOfLine, VisualDirectionOverride,
-    bool previousLineBrokeCleanly, bool isNewUBAParagraph);
+void constructBidiRunsForLine(InlineBidiResolver&,
+    BidiRunList<BidiRun>&,
+    const InlineIterator& endOfLine,
+    VisualDirectionOverride,
+    bool previousLineBrokeCleanly,
+    bool isNewUBAParagraph);
 
 } // namespace blink
 

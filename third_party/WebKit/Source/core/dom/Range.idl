@@ -24,8 +24,6 @@
 [
     Constructor,
     ConstructorCallWith=Document,
-    WillBeGarbageCollected,
-    TypeChecking=Interface,
 ] interface Range {
     readonly attribute Node startContainer;
     readonly attribute long startOffset;
@@ -50,14 +48,14 @@
     const unsigned short END_TO_START = 3;
     [RaisesException] short compareBoundaryPoints(unsigned short how, Range sourceRange);
 
-    [RaisesException, CustomElementCallbacks] void deleteContents();
-    [NewObject, RaisesException, CustomElementCallbacks] DocumentFragment extractContents();
-    [NewObject, RaisesException, CustomElementCallbacks] DocumentFragment cloneContents();
-    [RaisesException, CustomElementCallbacks] void insertNode(Node node);
-    [RaisesException, CustomElementCallbacks] void surroundContents(Node newParent);
+    [RaisesException, CEReactions, CustomElementCallbacks] void deleteContents();
+    [NewObject, RaisesException, CEReactions, CustomElementCallbacks] DocumentFragment extractContents();
+    [NewObject, RaisesException, CEReactions, CustomElementCallbacks] DocumentFragment cloneContents();
+    [RaisesException, CEReactions, CustomElementCallbacks] void insertNode(Node node);
+    [RaisesException, CEReactions, CustomElementCallbacks] void surroundContents(Node newParent);
 
     [NewObject] Range cloneRange();
-    [DeprecateAs=RangeDetach] void detach();
+    [MeasureAs=RangeDetach] void detach();
 
     [RaisesException] boolean isPointInRange(Node node, long offset);
     [RaisesException] short comparePoint(Node node, long offset);
@@ -67,15 +65,15 @@
     stringifier;
 
     // CSSOM View Module
-    // http://dev.w3.org/csswg/cssom-view/#extensions-to-the-range-interface
+    // https://dev.w3.org/csswg/cssom-view/#extensions-to-the-range-interface
     // FIXME: getClientRect() and getBoundingClientRect() should
     // return DOMRectList and DOMRect respectively.
     ClientRectList getClientRects();
     ClientRect getBoundingClientRect();
 
     // DOM Parsing and Serialization
-    // https://dvcs.w3.org/hg/innerhtml/raw-file/tip/index.html#extensions-to-the-range-interface
-    [NewObject, RaisesException, CustomElementCallbacks] DocumentFragment createContextualFragment(DOMString fragment);
+    // https://w3c.github.io/DOM-Parsing/#extensions-to-the-range-interface
+    [NewObject, RaisesException, CEReactions, CustomElementCallbacks] DocumentFragment createContextualFragment(DOMString fragment);
 
     // Non-standard API
     [RaisesException, DeprecateAs=RangeExpand] void expand([Default=Undefined] optional DOMString unit);

@@ -16,7 +16,6 @@ namespace v8 {
 
 namespace platform {
 
-<<<<<<< HEAD
     class TaskQueue;
 
     class V8_PLATFORM_EXPORT WorkerThread : public NON_EXPORTED_BASE(base::Thread) {
@@ -37,26 +36,3 @@ namespace platform {
 } // namespace v8
 
 #endif // V8_LIBPLATFORM_WORKER_THREAD_H_
-=======
-class TaskQueue;
-
-class V8_PLATFORM_EXPORT WorkerThread : public NON_EXPORTED_BASE(base::Thread) {
- public:
-  explicit WorkerThread(TaskQueue* queue);
-  ~WorkerThread() override;
-
-  // Thread implementation.
-  void Run() override;
-
- private:
-  TaskQueue* queue_;
-
-  DISALLOW_COPY_AND_ASSIGN(WorkerThread);
-};
-
-}  // namespace platform
-}  // namespace v8
-
-
-#endif  // V8_LIBPLATFORM_WORKER_THREAD_H_
->>>>>>> miniblink49

@@ -31,21 +31,12 @@
 #ifndef WebClipboard_h
 #define WebClipboard_h
 
-<<<<<<< HEAD
 #include "public/platform/WebBlobInfo.h"
 #include "public/platform/WebCommon.h"
 #include "public/platform/WebImage.h"
 #include "public/platform/WebString.h"
 #include "public/platform/WebURL.h"
 #include "public/platform/WebVector.h"
-=======
-#include "WebCommon.h"
-#include "WebData.h"
-#include "WebImage.h"
-#include "WebString.h"
-#include "WebURL.h"
-#include "WebVector.h"
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -55,19 +46,10 @@ class WebURL;
 
 class WebClipboard {
 public:
-<<<<<<< HEAD
     enum Format { FormatPlainText,
         FormatHTML,
         FormatBookmark,
         FormatSmartPaste };
-=======
-    enum Format {
-        FormatPlainText,
-        FormatHTML,
-        FormatBookmark,
-        FormatSmartPaste
-    };
->>>>>>> miniblink49
 
     enum Buffer {
         BufferStandard,
@@ -82,23 +64,17 @@ public:
 
     virtual bool isFormatAvailable(Format, Buffer) { return false; }
 
-<<<<<<< HEAD
     virtual WebVector<WebString> readAvailableTypes(Buffer,
         bool* containsFilenames)
     {
         return WebVector<WebString>();
     }
-=======
-    virtual WebVector<WebString> readAvailableTypes(
-        Buffer, bool* containsFilenames) { return WebVector<WebString>(); }
->>>>>>> miniblink49
     virtual WebString readPlainText(Buffer) { return WebString(); }
     // fragmentStart and fragmentEnd are indexes into the returned markup that
     // indicate the start and end of the fragment if the returned markup
     // contains additional context. If there is no additional context,
     // fragmentStart will be zero and fragmentEnd will be the same as the length
     // of the returned markup.
-<<<<<<< HEAD
     virtual WebString readHTML(Buffer buffer,
         WebURL* pageURL,
         unsigned* fragmentStart,
@@ -121,21 +97,6 @@ public:
     virtual void writeImage(const WebImage&,
         const WebURL&,
         const WebString& title) { }
-=======
-    virtual WebString readHTML(
-        Buffer buffer, WebURL* pageURL, unsigned* fragmentStart,
-        unsigned* fragmentEnd) { return WebString(); }
-    virtual WebData readImage(Buffer) { return WebData(); }
-    virtual WebString readCustomData(
-        Buffer, const WebString& type) { return WebString(); }
-
-    virtual void writePlainText(const WebString&) { }
-    virtual void writeHTML(
-        const WebString& htmlText, const WebURL&,
-        const WebString& plainText, bool writeSmartPaste) { }
-    virtual void writeImage(
-        const WebImage&, const WebURL&, const WebString& title) { }
->>>>>>> miniblink49
     virtual void writeDataObject(const WebDragData&) { }
 
 protected:

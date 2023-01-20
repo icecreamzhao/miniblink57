@@ -77,7 +77,6 @@ namespace double_conversion {
     // 'BignumDtoa' expects the given buffer to be big enough to hold all digits
     // and a terminating null-character.
     void BignumDtoa(double v, BignumDtoaMode mode, int requested_digits,
-<<<<<<< HEAD
         Vector<char> buffer, int* length, int* point);
 
 } // namespace double_conversion
@@ -85,12 +84,3 @@ namespace double_conversion {
 } // namespace WTF
 
 #endif // DOUBLE_CONVERSION_BIGNUM_DTOA_H_
-=======
-                    Vector<char> buffer, int* length, int* point);
-
-}  // namespace double_conversion
-
-} // namespace WTF
-
-#endif  // DOUBLE_CONVERSION_BIGNUM_DTOA_H_
->>>>>>> miniblink49

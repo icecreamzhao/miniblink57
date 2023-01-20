@@ -7,12 +7,8 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 // From
 // https://w3c.github.io/encrypted-media/initdata-format-registry.html#registry
-=======
-// From https://w3c.github.io/encrypted-media/initdata-format-registry.html#registry
->>>>>>> miniblink49
 enum class WebEncryptedMediaInitDataType {
     Unknown,
     Cenc,

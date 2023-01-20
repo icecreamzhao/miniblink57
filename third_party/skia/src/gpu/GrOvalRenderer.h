@@ -8,7 +8,6 @@
 #ifndef GrOvalRenderer_DEFINED
 #define GrOvalRenderer_DEFINED
 
-<<<<<<< HEAD
 #include "GrColor.h"
 
 class GrDrawBatch;
@@ -16,13 +15,6 @@ class GrShaderCaps;
 class SkMatrix;
 struct SkRect;
 class SkRRect;
-=======
-#include "GrPaint.h"
-
-class GrDrawTarget;
-class GrPipelineBuilder;
-struct SkRect;
->>>>>>> miniblink49
 class SkStrokeRec;
 
 /*
@@ -30,7 +22,6 @@ class SkStrokeRec;
  */
 class GrOvalRenderer {
 public:
-<<<<<<< HEAD
     static GrDrawBatch* CreateOvalBatch(GrColor,
         const SkMatrix& viewMatrix,
         const SkRect& oval,
@@ -41,34 +32,10 @@ public:
         const SkRRect& rrect,
         const SkStrokeRec& stroke,
         GrShaderCaps* shaderCaps);
-=======
-    static bool DrawOval(GrDrawTarget*,
-                         GrPipelineBuilder*,
-                         GrColor,
-                         const SkMatrix& viewMatrix,
-                         bool useAA,
-                         const SkRect& oval,
-                         const SkStrokeRec& stroke);
-    static bool DrawRRect(GrDrawTarget*,
-                          GrPipelineBuilder*,
-                          GrColor,
-                          const SkMatrix& viewMatrix,
-                          bool useAA,
-                          const SkRRect& rrect,
-                          const SkStrokeRec& stroke);
-    static bool DrawDRRect(GrDrawTarget* target,
-                           GrPipelineBuilder*,
-                           GrColor,
-                           const SkMatrix& viewMatrix,
-                           bool useAA,
-                           const SkRRect& outer,
-                           const SkRRect& inner);
->>>>>>> miniblink49
 
 private:
     GrOvalRenderer();
 
-<<<<<<< HEAD
     static GrDrawBatch* CreateEllipseBatch(GrColor,
         const SkMatrix& viewMatrix,
         const SkRect& ellipse,
@@ -81,29 +48,6 @@ private:
         const SkMatrix& viewMatrix,
         const SkRect& circle,
         const SkStrokeRec& stroke);
-=======
-    static bool DrawEllipse(GrDrawTarget* target,
-                            GrPipelineBuilder*,
-                            GrColor,
-                            const SkMatrix& viewMatrix,
-                            bool useCoverageAA,
-                            const SkRect& ellipse,
-                            const SkStrokeRec& stroke);
-    static bool DrawDIEllipse(GrDrawTarget* target,
-                              GrPipelineBuilder*,
-                              GrColor,
-                              const SkMatrix& viewMatrix,
-                              bool useCoverageAA,
-                              const SkRect& ellipse,
-                              const SkStrokeRec& stroke);
-    static void DrawCircle(GrDrawTarget* target,
-                           GrPipelineBuilder*,
-                           GrColor,
-                           const SkMatrix& viewMatrix,
-                           bool useCoverageAA,
-                           const SkRect& circle,
-                           const SkStrokeRec& stroke);
->>>>>>> miniblink49
 };
 
 #endif // GrOvalRenderer_DEFINED

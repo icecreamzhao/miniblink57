@@ -27,25 +27,13 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 class PLATFORM_EXPORT DistantLightSource final : public LightSource {
-=======
-class PLATFORM_EXPORT DistantLightSource : public LightSource {
->>>>>>> miniblink49
 public:
     static PassRefPtr<DistantLightSource> create(float azimuth, float elevation)
     {
         return adoptRef(new DistantLightSource(azimuth, elevation));
     }
 
-<<<<<<< HEAD
-=======
-    PassRefPtr<LightSource> create(const FloatPoint3D& scale, const FloatSize& offset) const override
-    {
-        return adoptRef(new DistantLightSource(m_azimuth, m_elevation));
-    }
-
->>>>>>> miniblink49
     float azimuth() const { return m_azimuth; }
     float elevation() const { return m_elevation; }
 

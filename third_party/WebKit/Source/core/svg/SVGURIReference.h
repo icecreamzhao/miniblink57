@@ -23,38 +23,38 @@
 
 #include "core/CoreExport.h"
 #include "core/dom/Document.h"
-#include "core/svg/SVGAnimatedString.h"
+#include "core/svg/SVGAnimatedHref.h"
 #include "platform/heap/Handle.h"
 
 namespace blink {
 
 class Element;
 
-class CORE_EXPORT SVGURIReference : public WillBeGarbageCollectedMixin {
+class CORE_EXPORT SVGURIReference : public GarbageCollectedMixin {
 public:
     virtual ~SVGURIReference() { }
 
     bool isKnownAttribute(const QualifiedName&);
-    void addSupportedAttributes(HashSet<QualifiedName>&);
 
-    static AtomicString fragmentIdentifierFromIRIString(const String&, const TreeScope&);
-    static Element* targetElementFromIRIString(const String&, const TreeScope&, AtomicString* = 0, Document* = 0);
+    // Use this for accesses to 'href' or 'xlink:href' (in that order) for
+    // elements where both are allowed and don't necessarily inherit from
+    // SVGURIReference.
+    static const AtomicString& legacyHrefString(const SVGElement&);
 
-    static inline bool isExternalURIReference(const String& uri, const Document& document)
-    {
-        // Fragment-only URIs are always internal
-        if (uri.startsWith('#'))
-            return false;
+    // Like above, but for elements that inherit from SVGURIReference. Resolves
+    // against the base URL of the passed Document.
+    KURL legacyHrefURL(const Document&) const;
 
-        // If the URI matches our documents URL, we're dealing with a local reference.
-        KURL url = document.completeURL(uri);
-        return !equalIgnoringFragmentIdentifier(url, document.url());
-    }
+    static AtomicString fragmentIdentifierFromIRIString(const String&,
+        const TreeScope&);
+    static Element* targetElementFromIRIString(const String&,
+        const TreeScope&,
+        AtomicString* = nullptr);
 
     const String& hrefString() const { return m_href->currentValue()->value(); }
 
     // JS API
-    SVGAnimatedString* href() const { return m_href.get(); }
+    SVGAnimatedHref* href() const { return m_href.get(); }
 
     DECLARE_VIRTUAL_TRACE();
 
@@ -62,7 +62,26 @@ protected:
     explicit SVGURIReference(SVGElement*);
 
 private:
-    RefPtrWillBeMember<SVGAnimatedString> m_href;
+    Member<SVGAnimatedHref> m_href;
+};
+
+// Helper class used to resolve fragment references. Handles the 'local url
+// flag' per https://drafts.csswg.org/css-values/#local-urls .
+class SVGURLReferenceResolver {
+    STACK_ALLOCATED();
+
+public:
+    SVGURLReferenceResolver(const String& urlString, const Document&);
+
+    bool isLocal() const;
+    KURL absoluteUrl() const;
+    AtomicString fragmentIdentifier() const;
+
+private:
+    const String& m_relativeUrl;
+    Member<const Document> m_document;
+    mutable KURL m_absoluteUrl;
+    bool m_isLocal;
 };
 
 } // namespace blink

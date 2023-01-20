@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -9,15 +5,10 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #ifndef SkOSWindow_SDL_DEFINED
 #define SkOSWindow_SDL_DEFINED
 
 #include "SDL.h"
-<<<<<<< HEAD
 #include "SDL_opengl.h"
 #include "SkWindow.h"
 
@@ -57,35 +48,6 @@ private:
     SDL_Window* fWindow;
     SDL_GLContext fGLContext;
     int fWindowMSAASampleCount;
-=======
-#include "SkWindow.h"
-
-class SkGLCanvas;
-
-class SkOSWindow : public SkWindow {
-public:
-    SkOSWindow(void* screen);
-    virtual ~SkOSWindow();
-
-    static bool PostEvent(SkEvent* evt, SkEventSinkID, SkMSec delay);
-
-    void handleSDLEvent(const SDL_Event& event);
-
-protected:
-    // overrides from SkWindow
-    virtual void onHandleInval(const SkIRect&);
-    // overrides from SkView
-    virtual void onAddMenu(const SkOSMenu*);
-    virtual void onSetTitle(const char[]);
-
-private:
-    SDL_Surface* fScreen;
-    SDL_Surface* fSurface;
-    SkGLCanvas* fGLCanvas;
-
-    void doDraw();
-
->>>>>>> miniblink49
     typedef SkWindow INHERITED;
 };
 

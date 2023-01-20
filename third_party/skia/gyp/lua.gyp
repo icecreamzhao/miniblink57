@@ -59,7 +59,6 @@
       'defines': [
         "getlocaledecpoint()='.'",
       ],
-<<<<<<< HEAD
       'variables': {
         'skia_lua_flags' : [
           '-Wno-parentheses-equality',
@@ -69,8 +68,6 @@
       },
       'cflags': [ '<@(skia_lua_flags)' ],
       'xcode_settings': { 'WARNING_CFLAGS': [ '<@(skia_lua_flags)' ], },
-=======
->>>>>>> miniblink49
       'conditions': [
         ['skia_os != "win"',
          {
@@ -79,14 +76,11 @@
             ],
           }
         ],
-<<<<<<< HEAD
         [ 'skia_clang_build == 1', {
           'cflags':[
             '-w',
           ],
         }],
-=======
->>>>>>> miniblink49
       ],
     },
   ],

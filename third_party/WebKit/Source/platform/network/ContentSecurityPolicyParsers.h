@@ -9,15 +9,6 @@
 #include "platform/PlatformExport.h"
 #include "wtf/text/Unicode.h"
 
-<<<<<<< HEAD
-=======
-namespace WTF {
-
-class StringUTF8Adaptor;
-
-}
-
->>>>>>> miniblink49
 namespace blink {
 
 typedef std::pair<unsigned, DigestValue> CSPHashValue;
@@ -55,12 +46,6 @@ PLATFORM_EXPORT bool isMediaTypeCharacter(UChar);
 // positional and may only appear at the end of a Base64 encoded string.
 PLATFORM_EXPORT bool isBase64EncodedCharacter(UChar);
 
-<<<<<<< HEAD
-=======
-// Normalize script or style source for script hash use.
-PLATFORM_EXPORT WTF::StringUTF8Adaptor normalizeSource(const String& source);
-
->>>>>>> miniblink49
 } // namespace blink
 
 #endif

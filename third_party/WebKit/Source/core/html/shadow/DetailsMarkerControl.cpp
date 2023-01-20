@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/html/shadow/DetailsMarkerControl.h"
 
 #include "core/HTMLNames.h"
@@ -56,7 +55,7 @@ bool DetailsMarkerControl::layoutObjectIsNeeded(const ComputedStyle& style)
 
 HTMLSummaryElement* DetailsMarkerControl::summaryElement()
 {
-    return toHTMLSummaryElement(shadowHost());
+    return toHTMLSummaryElement(ownerShadowHost());
 }
 
-}
+} // namespace blink

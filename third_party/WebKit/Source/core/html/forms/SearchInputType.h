@@ -38,9 +38,7 @@ namespace blink {
 
 class SearchInputType final : public BaseTextInputType {
 public:
-    static PassRefPtrWillBeRawPtr<InputType> create(HTMLInputElement&);
-
-    void stopSearchEventTimer();
+    static InputType* create(HTMLInputElement&);
 
 private:
     SearchInputType(HTMLInputElement&);
@@ -54,13 +52,14 @@ private:
     bool supportsInputModeAttribute() const override;
     void updateView() override;
     const AtomicString& defaultAutocapitalize() const override;
+    void dispatchSearchEvent() override;
 
-    void searchEventTimerFired(Timer<SearchInputType>*);
+    void searchEventTimerFired(TimerBase*);
     bool searchEventsShouldBeDispatched() const;
     void startSearchEventTimer();
     void updateCancelButtonVisibility();
 
-    Timer<SearchInputType> m_searchEventTimer;
+    TaskRunnerTimer<SearchInputType> m_searchEventTimer;
 };
 
 } // namespace blink

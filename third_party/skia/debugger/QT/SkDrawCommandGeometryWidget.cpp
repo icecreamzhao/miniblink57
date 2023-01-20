@@ -11,7 +11,6 @@
 #include "SkDebugger.h"
 #include "SkDrawCommandGeometryWidget.h"
 
-<<<<<<< HEAD
 SkDrawCommandGeometryWidget::SkDrawCommandGeometryWidget(SkDebugger* debugger)
     : QFrame()
     , fDebugger(debugger)
@@ -22,41 +21,20 @@ SkDrawCommandGeometryWidget::SkDrawCommandGeometryWidget(SkDebugger* debugger)
 
 void SkDrawCommandGeometryWidget::resizeEvent(QResizeEvent* event)
 {
-=======
-SkDrawCommandGeometryWidget::SkDrawCommandGeometryWidget(SkDebugger *debugger)
-    : QFrame()
-    , fDebugger(debugger)
-    , fCommandIndex(-1) {
-    this->setStyleSheet("QFrame {background-color: black; border: 1px solid #cccccc;}");
-}
-
-void SkDrawCommandGeometryWidget::resizeEvent(QResizeEvent* event) {
->>>>>>> miniblink49
     this->QFrame::resizeEvent(event);
     QRect r = this->contentsRect();
     int dim = std::min(r.width(), r.height());
     if (dim == 0) {
-<<<<<<< HEAD
         fSurface = nullptr;
     } else {
         SkImageInfo info = SkImageInfo::MakeN32Premul(dim, dim);
         fSurface = SkSurface::MakeRaster(info);
-=======
-        fSurface.reset(NULL);
-    } else {
-        SkImageInfo info = SkImageInfo::MakeN32Premul(dim, dim);
-        fSurface.reset(SkSurface::NewRaster(info));
->>>>>>> miniblink49
         this->updateImage();
     }
 }
 
-<<<<<<< HEAD
 void SkDrawCommandGeometryWidget::paintEvent(QPaintEvent* event)
 {
-=======
-void SkDrawCommandGeometryWidget::paintEvent(QPaintEvent* event) {
->>>>>>> miniblink49
     this->QFrame::paintEvent(event);
 
     if (!fSurface) {
@@ -66,7 +44,6 @@ void SkDrawCommandGeometryWidget::paintEvent(QPaintEvent* event) {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
 
-<<<<<<< HEAD
     SkPixmap pixmap;
 
     if (fSurface->peekPixels(&pixmap)) {
@@ -80,58 +57,27 @@ void SkDrawCommandGeometryWidget::paintEvent(QPaintEvent* event) {
         } else {
             float ratio = this->height() / pixmap.height();
             resultRect = QRectF(0, 0, ratio * pixmap.width(), this->height());
-=======
-    SkImageInfo info;
-    size_t rowBytes;
-    if (const void* pixels = fSurface->peekPixels(&info, &rowBytes)) {
-        SkASSERT(info.width() > 0);
-        SkASSERT(info.height() > 0);
-
-        QRectF resultRect;
-        if (this->width() < this->height()) {
-            float ratio = this->width() / info.width();
-            resultRect = QRectF(0, 0, this->width(), ratio * info.height());
-        } else {
-            float ratio = this->height() / info.height();
-            resultRect = QRectF(0, 0, ratio * info.width(), this->height());
->>>>>>> miniblink49
         }
 
         resultRect.moveCenter(this->contentsRect().center());
 
-<<<<<<< HEAD
         QImage image(reinterpret_cast<const uchar*>(pixmap.addr()),
             pixmap.width(),
             pixmap.height(),
             pixmap.rowBytes(),
             QImage::Format_ARGB32_Premultiplied);
-=======
-        QImage image(reinterpret_cast<const uchar*>(pixels),
-                     info.width(),
-                     info.height(),
-                     rowBytes,
-                     QImage::Format_ARGB32_Premultiplied);
->>>>>>> miniblink49
         painter.drawImage(resultRect, image);
     }
 }
 
-<<<<<<< HEAD
 void SkDrawCommandGeometryWidget::setDrawCommandIndex(int commandIndex)
 {
-=======
-void SkDrawCommandGeometryWidget::setDrawCommandIndex(int commandIndex) {
->>>>>>> miniblink49
     fCommandIndex = commandIndex;
     this->updateImage();
 }
 
-<<<<<<< HEAD
 void SkDrawCommandGeometryWidget::updateImage()
 {
-=======
-void SkDrawCommandGeometryWidget::updateImage() {
->>>>>>> miniblink49
     if (!fSurface) {
         return;
     }

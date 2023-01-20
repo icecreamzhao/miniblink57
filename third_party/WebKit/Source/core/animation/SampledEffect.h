@@ -7,48 +7,50 @@
 
 #include "core/animation/Animation.h"
 #include "core/animation/Interpolation.h"
-#include "core/animation/KeyframeEffect.h"
-#include "wtf/BitArray.h"
+#include "core/animation/KeyframeEffectReadOnly.h"
+#include "wtf/Allocator.h"
 #include "wtf/Vector.h"
 
 namespace blink {
 
-class SVGElement;
+// Associates the results of sampling an EffectModel with metadata used for
+// effect ordering and managing composited animations.
+class SampledEffect : public GarbageCollectedFinalized<SampledEffect> {
+    WTF_MAKE_NONCOPYABLE(SampledEffect);
 
-class SampledEffect : public NoBaseWillBeGarbageCollected<SampledEffect> {
 public:
-    static PassOwnPtrWillBeRawPtr<SampledEffect> create(KeyframeEffect* animation, PassOwnPtrWillBeRawPtr<WillBeHeapVector<RefPtrWillBeMember<Interpolation>>> interpolations)
+    static SampledEffect* create(KeyframeEffectReadOnly* animation)
     {
-        return adoptPtrWillBeNoop(new SampledEffect(animation, interpolations));
+        return new SampledEffect(animation);
     }
 
     void clear();
 
-    const WillBeHeapVector<RefPtrWillBeMember<Interpolation>>& interpolations() const { return *m_interpolations; }
-#if ENABLE(OILPAN)
-    RawPtr<WillBeHeapVector<RefPtrWillBeMember<Interpolation>>> mutableInterpolations() { return m_interpolations.get(); }
-#else
-    PassOwnPtr<WillBeHeapVector<RefPtrWillBeMember<Interpolation>>> mutableInterpolations() { return m_interpolations.release(); }
-#endif
+    const Vector<RefPtr<Interpolation>>& interpolations() const
+    {
+        return m_interpolations;
+    }
+    Vector<RefPtr<Interpolation>>& mutableInterpolations()
+    {
+        return m_interpolations;
+    }
 
-    void setInterpolations(PassOwnPtrWillBeRawPtr<WillBeHeapVector<RefPtrWillBeMember<Interpolation>>> interpolations) { m_interpolations = interpolations; }
-
-    KeyframeEffect* effect() const { return m_effect; }
+    KeyframeEffectReadOnly* effect() const { return m_effect; }
     unsigned sequenceNumber() const { return m_sequenceNumber; }
-    KeyframeEffect::Priority priority() const { return m_priority; }
+    KeyframeEffectReadOnly::Priority priority() const { return m_priority; }
+    bool willNeverChange() const;
+    void removeReplacedInterpolations(const HashSet<PropertyHandle>&);
+    void updateReplacedProperties(HashSet<PropertyHandle>&);
 
     DECLARE_TRACE();
 
-    void applySVGUpdate(SVGElement&);
-
 private:
-    SampledEffect(KeyframeEffect*, PassOwnPtrWillBeRawPtr<WillBeHeapVector<RefPtrWillBeMember<Interpolation>>>);
+    SampledEffect(KeyframeEffectReadOnly*);
 
-    RawPtrWillBeWeakMember<KeyframeEffect> m_effect;
-    RefPtrWillBeMember<Animation> m_animation;
-    OwnPtrWillBeMember<WillBeHeapVector<RefPtrWillBeMember<Interpolation>>> m_interpolations;
+    WeakMember<KeyframeEffectReadOnly> m_effect;
+    Vector<RefPtr<Interpolation>> m_interpolations;
     const unsigned m_sequenceNumber;
-    KeyframeEffect::Priority m_priority;
+    KeyframeEffectReadOnly::Priority m_priority;
 };
 
 } // namespace blink

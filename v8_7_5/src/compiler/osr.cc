@@ -12,7 +12,6 @@
 
 namespace v8 {
 namespace internal {
-<<<<<<< HEAD
     namespace compiler {
 
         OsrHelper::OsrHelper(OptimizedCompilationInfo* info)
@@ -33,22 +32,3 @@ namespace internal {
     } // namespace compiler
 } // namespace internal
 } // namespace v8
-=======
-namespace compiler {
-
-OsrHelper::OsrHelper(OptimizedCompilationInfo* info)
-    : parameter_count_(info->bytecode_array()->parameter_count()),
-      stack_slot_count_(InterpreterFrameConstants::RegisterStackSlotCount(
-                            info->bytecode_array()->register_count()) +
-                        InterpreterFrameConstants::kExtraSlotCount) {}
-
-void OsrHelper::SetupFrame(Frame* frame) {
-  // The optimized frame will subsume the unoptimized frame. Do so by reserving
-  // the first spill slots.
-  frame->ReserveSpillSlots(UnoptimizedFrameSlots());
-}
-
-}  // namespace compiler
-}  // namespace internal
-}  // namespace v8
->>>>>>> miniblink49

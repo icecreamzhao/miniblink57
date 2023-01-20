@@ -8,15 +8,9 @@
 #ifndef GrGLUtil_DEFINED
 #define GrGLUtil_DEFINED
 
-<<<<<<< HEAD
 #include "GrGLDefines.h"
 #include "GrStencilSettings.h"
 #include "gl/GrGLInterface.h"
-=======
-#include "gl/GrGLInterface.h"
-#include "GrGLDefines.h"
-#include "GrStencil.h"
->>>>>>> miniblink49
 
 class SkMatrix;
 
@@ -26,18 +20,9 @@ typedef uint32_t GrGLVersion;
 typedef uint32_t GrGLSLVersion;
 typedef uint32_t GrGLDriverVersion;
 
-<<<<<<< HEAD
 #define GR_GL_VER(major, minor) ((static_cast<int>(major) << 16) | static_cast<int>(minor))
 #define GR_GLSL_VER(major, minor) ((static_cast<int>(major) << 16) | static_cast<int>(minor))
 #define GR_GL_DRIVER_VER(major, minor) ((static_cast<int>(major) << 16) | static_cast<int>(minor))
-=======
-#define GR_GL_VER(major, minor) ((static_cast<int>(major) << 16) | \
-                                 static_cast<int>(minor))
-#define GR_GLSL_VER(major, minor) ((static_cast<int>(major) << 16) | \
-                                   static_cast<int>(minor))
-#define GR_GL_DRIVER_VER(major, minor) ((static_cast<int>(major) << 16) | \
-                                        static_cast<int>(minor))
->>>>>>> miniblink49
 
 #define GR_GL_INVALID_VER GR_GL_VER(0, 0)
 #define GR_GLSL_INVALID_VER GR_GLSL_VER(0, 0)
@@ -52,10 +37,7 @@ enum GrGLVendor {
     kIntel_GrGLVendor,
     kQualcomm_GrGLVendor,
     kNVIDIA_GrGLVendor,
-<<<<<<< HEAD
     kATI_GrGLVendor,
-=======
->>>>>>> miniblink49
 
     kOther_GrGLVendor
 };
@@ -67,10 +49,7 @@ enum GrGLRenderer {
     kPowerVRRogue_GrGLRenderer,
     kAdreno3xx_GrGLRenderer,
     kAdreno4xx_GrGLRenderer,
-<<<<<<< HEAD
     kOSMesa_GrGLRenderer,
-=======
->>>>>>> miniblink49
     kOther_GrGLRenderer
 };
 
@@ -79,10 +58,7 @@ enum GrGLDriver {
     kChromium_GrGLDriver,
     kNVIDIA_GrGLDriver,
     kIntel_GrGLDriver,
-<<<<<<< HEAD
     kANGLE_GrGLDriver,
-=======
->>>>>>> miniblink49
     kUnknown_GrGLDriver
 };
 
@@ -91,7 +67,6 @@ enum GrGLDriver {
 /**
  *  Some drivers want the var-int arg to be zero-initialized on input.
  */
-<<<<<<< HEAD
 #define GR_GL_INIT_ZERO 0
 #define GR_GL_GetIntegerv(gl, e, p)        \
     do {                                   \
@@ -129,39 +104,6 @@ enum GrGLDriver {
         (range)[1] = GR_GL_INIT_ZERO;                                       \
         (*precision) = GR_GL_INIT_ZERO;                                     \
         GR_GL_CALL(gl, GetShaderPrecisionFormat(st, pt, range, precision)); \
-=======
-#define GR_GL_INIT_ZERO     0
-#define GR_GL_GetIntegerv(gl, e, p)                                            \
-    do {                                                                       \
-        *(p) = GR_GL_INIT_ZERO;                                                \
-        GR_GL_CALL(gl, GetIntegerv(e, p));                                     \
-    } while (0)
-
-#define GR_GL_GetFramebufferAttachmentParameteriv(gl, t, a, pname, p)          \
-    do {                                                                       \
-        *(p) = GR_GL_INIT_ZERO;                                                \
-        GR_GL_CALL(gl, GetFramebufferAttachmentParameteriv(t, a, pname, p));   \
-    } while (0)
-
-#define GR_GL_GetRenderbufferParameteriv(gl, t, pname, p)                      \
-    do {                                                                       \
-        *(p) = GR_GL_INIT_ZERO;                                                \
-        GR_GL_CALL(gl, GetRenderbufferParameteriv(t, pname, p));               \
-    } while (0)
-
-#define GR_GL_GetTexLevelParameteriv(gl, t, l, pname, p)                       \
-    do {                                                                       \
-        *(p) = GR_GL_INIT_ZERO;                                                \
-        GR_GL_CALL(gl, GetTexLevelParameteriv(t, l, pname, p));                \
-    } while (0)
-
-#define GR_GL_GetShaderPrecisionFormat(gl, st, pt, range, precision)           \
-    do {                                                                       \
-        (range)[0] = GR_GL_INIT_ZERO;                                          \
-        (range)[1] = GR_GL_INIT_ZERO;                                          \
-        (*precision) = GR_GL_INIT_ZERO;                                        \
-        GR_GL_CALL(gl, GetShaderPrecisionFormat(st, pt, range, precision));    \
->>>>>>> miniblink49
     } while (0)
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -178,19 +120,11 @@ GrGLVendor GrGLGetVendorFromString(const char* vendorString);
 GrGLRenderer GrGLGetRendererFromString(const char* rendererString);
 
 void GrGLGetDriverInfo(GrGLStandard standard,
-<<<<<<< HEAD
     GrGLVendor vendor,
     const char* rendererString,
     const char* versionString,
     GrGLDriver* outDriver,
     GrGLDriverVersion* outVersion);
-=======
-                       GrGLVendor vendor,
-                       const char* rendererString,
-                       const char* versionString,
-                       GrGLDriver* outDriver,
-                       GrGLDriverVersion* outVersion);
->>>>>>> miniblink49
 
 // these variants call glGetString()
 GrGLVersion GrGLGetVersion(const GrGLInterface*);
@@ -198,33 +132,16 @@ GrGLSLVersion GrGLGetGLSLVersion(const GrGLInterface*);
 GrGLVendor GrGLGetVendor(const GrGLInterface*);
 GrGLRenderer GrGLGetRenderer(const GrGLInterface*);
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /**
  * Helpers for glGetError()
  */
 
 void GrGLCheckErr(const GrGLInterface* gl,
-<<<<<<< HEAD
     const char* location,
     const char* call);
 
 void GrGLClearErr(const GrGLInterface* gl);
 
-=======
-                  const char* location,
-                  const char* call);
-
-void GrGLClearErr(const GrGLInterface* gl);
-
-/**
- * Helper for converting SkMatrix to a column-major GL float array
- */
-template<int MatrixSize> void GrGLGetMatrix(GrGLfloat* dest, const SkMatrix& src);
-
->>>>>>> miniblink49
 ////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -234,27 +151,17 @@ template<int MatrixSize> void GrGLGetMatrix(GrGLfloat* dest, const SkMatrix& src
 // internal macro to conditionally call glGetError based on compile-time and
 // run-time flags.
 #if GR_GL_CHECK_ERROR
-<<<<<<< HEAD
 extern bool gCheckErrorGL;
 #define GR_GL_CHECK_ERROR_IMPL(IFACE, X) \
     if (gCheckErrorGL)                   \
     GrGLCheckErr(IFACE, GR_FILE_AND_LINE_STR, #X)
 #else
 #define GR_GL_CHECK_ERROR_IMPL(IFACE, X)
-=======
-    extern bool gCheckErrorGL;
-    #define GR_GL_CHECK_ERROR_IMPL(IFACE, X)                    \
-        if (gCheckErrorGL)                                      \
-            GrGLCheckErr(IFACE, GR_FILE_AND_LINE_STR, #X)
-#else
-    #define GR_GL_CHECK_ERROR_IMPL(IFACE, X)
->>>>>>> miniblink49
 #endif
 
 // internal macro to conditionally log the gl call using SkDebugf based on
 // compile-time and run-time flags.
 #if GR_GL_LOG_CALLS
-<<<<<<< HEAD
 extern bool gLogCallsGL;
 #define GR_GL_LOG_CALLS_IMPL(X) \
     if (gLogCallsGL)            \
@@ -268,33 +175,10 @@ extern bool gLogCallsGL;
     do {                                  \
         GR_GL_CALL_NOERRCHECK(IFACE, X);  \
         GR_GL_CHECK_ERROR_IMPL(IFACE, X); \
-=======
-    extern bool gLogCallsGL;
-    #define GR_GL_LOG_CALLS_IMPL(X)                             \
-        if (gLogCallsGL)                                        \
-            SkDebugf(GR_FILE_AND_LINE_STR "GL: " #X "\n")
-#else
-    #define GR_GL_LOG_CALLS_IMPL(X)
-#endif
-
-// internal macro that does the per-GL-call callback (if necessary)
-#if GR_GL_PER_GL_FUNC_CALLBACK
-    #define GR_GL_CALLBACK_IMPL(IFACE) (IFACE)->fCallback(IFACE)
-#else
-    #define GR_GL_CALLBACK_IMPL(IFACE)
-#endif
-
-// makes a GL call on the interface and does any error checking and logging
-#define GR_GL_CALL(IFACE, X)                                    \
-    do {                                                        \
-        GR_GL_CALL_NOERRCHECK(IFACE, X);                        \
-        GR_GL_CHECK_ERROR_IMPL(IFACE, X);                       \
->>>>>>> miniblink49
     } while (false)
 
 // Variant of above that always skips the error check. This is useful when
 // the caller wants to do its own glGetError() call and examine the error value.
-<<<<<<< HEAD
 #define GR_GL_CALL_NOERRCHECK(IFACE, X) \
     do {                                \
         (IFACE)->fFunctions.f##X;       \
@@ -313,38 +197,11 @@ extern bool gLogCallsGL;
     do {                                         \
         (RET) = (IFACE)->fFunctions.f##X;        \
         GR_GL_LOG_CALLS_IMPL(X);                 \
-=======
-#define GR_GL_CALL_NOERRCHECK(IFACE, X)                         \
-    do {                                                        \
-        GR_GL_CALLBACK_IMPL(IFACE);                             \
-        (IFACE)->fFunctions.f##X;                               \
-        GR_GL_LOG_CALLS_IMPL(X);                                \
-    } while (false)
-
-// same as GR_GL_CALL but stores the return value of the gl call in RET
-#define GR_GL_CALL_RET(IFACE, RET, X)                           \
-    do {                                                        \
-        GR_GL_CALL_RET_NOERRCHECK(IFACE, RET, X);               \
-        GR_GL_CHECK_ERROR_IMPL(IFACE, X);                       \
-    } while (false)
-
-// same as GR_GL_CALL_RET but always skips the error check.
-#define GR_GL_CALL_RET_NOERRCHECK(IFACE, RET, X)                \
-    do {                                                        \
-        GR_GL_CALLBACK_IMPL(IFACE);                             \
-        (RET) = (IFACE)->fFunctions.f##X;                       \
-        GR_GL_LOG_CALLS_IMPL(X);                                \
->>>>>>> miniblink49
     } while (false)
 
 // call glGetError without doing a redundant error check or logging.
 #define GR_GL_GET_ERROR(IFACE) (IFACE)->fFunctions.fGetError()
 
-<<<<<<< HEAD
 GrGLenum GrToGLStencilFunc(GrStencilTest test);
-=======
-GrGLenum GrToGLStencilFunc(GrStencilFunc basicFunc);
-
->>>>>>> miniblink49
 
 #endif

@@ -5,7 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "SkPathOpsDebug.h"
 #include "SkMutex.h"
 #include "SkOpCoincidence.h"
@@ -15,13 +14,6 @@
 
 struct SkCoincidentSpans;
 
-=======
-#include "SkMutex.h"
-#include "SkPath.h"
-#include "SkPathOpsDebug.h"
-#include "SkString.h"
-
->>>>>>> miniblink49
 #if DEBUG_VALIDATE
 extern bool FLAGS_runFail;
 #endif
@@ -32,16 +24,11 @@ int SkPathOpsDebug::gSortCount;
 #endif
 
 #if DEBUG_ACTIVE_OP
-<<<<<<< HEAD
 const char* SkPathOpsDebug::kPathOpStr[] = { "diff", "sect", "union", "xor" };
-=======
-const char* SkPathOpsDebug::kPathOpStr[] = {"diff", "sect", "union", "xor"};
->>>>>>> miniblink49
 #endif
 
 #if defined SK_DEBUG || !FORCE_RELEASE
 
-<<<<<<< HEAD
 const char* SkPathOpsDebug::kLVerbStr[] = { "", "line", "quad", "cubic" };
 
 int SkPathOpsDebug::gContourID = 0;
@@ -50,17 +37,6 @@ int SkPathOpsDebug::gSegmentID = 0;
 bool SkPathOpsDebug::ChaseContains(const SkTDArray<SkOpSpanBase*>& chaseArray,
     const SkOpSpanBase* span)
 {
-=======
-const char* SkPathOpsDebug::kLVerbStr[] = {"", "line", "quad", "cubic"};
-
-#if defined(SK_DEBUG) || !FORCE_RELEASE
-int SkPathOpsDebug::gContourID = 0;
-int SkPathOpsDebug::gSegmentID = 0;
-#endif
-
-bool SkPathOpsDebug::ChaseContains(const SkTDArray<SkOpSpanBase* >& chaseArray,
-        const SkOpSpanBase* span) {
->>>>>>> miniblink49
     for (int index = 0; index < chaseArray.count(); ++index) {
         const SkOpSpanBase* entry = chaseArray[index];
         if (entry == span) {
@@ -69,7 +45,6 @@ bool SkPathOpsDebug::ChaseContains(const SkTDArray<SkOpSpanBase* >& chaseArray,
     }
     return false;
 }
-<<<<<<< HEAD
 #endif
 
 #if DEBUG_COINCIDENCE
@@ -227,10 +202,6 @@ void SkPathOpsDebug::CheckHealth(SkOpContourHead* contourList, const char* id)
 #if defined SK_DEBUG || !FORCE_RELEASE
 void SkPathOpsDebug::MathematicaIze(char* str, size_t bufferLen)
 {
-=======
-
-void SkPathOpsDebug::MathematicaIze(char* str, size_t bufferLen) {
->>>>>>> miniblink49
     size_t len = strlen(str);
     bool num = false;
     for (size_t idx = 0; idx < len; ++idx) {
@@ -247,7 +218,6 @@ void SkPathOpsDebug::MathematicaIze(char* str, size_t bufferLen) {
     }
 }
 
-<<<<<<< HEAD
 bool SkPathOpsDebug::ValidWind(int wind)
 {
     return wind > SK_MinS32 + 0xFFFF && wind < SK_MaxS32 - 0xFFFF;
@@ -255,13 +225,6 @@ bool SkPathOpsDebug::ValidWind(int wind)
 
 void SkPathOpsDebug::WindingPrintf(int wind)
 {
-=======
-bool SkPathOpsDebug::ValidWind(int wind) {
-    return wind > SK_MinS32 + 0xFFFF && wind < SK_MaxS32 - 0xFFFF;
-}
-
-void SkPathOpsDebug::WindingPrintf(int wind) {
->>>>>>> miniblink49
     if (wind == SK_MinS32) {
         SkDebugf("?");
     } else {
@@ -270,7 +233,6 @@ void SkPathOpsDebug::WindingPrintf(int wind) {
 }
 #endif //  defined SK_DEBUG || !FORCE_RELEASE
 
-<<<<<<< HEAD
 #if DEBUG_SHOW_TEST_NAME
 void* SkPathOpsDebug::CreateNameStr()
 {
@@ -281,19 +243,6 @@ void SkPathOpsDebug::DeleteNameStr(void* v) { delete[] reinterpret_cast<char*>(v
 
 void SkPathOpsDebug::BumpTestName(char* test)
 {
-=======
-
-#if DEBUG_SHOW_TEST_NAME
-void* SkPathOpsDebug::CreateNameStr() {
-    return SkNEW_ARRAY(char, DEBUG_FILENAME_STRING_LENGTH);
-}
-
-void SkPathOpsDebug::DeleteNameStr(void* v) {
-    SkDELETE_ARRAY(reinterpret_cast<char* >(v));
-}
-
-void SkPathOpsDebug::BumpTestName(char* test) {
->>>>>>> miniblink49
     char* num = test + strlen(test);
     while (num[-1] >= '0' && num[-1] <= '9') {
         --num;
@@ -310,12 +259,8 @@ void SkPathOpsDebug::BumpTestName(char* test) {
 }
 #endif
 
-<<<<<<< HEAD
 static void show_function_header(const char* functionName)
 {
-=======
-static void show_function_header(const char* functionName) {
->>>>>>> miniblink49
     SkDebugf("\nstatic void %s(skiatest::Reporter* reporter, const char* filename) {\n", functionName);
     if (strcmp("skphealth_com76", functionName) == 0) {
         SkDebugf("found it\n");
@@ -330,7 +275,6 @@ static const char* gOpStrs[] = {
     "kReverseDifference_SkPathOp",
 };
 
-<<<<<<< HEAD
 const char* SkPathOpsDebug::OpStr(SkPathOp op)
 {
     return gOpStrs[op];
@@ -338,13 +282,6 @@ const char* SkPathOpsDebug::OpStr(SkPathOp op)
 
 static void show_op(SkPathOp op, const char* pathOne, const char* pathTwo)
 {
-=======
-const char* SkPathOpsDebug::OpStr(SkPathOp op) {
-    return gOpStrs[op];
-}
-
-static void show_op(SkPathOp op, const char* pathOne, const char* pathTwo) {
->>>>>>> miniblink49
     SkDebugf("    testPathOp(reporter, %s, %s, %s, filename);\n", pathOne, pathTwo, gOpStrs[op]);
     SkDebugf("}\n");
 }
@@ -352,12 +289,8 @@ static void show_op(SkPathOp op, const char* pathOne, const char* pathTwo) {
 SK_DECLARE_STATIC_MUTEX(gTestMutex);
 
 void SkPathOpsDebug::ShowPath(const SkPath& a, const SkPath& b, SkPathOp shapeOp,
-<<<<<<< HEAD
     const char* testName)
 {
-=======
-        const char* testName) {
->>>>>>> miniblink49
     SkAutoMutexAcquire ac(gTestMutex);
     show_function_header(testName);
     ShowOnePath(a, "path", true);
@@ -365,7 +298,6 @@ void SkPathOpsDebug::ShowPath(const SkPath& a, const SkPath& b, SkPathOp shapeOp
     show_op(shapeOp, "path", "pathB");
 }
 
-<<<<<<< HEAD
 #include "SkIntersectionHelper.h"
 #include "SkIntersections.h"
 #include "SkPathOpsTypes.h"
@@ -461,12 +393,6 @@ void SkOpGlobalState::debugResetLoopCounts()
 #ifdef SK_DEBUG
 bool SkOpGlobalState::debugRunFail() const
 {
-=======
-#include "SkPathOpsTypes.h"
-
-#ifdef SK_DEBUG
-bool SkOpGlobalState::debugRunFail() const {
->>>>>>> miniblink49
 #if DEBUG_VALIDATE
     return FLAGS_runFail;
 #else
@@ -475,7 +401,6 @@ bool SkOpGlobalState::debugRunFail() const {
 }
 #endif
 
-<<<<<<< HEAD
 #if DEBUG_T_SECT_LOOP_COUNT
 void SkIntersections::debugBumpLoopCount(DebugLoop index)
 {
@@ -498,12 +423,6 @@ void SkIntersections::debugResetLoopCount()
 
 SkDCubic SkDQuad::debugToCubic() const
 {
-=======
-#include "SkPathOpsCubic.h"
-#include "SkPathOpsQuad.h"
-
-SkDCubic SkDQuad::debugToCubic() const {
->>>>>>> miniblink49
     SkDCubic cubic;
     cubic[0] = fPts[0];
     cubic[2] = fPts[1];
@@ -515,7 +434,6 @@ SkDCubic SkDQuad::debugToCubic() const {
     return cubic;
 }
 
-<<<<<<< HEAD
 void SkDRect::debugInit()
 {
     fLeft = fTop = fRight = fBottom = SK_ScalarNaN;
@@ -713,14 +631,6 @@ void SkOpSegment::debugFindCollapsed(const char* id, SkPathOpsDebug::GlitchLog* 
 SkOpAngle* SkOpSegment::debugLastAngle()
 {
     SkOpAngle* result = nullptr;
-=======
-#include "SkOpAngle.h"
-#include "SkOpCoincidence.h"
-#include "SkOpSegment.h"
-
-SkOpAngle* SkOpSegment::debugLastAngle() {
-    SkOpAngle* result = NULL;
->>>>>>> miniblink49
     SkOpSpan* span = this->head();
     do {
         if (span->toAngle()) {
@@ -732,7 +642,6 @@ SkOpAngle* SkOpSegment::debugLastAngle() {
     return result;
 }
 
-<<<<<<< HEAD
 #if DEBUG_COINCIDENCE
 void SkOpSegment::debugMissingCoincidence(const char* id, SkPathOpsDebug::GlitchLog* log,
     const SkOpCoincidence* coincidences) const
@@ -967,19 +876,12 @@ void SkOpSegment::debugMoveNearby(const char* id, SkPathOpsDebug::GlitchLog* gli
 
 void SkOpSegment::debugReset()
 {
-=======
-void SkOpSegment::debugReset() {
->>>>>>> miniblink49
     this->init(this->fPts, this->fWeight, this->contour(), this->verb());
 }
 
 #if DEBUG_ACTIVE_SPANS
-<<<<<<< HEAD
 void SkOpSegment::debugShowActiveSpans() const
 {
-=======
-void SkOpSegment::debugShowActiveSpans() const {
->>>>>>> miniblink49
     debugValidate();
     if (done()) {
         return;
@@ -1022,21 +924,13 @@ void SkOpSegment::debugShowActiveSpans() const {
             SkDebugf(" oppValue=%d", span->oppValue());
         }
         SkDebugf("\n");
-<<<<<<< HEAD
     } while ((span = span->next()->upCastable()));
-=======
-   } while ((span = span->next()->upCastable()));
->>>>>>> miniblink49
 }
 #endif
 
 #if DEBUG_MARK_DONE
-<<<<<<< HEAD
 void SkOpSegment::debugShowNewWinding(const char* fun, const SkOpSpan* span, int winding)
 {
-=======
-void SkOpSegment::debugShowNewWinding(const char* fun, const SkOpSpan* span, int winding) {
->>>>>>> miniblink49
     const SkPoint& pt = span->ptT()->fPt;
     SkDebugf("%s id=%d", fun, this->debugID());
     SkDebugf(" (%1.9g,%1.9g", fPts[0].fX, fPts[0].fY);
@@ -1044,11 +938,7 @@ void SkOpSegment::debugShowNewWinding(const char* fun, const SkOpSpan* span, int
         SkDebugf(" %1.9g,%1.9g", fPts[vIndex].fX, fPts[vIndex].fY);
     }
     SkDebugf(") t=%1.9g [%d] (%1.9g,%1.9g) tEnd=%1.9g newWindSum=",
-<<<<<<< HEAD
         span->t(), span->debugID(), pt.fX, pt.fY, span->next()->t());
-=======
-            span->t(), span->debugID(), pt.fX, pt.fY, span->next()->t());
->>>>>>> miniblink49
     if (winding == SK_MinS32) {
         SkDebugf("?");
     } else {
@@ -1064,12 +954,8 @@ void SkOpSegment::debugShowNewWinding(const char* fun, const SkOpSpan* span, int
 }
 
 void SkOpSegment::debugShowNewWinding(const char* fun, const SkOpSpan* span, int winding,
-<<<<<<< HEAD
     int oppWinding)
 {
-=======
-                                      int oppWinding) {
->>>>>>> miniblink49
     const SkPoint& pt = span->ptT()->fPt;
     SkDebugf("%s id=%d", fun, this->debugID());
     SkDebugf(" (%1.9g,%1.9g", fPts[0].fX, fPts[0].fY);
@@ -1077,11 +963,7 @@ void SkOpSegment::debugShowNewWinding(const char* fun, const SkOpSpan* span, int
         SkDebugf(" %1.9g,%1.9g", fPts[vIndex].fX, fPts[vIndex].fY);
     }
     SkDebugf(") t=%1.9g [%d] (%1.9g,%1.9g) tEnd=%1.9g newWindSum=",
-<<<<<<< HEAD
         span->t(), span->debugID(), pt.fX, pt.fY, span->next()->t(), winding, oppWinding);
-=======
-            span->t(), span->debugID(), pt.fX, pt.fY, span->next()->t(), winding, oppWinding);
->>>>>>> miniblink49
     if (winding == SK_MinS32) {
         SkDebugf("?");
     } else {
@@ -1110,7 +992,6 @@ void SkOpSegment::debugShowNewWinding(const char* fun, const SkOpSpan* span, int
 
 #endif
 
-<<<<<<< HEAD
 // loop looking for a pair of angle parts that are too close to be sorted
 /* This is called after other more simple intersection and angle sorting tests have been exhausted.
    This should be rarely called -- the test below is thorough and time consuming.
@@ -1181,43 +1062,14 @@ SkString SkOpAngle::debugPart() const
         break;
     default:
         SkASSERT(0);
-=======
-#if DEBUG_ANGLE
-SkString SkOpAngle::debugPart() const {
-    SkString result;
-    switch (this->segment()->verb()) {
-        case SkPath::kLine_Verb:
-            result.printf(LINE_DEBUG_STR " id=%d", LINE_DEBUG_DATA(fCurvePart),
-                    this->segment()->debugID());
-            break;
-        case SkPath::kQuad_Verb:
-            result.printf(QUAD_DEBUG_STR " id=%d", QUAD_DEBUG_DATA(fCurvePart),
-                    this->segment()->debugID());
-            break;
-        case SkPath::kConic_Verb:
-            result.printf(CONIC_DEBUG_STR " id=%d",
-                    CONIC_DEBUG_DATA(fCurvePart, fCurvePart.fConic.fWeight),
-                    this->segment()->debugID());
-            break;
-        case SkPath::kCubic_Verb:
-            result.printf(CUBIC_DEBUG_STR " id=%d", CUBIC_DEBUG_DATA(fCurvePart),
-                    this->segment()->debugID());
-            break;
-        default:
-            SkASSERT(0);
->>>>>>> miniblink49
     }
     return result;
 }
 #endif
 
 #if DEBUG_SORT
-<<<<<<< HEAD
 void SkOpAngle::debugLoop() const
 {
-=======
-void SkOpAngle::debugLoop() const {
->>>>>>> miniblink49
     const SkOpAngle* first = this;
     const SkOpAngle* next = this;
     do {
@@ -1233,12 +1085,8 @@ void SkOpAngle::debugLoop() const {
 }
 #endif
 
-<<<<<<< HEAD
 void SkOpAngle::debugValidate() const
 {
-=======
-void SkOpAngle::debugValidate() const {
->>>>>>> miniblink49
 #if DEBUG_VALIDATE
     const SkOpAngle* first = this;
     const SkOpAngle* next = this;
@@ -1259,29 +1107,17 @@ void SkOpAngle::debugValidate() const {
         bool oppXor = next->segment()->oppXor();
         SkASSERT(!DEBUG_LIMIT_WIND_SUM || between(0, minSpan->windValue(), DEBUG_LIMIT_WIND_SUM));
         SkASSERT(!DEBUG_LIMIT_WIND_SUM
-<<<<<<< HEAD
             || between(-DEBUG_LIMIT_WIND_SUM, minSpan->oppValue(), DEBUG_LIMIT_WIND_SUM));
         bool useXor = op ? oppXor : isXor;
         SkASSERT(lastXor == -1 || lastXor == (int)useXor);
         lastXor = (int)useXor;
-=======
-                || between(-DEBUG_LIMIT_WIND_SUM, minSpan->oppValue(), DEBUG_LIMIT_WIND_SUM));
-        bool useXor = op ? oppXor : isXor;
-        SkASSERT(lastXor == -1 || lastXor == (int) useXor);
-        lastXor = (int) useXor;
->>>>>>> miniblink49
         wind += next->debugSign() * (op ? minSpan->oppValue() : minSpan->windValue());
         if (useXor) {
             wind &= 1;
         }
         useXor = op ? isXor : oppXor;
-<<<<<<< HEAD
         SkASSERT(lastOppXor == -1 || lastOppXor == (int)useXor);
         lastOppXor = (int)useXor;
-=======
-        SkASSERT(lastOppXor == -1 || lastOppXor == (int) useXor);
-        lastOppXor = (int) useXor;
->>>>>>> miniblink49
         opp += next->debugSign() * (op ? minSpan->windValue() : minSpan->oppValue());
         if (useXor) {
             opp &= 1;
@@ -1293,32 +1129,20 @@ void SkOpAngle::debugValidate() const {
 #endif
 }
 
-<<<<<<< HEAD
 void SkOpAngle::debugValidateNext() const
 {
-=======
-void SkOpAngle::debugValidateNext() const {
->>>>>>> miniblink49
 #if !FORCE_RELEASE
     const SkOpAngle* first = this;
     const SkOpAngle* next = first;
     SkTDArray<const SkOpAngle*>(angles);
     do {
-<<<<<<< HEAD
         //        SkASSERT_RELEASE(next->fSegment->debugContains(next));
-=======
-//        SK_ALWAYSBREAK(next->fSegment->debugContains(next));
->>>>>>> miniblink49
         angles.push(next);
         next = next->next();
         if (next == first) {
             break;
         }
-<<<<<<< HEAD
         SkASSERT_RELEASE(!angles.contains(next));
-=======
-        SK_ALWAYSBREAK(!angles.contains(next));
->>>>>>> miniblink49
         if (!next) {
             return;
         }
@@ -1326,7 +1150,6 @@ void SkOpAngle::debugValidateNext() const {
 #endif
 }
 
-<<<<<<< HEAD
 #if DEBUG_COINCIDENCE
 void SkOpCoincidence::debugAddExpanded(const char* id, SkPathOpsDebug::GlitchLog* log) const
 {
@@ -1677,22 +1500,10 @@ void SkOpCoincidence::debugShowCoincidence() const
         SkDebugf("%s + id=%d t=%1.9g tEnd=%1.9g\n", __FUNCTION__,
             span->fOppPtTStart->segment()->debugID(),
             span->fOppPtTStart->fT, span->fOppPtTEnd->fT);
-=======
-void SkOpCoincidence::debugShowCoincidence() const {
-    SkCoincidentSpans* span = fHead;
-    while (span) {
-        SkDebugf("%s - id=%d t=%1.9g tEnd=%1.9g\n", __FUNCTION__,
-                span->fCoinPtTStart->segment()->debugID(),
-                span->fCoinPtTStart->fT, span->fCoinPtTEnd->fT);
-        SkDebugf("%s + id=%d t=%1.9g tEnd=%1.9g\n", __FUNCTION__,
-                span->fOppPtTStart->segment()->debugID(),
-                span->fOppPtTStart->fT, span->fOppPtTEnd->fT);
->>>>>>> miniblink49
         span = span->fNext;
     }
 }
 
-<<<<<<< HEAD
 #if DEBUG_COINCIDENCE
 void SkOpContour::debugCheckHealth(const char* id, SkPathOpsDebug::GlitchLog* log) const
 {
@@ -1718,13 +1529,6 @@ void SkOpSegment::debugValidate() const
     const SkOpSpanBase* span = &fHead;
     double lastT = -1;
     const SkOpSpanBase* prev = nullptr;
-=======
-void SkOpSegment::debugValidate() const {
-#if DEBUG_VALIDATE
-    const SkOpSpanBase* span = &fHead;
-    double lastT = -1;
-    const SkOpSpanBase* prev = NULL;
->>>>>>> miniblink49
     int count = 0;
     int done = 0;
     do {
@@ -1749,7 +1553,6 @@ void SkOpSegment::debugValidate() const {
 #endif
 }
 
-<<<<<<< HEAD
 bool SkOpSpanBase::debugAlignedEnd(double t, const SkPoint& pt) const
 {
     SkASSERT(zero_or_one(t));
@@ -1805,9 +1608,6 @@ bool SkOpSpanBase::debugAlignedInner() const
 
 bool SkOpSpanBase::debugCoinEndLoopCheck() const
 {
-=======
-bool SkOpSpanBase::debugCoinEndLoopCheck() const {
->>>>>>> miniblink49
     int loop = 0;
     const SkOpSpanBase* next = this;
     SkOpSpanBase* nextCoin;
@@ -1830,7 +1630,6 @@ bool SkOpSpanBase::debugCoinEndLoopCheck() const {
     return true;
 }
 
-<<<<<<< HEAD
 bool SkOpSpanBase::debugContains(const SkOpSegment* segment) const
 {
     const SkOpPtT* start = &fPtT;
@@ -1859,18 +1658,11 @@ const SkOpSpan* SkOpSpanBase::debugStarter(SkOpSpanBase const** endPtr) const
 
 void SkOpSpanBase::debugValidate() const
 {
-=======
-void SkOpSpanBase::debugValidate() const {
->>>>>>> miniblink49
 #if DEBUG_VALIDATE
     const SkOpPtT* ptT = &fPtT;
     SkASSERT(ptT->span() == this);
     do {
-<<<<<<< HEAD
         //        SkASSERT(SkDPoint::RoughlyEqual(fPtT.fPt, ptT->fPt));
-=======
-//        SkASSERT(SkDPoint::RoughlyEqual(fPtT.fPt, ptT->fPt));
->>>>>>> miniblink49
         ptT->debugValidate();
         ptT = ptT->next();
     } while (ptT != &fPtT);
@@ -1887,12 +1679,8 @@ void SkOpSpanBase::debugValidate() const {
 #endif
 }
 
-<<<<<<< HEAD
 bool SkOpSpan::debugCoinLoopCheck() const
 {
-=======
-bool SkOpSpan::debugCoinLoopCheck() const {
->>>>>>> miniblink49
     int loop = 0;
     const SkOpSpan* next = this;
     SkOpSpan* nextCoin;
@@ -1916,24 +1704,15 @@ bool SkOpSpan::debugCoinLoopCheck() const {
 }
 
 // called only by test code
-<<<<<<< HEAD
 int SkIntersections::debugCoincidentUsed() const
 {
-=======
-int SkIntersections::debugCoincidentUsed() const {
->>>>>>> miniblink49
     if (!fIsCoincident[0]) {
         SkASSERT(!fIsCoincident[1]);
         return 0;
     }
     int count = 0;
-<<<<<<< HEAD
     SkDEBUGCODE(int count2 = 0;) for (int index = 0; index < fUsed; ++index)
     {
-=======
-    SkDEBUGCODE(int count2 = 0;)
-    for (int index = 0; index < fUsed; ++index) {
->>>>>>> miniblink49
         if (fIsCoincident[0] & (1 << index)) {
             ++count;
         }
@@ -1949,7 +1728,6 @@ int SkIntersections::debugCoincidentUsed() const {
 
 #include "SkOpContour.h"
 
-<<<<<<< HEAD
 bool SkOpPtT::debugContains(const SkOpPtT* check) const
 {
     SkASSERT(this != check);
@@ -1994,9 +1772,6 @@ const SkOpPtT* SkOpPtT::debugContains(const SkOpSegment* check) const
 
 int SkOpPtT::debugLoopLimit(bool report) const
 {
-=======
-int SkOpPtT::debugLoopLimit(bool report) const {
->>>>>>> miniblink49
     int loop = 0;
     const SkOpPtT* next = this;
     do {
@@ -2013,7 +1788,6 @@ int SkOpPtT::debugLoopLimit(bool report) const {
                 }
             }
         }
-<<<<<<< HEAD
         // there's nothing wrong with extremely large loop counts -- but this may appear to hang
         // by taking a very long time to figure out that no loop entry is a duplicate
         // -- and it's likely that a large loop count is indicative of a bug somewhere
@@ -2021,27 +1795,16 @@ int SkOpPtT::debugLoopLimit(bool report) const {
             SkDebugf("*** loop count exceeds 1000 ***\n");
             return 1000;
         }
-=======
-        ++loop;
->>>>>>> miniblink49
     } while ((next = next->fNext) && next != this);
     return 0;
 }
 
-<<<<<<< HEAD
 void SkOpPtT::debugValidate() const
 {
 #if DEBUG_VALIDATE
     SkOpGlobalState::Phase phase = contour()->globalState()->phase();
     if (phase == SkOpGlobalState::kIntersecting
         || phase == SkOpGlobalState::kFixWinding) {
-=======
-void SkOpPtT::debugValidate() const {
-#if DEBUG_VALIDATE
-    SkOpGlobalState::Phase phase = contour()->globalState()->phase();
-    if (phase == SkOpGlobalState::kIntersecting
-            || phase == SkOpGlobalState::kFixWinding) {
->>>>>>> miniblink49
         return;
     }
     SkASSERT(fNext);
@@ -2051,7 +1814,6 @@ void SkOpPtT::debugValidate() const {
 #endif
 }
 
-<<<<<<< HEAD
 static void output_scalar(SkScalar num)
 {
     if (num == (int)num) {
@@ -2060,15 +1822,6 @@ static void output_scalar(SkScalar num)
         SkString str;
         str.printf("%1.9g", num);
         int width = (int)str.size();
-=======
-static void output_scalar(SkScalar num) {
-    if (num == (int) num) {
-        SkDebugf("%d", (int) num);
-    } else {
-        SkString str;
-        str.printf("%1.9g", num);
-        int width = (int) str.size();
->>>>>>> miniblink49
         const char* cStr = str.c_str();
         while (cStr[width - 1] == '0') {
             --width;
@@ -2078,12 +1831,8 @@ static void output_scalar(SkScalar num) {
     }
 }
 
-<<<<<<< HEAD
 static void output_points(const SkPoint* pts, int count)
 {
-=======
-static void output_points(const SkPoint* pts, int count) {
->>>>>>> miniblink49
     for (int index = 0; index < count; ++index) {
         output_scalar(pts[index].fX);
         SkDebugf(", ");
@@ -2094,17 +1843,12 @@ static void output_points(const SkPoint* pts, int count) {
     }
 }
 
-<<<<<<< HEAD
 static void showPathContours(SkPath::RawIter& iter, const char* pathName)
 {
-=======
-static void showPathContours(SkPath::RawIter& iter, const char* pathName) {
->>>>>>> miniblink49
     uint8_t verb;
     SkPoint pts[4];
     while ((verb = iter.next(pts)) != SkPath::kDone_Verb) {
         switch (verb) {
-<<<<<<< HEAD
         case SkPath::kMove_Verb:
             SkDebugf("    %s.moveTo(", pathName);
             output_points(&pts[0], 1);
@@ -2136,39 +1880,6 @@ static void showPathContours(SkPath::RawIter& iter, const char* pathName) {
         default:
             SkDEBUGFAIL("bad verb");
             return;
-=======
-            case SkPath::kMove_Verb:
-                SkDebugf("    %s.moveTo(", pathName);
-                output_points(&pts[0], 1);
-                SkDebugf(");\n");
-                continue;
-            case SkPath::kLine_Verb:
-                SkDebugf("    %s.lineTo(", pathName);
-                output_points(&pts[1], 1);
-                SkDebugf(");\n");
-                break;
-            case SkPath::kQuad_Verb:
-                SkDebugf("    %s.quadTo(", pathName);
-                output_points(&pts[1], 2);
-                SkDebugf(");\n");
-                break;
-            case SkPath::kConic_Verb:
-                SkDebugf("    %s.conicTo(", pathName);
-                output_points(&pts[1], 2);
-                SkDebugf(", %1.9gf);\n", iter.conicWeight());
-                break;
-            case SkPath::kCubic_Verb:
-                SkDebugf("    %s.cubicTo(", pathName);
-                output_points(&pts[1], 3);
-                SkDebugf(");\n");
-                break;
-            case SkPath::kClose_Verb:
-                SkDebugf("    %s.close();\n", pathName);
-                break;
-            default:
-                SkDEBUGFAIL("bad verb");
-                return;
->>>>>>> miniblink49
         }
     }
 }
@@ -2180,20 +1891,12 @@ static const char* gFillTypeStr[] = {
     "kInverseEvenOdd_FillType"
 };
 
-<<<<<<< HEAD
 void SkPathOpsDebug::ShowOnePath(const SkPath& path, const char* name, bool includeDeclaration)
 {
     SkPath::RawIter iter(path);
 #define SUPPORT_RECT_CONTOUR_DETECTION 0
 #if SUPPORT_RECT_CONTOUR_DETECTION
     int rectCount = path.isRectContours() ? path.rectContours(nullptr, nullptr) : 0;
-=======
-void SkPathOpsDebug::ShowOnePath(const SkPath& path, const char* name, bool includeDeclaration) {
-    SkPath::RawIter iter(path);
-#define SUPPORT_RECT_CONTOUR_DETECTION 0
-#if SUPPORT_RECT_CONTOUR_DETECTION
-    int rectCount = path.isRectContours() ? path.rectContours(NULL, NULL) : 0;
->>>>>>> miniblink49
     if (rectCount > 0) {
         SkTDArray<SkRect> rects;
         SkTDArray<SkPath::Direction> directions;
@@ -2203,12 +1906,7 @@ void SkPathOpsDebug::ShowOnePath(const SkPath& path, const char* name, bool incl
         for (int contour = 0; contour < rectCount; ++contour) {
             const SkRect& rect = rects[contour];
             SkDebugf("path.addRect(%1.9g, %1.9g, %1.9g, %1.9g, %s);\n", rect.fLeft, rect.fTop,
-<<<<<<< HEAD
                 rect.fRight, rect.fBottom, directions[contour] == SkPath::kCCW_Direction ? "SkPath::kCCW_Direction" : "SkPath::kCW_Direction");
-=======
-                    rect.fRight, rect.fBottom, directions[contour] == SkPath::kCCW_Direction
-                    ? "SkPath::kCCW_Direction" : "SkPath::kCW_Direction");
->>>>>>> miniblink49
         }
         return;
     }

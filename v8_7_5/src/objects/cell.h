@@ -14,7 +14,6 @@
 namespace v8 {
 namespace internal {
 
-<<<<<<< HEAD
     class Cell : public HeapObject {
     public:
         // [value]: value of the cell.
@@ -44,34 +43,3 @@ namespace internal {
 #include "src/objects/object-macros-undef.h"
 
 #endif // V8_OBJECTS_CELL_H_
-=======
-class Cell : public HeapObject {
- public:
-  // [value]: value of the cell.
-  DECL_ACCESSORS(value, Object)
-
-  DECL_CAST(Cell)
-
-  static inline Cell FromValueAddress(Address value);
-
-  inline Address ValueAddress() { return address() + kValueOffset; }
-
-  // Dispatched behavior.
-  DECL_PRINTER(Cell)
-  DECL_VERIFIER(Cell)
-
-  DEFINE_FIELD_OFFSET_CONSTANTS(HeapObject::kHeaderSize,
-                                TORQUE_GENERATED_CELL_FIELDS)
-
-  typedef FixedBodyDescriptor<kValueOffset, kSize, kSize> BodyDescriptor;
-
-  OBJECT_CONSTRUCTORS(Cell, HeapObject);
-};
-
-}  // namespace internal
-}  // namespace v8
-
-#include "src/objects/object-macros-undef.h"
-
-#endif  // V8_OBJECTS_CELL_H_
->>>>>>> miniblink49

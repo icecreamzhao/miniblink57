@@ -32,16 +32,18 @@
 #define CSSGridTemplateAreasValue_h
 
 #include "core/css/CSSValue.h"
-#include "core/style/GridCoordinate.h"
+#include "core/style/GridArea.h"
 #include "wtf/text/StringHash.h"
 
 namespace blink {
 
 class CSSGridTemplateAreasValue : public CSSValue {
 public:
-    static PassRefPtrWillBeRawPtr<CSSGridTemplateAreasValue> create(const NamedGridAreaMap& gridAreaMap, size_t rowCount, size_t columnCount)
+    static CSSGridTemplateAreasValue* create(const NamedGridAreaMap& gridAreaMap,
+        size_t rowCount,
+        size_t columnCount)
     {
-        return adoptRefWillBeNoop(new CSSGridTemplateAreasValue(gridAreaMap, rowCount, columnCount));
+        return new CSSGridTemplateAreasValue(gridAreaMap, rowCount, columnCount);
     }
     ~CSSGridTemplateAreasValue() { }
 
@@ -53,17 +55,23 @@ public:
 
     bool equals(const CSSGridTemplateAreasValue&) const;
 
-    DEFINE_INLINE_TRACE_AFTER_DISPATCH() { CSSValue::traceAfterDispatch(visitor); }
+    DEFINE_INLINE_TRACE_AFTER_DISPATCH()
+    {
+        CSSValue::traceAfterDispatch(visitor);
+    }
 
 private:
-    CSSGridTemplateAreasValue(const NamedGridAreaMap&, size_t rowCount, size_t columnCount);
+    CSSGridTemplateAreasValue(const NamedGridAreaMap&,
+        size_t rowCount,
+        size_t columnCount);
 
     NamedGridAreaMap m_gridAreaMap;
     size_t m_rowCount;
     size_t m_columnCount;
 };
 
-DEFINE_CSS_VALUE_TYPE_CASTS(CSSGridTemplateAreasValue, isGridTemplateAreasValue());
+DEFINE_CSS_VALUE_TYPE_CASTS(CSSGridTemplateAreasValue,
+    isGridTemplateAreasValue());
 
 } // namespace blink
 

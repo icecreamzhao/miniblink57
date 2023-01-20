@@ -16,13 +16,10 @@
 #include "src/parsing/scanner.h"
 #include "src/parsing/token.h"
 
-<<<<<<< HEAD
 namespace wke {
 extern bool g_enableSkipJsError;
 }
 
-=======
->>>>>>> miniblink49
 namespace v8 {
 namespace internal {
 
@@ -5128,12 +5125,9 @@ typename ParserBase<Impl>::StatementT ParserBase<Impl>::ParseTryStatement(
   CatchInfo catch_info(this);
 
   if (peek() != Token::CATCH && peek() != Token::FINALLY) {
-<<<<<<< HEAD
     if (wke::g_enableSkipJsError)
       return try_block;
 
-=======
->>>>>>> miniblink49
     ReportMessage(MessageTemplate::kNoCatchOrFinally);
     *ok = false;
     return impl()->NullStatement();

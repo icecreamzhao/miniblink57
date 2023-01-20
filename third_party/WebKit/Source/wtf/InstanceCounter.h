@@ -26,21 +26,15 @@
 #ifndef InstanceCounter_h
 #define InstanceCounter_h
 
-<<<<<<< HEAD
 #include "wtf/TypeTraits.h"
 #include "wtf/WTFExport.h"
 #include "wtf/build_config.h"
-=======
-#include "wtf/Compiler.h"
-#include "wtf/WTFExport.h"
->>>>>>> miniblink49
 
 namespace WTF {
 
 class String;
 WTF_EXPORT String dumpRefCountedInstanceCounts();
 
-<<<<<<< HEAD
 #if ENABLE(INSTANCE_COUNTER)
 WTF_EXPORT void incrementInstanceCount(const char* stringWithTypeName,
     void* ptr);
@@ -62,33 +56,6 @@ inline void decrementInstanceCount(T* p)
 }
 
 #endif // ENABLE(INSTANCE_COUNTER)
-=======
-#if ENABLE(INSTANCE_COUNTER) || ENABLE(GC_PROFILING)
-WTF_EXPORT void incrementInstanceCount(const char* extractNameFunctionName, void* ptr);
-WTF_EXPORT void decrementInstanceCount(const char* extractNameFunctionName, void* ptr);
-
-WTF_EXPORT String extractTypeNameFromFunctionName(const char* funcName);
-
-template<typename T>
-inline const char* extractNameFunction()
-{
-    return WTF_PRETTY_FUNCTION;
-}
-
-template<typename T>
-inline void incrementInstanceCount(T* p)
-{
-    incrementInstanceCount(extractNameFunction<T>(), p);
-}
-
-template<typename T>
-inline void decrementInstanceCount(T* p)
-{
-    decrementInstanceCount(extractNameFunction<T>(), p);
-}
-
-#endif // ENABLE(INSTANCE_COUNTER) || ENABLE(GC_PROFILING)
->>>>>>> miniblink49
 
 } // namespace WTF
 

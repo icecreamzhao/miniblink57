@@ -5,49 +5,29 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "SkBlitMask.h"
 #include "SkBlitRow.h"
-=======
-#include "SkBlitRow.h"
-#include "SkBlitMask.h"
->>>>>>> miniblink49
 #include "SkColorPriv.h"
 #include "SkDither.h"
 #include "SkMathPriv.h"
 
 static void S32_D565_Blend_mips_dsp(uint16_t* SK_RESTRICT dst,
-<<<<<<< HEAD
     const SkPMColor* SK_RESTRICT src, int count,
     U8CPU alpha, int /*x*/, int /*y*/)
 {
-=======
-                                    const SkPMColor* SK_RESTRICT src, int count,
-                                    U8CPU alpha, int /*x*/, int /*y*/) {
->>>>>>> miniblink49
     register uint32_t t0, t1, t2, t3, t4, t5, t6;
     register uint32_t s0, s1, s2, s4, s5, s6;
 
     alpha += 1;
     if (count >= 2) {
-<<<<<<< HEAD
         __asm__ volatile(
             ".set             push                          \n\t"
             ".set             noreorder                     \n\t"
-=======
-        __asm__ volatile (
-           ".set             push                          \n\t"
-           ".set             noreorder                     \n\t"
->>>>>>> miniblink49
             "sll             %[s4],    %[alpha], 8         \n\t"
             "or              %[s4],    %[s4],    %[alpha]  \n\t"
             "repl.ph         %[s5],    0x1f                \n\t"
             "repl.ph         %[s6],    0x3f                \n\t"
-<<<<<<< HEAD
             "1:                                                \n\t"
-=======
-        "1:                                                \n\t"
->>>>>>> miniblink49
             "lw              %[s2],    0(%[src])           \n\t"
             "lw              %[s1],    4(%[src])           \n\t"
             "lwr             %[s0],    0(%[dst])           \n\t"
@@ -55,11 +35,7 @@ static void S32_D565_Blend_mips_dsp(uint16_t* SK_RESTRICT dst,
             "and             %[t1],    %[s0],    %[s5]     \n\t"
             "shra.ph         %[t0],    %[s0],    5         \n\t"
             "and             %[t2],    %[t0],    %[s6]     \n\t"
-<<<<<<< HEAD
 #ifdef __mips_dspr2
-=======
-#ifdef SK_MIPS_HAS_DSPR2
->>>>>>> miniblink49
             "shrl.ph         %[t3],    %[s0],    11        \n\t"
 #else
             "shra.ph         %[t0],    %[s0],    11        \n\t"
@@ -71,11 +47,7 @@ static void S32_D565_Blend_mips_dsp(uint16_t* SK_RESTRICT dst,
             "ins             %[s2],    %[s1],    16, 16    \n\t"
             "preceu.ph.qbra  %[t0],    %[s2]               \n\t"
             "shrl.qb         %[t6],    %[t0],    3         \n\t"
-<<<<<<< HEAD
 #ifdef __mips_dspr2
-=======
-#ifdef SK_MIPS_HAS_DSPR2
->>>>>>> miniblink49
             "shrl.ph         %[t5],    %[s2],    10        \n\t"
 #else
             "shra.ph         %[t0],    %[s2],    10        \n\t"
@@ -113,7 +85,6 @@ static void S32_D565_Blend_mips_dsp(uint16_t* SK_RESTRICT dst,
             "bge             %[count], 2,        1b        \n\t"
             " addiu          %[dst],   %[dst],   4         \n\t"
             ".set            pop                           \n\t"
-<<<<<<< HEAD
             : [t0] "=&r"(t0), [t1] "=&r"(t1), [t2] "=&r"(t2), [t3] "=&r"(t3),
             [t4] "=&r"(t4), [t5] "=&r"(t5), [t6] "=&r"(t6), [s0] "=&r"(s0),
             [s1] "=&r"(s1), [s2] "=&r"(s2), [s4] "=&r"(s4), [s5] "=&r"(s5),
@@ -121,16 +92,6 @@ static void S32_D565_Blend_mips_dsp(uint16_t* SK_RESTRICT dst,
             [src] "+r"(src)
             : [alpha] "r"(alpha)
             : "memory", "hi", "lo");
-=======
-            : [t0]"=&r"(t0), [t1]"=&r"(t1), [t2]"=&r"(t2), [t3]"=&r"(t3),
-              [t4]"=&r"(t4), [t5]"=&r"(t5), [t6]"=&r"(t6), [s0]"=&r"(s0),
-              [s1]"=&r"(s1), [s2]"=&r"(s2), [s4]"=&r"(s4), [s5]"=&r"(s5),
-              [s6]"=&r"(s6), [count]"+r"(count), [dst]"+r"(dst),
-              [src]"+r"(src)
-            : [alpha]"r"(alpha)
-            : "memory", "hi", "lo"
-        );
->>>>>>> miniblink49
     }
 
     if (count == 1) {
@@ -139,33 +100,21 @@ static void S32_D565_Blend_mips_dsp(uint16_t* SK_RESTRICT dst,
         SkASSERT(SkGetPackedA32(c) == 255);
         uint16_t d = *dst;
         *dst++ = SkPackRGB16(SkAlphaBlend(SkPacked32ToR16(c), SkGetPackedR16(d), alpha),
-<<<<<<< HEAD
             SkAlphaBlend(SkPacked32ToG16(c), SkGetPackedG16(d), alpha),
             SkAlphaBlend(SkPacked32ToB16(c), SkGetPackedB16(d), alpha));
-=======
-                             SkAlphaBlend(SkPacked32ToG16(c), SkGetPackedG16(d), alpha),
-                             SkAlphaBlend(SkPacked32ToB16(c), SkGetPackedB16(d), alpha));
->>>>>>> miniblink49
     }
 }
 
 static void S32A_D565_Opaque_Dither_mips_dsp(uint16_t* __restrict__ dst,
-<<<<<<< HEAD
     const SkPMColor* __restrict__ src,
     int count, U8CPU alpha, int x, int y)
 {
     __asm__ volatile(
-=======
-                                             const SkPMColor* __restrict__ src,
-                                             int count, U8CPU alpha, int x, int y) {
-    __asm__ volatile (
->>>>>>> miniblink49
         "pref  0,   0(%[src])     \n\t"
         "pref  1,   0(%[dst])     \n\t"
         "pref  0,   32(%[src])    \n\t"
         "pref  1,   32(%[dst])    \n\t"
         :
-<<<<<<< HEAD
         : [src] "r"(src), [dst] "r"(dst)
         : "memory");
 
@@ -175,36 +124,16 @@ static void S32A_D565_Opaque_Dither_mips_dsp(uint16_t* __restrict__ dst,
 
     if (count >= 2) {
         __asm__ volatile(
-=======
-        : [src]"r"(src), [dst]"r"(dst)
-        : "memory"
-    );
-
-    register int32_t t0, t1, t2, t3, t4, t5, t6;
-    register int32_t t7, t8, t9, s0, s1, s2, s3;
-    const uint16_t dither_scan = gDitherMatrix_3Bit_16[(y) & 3];
-
-    if (count >= 2) {
-        __asm__ volatile (
->>>>>>> miniblink49
             ".set            push                                \n\t"
             ".set            noreorder                           \n\t"
             "li              %[s1],    0x01010101                \n\t"
             "li              %[s2],    -2017                     \n\t"
-<<<<<<< HEAD
             "1:                                                      \n\t"
-=======
-        "1:                                                      \n\t"
->>>>>>> miniblink49
             "bnez            %[s3],    4f                        \n\t"
             " li             %[s3],    2                         \n\t"
             "pref            0,        64(%[src])                \n\t"
             "pref            1,        64(%[dst])                \n\t"
-<<<<<<< HEAD
             "4:                                                      \n\t"
-=======
-        "4:                                                      \n\t"
->>>>>>> miniblink49
             "addiu           %[s3],    %[s3],    -1              \n\t"
             "lw              %[t1],    0(%[src])                 \n\t"
             "andi            %[t3],    %[x],     0x3             \n\t"
@@ -271,11 +200,7 @@ static void S32A_D565_Opaque_Dither_mips_dsp(uint16_t* __restrict__ dst,
             "andi            %[t6],    %[t8],    0x7e0           \n\t"
             "or              %[t1],    %[t5],    %[t6]           \n\t"
             "sh              %[t1],    0(%[dst])                 \n\t"
-<<<<<<< HEAD
             "3:                                                      \n\t"
-=======
-        "3:                                                      \n\t"
->>>>>>> miniblink49
             "beqz            %[t2],    2f                        \n\t"
             " lhu            %[t5],    2(%[dst])                 \n\t"
             "sll             %[t1],    %[t7],    13              \n\t"
@@ -295,18 +220,13 @@ static void S32A_D565_Opaque_Dither_mips_dsp(uint16_t* __restrict__ dst,
             "andi            %[t6],    %[t8],    0x7e0           \n\t"
             "or              %[t1],    %[t5],    %[t6]           \n\t"
             "sh              %[t1],    2(%[dst])                 \n\t"
-<<<<<<< HEAD
             "2:                                                      \n\t"
-=======
-        "2:                                                      \n\t"
->>>>>>> miniblink49
             "addiu           %[count], %[count], -2              \n\t"
             "addiu           %[src],   %[src],   8               \n\t"
             "addiu           %[t1],    %[count], -1              \n\t"
             "bgtz            %[t1],    1b                        \n\t"
             " addiu          %[dst],  %[dst],    4               \n\t"
             ".set            pop                                 \n\t"
-<<<<<<< HEAD
             : [src] "+r"(src), [count] "+r"(count), [dst] "+r"(dst), [x] "+r"(x),
             [t0] "=&r"(t0), [t1] "=&r"(t1), [t2] "=&r"(t2), [t3] "=&r"(t3),
             [t4] "=&r"(t4), [t5] "=&r"(t5), [t6] "=&r"(t6), [t7] "=&r"(t7),
@@ -314,16 +234,6 @@ static void S32A_D565_Opaque_Dither_mips_dsp(uint16_t* __restrict__ dst,
             [s2] "=&r"(s2), [s3] "=&r"(s3)
             : [dither_scan] "r"(dither_scan)
             : "memory", "hi", "lo");
-=======
-            : [src]"+r"(src), [count]"+r"(count), [dst]"+r"(dst), [x]"+r"(x),
-              [t0]"=&r"(t0), [t1]"=&r"(t1), [t2]"=&r"(t2), [t3]"=&r"(t3),
-              [t4]"=&r"(t4), [t5]"=&r"(t5), [t6]"=&r"(t6), [t7]"=&r"(t7),
-              [t8]"=&r"(t8),  [t9]"=&r"(t9), [s0]"=&r"(s0), [s1]"=&r"(s1),
-              [s2]"=&r"(s2), [s3]"=&r"(s3)
-            : [dither_scan]"r"(dither_scan)
-            : "memory", "hi", "lo"
-        );
->>>>>>> miniblink49
     }
 
     if (count == 1) {
@@ -352,16 +262,10 @@ static void S32A_D565_Opaque_Dither_mips_dsp(uint16_t* __restrict__ dst,
 }
 
 static void S32_D565_Opaque_Dither_mips_dsp(uint16_t* __restrict__ dst,
-<<<<<<< HEAD
     const SkPMColor* __restrict__ src,
     int count, U8CPU alpha, int x, int y)
 {
     uint16_t dither_scan = gDitherMatrix_3Bit_16[(y)&3];
-=======
-                                            const SkPMColor* __restrict__ src,
-                                            int count, U8CPU alpha, int x, int y) {
-    uint16_t dither_scan = gDitherMatrix_3Bit_16[(y) & 3];
->>>>>>> miniblink49
     register uint32_t t0, t1, t2, t3, t4, t5;
     register uint32_t t6, t7, t8, t9, s0;
     int dither[4];
@@ -371,19 +275,11 @@ static void S32_D565_Opaque_Dither_mips_dsp(uint16_t* __restrict__ dst,
         dither[i] = (dither_scan >> ((x & 3) << 2)) & 0xF;
     }
 
-<<<<<<< HEAD
     __asm__ volatile(
         ".set            push                          \n\t"
         ".set            noreorder                     \n\t"
         "li              %[s0],    1                   \n\t"
         "2:                                                \n\t"
-=======
-    __asm__ volatile (
-        ".set            push                          \n\t"
-        ".set            noreorder                     \n\t"
-        "li              %[s0],    1                   \n\t"
-    "2:                                                \n\t"
->>>>>>> miniblink49
         "beqz            %[count], 1f                  \n\t"
         " nop                                          \n\t"
         "addiu           %[t0],    %[count], -1        \n\t"
@@ -396,30 +292,18 @@ static void S32_D565_Opaque_Dither_mips_dsp(uint16_t* __restrict__ dst,
         "li              %[s0],    0                   \n\t"
         "b               4f                            \n\t"
         " nop                                          \n\t"
-<<<<<<< HEAD
         "3:                                                \n\t"
         "lw              %[t0],    8(%[dither])        \n\t"
         "lw              %[t1],    12(%[dither])       \n\t"
         "li              %[s0],    1                   \n\t"
         "4:                                                \n\t"
-=======
-    "3:                                                \n\t"
-        "lw              %[t0],    8(%[dither])        \n\t"
-        "lw              %[t1],    12(%[dither])       \n\t"
-        "li              %[s0],    1                   \n\t"
-    "4:                                                \n\t"
->>>>>>> miniblink49
         "sll             %[t2],    %[t0],    16        \n\t"
         "or              %[t1],    %[t2],    %[t1]     \n\t"
         "lw              %[t0],    0(%[src])           \n\t"
         "lw              %[t2],    4(%[src])           \n\t"
         "precrq.ph.w     %[t3],    %[t0],    %[t2]     \n\t"
         "preceu.ph.qbra  %[t9],    %[t3]               \n\t"
-<<<<<<< HEAD
 #ifdef __mips_dspr2
-=======
-#ifdef SK_MIPS_HAS_DSPR2
->>>>>>> miniblink49
         "append          %[t0],    %[t2],    16        \n\t"
         "preceu.ph.qbra  %[t4],    %[t0]               \n\t"
         "preceu.ph.qbla  %[t5],    %[t0]               \n\t"
@@ -444,11 +328,7 @@ static void S32_D565_Opaque_Dither_mips_dsp(uint16_t* __restrict__ dst,
         "subu.qb         %[t4],    %[t3],    %[t2]     \n\t"
         "shra.ph         %[t8],    %[t4],    2         \n\t"
         "precrq.ph.w     %[t0],    %[t6],    %[t7]     \n\t"
-<<<<<<< HEAD
 #ifdef __mips_dspr2
-=======
-#ifdef SK_MIPS_HAS_DSPR2
->>>>>>> miniblink49
         "append          %[t6],    %[t7],    16        \n\t"
 #else
         "sll             %[t6],    %[t6],    16        \n\t"
@@ -473,7 +353,6 @@ static void S32_D565_Opaque_Dither_mips_dsp(uint16_t* __restrict__ dst,
         "addiu           %[src],   %[src],   8         \n\t"
         "b               2b                            \n\t"
         " addiu          %[dst],   %[dst],   4         \n\t"
-<<<<<<< HEAD
         "1:                                                \n\t"
         ".set            pop                           \n\t"
         : [dst] "+r"(dst), [src] "+r"(src), [count] "+r"(count),
@@ -482,17 +361,6 @@ static void S32_D565_Opaque_Dither_mips_dsp(uint16_t* __restrict__ dst,
         [t7] "=&r"(t7), [t8] "=&r"(t8), [t9] "=&r"(t9), [s0] "=&r"(s0)
         : [dither] "r"(dither)
         : "memory");
-=======
-    "1:                                                \n\t"
-        ".set            pop                           \n\t"
-        : [dst]"+r"(dst), [src]"+r"(src), [count]"+r"(count),
-          [x]"+r"(x), [t0]"=&r"(t0), [t1]"=&r"(t1), [t2]"=&r"(t2),
-          [t3]"=&r"(t3), [t4]"=&r"(t4), [t5]"=&r"(t5), [t6]"=&r"(t6),
-          [t7]"=&r"(t7), [t8]"=&r"(t8), [t9]"=&r"(t9), [s0]"=&r"(s0)
-        : [dither] "r" (dither)
-        : "memory"
-    );
->>>>>>> miniblink49
 
     if (count == 1) {
         SkPMColor c = *src++;
@@ -504,29 +372,18 @@ static void S32_D565_Opaque_Dither_mips_dsp(uint16_t* __restrict__ dst,
 }
 
 static void S32_D565_Blend_Dither_mips_dsp(uint16_t* dst,
-<<<<<<< HEAD
     const SkPMColor* src,
     int count, U8CPU alpha, int x, int y)
 {
-=======
-                                           const SkPMColor* src,
-                                           int count, U8CPU alpha, int x, int y) {
->>>>>>> miniblink49
     register int32_t t0, t1, t2, t3, t4, t5, t6;
     register int32_t s0, s1, s2, s3;
     register int x1 = 0;
     register uint32_t sc_mul;
     register uint32_t sc_add;
 #ifdef ENABLE_DITHER_MATRIX_4X4
-<<<<<<< HEAD
     const uint8_t* dither_scan = gDitherMatrix_3Bit_4X4[(y)&3];
 #else // ENABLE_DITHER_MATRIX_4X4
     const uint16_t dither_scan = gDitherMatrix_3Bit_16[(y)&3];
-=======
-    const uint8_t* dither_scan = gDitherMatrix_3Bit_4X4[(y) & 3];
-#else // ENABLE_DITHER_MATRIX_4X4
-    const uint16_t dither_scan = gDitherMatrix_3Bit_16[(y) & 3];
->>>>>>> miniblink49
 #endif // ENABLE_DITHER_MATRIX_4X4
     int dither[4];
 
@@ -535,11 +392,7 @@ static void S32_D565_Blend_Dither_mips_dsp(uint16_t* dst,
         x += 1;
     }
     alpha += 1;
-<<<<<<< HEAD
     __asm__ volatile(
-=======
-    __asm__ volatile (
->>>>>>> miniblink49
         ".set            push                              \n\t"
         ".set            noreorder                         \n\t"
         "li              %[t0],     0x100                  \n\t"
@@ -550,15 +403,9 @@ static void S32_D565_Blend_Dither_mips_dsp(uint16_t* dst,
         "replv.qb        %[sc_add], %[t0]                  \n\t"
         "b               2f                                \n\t"
         " nop                                              \n\t"
-<<<<<<< HEAD
         "1:                                                    \n\t"
         "replv.qb        %[sc_add], %[alpha]               \n\t"
         "2:                                                    \n\t"
-=======
-    "1:                                                    \n\t"
-        "replv.qb        %[sc_add], %[alpha]               \n\t"
-    "2:                                                    \n\t"
->>>>>>> miniblink49
         "addiu           %[t2],     %[count],  -1          \n\t"
         "blez            %[t2],     3f                     \n\t"
         " nop                                              \n\t"
@@ -571,7 +418,6 @@ static void S32_D565_Blend_Dither_mips_dsp(uint16_t* dst,
         "li              %[x1],     1                      \n\t"
         "b               5f                                \n\t"
         " nop                                              \n\t"
-<<<<<<< HEAD
         "4:                                                    \n\t"
         "lw              %[t0],     8(%[dither])           \n\t"
         "lw              %[t1],     12(%[dither])          \n\t"
@@ -580,16 +426,6 @@ static void S32_D565_Blend_Dither_mips_dsp(uint16_t* dst,
         "sll             %[t3],     %[t0],     7           \n\t"
         "sll             %[t4],     %[t1],     7           \n\t"
 #ifdef __mips_dspr2
-=======
-    "4:                                                    \n\t"
-        "lw              %[t0],     8(%[dither])           \n\t"
-        "lw              %[t1],     12(%[dither])          \n\t"
-        "li              %[x1],     0                      \n\t"
-    "5:                                                    \n\t"
-        "sll             %[t3],     %[t0],     7           \n\t"
-        "sll             %[t4],     %[t1],     7           \n\t"
-#ifdef SK_MIPS_HAS_DSPR2
->>>>>>> miniblink49
         "append          %[t0],     %[t1],     16          \n\t"
 #else
         "sll             %[t0],     %[t0],     8           \n\t"
@@ -606,11 +442,7 @@ static void S32_D565_Blend_Dither_mips_dsp(uint16_t* dst,
         "preceu.ph.qbra  %[t6],     %[t6]                  \n\t"
         "lh              %[t2],     0(%[dst])              \n\t"
         "lh              %[s1],     2(%[dst])              \n\t"
-<<<<<<< HEAD
 #ifdef __mips_dspr2
-=======
-#ifdef SK_MIPS_HAS_DSPR2
->>>>>>> miniblink49
         "append          %[t2],     %[s1],     16          \n\t"
 #else
         "sll             %[s1],     %[s1],     16          \n\t"
@@ -669,7 +501,6 @@ static void S32_D565_Blend_Dither_mips_dsp(uint16_t* dst,
         "addi            %[count],  %[count],  -2          \n\t"
         "b               2b                                \n\t"
         " addu           %[dst],    %[dst],    4           \n\t"
-<<<<<<< HEAD
         "3:                                                    \n\t"
         ".set            pop                               \n\t"
         : [src] "+r"(src), [dst] "+r"(dst), [count] "+r"(count),
@@ -681,20 +512,6 @@ static void S32_D565_Blend_Dither_mips_dsp(uint16_t* dst,
         : "memory", "hi", "lo");
 
     if (count == 1) {
-=======
-    "3:                                                    \n\t"
-        ".set            pop                               \n\t"
-        : [src]"+r"(src), [dst]"+r"(dst), [count]"+r"(count),
-          [x1]"+r"(x1), [sc_mul]"=&r"(sc_mul), [sc_add]"=&r"(sc_add),
-          [t0]"=&r"(t0), [t1]"=&r"(t1), [t2]"=&r"(t2), [t3]"=&r"(t3),
-          [t4]"=&r"(t4), [t5]"=&r"(t5), [t6]"=&r"(t6), [s0]"=&r"(s0),
-          [s1]"=&r"(s1), [s2]"=&r"(s2), [s3]"=&r"(s3)
-        : [dither]"r"(dither), [alpha]"r"(alpha)
-        : "memory", "hi", "lo"
-    );
-
-    if(count == 1) {
->>>>>>> miniblink49
         SkPMColor c = *src++;
         SkPMColorAssert(c);
         SkASSERT(SkGetPackedA32(c) == 255);
@@ -709,43 +526,25 @@ static void S32_D565_Blend_Dither_mips_dsp(uint16_t* dst,
 
         uint16_t d = *dst;
         *dst++ = SkPackRGB16(SkAlphaBlend(sr, SkGetPackedR16(d), alpha),
-<<<<<<< HEAD
             SkAlphaBlend(sg, SkGetPackedG16(d), alpha),
             SkAlphaBlend(sb, SkGetPackedB16(d), alpha));
-=======
-                             SkAlphaBlend(sg, SkGetPackedG16(d), alpha),
-                             SkAlphaBlend(sb, SkGetPackedB16(d), alpha));
->>>>>>> miniblink49
         DITHER_INC_X(x);
     }
 }
 
 static void S32A_D565_Opaque_mips_dsp(uint16_t* __restrict__ dst,
-<<<<<<< HEAD
     const SkPMColor* __restrict__ src,
     int count, U8CPU alpha, int x, int y)
 {
 
     __asm__ volatile(
-=======
-                                      const SkPMColor* __restrict__ src,
-                                      int count, U8CPU alpha, int x, int y) {
-
-    __asm__ volatile (
->>>>>>> miniblink49
         "pref  0,  0(%[src])     \n\t"
         "pref  1,  0(%[dst])     \n\t"
         "pref  0,  32(%[src])    \n\t"
         "pref  1,  32(%[dst])    \n\t"
         :
-<<<<<<< HEAD
         : [src] "r"(src), [dst] "r"(dst)
         : "memory");
-=======
-        : [src]"r"(src), [dst]"r"(dst)
-        : "memory"
-    );
->>>>>>> miniblink49
 
     register uint32_t t0, t1, t2, t3, t4, t5, t6, t7, t8;
     register uint32_t t16;
@@ -753,20 +552,12 @@ static void S32A_D565_Opaque_mips_dsp(uint16_t* __restrict__ dst,
     register uint32_t add_x20 = 0x200020;
     register uint32_t sa = 0xff00ff;
 
-<<<<<<< HEAD
     __asm__ volatile(
-=======
-    __asm__ volatile (
->>>>>>> miniblink49
         ".set           push                            \n\t"
         ".set           noreorder                       \n\t"
         "blez           %[count], 1f                    \n\t"
         " nop                                           \n\t"
-<<<<<<< HEAD
         "2:                                                 \n\t"
-=======
-    "2:                                                 \n\t"
->>>>>>> miniblink49
         "beqz           %[count], 1f                    \n\t"
         " nop                                           \n\t"
         "addiu          %[t0],    %[count], -1          \n\t"
@@ -777,21 +568,13 @@ static void S32A_D565_Opaque_mips_dsp(uint16_t* __restrict__ dst,
         "li             %[t16],   2                     \n\t"
         "pref           0,        64(%[src])            \n\t"
         "pref           1,        64(%[dst])            \n\t"
-<<<<<<< HEAD
         "3:                                                 \n\t"
-=======
-    "3:                                                 \n\t"
->>>>>>> miniblink49
         "addiu          %[t16],   %[t16],   -1          \n\t"
         "lw             %[t0],    0(%[src])             \n\t"
         "lw             %[t1],    4(%[src])             \n\t"
         "precrq.ph.w    %[t2],    %[t0],    %[t1]       \n\t"
         "preceu.ph.qbra %[t8],    %[t2]                 \n\t"
-<<<<<<< HEAD
 #ifdef __mips_dspr2
-=======
-#ifdef SK_MIPS_HAS_DSPR2
->>>>>>> miniblink49
         "append         %[t0],    %[t1],    16          \n\t"
 #else
         "sll            %[t0],    %[t0],    16          \n\t"
@@ -808,11 +591,7 @@ static void S32A_D565_Opaque_mips_dsp(uint16_t* __restrict__ dst,
         "lh             %[t0],    0(%[dst])             \n\t"
         "lh             %[t1],    2(%[dst])             \n\t"
         "and            %[t1],    %[t1],    0xffff      \n\t"
-<<<<<<< HEAD
 #ifdef __mips_dspr2
-=======
-#ifdef SK_MIPS_HAS_DSPR2
->>>>>>> miniblink49
         "append         %[t0],    %[t1],    16          \n\t"
 #else
         "sll            %[t5],    %[t0],    16          \n\t"
@@ -855,7 +634,6 @@ static void S32A_D565_Opaque_mips_dsp(uint16_t* __restrict__ dst,
         "addiu          %[src],   %[src],   8           \n\t"
         "b              2b                              \n\t"
         " addiu         %[dst],   %[dst],   4           \n\t"
-<<<<<<< HEAD
         "1:                                                 \n\t"
         ".set           pop                             \n\t"
         : [dst] "+r"(dst), [src] "+r"(src), [count] "+r"(count),
@@ -864,17 +642,6 @@ static void S32A_D565_Opaque_mips_dsp(uint16_t* __restrict__ dst,
         [t7] "=&r"(t7), [t8] "=&r"(t8)
         : [add_x10] "r"(add_x10), [add_x20] "r"(add_x20), [sa] "r"(sa)
         : "memory", "hi", "lo");
-=======
-    "1:                                                 \n\t"
-        ".set           pop                             \n\t"
-        : [dst]"+r"(dst), [src]"+r"(src), [count]"+r"(count),
-          [t16]"=&r"(t16), [t0]"=&r"(t0), [t1]"=&r"(t1), [t2]"=&r"(t2),
-          [t3]"=&r"(t3), [t4]"=&r"(t4), [t5]"=&r"(t5), [t6]"=&r"(t6),
-          [t7]"=&r"(t7), [t8]"=&r"(t8)
-        : [add_x10]"r"(add_x10), [add_x20]"r"(add_x20), [sa]"r"(sa)
-        : "memory", "hi", "lo"
-    );
->>>>>>> miniblink49
 
     if (count == 1) {
         SkPMColor c = *src++;
@@ -887,7 +654,6 @@ static void S32A_D565_Opaque_mips_dsp(uint16_t* __restrict__ dst,
 }
 
 static void S32A_D565_Blend_mips_dsp(uint16_t* SK_RESTRICT dst,
-<<<<<<< HEAD
     const SkPMColor* SK_RESTRICT src, int count,
     U8CPU alpha, int /*x*/, int /*y*/)
 {
@@ -896,25 +662,12 @@ static void S32A_D565_Blend_mips_dsp(uint16_t* SK_RESTRICT dst,
     register unsigned dst_scale = 0;
 
     __asm__ volatile(
-=======
-                                     const SkPMColor* SK_RESTRICT src, int count,
-                                     U8CPU alpha, int /*x*/, int /*y*/) {
-    register uint32_t t0, t1, t2, t3, t4, t5, t6, t7, t8, t9;
-    register uint32_t  s0, s1, s2, s3;
-    register unsigned dst_scale = 0;
-
-    __asm__ volatile (
->>>>>>> miniblink49
         ".set            push                                       \n\t"
         ".set            noreorder                                  \n\t"
         "replv.qb        %[t0],        %[alpha]                     \n\t"
         "repl.ph         %[t6],        0x80                         \n\t"
         "repl.ph         %[t7],        0xFF                         \n\t"
-<<<<<<< HEAD
         "1:                                                             \n\t"
-=======
-    "1:                                                             \n\t"
->>>>>>> miniblink49
         "addiu           %[t8],        %[count],     -1             \n\t"
         "blez            %[t8],        2f                           \n\t"
         " nop                                                       \n\t"
@@ -982,7 +735,6 @@ static void S32A_D565_Blend_mips_dsp(uint16_t* SK_RESTRICT dst,
         "addiu           %[count],     %[count],     -2             \n\t"
         "b               1b                                         \n\t"
         " addiu          %[dst],       %[dst],       4              \n\t"
-<<<<<<< HEAD
         "2:                                                             \n\t"
         ".set            pop                                        \n\t"
         : [src] "+r"(src), [dst] "+r"(dst), [count] "+r"(count),
@@ -992,18 +744,6 @@ static void S32A_D565_Blend_mips_dsp(uint16_t* SK_RESTRICT dst,
         [t6] "=&r"(t6), [t7] "=&r"(t7), [t8] "=&r"(t8), [t9] "=&r"(t9)
         : [alpha] "r"(alpha)
         : "memory", "hi", "lo");
-=======
-    "2:                                                             \n\t"
-        ".set            pop                                        \n\t"
-        : [src]"+r"(src), [dst]"+r"(dst), [count]"+r"(count),
-          [dst_scale]"+r"(dst_scale), [s0]"=&r"(s0), [s1]"=&r"(s1),
-          [s2]"=&r"(s2), [s3]"=&r"(s3), [t0]"=&r"(t0), [t1]"=&r"(t1),
-          [t2]"=&r"(t2), [t3]"=&r"(t3), [t4]"=&r"(t4), [t5]"=&r"(t5),
-          [t6]"=&r"(t6), [t7]"=&r"(t7), [t8]"=&r"(t8), [t9]"=&r"(t9)
-        : [alpha]"r"(alpha)
-        : "memory", "hi", "lo"
-    );
->>>>>>> miniblink49
 
     if (count == 1) {
         SkPMColor sc = *src++;
@@ -1011,18 +751,9 @@ static void S32A_D565_Blend_mips_dsp(uint16_t* SK_RESTRICT dst,
         if (sc) {
             uint16_t dc = *dst;
             unsigned dst_scale = 255 - SkMulDiv255Round(SkGetPackedA32(sc), alpha);
-<<<<<<< HEAD
             unsigned dr = (SkPacked32ToR16(sc) * alpha) + (SkGetPackedR16(dc) * dst_scale);
             unsigned dg = (SkPacked32ToG16(sc) * alpha) + (SkGetPackedG16(dc) * dst_scale);
             unsigned db = (SkPacked32ToB16(sc) * alpha) + (SkGetPackedB16(dc) * dst_scale);
-=======
-            unsigned dr = SkMulS16(SkPacked32ToR16(sc), alpha) +
-                          SkMulS16(SkGetPackedR16(dc), dst_scale);
-            unsigned dg = SkMulS16(SkPacked32ToG16(sc), alpha) +
-                          SkMulS16(SkGetPackedG16(dc), dst_scale);
-            unsigned db = SkMulS16(SkPacked32ToB16(sc), alpha) +
-                          SkMulS16(SkGetPackedB16(dc), dst_scale);
->>>>>>> miniblink49
             *dst = SkPackRGB16(SkDiv255Round(dr), SkDiv255Round(dg), SkDiv255Round(db));
         }
         dst += 1;
@@ -1030,20 +761,12 @@ static void S32A_D565_Blend_mips_dsp(uint16_t* SK_RESTRICT dst,
 }
 
 static void S32_Blend_BlitRow32_mips_dsp(SkPMColor* SK_RESTRICT dst,
-<<<<<<< HEAD
     const SkPMColor* SK_RESTRICT src,
     int count, U8CPU alpha)
 {
     register int32_t t0, t1, t2, t3, t4, t5, t6, t7;
 
     __asm__ volatile(
-=======
-                                         const SkPMColor* SK_RESTRICT src,
-                                         int count, U8CPU alpha) {
-    register int32_t t0, t1, t2, t3, t4, t5, t6, t7;
-
-    __asm__ volatile (
->>>>>>> miniblink49
         ".set            push                         \n\t"
         ".set            noreorder                    \n\t"
         "li              %[t2],    0x100              \n\t"
@@ -1051,11 +774,7 @@ static void S32_Blend_BlitRow32_mips_dsp(SkPMColor* SK_RESTRICT dst,
         "subu            %[t1],    %[t2],    %[t0]    \n\t"
         "replv.qb        %[t7],    %[t0]              \n\t"
         "replv.qb        %[t6],    %[t1]              \n\t"
-<<<<<<< HEAD
         "1:                                               \n\t"
-=======
-    "1:                                               \n\t"
->>>>>>> miniblink49
         "blez            %[count], 2f                 \n\t"
         "lw              %[t0],    0(%[src])          \n\t"
         "lw              %[t1],    0(%[dst])          \n\t"
@@ -1075,7 +794,6 @@ static void S32_Blend_BlitRow32_mips_dsp(SkPMColor* SK_RESTRICT dst,
         "sw              %[t1],    0(%[dst])          \n\t"
         "b               1b                           \n\t"
         " addi           %[dst],   %[dst],   4        \n\t"
-<<<<<<< HEAD
         "2:                                               \n\t"
         ".set            pop                          \n\t"
         : [src] "+r"(src), [dst] "+r"(dst), [count] "+r"(count),
@@ -1092,39 +810,14 @@ void blitmask_d565_opaque_mips(int width, int height, uint16_t* device,
     register uint32_t s0, s1, s2, s3;
 
     __asm__ volatile(
-=======
-    "2:                                               \n\t"
-        ".set            pop                          \n\t"
-        : [src]"+r"(src), [dst]"+r"(dst), [count]"+r"(count),
-          [t0]"=&r"(t0), [t1]"=&r"(t1), [t2]"=&r"(t2), [t3]"=&r"(t3),
-          [t4]"=&r"(t4), [t5]"=&r"(t5), [t6]"=&r"(t6), [t7]"=&r"(t7)
-        : [alpha]"r"(alpha)
-        : "memory", "hi", "lo"
-    );
-}
-
-void blitmask_d565_opaque_mips(int width, int height, uint16_t* device,
-                               unsigned deviceRB, const uint8_t* alpha,
-                               uint32_t expanded32, unsigned maskRB) {
-    register uint32_t s0, s1, s2, s3;
-
-    __asm__ volatile (
->>>>>>> miniblink49
         ".set            push                                    \n\t"
         ".set            noreorder                               \n\t"
         ".set            noat                                    \n\t"
         "li              $t9,       0x7E0F81F                    \n\t"
-<<<<<<< HEAD
         "1:                                                          \n\t"
         "move            $t8,       %[width]                     \n\t"
         "addiu           %[height], %[height],     -1            \n\t"
         "2:                                                          \n\t"
-=======
-    "1:                                                          \n\t"
-        "move            $t8,       %[width]                     \n\t"
-        "addiu           %[height], %[height],     -1            \n\t"
-    "2:                                                          \n\t"
->>>>>>> miniblink49
         "beqz            $t8,       4f                           \n\t"
         " addiu          $t0,       $t8,           -4            \n\t"
         "bltz            $t0,       3f                           \n\t"
@@ -1189,11 +882,7 @@ void blitmask_d565_opaque_mips(int width, int height, uint16_t* device,
         "sh              %[s3],     6(%[device])                 \n\t"
         "b               2b                                      \n\t"
         " addiu          %[device], %[device],     8             \n\t"
-<<<<<<< HEAD
         "3:                                                          \n\t"
-=======
-    "3:                                                          \n\t"
->>>>>>> miniblink49
         "lhu             $t0,       0(%[device])                 \n\t"
         "lbu             $t1,       0(%[alpha])                  \n\t"
         "addiu           $t8,       $t8,           -1            \n\t"
@@ -1211,44 +900,25 @@ void blitmask_d565_opaque_mips(int width, int height, uint16_t* device,
         "or              %[s0],     $t4,           $t3           \n\t"
         "sh              %[s0],     0(%[device])                 \n\t"
         "bnez            $t8,       3b                           \n\t"
-<<<<<<< HEAD
         "addiu          %[device], %[device],     2             \n\t"
         "4:                                                          \n\t"
-=======
-         "addiu          %[device], %[device],     2             \n\t"
-    "4:                                                          \n\t"
->>>>>>> miniblink49
         "addu            %[device], %[device],     %[deviceRB]   \n\t"
         "bgtz            %[height], 1b                           \n\t"
         " addu           %[alpha],  %[alpha],      %[maskRB]     \n\t"
         ".set            pop                                     \n\t"
-<<<<<<< HEAD
         : [height] "+r"(height), [alpha] "+r"(alpha), [device] "+r"(device),
         [deviceRB] "+r"(deviceRB), [maskRB] "+r"(maskRB), [s0] "=&r"(s0),
         [s1] "=&r"(s1), [s2] "=&r"(s2), [s3] "=&r"(s3)
         : [expanded32] "r"(expanded32), [width] "r"(width)
         : "memory", "hi", "lo", "t0", "t1", "t2", "t3",
         "t4", "t5", "t6", "t7", "t8", "t9");
-=======
-        : [height]"+r"(height), [alpha]"+r"(alpha), [device]"+r"(device),
-          [deviceRB]"+r"(deviceRB), [maskRB]"+r"(maskRB), [s0]"=&r"(s0),
-          [s1]"=&r"(s1), [s2]"=&r"(s2), [s3]"=&r"(s3)
-        : [expanded32] "r" (expanded32), [width] "r" (width)
-        : "memory", "hi", "lo", "t0", "t1", "t2", "t3",
-          "t4", "t5", "t6", "t7", "t8", "t9"
-    );
->>>>>>> miniblink49
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 const SkBlitRow::Proc16 platform_565_procs_mips_dsp[] = {
     // no dither
-<<<<<<< HEAD
     nullptr,
-=======
-    NULL,
->>>>>>> miniblink49
     S32_D565_Blend_mips_dsp,
     S32A_D565_Opaque_mips_dsp,
     S32A_D565_Blend_mips_dsp,
@@ -1257,7 +927,6 @@ const SkBlitRow::Proc16 platform_565_procs_mips_dsp[] = {
     S32_D565_Opaque_Dither_mips_dsp,
     S32_D565_Blend_Dither_mips_dsp,
     S32A_D565_Opaque_Dither_mips_dsp,
-<<<<<<< HEAD
     nullptr,
 };
 
@@ -1280,26 +949,5 @@ SkBlitRow::ColorProc16 SkBlitRow::PlatformColorFactory565(unsigned flags)
 
 SkBlitRow::Proc32 SkBlitRow::PlatformProcs32(unsigned flags)
 {
-=======
-    NULL,
-};
-
-static const SkBlitRow::Proc32 platform_32_procs_mips_dsp[] = {
-    NULL,   // S32_Opaque,
-    S32_Blend_BlitRow32_mips_dsp,   // S32_Blend,
-    NULL,   // S32A_Opaque,
-    NULL,   // S32A_Blend,
-};
-
-SkBlitRow::Proc16 SkBlitRow::PlatformFactory565(unsigned flags) {
-    return platform_565_procs_mips_dsp[flags];
-}
-
-SkBlitRow::ColorProc16 SkBlitRow::PlatformColorFactory565(unsigned flags) {
-    return NULL;
-}
-
-SkBlitRow::Proc32 SkBlitRow::PlatformProcs32(unsigned flags) {
->>>>>>> miniblink49
     return platform_32_procs_mips_dsp[flags];
 }

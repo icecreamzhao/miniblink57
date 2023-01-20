@@ -5,7 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "Resources.h"
 #include "SkSurface.h"
 #include "gm.h"
@@ -16,17 +15,6 @@
 
 static SkBitmap copy_bitmap(const SkBitmap& src, SkColorType colorType)
 {
-=======
-#include "sk_tool_utils.h"
-#include "SkSurface.h"
-#include "Resources.h"
-#include "gm.h"
-
-#include "SkMath.h"
-#include "SkColorPriv.h"
-
-static SkBitmap copy_bitmap(const SkBitmap& src, SkColorType colorType) {
->>>>>>> miniblink49
     SkBitmap copy;
     src.copyTo(&copy, colorType);
     copy.setImmutable();
@@ -36,7 +24,6 @@ static SkBitmap copy_bitmap(const SkBitmap& src, SkColorType colorType) {
 #define SCALE 128
 
 // Make either A8 or gray8 bitmap.
-<<<<<<< HEAD
 static SkBitmap make_bitmap(SkColorType ct)
 {
     SkBitmap bm;
@@ -51,21 +38,6 @@ static SkBitmap make_bitmap(SkColorType ct)
     default:
         SkASSERT(false);
         return bm;
-=======
-static SkBitmap make_bitmap(SkColorType ct) {
-    SkBitmap bm;
-    switch (ct) {
-        case kAlpha_8_SkColorType:
-            bm.allocPixels(SkImageInfo::MakeA8(SCALE, SCALE));
-            break;
-        case kGray_8_SkColorType:
-            bm.allocPixels(
-                    SkImageInfo::Make(SCALE, SCALE, ct, kOpaque_SkAlphaType));
-            break;
-        default:
-            SkASSERT(false);
-            return bm;
->>>>>>> miniblink49
     }
     SkAutoLockPixels autoLockPixels(bm);
     uint8_t spectrum[256];
@@ -81,32 +53,20 @@ static SkBitmap make_bitmap(SkColorType ct) {
 }
 
 static void draw_center_letter(char c,
-<<<<<<< HEAD
     SkPaint* p,
     SkColor color,
     SkScalar x,
     SkScalar y,
     SkCanvas* canvas)
 {
-=======
-                               SkPaint* p,
-                               SkColor color,
-                               SkScalar x,
-                               SkScalar y,
-                               SkCanvas* canvas) {
->>>>>>> miniblink49
     SkRect bounds;
     p->setColor(color);
     p->measureText(&c, 1, &bounds);
     canvas->drawText(&c, 1, x - bounds.centerX(), y - bounds.centerY(), *p);
 }
 
-<<<<<<< HEAD
 static void color_wheel_native(SkCanvas* canvas)
 {
-=======
-static void color_wheel_native(SkCanvas* canvas) {
->>>>>>> miniblink49
     SkAutoCanvasRestore autoCanvasRestore(canvas, true);
     canvas->translate(0.5f * SCALE, 0.5f * SCALE);
     SkPaint p;
@@ -119,11 +79,7 @@ static void color_wheel_native(SkCanvas* canvas) {
     const SkScalar D = 0.3f * SkIntToScalar(SCALE);
     const SkScalar X = SkDoubleToScalar(D * sqrt_3_over_2);
     const SkScalar Y = D * SK_ScalarHalf;
-<<<<<<< HEAD
     sk_tool_utils::set_portable_typeface(&p, nullptr, SkFontStyle::FromOldStyle(SkTypeface::kBold));
-=======
-    sk_tool_utils::set_portable_typeface_always(&p, NULL, SkTypeface::kBold);
->>>>>>> miniblink49
     p.setTextSize(0.28125f * SCALE);
     draw_center_letter('K', &p, SK_ColorBLACK, Z, Z, canvas);
     draw_center_letter('R', &p, SK_ColorRED, Z, D, canvas);
@@ -135,12 +91,8 @@ static void color_wheel_native(SkCanvas* canvas) {
 }
 
 template <typename T>
-<<<<<<< HEAD
 int find(T* array, int N, T item)
 {
-=======
-int find(T* array, int N, T item) {
->>>>>>> miniblink49
     for (int i = 0; i < N; ++i) {
         if (array[i] == item) {
             return i;
@@ -149,7 +101,6 @@ int find(T* array, int N, T item) {
     return -1;
 }
 
-<<<<<<< HEAD
 static SkPMColor premultiply_color(SkColor c)
 {
     return SkPremultiplyARGBInline(SkColorGetA(c), SkColorGetR(c),
@@ -158,14 +109,6 @@ static SkPMColor premultiply_color(SkColor c)
 
 static SkBitmap indexed_bitmap()
 {
-=======
-static SkPMColor premultiply_color(SkColor c) {
-    return SkPremultiplyARGBInline(SkColorGetA(c), SkColorGetR(c),
-                                   SkColorGetG(c), SkColorGetB(c));
-}
-
-static SkBitmap indexed_bitmap() {
->>>>>>> miniblink49
     SkBitmap n32bitmap;
     n32bitmap.allocN32Pixels(SCALE, SCALE);
     n32bitmap.eraseColor(SK_ColorTRANSPARENT);
@@ -173,7 +116,6 @@ static SkBitmap indexed_bitmap() {
     SkCanvas canvas(n32bitmap);
     color_wheel_native(&canvas);
     const SkColor colors[] = {
-<<<<<<< HEAD
         SK_ColorTRANSPARENT,
         SK_ColorWHITE,
         SK_ColorBLACK,
@@ -183,35 +125,16 @@ static SkBitmap indexed_bitmap() {
         SK_ColorCYAN,
         SK_ColorMAGENTA,
         SK_ColorYELLOW,
-=======
-            SK_ColorTRANSPARENT,
-            SK_ColorWHITE,
-            SK_ColorBLACK,
-            SK_ColorRED,
-            SK_ColorGREEN,
-            SK_ColorBLUE,
-            SK_ColorCYAN,
-            SK_ColorMAGENTA,
-            SK_ColorYELLOW,
->>>>>>> miniblink49
     };
     SkPMColor pmColors[SK_ARRAY_COUNT(colors)];
     for (size_t i = 0; i < SK_ARRAY_COUNT(colors); ++i) {
         pmColors[i] = premultiply_color(colors[i]);
     }
     SkBitmap bm;
-<<<<<<< HEAD
     SkAutoTUnref<SkColorTable> ctable(new SkColorTable(pmColors, SK_ARRAY_COUNT(pmColors)));
     SkImageInfo info = SkImageInfo::Make(SCALE, SCALE, kIndex_8_SkColorType,
         kPremul_SkAlphaType);
     bm.allocPixels(info, nullptr, ctable);
-=======
-    SkAutoTUnref<SkColorTable> ctable(
-            SkNEW_ARGS(SkColorTable, (pmColors, SK_ARRAY_COUNT(pmColors))));
-    SkImageInfo info = SkImageInfo::Make(SCALE, SCALE, kIndex_8_SkColorType,
-                                         kPremul_SkAlphaType);
-    bm.allocPixels(info, NULL, ctable);
->>>>>>> miniblink49
     SkAutoLockPixels autoLockPixels1(n32bitmap);
     SkAutoLockPixels autoLockPixels2(bm);
     for (int y = 0; y < SCALE; ++y) {
@@ -225,38 +148,23 @@ static SkBitmap indexed_bitmap() {
 }
 
 static void draw(SkCanvas* canvas,
-<<<<<<< HEAD
     const SkPaint& p,
     const SkBitmap& src,
     SkColorType colorType,
     const char text[])
 {
-=======
-                 const SkPaint& p,
-                 const SkBitmap& src,
-                 SkColorType colorType,
-                 const char text[]) {
->>>>>>> miniblink49
     SkASSERT(src.colorType() == colorType);
     canvas->drawBitmap(src, 0.0f, 0.0f);
     canvas->drawText(text, strlen(text), 0.0f, 12.0f, p);
 }
 
-<<<<<<< HEAD
 DEF_SIMPLE_GM(all_bitmap_configs, canvas, SCALE, 6 * SCALE)
 {
-=======
-DEF_SIMPLE_GM(all_bitmap_configs, canvas, SCALE, 6 * SCALE) {
->>>>>>> miniblink49
     SkAutoCanvasRestore autoCanvasRestore(canvas, true);
     SkPaint p;
     p.setColor(SK_ColorBLACK);
     p.setAntiAlias(true);
-<<<<<<< HEAD
     sk_tool_utils::set_portable_typeface(&p, nullptr);
-=======
-    sk_tool_utils::set_portable_typeface_always(&p, NULL);
->>>>>>> miniblink49
 
     sk_tool_utils::draw_checkerboard(canvas, SK_ColorLTGRAY, SK_ColorWHITE, 8);
 
@@ -291,7 +199,6 @@ DEF_SIMPLE_GM(all_bitmap_configs, canvas, SCALE, 6 * SCALE) {
     SkBitmap bitmapG8 = make_bitmap(kGray_8_SkColorType);
     draw(canvas, p, bitmapG8, kGray_8_SkColorType, "Gray 8");
 }
-<<<<<<< HEAD
 
 sk_sp<SkImage> make_not_native32_color_wheel()
 {
@@ -392,5 +299,3 @@ DEF_SIMPLE_GM(all_variants_8888, canvas, 4 * SCALE + 30, 2 * SCALE + 10)
         canvas->translate(2 * (SCALE + 10), 0.0f);
     }
 }
-=======
->>>>>>> miniblink49

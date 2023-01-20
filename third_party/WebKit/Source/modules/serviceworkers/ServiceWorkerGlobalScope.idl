@@ -28,45 +28,23 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 // https://w3c.github.io/ServiceWorker/#service-worker-global-scope-interface
-=======
-// https://slightlyoff.github.io/ServiceWorker/spec/service_worker/index.html#service-worker-global-scope-interface
->>>>>>> miniblink49
 
 [
     Exposed=ServiceWorker,
     Global=(Worker,ServiceWorker),
-<<<<<<< HEAD
-=======
-    TypeChecking=Interface,
->>>>>>> miniblink49
 ] interface ServiceWorkerGlobalScope : WorkerGlobalScope {
 
   readonly attribute Clients clients;
   readonly attribute ServiceWorkerRegistration registration;
 
-<<<<<<< HEAD
   [CallWith=ScriptState, RaisesException] Promise<Response> fetch(RequestInfo input, optional Dictionary init);
 
-=======
-  // https://github.com/mkruisselbrink/navigator-connect/blob/gh-pages/docs/api-idea.md#persisted-messageports
-  // TODO(mek): Link to actual spec when this is added there, and decide if this is the right place for this.
-  [RuntimeEnabled=NavigatorConnect] readonly attribute StashedPortCollection ports;
-
-  [CallWith=ScriptState, RaisesException] Promise<Response> fetch(RequestInfo input, optional Dictionary init);
-
-  [RaisesException] void close();
-
->>>>>>> miniblink49
   [CallWith=ScriptState] Promise<void> skipWaiting();
 
   attribute EventHandler onactivate;
   attribute EventHandler onfetch;
   attribute EventHandler oninstall;
   attribute EventHandler onmessage;
-<<<<<<< HEAD
   [OriginTrialEnabled=ForeignFetch] attribute EventHandler onforeignfetch;
-=======
->>>>>>> miniblink49
 };

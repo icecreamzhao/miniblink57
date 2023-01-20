@@ -18,16 +18,16 @@ namespace gin {
 // and ensure that all objects have kNumberOfInternalFields internal fields.
 
 enum InternalFields {
-  kWrapperInfoIndex,
-  kEncodedValueIndex,
-  kNumberOfInternalFields,
+    kWrapperInfoIndex,
+    kEncodedValueIndex,
+    kNumberOfInternalFields,
 };
 
 struct GIN_EXPORT WrapperInfo {
-  static WrapperInfo* From(v8::Local<v8::Object> object);
-  const GinEmbedder embedder;
+    static WrapperInfo* From(v8::Local<v8::Object> object);
+    const GinEmbedder embedder;
 };
 
-}  // namespace gin
+} // namespace gin
 
-#endif  // GIN_PUBLIC_WRAPPER_INFO_H_
+#endif // GIN_PUBLIC_WRAPPER_INFO_H_

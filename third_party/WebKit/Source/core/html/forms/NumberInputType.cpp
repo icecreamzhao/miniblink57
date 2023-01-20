@@ -29,22 +29,20 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/html/forms/NumberInputType.h"
 
 #include "bindings/core/v8/ExceptionState.h"
 #include "core/HTMLNames.h"
 #include "core/InputTypeNames.h"
-#include "core/dom/ExceptionCode.h"
 #include "core/events/BeforeTextInsertedEvent.h"
 #include "core/events/KeyboardEvent.h"
 #include "core/events/ScopedEventQueue.h"
 #include "core/html/HTMLInputElement.h"
 #include "core/html/parser/HTMLParserIdioms.h"
-#include "core/layout/LayoutTextControl.h"
+#include "core/inspector/ConsoleMessage.h"
+#include "core/layout/LayoutObject.h"
 #include "platform/text/PlatformLocale.h"
 #include "wtf/MathExtras.h"
-#include "wtf/PassOwnPtr.h"
 #include <limits>
 
 namespace blink {
@@ -76,7 +74,7 @@ struct RealNumberRenderSize {
 
 static RealNumberRenderSize calculateRenderSize(const Decimal& value)
 {
-    ASSERT(value.isFinite());
+    DCHECK(value.isFinite());
     const unsigned sizeOfDigits = String::number(value.value().coefficient()).length();
     const unsigned sizeOfSign = value.isNegative() ? 1 : 0;
     const int exponent = value.exponent();
@@ -86,18 +84,20 @@ static RealNumberRenderSize calculateRenderSize(const Decimal& value)
     const int sizeBeforeDecimalPoint = exponent + sizeOfDigits;
     if (sizeBeforeDecimalPoint > 0) {
         // In case of "123.456"
-        return RealNumberRenderSize(sizeOfSign + sizeBeforeDecimalPoint, sizeOfDigits - sizeBeforeDecimalPoint);
+        return RealNumberRenderSize(sizeOfSign + sizeBeforeDecimalPoint,
+            sizeOfDigits - sizeBeforeDecimalPoint);
     }
 
     // In case of "0.00012345"
     const unsigned sizeOfZero = 1;
     const unsigned numberOfZeroAfterDecimalPoint = -sizeBeforeDecimalPoint;
-    return RealNumberRenderSize(sizeOfSign + sizeOfZero , numberOfZeroAfterDecimalPoint + sizeOfDigits);
+    return RealNumberRenderSize(sizeOfSign + sizeOfZero,
+        numberOfZeroAfterDecimalPoint + sizeOfDigits);
 }
 
-PassRefPtrWillBeRawPtr<InputType> NumberInputType::create(HTMLInputElement& element)
+InputType* NumberInputType::create(HTMLInputElement& element)
 {
-    return adoptRefWillBeNoop(new NumberInputType(element));
+    return new NumberInputType(element);
 }
 
 void NumberInputType::countUsage()
@@ -110,7 +110,9 @@ const AtomicString& NumberInputType::formControlType() const
     return InputTypeNames::number;
 }
 
-void NumberInputType::setValue(const String& sanitizedValue, bool valueChanged, TextFieldEventBehavior eventBehavior)
+void NumberInputType::setValue(const String& sanitizedValue,
+    bool valueChanged,
+    TextFieldEventBehavior eventBehavior)
 {
     if (!valueChanged && sanitizedValue.isEmpty() && !element().innerEditorValue().isEmpty())
         element().updateView();
@@ -122,35 +124,44 @@ double NumberInputType::valueAsDouble() const
     return parseToDoubleForNumberType(element().value());
 }
 
-void NumberInputType::setValueAsDouble(double newValue, TextFieldEventBehavior eventBehavior, ExceptionState& exceptionState) const
+void NumberInputType::setValueAsDouble(double newValue,
+    TextFieldEventBehavior eventBehavior,
+    ExceptionState& exceptionState) const
 {
     element().setValue(serializeForNumberType(newValue), eventBehavior);
 }
 
-void NumberInputType::setValueAsDecimal(const Decimal& newValue, TextFieldEventBehavior eventBehavior, ExceptionState& exceptionState) const
+void NumberInputType::setValueAsDecimal(const Decimal& newValue,
+    TextFieldEventBehavior eventBehavior,
+    ExceptionState& exceptionState) const
 {
     element().setValue(serializeForNumberType(newValue), eventBehavior);
 }
 
 bool NumberInputType::typeMismatchFor(const String& value) const
 {
-    return !value.isEmpty() && !std::isfinite(parseToDoubleForNumberType(value));
+    return !value.isEmpty() && !std_isfinite(parseToDoubleForNumberType(value));
 }
 
 bool NumberInputType::typeMismatch() const
 {
-    ASSERT(!typeMismatchFor(element().value()));
+    DCHECK(!typeMismatchFor(element().value()));
     return false;
 }
 
-StepRange NumberInputType::createStepRange(AnyStepHandling anyStepHandling) const
+StepRange NumberInputType::createStepRange(
+    AnyStepHandling anyStepHandling) const
 {
-    DEFINE_STATIC_LOCAL(const StepRange::StepDescription, stepDescription, (numberDefaultStep, numberDefaultStepBase, numberStepScaleFactor));
+    DEFINE_STATIC_LOCAL(
+        const StepRange::StepDescription, stepDescription,
+        (numberDefaultStep, numberDefaultStepBase, numberStepScaleFactor));
     const Decimal doubleMax = Decimal::fromDouble(std::numeric_limits<double>::max());
-    return InputType::createStepRange(anyStepHandling, numberDefaultStepBase, -doubleMax, doubleMax, stepDescription);
+    return InputType::createStepRange(anyStepHandling, numberDefaultStepBase,
+        -doubleMax, doubleMax, stepDescription);
 }
 
-bool NumberInputType::sizeShouldIncludeDecoration(int defaultSize, int& preferredSize) const
+bool NumberInputType::sizeShouldIncludeDecoration(int defaultSize,
+    int& preferredSize) const
 {
     preferredSize = defaultSize;
 
@@ -167,9 +178,10 @@ bool NumberInputType::sizeShouldIncludeDecoration(int defaultSize, int& preferre
         return false;
 
     const Decimal step = parseToDecimalForNumberType(stepString, 1);
-    ASSERT(step.isFinite());
+    DCHECK(step.isFinite());
 
-    RealNumberRenderSize size = calculateRenderSize(minimum).max(calculateRenderSize(maximum).max(calculateRenderSize(step)));
+    RealNumberRenderSize size = calculateRenderSize(minimum).max(
+        calculateRenderSize(maximum).max(calculateRenderSize(step)));
 
     preferredSize = size.sizeBeforeDecimalPoint + size.sizeAfteDecimalPoint + (size.sizeAfteDecimalPoint ? 1 : 0);
 
@@ -189,12 +201,15 @@ void NumberInputType::handleKeydownEvent(KeyboardEvent* event)
         TextFieldInputType::handleKeydownEvent(event);
 }
 
-void NumberInputType::handleBeforeTextInsertedEvent(BeforeTextInsertedEvent* event)
+void NumberInputType::handleBeforeTextInsertedEvent(
+    BeforeTextInsertedEvent* event)
 {
-    event->setText(locale().stripInvalidNumberCharacters(event->text(), "0123456789.Ee-+"));
+    event->setText(
+        locale().stripInvalidNumberCharacters(event->text(), "0123456789.Ee-+"));
 }
 
-Decimal NumberInputType::parseToNumber(const String& src, const Decimal& defaultValue) const
+Decimal NumberInputType::parseToNumber(const String& src,
+    const Decimal& defaultValue) const
 {
     return parseToDecimalForNumberType(src, defaultValue);
 }
@@ -226,7 +241,8 @@ String NumberInputType::visibleValue() const
     return localizeValue(element().value());
 }
 
-String NumberInputType::convertFromVisibleValue(const String& visibleValue) const
+String NumberInputType::convertFromVisibleValue(
+    const String& visibleValue) const
 {
     if (visibleValue.isEmpty())
         return visibleValue;
@@ -240,13 +256,26 @@ String NumberInputType::sanitizeValue(const String& proposedValue) const
 {
     if (proposedValue.isEmpty())
         return proposedValue;
-    return std::isfinite(parseToDoubleForNumberType(proposedValue)) ? proposedValue : emptyString();
+    return std_isfinite(parseToDoubleForNumberType(proposedValue))
+        ? proposedValue
+        : emptyString();
+}
+
+void NumberInputType::warnIfValueIsInvalid(const String& value) const
+{
+    if (value.isEmpty() || !element().sanitizeValue(value).isEmpty())
+        return;
+    addWarningToConsole(
+        "The specified value %s is not a valid number. The value must match to "
+        "the following regular expression: "
+        "-?(\\d+|\\d+\\.\\d+|\\.\\d+)([eE][-+]?\\d+)?",
+        value);
 }
 
 bool NumberInputType::hasBadInput() const
 {
     String standardValue = convertFromVisibleValue(element().innerEditorValue());
-    return !standardValue.isEmpty() && !std::isfinite(parseToDoubleForNumberType(standardValue));
+    return !standardValue.isEmpty() && !std_isfinite(parseToDoubleForNumberType(standardValue));
 }
 
 String NumberInputType::badInputText() const
@@ -256,12 +285,14 @@ String NumberInputType::badInputText() const
 
 String NumberInputType::rangeOverflowText(const Decimal& maximum) const
 {
-    return locale().queryString(WebLocalizedString::ValidationRangeOverflow, localizeValue(serialize(maximum)));
+    return locale().queryString(WebLocalizedString::ValidationRangeOverflow,
+        localizeValue(serialize(maximum)));
 }
 
 String NumberInputType::rangeUnderflowText(const Decimal& minimum) const
 {
-    return locale().queryString(WebLocalizedString::ValidationRangeUnderflow, localizeValue(serialize(minimum)));
+    return locale().queryString(WebLocalizedString::ValidationRangeUnderflow,
+        localizeValue(serialize(minimum)));
 }
 
 bool NumberInputType::supportsPlaceholder() const
@@ -271,18 +302,24 @@ bool NumberInputType::supportsPlaceholder() const
 
 void NumberInputType::minOrMaxAttributeChanged()
 {
-    InputType::minOrMaxAttributeChanged();
+    TextFieldInputType::minOrMaxAttributeChanged();
 
     if (element().layoutObject())
-        element().layoutObject()->setNeedsLayoutAndPrefWidthsRecalcAndFullPaintInvalidation(LayoutInvalidationReason::AttributeChanged);
+        element()
+            .layoutObject()
+            ->setNeedsLayoutAndPrefWidthsRecalcAndFullPaintInvalidation(
+                LayoutInvalidationReason::AttributeChanged);
 }
 
 void NumberInputType::stepAttributeChanged()
 {
-    InputType::stepAttributeChanged();
+    TextFieldInputType::stepAttributeChanged();
 
     if (element().layoutObject())
-        element().layoutObject()->setNeedsLayoutAndPrefWidthsRecalcAndFullPaintInvalidation(LayoutInvalidationReason::AttributeChanged);
+        element()
+            .layoutObject()
+            ->setNeedsLayoutAndPrefWidthsRecalcAndFullPaintInvalidation(
+                LayoutInvalidationReason::AttributeChanged);
 }
 
 bool NumberInputType::supportsSelectionAPI() const

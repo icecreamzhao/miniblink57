@@ -27,15 +27,18 @@
 
 namespace blink {
 
-class HTMLParagraphElement final : public HTMLElement {
+class CORE_EXPORT HTMLParagraphElement final : public HTMLElement {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     DECLARE_NODE_FACTORY(HTMLParagraphElement);
 
 private:
     explicit HTMLParagraphElement(Document&);
 
-    void collectStyleForPresentationAttribute(const QualifiedName&, const AtomicString&, MutableStylePropertySet*) override;
+    void collectStyleForPresentationAttribute(const QualifiedName&,
+        const AtomicString&,
+        MutableStylePropertySet*) override;
 };
 
 } // namespace blink

@@ -33,7 +33,6 @@
 [
     CustomConstructor(MutationCallback callback),
     Custom=VisitDOMWrapper,
-    WillBeGarbageCollected,
 ] interface MutationObserver {
     [RaisesException] void observe(Node target, MutationObserverInit options);
     void disconnect();

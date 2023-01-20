@@ -1,32 +1,19 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-<<<<<<< HEAD
 
 #include "SkPath.h"
-=======
->>>>>>> miniblink49
 #include "gm.h"
 
 typedef SkScalar (*MakePathProc)(SkPath*);
 
-<<<<<<< HEAD
 static SkScalar make_frame(SkPath* path)
 {
     SkRect r = { SkIntToScalar(10), SkIntToScalar(10),
         SkIntToScalar(630), SkIntToScalar(470) };
-=======
-static SkScalar make_frame(SkPath* path) {
-    SkRect r = { SkIntToScalar(10), SkIntToScalar(10),
-                 SkIntToScalar(630), SkIntToScalar(470) };
->>>>>>> miniblink49
     path->addRoundRect(r, SkIntToScalar(15), SkIntToScalar(15));
 
     SkPaint paint;
@@ -36,12 +23,8 @@ static SkScalar make_frame(SkPath* path) {
     return SkIntToScalar(15);
 }
 
-<<<<<<< HEAD
 static SkScalar make_triangle(SkPath* path)
 {
-=======
-static SkScalar make_triangle(SkPath* path) {
->>>>>>> miniblink49
     static const int gCoord[] = {
         10, 20, 15, 5, 30, 30
     };
@@ -53,42 +36,26 @@ static SkScalar make_triangle(SkPath* path) {
     return SkIntToScalar(30);
 }
 
-<<<<<<< HEAD
 static SkScalar make_rect(SkPath* path)
 {
     SkRect r = { SkIntToScalar(10), SkIntToScalar(10),
         SkIntToScalar(30), SkIntToScalar(30) };
-=======
-static SkScalar make_rect(SkPath* path) {
-    SkRect r = { SkIntToScalar(10), SkIntToScalar(10),
-                 SkIntToScalar(30), SkIntToScalar(30) };
->>>>>>> miniblink49
     path->addRect(r);
     path->offset(SkIntToScalar(10), SkIntToScalar(0));
     return SkIntToScalar(30);
 }
 
-<<<<<<< HEAD
 static SkScalar make_oval(SkPath* path)
 {
     SkRect r = { SkIntToScalar(10), SkIntToScalar(10),
         SkIntToScalar(30), SkIntToScalar(30) };
-=======
-static SkScalar make_oval(SkPath* path) {
-    SkRect r = { SkIntToScalar(10), SkIntToScalar(10),
-                 SkIntToScalar(30), SkIntToScalar(30) };
->>>>>>> miniblink49
     path->addOval(r);
     path->offset(SkIntToScalar(10), SkIntToScalar(0));
     return SkIntToScalar(30);
 }
 
-<<<<<<< HEAD
 static SkScalar make_sawtooth(SkPath* path)
 {
-=======
-static SkScalar make_sawtooth(SkPath* path) {
->>>>>>> miniblink49
     SkScalar x = SkIntToScalar(20);
     SkScalar y = SkIntToScalar(20);
     const SkScalar x0 = x;
@@ -108,12 +75,8 @@ static SkScalar make_sawtooth(SkPath* path) {
     return SkIntToScalar(30);
 }
 
-<<<<<<< HEAD
 static SkScalar make_star(SkPath* path, int n)
 {
-=======
-static SkScalar make_star(SkPath* path, int n) {
->>>>>>> miniblink49
     const SkScalar c = SkIntToScalar(45);
     const SkScalar r = SkIntToScalar(20);
 
@@ -134,12 +97,8 @@ static SkScalar make_star_5(SkPath* path) { return make_star(path, 5); }
 static SkScalar make_star_13(SkPath* path) { return make_star(path, 13); }
 
 // We don't expect any output from this path.
-<<<<<<< HEAD
 static SkScalar make_line(SkPath* path)
 {
-=======
-static SkScalar make_line(SkPath* path) {
->>>>>>> miniblink49
     path->moveTo(SkIntToScalar(30), SkIntToScalar(30));
     path->lineTo(SkIntToScalar(120), SkIntToScalar(40));
     path->close();
@@ -161,7 +120,6 @@ static const MakePathProc gProcs[] = {
     make_line,
 };
 
-<<<<<<< HEAD
 #define N SK_ARRAY_COUNT(gProcs)
 
 class PathFillGM : public skiagm::GM {
@@ -171,21 +129,11 @@ class PathFillGM : public skiagm::GM {
 protected:
     void onOnceBeforeDraw() override
     {
-=======
-#define N   SK_ARRAY_COUNT(gProcs)
-
-class PathFillGM : public skiagm::GM {
-    SkPath  fPath[N];
-    SkScalar fDY[N];
-protected:
-    void onOnceBeforeDraw() override {
->>>>>>> miniblink49
         for (size_t i = 0; i < N; i++) {
             fDY[i] = gProcs[i](&fPath[i]);
         }
     }
 
-<<<<<<< HEAD
     SkString onShortName() override
     {
         return SkString("pathfill");
@@ -198,18 +146,6 @@ protected:
 
     void onDraw(SkCanvas* canvas) override
     {
-=======
-
-    SkString onShortName() override {
-        return SkString("pathfill");
-    }
-
-    SkISize onISize() override {
-        return SkISize::Make(640, 480);
-    }
-
-    void onDraw(SkCanvas* canvas) override {
->>>>>>> miniblink49
         SkPaint paint;
         paint.setAntiAlias(true);
 
@@ -225,25 +161,17 @@ private:
 
 // test inverse-fill w/ a clip that completely excludes the geometry
 class PathInverseFillGM : public skiagm::GM {
-<<<<<<< HEAD
     SkPath fPath[N];
     SkScalar fDY[N];
 
 protected:
     void onOnceBeforeDraw() override
     {
-=======
-    SkPath  fPath[N];
-    SkScalar fDY[N];
-protected:
-    void onOnceBeforeDraw() override {
->>>>>>> miniblink49
         for (size_t i = 0; i < N; i++) {
             fDY[i] = gProcs[i](&fPath[i]);
         }
     }
 
-<<<<<<< HEAD
     SkString onShortName() override
     {
         return SkString("pathinvfill");
@@ -251,23 +179,12 @@ protected:
 
     SkISize onISize() override
     {
-=======
-    SkString onShortName() override {
-        return SkString("pathinvfill");
-    }
-
-    SkISize onISize() override {
->>>>>>> miniblink49
         return SkISize::Make(450, 220);
     }
 
     static void show(SkCanvas* canvas, const SkPath& path, const SkPaint& paint,
-<<<<<<< HEAD
         const SkRect* clip, SkScalar top, const SkScalar bottom)
     {
-=======
-                     const SkRect* clip, SkScalar top, const SkScalar bottom) {
->>>>>>> miniblink49
         canvas->save();
         if (clip) {
             SkRect r = *clip;
@@ -279,12 +196,8 @@ protected:
         canvas->restore();
     }
 
-<<<<<<< HEAD
     void onDraw(SkCanvas* canvas) override
     {
-=======
-    void onDraw(SkCanvas* canvas) override {
->>>>>>> miniblink49
         SkPath path;
 
         path.addCircle(SkIntToScalar(50), SkIntToScalar(50), SkIntToScalar(40));
@@ -302,11 +215,7 @@ protected:
                 canvas->save();
                 canvas->clipRect(clipR);
 
-<<<<<<< HEAD
                 const SkRect* clipPtr = doclip ? &clipR : nullptr;
-=======
-                const SkRect* clipPtr = doclip ? &clipR : NULL;
->>>>>>> miniblink49
 
                 show(canvas, path, paint, clipPtr, clipR.fTop, clipR.centerY());
                 show(canvas, path, paint, clipPtr, clipR.centerY(), clipR.fBottom);
@@ -321,7 +230,6 @@ private:
     typedef skiagm::GM INHERITED;
 };
 
-<<<<<<< HEAD
 DEF_SIMPLE_GM(rotatedcubicpath, canvas, 200, 200)
 {
     SkPaint p;
@@ -349,12 +257,3 @@ DEF_SIMPLE_GM(rotatedcubicpath, canvas, 200, 200)
 
 DEF_GM(return new PathFillGM;)
 DEF_GM(return new PathInverseFillGM;)
-=======
-///////////////////////////////////////////////////////////////////////////////
-
-static skiagm::GM* MyFactory(void*) { return new PathFillGM; }
-static skiagm::GMRegistry reg(MyFactory);
-
-static skiagm::GM* F1(void*) { return new PathInverseFillGM; }
-static skiagm::GMRegistry gR1(F1);
->>>>>>> miniblink49

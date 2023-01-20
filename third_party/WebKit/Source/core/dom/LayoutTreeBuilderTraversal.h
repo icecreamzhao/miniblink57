@@ -29,52 +29,59 @@
 
 #include "core/CoreExport.h"
 #include "core/dom/Element.h"
+#include "core/dom/shadow/InsertionPoint.h"
+#include <cstdint>
 
 namespace blink {
 
-class InsertionPoint;
 class LayoutObject;
 
 namespace LayoutTreeBuilderTraversal {
 
-class ParentDetails {
-    STACK_ALLOCATED();
-public:
-    ParentDetails()
-        : m_insertionPoint(nullptr)
-    { }
+    const int32_t kTraverseAllSiblings = -2;
 
-    const InsertionPoint* insertionPoint() const { return m_insertionPoint; }
+    class ParentDetails {
+        STACK_ALLOCATED();
 
-    void didTraverseInsertionPoint(const InsertionPoint*);
+    public:
+        ParentDetails()
+            : m_insertionPoint(nullptr)
+        {
+        }
 
-    bool operator==(const ParentDetails& other)
+        const InsertionPoint* insertionPoint() const { return m_insertionPoint; }
+
+        void didTraverseInsertionPoint(const InsertionPoint*);
+
+        bool operator==(const ParentDetails& other)
+        {
+            return m_insertionPoint == other.m_insertionPoint;
+        }
+
+    private:
+        Member<const InsertionPoint> m_insertionPoint;
+    };
+
+    CORE_EXPORT ContainerNode* parent(const Node&, ParentDetails* = 0);
+    CORE_EXPORT Node* firstChild(const Node&);
+    CORE_EXPORT Node* nextSibling(const Node&);
+    Node* previousSibling(const Node&);
+    Node* previous(const Node&, const Node* stayWithin);
+    Node* next(const Node&, const Node* stayWithin);
+    Node* nextSkippingChildren(const Node&, const Node* stayWithin);
+    LayoutObject* nextSiblingLayoutObject(const Node&,
+        int32_t limit = kTraverseAllSiblings);
+    LayoutObject* previousSiblingLayoutObject(const Node&,
+        int32_t limit = kTraverseAllSiblings);
+    LayoutObject* nextInTopLayer(const Element&);
+
+    inline Element* parentElement(const Node& node)
     {
-        return m_insertionPoint == other.m_insertionPoint;
+        ContainerNode* found = parent(node);
+        return found && found->isElementNode() ? toElement(found) : 0;
     }
 
-private:
-    RawPtrWillBeMember<const InsertionPoint> m_insertionPoint;
-};
-
-CORE_EXPORT ContainerNode* parent(const Node&, ParentDetails* = 0);
-CORE_EXPORT Node* firstChild(const Node&);
-CORE_EXPORT Node* nextSibling(const Node&);
-Node* previousSibling(const Node&);
-Node* previous(const Node&, const Node* stayWithin);
-Node* next(const Node&, const Node* stayWithin);
-Node* nextSkippingChildren(const Node&, const Node* stayWithin);
-LayoutObject* nextSiblingLayoutObject(const Node&);
-LayoutObject* previousSiblingLayoutObject(const Node&);
-LayoutObject* nextInTopLayer(const Element&);
-
-inline Element* parentElement(const Node& node)
-{
-    ContainerNode* found = parent(node);
-    return found && found->isElementNode() ? toElement(found) : 0;
-}
-
-}
+} // namespace LayoutTreeBuilderTraversal
 
 } // namespace blink
 

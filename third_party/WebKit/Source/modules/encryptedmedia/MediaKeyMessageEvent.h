@@ -27,10 +27,6 @@
 #ifndef MediaKeyMessageEvent_h
 #define MediaKeyMessageEvent_h
 
-<<<<<<< HEAD
-=======
-#include "core/html/MediaKeyError.h"
->>>>>>> miniblink49
 #include "modules/EventModules.h"
 #include "modules/encryptedmedia/MediaKeyMessageEventInit.h"
 
@@ -40,7 +36,6 @@ class DOMArrayBuffer;
 
 class MediaKeyMessageEvent final : public Event {
     DEFINE_WRAPPERTYPEINFO();
-<<<<<<< HEAD
 
 public:
     ~MediaKeyMessageEvent() override;
@@ -52,19 +47,6 @@ public:
         const MediaKeyMessageEventInit& initializer)
     {
         return new MediaKeyMessageEvent(type, initializer);
-=======
-public:
-    ~MediaKeyMessageEvent() override;
-
-    static PassRefPtrWillBeRawPtr<MediaKeyMessageEvent> create()
-    {
-        return adoptRefWillBeNoop(new MediaKeyMessageEvent);
-    }
-
-    static PassRefPtrWillBeRawPtr<MediaKeyMessageEvent> create(const AtomicString& type, const MediaKeyMessageEventInit& initializer)
-    {
-        return adoptRefWillBeNoop(new MediaKeyMessageEvent(type, initializer));
->>>>>>> miniblink49
     }
 
     const AtomicString& interfaceName() const override;
@@ -76,18 +58,11 @@ public:
 
 private:
     MediaKeyMessageEvent();
-<<<<<<< HEAD
     MediaKeyMessageEvent(const AtomicString& type,
         const MediaKeyMessageEventInit& initializer);
 
     String m_messageType;
     Member<DOMArrayBuffer> m_message;
-=======
-    MediaKeyMessageEvent(const AtomicString& type, const MediaKeyMessageEventInit& initializer);
-
-    String m_messageType;
-    RefPtr<DOMArrayBuffer> m_message;
->>>>>>> miniblink49
 };
 
 } // namespace blink

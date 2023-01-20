@@ -2,10 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
-#include "File.h"
+#include "core/fileapi/File.h"
 
-#include <gtest/gtest.h>
+#include "testing/gtest/include/gtest/gtest.h"
 
 namespace blink {
 
@@ -38,7 +37,8 @@ TEST(FileTest, fileSystemFileWithNativeSnapshot)
 
 TEST(FileTest, fileSystemFileWithoutNativeSnapshot)
 {
-    KURL url(ParsedURLStringTag(), "filesystem:http://example.com/isolated/hash/non-native-file");
+    KURL url(ParsedURLStringTag(),
+        "filesystem:http://example.com/isolated/hash/non-native-file");
     FileMetadata metadata;
     File* const file = File::createForFileSystemFile(url, metadata, File::IsUserVisible);
     EXPECT_FALSE(file->hasBackingFile());
@@ -58,8 +58,10 @@ TEST(FileTest, hsaSameSource)
     File* const blobFileA2 = File::create("name", 0.0, blobDataA);
     File* const blobFileB = File::create("name", 0.0, blobDataB);
 
-    KURL urlA(ParsedURLStringTag(), "filesystem:http://example.com/isolated/hash/non-native-file-A");
-    KURL urlB(ParsedURLStringTag(), "filesystem:http://example.com/isolated/hash/non-native-file-B");
+    KURL urlA(ParsedURLStringTag(),
+        "filesystem:http://example.com/isolated/hash/non-native-file-A");
+    KURL urlB(ParsedURLStringTag(),
+        "filesystem:http://example.com/isolated/hash/non-native-file-B");
     FileMetadata metadata;
     File* const fileSystemFileA1 = File::createForFileSystemFile(urlA, metadata, File::IsUserVisible);
     File* const fileSystemFileA2 = File::createForFileSystemFile(urlA, metadata, File::IsUserVisible);

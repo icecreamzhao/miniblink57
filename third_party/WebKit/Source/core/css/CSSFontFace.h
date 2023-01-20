@@ -30,6 +30,8 @@
 #include "core/css/CSSFontFaceSource.h"
 #include "core/css/CSSSegmentedFontFace.h"
 #include "core/css/FontFace.h"
+#include "platform/fonts/SegmentedFontData.h"
+#include "platform/fonts/UnicodeRangeSet.h"
 #include "wtf/Deque.h"
 #include "wtf/Forward.h"
 #include "wtf/PassRefPtr.h"
@@ -41,14 +43,13 @@ class FontDescription;
 class RemoteFontFaceSource;
 class SimpleFontData;
 
-class CORE_EXPORT CSSFontFace final : public NoBaseWillBeGarbageCollectedFinalized<CSSFontFace> {
+class CORE_EXPORT CSSFontFace final
+    : public GarbageCollectedFinalized<CSSFontFace> {
     WTF_MAKE_NONCOPYABLE(CSSFontFace);
-public:
-    struct UnicodeRange;
-    class UnicodeRangeSet;
 
+public:
     CSSFontFace(FontFace* fontFace, Vector<UnicodeRange>& ranges)
-        : m_ranges(ranges)
+        : m_ranges(adoptRef(new UnicodeRangeSet(ranges)))
         , m_segmentedFontFace(nullptr)
         , m_fontFace(fontFace)
     {
@@ -57,53 +58,28 @@ public:
 
     FontFace* fontFace() const { return m_fontFace; }
 
-    UnicodeRangeSet& ranges() { return m_ranges; }
+    PassRefPtr<UnicodeRangeSet> ranges() { return m_ranges; }
 
     void setSegmentedFontFace(CSSSegmentedFontFace*);
     void clearSegmentedFontFace() { m_segmentedFontFace = nullptr; }
 
     bool isValid() const { return !m_sources.isEmpty(); }
+    size_t approximateBlankCharacterCount() const;
 
-    void addSource(PassOwnPtrWillBeRawPtr<CSSFontFaceSource>);
+    void addSource(CSSFontFaceSource*);
 
     void didBeginLoad();
     void fontLoaded(RemoteFontFaceSource*);
-    void fontLoadWaitLimitExceeded(RemoteFontFaceSource*);
+    void didBecomeVisibleFallback(RemoteFontFaceSource*);
 
     PassRefPtr<SimpleFontData> getFontData(const FontDescription&);
 
-    struct UnicodeRange {
-        UnicodeRange(UChar32 from, UChar32 to)
-            : m_from(from)
-            , m_to(to)
-        {
-        }
-
-        UChar32 from() const { return m_from; }
-        UChar32 to() const { return m_to; }
-        bool contains(UChar32 c) const { return m_from <= c && c <= m_to; }
-        bool operator<(const UnicodeRange& other) const { return m_from < other.m_from; }
-        bool operator<(UChar32 c) const { return m_to < c; }
-
-    private:
-        UChar32 m_from;
-        UChar32 m_to;
-    };
-
-    class CORE_EXPORT UnicodeRangeSet {
-    public:
-        explicit UnicodeRangeSet(const Vector<UnicodeRange>&);
-        bool contains(UChar32) const;
-        bool intersectsWith(const String&) const;
-        bool isEntireRange() const { return m_ranges.isEmpty(); }
-        size_t size() const { return m_ranges.size(); }
-        const UnicodeRange& rangeAt(size_t i) const { return m_ranges[i]; }
-    private:
-        Vector<UnicodeRange> m_ranges; // If empty, represents the whole code space.
-    };
-
-    FontFace::LoadStatus loadStatus() const { return m_fontFace->loadStatus(); }
-    bool maybeScheduleFontLoad(const FontDescription&, UChar32);
+    FontFace::LoadStatusType loadStatus() const
+    {
+        return m_fontFace->loadStatus();
+    }
+    bool maybeLoadFont(const FontDescription&, const String&);
+    bool maybeLoadFont(const FontDescription&, const FontDataForRangeSet&);
     void load();
     void load(const FontDescription&);
 
@@ -112,14 +88,14 @@ public:
     DECLARE_TRACE();
 
 private:
-    void setLoadStatus(FontFace::LoadStatus);
+    void setLoadStatus(FontFace::LoadStatusType);
 
-    UnicodeRangeSet m_ranges;
-    RawPtrWillBeMember<CSSSegmentedFontFace> m_segmentedFontFace;
-    WillBeHeapDeque<OwnPtrWillBeMember<CSSFontFaceSource>> m_sources;
-    RawPtrWillBeMember<FontFace> m_fontFace;
+    RefPtr<UnicodeRangeSet> m_ranges;
+    Member<CSSSegmentedFontFace> m_segmentedFontFace;
+    HeapDeque<Member<CSSFontFaceSource>> m_sources;
+    Member<FontFace> m_fontFace;
 };
 
-}
+} // namespace blink
 
 #endif

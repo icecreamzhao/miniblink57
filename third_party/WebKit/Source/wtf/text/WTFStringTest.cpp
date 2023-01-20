@@ -23,20 +23,11 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "wtf/text/WTFString.h"
 
 #include "testing/gtest/include/gtest/gtest.h"
 #include "wtf/MathExtras.h"
 #include "wtf/text/CString.h"
-=======
-#include "config.h"
-#include "wtf/text/WTFString.h"
-
-#include "wtf/MathExtras.h"
-#include "wtf/text/CString.h"
-#include <gtest/gtest.h>
->>>>>>> miniblink49
 #include <limits>
 
 namespace WTF {
@@ -69,19 +60,11 @@ TEST(StringTest, ASCII)
 
 namespace {
 
-<<<<<<< HEAD
     void testNumberToStringECMAScript(double number, const char* reference)
     {
         CString numberString = String::numberToStringECMAScript(number).latin1();
         EXPECT_STREQ(reference, numberString.data());
     }
-=======
-void testNumberToStringECMAScript(double number, const char* reference)
-{
-    CString numberString = String::numberToStringECMAScript(number).latin1();
-    EXPECT_STREQ(reference, numberString.data());
-}
->>>>>>> miniblink49
 
 } // anonymous namespace
 
@@ -133,67 +116,39 @@ TEST(StringTest, ReplaceWithLiteral)
     // Cases for 8Bit source.
     String testString = "1224";
     EXPECT_TRUE(testString.is8Bit());
-<<<<<<< HEAD
     testString.replace('2', "");
-=======
-    testString.replaceWithLiteral('2', "");
->>>>>>> miniblink49
     EXPECT_STREQ("14", testString.utf8().data());
 
     testString = "1224";
     EXPECT_TRUE(testString.is8Bit());
-<<<<<<< HEAD
     testString.replace('2', "3");
-=======
-    testString.replaceWithLiteral('2', "3");
->>>>>>> miniblink49
     EXPECT_STREQ("1334", testString.utf8().data());
 
     testString = "1224";
     EXPECT_TRUE(testString.is8Bit());
-<<<<<<< HEAD
     testString.replace('2', "555");
-=======
-    testString.replaceWithLiteral('2', "555");
->>>>>>> miniblink49
     EXPECT_STREQ("15555554", testString.utf8().data());
 
     testString = "1224";
     EXPECT_TRUE(testString.is8Bit());
-<<<<<<< HEAD
     testString.replace('3', "NotFound");
-=======
-    testString.replaceWithLiteral('3', "NotFound");
->>>>>>> miniblink49
     EXPECT_STREQ("1224", testString.utf8().data());
 
     // Cases for 16Bit source.
     // U+00E9 (=0xC3 0xA9 in UTF-8) is e with accent.
     testString = String::fromUTF8("r\xC3\xA9sum\xC3\xA9");
     EXPECT_FALSE(testString.is8Bit());
-<<<<<<< HEAD
     testString.replace(UChar(0x00E9), "e");
-=======
-    testString.replaceWithLiteral(UChar(0x00E9), "e");
->>>>>>> miniblink49
     EXPECT_STREQ("resume", testString.utf8().data());
 
     testString = String::fromUTF8("r\xC3\xA9sum\xC3\xA9");
     EXPECT_FALSE(testString.is8Bit());
-<<<<<<< HEAD
     testString.replace(UChar(0x00E9), "");
-=======
-    testString.replaceWithLiteral(UChar(0x00E9), "");
->>>>>>> miniblink49
     EXPECT_STREQ("rsum", testString.utf8().data());
 
     testString = String::fromUTF8("r\xC3\xA9sum\xC3\xA9");
     EXPECT_FALSE(testString.is8Bit());
-<<<<<<< HEAD
     testString.replace('3', "NotFound");
-=======
-    testString.replaceWithLiteral('3', "NotFound");
->>>>>>> miniblink49
     EXPECT_STREQ("r\xC3\xA9sum\xC3\xA9", testString.utf8().data());
 }
 
@@ -239,7 +194,6 @@ const char* turkicInput = "Isi\xC4\xB0 \xC4\xB0s\xC4\xB1I";
 const char* greekInput = "\xCE\x9F\xCE\x94\xCE\x8C\xCE\xA3 \xCE\x9F\xCE\xB4\xCF\x8C\xCF\x82 \xCE\xA3\xCE\xBF \xCE\xA3\xCE\x9F o\xCE\xA3 \xCE\x9F\xCE\xA3 \xCF\x83 \xE1\xBC\x95\xCE\xBE";
 const char* lithuanianInput = "I \xC3\x8F J J\xCC\x88 \xC4\xAE \xC4\xAE\xCC\x88 \xC3\x8C \xC3\x8D \xC4\xA8 xi\xCC\x87\xCC\x88 xj\xCC\x87\xCC\x88 x\xC4\xAF\xCC\x87\xCC\x88 xi\xCC\x87\xCC\x80 xi\xCC\x87\xCC\x81 xi\xCC\x87\xCC\x83 XI X\xC3\x8F XJ XJ\xCC\x88 X\xC4\xAE X\xC4\xAE\xCC\x88";
 
-<<<<<<< HEAD
 const char* turkicLocales[] = {
     "tr",
     "tr-TR",
@@ -317,27 +271,6 @@ const char* nonLithuanianLocales[] = {
     "fi",
     "el",
 };
-=======
-
-const char* turkicLocales[] = {
-    "tr", "tr-TR", "tr_TR", "tr@foo=bar", "tr-US", "TR", "tr-tr", "tR",
-    "az", "az-AZ", "az_AZ", "az@foo=bar", "az-US", "Az", "AZ-AZ", };
-const char* nonTurkicLocales[] = {
-    "en", "en-US", "en_US", "en@foo=bar", "EN", "En",
-    "ja", "el", "fil", "fi", "lt", };
-const char* greekLocales[] = {
-    "el", "el-GR", "el_GR", "el@foo=bar", "el-US", "EL", "el-gr", "eL",
-};
-const char* nonGreekLocales[] = {
-    "en", "en-US", "en_US", "en@foo=bar", "EN", "En",
-    "ja", "tr", "az", "fil", "fi", "lt", };
-const char* lithuanianLocales[] = {
-    "lt", "lt-LT", "lt_LT", "lt@foo=bar", "lt-US", "LT", "lt-lt", "lT",
-};
-// Should not have "tr" or "az" because "lt" and 'tr/az' rules conflict with each other.
-const char* nonLithuanianLocales[] = {
-    "en", "en-US", "en_US", "en@foo=bar", "EN", "En", "ja", "fil", "fi", "el", };
->>>>>>> miniblink49
 
 TEST(StringTest, ToUpperLocale)
 {
@@ -348,56 +281,36 @@ TEST(StringTest, ToUpperLocale)
             turkicLocales,
             sizeof(turkicLocales) / sizeof(const char*),
             "IS\xC4\xB0\xC4\xB0 \xC4\xB0SII",
-<<<<<<< HEAD
         },
         {
-=======
-        }, {
->>>>>>> miniblink49
             "Turkic input",
             turkicInput,
             nonTurkicLocales,
             sizeof(nonTurkicLocales) / sizeof(const char*),
             "ISI\xC4\xB0 \xC4\xB0SII",
-<<<<<<< HEAD
         },
         {
-=======
-        }, {
->>>>>>> miniblink49
             "Greek input",
             greekInput,
             greekLocales,
             sizeof(greekLocales) / sizeof(const char*),
             "\xCE\x9F\xCE\x94\xCE\x9F\xCE\xA3 \xCE\x9F\xCE\x94\xCE\x9F\xCE\xA3 \xCE\xA3\xCE\x9F \xCE\xA3\xCE\x9F \x4F\xCE\xA3 \xCE\x9F\xCE\xA3 \xCE\xA3 \xCE\x95\xCE\x9E",
-<<<<<<< HEAD
         },
         {
-=======
-        }, {
->>>>>>> miniblink49
             "Greek input",
             greekInput,
             nonGreekLocales,
             sizeof(nonGreekLocales) / sizeof(const char*),
             "\xCE\x9F\xCE\x94\xCE\x8C\xCE\xA3 \xCE\x9F\xCE\x94\xCE\x8C\xCE\xA3 \xCE\xA3\xCE\x9F \xCE\xA3\xCE\x9F \x4F\xCE\xA3 \xCE\x9F\xCE\xA3 \xCE\xA3 \xE1\xBC\x9D\xCE\x9E",
-<<<<<<< HEAD
         },
         {
-=======
-        }, {
->>>>>>> miniblink49
             "Lithuanian input",
             lithuanianInput,
             lithuanianLocales,
             sizeof(lithuanianLocales) / sizeof(const char*),
             "I \xC3\x8F J J\xCC\x88 \xC4\xAE \xC4\xAE\xCC\x88 \xC3\x8C \xC3\x8D \xC4\xA8 XI\xCC\x88 XJ\xCC\x88 X\xC4\xAE\xCC\x88 XI\xCC\x80 XI\xCC\x81 XI\xCC\x83 XI X\xC3\x8F XJ XJ\xCC\x88 X\xC4\xAE X\xC4\xAE\xCC\x88",
-<<<<<<< HEAD
         },
         {
-=======
-        }, {
->>>>>>> miniblink49
             "Lithuanian input",
             lithuanianInput,
             nonLithuanianLocales,
@@ -425,57 +338,37 @@ TEST(StringTest, ToLowerLocale)
             turkicLocales,
             sizeof(turkicLocales) / sizeof(const char*),
             "\xC4\xB1sii is\xC4\xB1\xC4\xB1",
-<<<<<<< HEAD
         },
         {
-=======
-        }, {
->>>>>>> miniblink49
             "Turkic input",
             turkicInput,
             nonTurkicLocales,
             sizeof(nonTurkicLocales) / sizeof(const char*),
             // U+0130 is lowercased to U+0069 followed by U+0307
             "isii\xCC\x87 i\xCC\x87s\xC4\xB1i",
-<<<<<<< HEAD
         },
         {
-=======
-        }, {
->>>>>>> miniblink49
             "Greek input",
             greekInput,
             greekLocales,
             sizeof(greekLocales) / sizeof(const char*),
             "\xCE\xBF\xCE\xB4\xCF\x8C\xCF\x82 \xCE\xBF\xCE\xB4\xCF\x8C\xCF\x82 \xCF\x83\xCE\xBF \xCF\x83\xCE\xBF \x6F\xCF\x82 \xCE\xBF\xCF\x82 \xCF\x83 \xE1\xBC\x95\xCE\xBE",
-<<<<<<< HEAD
         },
         {
-=======
-        }, {
->>>>>>> miniblink49
             "Greek input",
             greekInput,
             nonGreekLocales,
             sizeof(greekLocales) / sizeof(const char*),
             "\xCE\xBF\xCE\xB4\xCF\x8C\xCF\x82 \xCE\xBF\xCE\xB4\xCF\x8C\xCF\x82 \xCF\x83\xCE\xBF \xCF\x83\xCE\xBF \x6F\xCF\x82 \xCE\xBF\xCF\x82 \xCF\x83 \xE1\xBC\x95\xCE\xBE",
-<<<<<<< HEAD
         },
         {
-=======
-        }, {
->>>>>>> miniblink49
             "Lithuanian input",
             lithuanianInput,
             lithuanianLocales,
             sizeof(lithuanianLocales) / sizeof(const char*),
             "i \xC3\xAF j j\xCC\x87\xCC\x88 \xC4\xAF \xC4\xAF\xCC\x87\xCC\x88 i\xCC\x87\xCC\x80 i\xCC\x87\xCC\x81 i\xCC\x87\xCC\x83 xi\xCC\x87\xCC\x88 xj\xCC\x87\xCC\x88 x\xC4\xAF\xCC\x87\xCC\x88 xi\xCC\x87\xCC\x80 xi\xCC\x87\xCC\x81 xi\xCC\x87\xCC\x83 xi x\xC3\xAF xj xj\xCC\x87\xCC\x88 x\xC4\xAF x\xC4\xAF\xCC\x87\xCC\x88",
-<<<<<<< HEAD
         },
         {
-=======
-        }, {
->>>>>>> miniblink49
             "Lithuanian input",
             lithuanianInput,
             nonLithuanianLocales,
@@ -494,7 +387,6 @@ TEST(StringTest, ToLowerLocale)
     }
 }
 
-<<<<<<< HEAD
 TEST(StringTest, StartsWithIgnoringASCIICase)
 {
     String allASCII("LINK");
@@ -567,25 +459,6 @@ TEST(StringTest, FindIgnoringASCIICase)
     EXPECT_EQ(1u, haystack2.findIgnoringASCIICase(needle));
     EXPECT_EQ(4u, haystack2.findIgnoringASCIICase(needle, 2));
     EXPECT_EQ(kNotFound, haystack2.findIgnoringASCIICase(needle, 5));
-=======
-TEST(WTF, StartsWithIgnoringASCIICase)
-{
-    String allASCII("LINK");
-    String allASCIILowerCase("link");
-    EXPECT_TRUE(startsWithIgnoringASCIICase(allASCII, allASCIILowerCase));
-    String allASCIIMixedCase("lInK");
-    EXPECT_TRUE(startsWithIgnoringASCIICase(allASCII, allASCIIMixedCase));
-    String allASCIIDifferent("foo");
-    EXPECT_FALSE(startsWithIgnoringASCIICase(allASCII, allASCIIDifferent));
-    String nonASCII = String::fromUTF8("LIN\xE2\x84\xAA");
-    EXPECT_FALSE(startsWithIgnoringASCIICase(allASCII, nonASCII));
-    EXPECT_TRUE(startsWithIgnoringASCIICase(allASCII, nonASCII.lower()));
-
-    EXPECT_FALSE(startsWithIgnoringASCIICase(nonASCII, allASCII));
-    EXPECT_FALSE(startsWithIgnoringASCIICase(nonASCII, allASCIILowerCase));
-    EXPECT_FALSE(startsWithIgnoringASCIICase(nonASCII, allASCIIMixedCase));
-    EXPECT_FALSE(startsWithIgnoringASCIICase(nonASCII, allASCIIDifferent));
->>>>>>> miniblink49
 }
 
 TEST(StringTest, Lower)
@@ -596,7 +469,6 @@ TEST(StringTest, Lower)
     EXPECT_STREQ("link", String::fromUTF8("LIN\xE2\x84\xAA").lower().utf8().data());
 }
 
-<<<<<<< HEAD
 CString toCStringThroughPrinter(const String& string)
 {
     std::ostringstream output;
@@ -622,6 +494,4 @@ TEST(StringTest, StringPrinter)
     EXPECT_EQ(CString("\"\\u30C6\\u30B9\\u30C8\""), toCStringThroughPrinter(String(unicodeSample, WTF_ARRAY_LENGTH(unicodeSample))));
 }
 
-=======
->>>>>>> miniblink49
 } // namespace WTF

@@ -28,28 +28,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "SkFontMgr.h"
 #include "SkStream.h"
 #include "SkTypeface.h"
 #include "platform/Language.h"
 #include "platform/fonts/AcceptLanguagesResolver.h"
-=======
-#include "config.h"
-
-#if !OS(WIN) && !OS(ANDROID)
-#include "SkFontConfigInterface.h"
-#endif
-#include "SkFontMgr.h"
-#include "SkStream.h"
-#include "SkTypeface.h"
->>>>>>> miniblink49
 #include "platform/fonts/AlternateFontFamily.h"
 #include "platform/fonts/FontCache.h"
 #include "platform/fonts/FontDescription.h"
 #include "platform/fonts/FontFaceCreationParams.h"
 #include "platform/fonts/SimpleFontData.h"
-<<<<<<< HEAD
 #include "platform/graphics/skia/SkiaUtils.h"
 #include "public/platform/Platform.h"
 #include "public/platform/linux/WebSandboxSupport.h"
@@ -65,33 +53,17 @@
 #include "SkFontConfigInterface.h"
 
 static PassRefPtr<SkTypeface> typefaceForFontconfigInterfaceIdAndTtcIndex(int fontconfigInterfaceId, int ttcIndex)
-=======
-#include "public/platform/Platform.h"
-#include "public/platform/linux/WebSandboxSupport.h"
-#include "wtf/Assertions.h"
-#include "wtf/text/AtomicString.h"
-#include "wtf/text/CString.h"
-//#include <unicode/locid.h>
-
-#if !OS(WIN) && !OS(ANDROID)
-static SkStreamAsset* streamForFontconfigInterfaceId(int fontconfigInterfaceId)
->>>>>>> miniblink49
 {
     SkAutoTUnref<SkFontConfigInterface> fci(SkFontConfigInterface::RefGlobal());
     SkFontConfigInterface::FontIdentity fontIdentity;
     fontIdentity.fID = fontconfigInterfaceId;
-<<<<<<< HEAD
     fontIdentity.fTTCIndex = ttcIndex;
     return blink::fromSkSp(fci->makeTypeface(fontIdentity));
-=======
-    return fci->openStream(fontIdentity);
->>>>>>> miniblink49
 }
 #endif
 
 namespace blink {
 
-<<<<<<< HEAD
 #if OS(ANDROID) || OS(LINUX)
 // Android special locale for retrieving the color emoji font
 // based on the proposed changes in UTR #51 for introducing
@@ -134,8 +106,6 @@ AtomicString FontCache::getFamilyNameForCharacter(SkFontMgr* fm, UChar32 c, cons
 }
 #endif
 
-=======
->>>>>>> miniblink49
 void FontCache::platformInit()
 {
 }
@@ -152,18 +122,13 @@ PassRefPtr<SimpleFontData> FontCache::fallbackOnStandardFontStyle(
     if (substitutePlatformData && substitutePlatformData->fontContainsCharacter(character)) {
         FontPlatformData platformData = FontPlatformData(*substitutePlatformData);
         platformData.setSyntheticBold(fontDescription.weight() >= FontWeight600);
-<<<<<<< HEAD
         platformData.setSyntheticItalic(fontDescription.style() == FontStyleItalic || fontDescription.style() == FontStyleOblique);
-=======
-        platformData.setSyntheticItalic(fontDescription.style() == FontStyleItalic);
->>>>>>> miniblink49
         return fontDataFromFontPlatformData(&platformData, DoNotRetain);
     }
 
     return nullptr;
 }
 
-<<<<<<< HEAD
 static String getDefaultFontList()
 {
     String defaultFont;
@@ -217,64 +182,11 @@ static String getDefaultFontList()
     return defaultFont;
 }
 
-=======
-#if !OS(WIN) && !OS(ANDROID)
-PassRefPtr<SimpleFontData> FontCache::fallbackFontForCharacter(const FontDescription& fontDescription, UChar32 c, const SimpleFontData*)
-{
-    // First try the specified font with standard style & weight.
-    if (fontDescription.style() == FontStyleItalic
-        || fontDescription.weight() >= FontWeight600) {
-        RefPtr<SimpleFontData> fontData = fallbackOnStandardFontStyle(
-            fontDescription, c);
-        if (fontData)
-            return fontData;
-    }
-
-    FontCache::PlatformFallbackFont fallbackFont;
-    FontCache::getFontForCharacter(c, fontDescription.locale().ascii().data(), &fallbackFont);
-    if (fallbackFont.name.isEmpty())
-        return nullptr;
-
-    FontFaceCreationParams creationParams;
-    creationParams = FontFaceCreationParams(fallbackFont.filename, fallbackFont.fontconfigInterfaceId, fallbackFont.ttcIndex);
-
-    // Changes weight and/or italic of given FontDescription depends on
-    // the result of fontconfig so that keeping the correct font mapping
-    // of the given character. See http://crbug.com/32109 for details.
-    bool shouldSetSyntheticBold = false;
-    bool shouldSetSyntheticItalic = false;
-    FontDescription description(fontDescription);
-    if (fallbackFont.isBold && description.weight() < FontWeightBold)
-        description.setWeight(FontWeightBold);
-    if (!fallbackFont.isBold && description.weight() >= FontWeightBold) {
-        shouldSetSyntheticBold = true;
-        description.setWeight(FontWeightNormal);
-    }
-    if (fallbackFont.isItalic && description.style() == FontStyleNormal)
-        description.setStyle(FontStyleItalic);
-    if (!fallbackFont.isItalic && description.style() == FontStyleItalic) {
-        shouldSetSyntheticItalic = true;
-        description.setStyle(FontStyleNormal);
-    }
-
-    FontPlatformData* substitutePlatformData = getFontPlatformData(description, creationParams);
-    if (!substitutePlatformData)
-        return nullptr;
-    FontPlatformData platformData = FontPlatformData(*substitutePlatformData);
-    platformData.setSyntheticBold(shouldSetSyntheticBold);
-    platformData.setSyntheticItalic(shouldSetSyntheticItalic);
-    return fontDataFromFontPlatformData(&platformData, DoNotRetain);
-}
-
-#endif // !OS(WIN) && !OS(ANDROID)
-
->>>>>>> miniblink49
 PassRefPtr<SimpleFontData> FontCache::getLastResortFallbackFont(const FontDescription& description, ShouldRetain shouldRetain)
 {
     const FontFaceCreationParams fallbackCreationParams(getFallbackFontFamily(description));
     const FontPlatformData* fontPlatformData = getFontPlatformData(description, fallbackCreationParams);
 
-<<<<<<< HEAD
 #if !defined(WIN32)
     // /usr/share/fonts/opentype/noto
 
@@ -305,33 +217,16 @@ PassRefPtr<SimpleFontData> FontCache::getLastResortFallbackFont(const FontDescri
     }
     if (!fontPlatformData) {
         DEFINE_STATIC_LOCAL(const FontFaceCreationParams, arialCreationParams, (AtomicString("Arial")));
-=======
-    // We should at least have Sans or Arial which is the last resort fallback of SkFontHost ports.
-    if (!fontPlatformData) {
-        DEFINE_STATIC_LOCAL(const FontFaceCreationParams, sansCreationParams, (AtomicString("Sans", AtomicString::ConstructFromLiteral)));
-        fontPlatformData = getFontPlatformData(description, sansCreationParams);
-    }
-    if (!fontPlatformData) {
-        DEFINE_STATIC_LOCAL(const FontFaceCreationParams, arialCreationParams, (AtomicString("Arial", AtomicString::ConstructFromLiteral)));
->>>>>>> miniblink49
         fontPlatformData = getFontPlatformData(description, arialCreationParams);
     }
 #if OS(WIN)
     // Try some more Windows-specific fallbacks.
     if (!fontPlatformData) {
-<<<<<<< HEAD
         DEFINE_STATIC_LOCAL(const FontFaceCreationParams, msuigothicCreationParams, (AtomicString("MS UI Gothic")));
         fontPlatformData = getFontPlatformData(description, msuigothicCreationParams);
     }
     if (!fontPlatformData) {
         DEFINE_STATIC_LOCAL(const FontFaceCreationParams, mssansserifCreationParams, (AtomicString("Microsoft Sans Serif")));
-=======
-        DEFINE_STATIC_LOCAL(const FontFaceCreationParams, msuigothicCreationParams, (AtomicString("MS UI Gothic", AtomicString::ConstructFromLiteral)));
-        fontPlatformData = getFontPlatformData(description, msuigothicCreationParams);
-    }
-    if (!fontPlatformData) {
-        DEFINE_STATIC_LOCAL(const FontFaceCreationParams, mssansserifCreationParams, (AtomicString("Microsoft Sans Serif", AtomicString::ConstructFromLiteral)));
->>>>>>> miniblink49
         fontPlatformData = getFontPlatformData(description, mssansserifCreationParams);
     }
 #endif
@@ -340,48 +235,13 @@ PassRefPtr<SimpleFontData> FontCache::getLastResortFallbackFont(const FontDescri
     return fontDataFromFontPlatformData(fontPlatformData, shouldRetain);
 }
 
-<<<<<<< HEAD
-=======
-#if OS(WIN)
-static inline SkFontStyle fontStyle(const FontDescription& fontDescription)
-{
-    int width = static_cast<int>(fontDescription.stretch());
-    int weight = (fontDescription.weight() - FontWeight100 + 1) * 100;
-    SkFontStyle::Slant slant = fontDescription.style() == FontStyleItalic
-        ? SkFontStyle::kItalic_Slant
-        : SkFontStyle::kUpright_Slant;
-    return SkFontStyle(weight, width, slant);
-}
-
-static_assert(static_cast<int>(FontStretchUltraCondensed) == static_cast<int>(SkFontStyle::kUltraCondensed_Width),
-    "FontStretchUltraCondensed should map to kUltraCondensed_Width");
-static_assert(static_cast<int>(FontStretchNormal) == static_cast<int>(SkFontStyle::kNormal_Width),
-    "FontStretchNormal should map to kNormal_Width");
-static_assert(static_cast<int>(FontStretchUltraExpanded) == static_cast<int>(SkFontStyle::kUltaExpanded_Width),
-    "FontStretchUltraExpanded should map to kUltaExpanded_Width");
-#endif
-
->>>>>>> miniblink49
 PassRefPtr<SkTypeface> FontCache::createTypeface(const FontDescription& fontDescription, const FontFaceCreationParams& creationParams, CString& name)
 {
 #if !OS(WIN) && !OS(ANDROID)
     if (creationParams.creationType() == CreateFontByFciIdAndTtcIndex) {
-<<<<<<< HEAD
         if (Platform::current()->sandboxSupport())
             return typefaceForFontconfigInterfaceIdAndTtcIndex(creationParams.fontconfigInterfaceId(), creationParams.ttcIndex());
         return fromSkSp(SkTypeface::MakeFromFile(creationParams.filename().data(), creationParams.ttcIndex()));
-=======
-        SkTypeface* typeface = nullptr;
-        if (Platform::current()->sandboxSupport())
-            typeface = SkTypeface::CreateFromStream(streamForFontconfigInterfaceId(creationParams.fontconfigInterfaceId()), creationParams.ttcIndex());
-        else
-            typeface = SkTypeface::CreateFromFile(creationParams.filename().data(), creationParams.ttcIndex());
-
-        if (typeface)
-            return adoptRef(typeface);
-        else
-            return nullptr;
->>>>>>> miniblink49
     }
 #endif
 
@@ -389,17 +249,12 @@ PassRefPtr<SkTypeface> FontCache::createTypeface(const FontDescription& fontDesc
     // If we're creating a fallback font (e.g. "-webkit-monospace"), convert the name into
     // the fallback name (like "monospace") that fontconfig understands.
     if (!family.length() || family.startsWith("-webkit-")) {
-<<<<<<< HEAD
         name = getFallbackFontFamily(fontDescription).getString().utf8();
-=======
-        name = getFallbackFontFamily(fontDescription).string().utf8();
->>>>>>> miniblink49
     } else {
         // convert the name to utf8
         name = family.utf8();
     }
 
-<<<<<<< HEAD
 #if OS(WIN)
     if (s_sideloadedFonts) {
         HashMap<String, RefPtr<SkTypeface>>::iterator sideloadedFont = s_sideloadedFonts->find(name.data());
@@ -427,42 +282,10 @@ PassRefPtr<SkTypeface> FontCache::createTypeface(const FontDescription& fontDesc
 #if !OS(WIN)
 std::unique_ptr<FontPlatformData> FontCache::createFontPlatformData(const FontDescription& fontDescription,
     const FontFaceCreationParams& creationParams, float fontSize)
-=======
-    int style = SkTypeface::kNormal;
-    if (fontDescription.weight() >= FontWeight600)
-        style |= SkTypeface::kBold;
-    if (fontDescription.style())
-        style |= SkTypeface::kItalic;
-
-#if OS(WIN)
-    if (s_sideloadedFonts) {
-        HashMap<String, RefPtr<SkTypeface>>::iterator sideloadedFont =
-            s_sideloadedFonts->find(name.data());
-        if (sideloadedFont != s_sideloadedFonts->end())
-            return sideloadedFont->value;
-    }
-
-    if (m_fontManager) {
-        return adoptRef(useDirectWrite()
-            ? m_fontManager->matchFamilyStyle(name.data(), fontStyle(fontDescription))
-            : m_fontManager->legacyCreateTypeface(name.data(), style)
-            );
-    }
-#endif
-
-    // FIXME: Use m_fontManager, SkFontStyle and matchFamilyStyle instead of
-    // CreateFromName on all platforms.
-    return adoptRef(SkTypeface::CreateFromName(name.data(), static_cast<SkTypeface::Style>(style)));
-}
-
-#if !OS(WIN)
-FontPlatformData* FontCache::createFontPlatformData(const FontDescription& fontDescription, const FontFaceCreationParams& creationParams, float fontSize)
->>>>>>> miniblink49
 {
     CString name;
     RefPtr<SkTypeface> tf(createTypeface(fontDescription, creationParams, name));
     if (!tf)
-<<<<<<< HEAD
         return nullptr;
 
     return WTF::wrapUnique(new FontPlatformData(tf,
@@ -471,18 +294,6 @@ FontPlatformData* FontCache::createFontPlatformData(const FontDescription& fontD
         (fontDescription.weight() > 200 + tf->fontStyle().weight()) || fontDescription.isSyntheticBold(),
         ((fontDescription.style() == FontStyleItalic || fontDescription.style() == FontStyleOblique) && !tf->isItalic()) || fontDescription.isSyntheticItalic(),
         fontDescription.orientation()));
-=======
-        return 0;
-
-    FontPlatformData* result = new FontPlatformData(tf,
-        name.data(),
-        fontSize,
-        (fontDescription.weight() >= FontWeight600 && !tf->isBold()) || fontDescription.isSyntheticBold(),
-        (fontDescription.style() && !tf->isItalic()) || fontDescription.isSyntheticItalic(),
-        fontDescription.orientation(),
-        fontDescription.useSubpixelPositioning());
-    return result;
->>>>>>> miniblink49
 }
 #endif // !OS(WIN)
 

@@ -6,13 +6,9 @@
  */
 #include "SkNetPipeController.h"
 
-<<<<<<< HEAD
 SkNetPipeController::SkNetPipeController(SkCanvas* target)
     : fReader(target)
 {
-=======
-SkNetPipeController::SkNetPipeController(SkCanvas* target) : fReader(target) {
->>>>>>> miniblink49
     fBlock = NULL;
     fBlockSize = fBytesWritten = 0;
     fPlayback = true;
@@ -20,7 +16,6 @@ SkNetPipeController::SkNetPipeController(SkCanvas* target) : fReader(target) {
     fTotalWritten = 0;
     fAtomsWritten = 0;
 }
-<<<<<<< HEAD
 SkNetPipeController::~SkNetPipeController()
 {
     sk_free(fBlock);
@@ -28,25 +23,14 @@ SkNetPipeController::~SkNetPipeController()
 
 int SkNetPipeController::writeToSocket(SkSocket* sockfd, SkSocket::DataType type)
 {
-=======
-SkNetPipeController::~SkNetPipeController() {
-    sk_free(fBlock);
-}
-
-int SkNetPipeController::writeToSocket(SkSocket* sockfd, SkSocket::DataType type) {
->>>>>>> miniblink49
     if (NULL != sockfd && fTotalWritten > 4)
         return sockfd->writePacket(fBlock, fBytesWritten, type);
     else
         return -1;
 }
 
-<<<<<<< HEAD
 void* SkNetPipeController::requestBlock(size_t minRequest, size_t* actual)
 {
-=======
-void* SkNetPipeController::requestBlock(size_t minRequest, size_t* actual) {
->>>>>>> miniblink49
     sk_free(fBlock);
 
     fBlockSize = minRequest * 4;
@@ -56,12 +40,8 @@ void* SkNetPipeController::requestBlock(size_t minRequest, size_t* actual) {
     return fBlock;
 }
 
-<<<<<<< HEAD
 void SkNetPipeController::notifyWritten(size_t bytes)
 {
-=======
-void SkNetPipeController::notifyWritten(size_t bytes) {
->>>>>>> miniblink49
     SkASSERT(fBytesWritten + bytes <= fBlockSize);
 
     if (fPlayback) {

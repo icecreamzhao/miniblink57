@@ -6,10 +6,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #include "SkDrawSaveLayer.h"
 #include "SkAnimateMaker.h"
 #include "SkCanvas.h"
@@ -27,7 +23,6 @@ const SkMemberInfo SkSaveLayer::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkSaveLayer);
 
-<<<<<<< HEAD
 SkSaveLayer::SkSaveLayer()
     : paint(nullptr)
     , bounds(nullptr)
@@ -36,12 +31,6 @@ SkSaveLayer::SkSaveLayer()
 
 SkSaveLayer::~SkSaveLayer()
 {
-=======
-SkSaveLayer::SkSaveLayer() : paint(NULL), bounds(NULL) {
-}
-
-SkSaveLayer::~SkSaveLayer(){
->>>>>>> miniblink49
 }
 
 bool SkSaveLayer::draw(SkAnimateMaker& maker)
@@ -51,21 +40,11 @@ bool SkSaveLayer::draw(SkAnimateMaker& maker)
     }
     SkPaint* save = maker.fPaint;
     //paint is an SkDrawPaint
-<<<<<<< HEAD
     if (paint) {
         SkPaint realPaint;
         paint->setupPaint(&realPaint);
         maker.fCanvas->saveLayer(&bounds->fRect, &realPaint);
     } else
-=======
-    if (paint)
-    {
-        SkPaint realPaint;
-        paint->setupPaint(&realPaint);
-        maker.fCanvas->saveLayer(&bounds->fRect, &realPaint);
-    }
-    else
->>>>>>> miniblink49
         maker.fCanvas->saveLayer(&bounds->fRect, save);
     SkPaint local = SkPaint(*maker.fPaint);
     maker.fPaint = &local;

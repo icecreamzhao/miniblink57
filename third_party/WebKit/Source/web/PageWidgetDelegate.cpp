@@ -28,16 +28,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "web/PageWidgetDelegate.h"
 
 #include "core/frame/FrameView.h"
 #include "core/frame/LocalFrame.h"
 #include "core/input/EventHandler.h"
-<<<<<<< HEAD
 #include "core/layout/compositing/PaintLayerCompositor.h"
 #include "core/page/AutoscrollController.h"
 #include "core/page/Page.h"
@@ -49,41 +44,17 @@
 #include "platform/graphics/paint/SkPictureBuilder.h"
 #include "platform/transforms/AffineTransform.h"
 #include "public/platform/WebInputEvent.h"
-=======
-#include "core/layout/LayoutView.h"
-#include "core/layout/compositing/DeprecatedPaintLayerCompositor.h"
-#include "core/page/AutoscrollController.h"
-#include "core/page/Page.h"
-#include "core/paint/TransformRecorder.h"
-#include "platform/Logging.h"
-#include "platform/graphics/GraphicsContext.h"
-#include "platform/graphics/paint/ClipRecorder.h"
-#include "platform/graphics/paint/DrawingRecorder.h"
-#include "platform/graphics/paint/SkPictureBuilder.h"
-#include "platform/transforms/AffineTransform.h"
-#include "public/web/WebInputEvent.h"
-#include "web/PageOverlayList.h"
->>>>>>> miniblink49
 #include "web/WebInputEventConversion.h"
 #include "wtf/CurrentTime.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 void PageWidgetDelegate::animate(Page& page, double monotonicFrameBeginTime)
 {
-=======
-void PageWidgetDelegate::animate(Page& page, double monotonicFrameBeginTime, LocalFrame& root)
-{
-    RefPtrWillBeRawPtr<FrameView> view = root.view();
-    if (!view)
-        return;
->>>>>>> miniblink49
     page.autoscrollController().animate(monotonicFrameBeginTime);
     page.animator().serviceScriptedAnimations(monotonicFrameBeginTime);
 }
 
-<<<<<<< HEAD
 void PageWidgetDelegate::updateAllLifecyclePhases(Page& page,
     LocalFrame& root)
 {
@@ -95,15 +66,6 @@ static void paintInternal(Page& page,
     const WebRect& rect,
     LocalFrame& root,
     const GlobalPaintFlags globalPaintFlags)
-=======
-void PageWidgetDelegate::layout(Page& page, LocalFrame& root)
-{
-    page.animator().updateLayoutAndStyleForPainting(&root);
-}
-
-void PageWidgetDelegate::paint(Page& page, PageOverlayList* overlays, WebCanvas* canvas,
-    const WebRect& rect, LocalFrame& root)
->>>>>>> miniblink49
 {
     if (rect.isEmpty())
         return;
@@ -113,28 +75,18 @@ void PageWidgetDelegate::paint(Page& page, PageOverlayList* overlays, WebCanvas*
     {
         GraphicsContext& paintContext = pictureBuilder.context();
 
-<<<<<<< HEAD
         // FIXME: device scale factor settings are layering violations and should
         // not be used within Blink paint code.
-=======
-        // FIXME: device scale factor settings are layering violations and should not
-        // be used within Blink paint code.
->>>>>>> miniblink49
         float scaleFactor = page.deviceScaleFactor();
         paintContext.setDeviceScaleFactor(scaleFactor);
 
         AffineTransform scale;
         scale.scale(scaleFactor);
-<<<<<<< HEAD
         TransformRecorder scaleRecorder(paintContext, pictureBuilder, scale);
-=======
-        TransformRecorder scaleRecorder(paintContext, root, scale);
->>>>>>> miniblink49
 
         IntRect dirtyRect(rect);
         FrameView* view = root.view();
         if (view) {
-<<<<<<< HEAD
             ClipRecorder clipRecorder(paintContext, pictureBuilder,
                 DisplayItem::kPageWidgetDelegateClip,
                 dirtyRect);
@@ -143,22 +95,12 @@ void PageWidgetDelegate::paint(Page& page, PageOverlayList* overlays, WebCanvas*
             DrawingRecorder drawingRecorder(
                 paintContext, pictureBuilder,
                 DisplayItem::kPageWidgetDelegateBackgroundFallback, dirtyRect);
-=======
-            ClipRecorder clipRecorder(paintContext, root, DisplayItem::PageWidgetDelegateClip, LayoutRect(dirtyRect));
-
-            view->paint(&paintContext, dirtyRect);
-            if (overlays)
-                overlays->paintWebFrame(paintContext);
-        } else if (!DrawingRecorder::useCachedDrawingIfPossible(paintContext, root, DisplayItem::PageWidgetDelegateBackgroundFallback)) {
-            DrawingRecorder drawingRecorder(paintContext, root, DisplayItem::PageWidgetDelegateBackgroundFallback, dirtyRect);
->>>>>>> miniblink49
             paintContext.fillRect(dirtyRect, Color::white);
         }
     }
     pictureBuilder.endRecording()->playback(canvas);
 }
 
-<<<<<<< HEAD
 void PageWidgetDelegate::paint(Page& page,
     WebCanvas* canvas,
     const WebRect& rect,
@@ -232,59 +174,16 @@ WebInputEventResult PageWidgetDelegate::handleInputEvent(
             return WebInputEventResult::NotHandled;
         return handler.handleMouseWheel(
             *root, static_cast<const WebMouseWheelEvent&>(event));
-=======
-bool PageWidgetDelegate::handleInputEvent(PageWidgetEventHandler& handler, const WebInputEvent& event, LocalFrame* root)
-{
-    switch (event.type) {
-
-    // FIXME: WebKit seems to always return false on mouse events processing
-    // methods. For now we'll assume it has processed them (as we are only
-    // interested in whether keyboard events are processed).
-    // FIXME: Why do we return true when there is no root or the root is
-    // detached?
-    case WebInputEvent::MouseMove:
-        if (!root || !root->view())
-            return true;
-        handler.handleMouseMove(*root, static_cast<const WebMouseEvent&>(event));
-        return true;
-    case WebInputEvent::MouseLeave:
-        if (!root || !root->view())
-            return true;
-        handler.handleMouseLeave(*root, static_cast<const WebMouseEvent&>(event));
-        return true;
-    case WebInputEvent::MouseDown:
-        if (!root || !root->view())
-            return true;
-        handler.handleMouseDown(*root, static_cast<const WebMouseEvent&>(event));
-        return true;
-    case WebInputEvent::MouseUp:
-        if (!root || !root->view())
-            return true;
-        handler.handleMouseUp(*root, static_cast<const WebMouseEvent&>(event));
-        return true;
-
-    case WebInputEvent::MouseWheel:
-        if (!root || !root->view())
-            return false;
-        return handler.handleMouseWheel(*root, static_cast<const WebMouseWheelEvent&>(event));
->>>>>>> miniblink49
 
     case WebInputEvent::RawKeyDown:
     case WebInputEvent::KeyDown:
     case WebInputEvent::KeyUp:
-<<<<<<< HEAD
         return handler.handleKeyEvent(
             static_cast<const WebKeyboardEvent&>(event));
 
     case WebInputEvent::Char:
         return handler.handleCharEvent(
             static_cast<const WebKeyboardEvent&>(event));
-=======
-        return handler.handleKeyEvent(static_cast<const WebKeyboardEvent&>(event));
-
-    case WebInputEvent::Char:
-        return handler.handleCharEvent(static_cast<const WebKeyboardEvent&>(event));
->>>>>>> miniblink49
     case WebInputEvent::GestureScrollBegin:
     case WebInputEvent::GestureScrollEnd:
     case WebInputEvent::GestureScrollUpdate:
@@ -299,18 +198,13 @@ bool PageWidgetDelegate::handleInputEvent(PageWidgetEventHandler& handler, const
     case WebInputEvent::GestureTwoFingerTap:
     case WebInputEvent::GestureLongPress:
     case WebInputEvent::GestureLongTap:
-<<<<<<< HEAD
         return handler.handleGestureEvent(
             static_cast<const WebGestureEvent&>(event));
-=======
-        return handler.handleGestureEvent(static_cast<const WebGestureEvent&>(event));
->>>>>>> miniblink49
 
     case WebInputEvent::TouchStart:
     case WebInputEvent::TouchMove:
     case WebInputEvent::TouchEnd:
     case WebInputEvent::TouchCancel:
-<<<<<<< HEAD
     case WebInputEvent::TouchScrollStarted:
         if (!root || !root->view())
             return WebInputEventResult::NotHandled;
@@ -326,26 +220,12 @@ bool PageWidgetDelegate::handleInputEvent(PageWidgetEventHandler& handler, const
         return WebInputEventResult::NotHandled;
     default:
         return WebInputEventResult::NotHandled;
-=======
-        if (!root || !root->view())
-            return false;
-        return handler.handleTouchEvent(*root, static_cast<const WebTouchEvent&>(event));
-    case WebInputEvent::GesturePinchBegin:
-    case WebInputEvent::GesturePinchEnd:
-    case WebInputEvent::GesturePinchUpdate:
-        // Touchscreen pinch events are currently not handled in main thread. Once they are,
-        // these should be passed to |handleGestureEvent| similar to gesture scroll events.
-        return false;
-    default:
-        return false;
->>>>>>> miniblink49
     }
 }
 
 // ----------------------------------------------------------------
 // Default handlers for PageWidgetEventHandler
 
-<<<<<<< HEAD
 void PageWidgetEventHandler::handleMouseMove(
     LocalFrame& mainFrame,
     const WebMouseEvent& event,
@@ -393,36 +273,6 @@ WebInputEventResult PageWidgetEventHandler::handleTouchEvent(
     return mainFrame.eventHandler().handleTouchEvent(
         PlatformTouchEventBuilder(mainFrame.view(), event),
         createPlatformTouchEventVector(mainFrame.view(), coalescedEvents));
-=======
-void PageWidgetEventHandler::handleMouseMove(LocalFrame& mainFrame, const WebMouseEvent& event)
-{
-    mainFrame.eventHandler().handleMouseMoveEvent(PlatformMouseEventBuilder(mainFrame.view(), event));
-}
-
-void PageWidgetEventHandler::handleMouseLeave(LocalFrame& mainFrame, const WebMouseEvent& event)
-{
-    mainFrame.eventHandler().handleMouseLeaveEvent(PlatformMouseEventBuilder(mainFrame.view(), event));
-}
-
-void PageWidgetEventHandler::handleMouseDown(LocalFrame& mainFrame, const WebMouseEvent& event)
-{
-    mainFrame.eventHandler().handleMousePressEvent(PlatformMouseEventBuilder(mainFrame.view(), event));
-}
-
-void PageWidgetEventHandler::handleMouseUp(LocalFrame& mainFrame, const WebMouseEvent& event)
-{
-    mainFrame.eventHandler().handleMouseReleaseEvent(PlatformMouseEventBuilder(mainFrame.view(), event));
-}
-
-bool PageWidgetEventHandler::handleMouseWheel(LocalFrame& mainFrame, const WebMouseWheelEvent& event)
-{
-    return mainFrame.eventHandler().handleWheelEvent(PlatformWheelEventBuilder(mainFrame.view(), event));
-}
-
-bool PageWidgetEventHandler::handleTouchEvent(LocalFrame& mainFrame, const WebTouchEvent& event)
-{
-    return mainFrame.eventHandler().handleTouchEvent(PlatformTouchEventBuilder(mainFrame.view(), event));
->>>>>>> miniblink49
 }
 
 } // namespace blink

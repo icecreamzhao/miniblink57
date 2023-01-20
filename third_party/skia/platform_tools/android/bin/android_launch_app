@@ -14,16 +14,12 @@ fi
 
 app=${APP_ARGS[0]}
 if [[ ${app} == '-'* ]]; then
-<<<<<<< HEAD
     echo "Defaulting to running SampleApp."
-=======
->>>>>>> miniblink49
     app="SampleApp"
     APP_ARGS=( "SampleApp" ${APP_ARGS[*]} )
 fi
 
 if [[ ${app} == 'SampleApp' ]]; then
-<<<<<<< HEAD
     activity="com.skia.sample_app/com.skia.SkiaSampleActivity"
 elif [[ ${app} == "Viewer" ]] ; then
     activity="org.skia.viewer/org.skia.viewer.ViewerActivity"
@@ -32,12 +28,3 @@ else
     exit 1
 fi
 $ADB ${DEVICE_SERIAL} shell "am start -S -n ${activity} --es cmdLineFlags \"${APP_ARGS[*]:1}\""
-=======
-    $ADB ${DEVICE_SERIAL} shell am start -S -n "com.skia/.SkiaSampleActivity" --es "cmdLineFlags" "${APP_ARGS[*]:1}"
-elif [[ ${app} == "VisualBench" ]] ; then
-    $ADB ${DEVICE_SERIAL} shell am start -S -n "com.skia/.VisualBenchActivity" --es "cmdLineFlags" "${APP_ARGS[*]:1}"
-else
-    echo "ERROR: supports either 'SampleApp' or 'VisualBench' as valid apps"
-fi
-
->>>>>>> miniblink49

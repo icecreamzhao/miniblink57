@@ -1803,11 +1803,7 @@ typedef struct _D3DDEVINFO_D3DVERTEXSTATS
 
 
 typedef struct _D3DDEVINFO_VCACHE {
-<<<<<<< HEAD
     DWORD   Pattern;                    /* bit pattern, return value must be FOUR_CC(‘C? ‘A? ‘C? ‘H? */
-=======
-    DWORD   Pattern;                    /* bit pattern, return value must be FOUR_CC(‘C’, ‘A’, ‘C’, ‘H’) */
->>>>>>> miniblink49
     DWORD   OptMethod;                  /* optimization method 0 means longest strips, 1 means vertex cache based */
     DWORD   CacheSize;                  /* cache size to optimize for  (only required if type is 1) */
     DWORD   MagicNumber;                /* used to determine when to restart strips (only required if type is 1)*/
@@ -1851,7 +1847,6 @@ typedef struct _D3DDEVINFO_D3D9CACHEUTILIZATION
     FLOAT PostTransformVertexCacheHitRate;
 } D3DDEVINFO_D3D9CACHEUTILIZATION;
 
-<<<<<<< HEAD
 typedef enum _D3DCOMPOSERECTSOP {
     D3DCOMPOSERECTS_COPY = 1,
     D3DCOMPOSERECTS_OR = 2,
@@ -1860,8 +1855,6 @@ typedef enum _D3DCOMPOSERECTSOP {
     D3DCOMPOSERECTS_FORCE_DWORD = 0x7fffffff, /* force 32-bit size enum */
 } D3DCOMPOSERECTSOP;
 
-=======
->>>>>>> miniblink49
 #pragma pack()
 #if _MSC_VER >= 1200
 #pragma warning(pop)

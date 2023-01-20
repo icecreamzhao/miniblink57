@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -9,16 +5,9 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "SkEdge.h"
 #include "SkFDot6.h"
 #include "SkMathPriv.h"
-=======
-
-#include "SkEdge.h"
-#include "SkFDot6.h"
-#include "SkMath.h"
->>>>>>> miniblink49
 
 /*
     In setLine, setQuadratic, setCubic, the first thing we do is to convert
@@ -32,29 +21,18 @@
     or pt >> 8 for antialiasing. This is implemented as pt >> (10 - shift).
 */
 
-<<<<<<< HEAD
 static inline SkFixed SkFDot6ToFixedDiv2(SkFDot6 value)
 {
     // we want to return SkFDot6ToFixed(value >> 1), but we don't want to throw
     // away data in value, so just perform a modify up-shift
     return SkLeftShift(value, 16 - 6 - 1);
-=======
-static inline SkFixed SkFDot6ToFixedDiv2(SkFDot6 value) {
-    // we want to return SkFDot6ToFixed(value >> 1), but we don't want to throw
-    // away data in value, so just perform a modify up-shift
-    return value << (16 - 6 - 1);
->>>>>>> miniblink49
 }
 
 /////////////////////////////////////////////////////////////////////////
 
 int SkEdge::setLine(const SkPoint& p0, const SkPoint& p1, const SkIRect* clip,
-<<<<<<< HEAD
     int shift)
 {
-=======
-                    int shift) {
->>>>>>> miniblink49
     SkFDot6 x0, y0, x1, y1;
 
     {
@@ -93,7 +71,6 @@ int SkEdge::setLine(const SkPoint& p0, const SkPoint& p1, const SkIRect* clip,
     }
 
     SkFixed slope = SkFDot6Div(x1 - x0, y1 - y0);
-<<<<<<< HEAD
     const SkFDot6 dy = SkEdge_Compute_DY(top, y0);
 
     fX = SkFDot6ToFixed(x0 + SkFixedMul(slope, dy)); // + SK_Fixed1/2
@@ -102,16 +79,6 @@ int SkEdge::setLine(const SkPoint& p0, const SkPoint& p1, const SkIRect* clip,
     fLastY = bot - 1;
     fCurveCount = 0;
     fWinding = SkToS8(winding);
-=======
-    const SkFDot6 dy  = SkEdge_Compute_DY(top, y0);
-
-    fX          = SkFDot6ToFixed(x0 + SkFixedMul(slope, dy));   // + SK_Fixed1/2
-    fDX         = slope;
-    fFirstY     = top;
-    fLastY      = bot - 1;
-    fCurveCount = 0;
-    fWinding    = SkToS8(winding);
->>>>>>> miniblink49
     fCurveShift = 0;
 
     if (clip) {
@@ -125,11 +92,7 @@ int SkEdge::updateLine(SkFixed x0, SkFixed y0, SkFixed x1, SkFixed y1)
 {
     SkASSERT(fWinding == 1 || fWinding == -1);
     SkASSERT(fCurveCount != 0);
-<<<<<<< HEAD
     //    SkASSERT(fCurveShift != 0);
-=======
-//    SkASSERT(fCurveShift != 0);
->>>>>>> miniblink49
 
     y0 >>= 10;
     y1 >>= 10;
@@ -139,11 +102,7 @@ int SkEdge::updateLine(SkFixed x0, SkFixed y0, SkFixed x1, SkFixed y1)
     int top = SkFDot6Round(y0);
     int bot = SkFDot6Round(y1);
 
-<<<<<<< HEAD
     //  SkASSERT(top >= fFirstY);
-=======
-//  SkASSERT(top >= fFirstY);
->>>>>>> miniblink49
 
     // are we a zero-height line?
     if (top == bot)
@@ -153,21 +112,12 @@ int SkEdge::updateLine(SkFixed x0, SkFixed y0, SkFixed x1, SkFixed y1)
     x1 >>= 10;
 
     SkFixed slope = SkFDot6Div(x1 - x0, y1 - y0);
-<<<<<<< HEAD
     const SkFDot6 dy = SkEdge_Compute_DY(top, y0);
 
     fX = SkFDot6ToFixed(x0 + SkFixedMul(slope, dy)); // + SK_Fixed1/2
     fDX = slope;
     fFirstY = top;
     fLastY = bot - 1;
-=======
-    const SkFDot6 dy  = SkEdge_Compute_DY(top, y0);
-
-    fX          = SkFDot6ToFixed(x0 + SkFixedMul(slope, dy));   // + SK_Fixed1/2
-    fDX         = slope;
-    fFirstY     = top;
-    fLastY      = bot - 1;
->>>>>>> miniblink49
 
     return 1;
 }
@@ -179,12 +129,7 @@ void SkEdge::chopLineWithClip(const SkIRect& clip)
     SkASSERT(top < clip.fBottom);
 
     // clip the line to the top
-<<<<<<< HEAD
     if (top < clip.fTop) {
-=======
-    if (top < clip.fTop)
-    {
->>>>>>> miniblink49
         SkASSERT(fLastY >= clip.fTop);
         fX += fDX * (clip.fTop - top);
         fFirstY = clip.fTop;
@@ -198,11 +143,7 @@ void SkEdge::chopLineWithClip(const SkIRect& clip)
     If we need to increase this, we need to store fCurveCount in something
     larger than int8_t.
 */
-<<<<<<< HEAD
 #define MAX_COEFF_SHIFT 6
-=======
-#define MAX_COEFF_SHIFT     6
->>>>>>> miniblink49
 
 static inline SkFDot6 cheap_distance(SkFDot6 dx, SkFDot6 dy)
 {
@@ -255,12 +196,7 @@ int SkQuadraticEdge::setQuadratic(const SkPoint pts[3], int shift)
     }
 
     int winding = 1;
-<<<<<<< HEAD
     if (y0 > y2) {
-=======
-    if (y0 > y2)
-    {
->>>>>>> miniblink49
         SkTSwap(x0, x2);
         SkTSwap(y0, y2);
         winding = -1;
@@ -276,13 +212,8 @@ int SkQuadraticEdge::setQuadratic(const SkPoint pts[3], int shift)
 
     // compute number of steps needed (1 << shift)
     {
-<<<<<<< HEAD
         SkFDot6 dx = (SkLeftShift(x1, 1) - x0 - x2) >> 2;
         SkFDot6 dy = (SkLeftShift(y1, 1) - y0 - y2) >> 2;
-=======
-        SkFDot6 dx = ((x1 << 1) - x0 - x2) >> 2;
-        SkFDot6 dy = ((y1 << 1) - y0 - y2) >> 2;
->>>>>>> miniblink49
         shift = diff_to_shift(dx, dy);
         SkASSERT(shift >= 0);
     }
@@ -293,11 +224,7 @@ int SkQuadraticEdge::setQuadratic(const SkPoint pts[3], int shift)
         shift = MAX_COEFF_SHIFT;
     }
 
-<<<<<<< HEAD
     fWinding = SkToS8(winding);
-=======
-    fWinding    = SkToS8(winding);
->>>>>>> miniblink49
     //fCubicDShift only set for cubics
     fCurveCount = SkToS8(1 << shift);
 
@@ -321,7 +248,6 @@ int SkQuadraticEdge::setQuadratic(const SkPoint pts[3], int shift)
 
     fCurveShift = SkToU8(shift - 1);
 
-<<<<<<< HEAD
     SkFixed A = SkFDot6ToFixedDiv2(x0 - x1 - x1 + x2); // 1/2 the real value
     SkFixed B = SkFDot6ToFixed(x1 - x0); // 1/2 the real value
 
@@ -335,21 +261,6 @@ int SkQuadraticEdge::setQuadratic(const SkPoint pts[3], int shift)
     fQy = SkFDot6ToFixed(y0);
     fQDy = B + (A >> shift); // biased by shift
     fQDDy = A >> (shift - 1); // biased by shift
-=======
-    SkFixed A = SkFDot6ToFixedDiv2(x0 - x1 - x1 + x2);  // 1/2 the real value
-    SkFixed B = SkFDot6ToFixed(x1 - x0);                // 1/2 the real value
-
-    fQx     = SkFDot6ToFixed(x0);
-    fQDx    = B + (A >> shift);     // biased by shift
-    fQDDx   = A >> (shift - 1);     // biased by shift
-
-    A = SkFDot6ToFixedDiv2(y0 - y1 - y1 + y2);  // 1/2 the real value
-    B = SkFDot6ToFixed(y1 - y0);                // 1/2 the real value
-
-    fQy     = SkFDot6ToFixed(y0);
-    fQDy    = B + (A >> shift);     // biased by shift
-    fQDDy   = A >> (shift - 1);     // biased by shift
->>>>>>> miniblink49
 
     fQLastX = SkFDot6ToFixed(x2);
     fQLastY = SkFDot6ToFixed(y2);
@@ -359,28 +270,18 @@ int SkQuadraticEdge::setQuadratic(const SkPoint pts[3], int shift)
 
 int SkQuadraticEdge::updateQuadratic()
 {
-<<<<<<< HEAD
     int success;
     int count = fCurveCount;
-=======
-    int     success;
-    int     count = fCurveCount;
->>>>>>> miniblink49
     SkFixed oldx = fQx;
     SkFixed oldy = fQy;
     SkFixed dx = fQDx;
     SkFixed dy = fQDy;
     SkFixed newx, newy;
-<<<<<<< HEAD
     int shift = fCurveShift;
-=======
-    int     shift = fCurveShift;
->>>>>>> miniblink49
 
     SkASSERT(count > 0);
 
     do {
-<<<<<<< HEAD
         if (--count > 0) {
             newx = oldx + (dx >> shift);
             dx += fQDDx;
@@ -390,52 +291,26 @@ int SkQuadraticEdge::updateQuadratic()
         {
             newx = fQLastX;
             newy = fQLastY;
-=======
-        if (--count > 0)
-        {
-            newx    = oldx + (dx >> shift);
-            dx    += fQDDx;
-            newy    = oldy + (dy >> shift);
-            dy    += fQDDy;
-        }
-        else    // last segment
-        {
-            newx    = fQLastX;
-            newy    = fQLastY;
->>>>>>> miniblink49
         }
         success = this->updateLine(oldx, oldy, newx, newy);
         oldx = newx;
         oldy = newy;
     } while (count > 0 && !success);
 
-<<<<<<< HEAD
     fQx = newx;
     fQy = newy;
     fQDx = dx;
     fQDy = dy;
-=======
-    fQx         = newx;
-    fQy         = newy;
-    fQDx        = dx;
-    fQDy        = dy;
->>>>>>> miniblink49
     fCurveCount = SkToS8(count);
     return success;
 }
 
 /////////////////////////////////////////////////////////////////////////
 
-<<<<<<< HEAD
 static inline int SkFDot6UpShift(SkFDot6 x, int upShift)
 {
     SkASSERT((SkLeftShift(x, upShift) >> upShift) == x);
     return SkLeftShift(x, upShift);
-=======
-static inline int SkFDot6UpShift(SkFDot6 x, int upShift) {
-    SkASSERT((x << upShift >> upShift) == x);
-    return x << upShift;
->>>>>>> miniblink49
 }
 
 /*  f(1/3) = (8a + 12b + 6c + d) / 27
@@ -448,24 +323,15 @@ static inline int SkFDot6UpShift(SkFDot6 x, int upShift) {
 */
 static SkFDot6 cubic_delta_from_line(SkFDot6 a, SkFDot6 b, SkFDot6 c, SkFDot6 d)
 {
-<<<<<<< HEAD
     // since our parameters may be negative, we don't use << to avoid ASAN warnings
     SkFDot6 oneThird = (a * 8 - b * 15 + 6 * c + d) * 19 >> 9;
     SkFDot6 twoThird = (a + 6 * b - c * 15 + d * 8) * 19 >> 9;
-=======
-    SkFDot6 oneThird = ((a << 3) - ((b << 4) - b) + 6*c + d) * 19 >> 9;
-    SkFDot6 twoThird = (a + 6*b - ((c << 4) - c) + (d << 3)) * 19 >> 9;
->>>>>>> miniblink49
 
     return SkMax32(SkAbs32(oneThird), SkAbs32(twoThird));
 }
 
-<<<<<<< HEAD
 int SkCubicEdge::setCubic(const SkPoint pts[4], int shift)
 {
-=======
-int SkCubicEdge::setCubic(const SkPoint pts[4], int shift) {
->>>>>>> miniblink49
     SkFDot6 x0, y0, x1, y1, x2, y2, x3, y3;
 
     {
@@ -492,12 +358,7 @@ int SkCubicEdge::setCubic(const SkPoint pts[4], int shift) {
     }
 
     int winding = 1;
-<<<<<<< HEAD
     if (y0 > y3) {
-=======
-    if (y0 > y3)
-    {
->>>>>>> miniblink49
         SkTSwap(x0, x3);
         SkTSwap(x1, x2);
         SkTSwap(y0, y3);
@@ -532,24 +393,15 @@ int SkCubicEdge::setCubic(const SkPoint pts[4], int shift) {
         antialias). That means the most we can shift up is 8. However, we
         compute coefficients with a 3*, so the safest upshift is really 6
     */
-<<<<<<< HEAD
     int upShift = 6; // largest safe value
-=======
-    int upShift = 6;    // largest safe value
->>>>>>> miniblink49
     int downShift = shift + upShift - 10;
     if (downShift < 0) {
         downShift = 0;
         upShift = 10 - shift;
     }
 
-<<<<<<< HEAD
     fWinding = SkToS8(winding);
     fCurveCount = SkToS8(SkLeftShift(-1, shift));
-=======
-    fWinding    = SkToS8(winding);
-    fCurveCount = SkToS8(-1 << shift);
->>>>>>> miniblink49
     fCurveShift = SkToU8(shift);
     fCubicDShift = SkToU8(downShift);
 
@@ -557,33 +409,19 @@ int SkCubicEdge::setCubic(const SkPoint pts[4], int shift) {
     SkFixed C = SkFDot6UpShift(3 * (x0 - x1 - x1 + x2), upShift);
     SkFixed D = SkFDot6UpShift(x3 + 3 * (x1 - x2) - x0, upShift);
 
-<<<<<<< HEAD
     fCx = SkFDot6ToFixed(x0);
     fCDx = B + (C >> shift) + (D >> 2 * shift); // biased by shift
     fCDDx = 2 * C + (3 * D >> (shift - 1)); // biased by 2*shift
     fCDDDx = 3 * D >> (shift - 1); // biased by 2*shift
-=======
-    fCx     = SkFDot6ToFixed(x0);
-    fCDx    = B + (C >> shift) + (D >> 2*shift);    // biased by shift
-    fCDDx   = 2*C + (3*D >> (shift - 1));           // biased by 2*shift
-    fCDDDx  = 3*D >> (shift - 1);                   // biased by 2*shift
->>>>>>> miniblink49
 
     B = SkFDot6UpShift(3 * (y1 - y0), upShift);
     C = SkFDot6UpShift(3 * (y0 - y1 - y1 + y2), upShift);
     D = SkFDot6UpShift(y3 + 3 * (y1 - y2) - y0, upShift);
 
-<<<<<<< HEAD
     fCy = SkFDot6ToFixed(y0);
     fCDy = B + (C >> shift) + (D >> 2 * shift); // biased by shift
     fCDDy = 2 * C + (3 * D >> (shift - 1)); // biased by 2*shift
     fCDDDy = 3 * D >> (shift - 1); // biased by 2*shift
-=======
-    fCy     = SkFDot6ToFixed(y0);
-    fCDy    = B + (C >> shift) + (D >> 2*shift);    // biased by shift
-    fCDDy   = 2*C + (3*D >> (shift - 1));           // biased by 2*shift
-    fCDDDy  = 3*D >> (shift - 1);                   // biased by 2*shift
->>>>>>> miniblink49
 
     fCLastX = SkFDot6ToFixed(x3);
     fCLastY = SkFDot6ToFixed(y3);
@@ -593,13 +431,8 @@ int SkCubicEdge::setCubic(const SkPoint pts[4], int shift) {
 
 int SkCubicEdge::updateCubic()
 {
-<<<<<<< HEAD
     int success;
     int count = fCurveCount;
-=======
-    int     success;
-    int     count = fCurveCount;
->>>>>>> miniblink49
     SkFixed oldx = fCx;
     SkFixed oldy = fCy;
     SkFixed newx, newy;
@@ -609,7 +442,6 @@ int SkCubicEdge::updateCubic()
     SkASSERT(count < 0);
 
     do {
-<<<<<<< HEAD
         if (++count < 0) {
             newx = oldx + (fCDx >> dshift);
             fCDx += fCDDx >> ddshift;
@@ -623,23 +455,6 @@ int SkCubicEdge::updateCubic()
             //  SkDebugf("LastX err=%d, LastY err=%d\n", (oldx + (fCDx >> shift) - fLastX), (oldy + (fCDy >> shift) - fLastY));
             newx = fCLastX;
             newy = fCLastY;
-=======
-        if (++count < 0)
-        {
-            newx    = oldx + (fCDx >> dshift);
-            fCDx    += fCDDx >> ddshift;
-            fCDDx   += fCDDDx;
-
-            newy    = oldy + (fCDy >> dshift);
-            fCDy    += fCDDy >> ddshift;
-            fCDDy   += fCDDDy;
-        }
-        else    // last segment
-        {
-        //  SkDebugf("LastX err=%d, LastY err=%d\n", (oldx + (fCDx >> shift) - fLastX), (oldy + (fCDy >> shift) - fLastY));
-            newx    = fCLastX;
-            newy    = fCLastY;
->>>>>>> miniblink49
         }
 
         // we want to say SkASSERT(oldy <= newy), but our finite fixedpoint
@@ -653,13 +468,8 @@ int SkCubicEdge::updateCubic()
         oldy = newy;
     } while (count < 0 && !success);
 
-<<<<<<< HEAD
     fCx = newx;
     fCy = newy;
-=======
-    fCx         = newx;
-    fCy         = newy;
->>>>>>> miniblink49
     fCurveCount = SkToS8(count);
     return success;
 }

@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -9,10 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #include "SkSVGPath.h"
 #include "SkSVGParser.h"
 
@@ -22,21 +14,13 @@ const SkSVGAttribute SkSVGPath::gAttributes[] = {
 
 DEFINE_SVG_INFO(Path)
 
-<<<<<<< HEAD
 void SkSVGPath::translate(SkSVGParser& parser, bool defState)
 {
-=======
-void SkSVGPath::translate(SkSVGParser& parser, bool defState) {
->>>>>>> miniblink49
     parser._startElement("path");
     INHERITED::translate(parser, defState);
     bool hasMultiplePaths = false;
     const char* firstZ = strchr(f_d.c_str(), 'z');
-<<<<<<< HEAD
     if (firstZ != nullptr) {
-=======
-    if (firstZ != NULL) {
->>>>>>> miniblink49
         firstZ++; // skip over 'z'
         while (*firstZ == ' ')
             firstZ++;

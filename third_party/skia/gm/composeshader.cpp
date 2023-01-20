@@ -8,22 +8,14 @@
 #include "gm.h"
 
 #include "SkCanvas.h"
-<<<<<<< HEAD
-=======
-#include "SkComposeShader.h"
->>>>>>> miniblink49
 #include "SkGradientShader.h"
 #include "SkGraphics.h"
 #include "SkShader.h"
 #include "SkString.h"
 #include "SkXfermode.h"
 
-<<<<<<< HEAD
 static sk_sp<SkShader> make_shader(SkXfermode::Mode mode)
 {
-=======
-static SkShader* make_shader(SkXfermode::Mode mode) {
->>>>>>> miniblink49
     SkPoint pts[2];
     SkColor colors[2];
 
@@ -31,35 +23,20 @@ static SkShader* make_shader(SkXfermode::Mode mode) {
     pts[1].set(SkIntToScalar(100), 0);
     colors[0] = SK_ColorRED;
     colors[1] = SK_ColorBLUE;
-<<<<<<< HEAD
     auto shaderA = SkGradientShader::MakeLinear(pts, colors, nullptr, 2, SkShader::kClamp_TileMode);
-=======
-    SkAutoTUnref<SkShader> shaderA(SkGradientShader::CreateLinear(pts, colors, NULL, 2,
-                                                                  SkShader::kClamp_TileMode));
->>>>>>> miniblink49
 
     pts[0].set(0, 0);
     pts[1].set(0, SkIntToScalar(100));
     colors[0] = SK_ColorBLACK;
     colors[1] = SkColorSetARGB(0x80, 0, 0, 0);
-<<<<<<< HEAD
     auto shaderB = SkGradientShader::MakeLinear(pts, colors, nullptr, 2, SkShader::kClamp_TileMode);
 
     return SkShader::MakeComposeShader(std::move(shaderA), std::move(shaderB),
         SkXfermode::Make(mode));
-=======
-    SkAutoTUnref<SkShader> shaderB(SkGradientShader::CreateLinear(pts, colors, NULL, 2,
-                                                                  SkShader::kClamp_TileMode));
-
-    SkAutoTUnref<SkXfermode> xfer(SkXfermode::Create(mode));
-
-    return SkNEW_ARGS(SkComposeShader, (shaderA, shaderB, xfer));
->>>>>>> miniblink49
 }
 
 class ComposeShaderGM : public skiagm::GM {
 public:
-<<<<<<< HEAD
     ComposeShaderGM()
     {
         fShader = make_shader(SkXfermode::kDstIn_Mode);
@@ -79,29 +56,6 @@ protected:
     void onDraw(SkCanvas* canvas) override
     {
         SkPaint paint;
-=======
-    ComposeShaderGM() {
-        fShader = make_shader(SkXfermode::kDstIn_Mode);
-    }
-
-    virtual ~ComposeShaderGM() {
-        SkSafeUnref(fShader);
-    }
-
-protected:
-    SkString onShortName() override {
-        return SkString("composeshader");
-    }
-
-    SkISize onISize() override {
-        return SkISize::Make(120, 120);
-    }
-
-    void onDraw(SkCanvas* canvas) override {
-
-        SkPaint paint;
-
->>>>>>> miniblink49
         paint.setColor(SK_ColorGREEN);
         canvas->drawRectCoords(0, 0, SkIntToScalar(100), SkIntToScalar(100), paint);
         paint.setShader(fShader);
@@ -109,22 +63,14 @@ protected:
     }
 
 protected:
-<<<<<<< HEAD
     sk_sp<SkShader> fShader;
 
 private:
     typedef GM INHERITED;
-=======
-    SkShader*   fShader;
-
-private:
-    typedef GM INHERITED ;
->>>>>>> miniblink49
 };
 
 class ComposeShaderAlphaGM : public skiagm::GM {
 public:
-<<<<<<< HEAD
     ComposeShaderAlphaGM() { }
 
 protected:
@@ -144,23 +90,6 @@ protected:
             make_shader(SkXfermode::kDstIn_Mode),
             make_shader(SkXfermode::kSrcOver_Mode),
         };
-=======
-    ComposeShaderAlphaGM() {}
-
-protected:
-    SkString onShortName() override {
-        return SkString("composeshader_alpha");
-    }
-
-    SkISize onISize() override {
-        return SkISize::Make(220, 750);
-    }
-
-    void onDraw(SkCanvas* canvas) override {
-        SkAutoTUnref<SkShader> shader0(make_shader(SkXfermode::kDstIn_Mode));
-        SkAutoTUnref<SkShader> shader1(make_shader(SkXfermode::kSrcOver_Mode));
-        SkShader* shaders[] = { shader0.get(), shader1.get() };
->>>>>>> miniblink49
 
         SkPaint paint;
         paint.setColor(SK_ColorGREEN);
@@ -168,7 +97,6 @@ protected:
         const SkRect r = SkRect::MakeXYWH(5, 5, 100, 100);
 
         for (size_t y = 0; y < SK_ARRAY_COUNT(shaders); ++y) {
-<<<<<<< HEAD
             canvas->save();
             for (int alpha = 0xFF; alpha > 0; alpha -= 0x28) {
                 paint.setAlpha(0xFF);
@@ -177,17 +105,6 @@ protected:
 
                 paint.setAlpha(alpha);
                 paint.setShader(shaders[y]);
-=======
-            SkShader* shader = shaders[y];
-            canvas->save();
-            for (int alpha = 0xFF; alpha > 0; alpha -= 0x28) {
-                paint.setAlpha(0xFF);
-                paint.setShader(NULL);
-                canvas->drawRect(r, paint);
-
-                paint.setAlpha(alpha);
-                paint.setShader(shader);
->>>>>>> miniblink49
                 canvas->drawRect(r, paint);
 
                 canvas->translate(r.width() + 5, 0);
@@ -196,7 +113,6 @@ protected:
             canvas->translate(0, r.height() + 5);
         }
     }
-<<<<<<< HEAD
 
 private:
     typedef GM INHERITED;
@@ -316,17 +232,10 @@ private:
     sk_sp<SkShader> fLinearGradientShader;
 
     typedef GM INHERITED;
-=======
->>>>>>> miniblink49
 };
 
 //////////////////////////////////////////////////////////////////////////////
 
-<<<<<<< HEAD
 DEF_GM(return new ComposeShaderGM;)
 DEF_GM(return new ComposeShaderAlphaGM;)
 DEF_GM(return new ComposeShaderBitmapGM;)
-=======
-DEF_GM( return new ComposeShaderGM; )
-DEF_GM( return new ComposeShaderAlphaGM; )
->>>>>>> miniblink49

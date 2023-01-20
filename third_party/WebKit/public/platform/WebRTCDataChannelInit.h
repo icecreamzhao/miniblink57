@@ -42,13 +42,9 @@ public:
         , maxRetransmitTime(-1)
         , maxRetransmits(-1)
         , negotiated(false)
-<<<<<<< HEAD
         , id(-1)
     {
     }
-=======
-        , id(-1) { }
->>>>>>> miniblink49
     bool ordered;
     int maxRetransmitTime;
     int maxRetransmits;

@@ -7,7 +7,9 @@
 
 #include "core/CSSPropertyNames.h"
 #include "core/animation/css/CSSTimingData.h"
+#include "wtf/PtrUtil.h"
 #include "wtf/Vector.h"
+#include <memory>
 
 namespace blink {
 
@@ -15,22 +17,22 @@ class CSSTransitionData final : public CSSTimingData {
 public:
     enum TransitionPropertyType {
         TransitionNone,
-        TransitionSingleProperty,
-        TransitionUnknown,
-        TransitionAll
+        TransitionKnownProperty,
+        TransitionUnknownProperty,
     };
 
     // FIXME: We shouldn't allow 'none' to be used alongside other properties.
     struct TransitionProperty {
+        DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
         TransitionProperty(CSSPropertyID id)
-            : propertyType(TransitionSingleProperty)
+            : propertyType(TransitionKnownProperty)
             , unresolvedProperty(id)
         {
-            ASSERT(id != CSSPropertyInvalid);
+            DCHECK_NE(id, CSSPropertyInvalid);
         }
 
-        TransitionProperty(const String& string)
-            : propertyType(TransitionUnknown)
+        TransitionProperty(const AtomicString& string)
+            : propertyType(TransitionUnknownProperty)
             , unresolvedProperty(CSSPropertyInvalid)
             , propertyString(string)
         {
@@ -40,34 +42,44 @@ public:
             : propertyType(type)
             , unresolvedProperty(CSSPropertyInvalid)
         {
-            ASSERT(type == TransitionNone || type == TransitionAll);
+            DCHECK_EQ(type, TransitionNone);
         }
 
-        bool operator==(const TransitionProperty& other) const { return propertyType == other.propertyType && unresolvedProperty == other.unresolvedProperty && propertyString == other.propertyString; }
+        bool operator==(const TransitionProperty& other) const
+        {
+            return propertyType == other.propertyType && unresolvedProperty == other.unresolvedProperty && propertyString == other.propertyString;
+        }
 
         TransitionPropertyType propertyType;
         CSSPropertyID unresolvedProperty;
-        String propertyString;
+        AtomicString propertyString;
     };
 
-    static PassOwnPtr<CSSTransitionData> create()
+    static std::unique_ptr<CSSTransitionData> create()
     {
-        return adoptPtr(new CSSTransitionData);
+        return WTF::wrapUnique(new CSSTransitionData);
     }
 
-    static PassOwnPtr<CSSTransitionData> create(const CSSTransitionData& transitionData)
+    static std::unique_ptr<CSSTransitionData> create(
+        const CSSTransitionData& transitionData)
     {
-        return adoptPtr(new CSSTransitionData(transitionData));
+        return WTF::wrapUnique(new CSSTransitionData(transitionData));
     }
 
     bool transitionsMatchForStyleRecalc(const CSSTransitionData& other) const;
 
     Timing convertToTiming(size_t index) const;
 
-    const Vector<TransitionProperty>& propertyList() const { return m_propertyList; }
+    const Vector<TransitionProperty>& propertyList() const
+    {
+        return m_propertyList;
+    }
     Vector<TransitionProperty>& propertyList() { return m_propertyList; }
 
-    static TransitionProperty initialProperty() { return TransitionProperty(TransitionAll); }
+    static TransitionProperty initialProperty()
+    {
+        return TransitionProperty(CSSPropertyAll);
+    }
 
 private:
     CSSTransitionData();

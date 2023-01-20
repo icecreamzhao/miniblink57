@@ -5,7 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "SkCanvas.h"
 #include "SkPath.h"
 #include "gm.h"
@@ -15,25 +14,11 @@
 static void draw_path(SkCanvas* canvas, const SkPath& path, const SkRect& rect,
     SkPaint::Join join, int doFill)
 {
-=======
-#include "gm.h"
-#include "SkCanvas.h"
-#include "SkPath.h"
-
-#define STROKE_WIDTH    SkIntToScalar(20)
-
-static void draw_path(SkCanvas* canvas, const SkPath& path, const SkRect& rect,
-                      SkPaint::Join join, int doFill) {
->>>>>>> miniblink49
     SkPaint paint;
     paint.setAntiAlias(true);
     paint.setStyle(doFill ? SkPaint::kStrokeAndFill_Style : SkPaint::kStroke_Style);
 
-<<<<<<< HEAD
     paint.setColor(sk_tool_utils::color_to_565(SK_ColorGRAY));
-=======
-    paint.setColor(SK_ColorGRAY);
->>>>>>> miniblink49
     paint.setStrokeWidth(STROKE_WIDTH);
     paint.setStrokeJoin(join);
     canvas->drawRect(rect, paint);
@@ -59,7 +44,6 @@ static void draw_path(SkCanvas* canvas, const SkPath& path, const SkRect& rect,
  */
 class StrokeRectGM : public skiagm::GM {
 public:
-<<<<<<< HEAD
     StrokeRectGM() { }
 
 protected:
@@ -77,23 +61,6 @@ protected:
     {
         canvas->drawColor(SK_ColorWHITE);
         canvas->translate(STROKE_WIDTH * 3 / 2, STROKE_WIDTH * 3 / 2);
-=======
-    StrokeRectGM() {}
-
-protected:
-
-    SkString onShortName() override {
-        return SkString("strokerect");
-    }
-
-    SkISize onISize() override {
-        return SkISize::Make(1024, 740);
-    }
-
-    void onDraw(SkCanvas* canvas) override {
-        canvas->drawColor(SK_ColorWHITE);
-        canvas->translate(STROKE_WIDTH*3/2, STROKE_WIDTH*3/2);
->>>>>>> miniblink49
 
         SkPaint paint;
         paint.setStyle(SkPaint::kStroke_Style);
@@ -111,7 +78,6 @@ protected:
             { 0, H, W, 0 },
             { 0, 0, STROKE_WIDTH, H },
             { 0, 0, W, STROKE_WIDTH },
-<<<<<<< HEAD
             { 0, 0, STROKE_WIDTH / 2, STROKE_WIDTH / 2 },
             { 0, 0, W, 0 },
             { 0, 0, 0, H },
@@ -119,12 +85,6 @@ protected:
             { 0, 0, W, FLT_EPSILON },
             { 0, 0, FLT_EPSILON, H },
             { 0, 0, FLT_EPSILON, FLT_EPSILON },
-=======
-            { 0, 0, STROKE_WIDTH/2, STROKE_WIDTH/2 },
-            { 0, 0, W, 0 },
-            { 0, 0, 0, H },
-            { 0, 0, 0, 0 },
->>>>>>> miniblink49
         };
 
         for (int doFill = 0; doFill <= 1; ++doFill) {
@@ -153,7 +113,6 @@ protected:
 private:
     typedef GM INHERITED;
 };
-<<<<<<< HEAD
 DEF_GM(return new StrokeRectGM;)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -172,9 +131,3 @@ DEF_SIMPLE_GM(strokerect_anisotropic_5408, canvas, 200, 50)
     SkRect r = SkRect::MakeXYWH(5, 20, 10, 10);
     canvas->drawRect(r, p);
 }
-=======
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-
-DEF_GM(return new StrokeRectGM;)
->>>>>>> miniblink49

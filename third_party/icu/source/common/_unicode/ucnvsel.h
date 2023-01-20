@@ -23,19 +23,11 @@
 
 #if !UCONFIG_NO_CONVERSION
 
-<<<<<<< HEAD
 #include "unicode/localpointer.h"
 #include "unicode/ucnv.h"
 #include "unicode/uenum.h"
 #include "unicode/uset.h"
 #include "unicode/utf16.h"
-=======
-#include "unicode/uset.h"
-#include "unicode/utf16.h"
-#include "unicode/uenum.h"
-#include "unicode/ucnv.h"
-#include "unicode/localpointer.h"
->>>>>>> miniblink49
 
 /**
  * \file
@@ -79,15 +71,9 @@ typedef struct UConverterSelector UConverterSelector;
  * @stable ICU 4.2
  */
 U_STABLE UConverterSelector* U_EXPORT2
-<<<<<<< HEAD
 ucnvsel_open(const char* const* converterList, int32_t converterListSize,
     const USet* excludedCodePoints,
     const UConverterUnicodeSet whichSet, UErrorCode* status);
-=======
-ucnvsel_open(const char* const*  converterList, int32_t converterListSize,
-             const USet* excludedCodePoints,
-             const UConverterUnicodeSet whichSet, UErrorCode* status);
->>>>>>> miniblink49
 
 /**
  * Closes a selector.
@@ -103,11 +89,7 @@ ucnvsel_open(const char* const*  converterList, int32_t converterListSize,
  * @stable ICU 4.2
  */
 U_STABLE void U_EXPORT2
-<<<<<<< HEAD
 ucnvsel_close(UConverterSelector* sel);
-=======
-ucnvsel_close(UConverterSelector *sel);
->>>>>>> miniblink49
 
 #if U_SHOW_CPLUSPLUS_API
 
@@ -162,11 +144,7 @@ ucnvsel_openFromSerialized(const void* buffer, int32_t length, UErrorCode* statu
  */
 U_STABLE int32_t U_EXPORT2
 ucnvsel_serialize(const UConverterSelector* sel,
-<<<<<<< HEAD
     void* buffer, int32_t bufferCapacity, UErrorCode* status);
-=======
-                  void* buffer, int32_t bufferCapacity, UErrorCode* status);
->>>>>>> miniblink49
 
 /**
  * Select converters that can map all characters in a UTF-16 string,
@@ -182,15 +160,9 @@ ucnvsel_serialize(const UConverterSelector* sel,
  *
  * @stable ICU 4.2
  */
-<<<<<<< HEAD
 U_STABLE UEnumeration* U_EXPORT2
 ucnvsel_selectForString(const UConverterSelector* sel,
     const UChar* s, int32_t length, UErrorCode* status);
-=======
-U_STABLE UEnumeration * U_EXPORT2
-ucnvsel_selectForString(const UConverterSelector* sel,
-                        const UChar *s, int32_t length, UErrorCode *status);
->>>>>>> miniblink49
 
 /**
  * Select converters that can map all characters in a UTF-8 string,
@@ -206,7 +178,6 @@ ucnvsel_selectForString(const UConverterSelector* sel,
  *
  * @stable ICU 4.2
  */
-<<<<<<< HEAD
 U_STABLE UEnumeration* U_EXPORT2
 ucnvsel_selectForUTF8(const UConverterSelector* sel,
     const char* s, int32_t length, UErrorCode* status);
@@ -214,12 +185,3 @@ ucnvsel_selectForUTF8(const UConverterSelector* sel,
 #endif /* !UCONFIG_NO_CONVERSION */
 
 #endif /* __ICU_UCNV_SEL_H__ */
-=======
-U_STABLE UEnumeration * U_EXPORT2
-ucnvsel_selectForUTF8(const UConverterSelector* sel,
-                      const char *s, int32_t length, UErrorCode *status);
-
-#endif  /* !UCONFIG_NO_CONVERSION */
-
-#endif  /* __ICU_UCNV_SEL_H__ */
->>>>>>> miniblink49

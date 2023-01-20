@@ -21,11 +21,7 @@
 #define DOMPlugin_h
 
 #include "bindings/core/v8/ScriptWrappable.h"
-<<<<<<< HEAD
 #include "core/dom/ContextLifecycleObserver.h"
-=======
-#include "core/frame/LocalFrameLifecycleObserver.h"
->>>>>>> miniblink49
 #include "modules/plugins/DOMMimeType.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
@@ -35,7 +31,6 @@ namespace blink {
 
 class PluginData;
 
-<<<<<<< HEAD
 class DOMPlugin final : public GarbageCollectedFinalized<DOMPlugin>,
                         public ScriptWrappable,
                         public ContextClient {
@@ -46,13 +41,6 @@ public:
     static DOMPlugin* create(PluginData* pluginData,
         LocalFrame* frame,
         unsigned index)
-=======
-class DOMPlugin final : public GarbageCollectedFinalized<DOMPlugin>, public ScriptWrappable, public LocalFrameLifecycleObserver {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(DOMPlugin);
-    DEFINE_WRAPPERTYPEINFO();
-public:
-    static DOMPlugin* create(PluginData* pluginData, LocalFrame* frame, unsigned index)
->>>>>>> miniblink49
     {
         return new DOMPlugin(pluginData, frame, index);
     }
@@ -72,14 +60,10 @@ public:
 private:
     DOMPlugin(PluginData*, LocalFrame*, unsigned index);
 
-<<<<<<< HEAD
     const PluginInfo& pluginInfo() const
     {
         return m_pluginData->plugins()[m_index];
     }
-=======
-    const PluginInfo& pluginInfo() const { return m_pluginData->plugins()[m_index]; }
->>>>>>> miniblink49
 
     RefPtr<PluginData> m_pluginData;
     unsigned m_index;

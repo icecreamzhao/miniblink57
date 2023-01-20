@@ -35,13 +35,9 @@
             'msvs_settings': {
               'VCCLCompilerTool': {
                 'AdditionalOptions': [
-<<<<<<< HEAD
                   '/wd4996',
                   '/wd4018',
                   '/wd4267',
-=======
-                  '/w',
->>>>>>> miniblink49
                 ],
               },
             },

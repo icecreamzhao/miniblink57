@@ -26,10 +26,6 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/text/StringTruncator.h"
 
 #include "platform/fonts/Font.h"
@@ -42,7 +38,6 @@ namespace blink {
 
 #define STRING_BUFFER_SIZE 2048
 
-<<<<<<< HEAD
 typedef unsigned TruncationFunction(const String&,
     unsigned length,
     unsigned keepCount,
@@ -51,11 +46,6 @@ typedef unsigned TruncationFunction(const String&,
 static inline int textBreakAtOrPreceding(
     const NonSharedCharacterBreakIterator& it,
     int offset)
-=======
-typedef unsigned TruncationFunction(const String&, unsigned length, unsigned keepCount, UChar* buffer);
-
-static inline int textBreakAtOrPreceding(const NonSharedCharacterBreakIterator& it, int offset)
->>>>>>> miniblink49
 {
     if (it.isBreak(offset))
         return offset;
@@ -64,39 +54,27 @@ static inline int textBreakAtOrPreceding(const NonSharedCharacterBreakIterator& 
     return result == TextBreakDone ? 0 : result;
 }
 
-<<<<<<< HEAD
 static inline int boundedTextBreakFollowing(
     const NonSharedCharacterBreakIterator& it,
     int offset,
     int length)
-=======
-static inline int boundedTextBreakFollowing(const NonSharedCharacterBreakIterator& it, int offset, int length)
->>>>>>> miniblink49
 {
     int result = it.following(offset);
     return result == TextBreakDone ? length : result;
 }
 
-<<<<<<< HEAD
 static unsigned centerTruncateToBuffer(const String& string,
     unsigned length,
     unsigned keepCount,
     UChar* buffer)
-=======
-static unsigned centerTruncateToBuffer(const String& string, unsigned length, unsigned keepCount, UChar* buffer)
->>>>>>> miniblink49
 {
     ASSERT(keepCount < length);
     ASSERT(keepCount < STRING_BUFFER_SIZE);
 
     unsigned omitStart = (keepCount + 1) / 2;
     NonSharedCharacterBreakIterator it(string);
-<<<<<<< HEAD
     unsigned omitEnd = boundedTextBreakFollowing(
         it, omitStart + (length - keepCount) - 1, length);
-=======
-    unsigned omitEnd = boundedTextBreakFollowing(it, omitStart + (length - keepCount) - 1, length);
->>>>>>> miniblink49
     omitStart = textBreakAtOrPreceding(it, omitStart);
 
     unsigned truncatedLength = omitStart + 1 + (length - omitEnd);
@@ -109,14 +87,10 @@ static unsigned centerTruncateToBuffer(const String& string, unsigned length, un
     return truncatedLength;
 }
 
-<<<<<<< HEAD
 static unsigned rightTruncateToBuffer(const String& string,
     unsigned length,
     unsigned keepCount,
     UChar* buffer)
-=======
-static unsigned rightTruncateToBuffer(const String& string, unsigned length, unsigned keepCount, UChar* buffer)
->>>>>>> miniblink49
 {
     ASSERT(keepCount < length);
     ASSERT(keepCount < STRING_BUFFER_SIZE);
@@ -137,26 +111,18 @@ static float stringWidth(const Font& renderer, const String& string)
     return renderer.width(run);
 }
 
-<<<<<<< HEAD
 static float stringWidth(const Font& renderer,
     const UChar* characters,
     unsigned length)
-=======
-static float stringWidth(const Font& renderer, const UChar* characters, unsigned length)
->>>>>>> miniblink49
 {
     TextRun run(characters, length);
     return renderer.width(run);
 }
 
-<<<<<<< HEAD
 static String truncateString(const String& string,
     float maxWidth,
     const Font& font,
     TruncationFunction truncateToBuffer)
-=======
-static String truncateString(const String& string, float maxWidth, const Font& font, TruncationFunction truncateToBuffer)
->>>>>>> miniblink49
 {
     if (string.isEmpty())
         return string;
@@ -198,12 +164,7 @@ static String truncateString(const String& string, float maxWidth, const Font& f
         ASSERT(widthForLargestKnownToFit <= maxWidth);
         ASSERT(widthForSmallestKnownToNotFit > maxWidth);
 
-<<<<<<< HEAD
         float ratio = (keepCountForSmallestKnownToNotFit - keepCountForLargestKnownToFit) / (widthForSmallestKnownToNotFit - widthForLargestKnownToFit);
-=======
-        float ratio = (keepCountForSmallestKnownToNotFit - keepCountForLargestKnownToFit)
-            / (widthForSmallestKnownToNotFit - widthForLargestKnownToFit);
->>>>>>> miniblink49
         keepCount = static_cast<unsigned>(maxWidth * ratio);
 
         if (keepCount <= keepCountForLargestKnownToFit) {
@@ -240,24 +201,16 @@ static String truncateString(const String& string, float maxWidth, const Font& f
     return String(stringBuffer, truncatedLength);
 }
 
-<<<<<<< HEAD
 String StringTruncator::centerTruncate(const String& string,
     float maxWidth,
     const Font& font)
-=======
-String StringTruncator::centerTruncate(const String& string, float maxWidth, const Font& font)
->>>>>>> miniblink49
 {
     return truncateString(string, maxWidth, font, centerTruncateToBuffer);
 }
 
-<<<<<<< HEAD
 String StringTruncator::rightTruncate(const String& string,
     float maxWidth,
     const Font& font)
-=======
-String StringTruncator::rightTruncate(const String& string, float maxWidth, const Font& font)
->>>>>>> miniblink49
 {
     return truncateString(string, maxWidth, font, rightTruncateToBuffer);
 }

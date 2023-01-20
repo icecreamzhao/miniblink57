@@ -31,20 +31,13 @@
 #ifndef WebSocketChannel_h
 #define WebSocketChannel_h
 
-<<<<<<< HEAD
 #include "bindings/core/v8/SourceLocation.h"
 #include "core/inspector/ConsoleTypes.h"
-=======
-#include "core/frame/ConsoleTypes.h"
->>>>>>> miniblink49
 #include "modules/ModulesExport.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
 #include "wtf/Noncopyable.h"
-<<<<<<< HEAD
 #include <memory>
-=======
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -54,15 +47,10 @@ class ExecutionContext;
 class KURL;
 class WebSocketChannelClient;
 
-<<<<<<< HEAD
 class MODULES_EXPORT WebSocketChannel
     : public GarbageCollectedFinalized<WebSocketChannel> {
     WTF_MAKE_NONCOPYABLE(WebSocketChannel);
 
-=======
-class MODULES_EXPORT WebSocketChannel : public GarbageCollectedFinalized<WebSocketChannel> {
-    WTF_MAKE_NONCOPYABLE(WebSocketChannel);
->>>>>>> miniblink49
 public:
     WebSocketChannel() { }
     static WebSocketChannel* create(ExecutionContext*, WebSocketChannelClient*);
@@ -88,7 +76,6 @@ public:
 
     virtual bool connect(const KURL&, const String& protocol) = 0;
     virtual void send(const CString&) = 0;
-<<<<<<< HEAD
     virtual void send(const DOMArrayBuffer&,
         unsigned byteOffset,
         unsigned byteLength)
@@ -98,21 +85,12 @@ public:
     // For WorkerWebSocketChannel.
     virtual void sendTextAsCharVector(std::unique_ptr<Vector<char>>) = 0;
     virtual void sendBinaryAsCharVector(std::unique_ptr<Vector<char>>) = 0;
-=======
-    virtual void send(const DOMArrayBuffer&, unsigned byteOffset, unsigned byteLength) = 0;
-    virtual void send(PassRefPtr<BlobDataHandle>) = 0;
-
-    // For WorkerWebSocketChannel.
-    virtual void sendTextAsCharVector(PassOwnPtr<Vector<char>>) = 0;
-    virtual void sendBinaryAsCharVector(PassOwnPtr<Vector<char>>) = 0;
->>>>>>> miniblink49
 
     // Do not call |send| after calling this method.
     virtual void close(int code, const String& reason) = 0;
 
     // Log the reason text and close the connection. Will call didClose().
     // The MessageLevel parameter will be used for the level of the message
-<<<<<<< HEAD
     // shown at the devtools console.
     // SourceLocation parameter may be shown with the reason text
     // at the devtools console. Even if location is specified, it may be ignored
@@ -123,18 +101,6 @@ public:
         MessageLevel,
         std::unique_ptr<SourceLocation>)
         = 0;
-=======
-    // shown at the devtool console.
-    // sourceURL and lineNumber parameters may be shown with the reason text
-    // at the devtool console.
-    // Even if sourceURL and lineNumber are specified, they may be ignored
-    // and the "current" url and the line number in the sense of
-    // JavaScript execution may be shown if this method is called in
-    // a JS execution context.
-    // You can specify String() and 0 for sourceURL and lineNumber
-    // respectively, if you can't / needn't provide the information.
-    virtual void fail(const String& reason, MessageLevel, const String& sourceURL, unsigned lineNumber) = 0;
->>>>>>> miniblink49
 
     // Do not call any methods after calling this method.
     virtual void disconnect() = 0; // Will suppress didClose().

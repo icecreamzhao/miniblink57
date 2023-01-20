@@ -7,15 +7,18 @@
 
 #include "core/CoreExport.h"
 #include "core/css/MediaValues.h"
+#include "platform/CrossThreadCopier.h"
 
 namespace blink {
 
 class CORE_EXPORT MediaValuesCached final : public MediaValues {
 public:
-    struct MediaValuesCachedData {
-        // Members variables must be thread safe, since they're copied to the parser thread
-        int viewportWidth;
-        int viewportHeight;
+    struct MediaValuesCachedData final {
+        DISALLOW_NEW();
+        // Members variables must be thread safe, since they're copied to the parser
+        // thread
+        double viewportWidth;
+        double viewportHeight;
         int deviceWidth;
         int deviceHeight;
         float devicePixelRatio;
@@ -30,6 +33,7 @@ public:
         bool strictMode;
         String mediaType;
         WebDisplayMode displayMode;
+        DisplayShape displayShape;
 
         MediaValuesCachedData()
             : viewportWidth(0)
@@ -47,41 +51,67 @@ public:
             , threeDEnabled(false)
             , strictMode(true)
             , displayMode(WebDisplayModeBrowser)
+            , displayShape(DisplayShapeRect)
         {
+        }
+
+        explicit MediaValuesCachedData(Document&);
+
+        MediaValuesCachedData deepCopy() const
+        {
+            MediaValuesCachedData data;
+            data.viewportWidth = viewportWidth;
+            data.viewportHeight = viewportHeight;
+            data.deviceWidth = deviceWidth;
+            data.deviceHeight = deviceHeight;
+            data.devicePixelRatio = devicePixelRatio;
+            data.colorBitsPerComponent = colorBitsPerComponent;
+            data.monochromeBitsPerComponent = monochromeBitsPerComponent;
+            data.primaryPointerType = primaryPointerType;
+            data.availablePointerTypes = availablePointerTypes;
+            data.primaryHoverType = primaryHoverType;
+            data.availableHoverTypes = availableHoverTypes;
+            data.defaultFontSize = defaultFontSize;
+            data.threeDEnabled = threeDEnabled;
+            data.strictMode = strictMode;
+            data.mediaType = mediaType.isolatedCopy();
+            data.displayMode = displayMode;
+            data.displayShape = displayShape;
+            return data;
         }
     };
 
-    static PassRefPtr<MediaValues> create();
-    static PassRefPtr<MediaValues> create(Document&);
-    static PassRefPtr<MediaValues> create(LocalFrame*);
-    static PassRefPtr<MediaValues> create(MediaValuesCachedData&);
-    virtual PassRefPtr<MediaValues> copy() const override;
-    virtual bool isSafeToSendToAnotherThread() const override;
-    virtual bool computeLength(double value, CSSPrimitiveValue::UnitType, int& result) const override;
-    virtual bool computeLength(double value, CSSPrimitiveValue::UnitType, double& result) const override;
+    static MediaValuesCached* create();
+    static MediaValuesCached* create(const MediaValuesCachedData&);
+    MediaValues* copy() const override;
+    bool computeLength(double value,
+        CSSPrimitiveValue::UnitType,
+        int& result) const override;
+    bool computeLength(double value,
+        CSSPrimitiveValue::UnitType,
+        double& result) const override;
 
-    virtual int viewportWidth() const override;
-    virtual int viewportHeight() const override;
-    virtual int deviceWidth() const override;
-    virtual int deviceHeight() const override;
-    virtual float devicePixelRatio() const override;
-    virtual int colorBitsPerComponent() const override;
-    virtual int monochromeBitsPerComponent() const override;
-    virtual PointerType primaryPointerType() const override;
-    virtual int availablePointerTypes() const override;
-    virtual HoverType primaryHoverType() const override;
-    virtual int availableHoverTypes() const override;
-    virtual bool threeDEnabled() const override;
-    virtual bool strictMode() const override;
-    virtual Document* document() const override;
-    virtual bool hasValues() const override;
-    virtual const String mediaType() const override;
-    virtual WebDisplayMode displayMode() const override;
+    double viewportWidth() const override;
+    double viewportHeight() const override;
+    int deviceWidth() const override;
+    int deviceHeight() const override;
+    float devicePixelRatio() const override;
+    int colorBitsPerComponent() const override;
+    int monochromeBitsPerComponent() const override;
+    PointerType primaryPointerType() const override;
+    int availablePointerTypes() const override;
+    HoverType primaryHoverType() const override;
+    int availableHoverTypes() const override;
+    bool threeDEnabled() const override;
+    bool strictMode() const override;
+    Document* document() const override;
+    bool hasValues() const override;
+    const String mediaType() const override;
+    WebDisplayMode displayMode() const override;
+    DisplayShape displayShape() const override;
 
-    void setViewportWidth(int);
-    void setViewportHeight(int);
+    void overrideViewportDimensions(double width, double height) override;
 
-    virtual bool isCached() const override { return true; }
 protected:
     MediaValuesCached();
     MediaValuesCached(LocalFrame*);
@@ -90,6 +120,15 @@ protected:
     MediaValuesCachedData m_data;
 };
 
-} // namespace
+template <>
+struct CrossThreadCopier<MediaValuesCached::MediaValuesCachedData> {
+    typedef MediaValuesCached::MediaValuesCachedData Type;
+    static Type copy(const MediaValuesCached::MediaValuesCachedData& data)
+    {
+        return data.deepCopy();
+    }
+};
+
+} // namespace blink
 
 #endif // MediaValuesCached_h

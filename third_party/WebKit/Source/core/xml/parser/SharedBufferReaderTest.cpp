@@ -28,15 +28,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/xml/parser/SharedBufferReader.h"
 
 #include "platform/SharedBuffer.h"
-
+#include "testing/gtest/include/gtest/gtest.h"
 #include <algorithm>
 #include <cstdlib>
-#include <gtest/gtest.h>
-#include <vector>
 
 namespace blink {
 
@@ -68,13 +65,13 @@ TEST(SharedBufferReaderTest, readDataWithSizeBiggerThanSharedBufferSize)
 
     const char initializationByte = 'a';
     memset(outputBuffer, initializationByte, sizeof(outputBuffer));
-    EXPECT_EQ(sizeof(testData),
-        static_cast<size_t>(reader.readData(outputBuffer, sizeof(outputBuffer))));
+    EXPECT_EQ(sizeof(testData), static_cast<size_t>(reader.readData(outputBuffer, sizeof(outputBuffer))));
 
     EXPECT_TRUE(std::equal(testData, testData + sizeof(testData), outputBuffer));
     // Check that the bytes past index sizeof(testData) were not touched.
     EXPECT_EQ(extraBytes,
-        std::count(outputBuffer, outputBuffer + sizeof(outputBuffer), initializationByte));
+        std::count(outputBuffer, outputBuffer + sizeof(outputBuffer),
+            initializationByte));
 }
 
 TEST(SharedBufferReaderTest, readDataInMultiples)
@@ -82,13 +79,13 @@ TEST(SharedBufferReaderTest, readDataInMultiples)
     const int iterationsCount = 8;
     const int bytesPerIteration = 64;
 
-    std::vector<char> testData(iterationsCount * bytesPerIteration);
+    Vector<char> testData(iterationsCount * bytesPerIteration);
     std::generate(testData.begin(), testData.end(), &std::rand);
 
     RefPtr<SharedBuffer> sharedBuffer = SharedBuffer::create(&testData[0], testData.size());
     SharedBufferReader reader(sharedBuffer);
 
-    std::vector<char> destinationVector(testData.size());
+    Vector<char> destinationVector(testData.size());
 
     for (int i = 0; i < iterationsCount; ++i) {
         const int offset = i * bytesPerIteration;
@@ -96,18 +93,19 @@ TEST(SharedBufferReaderTest, readDataInMultiples)
         EXPECT_EQ(bytesPerIteration, bytesRead);
     }
 
-    EXPECT_TRUE(std::equal(testData.begin(), testData.end(), destinationVector.begin()));
+    EXPECT_TRUE(
+        std::equal(testData.begin(), testData.end(), destinationVector.begin()));
 }
 
 TEST(SharedBufferReaderTest, clearSharedBufferBetweenCallsToReadData)
 {
-    std::vector<char> testData(128);
+    Vector<char> testData(128);
     std::generate(testData.begin(), testData.end(), &std::rand);
 
     RefPtr<SharedBuffer> sharedBuffer = SharedBuffer::create(&testData[0], testData.size());
     SharedBufferReader reader(sharedBuffer);
 
-    std::vector<char> destinationVector(testData.size());
+    Vector<char> destinationVector(testData.size());
     const int bytesToRead = testData.size() / 2;
     EXPECT_EQ(bytesToRead, reader.readData(&destinationVector[0], bytesToRead));
 

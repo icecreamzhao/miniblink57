@@ -6,33 +6,21 @@
  */
 
 #include "SkOSFile.h"
-<<<<<<< HEAD
 #include "SkString.h"
 #include "SkTFitsIn.h"
 #include "SkTemplates.h"
-=======
-
-#include "SkTFitsIn.h"
->>>>>>> miniblink49
 #include "SkTypes.h"
 
 #include <dirent.h>
 #include <stdio.h>
-<<<<<<< HEAD
 #include <string.h>
-=======
->>>>>>> miniblink49
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
 
-<<<<<<< HEAD
 bool sk_exists(const char* path, SkFILE_Flags flags)
 {
-=======
-bool sk_exists(const char *path, SkFILE_Flags flags) {
->>>>>>> miniblink49
     int mode = F_OK;
     if (flags & kRead_SkFILE_Flag) {
         mode |= R_OK;
@@ -48,14 +36,9 @@ typedef struct {
     ino_t ino;
 } SkFILEID;
 
-<<<<<<< HEAD
 static bool sk_ino(FILE* a, SkFILEID* id)
 {
     int fd = fileno(a);
-=======
-static bool sk_ino(SkFILE* a, SkFILEID* id) {
-    int fd = fileno((FILE*)a);
->>>>>>> miniblink49
     if (fd < 0) {
         return 0;
     }
@@ -68,7 +51,6 @@ static bool sk_ino(SkFILE* a, SkFILEID* id) {
     return true;
 }
 
-<<<<<<< HEAD
 bool sk_fidentical(FILE* a, FILE* b)
 {
     SkFILEID aID, bID;
@@ -99,42 +81,12 @@ void* sk_fdmmap(int fd, size_t* size)
     void* addr = mmap(nullptr, fileSize, PROT_READ, MAP_PRIVATE, fd, 0);
     if (MAP_FAILED == addr) {
         return nullptr;
-=======
-bool sk_fidentical(SkFILE* a, SkFILE* b) {
-    SkFILEID aID, bID;
-    return sk_ino(a, &aID) && sk_ino(b, &bID)
-           && aID.ino == bID.ino
-           && aID.dev == bID.dev;
-}
-
-void sk_fmunmap(const void* addr, size_t length) {
-    munmap(const_cast<void*>(addr), length);
-}
-
-void* sk_fdmmap(int fd, size_t* size) {
-    struct stat status;
-    if (0 != fstat(fd, &status)) {
-        return NULL;
-    }
-    if (!S_ISREG(status.st_mode)) {
-        return NULL;
-    }
-    if (!SkTFitsIn<size_t>(status.st_size)) {
-        return NULL;
-    }
-    size_t fileSize = static_cast<size_t>(status.st_size);
-
-    void* addr = mmap(NULL, fileSize, PROT_READ, MAP_PRIVATE, fd, 0);
-    if (MAP_FAILED == addr) {
-        return NULL;
->>>>>>> miniblink49
     }
 
     *size = fileSize;
     return addr;
 }
 
-<<<<<<< HEAD
 int sk_fileno(FILE* f)
 {
     return fileno(f);
@@ -145,16 +97,6 @@ void* sk_fmmap(FILE* f, size_t* size)
     int fd = sk_fileno(f);
     if (fd < 0) {
         return nullptr;
-=======
-int sk_fileno(SkFILE* f) {
-    return fileno((FILE*)f);
-}
-
-void* sk_fmmap(SkFILE* f, size_t* size) {
-    int fd = sk_fileno(f);
-    if (fd < 0) {
-        return NULL;
->>>>>>> miniblink49
     }
 
     return sk_fdmmap(fd, size);
@@ -163,7 +105,6 @@ void* sk_fmmap(SkFILE* f, size_t* size) {
 ////////////////////////////////////////////////////////////////////////////
 
 struct SkOSFileIterData {
-<<<<<<< HEAD
     SkOSFileIterData()
         : fDIR(0)
     {
@@ -183,24 +124,6 @@ SkOSFile::Iter::Iter(const char path[], const char suffix[])
 
 SkOSFile::Iter::~Iter()
 {
-=======
-    SkOSFileIterData() : fDIR(0) { }
-    DIR* fDIR;
-    SkString fPath, fSuffix;
-};
-SK_COMPILE_ASSERT(sizeof(SkOSFileIterData) <= SkOSFile::Iter::kStorageSize, not_enough_space);
-
-SkOSFile::Iter::Iter() {
-    SkNEW_PLACEMENT(fSelf.get(), SkOSFileIterData);
-}
-
-SkOSFile::Iter::Iter(const char path[], const char suffix[]) {
-    SkNEW_PLACEMENT(fSelf.get(), SkOSFileIterData);
-    this->reset(path, suffix);
-}
-
-SkOSFile::Iter::~Iter() {
->>>>>>> miniblink49
     SkOSFileIterData& self = *static_cast<SkOSFileIterData*>(fSelf.get());
     if (self.fDIR) {
         ::closedir(self.fDIR);
@@ -208,12 +131,8 @@ SkOSFile::Iter::~Iter() {
     self.~SkOSFileIterData();
 }
 
-<<<<<<< HEAD
 void SkOSFile::Iter::reset(const char path[], const char suffix[])
 {
-=======
-void SkOSFile::Iter::reset(const char path[], const char suffix[]) {
->>>>>>> miniblink49
     SkOSFileIterData& self = *static_cast<SkOSFileIterData*>(fSelf.get());
     if (self.fDIR) {
         ::closedir(self.fDIR);
@@ -230,7 +149,6 @@ void SkOSFile::Iter::reset(const char path[], const char suffix[]) {
 }
 
 // returns true if suffix is empty, or if str ends with suffix
-<<<<<<< HEAD
 static bool issuffixfor(const SkString& suffix, const char str[])
 {
     size_t suffixLen = suffix.size();
@@ -241,26 +159,11 @@ static bool issuffixfor(const SkString& suffix, const char str[])
 
 bool SkOSFile::Iter::next(SkString* name, bool getDir)
 {
-=======
-static bool issuffixfor(const SkString& suffix, const char str[]) {
-    size_t  suffixLen = suffix.size();
-    size_t  strLen = strlen(str);
-
-    return  strLen >= suffixLen &&
-            memcmp(suffix.c_str(), str + strLen - suffixLen, suffixLen) == 0;
-}
-
-bool SkOSFile::Iter::next(SkString* name, bool getDir) {
->>>>>>> miniblink49
     SkOSFileIterData& self = *static_cast<SkOSFileIterData*>(fSelf.get());
     if (self.fDIR) {
         dirent* entry;
 
-<<<<<<< HEAD
         while ((entry = ::readdir(self.fDIR)) != nullptr) {
-=======
-        while ((entry = ::readdir(self.fDIR)) != NULL) {
->>>>>>> miniblink49
             struct stat s;
             SkString str(self.fPath);
 

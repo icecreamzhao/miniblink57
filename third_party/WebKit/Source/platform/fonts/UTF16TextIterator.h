@@ -22,25 +22,16 @@
 #define UTF16TextIterator_h
 
 #include "platform/PlatformExport.h"
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/text/CharacterNames.h"
 #include "wtf/text/WTFString.h"
-=======
-#include "wtf/text/CharacterNames.h"
-#include "wtf/text/WTFString.h"
-#include <unicode/uchar.h>
->>>>>>> miniblink49
 
 namespace blink {
 
 class PLATFORM_EXPORT UTF16TextIterator {
-<<<<<<< HEAD
     USING_FAST_MALLOC(UTF16TextIterator);
     WTF_MAKE_NONCOPYABLE(UTF16TextIterator);
 
-=======
->>>>>>> miniblink49
 public:
     // The passed in UChar pointer starts at 'offset'. The iterator operates on the range [offset, endOffset].
     // 'length' denotes the maximum length of the UChar array, which might exceed 'endOffset'.
@@ -57,23 +48,10 @@ public:
 
         character = *m_characters;
         m_currentGlyphLength = 1;
-<<<<<<< HEAD
         if (!U16_IS_SURROGATE(character))
             return true;
 
         return consumeSurrogatePair(character);
-=======
-
-        if (character < hiraganaLetterSmallACharacter || consumeSlowCase(character)) {
-//#ifdef MINIBLINK_NOT_IMPLEMENTED
-            if (U_GET_GC_MASK(character) & U_GC_M_MASK)
-                consumeMultipleUChar();
-//#endif // MINIBLINK_NOT_IMPLEMENTED
-            return true;
-        }
-
-        return false;
->>>>>>> miniblink49
     }
 
     void advance()
@@ -90,15 +68,9 @@ public:
     unsigned glyphLength() const { return m_currentGlyphLength; }
 
 private:
-<<<<<<< HEAD
     bool isValidSurrogatePair(UChar32&);
     bool consumeSurrogatePair(UChar32&);
     void consumeMultipleUChar();
-=======
-    bool consumeSlowCase(UChar32&);
-    void consumeMultipleUChar();
-    UChar32 normalizeVoicingMarks();
->>>>>>> miniblink49
 
     const UChar* m_characters;
     const UChar* m_charactersEnd;
@@ -107,10 +79,6 @@ private:
     unsigned m_currentGlyphLength;
 };
 
-<<<<<<< HEAD
 } // namespace blink
-=======
-}
->>>>>>> miniblink49
 
 #endif

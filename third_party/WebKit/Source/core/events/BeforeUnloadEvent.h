@@ -31,20 +31,24 @@ namespace blink {
 
 class BeforeUnloadEvent final : public Event {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    virtual ~BeforeUnloadEvent();
+    ~BeforeUnloadEvent() override;
 
-    static PassRefPtrWillBeRawPtr<BeforeUnloadEvent> create()
+    static BeforeUnloadEvent* create() { return new BeforeUnloadEvent; }
+
+    bool isBeforeUnloadEvent() const override;
+
+    void setReturnValue(const String& returnValue)
     {
-        return adoptRefWillBeNoop(new BeforeUnloadEvent);
+        m_returnValue = returnValue;
     }
-
-    virtual bool isBeforeUnloadEvent() const override;
-
-    void setReturnValue(const String& returnValue) { m_returnValue = returnValue; }
     String returnValue() const { return m_returnValue; }
 
-    virtual const AtomicString& interfaceName() const override { return EventNames::BeforeUnloadEvent; }
+    const AtomicString& interfaceName() const override
+    {
+        return EventNames::BeforeUnloadEvent;
+    }
 
     DECLARE_VIRTUAL_TRACE();
 

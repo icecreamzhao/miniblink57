@@ -1,8 +1,4 @@
 %{
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/graphics/Color.h"
 #include <string.h>
 

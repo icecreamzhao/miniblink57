@@ -32,6 +32,7 @@ class HTMLFormControlElement;
 
 class HTMLLegendElement final : public HTMLElement {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     DECLARE_NODE_FACTORY(HTMLLegendElement);
 
@@ -44,7 +45,7 @@ private:
     HTMLFormControlElement* associatedControl();
 
     void accessKeyAction(bool sendMouseEvents) override;
-    void focus(bool restorePreviousSelection, WebFocusType) override;
+    void focus(const FocusParams&) override;
 };
 
 } // namespace blink

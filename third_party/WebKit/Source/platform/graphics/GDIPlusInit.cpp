@@ -7,13 +7,8 @@
 
 using std::max;
 using std::min;
-<<<<<<< HEAD
 #include "GDIPlusInit.h"
 #include <gdiplus.h>
-=======
-#include <gdiplus.h>
-#include "GDIPlusInit.h"
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -24,31 +19,18 @@ static bool s_bInitClsid = false;
 
 static int getEncoderClsid(const WCHAR* format, CLSID* pClsid)
 {
-<<<<<<< HEAD
     UINT num = 0; // number of image encoders
     UINT size = 0; // size of the image encoder array in bytes
-=======
-    UINT  num = 0;          // number of image encoders
-    UINT  size = 0;         // size of the image encoder array in bytes
->>>>>>> miniblink49
 
     Gdiplus::ImageCodecInfo* pImageCodecInfo = NULL;
 
     Gdiplus::GetImageEncodersSize(&num, &size);
     if (size == 0)
-<<<<<<< HEAD
         return -1; // Failure
 
     pImageCodecInfo = (Gdiplus::ImageCodecInfo*)(malloc(size));
     if (pImageCodecInfo == NULL)
         return -1; // Failure
-=======
-        return -1;  // Failure
-
-    pImageCodecInfo = (Gdiplus::ImageCodecInfo*)(malloc(size));
-    if (pImageCodecInfo == NULL)
-        return -1;  // Failure
->>>>>>> miniblink49
 
     GetImageEncoders(num, size, pImageCodecInfo);
 
@@ -56,20 +38,12 @@ static int getEncoderClsid(const WCHAR* format, CLSID* pClsid)
         if (wcscmp(pImageCodecInfo[j].MimeType, format) == 0) {
             *pClsid = pImageCodecInfo[j].Clsid;
             free(pImageCodecInfo);
-<<<<<<< HEAD
             return j; // Success
-=======
-            return j;  // Success
->>>>>>> miniblink49
         }
     }
 
     free(pImageCodecInfo);
-<<<<<<< HEAD
     return -1; // Failure
-=======
-    return -1;  // Failure
->>>>>>> miniblink49
 }
 
 bool initGDIPlusClsids()

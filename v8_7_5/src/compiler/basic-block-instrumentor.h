@@ -11,7 +11,6 @@
 namespace v8 {
 namespace internal {
 
-<<<<<<< HEAD
     class OptimizedCompilationInfo;
 
     namespace compiler {
@@ -31,24 +30,3 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_COMPILER_BASIC_BLOCK_INSTRUMENTOR_H_
-=======
-class OptimizedCompilationInfo;
-
-namespace compiler {
-
-class Graph;
-class Schedule;
-
-class BasicBlockInstrumentor : public AllStatic {
- public:
-  static BasicBlockProfiler::Data* Instrument(OptimizedCompilationInfo* info,
-                                              Graph* graph, Schedule* schedule,
-                                              Isolate* isolate);
-};
-
-}  // namespace compiler
-}  // namespace internal
-}  // namespace v8
-
-#endif  // V8_COMPILER_BASIC_BLOCK_INSTRUMENTOR_H_
->>>>>>> miniblink49

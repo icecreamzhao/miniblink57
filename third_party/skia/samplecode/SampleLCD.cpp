@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -9,7 +5,6 @@
  * found in the LICENSE file.
  */
 #include "SampleCode.h"
-<<<<<<< HEAD
 #include "SkCanvas.h"
 #include "SkPaint.h"
 #include "SkShader.h"
@@ -23,21 +18,6 @@ protected:
     // overrides from SkEventSink
     virtual bool onQuery(SkEvent* evt)
     {
-=======
-#include "SkView.h"
-#include "SkCanvas.h"
-#include "SkDevice.h"
-#include "SkPaint.h"
-#include "SkShader.h"
-
-class LCDView : public SkView {
-public:
-    LCDView() {}
-
-protected:
-    // overrides from SkEventSink
-    virtual bool onQuery(SkEvent* evt) {
->>>>>>> miniblink49
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "LCD Text");
             return true;
@@ -45,7 +25,6 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-<<<<<<< HEAD
     void drawBG(SkCanvas* canvas)
     {
         canvas->drawColor(SK_ColorWHITE);
@@ -53,13 +32,6 @@ protected:
 
     virtual void onDraw(SkCanvas* canvas)
     {
-=======
-    void drawBG(SkCanvas* canvas) {
-        canvas->drawColor(SK_ColorWHITE);
-    }
-
-    virtual void onDraw(SkCanvas* canvas) {
->>>>>>> miniblink49
         this->drawBG(canvas);
 
         SkPaint paint;

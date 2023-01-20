@@ -10,7 +10,6 @@
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
  *
-<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -21,18 +20,6 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-=======
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
->>>>>>> miniblink49
  */
 
 #ifndef WebScrollbar_h
@@ -40,40 +27,20 @@
 
 #include "WebPoint.h"
 #include "WebRect.h"
-<<<<<<< HEAD
 #include "WebScrollbarOverlayColorTheme.h"
 #include "WebSize.h"
 #include "WebVector.h"
-=======
-#include "WebSize.h"
-#include "WebVector.h"
-#if INSIDE_BLINK
-#include "wtf/PassOwnPtr.h"
-#endif
->>>>>>> miniblink49
 
 namespace blink {
 
 // A const accessor interface for a WebKit scrollbar
 class BLINK_PLATFORM_EXPORT WebScrollbar {
 public:
-<<<<<<< HEAD
     enum Orientation { Horizontal,
         Vertical };
 
     enum ScrollDirection { ScrollBackward,
         ScrollForward };
-=======
-    enum Orientation {
-        Horizontal,
-        Vertical
-    };
-
-    enum ScrollDirection {
-        ScrollBackward,
-        ScrollForward
-    };
->>>>>>> miniblink49
 
     enum ScrollGranularity {
         ScrollByLine,
@@ -82,15 +49,8 @@ public:
         ScrollByPixel
     };
 
-<<<<<<< HEAD
     enum ScrollbarControlSize { RegularScrollbar,
         SmallScrollbar };
-=======
-    enum ScrollbarControlSize {
-        RegularScrollbar,
-        SmallScrollbar
-    };
->>>>>>> miniblink49
 
     enum ScrollbarPart {
         NoPart = 0,
@@ -106,15 +66,6 @@ public:
         AllParts = 0xffffffff
     };
 
-<<<<<<< HEAD
-=======
-    enum ScrollbarOverlayStyle {
-        ScrollbarOverlayStyleDefault,
-        ScrollbarOverlayStyleDark,
-        ScrollbarOverlayStyleLight
-    };
-
->>>>>>> miniblink49
     virtual ~WebScrollbar() { }
 
     // Return true if this is an overlay scrollbar.
@@ -133,19 +84,10 @@ public:
     virtual ScrollbarControlSize controlSize() const = 0;
     virtual ScrollbarPart pressedPart() const = 0;
     virtual ScrollbarPart hoveredPart() const = 0;
-<<<<<<< HEAD
     virtual WebScrollbarOverlayColorTheme scrollbarOverlayColorTheme() const = 0;
     virtual bool isCustomScrollbar() const = 0;
     virtual Orientation orientation() const = 0;
     virtual bool isLeftSideVerticalScrollbar() const = 0;
-=======
-    virtual ScrollbarOverlayStyle scrollbarOverlayStyle() const = 0;
-    virtual bool isCustomScrollbar() const = 0;
-    virtual Orientation orientation() const = 0;
-    virtual bool isLeftSideVerticalScrollbar() const = 0;
-    virtual bool isAlphaLocked() const { return false; }
-    virtual void setIsAlphaLocked(bool) { }
->>>>>>> miniblink49
     virtual float elasticOverscroll() const = 0;
     virtual void setElasticOverscroll(float) = 0;
 };

@@ -23,7 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "modules/speech/SpeechSynthesisUtterance.h"
 
 #include "core/dom/ExecutionContext.h"
@@ -33,43 +32,19 @@ namespace blink {
 SpeechSynthesisUtterance* SpeechSynthesisUtterance::create(
     ExecutionContext* context,
     const String& text)
-=======
-#include "config.h"
-#include "modules/speech/SpeechSynthesisUtterance.h"
-
-namespace blink {
-
-SpeechSynthesisUtterance* SpeechSynthesisUtterance::create(ExecutionContext* context, const String& text)
->>>>>>> miniblink49
 {
     return new SpeechSynthesisUtterance(context, text);
 }
 
-<<<<<<< HEAD
 SpeechSynthesisUtterance::SpeechSynthesisUtterance(ExecutionContext* context,
     const String& text)
     : ContextClient(context)
-=======
-SpeechSynthesisUtterance::SpeechSynthesisUtterance(ExecutionContext* context, const String& text)
-    : ContextLifecycleObserver(context)
->>>>>>> miniblink49
     , m_platformUtterance(PlatformSpeechSynthesisUtterance::create(this))
 {
     m_platformUtterance->setText(text);
 }
 
-<<<<<<< HEAD
 SpeechSynthesisUtterance::~SpeechSynthesisUtterance() { }
-=======
-SpeechSynthesisUtterance::~SpeechSynthesisUtterance()
-{
-}
-
-ExecutionContext* SpeechSynthesisUtterance::executionContext() const
-{
-    return ContextLifecycleObserver::executionContext();
-}
->>>>>>> miniblink49
 
 const AtomicString& SpeechSynthesisUtterance::interfaceName() const
 {
@@ -83,14 +58,9 @@ SpeechSynthesisVoice* SpeechSynthesisUtterance::voice() const
 
 void SpeechSynthesisUtterance::setVoice(SpeechSynthesisVoice* voice)
 {
-<<<<<<< HEAD
     // Cache our own version of the SpeechSynthesisVoice so that we don't have to
     // do some lookup to go from the platform voice back to the speech synthesis
     // voice in the read property.
-=======
-    // Cache our own version of the SpeechSynthesisVoice so that we don't have to do some lookup
-    // to go from the platform voice back to the speech synthesis voice in the read property.
->>>>>>> miniblink49
     m_voice = voice;
 
     if (voice)
@@ -101,13 +71,8 @@ DEFINE_TRACE(SpeechSynthesisUtterance)
 {
     visitor->trace(m_platformUtterance);
     visitor->trace(m_voice);
-<<<<<<< HEAD
     ContextClient::trace(visitor);
     EventTargetWithInlineData::trace(visitor);
-=======
-    RefCountedGarbageCollectedEventTargetWithInlineData<SpeechSynthesisUtterance>::trace(visitor);
-    ContextLifecycleObserver::trace(visitor);
->>>>>>> miniblink49
 }
 
 } // namespace blink

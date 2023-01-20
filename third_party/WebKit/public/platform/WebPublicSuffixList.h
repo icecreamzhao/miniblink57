@@ -46,7 +46,3 @@ protected:
 } // namespace blink
 
 #endif // WebPublicSuffixList_h
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49

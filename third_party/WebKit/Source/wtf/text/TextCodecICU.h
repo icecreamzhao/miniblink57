@@ -27,17 +27,11 @@
 #ifndef TextCodecICU_h
 #define TextCodecICU_h
 
-<<<<<<< HEAD
 #include "base/gtest_prod_util.h"
 #include "wtf/text/TextCodec.h"
 #include "wtf/text/TextEncoding.h"
 #include <memory>
 #include <unicode/utypes.h>
-=======
-#include <unicode/utypes.h>
-#include "wtf/text/TextCodec.h"
-#include "wtf/text/TextEncoding.h"
->>>>>>> miniblink49
 
 typedef struct UConverter UConverter;
 
@@ -54,7 +48,6 @@ public:
 
 private:
     TextCodecICU(const TextEncoding&);
-<<<<<<< HEAD
     WTF_EXPORT static std::unique_ptr<TextCodec> create(const TextEncoding&,
         const void*);
 
@@ -67,22 +60,12 @@ private:
     CString encode(const LChar*, size_t length, UnencodableHandling) override;
 
     template <typename CharType>
-=======
-    static PassOwnPtr<TextCodec> create(const TextEncoding&, const void*);
-
-    String decode(const char*, size_t length, FlushBehavior, bool stopOnError, bool& sawError) override;
-    CString encode(const UChar*, size_t length, UnencodableHandling) override;
-    CString encode(const LChar*, size_t length, UnencodableHandling) override;
-
-    template<typename CharType>
->>>>>>> miniblink49
     CString encodeCommon(const CharType*, size_t length, UnencodableHandling);
     CString encodeInternal(const TextCodecInput&, UnencodableHandling);
 
     void createICUConverter() const;
     void releaseICUConverter() const;
 #if defined(USING_SYSTEM_ICU)
-<<<<<<< HEAD
     bool needsGBKFallbacks() const
     {
         return m_needsGBKFallbacks;
@@ -100,21 +83,12 @@ private:
         int32_t* offsets,
         bool flush,
         UErrorCode&);
-=======
-    bool needsGBKFallbacks() const { return m_needsGBKFallbacks; }
-    void setNeedsGBKFallbacks(bool needsFallbacks) { m_needsGBKFallbacks = needsFallbacks; }
-#endif
-
-    int decodeToBuffer(UChar* buffer, UChar* bufferLimit, const char*& source,
-        const char* sourceLimit, int32_t* offsets, bool flush, UErrorCode&);
->>>>>>> miniblink49
 
     TextEncoding m_encoding;
     mutable UConverter* m_converterICU;
 #if defined(USING_SYSTEM_ICU)
     mutable bool m_needsGBKFallbacks;
 #endif
-<<<<<<< HEAD
 
     FRIEND_TEST_ALL_PREFIXES(TextCodecICUTest, IgnorableCodePoint);
     FRIEND_TEST_ALL_PREFIXES(TextCodecICUTest, UTF32AndQuestionMarks);
@@ -130,23 +104,6 @@ public:
         : converter(0)
     {
     }
-=======
-    static const int kIncrementalDataChunkLength = 6;
-    char m_incrementalDataChunk[kIncrementalDataChunkLength];
-    int m_incrementalDataChunkLength = 0;
-
-    bool hasValidChar();
-    bool toUnicode(unsigned char c, UChar& uc);
-
-//     int m_partialSequenceSize;
-//     uint8_t m_partialSequence[kIncrementalDataChunkLength;
-};
-
-struct ICUConverterWrapper {
-    WTF_MAKE_NONCOPYABLE(ICUConverterWrapper); WTF_MAKE_FAST_ALLOCATED(ICUConverterWrapper);
-public:
-    ICUConverterWrapper() : converter(0) { }
->>>>>>> miniblink49
     ~ICUConverterWrapper();
 
     UConverter* converter;

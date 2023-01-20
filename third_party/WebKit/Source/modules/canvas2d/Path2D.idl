@@ -32,17 +32,10 @@
     Constructor,
     Constructor(Path2D path),
     Constructor(DOMString text),
-<<<<<<< HEAD
     Exposed(Worker ExperimentalCanvasFeatures, Window StableBlinkFeatures, PaintWorklet CSSPaintAPI),
 ] interface Path2D {
 
     [RuntimeEnabled=ExperimentalCanvasFeatures] void addPath(Path2D path, optional SVGMatrix? transform);
-=======
-    GarbageCollected,
-] interface Path2D {
-
-    [RuntimeEnabled=ExperimentalCanvasFeatures, TypeChecking=Interface] void addPath(Path2D path, optional SVGMatrix? transform);
->>>>>>> miniblink49
 };
 
 Path2D implements CanvasPathMethods;

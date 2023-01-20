@@ -30,7 +30,6 @@
 
 namespace WTF {
 
-<<<<<<< HEAD
 class TextCodecUTF16 final : public TextCodec {
 public:
     static void registerEncodingNames(EncodingNameRegistrar);
@@ -58,24 +57,6 @@ private:
     bool m_haveBufferedByte = false;
     unsigned char m_bufferedByte = 0;
 };
-=======
-    class TextCodecUTF16 final : public TextCodec {
-    public:
-        static void registerEncodingNames(EncodingNameRegistrar);
-        static void registerCodecs(TextCodecRegistrar);
-
-        TextCodecUTF16(bool littleEndian) : m_littleEndian(littleEndian), m_haveBufferedByte(false) { }
-
-        String decode(const char*, size_t length, FlushBehavior, bool stopOnError, bool& sawError) override;
-        CString encode(const UChar*, size_t length, UnencodableHandling) override;
-        CString encode(const LChar*, size_t length, UnencodableHandling) override;
-
-    private:
-        bool m_littleEndian;
-        bool m_haveBufferedByte;
-        unsigned char m_bufferedByte;
-    };
->>>>>>> miniblink49
 
 } // namespace WTF
 

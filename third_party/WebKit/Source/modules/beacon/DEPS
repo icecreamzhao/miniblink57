@@ -1,15 +1,4 @@
 include_rules = [
-<<<<<<< HEAD
     "-modules",
     "+modules/beacon",
-=======
-    "+bindings",
-    "+core",
-    "+heap",
-    "-modules",
-    "+modules/beacon",
-    "+platform",
-    "+public/platform",
-    "-web",
->>>>>>> miniblink49
 ]

@@ -5,7 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "SkCanvas.h"
 #include "SkPath.h"
 #include "SkTArray.h"
@@ -27,36 +26,12 @@ protected:
     {
         {
             const SkScalar w = SkScalarSqrt(2) / 2;
-=======
-#include "gm.h"
-#include "SkCanvas.h"
-#include "SkTArray.h"
-
-class ConicPathsGM : public skiagm::GM {
-protected:
-
-    SkString onShortName() override {
-        return SkString("conicpaths");
-    }
-
-    SkISize onISize() override {
-        return SkISize::Make(920, 960);
-    }
-
-    void onOnceBeforeDraw() override {
-        {
-            const SkScalar w = SkScalarSqrt(2)/2;
->>>>>>> miniblink49
             SkPath* conicCirlce = &fPaths.push_back();
             conicCirlce->moveTo(0, 0);
             conicCirlce->conicTo(0, 50, 50, 50, w);
             conicCirlce->rConicTo(50, 0, 50, -50, w);
             conicCirlce->rConicTo(0, -50, -50, -50, w);
             conicCirlce->rConicTo(-50, 0, -50, 50, w);
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
         }
         {
             SkPath* hyperbola = &fPaths.push_back();
@@ -96,47 +71,27 @@ protected:
         }
         {
             SkPath* closedEllipse = &fPaths.push_back();
-<<<<<<< HEAD
             closedEllipse->moveTo(0, 0);
             closedEllipse->conicTo(100, 100, 0, 0, SK_ScalarHalf);
         }
         {
             const SkScalar w = SkScalarSqrt(2) / 2;
-=======
-            closedEllipse->moveTo(0,  0);
-            closedEllipse->conicTo(100, 100, 0, 0, SK_ScalarHalf);
-        }
-        {
-            const SkScalar w = SkScalarSqrt(2)/2;
->>>>>>> miniblink49
             fGiantCircle.moveTo(2.1e+11f, -1.05e+11f);
             fGiantCircle.conicTo(2.1e+11f, 0, 1.05e+11f, 0, w);
             fGiantCircle.conicTo(0, 0, 0, -1.05e+11f, w);
             fGiantCircle.conicTo(0, -2.1e+11f, 1.05e+11f, -2.1e+11f, w);
             fGiantCircle.conicTo(2.1e+11f, -2.1e+11f, 2.1e+11f, -1.05e+11f, w);
-<<<<<<< HEAD
         }
     }
 
     void drawGiantCircle(SkCanvas* canvas)
     {
-=======
-
-        }
-    }
-
-    void drawGiantCircle(SkCanvas* canvas) {
->>>>>>> miniblink49
         SkPaint paint;
         canvas->drawPath(fGiantCircle, paint);
     }
 
-<<<<<<< HEAD
     void onDraw(SkCanvas* canvas) override
     {
-=======
-    void onDraw(SkCanvas* canvas) override {
->>>>>>> miniblink49
         const SkAlpha kAlphaValue[] = { 0xFF, 0x40 };
 
         const SkScalar margin = 15;
@@ -167,16 +122,11 @@ protected:
         }
         canvas->restore();
 
-<<<<<<< HEAD
         this->drawGiantCircle(canvas);
-=======
-        this->drawGiantCircle(canvas);  
->>>>>>> miniblink49
     }
 
 private:
     SkTArray<SkPath> fPaths;
-<<<<<<< HEAD
     SkPath fGiantCircle;
     typedef skiagm::GM INHERITED;
 };
@@ -200,12 +150,3 @@ DEF_SIMPLE_GM(arccirclegap, canvas, 250, 250)
     paint.setColor(0xff007f00);
     canvas->drawPath(path, paint);
 }
-=======
-    SkPath           fGiantCircle;
-    typedef skiagm::GM INHERITED;
-};
-DEF_GM( return SkNEW(ConicPathsGM); )
-
-//////////////////////////////////////////////////////////////////////////////
-
->>>>>>> miniblink49

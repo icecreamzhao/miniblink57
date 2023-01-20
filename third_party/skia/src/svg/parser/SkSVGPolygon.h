@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -9,10 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #ifndef SkSVGPolygon_DEFINED
 #define SkSVGPolygon_DEFINED
 
@@ -20,14 +12,9 @@
 
 class SkSVGPolygon : public SkSVGPolyline {
     DECLARE_SVG_INFO(Polygon);
-<<<<<<< HEAD
     virtual void addAttribute(SkSVGParser&, int attrIndex,
         const char* attrValue, size_t attrLength);
 
-=======
-    virtual void addAttribute(SkSVGParser& , int attrIndex,
-        const char* attrValue, size_t attrLength);
->>>>>>> miniblink49
 private:
     typedef SkSVGPolyline INHERITED;
 };

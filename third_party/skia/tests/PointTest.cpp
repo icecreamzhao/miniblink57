@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -14,16 +10,10 @@
 #include "SkRect.h"
 #include "Test.h"
 
-<<<<<<< HEAD
 static void test_casts(skiatest::Reporter* reporter)
 {
     SkPoint p = { 0, 0 };
     SkRect r = { 0, 0, 0, 0 };
-=======
-static void test_casts(skiatest::Reporter* reporter) {
-    SkPoint p = { 0, 0 };
-    SkRect  r = { 0, 0, 0, 0 };
->>>>>>> miniblink49
 
     const SkScalar* pPtr = SkTCast<const SkScalar*>(&p);
     const SkScalar* rPtr = SkTCast<const SkScalar*>(&r);
@@ -34,12 +24,8 @@ static void test_casts(skiatest::Reporter* reporter) {
 
 // Tests SkPoint::Normalize() for this (x,y)
 static void test_Normalize(skiatest::Reporter* reporter,
-<<<<<<< HEAD
     SkScalar x, SkScalar y)
 {
-=======
-                           SkScalar x, SkScalar y) {
->>>>>>> miniblink49
     SkPoint point;
     point.set(x, y);
     SkScalar oldLength = point.length();
@@ -52,12 +38,8 @@ static void test_Normalize(skiatest::Reporter* reporter,
 // Tests that SkPoint::length() and SkPoint::Length() both return
 // approximately expectedLength for this (x,y).
 static void test_length(skiatest::Reporter* reporter, SkScalar x, SkScalar y,
-<<<<<<< HEAD
     SkScalar expectedLength)
 {
-=======
-                        SkScalar expectedLength) {
->>>>>>> miniblink49
     SkPoint point;
     point.set(x, y);
     SkScalar s1 = point.length();
@@ -77,13 +59,9 @@ static void test_length(skiatest::Reporter* reporter, SkScalar x, SkScalar y,
 // To avoid this warning, I need to convince the compiler that I might not
 // use that big value, hence this hacky helper function: reporter is
 // ALWAYS non-null. (shhhhhh, don't tell the compiler that).
-<<<<<<< HEAD
 template <typename T>
 T get_value(skiatest::Reporter* reporter, T value)
 {
-=======
-template <typename T> T get_value(skiatest::Reporter* reporter, T value) {
->>>>>>> miniblink49
     return reporter ? value : 0;
 }
 
@@ -94,22 +72,14 @@ template <typename T> T get_value(skiatest::Reporter* reporter, T value) {
 // force_as_float is meant to capture our latest technique (horrible as
 // it is) to force the value to be a float, so we can test whether it was
 // finite or not.
-<<<<<<< HEAD
 static float force_as_float(skiatest::Reporter* reporter, float value)
 {
-=======
-static float force_as_float(skiatest::Reporter* reporter, float value) {
->>>>>>> miniblink49
     uint32_t storage;
     memcpy(&storage, &value, 4);
     // even the pair of memcpy calls are not sufficient, since those seem to
     // be no-op'd, so we add a runtime tests (just like get_value) to force
     // the compiler to give us an actual float.
-<<<<<<< HEAD
     if (nullptr == reporter) {
-=======
-    if (NULL == reporter) {
->>>>>>> miniblink49
         storage = ~storage;
     }
     memcpy(&value, &storage, 4);
@@ -118,12 +88,8 @@ static float force_as_float(skiatest::Reporter* reporter, float value) {
 
 // test that we handle very large values correctly. i.e. that we can
 // successfully normalize something whose mag overflows a float.
-<<<<<<< HEAD
 static void test_overflow(skiatest::Reporter* reporter)
 {
-=======
-static void test_overflow(skiatest::Reporter* reporter) {
->>>>>>> miniblink49
     SkScalar bigFloat = get_value(reporter, 3.4e38f);
     SkPoint pt = { bigFloat, bigFloat };
 
@@ -146,12 +112,8 @@ static void test_overflow(skiatest::Reporter* reporter) {
 
 // test that we handle very small values correctly. i.e. that we can
 // report failure if we try to normalize them.
-<<<<<<< HEAD
 static void test_underflow(skiatest::Reporter* reporter)
 {
-=======
-static void test_underflow(skiatest::Reporter* reporter) {
->>>>>>> miniblink49
     SkPoint pt = { 1.0e-37f, 1.0e-37f };
     const SkPoint empty = { 0, 0 };
 
@@ -162,12 +124,8 @@ static void test_underflow(skiatest::Reporter* reporter) {
     REPORTER_ASSERT(reporter, pt == empty);
 }
 
-<<<<<<< HEAD
 DEF_TEST(Point, reporter)
 {
-=======
-DEF_TEST(Point, reporter) {
->>>>>>> miniblink49
     test_casts(reporter);
 
     static const struct {
@@ -187,33 +145,21 @@ DEF_TEST(Point, reporter) {
     test_overflow(reporter);
 }
 
-<<<<<<< HEAD
 DEF_TEST(Point_setLengthFast, reporter)
 {
-=======
-DEF_TEST(Point_setLengthFast, reporter) {
->>>>>>> miniblink49
     // Scale a (1,1) point to a bunch of different lengths,
     // making sure the slow and fast paths are within 0.1%.
     const float tests[] = { 1.0f, 0.0f, 1.0e-37f, 3.4e38f, 42.0f, 0.00012f };
 
-<<<<<<< HEAD
     const SkPoint kOne = { 1.0f, 1.0f };
-=======
-    const SkPoint kOne = {1.0f, 1.0f};
->>>>>>> miniblink49
     for (unsigned i = 0; i < SK_ARRAY_COUNT(tests); i++) {
         SkPoint slow = kOne, fast = kOne;
 
         slow.setLength(tests[i]);
         fast.setLengthFast(tests[i]);
 
-<<<<<<< HEAD
         if (slow.length() < FLT_MIN && fast.length() < FLT_MIN)
             continue;
-=======
-        if (slow.length() < FLT_MIN && fast.length() < FLT_MIN) continue;
->>>>>>> miniblink49
 
         SkScalar ratio = slow.length() / fast.length();
         REPORTER_ASSERT(reporter, ratio > 0.999f);

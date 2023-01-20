@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -9,28 +5,18 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #include "SkSVGPolygon.h"
 #include "SkSVGParser.h"
 
 const SkSVGAttribute SkSVGPolygon::gAttributes[] = {
-<<<<<<< HEAD
     SVG_LITERAL_ATTRIBUTE(clip - rule, f_clipRule),
     SVG_LITERAL_ATTRIBUTE(fill - rule, f_fillRule),
-=======
-    SVG_LITERAL_ATTRIBUTE(clip-rule, f_clipRule),
-    SVG_LITERAL_ATTRIBUTE(fill-rule, f_fillRule),
->>>>>>> miniblink49
     SVG_ATTRIBUTE(points)
 };
 
 DEFINE_SVG_INFO(Polygon)
 
 void SkSVGPolygon::addAttribute(SkSVGParser& parser, int attrIndex,
-<<<<<<< HEAD
     const char* attrValue, size_t attrLength)
 {
     INHERITED::addAttribute(parser, attrIndex, attrValue, attrLength);
@@ -38,13 +24,6 @@ void SkSVGPolygon::addAttribute(SkSVGParser& parser, int attrIndex,
 
 void SkSVGPolygon::translate(SkSVGParser& parser, bool defState)
 {
-=======
-        const char* attrValue, size_t attrLength) {
-    INHERITED::addAttribute(parser, attrIndex, attrValue, attrLength);
-}
-
-void SkSVGPolygon::translate(SkSVGParser& parser, bool defState) {
->>>>>>> miniblink49
     parser._startElement("polygon");
     SkSVGElement::translate(parser, defState);
     SVG_ADD_ATTRIBUTE(points);

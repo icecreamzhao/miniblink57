@@ -24,16 +24,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "platform/Timer.h"
 
 #include "platform/instrumentation/tracing/TraceEvent.h"
-=======
-#include "config.h"
-#include "platform/Timer.h"
-
-#include "platform/TraceEvent.h"
->>>>>>> miniblink49
 #include "public/platform/Platform.h"
 #include "public/platform/WebScheduler.h"
 #include "wtf/AddressSanitizer.h"
@@ -47,7 +40,6 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 TimerBase::TimerBase(RefPtr<WebTaskRunner> webTaskRunner)
     : m_nextFireTime(0)
     , m_repeatInterval(0)
@@ -60,18 +52,6 @@ TimerBase::TimerBase(RefPtr<WebTaskRunner> webTaskRunner)
     m_weakPtrFactory(this)
 {
     ASSERT(m_webTaskRunner);
-=======
-TimerBase::TimerBase()
-    : m_nextFireTime(0)
-    , m_unalignedNextFireTime(0)
-    , m_repeatInterval(0)
-    , m_cancellableTimerTask(nullptr)
-    , m_webScheduler(Platform::current()->currentThread()->scheduler())
-#if ENABLE(ASSERT)
-    , m_thread(currentThread())
-#endif
-{
->>>>>>> miniblink49
 }
 
 TimerBase::~TimerBase()
@@ -79,7 +59,6 @@ TimerBase::~TimerBase()
     stop();
 }
 
-<<<<<<< HEAD
 void TimerBase::start(double nextFireInterval,
     double repeatInterval,
     const WebTraceLocation& caller)
@@ -91,20 +70,10 @@ void TimerBase::start(double nextFireInterval,
     m_location = caller;
     m_repeatInterval = repeatInterval;
     setNextFireTime(timerMonotonicallyIncreasingTime(), nextFireInterval);
-=======
-void TimerBase::start(double nextFireInterval, double repeatInterval, const WebTraceLocation& caller)
-{
-    ASSERT(m_thread == currentThread());
-
-    m_location = caller;
-    m_repeatInterval = repeatInterval;
-    setNextFireTime(monotonicallyIncreasingTime(), nextFireInterval);
->>>>>>> miniblink49
 }
 
 void TimerBase::stop()
 {
-<<<<<<< HEAD
 #if DCHECK_IS_ON()
     DCHECK_EQ(m_thread, currentThread());
 #endif
@@ -112,31 +81,17 @@ void TimerBase::stop()
     m_repeatInterval = 0;
     m_nextFireTime = 0;
     m_weakPtrFactory.revokeAll();
-=======
-    ASSERT(m_thread == currentThread());
-
-    m_repeatInterval = 0;
-    m_nextFireTime = 0;
-    if (m_cancellableTimerTask)
-        m_cancellableTimerTask->cancel();
-    m_cancellableTimerTask = nullptr;
->>>>>>> miniblink49
 }
 
 double TimerBase::nextFireInterval() const
 {
     ASSERT(isActive());
-<<<<<<< HEAD
     double current = timerMonotonicallyIncreasingTime();
-=======
-    double current = monotonicallyIncreasingTime();
->>>>>>> miniblink49
     if (m_nextFireTime < current)
         return 0;
     return m_nextFireTime - current;
 }
 
-<<<<<<< HEAD
 void TimerBase::moveToNewTaskRunner(RefPtr<WebTaskRunner> taskRunner)
 {
 #if DCHECK_IS_ON()
@@ -202,43 +157,11 @@ void TimerBase::setNextFireTime(double now, double delay)
 }
 
 NO_SANITIZE_ADDRESS
-=======
-void TimerBase::setNextFireTime(double now, double delay)
-{
-    ASSERT(m_thread == currentThread());
-
-    m_unalignedNextFireTime = now + delay;
-
-    double newTime = alignedFireTime(m_unalignedNextFireTime);
-    if (m_nextFireTime != newTime) {
-        m_nextFireTime = newTime;
-        if (m_cancellableTimerTask)
-            m_cancellableTimerTask->cancel();
-        m_cancellableTimerTask = new CancellableTimerTask(this);
-        if (newTime != m_unalignedNextFireTime) {
-            // If the timer is being aligned, use postTimerTaskAt() to schedule it
-            // so that the relative order of aligned timers is preserved.
-            // TODO(skyostil): Move timer alignment into the scheduler.
-            m_webScheduler->postTimerTaskAt(m_location, m_cancellableTimerTask, m_nextFireTime);
-        } else {
-            // Round the delay up to the nearest millisecond to be consistant with the
-            // previous behavior of BlinkPlatformImpl::setSharedTimerFireInterval.
-            long long delayMs = static_cast<long long>(ceil((newTime - now) * 1000.0));
-            if (delayMs < 0)
-                delayMs = 0;
-            m_webScheduler->postTimerTask(m_location, m_cancellableTimerTask, delayMs);
-        }
-    }
-}
-
-NO_LAZY_SWEEP_SANITIZE_ADDRESS
->>>>>>> miniblink49
 void TimerBase::runInternal()
 {
     if (!canFire())
         return;
 
-<<<<<<< HEAD
     m_weakPtrFactory.revokeAll();
 
     TRACE_EVENT0("blink", "TimerBase::run");
@@ -272,35 +195,6 @@ bool TimerBase::Comparator::operator()(const TimerBase* a,
 double TimerBase::timerMonotonicallyIncreasingTime() const
 {
     return timerTaskRunner()->monotonicallyIncreasingVirtualTimeSeconds();
-=======
-    TRACE_EVENT0("blink", "TimerBase::run");
-    ASSERT_WITH_MESSAGE(m_thread == currentThread(), "Timer posted by %s %s was run on a different thread", m_location.functionName(), m_location.fileName());
-    TRACE_EVENT_SET_SAMPLING_STATE("blink", "BlinkInternal");
-
-    m_nextFireTime = 0;
-    // Note: repeating timers drift, but this is preserving the functionality of the old timer heap.
-    // See crbug.com/328700.
-    if (m_repeatInterval)
-        setNextFireTime(monotonicallyIncreasingTime(), m_repeatInterval);
-    fired();
-    TRACE_EVENT_SET_SAMPLING_STATE("blink", "Sleeping");
-}
-
-void TimerBase::didChangeAlignmentInterval(double now)
-{
-    setNextFireTime(now, m_unalignedNextFireTime - now);
-}
-
-double TimerBase::nextUnalignedFireInterval() const
-{
-    ASSERT(isActive());
-    return std::max(m_unalignedNextFireTime - monotonicallyIncreasingTime(), 0.0);
-}
-
-bool TimerBase::Comparator::operator()(const TimerBase* a, const TimerBase* b) const
-{
-    return a->m_unalignedNextFireTime < b->m_unalignedNextFireTime;
->>>>>>> miniblink49
 }
 
 } // namespace blink

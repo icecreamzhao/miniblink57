@@ -31,20 +31,12 @@
 
 #include "platform/PlatformExport.h"
 #include "platform/audio/AudioArray.h"
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/Noncopyable.h"
-=======
-
-#if USE(WEBAUDIO_IPP)
-#include <ipps.h>
-#endif // USE(WEBAUDIO_IPP)
->>>>>>> miniblink49
 
 namespace blink {
 
 class PLATFORM_EXPORT DirectConvolver {
-<<<<<<< HEAD
     USING_FAST_MALLOC(DirectConvolver);
     WTF_MAKE_NONCOPYABLE(DirectConvolver);
 
@@ -55,24 +47,12 @@ public:
         const float* sourceP,
         float* destP,
         size_t framesToProcess);
-=======
-public:
-    DirectConvolver(size_t inputBlockSize);
-
-    void process(AudioFloatArray* convolutionKernel, const float* sourceP, float* destP, size_t framesToProcess);
->>>>>>> miniblink49
 
     void reset();
 
 private:
     size_t m_inputBlockSize;
 
-<<<<<<< HEAD
-=======
-#if USE(WEBAUDIO_IPP)
-    AudioFloatArray m_overlayBuffer;
-#endif // USE(WEBAUDIO_IPP)
->>>>>>> miniblink49
     AudioFloatArray m_buffer;
 };
 

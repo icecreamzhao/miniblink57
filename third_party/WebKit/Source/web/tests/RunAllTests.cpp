@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "base/bind.h"
 #include "base/run_loop.h"
 #include "base/test/launcher/unit_test_launcher.h"
@@ -63,40 +62,13 @@ int runHelper(base::TestSuite* testSuite)
     content::TearDownBlinkTestEnvironment();
 
     return result;
-=======
-#if BLINK_IMPLEMENTATION
-#include "config.h"
-#endif
-
-#include "public/platform/Platform.h"
-#include "public/web/WebKit.h"
-#include "web/tests/WebUnitTests.h"
-#include <content/test/blink_test_environment.h>
-
-namespace {
-
-// Test helpers to support the fact that blink tests are gloriously complicated
-// in a shared library build. See WebUnitTests.h for more details.
-void preTestHook()
-{
-    content::SetUpBlinkTestEnvironment();
-}
-
-void postTestHook()
-{
-    content::TearDownBlinkTestEnvironment();
->>>>>>> miniblink49
 }
 
 } // namespace
 
 int main(int argc, char** argv)
 {
-<<<<<<< HEAD
     base::TestSuite testSuite(argc, argv);
     return base::LaunchUnitTests(
         argc, argv, base::Bind(&runHelper, base::Unretained(&testSuite)));
-=======
-    return blink::runWebTests(argc, argv, &preTestHook, &postTestHook);
->>>>>>> miniblink49
 }

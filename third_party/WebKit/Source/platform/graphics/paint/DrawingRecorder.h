@@ -8,15 +8,11 @@
 #include "platform/PlatformExport.h"
 
 #include "platform/geometry/FloatRect.h"
-<<<<<<< HEAD
 #include "platform/graphics/GraphicsContext.h"
 #include "platform/graphics/paint/DrawingDisplayItem.h"
 #include "platform/graphics/paint/PaintController.h"
 #include "wtf/Allocator.h"
 #include "wtf/Noncopyable.h"
-=======
-#include "platform/graphics/paint/DrawingDisplayItem.h"
->>>>>>> miniblink49
 
 #ifndef NDEBUG
 #include "wtf/text/WTFString.h"
@@ -26,7 +22,6 @@ namespace blink {
 
 class GraphicsContext;
 
-<<<<<<< HEAD
 class PLATFORM_EXPORT DrawingRecorder final {
     DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
     WTF_MAKE_NONCOPYABLE(DrawingRecorder);
@@ -62,26 +57,6 @@ private:
 
 #if DCHECK_IS_ON()
     size_t m_displayItemPosition;
-=======
-class PLATFORM_EXPORT DrawingRecorder {
-public:
-    static bool useCachedDrawingIfPossible(GraphicsContext&, const DisplayItemClientWrapper&, DisplayItem::Type);
-
-    DrawingRecorder(GraphicsContext&, const DisplayItemClientWrapper&, DisplayItem::Type, const FloatRect& cullRect);
-    ~DrawingRecorder();
-
-#if ENABLE(ASSERT)
-    void setUnderInvalidationCheckingMode(DrawingDisplayItem::UnderInvalidationCheckingMode mode) { m_underInvalidationCheckingMode = mode; }
-#endif
-
-private:
-    GraphicsContext& m_context;
-    DisplayItemClientWrapper m_displayItemClient;
-    const DisplayItem::Type m_displayItemType;
-#if ENABLE(ASSERT)
-    size_t m_displayItemPosition;
-    DrawingDisplayItem::UnderInvalidationCheckingMode m_underInvalidationCheckingMode;
->>>>>>> miniblink49
 #endif
 };
 

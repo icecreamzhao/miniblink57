@@ -13,7 +13,6 @@ class SkOSWindow;
 class SkEvent;
 struct FPSState;
 
-<<<<<<< HEAD
 @interface SkSampleUIView : SkUIView {
     BOOL fRedrawRequestPending;
 
@@ -24,18 +23,6 @@ struct FPSState;
         GLuint fFramebuffer;
         GLint fWidth;
         GLint fHeight;
-=======
-@interface SkSampleUIView : SkUIView  {
-    BOOL fRedrawRequestPending;
-
-    struct {
-        EAGLContext*    fContext;
-        GLuint          fRenderbuffer;
-        GLuint          fStencilbuffer;
-        GLuint          fFramebuffer;
-        GLint           fWidth;
-        GLint           fHeight;
->>>>>>> miniblink49
     } fGL;
 
     NSString* fTitle;

@@ -6,10 +6,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #ifndef SkDrawPaint_DEFINED
 #define SkDrawPaint_DEFINED
 
@@ -29,7 +25,6 @@ class SkDrawPaint : public SkADrawable {
     DECLARE_DRAW_MEMBER_INFO(Paint);
     SkDrawPaint();
     virtual ~SkDrawPaint();
-<<<<<<< HEAD
     virtual bool add(SkAnimateMaker*, SkDisplayable* child);
     SkDisplayable* deepCopy(SkAnimateMaker*) override;
     bool draw(SkAnimateMaker&) override;
@@ -47,23 +42,6 @@ protected:
     static const SkFunctionParamType fFunctionParameters[];
     void setupPaint(SkPaint* paint) const;
 
-=======
-    virtual bool add(SkAnimateMaker* , SkDisplayable* child);
-    SkDisplayable* deepCopy(SkAnimateMaker* ) override;
-    bool draw(SkAnimateMaker& ) override;
-#ifdef SK_DUMP_ENABLED
-    void dump(SkAnimateMaker* ) override;
-#endif
-    void executeFunction(SkDisplayable* target, int index,
-        SkTDArray<SkScriptValue>& parameters, SkDisplayTypes type,
-        SkScriptValue* ) override;
-    const SkFunctionParamType* getFunctionsParameters() override;
-    bool getProperty(int index, SkScriptValue* value) const override;
-    bool resolveIDs(SkAnimateMaker& maker, SkDisplayable* original, SkApply* apply) override;
-protected:
-    static const SkFunctionParamType fFunctionParameters[];
-    void setupPaint(SkPaint* paint) const;
->>>>>>> miniblink49
 public:
     SkBool antiAlias;
     SkDrawColor* color;
@@ -93,10 +71,7 @@ public:
     SkBool8 fOwnsShader;
     SkBool8 fOwnsTransferMode;
     SkBool8 fOwnsTypeface;
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 private:
     typedef SkADrawable INHERITED;
     friend class SkTextToPath;

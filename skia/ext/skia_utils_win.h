@@ -7,13 +7,16 @@
 
 #include "third_party/skia/include/core/SkColor.h"
 
+#include "build/build_config.h"
+#include <windows.h>
+
 struct SkIRect;
 struct SkPoint;
 struct SkRect;
-typedef unsigned long DWORD;
-typedef DWORD COLORREF;
-typedef struct tagPOINT POINT;
-typedef struct tagRECT RECT;
+// typedef unsigned long DWORD;
+// typedef DWORD COLORREF;
+// typedef struct tagPOINT POINT;
+// typedef struct tagRECT RECT;
 
 namespace skia {
 
@@ -24,17 +27,19 @@ POINT SkPointToPOINT(const SkPoint& point);
 SkRect RECTToSkRect(const RECT& rect);
 
 // Converts a Windows RECT to a Skia rect.
-// Both use same in-memory format. Verified by COMPILE_ASSERT() in
-// skia_utils.cc.
-inline const SkIRect& RECTToSkIRect(const RECT& rect) {
-  return reinterpret_cast<const SkIRect&>(rect);
+// Both use same in-memory format. Verified by static_assert in
+// skia_utils_win.cc.
+inline const SkIRect& RECTToSkIRect(const RECT& rect)
+{
+    return reinterpret_cast<const SkIRect&>(rect);
 }
 
 // Converts a Skia rect to a Windows RECT.
-// Both use same in-memory format. Verified by COMPILE_ASSERT() in
-// skia_utils.cc.
-inline const RECT& SkIRectToRECT(const SkIRect& rect) {
-  return reinterpret_cast<const RECT&>(rect);
+// Both use same in-memory format. Verified by static_assert in
+// skia_utils_win.cc.
+inline const RECT& SkIRectToRECT(const SkIRect& rect)
+{
+    return reinterpret_cast<const RECT&>(rect);
 }
 
 // Converts COLORREFs (0BGR) to the ARGB layout Skia expects.
@@ -43,7 +48,9 @@ SK_API SkColor COLORREFToSkColor(COLORREF color);
 // Converts ARGB to COLORREFs (0BGR).
 SK_API COLORREF SkColorToCOLORREF(SkColor color);
 
-}  // namespace skia
+// Initializes the default settings and colors in a device context.
+SK_API void InitializeDC(HDC context);
 
-#endif  // SKIA_EXT_SKIA_UTILS_WIN_H_
+} // namespace skia
 
+#endif // SKIA_EXT_SKIA_UTILS_WIN_H_

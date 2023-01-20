@@ -23,40 +23,22 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "modules/encryptedmedia/MediaEncryptedEvent.h"
 
 #include "core/dom/DOMArrayBuffer.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 MediaEncryptedEvent::MediaEncryptedEvent(
     const AtomicString& type,
     const MediaEncryptedEventInit& initializer)
-=======
-MediaEncryptedEvent::MediaEncryptedEvent()
-{
-}
-
-MediaEncryptedEvent::MediaEncryptedEvent(const AtomicString& type, const MediaEncryptedEventInit& initializer)
->>>>>>> miniblink49
     : Event(type, initializer)
     , m_initDataType(initializer.initDataType())
     , m_initData(initializer.initData())
 {
 }
 
-<<<<<<< HEAD
 MediaEncryptedEvent::~MediaEncryptedEvent() { }
-=======
-MediaEncryptedEvent::~MediaEncryptedEvent()
-{
-}
->>>>>>> miniblink49
 
 const AtomicString& MediaEncryptedEvent::interfaceName() const
 {
@@ -65,10 +47,7 @@ const AtomicString& MediaEncryptedEvent::interfaceName() const
 
 DEFINE_TRACE(MediaEncryptedEvent)
 {
-<<<<<<< HEAD
     visitor->trace(m_initData);
-=======
->>>>>>> miniblink49
     Event::trace(visitor);
 }
 

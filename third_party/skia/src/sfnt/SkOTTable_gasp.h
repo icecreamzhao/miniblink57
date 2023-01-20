@@ -45,13 +45,8 @@ struct SkOTTableGridAndScanProcedure {
                 SK_OT_BYTE_BITFIELD(
                     Gridfit,
                     DoGray,
-<<<<<<< HEAD
                     SymmetricGridfit, // Version 1
                     SymmetricSmoothing, // Version 1
-=======
-                    SymmetricGridfit,  // Version 1
-                    SymmetricSmoothing,  // Version 1
->>>>>>> miniblink49
                     Reserved04,
                     Reserved05,
                     Reserved06,
@@ -70,15 +65,8 @@ struct SkOTTableGridAndScanProcedure {
 
 #pragma pack(pop)
 
-<<<<<<< HEAD
 #include <stddef.h>
 static_assert(offsetof(SkOTTableGridAndScanProcedure, numRanges) == 2, "SkOTTableGridAndScanProcedure_numRanges_not_at_2");
 static_assert(sizeof(SkOTTableGridAndScanProcedure) == 4, "sizeof_SkOTTableGridAndScanProcedure_not_4");
-=======
-
-#include <stddef.h>
-SK_COMPILE_ASSERT(offsetof(SkOTTableGridAndScanProcedure, numRanges) == 2, SkOTTableGridAndScanProcedure_numRanges_not_at_2);
-SK_COMPILE_ASSERT(sizeof(SkOTTableGridAndScanProcedure) == 4, sizeof_SkOTTableGridAndScanProcedure_not_4);
->>>>>>> miniblink49
 
 #endif

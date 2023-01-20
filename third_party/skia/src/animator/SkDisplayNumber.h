@@ -6,10 +6,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #ifndef SkDisplayNumber_DEFINED
 #define SkDisplayNumber_DEFINED
 
@@ -19,10 +15,7 @@
 class SkDisplayNumber : public SkDisplayable {
     DECLARE_DISPLAY_MEMBER_INFO(Number);
     bool getProperty(int index, SkScriptValue* value) const override;
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 private:
 };
 

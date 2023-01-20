@@ -37,7 +37,6 @@ namespace blink {
 class FrameView;
 class WebViewImpl;
 
-<<<<<<< HEAD
 class ValidationMessageClientImpl final
     : public GarbageCollectedFinalized<ValidationMessageClientImpl>,
       public ValidationMessageClient {
@@ -45,19 +44,12 @@ class ValidationMessageClientImpl final
 
 public:
     static ValidationMessageClientImpl* create(WebViewImpl&);
-=======
-class ValidationMessageClientImpl final : public NoBaseWillBeGarbageCollectedFinalized<ValidationMessageClientImpl>, public ValidationMessageClient {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(ValidationMessageClientImpl);
-public:
-    static PassOwnPtrWillBeRawPtr<ValidationMessageClientImpl> create(WebViewImpl&);
->>>>>>> miniblink49
     ~ValidationMessageClientImpl() override;
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
     ValidationMessageClientImpl(WebViewImpl&);
-<<<<<<< HEAD
     void checkAnchorStatus(TimerBase*);
     FrameView* currentView();
 
@@ -66,23 +58,13 @@ private:
         TextDirection messageDir,
         const String& subMessage,
         TextDirection subMessageDir) override;
-=======
-    void checkAnchorStatus(Timer<ValidationMessageClientImpl>*);
-    FrameView* currentView();
-
-    void showValidationMessage(const Element& anchor, const String& message, TextDirection messageDir, const String& subMessage, TextDirection subMessageDir) override;
->>>>>>> miniblink49
     void hideValidationMessage(const Element& anchor) override;
     bool isValidationMessageVisible(const Element& anchor) override;
     void documentDetached(const Document&) override;
     void willBeDestroyed() override;
 
     WebViewImpl& m_webView;
-<<<<<<< HEAD
     Member<const Element> m_currentAnchor;
-=======
-    RawPtrWillBeMember<const Element> m_currentAnchor;
->>>>>>> miniblink49
     String m_message;
     IntRect m_lastAnchorRectInScreen;
     float m_lastPageScaleFactor;
@@ -90,10 +72,6 @@ private:
     Timer<ValidationMessageClientImpl> m_timer;
 };
 
-<<<<<<< HEAD
 } // namespace blink
-=======
-}
->>>>>>> miniblink49
 
 #endif

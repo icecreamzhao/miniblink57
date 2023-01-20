@@ -37,7 +37,6 @@
 namespace blink {
 
 // This class is an implementation detail for deferred interpolations.
-<<<<<<< HEAD
 class PLATFORM_EXPORT InterpolatedTransformOperation final
     : public TransformOperation {
 public:
@@ -45,11 +44,6 @@ public:
         const TransformOperations& from,
         const TransformOperations& to,
         double progress)
-=======
-class PLATFORM_EXPORT InterpolatedTransformOperation : public TransformOperation {
-public:
-    static PassRefPtr<InterpolatedTransformOperation> create(const TransformOperations& from, const TransformOperations& to, double progress)
->>>>>>> miniblink49
     {
         return adoptRef(new InterpolatedTransformOperation(from, to, progress));
     }
@@ -63,7 +57,6 @@ private:
     OperationType type() const override { return Interpolated; }
 
     bool operator==(const TransformOperation&) const override;
-<<<<<<< HEAD
     void apply(TransformationMatrix&,
         const FloatSize& borderBoxSize) const override;
 
@@ -74,18 +67,12 @@ private:
     {
         return create(from.zoom(factor), to.zoom(factor), progress);
     }
-=======
-    void apply(TransformationMatrix&, const FloatSize& borderBoxSize) const override;
-
-    PassRefPtr<TransformOperation> blend(const TransformOperation* from, double progress, bool blendToIdentity = false) override;
->>>>>>> miniblink49
 
     bool dependsOnBoxSize() const override
     {
         return from.dependsOnBoxSize() || to.dependsOnBoxSize();
     }
 
-<<<<<<< HEAD
     InterpolatedTransformOperation(const TransformOperations& from,
         const TransformOperations& to,
         double progress)
@@ -94,13 +81,6 @@ private:
         , progress(progress)
     {
     }
-=======
-    InterpolatedTransformOperation(const TransformOperations& from, const TransformOperations& to, double progress)
-        : from(from)
-        , to(to)
-        , progress(progress)
-    { }
->>>>>>> miniblink49
 
     const TransformOperations from;
     const TransformOperations to;
@@ -110,7 +90,3 @@ private:
 } // namespace blink
 
 #endif // InterpolatedTransformOperation_h
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49

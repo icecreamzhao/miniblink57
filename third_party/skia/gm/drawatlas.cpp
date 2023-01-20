@@ -5,7 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "SkCanvas.h"
 #include "SkRSXform.h"
 #include "SkSurface.h"
@@ -18,19 +17,6 @@ class DrawAtlasGM : public skiagm::GM {
         auto surface(caller->makeSurface(info));
         if (nullptr == surface) {
             surface = SkSurface::MakeRaster(info);
-=======
-#include "gm.h"
-#include "SkCanvas.h"
-#include "SkRSXform.h"
-#include "SkSurface.h"
-
-class DrawAtlasGM : public skiagm::GM {
-    static SkImage* MakeAtlas(SkCanvas* caller, const SkRect& target) {
-        SkImageInfo info = SkImageInfo::MakeN32Premul(100, 100);
-        SkAutoTUnref<SkSurface> surface(caller->newSurface(info));
-        if (NULL == surface) {
-            surface.reset(SkSurface::NewRaster(info));
->>>>>>> miniblink49
         }
         SkCanvas* canvas = surface->getCanvas();
         // draw red everywhere, but we don't expect to see it in the draw, testing the notion
@@ -43,7 +29,6 @@ class DrawAtlasGM : public skiagm::GM {
         r.inset(-1, -1);
         // zero out a place (with a 1-pixel border) to land our drawing.
         canvas->drawRect(r, paint);
-<<<<<<< HEAD
         paint.setXfermode(nullptr);
         paint.setColor(SK_ColorBLUE);
         paint.setAntiAlias(true);
@@ -72,34 +57,6 @@ protected:
         const SkRect target = { 50, 50, 80, 90 };
         if (nullptr == fAtlas) {
             fAtlas = MakeAtlas(canvas, target);
-=======
-        paint.setXfermode(NULL);
-        paint.setColor(SK_ColorBLUE);
-        paint.setAntiAlias(true);
-        canvas->drawOval(target, paint);
-        return surface->newImageSnapshot();
-    }
-
-    SkAutoTUnref<SkImage> fAtlas;
-
-public:
-    DrawAtlasGM() {}
-    
-protected:
-    
-    SkString onShortName() override {
-        return SkString("draw-atlas");
-    }
-    
-    SkISize onISize() override {
-        return SkISize::Make(640, 480);
-    }
-    
-    void onDraw(SkCanvas* canvas) override {
-        const SkRect target = { 50, 50, 80, 90 };
-        if (NULL == fAtlas) {
-            fAtlas.reset(MakeAtlas(canvas, target));
->>>>>>> miniblink49
         }
 
         const struct {
@@ -107,7 +64,6 @@ protected:
             SkScalar fDegrees;
             SkScalar fTx;
             SkScalar fTy;
-<<<<<<< HEAD
 
             void apply(SkRSXform* xform) const
             {
@@ -122,21 +78,6 @@ protected:
             { 2, 0, 110, 10 }, // scale + translate
             { 1, 30, 210, 10 }, // rotate + translate
             { 2, -30, 310, 30 }, // scale + rotate + translate
-=======
-            
-            void apply(SkRSXform* xform) const {
-                const SkScalar rad = SkDegreesToRadians(fDegrees);
-                xform->fSCos = fScale * SkScalarCos(rad);
-                xform->fSSin = fScale * SkScalarSin(rad);
-                xform->fTx   = fTx;
-                xform->fTy   = fTy;
-            }
-        } rec[] = {
-            { 1, 0, 10, 10 },       // just translate
-            { 2, 0, 110, 10 },      // scale + translate
-            { 1, 30, 210, 10 },     // rotate + translate
-            { 2, -30, 310, 30 },    // scale + rotate + translate
->>>>>>> miniblink49
         };
 
         const int N = SK_ARRAY_COUNT(rec);
@@ -154,7 +95,6 @@ protected:
         paint.setFilterQuality(kLow_SkFilterQuality);
         paint.setAntiAlias(true);
 
-<<<<<<< HEAD
         canvas->drawAtlas(fAtlas.get(), xform, tex, N, nullptr, &paint);
         canvas->translate(0, 100);
         canvas->drawAtlas(fAtlas.get(), xform, tex, colors, N, SkXfermode::kSrcIn_Mode, nullptr, &paint);
@@ -164,15 +104,3 @@ private:
     typedef GM INHERITED;
 };
 DEF_GM(return new DrawAtlasGM;)
-=======
-        canvas->drawAtlas(fAtlas, xform, tex, N, NULL, &paint);
-        canvas->translate(0, 100);
-        canvas->drawAtlas(fAtlas, xform, tex, colors, N, SkXfermode::kSrcIn_Mode, NULL, &paint);
-    }
-    
-private:
-    typedef GM INHERITED;
-};
-DEF_GM( return new DrawAtlasGM; )
-
->>>>>>> miniblink49

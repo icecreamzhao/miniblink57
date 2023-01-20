@@ -20,7 +20,6 @@
  *
  */
 
-#include "config.h"
 #include "core/html/HTMLPreElement.h"
 
 #include "core/CSSPropertyNames.h"
@@ -32,7 +31,8 @@ namespace blink {
 
 using namespace HTMLNames;
 
-inline HTMLPreElement::HTMLPreElement(const QualifiedName& tagName, Document& document)
+inline HTMLPreElement::HTMLPreElement(const QualifiedName& tagName,
+    Document& document)
     : HTMLElement(tagName, document)
 {
 }
@@ -46,7 +46,10 @@ bool HTMLPreElement::isPresentationAttribute(const QualifiedName& name) const
     return HTMLElement::isPresentationAttribute(name);
 }
 
-void HTMLPreElement::collectStyleForPresentationAttribute(const QualifiedName& name, const AtomicString& value, MutableStylePropertySet* style)
+void HTMLPreElement::collectStyleForPresentationAttribute(
+    const QualifiedName& name,
+    const AtomicString& value,
+    MutableStylePropertySet* style)
 {
     if (name == wrapAttr)
         style->setProperty(CSSPropertyWhiteSpace, CSSValuePreWrap);
@@ -54,4 +57,4 @@ void HTMLPreElement::collectStyleForPresentationAttribute(const QualifiedName& n
         HTMLElement::collectStyleForPresentationAttribute(name, value, style);
 }
 
-}
+} // namespace blink

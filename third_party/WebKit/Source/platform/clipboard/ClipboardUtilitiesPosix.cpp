@@ -24,37 +24,22 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/clipboard/ClipboardUtilities.h"
 
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 // On POSIX systems, the typical filename length limit is 255 character units.
 // HFS+'s limit is actually 255 Unicode characters using Apple's modification of
 // Normzliation Form D, but the differences aren't really worth dealing with
 // here.
-=======
-// On POSIX systems, the typical filename length limit is 255 character units. HFS+'s limit is
-// actually 255 Unicode characters using Apple's modification of Normzliation Form D, but the
-// differences aren't really worth dealing with here.
->>>>>>> miniblink49
 static const unsigned maxFilenameLength = 255;
 
 static bool isInvalidFileCharacter(UChar c)
 {
-<<<<<<< HEAD
     // HFS+ disallows '/' and Linux systems also disallow null. For sanity's sake
     // we'll also disallow control characters.
-=======
-    // HFS+ disallows '/' and Linux systems also disallow null. For sanity's sake we'll also
-    // disallow control characters.
->>>>>>> miniblink49
     return c < ' ' || c == 0x7F || c == '/';
 }
 

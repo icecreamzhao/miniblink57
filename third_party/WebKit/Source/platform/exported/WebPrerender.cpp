@@ -28,25 +28,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "public/platform/WebPrerender.h"
 
 #include "platform/Prerender.h"
 #include "wtf/PassRefPtr.h"
-<<<<<<< HEAD
 #include "wtf/PtrUtil.h"
 #include <memory>
-=======
->>>>>>> miniblink49
 
 namespace blink {
 
 namespace {
 
-<<<<<<< HEAD
     class ExtraDataContainer : public Prerender::ExtraData {
     public:
         static PassRefPtr<ExtraDataContainer> create(
@@ -71,28 +63,6 @@ namespace {
 } // namespace
 
 WebPrerender::WebPrerender(Prerender* prerender)
-=======
-class ExtraDataContainer : public Prerender::ExtraData {
-public:
-    static PassRefPtr<ExtraDataContainer> create(WebPrerender::ExtraData* extraData) { return adoptRef(new ExtraDataContainer(extraData)); }
-
-    ~ExtraDataContainer() override {}
-
-    WebPrerender::ExtraData* extraData() const { return m_extraData.get(); }
-
-private:
-    explicit ExtraDataContainer(WebPrerender::ExtraData* extraData)
-        : m_extraData(adoptPtr(extraData))
-    {
-    }
-
-    OwnPtr<WebPrerender::ExtraData> m_extraData;
-};
-
-} // anon namespace
-
-WebPrerender::WebPrerender(PassRefPtr<Prerender> prerender)
->>>>>>> miniblink49
     : m_private(prerender)
 {
 }
@@ -129,21 +99,12 @@ unsigned WebPrerender::relTypes() const
 
 WebString WebPrerender::referrer() const
 {
-<<<<<<< HEAD
     return m_private->getReferrer();
 }
 
 WebReferrerPolicy WebPrerender::getReferrerPolicy() const
 {
     return static_cast<WebReferrerPolicy>(m_private->getReferrerPolicy());
-=======
-    return m_private->referrer();
-}
-
-WebReferrerPolicy WebPrerender::referrerPolicy() const
-{
-    return static_cast<WebReferrerPolicy>(m_private->referrerPolicy());
->>>>>>> miniblink49
 }
 
 void WebPrerender::setExtraData(WebPrerender::ExtraData* extraData)
@@ -151,7 +112,6 @@ void WebPrerender::setExtraData(WebPrerender::ExtraData* extraData)
     m_private->setExtraData(ExtraDataContainer::create(extraData));
 }
 
-<<<<<<< HEAD
 const WebPrerender::ExtraData* WebPrerender::getExtraData() const
 {
     RefPtr<Prerender::ExtraData> webcoreExtraData = m_private->getExtraData();
@@ -159,14 +119,6 @@ const WebPrerender::ExtraData* WebPrerender::getExtraData() const
         return 0;
     return static_cast<ExtraDataContainer*>(webcoreExtraData.get())
         ->getExtraData();
-=======
-const WebPrerender::ExtraData* WebPrerender::extraData() const
-{
-    RefPtr<Prerender::ExtraData> webcoreExtraData = m_private->extraData();
-    if (!webcoreExtraData)
-        return 0;
-    return static_cast<ExtraDataContainer*>(webcoreExtraData.get())->extraData();
->>>>>>> miniblink49
 }
 
 void WebPrerender::didStartPrerender()

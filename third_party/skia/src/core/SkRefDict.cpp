@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -9,15 +5,10 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #include "SkRefDict.h"
 #include "SkString.h"
 
 struct SkRefDict::Impl {
-<<<<<<< HEAD
     Impl* fNext;
     SkString fName;
     SkRefCnt* fData;
@@ -37,22 +28,6 @@ SkRefCnt* SkRefDict::find(const char name[]) const
 {
     if (nullptr == name) {
         return nullptr;
-=======
-    Impl*       fNext;
-    SkString    fName;
-    SkRefCnt*   fData;
-};
-
-SkRefDict::SkRefDict() : fImpl(NULL) {}
-
-SkRefDict::~SkRefDict() {
-    this->removeAll();
-}
-
-SkRefCnt* SkRefDict::find(const char name[]) const {
-    if (NULL == name) {
-        return NULL;
->>>>>>> miniblink49
     }
 
     Impl* rec = fImpl;
@@ -62,29 +37,17 @@ SkRefCnt* SkRefDict::find(const char name[]) const {
         }
         rec = rec->fNext;
     }
-<<<<<<< HEAD
     return nullptr;
 }
 
 void SkRefDict::set(const char name[], SkRefCnt* data)
 {
     if (nullptr == name) {
-=======
-    return NULL;
-}
-
-void SkRefDict::set(const char name[], SkRefCnt* data) {
-    if (NULL == name) {
->>>>>>> miniblink49
         return;
     }
 
     Impl* rec = fImpl;
-<<<<<<< HEAD
     Impl* prev = nullptr;
-=======
-    Impl* prev = NULL;
->>>>>>> miniblink49
     while (rec) {
         if (rec->fName.equals(name)) {
             if (data) {
@@ -118,12 +81,8 @@ void SkRefDict::set(const char name[], SkRefCnt* data) {
     fImpl = rec;
 }
 
-<<<<<<< HEAD
 void SkRefDict::removeAll()
 {
-=======
-void SkRefDict::removeAll() {
->>>>>>> miniblink49
     Impl* rec = fImpl;
     while (rec) {
         Impl* next = rec->fNext;
@@ -131,9 +90,5 @@ void SkRefDict::removeAll() {
         delete rec;
         rec = next;
     }
-<<<<<<< HEAD
     fImpl = nullptr;
-=======
-    fImpl = NULL;
->>>>>>> miniblink49
 }

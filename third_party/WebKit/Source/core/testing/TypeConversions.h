@@ -27,19 +27,16 @@
 #define TypeConversions_h
 
 #include "bindings/core/v8/ScriptWrappable.h"
-#include "wtf/FastMalloc.h"
-#include "wtf/PassRefPtr.h"
-#include "wtf/RefCounted.h"
+#include "platform/heap/Handle.h"
 
 namespace blink {
 
-class TypeConversions final : public GarbageCollectedFinalized<TypeConversions>, public ScriptWrappable {
+class TypeConversions final : public GarbageCollectedFinalized<TypeConversions>,
+                              public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static TypeConversions* create()
-    {
-        return new TypeConversions();
-    }
+    static TypeConversions* create() { return new TypeConversions(); }
 
     long testLong() { return m_long; }
     void setTestLong(long value) { m_long = value; }
@@ -49,7 +46,10 @@ public:
     long long testLongLong() { return m_longLong; }
     void setTestLongLong(long long value) { m_longLong = value; }
     unsigned long long testUnsignedLongLong() { return m_unsignedLongLong; }
-    void setTestUnsignedLongLong(unsigned long long value) { m_unsignedLongLong = value; }
+    void setTestUnsignedLongLong(unsigned long long value)
+    {
+        m_unsignedLongLong = value;
+    }
 
     int8_t testByte() { return m_byte; }
     void setTestByte(int8_t value) { m_byte = value; }
@@ -79,7 +79,8 @@ private:
         , m_octet(0)
         , m_short(0)
         , m_unsignedShort(0)
-    { }
+    {
+    }
 
     long m_long;
     unsigned long m_unsignedLong;

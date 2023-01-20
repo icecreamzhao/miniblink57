@@ -19,12 +19,6 @@ namespace v8 {
 
 constexpr uint32_t CurrentValueSerializerFormatVersion() { return 13; }
 
-<<<<<<< HEAD
 } // namespace v8
 
 #endif // INCLUDE_V8_VALUE_SERIALIZER_VERSION_H_
-=======
-}  // namespace v8
-
-#endif  // INCLUDE_V8_VALUE_SERIALIZER_VERSION_H_
->>>>>>> miniblink49

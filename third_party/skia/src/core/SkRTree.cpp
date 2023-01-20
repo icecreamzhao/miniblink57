@@ -7,7 +7,6 @@
 
 #include "SkRTree.h"
 
-<<<<<<< HEAD
 SkRTree::SkRTree(SkScalar aspectRatio)
     : fCount(0)
     , fAspectRatio(aspectRatio)
@@ -16,11 +15,6 @@ SkRTree::SkRTree(SkScalar aspectRatio)
 
 SkRect SkRTree::getRootBound() const
 {
-=======
-SkRTree::SkRTree(SkScalar aspectRatio) : fCount(0), fAspectRatio(aspectRatio) {}
-
-SkRect SkRTree::getRootBound() const {
->>>>>>> miniblink49
     if (fCount) {
         return fRoot.fBounds;
     } else {
@@ -28,12 +22,8 @@ SkRect SkRTree::getRootBound() const {
     }
 }
 
-<<<<<<< HEAD
 void SkRTree::insert(const SkRect boundsArray[], int N)
 {
-=======
-void SkRTree::insert(const SkRect boundsArray[], int N) {
->>>>>>> miniblink49
     SkASSERT(0 == fCount);
 
     SkTDArray<Branch> branches;
@@ -58,11 +48,7 @@ void SkRTree::insert(const SkRect boundsArray[], int N) {
             n->fNumChildren = 1;
             n->fChildren[0] = branches[0];
             fRoot.fSubtree = n;
-<<<<<<< HEAD
             fRoot.fBounds = branches[0].fBounds;
-=======
-            fRoot.fBounds  = branches[0].fBounds;
->>>>>>> miniblink49
         } else {
             fNodes.setReserve(CountNodes(fCount, fAspectRatio));
             fRoot = this->bulkLoad(&branches);
@@ -70,39 +56,24 @@ void SkRTree::insert(const SkRect boundsArray[], int N) {
     }
 }
 
-<<<<<<< HEAD
 SkRTree::Node* SkRTree::allocateNodeAtLevel(uint16_t level)
 {
     SkDEBUGCODE(Node* p = fNodes.begin());
     Node* out = fNodes.push();
     SkASSERT(fNodes.begin() == p); // If this fails, we didn't setReserve() enough.
-=======
-SkRTree::Node* SkRTree::allocateNodeAtLevel(uint16_t level) {
-    SkDEBUGCODE(Node* p = fNodes.begin());
-    Node* out = fNodes.push();
-    SkASSERT(fNodes.begin() == p);  // If this fails, we didn't setReserve() enough.
->>>>>>> miniblink49
     out->fNumChildren = 0;
     out->fLevel = level;
     return out;
 }
 
 // This function parallels bulkLoad, but just counts how many nodes bulkLoad would allocate.
-<<<<<<< HEAD
 int SkRTree::CountNodes(int branches, SkScalar aspectRatio)
 {
-=======
-int SkRTree::CountNodes(int branches, SkScalar aspectRatio) {
->>>>>>> miniblink49
     if (branches == 1) {
         return 1;
     }
     int numBranches = branches / kMaxChildren;
-<<<<<<< HEAD
     int remainder = branches % kMaxChildren;
-=======
-    int remainder   = branches % kMaxChildren;
->>>>>>> miniblink49
     if (remainder > 0) {
         numBranches++;
         if (remainder >= kMinChildren) {
@@ -112,11 +83,7 @@ int SkRTree::CountNodes(int branches, SkScalar aspectRatio) {
         }
     }
     int numStrips = SkScalarCeilToInt(SkScalarSqrt(SkIntToScalar(numBranches) / aspectRatio));
-<<<<<<< HEAD
     int numTiles = SkScalarCeilToInt(SkIntToScalar(numBranches) / SkIntToScalar(numStrips));
-=======
-    int numTiles  = SkScalarCeilToInt(SkIntToScalar(numBranches) / SkIntToScalar(numStrips));
->>>>>>> miniblink49
     int currentBranch = 0;
     int nodes = 0;
     for (int i = 0; i < numStrips; ++i) {
@@ -141,12 +108,8 @@ int SkRTree::CountNodes(int branches, SkScalar aspectRatio) {
     return nodes + CountNodes(nodes, aspectRatio);
 }
 
-<<<<<<< HEAD
 SkRTree::Branch SkRTree::bulkLoad(SkTDArray<Branch>* branches, int level)
 {
-=======
-SkRTree::Branch SkRTree::bulkLoad(SkTDArray<Branch>* branches, int level) {
->>>>>>> miniblink49
     if (branches->count() == 1) { // Only one branch.  It will be the root.
         return (*branches)[0];
     }
@@ -155,11 +118,7 @@ SkRTree::Branch SkRTree::bulkLoad(SkTDArray<Branch>* branches, int level) {
     // Skipping a call to sort (in Y) here resulted in a 17% win for recording with negligible
     // difference in playback speed.
     int numBranches = branches->count() / kMaxChildren;
-<<<<<<< HEAD
     int remainder = branches->count() % kMaxChildren;
-=======
-    int remainder   = branches->count() % kMaxChildren;
->>>>>>> miniblink49
     int newBranches = 0;
 
     if (remainder > 0) {
@@ -173,11 +132,7 @@ SkRTree::Branch SkRTree::bulkLoad(SkTDArray<Branch>* branches, int level) {
     }
 
     int numStrips = SkScalarCeilToInt(SkScalarSqrt(SkIntToScalar(numBranches) / fAspectRatio));
-<<<<<<< HEAD
     int numTiles = SkScalarCeilToInt(SkIntToScalar(numBranches) / SkIntToScalar(numStrips));
-=======
-    int numTiles  = SkScalarCeilToInt(SkIntToScalar(numBranches) / SkIntToScalar(numStrips));
->>>>>>> miniblink49
     int currentBranch = 0;
 
     for (int i = 0; i < numStrips; ++i) {
@@ -215,23 +170,15 @@ SkRTree::Branch SkRTree::bulkLoad(SkTDArray<Branch>* branches, int level) {
     return this->bulkLoad(branches, level + 1);
 }
 
-<<<<<<< HEAD
 void SkRTree::search(const SkRect& query, SkTDArray<int>* results) const
 {
-=======
-void SkRTree::search(const SkRect& query, SkTDArray<unsigned>* results) const {
->>>>>>> miniblink49
     if (fCount > 0 && SkRect::Intersects(fRoot.fBounds, query)) {
         this->search(fRoot.fSubtree, query, results);
     }
 }
 
-<<<<<<< HEAD
 void SkRTree::search(Node* node, const SkRect& query, SkTDArray<int>* results) const
 {
-=======
-void SkRTree::search(Node* node, const SkRect& query, SkTDArray<unsigned>* results) const {
->>>>>>> miniblink49
     for (int i = 0; i < node->fNumChildren; ++i) {
         if (SkRect::Intersects(node->fChildren[i].fBounds, query)) {
             if (0 == node->fLevel) {
@@ -243,12 +190,8 @@ void SkRTree::search(Node* node, const SkRect& query, SkTDArray<unsigned>* resul
     }
 }
 
-<<<<<<< HEAD
 size_t SkRTree::bytesUsed() const
 {
-=======
-size_t SkRTree::bytesUsed() const {
->>>>>>> miniblink49
     size_t byteCount = sizeof(SkRTree);
 
     byteCount += fNodes.reserved() * sizeof(Node);

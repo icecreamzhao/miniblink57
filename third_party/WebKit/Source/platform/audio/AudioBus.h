@@ -31,31 +31,18 @@
 
 #include "platform/audio/AudioChannel.h"
 #include "wtf/Noncopyable.h"
-<<<<<<< HEAD
 #include "wtf/ThreadSafeRefCounted.h"
 #include "wtf/Vector.h"
 #include <memory>
-=======
-#include "wtf/PassOwnPtr.h"
-#include "wtf/ThreadSafeRefCounted.h"
-#include "wtf/Vector.h"
->>>>>>> miniblink49
 
 namespace blink {
 
 // An AudioBus represents a collection of one or more AudioChannels.
-<<<<<<< HEAD
 // The data layout is "planar" as opposed to "interleaved".  An AudioBus with
 // one channel is mono, an AudioBus with two channels is stereo, etc.
 class PLATFORM_EXPORT AudioBus : public ThreadSafeRefCounted<AudioBus> {
     WTF_MAKE_NONCOPYABLE(AudioBus);
 
-=======
-// The data layout is "planar" as opposed to "interleaved".
-// An AudioBus with one channel is mono, an AudioBus with two channels is stereo, etc.
-class PLATFORM_EXPORT AudioBus : public ThreadSafeRefCounted<AudioBus> {
-    WTF_MAKE_NONCOPYABLE(AudioBus);
->>>>>>> miniblink49
 public:
     enum {
         ChannelLeft = 0,
@@ -77,7 +64,6 @@ public:
         Discrete,
     };
 
-<<<<<<< HEAD
     // allocate indicates whether or not to initially have the AudioChannels
     // created with managed storage.  Normal usage is to pass true here, in which
     // case the AudioChannels will memory-manage their own storage.  If allocate
@@ -86,12 +72,6 @@ public:
     static PassRefPtr<AudioBus> create(unsigned numberOfChannels,
         size_t length,
         bool allocate = true);
-=======
-    // allocate indicates whether or not to initially have the AudioChannels created with managed storage.
-    // Normal usage is to pass true here, in which case the AudioChannels will memory-manage their own storage.
-    // If allocate is false then setChannelMemory() has to be called later on for each channel before the AudioBus is useable...
-    static PassRefPtr<AudioBus> create(unsigned numberOfChannels, size_t length, bool allocate = true);
->>>>>>> miniblink49
 
     // Tells the given channel to use an externally allocated buffer.
     void setChannelMemory(unsigned channelIndex, float* storage, size_t length);
@@ -100,14 +80,10 @@ public:
     unsigned numberOfChannels() const { return m_channels.size(); }
 
     AudioChannel* channel(unsigned channel) { return m_channels[channel].get(); }
-<<<<<<< HEAD
     const AudioChannel* channel(unsigned channel) const
     {
         return const_cast<AudioBus*>(this)->m_channels[channel].get();
     }
-=======
-    const AudioChannel* channel(unsigned channel) const { return const_cast<AudioBus*>(this)->m_channels[channel].get(); }
->>>>>>> miniblink49
     AudioChannel* channelByType(unsigned type);
     const AudioChannel* channelByType(unsigned type) const;
 
@@ -132,7 +108,6 @@ public:
     bool isSilent() const;
 
     // Returns true if the channel count and frame-size match.
-<<<<<<< HEAD
     bool topologyMatches(const AudioBus& sourceBus) const;
 
     // Creates a new buffer from a range in the source buffer.
@@ -155,22 +130,6 @@ public:
     // Creates a new AudioBus by mixing all the channels down to mono.
     // If sourceBus is already mono, then the returned AudioBus will simply be a
     // copy.
-=======
-    bool topologyMatches(const AudioBus &sourceBus) const;
-
-    // Creates a new buffer from a range in the source buffer.
-    // 0 may be returned if the range does not fit in the sourceBuffer
-    static PassRefPtr<AudioBus> createBufferFromRange(const AudioBus* sourceBuffer, unsigned startFrame, unsigned endFrame);
-
-
-    // Creates a new AudioBus by sample-rate converting sourceBus to the newSampleRate.
-    // setSampleRate() must have been previously called on sourceBus.
-    // Note: sample-rate conversion is already handled in the file-reading code for the mac port, so we don't need this.
-    static PassRefPtr<AudioBus> createBySampleRateConverting(const AudioBus* sourceBus, bool mixToMono, double newSampleRate);
-
-    // Creates a new AudioBus by mixing all the channels down to mono.
-    // If sourceBus is already mono, then the returned AudioBus will simply be a copy.
->>>>>>> miniblink49
     static PassRefPtr<AudioBus> createByMixingToMono(const AudioBus* sourceBus);
 
     // Scales all samples by the same amount.
@@ -179,7 +138,6 @@ public:
     void reset() { m_isFirstTime = true; } // for de-zippering
 
     // Copies the samples from the source bus to this one.
-<<<<<<< HEAD
     // This is just a simple per-channel copy if the number of channels match,
     // otherwise an up-mix or down-mix is done.
     void copyFrom(const AudioBus& sourceBus, ChannelInterpretation = Speakers);
@@ -207,43 +165,19 @@ public:
 
     // Returns maximum absolute value across all channels (useful for
     // normalization).
-=======
-    // This is just a simple per-channel copy if the number of channels match, otherwise an up-mix or down-mix is done.
-    void copyFrom(const AudioBus& sourceBus, ChannelInterpretation = Speakers);
-
-    // Sums the samples from the source bus to this one.
-    // This is just a simple per-channel summing if the number of channels match, otherwise an up-mix or down-mix is done.
-    void sumFrom(const AudioBus& sourceBus, ChannelInterpretation = Speakers);
-
-    // Copy each channel from sourceBus into our corresponding channel.
-    // We scale by targetGain (and our own internal gain m_busGain), performing "de-zippering" to smoothly change from *lastMixGain to (targetGain*m_busGain).
-    // The caller is responsible for setting up lastMixGain to point to storage which is unique for every "stream" which will be applied to this bus.
-    // This represents the dezippering memory.
-    void copyWithGainFrom(const AudioBus &sourceBus, float* lastMixGain, float targetGain);
-
-    // Copies the sourceBus by scaling with sample-accurate gain values.
-    void copyWithSampleAccurateGainValuesFrom(const AudioBus &sourceBus, float* gainValues, unsigned numberOfGainValues);
-
-    // Returns maximum absolute value across all channels (useful for normalization).
->>>>>>> miniblink49
     float maxAbsValue() const;
 
     // Makes maximum absolute value == 1.0 (if possible).
     void normalize();
 
-<<<<<<< HEAD
     static PassRefPtr<AudioBus> loadPlatformResource(const char* name,
         float sampleRate);
-=======
-    static PassRefPtr<AudioBus> loadPlatformResource(const char* name, float sampleRate);
->>>>>>> miniblink49
 
 protected:
     AudioBus() { }
 
     AudioBus(unsigned numberOfChannels, size_t length, bool allocate);
 
-<<<<<<< HEAD
     void discreteSumFrom(const AudioBus&);
 
     // Up/down-mix by in-place summing upon the existing channel content.
@@ -256,19 +190,6 @@ protected:
     int m_layout;
     float m_busGain;
     std::unique_ptr<AudioFloatArray> m_dezipperGainValues;
-=======
-    void speakersCopyFrom(const AudioBus&);
-    void discreteCopyFrom(const AudioBus&);
-    void speakersSumFrom(const AudioBus&);
-    void discreteSumFrom(const AudioBus&);
-    void speakersSumFrom5_1_ToMono(const AudioBus&);
-
-    size_t m_length;
-    Vector<OwnPtr<AudioChannel>> m_channels;
-    int m_layout;
-    float m_busGain;
-    OwnPtr<AudioFloatArray> m_dezipperGainValues;
->>>>>>> miniblink49
     bool m_isFirstTime;
     float m_sampleRate; // 0.0 if unknown or N/A
 };

@@ -17,7 +17,6 @@
  *  Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/css/MediaQueryList.h"
 
 #include "core/css/MediaList.h"
@@ -28,15 +27,17 @@
 
 namespace blink {
 
-PassRefPtrWillBeRawPtr<MediaQueryList> MediaQueryList::create(ExecutionContext* context, PassRefPtrWillBeRawPtr<MediaQueryMatcher> matcher, PassRefPtrWillBeRawPtr<MediaQuerySet> media)
+MediaQueryList* MediaQueryList::create(ExecutionContext* context,
+    MediaQueryMatcher* matcher,
+    MediaQuerySet* media)
 {
-    RefPtrWillBeRawPtr<MediaQueryList> list = adoptRefWillBeNoop(new MediaQueryList(context, matcher, media));
-    list->suspendIfNeeded();
-    return list.release();
+    return new MediaQueryList(context, matcher, media);
 }
 
-MediaQueryList::MediaQueryList(ExecutionContext* context, PassRefPtrWillBeRawPtr<MediaQueryMatcher> matcher, PassRefPtrWillBeRawPtr<MediaQuerySet> media)
-    : ActiveDOMObject(context)
+MediaQueryList::MediaQueryList(ExecutionContext* context,
+    MediaQueryMatcher* matcher,
+    MediaQuerySet* media)
+    : ContextLifecycleObserver(context)
     , m_matcher(matcher)
     , m_media(media)
     , m_matchesDirty(true)
@@ -46,19 +47,14 @@ MediaQueryList::MediaQueryList(ExecutionContext* context, PassRefPtrWillBeRawPtr
     updateMatches();
 }
 
-MediaQueryList::~MediaQueryList()
-{
-#if !ENABLE(OILPAN)
-    m_matcher->removeMediaQueryList(this);
-#endif
-}
+MediaQueryList::~MediaQueryList() { }
 
 String MediaQueryList::media() const
 {
     return m_media->mediaText();
 }
 
-void MediaQueryList::addDeprecatedListener(PassRefPtr<EventListener> listener)
+void MediaQueryList::addDeprecatedListener(EventListener* listener)
 {
     if (!listener)
         return;
@@ -66,7 +62,7 @@ void MediaQueryList::addDeprecatedListener(PassRefPtr<EventListener> listener)
     addEventListener(EventTypeNames::change, listener, false);
 }
 
-void MediaQueryList::removeDeprecatedListener(PassRefPtr<EventListener> listener)
+void MediaQueryList::removeDeprecatedListener(EventListener* listener)
 {
     if (!listener)
         return;
@@ -74,7 +70,7 @@ void MediaQueryList::removeDeprecatedListener(PassRefPtr<EventListener> listener
     removeEventListener(EventTypeNames::change, listener, false);
 }
 
-void MediaQueryList::addListener(PassRefPtrWillBeRawPtr<MediaQueryListListener> listener)
+void MediaQueryList::addListener(MediaQueryListListener* listener)
 {
     if (!listener)
         return;
@@ -82,35 +78,33 @@ void MediaQueryList::addListener(PassRefPtrWillBeRawPtr<MediaQueryListListener> 
     m_listeners.add(listener);
 }
 
-void MediaQueryList::removeListener(PassRefPtrWillBeRawPtr<MediaQueryListListener> listener)
+void MediaQueryList::removeListener(MediaQueryListListener* listener)
 {
     if (!listener)
         return;
 
-    RefPtrWillBeRawPtr<MediaQueryList> protect(this);
     m_listeners.remove(listener);
 }
 
 bool MediaQueryList::hasPendingActivity() const
 {
-    return m_listeners.size() || hasEventListeners(EventTypeNames::change);
+    return getExecutionContext() && (m_listeners.size() || hasEventListeners(EventTypeNames::change));
 }
 
-void MediaQueryList::stop()
+void MediaQueryList::contextDestroyed(ExecutionContext*)
 {
-    // m_listeners.clear() can drop the last ref to this MediaQueryList.
-    RefPtrWillBeRawPtr<MediaQueryList> protect(this);
     m_listeners.clear();
     removeAllEventListeners();
 }
 
-bool MediaQueryList::mediaFeaturesChanged(WillBeHeapVector<RefPtrWillBeMember<MediaQueryListListener>>* listenersToNotify)
+bool MediaQueryList::mediaFeaturesChanged(
+    HeapVector<Member<MediaQueryListListener>>* listenersToNotify)
 {
     m_matchesDirty = true;
     if (!updateMatches())
         return false;
     for (const auto& listener : m_listeners) {
-        listenersToNotify->append(listener);
+        listenersToNotify->push_back(listener);
     }
     return hasEventListeners(EventTypeNames::change);
 }
@@ -133,13 +127,11 @@ bool MediaQueryList::matches()
 
 DEFINE_TRACE(MediaQueryList)
 {
-#if ENABLE(OILPAN)
     visitor->trace(m_matcher);
     visitor->trace(m_media);
     visitor->trace(m_listeners);
-#endif
     EventTargetWithInlineData::trace(visitor);
-    ActiveDOMObject::trace(visitor);
+    ContextLifecycleObserver::trace(visitor);
 }
 
 const AtomicString& MediaQueryList::interfaceName() const
@@ -147,9 +139,9 @@ const AtomicString& MediaQueryList::interfaceName() const
     return EventTargetNames::MediaQueryList;
 }
 
-ExecutionContext* MediaQueryList::executionContext() const
+ExecutionContext* MediaQueryList::getExecutionContext() const
 {
-    return ActiveDOMObject::executionContext();
+    return ContextLifecycleObserver::getExecutionContext();
 }
 
-}
+} // namespace blink

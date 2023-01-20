@@ -23,22 +23,22 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// http://www.w3.org/TR/SVG2/pservers.html#InterfaceSVGPatternElement
+// https://svgwg.org/svg2-draft/pservers.html#InterfaceSVGPatternElement
 
 interface SVGPatternElement : SVGElement {
-    readonly attribute SVGAnimatedEnumeration patternUnits;
-    readonly attribute SVGAnimatedEnumeration patternContentUnits;
-    readonly attribute SVGAnimatedTransformList patternTransform;
-    readonly attribute SVGAnimatedLength x;
-    readonly attribute SVGAnimatedLength y;
-    readonly attribute SVGAnimatedLength width;
-    readonly attribute SVGAnimatedLength height;
+    [MeasureAs=SVG1DOMPaintServer] readonly attribute SVGAnimatedEnumeration patternUnits;
+    [MeasureAs=SVG1DOMPaintServer] readonly attribute SVGAnimatedEnumeration patternContentUnits;
+    [MeasureAs=SVG1DOMPaintServer] readonly attribute SVGAnimatedTransformList patternTransform;
+    [MeasureAs=SVG1DOMPaintServer] readonly attribute SVGAnimatedLength x;
+    [MeasureAs=SVG1DOMPaintServer] readonly attribute SVGAnimatedLength y;
+    [MeasureAs=SVG1DOMPaintServer] readonly attribute SVGAnimatedLength width;
+    [MeasureAs=SVG1DOMPaintServer] readonly attribute SVGAnimatedLength height;
 };
 
 SVGPatternElement implements SVGFitToViewBox;
 SVGPatternElement implements SVGURIReference;
 // SVGPatternElement implements SVGUnitTypes;
 
-// TODO(philipj): The following was part of SVG 1.1:
+// TODO(foolip): The following was part of SVG 1.1:
 // http://www.w3.org/TR/SVG11/pservers.html#InterfaceSVGPatternElement
 SVGPatternElement implements SVGTests;

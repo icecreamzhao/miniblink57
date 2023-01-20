@@ -6,19 +6,14 @@
 #define StackFrameDepth_h
 
 #include "platform/PlatformExport.h"
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/Assertions.h"
 #include <cstddef>
-=======
-#include "wtf/Assertions.h"
->>>>>>> miniblink49
 #include <stdint.h>
 
 namespace blink {
 
 // StackFrameDepth keeps track of current call stack frame depth.
-<<<<<<< HEAD
 // It is specifically used to control stack usage while tracing
 // the object graph during a GC.
 //
@@ -34,22 +29,11 @@ public:
     }
     bool isSafeToRecurse()
     {
-=======
-// Use isSafeToRecurse() to query if there is a room in current
-// call stack for more recursive call.
-class PLATFORM_EXPORT StackFrameDepth final {
-public:
-    inline static bool isSafeToRecurse()
-    {
-        ASSERT(s_stackFrameLimit || !s_isEnabled);
-
->>>>>>> miniblink49
         // Asssume that the stack grows towards lower addresses, which
         // all the ABIs currently supported do.
         //
         // A unit test checks that the assumption holds for a target
         // (HeapTest.StackGrowthDirection.)
-<<<<<<< HEAD
         return currentStackFrame() > m_stackFrameLimit;
     }
 
@@ -67,36 +51,11 @@ public:
 #endif
     }
 
-=======
-        return currentStackFrame() > s_stackFrameLimit;
-    }
-
-    static void enableStackLimit();
-    static void disableStackLimit()
-    {
-        s_stackFrameLimit = 0;
-#if ENABLE(ASSERT)
-        s_isEnabled = false;
-#endif
-    }
-
-#if ENABLE(ASSERT)
-    inline static bool isEnabled() { return s_isEnabled; }
-#endif
-
-    static size_t getUnderestimatedStackSize();
-    static void* getStackStart();
-
->>>>>>> miniblink49
 #if COMPILER(MSVC)
 // Ignore C4172: returning address of local variable or temporary: dummy. This
 // warning suppression has to go outside of the function to take effect.
 #pragma warning(push)
-<<<<<<< HEAD
 #pragma warning(disable : 4172)
-=======
-#pragma warning(disable: 4172)
->>>>>>> miniblink49
 #endif
     static uintptr_t currentStackFrame(const char* dummy = nullptr)
     {
@@ -115,7 +74,6 @@ public:
 
 private:
     // The maximum depth of eager, unrolled trace() calls that is
-<<<<<<< HEAD
     // considered safe and allowed for targets with an unknown
     // thread stack size.
     static const int kSafeStackFrameSize = 32 * 1024;
@@ -148,29 +106,6 @@ public:
 
 private:
     StackFrameDepth* m_depth;
-=======
-    // considered safe and allowed.
-    static const int kSafeStackFrameSize = 32 * 1024;
-
-    static uintptr_t s_stackFrameLimit;
-#if ENABLE(ASSERT)
-    static bool s_isEnabled;
-#endif
-};
-
-class StackFrameDepthScope {
-public:
-    StackFrameDepthScope()
-    {
-        StackFrameDepth::enableStackLimit();
-        ASSERT(StackFrameDepth::isSafeToRecurse());
-    }
-
-    ~StackFrameDepthScope()
-    {
-        StackFrameDepth::disableStackLimit();
-    }
->>>>>>> miniblink49
 };
 
 } // namespace blink

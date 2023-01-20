@@ -41,71 +41,40 @@ public:
         : fType(kFloat_GrSLType)
         , fTypeModifier(kNone_TypeModifier)
         , fCount(kNonArray)
-<<<<<<< HEAD
         , fPrecision(kDefault_GrSLPrecision)
     {
     }
 
     GrShaderVar(const SkString& name, GrSLType type, int arrayCount = kNonArray,
         GrSLPrecision precision = kDefault_GrSLPrecision)
-=======
-        , fPrecision(kDefault_GrSLPrecision) {
-    }
-
-    GrShaderVar(const SkString& name, GrSLType type, int arrayCount = kNonArray,
-                GrSLPrecision precision = kDefault_GrSLPrecision)
->>>>>>> miniblink49
         : fType(type)
         , fTypeModifier(kNone_TypeModifier)
         , fName(name)
         , fCount(arrayCount)
-<<<<<<< HEAD
         , fPrecision(precision)
     {
-=======
-        , fPrecision(precision) {
-        SkASSERT(kDefault_GrSLPrecision == precision || GrSLTypeIsFloatType(type));
->>>>>>> miniblink49
         SkASSERT(kVoid_GrSLType != type);
     }
 
     GrShaderVar(const char* name, GrSLType type, int arrayCount = kNonArray,
-<<<<<<< HEAD
         GrSLPrecision precision = kDefault_GrSLPrecision)
-=======
-                GrSLPrecision precision = kDefault_GrSLPrecision)
->>>>>>> miniblink49
         : fType(type)
         , fTypeModifier(kNone_TypeModifier)
         , fName(name)
         , fCount(arrayCount)
-<<<<<<< HEAD
         , fPrecision(precision)
     {
-=======
-        , fPrecision(precision) {
-        SkASSERT(kDefault_GrSLPrecision == precision || GrSLTypeIsFloatType(type));
->>>>>>> miniblink49
         SkASSERT(kVoid_GrSLType != type);
     }
 
     GrShaderVar(const char* name, GrSLType type, TypeModifier typeModifier,
-<<<<<<< HEAD
         int arrayCount = kNonArray, GrSLPrecision precision = kDefault_GrSLPrecision)
-=======
-                int arrayCount = kNonArray, GrSLPrecision precision = kDefault_GrSLPrecision)
->>>>>>> miniblink49
         : fType(type)
         , fTypeModifier(typeModifier)
         , fName(name)
         , fCount(arrayCount)
-<<<<<<< HEAD
         , fPrecision(precision)
     {
-=======
-        , fPrecision(precision) {
-        SkASSERT(kDefault_GrSLPrecision == precision || GrSLTypeIsFloatType(type));
->>>>>>> miniblink49
         SkASSERT(kVoid_GrSLType != type);
     }
 
@@ -113,30 +82,17 @@ public:
      * Values for array count that have special meaning. We allow 1-sized arrays.
      */
     enum {
-<<<<<<< HEAD
         kNonArray = 0, // not an array
-=======
-        kNonArray     =  0, // not an array
->>>>>>> miniblink49
         kUnsizedArray = -1, // an unsized array (declared with [])
     };
 
     void set(GrSLType type,
-<<<<<<< HEAD
         const SkString& name,
         TypeModifier typeModifier = kNone_TypeModifier,
         GrSLPrecision precision = kDefault_GrSLPrecision,
         int count = kNonArray)
     {
         SkASSERT(kVoid_GrSLType != type);
-=======
-             const SkString& name,
-             TypeModifier typeModifier = kNone_TypeModifier,
-             GrSLPrecision precision = kDefault_GrSLPrecision,
-             int count = kNonArray) {
-        SkASSERT(kVoid_GrSLType != type);
-        SkASSERT(kDefault_GrSLPrecision == precision || GrSLTypeIsFloatType(type));
->>>>>>> miniblink49
         fType = type;
         fTypeModifier = typeModifier;
         fName = name;
@@ -145,21 +101,12 @@ public:
     }
 
     void set(GrSLType type,
-<<<<<<< HEAD
         const char* name,
         TypeModifier typeModifier = kNone_TypeModifier,
         GrSLPrecision precision = kDefault_GrSLPrecision,
         int count = kNonArray)
     {
         SkASSERT(kVoid_GrSLType != type);
-=======
-             const char* name,
-             TypeModifier typeModifier = kNone_TypeModifier,
-             GrSLPrecision precision = kDefault_GrSLPrecision,
-             int count = kNonArray) {
-        SkASSERT(kVoid_GrSLType != type);
-        SkASSERT(kDefault_GrSLPrecision == precision || GrSLTypeIsFloatType(type));
->>>>>>> miniblink49
         fType = type;
         fTypeModifier = typeModifier;
         fName = name;
@@ -235,19 +182,11 @@ public:
     void setPrecision(GrSLPrecision p) { fPrecision = p; }
 
 protected:
-<<<<<<< HEAD
     GrSLType fType;
     TypeModifier fTypeModifier;
     SkString fName;
     int fCount;
     GrSLPrecision fPrecision;
-=======
-    GrSLType        fType;
-    TypeModifier    fTypeModifier;
-    SkString        fName;
-    int             fCount;
-    GrSLPrecision   fPrecision;
->>>>>>> miniblink49
 };
 
 #endif

@@ -85,14 +85,7 @@ struct WebRect {
         return *this;
     }
 
-<<<<<<< HEAD
     operator IntRect() const { return IntRect(x, y, width, height); }
-=======
-    operator IntRect() const
-    {
-        return IntRect(x, y, width, height);
-    }
->>>>>>> miniblink49
 #else
     WebRect(const gfx::Rect& r)
         : x(r.x())

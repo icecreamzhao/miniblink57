@@ -11,7 +11,6 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
-<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -23,18 +22,6 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
-=======
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
->>>>>>> miniblink49
  */
 
 var global = {
@@ -154,7 +141,6 @@ ColorPicker.prototype._handleMouseDown = function(event) {
 };
 
 ColorPicker.prototype._handleKeyDown = function(event) {
-<<<<<<< HEAD
     var key = event.key;
     if (key === "Escape")
         this.handleCancel();
@@ -163,22 +149,11 @@ ColorPicker.prototype._handleKeyDown = function(event) {
         var index = 0;
         if (selectedElement.classList.contains("other-color")) {
             if (key != "ArrowRight" && key != "ArrowUp")
-=======
-    var key = event.keyIdentifier;
-    if (key === "U+001B") // ESC
-        this.handleCancel();
-    else if (key == "Left" || key == "Up" || key == "Right" || key == "Down") {
-        var selectedElement = document.activeElement;
-        var index = 0;
-        if (selectedElement.classList.contains("other-color")) {
-            if (key != "Right" && key != "Up")
->>>>>>> miniblink49
                 return;
             index = this._container.childNodes.length - 1;
         } else if (selectedElement.classList.contains("color-swatch")) {
             index = parseInt(selectedElement.dataset.index, 10);
             switch (key) {
-<<<<<<< HEAD
             case "ArrowLeft":
                 index--;
                 break;
@@ -189,18 +164,6 @@ ColorPicker.prototype._handleKeyDown = function(event) {
                 index -= SwatchesPerRow;
                 break;
             case "ArrowDown":
-=======
-            case "Left":
-                index--;
-                break;
-            case "Right":
-                index++;
-                break;
-            case "Up":
-                index -= SwatchesPerRow;
-                break;
-            case "Down":
->>>>>>> miniblink49
                 index += SwatchesPerRow;
                 break;
             }

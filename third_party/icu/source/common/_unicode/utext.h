@@ -133,7 +133,6 @@
  *
  */
 
-<<<<<<< HEAD
 #include "unicode/uchar.h"
 #include "unicode/utypes.h"
 #if U_SHOW_CPLUSPLUS_API
@@ -143,39 +142,17 @@
 #include "unicode/unistr.h"
 #endif
 
-=======
-
-
-#include "unicode/utypes.h"
-#include "unicode/uchar.h"
-#if U_SHOW_CPLUSPLUS_API
-#include "unicode/localpointer.h"
-#include "unicode/rep.h"
-#include "unicode/unistr.h"
-#include "unicode/chariter.h"
-#endif
-
-
->>>>>>> miniblink49
 U_CDECL_BEGIN
 
 struct UText;
 typedef struct UText UText; /**< C typedef for struct UText. @stable ICU 3.6 */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /***************************************************************************************
  *
  *   C Functions for creating UText wrappers around various kinds of text strings.
  *
  ****************************************************************************************/
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /**
   * Close function for UText instances.
   * Cleans up, releases any resources being held by an open UText.
@@ -196,13 +173,8 @@ typedef struct UText UText; /**< C typedef for struct UText. @stable ICU 3.6 */
   *
   * @stable ICU 3.4
   */
-<<<<<<< HEAD
 U_STABLE UText* U_EXPORT2
 utext_close(UText* ut);
-=======
-U_STABLE UText * U_EXPORT2
-utext_close(UText *ut);
->>>>>>> miniblink49
 
 #if U_SHOW_CPLUSPLUS_API
 
@@ -244,14 +216,8 @@ U_NAMESPACE_END
  *               will always be used and returned.
  * @stable ICU 3.4
  */
-<<<<<<< HEAD
 U_STABLE UText* U_EXPORT2
 utext_openUTF8(UText* ut, const char* s, int64_t length, UErrorCode* status);
-=======
-U_STABLE UText * U_EXPORT2
-utext_openUTF8(UText *ut, const char *s, int64_t length, UErrorCode *status);
-
->>>>>>> miniblink49
 
 /**
  * Open a read-only UText for UChar * string.
@@ -267,14 +233,8 @@ utext_openUTF8(UText *ut, const char *s, int64_t length, UErrorCode *status);
  *               will always be used and returned.
  * @stable ICU 3.4
  */
-<<<<<<< HEAD
 U_STABLE UText* U_EXPORT2
 utext_openUChars(UText* ut, const UChar* s, int64_t length, UErrorCode* status);
-=======
-U_STABLE UText * U_EXPORT2
-utext_openUChars(UText *ut, const UChar *s, int64_t length, UErrorCode *status);
-
->>>>>>> miniblink49
 
 #if U_SHOW_CPLUSPLUS_API
 /**
@@ -289,14 +249,8 @@ utext_openUChars(UText *ut, const UChar *s, int64_t length, UErrorCode *status);
  *                 will always be used and returned.
  * @stable ICU 3.4
  */
-<<<<<<< HEAD
 U_STABLE UText* U_EXPORT2
 utext_openUnicodeString(UText* ut, icu::UnicodeString* s, UErrorCode* status);
-=======
-U_STABLE UText * U_EXPORT2
-utext_openUnicodeString(UText *ut, icu::UnicodeString *s, UErrorCode *status);
-
->>>>>>> miniblink49
 
 /**
  * Open a UText for a const UnicodeString.   The resulting UText will not be writable.
@@ -310,14 +264,8 @@ utext_openUnicodeString(UText *ut, icu::UnicodeString *s, UErrorCode *status);
  *               will always be used and returned.
  * @stable ICU 3.4
  */
-<<<<<<< HEAD
 U_STABLE UText* U_EXPORT2
 utext_openConstUnicodeString(UText* ut, const icu::UnicodeString* s, UErrorCode* status);
-=======
-U_STABLE UText * U_EXPORT2
-utext_openConstUnicodeString(UText *ut, const icu::UnicodeString *s, UErrorCode *status);
-
->>>>>>> miniblink49
 
 /**
  * Open a writable UText implementation for an ICU Replaceable object.
@@ -331,13 +279,8 @@ utext_openConstUnicodeString(UText *ut, const icu::UnicodeString *s, UErrorCode 
  * @see Replaceable
  * @stable ICU 3.4
  */
-<<<<<<< HEAD
 U_STABLE UText* U_EXPORT2
 utext_openReplaceable(UText* ut, icu::Replaceable* rep, UErrorCode* status);
-=======
-U_STABLE UText * U_EXPORT2
-utext_openReplaceable(UText *ut, icu::Replaceable *rep, UErrorCode *status);
->>>>>>> miniblink49
 
 /**
  * Open a  UText implementation over an ICU CharacterIterator.
@@ -351,20 +294,11 @@ utext_openReplaceable(UText *ut, icu::Replaceable *rep, UErrorCode *status);
  * @see Replaceable
  * @stable ICU 3.4
  */
-<<<<<<< HEAD
 U_STABLE UText* U_EXPORT2
 utext_openCharacterIterator(UText* ut, icu::CharacterIterator* ci, UErrorCode* status);
 
 #endif
 
-=======
-U_STABLE UText * U_EXPORT2
-utext_openCharacterIterator(UText *ut, icu::CharacterIterator *ci, UErrorCode *status);
-
-#endif
-
-
->>>>>>> miniblink49
 /**
   *  Clone a UText.  This is much like opening a UText where the source text is itself
   *  another UText.
@@ -422,14 +356,8 @@ utext_openCharacterIterator(UText *ut, icu::CharacterIterator *ci, UErrorCode *s
   *  @return       The newly created clone, or NULL if the clone operation failed.
   *  @stable ICU 3.4
   */
-<<<<<<< HEAD
 U_STABLE UText* U_EXPORT2
 utext_clone(UText* dest, const UText* src, UBool deep, UBool readOnly, UErrorCode* status);
-=======
-U_STABLE UText * U_EXPORT2
-utext_clone(UText *dest, const UText *src, UBool deep, UBool readOnly, UErrorCode *status);
-
->>>>>>> miniblink49
 
 /**
   *  Compare two UText objects for equality.
@@ -443,12 +371,7 @@ utext_clone(UText *dest, const UText *src, UBool deep, UBool readOnly, UErrorCod
   *  @stable ICU 3.6
   */
 U_STABLE UBool U_EXPORT2
-<<<<<<< HEAD
 utext_equals(const UText* a, const UText* b);
-=======
-utext_equals(const UText *a, const UText *b);
-
->>>>>>> miniblink49
 
 /*****************************************************************************
  *
@@ -468,11 +391,7 @@ utext_equals(const UText *a, const UText *b);
   * @stable ICU 3.4
   */
 U_STABLE int64_t U_EXPORT2
-<<<<<<< HEAD
 utext_nativeLength(UText* ut);
-=======
-utext_nativeLength(UText *ut);
->>>>>>> miniblink49
 
 /**
  *  Return TRUE if calculating the length of the text could be expensive.
@@ -488,11 +407,7 @@ utext_nativeLength(UText *ut);
  * @stable ICU 3.4
  */
 U_STABLE UBool U_EXPORT2
-<<<<<<< HEAD
 utext_isLengthExpensive(const UText* ut);
-=======
-utext_isLengthExpensive(const UText *ut);
->>>>>>> miniblink49
 
 /**
  * Returns the code point at the requested index,
@@ -520,12 +435,7 @@ utext_isLengthExpensive(const UText *ut);
  * @stable ICU 3.4
  */
 U_STABLE UChar32 U_EXPORT2
-<<<<<<< HEAD
 utext_char32At(UText* ut, int64_t nativeIndex);
-=======
-utext_char32At(UText *ut, int64_t nativeIndex);
-
->>>>>>> miniblink49
 
 /**
  *
@@ -538,12 +448,7 @@ utext_char32At(UText *ut, int64_t nativeIndex);
  * @stable ICU 3.4
  */
 U_STABLE UChar32 U_EXPORT2
-<<<<<<< HEAD
 utext_current32(UText* ut);
-=======
-utext_current32(UText *ut);
-
->>>>>>> miniblink49
 
 /**
  * Get the code point at the current iteration position of the UText, and
@@ -564,12 +469,7 @@ utext_current32(UText *ut);
  * @stable ICU 3.4
  */
 U_STABLE UChar32 U_EXPORT2
-<<<<<<< HEAD
 utext_next32(UText* ut);
-=======
-utext_next32(UText *ut);
-
->>>>>>> miniblink49
 
 /**
  *  Move the iterator position to the character (code point) whose
@@ -589,12 +489,7 @@ utext_next32(UText *ut);
  *  @stable ICU 3.4
  */
 U_STABLE UChar32 U_EXPORT2
-<<<<<<< HEAD
 utext_previous32(UText* ut);
-=======
-utext_previous32(UText *ut);
-
->>>>>>> miniblink49
 
 /**
   * Set the iteration index and return the code point at that index. 
@@ -615,13 +510,7 @@ utext_previous32(UText *ut);
   * @stable ICU 3.4
   */
 U_STABLE UChar32 U_EXPORT2
-<<<<<<< HEAD
 utext_next32From(UText* ut, int64_t nativeIndex);
-=======
-utext_next32From(UText *ut, int64_t nativeIndex);
-
-
->>>>>>> miniblink49
 
 /**
   * Set the iteration index, and return the code point preceding the
@@ -639,11 +528,7 @@ utext_next32From(UText *ut, int64_t nativeIndex);
   * @stable ICU 3.4
   */
 U_STABLE UChar32 U_EXPORT2
-<<<<<<< HEAD
 utext_previous32From(UText* ut, int64_t nativeIndex);
-=======
-utext_previous32From(UText *ut, int64_t nativeIndex);
->>>>>>> miniblink49
 
 /**
   * Get the current iterator position, which can range from 0 to 
@@ -658,11 +543,7 @@ utext_previous32From(UText *ut, int64_t nativeIndex);
   * @stable ICU 3.4
   */
 U_STABLE int64_t U_EXPORT2
-<<<<<<< HEAD
 utext_getNativeIndex(const UText* ut);
-=======
-utext_getNativeIndex(const UText *ut);
->>>>>>> miniblink49
 
 /**
  * Set the current iteration position to the nearest code point
@@ -688,11 +569,7 @@ utext_getNativeIndex(const UText *ut);
  * @stable ICU 3.4
  */
 U_STABLE void U_EXPORT2
-<<<<<<< HEAD
 utext_setNativeIndex(UText* ut, int64_t nativeIndex);
-=======
-utext_setNativeIndex(UText *ut, int64_t nativeIndex);
->>>>>>> miniblink49
 
 /**
  * Move the iterator postion by delta code points.  The number of code points
@@ -711,11 +588,7 @@ utext_setNativeIndex(UText *ut, int64_t nativeIndex);
  * @stable ICU 3.4
  */
 U_STABLE UBool U_EXPORT2
-<<<<<<< HEAD
 utext_moveIndex32(UText* ut, int32_t delta);
-=======
-utext_moveIndex32(UText *ut, int32_t delta);
->>>>>>> miniblink49
 
 /**
  * Get the native index of the character preceeding the current position.
@@ -740,12 +613,7 @@ utext_moveIndex32(UText *ut, int32_t delta);
  * @stable ICU 3.6
  */
 U_STABLE int64_t U_EXPORT2
-<<<<<<< HEAD
 utext_getPreviousNativeIndex(UText* ut);
-=======
-utext_getPreviousNativeIndex(UText *ut); 
-
->>>>>>> miniblink49
 
 /**
  *
@@ -782,19 +650,10 @@ utext_getPreviousNativeIndex(UText *ut);
  * @stable ICU 3.4
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 utext_extract(UText* ut,
     int64_t nativeStart, int64_t nativeLimit,
     UChar* dest, int32_t destCapacity,
     UErrorCode* status);
-=======
-utext_extract(UText *ut,
-             int64_t nativeStart, int64_t nativeLimit,
-             UChar *dest, int32_t destCapacity,
-             UErrorCode *status);
-
-
->>>>>>> miniblink49
 
 /************************************************************************************
  *
@@ -821,16 +680,9 @@ utext_extract(UText *ut,
  *
  * @internal ICU 4.4 technology preview
  */
-<<<<<<< HEAD
 #define UTEXT_CURRENT32(ut) \
     ((ut)->chunkOffset < (ut)->chunkLength && ((ut)->chunkContents)[(ut)->chunkOffset] < 0xd800 ? ((ut)->chunkContents)[((ut)->chunkOffset)] : utext_current32(ut))
 #endif /* U_HIDE_INTERNAL_API */
-=======
-#define UTEXT_CURRENT32(ut)  \
-    ((ut)->chunkOffset < (ut)->chunkLength && ((ut)->chunkContents)[(ut)->chunkOffset]<0xd800 ? \
-    ((ut)->chunkContents)[((ut)->chunkOffset)] : utext_current32(ut))
-#endif  /* U_HIDE_INTERNAL_API */
->>>>>>> miniblink49
 
 /**
  * inline version of utext_next32(), for performance-critical situations.
@@ -843,14 +695,8 @@ utext_extract(UText *ut,
  *
  * @stable ICU 3.4
  */
-<<<<<<< HEAD
 #define UTEXT_NEXT32(ut) \
     ((ut)->chunkOffset < (ut)->chunkLength && ((ut)->chunkContents)[(ut)->chunkOffset] < 0xd800 ? ((ut)->chunkContents)[((ut)->chunkOffset)++] : utext_next32(ut))
-=======
-#define UTEXT_NEXT32(ut)  \
-    ((ut)->chunkOffset < (ut)->chunkLength && ((ut)->chunkContents)[(ut)->chunkOffset]<0xd800 ? \
-    ((ut)->chunkContents)[((ut)->chunkOffset)++] : utext_next32(ut))
->>>>>>> miniblink49
 
 /**
  * inline version of utext_previous32(), for performance-critical situations.
@@ -862,15 +708,8 @@ utext_extract(UText *ut,
  *
  * @stable ICU 3.4
  */
-<<<<<<< HEAD
 #define UTEXT_PREVIOUS32(ut) \
     ((ut)->chunkOffset > 0 && (ut)->chunkContents[(ut)->chunkOffset - 1] < 0xd800 ? (ut)->chunkContents[--((ut)->chunkOffset)] : utext_previous32(ut))
-=======
-#define UTEXT_PREVIOUS32(ut)  \
-    ((ut)->chunkOffset > 0 && \
-     (ut)->chunkContents[(ut)->chunkOffset-1] < 0xd800 ? \
-          (ut)->chunkContents[--((ut)->chunkOffset)]  :  utext_previous32(ut))
->>>>>>> miniblink49
 
 /**
   *  inline version of utext_getNativeIndex(), for performance-critical situations.
@@ -884,15 +723,8 @@ utext_extract(UText *ut,
   *
   * @stable ICU 3.6
   */
-<<<<<<< HEAD
 #define UTEXT_GETNATIVEINDEX(ut) \
     ((ut)->chunkOffset <= (ut)->nativeIndexingLimit ? (ut)->chunkNativeStart + (ut)->chunkOffset : (ut)->pFuncs->mapOffsetToNative(ut))
-=======
-#define UTEXT_GETNATIVEINDEX(ut)                       \
-    ((ut)->chunkOffset <= (ut)->nativeIndexingLimit?   \
-        (ut)->chunkNativeStart+(ut)->chunkOffset :     \
-        (ut)->pFuncs->mapOffsetToNative(ut))    
->>>>>>> miniblink49
 
 /**
   *  inline version of utext_setNativeIndex(), for performance-critical situations.
@@ -905,7 +737,6 @@ utext_extract(UText *ut,
   *
   * @stable ICU 3.8
   */
-<<<<<<< HEAD
 #define UTEXT_SETNATIVEINDEX(ut, ix)                                           \
     {                                                                          \
         int64_t __offset = (ix) - (ut)->chunkNativeStart;                      \
@@ -915,16 +746,6 @@ utext_extract(UText *ut,
             utext_setNativeIndex((ut), (ix));                                  \
         }                                                                      \
     }
-=======
-#define UTEXT_SETNATIVEINDEX(ut, ix)                       \
-    { int64_t __offset = (ix) - (ut)->chunkNativeStart; \
-      if (__offset>=0 && __offset<=(int64_t)(ut)->nativeIndexingLimit) { \
-          (ut)->chunkOffset=(int32_t)__offset; \
-      } else { \
-          utext_setNativeIndex((ut), (ix)); } }
-
-
->>>>>>> miniblink49
 
 /************************************************************************************
  *
@@ -934,10 +755,6 @@ utext_extract(UText *ut,
  *
  ************************************************************************************/
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /**
  *  Return TRUE if the text can be written (modified) with utext_replace() or
  *  utext_copy().  For the text to be writable, the text provider must
@@ -957,12 +774,7 @@ utext_extract(UText *ut,
  *
  */
 U_STABLE UBool U_EXPORT2
-<<<<<<< HEAD
 utext_isWritable(const UText* ut);
-=======
-utext_isWritable(const UText *ut);
-
->>>>>>> miniblink49
 
 /**
   * Test whether there is meta data associated with the text.
@@ -973,12 +785,7 @@ utext_isWritable(const UText *ut);
   * @stable ICU 3.4
   */
 U_STABLE UBool U_EXPORT2
-<<<<<<< HEAD
 utext_hasMetaData(const UText* ut);
-=======
-utext_hasMetaData(const UText *ut);
-
->>>>>>> miniblink49
 
 /**
  * Replace a range of the original text with a replacement text.
@@ -1008,19 +815,10 @@ utext_hasMetaData(const UText *ut);
  * @stable ICU 3.4
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 utext_replace(UText* ut,
     int64_t nativeStart, int64_t nativeLimit,
     const UChar* replacementText, int32_t replacementLength,
     UErrorCode* status);
-=======
-utext_replace(UText *ut,
-             int64_t nativeStart, int64_t nativeLimit,
-             const UChar *replacementText, int32_t replacementLength,
-             UErrorCode *status);
-
-
->>>>>>> miniblink49
 
 /**
  *
@@ -1055,20 +853,11 @@ utext_replace(UText *ut,
  * @stable ICU 3.4
  */
 U_STABLE void U_EXPORT2
-<<<<<<< HEAD
 utext_copy(UText* ut,
     int64_t nativeStart, int64_t nativeLimit,
     int64_t destIndex,
     UBool move,
     UErrorCode* status);
-=======
-utext_copy(UText *ut,
-          int64_t nativeStart, int64_t nativeLimit,
-          int64_t destIndex,
-          UBool move,
-          UErrorCode *status);
-
->>>>>>> miniblink49
 
 /**
   *  <p>
@@ -1092,12 +881,7 @@ utext_copy(UText *ut,
   *  @stable ICU 3.6
   */
 U_STABLE void U_EXPORT2
-<<<<<<< HEAD
 utext_freeze(UText* ut);
-=======
-utext_freeze(UText *ut);
-
->>>>>>> miniblink49
 
 /**
  * UText provider properties (bit field indexes).
@@ -1129,11 +913,7 @@ enum {
      * There is meta data associated with the text.
      * @see Replaceable::hasMetaData()
      * @stable ICU 3.4
-<<<<<<< HEAD
      */
-=======
-     */ 
->>>>>>> miniblink49
     UTEXT_PROVIDER_HAS_META_DATA = 4,
     /**
      * Text provider owns the text storage.
@@ -1142,11 +922,7 @@ enum {
      *  also be closed/deleted/freed/ whatever is appropriate.
      * @stable ICU 3.6
      */
-<<<<<<< HEAD
     UTEXT_PROVIDER_OWNS_TEXT = 5
-=======
-     UTEXT_PROVIDER_OWNS_TEXT = 5
->>>>>>> miniblink49
 };
 
 /**
@@ -1186,14 +962,8 @@ enum {
   *
   * @stable ICU 3.4
   */
-<<<<<<< HEAD
 typedef UText* U_CALLCONV
 UTextClone(UText* dest, const UText* src, UBool deep, UErrorCode* status);
-=======
-typedef UText * U_CALLCONV
-UTextClone(UText *dest, const UText *src, UBool deep, UErrorCode *status);
-
->>>>>>> miniblink49
 
 /**
  * Function type declaration for UText.nativeLength().
@@ -1204,11 +974,7 @@ UTextClone(UText *dest, const UText *src, UBool deep, UErrorCode *status);
  * @stable ICU 3.4
  */
 typedef int64_t U_CALLCONV
-<<<<<<< HEAD
 UTextNativeLength(UText* ut);
-=======
-UTextNativeLength(UText *ut);
->>>>>>> miniblink49
 
 /**
  * Function type declaration for UText.access().  Get the description of the text chunk
@@ -1236,11 +1002,7 @@ UTextNativeLength(UText *ut);
  * @stable ICU 3.4
  */
 typedef UBool U_CALLCONV
-<<<<<<< HEAD
 UTextAccess(UText* ut, int64_t nativeIndex, UBool forward);
-=======
-UTextAccess(UText *ut, int64_t nativeIndex, UBool forward);
->>>>>>> miniblink49
 
 /**
  * Function type declaration for UText.extract().
@@ -1270,17 +1032,10 @@ UTextAccess(UText *ut, int64_t nativeIndex, UBool forward);
  * @stable ICU 3.4
  */
 typedef int32_t U_CALLCONV
-<<<<<<< HEAD
 UTextExtract(UText* ut,
     int64_t nativeStart, int64_t nativeLimit,
     UChar* dest, int32_t destCapacity,
     UErrorCode* status);
-=======
-UTextExtract(UText *ut,
-             int64_t nativeStart, int64_t nativeLimit,
-             UChar *dest, int32_t destCapacity,
-             UErrorCode *status);
->>>>>>> miniblink49
 
 /**
  * Function type declaration for UText.replace().
@@ -1312,17 +1067,10 @@ UTextExtract(UText *ut,
  * @stable ICU 3.4
  */
 typedef int32_t U_CALLCONV
-<<<<<<< HEAD
 UTextReplace(UText* ut,
     int64_t nativeStart, int64_t nativeLimit,
     const UChar* replacementText, int32_t replacmentLength,
     UErrorCode* status);
-=======
-UTextReplace(UText *ut,
-             int64_t nativeStart, int64_t nativeLimit,
-             const UChar *replacementText, int32_t replacmentLength,
-             UErrorCode *status);
->>>>>>> miniblink49
 
 /**
  * Function type declaration for UText.copy().
@@ -1353,19 +1101,11 @@ UTextReplace(UText *ut,
  * @stable ICU 3.4
  */
 typedef void U_CALLCONV
-<<<<<<< HEAD
 UTextCopy(UText* ut,
     int64_t nativeStart, int64_t nativeLimit,
     int64_t nativeDest,
     UBool move,
     UErrorCode* status);
-=======
-UTextCopy(UText *ut,
-          int64_t nativeStart, int64_t nativeLimit,
-          int64_t nativeDest,
-          UBool move,
-          UErrorCode *status);
->>>>>>> miniblink49
 
 /**
  * Function type declaration for UText.mapOffsetToNative().
@@ -1381,11 +1121,7 @@ UTextCopy(UText *ut,
  * @stable ICU 3.4
  */
 typedef int64_t U_CALLCONV
-<<<<<<< HEAD
 UTextMapOffsetToNative(const UText* ut);
-=======
-UTextMapOffsetToNative(const UText *ut);
->>>>>>> miniblink49
 
 /**
  * Function type declaration for UText.mapIndexToUTF16().
@@ -1403,12 +1139,7 @@ UTextMapOffsetToNative(const UText *ut);
  * @stable ICU 3.4
  */
 typedef int32_t U_CALLCONV
-<<<<<<< HEAD
 UTextMapNativeIndexToUTF16(const UText* ut, int64_t nativeIndex);
-=======
-UTextMapNativeIndexToUTF16(const UText *ut, int64_t nativeIndex);
-
->>>>>>> miniblink49
 
 /**
  * Function type declaration for UText.utextClose().
@@ -1428,12 +1159,7 @@ UTextMapNativeIndexToUTF16(const UText *ut, int64_t nativeIndex);
  * @stable ICU 3.4
  */
 typedef void U_CALLCONV
-<<<<<<< HEAD
 UTextClose(UText* ut);
-=======
-UTextClose(UText *ut);
-
->>>>>>> miniblink49
 
 /**
   *   (public)  Function dispatch table for UText.
@@ -1459,23 +1185,14 @@ struct UTextFuncs {
      *             in sequence.
      *   @stable ICU 3.6
      */
-<<<<<<< HEAD
     int32_t tableSize;
-=======
-    int32_t       tableSize;
->>>>>>> miniblink49
 
     /**
       *   (private)  Alignment padding.
       *              Do not use, reserved for use by the UText framework only.
       *   @internal
       */
-<<<<<<< HEAD
     int32_t reserved1, /** @internal */ reserved2, /** @internal */ reserved3;
-=======
-    int32_t       reserved1, /** @internal */ reserved2, /** @internal */ reserved3;
-
->>>>>>> miniblink49
 
     /**
      * (public) Function pointer for UTextClone
@@ -1483,11 +1200,7 @@ struct UTextFuncs {
      * @see UTextClone
      * @stable ICU 3.6
      */
-<<<<<<< HEAD
     UTextClone* clone;
-=======
-    UTextClone *clone;
->>>>>>> miniblink49
 
     /**
      * (public) function pointer for UTextLength
@@ -1496,11 +1209,7 @@ struct UTextFuncs {
      * @see UTextLength
      * @stable ICU 3.6
      */
-<<<<<<< HEAD
     UTextNativeLength* nativeLength;
-=======
-    UTextNativeLength *nativeLength;
->>>>>>> miniblink49
 
     /**
      * (public) Function pointer for UTextAccess.
@@ -1508,11 +1217,7 @@ struct UTextFuncs {
      * @see UTextAccess
      * @stable ICU 3.6
      */
-<<<<<<< HEAD
     UTextAccess* access;
-=======
-    UTextAccess *access;
->>>>>>> miniblink49
 
     /**
      * (public) Function pointer for UTextExtract.
@@ -1520,11 +1225,7 @@ struct UTextFuncs {
      * @see UTextExtract
      * @stable ICU 3.6
      */
-<<<<<<< HEAD
     UTextExtract* extract;
-=======
-    UTextExtract *extract;
->>>>>>> miniblink49
 
     /**
      * (public) Function pointer for UTextReplace.
@@ -1532,11 +1233,7 @@ struct UTextFuncs {
      * @see UTextReplace
      * @stable ICU 3.6
      */
-<<<<<<< HEAD
     UTextReplace* replace;
-=======
-    UTextReplace *replace;
->>>>>>> miniblink49
 
     /**
      * (public) Function pointer for UTextCopy.
@@ -1544,11 +1241,7 @@ struct UTextFuncs {
      * @see UTextCopy
      * @stable ICU 3.6
      */
-<<<<<<< HEAD
     UTextCopy* copy;
-=======
-    UTextCopy *copy;
->>>>>>> miniblink49
 
     /**
      * (public) Function pointer for UTextMapOffsetToNative.
@@ -1556,11 +1249,7 @@ struct UTextFuncs {
      * @see UTextMapOffsetToNative
      * @stable ICU 3.6
      */
-<<<<<<< HEAD
     UTextMapOffsetToNative* mapOffsetToNative;
-=======
-    UTextMapOffsetToNative *mapOffsetToNative;
->>>>>>> miniblink49
 
     /**
      * (public) Function pointer for UTextMapNativeIndexToUTF16.
@@ -1568,11 +1257,7 @@ struct UTextFuncs {
      * @see UTextMapNativeIndexToUTF16
      * @stable ICU 3.6
      */
-<<<<<<< HEAD
     UTextMapNativeIndexToUTF16* mapNativeIndexToUTF16;
-=======
-    UTextMapNativeIndexToUTF16 *mapNativeIndexToUTF16;
->>>>>>> miniblink49
 
     /**
      * (public) Function pointer for UTextClose.
@@ -1580,33 +1265,18 @@ struct UTextFuncs {
       * @see UTextClose
       * @stable ICU 3.6
       */
-<<<<<<< HEAD
     UTextClose* close;
-=======
-    UTextClose  *close;
->>>>>>> miniblink49
 
     /**
       * (private)  Spare function pointer
       * @internal
       */
-<<<<<<< HEAD
     UTextClose* spare1;
-=======
-    UTextClose  *spare1;
-    
-    /**
-      * (private)  Spare function pointer
-      * @internal
-      */
-    UTextClose  *spare2;
->>>>>>> miniblink49
 
     /**
       * (private)  Spare function pointer
       * @internal
       */
-<<<<<<< HEAD
     UTextClose* spare2;
 
     /**
@@ -1614,10 +1284,6 @@ struct UTextFuncs {
       * @internal
       */
     UTextClose* spare3;
-=======
-    UTextClose  *spare3;
-
->>>>>>> miniblink49
 };
 /**
  * Function dispatch table for UText
@@ -1625,11 +1291,7 @@ struct UTextFuncs {
  */
 typedef struct UTextFuncs UTextFuncs;
 
-<<<<<<< HEAD
 /**
-=======
- /**
->>>>>>> miniblink49
   *   UText struct.  Provides the interface between the generic UText access code
   *                  and the UText provider code that works on specific kinds of
   *                  text  (UTF-8, noncontiguous UTF-16, whatever.)
@@ -1653,35 +1315,21 @@ struct UText {
      *                        reuse of the UText struct.
      * @internal
      */
-<<<<<<< HEAD
     uint32_t magic;
-=======
-    uint32_t       magic;
-
->>>>>>> miniblink49
 
     /**
      *     (private)  Flags for managing the allocation and freeing of
      *                memory associated with this UText.
      * @internal
      */
-<<<<<<< HEAD
     int32_t flags;
-=======
-    int32_t        flags;
-
->>>>>>> miniblink49
 
     /**
       *  Text provider properties.  This set of flags is maintainted by the
       *                             text provider implementation.
       *  @stable ICU 3.4
       */
-<<<<<<< HEAD
     int32_t providerProperties;
-=======
-    int32_t         providerProperties;
->>>>>>> miniblink49
 
     /**
      * (public) sizeOfStruct=sizeof(UText)
@@ -1689,37 +1337,22 @@ struct UText {
      *
      * @stable ICU 3.4
      */
-<<<<<<< HEAD
     int32_t sizeOfStruct;
 
     /* ------ 16 byte alignment boundary -----------  */
-=======
-    int32_t         sizeOfStruct;
-    
-    /* ------ 16 byte alignment boundary -----------  */
-    
->>>>>>> miniblink49
 
     /**
       *  (protected) Native index of the first character position following
       *              the current chunk.
       *  @stable ICU 3.6
       */
-<<<<<<< HEAD
     int64_t chunkNativeLimit;
-=======
-    int64_t         chunkNativeLimit;
->>>>>>> miniblink49
 
     /**
      *   (protected)  Size in bytes of the extra space (pExtra).
      *  @stable ICU 3.4
      */
-<<<<<<< HEAD
     int32_t extraSize;
-=======
-    int32_t        extraSize;
->>>>>>> miniblink49
 
     /**
       *    (protected) The highest chunk offset where native indexing and
@@ -1728,52 +1361,30 @@ struct UText {
       *
       *    @stable ICU 3.6
       */
-<<<<<<< HEAD
     int32_t nativeIndexingLimit;
 
     /* ---- 16 byte alignment boundary------ */
 
-=======
-    int32_t         nativeIndexingLimit;
-
-    /* ---- 16 byte alignment boundary------ */
-    
->>>>>>> miniblink49
     /**
      *  (protected) Native index of the first character in the text chunk.
      *  @stable ICU 3.6
      */
-<<<<<<< HEAD
     int64_t chunkNativeStart;
-=======
-    int64_t         chunkNativeStart;
->>>>>>> miniblink49
 
     /**
      *  (protected) Current iteration position within the text chunk (UTF-16 buffer).
      *  This is the index to the character that will be returned by utext_next32().
      *  @stable ICU 3.6
      */
-<<<<<<< HEAD
     int32_t chunkOffset;
-=======
-    int32_t         chunkOffset;
->>>>>>> miniblink49
 
     /**
      *  (protected) Length the text chunk (UTF-16 buffer), in UChars.
      *  @stable ICU 3.6
      */
-<<<<<<< HEAD
     int32_t chunkLength;
 
     /* ---- 16  byte alignment boundary-- */
-=======
-    int32_t         chunkLength;
-
-    /* ---- 16  byte alignment boundary-- */
-    
->>>>>>> miniblink49
 
     /**
      *  (protected)  pointer to a chunk of text in UTF-16 format.
@@ -1781,7 +1392,6 @@ struct UText {
      *  if conversion was required, to a buffer owned by the UText.
      *  @stable ICU 3.6
      */
-<<<<<<< HEAD
     const UChar* chunkContents;
 
     /**
@@ -1789,26 +1399,13 @@ struct UText {
       * @stable ICU 3.6
       */
     const UTextFuncs* pFuncs;
-=======
-    const UChar    *chunkContents;
-
-     /**
-      * (public)     Pointer to Dispatch table for accessing functions for this UText.
-      * @stable ICU 3.6
-      */
-    const UTextFuncs     *pFuncs;
->>>>>>> miniblink49
 
     /**
      *  (protected)  Pointer to additional space requested by the
      *               text provider during the utext_open operation.
      * @stable ICU 3.4
      */
-<<<<<<< HEAD
     void* pExtra;
-=======
-    void          *pExtra;
->>>>>>> miniblink49
 
     /**
      * (protected) Pointer to string or text-containin object or similar.
@@ -1816,11 +1413,7 @@ struct UText {
      *  that is known to the text provider functions.
      * @stable ICU 3.4
      */
-<<<<<<< HEAD
     const void* context;
-=======
-    const void   *context;
->>>>>>> miniblink49
 
     /* --- 16 byte alignment boundary--- */
 
@@ -1829,124 +1422,72 @@ struct UText {
      * Not used by UText common code.
      * @stable ICU 3.6
      */
-<<<<<<< HEAD
     const void* p;
-=======
-    const void     *p; 
->>>>>>> miniblink49
     /**
      * (protected) Pointer fields available for use by the text provider.
      * Not used by UText common code.
      * @stable ICU 3.6
      */
-<<<<<<< HEAD
     const void* q;
     /**
-=======
-    const void     *q;
-     /**
->>>>>>> miniblink49
      * (protected) Pointer fields available for use by the text provider.
      * Not used by UText common code.
      * @stable ICU 3.6
       */
-<<<<<<< HEAD
     const void* r;
-=======
-    const void     *r;
->>>>>>> miniblink49
 
     /**
       *  Private field reserved for future use by the UText framework
       *     itself.  This is not to be touched by the text providers.
       * @internal ICU 3.4
       */
-<<<<<<< HEAD
     void* privP;
 
     /* --- 16 byte alignment boundary--- */
-=======
-    void           *privP;
-
-
-    /* --- 16 byte alignment boundary--- */
-    
->>>>>>> miniblink49
 
     /**
       * (protected) Integer field reserved for use by the text provider.
       * Not used by the UText framework, or by the client (user) of the UText.
       * @stable ICU 3.4
       */
-<<<<<<< HEAD
     int64_t a;
-=======
-    int64_t         a;
->>>>>>> miniblink49
 
     /**
       * (protected) Integer field reserved for use by the text provider.
       * Not used by the UText framework, or by the client (user) of the UText.
       * @stable ICU 3.4
       */
-<<<<<<< HEAD
     int32_t b;
-=======
-    int32_t         b;
->>>>>>> miniblink49
 
     /**
       * (protected) Integer field reserved for use by the text provider.
       * Not used by the UText framework, or by the client (user) of the UText.
       * @stable ICU 3.4
       */
-<<<<<<< HEAD
     int32_t c;
 
     /*  ---- 16 byte alignment boundary---- */
 
-=======
-    int32_t         c;
-
-    /*  ---- 16 byte alignment boundary---- */
-
-
->>>>>>> miniblink49
     /**
       *  Private field reserved for future use by the UText framework
       *     itself.  This is not to be touched by the text providers.
       * @internal ICU 3.4
       */
-<<<<<<< HEAD
     int64_t privA;
-=======
-    int64_t         privA;
->>>>>>> miniblink49
     /**
       *  Private field reserved for future use by the UText framework
       *     itself.  This is not to be touched by the text providers.
       * @internal ICU 3.4
       */
-<<<<<<< HEAD
     int32_t privB;
-=======
-    int32_t         privB;
->>>>>>> miniblink49
     /**
       *  Private field reserved for future use by the UText framework
       *     itself.  This is not to be touched by the text providers.
       * @internal ICU 3.4
       */
-<<<<<<< HEAD
     int32_t privC;
 };
 
-=======
-    int32_t         privC;
-};
-
-
->>>>>>> miniblink49
 /**
  *  Common function for use by Text Provider implementations to allocate and/or initialize
  *  a new UText struct.  To be called in the implementation of utext_open() functions.
@@ -1963,13 +1504,8 @@ struct UText {
  * @return pointer to the UText, allocated if necessary, with extra space set up if requested.
  * @stable ICU 3.4
  */
-<<<<<<< HEAD
 U_STABLE UText* U_EXPORT2
 utext_setup(UText* ut, int32_t extraSpace, UErrorCode* status);
-=======
-U_STABLE UText * U_EXPORT2
-utext_setup(UText *ut, int32_t extraSpace, UErrorCode *status);
->>>>>>> miniblink49
 
 #ifndef U_HIDE_INTERNAL_API
 /**
@@ -1980,11 +1516,7 @@ utext_setup(UText *ut, int32_t extraSpace, UErrorCode *status);
 enum {
     UTEXT_MAGIC = 0x345ad82c
 };
-<<<<<<< HEAD
 #endif /* U_HIDE_INTERNAL_API */
-=======
-#endif  /* U_HIDE_INTERNAL_API */
->>>>>>> miniblink49
 
 /**
  * initializer to be used with local (stack) instances of a UText
@@ -1993,7 +1525,6 @@ enum {
  *
  * @stable ICU 3.6
  */
-<<<<<<< HEAD
 #define UTEXT_INITIALIZER                                \
     {                                                    \
         UTEXT_MAGIC, /* magic                */          \
@@ -2018,32 +1549,4 @@ enum {
 
 U_CDECL_END
 
-=======
-#define UTEXT_INITIALIZER {                                        \
-                  UTEXT_MAGIC,          /* magic                */ \
-                  0,                    /* flags                */ \
-                  0,                    /* providerProps        */ \
-                  sizeof(UText),        /* sizeOfStruct         */ \
-                  0,                    /* chunkNativeLimit     */ \
-                  0,                    /* extraSize            */ \
-                  0,                    /* nativeIndexingLimit  */ \
-                  0,                    /* chunkNativeStart     */ \
-                  0,                    /* chunkOffset          */ \
-                  0,                    /* chunkLength          */ \
-                  NULL,                 /* chunkContents        */ \
-                  NULL,                 /* pFuncs               */ \
-                  NULL,                 /* pExtra               */ \
-                  NULL,                 /* context              */ \
-                  NULL, NULL, NULL,     /* p, q, r              */ \
-                  NULL,                 /* privP                */ \
-                  0, 0, 0,              /* a, b, c              */ \
-                  0, 0, 0               /* privA,B,C,           */ \
-                  }
-
-
-U_CDECL_END
-
-
-
->>>>>>> miniblink49
 #endif

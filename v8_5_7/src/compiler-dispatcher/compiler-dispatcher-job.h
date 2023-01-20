@@ -10,11 +10,7 @@
 #include "src/base/macros.h"
 #include "src/globals.h"
 #include "src/handles.h"
-<<<<<<< HEAD
 //#include "testing/gtest/include/gtest/gtest_prod.h"
-=======
-#include "testing/gtest/include/gtest/gtest_prod.h"
->>>>>>> miniblink49
 
 namespace v8 {
 namespace internal {
@@ -88,11 +84,7 @@ class V8_EXPORT_PRIVATE CompilerDispatcherJob {
   void ResetOnMainThread();
 
  private:
-<<<<<<< HEAD
   //FRIEND_TEST(CompilerDispatcherJobTest, ScopeChain);
-=======
-  FRIEND_TEST(CompilerDispatcherJobTest, ScopeChain);
->>>>>>> miniblink49
 
   CompileJobStatus status_ = CompileJobStatus::kInitial;
   Isolate* isolate_;

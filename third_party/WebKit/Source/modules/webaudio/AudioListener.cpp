@@ -26,7 +26,6 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "modules/webaudio/AudioListener.h"
 #include "modules/webaudio/PannerNode.h"
 #include "platform/audio/AudioBus.h"
@@ -85,50 +84,16 @@ DEFINE_TRACE(AudioListener)
     visitor->trace(m_upX);
     visitor->trace(m_upY);
     visitor->trace(m_upZ);
-=======
-#include "config.h"
-#if ENABLE(WEB_AUDIO)
-#include "modules/webaudio/AudioListener.h"
-
-#include "modules/webaudio/PannerNode.h"
-#include "platform/audio/AudioBus.h"
-#include "platform/audio/HRTFDatabaseLoader.h"
-#include "wtf/MainThread.h"
-
-namespace blink {
-
-AudioListener::AudioListener()
-    : m_position(0, 0, 0)
-    , m_orientation(0, 0, -1)
-    , m_upVector(0, 1, 0)
-    , m_velocity(0, 0, 0)
-    , m_dopplerFactor(1)
-    , m_speedOfSound(343.3)
-{
-}
-
-AudioListener::~AudioListener()
-{
-}
-
-DEFINE_TRACE(AudioListener)
-{
->>>>>>> miniblink49
 }
 
 void AudioListener::addPanner(PannerHandler& panner)
 {
-<<<<<<< HEAD
     DCHECK(isMainThread());
-=======
-    ASSERT(isMainThread());
->>>>>>> miniblink49
     m_panners.add(&panner);
 }
 
 void AudioListener::removePanner(PannerHandler& panner)
 {
-<<<<<<< HEAD
     DCHECK(isMainThread());
     DCHECK(m_panners.contains(&panner));
     m_panners.remove(&panner);
@@ -261,26 +226,13 @@ void AudioListener::createAndLoadHRTFDatabaseLoader(float sampleRate)
 {
     DCHECK(isMainThread());
 
-=======
-    ASSERT(isMainThread());
-    ASSERT(m_panners.contains(&panner));
-    m_panners.remove(&panner);
-}
-
-void AudioListener::createAndLoadHRTFDatabaseLoader(float sampleRate)
-{
->>>>>>> miniblink49
     if (!m_hrtfDatabaseLoader)
         m_hrtfDatabaseLoader = HRTFDatabaseLoader::createAndLoadAsynchronouslyIfNecessary(sampleRate);
 }
 
 bool AudioListener::isHRTFDatabaseLoaded()
 {
-<<<<<<< HEAD
     return m_hrtfDatabaseLoader && m_hrtfDatabaseLoader->isLoaded();
-=======
-    return m_hrtfDatabaseLoader->isLoaded();
->>>>>>> miniblink49
 }
 
 void AudioListener::waitForHRTFDatabaseLoaderThreadCompletion()
@@ -291,17 +243,13 @@ void AudioListener::waitForHRTFDatabaseLoaderThreadCompletion()
 
 void AudioListener::markPannersAsDirty(unsigned type)
 {
-<<<<<<< HEAD
     DCHECK(isMainThread());
-=======
->>>>>>> miniblink49
     for (PannerHandler* panner : m_panners)
         panner->markPannerAsDirty(type);
 }
 
 void AudioListener::setPosition(const FloatPoint3D& position)
 {
-<<<<<<< HEAD
     DCHECK(isMainThread());
 
     // This synchronizes with panner's process().
@@ -310,20 +258,10 @@ void AudioListener::setPosition(const FloatPoint3D& position)
     m_positionY->setValue(position.y());
     m_positionZ->setValue(position.z());
     markPannersAsDirty(PannerHandler::AzimuthElevationDirty | PannerHandler::DistanceConeGainDirty);
-=======
-    if (m_position == position)
-        return;
-
-    // This synchronizes with panner's process().
-    MutexLocker listenerLocker(m_listenerLock);
-    m_position = position;
-    markPannersAsDirty(PannerHandler::AzimuthElevationDirty | PannerHandler::DistanceConeGainDirty | PannerHandler::DopplerRateDirty);
->>>>>>> miniblink49
 }
 
 void AudioListener::setOrientation(const FloatPoint3D& orientation)
 {
-<<<<<<< HEAD
     DCHECK(isMainThread());
 
     // This synchronizes with panner's process().
@@ -331,20 +269,11 @@ void AudioListener::setOrientation(const FloatPoint3D& orientation)
     m_forwardX->setValue(orientation.x());
     m_forwardY->setValue(orientation.y());
     m_forwardZ->setValue(orientation.z());
-=======
-    if (m_orientation == orientation)
-        return;
-
-    // This synchronizes with panner's process().
-    MutexLocker listenerLocker(m_listenerLock);
-    m_orientation = orientation;
->>>>>>> miniblink49
     markPannersAsDirty(PannerHandler::AzimuthElevationDirty);
 }
 
 void AudioListener::setUpVector(const FloatPoint3D& upVector)
 {
-<<<<<<< HEAD
     DCHECK(isMainThread());
 
     // This synchronizes with panner's process().
@@ -356,50 +285,3 @@ void AudioListener::setUpVector(const FloatPoint3D& upVector)
 }
 
 } // namespace blink
-=======
-    if (m_upVector == upVector)
-        return;
-
-    // This synchronizes with panner's process().
-    MutexLocker listenerLocker(m_listenerLock);
-    m_upVector = upVector;
-    markPannersAsDirty(PannerHandler::AzimuthElevationDirty);
-}
-
-void AudioListener::setVelocity(const FloatPoint3D& velocity)
-{
-    if (m_velocity == velocity)
-        return;
-
-    // This synchronizes with panner's process().
-    MutexLocker listenerLocker(m_listenerLock);
-    m_velocity = velocity;
-    markPannersAsDirty(PannerHandler::DopplerRateDirty);
-}
-
-void AudioListener::setDopplerFactor(double dopplerFactor)
-{
-    if (m_dopplerFactor == dopplerFactor)
-        return;
-
-    // This synchronizes with panner's process().
-    MutexLocker listenerLocker(m_listenerLock);
-    m_dopplerFactor = dopplerFactor;
-    markPannersAsDirty(PannerHandler::DopplerRateDirty);
-}
-
-void AudioListener::setSpeedOfSound(double speedOfSound)
-{
-    if (m_speedOfSound == speedOfSound)
-        return;
-
-    // This synchronizes with panner's process().
-    MutexLocker listenerLocker(m_listenerLock);
-    m_speedOfSound = speedOfSound;
-    markPannersAsDirty(PannerHandler::DopplerRateDirty);
-}
-
-} // namespace blink
-
-#endif // ENABLE(WEB_AUDIO)
->>>>>>> miniblink49

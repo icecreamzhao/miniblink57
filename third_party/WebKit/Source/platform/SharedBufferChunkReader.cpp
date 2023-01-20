@@ -28,23 +28,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/SharedBufferChunkReader.h"
 
 #include "platform/SharedBuffer.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 SharedBufferChunkReader::SharedBufferChunkReader(
     PassRefPtr<const SharedBuffer> buffer,
     const Vector<char>& separator)
-=======
-SharedBufferChunkReader::SharedBufferChunkReader(SharedBuffer* buffer, const Vector<char>& separator)
->>>>>>> miniblink49
     : m_buffer(buffer)
     , m_bufferPosition(0)
     , m_segment(0)
@@ -56,13 +48,9 @@ SharedBufferChunkReader::SharedBufferChunkReader(SharedBuffer* buffer, const Vec
 {
 }
 
-<<<<<<< HEAD
 SharedBufferChunkReader::SharedBufferChunkReader(
     PassRefPtr<const SharedBuffer> buffer,
     const char* separator)
-=======
-SharedBufferChunkReader::SharedBufferChunkReader(SharedBuffer* buffer, const char* separator)
->>>>>>> miniblink49
     : m_buffer(buffer)
     , m_bufferPosition(0)
     , m_segment(0)
@@ -85,12 +73,8 @@ void SharedBufferChunkReader::setSeparator(const char* separator)
     m_separator.append(separator, strlen(separator));
 }
 
-<<<<<<< HEAD
 bool SharedBufferChunkReader::nextChunk(Vector<char>& chunk,
     bool includeSeparator)
-=======
-bool SharedBufferChunkReader::nextChunk(Vector<char>& chunk, bool includeSeparator)
->>>>>>> miniblink49
 {
     if (m_reachedEndOfFile)
         return false;
@@ -101,19 +85,11 @@ bool SharedBufferChunkReader::nextChunk(Vector<char>& chunk, bool includeSeparat
             char currentCharacter = m_segment[m_segmentIndex++];
             if (currentCharacter != m_separator[m_separatorIndex]) {
                 if (m_separatorIndex > 0) {
-<<<<<<< HEAD
                     SECURITY_DCHECK(m_separatorIndex <= m_separator.size());
                     chunk.append(m_separator.data(), m_separatorIndex);
                     m_separatorIndex = 0;
                 }
                 chunk.push_back(currentCharacter);
-=======
-                    ASSERT_WITH_SECURITY_IMPLICATION(m_separatorIndex <= m_separator.size());
-                    chunk.append(m_separator.data(), m_separatorIndex);
-                    m_separatorIndex = 0;
-                }
-                chunk.append(currentCharacter);
->>>>>>> miniblink49
                 continue;
             }
             m_separatorIndex++;
@@ -140,24 +116,16 @@ bool SharedBufferChunkReader::nextChunk(Vector<char>& chunk, bool includeSeparat
     return false;
 }
 
-<<<<<<< HEAD
 String SharedBufferChunkReader::nextChunkAsUTF8StringWithLatin1Fallback(
     bool includeSeparator)
-=======
-String SharedBufferChunkReader::nextChunkAsUTF8StringWithLatin1Fallback(bool includeSeparator)
->>>>>>> miniblink49
 {
     Vector<char> data;
     if (!nextChunk(data, includeSeparator))
         return String();
 
-<<<<<<< HEAD
     return data.size()
         ? String::fromUTF8WithLatin1Fallback(data.data(), data.size())
         : emptyString();
-=======
-    return data.size() ? String::fromUTF8WithLatin1Fallback(data.data(), data.size()) : emptyString();
->>>>>>> miniblink49
 }
 
 size_t SharedBufferChunkReader::peek(Vector<char>& data, size_t requestedSize)
@@ -186,8 +154,4 @@ size_t SharedBufferChunkReader::peek(Vector<char>& data, size_t requestedSize)
     return readBytesCount;
 }
 
-<<<<<<< HEAD
 } // namespace blink
-=======
-}
->>>>>>> miniblink49

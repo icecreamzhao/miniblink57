@@ -16,11 +16,7 @@
 #import  "SkEventNotifier.h"
 #define  kINVAL_NSVIEW_EventType "inval-nsview"
 
-<<<<<<< HEAD
 static_assert(SK_SUPPORT_GPU, "not_implemented_for_non_gpu_build");
-=======
-SK_COMPILE_ASSERT(SK_SUPPORT_GPU, not_implemented_for_non_gpu_build);
->>>>>>> miniblink49
 
 SkOSWindow::SkOSWindow(void* hWnd) : fHWND(hWnd) {
     fInvalEventIsPending = false;
@@ -69,20 +65,12 @@ void SkOSWindow::onUpdateMenu(const SkOSMenu* menu) {
     [(SkNSView*)fHWND onUpdateMenu:menu];
 }
 
-<<<<<<< HEAD
 bool SkOSWindow::attach(SkBackEndTypes attachType, int sampleCount, bool /*deepColor*/,
                         AttachmentInfo* info) {
     return [(SkNSView*)fHWND attach:attachType withMSAASampleCount:sampleCount andGetInfo:info];
 }
 
 void SkOSWindow::release() {
-=======
-bool SkOSWindow::attach(SkBackEndTypes attachType, int sampleCount, AttachmentInfo* info) {
-    return [(SkNSView*)fHWND attach:attachType withMSAASampleCount:sampleCount andGetInfo:info];
-}
-
-void SkOSWindow::detach() {
->>>>>>> miniblink49
     [(SkNSView*)fHWND detach];
 }
 

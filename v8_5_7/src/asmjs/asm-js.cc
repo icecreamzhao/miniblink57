@@ -89,11 +89,7 @@ bool IsStdlibMemberValid(i::Isolate* isolate, Handle<JSReceiver> stdlib,
         return false;
       }
       Handle<i::Object> value = maybe_value.ToHandleChecked();
-<<<<<<< HEAD
       return value->IsNumber() && std_isinf(value->Number());
-=======
-      return value->IsNumber() && std::isinf(value->Number());
->>>>>>> miniblink49
     }
     case wasm::AsmTyper::StandardMember::kNaN: {
       if (stdlib.is_null()) {

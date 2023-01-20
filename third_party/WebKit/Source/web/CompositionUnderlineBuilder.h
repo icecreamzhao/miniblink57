@@ -42,7 +42,6 @@ namespace blink {
 class CompositionUnderlineBuilder : public CompositionUnderline {
 public:
     CompositionUnderlineBuilder(const WebCompositionUnderline& u)
-<<<<<<< HEAD
         : CompositionUnderline(u.startOffset,
             u.endOffset,
             Color(u.color),
@@ -50,11 +49,6 @@ public:
             Color(u.backgroundColor))
     {
     }
-=======
-        : CompositionUnderline(u.startOffset, u.endOffset,
-            Color(u.color), u.thick,
-            Color(u.backgroundColor)) { }
->>>>>>> miniblink49
 };
 
 } // namespace blink

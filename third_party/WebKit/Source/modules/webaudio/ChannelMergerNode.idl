@@ -26,7 +26,6 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 // See https://webaudio.github.io/web-audio-api/#the-channelmergernode-interface
 [
     Constructor(BaseAudioContext context, optional ChannelMergerOptions options),
@@ -34,9 +33,4 @@
     Measure
 ]
 interface ChannelMergerNode : AudioNode {
-=======
-[
-    Conditional=WEB_AUDIO
-] interface ChannelMergerNode : AudioNode {
->>>>>>> miniblink49
 };

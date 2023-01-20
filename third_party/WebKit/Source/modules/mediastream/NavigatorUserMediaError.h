@@ -10,7 +10,6 @@
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
  *
-<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -21,18 +20,6 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-=======
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
->>>>>>> miniblink49
  */
 
 #ifndef NavigatorUserMediaError_h
@@ -43,7 +30,6 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 class NavigatorUserMediaError final
     : public GarbageCollectedFinalized<NavigatorUserMediaError>,
       public ScriptWrappable {
@@ -59,18 +45,6 @@ public:
     static NavigatorUserMediaError* create(const String& name,
         const String& message,
         const String& constraintName)
-=======
-class NavigatorUserMediaError final : public GarbageCollectedFinalized<NavigatorUserMediaError>, public ScriptWrappable {
-    DEFINE_WRAPPERTYPEINFO();
-public:
-    enum Name {
-        NamePermissionDenied,
-        NameConstraintNotSatisfied
-    };
-
-    static NavigatorUserMediaError* create(Name, const String& message, const String& constraintName);
-    static NavigatorUserMediaError* create(const String& name, const String& message, const String& constraintName)
->>>>>>> miniblink49
     {
         return new NavigatorUserMediaError(name, message, constraintName);
     }
@@ -82,7 +56,6 @@ public:
     DEFINE_INLINE_TRACE() { }
 
 private:
-<<<<<<< HEAD
     NavigatorUserMediaError(const String& name,
         const String& message,
         const String& constraintName)
@@ -91,12 +64,6 @@ private:
         , m_constraintName(constraintName)
     {
         DCHECK(!name.isEmpty());
-=======
-    NavigatorUserMediaError(const String& name, const String& message, const String& constraintName)
-        : m_name(name), m_message(message), m_constraintName(constraintName)
-    {
-        ASSERT(!name.isEmpty());
->>>>>>> miniblink49
     }
 
     String m_name;

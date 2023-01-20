@@ -4,11 +4,7 @@
 
 #ifndef V8_INTL_SUPPORT
 #error Internationalization is expected to be enabled.
-<<<<<<< HEAD
 #endif // V8_INTL_SUPPORT
-=======
-#endif  // V8_INTL_SUPPORT
->>>>>>> miniblink49
 
 #ifndef V8_OBJECTS_JS_COLLATOR_H_
 #define V8_OBJECTS_JS_COLLATOR_H_
@@ -28,16 +24,11 @@
 
 namespace U_ICU_NAMESPACE {
 class Collator;
-<<<<<<< HEAD
 } //  namespace U_ICU_NAMESPACE
-=======
-}  //  namespace U_ICU_NAMESPACE
->>>>>>> miniblink49
 
 namespace v8 {
 namespace internal {
 
-<<<<<<< HEAD
     class JSCollator : public JSObject {
     public:
         // ecma402/#sec-initializecollator
@@ -77,44 +68,3 @@ namespace internal {
 #include "src/objects/object-macros-undef.h"
 
 #endif // V8_OBJECTS_JS_COLLATOR_H_
-=======
-class JSCollator : public JSObject {
- public:
-  // ecma402/#sec-initializecollator
-  V8_WARN_UNUSED_RESULT static MaybeHandle<JSCollator> Initialize(
-      Isolate* isolate, Handle<JSCollator> collator, Handle<Object> locales,
-      Handle<Object> options);
-
-  // ecma402/#sec-intl.collator.prototype.resolvedoptions
-  static Handle<JSObject> ResolvedOptions(Isolate* isolate,
-                                          Handle<JSCollator> collator);
-
-  static const std::set<std::string>& GetAvailableLocales();
-
-  DECL_CAST(JSCollator)
-  DECL_PRINTER(JSCollator)
-  DECL_VERIFIER(JSCollator)
-
-// Layout description.
-#define JS_COLLATOR_FIELDS(V)         \
-  V(kICUCollatorOffset, kTaggedSize)  \
-  V(kBoundCompareOffset, kTaggedSize) \
-  /* Total size. */                   \
-  V(kSize, 0)
-
-  DEFINE_FIELD_OFFSET_CONSTANTS(JSObject::kHeaderSize, JS_COLLATOR_FIELDS)
-#undef JS_COLLATOR_FIELDS
-
-  DECL_ACCESSORS(icu_collator, Managed<icu::Collator>)
-  DECL_ACCESSORS(bound_compare, Object)
-
-  OBJECT_CONSTRUCTORS(JSCollator, JSObject);
-};
-
-}  // namespace internal
-}  // namespace v8
-
-#include "src/objects/object-macros-undef.h"
-
-#endif  // V8_OBJECTS_JS_COLLATOR_H_
->>>>>>> miniblink49

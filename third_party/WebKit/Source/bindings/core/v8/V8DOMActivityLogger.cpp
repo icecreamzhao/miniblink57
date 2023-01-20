@@ -2,19 +2,23 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "bindings/core/v8/V8DOMActivityLogger.h"
 
 #include "bindings/core/v8/V8Binding.h"
 #include "platform/weborigin/KURL.h"
 #include "wtf/HashMap.h"
-#include "wtf/MainThread.h"
 #include "wtf/text/StringHash.h"
+#include <memory>
 
 namespace blink {
 
-typedef HashMap<String, OwnPtr<V8DOMActivityLogger>> DOMActivityLoggerMapForMainWorld;
-typedef HashMap<int, OwnPtr<V8DOMActivityLogger>, WTF::IntHash<int>, WTF::UnsignedWithZeroKeyHashTraits<int>> DOMActivityLoggerMapForIsolatedWorld;
+typedef HashMap<String, std::unique_ptr<V8DOMActivityLogger>>
+    DOMActivityLoggerMapForMainWorld;
+typedef HashMap<int,
+    std::unique_ptr<V8DOMActivityLogger>,
+    WTF::IntHash<int>,
+    WTF::UnsignedWithZeroKeyHashTraits<int>>
+    DOMActivityLoggerMapForIsolatedWorld;
 
 static DOMActivityLoggerMapForMainWorld& domActivityLoggersForMainWorld()
 {
@@ -23,22 +27,28 @@ static DOMActivityLoggerMapForMainWorld& domActivityLoggersForMainWorld()
     return map;
 }
 
-static DOMActivityLoggerMapForIsolatedWorld& domActivityLoggersForIsolatedWorld()
+static DOMActivityLoggerMapForIsolatedWorld&
+domActivityLoggersForIsolatedWorld()
 {
     ASSERT(isMainThread());
     DEFINE_STATIC_LOCAL(DOMActivityLoggerMapForIsolatedWorld, map, ());
     return map;
 }
 
-void V8DOMActivityLogger::setActivityLogger(int worldId, const String& extensionId, PassOwnPtr<V8DOMActivityLogger> logger)
+void V8DOMActivityLogger::setActivityLogger(
+    int worldId,
+    const String& extensionId,
+    std::unique_ptr<V8DOMActivityLogger> logger)
 {
     if (worldId)
-        domActivityLoggersForIsolatedWorld().set(worldId, logger);
+        domActivityLoggersForIsolatedWorld().set(worldId, std::move(logger));
     else
-        domActivityLoggersForMainWorld().set(extensionId, logger);
+        domActivityLoggersForMainWorld().set(extensionId, std::move(logger));
 }
 
-V8DOMActivityLogger* V8DOMActivityLogger::activityLogger(int worldId, const String& extensionId)
+V8DOMActivityLogger* V8DOMActivityLogger::activityLogger(
+    int worldId,
+    const String& extensionId)
 {
     if (worldId) {
         DOMActivityLoggerMapForIsolatedWorld& loggers = domActivityLoggersForIsolatedWorld();
@@ -54,7 +64,8 @@ V8DOMActivityLogger* V8DOMActivityLogger::activityLogger(int worldId, const Stri
     return it == loggers.end() ? 0 : it->value.get();
 }
 
-V8DOMActivityLogger* V8DOMActivityLogger::activityLogger(int worldId, const KURL& url)
+V8DOMActivityLogger* V8DOMActivityLogger::activityLogger(int worldId,
+    const KURL& url)
 {
     // extension ID is ignored for worldId != 0.
     if (worldId)
@@ -87,7 +98,8 @@ V8DOMActivityLogger* V8DOMActivityLogger::currentActivityLogger()
     return contextData->activityLogger();
 }
 
-V8DOMActivityLogger* V8DOMActivityLogger::currentActivityLoggerIfIsolatedWorld()
+V8DOMActivityLogger*
+V8DOMActivityLogger::currentActivityLoggerIfIsolatedWorld()
 {
     v8::Isolate* isolate = v8::Isolate::GetCurrent();
     if (!isolate->InContext())

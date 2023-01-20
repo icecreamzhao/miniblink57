@@ -31,25 +31,17 @@
 #ifndef MIDIAccess_h
 #define MIDIAccess_h
 
-<<<<<<< HEAD
 #include "bindings/core/v8/ActiveScriptWrappable.h"
 #include "bindings/core/v8/ScriptPromise.h"
 #include "core/dom/ContextLifecycleObserver.h"
 #include "media/midi/midi_service.mojom-blink.h"
-=======
-#include "bindings/core/v8/ScriptPromise.h"
-#include "core/dom/ActiveDOMObject.h"
->>>>>>> miniblink49
 #include "modules/EventTargetModules.h"
 #include "modules/webmidi/MIDIAccessInitializer.h"
 #include "modules/webmidi/MIDIAccessor.h"
 #include "modules/webmidi/MIDIAccessorClient.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Vector.h"
-<<<<<<< HEAD
 #include <memory>
-=======
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -59,7 +51,6 @@ class MIDIInputMap;
 class MIDIOutput;
 class MIDIOutputMap;
 
-<<<<<<< HEAD
 class MIDIAccess final : public EventTargetWithInlineData,
                          public ActiveScriptWrappable<MIDIAccess>,
                          public ContextLifecycleObserver,
@@ -77,18 +68,6 @@ public:
     {
         return new MIDIAccess(std::move(accessor), sysexEnabled, ports,
             executionContext);
-=======
-class MIDIAccess final : public RefCountedGarbageCollectedEventTargetWithInlineData<MIDIAccess>, public ActiveDOMObject, public MIDIAccessorClient {
-    REFCOUNTED_GARBAGE_COLLECTED_EVENT_TARGET(MIDIAccess);
-    DEFINE_WRAPPERTYPEINFO();
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(MIDIAccess);
-public:
-    static MIDIAccess* create(PassOwnPtr<MIDIAccessor> accessor, bool sysexEnabled, const Vector<MIDIAccessInitializer::PortDescriptor>& ports, ExecutionContext* executionContext)
-    {
-        MIDIAccess* access = new MIDIAccess(accessor, sysexEnabled, ports, executionContext);
-        access->suspendIfNeeded();
-        return access;
->>>>>>> miniblink49
     }
     ~MIDIAccess() override;
 
@@ -96,16 +75,11 @@ public:
     MIDIOutputMap* outputs() const;
 
     EventListener* onstatechange();
-<<<<<<< HEAD
     void setOnstatechange(EventListener*);
-=======
-    void setOnstatechange(PassRefPtr<EventListener>);
->>>>>>> miniblink49
 
     bool sysexEnabled() const { return m_sysexEnabled; }
 
     // EventTarget
-<<<<<<< HEAD
     const AtomicString& interfaceName() const override
     {
         return EventTargetNames::MIDIAccess;
@@ -153,35 +127,10 @@ public:
         const unsigned char* data,
         size_t length,
         double timeStampInMilliseconds);
-=======
-    const AtomicString& interfaceName() const override { return EventTargetNames::MIDIAccess; }
-    ExecutionContext* executionContext() const override { return ActiveDOMObject::executionContext(); }
-
-    // ActiveDOMObject
-    bool hasPendingActivity() const override;
-    void stop() override;
-
-    // MIDIAccessorClient
-    void didAddInputPort(const String& id, const String& manufacturer, const String& name, const String& version, MIDIAccessor::MIDIPortState) override;
-    void didAddOutputPort(const String& id, const String& manufacturer, const String& name, const String& version, MIDIAccessor::MIDIPortState) override;
-    void didSetInputPortState(unsigned portIndex, MIDIAccessor::MIDIPortState) override;
-    void didSetOutputPortState(unsigned portIndex, MIDIAccessor::MIDIPortState) override;
-    void didStartSession(bool success, const String& error, const String& message) override
-    {
-        // This method is for MIDIAccess initialization: MIDIAccessInitializer
-        // has the implementation.
-        ASSERT_NOT_REACHED();
-    }
-    void didReceiveMIDIData(unsigned portIndex, const unsigned char* data, size_t length, double timeStamp) override;
-
-    // |timeStampInMilliseconds| is in the same time coordinate system as performance.now().
-    void sendMIDIData(unsigned portIndex, const unsigned char* data, size_t length, double timeStampInMilliseconds);
->>>>>>> miniblink49
 
     // Eager finalization needed to promptly release m_accessor. Otherwise
     // its client back reference could end up being unsafely used during
     // the lazy sweeping phase.
-<<<<<<< HEAD
     DECLARE_VIRTUAL_TRACE();
 
 private:
@@ -192,15 +141,6 @@ private:
     void dispose();
 
     std::unique_ptr<MIDIAccessor> m_accessor;
-=======
-    EAGERLY_FINALIZE();
-    DECLARE_VIRTUAL_TRACE();
-
-private:
-    MIDIAccess(PassOwnPtr<MIDIAccessor>, bool sysexEnabled, const Vector<MIDIAccessInitializer::PortDescriptor>&, ExecutionContext*);
-
-    OwnPtr<MIDIAccessor> m_accessor;
->>>>>>> miniblink49
     bool m_sysexEnabled;
     bool m_hasPendingActivity;
     HeapVector<Member<MIDIInput>> m_inputs;

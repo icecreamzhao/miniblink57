@@ -2,20 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "modules/fetch/FetchHeaderList.h"
 
 #include "core/fetch/FetchUtils.h"
 #include "platform/network/HTTPParsers.h"
-<<<<<<< HEAD
 #include "wtf/PtrUtil.h"
 #include <algorithm>
-=======
-#include "wtf/PassOwnPtr.h"
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -24,11 +16,7 @@ FetchHeaderList* FetchHeaderList::create()
     return new FetchHeaderList();
 }
 
-<<<<<<< HEAD
 FetchHeaderList* FetchHeaderList::clone() const
-=======
-FetchHeaderList* FetchHeaderList::clone()
->>>>>>> miniblink49
 {
     FetchHeaderList* list = create();
     for (size_t i = 0; i < m_headerList.size(); ++i)
@@ -36,30 +24,16 @@ FetchHeaderList* FetchHeaderList::clone()
     return list;
 }
 
-<<<<<<< HEAD
 FetchHeaderList::FetchHeaderList() { }
 
 FetchHeaderList::~FetchHeaderList() { }
-=======
-FetchHeaderList::FetchHeaderList()
-{
-}
-
-FetchHeaderList::~FetchHeaderList()
-{
-}
->>>>>>> miniblink49
 
 void FetchHeaderList::append(const String& name, const String& value)
 {
     // "To append a name/value (|name|/|value|) pair to a header list (|list|),
     // append a new header whose name is |name|, byte lowercased, and value is
     // |value|, to |list|."
-<<<<<<< HEAD
     m_headerList.push_back(WTF::wrapUnique(new Header(name.lower(), value)));
-=======
-    m_headerList.append(adoptPtr(new Header(name.lower(), value)));
->>>>>>> miniblink49
 }
 
 void FetchHeaderList::set(const String& name, const String& value)
@@ -75,11 +49,7 @@ void FetchHeaderList::set(const String& name, const String& value)
     for (size_t i = 0; i < m_headerList.size(); ++i) {
         if (m_headerList[i]->first == lowercasedName) {
             m_headerList[i]->second = value;
-<<<<<<< HEAD
             for (size_t j = i + 1; j < m_headerList.size();) {
-=======
-            for (size_t j = i + 1; j < m_headerList.size(); ) {
->>>>>>> miniblink49
                 if (m_headerList[j]->first == lowercasedName)
                     m_headerList.remove(j);
                 else
@@ -88,11 +58,7 @@ void FetchHeaderList::set(const String& name, const String& value)
             return;
         }
     }
-<<<<<<< HEAD
     m_headerList.push_back(WTF::makeUnique<Header>(lowercasedName, value));
-=======
-    m_headerList.append(adoptPtr(new Header(lowercasedName, value)));
->>>>>>> miniblink49
 }
 
 String FetchHeaderList::extractMIMEType() const
@@ -118,11 +84,7 @@ void FetchHeaderList::remove(const String& name)
     // "To delete a name (|name|) from a header list (|list|), remove all headers
     // whose name is |name|, byte lowercased, from |list|."
     const String lowercasedName = name.lower();
-<<<<<<< HEAD
     for (size_t i = 0; i < m_headerList.size();) {
-=======
-    for (size_t i = 0; i < m_headerList.size(); ) {
->>>>>>> miniblink49
         if (m_headerList[i]->first == lowercasedName)
             m_headerList.remove(i);
         else
@@ -133,7 +95,6 @@ void FetchHeaderList::remove(const String& name)
 bool FetchHeaderList::get(const String& name, String& result) const
 {
     const String lowercasedName = name.lower();
-<<<<<<< HEAD
     bool found = false;
     for (const auto& header : m_headerList) {
         if (header->first == lowercasedName) {
@@ -148,15 +109,6 @@ bool FetchHeaderList::get(const String& name, String& result) const
         }
     }
     return found;
-=======
-    for (size_t i = 0; i < m_headerList.size(); ++i) {
-        if (m_headerList[i]->first == lowercasedName) {
-            result = m_headerList[i]->second;
-            return true;
-        }
-    }
-    return false;
->>>>>>> miniblink49
 }
 
 void FetchHeaderList::getAll(const String& name, Vector<String>& result) const
@@ -165,11 +117,7 @@ void FetchHeaderList::getAll(const String& name, Vector<String>& result) const
     result.clear();
     for (size_t i = 0; i < m_headerList.size(); ++i) {
         if (m_headerList[i]->first == lowercasedName)
-<<<<<<< HEAD
             result.push_back(m_headerList[i]->second);
-=======
-            result.append(m_headerList[i]->second);
->>>>>>> miniblink49
     }
 }
 
@@ -191,18 +139,13 @@ void FetchHeaderList::clearList()
 bool FetchHeaderList::containsNonSimpleHeader() const
 {
     for (size_t i = 0; i < m_headerList.size(); ++i) {
-<<<<<<< HEAD
         if (!FetchUtils::isSimpleHeader(AtomicString(m_headerList[i]->first),
                 AtomicString(m_headerList[i]->second)))
-=======
-        if (!FetchUtils::isSimpleHeader(AtomicString(m_headerList[i]->first), AtomicString(m_headerList[i]->second)))
->>>>>>> miniblink49
             return true;
     }
     return false;
 }
 
-<<<<<<< HEAD
 void FetchHeaderList::sortAndCombine()
 {
     // https://fetch.spec.whatwg.org/#concept-header-list-sort-and-combine
@@ -225,8 +168,6 @@ void FetchHeaderList::sortAndCombine()
     }
 }
 
-=======
->>>>>>> miniblink49
 bool FetchHeaderList::isValidHeaderName(const String& name)
 {
     // "A name is a case-insensitive byte sequence that matches the field-name

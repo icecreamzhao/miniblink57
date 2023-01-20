@@ -28,10 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "modules/webmidi/MIDIAccess.h"
 
 #include "core/dom/Document.h"
@@ -39,17 +35,12 @@
 #include "core/loader/DocumentLoader.h"
 #include "modules/webmidi/MIDIAccessInitializer.h"
 #include "modules/webmidi/MIDIConnectionEvent.h"
-<<<<<<< HEAD
-=======
-#include "modules/webmidi/MIDIController.h"
->>>>>>> miniblink49
 #include "modules/webmidi/MIDIInput.h"
 #include "modules/webmidi/MIDIInputMap.h"
 #include "modules/webmidi/MIDIOutput.h"
 #include "modules/webmidi/MIDIOutputMap.h"
 #include "modules/webmidi/MIDIPort.h"
 #include "platform/AsyncMethodRunner.h"
-<<<<<<< HEAD
 #include <memory>
 
 namespace blink {
@@ -76,16 +67,6 @@ MIDIAccess::MIDIAccess(
     ExecutionContext* executionContext)
     : ContextLifecycleObserver(executionContext)
     , m_accessor(std::move(accessor))
-=======
-
-namespace blink {
-
-using PortState = MIDIAccessor::MIDIPortState;
-
-MIDIAccess::MIDIAccess(PassOwnPtr<MIDIAccessor> accessor, bool sysexEnabled, const Vector<MIDIAccessInitializer::PortDescriptor>& ports, ExecutionContext* executionContext)
-    : ActiveDOMObject(executionContext)
-    , m_accessor(accessor)
->>>>>>> miniblink49
     , m_sysexEnabled(sysexEnabled)
     , m_hasPendingActivity(false)
 {
@@ -93,7 +74,6 @@ MIDIAccess::MIDIAccess(PassOwnPtr<MIDIAccessor> accessor, bool sysexEnabled, con
     for (size_t i = 0; i < ports.size(); ++i) {
         const MIDIAccessInitializer::PortDescriptor& port = ports[i];
         if (port.type == MIDIPort::TypeInput) {
-<<<<<<< HEAD
             m_inputs.push_back(MIDIInput::create(this, port.id, port.manufacturer,
                 port.name, port.version,
                 ToDeviceState(port.state)));
@@ -101,25 +81,15 @@ MIDIAccess::MIDIAccess(PassOwnPtr<MIDIAccessor> accessor, bool sysexEnabled, con
             m_outputs.push_back(MIDIOutput::create(
                 this, m_outputs.size(), port.id, port.manufacturer, port.name,
                 port.version, ToDeviceState(port.state)));
-=======
-            m_inputs.append(MIDIInput::create(this, port.id, port.manufacturer, port.name, port.version, port.state));
-        } else {
-            m_outputs.append(MIDIOutput::create(this, m_outputs.size(), port.id, port.manufacturer, port.name, port.version, port.state));
->>>>>>> miniblink49
         }
     }
 }
 
-<<<<<<< HEAD
 MIDIAccess::~MIDIAccess() { }
 
 void MIDIAccess::dispose()
 {
     m_accessor.reset();
-=======
-MIDIAccess::~MIDIAccess()
-{
->>>>>>> miniblink49
 }
 
 EventListener* MIDIAccess::onstatechange()
@@ -127,11 +97,7 @@ EventListener* MIDIAccess::onstatechange()
     return getAttributeEventListener(EventTypeNames::statechange);
 }
 
-<<<<<<< HEAD
 void MIDIAccess::setOnstatechange(EventListener* listener)
-=======
-void MIDIAccess::setOnstatechange(PassRefPtr<EventListener> listener)
->>>>>>> miniblink49
 {
     m_hasPendingActivity = listener;
     setAttributeEventListener(EventTypeNames::statechange, listener);
@@ -139,11 +105,7 @@ void MIDIAccess::setOnstatechange(PassRefPtr<EventListener> listener)
 
 bool MIDIAccess::hasPendingActivity() const
 {
-<<<<<<< HEAD
     return m_hasPendingActivity && getExecutionContext() && !getExecutionContext()->isContextDestroyed();
-=======
-    return m_hasPendingActivity && !executionContext()->activeDOMObjectsAreStopped();
->>>>>>> miniblink49
 }
 
 MIDIInputMap* MIDIAccess::inputs() const
@@ -152,13 +114,8 @@ MIDIInputMap* MIDIAccess::inputs() const
     HashSet<String> ids;
     for (size_t i = 0; i < m_inputs.size(); ++i) {
         MIDIInput* input = m_inputs[i];
-<<<<<<< HEAD
         if (input->getState() != PortState::DISCONNECTED) {
             inputs.push_back(input);
-=======
-        if (input->getState() != PortState::MIDIPortStateDisconnected) {
-            inputs.append(input);
->>>>>>> miniblink49
             ids.add(input->id());
         }
     }
@@ -175,13 +132,8 @@ MIDIOutputMap* MIDIAccess::outputs() const
     HashSet<String> ids;
     for (size_t i = 0; i < m_outputs.size(); ++i) {
         MIDIOutput* output = m_outputs[i];
-<<<<<<< HEAD
         if (output->getState() != PortState::DISCONNECTED) {
             outputs.push_back(output);
-=======
-        if (output->getState() != PortState::MIDIPortStateDisconnected) {
-            outputs.append(output);
->>>>>>> miniblink49
             ids.add(output->id());
         }
     }
@@ -192,7 +144,6 @@ MIDIOutputMap* MIDIAccess::outputs() const
     return new MIDIOutputMap(outputs);
 }
 
-<<<<<<< HEAD
 void MIDIAccess::didAddInputPort(const String& id,
     const String& manufacturer,
     const String& name,
@@ -217,28 +168,11 @@ void MIDIAccess::didAddOutputPort(const String& id,
     MIDIOutput* port = MIDIOutput::create(this, portIndex, id, manufacturer, name,
         version, ToDeviceState(state));
     m_outputs.push_back(port);
-=======
-void MIDIAccess::didAddInputPort(const String& id, const String& manufacturer, const String& name, const String& version, PortState state)
-{
-    ASSERT(isMainThread());
-    MIDIInput* port = MIDIInput::create(this, id, manufacturer, name, version, state);
-    m_inputs.append(port);
-    dispatchEvent(MIDIConnectionEvent::create(port));
-}
-
-void MIDIAccess::didAddOutputPort(const String& id, const String& manufacturer, const String& name, const String& version, PortState state)
-{
-    ASSERT(isMainThread());
-    unsigned portIndex = m_outputs.size();
-    MIDIOutput* port = MIDIOutput::create(this, portIndex, id, manufacturer, name, version, state);
-    m_outputs.append(port);
->>>>>>> miniblink49
     dispatchEvent(MIDIConnectionEvent::create(port));
 }
 
 void MIDIAccess::didSetInputPortState(unsigned portIndex, PortState state)
 {
-<<<<<<< HEAD
     DCHECK(isMainThread());
     if (portIndex >= m_inputs.size())
         return;
@@ -246,18 +180,10 @@ void MIDIAccess::didSetInputPortState(unsigned portIndex, PortState state)
     PortState deviceState = ToDeviceState(state);
     if (m_inputs[portIndex]->getState() != deviceState)
         m_inputs[portIndex]->setState(deviceState);
-=======
-    ASSERT(isMainThread());
-    if (portIndex >= m_inputs.size())
-        return;
-
-    m_inputs[portIndex]->setState(state);
->>>>>>> miniblink49
 }
 
 void MIDIAccess::didSetOutputPortState(unsigned portIndex, PortState state)
 {
-<<<<<<< HEAD
     DCHECK(isMainThread());
     if (portIndex >= m_outputs.size())
         return;
@@ -306,76 +232,23 @@ void MIDIAccess::sendMIDIData(unsigned portIndex,
         timeStamp = 0;
     } else {
         double documentStartTime = loader->timing().referenceMonotonicTime();
-=======
-    ASSERT(isMainThread());
-    if (portIndex >= m_outputs.size())
-        return;
-
-    m_outputs[portIndex]->setState(state);
-}
-
-void MIDIAccess::didReceiveMIDIData(unsigned portIndex, const unsigned char* data, size_t length, double timeStamp)
-{
-    ASSERT(isMainThread());
-    if (portIndex >= m_inputs.size())
-        return;
-
-    // Convert from time in seconds which is based on the time coordinate system of monotonicallyIncreasingTime()
-    // into time in milliseconds (a DOMHighResTimeStamp) according to the same time coordinate system as performance.now().
-    // This is how timestamps are defined in the Web MIDI spec.
-    Document* document = toDocument(executionContext());
-    ASSERT(document);
-
-    double timeStampInMilliseconds = 1000 * document->loader()->timing().monotonicTimeToZeroBasedDocumentTime(timeStamp);
-
-    m_inputs[portIndex]->didReceiveMIDIData(portIndex, data, length, timeStampInMilliseconds);
-}
-
-void MIDIAccess::sendMIDIData(unsigned portIndex, const unsigned char* data, size_t length, double timeStampInMilliseconds)
-{
-    if (!data || !length || portIndex >= m_outputs.size())
-        return;
-    // Convert from a time in milliseconds (a DOMHighResTimeStamp) according to the same time coordinate system as performance.now()
-    // into a time in seconds which is based on the time coordinate system of monotonicallyIncreasingTime().
-    double timeStamp;
-
-    if (!timeStampInMilliseconds) {
-        // We treat a value of 0 (which is the default value) as special, meaning "now".
-        // We need to translate it exactly to 0 seconds.
-        timeStamp = 0;
-    } else {
-        Document* document = toDocument(executionContext());
-        ASSERT(document);
-        double documentStartTime = document->loader()->timing().referenceMonotonicTime();
->>>>>>> miniblink49
         timeStamp = documentStartTime + 0.001 * timeStampInMilliseconds;
     }
 
     m_accessor->sendMIDIData(portIndex, data, length, timeStamp);
 }
 
-<<<<<<< HEAD
 void MIDIAccess::contextDestroyed(ExecutionContext*)
 {
     m_accessor.reset();
-=======
-void MIDIAccess::stop()
-{
-    m_accessor.clear();
->>>>>>> miniblink49
 }
 
 DEFINE_TRACE(MIDIAccess)
 {
     visitor->trace(m_inputs);
     visitor->trace(m_outputs);
-<<<<<<< HEAD
     EventTargetWithInlineData::trace(visitor);
     ContextLifecycleObserver::trace(visitor);
-=======
-    RefCountedGarbageCollectedEventTargetWithInlineData<MIDIAccess>::trace(visitor);
-    ActiveDOMObject::trace(visitor);
->>>>>>> miniblink49
 }
 
 } // namespace blink

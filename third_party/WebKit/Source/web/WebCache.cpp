@@ -28,10 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "public/web/WebCache.h"
 
 #include "core/fetch/MemoryCache.h"
@@ -41,7 +37,6 @@ namespace blink {
 // A helper method for coverting a MemoryCache::TypeStatistic to a
 // WebCache::ResourceTypeStat.
 static void ToResourceTypeStat(const MemoryCache::TypeStatistic& from,
-<<<<<<< HEAD
     WebCache::ResourceTypeStat& to)
 {
     to.count = from.count;
@@ -54,22 +49,6 @@ void WebCache::setCapacity(size_t capacity)
     MemoryCache* cache = memoryCache();
     if (cache)
         cache->setCapacity(static_cast<unsigned>(capacity));
-=======
-                               WebCache::ResourceTypeStat& to)
-{
-    to.count = static_cast<size_t>(from.count);
-    to.size = static_cast<size_t>(from.size);
-    to.liveSize = static_cast<size_t>(from.liveSize);
-    to.decodedSize = static_cast<size_t>(from.decodedSize);
-}
-
-void WebCache::setCapacities(
-    size_t minDeadCapacity, size_t maxDeadCapacity, size_t capacity)
-{
-    MemoryCache* cache = memoryCache();
-    if (cache)
-        cache->setCapacities(static_cast<unsigned>(minDeadCapacity), static_cast<unsigned>(maxDeadCapacity), static_cast<unsigned>(capacity));
->>>>>>> miniblink49
 }
 
 void WebCache::clear()
@@ -81,24 +60,12 @@ void WebCache::clear()
 
 void WebCache::getUsageStats(UsageStats* result)
 {
-<<<<<<< HEAD
     DCHECK(result);
 
     MemoryCache* cache = memoryCache();
     if (cache) {
         result->capacity = cache->capacity();
         result->size = cache->size();
-=======
-    ASSERT(result);
-
-    MemoryCache* cache = memoryCache();
-    if (cache) {
-        result->minDeadCapacity = cache->minDeadCapacity();
-        result->maxDeadCapacity = cache->maxDeadCapacity();
-        result->capacity = cache->capacity();
-        result->liveSize = cache->liveSize();
-        result->deadSize = cache->deadSize();
->>>>>>> miniblink49
     } else
         memset(result, 0, sizeof(UsageStats));
 }
@@ -113,23 +80,9 @@ void WebCache::getResourceTypeStats(ResourceTypeStats* result)
         ToResourceTypeStat(stats.scripts, result->scripts);
         ToResourceTypeStat(stats.xslStyleSheets, result->xslStyleSheets);
         ToResourceTypeStat(stats.fonts, result->fonts);
-<<<<<<< HEAD
         ToResourceTypeStat(stats.other, result->other);
-=======
->>>>>>> miniblink49
     } else
         memset(result, 0, sizeof(WebCache::ResourceTypeStats));
 }
 
-<<<<<<< HEAD
 } // namespace blink
-=======
-void WebCache::pruneAll()
-{
-    MemoryCache* cache = memoryCache();
-    if (cache)
-        cache->pruneAll();
-}
-
-}  // namespace blink
->>>>>>> miniblink49

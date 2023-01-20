@@ -21,11 +21,7 @@
 
 #ifndef _STLP_VENDOR_CSTD
 // STLPort doesn't import fpclassify into the std namespace.
-<<<<<<< HEAD
 //using std::fpclassify;
-=======
-using std::fpclassify;
->>>>>>> miniblink49
 #endif
 
 namespace v8 {
@@ -418,11 +414,7 @@ char* DoubleToPrecisionCString(double value, int p) {
 
 char* DoubleToRadixCString(double value, int radix) {
   DCHECK(radix >= 2 && radix <= 36);
-<<<<<<< HEAD
   DCHECK(std_isfinite(value));
-=======
-  DCHECK(std::isfinite(value));
->>>>>>> miniblink49
   DCHECK_NE(0.0, value);
   // Character array used for conversion.
   static const char chars[] = "0123456789abcdefghijklmnopqrstuvwxyz";
@@ -569,11 +561,7 @@ bool IsSpecialIndex(UnicodeCache* unicode_cache, String* string) {
   // Slow path: test DoubleToString(StringToDouble(string)) == string.
   Vector<const uint16_t> vector(buffer, length);
   double d = StringToDouble(unicode_cache, vector, NO_FLAGS);
-<<<<<<< HEAD
   if (std_isnan(d)) return false;
-=======
-  if (std::isnan(d)) return false;
->>>>>>> miniblink49
   // Compute reverse string.
   char reverse_buffer[kBufferSize + 1];  // Result will be /0 terminated.
   Vector<char> reverse_vector(reverse_buffer, arraysize(reverse_buffer));

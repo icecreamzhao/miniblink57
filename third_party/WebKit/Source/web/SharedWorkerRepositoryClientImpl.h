@@ -33,20 +33,14 @@
 
 #include "core/workers/SharedWorkerRepositoryClient.h"
 #include "wtf/Noncopyable.h"
-<<<<<<< HEAD
 #include "wtf/PassRefPtr.h"
 #include "wtf/PtrUtil.h"
 #include <memory>
-=======
-#include "wtf/PassOwnPtr.h"
-#include "wtf/PassRefPtr.h"
->>>>>>> miniblink49
 
 namespace blink {
 
 class WebSharedWorkerRepositoryClient;
 
-<<<<<<< HEAD
 class SharedWorkerRepositoryClientImpl final
     : public SharedWorkerRepositoryClient {
     WTF_MAKE_NONCOPYABLE(SharedWorkerRepositoryClientImpl);
@@ -57,26 +51,14 @@ public:
         WebSharedWorkerRepositoryClient* client)
     {
         return WTF::wrapUnique(new SharedWorkerRepositoryClientImpl(client));
-=======
-class SharedWorkerRepositoryClientImpl final : public SharedWorkerRepositoryClient {
-    WTF_MAKE_NONCOPYABLE(SharedWorkerRepositoryClientImpl);
-public:
-    static PassOwnPtr<SharedWorkerRepositoryClientImpl> create(WebSharedWorkerRepositoryClient* client)
-    {
-        return adoptPtr(new SharedWorkerRepositoryClientImpl(client));
->>>>>>> miniblink49
     }
 
     ~SharedWorkerRepositoryClientImpl() override { }
 
-<<<<<<< HEAD
     void connect(SharedWorker*,
         WebMessagePortChannelUniquePtr,
         const KURL&,
         const String& name) override;
-=======
-    void connect(PassRefPtrWillBeRawPtr<SharedWorker>, PassOwnPtr<WebMessagePortChannel>, const KURL&, const String& name, ExceptionState&) override;
->>>>>>> miniblink49
     void documentDetached(Document*) override;
 
 private:

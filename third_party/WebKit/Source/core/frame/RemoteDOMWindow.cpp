@@ -2,30 +2,25 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "core/frame/RemoteDOMWindow.h"
 
 #include "bindings/core/v8/SerializedScriptValue.h"
 #include "core/css/CSSRuleList.h"
 #include "core/css/CSSStyleDeclaration.h"
 #include "core/css/MediaQueryList.h"
+#include "core/dom/Document.h"
+#include "core/frame/RemoteFrameClient.h"
 
 namespace blink {
 
-ExecutionContext* RemoteDOMWindow::executionContext() const
+ExecutionContext* RemoteDOMWindow::getExecutionContext() const
 {
     return nullptr;
 }
 
 DEFINE_TRACE(RemoteDOMWindow)
 {
-    visitor->trace(m_frame);
     DOMWindow::trace(visitor);
-}
-
-RemoteFrame* RemoteDOMWindow::frame() const
-{
-    return m_frame.get();
 }
 
 Screen* RemoteDOMWindow::screen() const
@@ -142,9 +137,7 @@ const AtomicString& RemoteDOMWindow::name() const
     return emptyAtom;
 }
 
-void RemoteDOMWindow::setName(const AtomicString&)
-{
-}
+void RemoteDOMWindow::setName(const AtomicString&) { }
 
 String RemoteDOMWindow::status() const
 {
@@ -198,21 +191,10 @@ int RemoteDOMWindow::orientation() const
     return 0;
 }
 
-Console* RemoteDOMWindow::console() const
-{
-    ASSERT_NOT_REACHED();
-    return 0;
-}
-
 DOMSelection* RemoteDOMWindow::getSelection()
 {
     ASSERT_NOT_REACHED();
     return 0;
-}
-
-void RemoteDOMWindow::focus(ExecutionContext* override)
-{
-    // FIXME: Implement.
 }
 
 void RemoteDOMWindow::blur()
@@ -220,7 +202,7 @@ void RemoteDOMWindow::blur()
     // FIXME: Implement.
 }
 
-void RemoteDOMWindow::print()
+void RemoteDOMWindow::print(ScriptState*)
 {
     ASSERT_NOT_REACHED();
 }
@@ -230,24 +212,32 @@ void RemoteDOMWindow::stop()
     // FIXME: Implement.
 }
 
-void RemoteDOMWindow::alert(const String& message)
+void RemoteDOMWindow::alert(ScriptState*, const String& message)
 {
     ASSERT_NOT_REACHED();
 }
 
-bool RemoteDOMWindow::confirm(const String& message)
+bool RemoteDOMWindow::confirm(ScriptState*, const String& message)
 {
     ASSERT_NOT_REACHED();
     return false;
 }
 
-String RemoteDOMWindow::prompt(const String& message, const String& defaultValue)
+String RemoteDOMWindow::prompt(ScriptState*,
+    const String& message,
+    const String& defaultValue)
 {
     ASSERT_NOT_REACHED();
     return String();
 }
 
-bool RemoteDOMWindow::find(const String&, bool caseSensitive, bool backwards, bool wrap, bool wholeWord, bool searchInFrames, bool showDialog) const
+bool RemoteDOMWindow::find(const String&,
+    bool caseSensitive,
+    bool backwards,
+    bool wrap,
+    bool wholeWord,
+    bool searchInFrames,
+    bool showDialog) const
 {
     ASSERT_NOT_REACHED();
     return false;
@@ -293,19 +283,23 @@ void RemoteDOMWindow::resizeTo(int width, int height) const
     ASSERT_NOT_REACHED();
 }
 
-PassRefPtrWillBeRawPtr<MediaQueryList> RemoteDOMWindow::matchMedia(const String&)
+MediaQueryList* RemoteDOMWindow::matchMedia(const String&)
 {
     ASSERT_NOT_REACHED();
     return nullptr;
 }
 
-PassRefPtrWillBeRawPtr<CSSStyleDeclaration> RemoteDOMWindow::getComputedStyle(Element*, const String& pseudoElt) const
+CSSStyleDeclaration* RemoteDOMWindow::getComputedStyle(
+    Element*,
+    const String& pseudoElt) const
 {
     ASSERT_NOT_REACHED();
     return nullptr;
 }
 
-PassRefPtrWillBeRawPtr<CSSRuleList> RemoteDOMWindow::getMatchedCSSRules(Element*, const String& pseudoElt) const
+CSSRuleList* RemoteDOMWindow::getMatchedCSSRules(
+    Element*,
+    const String& pseudoElt) const
 {
     ASSERT_NOT_REACHED();
     return nullptr;
@@ -328,9 +322,40 @@ void RemoteDOMWindow::cancelAnimationFrame(int id)
     ASSERT_NOT_REACHED();
 }
 
-RemoteDOMWindow::RemoteDOMWindow(RemoteFrame& frame)
-    : m_frame(&frame)
+int RemoteDOMWindow::requestIdleCallback(IdleRequestCallback*,
+    const IdleRequestOptions&)
 {
+    ASSERT_NOT_REACHED();
+    return 0;
+}
+
+void RemoteDOMWindow::cancelIdleCallback(int id)
+{
+    ASSERT_NOT_REACHED();
+}
+
+CustomElementRegistry* RemoteDOMWindow::customElements(ScriptState*) const
+{
+    ASSERT_NOT_REACHED();
+    return nullptr;
+}
+
+RemoteDOMWindow::RemoteDOMWindow(RemoteFrame& frame)
+    : DOMWindow(frame)
+{
+}
+
+void RemoteDOMWindow::frameDetached()
+{
+    disconnectFromFrame();
+}
+
+void RemoteDOMWindow::schedulePostMessage(MessageEvent* event,
+    PassRefPtr<SecurityOrigin> target,
+    Document* source)
+{
+    frame()->client()->forwardPostMessage(event, std::move(target),
+        source->frame());
 }
 
 } // namespace blink

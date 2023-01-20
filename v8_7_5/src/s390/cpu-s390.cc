@@ -10,7 +10,6 @@
 namespace v8 {
 namespace internal {
 
-<<<<<<< HEAD
     void CpuFeatures::FlushICache(void* buffer, size_t size)
     {
         // Given the strong memory model on z/Architecture, and the single
@@ -24,17 +23,3 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_TARGET_ARCH_S390
-=======
-void CpuFeatures::FlushICache(void* buffer, size_t size) {
-  // Given the strong memory model on z/Architecture, and the single
-  // thread nature of V8 and JavaScript, instruction cache flushing
-  // is not necessary.  The architecture guarantees that if a core
-  // patches its own instruction cache, the updated instructions will be
-  // reflected automatically.
-}
-
-}  // namespace internal
-}  // namespace v8
-
-#endif  // V8_TARGET_ARCH_S390
->>>>>>> miniblink49

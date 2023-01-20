@@ -27,22 +27,21 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
-#include "config.h"
 #include "core/editing/DOMSelection.h"
 
 #include "bindings/core/v8/ExceptionMessages.h"
 #include "bindings/core/v8/ExceptionState.h"
-#include "bindings/core/v8/ExceptionStatePlaceholder.h"
 #include "core/dom/Document.h"
 #include "core/dom/ExceptionCode.h"
 #include "core/dom/Node.h"
 #include "core/dom/Range.h"
 #include "core/dom/TreeScope.h"
+#include "core/editing/EditingUtilities.h"
 #include "core/editing/FrameSelection.h"
-#include "core/editing/htmlediting.h"
 #include "core/editing/iterators/TextIterator.h"
+#include "core/frame/Deprecation.h"
 #include "core/frame/LocalFrame.h"
+#include "core/frame/UseCounter.h"
 #include "core/inspector/ConsoleMessage.h"
 #include "wtf/text/WTFString.h"
 
@@ -61,7 +60,7 @@ static Node* selectionShadowAncestor(LocalFrame* frame)
 }
 
 DOMSelection::DOMSelection(const TreeScope* treeScope)
-    : DOMWindowProperty(treeScope->rootNode().document().frame())
+    : ContextClient(treeScope->rootNode().document().frame())
     , m_treeScope(treeScope)
 {
 }
@@ -71,10 +70,15 @@ void DOMSelection::clearTreeScope()
     m_treeScope = nullptr;
 }
 
+bool DOMSelection::isAvailable() const
+{
+    return frame() && frame()->selection().isAvailable();
+}
+
 const VisibleSelection& DOMSelection::visibleSelection() const
 {
-    ASSERT(m_frame);
-    return m_frame->selection().selection();
+    DCHECK(frame());
+    return frame()->selection().selection();
 }
 
 static Position anchorPosition(const VisibleSelection& selection)
@@ -101,7 +105,7 @@ static Position extentPosition(const VisibleSelection& selection)
 
 Node* DOMSelection::anchorNode() const
 {
-    if (!m_frame)
+    if (!isAvailable())
         return 0;
 
     return shadowAdjustedNode(anchorPosition(visibleSelection()));
@@ -109,7 +113,7 @@ Node* DOMSelection::anchorNode() const
 
 int DOMSelection::anchorOffset() const
 {
-    if (!m_frame)
+    if (!isAvailable())
         return 0;
 
     return shadowAdjustedOffset(anchorPosition(visibleSelection()));
@@ -117,7 +121,7 @@ int DOMSelection::anchorOffset() const
 
 Node* DOMSelection::focusNode() const
 {
-    if (!m_frame)
+    if (!isAvailable())
         return 0;
 
     return shadowAdjustedNode(focusPosition(visibleSelection()));
@@ -125,7 +129,7 @@ Node* DOMSelection::focusNode() const
 
 int DOMSelection::focusOffset() const
 {
-    if (!m_frame)
+    if (!isAvailable())
         return 0;
 
     return shadowAdjustedOffset(focusPosition(visibleSelection()));
@@ -133,7 +137,7 @@ int DOMSelection::focusOffset() const
 
 Node* DOMSelection::baseNode() const
 {
-    if (!m_frame)
+    if (!isAvailable())
         return 0;
 
     return shadowAdjustedNode(basePosition(visibleSelection()));
@@ -141,7 +145,7 @@ Node* DOMSelection::baseNode() const
 
 int DOMSelection::baseOffset() const
 {
-    if (!m_frame)
+    if (!isAvailable())
         return 0;
 
     return shadowAdjustedOffset(basePosition(visibleSelection()));
@@ -149,7 +153,7 @@ int DOMSelection::baseOffset() const
 
 Node* DOMSelection::extentNode() const
 {
-    if (!m_frame)
+    if (!isAvailable())
         return 0;
 
     return shadowAdjustedNode(extentPosition(visibleSelection()));
@@ -157,7 +161,7 @@ Node* DOMSelection::extentNode() const
 
 int DOMSelection::extentOffset() const
 {
-    if (!m_frame)
+    if (!isAvailable())
         return 0;
 
     return shadowAdjustedOffset(extentPosition(visibleSelection()));
@@ -165,17 +169,17 @@ int DOMSelection::extentOffset() const
 
 bool DOMSelection::isCollapsed() const
 {
-    if (!m_frame || selectionShadowAncestor(m_frame))
+    if (!isAvailable() || selectionShadowAncestor(frame()))
         return true;
-    return !m_frame->selection().isRange();
+    return !frame()->selection().isRange();
 }
 
 String DOMSelection::type() const
 {
-    if (!m_frame)
+    if (!isAvailable())
         return String();
 
-    FrameSelection& selection = m_frame->selection();
+    FrameSelection& selection = frame()->selection();
 
     // This is a WebKit DOM extension, incompatible with an IE extension
     // IE has this same attribute, but returns "none", "text" and "control"
@@ -189,103 +193,148 @@ String DOMSelection::type() const
 
 int DOMSelection::rangeCount() const
 {
-    if (!m_frame)
+    if (!isAvailable())
         return 0;
-    return m_frame->selection().isNone() ? 0 : 1;
+    return frame()->selection().isNone() ? 0 : 1;
 }
 
-void DOMSelection::collapse(Node* node, int offset, ExceptionState& exceptionState)
+void DOMSelection::collapse(Node* node,
+    int offset,
+    ExceptionState& exceptionState)
 {
-    if (!m_frame)
+    if (!isAvailable())
         return;
 
     if (!node) {
-        m_frame->selection().clear();
+        UseCounter::count(frame(), UseCounter::SelectionCollapseNull);
+        frame()->selection().clear();
         return;
     }
 
     if (offset < 0) {
-        exceptionState.throwDOMException(IndexSizeError, String::number(offset) + " is not a valid offset.");
+        exceptionState.throwDOMException(
+            IndexSizeError, String::number(offset) + " is not a valid offset.");
         return;
     }
 
     if (!isValidForPosition(node))
         return;
-    RefPtrWillBeRawPtr<Range> range = Range::create(node->document());
-    range->setStart(node, offset, exceptionState);
+    Range::checkNodeWOffset(node, offset, exceptionState);
     if (exceptionState.hadException())
         return;
-    range->setEnd(node, offset, exceptionState);
-    if (exceptionState.hadException())
-        return;
-    m_frame->selection().setSelectedRange(range.get(), DOWNSTREAM, m_frame->selection().isDirectional() ? FrameSelection::Directional : FrameSelection::NonDirectional);
+
+    frame()->selection().setSelection(
+        SelectionInDOMTree::Builder()
+            .collapse(Position(node, offset))
+            .setIsDirectional(frame()->selection().isDirectional())
+            .build());
 }
 
 void DOMSelection::collapseToEnd(ExceptionState& exceptionState)
 {
-    if (!m_frame)
+    if (!isAvailable())
         return;
 
-    const VisibleSelection& selection = m_frame->selection().selection();
+    const VisibleSelection& selection = frame()->selection().selection();
 
     if (selection.isNone()) {
-        exceptionState.throwDOMException(InvalidStateError, "there is no selection.");
+        exceptionState.throwDOMException(InvalidStateError,
+            "there is no selection.");
         return;
     }
 
-    m_frame->selection().moveTo(VisiblePosition(selection.end(), DOWNSTREAM));
+    SelectionInDOMTree::Builder builder;
+    builder.collapse(selection.end());
+    frame()->selection().setSelection(builder.build());
 }
 
 void DOMSelection::collapseToStart(ExceptionState& exceptionState)
 {
-    if (!m_frame)
+    if (!isAvailable())
         return;
 
-    const VisibleSelection& selection = m_frame->selection().selection();
+    const VisibleSelection& selection = frame()->selection().selection();
 
     if (selection.isNone()) {
-        exceptionState.throwDOMException(InvalidStateError, "there is no selection.");
+        exceptionState.throwDOMException(InvalidStateError,
+            "there is no selection.");
         return;
     }
 
-    m_frame->selection().moveTo(VisiblePosition(selection.start(), DOWNSTREAM));
+    SelectionInDOMTree::Builder builder;
+    builder.collapse(selection.start());
+    frame()->selection().setSelection(builder.build());
 }
 
 void DOMSelection::empty()
 {
-    if (!m_frame)
+    if (!isAvailable())
         return;
-    m_frame->selection().clear();
+    frame()->selection().clear();
 }
 
-void DOMSelection::setBaseAndExtent(Node* baseNode, int baseOffset, Node* extentNode, int extentOffset, ExceptionState& exceptionState)
+void DOMSelection::setBaseAndExtent(Node* baseNode,
+    int baseOffset,
+    Node* extentNode,
+    int extentOffset,
+    ExceptionState& exceptionState)
 {
-    if (!m_frame)
+    if (!isAvailable())
         return;
 
     if (baseOffset < 0) {
-        exceptionState.throwDOMException(IndexSizeError, String::number(baseOffset) + " is not a valid base offset.");
+        exceptionState.throwDOMException(
+            IndexSizeError,
+            String::number(baseOffset) + " is not a valid base offset.");
         return;
     }
 
     if (extentOffset < 0) {
-        exceptionState.throwDOMException(IndexSizeError, String::number(extentOffset) + " is not a valid extent offset.");
+        exceptionState.throwDOMException(
+            IndexSizeError,
+            String::number(extentOffset) + " is not a valid extent offset.");
         return;
+    }
+
+    // TODO(editing-dev): Behavior on where base or extent is null is still
+    // under discussion: https://github.com/w3c/selection-api/issues/72
+    if (!baseNode) {
+        UseCounter::count(frame(), UseCounter::SelectionSetBaseAndExtentNull);
+        frame()->selection().clear();
+        return;
+    }
+    if (!extentNode) {
+        UseCounter::count(frame(), UseCounter::SelectionSetBaseAndExtentNull);
+        extentOffset = 0;
     }
 
     if (!isValidForPosition(baseNode) || !isValidForPosition(extentNode))
         return;
 
-    // FIXME: Eliminate legacy editing positions
-    VisiblePosition visibleBase = VisiblePosition(createLegacyEditingPosition(baseNode, baseOffset), DOWNSTREAM);
-    VisiblePosition visibleExtent = VisiblePosition(createLegacyEditingPosition(extentNode, extentOffset), DOWNSTREAM);
+    // TODO(editing-dev): The use of updateStyleAndLayoutIgnorePendingStylesheets
+    // needs to be audited.  See http://crbug.com/590369 for more details.
+    // In the long term, we should change FrameSelection::setSelection to take a
+    // parameter that does not require clean layout, so that modifying selection
+    // no longer performs synchronous layout by itself.
+    // TODO(editing-dev): Once SVG USE element doesn't modifies DOM tree, we
+    // should get rid of this update layout call.
+    // See http://crbug.com/566281
+    // See "svg/text/textpath-reference-crash.html"
+    frame()->document()->updateStyleAndLayoutIgnorePendingStylesheets();
 
-    m_frame->selection().moveTo(visibleBase, visibleExtent);
+    frame()->selection().setSelection(
+        SelectionInDOMTree::Builder()
+            .setBaseAndExtentDeprecated(Position(baseNode, baseOffset),
+                Position(extentNode, extentOffset))
+            .setIsDirectional(true)
+            .build());
 }
 
-void DOMSelection::modify(const String& alterString, const String& directionString, const String& granularityString)
+void DOMSelection::modify(const String& alterString,
+    const String& directionString,
+    const String& granularityString)
 {
-    if (!m_frame)
+    if (!isAvailable())
         return;
 
     FrameSelection::EAlteration alter;
@@ -330,160 +379,247 @@ void DOMSelection::modify(const String& alterString, const String& directionStri
     else
         return;
 
-    m_frame->selection().modify(alter, direction, granularity);
+    // TODO(editing-dev): The use of updateStyleAndLayoutIgnorePendingStylesheets
+    // needs to be audited.  See http://crbug.com/590369 for more details.
+    frame()->document()->updateStyleAndLayoutIgnorePendingStylesheets();
+
+    frame()->selection().modify(alter, direction, granularity);
 }
 
-void DOMSelection::extend(Node* node, int offset, ExceptionState& exceptionState)
+void DOMSelection::extend(Node* node,
+    int offset,
+    ExceptionState& exceptionState)
 {
-    ASSERT(node);
+    DCHECK(node);
 
-    if (!m_frame)
+    if (!isAvailable())
         return;
 
     if (offset < 0) {
-        exceptionState.throwDOMException(IndexSizeError, String::number(offset) + " is not a valid offset.");
+        exceptionState.throwDOMException(
+            IndexSizeError, String::number(offset) + " is not a valid offset.");
         return;
     }
     if (static_cast<unsigned>(offset) > node->lengthOfContents()) {
-        exceptionState.throwDOMException(IndexSizeError, String::number(offset) + " is larger than the given node's length.");
+        exceptionState.throwDOMException(
+            IndexSizeError,
+            String::number(offset) + " is larger than the given node's length.");
         return;
     }
 
     if (!isValidForPosition(node))
         return;
 
-    // FIXME: Eliminate legacy editing positions
-    m_frame->selection().setExtent(VisiblePosition(createLegacyEditingPosition(node, offset), DOWNSTREAM));
+    const Position& base = frame()->selection().base();
+    if (base.isNull()) {
+        // TODO(editing-dev): We should throw |InvalidStateError| if selection is
+        // none to follow the spec.
+        frame()->selection().setSelection(SelectionInDOMTree::Builder()
+                                              .collapse(Position(node, offset))
+                                              .setIsDirectional(true)
+                                              .build());
+        return;
+    }
+    frame()->selection().setSelection(SelectionInDOMTree::Builder()
+                                          .collapse(base)
+                                          .extend(Position(node, offset))
+                                          .setIsDirectional(true)
+                                          .build());
 }
 
-PassRefPtrWillBeRawPtr<Range> DOMSelection::getRangeAt(int index, ExceptionState& exceptionState)
+Range* DOMSelection::getRangeAt(int index, ExceptionState& exceptionState)
 {
-    if (!m_frame)
+    if (!isAvailable())
         return nullptr;
 
     if (index < 0 || index >= rangeCount()) {
-        exceptionState.throwDOMException(IndexSizeError, String::number(index) + " is not a valid index.");
+        exceptionState.throwDOMException(
+            IndexSizeError, String::number(index) + " is not a valid index.");
         return nullptr;
     }
 
     // If you're hitting this, you've added broken multi-range selection support
-    ASSERT(rangeCount() == 1);
+    DCHECK_EQ(rangeCount(), 1);
 
     Position anchor = anchorPosition(visibleSelection());
     if (!anchor.anchorNode()->isInShadowTree())
-        return m_frame->selection().firstRange();
+        return frame()->selection().firstRange();
 
+    Node* node = shadowAdjustedNode(anchor);
+    if (!node) // crbug.com/595100
+        return nullptr;
     if (!visibleSelection().isBaseFirst())
-        return Range::create(*anchor.document(), focusNode(), focusOffset(), shadowAdjustedNode(anchor), anchorOffset());
-    return Range::create(*anchor.document(), shadowAdjustedNode(anchor), anchorOffset(), focusNode(), focusOffset());
+        return Range::create(*anchor.document(), focusNode(), focusOffset(), node,
+            anchorOffset());
+    return Range::create(*anchor.document(), node, anchorOffset(), focusNode(),
+        focusOffset());
 }
 
 void DOMSelection::removeAllRanges()
 {
-    if (!m_frame)
+    if (!isAvailable())
         return;
-    m_frame->selection().clear();
+    frame()->selection().clear();
 }
 
 void DOMSelection::addRange(Range* newRange)
 {
-    if (!m_frame)
+    DCHECK(newRange);
+
+    if (!isAvailable())
         return;
 
-    // FIXME: Should we throw DOMException for error cases below?
-    if (!newRange) {
-        addConsoleError("The given range is null.");
+    if (newRange->ownerDocument() != frame()->document())
+        return;
+
+    if (!newRange->isConnected()) {
+        addConsoleError("The given range isn't in document.");
         return;
     }
 
-    if (!newRange->startContainer()) {
-        addConsoleError("The given range has no container. Perhaps 'detach()' has been invoked on it?");
+    FrameSelection& selection = frame()->selection();
+
+    if (newRange->ownerDocument() != selection.document()) {
+        // "editing/selection/selection-in-iframe-removed-crash.html" goes here.
         return;
     }
 
-    FrameSelection& selection = m_frame->selection();
+    // TODO(xiaochengh): The use of updateStyleAndLayoutIgnorePendingStylesheets
+    // needs to be audited.  See http://crbug.com/590369 for more details.
+    // In the long term, we should change FrameSelection::setSelection to take a
+    // parameter that does not require clean layout, so that modifying selection
+    // no longer performs synchronous layout by itself.
+    frame()->document()->updateStyleAndLayoutIgnorePendingStylesheets();
 
     if (selection.isNone()) {
-        selection.setSelectedRange(newRange, VP_DEFAULT_AFFINITY);
+        selection.setSelectedRange(EphemeralRange(newRange), VP_DEFAULT_AFFINITY);
         return;
     }
 
-    RefPtrWillBeRawPtr<Range> originalRange = selection.firstRange();
+    Range* originalRange = selection.firstRange();
 
     if (originalRange->startContainer()->document() != newRange->startContainer()->document()) {
-        addConsoleError("The given range does not belong to the current selection's document.");
+        addConsoleError(
+            "The given range does not belong to the current selection's document.");
         return;
     }
     if (originalRange->startContainer()->treeScope() != newRange->startContainer()->treeScope()) {
-        addConsoleError("The given range and the current selection belong to two different document fragments.");
+        addConsoleError(
+            "The given range and the current selection belong to two different "
+            "document fragments.");
         return;
     }
 
-    if (originalRange->compareBoundaryPoints(Range::START_TO_END, newRange, ASSERT_NO_EXCEPTION) < 0
-        || newRange->compareBoundaryPoints(Range::START_TO_END, originalRange.get(), ASSERT_NO_EXCEPTION) < 0) {
+    if (originalRange->compareBoundaryPoints(Range::kStartToEnd, newRange,
+            ASSERT_NO_EXCEPTION)
+            < 0
+        || newRange->compareBoundaryPoints(Range::kStartToEnd, originalRange,
+               ASSERT_NO_EXCEPTION)
+            < 0) {
         addConsoleError("Discontiguous selection is not supported.");
         return;
     }
 
-    // FIXME: "Merge the ranges if they intersect" is Blink-specific behavior; other browsers supporting discontiguous
-    // selection (obviously) keep each Range added and return it in getRangeAt(). But it's unclear if we can really
-    // do the same, since we don't support discontiguous selection. Further discussions at
+    // FIXME: "Merge the ranges if they intersect" is Blink-specific behavior;
+    // other browsers supporting discontiguous selection (obviously) keep each
+    // Range added and return it in getRangeAt(). But it's unclear if we can
+    // really do the same, since we don't support discontiguous selection. Further
+    // discussions at
     // <https://code.google.com/p/chromium/issues/detail?id=353069>.
+    Deprecation::countDeprecation(frame(),
+        UseCounter::SelectionAddRangeIntersect);
 
-    Range* start = originalRange->compareBoundaryPoints(Range::START_TO_START, newRange, ASSERT_NO_EXCEPTION) < 0 ? originalRange.get() : newRange;
-    Range* end = originalRange->compareBoundaryPoints(Range::END_TO_END, newRange, ASSERT_NO_EXCEPTION) < 0 ? newRange : originalRange.get();
-    RefPtrWillBeRawPtr<Range> merged = Range::create(originalRange->startContainer()->document(), start->startContainer(), start->startOffset(), end->endContainer(), end->endOffset());
-    EAffinity affinity = selection.selection().affinity();
-    selection.setSelectedRange(merged.get(), affinity);
+    Range* start = originalRange->compareBoundaryPoints(
+                       Range::kStartToStart, newRange, ASSERT_NO_EXCEPTION)
+            < 0
+        ? originalRange
+        : newRange;
+    Range* end = originalRange->compareBoundaryPoints(Range::kEndToEnd, newRange,
+                     ASSERT_NO_EXCEPTION)
+            < 0
+        ? newRange
+        : originalRange;
+    const EphemeralRange merged = EphemeralRange(start->startPosition(), end->endPosition());
+    TextAffinity affinity = selection.selection().affinity();
+    selection.setSelectedRange(merged, affinity);
 }
 
 void DOMSelection::deleteFromDocument()
 {
-    if (!m_frame)
+    if (!isAvailable())
         return;
 
-    FrameSelection& selection = m_frame->selection();
+    FrameSelection& selection = frame()->selection();
 
     if (selection.isNone())
         return;
 
-    RefPtrWillBeRawPtr<Range> selectedRange = selection.selection().toNormalizedRange();
+    // TODO(xiaochengh): The use of updateStyleAndLayoutIgnorePendingStylesheets
+    // needs to be audited.  See http://crbug.com/590369 for more details.
+    // |VisibleSelection::toNormalizedEphemeralRange| requires clean layout.
+    frame()->document()->updateStyleAndLayoutIgnorePendingStylesheets();
+
+    Range* selectedRange = createRange(selection.selection().toNormalizedEphemeralRange());
     if (!selectedRange)
         return;
 
     selectedRange->deleteContents(ASSERT_NO_EXCEPTION);
 
-    setBaseAndExtent(selectedRange->startContainer(), selectedRange->startOffset(), selectedRange->startContainer(), selectedRange->startOffset(), ASSERT_NO_EXCEPTION);
+    setBaseAndExtent(selectedRange->startContainer(),
+        selectedRange->startOffset(),
+        selectedRange->startContainer(),
+        selectedRange->startOffset(), ASSERT_NO_EXCEPTION);
 }
 
 bool DOMSelection::containsNode(const Node* n, bool allowPartial) const
 {
-    if (!m_frame)
+    DCHECK(n);
+
+    if (!isAvailable())
         return false;
 
-    FrameSelection& selection = m_frame->selection();
+    FrameSelection& selection = frame()->selection();
 
-    if (!n || m_frame->document() != n->document() || selection.isNone())
+    if (frame()->document() != n->document() || selection.isNone())
         return false;
 
     unsigned nodeIndex = n->nodeIndex();
-    RefPtrWillBeRawPtr<Range> selectedRange = selection.selection().toNormalizedRange();
+
+    // TODO(xiaochengh): The use of updateStyleAndLayoutIgnorePendingStylesheets
+    // needs to be audited.  See http://crbug.com/590369 for more details.
+    // |VisibleSelection::toNormalizedEphemeralRange| requires clean layout.
+    frame()->document()->updateStyleAndLayoutIgnorePendingStylesheets();
+
+    const EphemeralRange selectedRange = selection.selection().toNormalizedEphemeralRange();
 
     ContainerNode* parentNode = n->parentNode();
     if (!parentNode)
         return false;
 
-    TrackExceptionState exceptionState;
-    bool nodeFullySelected = Range::compareBoundaryPoints(parentNode, nodeIndex, selectedRange->startContainer(), selectedRange->startOffset(), exceptionState) >= 0 && !exceptionState.hadException()
-        && Range::compareBoundaryPoints(parentNode, nodeIndex + 1, selectedRange->endContainer(), selectedRange->endOffset(), exceptionState) <= 0 && !exceptionState.hadException();
+    const Position startPosition = selectedRange.startPosition().toOffsetInAnchor();
+    const Position endPosition = selectedRange.endPosition().toOffsetInAnchor();
+    DummyExceptionStateForTesting exceptionState;
+    bool nodeFullySelected = Range::compareBoundaryPoints(
+                                 parentNode, nodeIndex, startPosition.computeContainerNode(),
+                                 startPosition.offsetInContainerNode(), exceptionState)
+            >= 0
+        && !exceptionState.hadException() && Range::compareBoundaryPoints(parentNode, nodeIndex + 1, endPosition.computeContainerNode(), endPosition.offsetInContainerNode(), exceptionState) <= 0 && !exceptionState.hadException();
     if (exceptionState.hadException())
         return false;
     if (nodeFullySelected)
         return true;
 
-    bool nodeFullyUnselected = (Range::compareBoundaryPoints(parentNode, nodeIndex, selectedRange->endContainer(), selectedRange->endOffset(), exceptionState) > 0 && !exceptionState.hadException())
-        || (Range::compareBoundaryPoints(parentNode, nodeIndex + 1, selectedRange->startContainer(), selectedRange->startOffset(), exceptionState) < 0 && !exceptionState.hadException());
-    ASSERT(!exceptionState.hadException());
+    bool nodeFullyUnselected = (Range::compareBoundaryPoints(
+                                    parentNode, nodeIndex, endPosition.computeContainerNode(),
+                                    endPosition.offsetInContainerNode(), exceptionState)
+                                       > 0
+                                   && !exceptionState.hadException())
+        || (Range::compareBoundaryPoints(
+                parentNode, nodeIndex + 1, startPosition.computeContainerNode(),
+                startPosition.offsetInContainerNode(), exceptionState)
+                < 0
+            && !exceptionState.hadException());
+    DCHECK(!exceptionState.hadException());
     if (nodeFullyUnselected)
         return false;
 
@@ -492,7 +628,7 @@ bool DOMSelection::containsNode(const Node* n, bool allowPartial) const
 
 void DOMSelection::selectAllChildren(Node* n, ExceptionState& exceptionState)
 {
-    ASSERT(n);
+    DCHECK(n);
 
     // This doesn't (and shouldn't) select text node characters.
     setBaseAndExtent(n, 0, n, n->countChildren(), exceptionState);
@@ -500,13 +636,18 @@ void DOMSelection::selectAllChildren(Node* n, ExceptionState& exceptionState)
 
 String DOMSelection::toString()
 {
-    if (!m_frame)
+    if (!isAvailable())
         return String();
 
-    Position start, end;
-    if (m_frame->selection().selection().toNormalizedPositions(start, end))
-        return plainText(start, end, TextIteratorForSelectionToString);
-    return emptyString();
+    // TODO(xiaochengh): The use of updateStyleAndLayoutIgnorePendingStylesheets
+    // needs to be audited.  See http://crbug.com/590369 for more details.
+    frame()->document()->updateStyleAndLayoutIgnorePendingStylesheets();
+
+    DocumentLifecycle::DisallowTransitionScope disallowTransition(
+        frame()->document()->lifecycle());
+
+    const EphemeralRange range = frame()->selection().selection().toNormalizedEphemeralRange();
+    return plainText(range, TextIteratorForSelectionToString);
 }
 
 Node* DOMSelection::shadowAdjustedNode(const Position& position) const
@@ -514,7 +655,7 @@ Node* DOMSelection::shadowAdjustedNode(const Position& position) const
     if (position.isNull())
         return 0;
 
-    Node* containerNode = position.containerNode();
+    Node* containerNode = position.computeContainerNode();
     Node* adjustedNode = m_treeScope->ancestorInThisScope(containerNode);
 
     if (!adjustedNode)
@@ -523,7 +664,7 @@ Node* DOMSelection::shadowAdjustedNode(const Position& position) const
     if (containerNode == adjustedNode)
         return containerNode;
 
-    ASSERT(!adjustedNode->isShadowRoot());
+    DCHECK(!adjustedNode->isShadowRoot()) << adjustedNode;
     return adjustedNode->parentOrShadowHostNode();
 }
 
@@ -532,7 +673,7 @@ int DOMSelection::shadowAdjustedOffset(const Position& position) const
     if (position.isNull())
         return 0;
 
-    Node* containerNode = position.containerNode();
+    Node* containerNode = position.computeContainerNode();
     Node* adjustedNode = m_treeScope->ancestorInThisScope(containerNode);
 
     if (!adjustedNode)
@@ -546,22 +687,23 @@ int DOMSelection::shadowAdjustedOffset(const Position& position) const
 
 bool DOMSelection::isValidForPosition(Node* node) const
 {
-    ASSERT(m_frame);
+    DCHECK(frame());
     if (!node)
         return true;
-    return node->document() == m_frame->document();
+    return node->document() == frame()->document() && node->isConnected();
 }
 
 void DOMSelection::addConsoleError(const String& message)
 {
     if (m_treeScope)
-        m_treeScope->document().addConsoleMessage(ConsoleMessage::create(JSMessageSource, ErrorMessageLevel, message));
+        m_treeScope->document().addConsoleMessage(
+            ConsoleMessage::create(JSMessageSource, ErrorMessageLevel, message));
 }
 
 DEFINE_TRACE(DOMSelection)
 {
     visitor->trace(m_treeScope);
-    DOMWindowProperty::trace(visitor);
+    ContextClient::trace(visitor);
 }
 
 } // namespace blink

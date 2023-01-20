@@ -9,7 +9,6 @@
 {
   'dependencies': [
     'skia_library',
-    'skia_chrome_opts',
     '../base/base.gyp:base',
     '../base/third_party/dynamic_annotations/dynamic_annotations.gyp:dynamic_annotations',
   ],
@@ -19,100 +18,69 @@
       'ext',
     ],
   },
-
+  'variables': {
+    # TODO(scottmg): http://crbug.com/177306
+    'clang_warning_flags_unset': [
+      # Don't warn about string->bool used in asserts.
+      '-Wstring-conversion',
+    ],
+  },
   'sources': [
+    # Note: file list duplicated in GN build.
     'ext/analysis_canvas.cc',
-    'ext/analysis_canvas.h',
     'ext/benchmarking_canvas.cc',
-    'ext/benchmarking_canvas.h',
-    'ext/bitmap_platform_device.h',
     'ext/bitmap_platform_device_cairo.cc',
-    'ext/bitmap_platform_device_cairo.h',
     'ext/bitmap_platform_device_mac.cc',
-    'ext/bitmap_platform_device_mac.h',
     'ext/bitmap_platform_device_skia.cc',
-    'ext/bitmap_platform_device_skia.h',
     'ext/bitmap_platform_device_win.cc',
-    'ext/bitmap_platform_device_win.h',
     'ext/convolver.cc',
-    'ext/convolver.h',
     'ext/event_tracer_impl.cc',
-    'ext/event_tracer_impl.h',
     'ext/fontmgr_default_win.cc',
-    'ext/fontmgr_default_win.h',
     'ext/google_logging.cc',
     'ext/image_operations.cc',
-    'ext/image_operations.h',
-    'ext/lazy_pixel_ref.cc',
-    'ext/lazy_pixel_ref.h',
-    'ext/opacity_draw_filter.cc',
-    'ext/opacity_draw_filter.h',
-    'ext/paint_simplifier.cc',
-    'ext/paint_simplifier.h',
-    'ext/pixel_ref_utils.cc',
-    'ext/pixel_ref_utils.h',
+    'ext/opacity_filter_canvas.cc',
     'ext/platform_canvas.cc',
-    'ext/platform_canvas.h',
     'ext/platform_device.cc',
-    'ext/platform_device.h',
     'ext/platform_device_linux.cc',
     'ext/platform_device_mac.cc',
     'ext/platform_device_win.cc',
     'ext/recursive_gaussian_convolution.cc',
-    'ext/recursive_gaussian_convolution.h',
-    'ext/refptr.h',
-    'ext/SkDiscardableMemory_chrome.h',
     'ext/SkDiscardableMemory_chrome.cc',
     'ext/SkMemory_new_handler.cpp',
-    'ext/skia_trace_shim.h',
+    'ext/skia_histogram.cc',
+    'ext/skia_memory_dump_provider.cc',
+    'ext/skia_trace_memory_dump_impl.cc',
     'ext/skia_utils_base.cc',
-    'ext/skia_utils_base.h',
     'ext/skia_utils_ios.mm',
-    'ext/skia_utils_ios.h',
     'ext/skia_utils_mac.mm',
-    'ext/skia_utils_mac.h',
     'ext/skia_utils_win.cc',
-    'ext/skia_utils_win.h',
-    'ext/vector_canvas.h',
-    'ext/vector_platform_device_emf_win.cc',
-    'ext/vector_platform_device_emf_win.h',
-    'ext/vector_platform_device_skia.cc',
-    'ext/vector_platform_device_skia.h',
   ],
   'conditions': [
-    [ 'OS == "android" and enable_printing == 0', {
+    [ 'OS == "ios"', {
+      'sources!': [
+        'ext/platform_canvas.cc',
+      ],
+    }],
+    [ 'OS == "android" and '
+      'enable_basic_printing==0 and enable_print_preview==0', {
       'sources!': [
         'ext/skia_utils_base.cc',
-      ],
-    }],
-    [ 'enable_printing == 0', {
-      'sources!': [
-        'ext/vector_platform_device_skia.cc',
-      ],
-    }],
-    ['OS == "ios"', {
-      'sources/': [
-        ['exclude', '^ext/vector_platform_device_skia\\.'],
-      ],
-      'dependencies!': [
-        'skia_chrome_opts',
-      ],
-    }],
-    # TODO(scottmg): http://crbug.com/177306
-    ['clang==1', {
-      'xcode_settings': {
-        'WARNING_CFLAGS!': [
-          # Don't warn about string->bool used in asserts.
-          '-Wstring-conversion',
-        ],
-      },
-      'cflags!': [
-        '-Wstring-conversion',
       ],
     }],
     [ 'OS != "android" and (OS != "linux" or use_cairo==1)', {
       'sources!': [
         'ext/bitmap_platform_device_skia.cc',
+      ],
+    }],
+    [ 'OS != "ios" and target_arch != "arm" and target_arch != "mipsel" and \
+       target_arch != "arm64" and target_arch != "mips64el"', {
+      'sources': [
+        'ext/convolver_SSE2.cc',
+      ],
+    }],
+    [ 'target_arch == "mipsel" and mips_dsp_rev >= 2',{
+      'sources': [
+        'ext/convolver_mips_dspr2.cc',
       ],
     }],
   ],

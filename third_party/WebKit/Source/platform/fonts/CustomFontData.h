@@ -41,11 +41,6 @@ public:
     virtual bool shouldSkipDrawing() const { return false; }
     virtual void clearFontFaceSource() { }
 
-<<<<<<< HEAD
-=======
-    virtual void initializeFontData(SimpleFontData*, float) { }
-
->>>>>>> miniblink49
 protected:
     CustomFontData() { }
 };

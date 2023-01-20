@@ -33,9 +33,9 @@ namespace blink {
 
 class CSSFontFeatureValue : public CSSValue {
 public:
-    static PassRefPtrWillBeRawPtr<CSSFontFeatureValue> create(const AtomicString& tag, int value)
+    static CSSFontFeatureValue* create(const AtomicString& tag, int value)
     {
-        return adoptRefWillBeNoop(new CSSFontFeatureValue(tag, value));
+        return new CSSFontFeatureValue(tag, value);
     }
 
     const AtomicString& tag() const { return m_tag; }
@@ -44,7 +44,10 @@ public:
 
     bool equals(const CSSFontFeatureValue&) const;
 
-    DEFINE_INLINE_TRACE_AFTER_DISPATCH() { CSSValue::traceAfterDispatch(visitor); }
+    DEFINE_INLINE_TRACE_AFTER_DISPATCH()
+    {
+        CSSValue::traceAfterDispatch(visitor);
+    }
 
 private:
     CSSFontFeatureValue(const AtomicString& tag, int value);
@@ -55,6 +58,6 @@ private:
 
 DEFINE_CSS_VALUE_TYPE_CASTS(CSSFontFeatureValue, isFontFeatureValue());
 
-} // namespace
+} // namespace blink
 
 #endif

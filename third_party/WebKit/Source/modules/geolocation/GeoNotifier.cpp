@@ -2,16 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "modules/geolocation/GeoNotifier.h"
 
 #include "modules/geolocation/Geolocation.h"
 #include "modules/geolocation/PositionError.h"
 #include "modules/geolocation/PositionOptions.h"
-<<<<<<< HEAD
 #include "platform/Histogram.h"
 #include "wtf/Assertions.h"
 
@@ -21,13 +16,6 @@ GeoNotifier::GeoNotifier(Geolocation* geolocation,
     PositionCallback* successCallback,
     PositionErrorCallback* errorCallback,
     const PositionOptions& options)
-=======
-
-namespace blink {
-
-GeoNotifier::GeoNotifier(Geolocation* geolocation, PositionCallback* successCallback, PositionErrorCallback* errorCallback, const PositionOptions& options)
-    // FIXME : m_geolocation should be removed, it makes circular dependancy.
->>>>>>> miniblink49
     : m_geolocation(geolocation)
     , m_successCallback(successCallback)
     , m_errorCallback(errorCallback)
@@ -35,7 +23,6 @@ GeoNotifier::GeoNotifier(Geolocation* geolocation, PositionCallback* successCall
     , m_timer(this, &GeoNotifier::timerFired)
     , m_useCachedPosition(false)
 {
-<<<<<<< HEAD
     DCHECK(m_geolocation);
     DCHECK(m_successCallback);
 
@@ -43,10 +30,6 @@ GeoNotifier::GeoNotifier(Geolocation* geolocation, PositionCallback* successCall
         ("Geolocation.Timeout", 0,
             1000 * 60 * 10 /* 10 minute max */, 20 /* buckets */));
     timeoutHistogram.count(m_options.timeout());
-=======
-    ASSERT(m_geolocation);
-    ASSERT(m_successCallback);
->>>>>>> miniblink49
 }
 
 DEFINE_TRACE(GeoNotifier)
@@ -68,21 +51,13 @@ void GeoNotifier::setFatalError(PositionError* error)
     m_fatalError = error;
     // An existing timer may not have a zero timeout.
     m_timer.stop();
-<<<<<<< HEAD
     m_timer.startOneShot(0, BLINK_FROM_HERE);
-=======
-    m_timer.startOneShot(0, FROM_HERE);
->>>>>>> miniblink49
 }
 
 void GeoNotifier::setUseCachedPosition()
 {
     m_useCachedPosition = true;
-<<<<<<< HEAD
     m_timer.startOneShot(0, BLINK_FROM_HERE);
-=======
-    m_timer.startOneShot(0, FROM_HERE);
->>>>>>> miniblink49
 }
 
 void GeoNotifier::runSuccessCallback(Geoposition* position)
@@ -98,11 +73,7 @@ void GeoNotifier::runErrorCallback(PositionError* error)
 
 void GeoNotifier::startTimer()
 {
-<<<<<<< HEAD
     m_timer.startOneShot(m_options.timeout() / 1000.0, BLINK_FROM_HERE);
-=======
-    m_timer.startOneShot(m_options.timeout() / 1000.0, FROM_HERE);
->>>>>>> miniblink49
 }
 
 void GeoNotifier::stopTimer()
@@ -110,7 +81,6 @@ void GeoNotifier::stopTimer()
     m_timer.stop();
 }
 
-<<<<<<< HEAD
 void GeoNotifier::timerFired(TimerBase*)
 {
     m_timer.stop();
@@ -119,16 +89,6 @@ void GeoNotifier::timerFired(TimerBase*)
     // LocalFrame is disconnected and requests are cancelled.
     if (m_fatalError) {
         runErrorCallback(m_fatalError);
-=======
-void GeoNotifier::timerFired(Timer<GeoNotifier>*)
-{
-    m_timer.stop();
-
-    // Test for fatal error first. This is required for the case where the LocalFrame is
-    // disconnected and requests are cancelled.
-    if (m_fatalError) {
-        runErrorCallback(m_fatalError.get());
->>>>>>> miniblink49
         // This will cause this notifier to be deleted.
         m_geolocation->fatalErrorOccurred(this);
         return;
@@ -143,7 +103,6 @@ void GeoNotifier::timerFired(Timer<GeoNotifier>*)
     }
 
     if (m_errorCallback)
-<<<<<<< HEAD
         m_errorCallback->handleEvent(
             PositionError::create(PositionError::kTimeout, "Timeout expired"));
 
@@ -152,9 +111,6 @@ void GeoNotifier::timerFired(Timer<GeoNotifier>*)
             1000 * 60 * 10 /* 10 minute max */, 20 /* buckets */));
     timeoutExpiredHistogram.count(m_options.timeout());
 
-=======
-        m_errorCallback->handleEvent(PositionError::create(PositionError::TIMEOUT, "Timeout expired"));
->>>>>>> miniblink49
     m_geolocation->requestTimedOut(this);
 }
 

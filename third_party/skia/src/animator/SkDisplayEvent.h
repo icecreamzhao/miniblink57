@@ -6,23 +6,13 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #ifndef SkDisplayEvent_DEFINED
 #define SkDisplayEvent_DEFINED
 
 #include "SkDisplayable.h"
-<<<<<<< HEAD
 #include "SkIntArray.h"
 #include "SkKey.h"
 #include "SkMemberInfo.h"
-=======
-#include "SkMemberInfo.h"
-#include "SkIntArray.h"
-#include "SkKey.h"
->>>>>>> miniblink49
 
 class SkEvent;
 
@@ -32,11 +22,7 @@ class SkDisplayEvent : public SkDisplayable {
         kNo_kind,
         kKeyChar,
         kKeyPress,
-<<<<<<< HEAD
         kKeyPressUp, //i assume the order here is intended to match with skanimatorscript.cpp
-=======
-        kKeyPressUp,    //i assume the order here is intended to match with skanimatorscript.cpp
->>>>>>> miniblink49
         kMouseDown,
         kMouseDrag,
         kMouseMove,
@@ -47,7 +33,6 @@ class SkDisplayEvent : public SkDisplayable {
     };
     SkDisplayEvent();
     virtual ~SkDisplayEvent();
-<<<<<<< HEAD
     bool addChild(SkAnimateMaker&, SkDisplayable* child) override;
     bool contains(SkDisplayable*) override;
     SkDisplayable* contains(const SkString&) override;
@@ -60,19 +45,6 @@ class SkDisplayEvent : public SkDisplayable {
     void populateInput(SkAnimateMaker&, const SkEvent& fEvent);
     bool setProperty(int index, SkScriptValue&) override;
 
-=======
-    bool addChild(SkAnimateMaker& , SkDisplayable* child) override;
-    bool contains(SkDisplayable*) override;
-    SkDisplayable* contains(const SkString& ) override;
-#ifdef SK_DEBUG
-    void dumpEvent(SkAnimateMaker* );
-#endif
-    bool enableEvent(SkAnimateMaker& );
-    bool getProperty(int index, SkScriptValue* ) const override;
-    void onEndElement(SkAnimateMaker& maker) override;
-    void populateInput(SkAnimateMaker& , const SkEvent& fEvent);
-    bool setProperty(int index, SkScriptValue& ) override;
->>>>>>> miniblink49
 protected:
     SkKey code;
     SkBool disable;

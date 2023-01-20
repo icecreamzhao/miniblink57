@@ -16,16 +16,9 @@
 #ifndef PARSEPOS_H
 #define PARSEPOS_H
 
-<<<<<<< HEAD
 #include "unicode/uobject.h"
 #include "unicode/utypes.h"
 
-=======
-#include "unicode/utypes.h"
-#include "unicode/uobject.h"
-
- 
->>>>>>> miniblink49
 U_NAMESPACE_BEGIN
 
 /**
@@ -57,18 +50,11 @@ public:
      * @stable ICU 2.0
      */
     ParsePosition()
-<<<<<<< HEAD
         : UObject()
         , index(0)
         , errorIndex(-1)
     {
     }
-=======
-        : UObject(),
-        index(0),
-        errorIndex(-1)
-      {}
->>>>>>> miniblink49
 
     /**
      * Create a new ParsePosition with the given initial index.
@@ -76,18 +62,11 @@ public:
      * @stable ICU 2.0
      */
     ParsePosition(int32_t newIndex)
-<<<<<<< HEAD
         : UObject()
         , index(newIndex)
         , errorIndex(-1)
     {
     }
-=======
-        : UObject(),
-        index(newIndex),
-        errorIndex(-1)
-      {}
->>>>>>> miniblink49
 
     /**
      * Copy constructor
@@ -95,18 +74,11 @@ public:
      * @stable ICU 2.0
      */
     ParsePosition(const ParsePosition& copy)
-<<<<<<< HEAD
         : UObject(copy)
         , index(copy.index)
         , errorIndex(copy.errorIndex)
     {
     }
-=======
-        : UObject(copy),
-        index(copy.index),
-        errorIndex(copy.errorIndex)
-      {}
->>>>>>> miniblink49
 
     /**
      * Destructor
@@ -118,33 +90,21 @@ public:
      * Assignment operator
      * @stable ICU 2.0
      */
-<<<<<<< HEAD
     ParsePosition& operator=(const ParsePosition& copy);
-=======
-    ParsePosition&      operator=(const ParsePosition& copy);
->>>>>>> miniblink49
 
     /**
      * Equality operator.
      * @return TRUE if the two parse positions are equal, FALSE otherwise.
      * @stable ICU 2.0
      */
-<<<<<<< HEAD
     UBool operator==(const ParsePosition& that) const;
-=======
-    UBool              operator==(const ParsePosition& that) const;
->>>>>>> miniblink49
 
     /**
      * Equality operator.
      * @return TRUE if the two parse positions are not equal, FALSE otherwise.
      * @stable ICU 2.0
      */
-<<<<<<< HEAD
     UBool operator!=(const ParsePosition& that) const;
-=======
-    UBool              operator!=(const ParsePosition& that) const;
->>>>>>> miniblink49
 
     /**
      * Clone this object.
@@ -157,11 +117,7 @@ public:
      * @see getDynamicClassID
      * @stable ICU 2.8
      */
-<<<<<<< HEAD
     ParsePosition* clone() const;
-=======
-    ParsePosition *clone() const;
->>>>>>> miniblink49
 
     /**
      * Retrieve the current parse position.  On input to a parse method, this
@@ -222,90 +178,53 @@ private:
      * The index at which a parse error occurred.
      */
     int32_t errorIndex;
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 };
 
 inline ParsePosition&
 ParsePosition::operator=(const ParsePosition& copy)
 {
-<<<<<<< HEAD
     index = copy.index;
     errorIndex = copy.errorIndex;
     return *this;
-=======
-  index = copy.index;
-  errorIndex = copy.errorIndex;
-  return *this;
->>>>>>> miniblink49
 }
 
 inline UBool
 ParsePosition::operator==(const ParsePosition& copy) const
 {
-<<<<<<< HEAD
     if (index != copy.index || errorIndex != copy.errorIndex)
         return FALSE;
     else
         return TRUE;
-=======
-  if(index != copy.index || errorIndex != copy.errorIndex)
-  return FALSE;
-  else
-  return TRUE;
->>>>>>> miniblink49
 }
 
 inline UBool
 ParsePosition::operator!=(const ParsePosition& copy) const
 {
-<<<<<<< HEAD
     return !operator==(copy);
-=======
-  return !operator==(copy);
->>>>>>> miniblink49
 }
 
 inline int32_t
 ParsePosition::getIndex() const
 {
-<<<<<<< HEAD
     return index;
-=======
-  return index;
->>>>>>> miniblink49
 }
 
 inline void
 ParsePosition::setIndex(int32_t offset)
 {
-<<<<<<< HEAD
     this->index = offset;
-=======
-  this->index = offset;
->>>>>>> miniblink49
 }
 
 inline int32_t
 ParsePosition::getErrorIndex() const
 {
-<<<<<<< HEAD
     return errorIndex;
-=======
-  return errorIndex;
->>>>>>> miniblink49
 }
 
 inline void
 ParsePosition::setErrorIndex(int32_t ei)
 {
-<<<<<<< HEAD
     this->errorIndex = ei;
-=======
-  this->errorIndex = ei;
->>>>>>> miniblink49
 }
 U_NAMESPACE_END
 

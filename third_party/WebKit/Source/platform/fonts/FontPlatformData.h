@@ -32,35 +32,24 @@
 #define FontPlatformData_h
 
 #include "SkPaint.h"
-<<<<<<< HEAD
 #include "SkTypeface.h"
-=======
->>>>>>> miniblink49
 #include "platform/PlatformExport.h"
 #include "platform/SharedBuffer.h"
 #include "platform/fonts/FontDescription.h"
 #include "platform/fonts/FontOrientation.h"
-<<<<<<< HEAD
 #include "platform/fonts/SmallCapsIterator.h"
 #include "platform/fonts/opentype/OpenTypeVerticalData.h"
 #include "wtf/Allocator.h"
-=======
-#include "platform/fonts/FontRenderStyle.h"
-#include "platform/fonts/opentype/OpenTypeVerticalData.h"
->>>>>>> miniblink49
 #include "wtf/Forward.h"
 #include "wtf/HashTableDeletedValueType.h"
 #include "wtf/RefPtr.h"
 #include "wtf/text/CString.h"
 #include "wtf/text/StringImpl.h"
 
-<<<<<<< HEAD
 #if OS(LINUX) || OS(ANDROID)
 #include "platform/fonts/linux/FontRenderStyle.h"
 #endif // OS(LINUX) || OS(ANDROID)
 
-=======
->>>>>>> miniblink49
 #if OS(MACOSX)
 OBJC_CLASS NSFont;
 
@@ -69,14 +58,10 @@ typedef const struct __CTFont* CTFontRef;
 
 #include <objc/objc-auto.h>
 
-<<<<<<< HEAD
 inline CTFontRef toCTFontRef(NSFont* nsFont)
 {
     return reinterpret_cast<CTFontRef>(nsFont);
 }
-=======
-inline CTFontRef toCTFontRef(NSFont *nsFont) { return reinterpret_cast<CTFontRef>(nsFont); }
->>>>>>> miniblink49
 inline NSFont* toNSFont(CTFontRef ctFontRef) { return const_cast<NSFont*>(reinterpret_cast<const NSFont*>(ctFontRef)); }
 #endif // OS(MACOSX)
 
@@ -90,11 +75,8 @@ class GraphicsContext;
 class HarfBuzzFace;
 
 class PLATFORM_EXPORT FontPlatformData {
-<<<<<<< HEAD
     USING_FAST_MALLOC(FontPlatformData);
 
-=======
->>>>>>> miniblink49
 public:
     // Used for deleted values in the font cache's hash tables. The hash table
     // will create us with this structure, and it will compare other values
@@ -109,11 +91,7 @@ public:
 #if OS(MACOSX)
     FontPlatformData(NSFont*, float size, bool syntheticBold = false, bool syntheticItalic = false, FontOrientation = FontOrientation::Horizontal);
 #endif
-<<<<<<< HEAD
     FontPlatformData(PassRefPtr<SkTypeface>, const char* name, float textSize, bool syntheticBold, bool syntheticItalic, FontOrientation = FontOrientation::Horizontal);
-=======
-    FontPlatformData(PassRefPtr<SkTypeface>, const char* name, float textSize, bool syntheticBold, bool syntheticItalic, FontOrientation = FontOrientation::Horizontal, bool subpixelTextPosition = defaultUseSubpixelPositioning());
->>>>>>> miniblink49
     ~FontPlatformData();
 
 #if OS(MACOSX)
@@ -142,7 +120,6 @@ public:
 
     bool isHashTableDeletedValue() const { return m_isHashTableDeletedValue; }
 #if OS(WIN)
-<<<<<<< HEAD
     void setMinSizeForAntiAlias(unsigned size)
     {
         m_minSizeForAntiAlias = size;
@@ -150,39 +127,19 @@ public:
     unsigned minSizeForAntiAlias() const { return m_minSizeForAntiAlias; }
     void setMinSizeForSubpixel(float size) { m_minSizeForSubpixel = size; }
     float minSizeForSubpixel() const { return m_minSizeForSubpixel; }
-=======
-    void setMinSizeForAntiAlias(unsigned size) { m_minSizeForAntiAlias = size; }
-    unsigned minSizeForAntiAlias() const { return m_minSizeForAntiAlias; }
-    void setMinSizeForSubpixel(float size) { m_minSizeForSubpixel = size; }
-    float minSizeForSubpixel() const { return m_minSizeForSubpixel; }
-    void setHinting(SkPaint::Hinting style)
-    {
-        m_style.useAutoHint = 0;
-        m_style.hintStyle = style;
-    }
->>>>>>> miniblink49
 #endif
     bool fontContainsCharacter(UChar32 character);
 
     PassRefPtr<OpenTypeVerticalData> verticalData() const;
-<<<<<<< HEAD
     PassRefPtr<SharedBuffer> openTypeTable(SkFontTableTag) const;
 
 #if OS(LINUX) || OS(ANDROID)
     // The returned styles are all actual styles without FontRenderStyle::NoPreference.
     const FontRenderStyle& getFontRenderStyle() const { return m_style; }
-=======
-    PassRefPtr<SharedBuffer> openTypeTable(uint32_t table) const;
-
-#if !OS(MACOSX)
-    // The returned styles are all actual styles without FontRenderStyle::NoPreference.
-    const FontRenderStyle& fontRenderStyle() const { return m_style; }
->>>>>>> miniblink49
 #endif
     void setupPaint(SkPaint*, float deviceScaleFactor = 1, const Font* = 0) const;
 
 #if OS(WIN)
-<<<<<<< HEAD
     int paintTextFlags() const
     {
         return m_paintTextFlags;
@@ -195,24 +152,6 @@ private:
 #endif
 
     RefPtr<SkTypeface> m_typeface;
-=======
-    int paintTextFlags() const { return m_paintTextFlags; }
-#else
-    static void setHinting(SkPaint::Hinting);
-    static void setAutoHint(bool);
-    static void setUseBitmaps(bool);
-    static void setAntiAlias(bool);
-    static void setSubpixelRendering(bool);
-#endif
-
-private:
-    bool static defaultUseSubpixelPositioning();
-#if !OS(MACOSX)
-    void querySystemForRenderStyle(bool useSkiaSubpixelPositioning);
-#endif
-
-    mutable RefPtr<SkTypeface> m_typeface;
->>>>>>> miniblink49
 #if !OS(WIN)
     CString m_family;
 #endif
@@ -222,7 +161,6 @@ public:
     bool m_syntheticBold;
     bool m_syntheticItalic;
     FontOrientation m_orientation;
-<<<<<<< HEAD
 
 private:
 #if OS(LINUX) || OS(ANDROID)
@@ -233,21 +171,6 @@ private:
     bool m_isHashTableDeletedValue;
 #if OS(WIN)
     int m_paintTextFlags;
-=======
-private:
-#if !OS(MACOSX)
-    FontRenderStyle m_style;
-#endif
-
-#ifndef MINIBLINK_NO_HARFBUZZ
-    mutable RefPtr<HarfBuzzFace> m_harfBuzzFace;
-#endif
-
-    bool m_isHashTableDeletedValue;
-#if OS(WIN)
-    int m_paintTextFlags;
-    bool m_useSubpixelPositioning;
->>>>>>> miniblink49
     unsigned m_minSizeForAntiAlias;
     float m_minSizeForSubpixel;
 #endif

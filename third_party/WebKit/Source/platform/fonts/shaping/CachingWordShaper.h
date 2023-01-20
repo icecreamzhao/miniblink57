@@ -26,23 +26,14 @@
 #ifndef CachingWordShaper_h
 #define CachingWordShaper_h
 
-<<<<<<< HEAD
 #include "platform/geometry/FloatRect.h"
 #include "platform/text/TextRun.h"
 #include "wtf/Allocator.h"
-=======
-
-#include "platform/geometry/FloatRect.h"
-#include "platform/text/TextRun.h"
->>>>>>> miniblink49
 #include "wtf/PassRefPtr.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 struct CharacterRange;
-=======
->>>>>>> miniblink49
 class Font;
 class GlyphBuffer;
 class SimpleFontData;
@@ -50,7 +41,6 @@ class ShapeCache;
 struct GlyphData;
 
 class PLATFORM_EXPORT CachingWordShaper final {
-<<<<<<< HEAD
     STACK_ALLOCATED();
     WTF_MAKE_NONCOPYABLE(CachingWordShaper);
 
@@ -60,35 +50,21 @@ public:
     {
     }
     ~CachingWordShaper() { }
-=======
-public:
-    CachingWordShaper();
-    ~CachingWordShaper();
-    void clear();
->>>>>>> miniblink49
 
     float width(const Font*, const TextRun&,
         HashSet<const SimpleFontData*>* fallbackFonts,
         FloatRect* glyphBounds);
-<<<<<<< HEAD
     int offsetForPosition(const Font*, const TextRun&, float targetX, bool includePartialGlyphs);
-=======
->>>>>>> miniblink49
     float fillGlyphBuffer(const Font*, const TextRun&,
         HashSet<const SimpleFontData*>*, GlyphBuffer*,
         unsigned from, unsigned to);
     float fillGlyphBufferForTextEmphasis(const Font*, const TextRun&,
         const GlyphData* emphasisData, GlyphBuffer*,
         unsigned from, unsigned to);
-<<<<<<< HEAD
     CharacterRange getCharacterRange(const Font*, const TextRun&,
         unsigned from, unsigned to);
     Vector<CharacterRange> individualCharacterRanges(const Font*,
         const TextRun&);
-=======
-    FloatRect selectionRect(const Font*, const TextRun&, const FloatPoint&,
-        int height, unsigned from, unsigned to);
->>>>>>> miniblink49
 
 private:
     ShapeCache* m_shapeCache;

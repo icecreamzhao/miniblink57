@@ -346,11 +346,7 @@ typedef struct hb_user_data_key_t {
   char unused;
 } hb_user_data_key_t;
 
-<<<<<<< HEAD
 typedef void (__cdecl *hb_destroy_func_t) (void *user_data);
-=======
-typedef void (*hb_destroy_func_t) (void *user_data);
->>>>>>> miniblink49
 
 
 HB_END_DECLS

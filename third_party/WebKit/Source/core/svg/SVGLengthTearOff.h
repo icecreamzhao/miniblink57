@@ -37,30 +37,37 @@
 
 namespace blink {
 
-class SVGLengthTearOff final : public SVGPropertyTearOff<SVGLength>, public ScriptWrappable {
+class SVGLengthTearOff final : public SVGPropertyTearOff<SVGLength>,
+                               public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     // Forward declare these enums in the w3c naming scheme, for IDL generation
     enum {
-        SVG_LENGTHTYPE_UNKNOWN = LengthTypeUnknown,
-        SVG_LENGTHTYPE_NUMBER = LengthTypeNumber,
-        SVG_LENGTHTYPE_PERCENTAGE = LengthTypePercentage,
-        SVG_LENGTHTYPE_EMS = LengthTypeEMS,
-        SVG_LENGTHTYPE_EXS = LengthTypeEXS,
-        SVG_LENGTHTYPE_PX = LengthTypePX,
-        SVG_LENGTHTYPE_CM = LengthTypeCM,
-        SVG_LENGTHTYPE_MM = LengthTypeMM,
-        SVG_LENGTHTYPE_IN = LengthTypeIN,
-        SVG_LENGTHTYPE_PT = LengthTypePT,
-        SVG_LENGTHTYPE_PC = LengthTypePC
+        kSvgLengthtypeUnknown = 0,
+        kSvgLengthtypeNumber = 1,
+        kSvgLengthtypePercentage = 2,
+        kSvgLengthtypeEms = 3,
+        kSvgLengthtypeExs = 4,
+        kSvgLengthtypePx = 5,
+        kSvgLengthtypeCm = 6,
+        kSvgLengthtypeMm = 7,
+        kSvgLengthtypeIn = 8,
+        kSvgLengthtypePt = 9,
+        kSvgLengthtypePc = 10
     };
 
-    static PassRefPtrWillBeRawPtr<SVGLengthTearOff> create(PassRefPtrWillBeRawPtr<SVGLength> target, SVGElement* contextElement, PropertyIsAnimValType propertyIsAnimVal, const QualifiedName& attributeName = QualifiedName::null())
+    static SVGLengthTearOff* create(
+        SVGLength* target,
+        SVGElement* contextElement,
+        PropertyIsAnimValType propertyIsAnimVal,
+        const QualifiedName& attributeName = QualifiedName::null())
     {
-        return adoptRefWillBeNoop(new SVGLengthTearOff(target, contextElement, propertyIsAnimVal, attributeName));
+        return new SVGLengthTearOff(target, contextElement, propertyIsAnimVal,
+            attributeName);
     }
 
-    SVGLengthType unitType();
+    unsigned short unitType();
     SVGLengthMode unitMode();
     float value(ExceptionState&);
     void setValue(float value, ExceptionState&);
@@ -68,13 +75,20 @@ public:
     void setValueInSpecifiedUnits(float value, ExceptionState&);
     String valueAsString();
     void setValueAsString(const String&, ExceptionState&);
-    void newValueSpecifiedUnits(unsigned short unitType, float valueInSpecifiedUnits, ExceptionState&);
+    void newValueSpecifiedUnits(unsigned short unitType,
+        float valueInSpecifiedUnits,
+        ExceptionState&);
     void convertToSpecifiedUnits(unsigned short unitType, ExceptionState&);
 
-    bool hasExposedLengthUnit() { return target()->unitType() <= LengthTypePC; }
+    bool hasExposedLengthUnit();
+
+    DECLARE_VIRTUAL_TRACE_WRAPPERS();
 
 private:
-    SVGLengthTearOff(PassRefPtrWillBeRawPtr<SVGLength>, SVGElement* contextElement, PropertyIsAnimValType, const QualifiedName& attributeName = QualifiedName::null());
+    SVGLengthTearOff(SVGLength*,
+        SVGElement* contextElement,
+        PropertyIsAnimValType,
+        const QualifiedName& attributeName = QualifiedName::null());
 };
 
 } // namespace blink

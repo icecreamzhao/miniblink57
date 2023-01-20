@@ -43,32 +43,22 @@ class FileSystemFlags;
 
 class DirectoryEntrySync final : public EntrySync {
     DEFINE_WRAPPERTYPEINFO();
-<<<<<<< HEAD
 
 public:
     static DirectoryEntrySync* create(DOMFileSystemBase* fileSystem,
         const String& fullPath)
-=======
-public:
-    static DirectoryEntrySync* create(DOMFileSystemBase* fileSystem, const String& fullPath)
->>>>>>> miniblink49
     {
         return new DirectoryEntrySync(fileSystem, fullPath);
     }
     bool isDirectory() const override { return true; }
 
     DirectoryReaderSync* createReader();
-<<<<<<< HEAD
     FileEntrySync* getFile(const String& path,
         const FileSystemFlags&,
         ExceptionState&);
     DirectoryEntrySync* getDirectory(const String& path,
         const FileSystemFlags&,
         ExceptionState&);
-=======
-    FileEntrySync* getFile(const String& path, const FileSystemFlags&, ExceptionState&);
-    DirectoryEntrySync* getDirectory(const String& path, const FileSystemFlags&, ExceptionState&);
->>>>>>> miniblink49
     void removeRecursively(ExceptionState&);
 
     DECLARE_VIRTUAL_TRACE();
@@ -77,15 +67,11 @@ private:
     DirectoryEntrySync(DOMFileSystemBase*, const String& fullPath);
 };
 
-<<<<<<< HEAD
 DEFINE_TYPE_CASTS(DirectoryEntrySync,
     EntrySync,
     entry,
     entry->isDirectory(),
     entry.isDirectory());
-=======
-DEFINE_TYPE_CASTS(DirectoryEntrySync, EntrySync, entry, entry->isDirectory(), entry.isDirectory());
->>>>>>> miniblink49
 
 } // namespace blink
 

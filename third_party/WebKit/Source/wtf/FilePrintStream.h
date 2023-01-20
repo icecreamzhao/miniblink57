@@ -26,35 +26,21 @@
 #ifndef FilePrintStream_h
 #define FilePrintStream_h
 
-<<<<<<< HEAD
 #include "wtf/Compiler.h"
 #include "wtf/PrintStream.h"
 #include <memory>
 #include <stdio.h>
-=======
-#include <stdio.h>
-#include "wtf/PassOwnPtr.h"
-#include "wtf/PrintStream.h"
->>>>>>> miniblink49
 
 namespace WTF {
 
 class WTF_EXPORT FilePrintStream final : public PrintStream {
 public:
-<<<<<<< HEAD
     enum AdoptionMode { Adopt,
         Borrow };
-=======
-    enum AdoptionMode {
-        Adopt,
-        Borrow
-    };
->>>>>>> miniblink49
 
     FilePrintStream(FILE*, AdoptionMode = Adopt);
     ~FilePrintStream() override;
 
-<<<<<<< HEAD
     static std::unique_ptr<FilePrintStream> open(const char* filename,
         const char* mode);
 
@@ -62,13 +48,6 @@ public:
 
     PRINTF_FORMAT(2, 0)
     void vprintf(const char* format, va_list) override;
-=======
-    static PassOwnPtr<FilePrintStream> open(const char* filename, const char* mode);
-
-    FILE* file() { return m_file; }
-
-    void vprintf(const char* format, va_list) override WTF_ATTRIBUTE_PRINTF(2, 0);
->>>>>>> miniblink49
     void flush() override;
 
 private:
@@ -81,7 +60,3 @@ private:
 using WTF::FilePrintStream;
 
 #endif // FilePrintStream_h
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49

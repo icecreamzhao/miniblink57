@@ -27,9 +27,5 @@
     ImplementedAs=DOMWindowSpeechSynthesis,
     RuntimeEnabled=ScriptedSpeech,
 ] partial interface Window {
-<<<<<<< HEAD
     [Measure, CallWith=ScriptState] readonly attribute SpeechSynthesis speechSynthesis;
-=======
-    readonly attribute SpeechSynthesis speechSynthesis;
->>>>>>> miniblink49
 };

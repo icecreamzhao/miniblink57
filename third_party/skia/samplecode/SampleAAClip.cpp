@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -10,7 +6,6 @@
  */
 
 #include "SampleCode.h"
-<<<<<<< HEAD
 #include "SkAAClip.h"
 #include "SkCanvas.h"
 #include "SkPath.h"
@@ -19,14 +14,6 @@
 static void testop(const SkIRect& r0, const SkIRect& r1, SkRegion::Op op,
     const SkIRect& expectedR)
 {
-=======
-#include "SkView.h"
-#include "SkCanvas.h"
-#include "SkAAClip.h"
-
-static void testop(const SkIRect& r0, const SkIRect& r1, SkRegion::Op op,
-                   const SkIRect& expectedR) {
->>>>>>> miniblink49
     SkAAClip c0, c1, c2;
     c0.setRect(r0);
     c1.setRect(r1);
@@ -42,7 +29,6 @@ static const struct {
     SkRegion::Op op;
     SkIRect expectedR;
 } gRec[] = {
-<<<<<<< HEAD
     { { 1, 2, 9, 3 }, { -3, 2, 5, 11 }, SkRegion::kDifference_Op, { 5, 2, 9, 3 } },
     { { 1, 10, 5, 13 }, { 1, 2, 5, 11 }, SkRegion::kDifference_Op, { 1, 11, 5, 13 } },
     { { 1, 10, 5, 13 }, { 1, 2, 5, 11 }, SkRegion::kReverseDifference_Op, { 1, 2, 5, 10 } },
@@ -50,25 +36,13 @@ static const struct {
 
 static void testop()
 {
-=======
-    {{ 1, 2, 9, 3 }, { -3, 2, 5, 11 }, SkRegion::kDifference_Op, { 5, 2, 9, 3 }},
-    {{ 1, 10, 5, 13 }, { 1, 2, 5, 11 }, SkRegion::kDifference_Op, { 1, 11, 5, 13 }},
-    {{ 1, 10, 5, 13 }, { 1, 2, 5, 11 }, SkRegion::kReverseDifference_Op, { 1, 2, 5, 10 }},
-};
-
-static void testop() {
->>>>>>> miniblink49
     for (size_t i = 0; i < SK_ARRAY_COUNT(gRec); ++i) {
         testop(gRec[i].r0, gRec[i].r1, gRec[i].op, gRec[i].expectedR);
     }
 }
 
-<<<<<<< HEAD
 static void drawClip(SkCanvas* canvas, const SkAAClip& clip)
 {
-=======
-static void drawClip(SkCanvas* canvas, const SkAAClip& clip) {
->>>>>>> miniblink49
     SkMask mask;
     SkBitmap bm;
 
@@ -79,36 +53,22 @@ static void drawClip(SkCanvas* canvas, const SkAAClip& clip) {
 
     SkPaint paint;
     canvas->drawBitmap(bm,
-<<<<<<< HEAD
         SK_Scalar1 * mask.fBounds.fLeft,
         SK_Scalar1 * mask.fBounds.fTop,
         &paint);
-=======
-                       SK_Scalar1 * mask.fBounds.fLeft,
-                       SK_Scalar1 * mask.fBounds.fTop,
-                       &paint);
->>>>>>> miniblink49
 }
 
 class AAClipView : public SampleView {
 public:
-<<<<<<< HEAD
     AAClipView()
     {
-=======
-    AAClipView() {
->>>>>>> miniblink49
         testop();
     }
 
 protected:
     // overrides from SkEventSink
-<<<<<<< HEAD
     virtual bool onQuery(SkEvent* evt)
     {
-=======
-    virtual bool onQuery(SkEvent* evt) {
->>>>>>> miniblink49
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "AAClip");
             return true;
@@ -116,12 +76,8 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-<<<<<<< HEAD
     virtual void onDrawContent(SkCanvas* canvas)
     {
-=======
-    virtual void onDrawContent(SkCanvas* canvas) {
->>>>>>> miniblink49
 #if 1
         SkAAClip aaclip;
         SkPath path;
@@ -130,13 +86,8 @@ protected:
         bounds.set(0, 0, 20, 20);
         bounds.inset(SK_ScalarHalf, SK_ScalarHalf);
 
-<<<<<<< HEAD
         //        path.addRect(bounds);
         //        path.addOval(bounds);
-=======
-//        path.addRect(bounds);
-//        path.addOval(bounds);
->>>>>>> miniblink49
         path.addRoundRect(bounds, 4, 4);
         aaclip.setPath(path);
         canvas->translate(30, 30);

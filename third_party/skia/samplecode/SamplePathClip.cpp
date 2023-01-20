@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -9,7 +5,6 @@
  * found in the LICENSE file.
  */
 #include "SampleCode.h"
-<<<<<<< HEAD
 #include "SkCanvas.h"
 #include "SkColorFilter.h"
 #include "SkColorPriv.h"
@@ -23,29 +18,12 @@
 #include "SkUtils.h"
 #include "SkView.h"
 #include "SkXfermode.h"
-=======
-#include "SkView.h"
-#include "SkCanvas.h"
-#include "SkGradientShader.h"
-#include "SkGraphics.h"
-#include "SkImageDecoder.h"
-#include "SkPath.h"
-#include "SkRegion.h"
-#include "SkShader.h"
-#include "SkUtils.h"
-#include "SkXfermode.h"
-#include "SkColorPriv.h"
-#include "SkColorFilter.h"
-#include "SkTime.h"
-#include "SkTypeface.h"
->>>>>>> miniblink49
 
 class PathClipView : public SampleView {
 public:
     SkRect fOval;
     SkPoint fCenter;
 
-<<<<<<< HEAD
     PathClipView()
         : fOval(SkRect::MakeWH(200, 50))
         , fCenter(SkPoint::Make(250, 250))
@@ -55,20 +33,6 @@ public:
 protected:
     bool onQuery(SkEvent* evt) override
     {
-=======
-    PathClipView() {
-        fOval.set(0, 0, SkIntToScalar(200), SkIntToScalar(50));
-        fCenter.set(SkIntToScalar(250), SkIntToScalar(250));
-
-//        test_ats();
-    }
-
-    virtual ~PathClipView() {}
-
-protected:
-    // overrides from SkEventSink
-    virtual bool onQuery(SkEvent* evt) {
->>>>>>> miniblink49
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "PathClip");
             return true;
@@ -76,16 +40,10 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-<<<<<<< HEAD
     void onDrawContent(SkCanvas* canvas) override
     {
         const SkRect oval = fOval.makeOffset(fCenter.fX - fOval.centerX(),
             fCenter.fY - fOval.centerY());
-=======
-    virtual void onDrawContent(SkCanvas* canvas) {
-        SkRect oval = fOval;
-        oval.offset(fCenter.fX - oval.centerX(), fCenter.fY - oval.centerY());
->>>>>>> miniblink49
 
         SkPaint p;
         p.setAntiAlias(true);
@@ -93,13 +51,7 @@ protected:
         p.setStyle(SkPaint::kStroke_Style);
         canvas->drawOval(oval, p);
 
-<<<<<<< HEAD
         const SkRect r = SkRect::MakeLTRB(200, 200, 300, 300);
-=======
-        SkRect r;
-        r.set(SkIntToScalar(200), SkIntToScalar(200),
-              SkIntToScalar(300), SkIntToScalar(300));
->>>>>>> miniblink49
         canvas->clipRect(r);
 
         p.setStyle(SkPaint::kFill_Style);
@@ -107,7 +59,6 @@ protected:
         canvas->drawRect(r, p);
 
         p.setColor(0x800000FF);
-<<<<<<< HEAD
         canvas->drawOval(oval, p);
     }
 
@@ -120,27 +71,12 @@ protected:
     {
         fCenter.set(click->fCurr.fX, click->fCurr.fY);
         this->inval(nullptr);
-=======
-        r.set(SkIntToScalar(150), SkIntToScalar(10),
-              SkIntToScalar(250), SkIntToScalar(400));
-        canvas->drawOval(oval, p);
-    }
-
-    SkView::Click* onFindClickHandler(SkScalar x, SkScalar y, unsigned) override {
-        return new Click(this);
-    }
-
-    virtual bool onClick(Click* click) {
-        fCenter.set(click->fCurr.fX, click->fCurr.fY);
-        this->inval(NULL);
->>>>>>> miniblink49
         return false;
     }
 
 private:
     typedef SampleView INHERITED;
 };
-<<<<<<< HEAD
 DEF_SAMPLE(return new PathClipView;)
 
 //////////////////////////////////////////////////////////////////////////////
@@ -421,10 +357,3 @@ private:
     typedef SampleView INHERITED;
 };
 DEF_SAMPLE(return new EdgeClipView;)
-=======
-
-//////////////////////////////////////////////////////////////////////////////
-
-static SkView* MyFactory() { return new PathClipView; }
-static SkViewRegister reg(MyFactory);
->>>>>>> miniblink49

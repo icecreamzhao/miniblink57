@@ -31,26 +31,16 @@
 
 #include "platform/PlatformExport.h"
 #include "platform/audio/AudioArray.h"
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/Noncopyable.h"
 #include <memory>
-=======
-#include "wtf/Noncopyable.h"
-#include "wtf/OwnPtr.h"
-#include "wtf/PassOwnPtr.h"
->>>>>>> miniblink49
 
 namespace blink {
 
 class PLATFORM_EXPORT DynamicsCompressorKernel {
-<<<<<<< HEAD
     DISALLOW_NEW();
     WTF_MAKE_NONCOPYABLE(DynamicsCompressorKernel);
 
-=======
-    WTF_MAKE_NONCOPYABLE(DynamicsCompressorKernel);
->>>>>>> miniblink49
 public:
     DynamicsCompressorKernel(float sampleRate, unsigned numberOfChannels);
 
@@ -58,7 +48,6 @@ public:
 
     // Performs stereo-linked compression.
     void process(const float* sourceChannels[],
-<<<<<<< HEAD
         float* destinationChannels[],
         unsigned numberOfChannels,
         unsigned framesToProcess,
@@ -76,26 +65,6 @@ public:
         float releaseZone2,
         float releaseZone3,
         float releaseZone4);
-=======
-                 float* destinationChannels[],
-                 unsigned numberOfChannels,
-                 unsigned framesToProcess,
-
-                 float dbThreshold,
-                 float dbKnee,
-                 float ratio,
-                 float attackTime,
-                 float releaseTime,
-                 float preDelayTime,
-                 float dbPostGain,
-                 float effectBlend,
-
-                 float releaseZone1,
-                 float releaseZone2,
-                 float releaseZone3,
-                 float releaseZone4
-                 );
->>>>>>> miniblink49
 
     void reset();
 
@@ -118,7 +87,6 @@ protected:
     // Lookahead section.
     enum { MaxPreDelayFrames = 1024 };
     enum { MaxPreDelayFramesMask = MaxPreDelayFrames - 1 };
-<<<<<<< HEAD
     enum {
         DefaultPreDelayFrames = 256
     }; // setPreDelayTime() will override this initial value
@@ -126,13 +94,6 @@ protected:
     void setPreDelayTime(float);
 
     Vector<std::unique_ptr<AudioFloatArray>> m_preDelayBuffers;
-=======
-    enum { DefaultPreDelayFrames = 256 }; // setPreDelayTime() will override this initial value
-    unsigned m_lastPreDelayFrames;
-    void setPreDelayTime(float);
-
-    Vector<OwnPtr<AudioFloatArray>> m_preDelayBuffers;
->>>>>>> miniblink49
     int m_preDelayReadIndex;
     int m_preDelayWriteIndex;
 
@@ -144,7 +105,6 @@ protected:
     float slopeAt(float x, float k);
     float kAtSlope(float desiredSlope);
 
-<<<<<<< HEAD
     float updateStaticCurveParameters(float dbThreshold,
         float dbKnee,
         float ratio);
@@ -152,12 +112,6 @@ protected:
     // Amount of input change in dB required for 1 dB of output change.
     // This applies to the portion of the curve above m_kneeThresholdDb (see
     // below).
-=======
-    float updateStaticCurveParameters(float dbThreshold, float dbKnee, float ratio);
-
-    // Amount of input change in dB required for 1 dB of output change.
-    // This applies to the portion of the curve above m_kneeThresholdDb (see below).
->>>>>>> miniblink49
     float m_ratio;
     float m_slope; // Inverse ratio.
 
@@ -165,30 +119,19 @@ protected:
     float m_linearThreshold;
     float m_dbThreshold;
 
-<<<<<<< HEAD
     // m_dbKnee is the number of dB above the threshold before we enter the
     // "ratio" portion of the curve.
     // m_kneeThresholdDb = m_dbThreshold + m_dbKnee
     // The portion between m_dbThreshold and m_kneeThresholdDb is the "soft knee"
     // portion of the curve which transitions smoothly from the linear portion to
     // the ratio portion.
-=======
-    // m_dbKnee is the number of dB above the threshold before we enter the "ratio" portion of the curve.
-    // m_kneeThresholdDb = m_dbThreshold + m_dbKnee
-    // The portion between m_dbThreshold and m_kneeThresholdDb is the "soft knee" portion of the curve
-    // which transitions smoothly from the linear portion to the ratio portion.
->>>>>>> miniblink49
     float m_dbKnee;
     float m_kneeThreshold;
     float m_kneeThresholdDb;
     float m_ykneeThresholdDb;
 
     // Internal parameter for the knee portion of the curve.
-<<<<<<< HEAD
     float m_knee;
-=======
-    float m_K;
->>>>>>> miniblink49
 };
 
 } // namespace blink

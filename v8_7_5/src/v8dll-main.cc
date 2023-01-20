@@ -12,7 +12,6 @@
 
 extern "C" {
 BOOL WINAPI DllMain(HANDLE hinstDLL,
-<<<<<<< HEAD
     DWORD dwReason,
     LPVOID lpvReserved)
 {
@@ -21,12 +20,3 @@ BOOL WINAPI DllMain(HANDLE hinstDLL,
 }
 }
 #endif // V8_OS_WIN
-=======
-                    DWORD dwReason,
-                    LPVOID lpvReserved) {
-  // Do nothing.
-  return TRUE;
-}
-}
-#endif  // V8_OS_WIN
->>>>>>> miniblink49

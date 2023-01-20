@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/fileapi/Blob.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -36,76 +35,129 @@
 #include "core/dom/ExceptionCode.h"
 #include "core/dom/ExecutionContext.h"
 #include "core/fileapi/BlobPropertyBag.h"
+#include "core/frame/UseCounter.h"
 #include "platform/blob/BlobRegistry.h"
 #include "platform/blob/BlobURL.h"
+#include <memory>
 
 namespace blink {
 
 namespace {
 
-class BlobURLRegistry final : public URLRegistry {
-public:
-    virtual void registerURL(SecurityOrigin*, const KURL&, URLRegistrable*) override;
-    virtual void unregisterURL(const KURL&) override;
+    class BlobURLRegistry final : public URLRegistry {
+    public:
+        // SecurityOrigin is passed together with KURL so that the registry can
+        // save it for entries from whose KURL the origin is not recoverable by
+        // using BlobURL::getOrigin().
+        void registerURL(SecurityOrigin*, const KURL&, URLRegistrable*) override;
+        void unregisterURL(const KURL&) override;
 
-    static URLRegistry& registry();
-};
+        static URLRegistry& registry();
+    };
 
-void BlobURLRegistry::registerURL(SecurityOrigin* origin, const KURL& publicURL, URLRegistrable* registrableObject)
-{
-    ASSERT(&registrableObject->registry() == this);
-    Blob* blob = static_cast<Blob*>(registrableObject);
-    BlobRegistry::registerPublicBlobURL(origin, publicURL, blob->blobDataHandle());
-}
+    void BlobURLRegistry::registerURL(SecurityOrigin* origin,
+        const KURL& publicURL,
+        URLRegistrable* registrableObject)
+    {
+        ASSERT(&registrableObject->registry() == this);
+        Blob* blob = static_cast<Blob*>(registrableObject);
+        BlobRegistry::registerPublicBlobURL(origin, publicURL,
+            blob->blobDataHandle());
+    }
 
-void BlobURLRegistry::unregisterURL(const KURL& publicURL)
-{
-    BlobRegistry::revokePublicBlobURL(publicURL);
-}
+    void BlobURLRegistry::unregisterURL(const KURL& publicURL)
+    {
+        BlobRegistry::revokePublicBlobURL(publicURL);
+    }
 
-URLRegistry& BlobURLRegistry::registry()
-{
-    // This is called on multiple threads.
-    // (This code assumes it is safe to register or unregister URLs on
-    // BlobURLRegistry (that is implemented by the embedder) on
-    // multiple threads.)
-    AtomicallyInitializedStaticReference(BlobURLRegistry, instance, new BlobURLRegistry());
-    return instance;
-}
+    URLRegistry& BlobURLRegistry::registry()
+    {
+        // This is called on multiple threads.
+        // (This code assumes it is safe to register or unregister URLs on
+        // BlobURLRegistry (that is implemented by the embedder) on
+        // multiple threads.)
+        DEFINE_THREAD_SAFE_STATIC_LOCAL(BlobURLRegistry, instance,
+            new BlobURLRegistry());
+        return instance;
+    }
 
 } // namespace
 
 Blob::Blob(PassRefPtr<BlobDataHandle> dataHandle)
     : m_blobDataHandle(dataHandle)
-    , m_hasBeenClosed(false)
+    , m_isClosed(false)
 {
 }
 
-Blob::~Blob()
-{
-}
+Blob::~Blob() { }
 
 // static
-Blob* Blob::create(const HeapVector<ArrayBufferOrArrayBufferViewOrBlobOrString>& blobParts, const BlobPropertyBag& options, ExceptionState& exceptionState)
+Blob* Blob::create(
+    ExecutionContext* context,
+    const HeapVector<ArrayBufferOrArrayBufferViewOrBlobOrUSVString>& blobParts,
+    const BlobPropertyBag& options,
+    ExceptionState& exceptionState)
 {
     ASSERT(options.hasType());
     if (!options.type().containsOnlyASCII()) {
-        exceptionState.throwDOMException(SyntaxError, "The 'type' property must consist of ASCII characters.");
+        exceptionState.throwDOMException(
+            SyntaxError, "The 'type' property must consist of ASCII characters.");
         return nullptr;
     }
 
     ASSERT(options.hasEndings());
     bool normalizeLineEndingsToNative = options.endings() == "native";
+    if (normalizeLineEndingsToNative)
+        UseCounter::count(context, UseCounter::FileAPINativeLineEndings);
 
-    OwnPtr<BlobData> blobData = BlobData::create();
+    std::unique_ptr<BlobData> blobData = BlobData::create();
     blobData->setContentType(options.type().lower());
 
     populateBlobData(blobData.get(), blobParts, normalizeLineEndingsToNative);
 
     long long blobSize = blobData->length();
-    return new Blob(BlobDataHandle::create(blobData.release(), blobSize));
+    return new Blob(BlobDataHandle::create(std::move(blobData), blobSize));
 }
 
+Blob* Blob::create(const unsigned char* data,
+    size_t bytes,
+    const String& contentType)
+{
+    ASSERT(data);
+
+    std::unique_ptr<BlobData> blobData = BlobData::create();
+    blobData->setContentType(contentType);
+    blobData->appendBytes(data, bytes);
+    long long blobSize = blobData->length();
+
+    return new Blob(BlobDataHandle::create(std::move(blobData), blobSize));
+}
+
+// static
+void Blob::populateBlobData(
+    BlobData* blobData,
+    const HeapVector<ArrayBufferOrArrayBufferViewOrBlobOrUSVString>& parts,
+    bool normalizeLineEndingsToNative)
+{
+    for (const auto& item : parts) {
+        if (item.isArrayBuffer()) {
+            DOMArrayBuffer* arrayBuffer = item.getAsArrayBuffer();
+            blobData->appendBytes(arrayBuffer->data(), arrayBuffer->byteLength());
+        } else if (item.isArrayBufferView()) {
+            DOMArrayBufferView* arrayBufferView = item.getAsArrayBufferView();
+            blobData->appendBytes(arrayBufferView->baseAddress(),
+                arrayBufferView->byteLength());
+        } else if (item.isBlob()) {
+            item.getAsBlob()->appendTo(*blobData);
+        } else if (item.isUSVString()) {
+            blobData->appendText(item.getAsUSVString(), normalizeLineEndingsToNative);
+        } else {
+            NOTREACHED();
+        }
+    }
+}
+
+// static
 void Blob::clampSliceOffsets(long long size, long long& start, long long& end)
 {
     ASSERT(size != -1);
@@ -124,16 +176,21 @@ void Blob::clampSliceOffsets(long long size, long long& start, long long& end)
     if (start >= size) {
         start = 0;
         end = 0;
-    } else if (end < start)
+    } else if (end < start) {
         end = start;
-    else if (end > size)
+    } else if (end > size) {
         end = size;
+    }
 }
 
-Blob* Blob::slice(long long start, long long end, const String& contentType, ExceptionState& exceptionState) const
+Blob* Blob::slice(long long start,
+    long long end,
+    const String& contentType,
+    ExceptionState& exceptionState) const
 {
-    if (hasBeenClosed()) {
-        exceptionState.throwDOMException(InvalidStateError, "Blob has been closed.");
+    if (isClosed()) {
+        exceptionState.throwDOMException(InvalidStateError,
+            "Blob has been closed.");
         return nullptr;
     }
 
@@ -141,16 +198,18 @@ Blob* Blob::slice(long long start, long long end, const String& contentType, Exc
     clampSliceOffsets(size, start, end);
 
     long long length = end - start;
-    OwnPtr<BlobData> blobData = BlobData::create();
+    std::unique_ptr<BlobData> blobData = BlobData::create();
     blobData->setContentType(contentType);
     blobData->appendBlob(m_blobDataHandle, start, length);
-    return Blob::create(BlobDataHandle::create(blobData.release(), length));
+    return Blob::create(BlobDataHandle::create(std::move(blobData), length));
 }
 
-void Blob::close(ExecutionContext* executionContext, ExceptionState& exceptionState)
+void Blob::close(ExecutionContext* executionContext,
+    ExceptionState& exceptionState)
 {
-    if (hasBeenClosed()) {
-        exceptionState.throwDOMException(InvalidStateError, "Blob has been closed.");
+    if (isClosed()) {
+        exceptionState.throwDOMException(InvalidStateError,
+            "Blob has been closed.");
         return;
     }
 
@@ -163,10 +222,10 @@ void Blob::close(ExecutionContext* executionContext, ExceptionState& exceptionSt
     // size as zero. Blob and FileReader operations now throws on
     // being passed a Blob in that state. Downstream uses of closed Blobs
     // (e.g., XHR.send()) consider them as empty.
-    OwnPtr<BlobData> blobData = BlobData::create();
+    std::unique_ptr<BlobData> blobData = BlobData::create();
     blobData->setContentType(type());
-    m_blobDataHandle = BlobDataHandle::create(blobData.release(), 0);
-    m_hasBeenClosed = true;
+    m_blobDataHandle = BlobDataHandle::create(std::move(blobData), 0);
+    m_isClosed = true;
 }
 
 void Blob::appendTo(BlobData& blobData) const

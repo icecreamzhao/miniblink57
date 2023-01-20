@@ -28,10 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "public/platform/WebRTCICECandidate.h"
 
 #include "public/platform/WebString.h"
@@ -40,7 +36,6 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 class WebRTCICECandidatePrivate final
     : public RefCounted<WebRTCICECandidatePrivate> {
 public:
@@ -51,20 +46,12 @@ public:
     {
         return adoptRef(
             new WebRTCICECandidatePrivate(candidate, sdpMid, sdpMLineIndex));
-=======
-class WebRTCICECandidatePrivate final : public RefCounted<WebRTCICECandidatePrivate> {
-public:
-    static PassRefPtr<WebRTCICECandidatePrivate> create(const WebString& candidate, const WebString& sdpMid, unsigned short sdpMLineIndex)
-    {
-        return adoptRef(new WebRTCICECandidatePrivate(candidate, sdpMid, sdpMLineIndex));
->>>>>>> miniblink49
     }
 
     const WebString& candidate() const { return m_candidate; }
     const WebString& sdpMid() const { return m_sdpMid; }
     unsigned short sdpMLineIndex() const { return m_sdpMLineIndex; }
 
-<<<<<<< HEAD
     BLINK_PLATFORM_EXPORT void setCandidate(WebString candidate)
     {
         m_candidate = candidate;
@@ -79,28 +66,16 @@ private:
     WebRTCICECandidatePrivate(const WebString& candidate,
         const WebString& sdpMid,
         unsigned short sdpMLineIndex);
-=======
-    BLINK_PLATFORM_EXPORT void setCandidate(WebString candidate) { m_candidate = candidate; }
-    BLINK_PLATFORM_EXPORT void setSdpMid(WebString sdpMid) { m_sdpMid = sdpMid; }
-    BLINK_PLATFORM_EXPORT void setSdpMLineIndex(unsigned short sdpMLineIndex) { m_sdpMLineIndex = sdpMLineIndex; }
-
-private:
-    WebRTCICECandidatePrivate(const WebString& candidate, const WebString& sdpMid, unsigned short sdpMLineIndex);
->>>>>>> miniblink49
 
     WebString m_candidate;
     WebString m_sdpMid;
     unsigned short m_sdpMLineIndex;
 };
 
-<<<<<<< HEAD
 WebRTCICECandidatePrivate::WebRTCICECandidatePrivate(
     const WebString& candidate,
     const WebString& sdpMid,
     unsigned short sdpMLineIndex)
-=======
-WebRTCICECandidatePrivate::WebRTCICECandidatePrivate(const WebString& candidate, const WebString& sdpMid, unsigned short sdpMLineIndex)
->>>>>>> miniblink49
     : m_candidate(candidate)
     , m_sdpMid(sdpMid)
     , m_sdpMLineIndex(sdpMLineIndex)
@@ -117,13 +92,9 @@ void WebRTCICECandidate::reset()
     m_private.reset();
 }
 
-<<<<<<< HEAD
 void WebRTCICECandidate::initialize(const WebString& candidate,
     const WebString& sdpMid,
     unsigned short sdpMLineIndex)
-=======
-void WebRTCICECandidate::initialize(const WebString& candidate, const WebString& sdpMid, unsigned short sdpMLineIndex)
->>>>>>> miniblink49
 {
     m_private = WebRTCICECandidatePrivate::create(candidate, sdpMid, sdpMLineIndex);
 }

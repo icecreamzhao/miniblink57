@@ -36,6 +36,7 @@
 #include "core/workers/WorkerGlobalScope.h"
 #include "core/workers/WorkerThreadStartupData.h"
 #include "platform/heap/Handle.h"
+#include <memory>
 
 namespace blink {
 
@@ -44,32 +45,38 @@ class SharedWorkerThread;
 
 class SharedWorkerGlobalScope final : public WorkerGlobalScope {
     DEFINE_WRAPPERTYPEINFO();
-public:
-    typedef WorkerGlobalScope Base;
-    static PassRefPtrWillBeRawPtr<SharedWorkerGlobalScope> create(const String& name, SharedWorkerThread*, PassOwnPtr<WorkerThreadStartupData>);
-    virtual ~SharedWorkerGlobalScope();
 
-    virtual bool isSharedWorkerGlobalScope() const override { return true; }
+public:
+    static SharedWorkerGlobalScope* create(
+        const String& name,
+        SharedWorkerThread*,
+        std::unique_ptr<WorkerThreadStartupData>);
+    ~SharedWorkerGlobalScope() override;
+
+    bool isSharedWorkerGlobalScope() const override { return true; }
 
     // EventTarget
-    virtual const AtomicString& interfaceName() const override;
+    const AtomicString& interfaceName() const override;
 
     // Setters/Getters for attributes in SharedWorkerGlobalScope.idl
     DEFINE_ATTRIBUTE_EVENT_LISTENER(connect);
     String name() const { return m_name; }
 
-    SharedWorkerThread* thread();
-
     DECLARE_VIRTUAL_TRACE();
 
 private:
-    SharedWorkerGlobalScope(const String& name, const KURL&, const String& userAgent, SharedWorkerThread*, const SecurityOrigin*, PassOwnPtrWillBeRawPtr<WorkerClients>);
-    virtual void logExceptionToConsole(const String& errorMessage, int scriptId, const String& sourceURL, int lineNumber, int columnNumber, PassRefPtrWillBeRawPtr<ScriptCallStack>) override;
+    SharedWorkerGlobalScope(const String& name,
+        const KURL&,
+        const String& userAgent,
+        SharedWorkerThread*,
+        std::unique_ptr<SecurityOrigin::PrivilegeData>,
+        WorkerClients*);
+    void exceptionThrown(ErrorEvent*) override;
 
     String m_name;
 };
 
-CORE_EXPORT PassRefPtrWillBeRawPtr<MessageEvent> createConnectEvent(MessagePort*);
+CORE_EXPORT MessageEvent* createConnectEvent(MessagePort*);
 
 } // namespace blink
 

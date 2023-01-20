@@ -20,7 +20,6 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-<<<<<<< HEAD
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
@@ -38,21 +37,5 @@ void ReportBlockedObjCException(NSException* exception) {
 #else
   NSLog(@"*** WebKit discarding exception: <%@> %@", [exception name],
         [exception reason]);
-=======
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
- */
-
-#import "config.h"
-#import "platform/mac/BlockExceptions.h"
-
-#import <wtf/Assertions.h>
-
-void ReportBlockedObjCException(NSException *exception)
-{
-#if ENABLE(ASSERT)
-    ASSERT_WITH_MESSAGE(0, "Uncaught exception - %@", exception);
-#else
-    NSLog(@"*** WebKit discarding exception: <%@> %@", [exception name], [exception reason]);
->>>>>>> miniblink49
 #endif
 }

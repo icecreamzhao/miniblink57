@@ -32,14 +32,14 @@
 #define ContextMenuProvider_h
 
 #include "platform/heap/Handle.h"
-#include "wtf/RefCounted.h"
 
 namespace blink {
 
 class ContextMenu;
 class ContextMenuItem;
 
-class ContextMenuProvider : public RefCountedWillBeGarbageCollectedFinalized<ContextMenuProvider> {
+class ContextMenuProvider
+    : public GarbageCollectedFinalized<ContextMenuProvider> {
 public:
     virtual ~ContextMenuProvider() { }
     DEFINE_INLINE_VIRTUAL_TRACE() { }

@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2014 Google Inc.
  *
@@ -17,7 +13,6 @@
 #include "SkPathEffect.h"
 
 class GrClip;
-<<<<<<< HEAD
 class GrDrawBatch;
 class GrStyle;
 
@@ -36,19 +31,6 @@ GrDrawBatch* CreateDashLineBatch(GrColor,
     const GrStyle& style);
 bool CanDrawDashLine(const SkPoint pts[2], const GrStyle& style,
     const SkMatrix& viewMatrix);
-=======
-class GrDrawTarget;
-class GrPaint;
-class GrPipelineBuilder;
-class GrStrokeInfo;
-
-namespace GrDashingEffect {
-    bool DrawDashLine(GrDrawTarget*, GrPipelineBuilder*, GrColor,
-                      const SkMatrix& viewMatrix, const SkPoint pts[2], bool useAA,
-                      const GrStrokeInfo& strokeInfo);
-    bool CanDrawDashLine(const SkPoint pts[2], const GrStrokeInfo& strokeInfo,
-                         const SkMatrix& viewMatrix);
->>>>>>> miniblink49
 }
 
 #endif

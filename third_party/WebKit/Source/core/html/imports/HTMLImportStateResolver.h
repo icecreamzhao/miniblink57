@@ -40,6 +40,7 @@ class HTMLImport;
 
 class HTMLImportStateResolver {
     STACK_ALLOCATED();
+
 public:
     explicit HTMLImportStateResolver(HTMLImport* import)
         : m_import(import)
@@ -54,10 +55,9 @@ private:
     bool shouldBlockScriptExecution() const;
     bool isActive() const;
 
-    RawPtrWillBeMember<HTMLImport> m_import;
+    Member<HTMLImport> m_import;
 };
 
-}
+} // namespace blink
 
 #endif // HTMLImportStateResolver_h
-

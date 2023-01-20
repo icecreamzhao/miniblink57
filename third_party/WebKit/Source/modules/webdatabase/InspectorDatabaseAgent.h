@@ -29,28 +29,18 @@
 #ifndef InspectorDatabaseAgent_h
 #define InspectorDatabaseAgent_h
 
-<<<<<<< HEAD
 #include "core/inspector/InspectorBaseAgent.h"
 #include "core/inspector/protocol/Database.h"
-=======
-#include "core/InspectorFrontend.h"
-#include "core/inspector/InspectorBaseAgent.h"
->>>>>>> miniblink49
 #include "modules/ModulesExport.h"
 #include "platform/heap/Handle.h"
 #include "wtf/HashMap.h"
 #include "wtf/Noncopyable.h"
-<<<<<<< HEAD
-=======
-#include "wtf/PassOwnPtr.h"
->>>>>>> miniblink49
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
 class Database;
 class InspectorDatabaseResource;
-<<<<<<< HEAD
 class Page;
 
 class MODULES_EXPORT InspectorDatabaseAgent final
@@ -61,33 +51,15 @@ public:
     static InspectorDatabaseAgent* create(Page* page)
     {
         return new InspectorDatabaseAgent(page);
-=======
-class InspectorFrontend;
-class Page;
-
-typedef String ErrorString;
-
-class MODULES_EXPORT InspectorDatabaseAgent final : public InspectorBaseAgent<InspectorDatabaseAgent, InspectorFrontend::Database>, public InspectorBackendDispatcher::DatabaseCommandHandler {
-    WTF_MAKE_NONCOPYABLE(InspectorDatabaseAgent);
-public:
-    static PassOwnPtrWillBeRawPtr<InspectorDatabaseAgent> create(Page* page)
-    {
-        return adoptPtrWillBeNoop(new InspectorDatabaseAgent(page));
->>>>>>> miniblink49
     }
     ~InspectorDatabaseAgent() override;
     DECLARE_VIRTUAL_TRACE();
 
-<<<<<<< HEAD
     Response disable() override;
-=======
-    void disable(ErrorString*) override;
->>>>>>> miniblink49
     void restore() override;
     void didCommitLoadForLocalFrame(LocalFrame*) override;
 
     // Called from the front-end.
-<<<<<<< HEAD
     Response enable() override;
     Response getDatabaseTableNames(
         const String& databaseId,
@@ -111,21 +83,6 @@ private:
     Member<Page> m_page;
     typedef HeapHashMap<String, Member<InspectorDatabaseResource>>
         DatabaseResourcesHeapMap;
-=======
-    void enable(ErrorString*) override;
-    void getDatabaseTableNames(ErrorString*, const String& databaseId, RefPtr<TypeBuilder::Array<String>>& names) override;
-    void executeSQL(ErrorString*, const String& databaseId, const String& query, PassRefPtrWillBeRawPtr<ExecuteSQLCallback>) override;
-
-    void didOpenDatabase(Database*, const String& domain, const String& name, const String& version);
-private:
-    explicit InspectorDatabaseAgent(Page*);
-
-    Database* databaseForId(const String& databaseId);
-    InspectorDatabaseResource* findByFileName(const String& fileName);
-
-    Page* m_page;
-    typedef PersistentHeapHashMapWillBeHeapHashMap<String, Member<InspectorDatabaseResource>> DatabaseResourcesHeapMap;
->>>>>>> miniblink49
     DatabaseResourcesHeapMap m_resources;
     bool m_enabled;
 };

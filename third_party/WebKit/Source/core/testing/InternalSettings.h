@@ -34,33 +34,30 @@
 #include "platform/graphics/ImageAnimationPolicy.h"
 #include "platform/heap/Handle.h"
 #include "public/platform/WebDisplayMode.h"
-#include "wtf/PassRefPtr.h"
-#include "wtf/RefCounted.h"
+#include "wtf/Allocator.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
-class Document;
 class ExceptionState;
-class LocalFrame;
 class Page;
 class Settings;
 
-#if ENABLE(OILPAN)
-class InternalSettings final : public InternalSettingsGenerated, public HeapSupplement<Page> {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(InternalSettings);
-#else
-class InternalSettings final : public InternalSettingsGenerated {
-#endif
+class InternalSettings final : public InternalSettingsGenerated,
+                               public Supplement<Page> {
+    USING_GARBAGE_COLLECTED_MIXIN(InternalSettings);
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     class Backup {
+        DISALLOW_NEW();
+
     public:
         explicit Backup(Settings*);
         void restoreTo(Settings*);
 
-        bool m_originalAuthorShadowDOMForAnyElementEnabled;
         bool m_originalCSP;
+        bool m_originalCSSStickyPositionEnabled;
         bool m_originalOverlayScrollbarsEnabled;
         EditingBehaviorType m_originalEditingBehavior;
         bool m_originalTextAutosizingEnabled;
@@ -74,31 +71,41 @@ public:
         bool m_imagesEnabled;
         String m_defaultVideoPosterURL;
         bool m_originalLayerSquashingEnabled;
-        bool m_originalImageColorProfilesEnabled;
         ImageAnimationPolicy m_originalImageAnimationPolicy;
         bool m_originalScrollTopLeftInteropEnabled;
+        bool m_originalCompositorWorkerEnabled;
     };
 
-    static PassRefPtrWillBeRawPtr<InternalSettings> create(Page& page)
+    static InternalSettings* create(Page& page)
     {
-        return adoptRefWillBeNoop(new InternalSettings(page));
+        return new InternalSettings(page);
     }
     static InternalSettings* from(Page&);
 
-#if !ENABLE(OILPAN)
-    void hostDestroyed() { m_page = nullptr; }
-#endif
-
-    virtual ~InternalSettings();
+    ~InternalSettings() override;
     void resetToConsistentState();
 
-    void setStandardFontFamily(const AtomicString& family, const String& script, ExceptionState&);
-    void setSerifFontFamily(const AtomicString& family, const String& script, ExceptionState&);
-    void setSansSerifFontFamily(const AtomicString& family, const String& script, ExceptionState&);
-    void setFixedFontFamily(const AtomicString& family, const String& script, ExceptionState&);
-    void setCursiveFontFamily(const AtomicString& family, const String& script, ExceptionState&);
-    void setFantasyFontFamily(const AtomicString& family, const String& script, ExceptionState&);
-    void setPictographFontFamily(const AtomicString& family, const String& script, ExceptionState&);
+    void setStandardFontFamily(const AtomicString& family,
+        const String& script,
+        ExceptionState&);
+    void setSerifFontFamily(const AtomicString& family,
+        const String& script,
+        ExceptionState&);
+    void setSansSerifFontFamily(const AtomicString& family,
+        const String& script,
+        ExceptionState&);
+    void setFixedFontFamily(const AtomicString& family,
+        const String& script,
+        ExceptionState&);
+    void setCursiveFontFamily(const AtomicString& family,
+        const String& script,
+        ExceptionState&);
+    void setFantasyFontFamily(const AtomicString& family,
+        const String& script,
+        ExceptionState&);
+    void setPictographFontFamily(const AtomicString& family,
+        const String& script,
+        ExceptionState&);
 
     void setDefaultVideoPosterURL(const String& url, ExceptionState&);
     void setEditingBehavior(const String&, ExceptionState&);
@@ -106,25 +113,30 @@ public:
     void setMediaTypeOverride(const String& mediaType, ExceptionState&);
     void setDisplayModeOverride(const String& displayMode, ExceptionState&);
     void setMockScrollbarsEnabled(bool, ExceptionState&);
+    void setHideScrollbars(bool, ExceptionState&);
     void setMockGestureTapHighlightsEnabled(bool, ExceptionState&);
     void setTextAutosizingEnabled(bool, ExceptionState&);
-    void setTextTrackKindUserPreference(const String& preference, ExceptionState&);
+    void setTextTrackKindUserPreference(const String& preference,
+        ExceptionState&);
     void setAccessibilityFontScaleFactor(float fontScaleFactor, ExceptionState&);
-    void setTextAutosizingWindowSizeOverride(int width, int height, ExceptionState&);
+    void setTextAutosizingWindowSizeOverride(int width,
+        int height,
+        ExceptionState&);
     void setViewportEnabled(bool, ExceptionState&);
     void setViewportMetaEnabled(bool, ExceptionState&);
+    void setViewportStyle(const String& preference, ExceptionState&);
+    void setCompositorWorkerEnabled(bool, ExceptionState&);
+    void setPresentationReceiver(bool, ExceptionState&);
 
     // FIXME: The following are RuntimeEnabledFeatures and likely
     // cannot be changed after process start. These setters should
     // be removed or moved onto internals.runtimeFlags:
-    void setAuthorShadowDOMForAnyElementEnabled(bool);
+    void setCSSStickyPositionEnabled(bool);
     void setLangAttributeAwareFormControlUIEnabled(bool);
     void setOverlayScrollbarsEnabled(bool);
     void setExperimentalContentSecurityPolicyFeaturesEnabled(bool);
-    void setImageColorProfilesEnabled(bool);
     void setImageAnimationPolicy(const String&, ExceptionState&);
     void setScrollTopLeftInteropEnabled(bool);
-    void setLinkHeaderEnabled(bool);
 
     DECLARE_VIRTUAL_TRACE();
 
@@ -142,7 +154,7 @@ private:
     Page* page() const { return m_page; }
     static const char* supplementName();
 
-    RawPtrWillBeWeakMember<Page> m_page;
+    WeakMember<Page> m_page;
     Backup m_backup;
 };
 

@@ -28,27 +28,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "web/StorageQuotaClientImpl.h"
 
 #include "bindings/core/v8/ScriptPromise.h"
 #include "bindings/core/v8/ScriptPromiseResolver.h"
 #include "bindings/core/v8/ScriptState.h"
-<<<<<<< HEAD
 #include "core/dom/Document.h"
 #include "core/dom/ExceptionCode.h"
 #include "core/dom/ExecutionContext.h"
 #include "core/dom/TaskRunnerHelper.h"
 #include "modules/quota/DOMError.h"
-=======
-#include "core/dom/DOMError.h"
-#include "core/dom/Document.h"
-#include "core/dom/ExceptionCode.h"
-#include "core/dom/ExecutionContext.h"
->>>>>>> miniblink49
 #include "modules/quota/DeprecatedStorageQuotaCallbacksImpl.h"
 #include "modules/quota/StorageErrorCallback.h"
 #include "modules/quota/StorageQuotaCallback.h"
@@ -61,7 +50,6 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 StorageQuotaClientImpl::StorageQuotaClientImpl() { }
 
 StorageQuotaClientImpl::~StorageQuotaClientImpl() { }
@@ -73,24 +61,10 @@ void StorageQuotaClientImpl::requestQuota(ExecutionContext* executionContext,
     StorageErrorCallback* errorCallback)
 {
     DCHECK(executionContext);
-=======
-StorageQuotaClientImpl::StorageQuotaClientImpl()
-{
-}
-
-StorageQuotaClientImpl::~StorageQuotaClientImpl()
-{
-}
-
-void StorageQuotaClientImpl::requestQuota(ExecutionContext* executionContext, WebStorageQuotaType storageType, unsigned long long newQuotaInBytes, StorageQuotaCallback* successCallback, StorageErrorCallback* errorCallback)
-{
-    ASSERT(executionContext);
->>>>>>> miniblink49
 
     if (executionContext->isDocument()) {
         Document* document = toDocument(executionContext);
         WebLocalFrameImpl* webFrame = WebLocalFrameImpl::fromFrame(document->frame());
-<<<<<<< HEAD
         StorageQuotaCallbacks* callbacks = DeprecatedStorageQuotaCallbacksImpl::create(successCallback,
             errorCallback);
         webFrame->client()->requestStorageQuota(storageType, newQuotaInBytes,
@@ -116,26 +90,6 @@ ScriptPromise StorageQuotaClientImpl::requestPersistentQuota(
         StorageQuotaCallbacks* callbacks = StorageQuotaCallbacksImpl::create(resolver);
         webFrame->client()->requestStorageQuota(WebStorageQuotaTypePersistent,
             newQuotaInBytes, callbacks);
-=======
-        StorageQuotaCallbacks* callbacks = DeprecatedStorageQuotaCallbacksImpl::create(successCallback, errorCallback);
-        webFrame->client()->requestStorageQuota(webFrame, storageType, newQuotaInBytes, callbacks);
-    } else {
-        // Requesting quota in Worker is not supported.
-        executionContext->postTask(FROM_HERE, StorageErrorCallback::CallbackTask::create(errorCallback, NotSupportedError));
-    }
-}
-
-ScriptPromise StorageQuotaClientImpl::requestPersistentQuota(ScriptState* scriptState, unsigned long long newQuotaInBytes)
-{
-    RefPtrWillBeRawPtr<ScriptPromiseResolver> resolver = ScriptPromiseResolver::create(scriptState);
-    ScriptPromise promise = resolver->promise();
-
-    if (scriptState->executionContext()->isDocument()) {
-        Document* document = toDocument(scriptState->executionContext());
-        WebLocalFrameImpl* webFrame = WebLocalFrameImpl::fromFrame(document->frame());
-        StorageQuotaCallbacks* callbacks = StorageQuotaCallbacksImpl::create(resolver);
-        webFrame->client()->requestStorageQuota(webFrame, WebStorageQuotaTypePersistent, newQuotaInBytes, callbacks);
->>>>>>> miniblink49
     } else {
         // Requesting quota in Worker is not supported.
         resolver->reject(DOMError::create(NotSupportedError));

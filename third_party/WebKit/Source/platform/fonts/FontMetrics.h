@@ -21,10 +21,7 @@
 #define FontMetrics_h
 
 #include "platform/fonts/FontBaseline.h"
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
-=======
->>>>>>> miniblink49
 #include "wtf/MathExtras.h"
 
 namespace blink {
@@ -32,11 +29,8 @@ namespace blink {
 const unsigned gDefaultUnitsPerEm = 1000;
 
 class FontMetrics {
-<<<<<<< HEAD
     DISALLOW_NEW();
 
-=======
->>>>>>> miniblink49
 public:
     FontMetrics()
         : m_unitsPerEm(gDefaultUnitsPerEm)
@@ -182,14 +176,6 @@ private:
     bool m_hasZeroWidth;
 };
 
-<<<<<<< HEAD
-=======
-inline float scaleEmToUnits(float x, unsigned unitsPerEm)
-{
-    return unitsPerEm ? x / unitsPerEm : x;
-}
-
->>>>>>> miniblink49
 } // namespace blink
 
 #endif // FontMetrics_h

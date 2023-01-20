@@ -47,15 +47,24 @@ public:
 };
 
 class CORE_EXPORT URLRegistry {
-    WTF_MAKE_FAST_ALLOCATED(URLRegistry);
+    USING_FAST_MALLOC(URLRegistry);
+
 public:
     virtual ~URLRegistry() { }
     virtual void registerURL(SecurityOrigin*, const KURL&, URLRegistrable*) = 0;
     virtual void unregisterURL(const KURL&) = 0;
 
     // These are optional APIs
-    virtual URLRegistrable* lookup(const String&) { ASSERT_NOT_REACHED(); return nullptr; }
-    virtual bool contains(const String&) { ASSERT_NOT_REACHED(); return false; }
+    virtual URLRegistrable* lookup(const String&)
+    {
+        NOTREACHED();
+        return nullptr;
+    }
+    virtual bool contains(const String&)
+    {
+        NOTREACHED();
+        return false;
+    }
 };
 
 } // namespace blink

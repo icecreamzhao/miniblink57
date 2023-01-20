@@ -28,18 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "public/platform/WebURLError.h"
 
 #include "platform/network/ResourceError.h"
 #include "platform/weborigin/KURL.h"
-<<<<<<< HEAD
-=======
-#include "wtf/text/CString.h"
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -60,10 +52,7 @@ WebURLError& WebURLError::operator=(const ResourceError& error)
         staleCopyInCache = error.staleCopyInCache();
         localizedDescription = error.localizedDescription();
         wasIgnoredByHandler = error.wasIgnoredByHandler();
-<<<<<<< HEAD
         isCacheMiss = error.isCacheMiss();
-=======
->>>>>>> miniblink49
     }
     return *this;
 }
@@ -72,20 +61,12 @@ WebURLError::operator ResourceError() const
 {
     if (!reason)
         return ResourceError();
-<<<<<<< HEAD
     ResourceError resourceError = ResourceError(
         domain, reason, unreachableURL.string(), localizedDescription);
     resourceError.setIsCancellation(isCancellation);
     resourceError.setStaleCopyInCache(staleCopyInCache);
     resourceError.setWasIgnoredByHandler(wasIgnoredByHandler);
     resourceError.setIsCacheMiss(isCacheMiss);
-=======
-    CString spec = unreachableURL.spec();
-    ResourceError resourceError = ResourceError(domain, reason, String::fromUTF8(spec.data(), spec.length()), localizedDescription);
-    resourceError.setIsCancellation(isCancellation);
-    resourceError.setStaleCopyInCache(staleCopyInCache);
-    resourceError.setWasIgnoredByHandler(wasIgnoredByHandler);
->>>>>>> miniblink49
     return resourceError;
 }
 

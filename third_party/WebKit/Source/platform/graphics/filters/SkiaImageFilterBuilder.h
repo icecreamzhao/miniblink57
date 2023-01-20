@@ -27,7 +27,6 @@
 #define SkiaImageFilterBuilder_h
 
 #include "platform/PlatformExport.h"
-<<<<<<< HEAD
 #include "platform/graphics/ColorSpace.h"
 #include "third_party/skia/include/core/SkRefCnt.h"
 
@@ -60,39 +59,6 @@ namespace SkiaImageFilterBuilder {
         sk_sp<SkImageFilter> input);
 
 } // namespace SkiaImageFilterBuilder
-=======
-#include "platform/geometry/FloatSize.h"
-#include "platform/graphics/ColorSpace.h"
-#include "platform/heap/Handle.h"
-#include "public/platform/WebFilterOperations.h"
-
-class SkImageFilter;
-
-namespace blink {
-class AffineTransform;
-class FilterEffect;
-class FilterOperations;
-
-class PLATFORM_EXPORT SkiaImageFilterBuilder {
-    STACK_ALLOCATED();
-public:
-    ~SkiaImageFilterBuilder();
-
-    PassRefPtr<SkImageFilter> build(FilterEffect*, ColorSpace, bool requiresPMColorValidation = true);
-    void buildFilterOperations(const FilterOperations&, WebFilterOperations*);
-    PassRefPtr<SkImageFilter> buildTransform(const AffineTransform&, SkImageFilter* input);
-
-    PassRefPtr<SkImageFilter> transformColorSpace(
-        SkImageFilter* input, ColorSpace srcColorSpace, ColorSpace dstColorSpace);
-
-    void setCropOffset(const FloatSize& cropOffset) { m_cropOffset = cropOffset; }
-    FloatSize cropOffset() { return m_cropOffset; }
-
-private:
-    FloatSize m_cropOffset;
-};
-
->>>>>>> miniblink49
 } // namespace blink
 
 #endif

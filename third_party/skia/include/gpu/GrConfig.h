@@ -6,11 +6,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> miniblink49
 #ifndef GrConfig_DEFINED
 #define GrConfig_DEFINED
 
@@ -28,11 +23,7 @@
 
 // hack to ensure we know what sort of Apple platform we're on
 #if defined(__APPLE_CPP__) || defined(__APPLE_CC__)
-<<<<<<< HEAD
 #include <TargetConditionals.h>
-=======
-    #include <TargetConditionals.h>
->>>>>>> miniblink49
 #endif
 
 /**
@@ -40,7 +31,6 @@
  */
 
 #if !defined(GR_CACHE_STATS)
-<<<<<<< HEAD
 #if defined(SK_DEBUG) || defined(SK_DUMP_STATS)
 #define GR_CACHE_STATS 1
 #else
@@ -54,21 +44,6 @@
 #else
 #define GR_GPU_STATS 0
 #endif
-=======
-  #ifdef SK_DEVELOPER
-      #define GR_CACHE_STATS  1
-  #else
-      #define GR_CACHE_STATS  0
-  #endif
-#endif
-
-#if !defined(GR_GPU_STATS)
-  #ifdef SK_DEVELOPER
-      #define GR_GPU_STATS    1
-  #else
-      #define GR_GPU_STATS    0
-  #endif
->>>>>>> miniblink49
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -115,13 +90,8 @@ typedef unsigned __int64 uint64_t;
  *  GR_CONCAT concatenates X and Y  where each is expanded before
  *  contanenation if either contains macros.
  */
-<<<<<<< HEAD
 #define GR_CONCAT(X, Y) GR_CONCAT_IMPL(X, Y)
 #define GR_CONCAT_IMPL(X, Y) X##Y
-=======
-#define GR_CONCAT(X,Y) GR_CONCAT_IMPL(X,Y)
-#define GR_CONCAT_IMPL(X,Y) X##Y
->>>>>>> miniblink49
 
 /**
  *  Creates a string of the form "<filename>(<linenumber>) : "
@@ -134,24 +104,16 @@ typedef unsigned __int64 uint64_t;
  *  particular compiler.
  *  To insert compiler warnings use "#pragma message GR_WARN(<string>)"
  */
-<<<<<<< HEAD
 #if defined(_MSC_VER)
 #define GR_WARN(MSG) (GR_FILE_AND_LINE_STR "WARNING: " MSG)
 #else //__GNUC__ - may need other defines for different compilers
 #define GR_WARN(MSG) ("WARNING: " MSG)
-=======
-#if defined(_MSC_VER) && _MSC_VER
-    #define GR_WARN(MSG) (GR_FILE_AND_LINE_STR "WARNING: " MSG)
-#else//__GNUC__ - may need other defines for different compilers
-    #define GR_WARN(MSG) ("WARNING: " MSG)
->>>>>>> miniblink49
 #endif
 
 /**
  *  GR_ALWAYSBREAK is an unconditional break in all builds.
  */
 #if !defined(GR_ALWAYSBREAK)
-<<<<<<< HEAD
 #if defined(SK_BUILD_FOR_WIN32)
 #define GR_ALWAYSBREAK  \
     SkNO_RETURN_HINT(); \
@@ -164,42 +126,23 @@ typedef unsigned __int64 uint64_t;
     SkNO_RETURN_HINT(); \
     *((int*)(int64_t)(int32_t)0xbeefcafe) = 0;
 #endif
-=======
-    #if     defined(SK_BUILD_FOR_WIN32)
-        #define GR_ALWAYSBREAK SkNO_RETURN_HINT(); __debugbreak()
-    #else
-        // TODO: do other platforms really not have continuable breakpoints?
-        // sign extend for 64bit architectures to be sure this is
-        // in the high address range
-        #define GR_ALWAYSBREAK SkNO_RETURN_HINT(); *((int*)(int64_t)(int32_t)0xbeefcafe) = 0;
-    #endif
->>>>>>> miniblink49
 #endif
 
 /**
  *  GR_DEBUGBREAK is an unconditional break in debug builds.
  */
 #if !defined(GR_DEBUGBREAK)
-<<<<<<< HEAD
 #ifdef SK_DEBUG
 #define GR_DEBUGBREAK GR_ALWAYSBREAK
 #else
 #define GR_DEBUGBREAK
 #endif
-=======
-    #ifdef SK_DEBUG
-        #define GR_DEBUGBREAK GR_ALWAYSBREAK
-    #else
-        #define GR_DEBUGBREAK
-    #endif
->>>>>>> miniblink49
 #endif
 
 /**
  *  GR_ALWAYSASSERT is an assertion in all builds.
  */
 #if !defined(GR_ALWAYSASSERT)
-<<<<<<< HEAD
 #define GR_ALWAYSASSERT(COND)                                        \
     do {                                                             \
         if (!(COND)) {                                               \
@@ -207,34 +150,17 @@ typedef unsigned __int64 uint64_t;
             GR_ALWAYSBREAK;                                          \
         }                                                            \
     } while (false)
-=======
-    #define GR_ALWAYSASSERT(COND)                                        \
-        do {                                                             \
-            if (!(COND)) {                                               \
-                SkDebugf("%s %s failed\n", GR_FILE_AND_LINE_STR, #COND); \
-                GR_ALWAYSBREAK;                                          \
-            }                                                            \
-        } while (false)
->>>>>>> miniblink49
 #endif
 
 /**
  *  GR_DEBUGASSERT is an assertion in debug builds only.
  */
 #if !defined(GR_DEBUGASSERT)
-<<<<<<< HEAD
 #ifdef SK_DEBUG
 #define GR_DEBUGASSERT(COND) GR_ALWAYSASSERT(COND)
 #else
 #define GR_DEBUGASSERT(COND)
 #endif
-=======
-    #ifdef SK_DEBUG
-        #define GR_DEBUGASSERT(COND) GR_ALWAYSASSERT(COND)
-    #else
-        #define GR_DEBUGASSERT(COND)
-    #endif
->>>>>>> miniblink49
 #endif
 
 /**
@@ -247,7 +173,6 @@ typedef unsigned __int64 uint64_t;
  *  it may print the message in the compiler log. Obviously, the condition must
  *  be evaluatable at compile time.
  */
-<<<<<<< HEAD
 #define GR_STATIC_ASSERT(CONDITION) static_assert(CONDITION, "bug")
 
 /**
@@ -255,28 +180,6 @@ typedef unsigned __int64 uint64_t;
  */
 #if !defined(GR_ENABLE_PLS_PATH_RENDERING)
 #define GR_ENABLE_PLS_PATH_RENDERING 0
-=======
-// VS 2010 and GCC compiled with c++0x or gnu++0x support the new
-// static_assert.
-#if !defined(GR_STATIC_ASSERT)
-    #if (defined(_MSC_VER) && _MSC_VER >= 1600) || (defined(__GXX_EXPERIMENTAL_CXX0X__) && __GXX_EXPERIMENTAL_CXX0X__)
-        #define GR_STATIC_ASSERT(CONDITION) static_assert(CONDITION, "bug")
-    #else
-        template <bool> class GR_STATIC_ASSERT_FAILURE;
-        template <> class GR_STATIC_ASSERT_FAILURE<true> {};
-        #define GR_STATIC_ASSERT(CONDITION) \
-            enum {GR_CONCAT(X,__LINE__) = \
-            sizeof(GR_STATIC_ASSERT_FAILURE<CONDITION>)}
-    #endif
-#endif
-
-/**
- * GR_FORCE_GPU_TRACE_DEBUGGING will force gpu tracing/debug markers to be turned on. The trace
- * markers will be printed out instead of making the backend calls to push and pop them.
- */
-#if !defined(GR_FORCE_GPU_TRACE_DEBUGGING)
-    #define GR_FORCE_GPU_TRACE_DEBUGGING 0
->>>>>>> miniblink49
 #endif
 
 #endif

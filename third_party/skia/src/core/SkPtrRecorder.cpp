@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -11,12 +7,8 @@
 #include "SkPtrRecorder.h"
 #include "SkTSearch.h"
 
-<<<<<<< HEAD
 void SkPtrSet::reset()
 {
-=======
-void SkPtrSet::reset() {
->>>>>>> miniblink49
     Pair* p = fList.begin();
     Pair* stop = fList.end();
     while (p < stop) {
@@ -26,7 +18,6 @@ void SkPtrSet::reset() {
     fList.reset();
 }
 
-<<<<<<< HEAD
 bool SkPtrSet::Less(const Pair& a, const Pair& b)
 {
     return (char*)a.fPtr < (char*)b.fPtr;
@@ -35,14 +26,6 @@ bool SkPtrSet::Less(const Pair& a, const Pair& b)
 uint32_t SkPtrSet::find(void* ptr) const
 {
     if (nullptr == ptr) {
-=======
-bool SkPtrSet::Less(const Pair& a, const Pair& b) {
-    return (char*)a.fPtr < (char*)b.fPtr;
-}
-
-uint32_t SkPtrSet::find(void* ptr) const {
-    if (NULL == ptr) {
->>>>>>> miniblink49
         return 0;
     }
 
@@ -57,14 +40,9 @@ uint32_t SkPtrSet::find(void* ptr) const {
     return fList[index].fIndex;
 }
 
-<<<<<<< HEAD
 uint32_t SkPtrSet::add(void* ptr)
 {
     if (nullptr == ptr) {
-=======
-uint32_t SkPtrSet::add(void* ptr) {
-    if (NULL == ptr) {
->>>>>>> miniblink49
         return 0;
     }
 
@@ -84,12 +62,8 @@ uint32_t SkPtrSet::add(void* ptr) {
     }
 }
 
-<<<<<<< HEAD
 void SkPtrSet::copyToArray(void* array[]) const
 {
-=======
-void SkPtrSet::copyToArray(void* array[]) const {
->>>>>>> miniblink49
     int count = fList.count();
     if (count > 0) {
         SkASSERT(array);

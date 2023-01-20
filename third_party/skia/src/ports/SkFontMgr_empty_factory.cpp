@@ -7,14 +7,8 @@
 
 #include "SkFontMgr.h"
 
-<<<<<<< HEAD
 SkFontMgr* SkFontMgr::Factory()
 {
     // Always return nullptr, an empty SkFontMgr will be used.
     return nullptr;
-=======
-SkFontMgr* SkFontMgr::Factory() {
-    // Always return NULL, an empty SkFontMgr will be used.
-    return NULL;
->>>>>>> miniblink49
 }

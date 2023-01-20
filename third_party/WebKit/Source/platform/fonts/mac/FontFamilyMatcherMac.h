@@ -27,26 +27,17 @@
 #ifndef FontFamilyMatcherMac_h
 #define FontFamilyMatcherMac_h
 
-<<<<<<< HEAD
 #include "platform/PlatformExport.h"
 #include "platform/fonts/FontTraits.h"
-=======
->>>>>>> miniblink49
 #include <AppKit/NSFontManager.h>
 
 namespace blink {
 
-<<<<<<< HEAD
 PLATFORM_EXPORT NSFont* MatchNSFontFamily(NSString* desiredFamily, NSFontTraitMask desiredTraits,
     FontWeight desiredWeight, float size);
 
 // Converts a blink::FontWeight to an AppKit font weight.
 int toAppKitFontWeight(FontWeight);
-=======
-NSFont* MatchNSFontFamily(NSString* desiredFamily, NSFontTraitMask desiredTraits,
-    int desiredWeight, float size);
-
->>>>>>> miniblink49
 }
 
 #endif // FontFamilyMatcherMac_h

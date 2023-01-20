@@ -5,12 +5,15 @@
 #ifndef SKIA_EXT_BITMAP_PLATFORM_DEVICE_CAIRO_H_
 #define SKIA_EXT_BITMAP_PLATFORM_DEVICE_CAIRO_H_
 
-#include "base/basictypes.h"
+#include <stdint.h>
+
 #include "base/compiler_specific.h"
+#include "base/macros.h"
 #include "base/memory/ref_counted.h"
 #include "skia/ext/platform_device.h"
 
 typedef struct _cairo_surface cairo_surface_t;
+typedef struct _cairo cairo_t;
 
 // -----------------------------------------------------------------------------
 // Image byte ordering on Linux:
@@ -44,6 +47,8 @@ typedef struct _cairo_surface cairo_surface_t;
 
 namespace skia {
 
+class ScopedPlatformPaint;
+
 // -----------------------------------------------------------------------------
 // This is the Linux bitmap backing for Skia. We create a Cairo image surface
 // to store the backing buffer. This buffer is BGRA in memory (on little-endian
@@ -57,76 +62,53 @@ namespace skia {
 // case we'll probably create the buffer from a precreated region of memory.
 // -----------------------------------------------------------------------------
 class BitmapPlatformDevice : public SkBitmapDevice, public PlatformDevice {
- public:
-  // Create a BitmapPlatformDeviceLinux from an already constructed bitmap;
-  // you should probably be using Create(). This may become private later if
-  // we ever have to share state between some native drawing UI and Skia, like
-  // the Windows and Mac versions of this class do.
-  //
-  // This object takes ownership of @cairo.
-  BitmapPlatformDevice(const SkBitmap& other, cairo_t* cairo);
-  virtual ~BitmapPlatformDevice();
+public:
+    // Create a BitmapPlatformDeviceLinux from an already constructed bitmap;
+    // you should probably be using Create(). This may become private later if
+    // we ever have to share state between some native drawing UI and Skia, like
+    // the Windows and Mac versions of this class do.
+    //
+    // This object takes ownership of @cairo.
+    BitmapPlatformDevice(const SkBitmap& other, cairo_t* cairo);
+    ~BitmapPlatformDevice() override;
 
-  // Constructs a device with size |width| * |height| with contents initialized
-  // to zero. |is_opaque| should be set if the caller knows the bitmap will be
-  // completely opaque and allows some optimizations.
-  static BitmapPlatformDevice* Create(int width, int height, bool is_opaque);
+    // Constructs a device with size |width| * |height| with contents initialized
+    // to zero. |is_opaque| should be set if the caller knows the bitmap will be
+    // completely opaque and allows some optimizations.
+    static BitmapPlatformDevice* Create(int width, int height, bool is_opaque);
 
-  // Performs the same construction as Create.
-  // Other ports require a separate construction routine because Create does not
-  // initialize the bitmap to 0.
-  static BitmapPlatformDevice* CreateAndClear(int width, int height,
-                                              bool is_opaque);
+    // This doesn't take ownership of |data|. If |data| is NULL, the contents
+    // of the device are initialized to 0.
+    static BitmapPlatformDevice* Create(int width, int height, bool is_opaque,
+        uint8_t* data);
 
-  // This doesn't take ownership of |data|. If |data| is NULL, the contents
-  // of the device are initialized to 0.
-  static BitmapPlatformDevice* Create(int width, int height, bool is_opaque,
-                                      uint8_t* data);
+protected:
+    SkBaseDevice* onCreateDevice(const CreateInfo&, const SkPaint*) override;
 
-  // Overridden from SkBaseDevice:
-  virtual void setMatrixClip(const SkMatrix& transform, const SkRegion& region,
-                             const SkClipStack&) OVERRIDE;
+private:
+    // Overridden from PlatformDevice:
+    /*cairo_t**/PlatformSurface BeginPlatformPaint(const SkMatrix& transform,
+        const SkIRect& clip_bounds) override;
 
-  // Overridden from PlatformDevice:
-  virtual cairo_t* BeginPlatformPaint() OVERRIDE;
-  virtual void DrawToNativeContext(PlatformSurface surface, int x, int y,
-                                   const PlatformRect* src_rect) OVERRIDE;
+    static BitmapPlatformDevice* Create(int width, int height, bool is_opaque,
+        cairo_surface_t* surface);
 
- protected:
-  virtual SkBaseDevice* onCreateDevice(const SkImageInfo& info,
-                                       Usage usage) OVERRIDE;
+    // Loads the current transform and clip into the context.
+    void LoadConfig(const SkMatrix& transform, const SkIRect& clip_bounds);
 
- private:
-  static BitmapPlatformDevice* Create(int width, int height, bool is_opaque,
-                                      cairo_surface_t* surface);
+    // Graphics context used to draw into the surface.
+    cairo_t* cairo_;
 
-  // Sets the transform and clip operations. This will not update the Cairo
-  // context, but will mark the config as dirty. The next call of LoadConfig
-  // will pick up these changes.
-  void SetMatrixClip(const SkMatrix& transform, const SkRegion& region);
+    // True when there is a transform or clip that has not been set to the
+    // context.  The context is retrieved for every text operation, and the
+    // transform and clip do not change as much. We can save time by not loading
+    // the clip and transform for every one.
+    bool config_dirty_;
 
-  // Loads the current transform and clip into the context.
-  void LoadConfig();
-
-  // Graphics context used to draw into the surface.
-  cairo_t* cairo_;
-
-  // True when there is a transform or clip that has not been set to the
-  // context.  The context is retrieved for every text operation, and the
-  // transform and clip do not change as much. We can save time by not loading
-  // the clip and transform for every one.
-  bool config_dirty_;
-
-  // Translation assigned to the context: we need to keep track of this
-  // separately so it can be updated even if the context isn't created yet.
-  SkMatrix transform_;
-
-  // The current clipping
-  SkRegion clip_region_;
-
-  DISALLOW_COPY_AND_ASSIGN(BitmapPlatformDevice);
+    DISALLOW_COPY_AND_ASSIGN(BitmapPlatformDevice);
+    friend class ScopedPlatformPaint;
 };
 
-}  // namespace skia
+} // namespace skia
 
-#endif  // SKIA_EXT_BITMAP_PLATFORM_DEVICE_CAIRO_H_
+#endif // SKIA_EXT_BITMAP_PLATFORM_DEVICE_CAIRO_H_

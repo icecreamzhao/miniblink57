@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "base/bind.h"
 #include "base/test/launcher/unit_test_launcher.h"
 #include "base/test/test_io_thread.h"
@@ -65,46 +64,5 @@ int main(int argc, char** argv)
         result = base::LaunchUnitTests(
             argc, argv, base::Bind(runTestSuite, base::Unretained(&testSuite)));
     }
-=======
-#include "config.h"
-
-#include "platform/EventTracer.h"
-#include "platform/TestingPlatformSupport.h"
-#include "platform/heap/Heap.h"
-#include "wtf/CryptographicallyRandomNumber.h"
-#include "wtf/MainThread.h"
-#include "wtf/Partitions.h"
-#include "wtf/WTF.h"
-#include <base/test/test_suite.h>
-#include <string.h>
-
-static double CurrentTime()
-{
-    return 0.0;
-}
-
-static void AlwaysZeroNumberSource(unsigned char* buf, size_t len)
-{
-    memset(buf, '\0', len);
-}
-
-int main(int argc, char** argv)
-{
-    WTF::setRandomSource(AlwaysZeroNumberSource);
-    WTF::initialize(CurrentTime, nullptr, nullptr, nullptr, nullptr);
-    WTF::initializeMainThread(0);
-
-    blink::TestingPlatformSupport::Config platformConfig;
-    blink::TestingPlatformSupport platform(platformConfig);
-
-    blink::Heap::init();
-    blink::ThreadState::attachMainThread();
-    blink::EventTracer::initialize();
-    int result = base::RunUnitTestsUsingBaseTestSuite(argc, argv);
-    blink::ThreadState::detachMainThread();
-    blink::Heap::shutdown();
-
-    WTF::shutdown();
->>>>>>> miniblink49
     return result;
 }

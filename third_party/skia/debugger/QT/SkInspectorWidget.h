@@ -6,16 +6,11 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #ifndef SKINSPECTORWIDGET_H_
 #define SKINSPECTORWIDGET_H_
 
 #include "SkMatrix.h"
 
-<<<<<<< HEAD
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QHBoxLayout>
@@ -24,16 +19,6 @@
 #include <QTabWidget>
 #include <QTextEdit>
 #include <QWidget>
-=======
-#include <QWidget>
-#include <QTabWidget>
-#include <QTextEdit>
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QLineEdit>
-#include <QGroupBox>
-#include <QGridLayout>
->>>>>>> miniblink49
 
 /** \class SkInspectorWidget
 
@@ -57,12 +42,8 @@ public:
      */
     SkInspectorWidget();
 
-<<<<<<< HEAD
     void setDisabled(bool isDisabled)
     {
-=======
-    void setDisabled(bool isDisabled) {
->>>>>>> miniblink49
         fMatrixAndClipWidget.setDisabled(isDisabled);
     }
 
@@ -90,12 +71,8 @@ public:
         QTextEdit fTabText;
         QString fName;
 
-<<<<<<< HEAD
         Tab(const char* name)
         {
-=======
-        Tab(const char* name) {
->>>>>>> miniblink49
             fTabText.setReadOnly(true);
             fTabLayout.addWidget(&fTabText);
             fTab.setLayout(&fTabLayout);

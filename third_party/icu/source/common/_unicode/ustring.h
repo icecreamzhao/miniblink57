@@ -16,15 +16,9 @@
 #ifndef USTRING_H
 #define USTRING_H
 
-<<<<<<< HEAD
 #include "unicode/putil.h"
 #include "unicode/uiter.h"
 #include "unicode/utypes.h"
-=======
-#include "unicode/utypes.h"
-#include "unicode/putil.h"
-#include "unicode/uiter.h"
->>>>>>> miniblink49
 
 /**
  * \def UBRK_TYPEDEF_UBREAK_ITERATOR
@@ -32,15 +26,9 @@
  */
 
 #ifndef UBRK_TYPEDEF_UBREAK_ITERATOR
-<<<<<<< HEAD
 #define UBRK_TYPEDEF_UBREAK_ITERATOR
 /** Simple declaration for u_strToTitle() to avoid including unicode/ubrk.h. @stable ICU 2.1*/
 typedef struct UBreakIterator UBreakIterator;
-=======
-#   define UBRK_TYPEDEF_UBREAK_ITERATOR
-/** Simple declaration for u_strToTitle() to avoid including unicode/ubrk.h. @stable ICU 2.1*/
-    typedef struct UBreakIterator UBreakIterator;
->>>>>>> miniblink49
 #endif
 
 /**
@@ -100,11 +88,7 @@ typedef struct UBreakIterator UBreakIterator;
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 u_strlen(const UChar* s);
-=======
-u_strlen(const UChar *s);
->>>>>>> miniblink49
 /*@}*/
 
 /**
@@ -121,11 +105,7 @@ u_strlen(const UChar *s);
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 u_countChar32(const UChar* s, int32_t length);
-=======
-u_countChar32(const UChar *s, int32_t length);
->>>>>>> miniblink49
 
 /**
  * Check if the string contains more Unicode code points than a certain number.
@@ -146,11 +126,7 @@ u_countChar32(const UChar *s, int32_t length);
  * @stable ICU 2.4
  */
 U_STABLE UBool U_EXPORT2
-<<<<<<< HEAD
 u_strHasMoreChar32Than(const UChar* s, int32_t length, int32_t number);
-=======
-u_strHasMoreChar32Than(const UChar *s, int32_t length, int32_t number);
->>>>>>> miniblink49
 
 /**
  * Concatenate two ustrings.  Appends a copy of <code>src</code>,
@@ -163,13 +139,8 @@ u_strHasMoreChar32Than(const UChar *s, int32_t length, int32_t number);
  * @stable ICU 2.0
  */
 U_STABLE UChar* U_EXPORT2
-<<<<<<< HEAD
 u_strcat(UChar* dst,
     const UChar* src);
-=======
-u_strcat(UChar     *dst, 
-    const UChar     *src);
->>>>>>> miniblink49
 
 /**
  * Concatenate two ustrings.  
@@ -186,15 +157,9 @@ u_strcat(UChar     *dst,
  * @stable ICU 2.0
  */
 U_STABLE UChar* U_EXPORT2
-<<<<<<< HEAD
 u_strncat(UChar* dst,
     const UChar* src,
     int32_t n);
-=======
-u_strncat(UChar     *dst, 
-     const UChar     *src, 
-     int32_t     n);
->>>>>>> miniblink49
 
 /**
  * Find the first occurrence of a substring in a string.
@@ -216,13 +181,8 @@ u_strncat(UChar     *dst,
  * @see u_strFindFirst
  * @see u_strFindLast
  */
-<<<<<<< HEAD
 U_STABLE UChar* U_EXPORT2
 u_strstr(const UChar* s, const UChar* substring);
-=======
-U_STABLE UChar * U_EXPORT2
-u_strstr(const UChar *s, const UChar *substring);
->>>>>>> miniblink49
 
 /**
  * Find the first occurrence of a substring in a string.
@@ -245,13 +205,8 @@ u_strstr(const UChar *s, const UChar *substring);
  * @see u_strstr
  * @see u_strFindLast
  */
-<<<<<<< HEAD
 U_STABLE UChar* U_EXPORT2
 u_strFindFirst(const UChar* s, int32_t length, const UChar* substring, int32_t subLength);
-=======
-U_STABLE UChar * U_EXPORT2
-u_strFindFirst(const UChar *s, int32_t length, const UChar *substring, int32_t subLength);
->>>>>>> miniblink49
 
 /**
  * Find the first occurrence of a BMP code point in a string.
@@ -270,13 +225,8 @@ u_strFindFirst(const UChar *s, int32_t length, const UChar *substring, int32_t s
  * @see u_strstr
  * @see u_strFindFirst
  */
-<<<<<<< HEAD
 U_STABLE UChar* U_EXPORT2
 u_strchr(const UChar* s, UChar c);
-=======
-U_STABLE UChar * U_EXPORT2
-u_strchr(const UChar *s, UChar c);
->>>>>>> miniblink49
 
 /**
  * Find the first occurrence of a code point in a string.
@@ -295,13 +245,8 @@ u_strchr(const UChar *s, UChar c);
  * @see u_strstr
  * @see u_strFindFirst
  */
-<<<<<<< HEAD
 U_STABLE UChar* U_EXPORT2
 u_strchr32(const UChar* s, UChar32 c);
-=======
-U_STABLE UChar * U_EXPORT2
-u_strchr32(const UChar *s, UChar32 c);
->>>>>>> miniblink49
 
 /**
  * Find the last occurrence of a substring in a string.
@@ -323,13 +268,8 @@ u_strchr32(const UChar *s, UChar32 c);
  * @see u_strFindFirst
  * @see u_strFindLast
  */
-<<<<<<< HEAD
 U_STABLE UChar* U_EXPORT2
 u_strrstr(const UChar* s, const UChar* substring);
-=======
-U_STABLE UChar * U_EXPORT2
-u_strrstr(const UChar *s, const UChar *substring);
->>>>>>> miniblink49
 
 /**
  * Find the last occurrence of a substring in a string.
@@ -352,13 +292,8 @@ u_strrstr(const UChar *s, const UChar *substring);
  * @see u_strstr
  * @see u_strFindLast
  */
-<<<<<<< HEAD
 U_STABLE UChar* U_EXPORT2
 u_strFindLast(const UChar* s, int32_t length, const UChar* substring, int32_t subLength);
-=======
-U_STABLE UChar * U_EXPORT2
-u_strFindLast(const UChar *s, int32_t length, const UChar *substring, int32_t subLength);
->>>>>>> miniblink49
 
 /**
  * Find the last occurrence of a BMP code point in a string.
@@ -377,13 +312,8 @@ u_strFindLast(const UChar *s, int32_t length, const UChar *substring, int32_t su
  * @see u_strrstr
  * @see u_strFindLast
  */
-<<<<<<< HEAD
 U_STABLE UChar* U_EXPORT2
 u_strrchr(const UChar* s, UChar c);
-=======
-U_STABLE UChar * U_EXPORT2
-u_strrchr(const UChar *s, UChar c);
->>>>>>> miniblink49
 
 /**
  * Find the last occurrence of a code point in a string.
@@ -402,13 +332,8 @@ u_strrchr(const UChar *s, UChar c);
  * @see u_strrstr
  * @see u_strFindLast
  */
-<<<<<<< HEAD
 U_STABLE UChar* U_EXPORT2
 u_strrchr32(const UChar* s, UChar32 c);
-=======
-U_STABLE UChar * U_EXPORT2
-u_strrchr32(const UChar *s, UChar32 c);
->>>>>>> miniblink49
 
 /**
  * Locates the first occurrence in the string <code>string</code> of any of the characters
@@ -422,13 +347,8 @@ u_strrchr32(const UChar *s, UChar32 c);
  *         characters in <code>matchSet</code>, or NULL if no such character is found.
  * @stable ICU 2.0
  */
-<<<<<<< HEAD
 U_STABLE UChar* U_EXPORT2
 u_strpbrk(const UChar* string, const UChar* matchSet);
-=======
-U_STABLE UChar * U_EXPORT2
-u_strpbrk(const UChar *string, const UChar *matchSet);
->>>>>>> miniblink49
 
 /**
  * Returns the number of consecutive characters in <code>string</code>,
@@ -444,11 +364,7 @@ u_strpbrk(const UChar *string, const UChar *matchSet);
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 u_strcspn(const UChar* string, const UChar* matchSet);
-=======
-u_strcspn(const UChar *string, const UChar *matchSet);
->>>>>>> miniblink49
 
 /**
  * Returns the number of consecutive characters in <code>string</code>,
@@ -464,11 +380,7 @@ u_strcspn(const UChar *string, const UChar *matchSet);
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 u_strspn(const UChar* string, const UChar* matchSet);
-=======
-u_strspn(const UChar *string, const UChar *matchSet);
->>>>>>> miniblink49
 
 /**
  * The string tokenizer API allows an application to break a string into
@@ -495,17 +407,10 @@ u_strspn(const UChar *string, const UChar *matchSet);
  *         when there are no more tokens.
  * @stable ICU 2.0
  */
-<<<<<<< HEAD
 U_STABLE UChar* U_EXPORT2
 u_strtok_r(UChar* src,
     const UChar* delim,
     UChar** saveState);
-=======
-U_STABLE UChar * U_EXPORT2
-u_strtok_r(UChar    *src, 
-     const UChar    *delim,
-           UChar   **saveState);
->>>>>>> miniblink49
 
 /**
  * Compare two Unicode strings for bitwise equality (code unit order).
@@ -517,15 +422,9 @@ u_strtok_r(UChar    *src,
  * value if <code>s1</code> is bitwise greater than <code>s2</code>.
  * @stable ICU 2.0
  */
-<<<<<<< HEAD
 U_STABLE int32_t U_EXPORT2
 u_strcmp(const UChar* s1,
     const UChar* s2);
-=======
-U_STABLE int32_t  U_EXPORT2
-u_strcmp(const UChar     *s1, 
-         const UChar     *s2);
->>>>>>> miniblink49
 
 /**
  * Compare two Unicode strings in code point order.
@@ -539,11 +438,7 @@ u_strcmp(const UChar     *s1,
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 u_strcmpCodePointOrder(const UChar* s1, const UChar* s2);
-=======
-u_strcmpCodePointOrder(const UChar *s1, const UChar *s2);
->>>>>>> miniblink49
 
 /**
  * Compare two Unicode strings (binary order).
@@ -573,15 +468,9 @@ u_strcmpCodePointOrder(const UChar *s1, const UChar *s2);
  * @stable ICU 2.2
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 u_strCompare(const UChar* s1, int32_t length1,
     const UChar* s2, int32_t length2,
     UBool codePointOrder);
-=======
-u_strCompare(const UChar *s1, int32_t length1,
-             const UChar *s2, int32_t length2,
-             UBool codePointOrder);
->>>>>>> miniblink49
 
 /**
  * Compare two Unicode strings (binary order)
@@ -604,11 +493,7 @@ u_strCompare(const UChar *s1, int32_t length1,
  * @stable ICU 2.6
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 u_strCompareIter(UCharIterator* iter1, UCharIterator* iter2, UBool codePointOrder);
-=======
-u_strCompareIter(UCharIterator *iter1, UCharIterator *iter2, UBool codePointOrder);
->>>>>>> miniblink49
 
 #ifndef U_COMPARE_CODE_POINT_ORDER
 /* see also unistr.h and unorm.h */
@@ -617,11 +502,7 @@ u_strCompareIter(UCharIterator *iter1, UCharIterator *iter2, UBool codePointOrde
  * Compare strings in code point order instead of code unit order.
  * @stable ICU 2.2
  */
-<<<<<<< HEAD
 #define U_COMPARE_CODE_POINT_ORDER 0x8000
-=======
-#define U_COMPARE_CODE_POINT_ORDER  0x8000
->>>>>>> miniblink49
 #endif
 
 /**
@@ -665,17 +546,10 @@ u_strCompareIter(UCharIterator *iter1, UCharIterator *iter2, UBool codePointOrde
  * @stable ICU 2.2
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 u_strCaseCompare(const UChar* s1, int32_t length1,
     const UChar* s2, int32_t length2,
     uint32_t options,
     UErrorCode* pErrorCode);
-=======
-u_strCaseCompare(const UChar *s1, int32_t length1,
-                 const UChar *s2, int32_t length2,
-                 uint32_t options,
-                 UErrorCode *pErrorCode);
->>>>>>> miniblink49
 
 /**
  * Compare two ustrings for bitwise equality. 
@@ -690,15 +564,9 @@ u_strCaseCompare(const UChar *s1, int32_t length1,
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 u_strncmp(const UChar* ucs1,
     const UChar* ucs2,
     int32_t n);
-=======
-u_strncmp(const UChar     *ucs1, 
-     const UChar     *ucs2, 
-     int32_t     n);
->>>>>>> miniblink49
 
 /**
  * Compare two Unicode strings in code point order.
@@ -714,11 +582,7 @@ u_strncmp(const UChar     *ucs1,
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 u_strncmpCodePointOrder(const UChar* s1, const UChar* s2, int32_t n);
-=======
-u_strncmpCodePointOrder(const UChar *s1, const UChar *s2, int32_t n);
->>>>>>> miniblink49
 
 /**
  * Compare two strings case-insensitively using full case folding.
@@ -740,11 +604,7 @@ u_strncmpCodePointOrder(const UChar *s1, const UChar *s2, int32_t n);
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 u_strcasecmp(const UChar* s1, const UChar* s2, uint32_t options);
-=======
-u_strcasecmp(const UChar *s1, const UChar *s2, uint32_t options);
->>>>>>> miniblink49
 
 /**
  * Compare two strings case-insensitively using full case folding.
@@ -768,11 +628,7 @@ u_strcasecmp(const UChar *s1, const UChar *s2, uint32_t options);
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 u_strncasecmp(const UChar* s1, const UChar* s2, int32_t n, uint32_t options);
-=======
-u_strncasecmp(const UChar *s1, const UChar *s2, int32_t n, uint32_t options);
->>>>>>> miniblink49
 
 /**
  * Compare two strings case-insensitively using full case folding.
@@ -796,11 +652,7 @@ u_strncasecmp(const UChar *s1, const UChar *s2, int32_t n, uint32_t options);
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 u_memcasecmp(const UChar* s1, const UChar* s2, int32_t length, uint32_t options);
-=======
-u_memcasecmp(const UChar *s1, const UChar *s2, int32_t length, uint32_t options);
->>>>>>> miniblink49
 
 /**
  * Copy a ustring. Adds a null terminator.
@@ -811,13 +663,8 @@ u_memcasecmp(const UChar *s1, const UChar *s2, int32_t length, uint32_t options)
  * @stable ICU 2.0
  */
 U_STABLE UChar* U_EXPORT2
-<<<<<<< HEAD
 u_strcpy(UChar* dst,
     const UChar* src);
-=======
-u_strcpy(UChar     *dst, 
-    const UChar     *src);
->>>>>>> miniblink49
 
 /**
  * Copy a ustring.
@@ -831,15 +678,9 @@ u_strcpy(UChar     *dst,
  * @stable ICU 2.0
  */
 U_STABLE UChar* U_EXPORT2
-<<<<<<< HEAD
 u_strncpy(UChar* dst,
     const UChar* src,
     int32_t n);
-=======
-u_strncpy(UChar     *dst, 
-     const UChar     *src, 
-     int32_t     n);
->>>>>>> miniblink49
 
 #if !UCONFIG_NO_CONVERSION
 
@@ -853,13 +694,8 @@ u_strncpy(UChar     *dst,
  * @return A pointer to <code>dst</code>.
  * @stable ICU 2.0
  */
-<<<<<<< HEAD
 U_STABLE UChar* U_EXPORT2 u_uastrcpy(UChar* dst,
     const char* src);
-=======
-U_STABLE UChar* U_EXPORT2 u_uastrcpy(UChar *dst,
-               const char *src );
->>>>>>> miniblink49
 
 /**
  * Copy a byte string encoded in the default codepage to a ustring.
@@ -873,15 +709,9 @@ U_STABLE UChar* U_EXPORT2 u_uastrcpy(UChar *dst,
  * @return A pointer to <code>dst</code>.
  * @stable ICU 2.0
  */
-<<<<<<< HEAD
 U_STABLE UChar* U_EXPORT2 u_uastrncpy(UChar* dst,
     const char* src,
     int32_t n);
-=======
-U_STABLE UChar* U_EXPORT2 u_uastrncpy(UChar *dst,
-            const char *src,
-            int32_t n);
->>>>>>> miniblink49
 
 /**
  * Copy ustring to a byte string encoded in the default codepage.
@@ -893,13 +723,8 @@ U_STABLE UChar* U_EXPORT2 u_uastrncpy(UChar *dst,
  * @return A pointer to <code>dst</code>.
  * @stable ICU 2.0
  */
-<<<<<<< HEAD
 U_STABLE char* U_EXPORT2 u_austrcpy(char* dst,
     const UChar* src);
-=======
-U_STABLE char* U_EXPORT2 u_austrcpy(char *dst,
-            const UChar *src );
->>>>>>> miniblink49
 
 /**
  * Copy ustring to a byte string encoded in the default codepage.
@@ -913,15 +738,9 @@ U_STABLE char* U_EXPORT2 u_austrcpy(char *dst,
  * @return A pointer to <code>dst</code>.
  * @stable ICU 2.0
  */
-<<<<<<< HEAD
 U_STABLE char* U_EXPORT2 u_austrncpy(char* dst,
     const UChar* src,
     int32_t n);
-=======
-U_STABLE char* U_EXPORT2 u_austrncpy(char *dst,
-            const UChar *src,
-            int32_t n );
->>>>>>> miniblink49
 
 #endif
 
@@ -934,11 +753,7 @@ U_STABLE char* U_EXPORT2 u_austrncpy(char *dst,
  * @stable ICU 2.0
  */
 U_STABLE UChar* U_EXPORT2
-<<<<<<< HEAD
 u_memcpy(UChar* dest, const UChar* src, int32_t count);
-=======
-u_memcpy(UChar *dest, const UChar *src, int32_t count);
->>>>>>> miniblink49
 
 /**
  * Synonym for memmove(), but with UChars only.
@@ -949,11 +764,7 @@ u_memcpy(UChar *dest, const UChar *src, int32_t count);
  * @stable ICU 2.0
  */
 U_STABLE UChar* U_EXPORT2
-<<<<<<< HEAD
 u_memmove(UChar* dest, const UChar* src, int32_t count);
-=======
-u_memmove(UChar *dest, const UChar *src, int32_t count);
->>>>>>> miniblink49
 
 /**
  * Initialize <code>count</code> characters of <code>dest</code> to <code>c</code>.
@@ -965,11 +776,7 @@ u_memmove(UChar *dest, const UChar *src, int32_t count);
  * @stable ICU 2.0
  */
 U_STABLE UChar* U_EXPORT2
-<<<<<<< HEAD
 u_memset(UChar* dest, UChar c, int32_t count);
-=======
-u_memset(UChar *dest, UChar c, int32_t count);
->>>>>>> miniblink49
 
 /**
  * Compare the first <code>count</code> UChars of each buffer.
@@ -983,11 +790,7 @@ u_memset(UChar *dest, UChar c, int32_t count);
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 u_memcmp(const UChar* buf1, const UChar* buf2, int32_t count);
-=======
-u_memcmp(const UChar *buf1, const UChar *buf2, int32_t count);
->>>>>>> miniblink49
 
 /**
  * Compare two Unicode strings in code point order.
@@ -1003,11 +806,7 @@ u_memcmp(const UChar *buf1, const UChar *buf2, int32_t count);
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 u_memcmpCodePointOrder(const UChar* s1, const UChar* s2, int32_t count);
-=======
-u_memcmpCodePointOrder(const UChar *s1, const UChar *s2, int32_t count);
->>>>>>> miniblink49
 
 /**
  * Find the first occurrence of a BMP code point in a string.
@@ -1027,11 +826,7 @@ u_memcmpCodePointOrder(const UChar *s1, const UChar *s2, int32_t count);
  * @see u_strFindFirst
  */
 U_STABLE UChar* U_EXPORT2
-<<<<<<< HEAD
 u_memchr(const UChar* s, UChar c, int32_t count);
-=======
-u_memchr(const UChar *s, UChar c, int32_t count);
->>>>>>> miniblink49
 
 /**
  * Find the first occurrence of a code point in a string.
@@ -1051,11 +846,7 @@ u_memchr(const UChar *s, UChar c, int32_t count);
  * @see u_strFindFirst
  */
 U_STABLE UChar* U_EXPORT2
-<<<<<<< HEAD
 u_memchr32(const UChar* s, UChar32 c, int32_t count);
-=======
-u_memchr32(const UChar *s, UChar32 c, int32_t count);
->>>>>>> miniblink49
 
 /**
  * Find the last occurrence of a BMP code point in a string.
@@ -1075,11 +866,7 @@ u_memchr32(const UChar *s, UChar32 c, int32_t count);
  * @see u_strFindLast
  */
 U_STABLE UChar* U_EXPORT2
-<<<<<<< HEAD
 u_memrchr(const UChar* s, UChar c, int32_t count);
-=======
-u_memrchr(const UChar *s, UChar c, int32_t count);
->>>>>>> miniblink49
 
 /**
  * Find the last occurrence of a code point in a string.
@@ -1099,11 +886,7 @@ u_memrchr(const UChar *s, UChar c, int32_t count);
  * @see u_strFindLast
  */
 U_STABLE UChar* U_EXPORT2
-<<<<<<< HEAD
 u_memrchr32(const UChar* s, UChar32 c, int32_t count);
-=======
-u_memrchr32(const UChar *s, UChar32 c, int32_t count);
->>>>>>> miniblink49
 
 /**
  * Unicode String literals in C.
@@ -1156,7 +939,6 @@ u_memrchr32(const UChar *s, UChar32 c, int32_t count);
  * @stable ICU 2.0
  */
 #if defined(U_DECLARE_UTF16)
-<<<<<<< HEAD
 #define U_STRING_DECL(var, cs, length) static const UChar* var = (const UChar*)U_DECLARE_UTF16(cs)
 /**@stable ICU 2.0 */
 #define U_STRING_INIT(var, cs, length)
@@ -1172,23 +954,6 @@ u_memrchr32(const UChar *s, UChar32 c, int32_t count);
 #define U_STRING_DECL(var, cs, length) static UChar var[(length) + 1]
 /**@stable ICU 2.0 */
 #define U_STRING_INIT(var, cs, length) u_charsToUChars(cs, var, length + 1)
-=======
-#   define U_STRING_DECL(var, cs, length) static const UChar *var=(const UChar *)U_DECLARE_UTF16(cs)
-    /**@stable ICU 2.0 */
-#   define U_STRING_INIT(var, cs, length)
-#elif U_SIZEOF_WCHAR_T==U_SIZEOF_UCHAR && (U_CHARSET_FAMILY==U_ASCII_FAMILY || (U_SIZEOF_UCHAR == 2 && defined(U_WCHAR_IS_UTF16)))
-#   define U_STRING_DECL(var, cs, length) static const UChar var[(length)+1]=L ## cs
-    /**@stable ICU 2.0 */
-#   define U_STRING_INIT(var, cs, length)
-#elif U_SIZEOF_UCHAR==1 && U_CHARSET_FAMILY==U_ASCII_FAMILY
-#   define U_STRING_DECL(var, cs, length) static const UChar var[(length)+1]=cs
-    /**@stable ICU 2.0 */
-#   define U_STRING_INIT(var, cs, length)
-#else
-#   define U_STRING_DECL(var, cs, length) static UChar var[(length)+1]
-    /**@stable ICU 2.0 */
-#   define U_STRING_INIT(var, cs, length) u_charsToUChars(cs, var, length+1)
->>>>>>> miniblink49
 #endif
 
 /**
@@ -1239,13 +1004,8 @@ u_memrchr32(const UChar *s, UChar32 c, int32_t count);
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 u_unescape(const char* src,
     UChar* dest, int32_t destCapacity);
-=======
-u_unescape(const char *src,
-           UChar *dest, int32_t destCapacity);
->>>>>>> miniblink49
 
 U_CDECL_BEGIN
 /**
@@ -1260,11 +1020,7 @@ U_CDECL_BEGIN
  * @see u_unescapeAt
  * @stable ICU 2.0
  */
-<<<<<<< HEAD
 typedef UChar(U_CALLCONV* UNESCAPE_CHAR_AT)(int32_t offset, void* context);
-=======
-typedef UChar (U_CALLCONV *UNESCAPE_CHAR_AT)(int32_t offset, void *context);
->>>>>>> miniblink49
 U_CDECL_END
 
 /**
@@ -1297,15 +1053,9 @@ U_CDECL_END
  */
 U_STABLE UChar32 U_EXPORT2
 u_unescapeAt(UNESCAPE_CHAR_AT charAt,
-<<<<<<< HEAD
     int32_t* offset,
     int32_t length,
     void* context);
-=======
-             int32_t *offset,
-             int32_t length,
-             void *context);
->>>>>>> miniblink49
 
 /**
  * Uppercase the characters in a string.
@@ -1328,17 +1078,10 @@ u_unescapeAt(UNESCAPE_CHAR_AT charAt,
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 u_strToUpper(UChar* dest, int32_t destCapacity,
     const UChar* src, int32_t srcLength,
     const char* locale,
     UErrorCode* pErrorCode);
-=======
-u_strToUpper(UChar *dest, int32_t destCapacity,
-             const UChar *src, int32_t srcLength,
-             const char *locale,
-             UErrorCode *pErrorCode);
->>>>>>> miniblink49
 
 /**
  * Lowercase the characters in a string.
@@ -1361,17 +1104,10 @@ u_strToUpper(UChar *dest, int32_t destCapacity,
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 u_strToLower(UChar* dest, int32_t destCapacity,
     const UChar* src, int32_t srcLength,
     const char* locale,
     UErrorCode* pErrorCode);
-=======
-u_strToLower(UChar *dest, int32_t destCapacity,
-             const UChar *src, int32_t srcLength,
-             const char *locale,
-             UErrorCode *pErrorCode);
->>>>>>> miniblink49
 
 #if !UCONFIG_NO_BREAK_ITERATION
 
@@ -1414,19 +1150,11 @@ u_strToLower(UChar *dest, int32_t destCapacity,
  * @stable ICU 2.1
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 u_strToTitle(UChar* dest, int32_t destCapacity,
     const UChar* src, int32_t srcLength,
     UBreakIterator* titleIter,
     const char* locale,
     UErrorCode* pErrorCode);
-=======
-u_strToTitle(UChar *dest, int32_t destCapacity,
-             const UChar *src, int32_t srcLength,
-             UBreakIterator *titleIter,
-             const char *locale,
-             UErrorCode *pErrorCode);
->>>>>>> miniblink49
 
 #endif
 
@@ -1455,17 +1183,10 @@ u_strToTitle(UChar *dest, int32_t destCapacity,
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 u_strFoldCase(UChar* dest, int32_t destCapacity,
     const UChar* src, int32_t srcLength,
     uint32_t options,
     UErrorCode* pErrorCode);
-=======
-u_strFoldCase(UChar *dest, int32_t destCapacity,
-              const UChar *src, int32_t srcLength,
-              uint32_t options,
-              UErrorCode *pErrorCode);
->>>>>>> miniblink49
 
 #if defined(U_WCHAR_IS_UTF16) || defined(U_WCHAR_IS_UTF32) || !UCONFIG_NO_CONVERSION
 /**
@@ -1491,21 +1212,12 @@ u_strFoldCase(UChar *dest, int32_t destCapacity,
  * @stable ICU 2.0
  */
 U_STABLE wchar_t* U_EXPORT2
-<<<<<<< HEAD
 u_strToWCS(wchar_t* dest,
     int32_t destCapacity,
     int32_t* pDestLength,
     const UChar* src,
     int32_t srcLength,
     UErrorCode* pErrorCode);
-=======
-u_strToWCS(wchar_t *dest, 
-           int32_t destCapacity,
-           int32_t *pDestLength,
-           const UChar *src, 
-           int32_t srcLength,
-           UErrorCode *pErrorCode);
->>>>>>> miniblink49
 /**
  * Convert a wchar_t string to UTF-16.
  * If it is known at compile time that wchar_t strings are in UTF-16 or UTF-32, then
@@ -1529,21 +1241,12 @@ u_strToWCS(wchar_t *dest,
  * @stable ICU 2.0
  */
 U_STABLE UChar* U_EXPORT2
-<<<<<<< HEAD
 u_strFromWCS(UChar* dest,
     int32_t destCapacity,
     int32_t* pDestLength,
     const wchar_t* src,
     int32_t srcLength,
     UErrorCode* pErrorCode);
-=======
-u_strFromWCS(UChar   *dest,
-             int32_t destCapacity, 
-             int32_t *pDestLength,
-             const wchar_t *src,
-             int32_t srcLength,
-             UErrorCode *pErrorCode);
->>>>>>> miniblink49
 #endif /* defined(U_WCHAR_IS_UTF16) || defined(U_WCHAR_IS_UTF32) || !UCONFIG_NO_CONVERSION */
 
 /**
@@ -1568,7 +1271,6 @@ u_strFromWCS(UChar   *dest,
  * @see u_strToUTF8WithSub
  * @see u_strFromUTF8
  */
-<<<<<<< HEAD
 U_STABLE char* U_EXPORT2
 u_strToUTF8(char* dest,
     int32_t destCapacity,
@@ -1576,15 +1278,6 @@ u_strToUTF8(char* dest,
     const UChar* src,
     int32_t srcLength,
     UErrorCode* pErrorCode);
-=======
-U_STABLE char* U_EXPORT2 
-u_strToUTF8(char *dest,           
-            int32_t destCapacity,
-            int32_t *pDestLength,
-            const UChar *src, 
-            int32_t srcLength,
-            UErrorCode *pErrorCode);
->>>>>>> miniblink49
 
 /**
  * Convert a UTF-8 string to UTF-16.
@@ -1609,21 +1302,12 @@ u_strToUTF8(char *dest,
  * @see u_strFromUTF8Lenient
  */
 U_STABLE UChar* U_EXPORT2
-<<<<<<< HEAD
 u_strFromUTF8(UChar* dest,
     int32_t destCapacity,
     int32_t* pDestLength,
     const char* src,
     int32_t srcLength,
     UErrorCode* pErrorCode);
-=======
-u_strFromUTF8(UChar *dest,             
-              int32_t destCapacity,
-              int32_t *pDestLength,
-              const char *src, 
-              int32_t srcLength,
-              UErrorCode *pErrorCode);
->>>>>>> miniblink49
 
 /**
  * Convert a UTF-16 string to UTF-8.
@@ -1661,7 +1345,6 @@ u_strFromUTF8(UChar *dest,
  * @stable ICU 3.6
  */
 U_STABLE char* U_EXPORT2
-<<<<<<< HEAD
 u_strToUTF8WithSub(char* dest,
     int32_t destCapacity,
     int32_t* pDestLength,
@@ -1669,15 +1352,6 @@ u_strToUTF8WithSub(char* dest,
     int32_t srcLength,
     UChar32 subchar, int32_t* pNumSubstitutions,
     UErrorCode* pErrorCode);
-=======
-u_strToUTF8WithSub(char *dest,
-            int32_t destCapacity,
-            int32_t *pDestLength,
-            const UChar *src,
-            int32_t srcLength,
-            UChar32 subchar, int32_t *pNumSubstitutions,
-            UErrorCode *pErrorCode);
->>>>>>> miniblink49
 
 /**
  * Convert a UTF-8 string to UTF-16.
@@ -1716,7 +1390,6 @@ u_strToUTF8WithSub(char *dest,
  * @stable ICU 3.6
  */
 U_STABLE UChar* U_EXPORT2
-<<<<<<< HEAD
 u_strFromUTF8WithSub(UChar* dest,
     int32_t destCapacity,
     int32_t* pDestLength,
@@ -1724,15 +1397,6 @@ u_strFromUTF8WithSub(UChar* dest,
     int32_t srcLength,
     UChar32 subchar, int32_t* pNumSubstitutions,
     UErrorCode* pErrorCode);
-=======
-u_strFromUTF8WithSub(UChar *dest,
-              int32_t destCapacity,
-              int32_t *pDestLength,
-              const char *src,
-              int32_t srcLength,
-              UChar32 subchar, int32_t *pNumSubstitutions,
-              UErrorCode *pErrorCode);
->>>>>>> miniblink49
 
 /**
  * Convert a UTF-8 string to UTF-16.
@@ -1785,7 +1449,6 @@ u_strFromUTF8WithSub(UChar *dest,
  * @see u_strToUTF8WithSub
  * @stable ICU 3.6
  */
-<<<<<<< HEAD
 U_STABLE UChar* U_EXPORT2
 u_strFromUTF8Lenient(UChar* dest,
     int32_t destCapacity,
@@ -1793,15 +1456,6 @@ u_strFromUTF8Lenient(UChar* dest,
     const char* src,
     int32_t srcLength,
     UErrorCode* pErrorCode);
-=======
-U_STABLE UChar * U_EXPORT2
-u_strFromUTF8Lenient(UChar *dest,
-                     int32_t destCapacity,
-                     int32_t *pDestLength,
-                     const char *src,
-                     int32_t srcLength,
-                     UErrorCode *pErrorCode);
->>>>>>> miniblink49
 
 /**
  * Convert a UTF-16 string to UTF-32.
@@ -1825,7 +1479,6 @@ u_strFromUTF8Lenient(UChar *dest,
  * @see u_strFromUTF32
  * @stable ICU 2.0
  */
-<<<<<<< HEAD
 U_STABLE UChar32* U_EXPORT2
 u_strToUTF32(UChar32* dest,
     int32_t destCapacity,
@@ -1833,15 +1486,6 @@ u_strToUTF32(UChar32* dest,
     const UChar* src,
     int32_t srcLength,
     UErrorCode* pErrorCode);
-=======
-U_STABLE UChar32* U_EXPORT2 
-u_strToUTF32(UChar32 *dest, 
-             int32_t  destCapacity,
-             int32_t  *pDestLength,
-             const UChar *src, 
-             int32_t  srcLength,
-             UErrorCode *pErrorCode);
->>>>>>> miniblink49
 
 /**
  * Convert a UTF-32 string to UTF-16.
@@ -1865,7 +1509,6 @@ u_strToUTF32(UChar32 *dest,
  * @see u_strToUTF32
  * @stable ICU 2.0
  */
-<<<<<<< HEAD
 U_STABLE UChar* U_EXPORT2
 u_strFromUTF32(UChar* dest,
     int32_t destCapacity,
@@ -1873,15 +1516,6 @@ u_strFromUTF32(UChar* dest,
     const UChar32* src,
     int32_t srcLength,
     UErrorCode* pErrorCode);
-=======
-U_STABLE UChar* U_EXPORT2 
-u_strFromUTF32(UChar   *dest,
-               int32_t destCapacity, 
-               int32_t *pDestLength,
-               const UChar32 *src,
-               int32_t srcLength,
-               UErrorCode *pErrorCode);
->>>>>>> miniblink49
 
 /**
  * Convert a UTF-16 string to UTF-32.
@@ -1919,7 +1553,6 @@ u_strFromUTF32(UChar   *dest,
  * @stable ICU 4.2
  */
 U_STABLE UChar32* U_EXPORT2
-<<<<<<< HEAD
 u_strToUTF32WithSub(UChar32* dest,
     int32_t destCapacity,
     int32_t* pDestLength,
@@ -1927,15 +1560,6 @@ u_strToUTF32WithSub(UChar32* dest,
     int32_t srcLength,
     UChar32 subchar, int32_t* pNumSubstitutions,
     UErrorCode* pErrorCode);
-=======
-u_strToUTF32WithSub(UChar32 *dest,
-             int32_t destCapacity,
-             int32_t *pDestLength,
-             const UChar *src,
-             int32_t srcLength,
-             UChar32 subchar, int32_t *pNumSubstitutions,
-             UErrorCode *pErrorCode);
->>>>>>> miniblink49
 
 /**
  * Convert a UTF-32 string to UTF-16.
@@ -1973,7 +1597,6 @@ u_strToUTF32WithSub(UChar32 *dest,
  * @stable ICU 4.2
  */
 U_STABLE UChar* U_EXPORT2
-<<<<<<< HEAD
 u_strFromUTF32WithSub(UChar* dest,
     int32_t destCapacity,
     int32_t* pDestLength,
@@ -1981,15 +1604,6 @@ u_strFromUTF32WithSub(UChar* dest,
     int32_t srcLength,
     UChar32 subchar, int32_t* pNumSubstitutions,
     UErrorCode* pErrorCode);
-=======
-u_strFromUTF32WithSub(UChar *dest,
-               int32_t destCapacity,
-               int32_t *pDestLength,
-               const UChar32 *src,
-               int32_t srcLength,
-               UChar32 subchar, int32_t *pNumSubstitutions,
-               UErrorCode *pErrorCode);
->>>>>>> miniblink49
 
 /**
  * Convert a 16-bit Unicode string to Java Modified UTF-8.
@@ -2023,7 +1637,6 @@ u_strFromUTF32WithSub(UChar *dest,
  * @see u_strToUTF8WithSub
  * @see u_strFromJavaModifiedUTF8WithSub
  */
-<<<<<<< HEAD
 U_STABLE char* U_EXPORT2
 u_strToJavaModifiedUTF8(
     char* dest,
@@ -2032,16 +1645,6 @@ u_strToJavaModifiedUTF8(
     const UChar* src,
     int32_t srcLength,
     UErrorCode* pErrorCode);
-=======
-U_STABLE char* U_EXPORT2 
-u_strToJavaModifiedUTF8(
-        char *dest,
-        int32_t destCapacity,
-        int32_t *pDestLength,
-        const UChar *src, 
-        int32_t srcLength,
-        UErrorCode *pErrorCode);
->>>>>>> miniblink49
 
 /**
  * Convert a Java Modified UTF-8 string to a 16-bit Unicode string.
@@ -2086,7 +1689,6 @@ u_strToJavaModifiedUTF8(
  */
 U_STABLE UChar* U_EXPORT2
 u_strFromJavaModifiedUTF8WithSub(
-<<<<<<< HEAD
     UChar* dest,
     int32_t destCapacity,
     int32_t* pDestLength,
@@ -2094,14 +1696,5 @@ u_strFromJavaModifiedUTF8WithSub(
     int32_t srcLength,
     UChar32 subchar, int32_t* pNumSubstitutions,
     UErrorCode* pErrorCode);
-=======
-        UChar *dest,
-        int32_t destCapacity,
-        int32_t *pDestLength,
-        const char *src,
-        int32_t srcLength,
-        UChar32 subchar, int32_t *pNumSubstitutions,
-        UErrorCode *pErrorCode);
->>>>>>> miniblink49
 
 #endif

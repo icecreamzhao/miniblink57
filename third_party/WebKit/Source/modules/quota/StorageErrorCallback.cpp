@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "modules/quota/StorageErrorCallback.h"
 
 #include "modules/quota/DOMError.h"
@@ -49,27 +48,6 @@ void StorageErrorCallback::run(StorageErrorCallback* callback,
     if (!callback)
         return;
     callback->handleEvent(DOMError::create(ec));
-=======
-#include "config.h"
-
-#include "modules/quota/StorageErrorCallback.h"
-
-#include "core/dom/DOMError.h"
-
-namespace blink {
-
-StorageErrorCallback::CallbackTask::CallbackTask(StorageErrorCallback* callback, ExceptionCode ec)
-    : m_callback(callback)
-    , m_ec(ec)
-{
-}
-
-void StorageErrorCallback::CallbackTask::performTask(ExecutionContext*)
-{
-    if (!m_callback)
-        return;
-    m_callback->handleEvent(DOMError::create(m_ec));
->>>>>>> miniblink49
 }
 
 } // namespace blink

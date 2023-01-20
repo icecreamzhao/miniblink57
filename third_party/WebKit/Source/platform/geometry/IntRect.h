@@ -27,13 +27,9 @@
 #define IntRect_h
 
 #include "platform/geometry/IntPoint.h"
-<<<<<<< HEAD
 #include "platform/geometry/IntRectOutsets.h"
 #include "wtf/Allocator.h"
 #include "wtf/Forward.h"
-=======
-#include "wtf/FastAllocBase.h"
->>>>>>> miniblink49
 #include "wtf/Vector.h"
 #include "wtf/VectorTraits.h"
 
@@ -48,20 +44,16 @@ typedef struct CGRect CGRect;
 struct SkRect;
 struct SkIRect;
 
-<<<<<<< HEAD
 namespace gfx {
 class Rect;
 }
 
-=======
->>>>>>> miniblink49
 namespace blink {
 
 class FloatRect;
 class LayoutRect;
 
 class PLATFORM_EXPORT IntRect {
-<<<<<<< HEAD
     USING_FAST_MALLOC(IntRect);
 
 public:
@@ -81,18 +73,6 @@ public:
         const FloatRect&); // don't do this implicitly since it's lossy
     explicit IntRect(
         const LayoutRect&); // don't do this implicitly since it's lossy
-=======
-    WTF_MAKE_FAST_ALLOCATED(IntRect);
-public:
-    IntRect() { }
-    IntRect(const IntPoint& location, const IntSize& size)
-        : m_location(location), m_size(size) { }
-    IntRect(int x, int y, int width, int height)
-        : m_location(IntPoint(x, y)), m_size(IntSize(width, height)) { }
-
-    explicit IntRect(const FloatRect&); // don't do this implicitly since it's lossy
-    explicit IntRect(const LayoutRect&); // don't do this implicitly since it's lossy
->>>>>>> miniblink49
 
     IntPoint location() const { return m_location; }
     IntSize size() const { return m_size; }
@@ -114,7 +94,6 @@ public:
 
     bool isEmpty() const { return m_size.isEmpty(); }
 
-<<<<<<< HEAD
     // NOTE: The result is rounded to integer values, and thus may be not the
     // exact center point.
     IntPoint center() const
@@ -139,18 +118,6 @@ public:
             outsets.top() + outsets.bottom());
     }
 
-=======
-    // NOTE: The result is rounded to integer values, and thus may be not the exact
-    // center point.
-    IntPoint center() const { return IntPoint(x() + width() / 2, y() + height() / 2); }
-
-    void move(const IntSize& size) { m_location += size; }
-    void moveBy(const IntPoint& offset) { m_location.move(offset.x(), offset.y()); }
-    void move(int dx, int dy) { m_location.move(dx, dy); }
-
-    void expand(const IntSize& size) { m_size += size; }
-    void expand(int dw, int dh) { m_size.expand(dw, dh); }
->>>>>>> miniblink49
     void contract(const IntSize& size) { m_size -= size; }
     void contract(int dw, int dh) { m_size.expand(-dw, -dh); }
 
@@ -178,7 +145,6 @@ public:
     }
 
     IntPoint minXMinYCorner() const { return m_location; } // typically topLeft
-<<<<<<< HEAD
     IntPoint maxXMinYCorner() const
     {
         return IntPoint(m_location.x() + m_size.width(), m_location.y());
@@ -192,17 +158,11 @@ public:
         return IntPoint(m_location.x() + m_size.width(),
             m_location.y() + m_size.height());
     } // typically bottomRight
-=======
-    IntPoint maxXMinYCorner() const { return IntPoint(m_location.x() + m_size.width(), m_location.y()); } // typically topRight
-    IntPoint minXMaxYCorner() const { return IntPoint(m_location.x(), m_location.y() + m_size.height()); } // typically bottomLeft
-    IntPoint maxXMaxYCorner() const { return IntPoint(m_location.x() + m_size.width(), m_location.y() + m_size.height()); } // typically bottomRight
->>>>>>> miniblink49
 
     bool intersects(const IntRect&) const;
     bool contains(const IntRect&) const;
 
     // This checks to see if the rect contains x,y in the traditional sense.
-<<<<<<< HEAD
     // Equivalent to checking if the rect contains a 1x1 rect below and to the
     // right of (px,py).
     bool contains(int px, int py) const
@@ -213,25 +173,16 @@ public:
     {
         return contains(point.x(), point.y());
     }
-=======
-    // Equivalent to checking if the rect contains a 1x1 rect below and to the right of (px,py).
-    bool contains(int px, int py) const
-        { return px >= x() && px < maxX() && py >= y() && py < maxY(); }
-    bool contains(const IntPoint& point) const { return contains(point.x(), point.y()); }
->>>>>>> miniblink49
 
     void intersect(const IntRect&);
     void unite(const IntRect&);
     void uniteIfNonZero(const IntRect&);
 
-<<<<<<< HEAD
     // Besides non-empty rects, this method also unites empty rects (as points or
     // line segments).  For example, union of (100, 100, 0x0) and (200, 200, 50x0)
     // is (100, 100, 150x100).
     void uniteEvenIfEmpty(const IntRect&);
 
-=======
->>>>>>> miniblink49
     void inflateX(int dx)
     {
         m_location.setX(m_location.x() - dx);
@@ -242,7 +193,6 @@ public:
         m_location.setY(m_location.y() - dy);
         m_size.setHeight(m_size.height() + dy + dy);
     }
-<<<<<<< HEAD
     void inflate(int d)
     {
         inflateX(d);
@@ -260,15 +210,6 @@ public:
     {
         return IntRect(m_location.transposedPoint(), m_size.transposedSize());
     }
-=======
-    void inflate(int d) { inflateX(d); inflateY(d); }
-    void scale(float s);
-
-    IntSize differenceToPoint(const IntPoint&) const;
-    int distanceSquaredToPoint(const IntPoint& p) const { return differenceToPoint(p).diagonalLengthSquared(); }
-
-    IntRect transposedRect() const { return IntRect(m_location.transposedPoint(), m_size.transposedSize()); }
->>>>>>> miniblink49
 
 #if OS(MACOSX)
     operator CGRect() const;
@@ -280,16 +221,9 @@ public:
     operator SkRect() const;
     operator SkIRect() const;
 
-<<<<<<< HEAD
     operator gfx::Rect() const;
 
     String toString() const;
-=======
-#ifndef NDEBUG
-    // Prints the rect to the screen.
-    void show() const;
-#endif
->>>>>>> miniblink49
 
 private:
     IntPoint m_location;
@@ -312,7 +246,6 @@ inline IntRect unionRect(const IntRect& a, const IntRect& b)
 
 PLATFORM_EXPORT IntRect unionRect(const Vector<IntRect>&);
 
-<<<<<<< HEAD
 inline IntRect unionRectEvenIfEmpty(const IntRect& a, const IntRect& b)
 {
     IntRect c = a;
@@ -322,8 +255,6 @@ inline IntRect unionRectEvenIfEmpty(const IntRect& a, const IntRect& b)
 
 PLATFORM_EXPORT IntRect unionRectEvenIfEmpty(const Vector<IntRect>&);
 
-=======
->>>>>>> miniblink49
 inline bool operator==(const IntRect& a, const IntRect& b)
 {
     return a.location() == b.location() && a.size() == b.size();
@@ -341,13 +272,10 @@ PLATFORM_EXPORT IntRect enclosingIntRect(const NSRect&);
 #endif
 #endif
 
-<<<<<<< HEAD
 // Redeclared here to avoid ODR issues.
 // See platform/testing/GeometryPrinters.h.
 void PrintTo(const IntRect&, std::ostream*);
 
-=======
->>>>>>> miniblink49
 } // namespace blink
 
 WTF_ALLOW_MOVE_INIT_AND_COMPARE_WITH_MEM_FUNCTIONS(blink::IntRect);

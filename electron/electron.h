@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "wke.h"
+#include "wke/wke.h"
 
 namespace atom {
 

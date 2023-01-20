@@ -10,35 +10,39 @@
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/html/parser/HTMLParserIdioms.h"
 
 #include "core/HTMLNames.h"
-#include <limits>
 #include "wtf/MathExtras.h"
 #include "wtf/text/AtomicString.h"
+#include "wtf/text/ParsingUtilities.h"
 #include "wtf/text/StringBuilder.h"
 #include "wtf/text/StringHash.h"
+#include "wtf/text/StringToNumber.h"
 #include "wtf/text/TextEncoding.h"
+
+#include <limits>
 
 namespace blink {
 
 using namespace HTMLNames;
 
 template <typename CharType>
-static String stripLeadingAndTrailingHTMLSpaces(String string, const CharType* characters, unsigned length)
+static String stripLeadingAndTrailingHTMLSpaces(String string,
+    const CharType* characters,
+    unsigned length)
 {
     unsigned numLeadingSpaces = 0;
     unsigned numTrailingSpaces = 0;
@@ -49,7 +53,7 @@ static String stripLeadingAndTrailingHTMLSpaces(String string, const CharType* c
     }
 
     if (numLeadingSpaces == length)
-        return string.isNull() ? string : emptyAtom.string();
+        return string.isNull() ? string : emptyAtom.getString();
 
     for (; numTrailingSpaces < length; ++numTrailingSpaces) {
         if (isNotHTMLSpace<CharType>(characters[length - numTrailingSpaces - 1]))
@@ -61,7 +65,8 @@ static String stripLeadingAndTrailingHTMLSpaces(String string, const CharType* c
     if (!(numLeadingSpaces | numTrailingSpaces))
         return string;
 
-    return string.substring(numLeadingSpaces, length - (numLeadingSpaces + numTrailingSpaces));
+    return string.substring(numLeadingSpaces,
+        length - (numLeadingSpaces + numTrailingSpaces));
 }
 
 String stripLeadingAndTrailingHTMLSpaces(const String& string)
@@ -69,12 +74,14 @@ String stripLeadingAndTrailingHTMLSpaces(const String& string)
     unsigned length = string.length();
 
     if (!length)
-        return string.isNull() ? string : emptyAtom.string();
+        return string.isNull() ? string : emptyAtom.getString();
 
     if (string.is8Bit())
-        return stripLeadingAndTrailingHTMLSpaces<LChar>(string, string.characters8(), length);
+        return stripLeadingAndTrailingHTMLSpaces<LChar>(
+            string, string.characters8(), length);
 
-    return stripLeadingAndTrailingHTMLSpaces<UChar>(string, string.characters16(), length);
+    return stripLeadingAndTrailingHTMLSpaces<UChar>(string, string.characters16(),
+        length);
 }
 
 String serializeForNumberType(const Decimal& number)
@@ -93,10 +100,12 @@ String serializeForNumberType(double number)
     return String::numberToStringECMAScript(number);
 }
 
-Decimal parseToDecimalForNumberType(const String& string, const Decimal& fallbackValue)
+Decimal parseToDecimalForNumberType(const String& string,
+    const Decimal& fallbackValue)
 {
-    // http://www.whatwg.org/specs/web-apps/current-work/#floating-point-numbers and parseToDoubleForNumberType
-    // String::toDouble() accepts leading + and whitespace characters, which are not valid here.
+    // http://www.whatwg.org/specs/web-apps/current-work/#floating-point-numbers
+    // and parseToDoubleForNumberType String::toDouble() accepts leading + and
+    // whitespace characters, which are not valid here.
     const UChar firstCharacter = string[0];
     if (firstCharacter != '-' && firstCharacter != '.' && !isASCIIDigit(firstCharacter))
         return fallbackValue;
@@ -105,7 +114,8 @@ Decimal parseToDecimalForNumberType(const String& string, const Decimal& fallbac
     if (!value.isFinite())
         return fallbackValue;
 
-    // Numbers are considered finite IEEE 754 Double-precision floating point values.
+    // Numbers are considered finite IEEE 754 Double-precision floating point
+    // values.
     const Decimal doubleMax = Decimal::fromDouble(std::numeric_limits<double>::max());
     if (value < -doubleMax || value > doubleMax)
         return fallbackValue;
@@ -114,24 +124,18 @@ Decimal parseToDecimalForNumberType(const String& string, const Decimal& fallbac
     return value.isZero() ? Decimal(0) : value;
 }
 
-double parseToDoubleForNumberType(const String& string, double fallbackValue)
+static double checkDoubleValue(double value, bool valid, double fallbackValue)
 {
-    // http://www.whatwg.org/specs/web-apps/current-work/#floating-point-numbers
-    // String::toDouble() accepts leading + and whitespace characters, which are not valid here.
-    UChar firstCharacter = string[0];
-    if (firstCharacter != '-' && firstCharacter != '.' && !isASCIIDigit(firstCharacter))
-        return fallbackValue;
-
-    bool valid = false;
-    double value = string.toDouble(&valid);
     if (!valid)
         return fallbackValue;
 
-    // NaN and infinity are considered valid by String::toDouble, but not valid here.
-    if (!std::isfinite(value))
+    // NaN and infinity are considered valid by String::toDouble, but not valid
+    // here.
+    if (!std_isfinite(value))
         return fallbackValue;
 
-    // Numbers are considered finite IEEE 754 Double-precision floating point values.
+    // Numbers are considered finite IEEE 754 Double-precision floating point
+    // values.
     if (-std::numeric_limits<double>::max() > value || value > std::numeric_limits<double>::max())
         return fallbackValue;
 
@@ -139,11 +143,29 @@ double parseToDoubleForNumberType(const String& string, double fallbackValue)
     return value ? value : 0;
 }
 
+double parseToDoubleForNumberType(const String& string, double fallbackValue)
+{
+    // http://www.whatwg.org/specs/web-apps/current-work/#floating-point-numbers
+    // String::toDouble() accepts leading + and whitespace characters, which are
+    // not valid here.
+    UChar firstCharacter = string[0];
+    if (firstCharacter != '-' && firstCharacter != '.' && !isASCIIDigit(firstCharacter))
+        return fallbackValue;
+    if (string.endsWith('.'))
+        return fallbackValue;
+
+    bool valid = false;
+    double value = string.toDouble(&valid);
+    return checkDoubleValue(value, valid, fallbackValue);
+}
+
 template <typename CharacterType>
-static bool parseHTMLIntegerInternal(const CharacterType* position, const CharacterType* end, int& value)
+static bool parseHTMLIntegerInternal(const CharacterType* position,
+    const CharacterType* end,
+    int& value)
 {
     // Step 3
-    int sign = 1;
+    bool isNegative = false;
 
     // Step 4
     while (position < end) {
@@ -159,7 +181,7 @@ static bool parseHTMLIntegerInternal(const CharacterType* position, const Charac
 
     // Step 6
     if (*position == '-') {
-        sign = -1;
+        isNegative = true;
         ++position;
     } else if (*position == '+')
         ++position;
@@ -172,20 +194,21 @@ static bool parseHTMLIntegerInternal(const CharacterType* position, const Charac
         return false;
 
     // Step 8
-    StringBuilder digits;
-    while (position < end) {
-        if (!isASCIIDigit(*position))
-            break;
-        digits.append(*position++);
-    }
+    static const int intMax = std::numeric_limits<int>::max();
+    const int base = 10;
+    const int maxMultiplier = intMax / base;
 
+    unsigned temp = 0;
+    do {
+        int digitValue = *position - '0';
+        if (temp > maxMultiplier || (temp == maxMultiplier && digitValue > (intMax % base) + isNegative))
+            return false;
+        temp = temp * base + digitValue;
+        ++position;
+    } while (position < end && isASCIIDigit(*position));
     // Step 9
-    bool ok;
-    if (digits.is8Bit())
-        value = sign * charactersToIntStrict(digits.characters8(), digits.length(), &ok);
-    else
-        value = sign * charactersToIntStrict(digits.characters16(), digits.length(), &ok);
-    return ok;
+    value = isNegative ? (0 - temp) : temp;
+    return true;
 }
 
 // http://www.whatwg.org/specs/web-apps/current-work/#rules-for-parsing-integers
@@ -204,34 +227,52 @@ bool parseHTMLInteger(const String& input, int& value)
 }
 
 template <typename CharacterType>
-static bool parseHTMLNonNegativeIntegerInternal(const CharacterType* position, const CharacterType* end, unsigned& value)
+static bool parseHTMLNonNegativeIntegerInternal(const CharacterType* position,
+    const CharacterType* end,
+    unsigned& value)
 {
-    // Step 3
+    // This function is an implementation of the following algorithm:
+    // https://html.spec.whatwg.org/multipage/infrastructure.html#rules-for-parsing-non-negative-integers
+    // However, in order to support integers >= 2^31, we fold [1] into this.
+    // 'Step N' in the following comments refers to [1].
+    //
+    // [1]
+    // https://html.spec.whatwg.org/multipage/infrastructure.html#rules-for-parsing-integers
+
+    // Step 3: Let sign have the value "positive".
+    int sign = 1;
+
+    // Step 4: Skip whitespace.
     while (position < end) {
         if (!isHTMLSpace<CharacterType>(*position))
             break;
         ++position;
     }
 
-    // Step 4
+    // Step 5: If position is past the end of input, return an error.
     if (position == end)
         return false;
     ASSERT(position < end);
 
-    // Step 5
-    if (*position == '+')
+    // Step 6: If the character indicated by position (the first character) is a
+    // U+002D HYPHEN-MINUS character (-), ...
+    if (*position == '-') {
+        sign = -1;
         ++position;
+    } else if (*position == '+') {
+        ++position;
+    }
 
-    // Step 6
     if (position == end)
         return false;
     ASSERT(position < end);
 
-    // Step 7
+    // Step 7: If the character indicated by position is not an ASCII digit,
+    // then return an error.
     if (!isASCIIDigit(*position))
         return false;
 
-    // Step 8
+    // Step 8: Collect a sequence of characters ...
     StringBuilder digits;
     while (position < end) {
         if (!isASCIIDigit(*position))
@@ -239,21 +280,23 @@ static bool parseHTMLNonNegativeIntegerInternal(const CharacterType* position, c
         digits.append(*position++);
     }
 
-    // Step 9
     bool ok;
+    unsigned digitsValue;
     if (digits.is8Bit())
-        value = charactersToUIntStrict(digits.characters8(), digits.length(), &ok);
+        digitsValue = charactersToUIntStrict(digits.characters8(), digits.length(), &ok);
     else
-        value = charactersToUIntStrict(digits.characters16(), digits.length(), &ok);
-    return ok;
+        digitsValue = charactersToUIntStrict(digits.characters16(), digits.length(), &ok);
+    if (!ok)
+        return false;
+    if (sign < 0 && digitsValue != 0)
+        return false;
+    value = digitsValue;
+    return true;
 }
 
-
-// http://www.whatwg.org/specs/web-apps/current-work/#rules-for-parsing-non-negative-integers
+// https://html.spec.whatwg.org/multipage/infrastructure.html#rules-for-parsing-non-negative-integers
 bool parseHTMLNonNegativeInteger(const String& input, unsigned& value)
 {
-    // Step 1
-    // Step 2
     unsigned length = input.length();
     if (length && input.is8Bit()) {
         const LChar* start = input.characters8();
@@ -264,16 +307,64 @@ bool parseHTMLNonNegativeInteger(const String& input, unsigned& value)
     return parseHTMLNonNegativeIntegerInternal(start, start + length, value);
 }
 
+template <typename CharacterType>
+static bool isSpaceOrDelimiter(CharacterType c)
+{
+    return isHTMLSpace(c) || c == ',' || c == ';';
+}
+
+template <typename CharacterType>
+static bool isNotSpaceDelimiterOrNumberStart(CharacterType c)
+{
+    return !(isSpaceOrDelimiter(c) || isASCIIDigit(c) || c == '.' || c == '-');
+}
+
+template <typename CharacterType>
+static Vector<double> parseHTMLListOfFloatingPointNumbersInternal(
+    const CharacterType* position,
+    const CharacterType* end)
+{
+    Vector<double> numbers;
+    skipWhile<CharacterType, isSpaceOrDelimiter>(position, end);
+
+    while (position < end) {
+        skipWhile<CharacterType, isNotSpaceDelimiterOrNumberStart>(position, end);
+
+        const CharacterType* unparsedNumberStart = position;
+        skipUntil<CharacterType, isSpaceOrDelimiter>(position, end);
+
+        size_t parsedLength = 0;
+        double number = charactersToDouble(
+            unparsedNumberStart, position - unparsedNumberStart, parsedLength);
+        numbers.push_back(checkDoubleValue(number, parsedLength != 0, 0));
+
+        skipWhile<CharacterType, isSpaceOrDelimiter>(position, end);
+    }
+    return numbers;
+}
+
+// https://html.spec.whatwg.org/multipage/infrastructure.html#rules-for-parsing-a-list-of-floating-point-numbers
+Vector<double> parseHTMLListOfFloatingPointNumbers(const String& input)
+{
+    unsigned length = input.length();
+    if (!length || input.is8Bit())
+        return parseHTMLListOfFloatingPointNumbersInternal(
+            input.characters8(), input.characters8() + length);
+    return parseHTMLListOfFloatingPointNumbersInternal(
+        input.characters16(), input.characters16() + length);
+}
+
 static const char charsetString[] = "charset";
 static const size_t charsetLength = sizeof("charset") - 1;
 
+// https://html.spec.whatwg.org/multipage/infrastructure.html#extracting-character-encodings-from-meta-elements
 String extractCharset(const String& value)
 {
     size_t pos = 0;
     unsigned length = value.length();
 
     while (pos < length) {
-        pos = value.find(charsetString, pos, TextCaseInsensitive);
+        pos = value.find(charsetString, pos, TextCaseASCIIInsensitive);
         if (pos == kNotFound)
             break;
 
@@ -319,7 +410,8 @@ enum Mode {
     Pragma,
 };
 
-WTF::TextEncoding encodingFromMetaAttributes(const HTMLAttributeList& attributes)
+WTF::TextEncoding encodingFromMetaAttributes(
+    const HTMLAttributeList& attributes)
 {
     bool gotPragma = false;
     Mode mode = None;
@@ -369,8 +461,9 @@ bool threadSafeMatch(const String& localName, const QualifiedName& qName)
     return threadSafeEqual(localName.impl(), qName.localName().impl());
 }
 
-template<typename CharType>
-inline StringImpl* findStringIfStatic(const CharType* characters, unsigned length)
+template <typename CharType>
+inline StringImpl* findStringIfStatic(const CharType* characters,
+    unsigned length)
 {
     // We don't need to try hashing if we know the string is too long.
     if (length > StringImpl::highestStaticStringLength())
@@ -383,10 +476,10 @@ inline StringImpl* findStringIfStatic(const CharType* characters, unsigned lengt
     WTF::StaticStringsTable::const_iterator it = table.find(hash);
     if (it == table.end())
         return nullptr;
-    // It's possible to have hash collisions between arbitrary strings and
-    // known identifiers (e.g. "bvvfg" collides with "script").
-    // However ASSERTs in StringImpl::createStatic guard against there ever being collisions
-    // between static strings.
+    // It's possible to have hash collisions between arbitrary strings and known
+    // identifiers (e.g. "bvvfg" collides with "script"). However ASSERTs in
+    // StringImpl::createStatic guard against there ever being collisions between
+    // static strings.
     if (!equal(it->value, characters, length))
         return nullptr;
     return it->value;
@@ -400,7 +493,9 @@ String attemptStaticStringCreation(const LChar* characters, size_t size)
     return String(characters, size);
 }
 
-String attemptStaticStringCreation(const UChar* characters, size_t size, CharacterWidth width)
+String attemptStaticStringCreation(const UChar* characters,
+    size_t size,
+    CharacterWidth width)
 {
     String string(findStringIfStatic(characters, size));
     if (string.impl())
@@ -415,4 +510,4 @@ String attemptStaticStringCreation(const UChar* characters, size_t size, Charact
     return string;
 }
 
-}
+} // namespace blink

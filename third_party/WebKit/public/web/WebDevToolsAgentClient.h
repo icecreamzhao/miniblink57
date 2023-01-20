@@ -31,16 +31,11 @@
 #ifndef WebDevToolsAgentClient_h
 #define WebDevToolsAgentClient_h
 
-<<<<<<< HEAD
-=======
-#include "../platform/WebCString.h"
->>>>>>> miniblink49
 #include "../platform/WebCommon.h"
 #include "../platform/WebString.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 class WebLocalFrame;
 class WebString;
 
@@ -53,16 +48,6 @@ public:
         int callId,
         const WebString& response,
         const WebString& state) { }
-=======
-class WebString;
-struct WebDeviceEmulationParams;
-
-class WebDevToolsAgentClient {
-public:
-    // Sends response message over the protocol, update agent state on the browser side for
-    // potential re-attach. |callId| for notifications is 0, |state| for notifications is empty.
-    virtual void sendProtocolMessage(int callId, const WebString& response, const WebString& state) { }
->>>>>>> miniblink49
 
     // Returns process id.
     virtual long processId() { return -1; }
@@ -70,12 +55,8 @@ public:
     // Returns unique identifier of the entity within process.
     virtual int debuggerId() { return -1; }
 
-<<<<<<< HEAD
     // Resume the inspected renderer that is waiting for DevTools front-end to
     // initialize its state.
-=======
-    // Resume the inspected renderer that is waiting for DevTools front-end to initialize its state.
->>>>>>> miniblink49
     virtual void resumeStartup() { }
 
     class WebKitClientMessageLoop {
@@ -88,7 +69,6 @@ public:
     virtual void willEnterDebugLoop() { }
     virtual void didExitDebugLoop() { }
 
-<<<<<<< HEAD
     virtual bool requestDevToolsForFrame(WebLocalFrame*) { return false; }
 
     virtual void enableTracing(const WebString& categoryFilter) { }
@@ -96,11 +76,6 @@ public:
 
     virtual void setCPUThrottlingRate(double rate) { }
 
-=======
-    virtual void enableTracing(const WebString& categoryFilter) { }
-    virtual void disableTracing() { }
-
->>>>>>> miniblink49
 protected:
     ~WebDevToolsAgentClient() { }
 };

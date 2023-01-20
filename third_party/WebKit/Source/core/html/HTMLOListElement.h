@@ -29,10 +29,14 @@ namespace blink {
 
 class HTMLOListElement final : public HTMLElement {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     DECLARE_NODE_FACTORY(HTMLOListElement);
 
-    int start() const { return m_hasExplicitStart ? m_start : (m_isReversed ? itemCount() : 1); }
+    int start() const
+    {
+        return m_hasExplicitStart ? m_start : (m_isReversed ? itemCount() : 1);
+    }
     void setStart(int);
 
     bool isReversed() const { return m_isReversed; }
@@ -53,9 +57,11 @@ private:
 
     void recalculateItemCount();
 
-    void parseAttribute(const QualifiedName&, const AtomicString&) override;
+    void parseAttribute(const AttributeModificationParams&) override;
     bool isPresentationAttribute(const QualifiedName&) const override;
-    void collectStyleForPresentationAttribute(const QualifiedName&, const AtomicString&, MutableStylePropertySet*) override;
+    void collectStyleForPresentationAttribute(const QualifiedName&,
+        const AtomicString&,
+        MutableStylePropertySet*) override;
 
     int m_start;
     unsigned m_itemCount;

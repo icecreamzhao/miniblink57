@@ -8,15 +8,9 @@
 #ifndef GrTypes_DEFINED
 #define GrTypes_DEFINED
 
-<<<<<<< HEAD
 #include "GrConfig.h"
 #include "SkMath.h"
 #include "SkTypes.h"
-=======
-#include "SkTypes.h"
-#include "GrConfig.h"
-#include "SkMath.h"
->>>>>>> miniblink49
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -24,7 +18,6 @@
  * Defines overloaded bitwise operators to make it easier to use an enum as a
  * bitfield.
  */
-<<<<<<< HEAD
 #define GR_MAKE_BITFIELD_OPS(X)     \
     inline X operator|(X a, X b)    \
     {                               \
@@ -61,39 +54,6 @@
                                         \
     template <typename T>               \
     friend X operator&(X a, T b);       \
-=======
-#define GR_MAKE_BITFIELD_OPS(X) \
-    inline X operator | (X a, X b) { \
-        return (X) (+a | +b); \
-    } \
-    inline X& operator |= (X& a, X b) { \
-        return (a = a | b); \
-    } \
-    \
-    inline X operator & (X a, X b) { \
-        return (X) (+a & +b); \
-    } \
-    template <typename T> \
-    inline X operator & (T a, X b) { \
-        return (X) (+a & +b); \
-    } \
-    template <typename T> \
-    inline X operator & (X a, T b) { \
-        return (X) (+a & +b); \
-    } \
-
-#define GR_DECL_BITFIELD_OPS_FRIENDS(X) \
-    friend X operator | (X a, X b); \
-    friend X& operator |= (X& a, X b); \
-    \
-    friend X operator & (X a, X b); \
-    \
-    template <typename T> \
-    friend X operator & (T a, X b); \
-    \
-    template <typename T> \
-    friend X operator & (X a, T b); \
->>>>>>> miniblink49
 ////////////////////////////////////////////////////////////////////////////////
 
 // compile time versions of min/max
@@ -103,7 +63,6 @@
 /**
  *  divide, rounding up
  */
-<<<<<<< HEAD
 static inline int32_t GrIDivRoundUp(int x, int y)
 {
     SkASSERT(y > 0);
@@ -116,17 +75,6 @@ static inline uint32_t GrUIDivRoundUp(uint32_t x, uint32_t y)
 static inline size_t GrSizeDivRoundUp(size_t x, size_t y)
 {
     return (x + (y - 1)) / y;
-=======
-static inline int32_t GrIDivRoundUp(int x, int y) {
-    SkASSERT(y > 0);
-    return (x + (y-1)) / y;
-}
-static inline uint32_t GrUIDivRoundUp(uint32_t x, uint32_t y) {
-    return (x + (y-1)) / y;
-}
-static inline size_t GrSizeDivRoundUp(size_t x, size_t y) {
-    return (x + (y-1)) / y;
->>>>>>> miniblink49
 }
 
 // compile time, evaluates Y multiple times
@@ -135,100 +83,54 @@ static inline size_t GrSizeDivRoundUp(size_t x, size_t y) {
 /**
  *  align up
  */
-<<<<<<< HEAD
 static inline uint32_t GrUIAlignUp(uint32_t x, uint32_t alignment)
 {
     return GrUIDivRoundUp(x, alignment) * alignment;
 }
 static inline size_t GrSizeAlignUp(size_t x, size_t alignment)
 {
-=======
-static inline uint32_t GrUIAlignUp(uint32_t x, uint32_t alignment) {
-    return GrUIDivRoundUp(x, alignment) * alignment;
-}
-static inline size_t GrSizeAlignUp(size_t x, size_t alignment) {
->>>>>>> miniblink49
     return GrSizeDivRoundUp(x, alignment) * alignment;
 }
 
 // compile time, evaluates A multiple times
-<<<<<<< HEAD
 #define GR_CT_ALIGN_UP(X, A) (GR_CT_DIV_ROUND_UP((X), (A)) * (A))
-=======
-#define GR_CT_ALIGN_UP(X, A) (GR_CT_DIV_ROUND_UP((X),(A)) * (A))
->>>>>>> miniblink49
 
 /**
  * amount of pad needed to align up
  */
-<<<<<<< HEAD
 static inline uint32_t GrUIAlignUpPad(uint32_t x, uint32_t alignment)
 {
     return (alignment - x % alignment) % alignment;
 }
 static inline size_t GrSizeAlignUpPad(size_t x, size_t alignment)
 {
-=======
-static inline uint32_t GrUIAlignUpPad(uint32_t x, uint32_t alignment) {
-    return (alignment - x % alignment) % alignment;
-}
-static inline size_t GrSizeAlignUpPad(size_t x, size_t alignment) {
->>>>>>> miniblink49
     return (alignment - x % alignment) % alignment;
 }
 
 /**
  *  align down
  */
-<<<<<<< HEAD
 static inline uint32_t GrUIAlignDown(uint32_t x, uint32_t alignment)
 {
     return (x / alignment) * alignment;
 }
 static inline size_t GrSizeAlignDown(size_t x, uint32_t alignment)
 {
-=======
-static inline uint32_t GrUIAlignDown(uint32_t x, uint32_t alignment) {
-    return (x / alignment) * alignment;
-}
-static inline size_t GrSizeAlignDown(size_t x, uint32_t alignment) {
->>>>>>> miniblink49
     return (x / alignment) * alignment;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
-<<<<<<< HEAD
-=======
- *  Return the next power of 2 >= n.
- */
-static inline uint32_t GrNextPow2(uint32_t n) {
-    return n ? (1 << (32 - SkCLZ(n - 1))) : 1;
-}
-
-static inline int GrNextPow2(int n) {
-    SkASSERT(n >= 0); // this impl only works for non-neg.
-    return n ? (1 << (32 - SkCLZ(n - 1))) : 1;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-/**
->>>>>>> miniblink49
  * Possible 3D APIs that may be used by Ganesh.
  */
 enum GrBackend {
     kOpenGL_GrBackend,
-<<<<<<< HEAD
     kVulkan_GrBackend,
 
     kLast_GrBackend = kVulkan_GrBackend
 };
 const int kBackendCount = kLast_GrBackend + 1;
-=======
-};
->>>>>>> miniblink49
 
 /**
  * Backend-specific 3D context handle
@@ -246,16 +148,11 @@ enum GrPrimitiveType {
     kTriangleStrip_GrPrimitiveType,
     kTriangleFan_GrPrimitiveType,
     kPoints_GrPrimitiveType,
-<<<<<<< HEAD
     kLines_GrPrimitiveType, // 1 pix wide only
-=======
-    kLines_GrPrimitiveType,     // 1 pix wide only
->>>>>>> miniblink49
     kLineStrip_GrPrimitiveType, // 1 pix wide only
     kLast_GrPrimitiveType = kLineStrip_GrPrimitiveType
 };
 
-<<<<<<< HEAD
 static inline bool GrIsPrimTypeLines(GrPrimitiveType type)
 {
     return kLines_GrPrimitiveType == type || kLineStrip_GrPrimitiveType == type;
@@ -264,16 +161,6 @@ static inline bool GrIsPrimTypeLines(GrPrimitiveType type)
 static inline bool GrIsPrimTypeTris(GrPrimitiveType type)
 {
     return kTriangles_GrPrimitiveType == type || kTriangleStrip_GrPrimitiveType == type || kTriangleFan_GrPrimitiveType == type;
-=======
-static inline bool GrIsPrimTypeLines(GrPrimitiveType type) {
-    return kLines_GrPrimitiveType == type || kLineStrip_GrPrimitiveType == type;
-}
-
-static inline bool GrIsPrimTypeTris(GrPrimitiveType type) {
-    return kTriangles_GrPrimitiveType == type     ||
-           kTriangleStrip_GrPrimitiveType == type ||
-           kTriangleFan_GrPrimitiveType == type;
->>>>>>> miniblink49
 }
 
 /**
@@ -281,15 +168,9 @@ static inline bool GrIsPrimTypeTris(GrPrimitiveType type) {
  *  Important that these are 0-based.
  */
 enum GrMaskFormat {
-<<<<<<< HEAD
     kA8_GrMaskFormat, //!< 1-byte per pixel
     kA565_GrMaskFormat, //!< 2-bytes per pixel, RGB represent 3-channel LCD coverage
     kARGB_GrMaskFormat, //!< 4-bytes per pixel, color format
-=======
-    kA8_GrMaskFormat,    //!< 1-byte per pixel
-    kA565_GrMaskFormat,  //!< 2-bytes per pixel, RGB represent 3-channel LCD coverage
-    kARGB_GrMaskFormat,  //!< 4-bytes per pixel, color format
->>>>>>> miniblink49
 
     kLast_GrMaskFormat = kARGB_GrMaskFormat
 };
@@ -298,33 +179,19 @@ static const int kMaskFormatCount = kLast_GrMaskFormat + 1;
 /**
  *  Return the number of bytes-per-pixel for the specified mask format.
  */
-<<<<<<< HEAD
 static inline int GrMaskFormatBytesPerPixel(GrMaskFormat format)
 {
     SkASSERT(format < kMaskFormatCount);
-=======
-static inline int GrMaskFormatBytesPerPixel(GrMaskFormat format) {
-    SkASSERT((unsigned)format < kMaskFormatCount);
->>>>>>> miniblink49
     // kA8   (0) -> 1
     // kA565 (1) -> 2
     // kARGB (2) -> 4
     static const int sBytesPerPixel[] = { 1, 2, 4 };
-<<<<<<< HEAD
     static_assert(SK_ARRAY_COUNT(sBytesPerPixel) == kMaskFormatCount, "array_size_mismatch");
     static_assert(kA8_GrMaskFormat == 0, "enum_order_dependency");
     static_assert(kA565_GrMaskFormat == 1, "enum_order_dependency");
     static_assert(kARGB_GrMaskFormat == 2, "enum_order_dependency");
 
     return sBytesPerPixel[(int)format];
-=======
-    SK_COMPILE_ASSERT(SK_ARRAY_COUNT(sBytesPerPixel) == kMaskFormatCount, array_size_mismatch);
-    SK_COMPILE_ASSERT(kA8_GrMaskFormat == 0, enum_order_dependency);
-    SK_COMPILE_ASSERT(kA565_GrMaskFormat == 1, enum_order_dependency);
-    SK_COMPILE_ASSERT(kARGB_GrMaskFormat == 2, enum_order_dependency);
-
-    return sBytesPerPixel[(int) format];
->>>>>>> miniblink49
 }
 
 /**
@@ -352,13 +219,10 @@ enum GrPixelConfig {
      */
     kSRGBA_8888_GrPixelConfig,
     /**
-<<<<<<< HEAD
      * Premultiplied and sRGB. Byte order is b,g,r,a.
      */
     kSBGRA_8888_GrPixelConfig,
     /**
-=======
->>>>>>> miniblink49
      * ETC1 Compressed Data
      */
     kETC1_GrPixelConfig,
@@ -405,7 +269,6 @@ static const int kGrPixelConfigCnt = kLast_GrPixelConfig + 1;
 
 // Aliases for pixel configs that match skia's byte order.
 #ifndef SK_CPU_LENDIAN
-<<<<<<< HEAD
 #error "Skia gpu currently assumes little endian"
 #endif
 #if SK_PMCOLOR_BYTE_ORDER(B, G, R, A)
@@ -416,21 +279,10 @@ static const GrPixelConfig kSkia8888_GrPixelConfig = kRGBA_8888_GrPixelConfig;
 static const GrPixelConfig kSkiaGamma8888_GrPixelConfig = kSRGBA_8888_GrPixelConfig;
 #else
 #error "SK_*32_SHIFT values must correspond to GL_BGRA or GL_RGBA format."
-=======
-    #error "Skia gpu currently assumes little endian"
-#endif
-#if SK_PMCOLOR_BYTE_ORDER(B,G,R,A)
-    static const GrPixelConfig kSkia8888_GrPixelConfig = kBGRA_8888_GrPixelConfig;
-#elif SK_PMCOLOR_BYTE_ORDER(R,G,B,A)
-    static const GrPixelConfig kSkia8888_GrPixelConfig = kRGBA_8888_GrPixelConfig;
-#else
-    #error "SK_*32_SHIFT values must correspond to GL_BGRA or GL_RGBA format."
->>>>>>> miniblink49
 #endif
 
 // Returns true if the pixel config is a GPU-specific compressed format
 // representation.
-<<<<<<< HEAD
 static inline bool GrPixelConfigIsCompressed(GrPixelConfig config)
 {
     switch (config) {
@@ -442,23 +294,10 @@ static inline bool GrPixelConfigIsCompressed(GrPixelConfig config)
         return true;
     default:
         return false;
-=======
-static inline bool GrPixelConfigIsCompressed(GrPixelConfig config) {
-    switch (config) {
-        case kIndex_8_GrPixelConfig:
-        case kETC1_GrPixelConfig:
-        case kLATC_GrPixelConfig:
-        case kR11_EAC_GrPixelConfig:
-        case kASTC_12x12_GrPixelConfig:
-            return true;
-        default:
-            return false;
->>>>>>> miniblink49
     }
 }
 
 /** If the pixel config is compressed, return an equivalent uncompressed format. */
-<<<<<<< HEAD
 static inline GrPixelConfig GrMakePixelConfigUncompressed(GrPixelConfig config)
 {
     switch (config) {
@@ -472,25 +311,10 @@ static inline GrPixelConfig GrMakePixelConfigUncompressed(GrPixelConfig config)
     default:
         SkASSERT(!GrPixelConfigIsCompressed(config));
         return config;
-=======
-static inline GrPixelConfig GrMakePixelConfigUncompressed(GrPixelConfig config) {
-    switch (config) {
-        case kIndex_8_GrPixelConfig:
-        case kETC1_GrPixelConfig:
-        case kASTC_12x12_GrPixelConfig:
-            return kRGBA_8888_GrPixelConfig;
-        case kLATC_GrPixelConfig:
-        case kR11_EAC_GrPixelConfig:
-            return kAlpha_8_GrPixelConfig;
-        default:
-            SkASSERT(!GrPixelConfigIsCompressed(config));
-            return config;
->>>>>>> miniblink49
     }
 }
 
 // Returns true if the pixel config is 32 bits per pixel
-<<<<<<< HEAD
 static inline bool GrPixelConfigIs8888(GrPixelConfig config)
 {
     switch (config) {
@@ -514,22 +338,11 @@ static inline bool GrPixelConfigIsSRGB(GrPixelConfig config)
         return true;
     default:
         return false;
-=======
-static inline bool GrPixelConfigIs8888(GrPixelConfig config) {
-    switch (config) {
-        case kRGBA_8888_GrPixelConfig:
-        case kBGRA_8888_GrPixelConfig:
-        case kSRGBA_8888_GrPixelConfig:
-            return true;
-        default:
-            return false;
->>>>>>> miniblink49
     }
 }
 
 // Takes a config and returns the equivalent config with the R and B order
 // swapped if such a config exists. Otherwise, kUnknown_GrPixelConfig
-<<<<<<< HEAD
 static inline GrPixelConfig GrPixelConfigSwapRAndB(GrPixelConfig config)
 {
     switch (config) {
@@ -604,81 +417,6 @@ static inline bool GrPixelConfigIsFloatingPoint(GrPixelConfig config)
         return true;
     default:
         return false;
-=======
-static inline GrPixelConfig GrPixelConfigSwapRAndB(GrPixelConfig config) {
-    switch (config) {
-        case kBGRA_8888_GrPixelConfig:
-            return kRGBA_8888_GrPixelConfig;
-        case kRGBA_8888_GrPixelConfig:
-            return kBGRA_8888_GrPixelConfig;
-        default:
-            return kUnknown_GrPixelConfig;
-    }
-}
-
-static inline size_t GrBytesPerPixel(GrPixelConfig config) {
-    SkASSERT(!GrPixelConfigIsCompressed(config));
-    switch (config) {
-        case kAlpha_8_GrPixelConfig:
-            return 1;
-        case kRGB_565_GrPixelConfig:
-        case kRGBA_4444_GrPixelConfig:
-        case kAlpha_half_GrPixelConfig:
-            return 2;
-        case kRGBA_8888_GrPixelConfig:
-        case kBGRA_8888_GrPixelConfig:
-        case kSRGBA_8888_GrPixelConfig:
-            return 4;
-        case kRGBA_half_GrPixelConfig:
-            return 8;
-        case kRGBA_float_GrPixelConfig:
-            return 16;
-        default:
-            return 0;
-    }
-}
-
-static inline size_t GrUnpackAlignment(GrPixelConfig config) {
-    SkASSERT(!GrPixelConfigIsCompressed(config));
-    switch (config) {
-        case kAlpha_8_GrPixelConfig:
-            return 1;
-        case kRGB_565_GrPixelConfig:
-        case kRGBA_4444_GrPixelConfig:
-        case kAlpha_half_GrPixelConfig:
-        case kRGBA_half_GrPixelConfig:
-            return 2;
-        case kRGBA_8888_GrPixelConfig:
-        case kBGRA_8888_GrPixelConfig:
-        case kSRGBA_8888_GrPixelConfig:
-        case kRGBA_float_GrPixelConfig:
-            return 4;
-        default:
-            return 0;
-    }
-}
-
-static inline bool GrPixelConfigIsOpaque(GrPixelConfig config) {
-    switch (config) {
-        case kETC1_GrPixelConfig:
-        case kRGB_565_GrPixelConfig:
-            return true;
-        default:
-            return false;
-    }
-}
-
-static inline bool GrPixelConfigIsAlphaOnly(GrPixelConfig config) {
-    switch (config) {
-        case kR11_EAC_GrPixelConfig:
-        case kLATC_GrPixelConfig:
-        case kASTC_12x12_GrPixelConfig:
-        case kAlpha_8_GrPixelConfig:
-        case kAlpha_half_GrPixelConfig:
-            return true;
-        default:
-            return false;
->>>>>>> miniblink49
     }
 }
 
@@ -686,43 +424,28 @@ static inline bool GrPixelConfigIsAlphaOnly(GrPixelConfig config) {
  * Optional bitfield flags that can be set on GrSurfaceDesc (below).
  */
 enum GrSurfaceFlags {
-<<<<<<< HEAD
     kNone_GrSurfaceFlags = 0x0,
-=======
-    kNone_GrSurfaceFlags            = 0x0,
->>>>>>> miniblink49
     /**
      * Creates a texture that can be rendered to as a GrRenderTarget. Use
      * GrTexture::asRenderTarget() to access.
      */
-<<<<<<< HEAD
     kRenderTarget_GrSurfaceFlag = 0x1,
     /**
      * Placeholder for managing zero-copy textures
      */
     kZeroCopy_GrSurfaceFlag = 0x2,
-=======
-    kRenderTarget_GrSurfaceFlag     = 0x1,
->>>>>>> miniblink49
     /**
      * Indicates that all allocations (color buffer, FBO completeness, etc)
      * should be verified.
      */
-<<<<<<< HEAD
     kCheckAllocation_GrSurfaceFlag = 0x4,
-=======
-    kCheckAllocation_GrSurfaceFlag  = 0x4,
->>>>>>> miniblink49
 };
 
 GR_MAKE_BITFIELD_OPS(GrSurfaceFlags)
 
-<<<<<<< HEAD
 // opaque type for 3D API object handles
 typedef intptr_t GrBackendObject;
 
-=======
->>>>>>> miniblink49
 /**
  * Some textures will be stored such that the upper and left edges of the content meet at the
  * the origin (in texture coord space) and for other textures the lower and left edges meet at
@@ -731,29 +454,21 @@ typedef intptr_t GrBackendObject;
  */
 
 enum GrSurfaceOrigin {
-<<<<<<< HEAD
     kDefault_GrSurfaceOrigin, // DEPRECATED; to be removed
-=======
-    kDefault_GrSurfaceOrigin,         // DEPRECATED; to be removed
->>>>>>> miniblink49
     kTopLeft_GrSurfaceOrigin,
     kBottomLeft_GrSurfaceOrigin,
 };
 
-<<<<<<< HEAD
 struct GrMipLevel {
     const void* fPixels;
     size_t fRowBytes;
 };
 
-=======
->>>>>>> miniblink49
 /**
  * Describes a surface to be created.
  */
 struct GrSurfaceDesc {
     GrSurfaceDesc()
-<<<<<<< HEAD
         : fFlags(kNone_GrSurfaceFlags)
         , fOrigin(kDefault_GrSurfaceOrigin)
         , fWidth(0)
@@ -768,30 +483,12 @@ struct GrSurfaceDesc {
     GrSurfaceOrigin fOrigin; //!< origin of the texture
     int fWidth; //!< Width of the texture
     int fHeight; //!< Height of the texture
-=======
-    : fFlags(kNone_GrSurfaceFlags)
-    , fOrigin(kDefault_GrSurfaceOrigin)
-    , fWidth(0)
-    , fHeight(0)
-    , fConfig(kUnknown_GrPixelConfig)
-    , fSampleCnt(0) {
-    }
-
-    GrSurfaceFlags         fFlags;  //!< bitfield of TextureFlags
-    GrSurfaceOrigin        fOrigin; //!< origin of the texture
-    int                    fWidth;  //!< Width of the texture
-    int                    fHeight; //!< Height of the texture
->>>>>>> miniblink49
 
     /**
      * Format of source data of the texture. Not guaranteed to be the same as
      * internal format used by 3D API.
      */
-<<<<<<< HEAD
     GrPixelConfig fConfig;
-=======
-    GrPixelConfig          fConfig;
->>>>>>> miniblink49
 
     /**
      * The number of samples per pixel or 0 to disable full scene AA. This only
@@ -800,12 +497,8 @@ struct GrSurfaceDesc {
      * up to the next supported sample count, or down if it is larger than the
      * max supported count.
      */
-<<<<<<< HEAD
     int fSampleCnt;
     bool fIsMipMapped; //!< Indicates if the texture has mipmaps
-=======
-    int                    fSampleCnt;
->>>>>>> miniblink49
 };
 
 // Legacy alias
@@ -821,13 +514,6 @@ enum GrClipType {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-<<<<<<< HEAD
-=======
-// opaque type for 3D API object handles
-typedef intptr_t GrBackendObject;
-
-
->>>>>>> miniblink49
 /** Ownership rules for external GPU resources imported into Skia. */
 enum GrWrapOwnership {
     /** Skia will assume the client will keep the resource alive and Skia will not free it. */
@@ -862,56 +548,32 @@ enum GrBackendTextureFlags {
     /**
      * No flags enabled
      */
-<<<<<<< HEAD
     kNone_GrBackendTextureFlag = 0,
-=======
-    kNone_GrBackendTextureFlag             = 0,
->>>>>>> miniblink49
     /**
      * Indicates that the texture is also a render target, and thus should have
      * a GrRenderTarget object.
      */
-<<<<<<< HEAD
     kRenderTarget_GrBackendTextureFlag = kRenderTarget_GrSurfaceFlag,
-=======
-    kRenderTarget_GrBackendTextureFlag     = kRenderTarget_GrSurfaceFlag,
->>>>>>> miniblink49
 };
 GR_MAKE_BITFIELD_OPS(GrBackendTextureFlags)
 
 struct GrBackendTextureDesc {
     GrBackendTextureDesc() { memset(this, 0, sizeof(*this)); }
-<<<<<<< HEAD
     GrBackendTextureFlags fFlags;
     GrSurfaceOrigin fOrigin;
     int fWidth; //<! width in pixels
     int fHeight; //<! height in pixels
     GrPixelConfig fConfig; //<! color format
-=======
-    GrBackendTextureFlags           fFlags;
-    GrSurfaceOrigin                 fOrigin;
-    int                             fWidth;         //<! width in pixels
-    int                             fHeight;        //<! height in pixels
-    GrPixelConfig                   fConfig;        //<! color format
->>>>>>> miniblink49
     /**
      * If the render target flag is set and sample count is greater than 0
      * then Gr will create an MSAA buffer that resolves to the texture.
      */
-<<<<<<< HEAD
     int fSampleCnt;
-=======
-    int                             fSampleCnt;
->>>>>>> miniblink49
     /**
      * Handle to the 3D API object.
      * OpenGL: Texture ID.
      */
-<<<<<<< HEAD
     GrBackendObject fTextureHandle;
-=======
-    GrBackendObject                 fTextureHandle;
->>>>>>> miniblink49
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -928,43 +590,24 @@ struct GrBackendTextureDesc {
 
 struct GrBackendRenderTargetDesc {
     GrBackendRenderTargetDesc() { memset(this, 0, sizeof(*this)); }
-<<<<<<< HEAD
     int fWidth; //<! width in pixels
     int fHeight; //<! height in pixels
     GrPixelConfig fConfig; //<! color format
     GrSurfaceOrigin fOrigin; //<! pixel origin
-=======
-    int                             fWidth;         //<! width in pixels
-    int                             fHeight;        //<! height in pixels
-    GrPixelConfig                   fConfig;        //<! color format
-    GrSurfaceOrigin                 fOrigin;        //<! pixel origin
->>>>>>> miniblink49
     /**
      * The number of samples per pixel. Gr uses this to influence decisions
      * about applying other forms of anti-aliasing.
      */
-<<<<<<< HEAD
     int fSampleCnt;
     /**
      * Number of bits of stencil per-pixel.
      */
     int fStencilBits;
-=======
-    int                             fSampleCnt;
-    /**
-     * Number of bits of stencil per-pixel.
-     */
-    int                             fStencilBits;
->>>>>>> miniblink49
     /**
      * Handle to the 3D API object.
      * OpenGL: FBO ID
      */
-<<<<<<< HEAD
     GrBackendObject fRenderTargetHandle;
-=======
-    GrBackendObject                 fRenderTargetHandle;
->>>>>>> miniblink49
 };
 
 /**
@@ -972,7 +615,6 @@ struct GrBackendRenderTargetDesc {
  * These enums are specific to the GL backend and we'd add a new set for an alternative backend.
  */
 enum GrGLBackendState {
-<<<<<<< HEAD
     kRenderTarget_GrGLBackendState = 1 << 0,
     kTextureBinding_GrGLBackendState = 1 << 1,
     // View state stands for scissor and viewport
@@ -987,39 +629,18 @@ enum GrGLBackendState {
     kMisc_GrGLBackendState = 1 << 10,
     kPathRendering_GrGLBackendState = 1 << 11,
     kALL_GrGLBackendState = 0xffff
-=======
-    kRenderTarget_GrGLBackendState     = 1 << 0,
-    kTextureBinding_GrGLBackendState   = 1 << 1,
-    // View state stands for scissor and viewport
-    kView_GrGLBackendState             = 1 << 2,
-    kBlend_GrGLBackendState            = 1 << 3,
-    kMSAAEnable_GrGLBackendState       = 1 << 4,
-    kVertex_GrGLBackendState           = 1 << 5,
-    kStencil_GrGLBackendState          = 1 << 6,
-    kPixelStore_GrGLBackendState       = 1 << 7,
-    kProgram_GrGLBackendState          = 1 << 8,
-    kFixedFunction_GrGLBackendState    = 1 << 9,
-    kMisc_GrGLBackendState             = 1 << 10,
-    kPathRendering_GrGLBackendState    = 1 << 11,
-    kALL_GrGLBackendState              = 0xffff
->>>>>>> miniblink49
 };
 
 /**
  * Returns the data size for the given compressed pixel config
  */
 static inline size_t GrCompressedFormatDataSize(GrPixelConfig config,
-<<<<<<< HEAD
     int width, int height)
 {
-=======
-                                                int width, int height) {
->>>>>>> miniblink49
     SkASSERT(GrPixelConfigIsCompressed(config));
     static const int kGrIndex8TableSize = 256 * 4; // 4 == sizeof(GrColor)
 
     switch (config) {
-<<<<<<< HEAD
     case kIndex_8_GrPixelConfig:
         return width * height + kGrIndex8TableSize;
     case kR11_EAC_GrPixelConfig:
@@ -1037,25 +658,6 @@ static inline size_t GrCompressedFormatDataSize(GrPixelConfig config,
     default:
         SkFAIL("Unknown compressed pixel config");
         return 4 * width * height;
-=======
-        case kIndex_8_GrPixelConfig:
-            return width * height + kGrIndex8TableSize;
-        case kR11_EAC_GrPixelConfig:
-        case kLATC_GrPixelConfig:
-        case kETC1_GrPixelConfig:
-            SkASSERT((width & 3) == 0);
-            SkASSERT((height & 3) == 0);
-            return (width >> 2) * (height >> 2) * 8;
-
-        case kASTC_12x12_GrPixelConfig:
-            SkASSERT((width % 12) == 0);
-            SkASSERT((height % 12) == 0);
-            return (width / 12) * (height / 12) * 16;
-
-        default:
-            SkFAIL("Unknown compressed pixel config");
-            return 4 * width * height;
->>>>>>> miniblink49
     }
 }
 

@@ -24,20 +24,14 @@
 #define FloatPoint3D_h
 
 #include "platform/geometry/FloatPoint.h"
-<<<<<<< HEAD
 #include "third_party/skia/include/core/SkPoint3.h"
 #include "wtf/Allocator.h"
-=======
->>>>>>> miniblink49
 
 namespace blink {
 
 class PLATFORM_EXPORT FloatPoint3D {
-<<<<<<< HEAD
     DISALLOW_NEW();
 
-=======
->>>>>>> miniblink49
 public:
     FloatPoint3D()
         : m_x(0)
@@ -94,14 +88,7 @@ public:
         m_z *= sz;
     }
 
-<<<<<<< HEAD
     bool isZero() const { return !m_x && !m_y && !m_z; }
-=======
-    bool isZero() const
-    {
-        return !m_x && !m_y && !m_z;
-    }
->>>>>>> miniblink49
 
     void normalize();
 
@@ -110,13 +97,8 @@ public:
         return m_x * a.x() + m_y * a.y() + m_z * a.z();
     }
 
-<<<<<<< HEAD
     // Compute the angle (in radians) between this and y.  If either vector is the
     // zero vector, return an angle of 0.
-=======
-    // Compute the angle (in radians) between this and y.  If either vector is the zero vector,
-    // return an angle of 0.
->>>>>>> miniblink49
     float angleBetween(const FloatPoint3D& y) const;
 
     // Sets this FloatPoint3D to the cross product of the passed two.
@@ -146,34 +128,23 @@ public:
 
     float distanceTo(const FloatPoint3D& a) const;
 
-<<<<<<< HEAD
     operator SkPoint3() const { return SkPoint3::Make(m_x, m_y, m_z); }
 
     String toString() const;
 
-=======
->>>>>>> miniblink49
 private:
     float m_x;
     float m_y;
     float m_z;
 };
 
-<<<<<<< HEAD
 inline FloatPoint3D& operator+=(FloatPoint3D& a, const FloatPoint3D& b)
-=======
-inline FloatPoint3D& operator +=(FloatPoint3D& a, const FloatPoint3D& b)
->>>>>>> miniblink49
 {
     a.move(b.x(), b.y(), b.z());
     return a;
 }
 
-<<<<<<< HEAD
 inline FloatPoint3D& operator-=(FloatPoint3D& a, const FloatPoint3D& b)
-=======
-inline FloatPoint3D& operator -=(FloatPoint3D& a, const FloatPoint3D& b)
->>>>>>> miniblink49
 {
     a.move(-b.x(), -b.y(), -b.z());
     return a;
@@ -220,13 +191,10 @@ inline float FloatPoint3D::distanceTo(const FloatPoint3D& a) const
     return (*this - a).length();
 }
 
-<<<<<<< HEAD
 // Redeclared here to avoid ODR issues.
 // See platform/testing/GeometryPrinters.h.
 void PrintTo(const FloatPoint3D&, std::ostream*);
 
-=======
->>>>>>> miniblink49
 } // namespace blink
 
 #endif // FloatPoint3D_h

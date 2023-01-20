@@ -36,33 +36,19 @@ namespace blink {
 struct WebLocalizedString {
     enum Name {
         AXAMPMFieldText,
-<<<<<<< HEAD
-=======
-        AXButtonActionVerb,
->>>>>>> miniblink49
         AXCalendarShowMonthSelector,
         AXCalendarShowNextMonth,
         AXCalendarShowPreviousMonth,
         AXCalendarWeekDescription,
-<<<<<<< HEAD
-=======
-        AXCheckedCheckBoxActionVerb,
-        AXDateTimeFieldEmptyValueText,
->>>>>>> miniblink49
         AXDayOfMonthFieldText,
         AXHeadingText, // Deprecated.
         AXHourFieldText,
         AXImageMapText, // Deprecated.
-<<<<<<< HEAD
-=======
-        AXLinkActionVerb,
->>>>>>> miniblink49
         AXLinkText, // Deprecated.
         AXListMarkerText, // Deprecated.
         AXMediaAudioElement,
         AXMediaAudioElementHelp,
         AXMediaAudioSliderHelp,
-<<<<<<< HEAD
         AXMediaCastOffButton,
         AXMediaCastOffButtonHelp,
         AXMediaCastOnButton,
@@ -71,15 +57,6 @@ struct WebLocalizedString {
         AXMediaCurrentTimeDisplayHelp,
         AXMediaDefault,
         AXMediaDownloadButton,
-=======
-        AxMediaCastOffButton,
-        AxMediaCastOffButtonHelp,
-        AxMediaCastOnButton,
-        AxMediaCastOnButtonHelp,
-        AXMediaCurrentTimeDisplay,
-        AXMediaCurrentTimeDisplayHelp,
-        AXMediaDefault,
->>>>>>> miniblink49
         AXMediaEnterFullscreenButton,
         AXMediaEnterFullscreenButtonHelp,
         AXMediaExitFullscreenButton,
@@ -88,11 +65,8 @@ struct WebLocalizedString {
         AXMediaHideClosedCaptionsButtonHelp,
         AXMediaMuteButton,
         AXMediaMuteButtonHelp,
-<<<<<<< HEAD
         AXMediaOverflowButton,
         AXMediaOverflowButtonHelp,
-=======
->>>>>>> miniblink49
         AXMediaPauseButton,
         AXMediaPauseButtonHelp,
         AXMediaPlayButton,
@@ -114,14 +88,7 @@ struct WebLocalizedString {
         AXMillisecondFieldText,
         AXMinuteFieldText,
         AXMonthFieldText,
-<<<<<<< HEAD
         AXSecondFieldText,
-=======
-        AXRadioButtonActionVerb,
-        AXSecondFieldText,
-        AXTextFieldActionVerb,
-        AXUncheckedCheckBoxActionVerb,
->>>>>>> miniblink49
         AXWebAreaText, // Deprecated.
         AXWeekOfYearFieldText,
         AXYearFieldText,
@@ -132,19 +99,11 @@ struct WebLocalizedString {
         DateFormatMonthLabel,
         DateFormatYearLabel,
         DetailsLabel,
-<<<<<<< HEAD
         DownloadButtonLabel,
-=======
->>>>>>> miniblink49
         FileButtonChooseFileLabel,
         FileButtonChooseMultipleFilesLabel,
         FileButtonNoFileSelectedLabel,
         InputElementAltText,
-<<<<<<< HEAD
-=======
-        KeygenMenuHighGradeKeySize,
-        KeygenMenuMediumGradeKeySize,
->>>>>>> miniblink49
         MissingPluginText,
         MultipleFileUploadText,
         OtherColorLabel,
@@ -152,7 +111,6 @@ struct WebLocalizedString {
         OtherMonthLabel,
         OtherTimeLabel,
         OtherWeekLabel,
-<<<<<<< HEAD
         OverflowMenuCaptions,
         OverflowMenuCast,
         OverflowMenuEnterFullscreen,
@@ -163,8 +121,6 @@ struct WebLocalizedString {
         OverflowMenuPlay,
         OverflowMenuPause,
         OverflowMenuDownload,
-=======
->>>>>>> miniblink49
         // PlaceholderForDayOfMonthField is for day placeholder text, e.g.
         // "dd", for date field used in multiple fields "date", "datetime", and
         // "datetime-local" input UI instead of "--".
@@ -184,11 +140,8 @@ struct WebLocalizedString {
         SearchMenuRecentSearchesText, // Deprecated.
         SelectMenuListText,
         SubmitButtonDefaultLabel,
-<<<<<<< HEAD
         TextTracksNoLabel,
         TextTracksOff,
-=======
->>>>>>> miniblink49
         ThisMonthButtonLabel,
         ThisWeekButtonLabel,
         ValidationBadInputForNumber,

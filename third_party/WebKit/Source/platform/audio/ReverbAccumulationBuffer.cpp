@@ -26,16 +26,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "platform/audio/ReverbAccumulationBuffer.h"
-=======
-#include "config.h"
-
-#if ENABLE(WEB_AUDIO)
-
-#include "platform/audio/ReverbAccumulationBuffer.h"
-
->>>>>>> miniblink49
 #include "platform/audio/VectorMath.h"
 
 namespace blink {
@@ -49,12 +40,8 @@ ReverbAccumulationBuffer::ReverbAccumulationBuffer(size_t length)
 {
 }
 
-<<<<<<< HEAD
 void ReverbAccumulationBuffer::readAndClear(float* destination,
     size_t numberOfFrames)
-=======
-void ReverbAccumulationBuffer::readAndClear(float* destination, size_t numberOfFrames)
->>>>>>> miniblink49
 {
     size_t bufferLength = m_buffer.size();
     bool isCopySafe = m_readIndex <= bufferLength && numberOfFrames <= bufferLength;
@@ -73,12 +60,8 @@ void ReverbAccumulationBuffer::readAndClear(float* destination, size_t numberOfF
 
     // Handle wrap-around if necessary
     if (numberOfFrames2 > 0) {
-<<<<<<< HEAD
         memcpy(destination + numberOfFrames1, source,
             sizeof(float) * numberOfFrames2);
-=======
-        memcpy(destination + numberOfFrames1, source, sizeof(float) * numberOfFrames2);
->>>>>>> miniblink49
         memset(source, 0, sizeof(float) * numberOfFrames2);
     }
 
@@ -86,25 +69,17 @@ void ReverbAccumulationBuffer::readAndClear(float* destination, size_t numberOfF
     m_readTimeFrame += numberOfFrames;
 }
 
-<<<<<<< HEAD
 void ReverbAccumulationBuffer::updateReadIndex(int* readIndex,
     size_t numberOfFrames) const
-=======
-void ReverbAccumulationBuffer::updateReadIndex(int* readIndex, size_t numberOfFrames) const
->>>>>>> miniblink49
 {
     // Update caller's readIndex
     *readIndex = (*readIndex + numberOfFrames) % m_buffer.size();
 }
 
-<<<<<<< HEAD
 int ReverbAccumulationBuffer::accumulate(float* source,
     size_t numberOfFrames,
     int* readIndex,
     size_t delayFrames)
-=======
-int ReverbAccumulationBuffer::accumulate(float* source, size_t numberOfFrames, int* readIndex, size_t delayFrames)
->>>>>>> miniblink49
 {
     size_t bufferLength = m_buffer.size();
 
@@ -124,7 +99,6 @@ int ReverbAccumulationBuffer::accumulate(float* source, size_t numberOfFrames, i
     if (!isSafe)
         return 0;
 
-<<<<<<< HEAD
     vadd(source, 1, destination + writeIndex, 1, destination + writeIndex, 1,
         numberOfFrames1);
 
@@ -132,13 +106,6 @@ int ReverbAccumulationBuffer::accumulate(float* source, size_t numberOfFrames, i
     if (numberOfFrames2 > 0)
         vadd(source + numberOfFrames1, 1, destination, 1, destination, 1,
             numberOfFrames2);
-=======
-    vadd(source, 1, destination + writeIndex, 1, destination + writeIndex, 1, numberOfFrames1);
-
-    // Handle wrap-around if necessary
-    if (numberOfFrames2 > 0)
-        vadd(source + numberOfFrames1, 1, destination, 1, destination, 1, numberOfFrames2);
->>>>>>> miniblink49
 
     return writeIndex;
 }
@@ -151,8 +118,3 @@ void ReverbAccumulationBuffer::reset()
 }
 
 } // namespace blink
-<<<<<<< HEAD
-=======
-
-#endif // ENABLE(WEB_AUDIO)
->>>>>>> miniblink49

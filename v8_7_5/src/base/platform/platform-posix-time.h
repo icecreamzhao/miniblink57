@@ -10,7 +10,6 @@
 namespace v8 {
 namespace base {
 
-<<<<<<< HEAD
     class PosixDefaultTimezoneCache : public PosixTimezoneCache {
     public:
         const char* LocalTimezone(double time_ms) override;
@@ -23,17 +22,3 @@ namespace base {
 } // namespace v8
 
 #endif // V8_BASE_PLATFORM_PLATFORM_POSIX_TIME_H_
-=======
-class PosixDefaultTimezoneCache : public PosixTimezoneCache {
- public:
-  const char* LocalTimezone(double time_ms) override;
-  double LocalTimeOffset(double time_ms, bool is_utc) override;
-
-  ~PosixDefaultTimezoneCache() override = default;
-};
-
-}  // namespace base
-}  // namespace v8
-
-#endif  // V8_BASE_PLATFORM_PLATFORM_POSIX_TIME_H_
->>>>>>> miniblink49

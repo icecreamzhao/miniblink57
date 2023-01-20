@@ -7,7 +7,6 @@
 #ifndef SkPDFCanon_DEFINED
 #define SkPDFCanon_DEFINED
 
-<<<<<<< HEAD
 #include "SkBitmapKey.h"
 #include "SkPDFGraphicState.h"
 #include "SkPDFShader.h"
@@ -20,30 +19,12 @@ class SkPDFFont;
 /**
  *  The SkPDFCanon canonicalizes objects across PDF pages
  *  (SkPDFDevices) and across draw calls.
-=======
-#include "SkPDFGraphicState.h"
-#include "SkPDFShader.h"
-#include "SkTDArray.h"
-#include "SkTHash.h"
-
-class SkBitmap;
-class SkPDFFont;
-class SkPDFBitmap;
-class SkPaint;
-
-/**
- *  The SkPDFCanon canonicalizes objects across PDF pages(SkPDFDevices).
->>>>>>> miniblink49
  *
  *  The PDF backend works correctly if:
  *  -  There is no more than one SkPDFCanon for each thread.
  *  -  Every SkPDFDevice is given a pointer to a SkPDFCanon on creation.
  *  -  All SkPDFDevices in a document share the same SkPDFCanon.
-<<<<<<< HEAD
  *  The SkPDFDocument class makes this happen by owning a single
-=======
- *  The SkDocument_PDF class makes this happen by owning a single
->>>>>>> miniblink49
  *  SkPDFCanon.
  *
  *  The addFoo() methods will ref the Foo; the canon's destructor will
@@ -59,21 +40,12 @@ public:
     // reset to original setting, unrefs all objects.
     void reset();
 
-<<<<<<< HEAD
     // Returns exact match if there is one.  If not, it returns nullptr.
     // If there is no exact match, but there is a related font, we
     // still return nullptr, but also set *relatedFont.
     SkPDFFont* findFont(uint32_t fontID,
         uint16_t glyphID,
         SkPDFFont** relatedFont) const;
-=======
-    // Returns exact match if there is one.  If not, it returns NULL.
-    // If there is no exact match, but there is a related font, we
-    // still return NULL, but also set *relatedFont.
-    SkPDFFont* findFont(uint32_t fontID,
-                        uint16_t glyphID,
-                        SkPDFFont** relatedFont) const;
->>>>>>> miniblink49
     void addFont(SkPDFFont* font, uint32_t fontID, uint16_t fGlyphID);
 
     SkPDFFunctionShader* findFunctionShader(const SkPDFShader::State&) const;
@@ -88,7 +60,6 @@ public:
     const SkPDFGraphicState* findGraphicState(const SkPDFGraphicState&) const;
     void addGraphicState(const SkPDFGraphicState*);
 
-<<<<<<< HEAD
     sk_sp<SkPDFObject> findPDFBitmap(SkBitmapKey key) const;
     void addPDFBitmap(SkBitmapKey key, sk_sp<SkPDFObject>);
 
@@ -103,10 +74,6 @@ public:
     sk_sp<SkPDFStream> makeInvertFunction();
     sk_sp<SkPDFDict> makeNoSmaskGraphicState();
     sk_sp<SkPDFArray> makeRangeObject();
-=======
-    SkPDFBitmap* findBitmap(const SkBitmap&) const;
-    void addBitmap(SkPDFBitmap*);
->>>>>>> miniblink49
 
 private:
     struct FontRec {
@@ -123,7 +90,6 @@ private:
     SkTDArray<SkPDFImageShader*> fImageShaderRecords;
 
     struct WrapGS {
-<<<<<<< HEAD
         explicit WrapGS(const SkPDFGraphicState* ptr = nullptr)
             : fPtr(ptr)
         {
@@ -131,16 +97,10 @@ private:
         const SkPDFGraphicState* fPtr;
         bool operator==(const WrapGS& rhs) const
         {
-=======
-        explicit WrapGS(const SkPDFGraphicState* ptr = NULL) : fPtr(ptr) {}
-        const SkPDFGraphicState* fPtr;
-        bool operator==(const WrapGS& rhs) const {
->>>>>>> miniblink49
             SkASSERT(fPtr);
             SkASSERT(rhs.fPtr);
             return *fPtr == *rhs.fPtr;
         }
-<<<<<<< HEAD
         struct Hash {
             uint32_t operator()(const WrapGS& w) const
             {
@@ -160,15 +120,3 @@ private:
     sk_sp<SkPDFArray> fRangeObject;
 };
 #endif // SkPDFCanon_DEFINED
-=======
-        static uint32_t Hash(const WrapGS& w) {
-            SkASSERT(w.fPtr);
-            return w.fPtr->hash();
-        }
-    };
-    SkTHashSet<WrapGS, WrapGS::Hash> fGraphicStateRecords;
-
-    SkTDArray<SkPDFBitmap*> fBitmapRecords;
-};
-#endif  // SkPDFCanon_DEFINED
->>>>>>> miniblink49

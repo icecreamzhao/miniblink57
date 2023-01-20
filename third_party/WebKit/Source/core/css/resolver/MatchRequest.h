@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
- * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc. All rights reserved.
+ * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc.
+ * All rights reserved.
  * Copyright (C) 2013 Google Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
@@ -32,10 +33,13 @@ class ContainerNode;
 
 class MatchRequest {
     STACK_ALLOCATED();
+
 public:
-    MatchRequest(RuleSet* ruleSet, bool includeEmptyRules = false, const ContainerNode* scope = 0, const CSSStyleSheet* cssSheet = 0, unsigned styleSheetIndex = 0)
+    MatchRequest(RuleSet* ruleSet,
+        const ContainerNode* scope = 0,
+        const CSSStyleSheet* cssSheet = 0,
+        unsigned styleSheetIndex = 0)
         : ruleSet(ruleSet)
-        , includeEmptyRules(includeEmptyRules)
         , scope(scope)
         , styleSheet(cssSheet)
         , styleSheetIndex(styleSheetIndex)
@@ -45,10 +49,9 @@ public:
         ruleSet->compactRulesIfNeeded();
     }
 
-    RawPtrWillBeMember<const RuleSet> ruleSet;
-    const bool includeEmptyRules;
-    RawPtrWillBeMember<const ContainerNode> scope;
-    RawPtrWillBeMember<const CSSStyleSheet> styleSheet;
+    Member<const RuleSet> ruleSet;
+    Member<const ContainerNode> scope;
+    Member<const CSSStyleSheet> styleSheet;
     const unsigned styleSheetIndex;
 };
 

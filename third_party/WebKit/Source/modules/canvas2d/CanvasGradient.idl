@@ -24,11 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 [
-<<<<<<< HEAD
     Exposed(Worker ExperimentalCanvasFeatures, Window StableBlinkFeatures),
-=======
-    GarbageCollected,
->>>>>>> miniblink49
 ] interface CanvasGradient {
 
     [RaisesException] void addColorStop(float offset, DOMString color);

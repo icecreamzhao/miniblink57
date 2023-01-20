@@ -38,18 +38,29 @@ enum SVGSpreadMethodType {
     SVGSpreadMethodReflect,
     SVGSpreadMethodRepeat
 };
-template<> const SVGEnumerationStringEntries& getStaticStringEntries<SVGSpreadMethodType>();
+template <>
+const SVGEnumerationStringEntries&
+getStaticStringEntries<SVGSpreadMethodType>();
 
-class SVGGradientElement : public SVGElement,
-                           public SVGURIReference {
+class SVGGradientElement : public SVGElement, public SVGURIReference {
     DEFINE_WRAPPERTYPEINFO();
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(SVGGradientElement);
+    USING_GARBAGE_COLLECTED_MIXIN(SVGGradientElement);
+
 public:
     Vector<Gradient::ColorStop> buildStops();
 
-    SVGAnimatedTransformList* gradientTransform() { return m_gradientTransform.get(); }
-    SVGAnimatedEnumeration<SVGSpreadMethodType>* spreadMethod() { return m_spreadMethod.get(); }
-    SVGAnimatedEnumeration<SVGUnitTypes::SVGUnitType>* gradientUnits() { return m_gradientUnits.get(); }
+    SVGAnimatedTransformList* gradientTransform()
+    {
+        return m_gradientTransform.get();
+    }
+    SVGAnimatedEnumeration<SVGSpreadMethodType>* spreadMethod()
+    {
+        return m_spreadMethod.get();
+    }
+    SVGAnimatedEnumeration<SVGUnitTypes::SVGUnitType>* gradientUnits()
+    {
+        return m_gradientUnits.get();
+    }
 
     DECLARE_VIRTUAL_TRACE();
 
@@ -61,11 +72,15 @@ protected:
 private:
     bool needsPendingResourceHandling() const final { return false; }
 
+    void collectStyleForPresentationAttribute(const QualifiedName&,
+        const AtomicString&,
+        MutableStylePropertySet*) override;
+
     void childrenChanged(const ChildrenChange&) final;
 
-    RefPtrWillBeMember<SVGAnimatedTransformList> m_gradientTransform;
-    RefPtrWillBeMember<SVGAnimatedEnumeration<SVGSpreadMethodType>> m_spreadMethod;
-    RefPtrWillBeMember<SVGAnimatedEnumeration<SVGUnitTypes::SVGUnitType>> m_gradientUnits;
+    Member<SVGAnimatedTransformList> m_gradientTransform;
+    Member<SVGAnimatedEnumeration<SVGSpreadMethodType>> m_spreadMethod;
+    Member<SVGAnimatedEnumeration<SVGUnitTypes::SVGUnitType>> m_gradientUnits;
 };
 
 inline bool isSVGGradientElement(const SVGElement& element)

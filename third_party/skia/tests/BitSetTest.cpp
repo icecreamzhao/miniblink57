@@ -8,12 +8,8 @@
 #include "SkBitSet.h"
 #include "Test.h"
 
-<<<<<<< HEAD
 DEF_TEST(BitSet, reporter)
 {
-=======
-DEF_TEST(BitSet, reporter) {
->>>>>>> miniblink49
     SkBitSet set0(65536);
     REPORTER_ASSERT(reporter, set0.isBitSet(0) == false);
     REPORTER_ASSERT(reporter, set0.isBitSet(32767) == false);
@@ -26,11 +22,7 @@ DEF_TEST(BitSet, reporter) {
     REPORTER_ASSERT(reporter, set0.isBitSet(22) == true);
     set0.setBit(24, true);
     REPORTER_ASSERT(reporter, set0.isBitSet(24) == true);
-<<<<<<< HEAD
     set0.setBit(35, true); // on a different DWORD
-=======
-    set0.setBit(35, true);  // on a different DWORD
->>>>>>> miniblink49
     REPORTER_ASSERT(reporter, set0.isBitSet(35) == true);
     set0.setBit(22, false);
     REPORTER_ASSERT(reporter, set0.isBitSet(22) == false);

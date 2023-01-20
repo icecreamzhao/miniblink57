@@ -32,14 +32,9 @@
 #define ServiceWorkerError_h
 
 #include "platform/heap/Handle.h"
-<<<<<<< HEAD
 #include "public/platform/modules/serviceworker/WebServiceWorkerError.h"
 
 #include <v8.h>
-=======
-#include "public/platform/WebServiceWorkerError.h"
-#include "wtf/PassOwnPtr.h"
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -47,7 +42,6 @@ class DOMException;
 class ScriptPromiseResolver;
 
 class ServiceWorkerError {
-<<<<<<< HEAD
     STATIC_ONLY(ServiceWorkerError);
 
 public:
@@ -64,16 +58,6 @@ public:
     // For CallbackPromiseAdapter
     static v8::Local<v8::Value> take(ScriptPromiseResolver* resolver,
         const WebServiceWorkerError& webError);
-=======
-public:
-    // For CallbackPromiseAdapter
-    typedef WebServiceWorkerError WebType;
-    static DOMException* take(ScriptPromiseResolver*, PassOwnPtr<WebType> webError);
-
-private:
-    WTF_MAKE_NONCOPYABLE(ServiceWorkerError);
-    ServiceWorkerError() = delete;
->>>>>>> miniblink49
 };
 
 } // namespace blink

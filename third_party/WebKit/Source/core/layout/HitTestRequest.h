@@ -23,11 +23,14 @@
 #ifndef HitTestRequest_h
 #define HitTestRequest_h
 
+#include "wtf/Allocator.h"
 #include "wtf/Assertions.h"
 
 namespace blink {
 
 class HitTestRequest {
+    DISALLOW_NEW();
+
 public:
     enum RequestType {
         ReadOnly = 1 << 1,
@@ -65,9 +68,15 @@ public:
     bool ignoreClipping() const { return m_requestType & IgnoreClipping; }
     bool svgClipContent() const { return m_requestType & SVGClipContent; }
     bool touchEvent() const { return m_requestType & TouchEvent; }
-    bool allowsChildFrameContent() const { return m_requestType & AllowChildFrameContent; }
+    bool allowsChildFrameContent() const
+    {
+        return m_requestType & AllowChildFrameContent;
+    }
     bool isChildFrameHitTest() const { return m_requestType & ChildFrameHitTest; }
-    bool ignorePointerEventsNone() const { return m_requestType & IgnorePointerEventsNone; }
+    bool ignorePointerEventsNone() const
+    {
+        return m_requestType & IgnorePointerEventsNone;
+    }
     bool listBased() const { return m_requestType & ListBased; }
     bool penetratingList() const { return m_requestType & PenetratingList; }
     bool avoidCache() const { return m_requestType & AvoidCache; }
@@ -78,9 +87,9 @@ public:
     HitTestRequestType type() const { return m_requestType; }
 
     // The Cacheability bits don't affect hit testing computation.
-    // TODO(dtapuska): These bits really shouldn't be fields on the HitTestRequest as
-    // they don't influence the result; but rather are hints on the output as to what to do.
-    // Perhaps move these fields to another enum ?
+    // TODO(dtapuska): These bits really shouldn't be fields on the HitTestRequest
+    // as they don't influence the result; but rather are hints on the output as
+    // to what to do. Perhaps move these fields to another enum?
     static const HitTestRequestType CacheabilityBits = ReadOnly | Active | Move | Release | TouchEvent;
     bool equalForCacheability(const HitTestRequest& value) const
     {

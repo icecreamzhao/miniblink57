@@ -19,16 +19,13 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/svg/SVGPreserveAspectRatio.h"
 
-#include "bindings/core/v8/ExceptionState.h"
-#include "bindings/core/v8/ExceptionStatePlaceholder.h"
-#include "core/dom/ExceptionCode.h"
 #include "core/svg/SVGAnimationElement.h"
 #include "core/svg/SVGParserUtilities.h"
 #include "platform/geometry/FloatRect.h"
 #include "platform/transforms/AffineTransform.h"
+#include "wtf/text/ParsingUtilities.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
@@ -40,174 +37,185 @@ SVGPreserveAspectRatio::SVGPreserveAspectRatio()
 
 void SVGPreserveAspectRatio::setDefault()
 {
-    m_align = SVG_PRESERVEASPECTRATIO_XMIDYMID;
-    m_meetOrSlice = SVG_MEETORSLICE_MEET;
+    m_align = kSvgPreserveaspectratioXmidymid;
+    m_meetOrSlice = kSvgMeetorsliceMeet;
 }
 
-PassRefPtrWillBeRawPtr<SVGPreserveAspectRatio> SVGPreserveAspectRatio::clone() const
+SVGPreserveAspectRatio* SVGPreserveAspectRatio::clone() const
 {
-    RefPtrWillBeRawPtr<SVGPreserveAspectRatio> preserveAspectRatio = create();
+    SVGPreserveAspectRatio* preserveAspectRatio = create();
 
     preserveAspectRatio->m_align = m_align;
     preserveAspectRatio->m_meetOrSlice = m_meetOrSlice;
 
-    return preserveAspectRatio.release();
+    return preserveAspectRatio;
 }
 
-template<typename CharType>
-bool SVGPreserveAspectRatio::parseInternal(const CharType*& ptr, const CharType* end, bool validate)
+template <typename CharType>
+SVGParsingError SVGPreserveAspectRatio::parseInternal(const CharType*& ptr,
+    const CharType* end,
+    bool validate)
 {
-    SVGPreserveAspectRatioType align = SVG_PRESERVEASPECTRATIO_XMIDYMID;
-    SVGMeetOrSliceType meetOrSlice = SVG_MEETORSLICE_MEET;
+    SVGPreserveAspectRatioType align = kSvgPreserveaspectratioXmidymid;
+    SVGMeetOrSliceType meetOrSlice = kSvgMeetorsliceMeet;
 
     setAlign(align);
     setMeetOrSlice(meetOrSlice);
 
+    const CharType* start = ptr;
     if (!skipOptionalSVGSpaces(ptr, end))
-        return false;
+        return SVGParsingError(SVGParseStatus::ExpectedEnumeration, ptr - start);
 
     if (*ptr == 'n') {
-        if (!skipString(ptr, end, "none"))
-            return false;
-        align = SVG_PRESERVEASPECTRATIO_NONE;
+        if (!skipToken(ptr, end, "none"))
+            return SVGParsingError(SVGParseStatus::ExpectedEnumeration, ptr - start);
+        align = kSvgPreserveaspectratioNone;
         skipOptionalSVGSpaces(ptr, end);
     } else if (*ptr == 'x') {
         if ((end - ptr) < 8)
-            return false;
+            return SVGParsingError(SVGParseStatus::ExpectedEnumeration, ptr - start);
         if (ptr[1] != 'M' || ptr[4] != 'Y' || ptr[5] != 'M')
-            return false;
+            return SVGParsingError(SVGParseStatus::ExpectedEnumeration, ptr - start);
         if (ptr[2] == 'i') {
             if (ptr[3] == 'n') {
                 if (ptr[6] == 'i') {
                     if (ptr[7] == 'n')
-                        align = SVG_PRESERVEASPECTRATIO_XMINYMIN;
+                        align = kSvgPreserveaspectratioXminymin;
                     else if (ptr[7] == 'd')
-                        align = SVG_PRESERVEASPECTRATIO_XMINYMID;
+                        align = kSvgPreserveaspectratioXminymid;
                     else
-                        return false;
+                        return SVGParsingError(SVGParseStatus::ExpectedEnumeration,
+                            ptr - start);
                 } else if (ptr[6] == 'a' && ptr[7] == 'x') {
-                    align = SVG_PRESERVEASPECTRATIO_XMINYMAX;
+                    align = kSvgPreserveaspectratioXminymax;
                 } else {
-                    return false;
+                    return SVGParsingError(SVGParseStatus::ExpectedEnumeration,
+                        ptr - start);
                 }
             } else if (ptr[3] == 'd') {
                 if (ptr[6] == 'i') {
                     if (ptr[7] == 'n')
-                        align = SVG_PRESERVEASPECTRATIO_XMIDYMIN;
+                        align = kSvgPreserveaspectratioXmidymin;
                     else if (ptr[7] == 'd')
-                        align = SVG_PRESERVEASPECTRATIO_XMIDYMID;
+                        align = kSvgPreserveaspectratioXmidymid;
                     else
-                        return false;
+                        return SVGParsingError(SVGParseStatus::ExpectedEnumeration,
+                            ptr - start);
                 } else if (ptr[6] == 'a' && ptr[7] == 'x') {
-                    align = SVG_PRESERVEASPECTRATIO_XMIDYMAX;
+                    align = kSvgPreserveaspectratioXmidymax;
                 } else {
-                    return false;
+                    return SVGParsingError(SVGParseStatus::ExpectedEnumeration,
+                        ptr - start);
                 }
             } else {
-                return false;
+                return SVGParsingError(SVGParseStatus::ExpectedEnumeration,
+                    ptr - start);
             }
         } else if (ptr[2] == 'a' && ptr[3] == 'x') {
             if (ptr[6] == 'i') {
                 if (ptr[7] == 'n')
-                    align = SVG_PRESERVEASPECTRATIO_XMAXYMIN;
+                    align = kSvgPreserveaspectratioXmaxymin;
                 else if (ptr[7] == 'd')
-                    align = SVG_PRESERVEASPECTRATIO_XMAXYMID;
+                    align = kSvgPreserveaspectratioXmaxymid;
                 else
-                    return false;
+                    return SVGParsingError(SVGParseStatus::ExpectedEnumeration,
+                        ptr - start);
             } else if (ptr[6] == 'a' && ptr[7] == 'x') {
-                align = SVG_PRESERVEASPECTRATIO_XMAXYMAX;
+                align = kSvgPreserveaspectratioXmaxymax;
             } else {
-                return false;
+                return SVGParsingError(SVGParseStatus::ExpectedEnumeration,
+                    ptr - start);
             }
         } else {
-            return false;
+            return SVGParsingError(SVGParseStatus::ExpectedEnumeration, ptr - start);
         }
         ptr += 8;
         skipOptionalSVGSpaces(ptr, end);
     } else {
-        return false;
+        return SVGParsingError(SVGParseStatus::ExpectedEnumeration, ptr - start);
     }
 
     if (ptr < end) {
         if (*ptr == 'm') {
-            if (!skipString(ptr, end, "meet"))
-                return false;
+            if (!skipToken(ptr, end, "meet"))
+                return SVGParsingError(SVGParseStatus::ExpectedEnumeration,
+                    ptr - start);
             skipOptionalSVGSpaces(ptr, end);
         } else if (*ptr == 's') {
-            if (!skipString(ptr, end, "slice"))
-                return false;
+            if (!skipToken(ptr, end, "slice"))
+                return SVGParsingError(SVGParseStatus::ExpectedEnumeration,
+                    ptr - start);
             skipOptionalSVGSpaces(ptr, end);
-            if (align != SVG_PRESERVEASPECTRATIO_NONE)
-                meetOrSlice = SVG_MEETORSLICE_SLICE;
+            if (align != kSvgPreserveaspectratioNone)
+                meetOrSlice = kSvgMeetorsliceSlice;
         }
     }
 
     if (end != ptr && validate)
-        return false;
+        return SVGParsingError(SVGParseStatus::TrailingGarbage, ptr - start);
 
     setAlign(align);
     setMeetOrSlice(meetOrSlice);
 
-    return true;
+    return SVGParseStatus::NoError;
 }
 
-void SVGPreserveAspectRatio::setValueAsString(const String& string, ExceptionState& exceptionState)
+SVGParsingError SVGPreserveAspectRatio::setValueAsString(const String& string)
 {
     setDefault();
 
     if (string.isEmpty())
-        return;
+        return SVGParseStatus::NoError;
 
-    bool valid = false;
     if (string.is8Bit()) {
         const LChar* ptr = string.characters8();
         const LChar* end = ptr + string.length();
-        valid = parseInternal(ptr, end, true);
-    } else {
-        const UChar* ptr = string.characters16();
-        const UChar* end = ptr + string.length();
-        valid = parseInternal(ptr, end, true);
+        return parseInternal(ptr, end, true);
     }
-
-    if (!valid) {
-        exceptionState.throwDOMException(SyntaxError, "The value provided ('" + string + "') is invalid.");
-    }
+    const UChar* ptr = string.characters16();
+    const UChar* end = ptr + string.length();
+    return parseInternal(ptr, end, true);
 }
 
-bool SVGPreserveAspectRatio::parse(const LChar*& ptr, const LChar* end, bool validate)
+bool SVGPreserveAspectRatio::parse(const LChar*& ptr,
+    const LChar* end,
+    bool validate)
 {
-    return parseInternal(ptr, end, validate);
+    return parseInternal(ptr, end, validate) == SVGParseStatus::NoError;
 }
 
-bool SVGPreserveAspectRatio::parse(const UChar*& ptr, const UChar* end, bool validate)
+bool SVGPreserveAspectRatio::parse(const UChar*& ptr,
+    const UChar* end,
+    bool validate)
 {
-    return parseInternal(ptr, end, validate);
+    return parseInternal(ptr, end, validate) == SVGParseStatus::NoError;
 }
 
-void SVGPreserveAspectRatio::transformRect(FloatRect& destRect, FloatRect& srcRect)
+void SVGPreserveAspectRatio::transformRect(FloatRect& destRect,
+    FloatRect& srcRect)
 {
-    if (m_align == SVG_PRESERVEASPECTRATIO_NONE)
+    if (m_align == kSvgPreserveaspectratioNone)
         return;
 
     FloatSize imageSize = srcRect.size();
     float origDestWidth = destRect.width();
     float origDestHeight = destRect.height();
     switch (m_meetOrSlice) {
-    case SVGPreserveAspectRatio::SVG_MEETORSLICE_UNKNOWN:
+    case SVGPreserveAspectRatio::kSvgMeetorsliceUnknown:
         break;
-    case SVGPreserveAspectRatio::SVG_MEETORSLICE_MEET: {
+    case SVGPreserveAspectRatio::kSvgMeetorsliceMeet: {
         float widthToHeightMultiplier = srcRect.height() / srcRect.width();
         if (origDestHeight > origDestWidth * widthToHeightMultiplier) {
             destRect.setHeight(origDestWidth * widthToHeightMultiplier);
             switch (m_align) {
-            case SVGPreserveAspectRatio::SVG_PRESERVEASPECTRATIO_XMINYMID:
-            case SVGPreserveAspectRatio::SVG_PRESERVEASPECTRATIO_XMIDYMID:
-            case SVGPreserveAspectRatio::SVG_PRESERVEASPECTRATIO_XMAXYMID:
+            case SVGPreserveAspectRatio::kSvgPreserveaspectratioXminymid:
+            case SVGPreserveAspectRatio::kSvgPreserveaspectratioXmidymid:
+            case SVGPreserveAspectRatio::kSvgPreserveaspectratioXmaxymid:
                 destRect.setY(destRect.y() + origDestHeight / 2 - destRect.height() / 2);
                 break;
-            case SVGPreserveAspectRatio::SVG_PRESERVEASPECTRATIO_XMINYMAX:
-            case SVGPreserveAspectRatio::SVG_PRESERVEASPECTRATIO_XMIDYMAX:
-            case SVGPreserveAspectRatio::SVG_PRESERVEASPECTRATIO_XMAXYMAX:
+            case SVGPreserveAspectRatio::kSvgPreserveaspectratioXminymax:
+            case SVGPreserveAspectRatio::kSvgPreserveaspectratioXmidymax:
+            case SVGPreserveAspectRatio::kSvgPreserveaspectratioXmaxymax:
                 destRect.setY(destRect.y() + origDestHeight - destRect.height());
                 break;
             default:
@@ -217,14 +225,14 @@ void SVGPreserveAspectRatio::transformRect(FloatRect& destRect, FloatRect& srcRe
         if (origDestWidth > origDestHeight / widthToHeightMultiplier) {
             destRect.setWidth(origDestHeight / widthToHeightMultiplier);
             switch (m_align) {
-            case SVGPreserveAspectRatio::SVG_PRESERVEASPECTRATIO_XMIDYMIN:
-            case SVGPreserveAspectRatio::SVG_PRESERVEASPECTRATIO_XMIDYMID:
-            case SVGPreserveAspectRatio::SVG_PRESERVEASPECTRATIO_XMIDYMAX:
+            case SVGPreserveAspectRatio::kSvgPreserveaspectratioXmidymin:
+            case SVGPreserveAspectRatio::kSvgPreserveaspectratioXmidymid:
+            case SVGPreserveAspectRatio::kSvgPreserveaspectratioXmidymax:
                 destRect.setX(destRect.x() + origDestWidth / 2 - destRect.width() / 2);
                 break;
-            case SVGPreserveAspectRatio::SVG_PRESERVEASPECTRATIO_XMAXYMIN:
-            case SVGPreserveAspectRatio::SVG_PRESERVEASPECTRATIO_XMAXYMID:
-            case SVGPreserveAspectRatio::SVG_PRESERVEASPECTRATIO_XMAXYMAX:
+            case SVGPreserveAspectRatio::kSvgPreserveaspectratioXmaxymin:
+            case SVGPreserveAspectRatio::kSvgPreserveaspectratioXmaxymid:
+            case SVGPreserveAspectRatio::kSvgPreserveaspectratioXmaxymax:
                 destRect.setX(destRect.x() + origDestWidth - destRect.width());
                 break;
             default:
@@ -233,40 +241,42 @@ void SVGPreserveAspectRatio::transformRect(FloatRect& destRect, FloatRect& srcRe
         }
         break;
     }
-    case SVGPreserveAspectRatio::SVG_MEETORSLICE_SLICE: {
+    case SVGPreserveAspectRatio::kSvgMeetorsliceSlice: {
         float widthToHeightMultiplier = srcRect.height() / srcRect.width();
-        // if the destination height is less than the height of the image we'll be drawing
+        // If the destination height is less than the height of the image we'll be
+        // drawing.
         if (origDestHeight < origDestWidth * widthToHeightMultiplier) {
             float destToSrcMultiplier = srcRect.width() / destRect.width();
             srcRect.setHeight(destRect.height() * destToSrcMultiplier);
             switch (m_align) {
-            case SVGPreserveAspectRatio::SVG_PRESERVEASPECTRATIO_XMINYMID:
-            case SVGPreserveAspectRatio::SVG_PRESERVEASPECTRATIO_XMIDYMID:
-            case SVGPreserveAspectRatio::SVG_PRESERVEASPECTRATIO_XMAXYMID:
+            case SVGPreserveAspectRatio::kSvgPreserveaspectratioXminymid:
+            case SVGPreserveAspectRatio::kSvgPreserveaspectratioXmidymid:
+            case SVGPreserveAspectRatio::kSvgPreserveaspectratioXmaxymid:
                 srcRect.setY(srcRect.y() + imageSize.height() / 2 - srcRect.height() / 2);
                 break;
-            case SVGPreserveAspectRatio::SVG_PRESERVEASPECTRATIO_XMINYMAX:
-            case SVGPreserveAspectRatio::SVG_PRESERVEASPECTRATIO_XMIDYMAX:
-            case SVGPreserveAspectRatio::SVG_PRESERVEASPECTRATIO_XMAXYMAX:
+            case SVGPreserveAspectRatio::kSvgPreserveaspectratioXminymax:
+            case SVGPreserveAspectRatio::kSvgPreserveaspectratioXmidymax:
+            case SVGPreserveAspectRatio::kSvgPreserveaspectratioXmaxymax:
                 srcRect.setY(srcRect.y() + imageSize.height() - srcRect.height());
                 break;
             default:
                 break;
             }
         }
-        // if the destination width is less than the width of the image we'll be drawing
+        // If the destination width is less than the width of the image we'll be
+        // drawing.
         if (origDestWidth < origDestHeight / widthToHeightMultiplier) {
             float destToSrcMultiplier = srcRect.height() / destRect.height();
             srcRect.setWidth(destRect.width() * destToSrcMultiplier);
             switch (m_align) {
-            case SVGPreserveAspectRatio::SVG_PRESERVEASPECTRATIO_XMIDYMIN:
-            case SVGPreserveAspectRatio::SVG_PRESERVEASPECTRATIO_XMIDYMID:
-            case SVGPreserveAspectRatio::SVG_PRESERVEASPECTRATIO_XMIDYMAX:
+            case SVGPreserveAspectRatio::kSvgPreserveaspectratioXmidymin:
+            case SVGPreserveAspectRatio::kSvgPreserveaspectratioXmidymid:
+            case SVGPreserveAspectRatio::kSvgPreserveaspectratioXmidymax:
                 srcRect.setX(srcRect.x() + imageSize.width() / 2 - srcRect.width() / 2);
                 break;
-            case SVGPreserveAspectRatio::SVG_PRESERVEASPECTRATIO_XMAXYMIN:
-            case SVGPreserveAspectRatio::SVG_PRESERVEASPECTRATIO_XMAXYMID:
-            case SVGPreserveAspectRatio::SVG_PRESERVEASPECTRATIO_XMAXYMAX:
+            case SVGPreserveAspectRatio::kSvgPreserveaspectratioXmaxymin:
+            case SVGPreserveAspectRatio::kSvgPreserveaspectratioXmaxymid:
+            case SVGPreserveAspectRatio::kSvgPreserveaspectratioXmaxymax:
                 srcRect.setX(srcRect.x() + imageSize.width() - srcRect.width());
                 break;
             default:
@@ -278,7 +288,12 @@ void SVGPreserveAspectRatio::transformRect(FloatRect& destRect, FloatRect& srcRe
     }
 }
 
-AffineTransform SVGPreserveAspectRatio::getCTM(float logicalX, float logicalY, float logicalWidth, float logicalHeight, float physicalWidth, float physicalHeight) const
+AffineTransform SVGPreserveAspectRatio::getCTM(float logicalX,
+    float logicalY,
+    float logicalWidth,
+    float logicalHeight,
+    float physicalWidth,
+    float physicalHeight) const
 {
     ASSERT(logicalWidth);
     ASSERT(logicalHeight);
@@ -286,7 +301,7 @@ AffineTransform SVGPreserveAspectRatio::getCTM(float logicalX, float logicalY, f
     ASSERT(physicalHeight);
 
     AffineTransform transform;
-    if (m_align == SVG_PRESERVEASPECTRATIO_UNKNOWN)
+    if (m_align == kSvgPreserveaspectratioUnknown)
         return transform;
 
     double extendedLogicalX = logicalX;
@@ -298,110 +313,135 @@ AffineTransform SVGPreserveAspectRatio::getCTM(float logicalX, float logicalY, f
     double logicalRatio = extendedLogicalWidth / extendedLogicalHeight;
     double physicalRatio = extendedPhysicalWidth / extendedPhysicalHeight;
 
-    if (m_align == SVG_PRESERVEASPECTRATIO_NONE) {
-        transform.scaleNonUniform(extendedPhysicalWidth / extendedLogicalWidth, extendedPhysicalHeight / extendedLogicalHeight);
+    if (m_align == kSvgPreserveaspectratioNone) {
+        transform.scaleNonUniform(extendedPhysicalWidth / extendedLogicalWidth,
+            extendedPhysicalHeight / extendedLogicalHeight);
         transform.translate(-extendedLogicalX, -extendedLogicalY);
         return transform;
     }
 
-    if ((logicalRatio < physicalRatio && (m_meetOrSlice == SVG_MEETORSLICE_MEET)) || (logicalRatio >= physicalRatio && (m_meetOrSlice == SVG_MEETORSLICE_SLICE))) {
-        transform.scaleNonUniform(extendedPhysicalHeight / extendedLogicalHeight, extendedPhysicalHeight / extendedLogicalHeight);
+    if ((logicalRatio < physicalRatio && (m_meetOrSlice == kSvgMeetorsliceMeet)) || (logicalRatio >= physicalRatio && (m_meetOrSlice == kSvgMeetorsliceSlice))) {
+        transform.scaleNonUniform(extendedPhysicalHeight / extendedLogicalHeight,
+            extendedPhysicalHeight / extendedLogicalHeight);
 
-        if (m_align == SVG_PRESERVEASPECTRATIO_XMINYMIN || m_align == SVG_PRESERVEASPECTRATIO_XMINYMID || m_align == SVG_PRESERVEASPECTRATIO_XMINYMAX)
+        if (m_align == kSvgPreserveaspectratioXminymin || m_align == kSvgPreserveaspectratioXminymid || m_align == kSvgPreserveaspectratioXminymax)
             transform.translate(-extendedLogicalX, -extendedLogicalY);
-        else if (m_align == SVG_PRESERVEASPECTRATIO_XMIDYMIN || m_align == SVG_PRESERVEASPECTRATIO_XMIDYMID || m_align == SVG_PRESERVEASPECTRATIO_XMIDYMAX)
-            transform.translate(-extendedLogicalX - (extendedLogicalWidth - extendedPhysicalWidth * extendedLogicalHeight / extendedPhysicalHeight) / 2, -extendedLogicalY);
+        else if (m_align == kSvgPreserveaspectratioXmidymin || m_align == kSvgPreserveaspectratioXmidymid || m_align == kSvgPreserveaspectratioXmidymax)
+            transform.translate(-extendedLogicalX - (extendedLogicalWidth - extendedPhysicalWidth * extendedLogicalHeight / extendedPhysicalHeight) / 2,
+                -extendedLogicalY);
         else
-            transform.translate(-extendedLogicalX - (extendedLogicalWidth - extendedPhysicalWidth * extendedLogicalHeight / extendedPhysicalHeight), -extendedLogicalY);
+            transform.translate(
+                -extendedLogicalX - (extendedLogicalWidth - extendedPhysicalWidth * extendedLogicalHeight / extendedPhysicalHeight),
+                -extendedLogicalY);
 
         return transform;
     }
 
-    transform.scaleNonUniform(extendedPhysicalWidth / extendedLogicalWidth, extendedPhysicalWidth / extendedLogicalWidth);
+    transform.scaleNonUniform(extendedPhysicalWidth / extendedLogicalWidth,
+        extendedPhysicalWidth / extendedLogicalWidth);
 
-    if (m_align == SVG_PRESERVEASPECTRATIO_XMINYMIN || m_align == SVG_PRESERVEASPECTRATIO_XMIDYMIN || m_align == SVG_PRESERVEASPECTRATIO_XMAXYMIN)
+    if (m_align == kSvgPreserveaspectratioXminymin || m_align == kSvgPreserveaspectratioXmidymin || m_align == kSvgPreserveaspectratioXmaxymin)
         transform.translate(-extendedLogicalX, -extendedLogicalY);
-    else if (m_align == SVG_PRESERVEASPECTRATIO_XMINYMID || m_align == SVG_PRESERVEASPECTRATIO_XMIDYMID || m_align == SVG_PRESERVEASPECTRATIO_XMAXYMID)
-        transform.translate(-extendedLogicalX, -extendedLogicalY - (extendedLogicalHeight - extendedPhysicalHeight * extendedLogicalWidth / extendedPhysicalWidth) / 2);
+    else if (m_align == kSvgPreserveaspectratioXminymid || m_align == kSvgPreserveaspectratioXmidymid || m_align == kSvgPreserveaspectratioXmaxymid)
+        transform.translate(-extendedLogicalX,
+            -extendedLogicalY - (extendedLogicalHeight - extendedPhysicalHeight * extendedLogicalWidth / extendedPhysicalWidth) / 2);
     else
-        transform.translate(-extendedLogicalX, -extendedLogicalY - (extendedLogicalHeight - extendedPhysicalHeight * extendedLogicalWidth / extendedPhysicalWidth));
+        transform.translate(
+            -extendedLogicalX,
+            -extendedLogicalY - (extendedLogicalHeight - extendedPhysicalHeight * extendedLogicalWidth / extendedPhysicalWidth));
 
     return transform;
 }
 
 String SVGPreserveAspectRatio::valueAsString() const
 {
-    String alignType;
+    StringBuilder builder;
 
+    const char* alignString = "";
     switch (m_align) {
-    case SVG_PRESERVEASPECTRATIO_NONE:
-        alignType = "none";
+    case kSvgPreserveaspectratioNone:
+        alignString = "none";
         break;
-    case SVG_PRESERVEASPECTRATIO_XMINYMIN:
-        alignType = "xMinYMin";
+    case kSvgPreserveaspectratioXminymin:
+        alignString = "xMinYMin";
         break;
-    case SVG_PRESERVEASPECTRATIO_XMIDYMIN:
-        alignType = "xMidYMin";
+    case kSvgPreserveaspectratioXmidymin:
+        alignString = "xMidYMin";
         break;
-    case SVG_PRESERVEASPECTRATIO_XMAXYMIN:
-        alignType = "xMaxYMin";
+    case kSvgPreserveaspectratioXmaxymin:
+        alignString = "xMaxYMin";
         break;
-    case SVG_PRESERVEASPECTRATIO_XMINYMID:
-        alignType = "xMinYMid";
+    case kSvgPreserveaspectratioXminymid:
+        alignString = "xMinYMid";
         break;
-    case SVG_PRESERVEASPECTRATIO_XMIDYMID:
-        alignType = "xMidYMid";
+    case kSvgPreserveaspectratioXmidymid:
+        alignString = "xMidYMid";
         break;
-    case SVG_PRESERVEASPECTRATIO_XMAXYMID:
-        alignType = "xMaxYMid";
+    case kSvgPreserveaspectratioXmaxymid:
+        alignString = "xMaxYMid";
         break;
-    case SVG_PRESERVEASPECTRATIO_XMINYMAX:
-        alignType = "xMinYMax";
+    case kSvgPreserveaspectratioXminymax:
+        alignString = "xMinYMax";
         break;
-    case SVG_PRESERVEASPECTRATIO_XMIDYMAX:
-        alignType = "xMidYMax";
+    case kSvgPreserveaspectratioXmidymax:
+        alignString = "xMidYMax";
         break;
-    case SVG_PRESERVEASPECTRATIO_XMAXYMAX:
-        alignType = "xMaxYMax";
+    case kSvgPreserveaspectratioXmaxymax:
+        alignString = "xMaxYMax";
         break;
-    case SVG_PRESERVEASPECTRATIO_UNKNOWN:
-        alignType = "unknown";
+    case kSvgPreserveaspectratioUnknown:
+        alignString = "unknown";
         break;
-    };
+    }
+    builder.append(alignString);
 
+    const char* meetOrSliceString = "";
     switch (m_meetOrSlice) {
     default:
-    case SVG_MEETORSLICE_UNKNOWN:
-        return alignType;
-    case SVG_MEETORSLICE_MEET:
-        return alignType + " meet";
-    case SVG_MEETORSLICE_SLICE:
-        return alignType + " slice";
+    case kSvgMeetorsliceUnknown:
+        break;
+    case kSvgMeetorsliceMeet:
+        meetOrSliceString = " meet";
+        break;
+    case kSvgMeetorsliceSlice:
+        meetOrSliceString = " slice";
+        break;
     }
+    builder.append(meetOrSliceString);
+    return builder.toString();
 }
 
-void SVGPreserveAspectRatio::add(PassRefPtrWillBeRawPtr<SVGPropertyBase> other, SVGElement*)
+void SVGPreserveAspectRatio::add(SVGPropertyBase* other, SVGElement*)
 {
     ASSERT_NOT_REACHED();
 }
 
-void SVGPreserveAspectRatio::calculateAnimatedValue(SVGAnimationElement* animationElement, float percentage, unsigned repeatCount, PassRefPtrWillBeRawPtr<SVGPropertyBase> fromValue, PassRefPtrWillBeRawPtr<SVGPropertyBase> toValue, PassRefPtrWillBeRawPtr<SVGPropertyBase>, SVGElement*)
+void SVGPreserveAspectRatio::calculateAnimatedValue(
+    SVGAnimationElement* animationElement,
+    float percentage,
+    unsigned repeatCount,
+    SVGPropertyBase* fromValue,
+    SVGPropertyBase* toValue,
+    SVGPropertyBase*,
+    SVGElement*)
 {
     ASSERT(animationElement);
 
     bool useToValue;
     animationElement->animateDiscreteType(percentage, false, true, useToValue);
 
-    RefPtrWillBeRawPtr<SVGPreserveAspectRatio> preserveAspectRatioToUse = useToValue ? toSVGPreserveAspectRatio(toValue) : toSVGPreserveAspectRatio(fromValue);
+    SVGPreserveAspectRatio* preserveAspectRatioToUse = useToValue ? toSVGPreserveAspectRatio(toValue)
+                                                                  : toSVGPreserveAspectRatio(fromValue);
 
     m_align = preserveAspectRatioToUse->m_align;
     m_meetOrSlice = preserveAspectRatioToUse->m_meetOrSlice;
 }
 
-float SVGPreserveAspectRatio::calculateDistance(PassRefPtrWillBeRawPtr<SVGPropertyBase> toValue, SVGElement* contextElement)
+float SVGPreserveAspectRatio::calculateDistance(SVGPropertyBase* toValue,
+    SVGElement* contextElement)
 {
     // No paced animations for SVGPreserveAspectRatio.
     return -1;
 }
 
-}
+} // namespace blink

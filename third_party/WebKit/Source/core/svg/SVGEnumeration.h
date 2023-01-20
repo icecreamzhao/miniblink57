@@ -31,11 +31,10 @@
 #ifndef SVGEnumeration_h
 #define SVGEnumeration_h
 
+#include "core/svg/SVGParsingError.h"
 #include "core/svg/properties/SVGProperty.h"
 
 namespace blink {
-
-class ExceptionState;
 
 class SVGEnumerationBase : public SVGPropertyBase {
 public:
@@ -48,31 +47,46 @@ public:
 
     ~SVGEnumerationBase() override;
 
-    unsigned short value() const { return m_value <= maxExposedEnumValue() ? m_value : 0; }
-    void setValue(unsigned short, ExceptionState&);
+    unsigned short value() const
+    {
+        return m_value <= maxExposedEnumValue() ? m_value : 0;
+    }
+    void setValue(unsigned short);
 
     // SVGPropertyBase:
-    virtual PassRefPtrWillBeRawPtr<SVGEnumerationBase> clone() const = 0;
-    PassRefPtrWillBeRawPtr<SVGPropertyBase> cloneForAnimation(const String&) const override;
+    virtual SVGEnumerationBase* clone() const = 0;
+    SVGPropertyBase* cloneForAnimation(const String&) const override;
 
     String valueAsString() const override;
-    void setValueAsString(const String&, ExceptionState&);
+    SVGParsingError setValueAsString(const String&);
 
-    void add(PassRefPtrWillBeRawPtr<SVGPropertyBase>, SVGElement*) override;
-    void calculateAnimatedValue(SVGAnimationElement*, float percentage, unsigned repeatCount, PassRefPtrWillBeRawPtr<SVGPropertyBase> from, PassRefPtrWillBeRawPtr<SVGPropertyBase> to, PassRefPtrWillBeRawPtr<SVGPropertyBase> toAtEndOfDurationValue, SVGElement*) override;
-    float calculateDistance(PassRefPtrWillBeRawPtr<SVGPropertyBase> to, SVGElement*) override;
+    void add(SVGPropertyBase*, SVGElement*) override;
+    void calculateAnimatedValue(SVGAnimationElement*,
+        float percentage,
+        unsigned repeatCount,
+        SVGPropertyBase* from,
+        SVGPropertyBase* to,
+        SVGPropertyBase* toAtEndOfDurationValue,
+        SVGElement*) override;
+    float calculateDistance(SVGPropertyBase* to, SVGElement*) override;
 
     static AnimatedPropertyType classType() { return AnimatedEnumeration; }
+    AnimatedPropertyType type() const override { return classType(); }
 
-    // Ensure that |SVGAnimatedEnumerationBase::setBaseVal| is used instead of |SVGAnimatedProperty<SVGEnumerationBase>::setBaseVal|.
-    void setValue(unsigned short) { ASSERT_NOT_REACHED(); }
+    static unsigned short valueOfLastEnum(const StringEntries& entries)
+    {
+        return entries.back().first;
+    }
 
-    static unsigned short valueOfLastEnum(const StringEntries& entries) { return entries.last().first; }
+    // This is the maximum value that is exposed as an IDL constant on the
+    // relevant interface.
+    unsigned short maxExposedEnumValue() const { return m_maxExposed; }
 
 protected:
-    SVGEnumerationBase(unsigned short value, const StringEntries& entries, unsigned short maxExposed)
-        : SVGPropertyBase(classType())
-        , m_value(value)
+    SVGEnumerationBase(unsigned short value,
+        const StringEntries& entries,
+        unsigned short maxExposed)
+        : m_value(value)
         , m_maxExposed(maxExposed)
         , m_entries(entries)
     {
@@ -80,10 +94,10 @@ protected:
 
     // This is the maximum value of all the internal enumeration values.
     // This assumes that |m_entries| are sorted.
-    unsigned short maxInternalEnumValue() const { return valueOfLastEnum(m_entries); }
-
-    // This is the maximum value that is exposed as an IDL constant on the relevant interface.
-    unsigned short maxExposedEnumValue() const { return m_maxExposed; }
+    unsigned short maxInternalEnumValue() const
+    {
+        return valueOfLastEnum(m_entries);
+    }
 
     // Used by SVGMarkerOrientEnumeration.
     virtual void notifyChange() { }
@@ -94,26 +108,25 @@ protected:
 };
 typedef SVGEnumerationBase::StringEntries SVGEnumerationStringEntries;
 
-template<typename Enum> const SVGEnumerationStringEntries& getStaticStringEntries();
-template<typename Enum> unsigned short getMaxExposedEnumValue()
+template <typename Enum>
+const SVGEnumerationStringEntries& getStaticStringEntries();
+template <typename Enum>
+unsigned short getMaxExposedEnumValue()
 {
     return SVGEnumerationBase::valueOfLastEnum(getStaticStringEntries<Enum>());
 }
 
-template<typename Enum>
+template <typename Enum>
 class SVGEnumeration : public SVGEnumerationBase {
 public:
-    static PassRefPtrWillBeRawPtr<SVGEnumeration<Enum>> create(Enum newValue)
+    static SVGEnumeration<Enum>* create(Enum newValue)
     {
-        return adoptRefWillBeNoop(new SVGEnumeration<Enum>(newValue));
+        return new SVGEnumeration<Enum>(newValue);
     }
 
-    ~SVGEnumeration() override {}
+    ~SVGEnumeration() override { }
 
-    PassRefPtrWillBeRawPtr<SVGEnumerationBase> clone() const override
-    {
-        return create(enumValue());
-    }
+    SVGEnumerationBase* clone() const override { return create(enumValue()); }
 
     Enum enumValue() const
     {
@@ -129,7 +142,9 @@ public:
 
 protected:
     explicit SVGEnumeration(Enum newValue)
-        : SVGEnumerationBase(newValue, getStaticStringEntries<Enum>(), getMaxExposedEnumValue<Enum>())
+        : SVGEnumerationBase(newValue,
+            getStaticStringEntries<Enum>(),
+            getMaxExposedEnumValue<Enum>())
     {
     }
 };

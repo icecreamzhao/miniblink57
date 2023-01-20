@@ -19,6 +19,8 @@ function setupPromises(scheduleMicrotasks) {
   });
 
   function unhandledRejection(promise, reason) {
+    mbConsoleLog("__callstack__ unhandledRejection:" + reason);
+    alert("unhandledRejection");
     hasBeenNotifiedProperty.set(promise, false);
     promiseToGuidProperty.set(promise, lastPromiseId++);
     addPendingUnhandledRejection(promise, reason);

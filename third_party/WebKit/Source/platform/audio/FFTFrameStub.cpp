@@ -25,17 +25,9 @@
 
 // FFTFrame stub implementation to avoid link errors during bringup
 
-<<<<<<< HEAD
 #include "wtf/build_config.h"
 
 #if !OS(MACOSX) && !USE(WEBAUDIO_FFMPEG) && !USE(WEBAUDIO_OPENMAX_DL_FFT)
-=======
-#include "config.h"
-
-#if ENABLE(WEB_AUDIO)
-
-#if !OS(MACOSX) && !USE(WEBAUDIO_FFMPEG) && !USE(WEBAUDIO_IPP) && !USE(WEBAUDIO_OPENMAX_DL_FFT)
->>>>>>> miniblink49
 
 #include "platform/audio/FFTFrame.h"
 
@@ -46,11 +38,7 @@ FFTFrame::FFTFrame(unsigned /*fftSize*/)
     : m_FFTSize(0)
     , m_log2FFTSize(0)
 {
-<<<<<<< HEAD
     NOTREACHED();
-=======
-    ASSERT_NOT_REACHED();
->>>>>>> miniblink49
 }
 
 // Creates a blank/empty frame (interpolate() must later be called).
@@ -58,11 +46,7 @@ FFTFrame::FFTFrame()
     : m_FFTSize(0)
     , m_log2FFTSize(0)
 {
-<<<<<<< HEAD
     NOTREACHED();
-=======
-    ASSERT_NOT_REACHED();
->>>>>>> miniblink49
 }
 
 // Copy constructor.
@@ -70,34 +54,21 @@ FFTFrame::FFTFrame(const FFTFrame& frame)
     : m_FFTSize(frame.m_FFTSize)
     , m_log2FFTSize(frame.m_log2FFTSize)
 {
-<<<<<<< HEAD
     NOTREACHED();
-=======
-    ASSERT_NOT_REACHED();
->>>>>>> miniblink49
 }
 
 FFTFrame::~FFTFrame()
 {
-<<<<<<< HEAD
     NOTREACHED();
-=======
-    ASSERT_NOT_REACHED();
->>>>>>> miniblink49
 }
 
 void FFTFrame::doFFT(const float* data)
 {
-<<<<<<< HEAD
     NOTREACHED();
-=======
-    ASSERT_NOT_REACHED();
->>>>>>> miniblink49
 }
 
 void FFTFrame::doInverseFFT(float* data)
 {
-<<<<<<< HEAD
     NOTREACHED();
 }
 
@@ -106,26 +77,8 @@ void FFTFrame::initialize() { }
 void FFTFrame::cleanup()
 {
     NOTREACHED();
-=======
-    ASSERT_NOT_REACHED();
-}
-
-void FFTFrame::initialize()
-{
-}
-
-void FFTFrame::cleanup()
-{
-    ASSERT_NOT_REACHED();
->>>>>>> miniblink49
 }
 
 } // namespace blink
 
-<<<<<<< HEAD
 #endif // !OS(MACOSX) && !USE(WEBAUDIO_FFMPEG) && !USE(WEBAUDIO_OPENMAX_DL_FFT)
-=======
-#endif // !OS(MACOSX) && !USE(WEBAUDIO_FFMPEG) && !USE(WEBAUDIO_IPP) && !USE(WEBAUDIO_OPENMAX_DL_FFT)
-
-#endif // ENABLE(WEB_AUDIO)
->>>>>>> miniblink49

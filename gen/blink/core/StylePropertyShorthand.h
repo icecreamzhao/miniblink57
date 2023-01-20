@@ -28,40 +28,31 @@
 namespace blink {
 
 class StylePropertyShorthand {
-    WTF_MAKE_FAST_ALLOCATED(StylePropertyShorthand);
+    USING_FAST_MALLOC(StylePropertyShorthand);
+
 public:
     StylePropertyShorthand()
         : m_properties(0)
-        , m_propertiesForInitialization(0)
         , m_length(0)
         , m_shorthandID(CSSPropertyInvalid)
     {
     }
 
-    StylePropertyShorthand(CSSPropertyID id, const CSSPropertyID* properties, unsigned numProperties)
+    StylePropertyShorthand(CSSPropertyID id,
+        const CSSPropertyID* properties,
+        unsigned numProperties)
         : m_properties(properties)
-        , m_propertiesForInitialization(0)
-        , m_length(numProperties)
-        , m_shorthandID(id)
-    {
-    }
-
-    StylePropertyShorthand(CSSPropertyID id, const CSSPropertyID* properties, const StylePropertyShorthand** propertiesForInitialization, unsigned numProperties)
-        : m_properties(properties)
-        , m_propertiesForInitialization(propertiesForInitialization)
         , m_length(numProperties)
         , m_shorthandID(id)
     {
     }
 
     const CSSPropertyID* properties() const { return m_properties; }
-    const StylePropertyShorthand** propertiesForInitialization() const { return m_propertiesForInitialization; }
     unsigned length() const { return m_length; }
     CSSPropertyID id() const { return m_shorthandID; }
 
 private:
     const CSSPropertyID* m_properties;
-    const StylePropertyShorthand** m_propertiesForInitialization;
     unsigned m_length;
     CSSPropertyID m_shorthandID;
 };
@@ -70,36 +61,44 @@ const StylePropertyShorthand& backgroundRepeatShorthand();
 const StylePropertyShorthand& flexShorthand();
 const StylePropertyShorthand& markerShorthand();
 const StylePropertyShorthand& flexFlowShorthand();
+const StylePropertyShorthand& borderRightShorthand();
 const StylePropertyShorthand& outlineShorthand();
-const StylePropertyShorthand& webkitColumnsShorthand();
 const StylePropertyShorthand& overflowShorthand();
 const StylePropertyShorthand& webkitTextStrokeShorthand();
+const StylePropertyShorthand& pageBreakInsideShorthand();
 const StylePropertyShorthand& listStyleShorthand();
 const StylePropertyShorthand& borderStyleShorthand();
 const StylePropertyShorthand& webkitMarginCollapseShorthand();
 const StylePropertyShorthand& marginShorthand();
+const StylePropertyShorthand& pageBreakBeforeShorthand();
 const StylePropertyShorthand& borderSpacingShorthand();
 const StylePropertyShorthand& textDecorationShorthand();
-const StylePropertyShorthand& borderRightShorthand();
+const StylePropertyShorthand& gridGapShorthand();
 const StylePropertyShorthand& backgroundShorthand();
 const StylePropertyShorthand& webkitMaskRepeatShorthand();
+const StylePropertyShorthand& columnRuleShorthand();
 const StylePropertyShorthand& gridShorthand();
 const StylePropertyShorthand& webkitBorderEndShorthand();
 const StylePropertyShorthand& borderTopShorthand();
+const StylePropertyShorthand& webkitColumnBreakAfterShorthand();
 const StylePropertyShorthand& webkitBorderAfterShorthand();
+const StylePropertyShorthand& gridAreaShorthand();
 const StylePropertyShorthand& fontShorthand();
 const StylePropertyShorthand& transitionShorthand();
 const StylePropertyShorthand& animationShorthand();
 const StylePropertyShorthand& webkitBorderBeforeShorthand();
+const StylePropertyShorthand& columnsShorthand();
+const StylePropertyShorthand& fontVariantShorthand();
 const StylePropertyShorthand& paddingShorthand();
 const StylePropertyShorthand& webkitMaskPositionShorthand();
 const StylePropertyShorthand& borderLeftShorthand();
 const StylePropertyShorthand& webkitMaskShorthand();
 const StylePropertyShorthand& gridColumnShorthand();
 const StylePropertyShorthand& webkitBorderStartShorthand();
-const StylePropertyShorthand& gridAreaShorthand();
+const StylePropertyShorthand& offsetShorthand();
 const StylePropertyShorthand& borderColorShorthand();
-const StylePropertyShorthand& webkitColumnRuleShorthand();
+const StylePropertyShorthand& webkitColumnBreakBeforeShorthand();
+const StylePropertyShorthand& webkitColumnBreakInsideShorthand();
 const StylePropertyShorthand& borderWidthShorthand();
 const StylePropertyShorthand& gridTemplateShorthand();
 const StylePropertyShorthand& motionShorthand();
@@ -107,12 +106,12 @@ const StylePropertyShorthand& backgroundPositionShorthand();
 const StylePropertyShorthand& borderShorthand();
 const StylePropertyShorthand& borderBottomShorthand();
 const StylePropertyShorthand& gridRowShorthand();
+const StylePropertyShorthand& pageBreakAfterShorthand();
 const StylePropertyShorthand& borderRadiusShorthand();
 const StylePropertyShorthand& webkitTextEmphasisShorthand();
 const StylePropertyShorthand& webkitMaskBoxImageShorthand();
 const StylePropertyShorthand& borderImageShorthand();
 
-const StylePropertyShorthand& borderShorthandForParsing();
 const StylePropertyShorthand& animationShorthandForParsing();
 const StylePropertyShorthand& transitionShorthandForParsing();
 
@@ -121,9 +120,11 @@ const StylePropertyShorthand& shorthandForProperty(CSSPropertyID);
 
 // Return the list of shorthands for a given longhand.
 // The client must pass in an empty result vector.
-void getMatchingShorthandsForLonghand(CSSPropertyID, Vector<StylePropertyShorthand, 4>* result);
+void getMatchingShorthandsForLonghand(
+    CSSPropertyID, Vector<StylePropertyShorthand, 4>* result);
 
-unsigned indexOfShorthandForLonghand(CSSPropertyID, const Vector<StylePropertyShorthand, 4>&);
+unsigned indexOfShorthandForLonghand(CSSPropertyID,
+    const Vector<StylePropertyShorthand, 4>&);
 
 bool isShorthandProperty(CSSPropertyID);
 

@@ -14,18 +14,13 @@ class TestKey : public SkResourceCache::Key {
 public:
     intptr_t fValue;
 
-<<<<<<< HEAD
     TestKey(intptr_t value)
         : fValue(value)
     {
-=======
-    TestKey(intptr_t value) : fValue(value) {
->>>>>>> miniblink49
         this->init(&gGlobalAddress, 0, sizeof(fValue));
     }
 };
 struct TestRec : public SkResourceCache::Rec {
-<<<<<<< HEAD
     TestKey fKey;
     intptr_t fValue;
 
@@ -42,17 +37,6 @@ struct TestRec : public SkResourceCache::Rec {
 
     static bool Visitor(const SkResourceCache::Rec&, void*)
     {
-=======
-    TestKey     fKey;
-    intptr_t    fValue;
-
-    TestRec(const TestKey& key, intptr_t value) : fKey(key), fValue(value) {}
-
-    const Key& getKey() const override { return fKey; }
-    size_t bytesUsed() const override { return sizeof(fKey) + sizeof(fValue); }
-
-    static bool Visitor(const SkResourceCache::Rec&, void*) {
->>>>>>> miniblink49
         return true;
     }
 };
@@ -64,7 +48,6 @@ class ImageCacheBench : public Benchmark {
     enum {
         CACHE_COUNT = 500
     };
-<<<<<<< HEAD
 
 public:
     ImageCacheBench()
@@ -76,19 +59,10 @@ public:
     {
         for (int i = 0; i < CACHE_COUNT; ++i) {
             fCache.add(new TestRec(TestKey(i), i));
-=======
-public:
-    ImageCacheBench()  : fCache(CACHE_COUNT * 100) {}
-
-    void populateCache() {
-        for (int i = 0; i < CACHE_COUNT; ++i) {
-            fCache.add(SkNEW_ARGS(TestRec, (TestKey(i), i)));
->>>>>>> miniblink49
         }
     }
 
 protected:
-<<<<<<< HEAD
     const char* onGetName() override
     {
         return "imagecache";
@@ -96,13 +70,6 @@ protected:
 
     void onDraw(int loops, SkCanvas*) override
     {
-=======
-    const char* onGetName() override {
-        return "imagecache";
-    }
-
-    void onDraw(const int loops, SkCanvas*) override {
->>>>>>> miniblink49
         if (fCache.getTotalBytesUsed() == 0) {
             this->populateCache();
         }
@@ -110,11 +77,7 @@ protected:
         TestKey key(-1);
         // search for a miss (-1)
         for (int i = 0; i < loops; ++i) {
-<<<<<<< HEAD
             SkDEBUGCODE(bool found =) fCache.find(key, TestRec::Visitor, nullptr);
-=======
-            SkDEBUGCODE(bool found =) fCache.find(key, TestRec::Visitor, NULL);
->>>>>>> miniblink49
             SkASSERT(!found);
         }
     }
@@ -125,8 +88,4 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 
-<<<<<<< HEAD
 DEF_BENCH(return new ImageCacheBench();)
-=======
-DEF_BENCH( return new ImageCacheBench(); )
->>>>>>> miniblink49

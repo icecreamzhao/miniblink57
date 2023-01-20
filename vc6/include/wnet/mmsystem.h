@@ -29,10 +29,7 @@
 #ifndef _INC_MMSYSTEM
 #define _INC_MMSYSTEM   /* #defined if mmsystem.h has been included */
 
-<<<<<<< HEAD
 #include "windows.h"
-=======
->>>>>>> miniblink49
 
 #ifdef _WIN32
 #include <pshpack1.h>

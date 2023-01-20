@@ -171,19 +171,12 @@ V8_INLINE Dest bit_cast(Source const& source) {
 #define STATIC_ASSERT(test) static_assert(test, #test)
 
 
-<<<<<<< HEAD
 #ifndef USE
-=======
->>>>>>> miniblink49
 // The USE(x) template is used to silence C++ compiler warnings
 // issued for (yet) unused variables (typically parameters).
 template <typename T>
 inline void USE(T) { }
-<<<<<<< HEAD
 #endif
-=======
-
->>>>>>> miniblink49
 
 #define IS_POWER_OF_TWO(x) ((x) != 0 && (((x) & ((x) - 1)) == 0))
 

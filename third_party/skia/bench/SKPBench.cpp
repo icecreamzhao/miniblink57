@@ -10,13 +10,10 @@
 #include "SkMultiPictureDraw.h"
 #include "SkSurface.h"
 
-<<<<<<< HEAD
 #if SK_SUPPORT_GPU
 #include "GrContext.h"
 #endif
 
-=======
->>>>>>> miniblink49
 // These CPU tile sizes are not good per se, but they are similar to what Chrome uses.
 DEFINE_int32(CPUbenchTileW, 256, "Tile width  used for CPU SKP playback.");
 DEFINE_int32(CPUbenchTileH, 256, "Tile height used for CPU SKP playback.");
@@ -25,41 +22,27 @@ DEFINE_int32(GPUbenchTileW, 1600, "Tile width  used for GPU SKP playback.");
 DEFINE_int32(GPUbenchTileH, 512, "Tile height used for GPU SKP playback.");
 
 SKPBench::SKPBench(const char* name, const SkPicture* pic, const SkIRect& clip, SkScalar scale,
-<<<<<<< HEAD
     bool useMultiPictureDraw, bool doLooping)
-=======
-                   bool useMultiPictureDraw, bool doLooping)
->>>>>>> miniblink49
     : fPic(SkRef(pic))
     , fClip(clip)
     , fScale(scale)
     , fName(name)
     , fUseMultiPictureDraw(useMultiPictureDraw)
-<<<<<<< HEAD
     , fDoLooping(doLooping)
 {
     fUniqueName.printf("%s_%.2g", name, scale); // Scale makes this unqiue for perf.skia.org traces.
-=======
-    , fDoLooping(doLooping) {
-    fUniqueName.printf("%s_%.2g", name, scale);  // Scale makes this unqiue for perf.skia.org traces.
->>>>>>> miniblink49
     if (useMultiPictureDraw) {
         fUniqueName.append("_mpd");
     }
 }
 
-<<<<<<< HEAD
 SKPBench::~SKPBench()
 {
-=======
-SKPBench::~SKPBench() {
->>>>>>> miniblink49
     for (int i = 0; i < fSurfaces.count(); ++i) {
         fSurfaces[i]->unref();
     }
 }
 
-<<<<<<< HEAD
 const char* SKPBench::onGetName()
 {
     return fName.c_str();
@@ -72,17 +55,6 @@ const char* SKPBench::onGetUniqueName()
 
 void SKPBench::onPerCanvasPreDraw(SkCanvas* canvas)
 {
-=======
-const char* SKPBench::onGetName() {
-    return fName.c_str();
-}
-
-const char* SKPBench::onGetUniqueName() {
-    return fUniqueName.c_str();
-}
-
-void SKPBench::onPerCanvasPreDraw(SkCanvas* canvas) {
->>>>>>> miniblink49
     SkIRect bounds;
     SkAssertResult(canvas->getClipDeviceBounds(&bounds));
 
@@ -93,11 +65,7 @@ void SKPBench::onPerCanvasPreDraw(SkCanvas* canvas) {
     tileW = SkTMin(tileW, bounds.width());
     tileH = SkTMin(tileH, bounds.height());
 
-<<<<<<< HEAD
     int xTiles = SkScalarCeilToInt(bounds.width() / SkIntToScalar(tileW));
-=======
-    int xTiles = SkScalarCeilToInt(bounds.width()  / SkIntToScalar(tileW));
->>>>>>> miniblink49
     int yTiles = SkScalarCeilToInt(bounds.height() / SkIntToScalar(tileH));
 
     fSurfaces.setReserve(xTiles * yTiles);
@@ -109,11 +77,7 @@ void SKPBench::onPerCanvasPreDraw(SkCanvas* canvas) {
         for (int x = bounds.fLeft; x < bounds.fRight; x += tileW) {
             const SkIRect tileRect = SkIRect::MakeXYWH(x, y, tileW, tileH);
             *fTileRects.append() = tileRect;
-<<<<<<< HEAD
             *fSurfaces.push() = canvas->makeSurface(ii).release();
-=======
-            *fSurfaces.push() = canvas->newSurface(ii);
->>>>>>> miniblink49
 
             // Never want the contents of a tile to include stuff the parent
             // canvas clips out
@@ -127,7 +91,6 @@ void SKPBench::onPerCanvasPreDraw(SkCanvas* canvas) {
     }
 }
 
-<<<<<<< HEAD
 void SKPBench::onPerCanvasPostDraw(SkCanvas* canvas)
 {
     // Draw the last set of tiles into the master canvas in case we're
@@ -136,15 +99,6 @@ void SKPBench::onPerCanvasPostDraw(SkCanvas* canvas)
         sk_sp<SkImage> image(fSurfaces[i]->makeImageSnapshot());
         canvas->drawImage(image,
             SkIntToScalar(fTileRects[i].fLeft), SkIntToScalar(fTileRects[i].fTop));
-=======
-void SKPBench::onPerCanvasPostDraw(SkCanvas* canvas) {
-    // Draw the last set of tiles into the master canvas in case we're
-    // saving the images
-    for (int i = 0; i < fTileRects.count(); ++i) {
-        SkAutoTUnref<SkImage> image(fSurfaces[i]->newImageSnapshot());
-        canvas->drawImage(image,
-                          SkIntToScalar(fTileRects[i].fLeft), SkIntToScalar(fTileRects[i].fTop));
->>>>>>> miniblink49
         SkSafeSetNull(fSurfaces[i]);
     }
 
@@ -152,7 +106,6 @@ void SKPBench::onPerCanvasPostDraw(SkCanvas* canvas) {
     fTileRects.rewind();
 }
 
-<<<<<<< HEAD
 bool SKPBench::isSuitableFor(Backend backend)
 {
     return backend != kNonRendering_Backend;
@@ -186,41 +139,12 @@ void SKPBench::onDraw(int loops, SkCanvas* canvas)
 
 void SKPBench::drawMPDPicture()
 {
-=======
-bool SKPBench::isSuitableFor(Backend backend) {
-    return backend != kNonRendering_Backend;
-}
-
-SkIPoint SKPBench::onGetSize() {
-    return SkIPoint::Make(fClip.width(), fClip.height());
-}
-
-void SKPBench::onDraw(const int loops, SkCanvas* canvas) {
-    SkASSERT(fDoLooping || 1 == loops);
-    if (fUseMultiPictureDraw) {
-        for (int i = 0; i < loops; i++) {
-            this->drawMPDPicture();
-        }
-    } else {
-        for (int i = 0; i < loops; i++) {
-            this->drawPicture();
-        }
-    }
-}
-
-void SKPBench::drawMPDPicture() {
->>>>>>> miniblink49
     SkMultiPictureDraw mpd;
 
     for (int j = 0; j < fTileRects.count(); ++j) {
         SkMatrix trans;
-<<<<<<< HEAD
         trans.setTranslate(-fTileRects[j].fLeft / fScale,
             -fTileRects[j].fTop / fScale);
-=======
-        trans.setTranslate(-fTileRects[j].fLeft/fScale,
-                           -fTileRects[j].fTop/fScale);
->>>>>>> miniblink49
         mpd.add(fSurfaces[j]->getCanvas(), fPic, &trans);
     }
 
@@ -231,27 +155,18 @@ void SKPBench::drawMPDPicture() {
     }
 }
 
-<<<<<<< HEAD
 void SKPBench::drawPicture()
 {
     for (int j = 0; j < fTileRects.count(); ++j) {
         const SkMatrix trans = SkMatrix::MakeTrans(-fTileRects[j].fLeft / fScale,
             -fTileRects[j].fTop / fScale);
         fSurfaces[j]->getCanvas()->drawPicture(fPic, &trans, nullptr);
-=======
-void SKPBench::drawPicture() {
-    for (int j = 0; j < fTileRects.count(); ++j) {
-        const SkMatrix trans = SkMatrix::MakeTrans(-fTileRects[j].fLeft / fScale,
-                                                   -fTileRects[j].fTop / fScale);
-        fSurfaces[j]->getCanvas()->drawPicture(fPic, &trans, NULL);
->>>>>>> miniblink49
     }
 
     for (int j = 0; j < fTileRects.count(); ++j) {
         fSurfaces[j]->getCanvas()->flush();
     }
 }
-<<<<<<< HEAD
 
 #if SK_SUPPORT_GPU
 #include "GrGpu.h"
@@ -295,5 +210,3 @@ void SKPBench::getGpuStats(SkCanvas* canvas, SkTArray<SkString>* keys, SkTArray<
 
 #endif
 }
-=======
->>>>>>> miniblink49

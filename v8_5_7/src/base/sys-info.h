@@ -9,10 +9,7 @@
 
 #include "src/base/base-export.h"
 #include "src/base/compiler-specific.h"
-<<<<<<< HEAD
 #include "v8.h"
-=======
->>>>>>> miniblink49
 
 namespace v8 {
 namespace base {
@@ -20,7 +17,6 @@ namespace base {
 class V8_BASE_EXPORT SysInfo final {
  public:
   // Returns the number of logical processors/core on the current machine.
-<<<<<<< HEAD
   static int V8CALL NumberOfProcessors();
 
   // Returns the number of bytes of physical memory on the current machine.
@@ -29,16 +25,6 @@ class V8_BASE_EXPORT SysInfo final {
   // Returns the number of bytes of virtual memory of this process. A return
   // value of zero means that there is no limit on the available virtual memory.
   static int64_t V8CALL AmountOfVirtualMemory();
-=======
-  static int NumberOfProcessors();
-
-  // Returns the number of bytes of physical memory on the current machine.
-  static int64_t AmountOfPhysicalMemory();
-
-  // Returns the number of bytes of virtual memory of this process. A return
-  // value of zero means that there is no limit on the available virtual memory.
-  static int64_t AmountOfVirtualMemory();
->>>>>>> miniblink49
 };
 
 }  // namespace base

@@ -5,94 +5,15 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-#include "gm.h"
->>>>>>> miniblink49
 #include "SkCanvas.h"
 #include "SkString.h"
 #include "SkTypeface.h"
 #include "SkTypes.h"
-<<<<<<< HEAD
 #include "gm.h"
 
 static void getGlyphPositions(const SkPaint& paint, const uint16_t glyphs[],
     int count, SkScalar x, SkScalar y, SkPoint pos[])
 {
-=======
-
-static const char* gFaces[] = {
-    "Times Roman",
-    "Hiragino Maru Gothic Pro",
-    "Papyrus",
-    "Helvetica",
-    "Courier New"
-};
-
-class TypefaceGM : public skiagm::GM {
-public:
-    TypefaceGM()
-        : fFaces(NULL) {
-    }
-
-    virtual ~TypefaceGM() {
-        if (fFaces) {
-            for (size_t i = 0; i < SK_ARRAY_COUNT(gFaces); i++) {
-                SkSafeUnref(fFaces[i]);
-            }
-            delete [] fFaces;
-        }
-    }
-
-protected:
-    void onOnceBeforeDraw() override {
-        fFaces = new SkTypeface*[SK_ARRAY_COUNT(gFaces)];
-        for (size_t i = 0; i < SK_ARRAY_COUNT(gFaces); i++) {
-            fFaces[i] = sk_tool_utils::create_portable_typeface(gFaces[i], SkTypeface::kNormal);
-        }
-    }
-
-    SkString onShortName() override {
-        return SkString("typeface");
-    }
-
-    SkISize onISize() override {
-        return SkISize::Make(640, 480);
-    }
-
-    void onDraw(SkCanvas* canvas) override {
-        SkString text("Typefaces are fun!");
-        SkScalar y = 0;
-
-        SkPaint paint;
-        paint.setAntiAlias(true);
-        for (int i = 0; i < (int)SK_ARRAY_COUNT(gFaces); i++) {
-            this->drawWithFace(text, i, y, paint, canvas);
-        }
-        // Now go backwards
-        for (int i = SK_ARRAY_COUNT(gFaces) - 1; i >= 0; i--) {
-            this->drawWithFace(text, i, y, paint, canvas);
-        }
-    }
-
-private:
-    void drawWithFace(const SkString& text, int i, SkScalar& y, SkPaint& paint,
-                      SkCanvas* canvas) {
-        paint.setTypeface(fFaces[i]);
-        y += paint.getFontMetrics(NULL);
-        canvas->drawText(text.c_str(), text.size(), 0, y, paint);
-    }
-
-    SkTypeface** fFaces;
-
-    typedef skiagm::GM INHERITED;
-};
-
-///////////////////////////////////////////////////////////////////////////////
-
-static void getGlyphPositions(const SkPaint& paint, const uint16_t glyphs[],
-                             int count, SkScalar x, SkScalar y, SkPoint pos[]) {
->>>>>>> miniblink49
     SkASSERT(SkPaint::kGlyphID_TextEncoding == paint.getTextEncoding());
 
     SkAutoSTMalloc<128, SkScalar> widthStorage(count);
@@ -106,12 +27,8 @@ static void getGlyphPositions(const SkPaint& paint, const uint16_t glyphs[],
 }
 
 static void applyKerning(SkPoint pos[], const int32_t adjustments[], int count,
-<<<<<<< HEAD
     const SkPaint& paint)
 {
-=======
-                         const SkPaint& paint) {
->>>>>>> miniblink49
     SkScalar scale = paint.getTextSize() / paint.getTypeface()->getUnitsPerEm();
 
     SkScalar globalAdj = 0;
@@ -122,12 +39,8 @@ static void applyKerning(SkPoint pos[], const int32_t adjustments[], int count,
 }
 
 static void drawKernText(SkCanvas* canvas, const void* text, size_t len,
-<<<<<<< HEAD
     SkScalar x, SkScalar y, const SkPaint& paint)
 {
-=======
-                         SkScalar x, SkScalar y, const SkPaint& paint) {
->>>>>>> miniblink49
     SkTypeface* face = paint.getTypeface();
     if (!face) {
         canvas->drawText(text, len, x, y, paint);
@@ -161,11 +74,7 @@ static void drawKernText(SkCanvas* canvas, const void* text, size_t len,
 
 static const struct {
     const char* fName;
-<<<<<<< HEAD
     SkTypeface::Style fStyle;
-=======
-    SkTypeface::Style   fStyle;
->>>>>>> miniblink49
 } gFaceStyles[] = {
     { "sans-serif", SkTypeface::kNormal },
     { "sans-serif", SkTypeface::kBold },
@@ -184,16 +93,11 @@ static const struct {
 static const int gFaceStylesCount = SK_ARRAY_COUNT(gFaceStyles);
 
 class TypefaceStylesGM : public skiagm::GM {
-<<<<<<< HEAD
     sk_sp<SkTypeface> fFaces[gFaceStylesCount];
-=======
-    SkTypeface* fFaces[gFaceStylesCount];
->>>>>>> miniblink49
     bool fApplyKerning;
 
 public:
     TypefaceStylesGM(bool applyKerning)
-<<<<<<< HEAD
         : fApplyKerning(applyKerning)
     {
         memset(fFaces, 0, sizeof(fFaces));
@@ -212,32 +116,10 @@ protected:
 
     SkString onShortName() override
     {
-=======
-        : fApplyKerning(applyKerning) {
-        memset(fFaces, 0, sizeof(fFaces));
-    }
-
-    virtual ~TypefaceStylesGM() {
-        for (int i = 0; i < gFaceStylesCount; i++) {
-            SkSafeUnref(fFaces[i]);
-        }
-    }
-
-protected:
-    void onOnceBeforeDraw() override {
-        for (int i = 0; i < gFaceStylesCount; i++) {
-            fFaces[i] = sk_tool_utils::create_portable_typeface(gFaceStyles[i].fName,
-                                                         gFaceStyles[i].fStyle);
-        }
-    }
-
-    SkString onShortName() override {
->>>>>>> miniblink49
         SkString name("typefacestyles");
         if (fApplyKerning) {
             name.append("_kerning");
         }
-<<<<<<< HEAD
         name.append(sk_tool_utils::major_platform_os_name());
         return name;
     }
@@ -249,16 +131,6 @@ protected:
 
     void onDraw(SkCanvas* canvas) override
     {
-=======
-        return name;
-    }
-
-    SkISize onISize() override {
-        return SkISize::Make(640, 480);
-    }
-
-    void onDraw(SkCanvas* canvas) override {
->>>>>>> miniblink49
         SkPaint paint;
         paint.setAntiAlias(true);
         paint.setTextSize(SkIntToScalar(30));
@@ -267,11 +139,7 @@ protected:
         const size_t textLen = strlen(text);
 
         SkScalar x = SkIntToScalar(10);
-<<<<<<< HEAD
         SkScalar dy = paint.getFontMetrics(nullptr);
-=======
-        SkScalar dy = paint.getFontMetrics(NULL);
->>>>>>> miniblink49
         SkScalar y = dy;
 
         if (fApplyKerning) {
@@ -295,11 +163,5 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 
-<<<<<<< HEAD
 DEF_GM(return new TypefaceStylesGM(false);)
 DEF_GM(return new TypefaceStylesGM(true);)
-=======
-DEF_GM( return new TypefaceGM; )
-DEF_GM( return new TypefaceStylesGM(false); )
-DEF_GM( return new TypefaceStylesGM(true); )
->>>>>>> miniblink49

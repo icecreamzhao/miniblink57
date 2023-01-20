@@ -26,10 +26,7 @@
 #ifndef BitVector_h
 #define BitVector_h
 
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
-=======
->>>>>>> miniblink49
 #include "wtf/Assertions.h"
 #include "wtf/StdLibExtras.h"
 #include "wtf/WTFExport.h"
@@ -40,30 +37,18 @@ class PrintStream;
 
 // This is a space-efficient, resizeable bitvector class. In the common case it
 // occupies one word, but if necessary, it will inflate this one word to point
-<<<<<<< HEAD
 // to a single chunk of out-of-line allocated storage to store an arbitrary
 // number of bits.
-=======
-// to a single chunk of out-of-line allocated storage to store an arbitrary number
-// of bits.
->>>>>>> miniblink49
 //
 // - The bitvector remembers the bound of how many bits can be stored, but this
 //   may be slightly greater (by as much as some platform-specific constant)
 //   than the last argument passed to ensureSize().
 //
-<<<<<<< HEAD
 // - The bitvector can resize itself automatically (set, clear, get) or can be
 //   used in a manual mode, which is faster (quickSet, quickClear, quickGet,
 //   ensureSize).
 //
 // - Accesses assert that you are within bounds.
-=======
-// - The bitvector can resize itself automatically (set, clear, get) or can be used
-//   in a manual mode, which is faster (quickSet, quickClear, quickGet, ensureSize).
-//
-// - Accesses ASSERT that you are within bounds.
->>>>>>> miniblink49
 //
 // - Bits are automatically initialized to zero.
 //
@@ -73,11 +58,8 @@ class PrintStream;
 // space.
 
 class WTF_EXPORT BitVector {
-<<<<<<< HEAD
     DISALLOW_NEW();
 
-=======
->>>>>>> miniblink49
 public:
     BitVector()
         : m_bitsOrPointer(makeInlineBits(0))
@@ -96,10 +78,6 @@ public:
         (*this) = other;
     }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
     ~BitVector()
     {
         if (isInline())
@@ -137,31 +115,19 @@ public:
 
     bool quickGet(size_t bit) const
     {
-<<<<<<< HEAD
         SECURITY_DCHECK(bit < size());
-=======
-        ASSERT_WITH_SECURITY_IMPLICATION(bit < size());
->>>>>>> miniblink49
         return !!(bits()[bit / bitsInPointer()] & (static_cast<uintptr_t>(1) << (bit & (bitsInPointer() - 1))));
     }
 
     void quickSet(size_t bit)
     {
-<<<<<<< HEAD
         SECURITY_DCHECK(bit < size());
-=======
-        ASSERT_WITH_SECURITY_IMPLICATION(bit < size());
->>>>>>> miniblink49
         bits()[bit / bitsInPointer()] |= (static_cast<uintptr_t>(1) << (bit & (bitsInPointer() - 1)));
     }
 
     void quickClear(size_t bit)
     {
-<<<<<<< HEAD
         SECURITY_DCHECK(bit < size());
-=======
-        ASSERT_WITH_SECURITY_IMPLICATION(bit < size());
->>>>>>> miniblink49
         bits()[bit / bitsInPointer()] &= ~(static_cast<uintptr_t>(1) << (bit & (bitsInPointer() - 1)));
     }
 
@@ -210,7 +176,6 @@ public:
     void dump(PrintStream& out);
 
 private:
-<<<<<<< HEAD
     static unsigned bitsInPointer() { return sizeof(void*) << 3; }
 
     static unsigned maxInlineBits() { return bitsInPointer() - 1; }
@@ -220,31 +185,10 @@ private:
     static uintptr_t makeInlineBits(uintptr_t bits)
     {
         DCHECK(!(bits & (static_cast<uintptr_t>(1) << maxInlineBits())));
-=======
-    static unsigned bitsInPointer()
-    {
-        return sizeof(void*) << 3;
-    }
-
-    static unsigned maxInlineBits()
-    {
-        return bitsInPointer() - 1;
-    }
-
-    static size_t byteCount(size_t bitCount)
-    {
-        return (bitCount + 7) >> 3;
-    }
-
-    static uintptr_t makeInlineBits(uintptr_t bits)
-    {
-        ASSERT(!(bits & (static_cast<uintptr_t>(1) << maxInlineBits())));
->>>>>>> miniblink49
         return bits | (static_cast<uintptr_t>(1) << maxInlineBits());
     }
 
     class WTF_EXPORT OutOfLineBits {
-<<<<<<< HEAD
         DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
     public:
@@ -258,13 +202,6 @@ private:
         {
             return bitwiseCast<const uintptr_t*>(this + 1);
         }
-=======
-    public:
-        size_t numBits() const { return m_numBits; }
-        size_t numWords() const { return (m_numBits + bitsInPointer() - 1) / bitsInPointer(); }
-        uintptr_t* bits() { return bitwise_cast<uintptr_t*>(this + 1); }
-        const uintptr_t* bits() const { return bitwise_cast<const uintptr_t*>(this + 1); }
->>>>>>> miniblink49
 
         static OutOfLineBits* create(size_t numBits);
 
@@ -281,7 +218,6 @@ private:
 
     bool isInline() const { return m_bitsOrPointer >> maxInlineBits(); }
 
-<<<<<<< HEAD
     const OutOfLineBits* outOfLineBits() const
     {
         return bitwiseCast<const OutOfLineBits*>(m_bitsOrPointer << 1);
@@ -290,10 +226,6 @@ private:
     {
         return bitwiseCast<OutOfLineBits*>(m_bitsOrPointer << 1);
     }
-=======
-    const OutOfLineBits* outOfLineBits() const { return bitwise_cast<const OutOfLineBits*>(m_bitsOrPointer << 1); }
-    OutOfLineBits* outOfLineBits() { return bitwise_cast<OutOfLineBits*>(m_bitsOrPointer << 1); }
->>>>>>> miniblink49
 
     void resizeOutOfLine(size_t numBits);
     void setSlow(const BitVector& other);

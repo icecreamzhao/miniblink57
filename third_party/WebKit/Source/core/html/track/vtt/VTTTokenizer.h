@@ -33,11 +33,14 @@
 
 #include "core/html/parser/InputStreamPreprocessor.h"
 #include "core/html/track/vtt/VTTToken.h"
+#include "wtf/Allocator.h"
 
 namespace blink {
 
 class VTTTokenizer {
+    DISALLOW_NEW();
     WTF_MAKE_NONCOPYABLE(VTTTokenizer);
+
 public:
     explicit VTTTokenizer(const String& input);
 
@@ -52,6 +55,6 @@ private:
     InputStreamPreprocessor<VTTTokenizer> m_inputStreamPreprocessor;
 };
 
-}
+} // namespace blink
 
 #endif

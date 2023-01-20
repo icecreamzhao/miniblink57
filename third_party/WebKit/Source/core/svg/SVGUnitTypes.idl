@@ -23,14 +23,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// http://www.w3.org/TR/SVG2/types.html#InterfaceSVGUnitTypes
+// https://svgwg.org/svg2-draft/types.html#InterfaceSVGUnitTypes
 
 [
     DependentLifetime,
-    WillBeGarbageCollected
 ] interface SVGUnitTypes {
     // Unit Types
-    [RuntimeEnabled=SVG1DOM, MeasureAs=SVG1DOM] const unsigned short SVG_UNIT_TYPE_UNKNOWN           = 0;
-    [RuntimeEnabled=SVG1DOM, MeasureAs=SVG1DOM] const unsigned short SVG_UNIT_TYPE_USERSPACEONUSE    = 1;
-    [RuntimeEnabled=SVG1DOM, MeasureAs=SVG1DOM] const unsigned short SVG_UNIT_TYPE_OBJECTBOUNDINGBOX = 2;
+    const unsigned short SVG_UNIT_TYPE_UNKNOWN           = 0;
+    const unsigned short SVG_UNIT_TYPE_USERSPACEONUSE    = 1;
+    const unsigned short SVG_UNIT_TYPE_OBJECTBOUNDINGBOX = 2;
 };

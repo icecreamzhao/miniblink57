@@ -51,10 +51,6 @@ enum WebFocusType {
 
     WebFocusTypeLast = WebFocusTypePage
 };
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 }
 
 #endif // WebFocusType_h

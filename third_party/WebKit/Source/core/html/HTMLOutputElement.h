@@ -31,15 +31,19 @@
 #ifndef HTMLOutputElement_h
 #define HTMLOutputElement_h
 
-#include "core/dom/DOMSettableTokenList.h"
+#include "core/dom/DOMTokenList.h"
 #include "core/html/HTMLFormControlElement.h"
 
 namespace blink {
 
-class HTMLOutputElement final : public HTMLFormControlElement {
+class CORE_EXPORT HTMLOutputElement final : public HTMLFormControlElement,
+                                            private DOMTokenListObserver {
     DEFINE_WRAPPERTYPEINFO();
+    USING_GARBAGE_COLLECTED_MIXIN(HTMLOutputElement);
+
 public:
-    static PassRefPtrWillBeRawPtr<HTMLOutputElement> create(Document&, HTMLFormElement*);
+    static HTMLOutputElement* create(Document&);
+    ~HTMLOutputElement() override;
 
     bool willValidate() const override { return false; }
 
@@ -48,26 +52,31 @@ public:
     String defaultValue() const;
     void setDefaultValue(const String&);
     void setFor(const AtomicString&);
-    DOMSettableTokenList* htmlFor() const;
+    DOMTokenList* htmlFor() const;
 
     bool canContainRangeEndPoint() const override { return false; }
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
-    HTMLOutputElement(Document&, HTMLFormElement*);
+    explicit HTMLOutputElement(Document&);
 
-    void parseAttribute(const QualifiedName&, const AtomicString&) override;
+    void parseAttribute(const AttributeModificationParams&) override;
     const AtomicString& formControlType() const override;
+    bool isDisabledFormControl() const override;
+    bool matchesEnabledPseudoClass() const override;
     bool isEnumeratable() const override { return true; }
     bool supportLabels() const override { return true; }
     bool supportsFocus() const override;
     void childrenChanged(const ChildrenChange&) override;
     void resetImpl() override;
+    int tabIndex() const override;
+
+    void valueWasSet() final;
 
     bool m_isDefaultValueMode;
     String m_defaultValue;
-    RefPtrWillBeMember<DOMSettableTokenList> m_tokens;
+    Member<DOMTokenList> m_tokens;
 };
 
 } // namespace blink

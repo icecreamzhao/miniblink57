@@ -19,44 +19,29 @@
  *
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/transforms/ScaleTransformOperation.h"
 
 #include "platform/animation/AnimationUtilities.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 PassRefPtr<TransformOperation> ScaleTransformOperation::blend(
     const TransformOperation* from,
     double progress,
     bool blendToIdentity)
-=======
-PassRefPtr<TransformOperation> ScaleTransformOperation::blend(const TransformOperation* from, double progress, bool blendToIdentity)
->>>>>>> miniblink49
 {
     if (from && !from->canBlendWith(*this))
         return this;
 
     if (blendToIdentity)
-<<<<<<< HEAD
         return ScaleTransformOperation::create(
             blink::blend(m_x, 1.0, progress), blink::blend(m_y, 1.0, progress),
             blink::blend(m_z, 1.0, progress), m_type);
-=======
-        return ScaleTransformOperation::create(blink::blend(m_x, 1.0, progress),
-                                               blink::blend(m_y, 1.0, progress),
-                                               blink::blend(m_z, 1.0, progress), m_type);
->>>>>>> miniblink49
 
     const ScaleTransformOperation* fromOp = static_cast<const ScaleTransformOperation*>(from);
     double fromX = fromOp ? fromOp->m_x : 1.0;
     double fromY = fromOp ? fromOp->m_y : 1.0;
     double fromZ = fromOp ? fromOp->m_z : 1.0;
-<<<<<<< HEAD
     return ScaleTransformOperation::create(
         blink::blend(fromX, m_x, progress), blink::blend(fromY, m_y, progress),
         blink::blend(fromZ, m_z, progress), m_type);
@@ -66,21 +51,6 @@ bool ScaleTransformOperation::canBlendWith(
     const TransformOperation& other) const
 {
     return other.type() == ScaleX || other.type() == ScaleY || other.type() == ScaleZ || other.type() == Scale3D || other.type() == Scale;
-=======
-    return ScaleTransformOperation::create(blink::blend(fromX, m_x, progress),
-                                           blink::blend(fromY, m_y, progress),
-                                           blink::blend(fromZ, m_z, progress), m_type);
-}
-
-
-bool ScaleTransformOperation::canBlendWith(const TransformOperation& other) const
-{
-    return other.type() == ScaleX
-        || other.type() == ScaleY
-        || other.type() == ScaleZ
-        || other.type() == Scale3D
-        || other.type() == Scale;
->>>>>>> miniblink49
 }
 
 } // namespace blink

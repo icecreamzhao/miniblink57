@@ -6,7 +6,6 @@
 #define PicturePattern_h
 
 #include "platform/graphics/Pattern.h"
-<<<<<<< HEAD
 #include "third_party/skia/include/core/SkRefCnt.h"
 
 namespace blink {
@@ -14,19 +13,10 @@ namespace blink {
 class PLATFORM_EXPORT PicturePattern final : public Pattern {
 public:
     static PassRefPtr<PicturePattern> create(sk_sp<SkPicture>, RepeatMode);
-=======
-
-namespace blink {
-
-class PLATFORM_EXPORT PicturePattern : public Pattern {
-public:
-    static PassRefPtr<PicturePattern> create(PassRefPtr<const SkPicture>, RepeatMode);
->>>>>>> miniblink49
 
     ~PicturePattern() override;
 
 protected:
-<<<<<<< HEAD
     sk_sp<SkShader> createShader(const SkMatrix&) override;
 
 private:
@@ -36,16 +26,5 @@ private:
 };
 
 } // namespace blink
-=======
-    PassRefPtr<SkShader> createShader() override;
-
-private:
-    PicturePattern(PassRefPtr<const SkPicture>, RepeatMode);
-
-    RefPtr<const SkPicture> m_tilePicture;
-};
-
-} // namespace
->>>>>>> miniblink49
 
 #endif

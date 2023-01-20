@@ -71,11 +71,7 @@ From the [Status](https://status.skia.org/) page:
    the information page. It may be necessary to move or click the mouse to wake
    the machine up.
 5. Log in to the machine if necessary. The password is stored in
-<<<<<<< HEAD
    [Valentine](https://valentine/) as "Chapel Hill buildbot slave password".
-=======
-   [Valentine](https://valentine/).
->>>>>>> miniblink49
 
 ### Rebooting a problematic Android device
 

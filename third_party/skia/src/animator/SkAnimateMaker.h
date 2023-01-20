@@ -6,10 +6,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #ifndef SkAnimateMaker_DEFINED
 #define SkAnimateMaker_DEFINED
 
@@ -17,28 +13,17 @@
 
 #include "SkAnimator.h"
 #include "SkBitmap.h"
-<<<<<<< HEAD
-=======
-#include "SkIntArray.h"
->>>>>>> miniblink49
 #include "SkDisplayEvents.h"
 #include "SkDisplayList.h"
 #include "SkDisplayScreenplay.h"
 #include "SkDisplayXMLParser.h"
-<<<<<<< HEAD
 #include "SkIntArray.h"
-=======
->>>>>>> miniblink49
 #include "SkScript.h"
 #include "SkString.h"
 #include "SkTDict.h"
 
 // not sure where this little helper macro should go
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 class SkActive;
 class SkAnimate;
 class SkCanvas;
@@ -56,11 +41,7 @@ class SkAnimateMaker {
 public:
     SkAnimateMaker(SkAnimator* animator, SkCanvas* canvas, SkPaint* paint);
     ~SkAnimateMaker();
-<<<<<<< HEAD
     void appendActive(SkActive*);
-=======
-    void appendActive(SkActive* );
->>>>>>> miniblink49
     void childrenAdd(SkDisplayable* child) { *fChildren.append() = child; }
     void clearExtraPropertyCallBack(SkDisplayTypes type);
     bool computeID(SkDisplayable* displayable, SkDisplayable* parent, SkString* newID);
@@ -73,7 +54,6 @@ public:
 #ifdef SK_DUMP_ENABLED
     void dump(const char* match);
 #endif
-<<<<<<< HEAD
     int dynamicProperty(SkString& nameStr, SkDisplayable**);
     bool find(const char* str, SkDisplayable** displayablePtr) const
     {
@@ -90,40 +70,20 @@ public:
     //  bool find(SkString& string, SkDisplayable** displayablePtr) {
     //      return fIDs.find(string.c_str(), displayablePtr);
     //  }
-=======
-    int dynamicProperty(SkString& nameStr, SkDisplayable**  );
-    bool find(const char* str, SkDisplayable** displayablePtr) const {
-        return fIDs.find(str, displayablePtr);
-    }
-    bool find(const char* str, size_t len, SkDisplayable** displayablePtr) const {
-        return fIDs.find(str, len, displayablePtr);
-    }
-    bool findKey(SkDisplayable* displayable, const char** string) const {
-        return fIDs.findKey(displayable, string);
-    }
-//  bool find(SkString& string, SkDisplayable** displayablePtr) {
-//      return fIDs.find(string.c_str(), displayablePtr);
-//  }
->>>>>>> miniblink49
     SkAnimator* getAnimator() { return fAnimator; }
     SkMSec getAppTime() const; // call caller to get current time
 #ifdef SK_DEBUG
     SkAnimator* getRoot();
 #endif
-<<<<<<< HEAD
     SkXMLParserError::ErrorCode getErrorCode() const
     {
         return fError.getErrorCode();
     }
-=======
-    SkXMLParserError::ErrorCode getErrorCode() const { return fError.getErrorCode(); }
->>>>>>> miniblink49
     SkMSec getInTime() { return fDisplayList.getTime(); }
     int getNativeCode() const { return fError.getNativeCode(); }
     bool hasError() { return fError.hasError(); }
     void helperAdd(SkDisplayable* trackMe);
     void helperRemove(SkDisplayable* alreadyTracked);
-<<<<<<< HEAD
     void idsSet(const char* attrValue, size_t len, SkDisplayable* displayable)
     {
         fIDs.set(attrValue, len, displayable);
@@ -165,40 +125,12 @@ public:
     void validate()
     {
     }
-=======
-    void idsSet(const char* attrValue, size_t len, SkDisplayable* displayable) {
-        fIDs.set(attrValue, len, displayable); }
-//  void loadMovies();
-    void notifyInval();
-    void notifyInvalTime(SkMSec time);
-    void postOnEnd(SkAnimateBase* animate, SkMSec end);
-    void removeActive(SkActive* );
-    void reset();
-    bool resolveID(SkDisplayable* displayable, SkDisplayable* original);
-    void setEnableTime(SkMSec appTime, SkMSec expectedTime);
-    void setErrorCode(SkXMLParserError::ErrorCode err) { if (fError.hasError() == false) fError.INHERITED::setCode(err); }
-    void setErrorCode(SkDisplayXMLParserError::ErrorCode err) { if (fError.hasError() == false) fError.setCode(err); }
-    void setErrorNoun(const SkString& str) { if (fError.hasError() == false) fError.setNoun(str); }
-    void setErrorString();
-    void setExtraPropertyCallBack(SkDisplayTypes type, SkScriptEngine::_propertyCallBack , void* userStorage);
-    void setID(SkDisplayable* displayable, const SkString& newID);
-    void setInnerError(SkAnimateMaker* maker, const SkString& str) { fError.setInnerError(maker, str); }
-    void setScriptError(const SkScriptEngine& );
-#ifdef SK_DEBUG
-    void validate() { fDisplayList.validate(); }
-#else
-    void validate() {}
->>>>>>> miniblink49
 #endif
     SkDisplayEvent* fActiveEvent;
     SkMSec fAdjustedStart;
     SkCanvas* fCanvas;
     SkMSec fEnableTime;
-<<<<<<< HEAD
     int fEndDepth; // passed parameter to onEndElement
-=======
-    int fEndDepth;  // passed parameter to onEndElement
->>>>>>> miniblink49
     SkEvents fEvents;
     SkDisplayList fDisplayList;
     SkEventSinkID fHostEventSinkID;
@@ -222,24 +154,15 @@ public:
 #endif
 private:
     void deleteMembers();
-<<<<<<< HEAD
     static bool GetStep(const char* token, size_t len, void* stepPtr, SkScriptValue*);
     SkAnimateMaker& operator=(SkAnimateMaker&);
-=======
-    static bool GetStep(const char* token, size_t len, void* stepPtr, SkScriptValue* );
-    SkAnimateMaker& operator=(SkAnimateMaker& );
->>>>>>> miniblink49
     SkTDDisplayableArray fChildren;
     SkTDDisplayableArray fDelayed; // SkApply that contain delayed enable events
     SkDisplayXMLParserError fError;
     SkString fErrorString;
     SkTDArray<SkExtras*> fExtras;
     SkString fFileName;
-<<<<<<< HEAD
     SkTDDisplayableArray fHelpers; // helper displayables
-=======
-    SkTDDisplayableArray fHelpers;  // helper displayables
->>>>>>> miniblink49
     SkBool8 fLoaded;
     SkTDDisplayableArray fMovies;
     SkTDict<SkDisplayable*> fIDs;

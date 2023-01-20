@@ -28,25 +28,15 @@ public:
         kNativeGL_BackEndType,
     };
 
-<<<<<<< HEAD
     bool attach(SkBackEndTypes attachType, int msaaSampleCount, bool deepColor,
         AttachmentInfo* info);
     void release();
-=======
-    bool attach(SkBackEndTypes attachType, int msaaSampleCount, AttachmentInfo* info);
-    void detach();
->>>>>>> miniblink49
     void present();
     bool makeFullscreen() { return true; }
     void closeWindow();
     void setVsync(bool);
     bool destroyRequested() { return fDestroyRequested; }
 
-<<<<<<< HEAD
-=======
-    virtual void onPDFSaved(const char title[], const char desc[], const char path[]);
-
->>>>>>> miniblink49
 protected:
     // overrides from SkWindow
     virtual void onHandleInval(const SkIRect&);

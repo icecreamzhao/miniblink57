@@ -31,10 +31,6 @@
 #ifndef WorkerNavigatorStorageQuota_h
 #define WorkerNavigatorStorageQuota_h
 
-<<<<<<< HEAD
-=======
-#include "core/frame/DOMWindowProperty.h"
->>>>>>> miniblink49
 #include "core/workers/WorkerNavigator.h"
 #include "modules/quota/DeprecatedStorageQuota.h"
 #include "platform/Supplementable.h"
@@ -42,7 +38,6 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 class StorageManager;
 
 class WorkerNavigatorStorageQuota final
@@ -56,17 +51,6 @@ public:
     static StorageManager* storage(WorkerNavigator&);
 
     StorageManager* storage() const;
-=======
-class WorkerNavigatorStorageQuota final : public GarbageCollected<WorkerNavigatorStorageQuota>, public HeapSupplement<WorkerNavigator> {
-    USING_GARBAGE_COLLECTED_MIXIN(WorkerNavigatorStorageQuota);
-public:
-    static WorkerNavigatorStorageQuota& from(WorkerNavigator&);
-
-    static DeprecatedStorageQuota* webkitTemporaryStorage(WorkerNavigator&);
-    static DeprecatedStorageQuota* webkitPersistentStorage(WorkerNavigator&);
-    DeprecatedStorageQuota* webkitTemporaryStorage() const;
-    DeprecatedStorageQuota* webkitPersistentStorage() const;
->>>>>>> miniblink49
 
     DECLARE_VIRTUAL_TRACE();
 
@@ -74,12 +58,7 @@ private:
     explicit WorkerNavigatorStorageQuota();
     static const char* supplementName();
 
-<<<<<<< HEAD
     mutable Member<StorageManager> m_storageManager;
-=======
-    mutable Member<DeprecatedStorageQuota> m_temporaryStorage;
-    mutable Member<DeprecatedStorageQuota> m_persistentStorage;
->>>>>>> miniblink49
 };
 
 } // namespace blink

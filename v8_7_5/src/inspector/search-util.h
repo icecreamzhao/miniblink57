@@ -16,18 +16,9 @@ String16 findSourceURL(const String16& content, bool multiline);
 String16 findSourceMapURL(const String16& content, bool multiline);
 std::vector<std::unique_ptr<protocol::Debugger::SearchMatch>>
 searchInTextByLinesImpl(V8InspectorSession*, const String16& text,
-<<<<<<< HEAD
     const String16& query, bool caseSensitive,
     bool isRegex);
 
 } //  namespace v8_inspector
 
 #endif // V8_INSPECTOR_SEARCH_UTIL_H_
-=======
-                        const String16& query, bool caseSensitive,
-                        bool isRegex);
-
-}  //  namespace v8_inspector
-
-#endif  // V8_INSPECTOR_SEARCH_UTIL_H_
->>>>>>> miniblink49

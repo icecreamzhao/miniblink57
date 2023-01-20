@@ -28,16 +28,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "platform/graphics/ReplayingCanvas.h"
 
-=======
-#include "config.h"
-#include "platform/graphics/ReplayingCanvas.h"
-
-#include "third_party/skia/include/core/SkBitmapDevice.h"
-
->>>>>>> miniblink49
 namespace blink {
 
 CanvasInterceptor<ReplayingCanvas>::~CanvasInterceptor()
@@ -46,7 +38,6 @@ CanvasInterceptor<ReplayingCanvas>::~CanvasInterceptor()
         canvas()->updateInRange();
 }
 
-<<<<<<< HEAD
 ReplayingCanvas::ReplayingCanvas(SkBitmap bitmap,
     unsigned fromStep,
     unsigned toStep)
@@ -54,10 +45,6 @@ ReplayingCanvas::ReplayingCanvas(SkBitmap bitmap,
     , m_fromStep(fromStep)
     , m_toStep(toStep)
     , m_abortDrawing(false)
-=======
-ReplayingCanvas::ReplayingCanvas(SkBitmap bitmap, unsigned fromStep, unsigned toStep)
-    : InterceptingCanvas(bitmap), m_fromStep(fromStep), m_toStep(toStep), m_abortDrawing(false)
->>>>>>> miniblink49
 {
 }
 
@@ -69,11 +56,7 @@ void ReplayingCanvas::updateInRange()
     if (m_toStep && step > m_toStep)
         m_abortDrawing = true;
     if (step == m_fromStep)
-<<<<<<< HEAD
         this->SkCanvas::clear(SK_ColorTRANSPARENT);
-=======
-        this->SkCanvas::clear(SkColorSetARGB(255, 255, 255, 255)); // FIXME: fill with nine patch instead.
->>>>>>> miniblink49
 }
 
 bool ReplayingCanvas::abort()
@@ -81,17 +64,12 @@ bool ReplayingCanvas::abort()
     return m_abortDrawing;
 }
 
-<<<<<<< HEAD
 SkCanvas::SaveLayerStrategy ReplayingCanvas::getSaveLayerStrategy(
     const SaveLayerRec& rec)
-=======
-SkCanvas::SaveLayerStrategy ReplayingCanvas::willSaveLayer(const SkRect* bounds, const SkPaint* paint, SaveFlags flags)
->>>>>>> miniblink49
 {
     // We're about to create a layer and we have not cleared the device yet.
     // Let's clear now, so it has effect on all layers.
     if (callCount() <= m_fromStep)
-<<<<<<< HEAD
         this->SkCanvas::clear(SK_ColorTRANSPARENT);
 
     return this->InterceptingCanvas<ReplayingCanvas>::getSaveLayerStrategy(rec);
@@ -100,14 +78,6 @@ SkCanvas::SaveLayerStrategy ReplayingCanvas::willSaveLayer(const SkRect* bounds,
 void ReplayingCanvas::onDrawPicture(const SkPicture* picture,
     const SkMatrix* matrix,
     const SkPaint* paint)
-=======
-        this->SkCanvas::clear(SkColorSetARGB(255, 255, 255, 255)); // FIXME: fill with nine patch instead.
-
-    return this->InterceptingCanvas<ReplayingCanvas>::willSaveLayer(bounds, paint, flags);
-}
-
-void ReplayingCanvas::onDrawPicture(const SkPicture* picture, const SkMatrix* matrix, const SkPaint* paint)
->>>>>>> miniblink49
 {
     this->unrollDrawPicture(picture, matrix, paint, this);
 }

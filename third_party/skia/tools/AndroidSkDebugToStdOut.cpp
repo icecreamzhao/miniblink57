@@ -15,12 +15,8 @@ extern bool gSkDebugToStdOut;
 // to stdout.
 class SendToStdOut {
 public:
-<<<<<<< HEAD
     SendToStdOut()
     {
-=======
-    SendToStdOut() {
->>>>>>> miniblink49
         gSkDebugToStdOut = true;
     }
 };

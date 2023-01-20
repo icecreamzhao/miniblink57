@@ -39,29 +39,40 @@ enum SVGTextPathSpacingType {
     SVGTextPathSpacingExact
 };
 
-template<> const SVGEnumerationStringEntries& getStaticStringEntries<SVGTextPathMethodType>();
-template<> const SVGEnumerationStringEntries& getStaticStringEntries<SVGTextPathSpacingType>();
+template <>
+const SVGEnumerationStringEntries&
+getStaticStringEntries<SVGTextPathMethodType>();
+template <>
+const SVGEnumerationStringEntries&
+getStaticStringEntries<SVGTextPathSpacingType>();
 
 class SVGTextPathElement final : public SVGTextContentElement,
                                  public SVGURIReference {
     DEFINE_WRAPPERTYPEINFO();
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(SVGTextPathElement);
+    USING_GARBAGE_COLLECTED_MIXIN(SVGTextPathElement);
+
 public:
     // Forward declare enumerations in the W3C naming scheme, for IDL generation.
     enum {
-        TEXTPATH_METHODTYPE_UNKNOWN = SVGTextPathMethodUnknown,
-        TEXTPATH_METHODTYPE_ALIGN = SVGTextPathMethodAlign,
-        TEXTPATH_METHODTYPE_STRETCH = SVGTextPathMethodStretch,
-        TEXTPATH_SPACINGTYPE_UNKNOWN = SVGTextPathSpacingUnknown,
-        TEXTPATH_SPACINGTYPE_AUTO = SVGTextPathSpacingAuto,
-        TEXTPATH_SPACINGTYPE_EXACT = SVGTextPathSpacingExact
+        kTextpathMethodtypeUnknown = SVGTextPathMethodUnknown,
+        kTextpathMethodtypeAlign = SVGTextPathMethodAlign,
+        kTextpathMethodtypeStretch = SVGTextPathMethodStretch,
+        kTextpathSpacingtypeUnknown = SVGTextPathSpacingUnknown,
+        kTextpathSpacingtypeAuto = SVGTextPathSpacingAuto,
+        kTextpathSpacingtypeExact = SVGTextPathSpacingExact
     };
 
     DECLARE_NODE_FACTORY(SVGTextPathElement);
 
     SVGAnimatedLength* startOffset() const { return m_startOffset.get(); }
-    SVGAnimatedEnumeration<SVGTextPathMethodType>* method() { return m_method.get(); }
-    SVGAnimatedEnumeration<SVGTextPathSpacingType>* spacing() { return m_spacing.get(); }
+    SVGAnimatedEnumeration<SVGTextPathMethodType>* method()
+    {
+        return m_method.get();
+    }
+    SVGAnimatedEnumeration<SVGTextPathSpacingType>* spacing()
+    {
+        return m_spacing.get();
+    }
 
     DECLARE_VIRTUAL_TRACE();
 
@@ -83,9 +94,9 @@ private:
 
     bool selfHasRelativeLengths() const override;
 
-    RefPtrWillBeMember<SVGAnimatedLength> m_startOffset;
-    RefPtrWillBeMember<SVGAnimatedEnumeration<SVGTextPathMethodType>> m_method;
-    RefPtrWillBeMember<SVGAnimatedEnumeration<SVGTextPathSpacingType>> m_spacing;
+    Member<SVGAnimatedLength> m_startOffset;
+    Member<SVGAnimatedEnumeration<SVGTextPathMethodType>> m_method;
+    Member<SVGAnimatedEnumeration<SVGTextPathSpacingType>> m_spacing;
 };
 
 } // namespace blink

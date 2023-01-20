@@ -2,11 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
 // https://w3c.github.io/ServiceWorker/#cache-interface
-=======
-// https://slightlyoff.github.io/ServiceWorker/spec/service_worker/index.html#cache
->>>>>>> miniblink49
 dictionary CacheQueryOptions {
     boolean ignoreSearch = false;
     boolean ignoreMethod = false;

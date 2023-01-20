@@ -23,12 +23,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "wtf/DataLog.h"
-=======
-#include "config.h"
-#include "DataLog.h"
->>>>>>> miniblink49
 
 #if OS(POSIX)
 #include <pthread.h>
@@ -37,28 +32,17 @@
 
 #define DATA_LOG_TO_FILE 0
 
-<<<<<<< HEAD
 // Uncomment to force logging to the given file regardless of what the
 // environment variable says. Note that we will append ".<pid>.txt" where <pid>
 // is the PID.
 
 // This path won't work on Windows, make sure to change to something like
 // C:\\Users\\<more path>\\log.txt.
-=======
-// Uncomment to force logging to the given file regardless of what the environment variable says. Note that
-// we will append ".<pid>.txt" where <pid> is the PID.
-
-// This path won't work on Windows, make sure to change to something like C:\\Users\\<more path>\\log.txt.
->>>>>>> miniblink49
 #define DATA_LOG_FILENAME "/tmp/WTFLog"
 
 namespace WTF {
 
-<<<<<<< HEAD
 #if OS(POSIX)
-=======
-#if USE(PTHREADS)
->>>>>>> miniblink49
 static pthread_once_t initializeLogFileOnceKey = PTHREAD_ONCE_INIT;
 #endif
 
@@ -74,7 +58,6 @@ static void initializeLogFileOnce()
 #endif
     char actualFilename[1024];
 
-<<<<<<< HEAD
     snprintf(actualFilename, sizeof(actualFilename), "%s.%d.txt", filename,
         getpid());
 
@@ -83,35 +66,19 @@ static void initializeLogFileOnce()
         if (!file)
             fprintf(stderr, "Warning: Could not open log file %s for writing.\n",
                 actualFilename);
-=======
-    snprintf(actualFilename, sizeof(actualFilename), "%s.%d.txt", filename, getpid());
-
-    if (filename) {
-        file = FilePrintStream::open(actualFilename, "w").leakPtr();
-        if (!file)
-            fprintf(stderr, "Warning: Could not open log file %s for writing.\n", actualFilename);
->>>>>>> miniblink49
     }
 #endif // DATA_LOG_TO_FILE
     if (!file)
         file = new FilePrintStream(stderr, FilePrintStream::Borrow);
 
-<<<<<<< HEAD
     // Prefer unbuffered output, so that we get a full log upon crash or
     // deadlock.
     setvbuf(file->file(), 0, _IONBF, 0);
-=======
-    setvbuf(file->file(), 0, _IONBF, 0); // Prefer unbuffered output, so that we get a full log upon crash or deadlock.
->>>>>>> miniblink49
 }
 
 static void initializeLogFile()
 {
-<<<<<<< HEAD
 #if OS(POSIX)
-=======
-#if USE(PTHREADS)
->>>>>>> miniblink49
     pthread_once(&initializeLogFileOnceKey, initializeLogFileOnce);
 #else
     if (!file)
@@ -138,14 +105,4 @@ void dataLogF(const char* format, ...)
     va_end(argList);
 }
 
-<<<<<<< HEAD
 } // namespace WTF
-=======
-void dataLogFString(const char* str)
-{
-    dataFile().printf("%s", str);
-}
-
-} // namespace WTF
-
->>>>>>> miniblink49

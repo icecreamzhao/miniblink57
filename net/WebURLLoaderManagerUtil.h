@@ -10,6 +10,7 @@
 
 namespace WTF {
 class Mutex;
+class RecursiveMutex;
 }
 
 namespace net {
@@ -31,7 +32,7 @@ void calculateWebTimingInformations(ResourceHandleInternal* job);
 // libcurl does not implement its own thread synchronization primitives.
 // these two functions provide mutexes for cookies, and for the global DNS
 // cache.
-WTF::Mutex* sharedResourceMutex(curl_lock_data data);
+WTF::RecursiveMutex* sharedResourceMutex(curl_lock_data data);
 
 void curl_lock_callback(CURL* /* handle */, curl_lock_data data, curl_lock_access /* access */, void* /* userPtr */);
 void curl_unlock_callback(CURL* /* handle */, curl_lock_data data, void* /* userPtr */);

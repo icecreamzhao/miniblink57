@@ -5,7 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "SkTypes.h"
 #if defined(SK_BUILD_FOR_WIN32) // And !SKIA_GDI?
 
@@ -18,11 +17,3 @@ SkFontMgr* SkFontMgr::Factory()
 }
 
 #endif //defined(SK_BUILD_FOR_WIN32)
-=======
-#include "SkFontMgr.h"
-#include "SkTypeface_win.h"
-
-SkFontMgr* SkFontMgr::Factory() {
-    return SkFontMgr_New_DirectWrite();
-}
->>>>>>> miniblink49

@@ -11,7 +11,6 @@
 namespace v8 {
 namespace internal {
 
-<<<<<<< HEAD
     // Initializes an isolate with context-independent data from a given snapshot.
     class StartupDeserializer final : public Deserializer {
     public:
@@ -32,23 +31,3 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_SNAPSHOT_STARTUP_DESERIALIZER_H_
-=======
-// Initializes an isolate with context-independent data from a given snapshot.
-class StartupDeserializer final : public Deserializer {
- public:
-  explicit StartupDeserializer(const SnapshotData* startup_data)
-      : Deserializer(startup_data, false) {}
-
-  // Deserialize the snapshot into an empty heap.
-  void DeserializeInto(Isolate* isolate);
-
- private:
-  void FlushICache();
-  void LogNewMapEvents();
-};
-
-}  // namespace internal
-}  // namespace v8
-
-#endif  // V8_SNAPSHOT_STARTUP_DESERIALIZER_H_
->>>>>>> miniblink49

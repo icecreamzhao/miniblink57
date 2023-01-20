@@ -5,36 +5,22 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "SkDevice.h"
 #include "SkColorFilter.h"
 #include "SkDraw.h"
 #include "SkDrawFilter.h"
 #include "SkImageFilter.h"
 #include "SkImageFilterCache.h"
-=======
-#include "SkColorFilter.h"
-#include "SkDevice.h"
-#include "SkDraw.h"
-#include "SkDrawFilter.h"
->>>>>>> miniblink49
 #include "SkImage_Base.h"
 #include "SkMetaData.h"
 #include "SkNinePatchIter.h"
 #include "SkPatchUtils.h"
 #include "SkPathMeasure.h"
-<<<<<<< HEAD
 #include "SkRSXform.h"
 #include "SkRasterClip.h"
 #include "SkShader.h"
 #include "SkSpecialImage.h"
 #include "SkTextBlobRunIterator.h"
-=======
-#include "SkRasterClip.h"
-#include "SkRSXform.h"
-#include "SkShader.h"
-#include "SkTextBlob.h"
->>>>>>> miniblink49
 #include "SkTextToPathIter.h"
 
 SkBaseDevice::SkBaseDevice(const SkSurfaceProps& surfaceProps)
@@ -44,7 +30,6 @@ SkBaseDevice::SkBaseDevice(const SkSurfaceProps& surfaceProps)
 #endif
 {
     fOrigin.setZero();
-<<<<<<< HEAD
     fMetaData = nullptr;
 }
 
@@ -55,25 +40,11 @@ SkMetaData& SkBaseDevice::getMetaData()
     // metadata users are rare, so we lazily allocate it. If that changes we
     // can decide to just make it a field in the device (rather than a ptr)
     if (nullptr == fMetaData) {
-=======
-    fMetaData = NULL;
-}
-
-SkBaseDevice::~SkBaseDevice() {
-    SkDELETE(fMetaData);
-}
-
-SkMetaData& SkBaseDevice::getMetaData() {
-    // metadata users are rare, so we lazily allocate it. If that changes we
-    // can decide to just make it a field in the device (rather than a ptr)
-    if (NULL == fMetaData) {
->>>>>>> miniblink49
         fMetaData = new SkMetaData;
     }
     return *fMetaData;
 }
 
-<<<<<<< HEAD
 SkImageInfo SkBaseDevice::imageInfo() const
 {
     return SkImageInfo::MakeUnknown();
@@ -81,13 +52,6 @@ SkImageInfo SkBaseDevice::imageInfo() const
 
 const SkBitmap& SkBaseDevice::accessBitmap(bool changePixels)
 {
-=======
-SkImageInfo SkBaseDevice::imageInfo() const {
-    return SkImageInfo::MakeUnknown();
-}
-
-const SkBitmap& SkBaseDevice::accessBitmap(bool changePixels) {
->>>>>>> miniblink49
     const SkBitmap& bitmap = this->onAccessBitmap();
     if (changePixels) {
         bitmap.notifyPixelsChanged();
@@ -96,7 +60,6 @@ const SkBitmap& SkBaseDevice::accessBitmap(bool changePixels) {
 }
 
 SkPixelGeometry SkBaseDevice::CreateInfo::AdjustGeometry(const SkImageInfo& info,
-<<<<<<< HEAD
     TileUsage tileUsage,
     SkPixelGeometry geo,
     bool preserveLCDText)
@@ -112,48 +75,24 @@ SkPixelGeometry SkBaseDevice::CreateInfo::AdjustGeometry(const SkImageInfo& info
             geo = kUnknown_SkPixelGeometry;
         }
         break;
-=======
-                                                         TileUsage tileUsage,
-                                                         SkPixelGeometry geo) {
-    switch (tileUsage) {
-        case kPossible_TileUsage:
-            // (we think) for compatibility with old clients, we assume this layer can support LCD
-            // even though they may not have marked it as opaque... seems like we should update
-            // our callers (reed/robertphilips).
-            break;
-        case kNever_TileUsage:
-            if (info.alphaType() != kOpaque_SkAlphaType) {
-                geo = kUnknown_SkPixelGeometry;
-            }
-            break;
->>>>>>> miniblink49
     }
     return geo;
 }
 
 void SkBaseDevice::drawDRRect(const SkDraw& draw, const SkRRect& outer,
-<<<<<<< HEAD
     const SkRRect& inner, const SkPaint& paint)
 {
-=======
-                              const SkRRect& inner, const SkPaint& paint) {
->>>>>>> miniblink49
     SkPath path;
     path.addRRect(outer);
     path.addRRect(inner);
     path.setFillType(SkPath::kEvenOdd_FillType);
 
-<<<<<<< HEAD
     const SkMatrix* preMatrix = nullptr;
-=======
-    const SkMatrix* preMatrix = NULL;
->>>>>>> miniblink49
     const bool pathIsMutable = true;
     this->drawPath(draw, path, paint, preMatrix, pathIsMutable);
 }
 
 void SkBaseDevice::drawPatch(const SkDraw& draw, const SkPoint cubics[12], const SkColor colors[4],
-<<<<<<< HEAD
     const SkPoint texCoords[4], SkXfermode* xmode, const SkPaint& paint)
 {
     SkPatchUtils::VertexData data;
@@ -166,24 +105,10 @@ void SkBaseDevice::drawPatch(const SkDraw& draw, const SkPoint cubics[12], const
         this->drawVertices(draw, SkCanvas::kTriangles_VertexMode, data.fVertexCount, data.fPoints,
             data.fTexCoords, data.fColors, xmode, data.fIndices, data.fIndexCount,
             paint);
-=======
-                             const SkPoint texCoords[4], SkXfermode* xmode, const SkPaint& paint) {
-    SkPatchUtils::VertexData data;
-    
-    SkISize lod = SkPatchUtils::GetLevelOfDetail(cubics, draw.fMatrix);
-
-    // It automatically adjusts lodX and lodY in case it exceeds the number of indices.
-    // If it fails to generate the vertices, then we do not draw. 
-    if (SkPatchUtils::getVertexData(&data, cubics, colors, texCoords, lod.width(), lod.height())) {
-        this->drawVertices(draw, SkCanvas::kTriangles_VertexMode, data.fVertexCount, data.fPoints,
-                           data.fTexCoords, data.fColors, xmode, data.fIndices, data.fIndexCount,
-                           paint);
->>>>>>> miniblink49
     }
 }
 
 void SkBaseDevice::drawTextBlob(const SkDraw& draw, const SkTextBlob* blob, SkScalar x, SkScalar y,
-<<<<<<< HEAD
     const SkPaint& paint, SkDrawFilter* drawFilter)
 {
 
@@ -191,14 +116,6 @@ void SkBaseDevice::drawTextBlob(const SkDraw& draw, const SkTextBlob* blob, SkSc
 
     SkTextBlobRunIterator it(blob);
     for (; !it.done(); it.next()) {
-=======
-                                const SkPaint &paint, SkDrawFilter* drawFilter) {
-
-    SkPaint runPaint = paint;
-
-    SkTextBlob::RunIterator it(blob);
-    for (;!it.done(); it.next()) {
->>>>>>> miniblink49
         size_t textLen = it.glyphCount() * sizeof(uint16_t);
         const SkPoint& offset = it.offset();
         // applyFontToPaint() always overwrites the exact same attributes,
@@ -219,19 +136,11 @@ void SkBaseDevice::drawTextBlob(const SkDraw& draw, const SkTextBlob* blob, SkSc
             break;
         case SkTextBlob::kHorizontal_Positioning:
             this->drawPosText(draw, it.glyphs(), textLen, it.pos(), 1,
-<<<<<<< HEAD
                 SkPoint::Make(x, y + offset.y()), runPaint);
             break;
         case SkTextBlob::kFull_Positioning:
             this->drawPosText(draw, it.glyphs(), textLen, it.pos(), 2,
                 SkPoint::Make(x, y), runPaint);
-=======
-                              SkPoint::Make(x, y + offset.y()), runPaint);
-            break;
-        case SkTextBlob::kFull_Positioning:
-            this->drawPosText(draw, it.glyphs(), textLen, it.pos(), 2,
-                              SkPoint::Make(x, y), runPaint);
->>>>>>> miniblink49
             break;
         default:
             SkFAIL("unhandled positioning mode");
@@ -245,12 +154,8 @@ void SkBaseDevice::drawTextBlob(const SkDraw& draw, const SkTextBlob* blob, SkSc
 }
 
 void SkBaseDevice::drawImage(const SkDraw& draw, const SkImage* image, SkScalar x, SkScalar y,
-<<<<<<< HEAD
     const SkPaint& paint)
 {
-=======
-                             const SkPaint& paint) {
->>>>>>> miniblink49
     // Default impl : turns everything into raster bitmap
     SkBitmap bm;
     if (as_IB(image)->getROPixels(&bm)) {
@@ -259,7 +164,6 @@ void SkBaseDevice::drawImage(const SkDraw& draw, const SkImage* image, SkScalar 
 }
 
 void SkBaseDevice::drawImageRect(const SkDraw& draw, const SkImage* image, const SkRect* src,
-<<<<<<< HEAD
     const SkRect& dst, const SkPaint& paint,
     SkCanvas::SrcRectConstraint constraint)
 {
@@ -267,37 +171,21 @@ void SkBaseDevice::drawImageRect(const SkDraw& draw, const SkImage* image, const
     SkBitmap bm;
     if (as_IB(image)->getROPixels(&bm)) {
         this->drawBitmapRect(draw, bm, src, dst, paint, constraint);
-=======
-                                 const SkRect& dst, const SkPaint& paint) {
-    // Default impl : turns everything into raster bitmap
-    SkBitmap bm;
-    if (as_IB(image)->getROPixels(&bm)) {
-        this->drawBitmapRect(draw, bm, src, dst, paint, SkCanvas::kNone_DrawBitmapRectFlag);
->>>>>>> miniblink49
     }
 }
 
 void SkBaseDevice::drawImageNine(const SkDraw& draw, const SkImage* image, const SkIRect& center,
-<<<<<<< HEAD
     const SkRect& dst, const SkPaint& paint)
 {
-=======
-                                 const SkRect& dst, const SkPaint& paint) {
->>>>>>> miniblink49
     SkNinePatchIter iter(image->width(), image->height(), center, dst);
 
     SkRect srcR, dstR;
     while (iter.next(&srcR, &dstR)) {
-<<<<<<< HEAD
         this->drawImageRect(draw, image, &srcR, dstR, paint, SkCanvas::kStrict_SrcRectConstraint);
-=======
-        this->drawImageRect(draw, image, &srcR, dstR, paint);
->>>>>>> miniblink49
     }
 }
 
 void SkBaseDevice::drawBitmapNine(const SkDraw& draw, const SkBitmap& bitmap, const SkIRect& center,
-<<<<<<< HEAD
     const SkRect& dst, const SkPaint& paint)
 {
     SkNinePatchIter iter(bitmap.width(), bitmap.height(), center, dst);
@@ -305,43 +193,25 @@ void SkBaseDevice::drawBitmapNine(const SkDraw& draw, const SkBitmap& bitmap, co
     SkRect srcR, dstR;
     while (iter.next(&srcR, &dstR)) {
         this->drawBitmapRect(draw, bitmap, &srcR, dstR, paint, SkCanvas::kStrict_SrcRectConstraint);
-=======
-                                  const SkRect& dst, const SkPaint& paint) {
-    SkNinePatchIter iter(bitmap.width(), bitmap.height(), center, dst);
-    
-    SkRect srcR, dstR;
-    while (iter.next(&srcR, &dstR)) {
-        this->drawBitmapRect(draw, bitmap, &srcR, dstR, paint, SkCanvas::kNone_DrawBitmapRectFlag);
->>>>>>> miniblink49
     }
 }
 
 void SkBaseDevice::drawAtlas(const SkDraw& draw, const SkImage* atlas, const SkRSXform xform[],
-<<<<<<< HEAD
     const SkRect tex[], const SkColor colors[], int count,
     SkXfermode::Mode mode, const SkPaint& paint)
 {
-=======
-                             const SkRect tex[], const SkColor colors[], int count,
-                             SkXfermode::Mode mode, const SkPaint& paint) {
->>>>>>> miniblink49
     SkPath path;
     path.setIsVolatile(true);
 
     for (int i = 0; i < count; ++i) {
         SkPoint quad[4];
         xform[i].toQuad(tex[i].width(), tex[i].height(), quad);
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> miniblink49
         SkMatrix localM;
         localM.setRSXform(xform[i]);
         localM.preTranslate(-tex[i].left(), -tex[i].top());
 
         SkPaint pnt(paint);
-<<<<<<< HEAD
         sk_sp<SkShader> shader = atlas->makeShader(SkShader::kClamp_TileMode,
             SkShader::kClamp_TileMode,
             &localM);
@@ -358,30 +228,13 @@ void SkBaseDevice::drawAtlas(const SkDraw& draw, const SkImage* atlas, const SkR
         path.addPoly(quad, 4, true);
         path.setConvexity(SkPath::kConvex_Convexity);
         this->drawPath(draw, path, pnt, nullptr, true);
-=======
-        pnt.setShader(atlas->newShader(SkShader::kClamp_TileMode, SkShader::kClamp_TileMode,
-                                       &localM))->unref();
-        if (colors && colors[i] != SK_ColorWHITE) {
-            SkAutoTUnref<SkColorFilter> cf(SkColorFilter::CreateModeFilter(colors[i], mode));
-            pnt.setColorFilter(cf);
-        }
-        
-        path.rewind();
-        path.addPoly(quad, 4, true);
-        path.setConvexity(SkPath::kConvex_Convexity);
-        this->drawPath(draw, path, pnt, NULL, true);
->>>>>>> miniblink49
     }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-<<<<<<< HEAD
 bool SkBaseDevice::readPixels(const SkImageInfo& info, void* dstP, size_t rowBytes, int x, int y)
 {
-=======
-bool SkBaseDevice::readPixels(const SkImageInfo& info, void* dstP, size_t rowBytes, int x, int y) {
->>>>>>> miniblink49
 #ifdef SK_DEBUG
     SkASSERT(info.width() > 0 && info.height() > 0);
     SkASSERT(dstP);
@@ -396,12 +249,8 @@ bool SkBaseDevice::readPixels(const SkImageInfo& info, void* dstP, size_t rowByt
 }
 
 bool SkBaseDevice::writePixels(const SkImageInfo& info, const void* pixels, size_t rowBytes,
-<<<<<<< HEAD
     int x, int y)
 {
-=======
-                               int x, int y) {
->>>>>>> miniblink49
 #ifdef SK_DEBUG
     SkASSERT(info.width() > 0 && info.height() > 0);
     SkASSERT(pixels);
@@ -415,7 +264,6 @@ bool SkBaseDevice::writePixels(const SkImageInfo& info, const void* pixels, size
     return this->onWritePixels(info, pixels, rowBytes, x, y);
 }
 
-<<<<<<< HEAD
 bool SkBaseDevice::onWritePixels(const SkImageInfo&, const void*, size_t, int, int)
 {
     return false;
@@ -423,52 +271,29 @@ bool SkBaseDevice::onWritePixels(const SkImageInfo&, const void*, size_t, int, i
 
 bool SkBaseDevice::onReadPixels(const SkImageInfo&, void*, size_t, int x, int y)
 {
-=======
-bool SkBaseDevice::onWritePixels(const SkImageInfo&, const void*, size_t, int, int) {
-    return false;
-}
-
-bool SkBaseDevice::onReadPixels(const SkImageInfo&, void*, size_t, int x, int y) {
->>>>>>> miniblink49
     return false;
 }
 
 bool SkBaseDevice::EXPERIMENTAL_drawPicture(SkCanvas*, const SkPicture*, const SkMatrix*,
-<<<<<<< HEAD
     const SkPaint*)
 {
-=======
-                                            const SkPaint*) {
->>>>>>> miniblink49
     // The base class doesn't perform any accelerated picture rendering
     return false;
 }
 
-<<<<<<< HEAD
 bool SkBaseDevice::accessPixels(SkPixmap* pmap)
 {
     SkPixmap tempStorage;
     if (nullptr == pmap) {
-=======
-bool SkBaseDevice::accessPixels(SkPixmap* pmap) {
-    SkPixmap tempStorage;
-    if (NULL == pmap) {
->>>>>>> miniblink49
         pmap = &tempStorage;
     }
     return this->onAccessPixels(pmap);
 }
 
-<<<<<<< HEAD
 bool SkBaseDevice::peekPixels(SkPixmap* pmap)
 {
     SkPixmap tempStorage;
     if (nullptr == pmap) {
-=======
-bool SkBaseDevice::peekPixels(SkPixmap* pmap) {
-    SkPixmap tempStorage;
-    if (NULL == pmap) {
->>>>>>> miniblink49
         pmap = &tempStorage;
     }
     return this->onPeekPixels(pmap);
@@ -477,7 +302,6 @@ bool SkBaseDevice::peekPixels(SkPixmap* pmap) {
 //////////////////////////////////////////////////////////////////////////////////////////
 
 static void morphpoints(SkPoint dst[], const SkPoint src[], int count,
-<<<<<<< HEAD
     SkPathMeasure& meas, const SkMatrix& matrix)
 {
     SkMatrix::MapXYProc proc = matrix.getMapXYProc();
@@ -490,36 +314,15 @@ static void morphpoints(SkPoint dst[], const SkPoint src[], int count,
         SkScalar sx = pos.fX;
         SkScalar sy = pos.fY;
 
-=======
-                        SkPathMeasure& meas, const SkMatrix& matrix) {
-    SkMatrix::MapXYProc proc = matrix.getMapXYProc();
-    
-    for (int i = 0; i < count; i++) {
-        SkPoint pos;
-        SkVector tangent;
-        
-        proc(matrix, src[i].fX, src[i].fY, &pos);
-        SkScalar sx = pos.fX;
-        SkScalar sy = pos.fY;
-        
->>>>>>> miniblink49
         if (!meas.getPosTan(sx, &pos, &tangent)) {
             // set to 0 if the measure failed, so that we just set dst == pos
             tangent.set(0, 0);
         }
-<<<<<<< HEAD
 
         /*  This is the old way (that explains our approach but is way too slow
          SkMatrix    matrix;
          SkPoint     pt;
 
-=======
-        
-        /*  This is the old way (that explains our approach but is way too slow
-         SkMatrix    matrix;
-         SkPoint     pt;
-         
->>>>>>> miniblink49
          pt.set(sx, sy);
          matrix.setSinCos(tangent.fY, tangent.fX);
          matrix.preTranslate(-sx, 0);
@@ -527,26 +330,17 @@ static void morphpoints(SkPoint dst[], const SkPoint src[], int count,
          matrix.mapPoints(&dst[i], &pt, 1);
          */
         dst[i].set(pos.fX - SkScalarMul(tangent.fY, sy),
-<<<<<<< HEAD
             pos.fY + SkScalarMul(tangent.fX, sy));
-=======
-                   pos.fY + SkScalarMul(tangent.fX, sy));
->>>>>>> miniblink49
     }
 }
 
 /*  TODO
-<<<<<<< HEAD
 
-=======
- 
->>>>>>> miniblink49
  Need differentially more subdivisions when the follow-path is curvy. Not sure how to
  determine that, but we need it. I guess a cheap answer is let the caller tell us,
  but that seems like a cop-out. Another answer is to get Rob Johnson to figure it out.
  */
 static void morphpath(SkPath* dst, const SkPath& src, SkPathMeasure& meas,
-<<<<<<< HEAD
     const SkMatrix& matrix)
 {
     SkPath::Iter iter(src, false);
@@ -580,46 +374,11 @@ static void morphpath(SkPath* dst, const SkPath& src, SkPathMeasure& meas,
         default:
             SkDEBUGFAIL("unknown verb");
             break;
-=======
-                      const SkMatrix& matrix) {
-    SkPath::Iter    iter(src, false);
-    SkPoint         srcP[4], dstP[3];
-    SkPath::Verb    verb;
-    
-    while ((verb = iter.next(srcP)) != SkPath::kDone_Verb) {
-        switch (verb) {
-            case SkPath::kMove_Verb:
-                morphpoints(dstP, srcP, 1, meas, matrix);
-                dst->moveTo(dstP[0]);
-                break;
-            case SkPath::kLine_Verb:
-                // turn lines into quads to look bendy
-                srcP[0].fX = SkScalarAve(srcP[0].fX, srcP[1].fX);
-                srcP[0].fY = SkScalarAve(srcP[0].fY, srcP[1].fY);
-                morphpoints(dstP, srcP, 2, meas, matrix);
-                dst->quadTo(dstP[0], dstP[1]);
-                break;
-            case SkPath::kQuad_Verb:
-                morphpoints(dstP, &srcP[1], 2, meas, matrix);
-                dst->quadTo(dstP[0], dstP[1]);
-                break;
-            case SkPath::kCubic_Verb:
-                morphpoints(dstP, &srcP[1], 3, meas, matrix);
-                dst->cubicTo(dstP[0], dstP[1], dstP[2]);
-                break;
-            case SkPath::kClose_Verb:
-                dst->close();
-                break;
-            default:
-                SkDEBUGFAIL("unknown verb");
-                break;
->>>>>>> miniblink49
         }
     }
 }
 
 void SkBaseDevice::drawTextOnPath(const SkDraw& draw, const void* text, size_t byteLength,
-<<<<<<< HEAD
     const SkPath& follow, const SkMatrix* matrix,
     const SkPaint& paint)
 {
@@ -634,21 +393,6 @@ void SkBaseDevice::drawTextOnPath(const SkDraw& draw, const void* text, size_t b
     SkPathMeasure meas(follow, false);
     SkScalar hOffset = 0;
 
-=======
-                                  const SkPath& follow, const SkMatrix* matrix,
-                                  const SkPaint& paint) {
-    SkASSERT(byteLength == 0 || text != NULL);
-    
-    // nothing to draw
-    if (text == NULL || byteLength == 0 || draw.fRC->isEmpty()) {
-        return;
-    }
-    
-    SkTextToPathIter    iter((const char*)text, byteLength, paint, true);
-    SkPathMeasure       meas(follow, false);
-    SkScalar            hOffset = 0;
-    
->>>>>>> miniblink49
     // need to measure first
     if (paint.getTextAlign() != SkPaint::kLeft_Align) {
         SkScalar pathLen = meas.getLength();
@@ -657,7 +401,6 @@ void SkBaseDevice::drawTextOnPath(const SkDraw& draw, const void* text, size_t b
         }
         hOffset += pathLen;
     }
-<<<<<<< HEAD
 
     const SkPath* iterPath;
     SkScalar xpos;
@@ -671,39 +414,19 @@ void SkBaseDevice::drawTextOnPath(const SkDraw& draw, const void* text, size_t b
             SkPath tmp;
             SkMatrix m(scaledMatrix);
 
-=======
-    
-    const SkPath*   iterPath;
-    SkScalar        xpos;
-    SkMatrix        scaledMatrix;
-    SkScalar        scale = iter.getPathScale();
-    
-    scaledMatrix.setScale(scale, scale);
-    
-    while (iter.next(&iterPath, &xpos)) {
-        if (iterPath) {
-            SkPath      tmp;
-            SkMatrix    m(scaledMatrix);
-            
->>>>>>> miniblink49
             tmp.setIsVolatile(true);
             m.postTranslate(xpos + hOffset, 0);
             if (matrix) {
                 m.postConcat(*matrix);
             }
             morphpath(&tmp, *iterPath, meas, m);
-<<<<<<< HEAD
             this->drawPath(draw, tmp, iter.getPaint(), nullptr, true);
-=======
-            this->drawPath(draw, tmp, iter.getPaint(), NULL, true);
->>>>>>> miniblink49
         }
     }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-<<<<<<< HEAD
 void SkBaseDevice::drawSpriteWithFilter(const SkDraw& draw, const SkBitmap& bitmap,
     int x, int y,
     const SkPaint& paint)
@@ -737,9 +460,6 @@ void SkBaseDevice::drawSpriteWithFilter(const SkDraw& draw, const SkBitmap& bitm
 
 uint32_t SkBaseDevice::filterTextFlags(const SkPaint& paint) const
 {
-=======
-uint32_t SkBaseDevice::filterTextFlags(const SkPaint& paint) const {
->>>>>>> miniblink49
     uint32_t flags = paint.getFlags();
 
     if (!paint.isLCDRenderText() || !paint.isAntiAlias()) {
@@ -756,7 +476,6 @@ uint32_t SkBaseDevice::filterTextFlags(const SkPaint& paint) const {
     return flags;
 }
 
-<<<<<<< HEAD
 sk_sp<SkSurface> SkBaseDevice::makeSurface(SkImageInfo const&, SkSurfaceProps const&)
 {
     return nullptr;
@@ -816,5 +535,3 @@ void SkBaseDevice::LogDrawScaleFactor(const SkMatrix& matrix, SkFilterQuality fi
     SK_HISTOGRAM_ENUMERATION("FilterQuality", filterQuality, kLast_SkFilterQuality + 1);
 #endif
 }
-=======
->>>>>>> miniblink49

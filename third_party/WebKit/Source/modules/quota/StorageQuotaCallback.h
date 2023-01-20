@@ -35,12 +35,8 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 class StorageQuotaCallback
     : public GarbageCollectedFinalized<StorageQuotaCallback> {
-=======
-class StorageQuotaCallback : public GarbageCollectedFinalized<StorageQuotaCallback> {
->>>>>>> miniblink49
 public:
     virtual ~StorageQuotaCallback() { }
     DEFINE_INLINE_VIRTUAL_TRACE() { }

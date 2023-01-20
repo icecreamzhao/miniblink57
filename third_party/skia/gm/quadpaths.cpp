@@ -4,54 +4,32 @@
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-<<<<<<< HEAD
 
 #include "SkCanvas.h"
 #include "SkPaint.h"
 #include "SkPath.h"
 #include "SkRandom.h"
 #include "gm.h"
-=======
-#include "gm.h"
-#include "SkCanvas.h"
-#include "SkPaint.h"
-#include "SkRandom.h"
->>>>>>> miniblink49
 
 namespace skiagm {
 
 class QuadPathGM : public GM {
 public:
-<<<<<<< HEAD
     QuadPathGM() { }
 
 protected:
     SkString onShortName() override
     {
-=======
-    QuadPathGM() {}
-
-protected:
-
-    SkString onShortName() override {
->>>>>>> miniblink49
         return SkString("quadpath");
     }
 
     SkISize onISize() override { return SkISize::Make(1240, 390); }
 
-<<<<<<< HEAD
     void drawPath(SkPath& path, SkCanvas* canvas, SkColor color,
         const SkRect& clip, SkPaint::Cap cap, SkPaint::Join join,
         SkPaint::Style style, SkPath::FillType fill,
         SkScalar strokeWidth)
     {
-=======
-    void drawPath(SkPath& path,SkCanvas* canvas,SkColor color,
-                  const SkRect& clip,SkPaint::Cap cap, SkPaint::Join join,
-                  SkPaint::Style style, SkPath::FillType fill,
-                  SkScalar strokeWidth) {
->>>>>>> miniblink49
         path.setFillType(fill);
         SkPaint paint;
         paint.setStrokeCap(cap);
@@ -65,7 +43,6 @@ protected:
         canvas->restore();
     }
 
-<<<<<<< HEAD
     void onDraw(SkCanvas* canvas) override
     {
         struct FillAndName {
@@ -105,75 +82,22 @@ protected:
         path.fPath.moveTo(25 * SK_Scalar1, 10 * SK_Scalar1);
         path.fPath.quadTo(50 * SK_Scalar1, 20 * SK_Scalar1,
             75 * SK_Scalar1, 10 * SK_Scalar1);
-=======
-    void onDraw(SkCanvas* canvas) override {
-        struct FillAndName {
-            SkPath::FillType fFill;
-            const char*      fName;
-        };
-        static const FillAndName gFills[] = {
-            {SkPath::kWinding_FillType, "Winding"},
-            {SkPath::kEvenOdd_FillType, "Even / Odd"},
-            {SkPath::kInverseWinding_FillType, "Inverse Winding"},
-            {SkPath::kInverseEvenOdd_FillType, "Inverse Even / Odd"},
-        };
-        struct StyleAndName {
-            SkPaint::Style fStyle;
-            const char*    fName;
-        };
-        static const StyleAndName gStyles[] = {
-            {SkPaint::kFill_Style, "Fill"},
-            {SkPaint::kStroke_Style, "Stroke"},
-            {SkPaint::kStrokeAndFill_Style, "Stroke And Fill"},
-        };
-        struct CapAndName {
-            SkPaint::Cap  fCap;
-            SkPaint::Join fJoin;
-            const char*   fName;
-        };
-        static const CapAndName gCaps[] = {
-            {SkPaint::kButt_Cap, SkPaint::kBevel_Join, "Butt"},
-            {SkPaint::kRound_Cap, SkPaint::kRound_Join, "Round"},
-            {SkPaint::kSquare_Cap, SkPaint::kBevel_Join, "Square"}
-        };
-        struct PathAndName {
-            SkPath      fPath;
-            const char* fName;
-        };
-        PathAndName path;
-        path.fPath.moveTo(25*SK_Scalar1, 10*SK_Scalar1);
-        path.fPath.quadTo(50*SK_Scalar1, 20*SK_Scalar1,
-                          75*SK_Scalar1, 10*SK_Scalar1);
->>>>>>> miniblink49
         path.fName = "moveTo-quad";
 
         SkPaint titlePaint;
         titlePaint.setColor(SK_ColorBLACK);
         titlePaint.setAntiAlias(true);
         sk_tool_utils::set_portable_typeface(&titlePaint);
-<<<<<<< HEAD
-=======
-        titlePaint.setLCDRenderText(true);
->>>>>>> miniblink49
         titlePaint.setTextSize(15 * SK_Scalar1);
         const char title[] = "Quad Drawn Into Rectangle Clips With "
                              "Indicated Style, Fill and Linecaps, with stroke width 10";
         canvas->drawText(title, strlen(title),
-<<<<<<< HEAD
             20 * SK_Scalar1,
             20 * SK_Scalar1,
             titlePaint);
 
         SkRandom rand;
         SkRect rect = SkRect::MakeWH(100 * SK_Scalar1, 30 * SK_Scalar1);
-=======
-                            20 * SK_Scalar1,
-                            20 * SK_Scalar1,
-                            titlePaint);
-
-        SkRandom rand;
-        SkRect rect = SkRect::MakeWH(100*SK_Scalar1, 30*SK_Scalar1);
->>>>>>> miniblink49
         canvas->save();
         canvas->translate(10 * SK_Scalar1, 30 * SK_Scalar1);
         canvas->save();
@@ -192,17 +116,10 @@ protected:
                         canvas->translate(rect.width() + 40 * SK_Scalar1, 0);
                     }
 
-<<<<<<< HEAD
                     SkColor color = sk_tool_utils::color_to_565(0xff007000);
                     this->drawPath(path.fPath, canvas, color, rect,
                         gCaps[cap].fCap, gCaps[cap].fJoin, gStyles[style].fStyle,
                         gFills[fill].fFill, SK_Scalar1 * 10);
-=======
-                    SkColor color = 0xff007000;
-                    this->drawPath(path.fPath, canvas, color, rect,
-                                    gCaps[cap].fCap, gCaps[cap].fJoin, gStyles[style].fStyle,
-                                    gFills[fill].fFill, SK_Scalar1*10);
->>>>>>> miniblink49
 
                     SkPaint rectPaint;
                     rectPaint.setColor(SK_ColorBLACK);
@@ -215,7 +132,6 @@ protected:
                     labelPaint.setColor(color);
                     labelPaint.setAntiAlias(true);
                     sk_tool_utils::set_portable_typeface(&labelPaint);
-<<<<<<< HEAD
                     labelPaint.setTextSize(10 * SK_Scalar1);
                     canvas->drawText(gStyles[style].fName,
                         strlen(gStyles[style].fName),
@@ -229,22 +145,6 @@ protected:
                         strlen(gCaps[cap].fName),
                         0, rect.height() + 36 * SK_Scalar1,
                         labelPaint);
-=======
-                    labelPaint.setLCDRenderText(true);
-                    labelPaint.setTextSize(10 * SK_Scalar1);
-                    canvas->drawText(gStyles[style].fName,
-                                        strlen(gStyles[style].fName),
-                                        0, rect.height() + 12 * SK_Scalar1,
-                                        labelPaint);
-                    canvas->drawText(gFills[fill].fName,
-                                        strlen(gFills[fill].fName),
-                                        0, rect.height() + 24 * SK_Scalar1,
-                                        labelPaint);
-                    canvas->drawText(gCaps[cap].fName,
-                                        strlen(gCaps[cap].fName),
-                                        0, rect.height() + 36 * SK_Scalar1,
-                                        labelPaint);
->>>>>>> miniblink49
                 }
                 canvas->restore();
             }
@@ -260,36 +160,21 @@ private:
 
 class QuadClosePathGM : public GM {
 public:
-<<<<<<< HEAD
     QuadClosePathGM() { }
 
 protected:
     SkString onShortName() override
     {
-=======
-    QuadClosePathGM() {}
-
-protected:
-
-    SkString onShortName() override {
->>>>>>> miniblink49
         return SkString("quadclosepath");
     }
 
     SkISize onISize() override { return SkISize::Make(1240, 390); }
 
-<<<<<<< HEAD
     void drawPath(SkPath& path, SkCanvas* canvas, SkColor color,
         const SkRect& clip, SkPaint::Cap cap, SkPaint::Join join,
         SkPaint::Style style, SkPath::FillType fill,
         SkScalar strokeWidth)
     {
-=======
-    void drawPath(SkPath& path,SkCanvas* canvas,SkColor color,
-                  const SkRect& clip,SkPaint::Cap cap, SkPaint::Join join,
-                  SkPaint::Style style, SkPath::FillType fill,
-                  SkScalar strokeWidth) {
->>>>>>> miniblink49
         path.setFillType(fill);
         SkPaint paint;
         paint.setStrokeCap(cap);
@@ -303,7 +188,6 @@ protected:
         canvas->restore();
     }
 
-<<<<<<< HEAD
     void onDraw(SkCanvas* canvas) override
     {
         struct FillAndName {
@@ -343,46 +227,6 @@ protected:
         path.fPath.moveTo(25 * SK_Scalar1, 10 * SK_Scalar1);
         path.fPath.quadTo(50 * SK_Scalar1, 20 * SK_Scalar1,
             75 * SK_Scalar1, 10 * SK_Scalar1);
-=======
-    void onDraw(SkCanvas* canvas) override {
-        struct FillAndName {
-            SkPath::FillType fFill;
-            const char*      fName;
-        };
-        static const FillAndName gFills[] = {
-            {SkPath::kWinding_FillType, "Winding"},
-            {SkPath::kEvenOdd_FillType, "Even / Odd"},
-            {SkPath::kInverseWinding_FillType, "Inverse Winding"},
-            {SkPath::kInverseEvenOdd_FillType, "Inverse Even / Odd"},
-        };
-        struct StyleAndName {
-            SkPaint::Style fStyle;
-            const char*    fName;
-        };
-        static const StyleAndName gStyles[] = {
-            {SkPaint::kFill_Style, "Fill"},
-            {SkPaint::kStroke_Style, "Stroke"},
-            {SkPaint::kStrokeAndFill_Style, "Stroke And Fill"},
-        };
-        struct CapAndName {
-            SkPaint::Cap  fCap;
-            SkPaint::Join fJoin;
-            const char*   fName;
-        };
-        static const CapAndName gCaps[] = {
-            {SkPaint::kButt_Cap, SkPaint::kBevel_Join, "Butt"},
-            {SkPaint::kRound_Cap, SkPaint::kRound_Join, "Round"},
-            {SkPaint::kSquare_Cap, SkPaint::kBevel_Join, "Square"}
-        };
-        struct PathAndName {
-            SkPath      fPath;
-            const char* fName;
-        };
-        PathAndName path;
-        path.fPath.moveTo(25*SK_Scalar1, 10*SK_Scalar1);
-        path.fPath.quadTo(50*SK_Scalar1, 20*SK_Scalar1,
-                          75*SK_Scalar1, 10*SK_Scalar1);
->>>>>>> miniblink49
         path.fPath.close();
         path.fName = "moveTo-quad-close";
 
@@ -390,29 +234,16 @@ protected:
         titlePaint.setColor(SK_ColorBLACK);
         titlePaint.setAntiAlias(true);
         sk_tool_utils::set_portable_typeface(&titlePaint);
-<<<<<<< HEAD
-=======
-        titlePaint.setLCDRenderText(true);
->>>>>>> miniblink49
         titlePaint.setTextSize(15 * SK_Scalar1);
         const char title[] = "Quad Closed Drawn Into Rectangle Clips With "
                              "Indicated Style, Fill and Linecaps, with stroke width 10";
         canvas->drawText(title, strlen(title),
-<<<<<<< HEAD
             20 * SK_Scalar1,
             20 * SK_Scalar1,
             titlePaint);
 
         SkRandom rand;
         SkRect rect = SkRect::MakeWH(100 * SK_Scalar1, 30 * SK_Scalar1);
-=======
-                            20 * SK_Scalar1,
-                            20 * SK_Scalar1,
-                            titlePaint);
-
-        SkRandom rand;
-        SkRect rect = SkRect::MakeWH(100*SK_Scalar1, 30*SK_Scalar1);
->>>>>>> miniblink49
         canvas->save();
         canvas->translate(10 * SK_Scalar1, 30 * SK_Scalar1);
         canvas->save();
@@ -431,17 +262,10 @@ protected:
                         canvas->translate(rect.width() + 40 * SK_Scalar1, 0);
                     }
 
-<<<<<<< HEAD
                     SkColor color = sk_tool_utils::color_to_565(0xff007000);
                     this->drawPath(path.fPath, canvas, color, rect,
                         gCaps[cap].fCap, gCaps[cap].fJoin, gStyles[style].fStyle,
                         gFills[fill].fFill, SK_Scalar1 * 10);
-=======
-                    SkColor color = 0xff007000;
-                    this->drawPath(path.fPath, canvas, color, rect,
-                                    gCaps[cap].fCap, gCaps[cap].fJoin, gStyles[style].fStyle,
-                                    gFills[fill].fFill, SK_Scalar1*10);
->>>>>>> miniblink49
 
                     SkPaint rectPaint;
                     rectPaint.setColor(SK_ColorBLACK);
@@ -454,7 +278,6 @@ protected:
                     labelPaint.setColor(color);
                     labelPaint.setAntiAlias(true);
                     sk_tool_utils::set_portable_typeface(&labelPaint);
-<<<<<<< HEAD
                     labelPaint.setTextSize(10 * SK_Scalar1);
                     canvas->drawText(gStyles[style].fName,
                         strlen(gStyles[style].fName),
@@ -468,22 +291,6 @@ protected:
                         strlen(gCaps[cap].fName),
                         0, rect.height() + 36 * SK_Scalar1,
                         labelPaint);
-=======
-                    labelPaint.setLCDRenderText(true);
-                    labelPaint.setTextSize(10 * SK_Scalar1);
-                    canvas->drawText(gStyles[style].fName,
-                                        strlen(gStyles[style].fName),
-                                        0, rect.height() + 12 * SK_Scalar1,
-                                        labelPaint);
-                    canvas->drawText(gFills[fill].fName,
-                                        strlen(gFills[fill].fName),
-                                        0, rect.height() + 24 * SK_Scalar1,
-                                        labelPaint);
-                    canvas->drawText(gCaps[cap].fName,
-                                        strlen(gCaps[cap].fName),
-                                        0, rect.height() + 36 * SK_Scalar1,
-                                        labelPaint);
->>>>>>> miniblink49
                 }
                 canvas->restore();
             }

@@ -26,25 +26,15 @@
 #include "platform/PlatformExport.h"
 #include "platform/text/TextDirection.h"
 #include "platform/text/WritingMode.h"
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
-=======
->>>>>>> miniblink49
 
 namespace blink {
 
 class PLATFORM_EXPORT LengthBox {
-<<<<<<< HEAD
     DISALLOW_NEW();
 
 public:
     LengthBox() { }
-=======
-public:
-    LengthBox()
-    {
-    }
->>>>>>> miniblink49
 
     LengthBox(LengthType t)
         : m_left(t)
@@ -90,25 +80,15 @@ public:
     const Length& after(WritingMode) const;
     const Length& start(WritingMode, TextDirection) const;
     const Length& end(WritingMode, TextDirection) const;
-<<<<<<< HEAD
     const Length& over(WritingMode) const;
     const Length& under(WritingMode) const;
-=======
->>>>>>> miniblink49
 
     bool operator==(const LengthBox& o) const
     {
         return m_left == o.m_left && m_right == o.m_right && m_top == o.m_top && m_bottom == o.m_bottom;
     }
 
-<<<<<<< HEAD
     bool operator!=(const LengthBox& o) const { return !(*this == o); }
-=======
-    bool operator!=(const LengthBox& o) const
-    {
-        return !(*this == o);
-    }
->>>>>>> miniblink49
 
     bool nonZero() const
     {

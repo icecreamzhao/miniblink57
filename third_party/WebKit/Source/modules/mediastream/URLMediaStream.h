@@ -31,10 +31,7 @@
 #ifndef URLMediaStream_h
 #define URLMediaStream_h
 
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
-=======
->>>>>>> miniblink49
 #include "wtf/Forward.h"
 
 namespace blink {
@@ -43,11 +40,8 @@ class MediaStream;
 class ExecutionContext;
 
 class URLMediaStream {
-<<<<<<< HEAD
     STATIC_ONLY(URLMediaStream);
 
-=======
->>>>>>> miniblink49
 public:
     static String createObjectURL(ExecutionContext*, MediaStream*);
 };

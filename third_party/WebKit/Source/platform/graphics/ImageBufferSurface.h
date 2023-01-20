@@ -34,7 +34,6 @@
 #include "platform/PlatformExport.h"
 #include "platform/geometry/IntSize.h"
 #include "platform/graphics/GraphicsTypes.h"
-<<<<<<< HEAD
 #include "third_party/khronos/GLES2/gl2.h"
 #include "third_party/skia/include/core/SkImageInfo.h"
 #include "third_party/skia/include/core/SkPaint.h"
@@ -46,17 +45,6 @@ class SkCanvas;
 class SkColorSpace;
 class SkImage;
 struct SkImageInfo;
-=======
-#include "platform/graphics/GraphicsTypes3D.h"
-#include "third_party/skia/include/core/SkPaint.h"
-#include "wtf/FastAllocBase.h"
-#include "wtf/Noncopyable.h"
-#include "wtf/PassRefPtr.h"
-
-class SkBitmap;
-class SkCanvas;
-class SkImage;
->>>>>>> miniblink49
 class SkPicture;
 
 namespace blink {
@@ -67,7 +55,6 @@ class FloatRect;
 class GraphicsContext;
 
 class PLATFORM_EXPORT ImageBufferSurface {
-<<<<<<< HEAD
     WTF_MAKE_NONCOPYABLE(ImageBufferSurface);
     USING_FAST_MALLOC(ImageBufferSurface);
 
@@ -77,15 +64,6 @@ public:
     virtual SkCanvas* canvas() = 0;
     virtual void disableDeferral(DisableDeferralReason) { }
     virtual void willOverwriteCanvas() { }
-=======
-    WTF_MAKE_NONCOPYABLE(ImageBufferSurface); WTF_MAKE_FAST_ALLOCATED(ImageBufferSurface);
-public:
-    virtual ~ImageBufferSurface();
-
-    virtual SkCanvas* canvas() const = 0;
-    virtual const SkBitmap& bitmap();
-    virtual void willAccessPixels() { }
->>>>>>> miniblink49
     virtual void didDraw(const FloatRect& rect) { }
     virtual bool isValid() const = 0;
     virtual bool restore() { return false; }
@@ -96,7 +74,6 @@ public:
     virtual void setFilterQuality(SkFilterQuality) { }
     virtual void setIsHidden(bool) { }
     virtual void setImageBuffer(ImageBuffer*) { }
-<<<<<<< HEAD
     virtual sk_sp<SkPicture> getPicture();
     virtual void finalizeFrame(const FloatRect& dirtyRect) { }
     virtual void draw(GraphicsContext&,
@@ -135,35 +112,13 @@ protected:
         OpacityMode,
         sk_sp<SkColorSpace>,
         SkColorType);
-=======
-    virtual PassRefPtr<SkPicture> getPicture();
-    virtual void finalizeFrame(const FloatRect &dirtyRect) { }
-    virtual void willDrawVideo() { }
-    virtual void willOverwriteCanvas() { }
-    virtual void draw(GraphicsContext*, const FloatRect& destRect, const FloatRect& srcRect, SkXfermode::Mode);
-    virtual void setHasExpensiveOp() { }
-    virtual Platform3DObject getBackingTextureHandleForOverwrite() { return 0; }
-
-    // May return nullptr if the surface is GPU-backed and the GPU context was lost.
-    virtual PassRefPtr<SkImage> newImageSnapshot() const = 0;
-
-    OpacityMode opacityMode() const { return m_opacityMode; }
-    const IntSize& size() const { return m_size; }
-    void notifyIsValidChanged(bool isValid) const;
-
-protected:
-    ImageBufferSurface(const IntSize&, OpacityMode);
->>>>>>> miniblink49
     void clear();
 
 private:
     OpacityMode m_opacityMode;
     IntSize m_size;
-<<<<<<< HEAD
     sk_sp<SkColorSpace> m_colorSpace;
     SkColorType m_colorType;
-=======
->>>>>>> miniblink49
 };
 
 } // namespace blink

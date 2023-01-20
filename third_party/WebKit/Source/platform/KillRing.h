@@ -32,16 +32,11 @@
 namespace blink {
 
 class PLATFORM_EXPORT KillRing {
-<<<<<<< HEAD
     USING_FAST_MALLOC(KillRing);
     WTF_MAKE_NONCOPYABLE(KillRing);
 
 public:
     KillRing() { }
-=======
-    WTF_MAKE_FAST_ALLOCATED(KillRing);
-public:
->>>>>>> miniblink49
     void append(const String&);
     void prepend(const String&);
     String yank();

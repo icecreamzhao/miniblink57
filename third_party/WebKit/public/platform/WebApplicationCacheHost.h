@@ -47,22 +47,12 @@ class WebURLResponse;
 class WebApplicationCacheHost {
 public:
     // These values must match blink::ApplicationCacheHost::Status values
-<<<<<<< HEAD
     enum Status { Uncached,
-=======
-    enum Status {
-        Uncached,
->>>>>>> miniblink49
         Idle,
         Checking,
         Downloading,
         UpdateReady,
-<<<<<<< HEAD
         Obsolete };
-=======
-        Obsolete
-    };
->>>>>>> miniblink49
 
     // These values must match blink::ApplicationCacheHost::EventID values
     enum EventID {
@@ -90,7 +80,6 @@ public:
     virtual ~WebApplicationCacheHost() { }
 
     // Called for every request made within the context.
-<<<<<<< HEAD
     virtual void willStartMainResourceRequest(
         WebURLRequest& r,
         const WebApplicationCacheHost* spawningHost) { }
@@ -105,16 +94,6 @@ public:
     {
         return true;
     }
-=======
-    virtual void willStartMainResourceRequest(WebURLRequest& r, const WebApplicationCacheHost* spawningHost) { }
-    virtual void willStartSubResourceRequest(WebURLRequest&) { }
-
-    // One or the other selectCache methods is called after having parsed the <html> tag.
-    // The latter returns false if the current document has been identified as a "foreign"
-    // entry, in which case the frame navigation will be restarted by webkit.
-    virtual void selectCacheWithoutManifest() { }
-    virtual bool selectCacheWithManifest(const WebURL& manifestURL) { return true; }
->>>>>>> miniblink49
 
     // Called as the main resource is retrieved.
     virtual void didReceiveResponseForMainResource(const WebURLResponse&) { }
@@ -122,11 +101,7 @@ public:
     virtual void didFinishLoadingMainResource(bool success) { }
 
     // Called on behalf of the scriptable interface.
-<<<<<<< HEAD
     virtual Status getStatus() { return Uncached; }
-=======
-    virtual Status status() { return Uncached; }
->>>>>>> miniblink49
     virtual bool startUpdate() { return false; }
     virtual bool swapCache() { return false; }
     virtual void abort() { }
@@ -137,16 +112,12 @@ public:
         double creationTime;
         double updateTime;
         long long totalSize;
-<<<<<<< HEAD
         CacheInfo()
             : creationTime(0)
             , updateTime(0)
             , totalSize(0)
         {
         }
-=======
-        CacheInfo() : creationTime(0), updateTime(0), totalSize(0) { }
->>>>>>> miniblink49
     };
     struct ResourceInfo {
         WebURL url;
@@ -156,7 +127,6 @@ public:
         bool isExplicit;
         bool isForeign;
         bool isFallback;
-<<<<<<< HEAD
         ResourceInfo()
             : size(0)
             , isMaster(false)
@@ -166,9 +136,6 @@ public:
             , isFallback(false)
         {
         }
-=======
-        ResourceInfo() : size(0), isMaster(false), isManifest(false), isExplicit(false), isForeign(false), isFallback(false) { }
->>>>>>> miniblink49
     };
     virtual void getAssociatedCacheInfo(CacheInfo*) { }
     virtual void getResourceList(WebVector<ResourceInfo>*) { }

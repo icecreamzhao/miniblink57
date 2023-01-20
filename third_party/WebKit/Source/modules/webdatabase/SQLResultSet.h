@@ -37,15 +37,10 @@ namespace blink {
 
 class ExceptionState;
 
-<<<<<<< HEAD
 class SQLResultSet final : public GarbageCollected<SQLResultSet>,
                            public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
 
-=======
-class SQLResultSet final : public GarbageCollected<SQLResultSet>, public ScriptWrappable {
-    DEFINE_WRAPPERTYPEINFO();
->>>>>>> miniblink49
 public:
     static SQLResultSet* create() { return new SQLResultSet; }
     DECLARE_TRACE();

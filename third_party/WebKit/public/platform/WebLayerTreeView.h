@@ -26,7 +26,6 @@
 #ifndef WebLayerTreeView_h
 #define WebLayerTreeView_h
 
-<<<<<<< HEAD
 #include "WebBrowserControlsState.h"
 #include "WebColor.h"
 #include "WebCommon.h"
@@ -38,35 +37,14 @@
 namespace cc {
 class AnimationHost;
 }
-=======
-#include "WebColor.h"
-#include "WebCommon.h"
-#include "WebFloatPoint.h"
-#include "WebNonCopyable.h"
-#include "WebPrivateOwnPtr.h"
-#include "WebSize.h"
-#include "WebTopControlsState.h"
-
-class SkBitmap;
->>>>>>> miniblink49
 
 namespace blink {
 
 class WebCompositeAndReadbackAsyncCallback;
-<<<<<<< HEAD
 class WebLayer;
 class WebLayoutAndPaintAsyncCallback;
 struct WebPoint;
 class WebSelection;
-=======
-class WebCompositorAnimationTimeline;
-class WebLayer;
-class WebLayoutAndPaintAsyncCallback;
-struct WebPoint;
-struct WebSelectionBound;
-class WebSelection;
-class WebWidget;
->>>>>>> miniblink49
 
 class WebLayerTreeView {
 public:
@@ -75,7 +53,6 @@ public:
     // Initialization and lifecycle --------------------------------------
 
     // Sets the root of the tree. The root is set by way of the constructor.
-<<<<<<< HEAD
     virtual void setRootLayer(const WebLayer&) { }
     virtual void clearRootLayer() { }
 
@@ -139,60 +116,6 @@ public:
 
     // Indicates that blink needs a BeginFrame, but that nothing might actually be
     // dirty.
-=======
-    virtual void setRootLayer(const WebLayer&) = 0;
-    virtual void clearRootLayer() = 0;
-
-    virtual void attachCompositorAnimationTimeline(WebCompositorAnimationTimeline*) { }
-    virtual void detachCompositorAnimationTimeline(WebCompositorAnimationTimeline*) { }
-
-    // View properties ---------------------------------------------------
-
-    virtual void setViewportSize(const WebSize& deviceViewportSize) = 0;
-    // Gives the viewport size in physical device pixels.
-    virtual WebSize deviceViewportSize() const = 0;
-
-    virtual void setDeviceScaleFactor(float) = 0;
-    virtual float deviceScaleFactor() const = 0;
-
-    // Sets the background color for the viewport.
-    virtual void setBackgroundColor(WebColor) = 0;
-
-    // Sets the background transparency for the viewport. The default is 'false'.
-    virtual void setHasTransparentBackground(bool) = 0;
-
-    // Sets whether this view is visible. In threaded mode, a view that is not visible will not
-    // composite or trigger updateAnimations() or layout() calls until it becomes visible.
-    virtual void setVisible(bool) = 0;
-
-    // Sets the current page scale factor and minimum / maximum limits. Both limits are initially 1 (no page scale allowed).
-    virtual void setPageScaleFactorAndLimits(float pageScaleFactor, float minimum, float maximum) = 0;
-
-    // Starts an animation of the page scale to a target scale factor and scroll offset.
-    // If useAnchor is true, destination is a point on the screen that will remain fixed for the duration of the animation.
-    // If useAnchor is false, destination is the final top-left scroll position.
-    virtual void startPageScaleAnimation(const WebPoint& destination, bool useAnchor, float newPageScale, double durationSec) = 0;
-
-    virtual void heuristicsForGpuRasterizationUpdated(bool) { }
-
-    // Sets the amount that the top controls are showing, from 0 (hidden) to 1
-    // (fully shown).
-    virtual void setTopControlsShownRatio(float) { }
-
-    // Update top controls permitted and current states
-    virtual void updateTopControlsState(WebTopControlsState constraints, WebTopControlsState current, bool animate) { }
-
-    // Set top controls height. If |shrinkViewport| is set to true, then Blink shrunk the viewport clip
-    // layers by the top controls height.
-    virtual void setTopControlsHeight(float height, bool shrinkViewport) { }
-
-    // Flow control and scheduling ---------------------------------------
-
-    // Indicates that an animation needs to be updated.
-    virtual void setNeedsAnimate() = 0;
-
-    // Indicates that blink needs a BeginFrame, but that nothing might actually be dirty.
->>>>>>> miniblink49
     virtual void setNeedsBeginFrame() { }
 
     // Indicates that blink needs a BeginFrame and to update compositor state.
@@ -202,7 +125,6 @@ public:
     virtual void didStopFlinging() { }
 
     // Run layout and paint of all pending document changes asynchronously.
-<<<<<<< HEAD
     // The caller is resposible for keeping the WebLayoutAndPaintAsyncCallback
     // object alive until it is called.
     virtual void layoutAndPaintAsync(WebLayoutAndPaintAsyncCallback*) { }
@@ -211,33 +133,12 @@ public:
     // WebCompositeAndReadbackAsyncCallback object alive until it is called.
     virtual void compositeAndReadbackAsync(
         WebCompositeAndReadbackAsyncCallback*) { }
-=======
-    // The caller is resposible for keeping the WebLayoutAndPaintAsyncCallback object
-    // alive until it is called.
-    virtual void layoutAndPaintAsync(WebLayoutAndPaintAsyncCallback*) { }
-
-    // The caller is responsible for keeping the WebCompositeAndReadbackAsyncCallback
-    // object alive until it is called.
-    virtual void compositeAndReadbackAsync(WebCompositeAndReadbackAsyncCallback*) { }
-
-    // Blocks until the most recently composited frame has finished rendering on the GPU.
-    // This can have a significant performance impact and should be used with care.
-    virtual void finishAllRendering() = 0;
->>>>>>> miniblink49
 
     // Prevents updates to layer tree from becoming visible.
     virtual void setDeferCommits(bool deferCommits) { }
 
-<<<<<<< HEAD
     // Identify key layers to the compositor when using the pinch virtual
     // viewport.
-=======
-    // Take responsiblity for this layer's animations, even if this layer hasn't yet
-    // been added to the tree.
-    virtual void registerForAnimations(WebLayer* layer) { }
-
-    // Identify key layers to the compositor when using the pinch virtual viewport.
->>>>>>> miniblink49
     virtual void registerViewportLayers(
         const WebLayer* overscrollElasticityLayer,
         const WebLayer* pageScaleLayer,
@@ -246,7 +147,6 @@ public:
     virtual void clearViewportLayers() { }
 
     // Used to update the active selection bounds.
-<<<<<<< HEAD
     virtual void registerSelection(const WebSelection&) { }
     virtual void clearSelection() { }
 
@@ -271,15 +171,6 @@ public:
     };
     virtual bool haveScrollEventHandlers() const { return false; };
 
-=======
-    // FIXME: Remove this overload when downstream consumers have been updated to use WebSelection, crbug.com/466672.
-    virtual void registerSelection(const WebSelectionBound& start, const WebSelectionBound& end) { }
-    virtual void registerSelection(const WebSelection&) { }
-    virtual void clearSelection() { }
-
-    // Debugging / dangerous ---------------------------------------------
-
->>>>>>> miniblink49
     virtual int layerTreeId() const { return 0; }
 
     // Toggles the FPS counter in the HUD layer
@@ -291,19 +182,8 @@ public:
     // Toggles the debug borders on layers
     virtual void setShowDebugBorders(bool) { }
 
-<<<<<<< HEAD
     // Toggles scroll bottleneck rects on the HUD layer
     virtual void setShowScrollBottleneckRects(bool) { }
-=======
-    // Toggles continuous painting
-    virtual void setContinuousPaintingEnabled(bool) { }
-
-    // Toggles scroll bottleneck rects on the HUD layer
-    virtual void setShowScrollBottleneckRects(bool) { }
-
-    // Move down Hud layer when qb aero effect enabled
-    virtual void SetHudLayerTopInset(int inset) {}
->>>>>>> miniblink49
 };
 
 } // namespace blink

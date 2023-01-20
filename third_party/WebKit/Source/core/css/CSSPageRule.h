@@ -32,18 +32,19 @@ class CSSStyleSheet;
 class StyleRulePage;
 class StyleRuleCSSStyleDeclaration;
 
-class CSSPageRule final : public CSSRule {
+class CORE_EXPORT CSSPageRule final : public CSSRule {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<CSSPageRule> create(StyleRulePage* rule, CSSStyleSheet* sheet)
+    static CSSPageRule* create(StyleRulePage* rule, CSSStyleSheet* sheet)
     {
-        return adoptRefWillBeNoop(new CSSPageRule(rule, sheet));
+        return new CSSPageRule(rule, sheet);
     }
 
-    virtual ~CSSPageRule();
+    ~CSSPageRule() override;
 
-    virtual String cssText() const override;
-    virtual void reattach(StyleRuleBase*) override;
+    String cssText() const override;
+    void reattach(StyleRuleBase*) override;
 
     CSSStyleDeclaration* style() const;
 
@@ -55,13 +56,13 @@ public:
 private:
     CSSPageRule(StyleRulePage*, CSSStyleSheet*);
 
-    virtual CSSRule::Type type() const override { return PAGE_RULE; }
+    CSSRule::Type type() const override { return kPageRule; }
 
-    RefPtrWillBeMember<StyleRulePage> m_pageRule;
-    mutable RefPtrWillBeMember<StyleRuleCSSStyleDeclaration> m_propertiesCSSOMWrapper;
+    Member<StyleRulePage> m_pageRule;
+    mutable Member<StyleRuleCSSStyleDeclaration> m_propertiesCSSOMWrapper;
 };
 
-DEFINE_CSS_RULE_TYPE_CASTS(CSSPageRule, PAGE_RULE);
+DEFINE_CSS_RULE_TYPE_CASTS(CSSPageRule, kPageRule);
 
 } // namespace blink
 

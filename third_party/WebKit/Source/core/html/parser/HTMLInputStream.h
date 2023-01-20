@@ -28,6 +28,7 @@
 
 #include "core/html/parser/InputStreamPreprocessor.h"
 #include "platform/text/SegmentedString.h"
+#include "wtf/Allocator.h"
 
 namespace blink {
 
@@ -38,38 +39,33 @@ namespace blink {
 //            L_ current insertion point
 //
 // The current segmented string is stored in InputStream.  Each of the
-// afterInsertionPoint buffers are stored in InsertionPointRecords on the
-// stack.
+// afterInsertionPoint buffers are stored in InsertionPointRecords on the stack.
 //
 // We remove characters from the "current" string in the InputStream.
-// document.write() will add characters at the current insertion point,
-// which appends them to the "current" string.
+// document.write() will add characters at the current insertion point, which
+// appends them to the "current" string.
 //
-// m_last is a pointer to the last of the afterInsertionPoint strings.
-// The network adds data at the end of the InputStream, which appends
-// them to the "last" string.
+// m_last is a pointer to the last of the afterInsertionPoint strings. The
+// network adds data at the end of the InputStream, which appends them to the
+// "last" string.
 class HTMLInputStream {
+    DISALLOW_NEW();
     WTF_MAKE_NONCOPYABLE(HTMLInputStream);
+
 public:
     HTMLInputStream()
         : m_last(&m_first)
     {
     }
 
-    void appendToEnd(const SegmentedString& string)
-    {
-        m_last->append(string);
-    }
+    void appendToEnd(const SegmentedString& string) { m_last->append(string); }
 
     void insertAtCurrentInsertionPoint(const SegmentedString& string)
     {
         m_first.append(string);
     }
 
-    bool hasInsertionPoint() const
-    {
-        return &m_first != m_last;
-    }
+    bool hasInsertionPoint() const { return &m_first != m_last; }
 
     void markEndOfFile()
     {
@@ -77,15 +73,9 @@ public:
         m_last->close();
     }
 
-    void closeWithoutMarkingEndOfFile()
-    {
-        m_last->close();
-    }
+    void closeWithoutMarkingEndOfFile() { m_last->close(); }
 
-    bool haveSeenEndOfFile() const
-    {
-        return m_last->isClosed();
-    }
+    bool haveSeenEndOfFile() const { return m_last->isClosed(); }
 
     SegmentedString& current() { return m_first; }
     const SegmentedString& current() const { return m_first; }
@@ -95,9 +85,9 @@ public:
         next = m_first;
         m_first = SegmentedString();
         if (m_last == &m_first) {
-            // We used to only have one SegmentedString in the InputStream
-            // but now we have two.  That means m_first is no longer also
-            // the m_last string, |next| is now the last one.
+            // We used to only have one SegmentedString in the InputStream but now we
+            // have two.  That means m_first is no longer also the m_last string,
+            // |next| is now the last one.
             m_last = &next;
         }
     }
@@ -112,8 +102,8 @@ public:
             m_last = &m_first;
         }
         if (next.isClosed()) {
-            // We also need to merge the "closed" state from next to
-            // m_first.  Arguably, this work could be done in append().
+            // We also need to merge the "closed" state from next to m_first.
+            // Arguably, this work could be done in append().
             m_first.close();
         }
     }
@@ -124,7 +114,9 @@ private:
 };
 
 class InsertionPointRecord {
+    STACK_ALLOCATED();
     WTF_MAKE_NONCOPYABLE(InsertionPointRecord);
+
 public:
     explicit InsertionPointRecord(HTMLInputStream& inputStream)
         : m_inputStream(&inputStream)
@@ -132,19 +124,23 @@ public:
         m_line = m_inputStream->current().currentLine();
         m_column = m_inputStream->current().currentColumn();
         m_inputStream->splitInto(m_next);
-        // We 'fork' current position and use it for the generated script part.
-        // This is a bit weird, because generated part does not have positions within an HTML document.
+        // We 'fork' current position and use it for the generated script part. This
+        // is a bit weird, because generated part does not have positions within an
+        // HTML document.
         m_inputStream->current().setCurrentPosition(m_line, m_column, 0);
     }
 
     ~InsertionPointRecord()
     {
-        // Some inserted text may have remained in input stream. E.g. if script has written "&amp" or "<table",
-        // it stays in buffer because it cannot be properly tokenized before we see next part.
+        // Some inserted text may have remained in input stream. E.g. if script has
+        // written "&amp" or "<table", it stays in buffer because it cannot be
+        // properly tokenized before we see next part.
         int unparsedRemainderLength = m_inputStream->current().length();
         m_inputStream->mergeFrom(m_next);
-        // We restore position for the character that goes right after unparsed remainder.
-        m_inputStream->current().setCurrentPosition(m_line, m_column, unparsedRemainderLength);
+        // We restore position for the character that goes right after unparsed
+        // remainder.
+        m_inputStream->current().setCurrentPosition(m_line, m_column,
+            unparsedRemainderLength);
     }
 
 private:
@@ -154,6 +150,6 @@ private:
     OrdinalNumber m_column;
 };
 
-}
+} // namespace blink
 
-#endif
+#endif // HTMLInputStream_h

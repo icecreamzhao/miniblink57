@@ -31,21 +31,15 @@
 #ifndef LoggingCanvas_h
 #define LoggingCanvas_h
 
-<<<<<<< HEAD
 #include "platform/graphics/InterceptingCanvas.h"
 #include "platform/json/JSONValues.h"
 #include <memory>
-=======
-#include "platform/JSONValues.h"
-#include "platform/graphics/InterceptingCanvas.h"
->>>>>>> miniblink49
 
 namespace blink {
 
 class LoggingCanvas : public InterceptingCanvasBase {
 public:
     LoggingCanvas(int width, int height);
-<<<<<<< HEAD
 
     // Returns a snapshot of the current log data.
     std::unique_ptr<JSONArray> log();
@@ -55,17 +49,10 @@ public:
         size_t count,
         const SkPoint pts[],
         const SkPaint&) override;
-=======
-    PassRefPtr<JSONArray> log();
-
-    void onDrawPaint(const SkPaint&) override;
-    void onDrawPoints(PointMode, size_t count, const SkPoint pts[], const SkPaint&) override;
->>>>>>> miniblink49
     void onDrawRect(const SkRect&, const SkPaint&) override;
     void onDrawOval(const SkRect&, const SkPaint&) override;
     void onDrawRRect(const SkRRect&, const SkPaint&) override;
     void onDrawPath(const SkPath&, const SkPaint&) override;
-<<<<<<< HEAD
     void onDrawBitmap(const SkBitmap&,
         SkScalar left,
         SkScalar top,
@@ -125,46 +112,17 @@ public:
     void onClipRRect(const SkRRect&, SkClipOp, ClipEdgeStyle) override;
     void onClipPath(const SkPath&, SkClipOp, ClipEdgeStyle) override;
     void onClipRegion(const SkRegion&, SkClipOp) override;
-=======
-    void onDrawBitmap(const SkBitmap&, SkScalar left, SkScalar top, const SkPaint*) override;
-    void onDrawBitmapRect(const SkBitmap&, const SkRect* src, const SkRect& dst, const SkPaint*, DrawBitmapRectFlags) override;
-    void onDrawBitmapNine(const SkBitmap&, const SkIRect& center, const SkRect& dst, const SkPaint*) override;
-    void onDrawImage(const SkImage*, SkScalar, SkScalar, const SkPaint*) override;
-    void onDrawImageRect(const SkImage*, const SkRect* src, const SkRect& dst, const SkPaint*) override;
-    void onDrawSprite(const SkBitmap&, int left, int top, const SkPaint*) override;
-    virtual void onDrawVertices(VertexMode vmode, int vertexCount, const SkPoint vertices[], const SkPoint texs[],
-        const SkColor colors[], SkXfermode* xmode, const uint16_t indices[], int indexCount, const SkPaint&) override;
-
-    void onDrawDRRect(const SkRRect& outer, const SkRRect& inner, const SkPaint&) override;
-    void onDrawText(const void* text, size_t byteLength, SkScalar x, SkScalar y, const SkPaint&) override;
-    void onDrawPosText(const void* text, size_t byteLength, const SkPoint pos[], const SkPaint&) override;
-    void onDrawPosTextH(const void* text, size_t byteLength, const SkScalar xpos[], SkScalar constY, const SkPaint&) override;
-    void onDrawTextOnPath(const void* text, size_t byteLength, const SkPath&, const SkMatrix*, const SkPaint&) override;
-    void onDrawTextBlob(const SkTextBlob*, SkScalar x, SkScalar y, const SkPaint&) override;
-    void onClipRect(const SkRect&, SkRegion::Op, ClipEdgeStyle) override;
-    void onClipRRect(const SkRRect&, SkRegion::Op, ClipEdgeStyle) override;
-    void onClipPath(const SkPath&, SkRegion::Op, ClipEdgeStyle) override;
-    void onClipRegion(const SkRegion&, SkRegion::Op) override;
->>>>>>> miniblink49
     virtual void onDrawPicture(const SkPicture*, const SkMatrix*, const SkPaint*);
     void didSetMatrix(const SkMatrix&) override;
     void didConcat(const SkMatrix&) override;
     void willSave() override;
-<<<<<<< HEAD
     SaveLayerStrategy getSaveLayerStrategy(const SaveLayerRec&) override;
-=======
-    SaveLayerStrategy willSaveLayer(const SkRect* bounds, const SkPaint*, SaveFlags) override;
->>>>>>> miniblink49
     void willRestore() override;
 
 private:
     friend class AutoLogger;
 
-<<<<<<< HEAD
     std::unique_ptr<JSONArray> m_log;
-=======
-    RefPtr<JSONArray> m_log;
->>>>>>> miniblink49
 };
 
 #ifndef NDEBUG

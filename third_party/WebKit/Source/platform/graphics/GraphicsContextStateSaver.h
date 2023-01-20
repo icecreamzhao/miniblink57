@@ -31,7 +31,6 @@
 
 #include "platform/PlatformExport.h"
 #include "platform/graphics/GraphicsContext.h"
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/Noncopyable.h"
 
@@ -44,15 +43,6 @@ class PLATFORM_EXPORT GraphicsContextStateSaver final {
 public:
     GraphicsContextStateSaver(GraphicsContext& context,
         bool saveAndRestore = true)
-=======
-
-namespace blink {
-
-class PLATFORM_EXPORT GraphicsContextStateSaver {
-    WTF_MAKE_FAST_ALLOCATED(GraphicsContextStateSaver);
-public:
-    GraphicsContextStateSaver(GraphicsContext& context, bool saveAndRestore = true)
->>>>>>> miniblink49
         : m_context(context)
         , m_saveAndRestore(saveAndRestore)
     {
@@ -87,11 +77,7 @@ public:
         m_saveAndRestore = false;
     }
 
-<<<<<<< HEAD
     GraphicsContext& context() const { return m_context; }
-=======
-    GraphicsContext* context() const { return &m_context; }
->>>>>>> miniblink49
     bool saved() const { return m_saveAndRestore; }
 
 private:

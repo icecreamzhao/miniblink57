@@ -5,7 +5,3 @@
 #include "ucnv_err.h"
 
 #endif // ucnv_h
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49

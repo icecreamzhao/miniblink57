@@ -21,7 +21,6 @@ public:
     public:
         virtual const char* getTag() = 0;
         virtual void preConcatFrameMatrix(double animationTimeMs, const SkIRect& devBounds,
-<<<<<<< HEAD
             SkMatrix* drawMatrix)
             = 0;
         virtual ~Animation() { }
@@ -29,14 +28,6 @@ public:
 
     SKPAnimationBench(const char* name, const SkPicture*, const SkIRect& devClip, Animation*,
         bool doLooping);
-=======
-                                          SkMatrix* drawMatrix) = 0;
-        virtual ~Animation() {}
-    };
-
-    SKPAnimationBench(const char* name, const SkPicture*, const SkIRect& devClip, Animation*,
-                      bool doLooping);
->>>>>>> miniblink49
 
     static Animation* CreateZoomAnimation(SkScalar zoomMax, double zoomPeriodMs);
 
@@ -44,28 +35,17 @@ protected:
     const char* onGetUniqueName() override;
     void onPerCanvasPreDraw(SkCanvas* canvas) override;
 
-<<<<<<< HEAD
     void drawMPDPicture() override
     {
-=======
-    void drawMPDPicture() override {
->>>>>>> miniblink49
         SkFAIL("MPD not supported\n");
     }
     void drawPicture() override;
 
 private:
-<<<<<<< HEAD
     SkAutoTUnref<Animation> fAnimation;
     WallTimer fAnimationTimer;
     SkString fUniqueName;
     SkIRect fDevBounds;
-=======
-    SkAutoTUnref<Animation>   fAnimation;
-    WallTimer                 fAnimationTimer;
-    SkString                  fUniqueName;
-    SkIRect                   fDevBounds;
->>>>>>> miniblink49
 
     typedef SKPBench INHERITED;
 };

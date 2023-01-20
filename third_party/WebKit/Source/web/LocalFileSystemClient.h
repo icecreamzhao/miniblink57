@@ -33,31 +33,20 @@
 
 #include "modules/filesystem/FileSystemClient.h"
 #include "wtf/Forward.h"
-<<<<<<< HEAD
 #include <memory>
-=======
->>>>>>> miniblink49
 
 namespace blink {
 
 class LocalFileSystemClient final : public FileSystemClient {
 public:
-<<<<<<< HEAD
     static std::unique_ptr<FileSystemClient> create();
-=======
-    static PassOwnPtr<FileSystemClient> create();
->>>>>>> miniblink49
 
     ~LocalFileSystemClient() override;
 
     bool requestFileSystemAccessSync(ExecutionContext*) override;
-<<<<<<< HEAD
     void requestFileSystemAccessAsync(
         ExecutionContext*,
         std::unique_ptr<ContentSettingCallbacks>) override;
-=======
-    void requestFileSystemAccessAsync(ExecutionContext*, PassOwnPtr<ContentSettingCallbacks>) override;
->>>>>>> miniblink49
 
 private:
     LocalFileSystemClient();

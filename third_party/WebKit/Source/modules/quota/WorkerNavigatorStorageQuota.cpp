@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "modules/quota/WorkerNavigatorStorageQuota.h"
 
 #include "modules/quota/DeprecatedStorageQuota.h"
@@ -37,35 +36,17 @@
 namespace blink {
 
 WorkerNavigatorStorageQuota::WorkerNavigatorStorageQuota() { }
-=======
-#include "config.h"
-#include "modules/quota/WorkerNavigatorStorageQuota.h"
-
-#include "modules/quota/DeprecatedStorageQuota.h"
-
-namespace blink {
-
-WorkerNavigatorStorageQuota::WorkerNavigatorStorageQuota()
-{
-}
->>>>>>> miniblink49
 
 const char* WorkerNavigatorStorageQuota::supplementName()
 {
     return "WorkerNavigatorStorageQuota";
 }
 
-<<<<<<< HEAD
 WorkerNavigatorStorageQuota& WorkerNavigatorStorageQuota::from(
     WorkerNavigator& navigator)
 {
     WorkerNavigatorStorageQuota* supplement = static_cast<WorkerNavigatorStorageQuota*>(
         Supplement<WorkerNavigator>::from(navigator, supplementName()));
-=======
-WorkerNavigatorStorageQuota& WorkerNavigatorStorageQuota::from(WorkerNavigator& navigator)
-{
-    WorkerNavigatorStorageQuota* supplement = static_cast<WorkerNavigatorStorageQuota*>(HeapSupplement<WorkerNavigator>::from(navigator, supplementName()));
->>>>>>> miniblink49
     if (!supplement) {
         supplement = new WorkerNavigatorStorageQuota();
         provideTo(navigator, supplementName(), supplement);
@@ -73,7 +54,6 @@ WorkerNavigatorStorageQuota& WorkerNavigatorStorageQuota::from(WorkerNavigator& 
     return *supplement;
 }
 
-<<<<<<< HEAD
 StorageManager* WorkerNavigatorStorageQuota::storage(
     WorkerNavigator& navigator)
 {
@@ -85,42 +65,12 @@ StorageManager* WorkerNavigatorStorageQuota::storage() const
     if (!m_storageManager)
         m_storageManager = new StorageManager();
     return m_storageManager.get();
-=======
-DeprecatedStorageQuota* WorkerNavigatorStorageQuota::webkitTemporaryStorage(WorkerNavigator& navigator)
-{
-    return WorkerNavigatorStorageQuota::from(navigator).webkitTemporaryStorage();
-}
-
-DeprecatedStorageQuota* WorkerNavigatorStorageQuota::webkitPersistentStorage(WorkerNavigator& navigator)
-{
-    return WorkerNavigatorStorageQuota::from(navigator).webkitPersistentStorage();
-}
-
-DeprecatedStorageQuota* WorkerNavigatorStorageQuota::webkitTemporaryStorage() const
-{
-    if (!m_temporaryStorage)
-        m_temporaryStorage = DeprecatedStorageQuota::create(DeprecatedStorageQuota::Temporary);
-    return m_temporaryStorage.get();
-}
-
-DeprecatedStorageQuota* WorkerNavigatorStorageQuota::webkitPersistentStorage() const
-{
-    if (!m_persistentStorage)
-        m_persistentStorage = DeprecatedStorageQuota::create(DeprecatedStorageQuota::Persistent);
-    return m_persistentStorage.get();
->>>>>>> miniblink49
 }
 
 DEFINE_TRACE(WorkerNavigatorStorageQuota)
 {
-<<<<<<< HEAD
     visitor->trace(m_storageManager);
     Supplement<WorkerNavigator>::trace(visitor);
-=======
-    visitor->trace(m_temporaryStorage);
-    visitor->trace(m_persistentStorage);
-    HeapSupplement<WorkerNavigator>::trace(visitor);
->>>>>>> miniblink49
 }
 
 } // namespace blink

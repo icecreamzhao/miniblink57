@@ -1,36 +1,21 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2015 Google Inc.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-<<<<<<< HEAD
 #include "SkArithmeticMode.h"
 #include "SkPath.h"
 #include "SkShader.h"
 #include "SkXfermode.h"
 #include "gm.h"
-=======
-#include "gm.h"
-#include "SkArithmeticMode.h"
-#include "SkShader.h"
-#include "SkXfermode.h"
->>>>>>> miniblink49
 
 enum {
     kXfermodeCount = SkXfermode::kLastMode + 2, // All xfermodes plus arithmetic mode.
     kShapeSize = 22,
     kShapeSpacing = 36,
     kShapeTypeSpacing = 4 * kShapeSpacing / 3,
-<<<<<<< HEAD
     kPaintSpacing = 4 * kShapeTypeSpacing,
-=======
-    kPaintSpacing = 3 * kShapeTypeSpacing,
->>>>>>> miniblink49
     kLabelSpacing = 3 * kShapeSize,
     kMargin = kShapeSpacing / 2,
     kXfermodeTypeSpacing = kLabelSpacing + 2 * kPaintSpacing + kShapeTypeSpacing,
@@ -41,27 +26,17 @@ enum {
 static const SkColor kBGColor = SkColorSetARGB(200, 210, 184, 135);
 
 static const SkColor kShapeColors[2] = {
-<<<<<<< HEAD
     SkColorSetARGB(130, 255, 0, 128), // input color unknown
     SkColorSetARGB(255, 0, 255, 255) // input color opaque
-=======
-    SkColorSetARGB(130, 255, 0, 128),   // input color unknown
-    SkColorSetARGB(255, 0, 255, 255)   // input color opaque
->>>>>>> miniblink49
 };
 
 enum Shape {
     kSquare_Shape,
     kDiamond_Shape,
     kOval_Shape,
-<<<<<<< HEAD
     kConcave_Shape,
 
     kLast_Shape = kConcave_Shape
-=======
-
-    kLast_Shape = kOval_Shape
->>>>>>> miniblink49
 };
 
 namespace skiagm {
@@ -72,11 +47,7 @@ namespace skiagm {
  */
 class AAXfermodesGM : public GM {
 public:
-<<<<<<< HEAD
     AAXfermodesGM() { }
-=======
-    AAXfermodesGM() {}
->>>>>>> miniblink49
 
 protected:
     enum DrawingPass {
@@ -85,7 +56,6 @@ protected:
         kShape_Pass
     };
 
-<<<<<<< HEAD
     SkString onShortName() override
     {
         return SkString("aaxfermodes");
@@ -126,40 +96,6 @@ protected:
     void draw_pass(SkCanvas* canvas, DrawingPass drawingPass)
     {
         SkRect clipRect = { -kShapeSize * 11 / 16, -kShapeSize * 11 / 16, kShapeSize * 11 / 16, kShapeSize * 11 / 16 };
-=======
-    SkString onShortName() override {
-        return SkString("aaxfermodes");
-    }
-
-    SkISize onISize() override {
-        return SkISize::Make(2 * kMargin + 2 * kXfermodeTypeSpacing -
-                             (kXfermodeTypeSpacing - (kLabelSpacing + 2 * kPaintSpacing)),
-                             2 * kMargin + kTitleSpacing + kSubtitleSpacing +
-                             (1 + SkXfermode::kLastCoeffMode) * kShapeSpacing);
-    }
-
-    void onOnceBeforeDraw() override {
-        fLabelPaint.setAntiAlias(true);
-        sk_tool_utils::set_portable_typeface_always(&fLabelPaint);
-        fLabelPaint.setTextSize(5 * kShapeSize/8);
-        fLabelPaint.setSubpixelText(true);
-
-        static const SkScalar radius = -1.4f * kShapeSize/2;
-        SkPoint pts[4] = {
-            {-radius, 0},
-            {0, -1.33f * radius},
-            {radius, 0},
-            {0, 1.33f * radius}
-        };
-        fPath.moveTo(pts[0]);
-        fPath.quadTo(pts[1], pts[2]);
-        fPath.quadTo(pts[3], pts[0]);
-    }
-
-    void draw_pass(SkCanvas* canvas, DrawingPass drawingPass) {
-        SkRect clipRect =
-                { -kShapeSize*11/16, -kShapeSize*11/16, kShapeSize*11/16, kShapeSize*11/16 };
->>>>>>> miniblink49
 
         canvas->save();
         if (kCheckerboard_Pass == drawingPass) {
@@ -174,7 +110,6 @@ protected:
             if (kShape_Pass == drawingPass) {
                 fLabelPaint.setTextAlign(SkPaint::kCenter_Align);
                 canvas->drawText("Src Unknown", sizeof("Src Unknown") - 1,
-<<<<<<< HEAD
                     kLabelSpacing + kShapeTypeSpacing * 1.5f + kShapeSpacing / 2,
                     kSubtitleSpacing / 2 + fLabelPaint.getTextSize() / 3, fLabelPaint);
                 canvas->drawText("Src Opaque", sizeof("Src Opaque") - 1,
@@ -183,16 +118,6 @@ protected:
             }
 
             canvas->translate(0, kSubtitleSpacing + kShapeSpacing / 2);
-=======
-                        kLabelSpacing + kShapeSpacing / 2 + kShapeTypeSpacing,
-                        kSubtitleSpacing / 2 + fLabelPaint.getTextSize() / 3, fLabelPaint);
-                canvas->drawText("Src Opaque", sizeof("Src Opaque") - 1,
-                        kLabelSpacing + kShapeSpacing / 2 + kShapeTypeSpacing + kPaintSpacing,
-                        kSubtitleSpacing / 2 + fLabelPaint.getTextSize() / 3, fLabelPaint);
-            }
-
-            canvas->translate(0, kSubtitleSpacing + kShapeSpacing/2);
->>>>>>> miniblink49
 
             for (size_t m = 0; m <= SkXfermode::kLastCoeffMode; m++) {
                 SkXfermode::Mode mode = static_cast<SkXfermode::Mode>(firstMode + m);
@@ -201,11 +126,7 @@ protected:
                 if (kShape_Pass == drawingPass) {
                     this->drawModeName(canvas, mode);
                 }
-<<<<<<< HEAD
                 canvas->translate(kLabelSpacing + kShapeSpacing / 2, 0);
-=======
-                canvas->translate(kLabelSpacing + kShapeSpacing/2, 0);
->>>>>>> miniblink49
 
                 for (size_t colorIdx = 0; colorIdx < SK_ARRAY_COUNT(kShapeColors); colorIdx++) {
                     SkPaint paint;
@@ -219,11 +140,7 @@ protected:
                             canvas->clipRect(clipRect);
                             if (kCheckerboard_Pass == drawingPass) {
                                 sk_tool_utils::draw_checkerboard(canvas, 0xffffffff, 0xffc6c3c6,
-<<<<<<< HEAD
                                     10);
-=======
-                                        10);
->>>>>>> miniblink49
                             } else {
                                 SkASSERT(kBackground_Pass == drawingPass);
                                 canvas->drawColor(kBGColor, SkXfermode::kSrc_Mode);
@@ -250,16 +167,10 @@ protected:
         canvas->restore();
     }
 
-<<<<<<< HEAD
     void onDraw(SkCanvas* canvas) override
     {
         draw_pass(canvas, kCheckerboard_Pass);
         canvas->saveLayer(nullptr, nullptr);
-=======
-    void onDraw(SkCanvas* canvas) override {
-        draw_pass(canvas, kCheckerboard_Pass);
-        canvas->saveLayer(NULL, NULL);
->>>>>>> miniblink49
 
         canvas->translate(kMargin, kMargin);
         draw_pass(canvas, kBackground_Pass);
@@ -269,69 +180,40 @@ protected:
         titlePaint.setFakeBoldText(true);
         titlePaint.setTextAlign(SkPaint::kCenter_Align);
         canvas->drawText("Porter Duff", sizeof("Porter Duff") - 1,
-<<<<<<< HEAD
             kLabelSpacing + 4 * kShapeTypeSpacing,
             kTitleSpacing / 2 + titlePaint.getTextSize() / 3, titlePaint);
         canvas->drawText("Advanced", sizeof("Advanced") - 1,
             kXfermodeTypeSpacing + kLabelSpacing + 4 * kShapeTypeSpacing,
             kTitleSpacing / 2 + titlePaint.getTextSize() / 3, titlePaint);
-=======
-                         kLabelSpacing + 3 * kShapeTypeSpacing,
-                         kTitleSpacing / 2 + titlePaint.getTextSize() / 3, titlePaint);
-        canvas->drawText("Advanced", sizeof("Advanced") - 1,
-                         kXfermodeTypeSpacing + kLabelSpacing + 3 * kShapeTypeSpacing,
-                         kTitleSpacing / 2 + titlePaint.getTextSize() / 3, titlePaint);
->>>>>>> miniblink49
 
         draw_pass(canvas, kShape_Pass);
         canvas->restore();
     }
 
-<<<<<<< HEAD
     void drawModeName(SkCanvas* canvas, SkXfermode::Mode mode)
     {
-=======
-    void drawModeName(SkCanvas* canvas, SkXfermode::Mode mode) {
->>>>>>> miniblink49
         const char* modeName = mode <= SkXfermode::kLastMode ? SkXfermode::ModeName(mode)
                                                              : "Arithmetic";
         fLabelPaint.setTextAlign(SkPaint::kRight_Align);
         canvas->drawText(modeName, strlen(modeName), kLabelSpacing - kShapeSize / 4,
-<<<<<<< HEAD
             fLabelPaint.getTextSize() / 4, fLabelPaint);
     }
 
     void setupShapePaint(SkCanvas* canvas, GrColor color, SkXfermode::Mode mode, SkPaint* paint)
     {
-=======
-                         fLabelPaint.getTextSize() / 3, fLabelPaint);
-    }
-
-    void setupShapePaint(SkCanvas* canvas, GrColor color, SkXfermode::Mode mode, SkPaint* paint) {
->>>>>>> miniblink49
         paint->setColor(color);
 
         if (mode == SkXfermode::kPlus_Mode) {
             // Check for overflow, otherwise we might get confusing AA artifacts.
             int maxSum = SkTMax(SkTMax(SkColorGetA(kBGColor) + SkColorGetA(color),
-<<<<<<< HEAD
                                     SkColorGetR(kBGColor) + SkColorGetR(color)),
                 SkTMax(SkColorGetG(kBGColor) + SkColorGetG(color),
                     SkColorGetB(kBGColor) + SkColorGetB(color)));
-=======
-                                       SkColorGetR(kBGColor) + SkColorGetR(color)),
-                                SkTMax(SkColorGetG(kBGColor) + SkColorGetG(color),
-                                       SkColorGetB(kBGColor) + SkColorGetB(color)));
->>>>>>> miniblink49
 
             if (maxSum > 255) {
                 SkPaint dimPaint;
                 dimPaint.setAntiAlias(false);
-<<<<<<< HEAD
                 dimPaint.setXfermode(SkXfermode::Make(SkXfermode::kDstIn_Mode));
-=======
-                dimPaint.setXfermode(SkXfermode::Create(SkXfermode::kDstIn_Mode));
->>>>>>> miniblink49
                 if (255 != paint->getAlpha()) {
                     // Dim the src and dst colors.
                     dimPaint.setARGB(255 * 255 / maxSum, 0, 0, 0);
@@ -340,20 +222,13 @@ protected:
                     // Just clear the dst, we need to preserve the paint's opacity.
                     dimPaint.setARGB(0, 0, 0, 0);
                 }
-<<<<<<< HEAD
                 canvas->drawRectCoords(-kShapeSpacing / 2, -kShapeSpacing / 2,
                     kShapeSpacing / 2 + 3 * kShapeTypeSpacing,
                     kShapeSpacing / 2, dimPaint);
-=======
-                canvas->drawRectCoords(-kShapeSpacing/2, -kShapeSpacing/2,
-                                       kShapeSpacing/2 + 2 * kShapeTypeSpacing,
-                                       kShapeSpacing/2, dimPaint);
->>>>>>> miniblink49
             }
         }
     }
 
-<<<<<<< HEAD
     void drawShape(SkCanvas* canvas, Shape shape, const SkPaint& paint, SkXfermode::Mode mode)
     {
         SkPaint shapePaint(paint);
@@ -394,55 +269,13 @@ protected:
 
         default:
             SkFAIL("Invalid shape.");
-=======
-    void drawShape(SkCanvas* canvas, Shape shape, const SkPaint& paint, SkXfermode::Mode mode) {
-        SkPaint shapePaint(paint);
-        shapePaint.setAntiAlias(kSquare_Shape != shape);
-
-        SkAutoTUnref<SkXfermode> xfermode;
-        if (mode <= SkXfermode::kLastMode) {
-            xfermode.reset(SkXfermode::Create(mode));
-        } else {
-            xfermode.reset(SkArithmeticMode::Create(+1.0f, +0.25f, -0.5f, +0.1f));
-        }
-        shapePaint.setXfermode(xfermode);
-
-        switch (shape) {
-            case kSquare_Shape:
-                canvas->drawRectCoords(-kShapeSize/2, -kShapeSize/2, kShapeSize/2, kShapeSize/2,
-                                       shapePaint);
-                break;
-
-            case kDiamond_Shape:
-                canvas->save();
-                canvas->rotate(45);
-                canvas->drawRectCoords(-kShapeSize/2, -kShapeSize/2, kShapeSize/2, kShapeSize/2,
-                                       shapePaint);
-                canvas->restore();
-                break;
-
-            case kOval_Shape:
-                canvas->save();
-                canvas->rotate(static_cast<SkScalar>((511 * mode + 257) % 360));
-                canvas->drawPath(fPath, shapePaint);
-                canvas->restore();
-                break;
-
-            default:
-                SkFAIL("Invalid shape.");
->>>>>>> miniblink49
         }
     }
 
 private:
-<<<<<<< HEAD
     SkPaint fLabelPaint;
     SkPath fOval;
     SkPath fConcave;
-=======
-    SkPaint   fLabelPaint;
-    SkPath    fPath;
->>>>>>> miniblink49
 
     typedef GM INHERITED;
 };

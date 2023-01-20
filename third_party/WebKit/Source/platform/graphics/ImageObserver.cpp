@@ -27,21 +27,10 @@
  *
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
-
->>>>>>> miniblink49
 #include "platform/graphics/ImageObserver.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 ImageObserver::~ImageObserver() { }
-=======
-ImageObserver::~ImageObserver()
-{
-}
->>>>>>> miniblink49
 
 } // namespace blink

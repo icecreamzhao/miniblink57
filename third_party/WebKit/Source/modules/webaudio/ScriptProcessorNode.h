@@ -10,7 +10,6 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
-<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -22,28 +21,13 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
-=======
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
->>>>>>> miniblink49
  */
 
 #ifndef ScriptProcessorNode_h
 #define ScriptProcessorNode_h
 
-<<<<<<< HEAD
 #include "base/gtest_prod_util.h"
 #include "bindings/core/v8/ActiveScriptWrappable.h"
-=======
->>>>>>> miniblink49
 #include "modules/webaudio/AudioNode.h"
 #include "platform/audio/AudioBus.h"
 #include "wtf/Forward.h"
@@ -53,7 +37,6 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 class BaseAudioContext;
 class AudioBuffer;
 class WaitableEvent;
@@ -74,20 +57,6 @@ public:
         size_t bufferSize,
         unsigned numberOfInputChannels,
         unsigned numberOfOutputChannels);
-=======
-class AudioBuffer;
-class AudioContext;
-
-// ScriptProcessorNode is an AudioNode which allows for arbitrary synthesis or processing directly using JavaScript.
-// The API allows for a variable number of inputs and outputs, although it must have at least one input or output.
-// This basic implementation supports no more than one input and output.
-// The "onaudioprocess" attribute is an event listener which will get called periodically with an AudioProcessingEvent which has
-// AudioBuffers for each input and output.
-
-class ScriptProcessorHandler final : public AudioHandler {
-public:
-    static PassRefPtr<ScriptProcessorHandler> create(AudioNode&, float sampleRate, size_t bufferSize, unsigned numberOfInputChannels, unsigned numberOfOutputChannels);
->>>>>>> miniblink49
     ~ScriptProcessorHandler() override;
 
     // AudioHandler
@@ -99,7 +68,6 @@ public:
     void setChannelCount(unsigned long, ExceptionState&) override;
     void setChannelCountMode(const String&, ExceptionState&) override;
 
-<<<<<<< HEAD
     virtual unsigned numberOfOutputChannels() const
     {
         return m_numberOfOutputChannels;
@@ -116,26 +84,12 @@ private:
 
     void fireProcessEvent(unsigned);
     void fireProcessEventForOfflineAudioContext(unsigned, WaitableEvent*);
-=======
-    virtual unsigned numberOfOutputChannels() const { return m_numberOfOutputChannels; }
-
-private:
-    ScriptProcessorHandler(AudioNode&, float sampleRate, size_t bufferSize, unsigned numberOfInputChannels, unsigned numberOfOutputChannels);
-    double tailTime() const override;
-    double latencyTime() const override;
-
-    void fireProcessEvent();
->>>>>>> miniblink49
 
     // Double buffering
     unsigned doubleBufferIndex() const { return m_doubleBufferIndex; }
     void swapBuffers() { m_doubleBufferIndex = 1 - m_doubleBufferIndex; }
     unsigned m_doubleBufferIndex;
-<<<<<<< HEAD
 
-=======
-    unsigned m_doubleBufferIndexForEvent;
->>>>>>> miniblink49
     // These Persistent don't make reference cycles including the owner
     // ScriptProcessorNode.
     PersistentHeapVector<Member<AudioBuffer>> m_inputBuffers;
@@ -151,7 +105,6 @@ private:
     // Synchronize process() with fireProcessEvent().
     mutable Mutex m_processEventLock;
 
-<<<<<<< HEAD
     FRIEND_TEST_ALL_PREFIXES(ScriptProcessorNodeTest, BufferLifetime);
 };
 
@@ -161,14 +114,6 @@ class ScriptProcessorNode final
     DEFINE_WRAPPERTYPEINFO();
     USING_GARBAGE_COLLECTED_MIXIN(ScriptProcessorNode);
 
-=======
-    // TODO(tkent): Use FRIEND_TEST macro provided by gtest_prod.h
-    friend class ScriptProcessorNodeTest_BufferLifetime_Test;
-};
-
-class ScriptProcessorNode final : public AudioNode {
-    DEFINE_WRAPPERTYPEINFO();
->>>>>>> miniblink49
 public:
     // bufferSize must be one of the following values: 256, 512, 1024, 2048,
     // 4096, 8192, 16384.
@@ -178,7 +123,6 @@ public:
     // latency. Higher numbers will be necessary to avoid audio breakup and
     // glitches.
     // The value chosen must carefully balance between latency and audio quality.
-<<<<<<< HEAD
     static ScriptProcessorNode* create(BaseAudioContext&, ExceptionState&);
     static ScriptProcessorNode* create(BaseAudioContext&,
         size_t bufferSize,
@@ -192,14 +136,10 @@ public:
         unsigned numberOfInputChannels,
         unsigned numberOfOutputChannels,
         ExceptionState&);
-=======
-    static ScriptProcessorNode* create(AudioContext&, float sampleRate, size_t bufferSize, unsigned numberOfInputChannels, unsigned numberOfOutputChannels);
->>>>>>> miniblink49
 
     DEFINE_ATTRIBUTE_EVENT_LISTENER(audioprocess);
     size_t bufferSize() const;
 
-<<<<<<< HEAD
     // ScriptWrappable
     bool hasPendingActivity() const final;
 
@@ -211,10 +151,6 @@ private:
         size_t bufferSize,
         unsigned numberOfInputChannels,
         unsigned numberOfOutputChannels);
-=======
-private:
-    ScriptProcessorNode(AudioContext&, float sampleRate, size_t bufferSize, unsigned numberOfInputChannels, unsigned numberOfOutputChannels);
->>>>>>> miniblink49
 };
 
 } // namespace blink

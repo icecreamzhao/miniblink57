@@ -27,7 +27,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/css/DOMWindowCSS.h"
 
 #include "core/css/CSSMarkup.h"
@@ -44,11 +43,21 @@ bool DOMWindowCSS::supports(const String& property, const String& value)
     CSSPropertyID unresolvedProperty = unresolvedCSSPropertyID(property);
     if (unresolvedProperty == CSSPropertyInvalid)
         return false;
+    if (unresolvedProperty == CSSPropertyVariable) {
+        MutableStylePropertySet* dummyStyle = MutableStylePropertySet::create(HTMLStandardMode);
+        bool isAnimationTainted = false;
+        return CSSParser::parseValueForCustomProperty(dummyStyle, "--valid",
+            nullptr, value, false,
+            nullptr, isAnimationTainted)
+            .didParse;
+    }
+
     ASSERT(CSSPropertyMetadata::isEnabledProperty(unresolvedProperty));
 
     // This will return false when !important is present
-    RefPtrWillBeRawPtr<MutableStylePropertySet> dummyStyle = MutableStylePropertySet::create();
-    return CSSParser::parseValue(dummyStyle.get(), unresolvedProperty, value, false, HTMLStandardMode, 0);
+    MutableStylePropertySet* dummyStyle = MutableStylePropertySet::create(HTMLStandardMode);
+    return CSSParser::parseValue(dummyStyle, unresolvedProperty, value, false)
+        .didParse;
 }
 
 bool DOMWindowCSS::supports(const String& conditionText)
@@ -63,4 +72,4 @@ String DOMWindowCSS::escape(const String& ident)
     return builder.toString();
 }
 
-}
+} // namespace blink

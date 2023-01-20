@@ -5,43 +5,24 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #ifndef GrGLSLCaps_DEFINED
 #define GrGLSLCaps_DEFINED
 
 #include "GrCaps.h"
 #include "GrGLSL.h"
-<<<<<<< HEAD
 #include "GrSwizzle.h"
 
 class GrGLSLCaps : public GrShaderCaps {
 public:
-=======
-
-class GrGLSLCaps : public GrShaderCaps {
-public:
-    
-
->>>>>>> miniblink49
     /**
     * Indicates how GLSL must interact with advanced blend equations. The KHR extension requires
     * special layout qualifiers in the fragment shader.
     */
     enum AdvBlendEqInteraction {
-<<<<<<< HEAD
         kNotSupported_AdvBlendEqInteraction, //<! No _blend_equation_advanced extension
         kAutomatic_AdvBlendEqInteraction, //<! No interaction required
         kGeneralEnable_AdvBlendEqInteraction, //<! layout(blend_support_all_equations) out
         kSpecificEnables_AdvBlendEqInteraction, //<! Specific layout qualifiers per equation
-=======
-        kNotSupported_AdvBlendEqInteraction,     //<! No _blend_equation_advanced extension
-        kAutomatic_AdvBlendEqInteraction,        //<! No interaction required
-        kGeneralEnable_AdvBlendEqInteraction,    //<! layout(blend_support_all_equations) out
-        kSpecificEnables_AdvBlendEqInteraction,  //<! Specific layout qualifiers per equation
->>>>>>> miniblink49
 
         kLast_AdvBlendEqInteraction = kSpecificEnables_AdvBlendEqInteraction
     };
@@ -62,18 +43,14 @@ public:
 
     bool bindlessTextureSupport() const { return fBindlessTextureSupport; }
 
-<<<<<<< HEAD
     const char* versionDeclString() const { return fVersionDeclString; }
 
-=======
->>>>>>> miniblink49
     const char* fbFetchColorName() const { return fFBFetchColorName; }
 
     const char* fbFetchExtensionString() const { return fFBFetchExtensionString; }
 
     bool dropsTileOnZeroDivide() const { return fDropsTileOnZeroDivide; }
 
-<<<<<<< HEAD
     bool flatInterpolationSupport() const { return fFlatInterpolationSupport; }
 
     bool noperspectiveInterpolationSupport() const { return fNoPerspectiveInterpolationSupport; }
@@ -201,22 +178,6 @@ public:
         return static_cast<GrSLPrecision>(fSamplerPrecisions[visibility][config]);
     }
 
-=======
-    AdvBlendEqInteraction advBlendEqInteraction() const { return fAdvBlendEqInteraction; }
-
-    bool mustEnableAdvBlendEqs() const {
-        return fAdvBlendEqInteraction >= kGeneralEnable_AdvBlendEqInteraction;
-    }
-
-    bool mustEnableSpecificAdvBlendEqs() const {
-        return fAdvBlendEqInteraction == kSpecificEnables_AdvBlendEqInteraction;
-    }
-    
-    bool mustDeclareFragmentShaderOutput() const {
-        return fGLSLGeneration > k110_GrGLSLGeneration;
-    }
-
->>>>>>> miniblink49
     GrGLSLGeneration generation() const { return fGLSLGeneration; }
 
     /**
@@ -225,7 +186,6 @@ public:
     SkString dump() const override;
 
 private:
-<<<<<<< HEAD
     /** GrCaps subclasses must call this after filling in the shader precision table. */
     void initSamplerPrecisionTable();
 
@@ -233,15 +193,10 @@ private:
 
     GrGLSLGeneration fGLSLGeneration;
 
-=======
-    GrGLSLGeneration fGLSLGeneration;
-    
->>>>>>> miniblink49
     bool fDropsTileOnZeroDivide : 1;
     bool fFBFetchSupport : 1;
     bool fFBFetchNeedsCustomOutput : 1;
     bool fBindlessTextureSupport : 1;
-<<<<<<< HEAD
     bool fUsesPrecisionModifiers : 1;
     bool fCanUseAnyFunctionInShader : 1;
     bool fFlatInterpolationSupport : 1;
@@ -266,13 +221,10 @@ private:
     const char* fNoPerspectiveInterpolationExtensionString;
     const char* fMultisampleInterpolationExtensionString;
     const char* fSampleVariablesExtensionString;
-=======
->>>>>>> miniblink49
 
     const char* fFBFetchColorName;
     const char* fFBFetchExtensionString;
 
-<<<<<<< HEAD
     uint32_t fMaxVertexSamplers;
     uint32_t fMaxGeometrySamplers;
     uint32_t fMaxFragmentSamplers;
@@ -287,17 +239,8 @@ private:
 
     friend class GrGLCaps; // For initialization.
     friend class GrVkCaps;
-=======
-    AdvBlendEqInteraction fAdvBlendEqInteraction;
-
-    friend class GrGLCaps;  // For initialization.
->>>>>>> miniblink49
 
     typedef GrShaderCaps INHERITED;
 };
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #endif

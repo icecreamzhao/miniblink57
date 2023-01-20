@@ -1,38 +1,78 @@
-{% from "macros.tmpl" import license %}
-{{ license() }}
+{ % from "macros.tmpl" import license % } {
+    {
+        license()
+    }
+}
 
-#ifndef {{namespace}}{{suffix}}Names_h
-#define {{namespace}}{{suffix}}Names_h
+#ifndef{ { namespace } } { { suffix } } Names_h
+#define{ { namespace } } { { suffix } } Names_h
 
-{% set symbol_export = '%s ' % export if export else '' %}
-{% if suffix %}
+{
+    % set symbol_export = '%s ' % export if export else '' %
+}
+{
+    % if suffix %
+}
 #include "core/{{namespace}}Names.h"
-{% else %}
+{
+    % else %
+}
 #include "wtf/text/AtomicString.h"
-{% endif %}
-{% if export == 'CORE_EXPORT' %}
+{ % endif % } {
+    % if export == 'CORE_EXPORT' %
+}
 #include "core/CoreExport.h"
-{% elif export == 'MODULES_EXPORT' %}
+{
+    % elif export == 'MODULES_EXPORT' %
+}
 #include "modules/ModulesExport.h"
-{% else %}
+{
+    % else %
+}
 #include "platform/PlatformExport.h"
-{% endif %}
+{ % endif % }
 
 // Generated from:
-{% for entry in in_files|sort %}
+{% for entry in in_files|sort %
+}
 // - {{entry}}
-{% endfor %}
+{
+    % endfor %
+}
 
 namespace blink {
-namespace {{namespace}}Names {
+namespace {
+    {namespace}
+}
+Names
+{
 
-{% for entry in entries|sort %}
-{% filter enable_conditional(entry.Conditional) %}
-{{symbol_export}}extern const WTF::AtomicString& {{entry|symbol}};
-{% endfilter %}
-{% endfor %}
+    {% for entry in entries|sort %
+    }
+    {
+        {
+            symbol_export
+        }
+    }
+    extern const WTF::AtomicString& { { entry | symbol } };
+    {
+        % endfor %
+    }
 
-{{symbol_export}}void init{{suffix}}();
+    const unsigned { { namespace } }
+    {
+        {
+            suffix
+        }
+    }
+    NamesCount = { { entries | length } };
+
+    {
+        {
+            symbol_export
+        }
+    }
+    void init { { suffix } }();
 
 } // {{namespace}}Names
 } // namespace blink

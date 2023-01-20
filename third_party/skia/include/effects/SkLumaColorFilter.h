@@ -9,10 +9,7 @@
 #define SkLumaColorFilter_DEFINED
 
 #include "SkColorFilter.h"
-<<<<<<< HEAD
 #include "SkRefCnt.h"
-=======
->>>>>>> miniblink49
 
 /**
  *  Luminance-to-alpha color filter, as defined in
@@ -27,7 +24,6 @@
  */
 class SK_API SkLumaColorFilter : public SkColorFilter {
 public:
-<<<<<<< HEAD
     static sk_sp<SkColorFilter> Make();
 
 #ifdef SK_SUPPORT_LEGACY_COLORFILTER_PTR
@@ -36,19 +32,11 @@ public:
         return Make().release();
     }
 #endif
-=======
-    static SkColorFilter* Create();
->>>>>>> miniblink49
 
     void filterSpan(const SkPMColor src[], int count, SkPMColor[]) const override;
 
 #if SK_SUPPORT_GPU
-<<<<<<< HEAD
     sk_sp<GrFragmentProcessor> asFragmentProcessor(GrContext*) const override;
-=======
-    bool asFragmentProcessors(GrContext*, GrProcessorDataManager*,
-                              SkTDArray<GrFragmentProcessor*>*) const override;
->>>>>>> miniblink49
 #endif
 
     SK_TO_STRING_OVERRIDE()

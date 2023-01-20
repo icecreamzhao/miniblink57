@@ -23,11 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
-
->>>>>>> miniblink49
 #include "public/web/WebMediaDevicesRequest.h"
 
 #include "core/dom/Document.h"
@@ -52,24 +47,16 @@ void WebMediaDevicesRequest::reset()
     m_private.reset();
 }
 
-<<<<<<< HEAD
 WebSecurityOrigin WebMediaDevicesRequest::getSecurityOrigin() const
 {
     DCHECK(!isNull());
     DCHECK(m_private->getExecutionContext());
     return WebSecurityOrigin(
         m_private->getExecutionContext()->getSecurityOrigin());
-=======
-WebSecurityOrigin WebMediaDevicesRequest::securityOrigin() const
-{
-    ASSERT(!isNull() && m_private->executionContext());
-    return WebSecurityOrigin(m_private->executionContext()->securityOrigin());
->>>>>>> miniblink49
 }
 
 WebDocument WebMediaDevicesRequest::ownerDocument() const
 {
-<<<<<<< HEAD
     DCHECK(!isNull());
     return WebDocument(m_private->ownerDocument());
 }
@@ -78,15 +65,6 @@ void WebMediaDevicesRequest::requestSucceeded(
     WebVector<WebMediaDeviceInfo> webDevices)
 {
     DCHECK(!isNull());
-=======
-    ASSERT(!isNull());
-    return WebDocument(m_private->ownerDocument());
-}
-
-void WebMediaDevicesRequest::requestSucceeded(WebVector<WebMediaDeviceInfo> webDevices)
-{
-    ASSERT(!isNull());
->>>>>>> miniblink49
 
     MediaDeviceInfoVector devices(webDevices.size());
     for (size_t i = 0; i < webDevices.size(); ++i)

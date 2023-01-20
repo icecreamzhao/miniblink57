@@ -28,23 +28,26 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/svg/SVGTransformTearOff.h"
 
-#include "bindings/core/v8/ExceptionState.h"
-#include "core/dom/ExceptionCode.h"
 #include "core/svg/SVGElement.h"
+#include "core/svg/SVGMatrixTearOff.h"
 
 namespace blink {
 
-SVGTransformTearOff::SVGTransformTearOff(PassRefPtrWillBeRawPtr<SVGTransform> target, SVGElement* contextElement, PropertyIsAnimValType propertyIsAnimVal, const QualifiedName& attributeName)
-    : SVGPropertyTearOff<SVGTransform>(target, contextElement, propertyIsAnimVal, attributeName)
+SVGTransformTearOff::SVGTransformTearOff(
+    SVGTransform* target,
+    SVGElement* contextElement,
+    PropertyIsAnimValType propertyIsAnimVal,
+    const QualifiedName& attributeName)
+    : SVGPropertyTearOff<SVGTransform>(target,
+        contextElement,
+        propertyIsAnimVal,
+        attributeName)
 {
 }
 
-SVGTransformTearOff::~SVGTransformTearOff()
-{
-}
+SVGTransformTearOff::~SVGTransformTearOff() { }
 
 DEFINE_TRACE(SVGTransformTearOff)
 {
@@ -52,55 +55,63 @@ DEFINE_TRACE(SVGTransformTearOff)
     SVGPropertyTearOff<SVGTransform>::trace(visitor);
 }
 
+SVGTransformTearOff* SVGTransformTearOff::create(SVGMatrixTearOff* matrix)
+{
+    return create(SVGTransform::create(matrix->value()), nullptr,
+        PropertyIsNotAnimVal);
+}
+
 SVGMatrixTearOff* SVGTransformTearOff::matrix()
 {
-    if (!m_matrixTearoff) {
+    if (!m_matrixTearoff)
         m_matrixTearoff = SVGMatrixTearOff::create(this);
-    }
-
     return m_matrixTearoff.get();
 }
 
-void SVGTransformTearOff::setMatrix(PassRefPtrWillBeRawPtr<SVGMatrixTearOff> matrix, ExceptionState& exceptionState)
+void SVGTransformTearOff::setMatrix(SVGMatrixTearOff* matrix,
+    ExceptionState& exceptionState)
 {
     if (isImmutable()) {
-        exceptionState.throwDOMException(NoModificationAllowedError, "The attribute is read-only.");
+        throwReadOnly(exceptionState);
         return;
     }
-
     target()->setMatrix(matrix->value());
     commitChange();
 }
 
-void SVGTransformTearOff::setTranslate(float tx, float ty, ExceptionState& exceptionState)
+void SVGTransformTearOff::setTranslate(float tx,
+    float ty,
+    ExceptionState& exceptionState)
 {
     if (isImmutable()) {
-        exceptionState.throwDOMException(NoModificationAllowedError, "The attribute is read-only.");
+        throwReadOnly(exceptionState);
         return;
     }
-
     target()->setTranslate(tx, ty);
     commitChange();
 }
 
-void SVGTransformTearOff::setScale(float sx, float sy, ExceptionState& exceptionState)
+void SVGTransformTearOff::setScale(float sx,
+    float sy,
+    ExceptionState& exceptionState)
 {
     if (isImmutable()) {
-        exceptionState.throwDOMException(NoModificationAllowedError, "The attribute is read-only.");
+        throwReadOnly(exceptionState);
         return;
     }
-
     target()->setScale(sx, sy);
     commitChange();
 }
 
-void SVGTransformTearOff::setRotate(float angle, float cx, float cy, ExceptionState& exceptionState)
+void SVGTransformTearOff::setRotate(float angle,
+    float cx,
+    float cy,
+    ExceptionState& exceptionState)
 {
     if (isImmutable()) {
-        exceptionState.throwDOMException(NoModificationAllowedError, "The attribute is read-only.");
+        throwReadOnly(exceptionState);
         return;
     }
-
     target()->setRotate(angle, cx, cy);
     commitChange();
 }
@@ -108,10 +119,9 @@ void SVGTransformTearOff::setRotate(float angle, float cx, float cy, ExceptionSt
 void SVGTransformTearOff::setSkewX(float x, ExceptionState& exceptionState)
 {
     if (isImmutable()) {
-        exceptionState.throwDOMException(NoModificationAllowedError, "The attribute is read-only.");
+        throwReadOnly(exceptionState);
         return;
     }
-
     target()->setSkewX(x);
     commitChange();
 }
@@ -119,12 +129,16 @@ void SVGTransformTearOff::setSkewX(float x, ExceptionState& exceptionState)
 void SVGTransformTearOff::setSkewY(float y, ExceptionState& exceptionState)
 {
     if (isImmutable()) {
-        exceptionState.throwDOMException(NoModificationAllowedError, "The attribute is read-only.");
+        throwReadOnly(exceptionState);
         return;
     }
-
     target()->setSkewY(y);
     commitChange();
 }
 
+DEFINE_TRACE_WRAPPERS(SVGTransformTearOff)
+{
+    visitor->traceWrappers(contextElement());
 }
+
+} // namespace blink

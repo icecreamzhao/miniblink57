@@ -71,13 +71,8 @@ typedef struct UReplaceableCallbacks {
      * @return The UChar (code unit) at offset, or U+FFFF if the offset is out of bounds.
      * @stable ICU 2.0
      */
-<<<<<<< HEAD
     UChar (*charAt)(const UReplaceable* rep,
         int32_t offset);
-=======
-    UChar   (*charAt)(const UReplaceable* rep,
-                      int32_t offset);
->>>>>>> miniblink49
 
     /**
      * Function pointer that returns a UChar32 code point at the given
@@ -90,13 +85,8 @@ typedef struct UReplaceableCallbacks {
      * @stable ICU 2.0
      */
     UChar32 (*char32At)(const UReplaceable* rep,
-<<<<<<< HEAD
         int32_t offset);
 
-=======
-                        int32_t offset);
-    
->>>>>>> miniblink49
     /**
      * Function pointer that replaces text between start and limit in
      * this text with the given text.  Attributes (out of band info)
@@ -113,21 +103,12 @@ typedef struct UReplaceableCallbacks {
      * is null-terminated.
      * @stable ICU 2.0
      */
-<<<<<<< HEAD
     void (*replace)(UReplaceable* rep,
         int32_t start,
         int32_t limit,
         const UChar* text,
         int32_t textLength);
 
-=======
-    void    (*replace)(UReplaceable* rep,
-                       int32_t start,
-                       int32_t limit,
-                       const UChar* text,
-                       int32_t textLength);
-    
->>>>>>> miniblink49
     /**
      * Function pointer that copies the characters in the range
      * [<tt>start</tt>, <tt>limit</tt>) into the array <tt>dst</tt>.
@@ -141,17 +122,10 @@ typedef struct UReplaceableCallbacks {
      * <tt>dst</tt> must be at least <tt>(limit - start)</tt>.
      * @stable ICU 2.1
      */
-<<<<<<< HEAD
     void (*extract)(UReplaceable* rep,
         int32_t start,
         int32_t limit,
         UChar* dst);
-=======
-    void    (*extract)(UReplaceable* rep,
-                       int32_t start,
-                       int32_t limit,
-                       UChar* dst);
->>>>>>> miniblink49
 
     /**
      * Function pointer that copies text between start and limit in
@@ -169,17 +143,10 @@ typedef struct UReplaceableCallbacks {
      * inserted.
      * @stable ICU 2.0
      */
-<<<<<<< HEAD
     void (*copy)(UReplaceable* rep,
         int32_t start,
         int32_t limit,
         int32_t dest);
-=======
-    void    (*copy)(UReplaceable* rep,
-                    int32_t start,
-                    int32_t limit,
-                    int32_t dest);    
->>>>>>> miniblink49
 
 } UReplaceableCallbacks;
 

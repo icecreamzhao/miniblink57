@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #ifndef SkAnimatorView_DEFINED
 #define SkAnimatorView_DEFINED
 
@@ -16,31 +15,13 @@
 class SkAnimatorView : public SkView {
 public:
     SkAnimatorView();
-=======
-
-#ifndef SkAnimatorView_DEFINED
-#define SkAnimatorView_DEFINED
-
-#include "SkView.h"
-#include "SkAnimator.h"
-
-class SkAnimatorView : public SkView {
-public:
-            SkAnimatorView();
->>>>>>> miniblink49
     virtual ~SkAnimatorView();
 
     SkAnimator* getAnimator() const { return fAnimator; }
 
-<<<<<<< HEAD
     bool decodeFile(const char path[]);
     bool decodeMemory(const void* buffer, size_t size);
     bool decodeStream(SkStream* stream);
-=======
-    bool    decodeFile(const char path[]);
-    bool    decodeMemory(const void* buffer, size_t size);
-    bool    decodeStream(SkStream* stream);
->>>>>>> miniblink49
 
 protected:
     // overrides

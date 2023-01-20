@@ -484,11 +484,7 @@ class GlobalValueMap : public PersistentValueMapBase<K, V, Traits> {
   }
 
  private:
-<<<<<<< HEAD
   static void V8CALL OnWeakCallback(
-=======
-  static void OnWeakCallback(
->>>>>>> miniblink49
       const WeakCallbackInfo<typename Traits::WeakCallbackDataType>& data) {
     if (Traits::kCallbackType != kNotWeak) {
       auto map = Traits::MapFromWeakCallbackInfo(data);
@@ -499,11 +495,7 @@ class GlobalValueMap : public PersistentValueMapBase<K, V, Traits> {
     }
   }
 
-<<<<<<< HEAD
   static void V8CALL SecondWeakCallback(
-=======
-  static void SecondWeakCallback(
->>>>>>> miniblink49
       const WeakCallbackInfo<typename Traits::WeakCallbackDataType>& data) {
     Traits::DisposeWeak(data);
   }

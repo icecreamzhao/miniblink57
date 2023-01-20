@@ -27,12 +27,8 @@ public:
         kIsDuplicate = 1
     };
 
-<<<<<<< HEAD
     void addOpp(SkOpPtT* opp)
     {
-=======
-    void addOpp(SkOpPtT* opp) {
->>>>>>> miniblink49
         // find the fOpp ptr to opp
         SkOpPtT* oppPrev = opp->fNext;
         if (oppPrev == this) {
@@ -40,19 +36,11 @@ public:
         }
         while (oppPrev->fNext != opp) {
             oppPrev = oppPrev->fNext;
-<<<<<<< HEAD
             if (oppPrev == this) {
                 return;
             }
         }
 
-=======
-             if (oppPrev == this) {
-                 return;
-             }
-        }
-        
->>>>>>> miniblink49
         SkOpPtT* oldNext = this->fNext;
         SkASSERT(this != opp);
         this->fNext = opp;
@@ -61,7 +49,6 @@ public:
     }
 
     bool alias() const;
-<<<<<<< HEAD
     bool collapsed(const SkOpPtT*) const;
     bool contains(const SkOpPtT*) const;
     SkOpPtT* contains(const SkOpSegment*);
@@ -69,45 +56,27 @@ public:
 
     int debugID() const
     {
-=======
-    bool contains(const SkOpPtT* ) const;
-    SkOpPtT* contains(const SkOpSegment* );
-    SkOpContour* contour() const;
-
-    int debugID() const {
->>>>>>> miniblink49
         return SkDEBUGRELEASE(fID, -1);
     }
 
     const SkOpAngle* debugAngle(int id) const;
-<<<<<<< HEAD
     bool debugContains(const SkOpPtT*) const;
     const SkOpPtT* debugContains(const SkOpSegment* check) const;
-=======
->>>>>>> miniblink49
     SkOpContour* debugContour(int id);
     int debugLoopLimit(bool report) const;
     bool debugMatchID(int id) const;
     const SkOpPtT* debugPtT(int id) const;
     const SkOpSegment* debugSegment(int id) const;
     const SkOpSpanBase* debugSpan(int id) const;
-<<<<<<< HEAD
     void debugValidate() const;
 
     bool deleted() const
     {
-=======
-    SkOpGlobalState* globalState() const;
-    void debugValidate() const;
-
-    bool deleted() const {
->>>>>>> miniblink49
         return fDeleted;
     }
 
     SkOpPtT* doppelganger();
 
-<<<<<<< HEAD
     bool duplicate() const
     {
         return fDuplicatePt;
@@ -123,26 +92,11 @@ public:
 
     void insert(SkOpPtT* span)
     {
-=======
-    bool duplicate() const {
-        return fDuplicatePt;
-    }
-
-    void dump() const;  // available to testing only
-    void dumpAll() const;
-    void dumpBase() const;
-
-    SkOpPtT* find(SkOpSegment* );
-    void init(SkOpSpanBase* , double t, const SkPoint& , bool dup);
-
-    void insert(SkOpPtT* span) {
->>>>>>> miniblink49
         SkASSERT(span != this);
         span->fNext = fNext;
         fNext = span;
     }
 
-<<<<<<< HEAD
     const SkOpPtT* next() const
     {
         return fNext;
@@ -150,20 +104,12 @@ public:
 
     SkOpPtT* next()
     {
-=======
-    const SkOpPtT* next() const {
-        return fNext;
-    }
-
-    SkOpPtT* next() {
->>>>>>> miniblink49
         return fNext;
     }
 
     bool onEnd() const;
 
     static bool Overlaps(SkOpPtT* s1, SkOpPtT* e1, SkOpPtT* s2, SkOpPtT* e2,
-<<<<<<< HEAD
         SkOpPtT** sOut, SkOpPtT** eOut)
     {
         SkOpPtT* start1 = s1->fT < e1->fT ? s1 : e1;
@@ -174,17 +120,6 @@ public:
         SkOpPtT* end2 = s2->fT < e2->fT ? e2 : s2;
         *eOut = between(s1->fT, end2->fT, e1->fT) ? end2
                                                   : between(s2->fT, end1->fT, e2->fT) ? end1 : nullptr;
-=======
-            SkOpPtT** sOut, SkOpPtT** eOut) {
-        SkOpPtT* start1 = s1->fT < e1->fT ? s1 : e1;
-        SkOpPtT* start2 = s2->fT < e2->fT ? s2 : e2;
-        *sOut = between(s1->fT, start2->fT, e1->fT) ? start2
-                : between(s2->fT, start1->fT, e2->fT) ? start1 : NULL;
-        SkOpPtT* end1 = s1->fT < e1->fT ? e1 : s1;
-        SkOpPtT* end2 = s2->fT < e2->fT ? e2 : s2;
-        *eOut = between(s1->fT, end2->fT, e1->fT) ? end2
-                : between(s2->fT, end1->fT, e2->fT) ? end1 : NULL;
->>>>>>> miniblink49
         if (*sOut == *eOut) {
             SkASSERT(start1->fT >= end2->fT || start2->fT >= end1->fT);
             return false;
@@ -200,17 +135,12 @@ public:
     const SkOpSegment* segment() const;
     SkOpSegment* segment();
 
-<<<<<<< HEAD
     void setDeleted()
     {
-=======
-    void setDeleted() {
->>>>>>> miniblink49
         SkASSERT(!fDeleted);
         fDeleted = true;
     }
 
-<<<<<<< HEAD
     const SkOpSpanBase* span() const
     {
         return fSpan;
@@ -233,27 +163,6 @@ protected:
     SkOpPtT* fNext; // intersection on opposite curve or alias on this curve
     bool fDeleted; // set if removed from span list
     bool fDuplicatePt; // set if identical pt is somewhere in the next loop
-=======
-    const SkOpSpanBase* span() const {
-        return fSpan;
-    }
-
-    SkOpSpanBase* span() {
-        return fSpan;
-    }
-
-    const SkOpPtT* starter(const SkOpPtT* end) const {
-        return fT < end->fT ? this : end;
-    }
-
-    double fT; 
-    SkPoint fPt;   // cache of point value at this t
-protected:
-    SkOpSpanBase* fSpan;  // contains winding data
-    SkOpPtT* fNext;  // intersection on opposite curve or alias on this curve
-    bool fDeleted;  // set if removed from span list 
-    bool fDuplicatePt;  // set if identical pt is somewhere in the next loop
->>>>>>> miniblink49
     SkDEBUGCODE(int fID);
 };
 
@@ -261,18 +170,13 @@ class SkOpSpanBase {
 public:
     void align();
 
-<<<<<<< HEAD
     bool aligned() const
     {
-=======
-    bool aligned() const {
->>>>>>> miniblink49
         return fAligned;
     }
 
     void alignEnd(double t, const SkPoint& pt);
 
-<<<<<<< HEAD
     void bumpSpanAdds()
     {
         ++fSpanAdds;
@@ -285,22 +189,10 @@ public:
 
     void clearCoinEnd()
     {
-=======
-    void bumpSpanAdds() {
-        ++fSpanAdds;
-    }
-
-    bool chased() const {
-        return fChased;
-    }
-
-    void clearCoinEnd() {
->>>>>>> miniblink49
         SkASSERT(fCoinEnd != this);
         fCoinEnd = this;
     }
 
-<<<<<<< HEAD
     const SkOpSpanBase* coinEnd() const
     {
         return fCoinEnd;
@@ -311,16 +203,6 @@ public:
 
     bool containsCoinEnd(const SkOpSpanBase* coin) const
     {
-=======
-    const SkOpSpanBase* coinEnd() const {
-        return fCoinEnd;
-    }
-
-    bool contains(const SkOpSpanBase* ) const;
-    SkOpPtT* contains(const SkOpSegment* );
-
-    bool containsCoinEnd(const SkOpSpanBase* coin) const {
->>>>>>> miniblink49
         SkASSERT(this != coin);
         const SkOpSpanBase* next = this;
         while ((next = next->fCoinEnd) != this) {
@@ -331,7 +213,6 @@ public:
         return false;
     }
 
-<<<<<<< HEAD
     bool containsCoinEnd(const SkOpSegment*) const;
     SkOpContour* contour() const;
 
@@ -350,26 +231,10 @@ public:
     const SkOpAngle* debugAngle(int id) const;
     bool debugCoinEndLoopCheck() const;
     bool debugContains(const SkOpSegment*) const;
-=======
-    bool containsCoinEnd(const SkOpSegment* ) const;
-    SkOpContour* contour() const;
-
-    int debugBumpCount() {
-        return SkDEBUGRELEASE(++fCount, -1);
-    }
-
-    int debugID() const {
-        return SkDEBUGRELEASE(fID, -1);
-    }
-
-    const SkOpAngle* debugAngle(int id) const;
-    bool debugCoinEndLoopCheck() const;
->>>>>>> miniblink49
     SkOpContour* debugContour(int id);
     const SkOpPtT* debugPtT(int id) const;
     const SkOpSegment* debugSegment(int id) const;
     const SkOpSpanBase* debugSpan(int id) const;
-<<<<<<< HEAD
     const SkOpSpan* debugStarter(SkOpSpanBase const** endPtr) const;
     SkOpGlobalState* globalState() const;
     void debugValidate() const;
@@ -380,21 +245,10 @@ public:
     }
 
     void dump() const; // available to testing only
-=======
-    SkOpGlobalState* globalState() const;
-    void debugValidate() const;
-
-    bool deleted() const {
-        return fPtT.deleted();
-    }
-
-    void dump() const;  // available to testing only
->>>>>>> miniblink49
     void dumpCoin() const;
     void dumpAll() const;
     void dumpBase() const;
 
-<<<<<<< HEAD
     bool final() const
     {
         return fPtT.fT == 1;
@@ -402,24 +256,13 @@ public:
 
     SkOpAngle* fromAngle() const
     {
-=======
-    bool final() const {
-        return fPtT.fT == 1;
-    }
-
-    SkOpAngle* fromAngle() const {
->>>>>>> miniblink49
         return fFromAngle;
     }
 
     void initBase(SkOpSegment* parent, SkOpSpan* prev, double t, const SkPoint& pt);
 
-<<<<<<< HEAD
     void insertCoinEnd(SkOpSpanBase* coin)
     {
-=======
-    void insertCoinEnd(SkOpSpanBase* coin) {
->>>>>>> miniblink49
         if (containsCoinEnd(coin)) {
             SkASSERT(coin->containsCoinEnd(this));
             return;
@@ -434,7 +277,6 @@ public:
 
     void merge(SkOpSpan* span);
 
-<<<<<<< HEAD
     SkOpSpan* prev() const
     {
         return fPrev;
@@ -467,35 +309,11 @@ public:
 
     void setChased(bool chased)
     {
-=======
-    SkOpSpan* prev() const {
-        return fPrev;
-    }
-
-    const SkPoint& pt() const {
-        return fPtT.fPt;
-    }
-
-    const SkOpPtT* ptT() const {
-        return &fPtT;
-    }
-
-    SkOpPtT* ptT() {
-        return &fPtT;
-    }
-
-    SkOpSegment* segment() const {
-        return fSegment;
-    }
-
-    void setChased(bool chased) {
->>>>>>> miniblink49
         fChased = chased;
     }
 
     SkOpPtT* setCoinEnd(SkOpSpanBase* oldCoinEnd, SkOpSegment* oppSegment);
 
-<<<<<<< HEAD
     void setFromAngle(SkOpAngle* angle)
     {
         fFromAngle = angle;
@@ -519,47 +337,19 @@ public:
 
     const SkOpSpan* starter(const SkOpSpanBase* end) const
     {
-=======
-    void setFromAngle(SkOpAngle* angle) {
-        fFromAngle = angle;
-    }
-
-    void setPrev(SkOpSpan* prev) {
-        fPrev = prev;
-    }
-
-    bool simple() const {
-        fPtT.debugValidate();
-        return fPtT.next()->next() == &fPtT; 
-    }
-
-    int spanAddsCount() const {
-        return fSpanAdds;
-    }
-
-    const SkOpSpan* starter(const SkOpSpanBase* end) const {
->>>>>>> miniblink49
         const SkOpSpanBase* result = t() < end->t() ? this : end;
         return result->upCast();
     }
 
-<<<<<<< HEAD
     SkOpSpan* starter(SkOpSpanBase* end)
     {
-=======
-    SkOpSpan* starter(SkOpSpanBase* end) {
->>>>>>> miniblink49
         SkASSERT(this->segment() == end->segment());
         SkOpSpanBase* result = t() < end->t() ? this : end;
         return result->upCast();
     }
 
-<<<<<<< HEAD
     SkOpSpan* starter(SkOpSpanBase** endPtr)
     {
-=======
-    SkOpSpan* starter(SkOpSpanBase** endPtr) {
->>>>>>> miniblink49
         SkOpSpanBase* end = *endPtr;
         SkASSERT(this->segment() == end->segment());
         SkOpSpanBase* result;
@@ -572,7 +362,6 @@ public:
         return result->upCast();
     }
 
-<<<<<<< HEAD
     int step(const SkOpSpanBase* end) const
     {
         return t() < end->t() ? 1 : -1;
@@ -608,42 +397,11 @@ public:
     const SkOpSpan* upCastable() const
     {
         return final() ? nullptr : upCast();
-=======
-    int step(const SkOpSpanBase* end) const {
-        return t() < end->t() ? 1 : -1;
-    }
-
-    double t() const {
-        return fPtT.fT;
-    }
-
-    void unaligned() {
-        fAligned = false;
-    }
-
-    SkOpSpan* upCast() {
-        SkASSERT(!final());
-        return (SkOpSpan*) this;
-    }
-
-    const SkOpSpan* upCast() const {
-        SkASSERT(!final());
-        return (const SkOpSpan*) this;
-    }
-
-    SkOpSpan* upCastable() {
-        return final() ? NULL : upCast();
-    }
-
-    const SkOpSpan* upCastable() const {
-        return final() ? NULL : upCast();
->>>>>>> miniblink49
     }
 
 private:
     void alignInner();
 
-<<<<<<< HEAD
 protected: // no direct access to internals to avoid treating a span base as a span
     SkOpPtT fPtT; // list of points and t values associated with the start of this span
     SkOpSegment* fSegment; // segment that contains this span
@@ -654,24 +412,11 @@ protected: // no direct access to internals to avoid treating a span base as a s
     bool fAligned;
     bool fChased; // set after span has been added to chase array
     SkDEBUGCODE(int fCount); // number of pt/t pairs added
-=======
-protected:  // no direct access to internals to avoid treating a span base as a span
-    SkOpPtT fPtT;  // list of points and t values associated with the start of this span
-    SkOpSegment* fSegment;  // segment that contains this span
-    SkOpSpanBase* fCoinEnd;  // linked list of coincident spans that end here (may point to itself)
-    SkOpAngle* fFromAngle;  // points to next angle from span start to end
-    SkOpSpan* fPrev;  // previous intersection point
-    int fSpanAdds;  // number of times intersections have been added to span
-    bool fAligned;
-    bool fChased;  // set after span has been added to chase array
-    SkDEBUGCODE(int fCount);  // number of pt/t pairs added
->>>>>>> miniblink49
     SkDEBUGCODE(int fID);
 };
 
 class SkOpSpan : public SkOpSpanBase {
 public:
-<<<<<<< HEAD
     bool alreadyAdded() const
     {
         if (fAlreadyAdded) {
@@ -683,9 +428,6 @@ public:
 
     bool clearCoincident()
     {
-=======
-    bool clearCoincident() {
->>>>>>> miniblink49
         SkASSERT(!final());
         if (fCoincident == this) {
             return false;
@@ -695,16 +437,10 @@ public:
     }
 
     int computeWindSum();
-<<<<<<< HEAD
     bool containsCoincidence(const SkOpSegment*) const;
 
     bool containsCoincidence(const SkOpSpan* coin) const
     {
-=======
-    bool containsCoincidence(const SkOpSegment* ) const;
-
-    bool containsCoincidence(const SkOpSpan* coin) const {
->>>>>>> miniblink49
         SkASSERT(this != coin);
         const SkOpSpan* next = this;
         while ((next = next->fCoincident) != this) {
@@ -716,16 +452,10 @@ public:
     }
 
     bool debugCoinLoopCheck() const;
-<<<<<<< HEAD
     void release(SkOpPtT*);
 
     bool done() const
     {
-=======
-    void detach(SkOpPtT* );
-
-    bool done() const {
->>>>>>> miniblink49
         SkASSERT(!final());
         return fDone;
     }
@@ -734,12 +464,8 @@ public:
     bool dumpSpan() const;
     void init(SkOpSegment* parent, SkOpSpan* prev, double t, const SkPoint& pt);
 
-<<<<<<< HEAD
     void insertCoincidence(SkOpSpan* coin)
     {
-=======
-    void insertCoincidence(SkOpSpan* coin) {
->>>>>>> miniblink49
         if (containsCoincidence(coin)) {
             SkASSERT(coin->containsCoincidence(this));
             return;
@@ -752,150 +478,95 @@ public:
         debugValidate();
     }
 
-<<<<<<< HEAD
     bool isCanceled() const
     {
-=======
-    bool isCanceled() const {
->>>>>>> miniblink49
         SkASSERT(!final());
         return fWindValue == 0 && fOppValue == 0;
     }
 
-<<<<<<< HEAD
     bool isCoincident() const
     {
-=======
-    bool isCoincident() const {
->>>>>>> miniblink49
         SkASSERT(!final());
         return fCoincident != this;
     }
 
-<<<<<<< HEAD
     SkOpSpanBase* next() const
     {
-=======
-    SkOpSpanBase* next() const {
->>>>>>> miniblink49
         SkASSERT(!final());
         return fNext;
     }
 
-<<<<<<< HEAD
     int oppSum() const
     {
-=======
-    int oppSum() const {
->>>>>>> miniblink49
         SkASSERT(!final());
         return fOppSum;
     }
 
-<<<<<<< HEAD
     int oppValue() const
     {
-=======
-    int oppValue() const {
->>>>>>> miniblink49
         SkASSERT(!final());
         return fOppValue;
     }
 
     SkOpPtT* setCoinStart(SkOpSpan* oldCoinStart, SkOpSegment* oppSegment);
 
-<<<<<<< HEAD
     void setDone(bool done)
     {
-=======
-    void setDone(bool done) {
->>>>>>> miniblink49
         SkASSERT(!final());
         fDone = done;
     }
 
-<<<<<<< HEAD
     void setNext(SkOpSpanBase* nextT)
     {
-=======
-    void setNext(SkOpSpanBase* nextT) {
->>>>>>> miniblink49
         SkASSERT(!final());
         fNext = nextT;
     }
 
     void setOppSum(int oppSum);
 
-<<<<<<< HEAD
     void setOppValue(int oppValue)
     {
-=======
-    void setOppValue(int oppValue) {
->>>>>>> miniblink49
         SkASSERT(!final());
         SkASSERT(fOppSum == SK_MinS32);
         fOppValue = oppValue;
     }
 
-<<<<<<< HEAD
     void setToAngle(SkOpAngle* angle)
     {
-=======
-    void setToAngle(SkOpAngle* angle) {
->>>>>>> miniblink49
         SkASSERT(!final());
         fToAngle = angle;
     }
 
     void setWindSum(int windSum);
 
-<<<<<<< HEAD
     void setWindValue(int windValue)
     {
-=======
-    void setWindValue(int windValue) {
->>>>>>> miniblink49
         SkASSERT(!final());
         SkASSERT(windValue >= 0);
         SkASSERT(fWindSum == SK_MinS32);
         fWindValue = windValue;
     }
 
-<<<<<<< HEAD
     bool sortableTop(SkOpContour*);
 
     SkOpAngle* toAngle() const
     {
-=======
-    bool sortableTop(SkOpContour* );
-
-    SkOpAngle* toAngle() const {
->>>>>>> miniblink49
         SkASSERT(!final());
         return fToAngle;
     }
 
-<<<<<<< HEAD
     int windSum() const
     {
-=======
-    int windSum() const {
->>>>>>> miniblink49
         SkASSERT(!final());
         return fWindSum;
     }
 
-<<<<<<< HEAD
     int windValue() const
     {
-=======
-    int windValue() const {
->>>>>>> miniblink49
         SkASSERT(!final());
         return fWindValue;
     }
 
-<<<<<<< HEAD
 private: // no direct access to internals to avoid treating a span base as a span
     SkOpSpan* fCoincident; // linked list of spans coincident with this one (may point to itself)
     SkOpAngle* fToAngle; // points to next angle from span start to end
@@ -907,18 +578,6 @@ private: // no direct access to internals to avoid treating a span base as a spa
     int fTopTTry; // specifies direction and t value to try next
     bool fDone; // if set, this span to next higher T has been processed
     mutable bool fAlreadyAdded;
-=======
-private:  // no direct access to internals to avoid treating a span base as a span
-    SkOpSpan* fCoincident;  // linked list of spans coincident with this one (may point to itself)
-    SkOpAngle* fToAngle;  // points to next angle from span start to end
-    SkOpSpanBase* fNext;  // next intersection point
-    int fWindSum;  // accumulated from contours surrounding this one.
-    int fOppSum;  // for binary operators: the opposite winding sum
-    int fWindValue;  // 0 == canceled; 1 == normal; >1 == coincident
-    int fOppValue;  // normally 0 -- when binary coincident edges combine, opp value goes here
-    int fTopTTry; // specifies direction and t value to try next
-    bool fDone;  // if set, this span to next higher T has been processed
->>>>>>> miniblink49
 };
 
 #endif

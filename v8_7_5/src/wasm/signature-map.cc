@@ -8,7 +8,6 @@
 
 namespace v8 {
 namespace internal {
-<<<<<<< HEAD
     namespace wasm {
 
         uint32_t SignatureMap::FindOrInsert(const FunctionSig& sig)
@@ -35,27 +34,3 @@ namespace internal {
     } // namespace wasm
 } // namespace internal
 } // namespace v8
-=======
-namespace wasm {
-
-uint32_t SignatureMap::FindOrInsert(const FunctionSig& sig) {
-  CHECK(!frozen_);
-  auto pos = map_.find(sig);
-  if (pos != map_.end()) return pos->second;
-  // Indexes are returned as int32_t, thus check against their limit.
-  CHECK_GE(kMaxInt, map_.size());
-  uint32_t index = static_cast<uint32_t>(map_.size());
-  map_.insert(std::make_pair(sig, index));
-  return index;
-}
-
-int32_t SignatureMap::Find(const FunctionSig& sig) const {
-  auto pos = map_.find(sig);
-  if (pos == map_.end()) return -1;
-  return static_cast<int32_t>(pos->second);
-}
-
-}  // namespace wasm
-}  // namespace internal
-}  // namespace v8
->>>>>>> miniblink49

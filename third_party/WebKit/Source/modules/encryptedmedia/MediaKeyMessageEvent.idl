@@ -32,17 +32,8 @@ enum MediaKeyMessageType {
 };
 
 [
-<<<<<<< HEAD
     Constructor(DOMString type, MediaKeyMessageEventInit eventInitDict)
-=======
-    Constructor(DOMString type, optional MediaKeyMessageEventInit eventInitDict),
-    RuntimeEnabled=EncryptedMedia
->>>>>>> miniblink49
 ] interface MediaKeyMessageEvent : Event {
     readonly attribute MediaKeyMessageType messageType;
     readonly attribute ArrayBuffer message;
 };
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49

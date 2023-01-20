@@ -16,7 +16,6 @@
 namespace v8 {
 namespace internal {
 
-<<<<<<< HEAD
     OBJECT_CONSTRUCTORS_IMPL(PropertyCell, HeapObject)
 
     CAST_ACCESSOR(PropertyCell)
@@ -41,27 +40,3 @@ namespace internal {
 #include "src/objects/object-macros-undef.h"
 
 #endif // V8_OBJECTS_PROPERTY_CELL_INL_H_
-=======
-OBJECT_CONSTRUCTORS_IMPL(PropertyCell, HeapObject)
-
-CAST_ACCESSOR(PropertyCell)
-ACCESSORS(PropertyCell, dependent_code, DependentCode, kDependentCodeOffset)
-ACCESSORS(PropertyCell, name, Name, kNameOffset)
-ACCESSORS(PropertyCell, value, Object, kValueOffset)
-ACCESSORS(PropertyCell, property_details_raw, Object, kDetailsOffset)
-
-PropertyDetails PropertyCell::property_details() const {
-  return PropertyDetails(Smi::cast(property_details_raw()));
-}
-
-void PropertyCell::set_property_details(PropertyDetails details) {
-  set_property_details_raw(details.AsSmi());
-}
-
-}  // namespace internal
-}  // namespace v8
-
-#include "src/objects/object-macros-undef.h"
-
-#endif  // V8_OBJECTS_PROPERTY_CELL_INL_H_
->>>>>>> miniblink49

@@ -45,7 +45,6 @@ typedef unsigned ControlStates;
 
 // Must follow CSSValueKeywords.in order
 enum ControlPart {
-<<<<<<< HEAD
     NoControlPart,
     CheckboxPart,
     RadioPart,
@@ -151,38 +150,4 @@ enum ThemeColor {
 };
 
 } // namespace blink
-=======
-    NoControlPart, CheckboxPart, RadioPart, PushButtonPart, SquareButtonPart, ButtonPart,
-    ButtonBevelPart, InnerSpinButtonPart, ListboxPart, ListItemPart,
-    MediaEnterFullscreenButtonPart, MediaExitFullscreenButtonPart, MediaFullScreenVolumeSliderPart, MediaFullScreenVolumeSliderThumbPart, MediaMuteButtonPart, MediaPlayButtonPart,
-    MediaOverlayPlayButtonPart, MediaToggleClosedCaptionsButtonPart,
-    MediaSliderPart, MediaSliderThumbPart, MediaVolumeSliderContainerPart, MediaVolumeSliderPart, MediaVolumeSliderThumbPart,
-    MediaControlsBackgroundPart, MediaControlsFullscreenBackgroundPart, MediaCurrentTimePart, MediaTimeRemainingPart, MediaCastOffButtonPart, MediaOverlayCastOffButtonPart,
-    MenulistPart, MenulistButtonPart, MenulistTextPart, MenulistTextFieldPart, MeterPart, ProgressBarPart, ProgressBarValuePart,
-    SliderHorizontalPart, SliderVerticalPart, SliderThumbHorizontalPart,
-    SliderThumbVerticalPart, CaretPart, SearchFieldPart, SearchFieldDecorationPart,
-    SearchFieldResultsDecorationPart,
-    SearchFieldCancelButtonPart, TextFieldPart,
-    RelevancyLevelIndicatorPart, ContinuousCapacityLevelIndicatorPart, DiscreteCapacityLevelIndicatorPart, RatingLevelIndicatorPart,
-    TextAreaPart, CapsLockIndicatorPart
-};
-
-enum SelectionPart {
-    SelectionBackground, SelectionForeground
-};
-
-enum ThemeFont {
-    CaptionFont, IconFont, MenuFont, MessageBoxFont, SmallCaptionFont, StatusBarFont, MiniControlFont, SmallControlFont, ControlFont
-};
-
-enum ThemeColor {
-    ActiveBorderColor, ActiveCaptionColor, AppWorkspaceColor, BackgroundColor, ButtonFaceColor, ButtonHighlightColor, ButtonShadowColor,
-    ButtonTextColor, CaptionTextColor, GrayTextColor, HighlightColor, HighlightTextColor, InactiveBorderColor, InactiveCaptionColor,
-    InactiveCaptionTextColor, InfoBackgroundColor, InfoTextColor, MatchColor, MenuTextColor, ScrollbarColor, ThreeDDarkDhasowColor,
-    ThreeDFaceColor, ThreeDHighlightColor, ThreeDLightShadowColor, ThreeDShadowCLor, WindowColor, WindowFrameColor, WindowTextColor,
-    FocusRingColor, ActiveListBoxSelection, ActiveListBoxSelectionText, InactiveListBoxSelection, InactiveListBoxSelectionText
-};
-
-}
->>>>>>> miniblink49
 #endif

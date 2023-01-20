@@ -10,16 +10,17 @@
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+ * DAMAGE.
  */
 
 #ifndef ClassList_h
@@ -29,26 +30,15 @@
 #include "core/dom/DOMTokenList.h"
 #include "core/dom/Element.h"
 #include "core/dom/SpaceSplitString.h"
-#include "wtf/OwnPtr.h"
-#include "wtf/PassOwnPtr.h"
+#include <memory>
 
 namespace blink {
 
 class Element;
 
-typedef int ExceptionCode;
-
 class ClassList final : public DOMTokenList {
 public:
-    static PassOwnPtrWillBeRawPtr<ClassList> create(Element* element)
-    {
-        return adoptPtrWillBeNoop(new ClassList(element));
-    }
-
-#if !ENABLE(OILPAN)
-    void ref() override;
-    void deref() override;
-#endif
+    static ClassList* create(Element* element) { return new ClassList(element); }
 
     unsigned length() const override;
     const AtomicString item(unsigned index) const override;
@@ -66,11 +56,17 @@ private:
 
     const SpaceSplitString& classNames() const;
 
-    const AtomicString& value() const override { return m_element->getAttribute(HTMLNames::classAttr); }
-    void setValue(const AtomicString& value) override { m_element->setAttribute(HTMLNames::classAttr, value); }
+    const AtomicString& value() const override
+    {
+        return m_element->getAttribute(HTMLNames::classAttr);
+    }
+    void setValue(const AtomicString& value) override
+    {
+        m_element->setAttribute(HTMLNames::classAttr, value);
+    }
 
-    RawPtrWillBeMember<Element> m_element;
-    mutable OwnPtr<SpaceSplitString> m_classNamesForQuirksMode;
+    Member<Element> m_element;
+    mutable std::unique_ptr<SpaceSplitString> m_classNamesForQuirksMode;
 };
 
 } // namespace blink

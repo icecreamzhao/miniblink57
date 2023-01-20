@@ -31,7 +31,6 @@
 
 #include "platform/PlatformExport.h"
 #include "platform/audio/AudioArray.h"
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/PtrUtil.h"
 #include <memory>
@@ -48,18 +47,6 @@ class PLATFORM_EXPORT AudioChannel {
 public:
     // Memory can be externally referenced, or can be internally allocated with an
     // AudioFloatArray.
-=======
-#include "wtf/PassOwnPtr.h"
-
-namespace blink {
-
-// An AudioChannel represents a buffer of non-interleaved floating-point audio samples.
-// The PCM samples are normally assumed to be in a nominal range -1.0 -> +1.0
-class PLATFORM_EXPORT AudioChannel {
-    WTF_MAKE_NONCOPYABLE(AudioChannel);
-public:
-    // Memory can be externally referenced, or can be internally allocated with an AudioFloatArray.
->>>>>>> miniblink49
 
     // Reference an external buffer.
     AudioChannel(float* storage, size_t length)
@@ -75,11 +62,7 @@ public:
         , m_rawPointer(nullptr)
         , m_silent(true)
     {
-<<<<<<< HEAD
         m_memBuffer = WTF::wrapUnique(new AudioFloatArray(length));
-=======
-        m_memBuffer = adoptPtr(new AudioFloatArray(length));
->>>>>>> miniblink49
     }
 
     // A "blank" audio channel -- must call set() before it's useful...
@@ -94,11 +77,7 @@ public:
     // storage represents external memory not managed by this object.
     void set(float* storage, size_t length)
     {
-<<<<<<< HEAD
         m_memBuffer.reset(); // cleanup managed storage
-=======
-        m_memBuffer.clear(); // cleanup managed storage
->>>>>>> miniblink49
         m_rawPointer = storage;
         m_length = length;
         m_silent = false;
@@ -118,14 +97,10 @@ public:
         return m_rawPointer ? m_rawPointer : m_memBuffer->data();
     }
 
-<<<<<<< HEAD
     const float* data() const
     {
         return m_rawPointer ? m_rawPointer : m_memBuffer->data();
     }
-=======
-    const float* data() const { return m_rawPointer ? m_rawPointer : m_memBuffer->data(); }
->>>>>>> miniblink49
 
     // Zeroes out all sample values in buffer.
     void zero()
@@ -153,13 +128,9 @@ public:
     void copyFrom(const AudioChannel* sourceChannel);
 
     // Copies the given range from the source channel.
-<<<<<<< HEAD
     void copyFromRange(const AudioChannel* sourceChannel,
         unsigned startFrame,
         unsigned endFrame);
-=======
-    void copyFromRange(const AudioChannel* sourceChannel, unsigned startFrame, unsigned endFrame);
->>>>>>> miniblink49
 
     // Sums (with unity gain) from the source channel.
     void sumFrom(const AudioChannel* sourceChannel);
@@ -171,11 +142,7 @@ private:
     size_t m_length;
 
     float* m_rawPointer;
-<<<<<<< HEAD
     std::unique_ptr<AudioFloatArray> m_memBuffer;
-=======
-    OwnPtr<AudioFloatArray> m_memBuffer;
->>>>>>> miniblink49
     bool m_silent;
 };
 

@@ -12,7 +12,6 @@
 //
 // PRESUBMIT_INTENTIONALLY_MISSING_INCLUDE_GUARD
 
-<<<<<<< HEAD
 #define DEFINE_IMPLICATION(whenflag, thenflag) \
     DEFINE_VALUE_IMPLICATION(whenflag, thenflag, true)
 
@@ -21,48 +20,25 @@
 
 #define DEFINE_NEG_NEG_IMPLICATION(whenflag, thenflag) \
     DEFINE_NEG_VALUE_IMPLICATION(whenflag, thenflag, false)
-=======
-#define DEFINE_IMPLICATION(whenflag, thenflag)              \
-  DEFINE_VALUE_IMPLICATION(whenflag, thenflag, true)
-
-#define DEFINE_NEG_IMPLICATION(whenflag, thenflag)          \
-  DEFINE_VALUE_IMPLICATION(whenflag, thenflag, false)
-
-#define DEFINE_NEG_NEG_IMPLICATION(whenflag, thenflag) \
-  DEFINE_NEG_VALUE_IMPLICATION(whenflag, thenflag, false)
->>>>>>> miniblink49
 
 // We want to declare the names of the variables for the header file.  Normally
 // this will just be an extern declaration, but for a readonly flag we let the
 // compiler make better optimizations by giving it the value.
 #if defined(FLAG_MODE_DECLARE)
 #define FLAG_FULL(ftype, ctype, nam, def, cmt) \
-<<<<<<< HEAD
     V8_EXPORT_PRIVATE extern ctype FLAG_##nam;
 #define FLAG_READONLY(ftype, ctype, nam, def, cmt) \
     static constexpr ctype FLAG_##nam = def;
-=======
-  V8_EXPORT_PRIVATE extern ctype FLAG_##nam;
-#define FLAG_READONLY(ftype, ctype, nam, def, cmt) \
-  static constexpr ctype FLAG_##nam = def;
->>>>>>> miniblink49
 
 // We want to supply the actual storage and value for the flag variable in the
 // .cc file.  We only do this for writable flags.
 #elif defined(FLAG_MODE_DEFINE)
 #ifdef USING_V8_SHARED
 #define FLAG_FULL(ftype, ctype, nam, def, cmt) \
-<<<<<<< HEAD
     V8_EXPORT_PRIVATE extern ctype FLAG_##nam;
 #else
 #define FLAG_FULL(ftype, ctype, nam, def, cmt) \
     V8_EXPORT_PRIVATE ctype FLAG_##nam = def;
-=======
-  V8_EXPORT_PRIVATE extern ctype FLAG_##nam;
-#else
-#define FLAG_FULL(ftype, ctype, nam, def, cmt) \
-  V8_EXPORT_PRIVATE ctype FLAG_##nam = def;
->>>>>>> miniblink49
 #endif
 
 // We need to define all of our default values so that the Flag structure can
@@ -70,16 +46,11 @@
 // for MODE_META, so there is no impact on the flags interface.
 #elif defined(FLAG_MODE_DEFINE_DEFAULTS)
 #define FLAG_FULL(ftype, ctype, nam, def, cmt) \
-<<<<<<< HEAD
     static constexpr ctype FLAGDEFAULT_##nam = def;
-=======
-  static constexpr ctype FLAGDEFAULT_##nam = def;
->>>>>>> miniblink49
 
 // We want to write entries into our meta data table, for internal parsing and
 // printing / etc in the flag parser code.  We only do this for writable flags.
 #elif defined(FLAG_MODE_META)
-<<<<<<< HEAD
 #define FLAG_FULL(ftype, ctype, nam, def, cmt) \
     { Flag::TYPE_##ftype, #nam, &FLAG_##nam, &FLAGDEFAULT_##nam, cmt, false },
 #define FLAG_ALIAS(ftype, ctype, alias, nam)                         \
@@ -87,22 +58,10 @@
         Flag::TYPE_##ftype, #alias, &FLAG_##nam, &FLAGDEFAULT_##nam, \
         "alias for --" #nam, false                                   \
     },
-=======
-#define FLAG_FULL(ftype, ctype, nam, def, cmt)                              \
-  { Flag::TYPE_##ftype, #nam, &FLAG_##nam, &FLAGDEFAULT_##nam, cmt, false } \
-  ,
-#define FLAG_ALIAS(ftype, ctype, alias, nam)                     \
-  {                                                              \
-    Flag::TYPE_##ftype, #alias, &FLAG_##nam, &FLAGDEFAULT_##nam, \
-        "alias for --" #nam, false                               \
-  }                                                              \
-  ,
->>>>>>> miniblink49
 
 // We produce the code to set flags when it is implied by another flag.
 #elif defined(FLAG_MODE_DEFINE_IMPLICATIONS)
 #define DEFINE_VALUE_IMPLICATION(whenflag, thenflag, value) \
-<<<<<<< HEAD
     if (FLAG_##whenflag)                                    \
         FLAG_##thenflag = value;
 
@@ -113,15 +72,6 @@
 #define DEFINE_NEG_VALUE_IMPLICATION(whenflag, thenflag, value) \
     if (!FLAG_##whenflag)                                       \
         FLAG_##thenflag = value;
-=======
-  if (FLAG_##whenflag) FLAG_##thenflag = value;
-
-#define DEFINE_GENERIC_IMPLICATION(whenflag, statement) \
-  if (FLAG_##whenflag) statement;
-
-#define DEFINE_NEG_VALUE_IMPLICATION(whenflag, thenflag, value) \
-  if (!FLAG_##whenflag) FLAG_##thenflag = value;
->>>>>>> miniblink49
 
 // We apply a generic macro to the flags.
 #elif defined(FLAG_MODE_APPLY)
@@ -162,7 +112,6 @@
 #ifdef FLAG_MODE_DECLARE
 
 struct MaybeBoolFlag {
-<<<<<<< HEAD
     static MaybeBoolFlag Create(bool has_value, bool value)
     {
         MaybeBoolFlag flag;
@@ -177,20 +126,6 @@ struct MaybeBoolFlag {
     {
         return has_value != other.has_value || value != other.value;
     }
-=======
-  static MaybeBoolFlag Create(bool has_value, bool value) {
-    MaybeBoolFlag flag;
-    flag.has_value = has_value;
-    flag.value = value;
-    return flag;
-  }
-  bool has_value;
-  bool value;
-
-  bool operator!=(const MaybeBoolFlag& other) const {
-    return has_value != other.has_value || value != other.value;
-  }
->>>>>>> miniblink49
 };
 #endif
 
@@ -211,52 +146,27 @@ struct MaybeBoolFlag {
 //  "armv7":       ARMv7 + VFPv3-D32 + NEON
 //  "armv7+sudiv": ARMv7 + VFPv4-D32 + NEON + SUDIV
 //  "armv8":       ARMv8 (including all of the above)
-<<<<<<< HEAD
 #if !defined(ARM_TEST_NO_FEATURE_PROBE) || (defined(CAN_USE_ARMV8_INSTRUCTIONS) && defined(CAN_USE_ARMV7_INSTRUCTIONS) && defined(CAN_USE_SUDIV) && defined(CAN_USE_NEON) && defined(CAN_USE_VFP3_INSTRUCTIONS))
 #define ARM_ARCH_DEFAULT "armv8"
 #elif defined(CAN_USE_ARMV7_INSTRUCTIONS) && defined(CAN_USE_SUDIV) && defined(CAN_USE_NEON) && defined(CAN_USE_VFP3_INSTRUCTIONS)
 #define ARM_ARCH_DEFAULT "armv7+sudiv"
 #elif defined(CAN_USE_ARMV7_INSTRUCTIONS) && defined(CAN_USE_NEON) && defined(CAN_USE_VFP3_INSTRUCTIONS)
-=======
-#if !defined(ARM_TEST_NO_FEATURE_PROBE) ||                            \
-    (defined(CAN_USE_ARMV8_INSTRUCTIONS) &&                           \
-     defined(CAN_USE_ARMV7_INSTRUCTIONS) && defined(CAN_USE_SUDIV) && \
-     defined(CAN_USE_NEON) && defined(CAN_USE_VFP3_INSTRUCTIONS))
-#define ARM_ARCH_DEFAULT "armv8"
-#elif defined(CAN_USE_ARMV7_INSTRUCTIONS) && defined(CAN_USE_SUDIV) && \
-    defined(CAN_USE_NEON) && defined(CAN_USE_VFP3_INSTRUCTIONS)
-#define ARM_ARCH_DEFAULT "armv7+sudiv"
-#elif defined(CAN_USE_ARMV7_INSTRUCTIONS) && defined(CAN_USE_NEON) && \
-    defined(CAN_USE_VFP3_INSTRUCTIONS)
->>>>>>> miniblink49
 #define ARM_ARCH_DEFAULT "armv7"
 #else
 #define ARM_ARCH_DEFAULT "armv6"
 #endif
 
 #ifdef V8_OS_WIN
-<<<<<<< HEAD
 #define ENABLE_LOG_COLOUR false
 #else
 #define ENABLE_LOG_COLOUR true
-=======
-# define ENABLE_LOG_COLOUR false
-#else
-# define ENABLE_LOG_COLOUR true
->>>>>>> miniblink49
 #endif
 
 #define DEFINE_BOOL(nam, def, cmt) FLAG(BOOL, bool, nam, def, cmt)
 #define DEFINE_BOOL_READONLY(nam, def, cmt) \
-<<<<<<< HEAD
     FLAG_READONLY(BOOL, bool, nam, def, cmt)
 #define DEFINE_MAYBE_BOOL(nam, cmt) \
     FLAG(MAYBE_BOOL, MaybeBoolFlag, nam, { false COMMA false }, cmt)
-=======
-  FLAG_READONLY(BOOL, bool, nam, def, cmt)
-#define DEFINE_MAYBE_BOOL(nam, cmt) \
-  FLAG(MAYBE_BOOL, MaybeBoolFlag, nam, {false COMMA false}, cmt)
->>>>>>> miniblink49
 #define DEFINE_INT(nam, def, cmt) FLAG(INT, int, nam, def, cmt)
 #define DEFINE_UINT(nam, def, cmt) FLAG(UINT, unsigned int, nam, def, cmt)
 #define DEFINE_UINT64(nam, def, cmt) FLAG(UINT64, uint64_t, nam, def, cmt)
@@ -268,11 +178,7 @@ struct MaybeBoolFlag {
 #define DEFINE_ALIAS_FLOAT(alias, nam) FLAG_ALIAS(FLOAT, double, alias, nam)
 #define DEFINE_ALIAS_SIZE_T(alias, nam) FLAG_ALIAS(SIZE_T, size_t, alias, nam)
 #define DEFINE_ALIAS_STRING(alias, nam) \
-<<<<<<< HEAD
     FLAG_ALIAS(STRING, const char*, alias, nam)
-=======
-  FLAG_ALIAS(STRING, const char*, alias, nam)
->>>>>>> miniblink49
 
 #ifdef DEBUG
 #define DEFINE_DEBUG_BOOL DEFINE_BOOL
@@ -289,11 +195,7 @@ struct MaybeBoolFlag {
 DEFINE_BOOL(use_strict, false, "enforce strict mode")
 
 DEFINE_BOOL(es_staging, false,
-<<<<<<< HEAD
     "enable test-worthy harmony features (for internal use only)")
-=======
-            "enable test-worthy harmony features (for internal use only)")
->>>>>>> miniblink49
 DEFINE_BOOL(harmony, false, "enable all completed harmony features")
 DEFINE_BOOL(harmony_shipping, true, "enable all shipped harmony features")
 DEFINE_IMPLICATION(es_staging, harmony)
@@ -309,7 +211,6 @@ DEFINE_IMPLICATION(harmony_private_methods, harmony_private_fields)
 // Update bootstrapper.cc whenever adding a new feature flag.
 
 // Features that are still work in progress (behind individual flags).
-<<<<<<< HEAD
 #define HARMONY_INPROGRESS_BASE(V)                                          \
     V(harmony_class_fields, "harmony fields in class literals")             \
     V(harmony_private_methods, "harmony private methods in class literals") \
@@ -320,27 +221,12 @@ DEFINE_IMPLICATION(harmony_private_methods, harmony_private_fields)
 #define HARMONY_INPROGRESS(V)  \
     HARMONY_INPROGRESS_BASE(V) \
     V(harmony_intl_date_format_range, "DateTimeFormat formatRange")
-=======
-#define HARMONY_INPROGRESS_BASE(V)                                        \
-  V(harmony_class_fields, "harmony fields in class literals")             \
-  V(harmony_private_methods, "harmony private methods in class literals") \
-  V(harmony_regexp_sequence, "RegExp Unicode sequence properties")        \
-  V(harmony_weak_refs, "harmony weak references")                         \
-
-#ifdef V8_INTL_SUPPORT
-#define HARMONY_INPROGRESS(V)                                              \
-  HARMONY_INPROGRESS_BASE(V)                                               \
-  V(harmony_intl_bigint, "BigInt.prototype.toLocaleString")                \
-  V(harmony_intl_datetime_style, "dateStyle timeStyle for DateTimeFormat") \
-  V(harmony_intl_date_format_range, "DateTimeFormat formatRange")
->>>>>>> miniblink49
 #else
 #define HARMONY_INPROGRESS(V) HARMONY_INPROGRESS_BASE(V)
 #endif
 
 // Features that are complete (but still behind --harmony/es-staging flag).
 #define HARMONY_STAGED_BASE(V) \
-<<<<<<< HEAD
     V(harmony_promise_all_settled, "harmony Promise.allSettled")
 
 #ifdef V8_INTL_SUPPORT
@@ -349,20 +235,11 @@ DEFINE_IMPLICATION(harmony_private_methods, harmony_private_fields)
     V(harmony_intl_bigint, "BigInt.prototype.toLocaleString")                \
     V(harmony_intl_datetime_style, "dateStyle timeStyle for DateTimeFormat") \
     V(harmony_intl_segmenter, "Intl.Segmenter")
-=======
-  V(harmony_numeric_separator, "harmony numeric separator between digits")
-
-#ifdef V8_INTL_SUPPORT
-#define HARMONY_STAGED(V)          \
-  HARMONY_STAGED_BASE(V)           \
-  V(harmony_intl_segmenter, "Intl.Segmenter")
->>>>>>> miniblink49
 #else
 #define HARMONY_STAGED(V) HARMONY_STAGED_BASE(V)
 #endif
 
 // Features that are shipping (turned on by default, but internal flag remains).
-<<<<<<< HEAD
 #define HARMONY_SHIPPING_BASE(V)                                                 \
     V(harmony_namespace_exports,                                                 \
         "harmony namespace exports (export * as foo from 'bar')")                \
@@ -384,28 +261,6 @@ DEFINE_IMPLICATION(harmony_private_methods, harmony_private_fields)
 #define HARMONY_SHIPPING(V)  \
     HARMONY_SHIPPING_BASE(V) \
     V(harmony_locale, "Intl.Locale")
-=======
-#define HARMONY_SHIPPING_BASE(V)                                               \
-  V(harmony_namespace_exports,                                                 \
-    "harmony namespace exports (export * as foo from 'bar')")                  \
-  V(harmony_sharedarraybuffer, "harmony sharedarraybuffer")                    \
-  V(harmony_import_meta, "harmony import.meta property")                       \
-  V(harmony_dynamic_import, "harmony dynamic import")                          \
-  V(harmony_global, "harmony global")                                          \
-  V(harmony_json_stringify, "well-formed JSON.stringify")                      \
-  V(harmony_public_fields, "harmony public instance fields in class literals") \
-  V(harmony_static_fields, "harmony static fields in class literals")          \
-  V(harmony_string_matchall, "harmony String.prototype.matchAll")              \
-  V(harmony_object_from_entries, "harmony Object.fromEntries()")               \
-  V(harmony_await_optimization, "harmony await taking 1 tick")                 \
-  V(harmony_private_fields, "harmony private fields in class literals")        \
-  V(harmony_hashbang, "harmony hashbang syntax")
-
-#ifdef V8_INTL_SUPPORT
-#define HARMONY_SHIPPING(V) \
-  HARMONY_SHIPPING_BASE(V)  \
-  V(harmony_locale, "Intl.Locale")
->>>>>>> miniblink49
 #else
 #define HARMONY_SHIPPING(V) HARMONY_SHIPPING_BASE(V)
 #endif
@@ -415,7 +270,6 @@ DEFINE_IMPLICATION(harmony_private_methods, harmony_private_fields)
 // and associated tests are moved from the harmony directory to the appropriate
 // esN directory.
 
-<<<<<<< HEAD
 #define FLAG_INPROGRESS_FEATURES(id, description) \
     DEFINE_BOOL(id, false, "enable " #description " (in progress)")
 HARMONY_INPROGRESS(FLAG_INPROGRESS_FEATURES)
@@ -430,23 +284,6 @@ HARMONY_STAGED(FLAG_STAGED_FEATURES)
 #define FLAG_SHIPPING_FEATURES(id, description)   \
     DEFINE_BOOL(id, true, "enable " #description) \
     DEFINE_NEG_NEG_IMPLICATION(harmony_shipping, id)
-=======
-
-#define FLAG_INPROGRESS_FEATURES(id, description) \
-  DEFINE_BOOL(id, false, "enable " #description " (in progress)")
-HARMONY_INPROGRESS(FLAG_INPROGRESS_FEATURES)
-#undef FLAG_INPROGRESS_FEATURES
-
-#define FLAG_STAGED_FEATURES(id, description) \
-  DEFINE_BOOL(id, false, "enable " #description) \
-  DEFINE_IMPLICATION(harmony, id)
-HARMONY_STAGED(FLAG_STAGED_FEATURES)
-#undef FLAG_STAGED_FEATURES
-
-#define FLAG_SHIPPING_FEATURES(id, description) \
-  DEFINE_BOOL(id, true, "enable " #description) \
-  DEFINE_NEG_NEG_IMPLICATION(harmony_shipping, id)
->>>>>>> miniblink49
 HARMONY_SHIPPING(FLAG_SHIPPING_FEATURES)
 #undef FLAG_SHIPPING_FEATURES
 
@@ -458,11 +295,7 @@ DEFINE_BOOL(icu_timezone_data, true, "get information about timezones from ICU")
 #define V8_ENABLE_RAW_HEAP_SNAPSHOTS_BOOL true
 #else
 #define V8_ENABLE_RAW_HEAP_SNAPSHOTS_BOOL false
-<<<<<<< HEAD
 #endif // V8_ENABLE_RAW_HEAP_SNAPSHOTS
-=======
-#endif  // V8_ENABLE_RAW_HEAP_SNAPSHOTS
->>>>>>> miniblink49
 
 #ifdef V8_LITE_MODE
 #define V8_LITE_BOOL true
@@ -476,19 +309,13 @@ DEFINE_BOOL(icu_timezone_data, true, "get information about timezones from ICU")
 #define FUTURE_BOOL false
 #endif
 DEFINE_BOOL(future, FUTURE_BOOL,
-<<<<<<< HEAD
     "Implies all staged features that we want to ship in the "
     "not-too-far future")
-=======
-            "Implies all staged features that we want to ship in the "
-            "not-too-far future")
->>>>>>> miniblink49
 
 DEFINE_IMPLICATION(future, write_protect_code_memory)
 
 // Flags for experimental implementation features.
 DEFINE_BOOL(allocation_site_pretenuring, true,
-<<<<<<< HEAD
     "pretenure with allocation sites")
 DEFINE_BOOL(page_promotion, true, "promote pages based on utilization")
 DEFINE_INT(page_promotion_threshold, 70,
@@ -497,16 +324,6 @@ DEFINE_BOOL(trace_pretenuring, false,
     "trace pretenuring decisions of HAllocate instructions")
 DEFINE_BOOL(trace_pretenuring_statistics, false,
     "trace allocation site pretenuring statistics")
-=======
-            "pretenure with allocation sites")
-DEFINE_BOOL(page_promotion, true, "promote pages based on utilization")
-DEFINE_INT(page_promotion_threshold, 70,
-           "min percentage of live bytes on a page to enable fast evacuation")
-DEFINE_BOOL(trace_pretenuring, false,
-            "trace pretenuring decisions of HAllocate instructions")
-DEFINE_BOOL(trace_pretenuring_statistics, false,
-            "trace allocation site pretenuring statistics")
->>>>>>> miniblink49
 DEFINE_BOOL(track_fields, true, "track fields with only smi values")
 DEFINE_BOOL(track_double_fields, true, "track fields with double values")
 DEFINE_BOOL(track_heap_object_fields, true, "track fields with heap values")
@@ -518,7 +335,6 @@ DEFINE_BOOL(track_field_types, true, "track field types")
 DEFINE_IMPLICATION(track_field_types, track_fields)
 DEFINE_IMPLICATION(track_field_types, track_heap_object_fields)
 DEFINE_BOOL(trace_block_coverage, false,
-<<<<<<< HEAD
     "trace collected block coverage information")
 DEFINE_BOOL(feedback_normalization, false,
     "feed back normalization to constructors")
@@ -538,58 +354,21 @@ DEFINE_BOOL(enable_one_shot_optimization, true,
 // Flag for sealed, frozen elements kind instead of dictionary elements kind
 DEFINE_BOOL(enable_sealed_frozen_elements_kind, true,
     "Enable sealed, frozen elements kind")
-=======
-            "trace collected block coverage information")
-DEFINE_BOOL(feedback_normalization, false,
-            "feed back normalization to constructors")
-// TODO(jkummerow): This currently adds too much load on the stub cache.
-DEFINE_BOOL_READONLY(internalize_on_the_fly, true,
-                     "internalize string keys for generic keyed ICs on the fly")
-
-// Flag to faster calls with arguments mismatches (https://crbug.com/v8/8895)
-DEFINE_BOOL(fast_calls_with_arguments_mismatches, true,
-            "skip arguments adaptor frames when it's provably safe")
-
-// Flag for one shot optimiztions.
-DEFINE_BOOL(enable_one_shot_optimization, true,
-            "Enable size optimizations for the code that will "
-            "only be executed once")
-
->>>>>>> miniblink49
 
 // Flags for data representation optimizations
 DEFINE_BOOL(unbox_double_arrays, true, "automatically unbox arrays of doubles")
 DEFINE_BOOL_READONLY(string_slices, true, "use string slices")
 
-<<<<<<< HEAD
 DEFINE_INT(interrupt_budget, 144 * KB,
     "interrupt budget which should be used for the profiler counter")
 
 DEFINE_INT(budget_for_feedback_vector_allocation, 1 * KB,
     "The budget in amount of bytecode executed by a function before we "
     "decide to allocate feedback vectors")
-=======
-// Flags for Ignition for no-snapshot builds.
-#undef FLAG
-#ifndef V8_USE_SNAPSHOT
-#define FLAG FLAG_FULL
-#else
-#define FLAG FLAG_READONLY
-#endif
-DEFINE_INT(interrupt_budget, 144 * KB,
-           "interrupt budget which should be used for the profiler counter")
-#undef FLAG
-#define FLAG FLAG_FULL
-
-DEFINE_INT(budget_for_feedback_vector_allocation, 2 * KB,
-           "The budget in amount of bytecode executed by a function before we "
-           "decide to allocate feedback vectors")
->>>>>>> miniblink49
 DEFINE_BOOL(lazy_feedback_allocation, false, "Allocate feedback vectors lazily")
 
 // Flags for Ignition.
 DEFINE_BOOL(ignition_elide_noneffectful_bytecodes, true,
-<<<<<<< HEAD
     "elide bytecodes which won't have any external effect")
 DEFINE_BOOL(ignition_reo, true, "use ignition register equivalence optimizer")
 DEFINE_BOOL(ignition_filter_expression_positions, true,
@@ -607,25 +386,6 @@ DEFINE_STRING(print_bytecode_filter, "*",
 #ifdef V8_TRACE_IGNITION
 DEFINE_BOOL(trace_ignition, false,
     "trace the bytecodes executed by the ignition interpreter")
-=======
-            "elide bytecodes which won't have any external effect")
-DEFINE_BOOL(ignition_reo, true, "use ignition register equivalence optimizer")
-DEFINE_BOOL(ignition_filter_expression_positions, true,
-            "filter expression positions before the bytecode pipeline")
-DEFINE_BOOL(ignition_share_named_property_feedback, true,
-            "share feedback slots when loading the same named property from "
-            "the same object")
-DEFINE_BOOL(print_bytecode, false,
-            "print bytecode generated by ignition interpreter")
-DEFINE_BOOL(enable_lazy_source_positions, V8_LITE_BOOL,
-            "skip generating source positions during initial compile but "
-            "regenerate when actually required")
-DEFINE_STRING(print_bytecode_filter, "*",
-              "filter for selecting which functions to print bytecode")
-#ifdef V8_TRACE_IGNITION
-DEFINE_BOOL(trace_ignition, false,
-            "trace the bytecodes executed by the ignition interpreter")
->>>>>>> miniblink49
 #endif
 #ifdef V8_TRACE_FEEDBACK_UPDATES
 DEFINE_BOOL(
@@ -633,7 +393,6 @@ DEFINE_BOOL(
     "trace updates to feedback vectors during ignition interpreter execution.")
 #endif
 DEFINE_BOOL(trace_ignition_codegen, false,
-<<<<<<< HEAD
     "trace the codegen of ignition interpreter bytecode handlers")
 DEFINE_BOOL(trace_ignition_dispatches, false,
     "traces the dispatches to bytecode handlers by the ignition "
@@ -645,25 +404,11 @@ DEFINE_STRING(trace_ignition_dispatches_output_file, nullptr,
 DEFINE_BOOL(fast_math, true, "faster (but maybe less accurate) math functions")
 DEFINE_BOOL(trace_track_allocation_sites, false,
     "trace the tracking of allocation sites")
-=======
-            "trace the codegen of ignition interpreter bytecode handlers")
-DEFINE_BOOL(trace_ignition_dispatches, false,
-            "traces the dispatches to bytecode handlers by the ignition "
-            "interpreter")
-DEFINE_STRING(trace_ignition_dispatches_output_file, nullptr,
-              "the file to which the bytecode handler dispatch table is "
-              "written (by default, the table is not written to a file)")
-
-DEFINE_BOOL(fast_math, true, "faster (but maybe less accurate) math functions")
-DEFINE_BOOL(trace_track_allocation_sites, false,
-            "trace the tracking of allocation sites")
->>>>>>> miniblink49
 DEFINE_BOOL(trace_migration, false, "trace object migration")
 DEFINE_BOOL(trace_generalization, false, "trace map generalization")
 
 // Flags for concurrent recompilation.
 DEFINE_BOOL(concurrent_recompilation, true,
-<<<<<<< HEAD
     "optimizing hot functions asynchronously on a separate thread")
 DEFINE_BOOL(trace_concurrent_recompilation, false,
     "track concurrent recompilation")
@@ -681,35 +426,15 @@ DEFINE_BOOL(trace_heap_broker_verbose, false,
 DEFINE_BOOL(trace_heap_broker, false,
     "trace the heap broker (reports on missing data only)")
 DEFINE_IMPLICATION(trace_heap_broker_verbose, trace_heap_broker)
-=======
-            "optimizing hot functions asynchronously on a separate thread")
-DEFINE_BOOL(trace_concurrent_recompilation, false,
-            "track concurrent recompilation")
-DEFINE_INT(concurrent_recompilation_queue_length, 8,
-           "the length of the concurrent compilation queue")
-DEFINE_INT(concurrent_recompilation_delay, 0,
-           "artificial compilation delay in ms")
-DEFINE_BOOL(block_concurrent_recompilation, false,
-            "block queued jobs until released")
-DEFINE_BOOL(concurrent_inlining, false,
-            "run optimizing compiler's inlining phase on a separate thread")
-DEFINE_IMPLICATION(future, concurrent_inlining)
-DEFINE_BOOL(trace_heap_broker, false, "trace the heap broker")
->>>>>>> miniblink49
 
 // Flags for stress-testing the compiler.
 DEFINE_INT(stress_runs, 0, "number of stress runs")
 DEFINE_INT(deopt_every_n_times, 0,
-<<<<<<< HEAD
     "deoptimize every n times a deopt point is passed")
-=======
-           "deoptimize every n times a deopt point is passed")
->>>>>>> miniblink49
 DEFINE_BOOL(print_deopt_stress, false, "print number of possible deopt points")
 
 // Flags for TurboFan.
 DEFINE_BOOL(turbo_sp_frame_access, false,
-<<<<<<< HEAD
     "use stack pointer-relative access to frame wherever possible")
 DEFINE_BOOL(turbo_preprocess_ranges, true,
     "run pre-register allocation heuristics")
@@ -717,37 +442,18 @@ DEFINE_BOOL(turbo_control_flow_aware_allocation, false,
     "consider control flow while allocating registers")
 DEFINE_NEG_IMPLICATION(turbo_control_flow_aware_allocation,
     turbo_preprocess_ranges)
-=======
-            "use stack pointer-relative access to frame wherever possible")
-DEFINE_BOOL(turbo_preprocess_ranges, true,
-            "run pre-register allocation heuristics")
-DEFINE_BOOL(turbo_control_flow_aware_allocation, false,
-            "consider control flow while allocating registers")
-DEFINE_NEG_IMPLICATION(turbo_control_flow_aware_allocation,
-                       turbo_preprocess_ranges)
->>>>>>> miniblink49
 
 DEFINE_STRING(turbo_filter, "*", "optimization filter for TurboFan compiler")
 DEFINE_BOOL(trace_turbo, false, "trace generated TurboFan IR")
 DEFINE_STRING(trace_turbo_path, nullptr,
-<<<<<<< HEAD
     "directory to dump generated TurboFan IR to")
 DEFINE_STRING(trace_turbo_filter, "*",
     "filter for tracing turbofan compilation")
-=======
-              "directory to dump generated TurboFan IR to")
-DEFINE_STRING(trace_turbo_filter, "*",
-              "filter for tracing turbofan compilation")
->>>>>>> miniblink49
 DEFINE_BOOL(trace_turbo_graph, false, "trace generated TurboFan graphs")
 DEFINE_BOOL(trace_turbo_scheduled, false, "trace TurboFan IR with schedule")
 DEFINE_IMPLICATION(trace_turbo_scheduled, trace_turbo_graph)
 DEFINE_STRING(trace_turbo_cfg_file, nullptr,
-<<<<<<< HEAD
     "trace turbo cfg graph (for C1 visualizer) to a given file name")
-=======
-              "trace turbo cfg graph (for C1 visualizer) to a given file name")
->>>>>>> miniblink49
 DEFINE_BOOL(trace_turbo_types, true, "trace TurboFan's types")
 DEFINE_BOOL(trace_turbo_scheduler, false, "trace TurboFan's scheduler")
 DEFINE_BOOL(trace_turbo_reduction, false, "trace TurboFan's various reducers")
@@ -760,22 +466,14 @@ DEFINE_BOOL(trace_all_uses, false, "trace all use positions")
 DEFINE_BOOL(trace_representation, false, "trace representation types")
 DEFINE_BOOL(turbo_verify, DEBUG_BOOL, "verify TurboFan graphs at each phase")
 DEFINE_STRING(turbo_verify_machine_graph, nullptr,
-<<<<<<< HEAD
     "verify TurboFan machine graph before instruction selection")
 #ifdef ENABLE_VERIFY_CSA
 DEFINE_BOOL(verify_csa, DEBUG_BOOL,
     "verify TurboFan machine graph of code stubs")
-=======
-              "verify TurboFan machine graph before instruction selection")
-#ifdef ENABLE_VERIFY_CSA
-DEFINE_BOOL(verify_csa, DEBUG_BOOL,
-            "verify TurboFan machine graph of code stubs")
->>>>>>> miniblink49
 #else
 // Define the flag as read-only-false so that code still compiles even in the
 // non-ENABLE_VERIFY_CSA configuration.
 DEFINE_BOOL_READONLY(verify_csa, false,
-<<<<<<< HEAD
     "verify TurboFan machine graph of code stubs")
 #endif
 DEFINE_BOOL(trace_verify_csa, false, "trace code stubs verification")
@@ -816,51 +514,12 @@ DEFINE_VALUE_IMPLICATION(stress_inline, max_inlined_bytecode_size_cumulative,
     999999)
 DEFINE_VALUE_IMPLICATION(stress_inline, max_inlined_bytecode_size_absolute,
     999999)
-=======
-                     "verify TurboFan machine graph of code stubs")
-#endif
-DEFINE_BOOL(trace_verify_csa, false, "trace code stubs verification")
-DEFINE_STRING(csa_trap_on_node, nullptr,
-              "trigger break point when a node with given id is created in "
-              "given stub. The format is: StubName,NodeId")
-DEFINE_BOOL_READONLY(fixed_array_bounds_checks, true,
-                     "enable FixedArray bounds checks")
-DEFINE_BOOL(turbo_stats, false, "print TurboFan statistics")
-DEFINE_BOOL(turbo_stats_nvp, false,
-            "print TurboFan statistics in machine-readable format")
-DEFINE_BOOL(turbo_stats_wasm, false,
-            "print TurboFan statistics of wasm compilations")
-DEFINE_BOOL(turbo_splitting, true, "split nodes during scheduling in TurboFan")
-DEFINE_BOOL(function_context_specialization, false,
-            "enable function context specialization in TurboFan")
-DEFINE_BOOL(turbo_inlining, true, "enable inlining in TurboFan")
-DEFINE_INT(max_inlined_bytecode_size, 500,
-           "maximum size of bytecode for a single inlining")
-DEFINE_INT(max_inlined_bytecode_size_cumulative, 1000,
-           "maximum cumulative size of bytecode considered for inlining")
-DEFINE_INT(max_inlined_bytecode_size_absolute, 5000,
-           "maximum cumulative size of bytecode considered for inlining")
-DEFINE_FLOAT(reserve_inline_budget_scale_factor, 1.2,
-             "maximum cumulative size of bytecode considered for inlining")
-DEFINE_INT(max_inlined_bytecode_size_small, 30,
-           "maximum size of bytecode considered for small function inlining")
-DEFINE_FLOAT(min_inlining_frequency, 0.15, "minimum frequency for inlining")
-DEFINE_BOOL(polymorphic_inlining, true, "polymorphic inlining")
-DEFINE_BOOL(stress_inline, false,
-            "set high thresholds for inlining to inline as much as possible")
-DEFINE_VALUE_IMPLICATION(stress_inline, max_inlined_bytecode_size, 999999)
-DEFINE_VALUE_IMPLICATION(stress_inline, max_inlined_bytecode_size_cumulative,
-                         999999)
-DEFINE_VALUE_IMPLICATION(stress_inline, max_inlined_bytecode_size_absolute,
-                         999999)
->>>>>>> miniblink49
 DEFINE_VALUE_IMPLICATION(stress_inline, min_inlining_frequency, 0)
 DEFINE_VALUE_IMPLICATION(stress_inline, polymorphic_inlining, true)
 DEFINE_BOOL(trace_turbo_inlining, false, "trace TurboFan inlining")
 DEFINE_BOOL(inline_accessors, true, "inline JavaScript accessors")
 DEFINE_BOOL(inline_into_try, true, "inline into try blocks")
 DEFINE_BOOL(turbo_inline_array_builtins, true,
-<<<<<<< HEAD
     "inline array builtins in TurboFan code")
 DEFINE_BOOL(use_osr, true, "use on-stack replacement")
 DEFINE_BOOL(trace_osr, false, "trace on-stack replacement")
@@ -874,21 +533,6 @@ DEFINE_BOOL(trace_turbo_load_elimination, false,
 DEFINE_BOOL(turbo_profiling, false, "enable profiling in TurboFan")
 DEFINE_BOOL(turbo_verify_allocation, DEBUG_BOOL,
     "verify register allocation in TurboFan")
-=======
-            "inline array builtins in TurboFan code")
-DEFINE_BOOL(use_osr, true, "use on-stack replacement")
-DEFINE_BOOL(trace_osr, false, "trace on-stack replacement")
-DEFINE_BOOL(analyze_environment_liveness, true,
-            "analyze liveness of environment slots and zap dead values")
-DEFINE_BOOL(trace_environment_liveness, false,
-            "trace liveness of local variable slots")
-DEFINE_BOOL(turbo_load_elimination, true, "enable load elimination in TurboFan")
-DEFINE_BOOL(trace_turbo_load_elimination, false,
-            "trace TurboFan load elimination")
-DEFINE_BOOL(turbo_profiling, false, "enable profiling in TurboFan")
-DEFINE_BOOL(turbo_verify_allocation, DEBUG_BOOL,
-            "verify register allocation in TurboFan")
->>>>>>> miniblink49
 DEFINE_BOOL(turbo_move_optimization, true, "optimize gap moves in TurboFan")
 DEFINE_BOOL(turbo_jt, true, "enable jump threading in TurboFan")
 DEFINE_BOOL(turbo_loop_peeling, true, "Turbofan loop peeling")
@@ -898,7 +542,6 @@ DEFINE_BOOL(turbo_cf_optimization, true, "optimize control flow in TurboFan")
 DEFINE_BOOL(turbo_escape, true, "enable escape analysis")
 DEFINE_BOOL(turbo_allocation_folding, true, "Turbofan allocation folding")
 DEFINE_BOOL(turbo_instruction_scheduling, false,
-<<<<<<< HEAD
     "enable instruction scheduling in TurboFan")
 DEFINE_BOOL(turbo_stress_instruction_scheduling, false,
     "randomly schedule instructions to stress dependency tracking")
@@ -909,18 +552,6 @@ DEFINE_BOOL(turbo_rewrite_far_jumps, true,
     "rewrite far to near jumps (ia32,x64)")
 DEFINE_BOOL(experimental_inline_promise_constructor, true,
     "inline the Promise constructor in TurboFan")
-=======
-            "enable instruction scheduling in TurboFan")
-DEFINE_BOOL(turbo_stress_instruction_scheduling, false,
-            "randomly schedule instructions to stress dependency tracking")
-DEFINE_BOOL(turbo_store_elimination, true,
-            "enable store-store elimination in TurboFan")
-DEFINE_BOOL(trace_store_elimination, false, "trace store elimination")
-DEFINE_BOOL(turbo_rewrite_far_jumps, true,
-            "rewrite far to near jumps (ia32,x64)")
-DEFINE_BOOL(experimental_inline_promise_constructor, true,
-            "inline the Promise constructor in TurboFan")
->>>>>>> miniblink49
 DEFINE_BOOL(
     stress_gc_during_compilation, false,
     "simulate GC/compiler thread race related to https://crbug.com/v8/8520")
@@ -931,17 +562,12 @@ DEFINE_BOOL(
 #define V8_DEFAULT_UNTRUSTED_CODE_MITIGATIONS true
 #endif
 DEFINE_BOOL(untrusted_code_mitigations, V8_DEFAULT_UNTRUSTED_CODE_MITIGATIONS,
-<<<<<<< HEAD
     "Enable mitigations for executing untrusted code")
-=======
-            "Enable mitigations for executing untrusted code")
->>>>>>> miniblink49
 #undef V8_DEFAULT_UNTRUSTED_CODE_MITIGATIONS
 
 // Flags for native WebAssembly.
 DEFINE_BOOL(expose_wasm, true, "expose wasm interface to JavaScript")
 DEFINE_BOOL(assume_asmjs_origin, false,
-<<<<<<< HEAD
     "force wasm decoder to assume input is internal asm-wasm format")
 DEFINE_BOOL(wasm_disable_structured_cloning, false,
     "disable wasm structured cloning")
@@ -963,29 +589,6 @@ DEFINE_UINT(wasm_max_table_size, v8::internal::wasm::kV8MaxWasmTableSize,
     "maximum table size of a wasm instance")
 DEFINE_UINT(wasm_max_code_space, v8::internal::kMaxWasmCodeMB,
     "maximum committed code space for wasm (in MB)")
-=======
-            "force wasm decoder to assume input is internal asm-wasm format")
-DEFINE_BOOL(wasm_disable_structured_cloning, false,
-            "disable wasm structured cloning")
-DEFINE_INT(wasm_num_compilation_tasks, 10,
-           "number of parallel compilation tasks for wasm")
-DEFINE_DEBUG_BOOL(trace_wasm_native_heap, false,
-                  "trace wasm native heap events")
-DEFINE_BOOL(wasm_write_protect_code_memory, false,
-            "write protect code memory on the wasm native heap")
-DEFINE_BOOL(trace_wasm_serialization, false,
-            "trace serialization/deserialization")
-DEFINE_BOOL(wasm_async_compilation, true,
-            "enable actual asynchronous compilation for WebAssembly.compile")
-DEFINE_BOOL(wasm_test_streaming, false,
-            "use streaming compilation instead of async compilation for tests")
-DEFINE_UINT(wasm_max_mem_pages, v8::internal::wasm::kV8MaxWasmMemoryPages,
-            "maximum number of 64KiB memory pages of a wasm instance")
-DEFINE_UINT(wasm_max_table_size, v8::internal::wasm::kV8MaxWasmTableSize,
-            "maximum table size of a wasm instance")
-DEFINE_UINT(wasm_max_code_space, v8::internal::kMaxWasmCodeMB,
-            "maximum committed code space for wasm (in MB)")
->>>>>>> miniblink49
 // Enable Liftoff by default on ia32 and x64. More architectures will follow
 // once they are implemented and sufficiently tested.
 #if V8_TARGET_ARCH_IA32 || V8_TARGET_ARCH_X64
@@ -1001,7 +604,6 @@ DEFINE_IMPLICATION(future, wasm_tier_up)
 DEFINE_IMPLICATION(wasm_tier_up, liftoff)
 DEFINE_DEBUG_BOOL(trace_wasm_decoder, false, "trace decoding of wasm code")
 DEFINE_DEBUG_BOOL(trace_wasm_decode_time, false,
-<<<<<<< HEAD
     "trace decoding time of wasm code")
 DEFINE_DEBUG_BOOL(trace_wasm_compiler, false, "trace compiling of wasm code")
 DEFINE_DEBUG_BOOL(trace_wasm_interpreter, false,
@@ -1030,46 +632,12 @@ DEFINE_BOOL(suppress_asm_messages, false,
 DEFINE_BOOL(trace_asm_time, false, "log asm.js timing info to the console")
 DEFINE_BOOL(trace_asm_scanner, false,
     "log tokens encountered by asm.js scanner")
-=======
-                  "trace decoding time of wasm code")
-DEFINE_DEBUG_BOOL(trace_wasm_compiler, false, "trace compiling of wasm code")
-DEFINE_DEBUG_BOOL(trace_wasm_interpreter, false,
-                  "trace interpretation of wasm code")
-DEFINE_DEBUG_BOOL(trace_wasm_streaming, false,
-                  "trace streaming compilation of wasm code")
-DEFINE_INT(trace_wasm_ast_start, 0,
-           "start function for wasm AST trace (inclusive)")
-DEFINE_INT(trace_wasm_ast_end, 0, "end function for wasm AST trace (exclusive)")
-DEFINE_BOOL(liftoff, false,
-            "enable Liftoff, the baseline compiler for WebAssembly")
-DEFINE_DEBUG_BOOL(trace_liftoff, false,
-                  "trace Liftoff, the baseline compiler for WebAssembly")
-DEFINE_DEBUG_BOOL(wasm_break_on_decoder_error, false,
-                  "debug break when wasm decoder encounters an error")
-DEFINE_BOOL(trace_wasm_memory, false,
-            "print all memory updates performed in wasm code")
-// Fuzzers use {wasm_tier_mask_for_testing} together with {liftoff} and
-// {no_wasm_tier_up} to force some functions to be compiled with Turbofan.
-DEFINE_INT(wasm_tier_mask_for_testing, 0,
-           "bitmask of functions to compile with TurboFan instead of Liftoff")
-
-DEFINE_BOOL(validate_asm, true, "validate asm.js modules before compiling")
-DEFINE_BOOL(suppress_asm_messages, false,
-            "don't emit asm.js related messages (for golden file testing)")
-DEFINE_BOOL(trace_asm_time, false, "log asm.js timing info to the console")
-DEFINE_BOOL(trace_asm_scanner, false,
-            "log tokens encountered by asm.js scanner")
->>>>>>> miniblink49
 DEFINE_BOOL(trace_asm_parser, false, "verbose logging of asm.js parse failures")
 DEFINE_BOOL(stress_validate_asm, false, "try to validate everything as asm.js")
 
 DEFINE_DEBUG_BOOL(dump_wasm_module, false, "dump wasm module bytes")
 DEFINE_STRING(dump_wasm_module_path, nullptr,
-<<<<<<< HEAD
     "directory to dump wasm modules to")
-=======
-              "directory to dump wasm modules to")
->>>>>>> miniblink49
 
 // Declare command-line flags for WASM features. Warning: avoid using these
 // flags directly in the implementation. Instead accept wasm::WasmFeatures
@@ -1077,22 +645,15 @@ DEFINE_STRING(dump_wasm_module_path, nullptr,
 #include "src/wasm/wasm-feature-flags.h"
 
 #define SPACE
-<<<<<<< HEAD
 #define DECL_WASM_FLAG(feat, desc, val)        \
     DEFINE_BOOL(experimental_wasm_##feat, val, \
         "enable prototype " desc " for wasm")
-=======
-#define DECL_WASM_FLAG(feat, desc, val)      \
-  DEFINE_BOOL(experimental_wasm_##feat, val, \
-              "enable prototype " desc " for wasm")
->>>>>>> miniblink49
 FOREACH_WASM_FEATURE_FLAG(DECL_WASM_FLAG, SPACE)
 #undef DECL_WASM_FLAG
 #undef SPACE
 
 DEFINE_BOOL(wasm_opt, false, "enable wasm optimization")
 DEFINE_BOOL(wasm_no_bounds_checks, false,
-<<<<<<< HEAD
     "disable bounds checks (performance testing only)")
 DEFINE_BOOL(wasm_no_stack_checks, false,
     "disable stack checks (performance testing only)")
@@ -1110,32 +671,10 @@ DEFINE_BOOL(wasm_trap_handler, true,
     " (currently Linux x86_64 only)")
 DEFINE_BOOL(wasm_fuzzer_gen_test, false,
     "Generate a test case when running a wasm fuzzer")
-=======
-            "disable bounds checks (performance testing only)")
-DEFINE_BOOL(wasm_no_stack_checks, false,
-            "disable stack checks (performance testing only)")
-DEFINE_BOOL(wasm_math_intrinsics, true,
-            "intrinsify some Math imports into wasm")
-
-DEFINE_BOOL(wasm_shared_engine, true,
-            "shares one wasm engine between all isolates within a process")
-DEFINE_IMPLICATION(future, wasm_shared_engine)
-DEFINE_BOOL(wasm_shared_code, true,
-            "shares code underlying a wasm module when it is transferred")
-DEFINE_IMPLICATION(future, wasm_shared_code)
-DEFINE_BOOL(wasm_trap_handler, true,
-            "use signal handlers to catch out of bounds memory access in wasm"
-            " (currently Linux x86_64 only)")
-DEFINE_BOOL(wasm_trap_handler_fallback, false,
-            "Use bounds checks if guarded memory is not available")
-DEFINE_BOOL(wasm_fuzzer_gen_test, false,
-            "Generate a test case when running a wasm fuzzer")
->>>>>>> miniblink49
 DEFINE_IMPLICATION(wasm_fuzzer_gen_test, single_threaded)
 DEFINE_BOOL(print_wasm_code, false, "Print WebAssembly code")
 DEFINE_BOOL(print_wasm_stub_code, false, "Print WebAssembly stub code")
 DEFINE_BOOL(wasm_interpret_all, false,
-<<<<<<< HEAD
     "Execute all wasm code in the wasm interpreter")
 DEFINE_BOOL(asm_wasm_lazy_compilation, false,
     "enable lazy compilation for asm-wasm modules")
@@ -1146,31 +685,17 @@ DEFINE_DEBUG_BOOL(trace_wasm_lazy_compilation, false,
     "trace lazy compilation of wasm functions")
 DEFINE_BOOL(wasm_grow_shared_memory, false,
     "Allow growing shared WebAssembly memory objects")
-=======
-            "Execute all wasm code in the wasm interpreter")
-DEFINE_BOOL(asm_wasm_lazy_compilation, false,
-            "enable lazy compilation for asm-wasm modules")
-DEFINE_IMPLICATION(validate_asm, asm_wasm_lazy_compilation)
-DEFINE_BOOL(wasm_lazy_compilation, false,
-            "enable lazy compilation for all wasm modules")
-DEFINE_DEBUG_BOOL(trace_wasm_lazy_compilation, false,
-                  "trace lazy compilation of wasm functions")
->>>>>>> miniblink49
 // wasm-interpret-all resets {asm-,}wasm-lazy-compilation.
 DEFINE_NEG_IMPLICATION(wasm_interpret_all, asm_wasm_lazy_compilation)
 DEFINE_NEG_IMPLICATION(wasm_interpret_all, wasm_lazy_compilation)
 DEFINE_NEG_IMPLICATION(wasm_interpret_all, wasm_tier_up)
-<<<<<<< HEAD
 DEFINE_BOOL(wasm_code_gc, false, "enable garbage collection of wasm code")
 DEFINE_IMPLICATION(future, wasm_code_gc)
-=======
->>>>>>> miniblink49
 
 // Profiler flags.
 DEFINE_INT(frame_count, 1, "number of stack frames inspected by the profiler")
 
 DEFINE_INT(stress_sampling_allocation_profiler, 0,
-<<<<<<< HEAD
     "Enables sampling allocation profiler with X as a sample interval")
 
 // Garbage collections flags.
@@ -1184,26 +709,10 @@ DEFINE_INT(semi_space_growth_factor, 2, "factor by which to grow the new space")
 DEFINE_BOOL(experimental_new_space_growth_heuristic, false,
     "Grow the new space based on the percentage of survivors instead "
     "of their absolute value.")
-=======
-           "Enables sampling allocation profiler with X as a sample interval")
-
-// Garbage collections flags.
-DEFINE_SIZE_T(min_semi_space_size, 0,
-              "min size of a semi-space (in MBytes), the new space consists of "
-              "two semi-spaces")
-DEFINE_SIZE_T(max_semi_space_size, 0,
-              "max size of a semi-space (in MBytes), the new space consists of "
-              "two semi-spaces")
-DEFINE_INT(semi_space_growth_factor, 2, "factor by which to grow the new space")
-DEFINE_BOOL(experimental_new_space_growth_heuristic, false,
-            "Grow the new space based on the percentage of survivors instead "
-            "of their absolute value.")
->>>>>>> miniblink49
 DEFINE_SIZE_T(max_old_space_size, 0, "max size of the old space (in Mbytes)")
 DEFINE_SIZE_T(initial_old_space_size, 0, "initial old space size (in Mbytes)")
 DEFINE_BOOL(gc_global, false, "always perform global GCs")
 DEFINE_INT(random_gc_interval, 0,
-<<<<<<< HEAD
     "Collect garbage after random(0, X) allocations. It overrides "
     "gc_interval.")
 DEFINE_INT(gc_interval, -1, "garbage collect after <n> allocations")
@@ -1238,42 +747,6 @@ DEFINE_BOOL(trace_mutator_utilization, false,
 DEFINE_BOOL(incremental_marking, true, "use incremental marking")
 DEFINE_BOOL(incremental_marking_wrappers, true,
     "use incremental marking for marking wrappers")
-=======
-           "Collect garbage after random(0, X) allocations. It overrides "
-           "gc_interval.")
-DEFINE_INT(gc_interval, -1, "garbage collect after <n> allocations")
-DEFINE_INT(retain_maps_for_n_gc, 2,
-           "keeps maps alive for <n> old space garbage collections")
-DEFINE_BOOL(trace_gc, false,
-            "print one trace line following each garbage collection")
-DEFINE_BOOL(trace_gc_nvp, false,
-            "print one detailed trace line in name=value format "
-            "after each garbage collection")
-DEFINE_BOOL(trace_gc_ignore_scavenger, false,
-            "do not print trace line after scavenger collection")
-DEFINE_BOOL(trace_idle_notification, false,
-            "print one trace line following each idle notification")
-DEFINE_BOOL(trace_idle_notification_verbose, false,
-            "prints the heap state used by the idle notification")
-DEFINE_BOOL(trace_gc_verbose, false,
-            "print more details following each garbage collection")
-DEFINE_IMPLICATION(trace_gc_verbose, trace_gc)
-
-DEFINE_INT(trace_allocation_stack_interval, -1,
-           "print stack trace after <n> free-list allocations")
-DEFINE_INT(trace_duplicate_threshold_kb, 0,
-           "print duplicate objects in the heap if their size is more than "
-           "given threshold")
-DEFINE_BOOL(trace_fragmentation, false, "report fragmentation for old space")
-DEFINE_BOOL(trace_fragmentation_verbose, false,
-            "report fragmentation for old space (detailed)")
-DEFINE_BOOL(trace_evacuation, false, "report evacuation statistics")
-DEFINE_BOOL(trace_mutator_utilization, false,
-            "print mutator utilization, allocation speed, gc speed")
-DEFINE_BOOL(incremental_marking, true, "use incremental marking")
-DEFINE_BOOL(incremental_marking_wrappers, true,
-            "use incremental marking for marking wrappers")
->>>>>>> miniblink49
 DEFINE_BOOL(trace_unmapper, false, "Trace the unmapping")
 DEFINE_BOOL(parallel_scavenge, true, "parallel scavenge")
 DEFINE_BOOL(trace_parallel_scavenge, false, "trace parallel scavenge")
@@ -1284,7 +757,6 @@ DEFINE_BOOL(write_protect_code_memory, true, "write protect code memory")
 #define V8_CONCURRENT_MARKING_BOOL false
 #endif
 DEFINE_BOOL(concurrent_marking, V8_CONCURRENT_MARKING_BOOL,
-<<<<<<< HEAD
     "use concurrent marking")
 DEFINE_BOOL(parallel_marking, true, "use parallel marking in atomic pause")
 DEFINE_INT(ephemeron_fixpoint_iterations, 10,
@@ -1312,35 +784,6 @@ DEFINE_BOOL(track_retaining_path, false,
     "enable support for tracking retaining path")
 DEFINE_BOOL(concurrent_array_buffer_freeing, true,
     "free array buffer allocations on a background thread")
-=======
-            "use concurrent marking")
-DEFINE_BOOL(parallel_marking, true, "use parallel marking in atomic pause")
-DEFINE_INT(ephemeron_fixpoint_iterations, 10,
-           "number of fixpoint iterations it takes to switch to linear "
-           "ephemeron algorithm")
-DEFINE_BOOL(trace_concurrent_marking, false, "trace concurrent marking")
-DEFINE_BOOL(concurrent_store_buffer, true,
-            "use concurrent store buffer processing")
-DEFINE_BOOL(concurrent_sweeping, true, "use concurrent sweeping")
-DEFINE_BOOL(parallel_compaction, true, "use parallel compaction")
-DEFINE_BOOL(parallel_pointer_update, true,
-            "use parallel pointer update during compaction")
-DEFINE_BOOL(detect_ineffective_gcs_near_heap_limit, true,
-            "trigger out-of-memory failure to avoid GC storm near heap limit")
-DEFINE_BOOL(trace_incremental_marking, false,
-            "trace progress of the incremental marking")
-DEFINE_BOOL(trace_stress_marking, false, "trace stress marking progress")
-DEFINE_BOOL(trace_stress_scavenge, false, "trace stress scavenge progress")
-DEFINE_BOOL(track_gc_object_stats, false,
-            "track object counts and memory usage")
-DEFINE_BOOL(trace_gc_object_stats, false,
-            "trace object counts and memory usage")
-DEFINE_BOOL(trace_zone_stats, false, "trace zone memory usage")
-DEFINE_BOOL(track_retaining_path, false,
-            "enable support for tracking retaining path")
-DEFINE_BOOL(concurrent_array_buffer_freeing, true,
-            "free array buffer allocations on a background thread")
->>>>>>> miniblink49
 DEFINE_INT(gc_stats, 0, "Used by tracing internally to enable gc statistics")
 DEFINE_IMPLICATION(trace_gc_object_stats, track_gc_object_stats)
 DEFINE_GENERIC_IMPLICATION(
@@ -1356,29 +799,18 @@ DEFINE_NEG_IMPLICATION(track_retaining_path, incremental_marking)
 DEFINE_NEG_IMPLICATION(track_retaining_path, parallel_marking)
 DEFINE_NEG_IMPLICATION(track_retaining_path, concurrent_marking)
 DEFINE_BOOL(track_detached_contexts, true,
-<<<<<<< HEAD
     "track native contexts that are expected to be garbage collected")
 DEFINE_BOOL(trace_detached_contexts, false,
     "trace native contexts that are expected to be garbage collected")
-=======
-            "track native contexts that are expected to be garbage collected")
-DEFINE_BOOL(trace_detached_contexts, false,
-            "trace native contexts that are expected to be garbage collected")
->>>>>>> miniblink49
 DEFINE_IMPLICATION(trace_detached_contexts, track_detached_contexts)
 #ifdef VERIFY_HEAP
 DEFINE_BOOL(verify_heap, false, "verify heap pointers before and after GC")
 DEFINE_BOOL(verify_heap_skip_remembered_set, false,
-<<<<<<< HEAD
     "disable remembered set verification")
-=======
-            "disable remembered set verification")
->>>>>>> miniblink49
 #endif
 DEFINE_BOOL(move_object_start, true, "enable moving of object starts")
 DEFINE_BOOL(memory_reducer, true, "use memory reducer")
 DEFINE_BOOL(memory_reducer_for_small_heaps, true,
-<<<<<<< HEAD
     "use memory reducer for small heaps")
 DEFINE_INT(heap_growing_percent, 0,
     "specifies heap growing factor as (1 + heap_growing_percent/100)")
@@ -1415,78 +847,27 @@ DEFINE_INT(stress_marking, 0,
 DEFINE_INT(stress_scavenge, 0,
     "force scavenge at random points between 0 and X (inclusive) "
     "percent of the new space capacity")
-=======
-            "use memory reducer for small heaps")
-DEFINE_INT(heap_growing_percent, 0,
-           "specifies heap growing factor as (1 + heap_growing_percent/100)")
-DEFINE_INT(v8_os_page_size, 0, "override OS page size (in KBytes)")
-DEFINE_BOOL(always_compact, false, "Perform compaction on every full GC")
-DEFINE_BOOL(never_compact, false,
-            "Never perform compaction on full GC - testing only")
-DEFINE_BOOL(compact_code_space, true, "Compact code space on full collections")
-DEFINE_BOOL(flush_bytecode, true,
-            "flush of bytecode when it has not been executed recently")
-DEFINE_BOOL(stress_flush_bytecode, false, "stress bytecode flushing")
-DEFINE_IMPLICATION(stress_flush_bytecode, flush_bytecode)
-DEFINE_BOOL(use_marking_progress_bar, true,
-            "Use a progress bar to scan large objects in increments when "
-            "incremental marking is active.")
-DEFINE_BOOL(force_marking_deque_overflows, false,
-            "force overflows of marking deque by reducing it's size "
-            "to 64 words")
-DEFINE_BOOL(stress_compaction, false,
-            "stress the GC compactor to flush out bugs (implies "
-            "--force_marking_deque_overflows)")
-DEFINE_BOOL(stress_compaction_random, false,
-            "Stress GC compaction by selecting random percent of pages as "
-            "evacuation candidates. It overrides stress_compaction.")
-DEFINE_BOOL(stress_incremental_marking, false,
-            "force incremental marking for small heaps and run it more often")
-
-DEFINE_BOOL(fuzzer_gc_analysis, false,
-            "prints number of allocations and enables analysis mode for gc "
-            "fuzz testing, e.g. --stress-marking, --stress-scavenge")
-DEFINE_INT(stress_marking, 0,
-           "force marking at random points between 0 and X (inclusive) percent "
-           "of the regular marking start limit")
-DEFINE_INT(stress_scavenge, 0,
-           "force scavenge at random points between 0 and X (inclusive) "
-           "percent of the new space capacity")
->>>>>>> miniblink49
 DEFINE_IMPLICATION(fuzzer_gc_analysis, stress_marking)
 DEFINE_IMPLICATION(fuzzer_gc_analysis, stress_scavenge)
 
 DEFINE_BOOL(disable_abortjs, false, "disables AbortJS runtime function")
 
 DEFINE_BOOL(manual_evacuation_candidates_selection, false,
-<<<<<<< HEAD
     "Test mode only flag. It allows an unit test to select evacuation "
     "candidates pages (requires --stress_compaction).")
 DEFINE_BOOL(fast_promotion_new_space, false,
     "fast promote new space on high survival rates")
-=======
-            "Test mode only flag. It allows an unit test to select evacuation "
-            "candidates pages (requires --stress_compaction).")
-DEFINE_BOOL(fast_promotion_new_space, false,
-            "fast promote new space on high survival rates")
->>>>>>> miniblink49
 
 DEFINE_BOOL(clear_free_memory, false, "initialize free memory with 0")
 
 DEFINE_BOOL(young_generation_large_objects, true,
-<<<<<<< HEAD
     "allocates large objects by default in the young generation large "
     "object space")
-=======
-            "allocates large objects by default in the young generation large "
-            "object space")
->>>>>>> miniblink49
 
 DEFINE_BOOL(idle_time_scavenge, true, "Perform scavenges in idle time.")
 
 // assembler-ia32.cc / assembler-arm.cc / assembler-x64.cc
 DEFINE_BOOL(debug_code, DEBUG_BOOL,
-<<<<<<< HEAD
     "generate extra code (assertions) for debugging")
 DEFINE_BOOL(code_comments, false,
     "emit comments in code disassembly; for more readable source "
@@ -1497,25 +878,12 @@ DEFINE_BOOL(enable_sse4_1, true,
     "enable use of SSE4.1 instructions if available")
 DEFINE_BOOL(enable_sahf, true,
     "enable use of SAHF instruction if available (X64 only)")
-=======
-            "generate extra code (assertions) for debugging")
-DEFINE_BOOL(code_comments, false,
-            "emit comments in code disassembly; for more readable source "
-            "positions you should add --no-concurrent_recompilation")
-DEFINE_BOOL(enable_sse3, true, "enable use of SSE3 instructions if available")
-DEFINE_BOOL(enable_ssse3, true, "enable use of SSSE3 instructions if available")
-DEFINE_BOOL(enable_sse4_1, true,
-            "enable use of SSE4.1 instructions if available")
-DEFINE_BOOL(enable_sahf, true,
-            "enable use of SAHF instruction if available (X64 only)")
->>>>>>> miniblink49
 DEFINE_BOOL(enable_avx, true, "enable use of AVX instructions if available")
 DEFINE_BOOL(enable_fma3, true, "enable use of FMA3 instructions if available")
 DEFINE_BOOL(enable_bmi1, true, "enable use of BMI1 instructions if available")
 DEFINE_BOOL(enable_bmi2, true, "enable use of BMI2 instructions if available")
 DEFINE_BOOL(enable_lzcnt, true, "enable use of LZCNT instruction if available")
 DEFINE_BOOL(enable_popcnt, true,
-<<<<<<< HEAD
     "enable use of POPCNT instruction if available")
 DEFINE_STRING(arm_arch, ARM_ARCH_DEFAULT,
     "generate instructions for the selected ARM architecture if "
@@ -1529,21 +897,6 @@ DEFINE_BOOL(partial_constant_pool, true,
 // Controlling source positions for Torque/CSA code.
 DEFINE_BOOL(enable_source_at_csa_bind, false,
     "Include source information in the binary at CSA bind locations.")
-=======
-            "enable use of POPCNT instruction if available")
-DEFINE_STRING(arm_arch, ARM_ARCH_DEFAULT,
-              "generate instructions for the selected ARM architecture if "
-              "available: armv6, armv7, armv7+sudiv or armv8")
-DEFINE_BOOL(force_long_branches, false,
-            "force all emitted branches to be in long mode (MIPS/PPC only)")
-DEFINE_STRING(mcpu, "auto", "enable optimization for specific cpu")
-DEFINE_BOOL(partial_constant_pool, true,
-            "enable use of partial constant pools (X64 only)")
-
-// Controlling source positions for Torque/CSA code.
-DEFINE_BOOL(enable_source_at_csa_bind, false,
-            "Include source information in the binary at CSA bind locations.")
->>>>>>> miniblink49
 
 // Deprecated ARM flags (replaced by arm_arch).
 DEFINE_MAYBE_BOOL(enable_armv7, "deprecated (use --arm_arch instead)")
@@ -1555,28 +908,18 @@ DEFINE_MAYBE_BOOL(enable_armv8, "deprecated (use --arm_arch instead)")
 
 // regexp-macro-assembler-*.cc
 DEFINE_BOOL(enable_regexp_unaligned_accesses, true,
-<<<<<<< HEAD
     "enable unaligned accesses for the regexp engine")
-=======
-            "enable unaligned accesses for the regexp engine")
->>>>>>> miniblink49
 
 // api.cc
 DEFINE_BOOL(script_streaming, true, "enable parsing on background")
 DEFINE_BOOL(disable_old_api_accessors, false,
-<<<<<<< HEAD
     "Disable old-style API accessors whose setters trigger through the "
     "prototype chain")
-=======
-            "Disable old-style API accessors whose setters trigger through the "
-            "prototype chain")
->>>>>>> miniblink49
 
 // bootstrapper.cc
 DEFINE_BOOL(expose_free_buffer, false, "expose freeBuffer extension")
 DEFINE_BOOL(expose_gc, false, "expose gc extension")
 DEFINE_STRING(expose_gc_as, nullptr,
-<<<<<<< HEAD
     "expose gc extension under the specified name")
 DEFINE_IMPLICATION(expose_gc_as, expose_gc)
 DEFINE_BOOL(expose_externalize_string, false,
@@ -1587,35 +930,15 @@ DEFINE_BOOL(builtins_in_stack_traces, false,
     "show built-in functions in stack traces")
 DEFINE_BOOL(disallow_code_generation_from_strings, false,
     "disallow eval and friends")
-=======
-              "expose gc extension under the specified name")
-DEFINE_IMPLICATION(expose_gc_as, expose_gc)
-DEFINE_BOOL(expose_externalize_string, false,
-            "expose externalize string extension")
-DEFINE_BOOL(expose_trigger_failure, false, "expose trigger-failure extension")
-DEFINE_INT(stack_trace_limit, 10, "number of stack frames to capture")
-DEFINE_BOOL(builtins_in_stack_traces, false,
-            "show built-in functions in stack traces")
-DEFINE_BOOL(disallow_code_generation_from_strings, false,
-            "disallow eval and friends")
->>>>>>> miniblink49
 DEFINE_BOOL(expose_async_hooks, false, "expose async_hooks object")
 
 // builtins.cc
 DEFINE_BOOL(allow_unsafe_function_constructor, false,
-<<<<<<< HEAD
     "allow invoking the function constructor without security checks")
 DEFINE_BOOL(force_slow_path, false, "always take the slow path for builtins")
 DEFINE_BOOL(test_small_max_function_context_stub_size, false,
     "enable testing the function context size overflow path "
     "by making the maximum size smaller")
-=======
-            "allow invoking the function constructor without security checks")
-DEFINE_BOOL(force_slow_path, false, "always take the slow path for builtins")
-DEFINE_BOOL(test_small_max_function_context_stub_size, false,
-            "enable testing the function context size overflow path "
-            "by making the maximum size smaller")
->>>>>>> miniblink49
 
 // builtins-ia32.cc
 DEFINE_BOOL(inline_new, true, "use fast inline allocation")
@@ -1633,11 +956,7 @@ DEFINE_IMPLICATION(trace_opt_verbose, trace_opt)
 DEFINE_BOOL(trace_opt_stats, false, "trace lazy optimization statistics")
 DEFINE_BOOL(trace_deopt, false, "trace optimize function deoptimization")
 DEFINE_BOOL(trace_file_names, false,
-<<<<<<< HEAD
     "include file names in trace-opt/trace-deopt output")
-=======
-            "include file names in trace-opt/trace-deopt output")
->>>>>>> miniblink49
 DEFINE_BOOL(always_opt, false, "always try to optimize functions")
 DEFINE_BOOL(always_osr, false, "always try to OSR functions")
 DEFINE_BOOL(prepare_always_opt, false, "prepare for turning on always opt")
@@ -1645,13 +964,8 @@ DEFINE_BOOL(prepare_always_opt, false, "prepare for turning on always opt")
 DEFINE_BOOL(trace_serializer, false, "print code serializer trace")
 #ifdef DEBUG
 DEFINE_BOOL(external_reference_stats, false,
-<<<<<<< HEAD
     "print statistics on external references used during serialization")
 #endif // DEBUG
-=======
-            "print statistics on external references used during serialization")
-#endif  // DEBUG
->>>>>>> miniblink49
 
 // compilation-cache.cc
 DEFINE_BOOL(compilation_cache, true, "enable compilation cache")
@@ -1663,7 +977,6 @@ DEFINE_BOOL(parallel_compile_tasks, false, "enable parallel compile tasks")
 DEFINE_BOOL(compiler_dispatcher, false, "enable compiler dispatcher")
 DEFINE_IMPLICATION(parallel_compile_tasks, compiler_dispatcher)
 DEFINE_BOOL(trace_compiler_dispatcher, false,
-<<<<<<< HEAD
     "trace compiler dispatcher activity")
 
 // cpu-profiler.cc
@@ -1677,21 +990,6 @@ DEFINE_BOOL(trace_external_array_abuse, false,
     "trace out-of-bounds-accesses to external arrays")
 DEFINE_BOOL(trace_array_abuse, false,
     "trace out-of-bounds accesses to all arrays")
-=======
-            "trace compiler dispatcher activity")
-
-// cpu-profiler.cc
-DEFINE_INT(cpu_profiler_sampling_interval, 1000,
-           "CPU profiler sampling interval in microseconds")
-
-// Array abuse tracing
-DEFINE_BOOL(trace_js_array_abuse, false,
-            "trace out-of-bounds accesses to JS arrays")
-DEFINE_BOOL(trace_external_array_abuse, false,
-            "trace out-of-bounds-accesses to external arrays")
-DEFINE_BOOL(trace_array_abuse, false,
-            "trace out-of-bounds accesses to all arrays")
->>>>>>> miniblink49
 DEFINE_IMPLICATION(trace_array_abuse, trace_js_array_abuse)
 DEFINE_IMPLICATION(trace_array_abuse, trace_external_array_abuse)
 
@@ -1703,7 +1001,6 @@ DEFINE_BOOL(hard_abort, true, "abort by crashing")
 
 // inspector
 DEFINE_BOOL(expose_inspector_scripts, false,
-<<<<<<< HEAD
     "expose injected-script-source.js for debugging")
 
 // execution.cc
@@ -1754,67 +1051,11 @@ DEFINE_INT(max_polymorphic_map_count, 4,
 
 DEFINE_BOOL(native_code_counters, DEBUG_BOOL,
     "generate extra code for manipulating stats counters")
-=======
-            "expose injected-script-source.js for debugging")
-
-// execution.cc
-DEFINE_INT(stack_size, V8_DEFAULT_STACK_SIZE_KB,
-           "default size of stack region v8 is allowed to use (in kBytes)")
-
-// frames.cc
-DEFINE_INT(max_stack_trace_source_length, 300,
-           "maximum length of function source code printed in a stack trace.")
-
-// execution.cc, messages.cc
-DEFINE_BOOL(clear_exceptions_on_js_entry, false,
-            "clear pending exceptions when entering JavaScript")
-
-// counters.cc
-DEFINE_INT(histogram_interval, 600000,
-           "time interval in ms for aggregating memory histograms")
-
-// heap-snapshot-generator.cc
-DEFINE_BOOL(heap_profiler_trace_objects, false,
-            "Dump heap object allocations/movements/size_updates")
-DEFINE_BOOL(heap_profiler_use_embedder_graph, true,
-            "Use the new EmbedderGraph API to get embedder nodes")
-DEFINE_INT(heap_snapshot_string_limit, 1024,
-           "truncate strings to this length in the heap snapshot")
-
-// sampling-heap-profiler.cc
-DEFINE_BOOL(sampling_heap_profiler_suppress_randomness, false,
-            "Use constant sample intervals to eliminate test flakiness")
-
-// v8.cc
-DEFINE_BOOL(use_idle_notification, true,
-            "Use idle notification to reduce memory footprint.")
-// ic.cc
-DEFINE_BOOL(trace_ic, false,
-            "trace inline cache state transitions for tools/ic-processor")
-DEFINE_IMPLICATION(trace_ic, log_code)
-DEFINE_GENERIC_IMPLICATION(
-    trace_ic, TracingFlags::ic_stats.store(
-                  v8::tracing::TracingCategoryObserver::ENABLED_BY_NATIVE))
-DEFINE_BOOL_READONLY(track_constant_fields, true,
-                     "enable constant field tracking")
-DEFINE_BOOL_READONLY(modify_map_inplace, true, "enable in-place map updates")
-DEFINE_BOOL_READONLY(fast_map_update, false,
-                     "enable fast map update by caching the migration target")
-DEFINE_INT(max_polymorphic_map_count, 4,
-           "maximum number of maps to track in POLYMORPHIC state")
-
-DEFINE_BOOL(native_code_counters, DEBUG_BOOL,
-            "generate extra code for manipulating stats counters")
->>>>>>> miniblink49
 
 // objects.cc
 DEFINE_BOOL(thin_strings, true, "Enable ThinString support")
 DEFINE_BOOL(trace_prototype_users, false,
-<<<<<<< HEAD
     "Trace updates to prototype user tracking")
-=======
-            "Trace updates to prototype user tracking")
->>>>>>> miniblink49
 DEFINE_BOOL(use_verbose_printer, true, "allows verbose printing")
 DEFINE_BOOL(trace_for_in_enumerate, false, "Trace for-in enumerate slow-paths")
 DEFINE_BOOL(trace_maps, false, "trace map creation")
@@ -1829,7 +1070,6 @@ DEFINE_BOOL(parse_only, false, "only parse the sources")
 DEFINE_BOOL(trace_sim, false, "Trace simulator execution")
 DEFINE_BOOL(debug_sim, false, "Enable debugging the simulator")
 DEFINE_BOOL(check_icache, false,
-<<<<<<< HEAD
     "Check icache flushes in ARM and MIPS simulator")
 DEFINE_INT(stop_sim_at, 0, "Simulator stop after x number of instructions")
 #if defined(V8_TARGET_ARCH_ARM64) || defined(V8_TARGET_ARCH_MIPS64) || defined(V8_TARGET_ARCH_PPC64)
@@ -1881,60 +1121,6 @@ DEFINE_INT(fuzzer_random_seed, 0,
 DEFINE_BOOL(trace_rail, false, "trace RAIL mode")
 DEFINE_BOOL(print_all_exceptions, false,
     "print exception object and stack trace on each thrown exception")
-=======
-            "Check icache flushes in ARM and MIPS simulator")
-DEFINE_INT(stop_sim_at, 0, "Simulator stop after x number of instructions")
-#if defined(V8_TARGET_ARCH_ARM64) || defined(V8_TARGET_ARCH_MIPS64) || \
-    defined(V8_TARGET_ARCH_PPC64)
-DEFINE_INT(sim_stack_alignment, 16,
-           "Stack alignment in bytes in simulator. This must be a power of two "
-           "and it must be at least 16. 16 is default.")
-#else
-DEFINE_INT(sim_stack_alignment, 8,
-           "Stack alingment in bytes in simulator (4 or 8, 8 is default)")
-#endif
-DEFINE_INT(sim_stack_size, 2 * MB / KB,
-           "Stack size of the ARM64, MIPS64 and PPC64 simulator "
-           "in kBytes (default is 2 MB)")
-DEFINE_BOOL(log_colour, ENABLE_LOG_COLOUR,
-            "When logging, try to use coloured output.")
-DEFINE_BOOL(ignore_asm_unimplemented_break, false,
-            "Don't break for ASM_UNIMPLEMENTED_BREAK macros.")
-DEFINE_BOOL(trace_sim_messages, false,
-            "Trace simulator debug messages. Implied by --trace-sim.")
-
-// isolate.cc
-DEFINE_BOOL(async_stack_traces, true,
-            "include async stack traces in Error.stack")
-DEFINE_IMPLICATION(async_stack_traces, harmony_await_optimization)
-DEFINE_BOOL(stack_trace_on_illegal, false,
-            "print stack trace when an illegal exception is thrown")
-DEFINE_BOOL(abort_on_uncaught_exception, false,
-            "abort program (dump core) when an uncaught exception is thrown")
-// TODO(jgruber,machenbach): Rename to --correctness-fuzzer-suppressions.
-DEFINE_BOOL(abort_on_stack_or_string_length_overflow, false,
-            "Abort program when the stack overflows or a string exceeds "
-            "maximum length (as opposed to throwing RangeError). This is "
-            "useful for fuzzing where the spec behaviour would introduce "
-            "nondeterminism.")
-DEFINE_BOOL(randomize_hashes, true,
-            "randomize hashes to avoid predictable hash collisions "
-            "(with snapshots this option cannot override the baked-in seed)")
-DEFINE_BOOL(rehash_snapshot, true,
-            "rehash strings from the snapshot to override the baked-in seed")
-DEFINE_UINT64(hash_seed, 0,
-              "Fixed seed to use to hash property keys (0 means random)"
-              "(with snapshots this option cannot override the baked-in seed)")
-DEFINE_INT(random_seed, 0,
-           "Default seed for initializing random generator "
-           "(0, the default, means to use system random).")
-DEFINE_INT(fuzzer_random_seed, 0,
-           "Default seed for initializing fuzzer random generator "
-           "(0, the default, means to use v8's random number generator seed).")
-DEFINE_BOOL(trace_rail, false, "trace RAIL mode")
-DEFINE_BOOL(print_all_exceptions, false,
-            "print exception object and stack trace on each thrown exception")
->>>>>>> miniblink49
 DEFINE_BOOL(
     detailed_error_stack_trace, false,
     "includes arguments for each function call in the error stack frames array")
@@ -1953,7 +1139,6 @@ DEFINE_GENERIC_IMPLICATION(
 #define V8_EMBEDDED_BUILTINS_BOOL false
 #endif
 DEFINE_BOOL_READONLY(embedded_builtins, V8_EMBEDDED_BUILTINS_BOOL,
-<<<<<<< HEAD
     "Embed builtin code into the binary.")
 DEFINE_BOOL(profile_deserialization, false,
     "Print the time it takes to deserialize the snapshot.")
@@ -1961,24 +1146,11 @@ DEFINE_BOOL(serialization_statistics, false,
     "Collect statistics on serialized objects.")
 DEFINE_UINT(serialization_chunk_size, 4096,
     "Custom size for serialization chunks")
-=======
-                     "Embed builtin code into the binary.")
-DEFINE_BOOL(profile_deserialization, false,
-            "Print the time it takes to deserialize the snapshot.")
-DEFINE_BOOL(serialization_statistics, false,
-            "Collect statistics on serialized objects.")
-DEFINE_UINT(serialization_chunk_size, 4096,
-            "Custom size for serialization chunks")
->>>>>>> miniblink49
 
 // Regexp
 DEFINE_BOOL(regexp_optimization, true, "generate optimized regexp code")
 DEFINE_BOOL(regexp_mode_modifiers, false, "enable inline flags in regexp.")
-<<<<<<< HEAD
 DEFINE_BOOL(regexp_interpret_all, false, "interpret all regexp code")
-=======
-DEFINE_BOOL(regexp_interpret_all, false,  "interpret all regexp code")
->>>>>>> miniblink49
 
 // Testing flags test/cctest/test-{flags,api,serialization}.cc
 DEFINE_BOOL(testing_bool_flag, true, "testing_bool_flag")
@@ -1990,44 +1162,26 @@ DEFINE_INT(testing_prng_seed, 42, "Seed used for threading test randomness")
 
 // mksnapshot.cc
 DEFINE_STRING(embedded_src, nullptr,
-<<<<<<< HEAD
     "Path for the generated embedded data file. (mksnapshot only)")
-=======
-              "Path for the generated embedded data file. (mksnapshot only)")
->>>>>>> miniblink49
 DEFINE_STRING(
     embedded_variant, nullptr,
     "Label to disambiguate symbols in embedded data file. (mksnapshot only)")
 DEFINE_STRING(startup_src, nullptr,
-<<<<<<< HEAD
     "Write V8 startup as C++ src. (mksnapshot only)")
 DEFINE_STRING(startup_blob, nullptr,
     "Write V8 startup blob file. (mksnapshot only)")
 DEFINE_STRING(target_os, nullptr, "The mksnapshot target os. (mksnapshot only)")
-=======
-              "Write V8 startup as C++ src. (mksnapshot only)")
-DEFINE_STRING(startup_blob, nullptr,
-              "Write V8 startup blob file. (mksnapshot only)")
->>>>>>> miniblink49
 
 //
 // Minor mark compact collector flags.
 //
 #ifdef ENABLE_MINOR_MC
 DEFINE_BOOL(minor_mc_parallel_marking, true,
-<<<<<<< HEAD
     "use parallel marking for the young generation")
 DEFINE_BOOL(trace_minor_mc_parallel_marking, false,
     "trace parallel marking for the young generation")
 DEFINE_BOOL(minor_mc, false, "perform young generation mark compact GCs")
 #endif // ENABLE_MINOR_MC
-=======
-            "use parallel marking for the young generation")
-DEFINE_BOOL(trace_minor_mc_parallel_marking, false,
-            "trace parallel marking for the young generation")
-DEFINE_BOOL(minor_mc, false, "perform young generation mark compact GCs")
-#endif  // ENABLE_MINOR_MC
->>>>>>> miniblink49
 
 //
 // Dev shell flags
@@ -2036,26 +1190,15 @@ DEFINE_BOOL(minor_mc, false, "perform young generation mark compact GCs")
 DEFINE_BOOL(help, false, "Print usage message, including flags, on console")
 DEFINE_BOOL(dump_counters, false, "Dump counters on exit")
 DEFINE_BOOL(dump_counters_nvp, false,
-<<<<<<< HEAD
     "Dump counters as name-value pairs on exit")
-=======
-            "Dump counters as name-value pairs on exit")
->>>>>>> miniblink49
 DEFINE_BOOL(use_external_strings, false, "Use external strings for source code")
 
 DEFINE_STRING(map_counters, "", "Map counters to a file")
 DEFINE_BOOL(mock_arraybuffer_allocator, false,
-<<<<<<< HEAD
     "Use a mock ArrayBuffer allocator for testing.")
 DEFINE_SIZE_T(mock_arraybuffer_allocator_limit, 0,
     "Memory limit for mock ArrayBuffer allocator used to simulate "
     "OOM for testing.")
-=======
-            "Use a mock ArrayBuffer allocator for testing.")
-DEFINE_SIZE_T(mock_arraybuffer_allocator_limit, 0,
-              "Memory limit for mock ArrayBuffer allocator used to simulate "
-              "OOM for testing.")
->>>>>>> miniblink49
 
 //
 // Flags only available in non-Lite modes.
@@ -2068,11 +1211,7 @@ DEFINE_SIZE_T(mock_arraybuffer_allocator_limit, 0,
 #endif
 
 DEFINE_BOOL(jitless, V8_LITE_BOOL,
-<<<<<<< HEAD
     "Disable runtime allocation of executable memory.")
-=======
-            "Disable runtime allocation of executable memory.")
->>>>>>> miniblink49
 
 // Jitless V8 has a few implications:
 #ifndef V8_LITE_MODE
@@ -2101,13 +1240,8 @@ DEFINE_BOOL(use_ic, true, "use inline caching")
 
 // Favor memory over execution speed.
 DEFINE_BOOL(optimize_for_size, V8_LITE_BOOL,
-<<<<<<< HEAD
     "Enables optimizations which favor memory size over execution "
     "speed")
-=======
-            "Enables optimizations which favor memory size over execution "
-            "speed")
->>>>>>> miniblink49
 DEFINE_VALUE_IMPLICATION(optimize_for_size, max_semi_space_size, 1)
 
 //
@@ -2124,11 +1258,7 @@ DEFINE_BOOL(gdbjit, false, "enable GDBJIT interface")
 DEFINE_BOOL(gdbjit_full, false, "enable GDBJIT interface for all code objects")
 DEFINE_BOOL(gdbjit_dump, false, "dump elf objects with debug info to disk")
 DEFINE_STRING(gdbjit_dump_filter, "",
-<<<<<<< HEAD
     "dump only objects containing this substring")
-=======
-              "dump only objects containing this substring")
->>>>>>> miniblink49
 
 #ifdef ENABLE_GDB_JIT_INTERFACE
 DEFINE_IMPLICATION(gdbjit_full, gdbjit)
@@ -2149,11 +1279,7 @@ DEFINE_NEG_IMPLICATION(gdbjit, compact_code_space)
 // checks.cc
 #ifdef ENABLE_SLOW_DCHECKS
 DEFINE_BOOL(enable_slow_asserts, true,
-<<<<<<< HEAD
     "enable asserts that are slow to execute")
-=======
-            "enable asserts that are slow to execute")
->>>>>>> miniblink49
 #endif
 
 // codegen-ia32.cc / codegen-arm.cc / macro-assembler-*.cc
@@ -2161,10 +1287,6 @@ DEFINE_BOOL(print_ast, false, "print source AST")
 DEFINE_BOOL(trap_on_abort, false, "replace aborts by breakpoints")
 
 // compiler.cc
-<<<<<<< HEAD
-=======
-DEFINE_BOOL(print_builtin_scopes, false, "print scopes for builtins")
->>>>>>> miniblink49
 DEFINE_BOOL(print_scopes, false, "print scopes")
 
 // contexts.cc
@@ -2175,11 +1297,7 @@ DEFINE_BOOL(gc_verbose, false, "print stuff during garbage collection")
 DEFINE_BOOL(code_stats, false, "report code statistics after GC")
 DEFINE_BOOL(print_handles, false, "report handles after GC")
 DEFINE_BOOL(check_handle_count, false,
-<<<<<<< HEAD
     "Check that there are not too many handles at GC")
-=======
-            "Check that there are not too many handles at GC")
->>>>>>> miniblink49
 DEFINE_BOOL(print_global_handles, false, "report global handles after GC")
 
 // TurboFan debug-only flags.
@@ -2187,43 +1305,25 @@ DEFINE_BOOL(trace_turbo_escape, false, "enable tracing in escape analysis")
 
 // objects.cc
 DEFINE_BOOL(trace_module_status, false,
-<<<<<<< HEAD
     "Trace status transitions of ECMAScript modules")
 DEFINE_BOOL(trace_normalization, false,
     "prints when objects are turned into dictionaries.")
-=======
-            "Trace status transitions of ECMAScript modules")
-DEFINE_BOOL(trace_normalization, false,
-            "prints when objects are turned into dictionaries.")
->>>>>>> miniblink49
 
 // runtime.cc
 DEFINE_BOOL(trace_lazy, false, "trace lazy compilation")
 
 // spaces.cc
 DEFINE_BOOL(collect_heap_spill_statistics, false,
-<<<<<<< HEAD
     "report heap spill statistics along with heap_stats "
     "(requires heap_stats)")
-=======
-            "report heap spill statistics along with heap_stats "
-            "(requires heap_stats)")
->>>>>>> miniblink49
 DEFINE_BOOL(trace_isolates, false, "trace isolate state changes")
 
 // Regexp
 DEFINE_BOOL(regexp_possessive_quantifier, false,
-<<<<<<< HEAD
     "enable possessive quantifier syntax for testing")
 DEFINE_BOOL(trace_regexp_bytecodes, false, "trace regexp bytecode execution")
 DEFINE_BOOL(trace_regexp_assembler, false,
     "trace regexp macro assembler calls.")
-=======
-            "enable possessive quantifier syntax for testing")
-DEFINE_BOOL(trace_regexp_bytecodes, false, "trace regexp bytecode execution")
-DEFINE_BOOL(trace_regexp_assembler, false,
-            "trace regexp macro assembler calls.")
->>>>>>> miniblink49
 DEFINE_BOOL(trace_regexp_parser, false, "trace regexp parsing")
 
 // Debugger
@@ -2231,11 +1331,7 @@ DEFINE_BOOL(print_break_location, false, "print source location on debug break")
 
 // wasm instance management
 DEFINE_DEBUG_BOOL(trace_wasm_instances, false,
-<<<<<<< HEAD
     "trace creation and collection of wasm instances")
-=======
-                  "trace creation and collection of wasm instances")
->>>>>>> miniblink49
 
 //
 // Logging and profiling flags
@@ -2245,24 +1341,15 @@ DEFINE_DEBUG_BOOL(trace_wasm_instances, false,
 
 // log.cc
 DEFINE_BOOL(log, false,
-<<<<<<< HEAD
     "Minimal logging (no API, code, GC, suspect, or handles samples).")
 DEFINE_BOOL(log_all, false, "Log all events to the log file.")
 DEFINE_BOOL(log_api, false, "Log API events to the log file.")
 DEFINE_BOOL(log_code, false,
     "Log code events to the log file without profiling.")
-=======
-            "Minimal logging (no API, code, GC, suspect, or handles samples).")
-DEFINE_BOOL(log_all, false, "Log all events to the log file.")
-DEFINE_BOOL(log_api, false, "Log API events to the log file.")
-DEFINE_BOOL(log_code, false,
-            "Log code events to the log file without profiling.")
->>>>>>> miniblink49
 DEFINE_BOOL(log_handles, false, "Log global handle events.")
 DEFINE_BOOL(log_suspect, false, "Log suspect operations.")
 DEFINE_BOOL(log_source_code, false, "Log source code.")
 DEFINE_BOOL(log_function_events, false,
-<<<<<<< HEAD
     "Log function events "
     "(parse, compile, execute) separately.")
 DEFINE_BOOL(prof, false,
@@ -2270,15 +1357,6 @@ DEFINE_BOOL(prof, false,
 
 DEFINE_BOOL(detailed_line_info, false,
     "Always generate detailed line information for CPU profiling.")
-=======
-            "Log function events "
-            "(parse, compile, execute) separately.")
-DEFINE_BOOL(prof, false,
-            "Log statistical profiling information (implies --log-code).")
-
-DEFINE_BOOL(detailed_line_info, false,
-            "Always generate detailed line information for CPU profiling.")
->>>>>>> miniblink49
 
 #if defined(ANDROID)
 // Phones and tablets have processors that are much slower than desktop
@@ -2288,26 +1366,17 @@ DEFINE_BOOL(detailed_line_info, false,
 #define DEFAULT_PROF_SAMPLING_INTERVAL 1000
 #endif
 DEFINE_INT(prof_sampling_interval, DEFAULT_PROF_SAMPLING_INTERVAL,
-<<<<<<< HEAD
     "Interval for --prof samples (in microseconds).")
-=======
-           "Interval for --prof samples (in microseconds).")
->>>>>>> miniblink49
 #undef DEFAULT_PROF_SAMPLING_INTERVAL
 
 DEFINE_BOOL(prof_cpp, false, "Like --prof, but ignore generated code.")
 DEFINE_IMPLICATION(prof, prof_cpp)
 DEFINE_BOOL(prof_browser_mode, true,
-<<<<<<< HEAD
     "Used with --prof, turns on browser-compatible mode for profiling.")
-=======
-            "Used with --prof, turns on browser-compatible mode for profiling.")
->>>>>>> miniblink49
 DEFINE_STRING(logfile, "v8.log", "Specify the name of the log file.")
 DEFINE_BOOL(logfile_per_isolate, true, "Separate log files for each isolate.")
 DEFINE_BOOL(ll_prof, false, "Enable low-level linux profiler.")
 DEFINE_BOOL(perf_basic_prof, false,
-<<<<<<< HEAD
     "Enable perf linux profiler (basic support).")
 DEFINE_NEG_IMPLICATION(perf_basic_prof, compact_code_space)
 DEFINE_BOOL(perf_basic_prof_only_functions, false,
@@ -2315,21 +1384,11 @@ DEFINE_BOOL(perf_basic_prof_only_functions, false,
 DEFINE_IMPLICATION(perf_basic_prof_only_functions, perf_basic_prof)
 DEFINE_BOOL(perf_prof, false,
     "Enable perf linux profiler (experimental annotate support).")
-=======
-            "Enable perf linux profiler (basic support).")
-DEFINE_NEG_IMPLICATION(perf_basic_prof, compact_code_space)
-DEFINE_BOOL(perf_basic_prof_only_functions, false,
-            "Only report function code ranges to perf (i.e. no stubs).")
-DEFINE_IMPLICATION(perf_basic_prof_only_functions, perf_basic_prof)
-DEFINE_BOOL(perf_prof, false,
-            "Enable perf linux profiler (experimental annotate support).")
->>>>>>> miniblink49
 DEFINE_NEG_IMPLICATION(perf_prof, compact_code_space)
 // TODO(v8:8462) Remove implication once perf supports remapping.
 DEFINE_NEG_IMPLICATION(perf_prof, write_protect_code_memory)
 DEFINE_NEG_IMPLICATION(perf_prof, wasm_write_protect_code_memory)
 DEFINE_BOOL(perf_prof_unwinding_info, false,
-<<<<<<< HEAD
     "Enable unwinding info for perf linux profiler (experimental).")
 DEFINE_IMPLICATION(perf_prof, perf_prof_unwinding_info)
 DEFINE_STRING(gc_fake_mmap, "/tmp/__v8_gc__",
@@ -2337,20 +1396,10 @@ DEFINE_STRING(gc_fake_mmap, "/tmp/__v8_gc__",
 DEFINE_BOOL(log_internal_timer_events, false, "Time internal events.")
 DEFINE_BOOL(log_timer_events, false,
     "Time events including external callbacks.")
-=======
-            "Enable unwinding info for perf linux profiler (experimental).")
-DEFINE_IMPLICATION(perf_prof, perf_prof_unwinding_info)
-DEFINE_STRING(gc_fake_mmap, "/tmp/__v8_gc__",
-              "Specify the name of the file for fake gc mmap used in ll_prof")
-DEFINE_BOOL(log_internal_timer_events, false, "Time internal events.")
-DEFINE_BOOL(log_timer_events, false,
-            "Time events including external callbacks.")
->>>>>>> miniblink49
 DEFINE_IMPLICATION(log_timer_events, log_internal_timer_events)
 DEFINE_IMPLICATION(log_internal_timer_events, prof)
 DEFINE_BOOL(log_instruction_stats, false, "Log AArch64 instruction statistics.")
 DEFINE_STRING(log_instruction_file, "arm64_inst.csv",
-<<<<<<< HEAD
     "AArch64 instruction statistics log file.")
 DEFINE_INT(log_instruction_period, 1 << 22,
     "AArch64 instruction statistics logging period.")
@@ -2366,20 +1415,6 @@ DEFINE_BOOL(print_opt_source, false,
 
 DEFINE_BOOL(win64_unwinding_info, false,
     "Enable unwinding info for Windows/x64 (experimental).")
-=======
-              "AArch64 instruction statistics log file.")
-DEFINE_INT(log_instruction_period, 1 << 22,
-           "AArch64 instruction statistics logging period.")
-
-DEFINE_BOOL(redirect_code_traces, false,
-            "output deopt information and disassembly into file "
-            "code-<pid>-<isolate id>.asm")
-DEFINE_STRING(redirect_code_traces_to, nullptr,
-              "output deopt information and disassembly into the given file")
-
-DEFINE_BOOL(print_opt_source, false,
-            "print source code of optimized and inlined functions")
->>>>>>> miniblink49
 
 #ifdef V8_TARGET_ARCH_ARM
 // Unsupported on arm. See https://crbug.com/v8/8713.
@@ -2389,13 +1424,8 @@ DEFINE_BOOL_READONLY(
     "profilers).")
 #else
 DEFINE_BOOL(interpreted_frames_native_stack, false,
-<<<<<<< HEAD
     "Show interpreted frames on the native stack (useful for external "
     "profilers).")
-=======
-            "Show interpreted frames on the native stack (useful for external "
-            "profilers).")
->>>>>>> miniblink49
 #endif
 
 //
@@ -2412,11 +1442,7 @@ DEFINE_BOOL(interpreted_frames_native_stack, false,
 DEFINE_BOOL(trace_elements_transitions, false, "trace elements transitions")
 
 DEFINE_BOOL(trace_creation_allocation_sites, false,
-<<<<<<< HEAD
     "trace the creation of allocation sites")
-=======
-            "trace the creation of allocation sites")
->>>>>>> miniblink49
 
 // codegen-ia32.cc / codegen-arm.cc
 DEFINE_BOOL(print_code, false, "print generated code")
@@ -2425,22 +1451,13 @@ DEFINE_STRING(print_opt_code_filter, "*", "filter for printing optimized code")
 DEFINE_BOOL(print_code_verbose, false, "print more information for code")
 DEFINE_BOOL(print_builtin_code, false, "print generated code for builtins")
 DEFINE_STRING(print_builtin_code_filter, "*",
-<<<<<<< HEAD
     "filter for printing builtin code")
-=======
-              "filter for printing builtin code")
->>>>>>> miniblink49
 DEFINE_BOOL(print_builtin_size, false, "print code size for builtins")
 
 #ifdef ENABLE_DISASSEMBLER
 DEFINE_BOOL(sodium, false,
-<<<<<<< HEAD
     "print generated code output suitable for use with "
     "the Sodium code viewer")
-=======
-            "print generated code output suitable for use with "
-            "the Sodium code viewer")
->>>>>>> miniblink49
 
 DEFINE_IMPLICATION(sodium, print_code)
 DEFINE_IMPLICATION(sodium, print_opt_code)
@@ -2468,13 +1485,8 @@ DEFINE_VALUE_IMPLICATION(single_threaded, wasm_num_compilation_tasks, 0)
 DEFINE_NEG_IMPLICATION(single_threaded, wasm_async_compilation)
 
 DEFINE_BOOL(predictable_gc_schedule, false,
-<<<<<<< HEAD
     "Predictable garbage collection schedule. Fixes heap growing, "
     "idle, and memory reducing behavior.")
-=======
-            "Predictable garbage collection schedule. Fixes heap growing, "
-            "idle, and memory reducing behavior.")
->>>>>>> miniblink49
 DEFINE_VALUE_IMPLICATION(predictable_gc_schedule, min_semi_space_size, 4)
 DEFINE_VALUE_IMPLICATION(predictable_gc_schedule, max_semi_space_size, 4)
 DEFINE_VALUE_IMPLICATION(predictable_gc_schedule, heap_growing_percent, 30)
@@ -2503,11 +1515,7 @@ DEFINE_NEG_IMPLICATION(single_threaded_gc, parallel_scavenge)
 DEFINE_NEG_IMPLICATION(single_threaded_gc, concurrent_store_buffer)
 #ifdef ENABLE_MINOR_MC
 DEFINE_NEG_IMPLICATION(single_threaded_gc, minor_mc_parallel_marking)
-<<<<<<< HEAD
 #endif // ENABLE_MINOR_MC
-=======
-#endif  // ENABLE_MINOR_MC
->>>>>>> miniblink49
 DEFINE_NEG_IMPLICATION(single_threaded_gc, concurrent_array_buffer_freeing)
 
 #undef FLAG
@@ -2519,15 +1527,9 @@ DEFINE_NEG_IMPLICATION(single_threaded_gc, concurrent_array_buffer_freeing)
 #endif
 
 DEFINE_BOOL(verify_predictable, false,
-<<<<<<< HEAD
     "this mode is used for checking that V8 behaves predictably")
 DEFINE_INT(dump_allocations_digest_at_alloc, -1,
     "dump allocations digest each n-th allocation")
-=======
-            "this mode is used for checking that V8 behaves predictably")
-DEFINE_INT(dump_allocations_digest_at_alloc, -1,
-           "dump allocations digest each n-th allocation")
->>>>>>> miniblink49
 
 //
 // Read-only flags
@@ -2537,7 +1539,6 @@ DEFINE_INT(dump_allocations_digest_at_alloc, -1,
 
 // assembler.h
 DEFINE_BOOL(enable_embedded_constant_pool, V8_EMBEDDED_CONSTANT_POOL,
-<<<<<<< HEAD
     "enable use of embedded constant pools (PPC only)")
 
 DEFINE_BOOL(unbox_double_fields, V8_DOUBLE_FIELDS_UNBOXING,
@@ -2550,20 +1551,6 @@ DEFINE_BOOL(raw_heap_snapshots, V8_ENABLE_RAW_HEAP_SNAPSHOTS_BOOL,
 DEFINE_BOOL(lite_mode, V8_LITE_BOOL,
     "enables trade-off of performance for memory savings "
     "(Lite mode only)")
-=======
-            "enable use of embedded constant pools (PPC only)")
-
-DEFINE_BOOL(unbox_double_fields, V8_DOUBLE_FIELDS_UNBOXING,
-            "enable in-object double fields unboxing (64-bit only)")
-DEFINE_IMPLICATION(unbox_double_fields, track_double_fields)
-
-DEFINE_BOOL(raw_heap_snapshots, V8_ENABLE_RAW_HEAP_SNAPSHOTS_BOOL,
-            "enable raw heap snapshots contain garbage collection internals")
-
-DEFINE_BOOL(lite_mode, V8_LITE_BOOL,
-            "enables trade-off of performance for memory savings "
-            "(Lite mode only)")
->>>>>>> miniblink49
 DEFINE_IMPLICATION(lite_mode, lazy_feedback_allocation)
 
 // Cleanup...

@@ -29,7 +29,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/html/parser/HTMLSrcsetParser.h"
 
 #include "core/dom/Document.h"
@@ -40,11 +39,15 @@
 #include "core/frame/UseCounter.h"
 #include "core/html/parser/HTMLParserIdioms.h"
 #include "core/inspector/ConsoleMessage.h"
-#include "platform/ParsingUtilities.h"
+#include "platform/json/JSONValues.h"
+#include "wtf/text/ParsingUtilities.h"
+#include "wtf/text/StringToNumber.h"
+#include <algorithm>
 
 namespace blink {
 
-static bool compareByDensity(const ImageCandidate& first, const ImageCandidate& second)
+static bool compareByDensity(const ImageCandidate& first,
+    const ImageCandidate& second)
 {
     return first.density() < second.density();
 }
@@ -65,12 +68,9 @@ struct DescriptorToken {
     {
     }
 
-    unsigned lastIndex()
-    {
-        return start + length - 1;
-    }
+    unsigned lastIndex() { return start + length - 1; }
 
-    template<typename CharType>
+    template <typename CharType>
     int toInt(const CharType* attribute, bool& isValid)
     {
         unsigned position = 0;
@@ -84,10 +84,11 @@ struct DescriptorToken {
             }
             ++position;
         }
-        return charactersToIntStrict(attribute + start, lengthExcludingDescriptor, &isValid);
+        return charactersToIntStrict(attribute + start, lengthExcludingDescriptor,
+            &isValid);
     }
 
-    template<typename CharType>
+    template <typename CharType>
     float toFloat(const CharType* attribute, bool& isValid)
     {
         // Make sure the is a valid floating point number
@@ -97,34 +98,45 @@ struct DescriptorToken {
             isValid = false;
             return 0;
         }
-        return charactersToFloat(attribute + start, lengthExcludingDescriptor, &isValid);
+        Decimal result = parseToDecimalForNumberType(
+            String(attribute + start, lengthExcludingDescriptor));
+        isValid = result.isFinite();
+        if (!isValid)
+            return 0;
+        return static_cast<float>(result.toDouble());
     }
 };
 
-template<typename CharType>
-static void appendDescriptorAndReset(const CharType* attributeStart, const CharType*& descriptorStart, const CharType* position, Vector<DescriptorToken>& descriptors)
+template <typename CharType>
+static void appendDescriptorAndReset(const CharType* attributeStart,
+    const CharType*& descriptorStart,
+    const CharType* position,
+    Vector<DescriptorToken>& descriptors)
 {
     if (position > descriptorStart)
-        descriptors.append(DescriptorToken(descriptorStart - attributeStart, position - descriptorStart));
+        descriptors.push_back(DescriptorToken(descriptorStart - attributeStart,
+            position - descriptorStart));
     descriptorStart = 0;
 }
 
 // The following is called appendCharacter to match the spec's terminology.
-template<typename CharType>
-static void appendCharacter(const CharType* descriptorStart, const CharType* position)
+template <typename CharType>
+static void appendCharacter(const CharType* descriptorStart,
+    const CharType* position)
 {
-    // Since we don't copy the tokens, this just set the point where the descriptor tokens start.
+    // Since we don't copy the tokens, this just set the point where the
+    // descriptor tokens start.
     if (!descriptorStart)
         descriptorStart = position;
 }
 
-template<typename CharType>
+template <typename CharType>
 static bool isEOF(const CharType* position, const CharType* end)
 {
     return position >= end;
 }
 
-template<typename CharType>
+template <typename CharType>
 static void tokenizeDescriptors(const CharType* attributeStart,
     const CharType*& position,
     const CharType* attributeEnd,
@@ -137,16 +149,19 @@ static void tokenizeDescriptors(const CharType* attributeStart,
         switch (state) {
         case TokenStart:
             if (isEOF(position, attributeEnd)) {
-                appendDescriptorAndReset(attributeStart, currentDescriptorStart, attributeEnd, descriptors);
+                appendDescriptorAndReset(attributeStart, currentDescriptorStart,
+                    attributeEnd, descriptors);
                 return;
             }
             if (isComma(*position)) {
-                appendDescriptorAndReset(attributeStart, currentDescriptorStart, position, descriptors);
+                appendDescriptorAndReset(attributeStart, currentDescriptorStart,
+                    position, descriptors);
                 ++position;
                 return;
             }
             if (isHTMLSpace(*position)) {
-                appendDescriptorAndReset(attributeStart, currentDescriptorStart, position, descriptors);
+                appendDescriptorAndReset(attributeStart, currentDescriptorStart,
+                    position, descriptors);
                 currentDescriptorStart = position + 1;
                 state = AfterToken;
             } else if (*position == '(') {
@@ -158,7 +173,8 @@ static void tokenizeDescriptors(const CharType* attributeStart,
             break;
         case InParenthesis:
             if (isEOF(position, attributeEnd)) {
-                appendDescriptorAndReset(attributeStart, currentDescriptorStart, attributeEnd, descriptors);
+                appendDescriptorAndReset(attributeStart, currentDescriptorStart,
+                    attributeEnd, descriptors);
                 return;
             }
             if (*position == ')') {
@@ -188,12 +204,16 @@ static void srcsetError(Document* document, String message)
         StringBuilder errorMessage;
         errorMessage.append("Failed parsing 'srcset' attribute value since ");
         errorMessage.append(message);
-        document->frame()->console().addMessage(ConsoleMessage::create(OtherMessageSource, ErrorMessageLevel, errorMessage.toString()));
+        document->frame()->console().addMessage(ConsoleMessage::create(
+            OtherMessageSource, ErrorMessageLevel, errorMessage.toString()));
     }
 }
 
-template<typename CharType>
-static bool parseDescriptors(const CharType* attribute, Vector<DescriptorToken>& descriptors, DescriptorParsingResult& result, Document* document)
+template <typename CharType>
+static bool parseDescriptors(const CharType* attribute,
+    Vector<DescriptorToken>& descriptors,
+    DescriptorParsingResult& result,
+    Document* document)
 {
     for (DescriptorToken& descriptor : descriptors) {
         if (descriptor.length == 0)
@@ -202,7 +222,9 @@ static bool parseDescriptors(const CharType* attribute, Vector<DescriptorToken>&
         bool isValid = false;
         if (c == 'w') {
             if (result.hasDensity() || result.hasWidth()) {
-                srcsetError(document, "it has multiple 'w' descriptors or a mix of 'x' and 'w' descriptors.");
+                srcsetError(document,
+                    "it has multiple 'w' descriptors or a mix of 'x' and 'w' "
+                    "descriptors.");
                 return false;
             }
             int resourceWidth = descriptor.toInt(attribute, isValid);
@@ -212,10 +234,12 @@ static bool parseDescriptors(const CharType* attribute, Vector<DescriptorToken>&
             }
             result.setResourceWidth(resourceWidth);
         } else if (c == 'h') {
-            // This is here only for future compat purposes.
-            // The value of the 'h' descriptor is not used.
+            // This is here only for future compat purposes. The value of the 'h'
+            // descriptor is not used.
             if (result.hasDensity() || result.hasHeight()) {
-                srcsetError(document, "it has multiple 'h' descriptors or a mix of 'x' and 'h' descriptors.");
+                srcsetError(document,
+                    "it has multiple 'h' descriptors or a mix of 'x' and 'h' "
+                    "descriptors.");
                 return false;
             }
             int resourceHeight = descriptor.toInt(attribute, isValid);
@@ -226,7 +250,9 @@ static bool parseDescriptors(const CharType* attribute, Vector<DescriptorToken>&
             result.setResourceHeight(resourceHeight);
         } else if (c == 'x') {
             if (result.hasDensity() || result.hasHeight() || result.hasWidth()) {
-                srcsetError(document, "it has multiple 'x' descriptors or a mix of 'x' and 'w'/'h' descriptors.");
+                srcsetError(document,
+                    "it has multiple 'x' descriptors or a mix of 'x' and "
+                    "'w'/'h' descriptors.");
                 return false;
             }
             float density = descriptor.toFloat(attribute, isValid);
@@ -246,32 +272,45 @@ static bool parseDescriptors(const CharType* attribute, Vector<DescriptorToken>&
     return res;
 }
 
-static bool parseDescriptors(const String& attribute, Vector<DescriptorToken>& descriptors, DescriptorParsingResult& result, Document* document)
+static bool parseDescriptors(const String& attribute,
+    Vector<DescriptorToken>& descriptors,
+    DescriptorParsingResult& result,
+    Document* document)
 {
     // FIXME: See if StringView can't be extended to replace DescriptorToken here.
     if (attribute.is8Bit()) {
-        return parseDescriptors(attribute.characters8(), descriptors, result, document);
+        return parseDescriptors(attribute.characters8(), descriptors, result,
+            document);
     }
-    return parseDescriptors(attribute.characters16(), descriptors, result, document);
+    return parseDescriptors(attribute.characters16(), descriptors, result,
+        document);
 }
 
 // http://picture.responsiveimages.org/#parse-srcset-attr
-template<typename CharType>
-static void parseImageCandidatesFromSrcsetAttribute(const String& attribute, const CharType* attributeStart, unsigned length, Vector<ImageCandidate>& imageCandidates, Document* document)
+template <typename CharType>
+static void parseImageCandidatesFromSrcsetAttribute(
+    const String& attribute,
+    const CharType* attributeStart,
+    unsigned length,
+    Vector<ImageCandidate>& imageCandidates,
+    Document* document)
 {
     const CharType* position = attributeStart;
     const CharType* attributeEnd = position + length;
 
     while (position < attributeEnd) {
-        // 4. Splitting loop: Collect a sequence of characters that are space characters or U+002C COMMA characters.
+        // 4. Splitting loop: Collect a sequence of characters that are space
+        // characters or U+002C COMMA characters.
         skipWhile<CharType, isHTMLSpaceOrComma<CharType>>(position, attributeEnd);
         if (position == attributeEnd) {
-            // Contrary to spec language - descriptor parsing happens on each candidate, so when we reach the attributeEnd, we can exit.
+            // Contrary to spec language - descriptor parsing happens on each
+            // candidate, so when we reach the attributeEnd, we can exit.
             break;
         }
         const CharType* imageURLStart = position;
 
-        // 6. Collect a sequence of characters that are not space characters, and let that be url.
+        // 6. Collect a sequence of characters that are not space characters, and
+        // let that be url.
         skipUntil<CharType, isHTMLSpace<CharType>>(position, attributeEnd);
         const CharType* imageURLEnd = position;
 
@@ -289,14 +328,18 @@ static void parseImageCandidatesFromSrcsetAttribute(const String& attribute, con
         } else {
             skipWhile<CharType, isHTMLSpace<CharType>>(position, attributeEnd);
             Vector<DescriptorToken> descriptorTokens;
-            tokenizeDescriptors(attributeStart, position, attributeEnd, descriptorTokens);
-            // Contrary to spec language - descriptor parsing happens on each candidate.
-            // This is a black-box equivalent, to avoid storing descriptor lists for each candidate.
+            tokenizeDescriptors(attributeStart, position, attributeEnd,
+                descriptorTokens);
+            // Contrary to spec language - descriptor parsing happens on each
+            // candidate. This is a black-box equivalent, to avoid storing descriptor
+            // lists for each candidate.
             if (!parseDescriptors(attribute, descriptorTokens, result, document)) {
                 if (document) {
                     UseCounter::count(document, UseCounter::SrcsetDroppedCandidate);
                     if (document->frame())
-                        document->frame()->console().addMessage(ConsoleMessage::create(OtherMessageSource, ErrorMessageLevel, String("Dropped srcset candidate ") + String(imageURLStart, imageURLEnd - imageURLStart)));
+                        document->frame()->console().addMessage(ConsoleMessage::create(
+                            OtherMessageSource, ErrorMessageLevel,
+                            String("Dropped srcset candidate ") + JSONValue::quoteString(String(imageURLStart, imageURLEnd - imageURLStart))));
                 }
                 continue;
             }
@@ -306,23 +349,33 @@ static void parseImageCandidatesFromSrcsetAttribute(const String& attribute, con
         unsigned imageURLStartingPosition = imageURLStart - attributeStart;
         ASSERT(imageURLEnd > imageURLStart);
         unsigned imageURLLength = imageURLEnd - imageURLStart;
-        imageCandidates.append(ImageCandidate(attribute, imageURLStartingPosition, imageURLLength, result, ImageCandidate::SrcsetOrigin));
+        imageCandidates.push_back(
+            ImageCandidate(attribute, imageURLStartingPosition, imageURLLength,
+                result, ImageCandidate::SrcsetOrigin));
         // 11. Return to the step labeled splitting loop.
     }
 }
 
-static void parseImageCandidatesFromSrcsetAttribute(const String& attribute, Vector<ImageCandidate>& imageCandidates, Document* document)
+static void parseImageCandidatesFromSrcsetAttribute(
+    const String& attribute,
+    Vector<ImageCandidate>& imageCandidates,
+    Document* document)
 {
     if (attribute.isNull())
         return;
 
     if (attribute.is8Bit())
-        parseImageCandidatesFromSrcsetAttribute<LChar>(attribute, attribute.characters8(), attribute.length(), imageCandidates, document);
+        parseImageCandidatesFromSrcsetAttribute<LChar>(
+            attribute, attribute.characters8(), attribute.length(), imageCandidates,
+            document);
     else
-        parseImageCandidatesFromSrcsetAttribute<UChar>(attribute, attribute.characters16(), attribute.length(), imageCandidates, document);
+        parseImageCandidatesFromSrcsetAttribute<UChar>(
+            attribute, attribute.characters16(), attribute.length(),
+            imageCandidates, document);
 }
 
-static unsigned selectionLogic(Vector<ImageCandidate*>& imageCandidates, float deviceScaleFactor)
+static unsigned selectionLogic(Vector<ImageCandidate*>& imageCandidates,
+    float deviceScaleFactor)
 {
     unsigned i = 0;
 
@@ -345,19 +398,29 @@ static unsigned selectionLogic(Vector<ImageCandidate*>& imageCandidates, float d
     return i;
 }
 
-static unsigned avoidDownloadIfHigherDensityResourceIsInCache(Vector<ImageCandidate*>& imageCandidates, unsigned winner, Document* document)
+static unsigned avoidDownloadIfHigherDensityResourceIsInCache(
+    Vector<ImageCandidate*>& imageCandidates,
+    unsigned winner,
+    Document* document)
 {
     if (!document)
         return winner;
     for (unsigned i = imageCandidates.size() - 1; i > winner; --i) {
-        KURL url = document->completeURL(stripLeadingAndTrailingHTMLSpaces(imageCandidates[i]->url()));
-        if (memoryCache()->resourceForURL(url, document->fetcher()->getCacheIdentifier()))
+        KURL url = document->completeURL(
+            stripLeadingAndTrailingHTMLSpaces(imageCandidates[i]->url()));
+        if (memoryCache()->resourceForURL(
+                url, document->fetcher()->getCacheIdentifier())
+            || url.protocolIsData())
             return i;
     }
     return winner;
 }
 
-static ImageCandidate pickBestImageCandidate(float deviceScaleFactor, float sourceSize, Vector<ImageCandidate>& imageCandidates, Document* document = nullptr)
+static ImageCandidate pickBestImageCandidate(
+    float deviceScaleFactor,
+    float sourceSize,
+    Vector<ImageCandidate>& imageCandidates,
+    Document* document = nullptr)
 {
     const float defaultDensityValue = 1.0;
     bool ignoreSrc = false;
@@ -366,29 +429,32 @@ static ImageCandidate pickBestImageCandidate(float deviceScaleFactor, float sour
 
     // http://picture.responsiveimages.org/#normalize-source-densities
     for (ImageCandidate& image : imageCandidates) {
-        if (image.resourceWidth() > 0) {
-            image.setDensity((float)image.resourceWidth() / sourceSize);
+        if (image.getResourceWidth() > 0) {
+            image.setDensity((float)image.getResourceWidth() / sourceSize);
             ignoreSrc = true;
         } else if (image.density() < 0) {
             image.setDensity(defaultDensityValue);
         }
     }
 
-    std::stable_sort(imageCandidates.begin(), imageCandidates.end(), compareByDensity);
+    std::stable_sort(imageCandidates.begin(), imageCandidates.end(),
+        compareByDensity);
 
     Vector<ImageCandidate*> deDupedImageCandidates;
     float prevDensity = -1.0;
     for (ImageCandidate& image : imageCandidates) {
         if (image.density() != prevDensity && (!ignoreSrc || !image.srcOrigin()))
-            deDupedImageCandidates.append(&image);
+            deDupedImageCandidates.push_back(&image);
         prevDensity = image.density();
     }
     unsigned winner = selectionLogic(deDupedImageCandidates, deviceScaleFactor);
     ASSERT(winner < deDupedImageCandidates.size());
-    winner = avoidDownloadIfHigherDensityResourceIsInCache(deDupedImageCandidates, winner, document);
+    winner = avoidDownloadIfHigherDensityResourceIsInCache(deDupedImageCandidates,
+        winner, document);
 
     float winningDensity = deDupedImageCandidates[winner]->density();
-    // 16. If an entry b in candidates has the same associated ... pixel density as an earlier entry a in candidates,
+    // 16. If an entry b in candidates has the same associated ... pixel density
+    // as an earlier entry a in candidates,
     // then remove entry b
     while ((winner > 0) && (deDupedImageCandidates[winner - 1]->density() == winningDensity))
         --winner;
@@ -396,45 +462,65 @@ static ImageCandidate pickBestImageCandidate(float deviceScaleFactor, float sour
     return *deDupedImageCandidates[winner];
 }
 
-ImageCandidate bestFitSourceForSrcsetAttribute(float deviceScaleFactor, float sourceSize, const String& srcsetAttribute, Document* document)
+ImageCandidate bestFitSourceForSrcsetAttribute(float deviceScaleFactor,
+    float sourceSize,
+    const String& srcsetAttribute,
+    Document* document)
 {
     Vector<ImageCandidate> imageCandidates;
 
-    parseImageCandidatesFromSrcsetAttribute(srcsetAttribute, imageCandidates, document);
+    parseImageCandidatesFromSrcsetAttribute(srcsetAttribute, imageCandidates,
+        document);
 
-    return pickBestImageCandidate(deviceScaleFactor, sourceSize, imageCandidates, document);
+    return pickBestImageCandidate(deviceScaleFactor, sourceSize, imageCandidates,
+        document);
 }
 
-ImageCandidate bestFitSourceForImageAttributes(float deviceScaleFactor, float sourceSize, const String& srcAttribute, const String& srcsetAttribute, Document* document)
+ImageCandidate bestFitSourceForImageAttributes(float deviceScaleFactor,
+    float sourceSize,
+    const String& srcAttribute,
+    const String& srcsetAttribute,
+    Document* document)
 {
     if (srcsetAttribute.isNull()) {
         if (srcAttribute.isNull())
             return ImageCandidate();
-        return ImageCandidate(srcAttribute, 0, srcAttribute.length(), DescriptorParsingResult(), ImageCandidate::SrcOrigin);
+        return ImageCandidate(srcAttribute, 0, srcAttribute.length(),
+            DescriptorParsingResult(), ImageCandidate::SrcOrigin);
     }
 
     Vector<ImageCandidate> imageCandidates;
 
-    parseImageCandidatesFromSrcsetAttribute(srcsetAttribute, imageCandidates, document);
+    parseImageCandidatesFromSrcsetAttribute(srcsetAttribute, imageCandidates,
+        document);
 
     if (!srcAttribute.isEmpty())
-        imageCandidates.append(ImageCandidate(srcAttribute, 0, srcAttribute.length(), DescriptorParsingResult(), ImageCandidate::SrcOrigin));
+        imageCandidates.push_back(
+            ImageCandidate(srcAttribute, 0, srcAttribute.length(),
+                DescriptorParsingResult(), ImageCandidate::SrcOrigin));
 
-    return pickBestImageCandidate(deviceScaleFactor, sourceSize, imageCandidates, document);
+    return pickBestImageCandidate(deviceScaleFactor, sourceSize, imageCandidates,
+        document);
 }
 
-String bestFitSourceForImageAttributes(float deviceScaleFactor, float sourceSize, const String& srcAttribute, ImageCandidate& srcsetImageCandidate)
+String bestFitSourceForImageAttributes(float deviceScaleFactor,
+    float sourceSize,
+    const String& srcAttribute,
+    ImageCandidate& srcsetImageCandidate)
 {
     if (srcsetImageCandidate.isEmpty())
         return srcAttribute;
 
     Vector<ImageCandidate> imageCandidates;
-    imageCandidates.append(srcsetImageCandidate);
+    imageCandidates.push_back(srcsetImageCandidate);
 
     if (!srcAttribute.isEmpty())
-        imageCandidates.append(ImageCandidate(srcAttribute, 0, srcAttribute.length(), DescriptorParsingResult(), ImageCandidate::SrcOrigin));
+        imageCandidates.push_back(
+            ImageCandidate(srcAttribute, 0, srcAttribute.length(),
+                DescriptorParsingResult(), ImageCandidate::SrcOrigin));
 
-    return pickBestImageCandidate(deviceScaleFactor, sourceSize, imageCandidates).toString();
+    return pickBestImageCandidate(deviceScaleFactor, sourceSize, imageCandidates)
+        .toString();
 }
 
-}
+} // namespace blink

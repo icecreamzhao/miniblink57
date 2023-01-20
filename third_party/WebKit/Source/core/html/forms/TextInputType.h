@@ -37,10 +37,13 @@ namespace blink {
 
 class TextInputType final : public BaseTextInputType {
 public:
-    static PassRefPtrWillBeRawPtr<InputType> create(HTMLInputElement&);
+    static InputType* create(HTMLInputElement&);
 
 private:
-    TextInputType(HTMLInputElement& element) : BaseTextInputType(element) { }
+    TextInputType(HTMLInputElement& element)
+        : BaseTextInputType(element)
+    {
+    }
     void countUsage() override;
     const AtomicString& formControlType() const override;
     bool supportsInputModeAttribute() const override;

@@ -33,17 +33,11 @@
 #include "platform/PlatformExport.h"
 #include "platform/fonts/CustomFontData.h"
 #include "platform/fonts/Glyph.h"
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/PassRefPtr.h"
 #include "wtf/RefCounted.h"
 #include "wtf/RefPtr.h"
 #include "wtf/allocator/Partitions.h"
-=======
-#include "wtf/PassRefPtr.h"
-#include "wtf/RefCounted.h"
-#include "wtf/RefPtr.h"
->>>>>>> miniblink49
 #include "wtf/text/Unicode.h"
 #include <string.h>
 
@@ -55,10 +49,7 @@ class GlyphPageTreeNodeBase;
 // Holds the glyph index and the corresponding SimpleFontData information for a given
 // character.
 struct GlyphData {
-<<<<<<< HEAD
     DISALLOW_NEW();
-=======
->>>>>>> miniblink49
     GlyphData(Glyph g = 0, const SimpleFontData* f = 0)
         : glyph(g)
         , fontData(f)
@@ -70,11 +61,7 @@ struct GlyphData {
 
 #if COMPILER(MSVC)
 #pragma warning(push)
-<<<<<<< HEAD
 #pragma warning(disable : 4200) // Disable "zero-sized array in struct/union" warning
-=======
-#pragma warning(disable: 4200) // Disable "zero-sized array in struct/union" warning
->>>>>>> miniblink49
 #endif
 
 // A GlyphPage contains a fixed-size set of GlyphData mappings for a contiguous
@@ -89,11 +76,7 @@ class PLATFORM_EXPORT GlyphPage : public RefCounted<GlyphPage> {
 public:
     static PassRefPtr<GlyphPage> createForMixedFontData(GlyphPageTreeNodeBase* owner)
     {
-<<<<<<< HEAD
         void* slot = WTF::Partitions::fastMalloc(sizeof(GlyphPage) + sizeof(SimpleFontData*) * GlyphPage::size, WTF_HEAP_PROFILER_TYPE_NAME(GlyphPage));
-=======
-        void* slot = fastMalloc(sizeof(GlyphPage) + sizeof(SimpleFontData*) * GlyphPage::size);
->>>>>>> miniblink49
         return adoptRef(new (slot) GlyphPage(owner));
     }
 
@@ -224,10 +207,7 @@ private:
         static RefPtr<CustomDataPage> create() { return adoptRef(new CustomDataPage()); }
         const CustomFontData* at(size_t index) const { return m_customData[index]; }
         void set(size_t index, const CustomFontData* data) { m_customData[index] = data; }
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
     private:
         CustomDataPage() { memset(m_customData, 0, sizeof(m_customData)); }
         const CustomFontData* m_customData[size];

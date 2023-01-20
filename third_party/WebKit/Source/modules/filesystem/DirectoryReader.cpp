@@ -28,20 +28,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "modules/filesystem/DirectoryReader.h"
 
 #include "core/fileapi/FileError.h"
 #include "modules/filesystem/EntriesCallback.h"
 #include "modules/filesystem/Entry.h"
 #include "modules/filesystem/ErrorCallback.h"
-<<<<<<< HEAD
 #include "modules/filesystem/FileSystemCallbacks.h"
-=======
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -64,61 +57,37 @@ public:
     }
 
 private:
-<<<<<<< HEAD
     // FIXME: This Member keeps the reader alive until all of the readDirectory
     // results are received. crbug.com/350285
     Member<DirectoryReader> m_reader;
 };
 
 class DirectoryReader::ErrorCallbackHelper final : public ErrorCallbackBase {
-=======
-    // FIXME: This Member keeps the reader alive until all of the readDirectory results are received. crbug.com/350285
-    Member<DirectoryReader> m_reader;
-};
-
-class DirectoryReader::ErrorCallbackHelper final : public ErrorCallback {
->>>>>>> miniblink49
 public:
     explicit ErrorCallbackHelper(DirectoryReader* reader)
         : m_reader(reader)
     {
     }
 
-<<<<<<< HEAD
     void invoke(FileError::ErrorCode error) override { m_reader->onError(error); }
-=======
-    void handleEvent(FileError* error) override
-    {
-        m_reader->onError(error);
-    }
->>>>>>> miniblink49
 
     DEFINE_INLINE_VIRTUAL_TRACE()
     {
         visitor->trace(m_reader);
-<<<<<<< HEAD
         ErrorCallbackBase::trace(visitor);
-=======
-        ErrorCallback::trace(visitor);
->>>>>>> miniblink49
     }
 
 private:
     Member<DirectoryReader> m_reader;
 };
 
-<<<<<<< HEAD
 DirectoryReader::DirectoryReader(DOMFileSystemBase* fileSystem,
     const String& fullPath)
-=======
-DirectoryReader::DirectoryReader(DOMFileSystemBase* fileSystem, const String& fullPath)
->>>>>>> miniblink49
     : DirectoryReaderBase(fileSystem, fullPath)
     , m_isReading(false)
 {
 }
 
-<<<<<<< HEAD
 DirectoryReader::~DirectoryReader() { }
 
 void DirectoryReader::readEntries(EntriesCallback* entriesCallback,
@@ -134,39 +103,18 @@ void DirectoryReader::readEntries(EntriesCallback* entriesCallback,
     if (m_error) {
         filesystem()->reportError(ScriptErrorCallback::wrap(errorCallback),
             m_error);
-=======
-DirectoryReader::~DirectoryReader()
-{
-}
-
-void DirectoryReader::readEntries(EntriesCallback* entriesCallback, ErrorCallback* errorCallback)
-{
-    if (!m_isReading) {
-        m_isReading = true;
-        filesystem()->readDirectory(this, m_fullPath, new EntriesCallbackHelper(this), new ErrorCallbackHelper(this));
-    }
-
-    if (m_error) {
-        filesystem()->scheduleCallback(errorCallback, m_error);
->>>>>>> miniblink49
         return;
     }
 
     if (m_entriesCallback) {
-<<<<<<< HEAD
         // Non-null m_entriesCallback means multiple readEntries() calls are made
         // concurrently. We don't allow doing it.
         filesystem()->reportError(ScriptErrorCallback::wrap(errorCallback),
             FileError::kInvalidStateErr);
-=======
-        // Non-null m_entriesCallback means multiple readEntries() calls are made concurrently. We don't allow doing it.
-        filesystem()->scheduleCallback(errorCallback, FileError::create(FileError::INVALID_STATE_ERR));
->>>>>>> miniblink49
         return;
     }
 
     if (!m_hasMoreEntries || !m_entries.isEmpty()) {
-<<<<<<< HEAD
         if (entriesCallback) {
             DOMFileSystem::scheduleCallback(
                 filesystem()->getExecutionContext(),
@@ -174,9 +122,6 @@ void DirectoryReader::readEntries(EntriesCallback* entriesCallback, ErrorCallbac
                     wrapPersistent(entriesCallback),
                     PersistentHeapVector<Member<Entry>>(m_entries)));
         }
-=======
-        filesystem()->scheduleCallback(entriesCallback, m_entries);
->>>>>>> miniblink49
         m_entries.clear();
         return;
     }
@@ -197,39 +142,20 @@ void DirectoryReader::addEntries(const EntryHeapVector& entries)
     }
 }
 
-<<<<<<< HEAD
 void DirectoryReader::onError(FileError::ErrorCode error)
 {
     m_error = error;
     m_entriesCallback = nullptr;
     if (m_errorCallback)
         m_errorCallback->handleEvent(FileError::createDOMException(error));
-=======
-void DirectoryReader::onError(FileError* error)
-{
-    m_error = error;
-    m_entriesCallback = nullptr;
-    if (m_errorCallback) {
-        ErrorCallback* errorCallback = m_errorCallback.release();
-        errorCallback->handleEvent(error);
-    }
->>>>>>> miniblink49
 }
 
 DEFINE_TRACE(DirectoryReader)
 {
     visitor->trace(m_entries);
-<<<<<<< HEAD
-=======
-    visitor->trace(m_error);
->>>>>>> miniblink49
     visitor->trace(m_entriesCallback);
     visitor->trace(m_errorCallback);
     DirectoryReaderBase::trace(visitor);
 }
 
-<<<<<<< HEAD
 } // namespace blink
-=======
-}
->>>>>>> miniblink49

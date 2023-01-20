@@ -17,7 +17,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/layout/svg/SVGResourcesCycleSolver.h"
 
 // Set to a value > 0, to debug the resource cache.
@@ -33,7 +32,8 @@
 
 namespace blink {
 
-SVGResourcesCycleSolver::SVGResourcesCycleSolver(LayoutObject* layoutObject, SVGResources* resources)
+SVGResourcesCycleSolver::SVGResourcesCycleSolver(LayoutObject* layoutObject,
+    SVGResources* resources)
     : m_layoutObject(layoutObject)
     , m_resources(resources)
 {
@@ -41,9 +41,7 @@ SVGResourcesCycleSolver::SVGResourcesCycleSolver(LayoutObject* layoutObject, SVG
     ASSERT(m_resources);
 }
 
-SVGResourcesCycleSolver::~SVGResourcesCycleSolver()
-{
-}
+SVGResourcesCycleSolver::~SVGResourcesCycleSolver() { }
 
 struct ActiveFrame {
     typedef SVGResourcesCycleSolver::ResourceSet ResourceSet;
@@ -54,16 +52,14 @@ struct ActiveFrame {
     {
         m_activeSet.add(m_resource);
     }
-    ~ActiveFrame()
-    {
-        m_activeSet.remove(m_resource);
-    }
+    ~ActiveFrame() { m_activeSet.remove(m_resource); }
 
     ResourceSet& m_activeSet;
     LayoutSVGResourceContainer* m_resource;
 };
 
-bool SVGResourcesCycleSolver::resourceContainsCycles(LayoutSVGResourceContainer* resource)
+bool SVGResourcesCycleSolver::resourceContainsCycles(
+    LayoutSVGResourceContainer* resource)
 {
     // If we've traversed this sub-graph before and no cycles were observed, then
     // reuse that result.
@@ -122,7 +118,8 @@ void SVGResourcesCycleSolver::resolveCycles()
     m_activeResources.clear();
 }
 
-void SVGResourcesCycleSolver::breakCycle(LayoutSVGResourceContainer* resourceLeadingToCycle)
+void SVGResourcesCycleSolver::breakCycle(
+    LayoutSVGResourceContainer* resourceLeadingToCycle)
 {
     ASSERT(resourceLeadingToCycle);
     if (resourceLeadingToCycle == m_resources->linkedResource()) {
@@ -167,4 +164,4 @@ void SVGResourcesCycleSolver::breakCycle(LayoutSVGResourceContainer* resourceLea
     }
 }
 
-}
+} // namespace blink

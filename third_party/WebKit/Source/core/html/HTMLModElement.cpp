@@ -20,7 +20,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/html/HTMLModElement.h"
 
 #include "core/HTMLNames.h"
@@ -29,7 +28,8 @@ namespace blink {
 
 using namespace HTMLNames;
 
-inline HTMLModElement::HTMLModElement(const QualifiedName& tagName, Document& document)
+inline HTMLModElement::HTMLModElement(const QualifiedName& tagName,
+    Document& document)
     : HTMLElement(tagName, document)
 {
 }
@@ -51,4 +51,4 @@ const QualifiedName& HTMLModElement::subResourceAttributeName() const
     return citeAttr;
 }
 
-}
+} // namespace blink

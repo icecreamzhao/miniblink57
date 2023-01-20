@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
 // https://w3c.github.io/ServiceWorker/#fetch-event-interface
 [
     Constructor(DOMString type, FetchEventInit eventInitDict),
@@ -15,16 +14,4 @@
 
     [CallWith=ScriptState, RaisesException] void respondWith(Promise<Response> r);
     [OriginTrialEnabled=ServiceWorkerNavigationPreload, CallWith=ScriptState] readonly attribute Promise<any> preloadResponse;
-=======
-// https://slightlyoff.github.io/ServiceWorker/spec/service_worker/index.html#fetch-event-interface
-[
-    Constructor(DOMString type, optional FetchEventInit eventInitDict),
-    Exposed=ServiceWorker,
-    TypeChecking=Interface,
-] interface FetchEvent : ExtendableEvent {
-    readonly attribute Request request;
-    readonly attribute boolean isReload;
-
-    [CallWith=ScriptState, RaisesException] void respondWith(any value);
->>>>>>> miniblink49
 };

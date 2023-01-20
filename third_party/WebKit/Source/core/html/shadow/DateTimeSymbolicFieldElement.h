@@ -26,7 +26,6 @@
 #ifndef DateTimeSymbolicFieldElement_h
 #define DateTimeSymbolicFieldElement_h
 
-#if ENABLE(INPUT_MULTIPLE_FIELDS_UI)
 #include "core/html/forms/TypeAhead.h"
 #include "core/html/shadow/DateTimeFieldElement.h"
 
@@ -34,11 +33,16 @@ namespace blink {
 
 // DateTimeSymbolicFieldElement represents non-numeric field of data time
 // format, such as: AM/PM, and month.
-class DateTimeSymbolicFieldElement : public DateTimeFieldElement, public TypeAheadDataSource {
+class DateTimeSymbolicFieldElement : public DateTimeFieldElement,
+                                     public TypeAheadDataSource {
     WTF_MAKE_NONCOPYABLE(DateTimeSymbolicFieldElement);
 
 protected:
-    DateTimeSymbolicFieldElement(Document&, FieldOwner&, const Vector<String>&, int minimum, int maximum);
+    DateTimeSymbolicFieldElement(Document&,
+        FieldOwner&,
+        const Vector<String>&,
+        int minimum,
+        int maximum);
     size_t symbolsSize() const { return m_symbols.size(); }
     bool hasValue() const final;
     void initialize(const AtomicString& pseudo, const String& axHelpText);
@@ -50,11 +54,14 @@ private:
     static const int invalidIndex = -1;
 
     String visibleEmptyValue() const;
-    bool indexIsInRange(int index) const { return index >= m_minimumIndex && index <= m_maximumIndex; }
+    bool indexIsInRange(int index) const
+    {
+        return index >= m_minimumIndex && index <= m_maximumIndex;
+    }
 
     // DateTimeFieldElement functions.
     void handleKeyboardEvent(KeyboardEvent*) final;
-    float maximumWidth(const Font&) override;
+    float maximumWidth(const ComputedStyle&) override;
     void stepDown() final;
     void stepUp() final;
     String value() const final;
@@ -79,5 +86,4 @@ private:
 
 } // namespace blink
 
-#endif
 #endif

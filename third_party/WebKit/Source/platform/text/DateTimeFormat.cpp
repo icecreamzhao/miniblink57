@@ -23,10 +23,6 @@
  * SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/text/DateTimeFormat.h"
 
 #include "wtf/ASCIICType.h"
@@ -111,12 +107,8 @@ bool DateTimeFormat::parse(const String& source, TokenHandler& tokenHandler)
         StateLiteral,
         StateQuote,
         StateSymbol,
-<<<<<<< HEAD
     } state
         = StateLiteral;
-=======
-    } state = StateLiteral;
->>>>>>> miniblink49
 
     FieldType fieldType = FieldTypeLiteral;
     StringBuilder literalBuffer;
@@ -253,12 +245,8 @@ static bool isASCIIAlphabetOrQuote(UChar ch)
     return isASCIIAlpha(ch) || ch == '\'';
 }
 
-<<<<<<< HEAD
 void DateTimeFormat::quoteAndappend(const String& literal,
     StringBuilder& buffer)
-=======
-void DateTimeFormat::quoteAndAppendLiteral(const String& literal, StringBuilder& buffer)
->>>>>>> miniblink49
 {
     if (literal.length() <= 0)
         return;
@@ -277,11 +265,7 @@ void DateTimeFormat::quoteAndAppendLiteral(const String& literal, StringBuilder&
 
     for (unsigned i = 0; i < literal.length(); ++i) {
         if (literal[i] == '\'') {
-<<<<<<< HEAD
             buffer.append("''");
-=======
-            buffer.appendLiteral("''");
->>>>>>> miniblink49
         } else {
             String escaped = literal.substring(i);
             escaped.replace("'", "''");

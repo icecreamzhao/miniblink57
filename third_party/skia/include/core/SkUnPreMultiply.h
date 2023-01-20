@@ -6,13 +6,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
-
-
-
->>>>>>> miniblink49
 #ifndef SkUnPreMultiply_DEFINED
 #define SkUnPreMultiply_DEFINED
 
@@ -23,7 +16,6 @@ public:
     typedef uint32_t Scale;
 
     // index this table with alpha [0..255]
-<<<<<<< HEAD
     static const Scale* GetScaleTable()
     {
         return gTable;
@@ -31,13 +23,6 @@ public:
 
     static Scale GetScale(U8CPU alpha)
     {
-=======
-    static const Scale* GetScaleTable() {
-        return gTable;
-    }
-
-    static Scale GetScale(U8CPU alpha) {
->>>>>>> miniblink49
         SkASSERT(alpha <= 255);
         return gTable[alpha];
     }
@@ -55,12 +40,8 @@ public:
             // now red is unpremultiplied
         }
     */
-<<<<<<< HEAD
     static U8CPU ApplyScale(Scale scale, U8CPU component)
     {
-=======
-    static U8CPU ApplyScale(Scale scale, U8CPU component) {
->>>>>>> miniblink49
         SkASSERT(component <= 255);
         return (scale * component + (1 << 23)) >> 24;
     }

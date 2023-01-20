@@ -2,39 +2,22 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
 #include "wtf/text/TextCodecReplacement.h"
 
 #include "wtf/PtrUtil.h"
 #include "wtf/text/CharacterNames.h"
 #include "wtf/text/WTFString.h"
 #include <memory>
-=======
-#include "config.h"
-#include "wtf/text/TextCodecReplacement.h"
-
-#include "wtf/PassOwnPtr.h"
-#include "wtf/text/CharacterNames.h"
-#include "wtf/text/WTFString.h"
->>>>>>> miniblink49
 
 namespace WTF {
 
 TextCodecReplacement::TextCodecReplacement()
-<<<<<<< HEAD
     : m_replacementErrorReturned(false)
 {
 }
 
 void TextCodecReplacement::registerEncodingNames(
     EncodingNameRegistrar registrar)
-=======
-    : m_sentEOF(false)
-{
-}
-
-void TextCodecReplacement::registerEncodingNames(EncodingNameRegistrar registrar)
->>>>>>> miniblink49
 {
     // The 'replacement' label itself should not be referenceable by
     // resources or script - it's a specification convenience - but much of
@@ -49,17 +32,11 @@ void TextCodecReplacement::registerEncodingNames(EncodingNameRegistrar registrar
     registrar("iso-2022-kr", "replacement");
 }
 
-<<<<<<< HEAD
 static std::unique_ptr<TextCodec> newStreamingTextDecoderReplacement(
     const TextEncoding&,
     const void*)
 {
     return WTF::wrapUnique(new TextCodecReplacement);
-=======
-static PassOwnPtr<TextCodec> newStreamingTextDecoderReplacement(const TextEncoding&, const void*)
-{
-    return adoptPtr(new TextCodecReplacement);
->>>>>>> miniblink49
 }
 
 void TextCodecReplacement::registerCodecs(TextCodecRegistrar registrar)
@@ -67,7 +44,6 @@ void TextCodecReplacement::registerCodecs(TextCodecRegistrar registrar)
     registrar("replacement", newStreamingTextDecoderReplacement, 0);
 }
 
-<<<<<<< HEAD
 String TextCodecReplacement::decode(const char*,
     size_t length,
     FlushBehavior,
@@ -90,16 +66,6 @@ String TextCodecReplacement::decode(const char*,
 
     // 3. Return finished.
     return String();
-=======
-String TextCodecReplacement::decode(const char*, size_t, FlushBehavior, bool, bool& sawError)
-{
-    sawError = true;
-    if (m_sentEOF)
-        return String();
-
-    m_sentEOF = true;
-    return String(&replacementCharacter, 1);
->>>>>>> miniblink49
 }
 
 } // namespace WTF

@@ -2,7 +2,8 @@
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
  *           (C) 1999 Antti Koivisto (koivisto@kde.org)
  *           (C) 2007 David Smith (catfish.man@gmail.com)
- * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc. All rights reserved.
+ * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc.
+ *               All rights reserved.
  * Copyright (C) Research In Motion Limited 2010. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
@@ -21,13 +22,16 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/layout/FloatingObjects.h"
 
 #include "core/layout/LayoutBlockFlow.h"
 #include "core/layout/LayoutBox.h"
 #include "core/layout/LayoutView.h"
+#include "core/layout/api/LineLayoutBlockFlow.h"
 #include "core/layout/shapes/ShapeOutsideInfo.h"
+#include "wtf/PtrUtil.h"
+#include <algorithm>
+#include <memory>
 
 using namespace WTF;
 
@@ -36,68 +40,86 @@ namespace blink {
 struct SameSizeAsFloatingObject {
     void* pointers[2];
     LayoutRect rect;
-    int paginationStrut;
     uint32_t bitfields : 8;
 };
 
-static_assert(sizeof(FloatingObject) == sizeof(SameSizeAsFloatingObject), "FloatingObject should stay small");
+static_assert(sizeof(FloatingObject) == sizeof(SameSizeAsFloatingObject),
+    "FloatingObject should stay small");
 
 FloatingObject::FloatingObject(LayoutBox* layoutObject)
     : m_layoutObject(layoutObject)
     , m_originatingLine(nullptr)
-    , m_paginationStrut(0)
     , m_shouldPaint(true)
     , m_isDescendant(false)
     , m_isPlaced(false)
     , m_isLowestNonOverhangingFloatInChild(false)
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
     , m_isInPlacedTree(false)
 #endif
 {
     EFloat type = layoutObject->style()->floating();
-    ASSERT(type != NoFloat);
-    if (type == LeftFloat)
+    DCHECK_NE(type, EFloat::kNone);
+    if (type == EFloat::kLeft)
         m_type = FloatLeft;
-    else if (type == RightFloat)
+    else if (type == EFloat::kRight)
         m_type = FloatRight;
 }
 
-FloatingObject::FloatingObject(LayoutBox* layoutObject, Type type, const LayoutRect& frameRect, bool shouldPaint, bool isDescendant, bool isLowestNonOverhangingFloatInChild)
+FloatingObject::FloatingObject(LayoutBox* layoutObject,
+    Type type,
+    const LayoutRect& frameRect,
+    bool shouldPaint,
+    bool isDescendant,
+    bool isLowestNonOverhangingFloatInChild)
     : m_layoutObject(layoutObject)
     , m_originatingLine(nullptr)
     , m_frameRect(frameRect)
-    , m_paginationStrut(0)
     , m_type(type)
     , m_shouldPaint(shouldPaint)
     , m_isDescendant(isDescendant)
     , m_isPlaced(true)
     , m_isLowestNonOverhangingFloatInChild(isLowestNonOverhangingFloatInChild)
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
     , m_isInPlacedTree(false)
 #endif
 {
 }
 
-PassOwnPtr<FloatingObject> FloatingObject::create(LayoutBox* layoutObject)
+FloatingObject::~FloatingObject()
 {
-    OwnPtr<FloatingObject> newObj = adoptPtr(new FloatingObject(layoutObject));
-    newObj->setShouldPaint(!layoutObject->hasSelfPaintingLayer()); // If a layer exists, the float will paint itself. Otherwise someone else will.
+}
+
+std::unique_ptr<FloatingObject> FloatingObject::create(
+    LayoutBox* layoutObject)
+{
+    std::unique_ptr<FloatingObject> newObj = WTF::wrapUnique(new FloatingObject(layoutObject));
+
+    // If a layer exists, the float will paint itself. Otherwise someone else
+    // will.
+    newObj->setShouldPaint(!layoutObject->hasSelfPaintingLayer());
+
     newObj->setIsDescendant(true);
 
-    return newObj.release();
+    return newObj;
 }
 
-PassOwnPtr<FloatingObject> FloatingObject::copyToNewContainer(LayoutSize offset, bool shouldPaint, bool isDescendant) const
+std::unique_ptr<FloatingObject> FloatingObject::copyToNewContainer(
+    LayoutSize offset,
+    bool shouldPaint,
+    bool isDescendant) const
 {
-    return adoptPtr(new FloatingObject(layoutObject(), type(), LayoutRect(frameRect().location() - offset, frameRect().size()), shouldPaint, isDescendant, isLowestNonOverhangingFloatInChild()));
+    return WTF::wrapUnique(new FloatingObject(
+        layoutObject(), getType(),
+        LayoutRect(frameRect().location() - offset, frameRect().size()),
+        shouldPaint, isDescendant, isLowestNonOverhangingFloatInChild()));
 }
 
-PassOwnPtr<FloatingObject> FloatingObject::unsafeClone() const
+std::unique_ptr<FloatingObject> FloatingObject::unsafeClone() const
 {
-    OwnPtr<FloatingObject> cloneObject = adoptPtr(new FloatingObject(layoutObject(), type(), m_frameRect, m_shouldPaint, m_isDescendant, false));
-    cloneObject->m_paginationStrut = m_paginationStrut;
+    std::unique_ptr<FloatingObject> cloneObject = WTF::wrapUnique(new FloatingObject(layoutObject(), getType(), m_frameRect,
+        m_shouldPaint, m_isDescendant, false));
     cloneObject->m_isPlaced = m_isPlaced;
-    return cloneObject.release();
+    return cloneObject;
 }
 
 template <FloatingObject::Type FloatTypeValue>
@@ -105,7 +127,10 @@ class ComputeFloatOffsetAdapter {
 public:
     typedef FloatingObjectInterval IntervalType;
 
-    ComputeFloatOffsetAdapter(const LayoutBlockFlow* layoutObject, int lineTop, int lineBottom, LayoutUnit offset)
+    ComputeFloatOffsetAdapter(const LayoutBlockFlow* layoutObject,
+        LayoutUnit lineTop,
+        LayoutUnit lineBottom,
+        LayoutUnit offset)
         : m_layoutObject(layoutObject)
         , m_lineTop(lineTop)
         , m_lineBottom(lineBottom)
@@ -116,8 +141,8 @@ public:
 
     virtual ~ComputeFloatOffsetAdapter() { }
 
-    int lowValue() const { return m_lineTop; }
-    int highValue() const { return m_lineBottom; }
+    LayoutUnit lowValue() const { return m_lineTop; }
+    LayoutUnit highValue() const { return m_lineBottom; }
     void collectIfNeeded(const IntervalType&);
 
     LayoutUnit offset() const { return m_offset; }
@@ -126,57 +151,174 @@ protected:
     virtual bool updateOffsetIfNeeded(const FloatingObject&) = 0;
 
     const LayoutBlockFlow* m_layoutObject;
-    int m_lineTop;
-    int m_lineBottom;
+    LayoutUnit m_lineTop;
+    LayoutUnit m_lineBottom;
     LayoutUnit m_offset;
     const FloatingObject* m_outermostFloat;
 };
 
 template <FloatingObject::Type FloatTypeValue>
-class ComputeFloatOffsetForFloatLayoutAdapter : public ComputeFloatOffsetAdapter<FloatTypeValue> {
+class ComputeFloatOffsetForFloatLayoutAdapter
+    : public ComputeFloatOffsetAdapter<FloatTypeValue> {
 public:
-    ComputeFloatOffsetForFloatLayoutAdapter(const LayoutBlockFlow* layoutObject, LayoutUnit lineTop, LayoutUnit lineBottom, LayoutUnit offset)
-        : ComputeFloatOffsetAdapter<FloatTypeValue>(layoutObject, lineTop, lineBottom, offset)
+    ComputeFloatOffsetForFloatLayoutAdapter(const LayoutBlockFlow* layoutObject,
+        LayoutUnit lineTop,
+        LayoutUnit lineBottom,
+        LayoutUnit offset)
+        : ComputeFloatOffsetAdapter<FloatTypeValue>(layoutObject,
+            lineTop,
+            lineBottom,
+            offset)
     {
     }
 
-    virtual ~ComputeFloatOffsetForFloatLayoutAdapter() { }
+    ~ComputeFloatOffsetForFloatLayoutAdapter() override { }
 
     LayoutUnit heightRemaining() const;
 
 protected:
-    virtual bool updateOffsetIfNeeded(const FloatingObject&) override final;
+    bool updateOffsetIfNeeded(const FloatingObject&) final;
 };
 
 template <FloatingObject::Type FloatTypeValue>
-class ComputeFloatOffsetForLineLayoutAdapter : public ComputeFloatOffsetAdapter<FloatTypeValue> {
+class ComputeFloatOffsetForLineLayoutAdapter
+    : public ComputeFloatOffsetAdapter<FloatTypeValue> {
 public:
-    ComputeFloatOffsetForLineLayoutAdapter(const LayoutBlockFlow* layoutObject, LayoutUnit lineTop, LayoutUnit lineBottom, LayoutUnit offset)
-        : ComputeFloatOffsetAdapter<FloatTypeValue>(layoutObject, lineTop, lineBottom, offset)
+    ComputeFloatOffsetForLineLayoutAdapter(const LayoutBlockFlow* layoutObject,
+        LayoutUnit lineTop,
+        LayoutUnit lineBottom,
+        LayoutUnit offset)
+        : ComputeFloatOffsetAdapter<FloatTypeValue>(layoutObject,
+            lineTop,
+            lineBottom,
+            offset)
     {
     }
 
-    virtual ~ComputeFloatOffsetForLineLayoutAdapter() { }
+    ~ComputeFloatOffsetForLineLayoutAdapter() override { }
 
 protected:
-    virtual bool updateOffsetIfNeeded(const FloatingObject&) override final;
+    bool updateOffsetIfNeeded(const FloatingObject&) final;
 };
 
+class FindNextFloatLogicalBottomAdapter {
+public:
+    typedef FloatingObjectInterval IntervalType;
 
-FloatingObjects::~FloatingObjects()
+    FindNextFloatLogicalBottomAdapter(const LayoutBlockFlow& renderer,
+        LayoutUnit belowLogicalHeight)
+        : m_layoutObject(renderer)
+        , m_belowLogicalHeight(belowLogicalHeight)
+        , m_aboveLogicalHeight(LayoutUnit::max())
+        , m_nextLogicalBottom()
+        , m_nextShapeLogicalBottom()
+    {
+    }
+
+    LayoutUnit lowValue() const { return m_belowLogicalHeight; }
+    LayoutUnit highValue() const { return m_aboveLogicalHeight; }
+    void collectIfNeeded(const IntervalType&);
+
+    LayoutUnit nextLogicalBottom() { return m_nextLogicalBottom; }
+    LayoutUnit nextShapeLogicalBottom() { return m_nextShapeLogicalBottom; }
+
+private:
+    const LayoutBlockFlow& m_layoutObject;
+    LayoutUnit m_belowLogicalHeight;
+    LayoutUnit m_aboveLogicalHeight;
+    LayoutUnit m_nextLogicalBottom;
+    LayoutUnit m_nextShapeLogicalBottom;
+};
+
+inline static bool rangesIntersect(LayoutUnit floatTop,
+    LayoutUnit floatBottom,
+    LayoutUnit objectTop,
+    LayoutUnit objectBottom)
 {
+    if (objectTop >= floatBottom || objectBottom < floatTop)
+        return false;
+
+    // The top of the object overlaps the float
+    if (objectTop >= floatTop)
+        return true;
+
+    // The object encloses the float
+    if (objectTop < floatTop && objectBottom > floatBottom)
+        return true;
+
+    // The bottom of the object overlaps the float
+    if (objectBottom > objectTop && objectBottom > floatTop && objectBottom <= floatBottom)
+        return true;
+
+    return false;
 }
+
+inline void FindNextFloatLogicalBottomAdapter::collectIfNeeded(
+    const IntervalType& interval)
+{
+    const FloatingObject& floatingObject = *(interval.data());
+    if (!rangesIntersect(interval.low(), interval.high(), m_belowLogicalHeight,
+            m_aboveLogicalHeight))
+        return;
+
+    // All the objects returned from the tree should be already placed.
+    ASSERT(floatingObject.isPlaced());
+    ASSERT(rangesIntersect(m_layoutObject.logicalTopForFloat(floatingObject),
+        m_layoutObject.logicalBottomForFloat(floatingObject),
+        m_belowLogicalHeight, m_aboveLogicalHeight));
+
+    LayoutUnit floatBottom = m_layoutObject.logicalBottomForFloat(floatingObject);
+
+    if (ShapeOutsideInfo* shapeOutside = floatingObject.layoutObject()->shapeOutsideInfo()) {
+        LayoutUnit shapeBottom = m_layoutObject.logicalTopForFloat(floatingObject) + m_layoutObject.marginBeforeForChild(*floatingObject.layoutObject()) + shapeOutside->shapeLogicalBottom();
+        // Use the shapeBottom unless it extends outside of the margin box, in which
+        // case it is clipped.
+        m_nextShapeLogicalBottom = m_nextShapeLogicalBottom
+            ? std::min(shapeBottom, floatBottom)
+            : shapeBottom;
+    } else {
+        m_nextShapeLogicalBottom = m_nextShapeLogicalBottom
+            ? std::min(m_nextShapeLogicalBottom, floatBottom)
+            : floatBottom;
+    }
+
+    m_nextLogicalBottom = m_nextLogicalBottom
+        ? std::min(m_nextLogicalBottom, floatBottom)
+        : floatBottom;
+}
+
+LayoutUnit FloatingObjects::findNextFloatLogicalBottomBelow(
+    LayoutUnit logicalHeight)
+{
+    FindNextFloatLogicalBottomAdapter adapter(*m_layoutObject, logicalHeight);
+    placedFloatsTree().allOverlapsWithAdapter(adapter);
+
+    return adapter.nextShapeLogicalBottom();
+}
+
+LayoutUnit FloatingObjects::findNextFloatLogicalBottomBelowForBlock(
+    LayoutUnit logicalHeight)
+{
+    FindNextFloatLogicalBottomAdapter adapter(*m_layoutObject, logicalHeight);
+    placedFloatsTree().allOverlapsWithAdapter(adapter);
+
+    return adapter.nextLogicalBottom();
+}
+
+FloatingObjects::~FloatingObjects() { }
 void FloatingObjects::clearLineBoxTreePointers()
 {
     // Clear references to originating lines, since the lines are being deleted
     FloatingObjectSetIterator end = m_set.end();
     for (FloatingObjectSetIterator it = m_set.begin(); it != end; ++it) {
-        ASSERT(!((*it)->originatingLine()) || (*it)->originatingLine()->layoutObject() == m_layoutObject);
+        ASSERT(
+            !((*it)->originatingLine()) || (*it)->originatingLine()->getLineLayoutItem().isEqual(m_layoutObject));
         (*it)->setOriginatingLine(nullptr);
     }
 }
 
-FloatingObjects::FloatingObjects(const LayoutBlockFlow* layoutObject, bool horizontalWritingMode)
+FloatingObjects::FloatingObjects(const LayoutBlockFlow* layoutObject,
+    bool horizontalWritingMode)
     : m_placedFloatsTree(UninitializedTree)
     , m_leftObjectsCount(0)
     , m_rightObjectsCount(0)
@@ -195,31 +337,37 @@ void FloatingObjects::clear()
     markLowestFloatLogicalBottomCacheAsDirty();
 }
 
-LayoutUnit FloatingObjects::lowestFloatLogicalBottom(FloatingObject::Type floatType)
+LayoutUnit FloatingObjects::lowestFloatLogicalBottom(
+    FloatingObject::Type floatType)
 {
     bool isInHorizontalWritingMode = m_horizontalWritingMode;
     if (floatType != FloatingObject::FloatLeftRight) {
         if (hasLowestFloatLogicalBottomCached(isInHorizontalWritingMode, floatType))
             return getCachedlowestFloatLogicalBottom(floatType);
     } else {
-        if (hasLowestFloatLogicalBottomCached(isInHorizontalWritingMode, FloatingObject::FloatLeft) && hasLowestFloatLogicalBottomCached(isInHorizontalWritingMode, FloatingObject::FloatRight)) {
-            return std::max(getCachedlowestFloatLogicalBottom(FloatingObject::FloatLeft),
+        if (hasLowestFloatLogicalBottomCached(isInHorizontalWritingMode,
+                FloatingObject::FloatLeft)
+            && hasLowestFloatLogicalBottomCached(isInHorizontalWritingMode,
+                FloatingObject::FloatRight)) {
+            return std::max(
+                getCachedlowestFloatLogicalBottom(FloatingObject::FloatLeft),
                 getCachedlowestFloatLogicalBottom(FloatingObject::FloatRight));
         }
     }
 
-    LayoutUnit lowestFloatBottom = 0;
+    LayoutUnit lowestFloatBottom;
     const FloatingObjectSet& floatingObjectSet = set();
     FloatingObjectSetIterator end = floatingObjectSet.end();
     if (floatType == FloatingObject::FloatLeftRight) {
         FloatingObject* lowestFloatingObjectLeft = nullptr;
         FloatingObject* lowestFloatingObjectRight = nullptr;
-        LayoutUnit lowestFloatBottomLeft = 0;
-        LayoutUnit lowestFloatBottomRight = 0;
-        for (FloatingObjectSetIterator it = floatingObjectSet.begin(); it != end; ++it) {
+        LayoutUnit lowestFloatBottomLeft;
+        LayoutUnit lowestFloatBottomRight;
+        for (FloatingObjectSetIterator it = floatingObjectSet.begin(); it != end;
+             ++it) {
             FloatingObject& floatingObject = *it->get();
             if (floatingObject.isPlaced()) {
-                FloatingObject::Type curType = floatingObject.type();
+                FloatingObject::Type curType = floatingObject.getType();
                 LayoutUnit curFloatLogicalBottom = m_layoutObject->logicalBottomForFloat(floatingObject);
                 if (curType & FloatingObject::FloatLeft && curFloatLogicalBottom > lowestFloatBottomLeft) {
                     lowestFloatBottomLeft = curFloatLogicalBottom;
@@ -232,26 +380,34 @@ LayoutUnit FloatingObjects::lowestFloatLogicalBottom(FloatingObject::Type floatT
             }
         }
         lowestFloatBottom = std::max(lowestFloatBottomLeft, lowestFloatBottomRight);
-        setCachedLowestFloatLogicalBottom(isInHorizontalWritingMode, FloatingObject::FloatLeft, lowestFloatingObjectLeft);
-        setCachedLowestFloatLogicalBottom(isInHorizontalWritingMode, FloatingObject::FloatRight, lowestFloatingObjectRight);
+        setCachedLowestFloatLogicalBottom(isInHorizontalWritingMode,
+            FloatingObject::FloatLeft,
+            lowestFloatingObjectLeft);
+        setCachedLowestFloatLogicalBottom(isInHorizontalWritingMode,
+            FloatingObject::FloatRight,
+            lowestFloatingObjectRight);
     } else {
         FloatingObject* lowestFloatingObject = nullptr;
-        for (FloatingObjectSetIterator it = floatingObjectSet.begin(); it != end; ++it) {
+        for (FloatingObjectSetIterator it = floatingObjectSet.begin(); it != end;
+             ++it) {
             FloatingObject& floatingObject = *it->get();
-            if (floatingObject.isPlaced() && floatingObject.type() == floatType) {
+            if (floatingObject.isPlaced() && floatingObject.getType() == floatType) {
                 if (m_layoutObject->logicalBottomForFloat(floatingObject) > lowestFloatBottom) {
                     lowestFloatingObject = &floatingObject;
                     lowestFloatBottom = m_layoutObject->logicalBottomForFloat(floatingObject);
                 }
             }
         }
-        setCachedLowestFloatLogicalBottom(isInHorizontalWritingMode, floatType, lowestFloatingObject);
+        setCachedLowestFloatLogicalBottom(isInHorizontalWritingMode, floatType,
+            lowestFloatingObject);
     }
 
     return lowestFloatBottom;
 }
 
-bool FloatingObjects::hasLowestFloatLogicalBottomCached(bool isHorizontal, FloatingObject::Type type) const
+bool FloatingObjects::hasLowestFloatLogicalBottomCached(
+    bool isHorizontal,
+    FloatingObject::Type type) const
 {
     int floatIndex = static_cast<int>(type) - 1;
     ASSERT(floatIndex < static_cast<int>(sizeof(m_lowestFloatBottomCache) / sizeof(FloatBottomCachedValue)));
@@ -259,17 +415,22 @@ bool FloatingObjects::hasLowestFloatLogicalBottomCached(bool isHorizontal, Float
     return (m_cachedHorizontalWritingMode == isHorizontal && !m_lowestFloatBottomCache[floatIndex].dirty);
 }
 
-LayoutUnit FloatingObjects::getCachedlowestFloatLogicalBottom(FloatingObject::Type type) const
+LayoutUnit FloatingObjects::getCachedlowestFloatLogicalBottom(
+    FloatingObject::Type type) const
 {
     int floatIndex = static_cast<int>(type) - 1;
     ASSERT(floatIndex < static_cast<int>(sizeof(m_lowestFloatBottomCache) / sizeof(FloatBottomCachedValue)));
     ASSERT(floatIndex >= 0);
     if (!m_lowestFloatBottomCache[floatIndex].floatingObject)
         return LayoutUnit();
-    return m_layoutObject->logicalBottomForFloat(*m_lowestFloatBottomCache[floatIndex].floatingObject);
+    return m_layoutObject->logicalBottomForFloat(
+        *m_lowestFloatBottomCache[floatIndex].floatingObject);
 }
 
-void FloatingObjects::setCachedLowestFloatLogicalBottom(bool isHorizontal, FloatingObject::Type type, FloatingObject* floatingObject)
+void FloatingObjects::setCachedLowestFloatLogicalBottom(
+    bool isHorizontal,
+    FloatingObject::Type type,
+    FloatingObject* floatingObject)
 {
     int floatIndex = static_cast<int>(type) - 1;
     ASSERT(floatIndex < static_cast<int>(sizeof(m_lowestFloatBottomCache) / sizeof(FloatBottomCachedValue)));
@@ -282,12 +443,19 @@ void FloatingObjects::setCachedLowestFloatLogicalBottom(bool isHorizontal, Float
 FloatingObject* FloatingObjects::lowestFloatingObject() const
 {
     bool isInHorizontalWritingMode = m_horizontalWritingMode;
-    if (!hasLowestFloatLogicalBottomCached(isInHorizontalWritingMode, FloatingObject::FloatLeft) && !hasLowestFloatLogicalBottomCached(isInHorizontalWritingMode, FloatingObject::FloatRight))
+    if (!hasLowestFloatLogicalBottomCached(isInHorizontalWritingMode,
+            FloatingObject::FloatLeft)
+        && !hasLowestFloatLogicalBottomCached(isInHorizontalWritingMode,
+            FloatingObject::FloatRight))
         return nullptr;
     FloatingObject* lowestLeftObject = m_lowestFloatBottomCache[0].floatingObject;
     FloatingObject* lowestRightObject = m_lowestFloatBottomCache[1].floatingObject;
-    LayoutUnit lowestFloatBottomLeft = lowestLeftObject ? m_layoutObject->logicalBottomForFloat(*lowestLeftObject) : LayoutUnit();
-    LayoutUnit lowestFloatBottomRight = lowestRightObject ? m_layoutObject->logicalBottomForFloat(*lowestRightObject) : LayoutUnit();
+    LayoutUnit lowestFloatBottomLeft = lowestLeftObject
+        ? m_layoutObject->logicalBottomForFloat(*lowestLeftObject)
+        : LayoutUnit();
+    LayoutUnit lowestFloatBottomRight = lowestRightObject
+        ? m_layoutObject->logicalBottomForFloat(*lowestRightObject)
+        : LayoutUnit();
 
     if (lowestFloatBottomLeft > lowestFloatBottomRight)
         return lowestLeftObject;
@@ -296,16 +464,18 @@ FloatingObject* FloatingObjects::lowestFloatingObject() const
 
 void FloatingObjects::markLowestFloatLogicalBottomCacheAsDirty()
 {
-    for (size_t i = 0; i < sizeof(m_lowestFloatBottomCache) / sizeof(FloatBottomCachedValue); ++i)
+    for (size_t i = 0;
+         i < sizeof(m_lowestFloatBottomCache) / sizeof(FloatBottomCachedValue);
+         ++i)
         m_lowestFloatBottomCache[i].dirty = true;
 }
 
 void FloatingObjects::moveAllToFloatInfoMap(LayoutBoxToFloatInfoMap& map)
 {
     while (!m_set.isEmpty()) {
-        OwnPtr<FloatingObject> floatingObject = m_set.takeFirst();
+        std::unique_ptr<FloatingObject> floatingObject = m_set.takeFirst();
         LayoutBox* layoutObject = floatingObject->layoutObject();
-        map.add(layoutObject, floatingObject.release());
+        map.add(layoutObject, std::move(floatingObject));
     }
     clear();
 }
@@ -326,11 +496,16 @@ inline void FloatingObjects::decreaseObjectsCount(FloatingObject::Type type)
         m_rightObjectsCount--;
 }
 
-inline FloatingObjectInterval FloatingObjects::intervalForFloatingObject(FloatingObject& floatingObject)
+inline FloatingObjectInterval FloatingObjects::intervalForFloatingObject(
+    FloatingObject& floatingObject)
 {
     if (m_horizontalWritingMode)
-        return FloatingObjectInterval(floatingObject.frameRect().pixelSnappedY(), floatingObject.frameRect().pixelSnappedMaxY(), &floatingObject);
-    return FloatingObjectInterval(floatingObject.frameRect().pixelSnappedX(), floatingObject.frameRect().pixelSnappedMaxX(), &floatingObject);
+        return FloatingObjectInterval(floatingObject.frameRect().y(),
+            floatingObject.frameRect().maxY(),
+            &floatingObject);
+    return FloatingObjectInterval(floatingObject.frameRect().x(),
+        floatingObject.frameRect().maxX(),
+        &floatingObject);
 }
 
 void FloatingObjects::addPlacedObject(FloatingObject& floatingObject)
@@ -341,7 +516,7 @@ void FloatingObjects::addPlacedObject(FloatingObject& floatingObject)
     if (m_placedFloatsTree.isInitialized())
         m_placedFloatsTree.add(intervalForFloatingObject(floatingObject));
 
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
     floatingObject.setIsInPlacedTree(true);
 #endif
     markLowestFloatLogicalBottomCacheAsDirty();
@@ -353,21 +528,22 @@ void FloatingObjects::removePlacedObject(FloatingObject& floatingObject)
 
     if (m_placedFloatsTree.isInitialized()) {
         bool removed = m_placedFloatsTree.remove(intervalForFloatingObject(floatingObject));
-        ASSERT_UNUSED(removed, removed);
+        DCHECK(removed);
     }
 
     floatingObject.setIsPlaced(false);
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
     floatingObject.setIsInPlacedTree(false);
 #endif
     markLowestFloatLogicalBottomCacheAsDirty();
 }
 
-FloatingObject* FloatingObjects::add(PassOwnPtr<FloatingObject> floatingObject)
+FloatingObject* FloatingObjects::add(
+    std::unique_ptr<FloatingObject> floatingObject)
 {
-    FloatingObject* newObject = floatingObject.leakPtr();
-    increaseObjectsCount(newObject->type());
-    m_set.add(adoptPtr(newObject));
+    FloatingObject* newObject = floatingObject.release();
+    increaseObjectsCount(newObject->getType());
+    m_set.add(WTF::wrapUnique(newObject));
     if (newObject->isPlaced())
         addPlacedObject(*newObject);
     markLowestFloatLogicalBottomCacheAsDirty();
@@ -376,8 +552,8 @@ FloatingObject* FloatingObjects::add(PassOwnPtr<FloatingObject> floatingObject)
 
 void FloatingObjects::remove(FloatingObject* toBeRemoved)
 {
-    decreaseObjectsCount(toBeRemoved->type());
-    OwnPtr<FloatingObject> floatingObject = m_set.take(toBeRemoved);
+    decreaseObjectsCount(toBeRemoved->getType());
+    std::unique_ptr<FloatingObject> floatingObject = m_set.take(toBeRemoved);
     ASSERT(floatingObject->isPlaced() || !floatingObject->isInPlacedTree());
     if (floatingObject->isPlaced())
         removePlacedObject(*floatingObject);
@@ -400,10 +576,13 @@ void FloatingObjects::computePlacedFloatsTree()
     }
 }
 
-LayoutUnit FloatingObjects::logicalLeftOffsetForPositioningFloat(LayoutUnit fixedOffset, LayoutUnit logicalTop, LayoutUnit *heightRemaining)
+LayoutUnit FloatingObjects::logicalLeftOffsetForPositioningFloat(
+    LayoutUnit fixedOffset,
+    LayoutUnit logicalTop,
+    LayoutUnit* heightRemaining)
 {
-    int logicalTopAsInt = roundToInt(logicalTop);
-    ComputeFloatOffsetForFloatLayoutAdapter<FloatingObject::FloatLeft> adapter(m_layoutObject, logicalTopAsInt, logicalTopAsInt, fixedOffset);
+    ComputeFloatOffsetForFloatLayoutAdapter<FloatingObject::FloatLeft> adapter(
+        m_layoutObject, logicalTop, logicalTop, fixedOffset);
     placedFloatsTree().allOverlapsWithAdapter(adapter);
 
     if (heightRemaining)
@@ -412,10 +591,13 @@ LayoutUnit FloatingObjects::logicalLeftOffsetForPositioningFloat(LayoutUnit fixe
     return adapter.offset();
 }
 
-LayoutUnit FloatingObjects::logicalRightOffsetForPositioningFloat(LayoutUnit fixedOffset, LayoutUnit logicalTop, LayoutUnit *heightRemaining)
+LayoutUnit FloatingObjects::logicalRightOffsetForPositioningFloat(
+    LayoutUnit fixedOffset,
+    LayoutUnit logicalTop,
+    LayoutUnit* heightRemaining)
 {
-    int logicalTopAsInt = roundToInt(logicalTop);
-    ComputeFloatOffsetForFloatLayoutAdapter<FloatingObject::FloatRight> adapter(m_layoutObject, logicalTopAsInt, logicalTopAsInt, fixedOffset);
+    ComputeFloatOffsetForFloatLayoutAdapter<FloatingObject::FloatRight> adapter(
+        m_layoutObject, logicalTop, logicalTop, fixedOffset);
     placedFloatsTree().allOverlapsWithAdapter(adapter);
 
     if (heightRemaining)
@@ -424,17 +606,23 @@ LayoutUnit FloatingObjects::logicalRightOffsetForPositioningFloat(LayoutUnit fix
     return std::min(fixedOffset, adapter.offset());
 }
 
-LayoutUnit FloatingObjects::logicalLeftOffset(LayoutUnit fixedOffset, LayoutUnit logicalTop, LayoutUnit logicalHeight)
+LayoutUnit FloatingObjects::logicalLeftOffset(LayoutUnit fixedOffset,
+    LayoutUnit logicalTop,
+    LayoutUnit logicalHeight)
 {
-    ComputeFloatOffsetForLineLayoutAdapter<FloatingObject::FloatLeft> adapter(m_layoutObject, roundToInt(logicalTop), roundToInt(logicalTop + logicalHeight), fixedOffset);
+    ComputeFloatOffsetForLineLayoutAdapter<FloatingObject::FloatLeft> adapter(
+        m_layoutObject, logicalTop, logicalTop + logicalHeight, fixedOffset);
     placedFloatsTree().allOverlapsWithAdapter(adapter);
 
     return adapter.offset();
 }
 
-LayoutUnit FloatingObjects::logicalRightOffset(LayoutUnit fixedOffset, LayoutUnit logicalTop, LayoutUnit logicalHeight)
+LayoutUnit FloatingObjects::logicalRightOffset(LayoutUnit fixedOffset,
+    LayoutUnit logicalTop,
+    LayoutUnit logicalHeight)
 {
-    ComputeFloatOffsetForLineLayoutAdapter<FloatingObject::FloatRight> adapter(m_layoutObject, roundToInt(logicalTop), roundToInt(logicalTop + logicalHeight), fixedOffset);
+    ComputeFloatOffsetForLineLayoutAdapter<FloatingObject::FloatRight> adapter(
+        m_layoutObject, logicalTop, logicalTop + logicalHeight, fixedOffset);
     placedFloatsTree().allOverlapsWithAdapter(adapter);
 
     return std::min(fixedOffset, adapter.offset());
@@ -446,28 +634,9 @@ FloatingObjects::FloatBottomCachedValue::FloatBottomCachedValue()
 {
 }
 
-inline static bool rangesIntersect(int floatTop, int floatBottom, int objectTop, int objectBottom)
-{
-    if (objectTop >= floatBottom || objectBottom < floatTop)
-        return false;
-
-    // The top of the object overlaps the float
-    if (objectTop >= floatTop)
-        return true;
-
-    // The object encloses the float
-    if (objectTop < floatTop && objectBottom > floatBottom)
-        return true;
-
-    // The bottom of the object overlaps the float
-    if (objectBottom > objectTop && objectBottom > floatTop && objectBottom <= floatBottom)
-        return true;
-
-    return false;
-}
-
-template<>
-inline bool ComputeFloatOffsetForFloatLayoutAdapter<FloatingObject::FloatLeft>::updateOffsetIfNeeded(const FloatingObject& floatingObject)
+template <>
+inline bool ComputeFloatOffsetForFloatLayoutAdapter<FloatingObject::FloatLeft>::
+    updateOffsetIfNeeded(const FloatingObject& floatingObject)
 {
     LayoutUnit logicalRight = m_layoutObject->logicalRightForFloat(floatingObject);
     if (logicalRight > m_offset) {
@@ -477,8 +646,10 @@ inline bool ComputeFloatOffsetForFloatLayoutAdapter<FloatingObject::FloatLeft>::
     return false;
 }
 
-template<>
-inline bool ComputeFloatOffsetForFloatLayoutAdapter<FloatingObject::FloatRight>::updateOffsetIfNeeded(const FloatingObject& floatingObject)
+template <>
+inline bool ComputeFloatOffsetForFloatLayoutAdapter<
+    FloatingObject::FloatRight>::updateOffsetIfNeeded(const FloatingObject&
+        floatingObject)
 {
     LayoutUnit logicalLeft = m_layoutObject->logicalLeftForFloat(floatingObject);
     if (logicalLeft < m_offset) {
@@ -489,34 +660,45 @@ inline bool ComputeFloatOffsetForFloatLayoutAdapter<FloatingObject::FloatRight>:
 }
 
 template <FloatingObject::Type FloatTypeValue>
-LayoutUnit ComputeFloatOffsetForFloatLayoutAdapter<FloatTypeValue>::heightRemaining() const
+LayoutUnit ComputeFloatOffsetForFloatLayoutAdapter<
+    FloatTypeValue>::heightRemaining() const
 {
-    return this->m_outermostFloat ? this->m_layoutObject->logicalBottomForFloat(*this->m_outermostFloat) - this->m_lineTop : LayoutUnit(1);
+    return this->m_outermostFloat
+        ? this->m_layoutObject->logicalBottomForFloat(
+              *this->m_outermostFloat)
+            - this->m_lineTop
+        : LayoutUnit(1);
 }
 
 template <FloatingObject::Type FloatTypeValue>
-inline void ComputeFloatOffsetAdapter<FloatTypeValue>::collectIfNeeded(const IntervalType& interval)
+DISABLE_CFI_PERF inline void
+ComputeFloatOffsetAdapter<FloatTypeValue>::collectIfNeeded(
+    const IntervalType& interval)
 {
     const FloatingObject& floatingObject = *(interval.data());
-    if (floatingObject.type() != FloatTypeValue || !rangesIntersect(interval.low(), interval.high(), m_lineTop, m_lineBottom))
+    if (floatingObject.getType() != FloatTypeValue || !rangesIntersect(interval.low(), interval.high(), m_lineTop, m_lineBottom))
         return;
 
-    // Make sure the float hasn't changed since it was added to the placed floats tree.
+    // Make sure the float hasn't changed since it was added to the placed floats
+    // tree.
     ASSERT(floatingObject.isPlaced());
-    ASSERT(interval.low() == m_layoutObject->pixelSnappedLogicalTopForFloat(floatingObject));
-    ASSERT(interval.high() == m_layoutObject->pixelSnappedLogicalBottomForFloat(floatingObject));
+    ASSERT(interval.low() == m_layoutObject->logicalTopForFloat(floatingObject));
+    ASSERT(interval.high() == m_layoutObject->logicalBottomForFloat(floatingObject));
 
     bool floatIsNewExtreme = updateOffsetIfNeeded(floatingObject);
     if (floatIsNewExtreme)
         m_outermostFloat = &floatingObject;
 }
 
-template<>
-inline bool ComputeFloatOffsetForLineLayoutAdapter<FloatingObject::FloatLeft>::updateOffsetIfNeeded(const FloatingObject& floatingObject)
+template <>
+inline bool ComputeFloatOffsetForLineLayoutAdapter<FloatingObject::FloatLeft>::
+    updateOffsetIfNeeded(const FloatingObject& floatingObject)
 {
     LayoutUnit logicalRight = m_layoutObject->logicalRightForFloat(floatingObject);
     if (ShapeOutsideInfo* shapeOutside = floatingObject.layoutObject()->shapeOutsideInfo()) {
-        ShapeOutsideDeltas shapeDeltas = shapeOutside->computeDeltasForContainingBlockLine(LineLayoutBlockFlow(const_cast<LayoutBlockFlow*>(m_layoutObject)), floatingObject, m_lineTop, m_lineBottom - m_lineTop);
+        ShapeOutsideDeltas shapeDeltas = shapeOutside->computeDeltasForContainingBlockLine(
+            LineLayoutBlockFlow(const_cast<LayoutBlockFlow*>(m_layoutObject)),
+            floatingObject, m_lineTop, m_lineBottom - m_lineTop);
         if (!shapeDeltas.lineOverlapsShape())
             return false;
 
@@ -530,12 +712,15 @@ inline bool ComputeFloatOffsetForLineLayoutAdapter<FloatingObject::FloatLeft>::u
     return false;
 }
 
-template<>
-inline bool ComputeFloatOffsetForLineLayoutAdapter<FloatingObject::FloatRight>::updateOffsetIfNeeded(const FloatingObject& floatingObject)
+template <>
+inline bool ComputeFloatOffsetForLineLayoutAdapter<FloatingObject::FloatRight>::
+    updateOffsetIfNeeded(const FloatingObject& floatingObject)
 {
     LayoutUnit logicalLeft = m_layoutObject->logicalLeftForFloat(floatingObject);
     if (ShapeOutsideInfo* shapeOutside = floatingObject.layoutObject()->shapeOutsideInfo()) {
-        ShapeOutsideDeltas shapeDeltas = shapeOutside->computeDeltasForContainingBlockLine(LineLayoutBlockFlow(const_cast<LayoutBlockFlow*>(m_layoutObject)), floatingObject, m_lineTop, m_lineBottom - m_lineTop);
+        ShapeOutsideDeltas shapeDeltas = shapeOutside->computeDeltasForContainingBlockLine(
+            LineLayoutBlockFlow(const_cast<LayoutBlockFlow*>(m_layoutObject)),
+            floatingObject, m_lineTop, m_lineBottom - m_lineTop);
         if (!shapeDeltas.lineOverlapsShape())
             return false;
 
@@ -551,16 +736,20 @@ inline bool ComputeFloatOffsetForLineLayoutAdapter<FloatingObject::FloatRight>::
 
 #ifndef NDEBUG
 // These helpers are only used by the PODIntervalTree for debugging purposes.
-String ValueToString<int>::string(const int value)
+String ValueToString<LayoutUnit>::toString(const LayoutUnit value)
 {
-    return String::number(value);
+    return String::number(value.toFloat());
 }
 
-String ValueToString<FloatingObject*>::string(const FloatingObject* floatingObject)
+String ValueToString<FloatingObject*>::toString(
+    const FloatingObject* floatingObject)
 {
-    return String::format("%p (%dx%d %dx%d)", floatingObject, floatingObject->frameRect().pixelSnappedX(), floatingObject->frameRect().pixelSnappedY(), floatingObject->frameRect().pixelSnappedMaxX(), floatingObject->frameRect().pixelSnappedMaxY());
+    return String::format("%p (%gx%g %gx%g)", floatingObject,
+        floatingObject->frameRect().x().toFloat(),
+        floatingObject->frameRect().y().toFloat(),
+        floatingObject->frameRect().maxX().toFloat(),
+        floatingObject->frameRect().maxY().toFloat());
 }
 #endif
-
 
 } // namespace blink

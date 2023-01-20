@@ -43,17 +43,10 @@ private:
     JsContext* fJsContext;
 
 #if SK_SUPPORT_GPU
-<<<<<<< HEAD
     GrContext* fCurContext;
     const GrGLInterface* fCurIntf;
     GrRenderTarget* fCurRenderTarget;
     SkSurface* fCurSurface;
-=======
-    GrContext*              fCurContext;
-    const GrGLInterface*    fCurIntf;
-    GrRenderTarget*         fCurRenderTarget;
-    SkSurface*              fCurSurface;
->>>>>>> miniblink49
 #endif
 };
 

@@ -5,27 +5,17 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #ifndef SkPDFTypes_DEFINED
 #define SkPDFTypes_DEFINED
 
 #include "SkRefCnt.h"
 #include "SkScalar.h"
-<<<<<<< HEAD
-=======
-#include "SkString.h"
-#include "SkTDArray.h"
->>>>>>> miniblink49
 #include "SkTHash.h"
 #include "SkTypes.h"
 
 class SkPDFObjNumMap;
 class SkPDFObject;
 class SkPDFSubstituteMap;
-<<<<<<< HEAD
 class SkStreamAsset;
 class SkString;
 class SkWStream;
@@ -34,10 +24,6 @@ class SkWStream;
 #include "SkAtomics.h"
 #endif
 
-=======
-class SkWStream;
-
->>>>>>> miniblink49
 /** \class SkPDFObject
 
     A PDF Object is the base class for primitive elements in a PDF file.  A
@@ -47,26 +33,14 @@ class SkWStream;
 */
 class SkPDFObject : public SkRefCnt {
 public:
-<<<<<<< HEAD
-=======
-    
-
->>>>>>> miniblink49
     /** Subclasses must implement this method to print the object to the
      *  PDF file.
      *  @param catalog  The object catalog to use.
      *  @param stream   The writable output stream to send the output to.
      */
-<<<<<<< HEAD
     virtual void emitObject(SkWStream* stream,
         const SkPDFObjNumMap& objNumMap,
         const SkPDFSubstituteMap& substitutes) const = 0;
-=======
-    // TODO(halcanary): make this method const
-    virtual void emitObject(SkWStream* stream,
-                            const SkPDFObjNumMap& objNumMap,
-                            const SkPDFSubstituteMap& substitutes) = 0;
->>>>>>> miniblink49
 
     /**
      *  Adds all transitive dependencies of this object to the
@@ -74,7 +48,6 @@ public:
      *  substitution map.
      */
     virtual void addResources(SkPDFObjNumMap* catalog,
-<<<<<<< HEAD
         const SkPDFSubstituteMap& substitutes) const { }
 
     /**
@@ -85,9 +58,6 @@ public:
     virtual void drop() { }
 
     virtual ~SkPDFObject() { }
-=======
-                              const SkPDFSubstituteMap& substitutes) const {}
->>>>>>> miniblink49
 
 private:
     typedef SkRefCnt INHERITED;
@@ -102,11 +72,6 @@ private:
  */
 class SkPDFUnion {
 public:
-<<<<<<< HEAD
-=======
-    // u.move() is analogous to std::move(u). It returns an rvalue.
-    SkPDFUnion move() { return static_cast<SkPDFUnion&&>(*this); }
->>>>>>> miniblink49
     // Move contstructor and assignemnt operator destroy the argument
     // and steal their references (if needed).
     SkPDFUnion(SkPDFUnion&& other);
@@ -119,21 +84,13 @@ public:
 
     static SkPDFUnion Int(int32_t);
 
-<<<<<<< HEAD
     static SkPDFUnion Int(size_t v) { return SkPDFUnion::Int(SkToS32(v)); }
-=======
-    static SkPDFUnion Int(size_t);
->>>>>>> miniblink49
 
     static SkPDFUnion Bool(bool);
 
     static SkPDFUnion Scalar(SkScalar);
 
-<<<<<<< HEAD
     /** These two functions do NOT take ownership of char*, and do NOT
-=======
-    /** These two functions do NOT take ownership of ptr, and do NOT
->>>>>>> miniblink49
         copy the string.  Suitable for passing in static const
         strings. For example:
           SkPDFUnion n = SkPDFUnion::Name("Length");
@@ -156,33 +113,14 @@ public:
     /** SkPDFUnion::String will encode the passed string. */
     static SkPDFUnion String(const SkString&);
 
-<<<<<<< HEAD
     static SkPDFUnion Object(sk_sp<SkPDFObject>);
     static SkPDFUnion ObjRef(sk_sp<SkPDFObject>);
-=======
-    /** This function DOES take ownership of the object. E.g.
-          SkAutoTUnref<SkPDFDict> dict(new SkPDFDict);
-          dict->insert(.....);
-          SkPDFUnion u = SkPDFUnion::Object(dict.detach()) */
-    static SkPDFUnion Object(SkPDFObject*);
-
-    /** This function DOES take ownership of the object. E.g.
-          SkAutoTUnref<SkPDFBitmap> image(
-                 SkPDFBitmap::Create(fCanon, bitmap));
-          SkPDFUnion u = SkPDFUnion::ObjRef(image.detach()) */
-    static SkPDFUnion ObjRef(SkPDFObject*);
->>>>>>> miniblink49
 
     /** These two non-virtual methods mirror SkPDFObject's
         corresponding virtuals. */
     void emitObject(SkWStream*,
-<<<<<<< HEAD
         const SkPDFObjNumMap&,
         const SkPDFSubstituteMap&) const;
-=======
-                    const SkPDFObjNumMap&,
-                    const SkPDFSubstituteMap&) const;
->>>>>>> miniblink49
     void addResources(SkPDFObjNumMap*, const SkPDFSubstituteMap&) const;
 
     bool isName() const;
@@ -218,7 +156,6 @@ private:
     SkPDFUnion& operator=(const SkPDFUnion&) = delete;
     SkPDFUnion(const SkPDFUnion&) = delete;
 };
-<<<<<<< HEAD
 static_assert(sizeof(SkString) == sizeof(void*), "SkString_size");
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -228,37 +165,18 @@ static_assert(sizeof(SkString) == sizeof(void*), "SkString_size");
     The only use case of this is when a non-compound PDF object is
     referenced indirectly. */
 class SkPDFAtom final : public SkPDFObject {
-=======
-SK_COMPILE_ASSERT(sizeof(SkString) == sizeof(void*), SkString_size);
-
-////////////////////////////////////////////////////////////////////////////////
-
-#if 0  // Enable if needed.
-/** This class is a SkPDFUnion with SkPDFObject virtuals attached.
-    The only use case of this is when a non-compound PDF object is
-    referenced indirectly. */
-class SkPDFAtom : public SkPDFObject {
->>>>>>> miniblink49
 public:
     void emitObject(SkWStream* stream,
                     const SkPDFObjNumMap& objNumMap,
                     const SkPDFSubstituteMap& substitutes) final;
     void addResources(SkPDFObjNumMap*, const SkPDFSubstituteMap&) const final;
-<<<<<<< HEAD
     SkPDFAtom(SkPDFUnion&& v) : fValue(std::move(v) {}
-=======
-    SkPDFAtom(SkPDFUnion&& v) : fValue(v.move()) {}
->>>>>>> miniblink49
 
 private:
     const SkPDFUnion fValue;
     typedef SkPDFObject INHERITED;
 };
-<<<<<<< HEAD
 #endif // 0
-=======
-#endif  // 0
->>>>>>> miniblink49
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -266,17 +184,8 @@ private:
 
     An array object in a PDF.
 */
-<<<<<<< HEAD
 class SkPDFArray final : public SkPDFObject {
 public:
-=======
-class SkPDFArray : public SkPDFObject {
-public:
-    
-
-    static const int kMaxLen = 8191;
-
->>>>>>> miniblink49
     /** Create a PDF array. Maximum length is 8191.
      */
     SkPDFArray();
@@ -284,18 +193,11 @@ public:
 
     // The SkPDFObject interface.
     void emitObject(SkWStream* stream,
-<<<<<<< HEAD
         const SkPDFObjNumMap& objNumMap,
         const SkPDFSubstituteMap& substitutes) const override;
     void addResources(SkPDFObjNumMap*,
         const SkPDFSubstituteMap&) const override;
     void drop() override;
-=======
-                    const SkPDFObjNumMap& objNumMap,
-                    const SkPDFSubstituteMap& substitutes) override;
-    void addResources(SkPDFObjNumMap*,
-                      const SkPDFSubstituteMap&) const override;
->>>>>>> miniblink49
 
     /** The size of the array.
      */
@@ -316,7 +218,6 @@ public:
     void appendName(const SkString&);
     void appendString(const char[]);
     void appendString(const SkString&);
-<<<<<<< HEAD
     void appendObject(sk_sp<SkPDFObject>);
     void appendObjRef(sk_sp<SkPDFObject>);
 
@@ -324,16 +225,6 @@ private:
     SkTArray<SkPDFUnion> fValues;
     void append(SkPDFUnion&& value);
     SkDEBUGCODE(bool fDumped;)
-=======
-    /** appendObject and appendObjRef take ownership of the passed object */
-    void appendObject(SkPDFObject*);
-    void appendObjRef(SkPDFObject*);
-
-private:
-    SkTDArray<SkPDFUnion> fValues;
-    void append(SkPDFUnion&& value);
-    typedef SkPDFObject INHERITED;
->>>>>>> miniblink49
 };
 
 /** \class SkPDFDict
@@ -342,46 +233,25 @@ private:
 */
 class SkPDFDict : public SkPDFObject {
 public:
-<<<<<<< HEAD
     /** Create a PDF dictionary.
      *  @param type   The value of the Type entry, nullptr for no type.
      */
     explicit SkPDFDict(const char type[] = nullptr);
-=======
-    
-
-    /** Create a PDF dictionary. Maximum number of entries is 4095.
-     */
-    SkPDFDict();
-
-    /** Create a PDF dictionary with a Type entry.
-     *  @param type   The value of the Type entry.
-     */
-    explicit SkPDFDict(const char type[]);
->>>>>>> miniblink49
 
     virtual ~SkPDFDict();
 
     // The SkPDFObject interface.
     void emitObject(SkWStream* stream,
-<<<<<<< HEAD
         const SkPDFObjNumMap& objNumMap,
         const SkPDFSubstituteMap& substitutes) const override;
     void addResources(SkPDFObjNumMap*,
         const SkPDFSubstituteMap&) const override;
     void drop() override;
-=======
-                    const SkPDFObjNumMap& objNumMap,
-                    const SkPDFSubstituteMap& substitutes) override;
-    void addResources(SkPDFObjNumMap*,
-                      const SkPDFSubstituteMap&) const override;
->>>>>>> miniblink49
 
     /** The size of the dictionary.
      */
     int size() const;
 
-<<<<<<< HEAD
     /** Add the value to the dictionary with the given key.
      *  @param key   The text of the key for this dictionary entry.
      *  @param value The value for this dictionary entry.
@@ -390,17 +260,6 @@ public:
     void insertObject(const SkString& key, sk_sp<SkPDFObject>);
     void insertObjRef(const char key[], sk_sp<SkPDFObject>);
     void insertObjRef(const SkString& key, sk_sp<SkPDFObject>);
-=======
-    /** Add the value to the dictionary with the given key.  Takes
-     *  ownership of the object.
-     *  @param key   The text of the key for this dictionary entry.
-     *  @param value The value for this dictionary entry.
-     */
-    void insertObject(const char key[], SkPDFObject* value);
-    void insertObject(const SkString& key, SkPDFObject* value);
-    void insertObjRef(const char key[], SkPDFObject* value);
-    void insertObjRef(const SkString& key, SkPDFObject* value);
->>>>>>> miniblink49
 
     /** Add the value to the dictionary with the given key.
      *  @param key   The text of the key for this dictionary entry.
@@ -415,23 +274,16 @@ public:
     void insertString(const char key[], const char value[]);
     void insertString(const char key[], const SkString& value);
 
-<<<<<<< HEAD
     /** Emit the dictionary, without the "<<" and ">>".
      */
     void emitAll(SkWStream* stream,
         const SkPDFObjNumMap& objNumMap,
         const SkPDFSubstituteMap& substitutes) const;
-=======
-    /** Remove all entries from the dictionary.
-     */
-    void clear();
->>>>>>> miniblink49
 
 private:
     struct Record {
         SkPDFUnion fKey;
         SkPDFUnion fValue;
-<<<<<<< HEAD
         Record(SkPDFUnion&&, SkPDFUnion&&);
         Record(Record&&);
         Record& operator=(Record&&);
@@ -466,15 +318,6 @@ private:
     std::unique_ptr<SkStreamAsset> fAsset;
     sk_sp<SkPDFDict> fDict;
     SkDEBUGCODE(bool fDumped;) typedef SkPDFObject INHERITED;
-=======
-    };
-    SkTDArray<Record> fRecords;
-    static const int kMaxLen = 4095;
-
-    void set(SkPDFUnion&& name, SkPDFUnion&& value);
-
-    typedef SkPDFObject INHERITED;
->>>>>>> miniblink49
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -492,31 +335,21 @@ public:
      */
     bool addObject(SkPDFObject* obj);
 
-<<<<<<< HEAD
     /** Add the passed object to the catalog, as well as all its dependencies.
      *  @param obj   The object to add.  If nullptr, this is a noop.
      *  @param subs  Will be passed to obj->addResources().
      */
     void addObjectRecursively(SkPDFObject* obj, const SkPDFSubstituteMap& subs);
 
-=======
->>>>>>> miniblink49
     /** Get the object number for the passed object.
      *  @param obj         The object of interest.
      */
     int32_t getObjectNumber(SkPDFObject* obj) const;
 
-<<<<<<< HEAD
     const SkTArray<sk_sp<SkPDFObject>>& objects() const { return fObjects; }
 
 private:
     SkTArray<sk_sp<SkPDFObject>> fObjects;
-=======
-    const SkTDArray<SkPDFObject*>& objects() const { return fObjects; }
-
-private:
-    SkTDArray<SkPDFObject*> fObjects;
->>>>>>> miniblink49
     SkTHashMap<SkPDFObject*, int32_t> fObjectNumbers;
 };
 
@@ -540,12 +373,8 @@ public:
      */
     SkPDFObject* getSubstitute(SkPDFObject* object) const;
 
-<<<<<<< HEAD
     SkPDFObject* operator()(SkPDFObject* o) const
     {
-=======
-    SkPDFObject* operator()(SkPDFObject* o) const {
->>>>>>> miniblink49
         return this->getSubstitute(o);
     }
 
@@ -553,7 +382,6 @@ private:
     SkTHashMap<SkPDFObject*, SkPDFObject*> fSubstituteMap;
 };
 
-<<<<<<< HEAD
 #ifdef SK_PDF_IMAGE_STATS
 extern SkAtomic<int> gDrawImageCalls;
 extern SkAtomic<int> gJpegImageObjects;
@@ -561,6 +389,4 @@ extern SkAtomic<int> gRegularImageObjects;
 extern void SkPDFImageDumpStats();
 #endif // SK_PDF_IMAGE_STATS
 
-=======
->>>>>>> miniblink49
 #endif

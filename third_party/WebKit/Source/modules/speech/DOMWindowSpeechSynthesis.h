@@ -26,11 +26,7 @@
 #ifndef DOMWindowSpeechSynthesis_h
 #define DOMWindowSpeechSynthesis_h
 
-<<<<<<< HEAD
 #include "core/frame/LocalDOMWindow.h"
-=======
-#include "core/frame/DOMWindowProperty.h"
->>>>>>> miniblink49
 #include "modules/ModulesExport.h"
 #include "modules/speech/SpeechSynthesis.h"
 #include "platform/Supplementable.h"
@@ -38,7 +34,6 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 class ScriptState;
 
 class MODULES_EXPORT DOMWindowSpeechSynthesis final
@@ -48,15 +43,6 @@ class MODULES_EXPORT DOMWindowSpeechSynthesis final
 
 public:
     static SpeechSynthesis* speechSynthesis(ScriptState*, DOMWindow&);
-=======
-class DOMWindow;
-
-class MODULES_EXPORT DOMWindowSpeechSynthesis final : public NoBaseWillBeGarbageCollected<DOMWindowSpeechSynthesis>, public WillBeHeapSupplement<LocalDOMWindow>, public DOMWindowProperty {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(DOMWindowSpeechSynthesis);
-    DECLARE_EMPTY_DESTRUCTOR_WILL_BE_REMOVED(DOMWindowSpeechSynthesis);
-public:
-    static SpeechSynthesis* speechSynthesis(DOMWindow&);
->>>>>>> miniblink49
     static DOMWindowSpeechSynthesis& from(LocalDOMWindow&);
 
     DECLARE_TRACE();
@@ -64,17 +50,10 @@ public:
 private:
     explicit DOMWindowSpeechSynthesis(LocalDOMWindow&);
 
-<<<<<<< HEAD
     SpeechSynthesis* speechSynthesis(ScriptState*);
     static const char* supplementName();
 
     Member<SpeechSynthesis> m_speechSynthesis;
-=======
-    SpeechSynthesis* speechSynthesis();
-    static const char* supplementName();
-
-    PersistentWillBeMember<SpeechSynthesis> m_speechSynthesis;
->>>>>>> miniblink49
 };
 
 } // namespace blink

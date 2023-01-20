@@ -2,16 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "public/platform/WebCredential.h"
 
 #include "platform/credentialmanager/PlatformCredential.h"
 #include "public/platform/WebFederatedCredential.h"
 #include "public/platform/WebPasswordCredential.h"
-<<<<<<< HEAD
 #include "wtf/PtrUtil.h"
 
 namespace blink {
@@ -34,28 +29,6 @@ std::unique_ptr<WebCredential> WebCredential::create(
 WebCredential::WebCredential(const WebString& id,
     const WebString& name,
     const WebURL& iconURL)
-=======
-
-namespace blink {
-
-WebCredential WebCredential::create(PlatformCredential* credential)
-{
-    if (credential->isPassword()) {
-        WebPasswordCredential password(credential);
-        return password;
-    }
-
-    if (credential->isFederated()) {
-        WebFederatedCredential federated(credential);
-        return federated;
-    }
-
-    ASSERT_NOT_REACHED();
-    return WebCredential(credential);
-}
-
-WebCredential::WebCredential(const WebString& id, const WebString& name, const WebURL& iconURL)
->>>>>>> miniblink49
     : m_platformCredential(PlatformCredential::create(id, name, iconURL))
 {
 }

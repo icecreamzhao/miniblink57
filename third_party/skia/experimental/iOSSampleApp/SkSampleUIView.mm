@@ -47,24 +47,14 @@ public:
 #endif
     }
     
-<<<<<<< HEAD
     void setUpBackend(SampleWindow* win, int msaaSampleCount, bool deepColor) override {
-=======
-    void setUpBackend(SampleWindow* win, int msaaSampleCount) override {
->>>>>>> miniblink49
         SkASSERT(SkOSWindow::kNone_BackEndType == fBackend);
         
         fBackend = SkOSWindow::kNone_BackEndType;
         
 #if SK_SUPPORT_GPU
         switch (win->getDeviceType()) {
-<<<<<<< HEAD
             case SampleWindow::kRaster_DeviceType:
-=======
-            // these two don't use GL
-            case SampleWindow::kRaster_DeviceType:
-            case SampleWindow::kPicture_DeviceType:
->>>>>>> miniblink49
                 break;
             // these guys use the native backend
             case SampleWindow::kGPU_DeviceType:
@@ -75,11 +65,7 @@ public:
                 break;
         }
         SkOSWindow::AttachmentInfo info;
-<<<<<<< HEAD
         bool result = win->attach(fBackend, msaaSampleCount, false, &info);
-=======
-        bool result = win->attach(fBackend, msaaSampleCount, &info);
->>>>>>> miniblink49
         if (!result) {
             SkDebugf("Failed to initialize GL");
             return;
@@ -88,13 +74,7 @@ public:
         
         SkASSERT(NULL == fCurIntf);
         switch (win->getDeviceType()) {
-<<<<<<< HEAD
             case SampleWindow::kRaster_DeviceType:
-=======
-            // these two don't use GL
-            case SampleWindow::kRaster_DeviceType:
-            case SampleWindow::kPicture_DeviceType:
->>>>>>> miniblink49
                 fCurIntf = NULL;
                 break;
             case SampleWindow::kGPU_DeviceType:
@@ -117,11 +97,7 @@ public:
             SkSafeUnref(fCurContext);
             SkSafeUnref(fCurIntf);
             SkDebugf("Failed to setup 3D");
-<<<<<<< HEAD
             win->release();
-=======
-            win->detach();
->>>>>>> miniblink49
         }
 #endif // SK_SUPPORT_GPU
         // call windowSizeChanged to create the render target
@@ -139,11 +115,7 @@ public:
         SkSafeUnref(fCurRenderTarget);
         fCurRenderTarget = NULL;
 #endif
-<<<<<<< HEAD
         win->release();
-=======
-        win->detach();
->>>>>>> miniblink49
         fBackend = SampleWindow::kNone_BackEndType;
     }
 
@@ -173,11 +145,7 @@ public:
         if (NULL != fCurContext) {
             SkOSWindow::AttachmentInfo info;
 
-<<<<<<< HEAD
             win->attach(fBackend, fMSAASampleCount, false, &info);
-=======
-            win->attach(fBackend, fMSAASampleCount, &info);
->>>>>>> miniblink49
             
             glBindFramebuffer(GL_FRAMEBUFFER, fLayerFBO);
             GrBackendRenderTargetDesc desc;
@@ -189,11 +157,7 @@ public:
             desc.fStencilBits = info.fStencilBits;
 
             SkSafeUnref(fCurRenderTarget);
-<<<<<<< HEAD
             fCurRenderTarget = fCurContext->textureProvider()->wrapBackendRenderTarget(desc);
-=======
-            fCurRenderTarget = fCurContext->wrapBackendRenderTarget(desc);
->>>>>>> miniblink49
         }
 #endif
     }
@@ -213,15 +177,11 @@ public:
         return NULL;
 #endif
     }
-<<<<<<< HEAD
 
     int getColorBits() override {
         return 24;
     }
 
-=======
-    
->>>>>>> miniblink49
     bool isUsingGL() const { return SkOSWindow::kNone_BackEndType != fBackend; }
     
 private:
@@ -356,7 +316,6 @@ static FPSState gFPS;
         fRasterLayer.actions = newActions;
         [newActions release];
         
-<<<<<<< HEAD
         // rebuild argc and argv from process info
         NSArray* arguments = [[NSProcessInfo processInfo] arguments];
         int argc = [arguments count];
@@ -377,14 +336,6 @@ static FPSState gFPS;
             delete [] argv[i];
         }
         delete [] argv;
-=======
-        fDevManager = new SkiOSDeviceManager(fGL.fFramebuffer);
-        static char* kDummyArgv = const_cast<char*>("dummyExecutableName");
-        fWind = new SampleWindow(self, 1, &kDummyArgv, fDevManager);
-
-        fWind->resize(self.frame.size.width, self.frame.size.height,
-                      kN32_SkColorType);
->>>>>>> miniblink49
     }
     return self;
 }

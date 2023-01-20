@@ -41,10 +41,7 @@ enum WebNavigationPolicy {
     WebNavigationPolicyNewForegroundTab,
     WebNavigationPolicyNewWindow,
     WebNavigationPolicyNewPopup,
-<<<<<<< HEAD
     WebNavigationPolicyHandledByClient,
-=======
->>>>>>> miniblink49
 };
 
 } // namespace blink

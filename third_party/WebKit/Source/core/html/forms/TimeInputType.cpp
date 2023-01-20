@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/html/forms/TimeInputType.h"
 
 #include "core/HTMLNames.h"
@@ -42,7 +41,6 @@
 #include "wtf/CurrentTime.h"
 #include "wtf/DateMath.h"
 #include "wtf/MathExtras.h"
-#include "wtf/PassOwnPtr.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
@@ -54,13 +52,13 @@ static const int timeDefaultStepBase = 0;
 static const int timeStepScaleFactor = 1000;
 
 TimeInputType::TimeInputType(HTMLInputElement& element)
-    : BaseTimeInputType(element)
+    : BaseTemporalInputType(element)
 {
 }
 
-PassRefPtrWillBeRawPtr<InputType> TimeInputType::create(HTMLInputElement& element)
+InputType* TimeInputType::create(HTMLInputElement& element)
 {
-    return adoptRefWillBeNoop(new TimeInputType(element));
+    return new TimeInputType(element);
 }
 
 void TimeInputType::countUsage()
@@ -78,35 +76,47 @@ Decimal TimeInputType::defaultValueForStepUp() const
     DateComponents date;
     date.setMillisecondsSinceMidnight(convertToLocalTime(currentTimeMS()));
     double milliseconds = date.millisecondsSinceEpoch();
-    ASSERT(std::isfinite(milliseconds));
+    DCHECK(std_isfinite(milliseconds));
     return Decimal::fromDouble(milliseconds);
 }
 
-StepRange TimeInputType::createStepRange(AnyStepHandling anyStepHandling) const
+StepRange TimeInputType::createStepRange(
+    AnyStepHandling anyStepHandling) const
 {
-    DEFINE_STATIC_LOCAL(const StepRange::StepDescription, stepDescription, (timeDefaultStep, timeDefaultStepBase, timeStepScaleFactor, StepRange::ScaledStepValueShouldBeInteger));
+    DEFINE_STATIC_LOCAL(
+        const StepRange::StepDescription, stepDescription,
+        (timeDefaultStep, timeDefaultStepBase, timeStepScaleFactor,
+            StepRange::ScaledStepValueShouldBeInteger));
 
-    return InputType::createStepRange(anyStepHandling, timeDefaultStepBase, Decimal::fromDouble(DateComponents::minimumTime()), Decimal::fromDouble(DateComponents::maximumTime()), stepDescription);
+    return InputType::createStepRange(
+        anyStepHandling, timeDefaultStepBase,
+        Decimal::fromDouble(DateComponents::minimumTime()),
+        Decimal::fromDouble(DateComponents::maximumTime()), stepDescription);
 }
 
-bool TimeInputType::parseToDateComponentsInternal(const String& string, DateComponents* out) const
+bool TimeInputType::parseToDateComponentsInternal(const String& string,
+    DateComponents* out) const
 {
-    ASSERT(out);
+    DCHECK(out);
     unsigned end;
     return out->parseTime(string, 0, end) && end == string.length();
 }
 
-bool TimeInputType::setMillisecondToDateComponents(double value, DateComponents* date) const
+bool TimeInputType::setMillisecondToDateComponents(double value,
+    DateComponents* date) const
 {
-    ASSERT(date);
+    DCHECK(date);
     return date->setMillisecondsSinceMidnight(value);
 }
 
 void TimeInputType::warnIfValueIsInvalid(const String& value) const
 {
     if (value != element().sanitizeValue(value)) {
-        element().document().addConsoleMessage(ConsoleMessage::create(RenderingMessageSource, WarningMessageLevel,
-            String::format("The specified value %s does not conform to the required format.  The format is \"HH:mm\", \"HH:mm:ss\" or \"HH:mm:ss.SSS\" where HH is 00-23, mm is 00-59, ss is 00-59, and SSS is 000-999.", JSONValue::quoteString(value).utf8().data())));
+        addWarningToConsole(
+            "The specified value %s does not conform to the required format.  The "
+            "format is \"HH:mm\", \"HH:mm:ss\" or \"HH:mm:ss.SSS\" where HH is "
+            "00-23, mm is 00-59, ss is 00-59, and SSS is 000-999.",
+            value);
     }
 }
 
@@ -116,35 +126,38 @@ String TimeInputType::localizeValue(const String& proposedValue) const
     if (!parseToDateComponents(proposedValue, &date))
         return proposedValue;
 
-    Locale::FormatType formatType = shouldHaveSecondField(date) ? Locale::FormatTypeMedium : Locale::FormatTypeShort;
+    Locale::FormatType formatType = shouldHaveSecondField(date)
+        ? Locale::FormatTypeMedium
+        : Locale::FormatTypeShort;
 
     String localized = element().locale().formatDateTime(date, formatType);
     return localized.isEmpty() ? proposedValue : localized;
 }
 
-#if ENABLE(INPUT_MULTIPLE_FIELDS_UI)
-
-String TimeInputType::formatDateTimeFieldsState(const DateTimeFieldsState& dateTimeFieldsState) const
+String TimeInputType::formatDateTimeFieldsState(
+    const DateTimeFieldsState& dateTimeFieldsState) const
 {
     if (!dateTimeFieldsState.hasHour() || !dateTimeFieldsState.hasMinute() || !dateTimeFieldsState.hasAMPM())
         return emptyString();
     if (dateTimeFieldsState.hasMillisecond() && dateTimeFieldsState.millisecond()) {
-        return String::format("%02u:%02u:%02u.%03u",
-            dateTimeFieldsState.hour23(),
+        return String::format(
+            "%02u:%02u:%02u.%03u", dateTimeFieldsState.hour23(),
             dateTimeFieldsState.minute(),
             dateTimeFieldsState.hasSecond() ? dateTimeFieldsState.second() : 0,
             dateTimeFieldsState.millisecond());
     }
     if (dateTimeFieldsState.hasSecond() && dateTimeFieldsState.second()) {
-        return String::format("%02u:%02u:%02u",
-            dateTimeFieldsState.hour23(),
+        return String::format("%02u:%02u:%02u", dateTimeFieldsState.hour23(),
             dateTimeFieldsState.minute(),
             dateTimeFieldsState.second());
     }
-    return String::format("%02u:%02u", dateTimeFieldsState.hour23(), dateTimeFieldsState.minute());
+    return String::format("%02u:%02u", dateTimeFieldsState.hour23(),
+        dateTimeFieldsState.minute());
 }
 
-void TimeInputType::setupLayoutParameters(DateTimeEditElement::LayoutParameters& layoutParameters, const DateComponents& date) const
+void TimeInputType::setupLayoutParameters(
+    DateTimeEditElement::LayoutParameters& layoutParameters,
+    const DateComponents& date) const
 {
     if (shouldHaveSecondField(date)) {
         layoutParameters.dateTimeFormat = layoutParameters.locale.timeFormat();
@@ -153,16 +166,24 @@ void TimeInputType::setupLayoutParameters(DateTimeEditElement::LayoutParameters&
         layoutParameters.dateTimeFormat = layoutParameters.locale.shortTimeFormat();
         layoutParameters.fallbackDateTimeFormat = "HH:mm";
     }
-    if (!parseToDateComponents(element().fastGetAttribute(minAttr), &layoutParameters.minimum))
+    if (!parseToDateComponents(element().fastGetAttribute(minAttr),
+            &layoutParameters.minimum))
         layoutParameters.minimum = DateComponents();
-    if (!parseToDateComponents(element().fastGetAttribute(maxAttr), &layoutParameters.maximum))
+    if (!parseToDateComponents(element().fastGetAttribute(maxAttr),
+            &layoutParameters.maximum))
         layoutParameters.maximum = DateComponents();
 }
 
-bool TimeInputType::isValidFormat(bool hasYear, bool hasMonth, bool hasWeek, bool hasDay, bool hasAMPM, bool hasHour, bool hasMinute, bool hasSecond) const
+bool TimeInputType::isValidFormat(bool hasYear,
+    bool hasMonth,
+    bool hasWeek,
+    bool hasDay,
+    bool hasAMPM,
+    bool hasHour,
+    bool hasMinute,
+    bool hasSecond) const
 {
     return hasHour && hasMinute && hasAMPM;
 }
-#endif
 
 } // namespace blink

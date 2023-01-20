@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 Writing Skia Tests
 ==================
 
@@ -7,10 +6,6 @@ Writing Skia Tests
 +   [Benchmark Tests](#bench)
 
 <span id="test"></span>
-=======
-Writing Unit and Rendering Tests
-================================
->>>>>>> miniblink49
 
 Writing a Unit Test
 -------------------
@@ -36,19 +31,12 @@ Writing a Unit Test
 
 2.  Recompile and run test:
 
-<<<<<<< HEAD
         python bin/sync-and-gyp
         ninja -C out/Debug dm
         out/Debug/dm --match NewUnitTest
 
 <span id="gm"></span>
 
-=======
-        ./gyp_skia
-        ninja -C out/Debug dm
-        out/Debug/dm --match NewUnitTest
-
->>>>>>> miniblink49
 Writing a Rendering Test
 ------------------------
 
@@ -72,28 +60,19 @@ Writing a Rendering Test
 
 2.  Recompile and run test:
 
-<<<<<<< HEAD
         python bin/sync-and-gyp
-=======
-        ./gyp_skia
->>>>>>> miniblink49
         ninja -C out/Debug dm
         out/Debug/dm --match newgmtest
 
 3.  Run the GM inside SampleApp:
 
-<<<<<<< HEAD
         python bin/sync-and-gyp
-=======
-        ./gyp_skia
->>>>>>> miniblink49
         ninja -C out/Debug SampleApp
         out/Debug/SampleApp --slide GM:newgmtest
 
     On MacOS, try this:
 
         out/Debug/SampleApp.app/Contents/MacOS/SampleApp --slide GM:newgmtest
-<<<<<<< HEAD
 
 <span id="bench"></span>
 
@@ -135,5 +114,3 @@ Writing a Benchmark Test
         python bin/sync-and-gyp
         ninja -C out/Release nanobench
         out/Release/nanobench --match Foo
-=======
->>>>>>> miniblink49

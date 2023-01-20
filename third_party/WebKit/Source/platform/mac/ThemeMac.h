@@ -28,18 +28,10 @@
 
 #include "platform/Theme.h"
 
-<<<<<<< HEAD
-=======
-@interface NSFont(WebCoreTheme)
-- (NSString*)webCoreFamilyName;
-@end
-
->>>>>>> miniblink49
 namespace blink {
 
 class ThemeMac : public Theme {
 public:
-<<<<<<< HEAD
     ThemeMac() { }
     ~ThemeMac() override { }
 
@@ -126,44 +118,6 @@ public:
         const IntSize& minZoomedSize,
         float zoomFactor);
     static PLATFORM_EXPORT const IntSize* stepperSizes();
-=======
-    ThemeMac() {}
-    ~ThemeMac() override {}
-
-    virtual int baselinePositionAdjustment(ControlPart) const;
-
-    virtual FontDescription controlFont(ControlPart, const FontDescription&, float zoomFactor) const;
-
-    virtual LengthSize controlSize(ControlPart, const FontDescription&, const LengthSize&, float zoomFactor) const;
-    virtual LengthSize minimumControlSize(ControlPart, const FontDescription&, float zoomFactor) const;
-
-    virtual LengthBox controlPadding(ControlPart, const FontDescription&, const LengthBox& zoomedBox, float zoomFactor) const;
-    virtual LengthBox controlBorder(ControlPart, const FontDescription&, const LengthBox& zoomedBox, float zoomFactor) const;
-
-    virtual bool controlRequiresPreWhiteSpace(ControlPart part) const { return part == PushButtonPart; }
-
-    virtual void paint(ControlPart, ControlStates, GraphicsContext*, const IntRect&, float zoomFactor, ScrollableArea*) const;
-    virtual void addVisualOverflow(ControlPart, ControlStates, float zoomFactor, IntRect& borderBox) const;
-
-    // Inflate an IntRect to accout for specific padding around margins.
-    enum {
-        TopMargin = 0,
-        RightMargin = 1,
-        BottomMargin = 2,
-        LeftMargin = 3
-    };
-    static PLATFORM_EXPORT IntRect inflateRect(const IntRect&, const IntSize&, const int* margins, float zoomLevel = 1.0f);
-
-    // Inflate an IntRect to account for any bleeding that would happen due to anti-aliasing.
-    static PLATFORM_EXPORT IntRect inflateRectForAA(const IntRect&);
-
-    // Inflate an IntRect to account for its focus ring. This is only used when
-    // drawWithFrameDrawsFocusRing() returns true (otherwise, the focus ring's
-    // bounds could be accurately computed with -[NSCell focusRingMaskBoundsForFrame:inView:]).
-    static PLATFORM_EXPORT IntRect inflateRectForFocusRing(const IntRect&);
-
-    static PLATFORM_EXPORT bool drawWithFrameDrawsFocusRing();
->>>>>>> miniblink49
 };
 
 } // namespace blink

@@ -29,10 +29,6 @@
 import copy
 import os
 
-# NOTE: This has only been used to parse
-# core/page/RuntimeEnabledFeatures.in and may not be capable
-# of parsing other .in files correctly.
-
 # .in file format is:
 # // comment
 # name1 arg=value, arg2=value2, arg2=value3
@@ -121,6 +117,10 @@ class InFile(object):
                 merged[key] = two[key]
         return merged
 
+    def _parse_value_sequence(self, value):
+        value = value.strip('[]')
+        # We're using '|' instead of ',' since the outer list uses ','.
+        return value.split('|')
 
     def _parse_parameter(self, line):
         if '=' in line:
@@ -151,7 +151,7 @@ class InFile(object):
             if valid_values and arg_value not in valid_values:
                 self._fatal("Unknown value: '%s' in line:\n%s\nKnown values: %s" % (arg_value, line, valid_values))
             if self._is_sequence(args[arg_name]):
-                args[arg_name].append(arg_value)
+                args[arg_name].extend(self._parse_value_sequence(arg_value))
             else:
                 args[arg_name] = arg_value
         return args

@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -9,10 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #include "SkSVGLine.h"
 #include "SkSVGParser.h"
 
@@ -25,12 +17,8 @@ const SkSVGAttribute SkSVGLine::gAttributes[] = {
 
 DEFINE_SVG_INFO(Line)
 
-<<<<<<< HEAD
 void SkSVGLine::translate(SkSVGParser& parser, bool defState)
 {
-=======
-void SkSVGLine::translate(SkSVGParser& parser, bool defState) {
->>>>>>> miniblink49
     parser._startElement("line");
     INHERITED::translate(parser, defState);
     SVG_ADD_ATTRIBUTE(x1);

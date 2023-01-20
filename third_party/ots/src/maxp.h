@@ -10,7 +10,6 @@
 namespace ots {
 
 struct OpenTypeMAXP {
-<<<<<<< HEAD
     uint16_t num_glyphs;
     bool version_1;
 
@@ -34,28 +33,3 @@ struct OpenTypeMAXP {
 } // namespace ots
 
 #endif // OTS_MAXP_H_
-=======
-  uint16_t num_glyphs;
-  bool version_1;
-
-  uint16_t max_points;
-  uint16_t max_contours;
-  uint16_t max_c_points;
-  uint16_t max_c_contours;
-
-  uint16_t max_zones;
-  uint16_t max_t_points;
-  uint16_t max_storage;
-  uint16_t max_fdefs;
-  uint16_t max_idefs;
-  uint16_t max_stack;
-  uint16_t max_size_glyf_instructions;
-
-  uint16_t max_c_components;
-  uint16_t max_c_depth;
-};
-
-}  // namespace ots
-
-#endif  // OTS_MAXP_H_
->>>>>>> miniblink49

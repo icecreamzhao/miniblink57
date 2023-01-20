@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "platform/text/LocaleWin.h"
 
 #include "platform/DateComponents.h"
@@ -37,24 +36,12 @@
 #include "wtf/MathExtras.h"
 #include "wtf/text/CString.h"
 #include <memory>
-=======
-#include "config.h"
-#include "platform/text/LocaleWin.h"
-
-#include "platform/DateComponents.h"
-#include "wtf/DateMath.h"
-#include "wtf/MathExtras.h"
-#include "wtf/PassOwnPtr.h"
-#include "wtf/text/CString.h"
-#include <gtest/gtest.h>
->>>>>>> miniblink49
 
 namespace blink {
 
 class LocaleWinTest : public ::testing::Test {
 protected:
     enum {
-<<<<<<< HEAD
         January = 0,
         February,
         March,
@@ -76,17 +63,6 @@ protected:
         Wednesday,
         Thursday,
         Friday,
-=======
-        January = 0, February, March,
-        April, May, June,
-        July, August, September,
-        October, November, December,
-    };
-
-    enum {
-        Sunday = 0, Monday, Tuesday,
-        Wednesday, Thursday, Friday,
->>>>>>> miniblink49
         Saturday,
     };
 
@@ -106,11 +82,7 @@ protected:
         Spanish = 0x040A, // es
     };
 
-<<<<<<< HEAD
     DateComponents getDateComponents(int year, int month, int day)
-=======
-    DateComponents dateComponents(int year, int month, int day)
->>>>>>> miniblink49
     {
         DateComponents date;
         date.setMillisecondsSinceEpochForDate(msForDate(year, month, day));
@@ -124,48 +96,30 @@ protected:
 
     String formatDate(LCID lcid, int year, int month, int day)
     {
-<<<<<<< HEAD
         std::unique_ptr<LocaleWin> locale = LocaleWin::create(lcid, true /* defaultsForLocale */);
         return locale->formatDateTime(getDateComponents(year, month, day));
-=======
-        OwnPtr<LocaleWin> locale = LocaleWin::create(lcid, true /* defaultsForLocale */);
-        return locale->formatDateTime(dateComponents(year, month, day));
->>>>>>> miniblink49
     }
 
     unsigned firstDayOfWeek(LCID lcid)
     {
-<<<<<<< HEAD
         std::unique_ptr<LocaleWin> locale = LocaleWin::create(lcid, true /* defaultsForLocale */);
-=======
-        OwnPtr<LocaleWin> locale = LocaleWin::create(lcid, true /* defaultsForLocale */);
->>>>>>> miniblink49
         return locale->firstDayOfWeek();
     }
 
     String monthLabel(LCID lcid, unsigned index)
     {
-<<<<<<< HEAD
         std::unique_ptr<LocaleWin> locale = LocaleWin::create(lcid, true /* defaultsForLocale */);
-=======
-        OwnPtr<LocaleWin> locale = LocaleWin::create(lcid, true /* defaultsForLocale */);
->>>>>>> miniblink49
         return locale->monthLabels()[index];
     }
 
     String weekDayShortLabel(LCID lcid, unsigned index)
     {
-<<<<<<< HEAD
         std::unique_ptr<LocaleWin> locale = LocaleWin::create(lcid, true /* defaultsForLocale */);
-=======
-        OwnPtr<LocaleWin> locale = LocaleWin::create(lcid, true /* defaultsForLocale */);
->>>>>>> miniblink49
         return locale->weekDayShortLabels()[index];
     }
 
     bool isRTL(LCID lcid)
     {
-<<<<<<< HEAD
         std::unique_ptr<LocaleWin> locale = LocaleWin::create(lcid, true /* defaultsForLocale */);
         return locale->isRTL();
     }
@@ -173,87 +127,48 @@ protected:
     String monthFormat(LCID lcid)
     {
         std::unique_ptr<LocaleWin> locale = LocaleWin::create(lcid, true /* defaultsForLocale */);
-=======
-        OwnPtr<LocaleWin> locale = LocaleWin::create(lcid, true /* defaultsForLocale */);
-        return locale->isRTL();
-    }
-
-#if ENABLE(INPUT_MULTIPLE_FIELDS_UI)
-    String monthFormat(LCID lcid)
-    {
-        OwnPtr<LocaleWin> locale = LocaleWin::create(lcid, true /* defaultsForLocale */);
->>>>>>> miniblink49
         return locale->monthFormat();
     }
 
     String timeFormat(LCID lcid)
     {
-<<<<<<< HEAD
         std::unique_ptr<LocaleWin> locale = LocaleWin::create(lcid, true /* defaultsForLocale */);
-=======
-        OwnPtr<LocaleWin> locale = LocaleWin::create(lcid, true /* defaultsForLocale */);
->>>>>>> miniblink49
         return locale->timeFormat();
     }
 
     String shortTimeFormat(LCID lcid)
     {
-<<<<<<< HEAD
         std::unique_ptr<LocaleWin> locale = LocaleWin::create(lcid, true /* defaultsForLocale */);
-=======
-        OwnPtr<LocaleWin> locale = LocaleWin::create(lcid, true /* defaultsForLocale */);
->>>>>>> miniblink49
         return locale->shortTimeFormat();
     }
 
     String shortMonthLabel(LCID lcid, unsigned index)
     {
-<<<<<<< HEAD
         std::unique_ptr<LocaleWin> locale = LocaleWin::create(lcid, true /* defaultsForLocale */);
-=======
-        OwnPtr<LocaleWin> locale = LocaleWin::create(lcid, true /* defaultsForLocale */);
->>>>>>> miniblink49
         return locale->shortMonthLabels()[index];
     }
 
     String timeAMPMLabel(LCID lcid, unsigned index)
     {
-<<<<<<< HEAD
         std::unique_ptr<LocaleWin> locale = LocaleWin::create(lcid, true /* defaultsForLocale */);
-=======
-        OwnPtr<LocaleWin> locale = LocaleWin::create(lcid, true /* defaultsForLocale */);
->>>>>>> miniblink49
         return locale->timeAMPMLabels()[index];
     }
 
     String decimalSeparator(LCID lcid)
     {
-<<<<<<< HEAD
         std::unique_ptr<LocaleWin> locale = LocaleWin::create(lcid, true /* defaultsForLocale */);
         return locale->localizedDecimalSeparator();
     }
-=======
-        OwnPtr<LocaleWin> locale = LocaleWin::create(lcid, true /* defaultsForLocale */);
-        return locale->localizedDecimalSeparator();
-    }
-#endif
->>>>>>> miniblink49
 };
 
 TEST_F(LocaleWinTest, formatDate)
 {
-<<<<<<< HEAD
     EXPECT_STREQ("04/27/2005",
         formatDate(EnglishUS, 2005, April, 27).utf8().data());
     EXPECT_STREQ("27/04/2005",
         formatDate(FrenchFR, 2005, April, 27).utf8().data());
     EXPECT_STREQ("2005/04/27",
         formatDate(JapaneseJP, 2005, April, 27).utf8().data());
-=======
-    EXPECT_STREQ("04/27/2005", formatDate(EnglishUS, 2005, April, 27).utf8().data());
-    EXPECT_STREQ("27/04/2005", formatDate(FrenchFR, 2005, April, 27).utf8().data());
-    EXPECT_STREQ("2005/04/27", formatDate(JapaneseJP, 2005, April, 27).utf8().data());
->>>>>>> miniblink49
 }
 
 TEST_F(LocaleWinTest, firstDayOfWeek)
@@ -271,7 +186,6 @@ TEST_F(LocaleWinTest, monthLabels)
 
     EXPECT_STREQ("janvier", monthLabel(FrenchFR, January).utf8().data());
     EXPECT_STREQ("juin", monthLabel(FrenchFR, June).utf8().data());
-<<<<<<< HEAD
     EXPECT_STREQ(
         "d\xC3\xA9"
         "cembre",
@@ -281,13 +195,6 @@ TEST_F(LocaleWinTest, monthLabels)
     EXPECT_STREQ("6\xE6\x9C\x88", monthLabel(JapaneseJP, June).utf8().data());
     EXPECT_STREQ("12\xE6\x9C\x88",
         monthLabel(JapaneseJP, December).utf8().data());
-=======
-    EXPECT_STREQ("d\xC3\xA9" "cembre", monthLabel(FrenchFR, December).utf8().data());
-
-    EXPECT_STREQ("1\xE6\x9C\x88", monthLabel(JapaneseJP, January).utf8().data());
-    EXPECT_STREQ("6\xE6\x9C\x88", monthLabel(JapaneseJP, June).utf8().data());
-    EXPECT_STREQ("12\xE6\x9C\x88", monthLabel(JapaneseJP, December).utf8().data());
->>>>>>> miniblink49
 }
 
 TEST_F(LocaleWinTest, weekDayShortLabels)
@@ -300,18 +207,12 @@ TEST_F(LocaleWinTest, weekDayShortLabels)
     EXPECT_STREQ("mer.", weekDayShortLabel(FrenchFR, Wednesday).utf8().data());
     EXPECT_STREQ("sam.", weekDayShortLabel(FrenchFR, Saturday).utf8().data());
 
-<<<<<<< HEAD
     EXPECT_STREQ("\xE6\x97\xA5",
         weekDayShortLabel(JapaneseJP, Sunday).utf8().data());
     EXPECT_STREQ("\xE6\xB0\xB4",
         weekDayShortLabel(JapaneseJP, Wednesday).utf8().data());
     EXPECT_STREQ("\xE5\x9C\x9F",
         weekDayShortLabel(JapaneseJP, Saturday).utf8().data());
-=======
-    EXPECT_STREQ("\xE6\x97\xA5", weekDayShortLabel(JapaneseJP, Sunday).utf8().data());
-    EXPECT_STREQ("\xE6\xB0\xB4", weekDayShortLabel(JapaneseJP, Wednesday).utf8().data());
-    EXPECT_STREQ("\xE5\x9C\x9F", weekDayShortLabel(JapaneseJP, Saturday).utf8().data());
->>>>>>> miniblink49
 }
 
 TEST_F(LocaleWinTest, isRTL)
@@ -320,7 +221,6 @@ TEST_F(LocaleWinTest, isRTL)
     EXPECT_FALSE(isRTL(EnglishUS));
 }
 
-<<<<<<< HEAD
 TEST_F(LocaleWinTest, dateFormat)
 {
     EXPECT_STREQ("y-M-d", LocaleWin::dateFormat("y-M-d").utf8().data());
@@ -330,20 +230,10 @@ TEST_F(LocaleWinTest, dateFormat)
         LocaleWin::dateFormat("yyyy-''''-MMM''''-dd").utf8().data());
     EXPECT_STREQ("yyyy'-'''''MMMM-dd",
         LocaleWin::dateFormat("yyyy-''''MMMM-dd").utf8().data());
-=======
-#if ENABLE(INPUT_MULTIPLE_FIELDS_UI)
-TEST_F(LocaleWinTest, dateFormat)
-{
-    EXPECT_STREQ("y-M-d", LocaleWin::dateFormat("y-M-d").utf8().data());
-    EXPECT_STREQ("''yy'-'''MM'''-'dd", LocaleWin::dateFormat("''yy-''MM''-dd").utf8().data());
-    EXPECT_STREQ("yyyy'-''''-'MMM'''''-'dd", LocaleWin::dateFormat("yyyy-''''-MMM''''-dd").utf8().data());
-    EXPECT_STREQ("yyyy'-'''''MMMM-dd", LocaleWin::dateFormat("yyyy-''''MMMM-dd").utf8().data());
->>>>>>> miniblink49
 }
 
 TEST_F(LocaleWinTest, monthFormat)
 {
-<<<<<<< HEAD
     // Month format for EnglishUS:
     //  "MMMM, yyyy" on Windows 7 or older.
     //  "MMMM yyyy" on Window 8 or later.
@@ -352,11 +242,6 @@ TEST_F(LocaleWinTest, monthFormat)
     EXPECT_STREQ("MMMM yyyy", monthFormat(FrenchFR).utf8().data());
     EXPECT_STREQ("yyyy\xE5\xB9\xB4M\xE6\x9C\x88",
         monthFormat(JapaneseJP).utf8().data());
-=======
-    EXPECT_STREQ("MMMM, yyyy", monthFormat(EnglishUS).utf8().data());
-    EXPECT_STREQ("MMMM yyyy", monthFormat(FrenchFR).utf8().data());
-    EXPECT_STREQ("yyyy\xE5\xB9\xB4M\xE6\x9C\x88", monthFormat(JapaneseJP).utf8().data());
->>>>>>> miniblink49
 }
 
 TEST_F(LocaleWinTest, timeFormat)
@@ -378,14 +263,10 @@ TEST_F(LocaleWinTest, shortMonthLabels)
     EXPECT_STREQ("Jan", shortMonthLabel(EnglishUS, 0).utf8().data());
     EXPECT_STREQ("Dec", shortMonthLabel(EnglishUS, 11).utf8().data());
     EXPECT_STREQ("janv.", shortMonthLabel(FrenchFR, 0).utf8().data());
-<<<<<<< HEAD
     EXPECT_STREQ(
         "d\xC3\xA9"
         "c.",
         shortMonthLabel(FrenchFR, 11).utf8().data());
-=======
-    EXPECT_STREQ("d\xC3\xA9" "c.", shortMonthLabel(FrenchFR, 11).utf8().data());
->>>>>>> miniblink49
     EXPECT_STREQ("1", shortMonthLabel(JapaneseJP, 0).utf8().data());
     EXPECT_STREQ("12", shortMonthLabel(JapaneseJP, 11).utf8().data());
 }
@@ -398,15 +279,10 @@ TEST_F(LocaleWinTest, timeAMPMLabels)
     EXPECT_STREQ("", timeAMPMLabel(FrenchFR, 0).utf8().data());
     EXPECT_STREQ("", timeAMPMLabel(FrenchFR, 1).utf8().data());
 
-<<<<<<< HEAD
     EXPECT_STREQ("\xE5\x8D\x88\xE5\x89\x8D",
         timeAMPMLabel(JapaneseJP, 0).utf8().data());
     EXPECT_STREQ("\xE5\x8D\x88\xE5\xBE\x8C",
         timeAMPMLabel(JapaneseJP, 1).utf8().data());
-=======
-    EXPECT_STREQ("\xE5\x8D\x88\xE5\x89\x8D", timeAMPMLabel(JapaneseJP, 0).utf8().data());
-    EXPECT_STREQ("\xE5\x8D\x88\xE5\xBE\x8C", timeAMPMLabel(JapaneseJP, 1).utf8().data());
->>>>>>> miniblink49
 }
 
 TEST_F(LocaleWinTest, decimalSeparator)
@@ -414,20 +290,12 @@ TEST_F(LocaleWinTest, decimalSeparator)
     EXPECT_STREQ(".", decimalSeparator(EnglishUS).utf8().data());
     EXPECT_STREQ(",", decimalSeparator(FrenchFR).utf8().data());
 }
-<<<<<<< HEAD
 
 static void testNumberIsReversible(LCID lcid,
     const char* original,
     const char* shouldHave = 0)
 {
     std::unique_ptr<LocaleWin> locale = LocaleWin::create(lcid, true /* defaultsForLocale */);
-=======
-#endif
-
-static void testNumberIsReversible(LCID lcid, const char* original, const char* shouldHave = 0)
-{
-    OwnPtr<LocaleWin> locale = LocaleWin::create(lcid, true /* defaultsForLocale */);
->>>>>>> miniblink49
     String localized = locale->convertToLocalizedNumber(original);
     if (shouldHave)
         EXPECT_TRUE(localized.contains(shouldHave));

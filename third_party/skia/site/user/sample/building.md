@@ -77,11 +77,7 @@ Create a src/DEPS file with the following:
 
   deps = {
     "src/third_party/skia/":
-<<<<<<< HEAD
         "http://skia.googlesource.com/skia.git@" + Var("skia_revision"),
-=======
-        "http://skia.googlecode.com/skia.git@" + Var("skia_revision"),
->>>>>>> miniblink49
   }
 
 ~~~~
@@ -89,11 +85,7 @@ Create a src/DEPS file with the following:
 There are two sections to the `DEPS` file at the moment, `vars` and `deps`.
 The `vars` sections defines variables we can use later in the file with the
 `Var()` accessor. In this case, we define our root directory, a shorter name
-<<<<<<< HEAD
 for any googlesource repositories and a specific revision of Skia that we're
-=======
-for any googlecode repositories and a specific revision of Skia that we're
->>>>>>> miniblink49
 going to use. I've pinned to a specific version to insulate the application
 from changes in the Skia tree. This lets us know that when someone checks out
 the repo they'll be using the same version of Skia that we've built and tested
@@ -131,11 +123,7 @@ command above) to look as follows:
         "safesync_url": "",
       },
       { "name"        : "src/third_party/skia",
-<<<<<<< HEAD
         "url"         : "http://skia.googlesource.com/skia.git@a6a8f00a3977e71dbce9da50a32c5e9a51c49285",
-=======
-        "url"         : "http://skia.googlecode.com/skia.git@a6a8f00a3977e71dbce9da50a32c5e9a51c49285",
->>>>>>> miniblink49
         "deps_file"   : "DEPS",
         "managed"     : True,
         "custom_deps" : {
@@ -165,11 +153,7 @@ First, we need to add GYP to our project. We'll do that by adding a new entry
 to the deps section of the `DEPS` file.
 
     "src/tools/gyp":
-<<<<<<< HEAD
         (Var("googlesource_url") % "gyp") + "/trunk@1700",
-=======
-        (Var("googlecode_url") % "gyp") + "/trunk@1700",
->>>>>>> miniblink49
 
 As you can see, I'm going to put the library into `src/tools/gyp` and checkout
 revision 1700 (note, the revision used here, 1700, was the head revision at
@@ -276,17 +260,10 @@ int main(int argc, char** argv) {
   SkPaint paint;
   paint.setColor(SK_ColorRED);
 
-<<<<<<< HEAD
   SkString str;
   paint.toString(&str);
 
   fprintf(stdout, "%s\n", str.c_str());
-=======
-  SkString* str = new SkString();
-  paint.toString(str);
-
-  fprintf(stdout, "%s\n", str->c_str());
->>>>>>> miniblink49
 
   return 0;
 }
@@ -303,11 +280,7 @@ a relative tools directory which doesn't exist. Luckily, that's easy to fix
 with another entry in our DEPS file.
 
     "src/tools/":
-<<<<<<< HEAD
         File((Var("googlesource_url") % "skia") + "/trunk/tools/find_mac_sdk.py@" +
-=======
-        File((Var("googlecode_url") % "skia") + "/trunk/tools/find_mac_sdk.py@" +
->>>>>>> miniblink49
             Var("skia_revision")),
 
 Here we using the `File()` function of `gclient` to specify that we're checking
@@ -344,7 +317,3 @@ sync.
 
 Adding the above to the end of DEPS and running gclient sync should show the
 GYP files being updated at the end of the sync procedure.
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49

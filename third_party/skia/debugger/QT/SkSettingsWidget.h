@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #ifndef SKSETTINGSWIDGET_H_
 #define SKSETTINGSWIDGET_H_
 
@@ -20,22 +19,6 @@
 #include <QLineEdit>
 #include <QTextEdit>
 #include <QWidget>
-=======
-
-#ifndef SKSETTINGSWIDGET_H_
-#define SKSETTINGSWIDGET_H_
-
-#include <QWidget>
-#include <QHBoxLayout>
-#include <QTextEdit>
-#include <QFrame>
-#include <QGroupBox>
-#include <QLabel>
-#include <QCheckBox>
-#include <QLineEdit>
-#include <QComboBox>
-#include <QFormLayout>
->>>>>>> miniblink49
 
 #include "SkPaint.h"
 
@@ -54,7 +37,6 @@ public:
      */
     SkSettingsWidget();
 
-<<<<<<< HEAD
 #if SK_SUPPORT_GPU
     // GL settings.
     bool isGLActive() const
@@ -64,34 +46,19 @@ public:
 
     int getGLSampleCount() const
     {
-=======
-
-#if SK_SUPPORT_GPU
-    // GL settings.
-    bool isGLActive() const {
-        return fGLGroup.isChecked();
-    }
-
-    int getGLSampleCount() const {
->>>>>>> miniblink49
         return fGLMSAACombo.itemData(fGLMSAACombo.currentIndex()).toInt();
     }
 
 #endif
 
-<<<<<<< HEAD
     bool getFilterOverride(SkFilterQuality* filterQuality) const
     {
-=======
-    bool getFilterOverride(SkFilterQuality* filterQuality) const {
->>>>>>> miniblink49
         int index = fFilterCombo.currentIndex();
         *filterQuality = (SkFilterQuality)fFilterCombo.itemData(index).toUInt();
 
         return index > 0;
     }
 
-<<<<<<< HEAD
     // Raster settings.
     bool isRasterEnabled()
     {
@@ -100,20 +67,10 @@ public:
 
     bool isOverdrawVizEnabled()
     {
-=======
-
-    // Raster settings.
-    bool isRasterEnabled() {
-        return fRasterGroup.isChecked();
-    }
-
-    bool isOverdrawVizEnabled() {
->>>>>>> miniblink49
         return fOverdrawVizCheckBox.isChecked();
     }
 
     // Visualizations.
-<<<<<<< HEAD
     bool isVisibilityFilterEnabled() const
     {
         return fVisibilityFilterCheckBox.isChecked();
@@ -132,23 +89,6 @@ public:
 private Q_SLOTS:
 
 Q_SIGNALS:
-=======
-    bool isVisibilityFilterEnabled() const {
-        return fVisibilityFilterCheckBox.isChecked();
-    }
-
-    bool isMegaVizEnabled() {
-        return fMegaVizCheckBox.isChecked();
-    }
-
-    bool isPathOpsEnabled() {
-        return fPathOpsCheckBox.isChecked();
-    }
-
-private slots:
-
-signals:
->>>>>>> miniblink49
     void visualizationsChanged();
     void texFilterSettingsChanged();
 #if SK_SUPPORT_GPU

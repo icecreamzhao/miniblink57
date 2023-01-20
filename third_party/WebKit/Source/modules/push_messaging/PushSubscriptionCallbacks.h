@@ -6,15 +6,8 @@
 #define PushSubscriptionCallbacks_h
 
 #include "platform/heap/Handle.h"
-<<<<<<< HEAD
 #include "public/platform/modules/push_messaging/WebPushProvider.h"
 #include "wtf/Noncopyable.h"
-=======
-#include "public/platform/WebCallbacks.h"
-#include "wtf/Noncopyable.h"
-#include "wtf/PassRefPtr.h"
-#include "wtf/RefPtr.h"
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -23,7 +16,6 @@ class ScriptPromiseResolver;
 struct WebPushError;
 struct WebPushSubscription;
 
-<<<<<<< HEAD
 // This class is an implementation of WebPushSubscriptionCallbacks that will
 // resolve the underlying promise depending on the result passed to the
 // callback. It takes a ServiceWorkerRegistration in its constructor and will
@@ -42,23 +34,6 @@ public:
 
 private:
     Persistent<ScriptPromiseResolver> m_resolver;
-=======
-// PushSubscriptionCallbacks is an implementation of WebPushSubscriptionCallbacks
-// that will resolve the underlying promise depending on the result passed to
-// the callback. It takes a ServiceWorkerRegistration in its constructor and
-// will pass it to the PushSubscription.
-class PushSubscriptionCallbacks final : public WebCallbacks<WebPushSubscription, WebPushError> {
-    WTF_MAKE_NONCOPYABLE(PushSubscriptionCallbacks);
-public:
-    PushSubscriptionCallbacks(PassRefPtrWillBeRawPtr<ScriptPromiseResolver>, ServiceWorkerRegistration*);
-    ~PushSubscriptionCallbacks() override;
-
-    void onSuccess(WebPushSubscription*) override;
-    void onError(WebPushError*) override;
-
-private:
-    RefPtrWillBePersistent<ScriptPromiseResolver> m_resolver;
->>>>>>> miniblink49
     Persistent<ServiceWorkerRegistration> m_serviceWorkerRegistration;
 };
 

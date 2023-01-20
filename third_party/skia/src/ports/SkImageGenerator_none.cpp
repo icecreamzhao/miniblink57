@@ -7,12 +7,7 @@
 
 #include "SkImageGenerator.h"
 
-<<<<<<< HEAD
 SkImageGenerator* SkImageGenerator::NewFromEncodedImpl(SkData*)
 {
     return nullptr;
-=======
-SkImageGenerator* SkImageGenerator::NewFromEncodedImpl(SkData*) {
-    return NULL;
->>>>>>> miniblink49
 }

@@ -5,15 +5,10 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-#include "gm.h"
->>>>>>> miniblink49
 #include "SkAnimTimer.h"
 #include "SkCanvas.h"
 #include "SkPathMeasure.h"
 #include "SkRandom.h"
-<<<<<<< HEAD
 #include "gm.h"
 
 class AddArcGM : public skiagm::GM {
@@ -22,24 +17,14 @@ public:
         : fRotate(0)
     {
     }
-=======
-
-class AddArcGM : public skiagm::GM {
-public:
-    AddArcGM() : fRotate(0) {}
->>>>>>> miniblink49
 
 protected:
     SkString onShortName() override { return SkString("addarc"); }
 
     SkISize onISize() override { return SkISize::Make(1040, 1040); }
 
-<<<<<<< HEAD
     void onDraw(SkCanvas* canvas) override
     {
-=======
-    void onDraw(SkCanvas* canvas) override {
->>>>>>> miniblink49
         canvas->translate(20, 20);
 
         SkRect r = SkRect::MakeWH(1000, 1000);
@@ -55,11 +40,7 @@ protected:
 
         SkScalar sign = 1;
         while (r.width() > paint.getStrokeWidth() * 3) {
-<<<<<<< HEAD
             paint.setColor(sk_tool_utils::color_to_565(rand.nextU() | (0xFF << 24)));
-=======
-            paint.setColor(rand.nextU() | (0xFF << 24));
->>>>>>> miniblink49
             SkScalar startAngle = rand.nextUScalar1() * 360;
 
             SkScalar speed = SkScalarSqrt(16 / r.width()) * 0.5f;
@@ -74,12 +55,8 @@ protected:
         }
     }
 
-<<<<<<< HEAD
     bool onAnimate(const SkAnimTimer& timer) override
     {
-=======
-    bool onAnimate(const SkAnimTimer& timer) override {
->>>>>>> miniblink49
         fRotate = timer.scaled(1, 360);
         return true;
     }
@@ -88,7 +65,6 @@ private:
     SkScalar fRotate;
     typedef skiagm::GM INHERITED;
 };
-<<<<<<< HEAD
 DEF_GM(return new AddArcGM;)
 
 ///////////////////////////////////////////////////
@@ -98,31 +74,14 @@ DEF_GM(return new AddArcGM;)
 class AddArcMeasGM : public skiagm::GM {
 public:
     AddArcMeasGM() { }
-=======
-DEF_GM( return new AddArcGM; )
-
-///////////////////////////////////////////////////
-
-#define R   400
-
-class AddArcMeasGM : public skiagm::GM {
-public:
-    AddArcMeasGM() {}
->>>>>>> miniblink49
 
 protected:
     SkString onShortName() override { return SkString("addarc_meas"); }
 
-<<<<<<< HEAD
     SkISize onISize() override { return SkISize::Make(2 * R + 40, 2 * R + 40); }
 
     void onDraw(SkCanvas* canvas) override
     {
-=======
-    SkISize onISize() override { return SkISize::Make(2*R + 40, 2*R + 40); }
-
-    void onDraw(SkCanvas* canvas) override {
->>>>>>> miniblink49
         canvas->translate(R + 20, R + 20);
 
         SkPaint paint;
@@ -148,11 +107,7 @@ protected:
             SkPathMeasure meas(path, false);
             SkScalar arcLen = rad * R;
             SkPoint pos;
-<<<<<<< HEAD
             if (meas.getPosTan(arcLen, &pos, nullptr)) {
-=======
-            if (meas.getPosTan(arcLen, &pos, NULL)) {
->>>>>>> miniblink49
                 canvas->drawLine(0, 0, pos.x(), pos.y(), measPaint);
             }
         }
@@ -161,11 +116,7 @@ protected:
 private:
     typedef skiagm::GM INHERITED;
 };
-<<<<<<< HEAD
 DEF_GM(return new AddArcMeasGM;)
-=======
-DEF_GM( return new AddArcMeasGM; )
->>>>>>> miniblink49
 
 ///////////////////////////////////////////////////
 
@@ -174,7 +125,6 @@ DEF_GM( return new AddArcMeasGM; )
 //
 class StrokeCircleGM : public skiagm::GM {
 public:
-<<<<<<< HEAD
     StrokeCircleGM()
         : fRotate(0)
     {
@@ -187,16 +137,6 @@ protected:
 
     void onDraw(SkCanvas* canvas) override
     {
-=======
-    StrokeCircleGM() : fRotate(0) {}
-    
-protected:
-    SkString onShortName() override { return SkString("strokecircle"); }
-    
-    SkISize onISize() override { return SkISize::Make(520, 520); }
-    
-    void onDraw(SkCanvas* canvas) override {
->>>>>>> miniblink49
         canvas->scale(20, 20);
         canvas->translate(13, 13);
 
@@ -214,23 +154,15 @@ protected:
             SkAutoCanvasRestore acr(canvas, true);
             canvas->rotate(fRotate * sign);
 
-<<<<<<< HEAD
             paint.setColor(sk_tool_utils::color_to_565(rand.nextU() | (0xFF << 24)));
-=======
-            paint.setColor(rand.nextU() | (0xFF << 24));
->>>>>>> miniblink49
             canvas->drawOval(r, paint);
             r.inset(delta, delta);
             sign = -sign;
         }
     }
 
-<<<<<<< HEAD
     bool onAnimate(const SkAnimTimer& timer) override
     {
-=======
-    bool onAnimate(const SkAnimTimer& timer) override {
->>>>>>> miniblink49
         fRotate = timer.scaled(60, 360);
         return true;
     }
@@ -240,21 +172,13 @@ private:
 
     typedef skiagm::GM INHERITED;
 };
-<<<<<<< HEAD
 DEF_GM(return new StrokeCircleGM;)
-=======
-DEF_GM( return new StrokeCircleGM; )
->>>>>>> miniblink49
 
 //////////////////////
 
 static void html_canvas_arc(SkPath* path, SkScalar x, SkScalar y, SkScalar r, SkScalar start,
-<<<<<<< HEAD
     SkScalar end, bool ccw)
 {
-=======
-                            SkScalar end, bool ccw) {
->>>>>>> miniblink49
     SkRect bounds = { x - r, y - r, x + r, y + r };
     SkScalar sweep = ccw ? end - start : start - end;
     path->arcTo(bounds, start, sweep, false);
@@ -263,7 +187,6 @@ static void html_canvas_arc(SkPath* path, SkScalar x, SkScalar y, SkScalar r, Sk
 // Lifted from canvas-arc-circumference-fill-diffs.html
 class ManyArcsGM : public skiagm::GM {
 public:
-<<<<<<< HEAD
     ManyArcsGM() { }
 
 protected:
@@ -273,16 +196,6 @@ protected:
 
     void onDraw(SkCanvas* canvas) override
     {
-=======
-    ManyArcsGM() {}
-    
-protected:
-    SkString onShortName() override { return SkString("manyarcs"); }
-    
-    SkISize onISize() override { return SkISize::Make(620, 330); }
-    
-    void onDraw(SkCanvas* canvas) override {
->>>>>>> miniblink49
         SkPaint paint;
         paint.setAntiAlias(true);
         paint.setStyle(SkPaint::kStroke_Style);
@@ -291,31 +204,18 @@ protected:
 
         // 20 angles.
         SkScalar sweepAngles[] = {
-<<<<<<< HEAD
             -123.7f, -2.3f, -2, -1, -0.3f, -0.000001f, 0, 0.000001f, 0.3f, 0.7f,
             1, 1.3f, 1.5f, 1.7f, 1.99999f, 2, 2.00001f, 2.3f, 4.3f, 3934723942837.3f
-=======
-                           -123.7f, -2.3f, -2, -1, -0.3f, -0.000001f, 0, 0.000001f, 0.3f, 0.7f,
-                           1, 1.3f, 1.5f, 1.7f, 1.99999f, 2, 2.00001f, 2.3f, 4.3f, 3934723942837.3f
->>>>>>> miniblink49
         };
         for (size_t i = 0; i < SK_ARRAY_COUNT(sweepAngles); ++i) {
             sweepAngles[i] *= 180;
         }
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> miniblink49
         SkScalar startAngles[] = { -1, -0.5f, 0, 0.5f };
         for (size_t i = 0; i < SK_ARRAY_COUNT(startAngles); ++i) {
             startAngles[i] *= 180;
         }
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> miniblink49
         bool anticlockwise = false;
         SkScalar sign = 1;
         for (size_t i = 0; i < SK_ARRAY_COUNT(startAngles) * 2; ++i) {
@@ -329,11 +229,7 @@ protected:
                 SkPath path;
                 path.moveTo(0, 2);
                 html_canvas_arc(&path, 18, 15, 10, startAngle, startAngle + (sweepAngles[j] * sign),
-<<<<<<< HEAD
                     anticlockwise);
-=======
-                                anticlockwise);
->>>>>>> miniblink49
                 path.lineTo(0, 28);
                 canvas->drawPath(path, paint);
                 canvas->translate(30, 0);
@@ -342,17 +238,8 @@ protected:
             canvas->translate(0, 40);
         }
     }
-<<<<<<< HEAD
 
 private:
     typedef skiagm::GM INHERITED;
 };
 DEF_GM(return new ManyArcsGM;)
-=======
-    
-private:
-    typedef skiagm::GM INHERITED;
-};
-DEF_GM( return new ManyArcsGM; )
-
->>>>>>> miniblink49

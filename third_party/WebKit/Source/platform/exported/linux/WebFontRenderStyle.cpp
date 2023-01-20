@@ -28,16 +28,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "public/platform/linux/WebFontRenderStyle.h"
 
 #include "platform/fonts/linux/FontRenderStyle.h"
-=======
-#include "config.h"
-#include "public/platform/linux/WebFontRenderStyle.h"
-
-#include "platform/fonts/FontRenderStyle.h"
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -54,7 +47,6 @@ void WebFontRenderStyle::toFontRenderStyle(FontRenderStyle* out)
 
 void WebFontRenderStyle::setDefaults()
 {
-<<<<<<< HEAD
     useBitmaps = FontRenderStyle::NoPreference;
     useAutoHint = FontRenderStyle::NoPreference;
     useHinting = FontRenderStyle::NoPreference;
@@ -62,15 +54,6 @@ void WebFontRenderStyle::setDefaults()
     useAntiAlias = FontRenderStyle::NoPreference;
     useSubpixelRendering = FontRenderStyle::NoPreference;
     useSubpixelPositioning = FontRenderStyle::NoPreference;
-=======
-    useBitmaps = 2;
-    useAutoHint = 2;
-    useHinting = 2;
-    hintStyle = 0;
-    useAntiAlias = 2;
-    useSubpixelRendering = 2;
-    useSubpixelPositioning = 2;
->>>>>>> miniblink49
 }
 
 } // namespace blink

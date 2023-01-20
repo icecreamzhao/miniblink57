@@ -36,32 +36,33 @@
 
 namespace blink {
 
-class Blob;
 class ExceptionState;
 class ExecutionContext;
 class URLRegistrable;
+class URLSearchParams;
 
-class DOMURL final : public GarbageCollectedFinalized<DOMURL>, public ScriptWrappable, public DOMURLUtils {
+class DOMURL final : public GarbageCollectedFinalized<DOMURL>,
+                     public ScriptWrappable,
+                     public DOMURLUtils {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     static DOMURL* create(const String& url, ExceptionState& exceptionState)
     {
         return new DOMURL(url, blankURL(), exceptionState);
     }
-    static DOMURL* create(const String& url, const String& base, ExceptionState& exceptionState)
+
+    static DOMURL* create(const String& url,
+        const String& base,
+        ExceptionState& exceptionState)
     {
         return new DOMURL(url, KURL(KURL(), base), exceptionState);
     }
-    static DOMURL* create(const String& url, DOMURL* base, ExceptionState& exceptionState)
-    {
-        ASSERT(base);
-        return new DOMURL(url, base->m_url, exceptionState);
-    }
+    ~DOMURL();
 
-    static String createObjectURL(ExecutionContext*, Blob*, ExceptionState&);
-    static void revokeObjectURL(ExecutionContext*, const String&);
-
-    CORE_EXPORT static String createPublicURL(ExecutionContext*, URLRegistrable*, const String& uuid = String());
+    CORE_EXPORT static String createPublicURL(ExecutionContext*,
+        URLRegistrable*,
+        const String& uuid = String());
     static void revokeObjectUUID(ExecutionContext*, const String&);
 
     KURL url() const override { return m_url; }
@@ -70,13 +71,22 @@ public:
     String input() const override { return m_input; }
     void setInput(const String&) override;
 
-    DEFINE_INLINE_TRACE() { }
+    void setSearch(const String&) override;
+
+    URLSearchParams* searchParams();
+
+    DECLARE_VIRTUAL_TRACE();
 
 private:
+    friend class URLSearchParams;
     DOMURL(const String& url, const KURL& base, ExceptionState&);
+
+    void update();
+    void updateSearchParams(const String&);
 
     KURL m_url;
     String m_input;
+    WeakMember<URLSearchParams> m_searchParams;
 };
 
 } // namespace blink

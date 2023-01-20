@@ -25,7 +25,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "wtf/text/TextEncoding.h"
 
 #include "wtf/StdLibExtras.h"
@@ -34,29 +33,13 @@
 #include "wtf/text/TextEncodingRegistry.h"
 #include "wtf/text/WTFString.h"
 #include <memory>
-=======
-#include "config.h"
-#include "wtf/text/TextEncoding.h"
-
-#include "wtf/text/TextEncodingRegistry.h"
-//#include <unicode/unorm.h>
-#include "wtf/OwnPtr.h"
-#include "wtf/StdLibExtras.h"
-#include "wtf/Threading.h"
-#include "wtf/text/CString.h"
-#include "wtf/text/WTFString.h"
->>>>>>> miniblink49
 
 namespace WTF {
 
 static const TextEncoding& UTF7Encoding()
 {
-<<<<<<< HEAD
     DEFINE_THREAD_SAFE_STATIC_LOCAL(const TextEncoding, globalUTF7Encoding,
         new TextEncoding("UTF-7"));
-=======
-    AtomicallyInitializedStaticReference(const TextEncoding, globalUTF7Encoding, new TextEncoding("UTF-7"));
->>>>>>> miniblink49
     return globalUTF7Encoding;
 }
 
@@ -76,31 +59,20 @@ TextEncoding::TextEncoding(const String& name)
         m_name = 0;
 }
 
-<<<<<<< HEAD
 String TextEncoding::decode(const char* data,
     size_t length,
     bool stopOnError,
     bool& sawError) const
-=======
-String TextEncoding::decode(const char* data, size_t length, bool stopOnError, bool& sawError) const
->>>>>>> miniblink49
 {
     if (!m_name)
         return String();
 
-<<<<<<< HEAD
     return newTextCodec(*this)->decode(data, length, DataEOF, stopOnError,
         sawError);
 }
 
 CString TextEncoding::encode(const String& string,
     UnencodableHandling handling) const
-=======
-    return newTextCodec(*this)->decode(data, length, DataEOF, stopOnError, sawError);
-}
-
-CString TextEncoding::encode(const String& string, UnencodableHandling handling) const
->>>>>>> miniblink49
 {
     if (!m_name)
         return CString();
@@ -108,11 +80,7 @@ CString TextEncoding::encode(const String& string, UnencodableHandling handling)
     if (string.isEmpty())
         return "";
 
-<<<<<<< HEAD
     std::unique_ptr<TextCodec> textCodec = newTextCodec(*this);
-=======
-    OwnPtr<TextCodec> textCodec = newTextCodec(*this);
->>>>>>> miniblink49
     CString encodedString;
     if (string.is8Bit())
         encodedString = textCodec->encode(string.characters8(), string.length(), handling);
@@ -121,50 +89,6 @@ CString TextEncoding::encode(const String& string, UnencodableHandling handling)
     return encodedString;
 }
 
-<<<<<<< HEAD
-=======
-CString TextEncoding::normalizeAndEncode(const String& string, UnencodableHandling handling) const
-{
-    if (!m_name)
-        return CString();
-
-    if (string.isEmpty())
-        return "";
-
-    // Text exclusively containing Latin-1 characters (U+0000..U+00FF) is left
-    // unaffected by NFC. This is effectively the same as saying that all
-    // Latin-1 text is already normalized to NFC.
-    // Source: http://unicode.org/reports/tr15/
-    if (string.is8Bit())
-        return newTextCodec(*this)->encode(string.characters8(), string.length(), handling);
-
-    const UChar* source = string.characters16();
-    size_t length = string.length();
-
-    Vector<UChar> normalizedCharacters;
-
-#ifdef MINIBLINK_NOT_IMPLEMENTED
-    UErrorCode err = U_ZERO_ERROR;
-    if (unorm_quickCheck(source, length, UNORM_NFC, &err) != UNORM_YES) {
-        // First try using the length of the original string, since normalization to NFC rarely increases length.
-        normalizedCharacters.grow(length);
-        int32_t normalizedLength = unorm_normalize(source, length, UNORM_NFC, 0, normalizedCharacters.data(), length, &err);
-        if (err == U_BUFFER_OVERFLOW_ERROR) {
-            err = U_ZERO_ERROR;
-            normalizedCharacters.resize(normalizedLength);
-            normalizedLength = unorm_normalize(source, length, UNORM_NFC, 0, normalizedCharacters.data(), normalizedLength, &err);
-        }
-        ASSERT(U_SUCCESS(err));
-
-        source = normalizedCharacters.data();
-        length = normalizedLength;
-    }
-#endif // MINIBLINK_NOT_IMPLEMENTED
-
-    return newTextCodec(*this)->encode(source, length, handling);
-}
-
->>>>>>> miniblink49
 bool TextEncoding::usesVisualOrdering() const
 {
     if (noExtendedTextEncodingNameUsed())
@@ -177,21 +101,10 @@ bool TextEncoding::usesVisualOrdering() const
 bool TextEncoding::isNonByteBasedEncoding() const
 {
     if (noExtendedTextEncodingNameUsed()) {
-<<<<<<< HEAD
         return *this == UTF16LittleEndianEncoding() || *this == UTF16BigEndianEncoding();
     }
 
     return *this == UTF16LittleEndianEncoding() || *this == UTF16BigEndianEncoding() || *this == UTF32Encoding() || *this == UTF32BigEndianEncoding() || *this == UTF32LittleEndianEncoding();
-=======
-        return *this == UTF16LittleEndianEncoding()
-            || *this == UTF16BigEndianEncoding();
-    }
-
-    return *this == UTF16LittleEndianEncoding()
-        || *this == UTF16BigEndianEncoding()
-        || *this == UTF32BigEndianEncoding()
-        || *this == UTF32LittleEndianEncoding();
->>>>>>> miniblink49
 }
 
 bool TextEncoding::isUTF7Encoding() const
@@ -223,41 +136,28 @@ const TextEncoding& TextEncoding::encodingForFormSubmission() const
 
 const TextEncoding& ASCIIEncoding()
 {
-<<<<<<< HEAD
     DEFINE_THREAD_SAFE_STATIC_LOCAL(const TextEncoding, globalASCIIEncoding,
         new TextEncoding("ASCII"));
-=======
-    AtomicallyInitializedStaticReference(const TextEncoding, globalASCIIEncoding, new TextEncoding("ASCII"));
->>>>>>> miniblink49
     return globalASCIIEncoding;
 }
 
 const TextEncoding& Latin1Encoding()
 {
-<<<<<<< HEAD
     DEFINE_THREAD_SAFE_STATIC_LOCAL(const TextEncoding, globalLatin1Encoding,
         new TextEncoding("latin1"));
-=======
-    AtomicallyInitializedStaticReference(const TextEncoding, globalLatin1Encoding, new TextEncoding("latin1"));
->>>>>>> miniblink49
     return globalLatin1Encoding;
 }
 
 const TextEncoding& UTF16BigEndianEncoding()
 {
-<<<<<<< HEAD
     DEFINE_THREAD_SAFE_STATIC_LOCAL(const TextEncoding,
         globalUTF16BigEndianEncoding,
         new TextEncoding("UTF-16BE"));
-=======
-    AtomicallyInitializedStaticReference(const TextEncoding, globalUTF16BigEndianEncoding, new TextEncoding("UTF-16BE"));
->>>>>>> miniblink49
     return globalUTF16BigEndianEncoding;
 }
 
 const TextEncoding& UTF16LittleEndianEncoding()
 {
-<<<<<<< HEAD
     DEFINE_THREAD_SAFE_STATIC_LOCAL(const TextEncoding,
         globalUTF16LittleEndianEncoding,
         new TextEncoding("UTF-16LE"));
@@ -277,52 +177,30 @@ const TextEncoding& UTF32BigEndianEncoding()
     DEFINE_THREAD_SAFE_STATIC_LOCAL(const TextEncoding,
         globalUTF32BigEndianEncoding,
         new TextEncoding("UTF-32BE"));
-=======
-    AtomicallyInitializedStaticReference(const TextEncoding, globalUTF16LittleEndianEncoding, new TextEncoding("UTF-16LE"));
-    return globalUTF16LittleEndianEncoding;
-}
-
-const TextEncoding& UTF32BigEndianEncoding()
-{
-    AtomicallyInitializedStaticReference(const TextEncoding, globalUTF32BigEndianEncoding, new TextEncoding("UTF-32BE"));
->>>>>>> miniblink49
     return globalUTF32BigEndianEncoding;
 }
 
 const TextEncoding& UTF32LittleEndianEncoding()
 {
-<<<<<<< HEAD
     DEFINE_THREAD_SAFE_STATIC_LOCAL(const TextEncoding,
         globalUTF32LittleEndianEncoding,
         new TextEncoding("UTF-32LE"));
-=======
-    AtomicallyInitializedStaticReference(const TextEncoding, globalUTF32LittleEndianEncoding, new TextEncoding("UTF-32LE"));
->>>>>>> miniblink49
     return globalUTF32LittleEndianEncoding;
 }
 
 const TextEncoding& UTF8Encoding()
 {
-<<<<<<< HEAD
     DEFINE_THREAD_SAFE_STATIC_LOCAL(const TextEncoding, globalUTF8Encoding,
         new TextEncoding("UTF-8"));
     DCHECK(globalUTF8Encoding.isValid());
-=======
-    AtomicallyInitializedStaticReference(const TextEncoding, globalUTF8Encoding, new TextEncoding("UTF-8"));
-    ASSERT(globalUTF8Encoding.isValid());
->>>>>>> miniblink49
     return globalUTF8Encoding;
 }
 
 const TextEncoding& WindowsLatin1Encoding()
 {
-<<<<<<< HEAD
     DEFINE_THREAD_SAFE_STATIC_LOCAL(const TextEncoding,
         globalWindowsLatin1Encoding,
         new TextEncoding("WinLatin1"));
-=======
-    AtomicallyInitializedStaticReference(const TextEncoding, globalWindowsLatin1Encoding, new TextEncoding("WinLatin1"));
->>>>>>> miniblink49
     return globalWindowsLatin1Encoding;
 }
 

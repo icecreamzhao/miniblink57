@@ -6,7 +6,7 @@
 #define NinePieceImagePainter_h
 
 #include "platform/heap/Heap.h"
-#include "third_party/skia/include/core/SkXfermode.h"
+#include "third_party/skia/include/core/SkBlendMode.h"
 
 namespace blink {
 
@@ -18,13 +18,18 @@ class NinePieceImage;
 
 class NinePieceImagePainter {
     STACK_ALLOCATED();
-public:
-    NinePieceImagePainter(LayoutBoxModelObject&);
 
-    bool paint(GraphicsContext*, const LayoutRect&, const ComputedStyle&, const NinePieceImage&, SkXfermode::Mode) const;
+public:
+    NinePieceImagePainter(const LayoutBoxModelObject&);
+
+    bool paint(GraphicsContext&,
+        const LayoutRect&,
+        const ComputedStyle&,
+        const NinePieceImage&,
+        SkBlendMode) const;
 
 private:
-    LayoutBoxModelObject& m_layoutObject;
+    const LayoutBoxModelObject& m_layoutObject;
 };
 
 } // namespace blink

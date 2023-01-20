@@ -35,62 +35,36 @@
 #include "WebExceptionCode.h"
 #include "WebFrame.h"
 #include "WebNode.h"
-<<<<<<< HEAD
 #include "public/platform/WebColor.h"
-=======
->>>>>>> miniblink49
 #include "public/platform/WebReferrerPolicy.h"
 #include "public/platform/WebSecurityOrigin.h"
 #include "public/platform/WebVector.h"
 
-<<<<<<< HEAD
 namespace v8 {
 class Value;
 template <class T>
 class Local;
-=======
-#if BLINK_IMPLEMENTATION
-namespace WTF { template <typename T> class PassRefPtr; }
-#endif
-
-namespace v8 {
-class Value;
-template <class T> class Local;
->>>>>>> miniblink49
 }
 
 namespace blink {
 
 class Document;
-<<<<<<< HEAD
 class WebAXObject;
-=======
-class DocumentType;
-class WebAXObject;
-class WebDocumentType;
->>>>>>> miniblink49
 class WebElement;
 class WebFormElement;
 class WebElementCollection;
 class WebString;
 class WebURL;
-<<<<<<< HEAD
 struct WebDistillabilityFeatures;
-=======
->>>>>>> miniblink49
 
 // Provides readonly access to some properties of a DOM document.
 class WebDocument : public WebNode {
 public:
     WebDocument() { }
-<<<<<<< HEAD
     WebDocument(const WebDocument& e)
         : WebNode(e)
     {
     }
-=======
-    WebDocument(const WebDocument& e) : WebNode(e) { }
->>>>>>> miniblink49
 
     WebDocument& operator=(const WebDocument& e)
     {
@@ -100,15 +74,9 @@ public:
     void assign(const WebDocument& e) { WebNode::assign(e); }
 
     BLINK_EXPORT WebURL url() const;
-<<<<<<< HEAD
     // Note: Security checks should use the getSecurityOrigin(), not url().
     BLINK_EXPORT WebSecurityOrigin getSecurityOrigin() const;
     BLINK_EXPORT bool isSecureContext() const;
-=======
-    // Note: Security checks should use the securityOrigin(), not url().
-    BLINK_EXPORT WebSecurityOrigin securityOrigin() const;
-    BLINK_EXPORT bool isPrivilegedContext(WebString& errorMessage) const;
->>>>>>> miniblink49
 
     BLINK_EXPORT WebString encoding() const;
     BLINK_EXPORT WebString contentLanguage() const;
@@ -117,12 +85,8 @@ public:
     // The url of the OpenSearch Desription Document (if any).
     BLINK_EXPORT WebURL openSearchDescriptionURL() const;
 
-<<<<<<< HEAD
     // Returns the frame the document belongs to or 0 if the document is
     // frameless.
-=======
-    // Returns the frame the document belongs to or 0 if the document is frameless.
->>>>>>> miniblink49
     BLINK_EXPORT WebLocalFrame* frame() const;
     BLINK_EXPORT bool isHTMLDocument() const;
     BLINK_EXPORT bool isXHTMLDocument() const;
@@ -144,22 +108,12 @@ public:
     BLINK_EXPORT WebURL completeURL(const WebString&) const;
     BLINK_EXPORT WebElement getElementById(const WebString&) const;
     BLINK_EXPORT WebElement focusedElement() const;
-<<<<<<< HEAD
     BLINK_EXPORT WebReferrerPolicy getReferrerPolicy() const;
     BLINK_EXPORT WebString outgoingReferrer();
-=======
-    BLINK_EXPORT WebDocumentType doctype() const;
-    BLINK_EXPORT void cancelFullScreen();
-    BLINK_EXPORT WebElement fullScreenElement() const;
-    BLINK_EXPORT WebDOMEvent createEvent(const WebString& eventType);
-    BLINK_EXPORT WebReferrerPolicy referrerPolicy() const;
-    BLINK_EXPORT WebElement createElement(const WebString& tagName);
->>>>>>> miniblink49
 
     // Accessibility support. These methods should only be called on the
     // top-level document, because one accessibility cache spans all of
     // the documents on the page.
-<<<<<<< HEAD
 
     //   // Gets the accessibility object for this document.
     //   BLINK_EXPORT WebAXObject accessibilityObject() const;
@@ -169,15 +123,6 @@ public:
     //
     //   // Gets the accessibility object that has focus.
     //   BLINK_EXPORT WebAXObject focusedAccessibilityObject() const;
-=======
-#ifdef IMPLEMENTED_NEWEST_BLINK
-    // Gets the accessibility object for this document.
-    BLINK_EXPORT WebAXObject accessibilityObject() const;
-
-    // Gets the accessibility object for an object on this page by ID.
-    BLINK_EXPORT WebAXObject accessibilityObjectFromID(int axID) const;
-#endif // IMPLEMENTED_NEWEST_BLINK
->>>>>>> miniblink49
 
     // Inserts the given CSS source code as a stylesheet in the document.
     BLINK_EXPORT void insertStyleSheet(const WebString& sourceCode);
@@ -189,7 +134,6 @@ public:
 
     BLINK_EXPORT WebVector<WebDraggableRegion> draggableRegions() const;
 
-<<<<<<< HEAD
     BLINK_EXPORT v8::Local<v8::Value> registerEmbedderCustomElement(
         const WebString& name,
         v8::Local<v8::Value> options,
@@ -208,22 +152,6 @@ public:
 
 DECLARE_WEB_NODE_TYPE_CASTS(WebDocument);
 
-=======
-    BLINK_EXPORT v8::Local<v8::Value> registerEmbedderCustomElement(const WebString& name, v8::Local<v8::Value> options, WebExceptionCode&);
-
-    BLINK_EXPORT WebURL manifestURL() const;
-    BLINK_EXPORT bool manifestUseCredentials() const;
-
-    BLINK_EXPORT WebURL defaultPresentationURL() const;
-
-#if BLINK_IMPLEMENTATION
-    WebDocument(const PassRefPtrWillBeRawPtr<Document>&);
-    WebDocument& operator=(const PassRefPtrWillBeRawPtr<Document>&);
-    operator PassRefPtrWillBeRawPtr<Document>() const;
-#endif
-};
-
->>>>>>> miniblink49
 } // namespace blink
 
 #endif

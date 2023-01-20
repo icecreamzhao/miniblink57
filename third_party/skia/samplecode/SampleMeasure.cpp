@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -9,7 +5,6 @@
  * found in the LICENSE file.
  */
 #include "SampleCode.h"
-<<<<<<< HEAD
 #include "Sk1DPathEffect.h"
 #include "SkCanvas.h"
 #include "SkColorFilter.h"
@@ -48,45 +43,6 @@ static void doMeasure(SkCanvas* canvas, const SkPaint& paint, const char text[])
     SkAutoTMalloc<SkRect> autoRects(len);
     SkRect* rects = autoRects.get();
     SkRect bounds;
-=======
-#include "SkView.h"
-#include "SkCanvas.h"
-#include "SkGradientShader.h"
-#include "SkPath.h"
-#include "SkRegion.h"
-#include "SkShader.h"
-#include "SkUtils.h"
-#include "Sk1DPathEffect.h"
-#include "SkCornerPathEffect.h"
-#include "SkPathMeasure.h"
-#include "SkRandom.h"
-#include "SkColorPriv.h"
-#include "SkColorFilter.h"
-#include "SkDither.h"
-
-// exercise scale/linear/devkern
-struct Setting {
-    bool        fLinearText;
-    bool        fDevKernText;
-};
-
-static const Setting gSettings[] = {
-    { false,  false   },
-    { false,  true    },
-    { true,   false   },
-    { true,   true    },
-};
-
-static void doMeasure(SkCanvas* canvas, const SkPaint& paint, const char text[]) {
-    SkScalar    dy = paint.getFontMetrics(NULL);
-
-    size_t      len = strlen(text);
-    SkAutoTMalloc<SkScalar> autoWidths(len);
-    SkScalar*   widths = autoWidths.get();
-    SkAutoTMalloc<SkRect> autoRects(len);
-    SkRect*     rects = autoRects.get();
-    SkRect      bounds;
->>>>>>> miniblink49
 
     SkPaint p(paint);
     for (size_t i = 0; i < SK_ARRAY_COUNT(gSettings); i++) {
@@ -126,12 +82,8 @@ class MeasureView : public SampleView {
 public:
     SkPaint fPaint;
 
-<<<<<<< HEAD
     MeasureView()
     {
-=======
-    MeasureView() {
->>>>>>> miniblink49
         fPaint.setAntiAlias(true);
         fPaint.setTextSize(SkIntToScalar(64));
         this->setBGColor(0xFFDDDDDD);
@@ -139,12 +91,8 @@ public:
 
 protected:
     // overrides from SkEventSink
-<<<<<<< HEAD
     virtual bool onQuery(SkEvent* evt)
     {
-=======
-    virtual bool onQuery(SkEvent* evt) {
->>>>>>> miniblink49
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "Measure");
             return true;
@@ -152,12 +100,8 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-<<<<<<< HEAD
     virtual void onDrawContent(SkCanvas* canvas)
     {
-=======
-    virtual void onDrawContent(SkCanvas* canvas) {
->>>>>>> miniblink49
         canvas->translate(fPaint.getTextSize(), fPaint.getTextSize());
         doMeasure(canvas, fPaint, "Hamburgefons");
     }

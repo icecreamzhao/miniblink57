@@ -29,25 +29,16 @@
 #ifndef PageOverlay_h
 #define PageOverlay_h
 
-<<<<<<< HEAD
 #include "platform/graphics/GraphicsLayer.h"
 #include "platform/graphics/GraphicsLayerClient.h"
 #include "platform/graphics/paint/DisplayItemClient.h"
 #include "web/WebExport.h"
 #include "wtf/text/WTFString.h"
 #include <memory>
-=======
-#include "platform/graphics/GraphicsLayerClient.h"
-#include "platform/graphics/paint/DisplayItemClient.h"
-#include "wtf/OwnPtr.h"
-#include "wtf/PassOwnPtr.h"
-#include "wtf/text/WTFString.h"
->>>>>>> miniblink49
 
 namespace blink {
 
 class GraphicsContext;
-<<<<<<< HEAD
 class WebLocalFrameImpl;
 
 // Manages a layer that is overlaid on a WebLocalFrame's content.
@@ -94,49 +85,6 @@ private:
     Persistent<WebLocalFrameImpl> m_frameImpl;
     std::unique_ptr<PageOverlay::Delegate> m_delegate;
     std::unique_ptr<GraphicsLayer> m_layer;
-=======
-class GraphicsLayer;
-class WebPageOverlay;
-class WebViewImpl;
-
-// Manages a layer that is overlaid on a WebView's content.
-// Clients can paint by implementing WebPageOverlay.
-//
-// With Slimming Paint, internal clients can extract a GraphicsContext to add
-// to the DisplayItemList owned by the GraphicsLayer.
-class PageOverlay : public GraphicsLayerClient {
-public:
-    static PassOwnPtr<PageOverlay> create(WebViewImpl*, WebPageOverlay*);
-
-    ~PageOverlay() { }
-
-    WebPageOverlay* overlay() const { return m_overlay; }
-    void setOverlay(WebPageOverlay* overlay) { m_overlay = overlay; }
-
-    int zOrder() const { return m_zOrder; }
-    void setZOrder(int zOrder) { m_zOrder = zOrder; }
-
-    void clear();
-    void update();
-    void paintWebFrame(GraphicsContext&);
-
-    GraphicsLayer* graphicsLayer() const { return m_layer.get(); }
-    DisplayItemClient displayItemClient() const { return toDisplayItemClient(this); }
-    String debugName() const { return "PageOverlay"; }
-
-    // GraphicsLayerClient implementation
-    void paintContents(const GraphicsLayer*, GraphicsContext&, GraphicsLayerPaintingPhase, const IntRect& inClip) override;
-    String debugName(const GraphicsLayer*) override;
-
-private:
-    PageOverlay(WebViewImpl*, WebPageOverlay*);
-    void invalidateWebFrame();
-
-    WebViewImpl* m_viewImpl;
-    WebPageOverlay* m_overlay;
-    OwnPtr<GraphicsLayer> m_layer;
-    int m_zOrder;
->>>>>>> miniblink49
 };
 
 } // namespace blink

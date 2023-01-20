@@ -36,38 +36,24 @@
 #include "modules/quota/StorageQuotaCallback.h"
 #include "modules/quota/StorageUsageCallback.h"
 #include "platform/StorageQuotaCallbacks.h"
-<<<<<<< HEAD
-=======
-#include "wtf/OwnPtr.h"
->>>>>>> miniblink49
 #include "wtf/PassRefPtr.h"
 #include "wtf/RefPtr.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 class MODULES_EXPORT DeprecatedStorageQuotaCallbacksImpl final
     : public StorageQuotaCallbacks {
 public:
     static DeprecatedStorageQuotaCallbacksImpl* create(
         StorageUsageCallback* success,
         StorageErrorCallback* error)
-=======
-class MODULES_EXPORT DeprecatedStorageQuotaCallbacksImpl final : public StorageQuotaCallbacks {
-public:
-    static DeprecatedStorageQuotaCallbacksImpl* create(StorageUsageCallback* success, StorageErrorCallback* error)
->>>>>>> miniblink49
     {
         return new DeprecatedStorageQuotaCallbacksImpl(success, error);
     }
 
-<<<<<<< HEAD
     static DeprecatedStorageQuotaCallbacksImpl* create(
         StorageQuotaCallback* success,
         StorageErrorCallback* error)
-=======
-    static DeprecatedStorageQuotaCallbacksImpl* create(StorageQuotaCallback* success, StorageErrorCallback* error)
->>>>>>> miniblink49
     {
         return new DeprecatedStorageQuotaCallbacksImpl(success, error);
     }
@@ -75,7 +61,6 @@ public:
     ~DeprecatedStorageQuotaCallbacksImpl() override;
     DECLARE_VIRTUAL_TRACE();
 
-<<<<<<< HEAD
     void didQueryStorageUsageAndQuota(unsigned long long usageInBytes,
         unsigned long long quotaInBytes) override;
     void didGrantStorageQuota(unsigned long long usageInBytes,
@@ -87,15 +72,6 @@ private:
         StorageErrorCallback*);
     DeprecatedStorageQuotaCallbacksImpl(StorageQuotaCallback*,
         StorageErrorCallback*);
-=======
-    void didQueryStorageUsageAndQuota(unsigned long long usageInBytes, unsigned long long quotaInBytes) override;
-    void didGrantStorageQuota(unsigned long long usageInBytes, unsigned long long grantedQuotaInBytes) override;
-    void didFail(WebStorageQuotaError) override;
-
-private:
-    DeprecatedStorageQuotaCallbacksImpl(StorageUsageCallback*, StorageErrorCallback*);
-    DeprecatedStorageQuotaCallbacksImpl(StorageQuotaCallback*, StorageErrorCallback*);
->>>>>>> miniblink49
 
     Member<StorageUsageCallback> m_usageCallback;
     Member<StorageQuotaCallback> m_quotaCallback;

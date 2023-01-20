@@ -12,11 +12,7 @@ namespace blink {
 class GeoNotifier;
 
 class GeolocationWatchers {
-<<<<<<< HEAD
     DISALLOW_NEW();
-=======
-    DISALLOW_ALLOCATION();
->>>>>>> miniblink49
 
 public:
     GeolocationWatchers() { }

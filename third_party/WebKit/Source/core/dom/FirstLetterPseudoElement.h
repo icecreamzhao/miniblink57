@@ -2,7 +2,8 @@
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
  *           (C) 1999 Antti Koivisto (koivisto@kde.org)
  *           (C) 2007 David Smith (catfish.man@gmail.com)
- * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc. All rights reserved.
+ * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc.
+ * All rights reserved.
  * Copyright (C) Research In Motion Limited 2010. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
@@ -36,10 +37,11 @@ class LayoutTextFragment;
 
 class FirstLetterPseudoElement final : public PseudoElement {
     WTF_MAKE_NONCOPYABLE(FirstLetterPseudoElement);
+
 public:
-    static PassRefPtrWillBeRawPtr<FirstLetterPseudoElement> create(Element* parent)
+    static FirstLetterPseudoElement* create(Element* parent)
     {
-        return adoptRefWillBeNoop(new FirstLetterPseudoElement(parent));
+        return new FirstLetterPseudoElement(parent);
     }
 
     ~FirstLetterPseudoElement() override;
@@ -48,12 +50,15 @@ public:
     static unsigned firstLetterLength(const String&);
 
     void setRemainingTextLayoutObject(LayoutTextFragment*);
-    LayoutTextFragment* remainingTextLayoutObject() const { return m_remainingTextLayoutObject; }
+    LayoutTextFragment* remainingTextLayoutObject() const
+    {
+        return m_remainingTextLayoutObject;
+    }
 
     void updateTextFragments();
 
-    void attach(const AttachContext& = AttachContext()) override;
-    void detach(const AttachContext& = AttachContext()) override;
+    void attachLayoutTree(const AttachContext& = AttachContext()) override;
+    void detachLayoutTree(const AttachContext& = AttachContext()) override;
 
 private:
     explicit FirstLetterPseudoElement(Element*);
@@ -66,7 +71,8 @@ private:
     LayoutTextFragment* m_remainingTextLayoutObject;
 };
 
-DEFINE_ELEMENT_TYPE_CASTS(FirstLetterPseudoElement, isFirstLetterPseudoElement());
+DEFINE_ELEMENT_TYPE_CASTS(FirstLetterPseudoElement,
+    isFirstLetterPseudoElement());
 
 } // namespace blink
 

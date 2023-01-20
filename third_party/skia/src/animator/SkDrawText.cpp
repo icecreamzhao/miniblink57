@@ -6,10 +6,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #include "SkDrawText.h"
 #include "SkAnimateMaker.h"
 #include "SkCanvas.h"
@@ -32,7 +28,6 @@ const SkMemberInfo SkText::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkText);
 
-<<<<<<< HEAD
 SkText::SkText()
     : x(0)
     , y(0)
@@ -45,42 +40,22 @@ SkText::~SkText()
 
 bool SkText::draw(SkAnimateMaker& maker)
 {
-=======
-SkText::SkText() : x(0), y(0) {
-}
-
-SkText::~SkText() {
-}
-
-bool SkText::draw(SkAnimateMaker& maker) {
->>>>>>> miniblink49
     SkBoundableAuto boundable(this, maker);
     maker.fCanvas->drawText(text.c_str(), text.size(), x, y, *maker.fPaint);
     return false;
 }
 
 #ifdef SK_DUMP_ENABLED
-<<<<<<< HEAD
 void SkText::dump(SkAnimateMaker* maker)
 {
-=======
-void SkText::dump(SkAnimateMaker* maker) {
->>>>>>> miniblink49
     INHERITED::dump(maker);
 }
 #endif
 
-<<<<<<< HEAD
 bool SkText::getProperty(int index, SkScriptValue* value) const
 {
     SkASSERT(index == SK_PROPERTY(length));
     value->fType = SkType_Int;
     value->fOperand.fS32 = (int32_t)text.size();
-=======
-bool SkText::getProperty(int index, SkScriptValue* value) const {
-    SkASSERT(index == SK_PROPERTY(length));
-    value->fType = SkType_Int;
-    value->fOperand.fS32 = (int32_t) text.size();
->>>>>>> miniblink49
     return true;
 }

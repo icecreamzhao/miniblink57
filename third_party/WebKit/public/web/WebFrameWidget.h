@@ -32,29 +32,21 @@
 #define WebFrameWidget_h
 
 #include "../platform/WebCommon.h"
-<<<<<<< HEAD
 #include "../platform/WebDragOperation.h"
-=======
->>>>>>> miniblink49
 #include "../platform/WebPageVisibilityState.h"
 #include "public/web/WebWidget.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 class WebDragData;
 class WebLocalFrame;
 class WebInputMethodController;
 class WebView;
-=======
-class WebLocalFrame;
->>>>>>> miniblink49
 class WebWidgetClient;
 
 class WebFrameWidget : public WebWidget {
 public:
     BLINK_EXPORT static WebFrameWidget* create(WebWidgetClient*, WebLocalFrame*);
-<<<<<<< HEAD
     // Creates a frame widget for a WebView. Temporary helper to help transition
     // away from WebView inheriting WebWidget.
     // TODO(dcheng): Remove once transition is complete.
@@ -132,13 +124,6 @@ public:
     // This is needed for out-of-process iframes to know if they are clipped
     // by ancestor frames in another process.
     virtual void setRemoteViewportIntersection(const WebRect&) { }
-=======
-
-    // We still track page-level visibility, but additionally we need to notify a WebFrameWidget
-    // when its owning RenderWidget receives a Show or Hide directive, so that it knows whether
-    // it needs to draw or not.
-    virtual void setVisibilityState(WebPageVisibilityState visibilityState, bool isInitialState) { }
->>>>>>> miniblink49
 };
 
 } // namespace blink

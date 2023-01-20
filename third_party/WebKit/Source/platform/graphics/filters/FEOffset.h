@@ -27,15 +27,9 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 class PLATFORM_EXPORT FEOffset final : public FilterEffect {
 public:
     static FEOffset* create(Filter*, float dx, float dy);
-=======
-class PLATFORM_EXPORT FEOffset : public FilterEffect {
-public:
-    static PassRefPtrWillBeRawPtr<FEOffset> create(Filter*, float dx, float dy);
->>>>>>> miniblink49
 
     float dx() const;
     void setDx(float);
@@ -43,7 +37,6 @@ public:
     float dy() const;
     void setDy(float);
 
-<<<<<<< HEAD
     TextStream& externalRepresentation(TextStream&, int indention) const override;
 
 private:
@@ -53,17 +46,6 @@ private:
 
     sk_sp<SkImageFilter> createImageFilter() override;
 
-=======
-    FloatRect mapRect(const FloatRect&, bool forward = true) final;
-
-    TextStream& externalRepresentation(TextStream&, int indention) const override;
-
-    PassRefPtr<SkImageFilter> createImageFilter(SkiaImageFilterBuilder*) override;
-
-private:
-    FEOffset(Filter*, float dx, float dy);
-
->>>>>>> miniblink49
     float m_dx;
     float m_dy;
 };

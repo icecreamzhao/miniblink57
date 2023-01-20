@@ -23,11 +23,7 @@ protected:
     void onSizeChange() override;
 
     virtual bool onDispatchClick(int x, int y, Click::State, void* owner,
-<<<<<<< HEAD
         unsigned modi) override;
-=======
-                                 unsigned modi) override;
->>>>>>> miniblink49
 
 private:
     typedef SkOSWindow INHERITED;

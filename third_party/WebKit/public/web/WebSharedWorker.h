@@ -31,10 +31,7 @@
 #ifndef WebSharedWorker_h
 #define WebSharedWorker_h
 
-<<<<<<< HEAD
 #include "../platform/WebAddressSpace.h"
-=======
->>>>>>> miniblink49
 #include "../platform/WebCommon.h"
 #include "WebContentSecurityPolicy.h"
 
@@ -53,25 +50,16 @@ public:
     // lifetime as this instance.
     BLINK_EXPORT static WebSharedWorker* create(WebSharedWorkerClient*);
 
-<<<<<<< HEAD
     virtual void startWorkerContext(const WebURL& scriptURL,
         const WebString& name,
         const WebString& contentSecurityPolicy,
         WebContentSecurityPolicyType,
         WebAddressSpace)
         = 0;
-=======
-    virtual void startWorkerContext(
-        const WebURL& scriptURL,
-        const WebString& name,
-        const WebString& contentSecurityPolicy,
-        WebContentSecurityPolicyType) = 0;
->>>>>>> miniblink49
 
     // Sends a connect event to the SharedWorker context.
     virtual void connect(WebMessagePortChannel*) = 0;
 
-<<<<<<< HEAD
     // Invoked to shutdown the worker when there are no more associated documents.
     // This eventually deletes this instance.
     virtual void terminateWorkerContext() = 0;
@@ -88,16 +76,6 @@ public:
         const WebString& method,
         const WebString& message)
         = 0;
-=======
-    // Invoked to shutdown the worker when there are no more associated documents. This eventually deletes this instance.
-    virtual void terminateWorkerContext() = 0;
-
-    virtual void pauseWorkerContextOnStart() = 0;
-    virtual void attachDevTools(const WebString& hostId) = 0;
-    virtual void reattachDevTools(const WebString& hostId, const WebString& savedState) = 0;
-    virtual void detachDevTools() = 0;
-    virtual void dispatchDevToolsMessage(const WebString&) = 0;
->>>>>>> miniblink49
 };
 
 } // namespace blink

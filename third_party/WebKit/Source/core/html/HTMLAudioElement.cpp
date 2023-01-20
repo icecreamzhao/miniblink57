@@ -23,7 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/html/HTMLAudioElement.h"
 
 #include "core/HTMLNames.h"
@@ -38,23 +37,25 @@ HTMLAudioElement::HTMLAudioElement(Document& document)
 {
 }
 
-PassRefPtrWillBeRawPtr<HTMLAudioElement> HTMLAudioElement::create(Document& document)
+HTMLAudioElement* HTMLAudioElement::create(Document& document)
 {
-    RefPtrWillBeRawPtr<HTMLAudioElement> audio = adoptRefWillBeNoop(new HTMLAudioElement(document));
+    HTMLAudioElement* audio = new HTMLAudioElement(document);
     audio->ensureUserAgentShadowRoot();
     audio->suspendIfNeeded();
-    return audio.release();
+    return audio;
 }
 
-PassRefPtrWillBeRawPtr<HTMLAudioElement> HTMLAudioElement::createForJSConstructor(Document& document, const AtomicString& src)
+HTMLAudioElement* HTMLAudioElement::createForJSConstructor(
+    Document& document,
+    const AtomicString& src)
 {
-    RefPtrWillBeRawPtr<HTMLAudioElement> audio = adoptRefWillBeNoop(new HTMLAudioElement(document));
+    HTMLAudioElement* audio = new HTMLAudioElement(document);
     audio->ensureUserAgentShadowRoot();
-    audio->setPreload(AtomicString("auto", AtomicString::ConstructFromLiteral));
+    audio->setPreload(AtomicString("auto"));
     if (!src.isNull())
         audio->setSrc(src);
     audio->suspendIfNeeded();
-    return audio.release();
+    return audio;
 }
 
-}
+} // namespace blink

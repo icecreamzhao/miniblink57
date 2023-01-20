@@ -17,219 +17,240 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
-
 #include "core/layout/svg/SVGTextLayoutAttributesBuilder.h"
 
+#include "core/layout/api/LineLayoutSVGInlineText.h"
 #include "core/layout/svg/LayoutSVGInline.h"
 #include "core/layout/svg/LayoutSVGInlineText.h"
 #include "core/layout/svg/LayoutSVGText.h"
-#include "core/layout/svg/SVGTextMetricsBuilder.h"
 #include "core/svg/SVGTextPositioningElement.h"
 
 namespace blink {
 
-SVGTextLayoutAttributesBuilder::SVGTextLayoutAttributesBuilder()
-    : m_textLength(0)
-{
-}
+namespace {
 
-void SVGTextLayoutAttributesBuilder::buildLayoutAttributesForText(LayoutSVGInlineText* text)
-{
-    ASSERT(text);
+    void updateLayoutAttributes(LayoutSVGInlineText& text,
+        unsigned& valueListPosition,
+        const SVGCharacterDataMap& allCharactersMap)
+    {
+        SVGCharacterDataMap& characterDataMap = text.characterDataMap();
+        characterDataMap.clear();
 
-    LayoutSVGText* textRoot = LayoutSVGText::locateLayoutSVGTextAncestor(text);
-    if (!textRoot)
-        return;
+        LineLayoutSVGInlineText textLineLayout(&text);
+        for (SVGInlineTextMetricsIterator iterator(textLineLayout);
+             !iterator.isAtEnd(); iterator.next()) {
+            if (iterator.metrics().isEmpty())
+                continue;
 
-    if (m_textPositions.isEmpty()) {
-        m_characterDataMap.clear();
+            auto it = allCharactersMap.find(valueListPosition + 1);
+            if (it != allCharactersMap.end())
+                characterDataMap.set(iterator.characterOffset() + 1, it->value);
 
-        m_textLength = 0;
-        UChar lastCharacter = ' ';
-        collectTextPositioningElements(*textRoot, lastCharacter);
-
-        if (!m_textLength)
-            return;
-
-        buildCharacterDataMap(*textRoot);
+            // Increase the position in the value/attribute list with one for each
+            // "character unit" (that will be displayed.)
+            valueListPosition++;
+        }
     }
 
-    SVGTextMetricsBuilder::buildMetricsAndLayoutAttributes(textRoot, text, m_characterDataMap);
+} // namespace
+
+SVGTextLayoutAttributesBuilder::SVGTextLayoutAttributesBuilder(
+    LayoutSVGText& textRoot)
+    : m_textRoot(textRoot)
+    , m_characterCount(0)
+{
 }
 
-bool SVGTextLayoutAttributesBuilder::buildLayoutAttributesForForSubtree(LayoutSVGText& textRoot)
+void SVGTextLayoutAttributesBuilder::buildLayoutAttributes()
 {
     m_characterDataMap.clear();
 
     if (m_textPositions.isEmpty()) {
-        m_textLength = 0;
-        UChar lastCharacter = ' ';
-        collectTextPositioningElements(textRoot, lastCharacter);
+        m_characterCount = 0;
+        collectTextPositioningElements(m_textRoot);
     }
 
-    if (!m_textLength)
-        return false;
-
-    buildCharacterDataMap(textRoot);
-    SVGTextMetricsBuilder::buildMetricsAndLayoutAttributes(&textRoot, nullptr, m_characterDataMap);
-    return true;
-}
-
-void SVGTextLayoutAttributesBuilder::rebuildMetricsForTextLayoutObject(LayoutSVGInlineText* text)
-{
-    ASSERT(text);
-    SVGTextMetricsBuilder::measureTextLayoutObject(text);
-}
-
-static inline void processLayoutSVGInlineText(LayoutSVGInlineText* text, unsigned& atCharacter, UChar& lastCharacter)
-{
-    if (text->style()->whiteSpace() == PRE) {
-        atCharacter += text->textLength();
+    if (!m_characterCount)
         return;
-    }
 
-    unsigned textLength = text->textLength();
-    for (unsigned textPosition = 0; textPosition < textLength; ++textPosition) {
-        UChar currentCharacter = text->characterAt(textPosition);
-        if (currentCharacter == ' ' && lastCharacter == ' ')
-            continue;
+    buildCharacterDataMap(m_textRoot);
 
-        lastCharacter = currentCharacter;
-        ++atCharacter;
+    unsigned valueListPosition = 0;
+    LayoutObject* child = m_textRoot.firstChild();
+    while (child) {
+        if (child->isSVGInlineText()) {
+            updateLayoutAttributes(toLayoutSVGInlineText(*child), valueListPosition,
+                m_characterDataMap);
+        } else if (child->isSVGInline()) {
+            // Visit children of text content elements.
+            if (LayoutObject* inlineChild = toLayoutSVGInline(child)->firstChild()) {
+                child = inlineChild;
+                continue;
+            }
+        }
+        child = child->nextInPreOrderAfterChildren(&m_textRoot);
     }
 }
 
-void SVGTextLayoutAttributesBuilder::collectTextPositioningElements(LayoutBoxModelObject& start, UChar& lastCharacter)
+static inline unsigned countCharactersInTextNode(
+    const LayoutSVGInlineText& text)
+{
+    unsigned numCharacters = 0;
+    for (const SVGTextMetrics& metrics : text.metricsList()) {
+        if (metrics.isEmpty())
+            continue;
+        numCharacters++;
+    }
+    return numCharacters;
+}
+
+static SVGTextPositioningElement* positioningElementFromLayoutObject(
+    LayoutObject& layoutObject)
+{
+    ASSERT(layoutObject.isSVGText() || layoutObject.isSVGInline());
+
+    Node* node = layoutObject.node();
+    ASSERT(node);
+    ASSERT(node->isSVGElement());
+
+    return isSVGTextPositioningElement(*node) ? toSVGTextPositioningElement(node)
+                                              : nullptr;
+}
+
+void SVGTextLayoutAttributesBuilder::collectTextPositioningElements(
+    LayoutBoxModelObject& start)
 {
     ASSERT(!start.isSVGText() || m_textPositions.isEmpty());
+    SVGTextPositioningElement* element = positioningElementFromLayoutObject(start);
+    unsigned atPosition = m_textPositions.size();
+    if (element)
+        m_textPositions.push_back(TextPosition(element, m_characterCount));
 
-    for (LayoutObject* child = start.slowFirstChild(); child; child = child->nextSibling()) {
+    for (LayoutObject* child = start.slowFirstChild(); child;
+         child = child->nextSibling()) {
         if (child->isSVGInlineText()) {
-            processLayoutSVGInlineText(toLayoutSVGInlineText(child), m_textLength, lastCharacter);
+            m_characterCount += countCharactersInTextNode(toLayoutSVGInlineText(*child));
             continue;
         }
 
-        if (!child->isSVGInline())
+        if (child->isSVGInline()) {
+            collectTextPositioningElements(toLayoutSVGInline(*child));
             continue;
-
-        LayoutSVGInline& inlineChild = toLayoutSVGInline(*child);
-        SVGTextPositioningElement* element = SVGTextPositioningElement::elementFromLayoutObject(inlineChild);
-        unsigned atPosition = m_textPositions.size();
-        if (element)
-            m_textPositions.append(TextPosition(element, m_textLength));
-
-        collectTextPositioningElements(inlineChild, lastCharacter);
-
-        if (!element)
-            continue;
-
-        // Update text position, after we're back from recursion.
-        TextPosition& position = m_textPositions[atPosition];
-        ASSERT(!position.length);
-        position.length = m_textLength - position.start;
+        }
     }
+
+    if (!element)
+        return;
+
+    // Compute the length of the subtree after all children have been visited.
+    TextPosition& position = m_textPositions[atPosition];
+    ASSERT(!position.length);
+    position.length = m_characterCount - position.start;
 }
 
-void SVGTextLayoutAttributesBuilder::buildCharacterDataMap(LayoutSVGText& textRoot)
+void SVGTextLayoutAttributesBuilder::buildCharacterDataMap(
+    LayoutSVGText& textRoot)
 {
-    SVGTextPositioningElement* outermostTextElement = SVGTextPositioningElement::elementFromLayoutObject(textRoot);
-    ASSERT(outermostTextElement);
-
-    // Grab outermost <text> element value lists and insert them in the character data map.
-    TextPosition wholeTextPosition(outermostTextElement, 0, m_textLength);
-    fillCharacterDataMap(wholeTextPosition);
+    // Fill character data map using text positioning elements in top-down order.
+    for (const TextPosition& position : m_textPositions)
+        fillCharacterDataMap(position);
 
     // Handle x/y default attributes.
-    SVGCharacterDataMap::iterator it = m_characterDataMap.find(1);
-    if (it == m_characterDataMap.end()) {
-        SVGCharacterData data;
+    SVGCharacterData& data = m_characterDataMap.add(1, SVGCharacterData()).storedValue->value;
+    if (!data.hasX())
         data.x = 0;
+    if (!data.hasY())
         data.y = 0;
-        m_characterDataMap.set(1, data);
-    } else {
-        SVGCharacterData& data = it->value;
-        if (SVGTextLayoutAttributes::isEmptyValue(data.x))
-            data.x = 0;
-        if (SVGTextLayoutAttributes::isEmptyValue(data.y))
-            data.y = 0;
-    }
-
-    // Fill character data map using child text positioning elements in top-down order.
-    unsigned size = m_textPositions.size();
-    for (unsigned i = 0; i < size; ++i)
-        fillCharacterDataMap(m_textPositions[i]);
 }
 
-static inline void updateCharacterData(unsigned i, float& lastRotation, SVGCharacterData& data, const SVGLengthContext& lengthContext, const SVGLengthList* xList, const SVGLengthList* yList, const SVGLengthList* dxList, const SVGLengthList* dyList, const SVGNumberList* rotateList)
-{
-    if (xList)
-        data.x = xList->at(i)->value(lengthContext);
-    if (yList)
-        data.y = yList->at(i)->value(lengthContext);
-    if (dxList)
-        data.dx = dxList->at(i)->value(lengthContext);
-    if (dyList)
-        data.dy = dyList->at(i)->value(lengthContext);
-    if (rotateList) {
-        data.rotate = rotateList->at(i)->value();
-        lastRotation = data.rotate;
-    }
-}
+namespace {
 
-void SVGTextLayoutAttributesBuilder::fillCharacterDataMap(const TextPosition& position)
-{
-    RefPtrWillBeRawPtr<SVGLengthList> xList = position.element->x()->currentValue();
-    RefPtrWillBeRawPtr<SVGLengthList> yList = position.element->y()->currentValue();
-    RefPtrWillBeRawPtr<SVGLengthList> dxList = position.element->dx()->currentValue();
-    RefPtrWillBeRawPtr<SVGLengthList> dyList = position.element->dy()->currentValue();
-    RefPtrWillBeRawPtr<SVGNumberList> rotateList = position.element->rotate()->currentValue();
+    class AttributeListsIterator {
+        STACK_ALLOCATED();
 
-    unsigned xListSize = xList->length();
-    unsigned yListSize = yList->length();
-    unsigned dxListSize = dxList->length();
-    unsigned dyListSize = dyList->length();
-    unsigned rotateListSize = rotateList->length();
-    if (!xListSize && !yListSize && !dxListSize && !dyListSize && !rotateListSize)
-        return;
+    public:
+        AttributeListsIterator(SVGTextPositioningElement*);
 
-    float lastRotation = SVGTextLayoutAttributes::emptyValue();
-    SVGLengthContext lengthContext(position.element);
-    for (unsigned i = 0; i < position.length; ++i) {
-        const SVGLengthList* xListPtr = i < xListSize ? xList.get() : 0;
-        const SVGLengthList* yListPtr = i < yListSize ? yList.get() : 0;
-        const SVGLengthList* dxListPtr = i < dxListSize ? dxList.get() : 0;
-        const SVGLengthList* dyListPtr = i < dyListSize ? dyList.get() : 0;
-        const SVGNumberList* rotateListPtr = i < rotateListSize ? rotateList.get() : 0;
-        if (!xListPtr && !yListPtr && !dxListPtr && !dyListPtr && !rotateListPtr)
-            break;
-
-        SVGCharacterDataMap::iterator it = m_characterDataMap.find(position.start + i + 1);
-        if (it == m_characterDataMap.end()) {
-            SVGCharacterData data;
-            updateCharacterData(i, lastRotation, data, lengthContext, xListPtr, yListPtr, dxListPtr, dyListPtr, rotateListPtr);
-            m_characterDataMap.set(position.start + i + 1, data);
-            continue;
+        bool hasAttributes() const
+        {
+            return m_xListRemaining || m_yListRemaining || m_dxListRemaining || m_dyListRemaining || m_rotateListRemaining;
         }
+        void updateCharacterData(size_t index, SVGCharacterData&);
 
-        updateCharacterData(i, lastRotation, it->value, lengthContext, xListPtr, yListPtr, dxListPtr, dyListPtr, rotateListPtr);
+    private:
+        SVGLengthContext m_lengthContext;
+        Member<SVGLengthList> m_xList;
+        unsigned m_xListRemaining;
+        Member<SVGLengthList> m_yList;
+        unsigned m_yListRemaining;
+        Member<SVGLengthList> m_dxList;
+        unsigned m_dxListRemaining;
+        Member<SVGLengthList> m_dyList;
+        unsigned m_dyListRemaining;
+        Member<SVGNumberList> m_rotateList;
+        unsigned m_rotateListRemaining;
+    };
+
+    AttributeListsIterator::AttributeListsIterator(
+        SVGTextPositioningElement* element)
+        : m_lengthContext(element)
+        , m_xList(element->x()->currentValue())
+        , m_xListRemaining(m_xList->length())
+        , m_yList(element->y()->currentValue())
+        , m_yListRemaining(m_yList->length())
+        , m_dxList(element->dx()->currentValue())
+        , m_dxListRemaining(m_dxList->length())
+        , m_dyList(element->dy()->currentValue())
+        , m_dyListRemaining(m_dyList->length())
+        , m_rotateList(element->rotate()->currentValue())
+        , m_rotateListRemaining(m_rotateList->length())
+    {
     }
 
-    // The last rotation value always spans the whole scope.
-    if (SVGTextLayoutAttributes::isEmptyValue(lastRotation))
-        return;
-
-    for (unsigned i = rotateList->length(); i < position.length; ++i) {
-        SVGCharacterDataMap::iterator it = m_characterDataMap.find(position.start + i + 1);
-        if (it == m_characterDataMap.end()) {
-            SVGCharacterData data;
-            data.rotate = lastRotation;
-            m_characterDataMap.set(position.start + i + 1, data);
-            continue;
+    inline void AttributeListsIterator::updateCharacterData(
+        size_t index,
+        SVGCharacterData& data)
+    {
+        if (m_xListRemaining) {
+            data.x = m_xList->at(index)->value(m_lengthContext);
+            --m_xListRemaining;
         }
+        if (m_yListRemaining) {
+            data.y = m_yList->at(index)->value(m_lengthContext);
+            --m_yListRemaining;
+        }
+        if (m_dxListRemaining) {
+            data.dx = m_dxList->at(index)->value(m_lengthContext);
+            --m_dxListRemaining;
+        }
+        if (m_dyListRemaining) {
+            data.dy = m_dyList->at(index)->value(m_lengthContext);
+            --m_dyListRemaining;
+        }
+        if (m_rotateListRemaining) {
+            data.rotate = m_rotateList->at(std::min(index, m_rotateList->length() - 1))->value();
+            // The last rotation value spans the whole scope.
+            if (m_rotateListRemaining > 1)
+                --m_rotateListRemaining;
+        }
+    }
 
-        it->value.rotate = lastRotation;
+} // namespace
+
+void SVGTextLayoutAttributesBuilder::fillCharacterDataMap(
+    const TextPosition& position)
+{
+    AttributeListsIterator attrLists(position.element);
+    for (unsigned i = 0; attrLists.hasAttributes() && i < position.length; ++i) {
+        SVGCharacterData& data = m_characterDataMap.add(position.start + i + 1, SVGCharacterData())
+                                     .storedValue->value;
+        attrLists.updateCharacterData(i, data);
     }
 }
 
+DEFINE_TRACE(SVGTextLayoutAttributesBuilder::TextPosition)
+{
+    visitor->trace(element);
 }
+
+} // namespace blink

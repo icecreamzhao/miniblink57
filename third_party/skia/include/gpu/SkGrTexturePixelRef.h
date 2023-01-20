@@ -6,11 +6,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> miniblink49
 #ifndef SkGrTexturePixelRef_DEFINED
 #define SkGrTexturePixelRef_DEFINED
 

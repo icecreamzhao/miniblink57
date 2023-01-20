@@ -27,7 +27,6 @@
 #define TransformationMatrix_h
 
 #include "SkMatrix44.h"
-<<<<<<< HEAD
 #include "platform/geometry/FloatPoint.h"
 #include "platform/geometry/FloatPoint3D.h"
 #include "wtf/Alignment.h"
@@ -37,14 +36,6 @@
 #include "wtf/PtrUtil.h"
 #include <memory>
 #include <string.h> // for memcpy
-=======
-#include <string.h> //for memcpy
-#include "platform/geometry/FloatPoint.h"
-#include "platform/geometry/FloatPoint3D.h"
-#include "platform/geometry/IntPoint.h"
-#include "wtf/CPU.h"
-#include "wtf/FastAllocBase.h"
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -54,15 +45,11 @@ class LayoutRect;
 class FloatRect;
 class FloatQuad;
 class FloatBox;
-<<<<<<< HEAD
 struct Rotation;
-=======
->>>>>>> miniblink49
 #if CPU(X86_64)
 #define TRANSFORMATION_MATRIX_USE_X86_64_SSE2
 #endif
 
-<<<<<<< HEAD
 // TransformationMatrix must not be allocated on Oilpan's heap since
 // Oilpan doesn't (yet) have an ability to allocate the TransformationMatrix
 // with 16-byte alignment. PartitionAlloc has the ability.
@@ -72,23 +59,10 @@ class PLATFORM_EXPORT TransformationMatrix {
 public:
 #if defined(TRANSFORMATION_MATRIX_USE_X86_64_SSE2)
     typedef WTF_ALIGNED(double, Matrix4[4][4], 16);
-=======
-class PLATFORM_EXPORT TransformationMatrix {
-    WTF_MAKE_FAST_ALLOCATED(TransformationMatrix);
-public:
-
-#if CPU(APPLE_ARMV7S) || defined(TRANSFORMATION_MATRIX_USE_X86_64_SSE2)
-#if COMPILER(MSVC)
-    __declspec(align(16)) typedef double Matrix4[4][4];
-#else
-    typedef double Matrix4[4][4] __attribute__((aligned (16)));
-#endif
->>>>>>> miniblink49
 #else
     typedef double Matrix4[4][4];
 #endif
 
-<<<<<<< HEAD
     static std::unique_ptr<TransformationMatrix> create()
     {
         return WTF::makeUnique<TransformationMatrix>();
@@ -178,23 +152,10 @@ public:
             matrix.get(0, 1), matrix.get(1, 1), matrix.get(2, 1), matrix.get(3, 1),
             matrix.get(0, 2), matrix.get(1, 2), matrix.get(2, 2), matrix.get(3, 2),
             matrix.get(0, 3), matrix.get(1, 3), matrix.get(2, 3), matrix.get(3, 3));
-=======
-    TransformationMatrix() { makeIdentity(); }
-    TransformationMatrix(const AffineTransform& t);
-    TransformationMatrix(const TransformationMatrix& t) { *this = t; }
-    TransformationMatrix(double a, double b, double c, double d, double e, double f) { setMatrix(a, b, c, d, e, f); }
-    TransformationMatrix(double m11, double m12, double m13, double m14,
-                         double m21, double m22, double m23, double m24,
-                         double m31, double m32, double m33, double m34,
-                         double m41, double m42, double m43, double m44)
-    {
-        setMatrix(m11, m12, m13, m14, m21, m22, m23, m24, m31, m32, m33, m34, m41, m42, m43, m44);
->>>>>>> miniblink49
     }
 
     void setMatrix(double a, double b, double c, double d, double e, double f)
     {
-<<<<<<< HEAD
         m_matrix[0][0] = a;
         m_matrix[0][1] = b;
         m_matrix[0][2] = 0;
@@ -249,26 +210,6 @@ public:
     }
 
     TransformationMatrix& operator=(const TransformationMatrix& t)
-=======
-        m_matrix[0][0] = a; m_matrix[0][1] = b; m_matrix[0][2] = 0; m_matrix[0][3] = 0;
-        m_matrix[1][0] = c; m_matrix[1][1] = d; m_matrix[1][2] = 0; m_matrix[1][3] = 0;
-        m_matrix[2][0] = 0; m_matrix[2][1] = 0; m_matrix[2][2] = 1; m_matrix[2][3] = 0;
-        m_matrix[3][0] = e; m_matrix[3][1] = f; m_matrix[3][2] = 0; m_matrix[3][3] = 1;
-    }
-
-    void setMatrix(double m11, double m12, double m13, double m14,
-                   double m21, double m22, double m23, double m24,
-                   double m31, double m32, double m33, double m34,
-                   double m41, double m42, double m43, double m44)
-    {
-        m_matrix[0][0] = m11; m_matrix[0][1] = m12; m_matrix[0][2] = m13; m_matrix[0][3] = m14;
-        m_matrix[1][0] = m21; m_matrix[1][1] = m22; m_matrix[1][2] = m23; m_matrix[1][3] = m24;
-        m_matrix[2][0] = m31; m_matrix[2][1] = m32; m_matrix[2][2] = m33; m_matrix[2][3] = m34;
-        m_matrix[3][0] = m41; m_matrix[3][1] = m42; m_matrix[3][2] = m43; m_matrix[3][3] = m44;
-    }
-
-    TransformationMatrix& operator =(const TransformationMatrix &t)
->>>>>>> miniblink49
     {
         setMatrix(t.m_matrix);
         return *this;
@@ -276,36 +217,21 @@ public:
 
     TransformationMatrix& makeIdentity()
     {
-<<<<<<< HEAD
         setMatrix(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
-=======
-        setMatrix(1, 0, 0, 0,  0, 1, 0, 0,  0, 0, 1, 0,  0, 0, 0, 1);
->>>>>>> miniblink49
         return *this;
     }
 
     bool isIdentity() const
     {
-<<<<<<< HEAD
         return m_matrix[0][0] == 1 && m_matrix[0][1] == 0 && m_matrix[0][2] == 0 && m_matrix[0][3] == 0 && m_matrix[1][0] == 0 && m_matrix[1][1] == 1 && m_matrix[1][2] == 0 && m_matrix[1][3] == 0 && m_matrix[2][0] == 0 && m_matrix[2][1] == 0 && m_matrix[2][2] == 1 && m_matrix[2][3] == 0 && m_matrix[3][0] == 0 && m_matrix[3][1] == 0 && m_matrix[3][2] == 0 && m_matrix[3][3] == 1;
-=======
-        return m_matrix[0][0] == 1 && m_matrix[0][1] == 0 && m_matrix[0][2] == 0 && m_matrix[0][3] == 0 &&
-               m_matrix[1][0] == 0 && m_matrix[1][1] == 1 && m_matrix[1][2] == 0 && m_matrix[1][3] == 0 &&
-               m_matrix[2][0] == 0 && m_matrix[2][1] == 0 && m_matrix[2][2] == 1 && m_matrix[2][3] == 0 &&
-               m_matrix[3][0] == 0 && m_matrix[3][1] == 0 && m_matrix[3][2] == 0 && m_matrix[3][3] == 1;
->>>>>>> miniblink49
     }
 
     // Map a 3D point through the transform, returning a 3D point.
     FloatPoint3D mapPoint(const FloatPoint3D&) const;
 
     // Map a 2D point through the transform, returning a 2D point.
-<<<<<<< HEAD
     // Note that this ignores the z component, effectively projecting the point
     // into the z=0 plane.
-=======
-    // Note that this ignores the z component, effectively projecting the point into the z=0 plane.
->>>>>>> miniblink49
     FloatPoint mapPoint(const FloatPoint&) const;
 
     // If the matrix has 3D components, the z component of the result is
@@ -328,11 +254,7 @@ public:
     // with the destination plane.
     FloatPoint projectPoint(const FloatPoint&, bool* clamped = 0) const;
     // Projects the four corners of the quad
-<<<<<<< HEAD
     FloatQuad projectQuad(const FloatQuad&, bool* clamped = 0) const;
-=======
-    FloatQuad projectQuad(const FloatQuad&,  bool* clamped = 0) const;
->>>>>>> miniblink49
     // Projects the four corners of the quad and takes a bounding box,
     // while sanitizing values created when the w component is negative.
     LayoutRect clampedBoundsOfProjectedQuad(const FloatQuad&) const;
@@ -390,11 +312,7 @@ public:
     double f() const { return m_matrix[3][1]; }
     void setF(double f) { m_matrix[3][1] = f; }
 
-<<<<<<< HEAD
     // *this = *this * mat.
-=======
-    // this = mat * this.
->>>>>>> miniblink49
     TransformationMatrix& multiply(const TransformationMatrix&);
 
     TransformationMatrix& scale(double);
@@ -402,13 +320,9 @@ public:
     TransformationMatrix& scale3d(double sx, double sy, double sz);
 
     TransformationMatrix& rotate(double d) { return rotate3d(0, 0, d); }
-<<<<<<< HEAD
     // Angles are in degrees.
     TransformationMatrix& rotate3d(double rx, double ry, double rz);
     TransformationMatrix& rotate3d(const Rotation&);
-=======
-    TransformationMatrix& rotate3d(double rx, double ry, double rz);
->>>>>>> miniblink49
 
     // The vector (x,y,z) is normalized if it's not already. A vector of
     // (0,0,0) uses a vector of (0,0,1).
@@ -427,7 +341,6 @@ public:
 
     TransformationMatrix& applyPerspective(double p);
 
-<<<<<<< HEAD
     // Changes the transform to apply as if the origin were at (x, y, z).
     TransformationMatrix& applyTransformOrigin(double x, double y, double z);
     TransformationMatrix& applyTransformOrigin(const FloatPoint3D& origin)
@@ -445,8 +358,6 @@ public:
     //
     TransformationMatrix& zoom(double zoomFactor);
 
-=======
->>>>>>> miniblink49
     bool isInvertible() const;
 
     // This method returns the identity matrix if it is not invertible.
@@ -462,23 +373,14 @@ public:
         double perspectiveX, perspectiveY, perspectiveZ, perspectiveW;
     } DecomposedType;
 
-<<<<<<< HEAD
     WARN_UNUSED_RESULT bool decompose(DecomposedType&) const;
-=======
-    bool decompose(DecomposedType&) const WARN_UNUSED_RETURN;
->>>>>>> miniblink49
     void recompose(const DecomposedType&);
 
     void blend(const TransformationMatrix& from, double progress);
 
     bool isAffine() const
     {
-<<<<<<< HEAD
         return m13() == 0 && m14() == 0 && m23() == 0 && m24() == 0 && m31() == 0 && m32() == 0 && m33() == 1 && m34() == 0 && m43() == 0 && m44() == 1;
-=======
-        return (m13() == 0 && m14() == 0 && m23() == 0 && m24() == 0 &&
-                m31() == 0 && m32() == 0 && m33() == 1 && m34() == 0 && m43() == 0 && m44() == 1);
->>>>>>> miniblink49
     }
 
     // Throw away the non-affine parts of the matrix (lossy!)
@@ -486,7 +388,6 @@ public:
 
     AffineTransform toAffineTransform() const;
 
-<<<<<<< HEAD
     // Flatten into a 2-D transformation (non-invertable).
     // Same as gfx::Transform::FlattenTo2d(); see the docs for that function for
     // details and discussion.
@@ -501,29 +402,6 @@ public:
     {
         return !(*this == other);
     }
-=======
-    bool operator==(const TransformationMatrix& m2) const
-    {
-        return (m_matrix[0][0] == m2.m_matrix[0][0] &&
-                m_matrix[0][1] == m2.m_matrix[0][1] &&
-                m_matrix[0][2] == m2.m_matrix[0][2] &&
-                m_matrix[0][3] == m2.m_matrix[0][3] &&
-                m_matrix[1][0] == m2.m_matrix[1][0] &&
-                m_matrix[1][1] == m2.m_matrix[1][1] &&
-                m_matrix[1][2] == m2.m_matrix[1][2] &&
-                m_matrix[1][3] == m2.m_matrix[1][3] &&
-                m_matrix[2][0] == m2.m_matrix[2][0] &&
-                m_matrix[2][1] == m2.m_matrix[2][1] &&
-                m_matrix[2][2] == m2.m_matrix[2][2] &&
-                m_matrix[2][3] == m2.m_matrix[2][3] &&
-                m_matrix[3][0] == m2.m_matrix[3][0] &&
-                m_matrix[3][1] == m2.m_matrix[3][1] &&
-                m_matrix[3][2] == m2.m_matrix[3][2] &&
-                m_matrix[3][3] == m2.m_matrix[3][3]);
-    }
-
-    bool operator!=(const TransformationMatrix& other) const { return !(*this == other); }
->>>>>>> miniblink49
 
     // *this = *this * t
     TransformationMatrix& operator*=(const TransformationMatrix& t)
@@ -541,14 +419,7 @@ public:
 
     bool isIdentityOrTranslation() const
     {
-<<<<<<< HEAD
         return m_matrix[0][0] == 1 && m_matrix[0][1] == 0 && m_matrix[0][2] == 0 && m_matrix[0][3] == 0 && m_matrix[1][0] == 0 && m_matrix[1][1] == 1 && m_matrix[1][2] == 0 && m_matrix[1][3] == 0 && m_matrix[2][0] == 0 && m_matrix[2][1] == 0 && m_matrix[2][2] == 1 && m_matrix[2][3] == 0 && m_matrix[3][3] == 1;
-=======
-        return m_matrix[0][0] == 1 && m_matrix[0][1] == 0 && m_matrix[0][2] == 0 && m_matrix[0][3] == 0
-            && m_matrix[1][0] == 0 && m_matrix[1][1] == 1 && m_matrix[1][2] == 0 && m_matrix[1][3] == 0
-            && m_matrix[2][0] == 0 && m_matrix[2][1] == 0 && m_matrix[2][2] == 1 && m_matrix[2][3] == 0
-            && m_matrix[3][3] == 1;
->>>>>>> miniblink49
     }
 
     bool isIdentityOr2DTranslation() const
@@ -567,13 +438,10 @@ public:
 
     static SkMatrix44 toSkMatrix44(const TransformationMatrix&);
 
-<<<<<<< HEAD
     // If |asMatrix|, return the matrix in row-major order. Otherwise, return
     // the transform's decomposition which shows the translation, scale, etc.
     String toString(bool asMatrix = false) const;
 
-=======
->>>>>>> miniblink49
 private:
     // multiply passed 2D point by matrix (assume z=0)
     void multVecMatrix(double x, double y, double& dstX, double& dstY) const;
@@ -586,31 +454,22 @@ private:
     }
 
     // multiply passed 3D point by matrix
-<<<<<<< HEAD
     void multVecMatrix(double x,
         double y,
         double z,
         double& dstX,
         double& dstY,
         double& dstZ) const;
-=======
-    void multVecMatrix(double x, double y, double z, double& dstX, double& dstY, double& dstZ) const;
->>>>>>> miniblink49
     FloatPoint3D internalMapPoint(const FloatPoint3D& sourcePoint) const
     {
         double resultX;
         double resultY;
         double resultZ;
-<<<<<<< HEAD
         multVecMatrix(sourcePoint.x(), sourcePoint.y(), sourcePoint.z(), resultX,
             resultY, resultZ);
         return FloatPoint3D(static_cast<float>(resultX),
             static_cast<float>(resultY),
             static_cast<float>(resultZ));
-=======
-        multVecMatrix(sourcePoint.x(), sourcePoint.y(), sourcePoint.z(), resultX, resultY, resultZ);
-        return FloatPoint3D(static_cast<float>(resultX), static_cast<float>(resultY), static_cast<float>(resultZ));
->>>>>>> miniblink49
     }
 
     void setMatrix(const Matrix4 m)
@@ -619,7 +478,6 @@ private:
             memcpy(m_matrix, m, sizeof(Matrix4));
     }
 
-<<<<<<< HEAD
     void checkAlignment()
     {
 #if defined(TRANSFORMATION_MATRIX_USE_X86_64_SSE2)
@@ -636,11 +494,6 @@ private:
 // See platform/testing/TransformPrinters.h.
 void PrintTo(const TransformationMatrix&, std::ostream*);
 
-=======
-    Matrix4 m_matrix;
-};
-
->>>>>>> miniblink49
 } // namespace blink
 
 #endif // TransformationMatrix_h

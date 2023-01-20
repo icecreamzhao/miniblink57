@@ -10,7 +10,6 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
-<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,30 +24,10 @@
  */
 
 #include "modules/webaudio/AudioBasicProcessorHandler.h"
-=======
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-
-#include "config.h"
-#if ENABLE(WEB_AUDIO)
-#include "modules/webaudio/AudioBasicProcessorHandler.h"
-
-#include "modules/webaudio/AudioContext.h"
->>>>>>> miniblink49
 #include "modules/webaudio/AudioNodeInput.h"
 #include "modules/webaudio/AudioNodeOutput.h"
 #include "platform/audio/AudioBus.h"
 #include "platform/audio/AudioProcessor.h"
-<<<<<<< HEAD
 #include <memory>
 
 namespace blink {
@@ -60,20 +39,11 @@ AudioBasicProcessorHandler::AudioBasicProcessorHandler(
     std::unique_ptr<AudioProcessor> processor)
     : AudioHandler(nodeType, node, sampleRate)
     , m_processor(std::move(processor))
-=======
-
-namespace blink {
-
-AudioBasicProcessorHandler::AudioBasicProcessorHandler(NodeType nodeType, AudioNode& node, float sampleRate, PassOwnPtr<AudioProcessor> processor)
-    : AudioHandler(nodeType, node, sampleRate)
-    , m_processor(processor)
->>>>>>> miniblink49
 {
     addInput();
     addOutput(1);
 }
 
-<<<<<<< HEAD
 PassRefPtr<AudioBasicProcessorHandler> AudioBasicProcessorHandler::create(
     NodeType nodeType,
     AudioNode& node,
@@ -82,11 +52,6 @@ PassRefPtr<AudioBasicProcessorHandler> AudioBasicProcessorHandler::create(
 {
     return adoptRef(new AudioBasicProcessorHandler(nodeType, node, sampleRate,
         std::move(processor)));
-=======
-PassRefPtr<AudioBasicProcessorHandler> AudioBasicProcessorHandler::create(NodeType nodeType, AudioNode& node, float sampleRate, PassOwnPtr<AudioProcessor> processor)
-{
-    return adoptRef(new AudioBasicProcessorHandler(nodeType, node, sampleRate, processor));
->>>>>>> miniblink49
 }
 
 AudioBasicProcessorHandler::~AudioBasicProcessorHandler()
@@ -100,11 +65,7 @@ void AudioBasicProcessorHandler::initialize()
     if (isInitialized())
         return;
 
-<<<<<<< HEAD
     DCHECK(processor());
-=======
-    ASSERT(processor());
->>>>>>> miniblink49
     processor()->initialize();
 
     AudioHandler::initialize();
@@ -115,11 +76,7 @@ void AudioBasicProcessorHandler::uninitialize()
     if (!isInitialized())
         return;
 
-<<<<<<< HEAD
     DCHECK(processor());
-=======
-    ASSERT(processor());
->>>>>>> miniblink49
     processor()->uninitialize();
 
     AudioHandler::uninitialize();
@@ -134,12 +91,8 @@ void AudioBasicProcessorHandler::process(size_t framesToProcess)
     } else {
         AudioBus* sourceBus = input(0).bus();
 
-<<<<<<< HEAD
         // FIXME: if we take "tail time" into account, then we can avoid calling
         // processor()->process() once the tail dies down.
-=======
-        // FIXME: if we take "tail time" into account, then we can avoid calling processor()->process() once the tail dies down.
->>>>>>> miniblink49
         if (!input(0).isConnected())
             sourceBus->zero();
 
@@ -147,7 +100,6 @@ void AudioBasicProcessorHandler::process(size_t framesToProcess)
     }
 }
 
-<<<<<<< HEAD
 void AudioBasicProcessorHandler::processOnlyAudioParams(
     size_t framesToProcess)
 {
@@ -162,17 +114,10 @@ void AudioBasicProcessorHandler::pullInputs(size_t framesToProcess)
 {
     // Render input stream - suggest to the input to render directly into output
     // bus for in-place processing in process() if possible.
-=======
-// Nice optimization in the very common case allowing for "in-place" processing
-void AudioBasicProcessorHandler::pullInputs(size_t framesToProcess)
-{
-    // Render input stream - suggest to the input to render directly into output bus for in-place processing in process() if possible.
->>>>>>> miniblink49
     input(0).pull(output(0).bus(), framesToProcess);
 }
 
 // As soon as we know the channel count of our input, we can lazily initialize.
-<<<<<<< HEAD
 // Sometimes this may be called more than once with different channel counts, in
 // which case we must safely uninitialize and then re-initialize with the new
 // channel count.
@@ -187,20 +132,6 @@ void AudioBasicProcessorHandler::checkNumberOfChannelsForInput(
         return;
 
     DCHECK(processor());
-=======
-// Sometimes this may be called more than once with different channel counts, in which case we must safely
-// uninitialize and then re-initialize with the new channel count.
-void AudioBasicProcessorHandler::checkNumberOfChannelsForInput(AudioNodeInput* input)
-{
-    ASSERT(context()->isAudioThread());
-    ASSERT(context()->isGraphOwner());
-
-    ASSERT(input == &this->input(0));
-    if (input != &this->input(0))
-        return;
-
-    ASSERT(processor());
->>>>>>> miniblink49
     if (!processor())
         return;
 
@@ -212,12 +143,8 @@ void AudioBasicProcessorHandler::checkNumberOfChannelsForInput(AudioNodeInput* i
     }
 
     if (!isInitialized()) {
-<<<<<<< HEAD
         // This will propagate the channel count to any nodes connected further down
         // the chain...
-=======
-        // This will propagate the channel count to any nodes connected further down the chain...
->>>>>>> miniblink49
         output(0).setNumberOfChannels(numberOfChannels);
 
         // Re-initialize the processor with the new channel count.
@@ -244,8 +171,3 @@ double AudioBasicProcessorHandler::latencyTime() const
 }
 
 } // namespace blink
-<<<<<<< HEAD
-=======
-
-#endif // ENABLE(WEB_AUDIO)
->>>>>>> miniblink49

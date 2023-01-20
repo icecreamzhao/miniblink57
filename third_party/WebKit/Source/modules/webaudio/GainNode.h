@@ -10,7 +10,6 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
-<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -22,18 +21,6 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
-=======
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
->>>>>>> miniblink49
  */
 
 #ifndef GainNode_h
@@ -46,7 +33,6 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 class BaseAudioContext;
 class GainOptions;
 
@@ -66,21 +52,6 @@ public:
 
     // Called in the main thread when the number of channels for the input may
     // have changed.
-=======
-class AudioContext;
-
-// GainNode is an AudioNode with one input and one output which applies a gain (volume) change to the audio signal.
-// De-zippering (smoothing) is applied when the gain value is changed dynamically.
-
-class GainHandler final : public AudioHandler {
-public:
-    static PassRefPtr<GainHandler> create(AudioNode&, float sampleRate, AudioParamHandler& gain);
-
-    // AudioHandler
-    void process(size_t framesToProcess) override;
-
-    // Called in the main thread when the number of channels for the input may have changed.
->>>>>>> miniblink49
     void checkNumberOfChannelsForInput(AudioNodeInput*) override;
 
 private:
@@ -94,27 +65,18 @@ private:
 
 class GainNode final : public AudioNode {
     DEFINE_WRAPPERTYPEINFO();
-<<<<<<< HEAD
 
 public:
     static GainNode* create(BaseAudioContext&, ExceptionState&);
     static GainNode* create(BaseAudioContext*,
         const GainOptions&,
         ExceptionState&);
-=======
-public:
-    static GainNode* create(AudioContext&, float sampleRate);
->>>>>>> miniblink49
     DECLARE_VIRTUAL_TRACE();
 
     AudioParam* gain() const;
 
 private:
-<<<<<<< HEAD
     GainNode(BaseAudioContext&);
-=======
-    GainNode(AudioContext&, float sampleRate);
->>>>>>> miniblink49
 
     Member<AudioParam> m_gain;
 };

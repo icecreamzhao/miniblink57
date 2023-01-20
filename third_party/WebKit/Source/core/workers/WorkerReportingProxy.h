@@ -32,44 +32,72 @@
 #define WorkerReportingProxy_h
 
 #include "core/CoreExport.h"
-#include "core/frame/ConsoleTypes.h"
+#include "core/frame/UseCounter.h"
+#include "core/inspector/ConsoleTypes.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
+#include <memory>
 
 namespace blink {
 
-class ConsoleMessage;
-class WorkerGlobalScope;
+class ParentFrameTaskRunners;
+class SourceLocation;
+class WorkerOrWorkletGlobalScope;
 
 // APIs used by workers to report console and worker activity.
 class CORE_EXPORT WorkerReportingProxy {
 public:
     virtual ~WorkerReportingProxy() { }
 
-    virtual void reportException(const String& errorMessage, int lineNumber, int columnNumber, const String& sourceURL, int exceptionId) = 0;
-    virtual void reportConsoleMessage(PassRefPtrWillBeRawPtr<ConsoleMessage>) = 0;
+    virtual void countFeature(UseCounter::Feature) = 0;
+    virtual void countDeprecation(UseCounter::Feature) = 0;
+    virtual void reportException(const String& errorMessage,
+        std::unique_ptr<SourceLocation>,
+        int exceptionId)
+        = 0;
+    virtual void reportConsoleMessage(MessageSource,
+        MessageLevel,
+        const String& message,
+        SourceLocation*)
+        = 0;
     virtual void postMessageToPageInspector(const String&) = 0;
-    virtual void postWorkerConsoleAgentEnabled() = 0;
+
+    // Returns the parent frame's task runners.
+    virtual ParentFrameTaskRunners* getParentFrameTaskRunners() = 0;
+
+    // Invoked when the new WorkerGlobalScope is created. This is called after
+    // didLoadWorkerScript().
+    virtual void didCreateWorkerGlobalScope(WorkerOrWorkletGlobalScope*) { }
+
+    // Invoked when the WorkerGlobalScope is initialized. This is called after
+    // didCreateWorkerGlobalScope().
+    virtual void didInitializeWorkerContext() { }
+
+    // Invoked when the worker script is about to be evaluated. This is called
+    // after didInitializeWorkerContext().
+    virtual void willEvaluateWorkerScript(size_t scriptSize,
+        size_t cachedMetadataSize) { }
+
+    // Invoked when an imported script is about to be evaluated. This is called
+    // after willEvaluateWorkerScript().
+    virtual void willEvaluateImportedScript(size_t scriptSize,
+        size_t cachedMetadataSize) { }
 
     // Invoked when the worker script is evaluated. |success| is true if the
     // evaluation completed with no uncaught exception.
     virtual void didEvaluateWorkerScript(bool success) = 0;
 
-    // Invoked when the new WorkerGlobalScope is started.
-    virtual void workerGlobalScopeStarted(WorkerGlobalScope*) = 0;
-
     // Invoked when close() is invoked on the worker context.
-    virtual void workerGlobalScopeClosed() = 0;
-
-    // Invoked when the thread is stopped and WorkerGlobalScope is being
-    // destructed. (This is be the last method that is called on this
-    // interface)
-    virtual void workerThreadTerminated() = 0;
+    virtual void didCloseWorkerGlobalScope() = 0;
 
     // Invoked when the thread is about to be stopped and WorkerGlobalScope
-    // is to be destructed. (When this is called it is guaranteed that
-    // WorkerGlobalScope is still alive)
+    // is to be destructed. When this is called, it is guaranteed that
+    // WorkerGlobalScope is still alive.
     virtual void willDestroyWorkerGlobalScope() = 0;
+
+    // Invoked when the thread is stopped and WorkerGlobalScope is being
+    // destructed. This is the last method that is called on this interface.
+    virtual void didTerminateWorkerThread() = 0;
 };
 
 } // namespace blink

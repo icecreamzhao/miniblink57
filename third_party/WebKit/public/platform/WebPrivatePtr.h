@@ -32,10 +32,7 @@
 #define WebPrivatePtr_h
 
 #include "WebCommon.h"
-<<<<<<< HEAD
 #include "base/logging.h"
-=======
->>>>>>> miniblink49
 
 #if INSIDE_BLINK
 #include "platform/heap/Handle.h"
@@ -43,7 +40,6 @@
 #include "wtf/TypeTraits.h"
 #endif
 
-<<<<<<< HEAD
 namespace WTF {
 template <class T>
 class ThreadSafeRefCounted;
@@ -67,15 +63,10 @@ enum class WebPrivatePtrStrength {
     Weak,
 };
 
-=======
-namespace blink {
-
->>>>>>> miniblink49
 #if INSIDE_BLINK
 enum LifetimeManagementType {
     RefCountedLifetime,
     GarbageCollectedLifetime,
-<<<<<<< HEAD
 };
 
 template <typename T>
@@ -100,32 +91,11 @@ class PtrStorageImpl<T,
     crossThreadDestruction,
     strongOrWeak,
     RefCountedLifetime> {
-=======
-    RefCountedGarbageCollectedLifetime
-};
-
-template<typename T>
-class LifetimeOf {
-    static const bool isGarbageCollected = WTF::IsSubclassOfTemplate<T, GarbageCollected>::value || IsGarbageCollectedMixin<T>::value;
-    static const bool isRefCountedGarbageCollected = WTF::IsSubclassOfTemplate<T, RefCountedGarbageCollected>::value;
-public:
-    static const LifetimeManagementType value =
-        !isGarbageCollected ? RefCountedLifetime :
-        isRefCountedGarbageCollected ? RefCountedGarbageCollectedLifetime : GarbageCollectedLifetime;
-};
-
-template<typename T, LifetimeManagementType lifetime>
-class PtrStorageImpl;
-
-template<typename T>
-class PtrStorageImpl<T, RefCountedLifetime> {
->>>>>>> miniblink49
 public:
     typedef PassRefPtr<T> BlinkPtrType;
 
     void assign(const BlinkPtrType& val)
     {
-<<<<<<< HEAD
         static_assert(
             crossThreadDestruction == WebPrivatePtrDestructionSameThread || WTF::IsSubclassOfTemplate<T, WTF::ThreadSafeRefCounted>::value,
             "Cross thread destructible class must derive from "
@@ -133,37 +103,20 @@ public:
         static_assert(
             strongOrWeak == WebPrivatePtrStrength::Normal,
             "Ref-counted classes do not support weak WebPrivatePtr<> references");
-=======
->>>>>>> miniblink49
         release();
         m_ptr = val.leakRef();
     }
 
     void assign(const PtrStorageImpl& other)
     {
-<<<<<<< HEAD
         T* val = other.get();
         if (m_ptr == val)
             return;
         release();
-=======
-        release();
-        T* val = other.get();
->>>>>>> miniblink49
         WTF::refIfNotNull(val);
         m_ptr = val;
     }
 
-<<<<<<< HEAD
-=======
-    void moveFrom(PtrStorageImpl& other)
-    {
-        release();
-        m_ptr = other.m_ptr;
-        other.m_ptr = 0;
-    }
-
->>>>>>> miniblink49
     T* get() const { return m_ptr; }
 
     void release()
@@ -176,7 +129,6 @@ private:
     T* m_ptr;
 };
 
-<<<<<<< HEAD
 template <typename T, WebPrivatePtrDestruction, WebPrivatePtrStrength>
 struct WebPrivatePtrPersistentStorageType {
 public:
@@ -221,12 +173,6 @@ public:
             strongOrWeak>::Type;
 
     void assign(T* val)
-=======
-template<typename T>
-class PtrStorageImpl<T, GarbageCollectedLifetime> {
-public:
-    void assign(const RawPtr<T>& val)
->>>>>>> miniblink49
     {
         if (!val) {
             release();
@@ -234,16 +180,11 @@ public:
         }
 
         if (!m_handle)
-<<<<<<< HEAD
             m_handle = new BlinkPtrType;
-=======
-            m_handle = new Persistent<T>();
->>>>>>> miniblink49
 
         (*m_handle) = val;
     }
 
-<<<<<<< HEAD
     template <typename U>
     void assign(U* val)
     {
@@ -252,20 +193,6 @@ public:
 
     void assign(const PtrStorageImpl& other) { assign(other.get()); }
 
-=======
-    void assign(T* ptr) { assign(RawPtr<T>(ptr)); }
-    template<typename U> void assign(const RawPtr<U>& val) { assign(RawPtr<T>(val)); }
-
-    void assign(const PtrStorageImpl& other) { assign(other.get()); }
-
-    void moveFrom(PtrStorageImpl& other)
-    {
-        release();
-        m_handle = other.m_handle;
-        other.m_handle = 0;
-    }
-
->>>>>>> miniblink49
     T* get() const { return m_handle ? m_handle->get() : 0; }
 
     void release()
@@ -275,7 +202,6 @@ public:
     }
 
 private:
-<<<<<<< HEAD
     BlinkPtrType* m_handle;
 };
 
@@ -291,36 +217,13 @@ public:
     {
         static_assert(sizeof(PtrStorage) == sizeof(void*),
             "PtrStorage must be the size of a pointer");
-=======
-    Persistent<T>* m_handle;
-};
-
-template<typename T>
-class PtrStorageImpl<T, RefCountedGarbageCollectedLifetime> : public PtrStorageImpl<T, GarbageCollectedLifetime> {
-public:
-    void assign(const PassRefPtrWillBeRawPtr<T>& val) { PtrStorageImpl<T, GarbageCollectedLifetime>::assign(val.get()); }
-
-    void assign(const PtrStorageImpl& other) { PtrStorageImpl<T, GarbageCollectedLifetime>::assign(other.get()); }
-};
-
-template<typename T>
-class PtrStorage : public PtrStorageImpl<T, LifetimeOf<T>::value> {
-public:
-    static PtrStorage& fromSlot(void** slot)
-    {
-        static_assert(sizeof(PtrStorage) == sizeof(void*), "PtrStorage must be the size of a pointer");
->>>>>>> miniblink49
         return *reinterpret_cast<PtrStorage*>(slot);
     }
 
     static const PtrStorage& fromSlot(void* const* slot)
     {
-<<<<<<< HEAD
         static_assert(sizeof(PtrStorage) == sizeof(void*),
             "PtrStorage must be the size of a pointer");
-=======
-        static_assert(sizeof(PtrStorage) == sizeof(void*), "PtrStorage must be the size of a pointer");
->>>>>>> miniblink49
         return *reinterpret_cast<const PtrStorage*>(slot);
     }
 
@@ -331,10 +234,6 @@ private:
 };
 #endif
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 // This class is an implementation detail of the Blink API. It exists to help
 // simplify the implementation of Blink interfaces that merely wrap a reference
 // counted WebCore class.
@@ -360,11 +259,7 @@ private:
 //        // Methods that are used only by other Blink classes should only be
 //        // declared when INSIDE_BLINK is set.
 //    #if INSIDE_BLINK
-<<<<<<< HEAD
 //        WebFoo(WTF::PassRefPtr<Foo>);
-=======
-//        WebFoo(const WTF::PassRefPtr<Foo>&);
->>>>>>> miniblink49
 //    #endif
 //
 //    private:
@@ -375,7 +270,6 @@ private:
 //    WebFoo::~WebFoo() { m_private.reset(); }
 //    void WebFoo::assign(const WebFoo& other) { ... }
 //
-<<<<<<< HEAD
 template <typename T,
     WebPrivatePtrDestruction crossThreadDestruction = WebPrivatePtrDestructionSameThread,
     WebPrivatePtrStrength strongOrWeak = WebPrivatePtrStrength::Normal>
@@ -385,33 +279,19 @@ public:
         : m_storage(0)
     {
     }
-=======
-template <typename T>
-class WebPrivatePtr {
-public:
-    WebPrivatePtr() : m_storage(0) { }
->>>>>>> miniblink49
     ~WebPrivatePtr()
     {
         // We don't destruct the object pointed by m_ptr here because we don't
         // want to expose destructors of core classes to embedders. We should
         // call reset() manually in destructors of classes with WebPrivatePtr
         // members.
-<<<<<<< HEAD
         DCHECK(!m_storage);
-=======
-        BLINK_ASSERT(!m_storage);
->>>>>>> miniblink49
     }
 
     bool isNull() const { return !m_storage; }
 
 #if INSIDE_BLINK
-<<<<<<< HEAD
     template <typename U>
-=======
-    template<typename U>
->>>>>>> miniblink49
     WebPrivatePtr(const U& ptr)
         : m_storage(0)
     {
@@ -420,29 +300,14 @@ public:
 
     void reset() { storage().release(); }
 
-<<<<<<< HEAD
     WebPrivatePtr& operator=(const WebPrivatePtr& other)
-=======
-    WebPrivatePtr<T>& operator=(const WebPrivatePtr<T>& other)
->>>>>>> miniblink49
     {
         storage().assign(other.storage());
         return *this;
     }
 
-<<<<<<< HEAD
     template <typename U>
     WebPrivatePtr& operator=(const U& ptr)
-=======
-    void moveFrom(WebPrivatePtr<T>& other)
-    {
-        storage().moveFrom(other.storage());
-        return;
-    }
-
-    template<typename U>
-    WebPrivatePtr<T>& operator=(const U& ptr)
->>>>>>> miniblink49
     {
         storage().assign(ptr);
         return *this;
@@ -465,7 +330,6 @@ public:
 
 private:
 #if INSIDE_BLINK
-<<<<<<< HEAD
     using PtrStorageType = PtrStorage<T, crossThreadDestruction, strongOrWeak>;
 
     PtrStorageType& storage() { return PtrStorageType::fromSlot(&m_storage); }
@@ -473,10 +337,6 @@ private:
     {
         return PtrStorageType::fromSlot(&m_storage);
     }
-=======
-    PtrStorage<T>& storage() { return PtrStorage<T>::fromSlot(&m_storage); }
-    const PtrStorage<T>& storage() const { return PtrStorage<T>::fromSlot(&m_storage); }
->>>>>>> miniblink49
 #endif
 
 #if !INSIDE_BLINK
@@ -484,27 +344,15 @@ private:
     // INSIDE_BLINK is set, but we need to make sure that it is not
     // used outside there; the compiler-provided version won't handle reference
     // counting properly.
-<<<<<<< HEAD
     WebPrivatePtr& operator=(const WebPrivatePtr& other) = delete;
 #endif
     // Disable the copy constructor; classes that contain a WebPrivatePtr
     // should implement their copy constructor using assign().
     WebPrivatePtr(const WebPrivatePtr&) = delete;
-=======
-    WebPrivatePtr<T>& operator=(const WebPrivatePtr<T>& other);
-#endif
-    // Disable the copy constructor; classes that contain a WebPrivatePtr
-    // should implement their copy constructor using assign().
-    WebPrivatePtr(const WebPrivatePtr<T>&);
->>>>>>> miniblink49
 
     void* m_storage;
 };
 
 } // namespace blink
 
-<<<<<<< HEAD
 #endif // WebPrivatePtr_h
-=======
-#endif
->>>>>>> miniblink49

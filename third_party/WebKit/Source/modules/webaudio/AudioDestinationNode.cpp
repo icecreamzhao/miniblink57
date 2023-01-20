@@ -10,7 +10,6 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
-<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -28,39 +27,14 @@
 #include "modules/webaudio/AudioNodeInput.h"
 #include "modules/webaudio/AudioNodeOutput.h"
 #include "modules/webaudio/BaseAudioContext.h"
-=======
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-
-#include "config.h"
-#if ENABLE(WEB_AUDIO)
-#include "modules/webaudio/AudioDestinationNode.h"
-
-#include "modules/webaudio/AudioContext.h"
-#include "modules/webaudio/AudioNodeInput.h"
-#include "modules/webaudio/AudioNodeOutput.h"
->>>>>>> miniblink49
 #include "platform/audio/AudioUtilities.h"
 #include "platform/audio/DenormalDisabler.h"
 #include "wtf/Atomics.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 AudioDestinationHandler::AudioDestinationHandler(AudioNode& node,
     float sampleRate)
-=======
-AudioDestinationHandler::AudioDestinationHandler(AudioNode& node, float sampleRate)
->>>>>>> miniblink49
     : AudioHandler(NodeTypeDestination, node, sampleRate)
     , m_currentSampleFrame(0)
 {
@@ -69,7 +43,6 @@ AudioDestinationHandler::AudioDestinationHandler(AudioNode& node, float sampleRa
 
 AudioDestinationHandler::~AudioDestinationHandler()
 {
-<<<<<<< HEAD
     DCHECK(!isInitialized());
 }
 
@@ -99,54 +72,25 @@ void AudioDestinationHandler::render(AudioBus* sourceBus,
     // audio destination (one step before the FIFO). This check is for the case
     // where the destination is in the middle of tearing down process.
     if (!isInitialized()) {
-=======
-    ASSERT(!isInitialized());
-}
-
-void AudioDestinationHandler::render(AudioBus* sourceBus, AudioBus* destinationBus, size_t numberOfFrames)
-{
-    // We don't want denormals slowing down any of the audio processing
-    // since they can very seriously hurt performance.
-    // This will take care of all AudioNodes because they all process within this scope.
-    DenormalDisabler denormalDisabler;
-
-    context()->deferredTaskHandler().setAudioThread(currentThread());
-
-    if (!context()->isInitialized()) {
->>>>>>> miniblink49
         destinationBus->zero();
         return;
     }
 
-<<<<<<< HEAD
     // Let the context take care of any business at the start of each render
     // quantum.
     context()->handlePreRenderTasks(outputPosition);
-=======
-    // Let the context take care of any business at the start of each render quantum.
-    context()->handlePreRenderTasks();
->>>>>>> miniblink49
 
     // Prepare the local audio input provider for this render quantum.
     if (sourceBus)
         m_localAudioInputProvider.set(sourceBus);
 
-<<<<<<< HEAD
     DCHECK_GE(numberOfInputs(), 1u);
-=======
-    ASSERT(numberOfInputs() >= 1);
->>>>>>> miniblink49
     if (numberOfInputs() < 1) {
         destinationBus->zero();
         return;
     }
-<<<<<<< HEAD
     // This will cause the node(s) connected to us to process, which in turn will
     // pull on their input(s), all the way backwards through the rendering graph.
-=======
-    // This will cause the node(s) connected to us to process, which in turn will pull on their input(s),
-    // all the way backwards through the rendering graph.
->>>>>>> miniblink49
     AudioBus* renderedBus = input(0).pull(destinationBus, numberOfFrames);
 
     if (!renderedBus) {
@@ -156,19 +100,12 @@ void AudioDestinationHandler::render(AudioBus* sourceBus, AudioBus* destinationB
         destinationBus->copyFrom(*renderedBus);
     }
 
-<<<<<<< HEAD
     // Process nodes which need a little extra help because they are not connected
     // to anything, but still need to process.
     context()->deferredTaskHandler().processAutomaticPullNodes(numberOfFrames);
 
     // Let the context take care of any business at the end of each render
     // quantum.
-=======
-    // Process nodes which need a little extra help because they are not connected to anything, but still need to process.
-    context()->deferredTaskHandler().processAutomaticPullNodes(numberOfFrames);
-
-    // Let the context take care of any business at the end of each render quantum.
->>>>>>> miniblink49
     context()->handlePostRenderTasks();
 
     // Advance current sample-frame.
@@ -178,11 +115,7 @@ void AudioDestinationHandler::render(AudioBus* sourceBus, AudioBus* destinationB
 
 // ----------------------------------------------------------------
 
-<<<<<<< HEAD
 AudioDestinationNode::AudioDestinationNode(BaseAudioContext& context)
-=======
-AudioDestinationNode::AudioDestinationNode(AudioContext& context)
->>>>>>> miniblink49
     : AudioNode(context)
 {
 }
@@ -198,8 +131,3 @@ unsigned long AudioDestinationNode::maxChannelCount() const
 }
 
 } // namespace blink
-<<<<<<< HEAD
-=======
-
-#endif // ENABLE(WEB_AUDIO)
->>>>>>> miniblink49

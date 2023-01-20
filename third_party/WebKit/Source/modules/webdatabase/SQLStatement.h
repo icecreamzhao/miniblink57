@@ -28,13 +28,8 @@
 #ifndef SQLStatement_h
 #define SQLStatement_h
 
-<<<<<<< HEAD
 #include "modules/webdatabase/SQLResultSet.h"
 #include "modules/webdatabase/sqlite/SQLValue.h"
-=======
-#include "modules/webdatabase/sqlite/SQLValue.h"
-#include "modules/webdatabase/SQLResultSet.h"
->>>>>>> miniblink49
 #include "wtf/Forward.h"
 #include "wtf/text/WTFString.h"
 
@@ -46,18 +41,11 @@ class SQLStatementCallback;
 class SQLStatementErrorCallback;
 class SQLTransaction;
 
-<<<<<<< HEAD
 class SQLStatement final : public GarbageCollected<SQLStatement> {
 public:
     static SQLStatement* create(Database*,
         SQLStatementCallback*,
         SQLStatementErrorCallback*);
-=======
-class SQLStatement final : public GarbageCollectedFinalized<SQLStatement> {
-public:
-    static SQLStatement* create(Database*, SQLStatementCallback*, SQLStatementErrorCallback*);
-    ~SQLStatement();
->>>>>>> miniblink49
     DECLARE_TRACE();
 
     bool performCallback(SQLTransaction*);
@@ -77,10 +65,6 @@ private:
 
     Member<SQLStatementCallback> m_statementCallback;
     Member<SQLStatementErrorCallback> m_statementErrorCallback;
-<<<<<<< HEAD
-=======
-    int m_asyncOperationId;
->>>>>>> miniblink49
 };
 
 } // namespace blink

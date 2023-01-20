@@ -356,14 +356,10 @@ enum __SAL_YesNo {_SAL_notpresent, _SAL_no, _SAL_maybe, _SAL_yes, _SAL_default};
 //           _Outptr_/_Outref) (see below) are typically used to return pointers via parameters.
 
 // e.g. void GetPoint( _Out_ POINT* pPT );
-<<<<<<< HEAD
 #ifndef _Out_
 #define _Out_                                  _SAL2_Source_(_Out_, (),     _Out_impl_)
 
 
-=======
-#define _Out_                                  _SAL2_Source_(_Out_, (),     _Out_impl_)
->>>>>>> miniblink49
 #define _Out_opt_                              _SAL2_Source_(_Out_opt_, (), _Out_opt_impl_)
 
 #define _Out_writes_(size)                     _SAL2_Source_(_Out_writes_, (size), _Pre_cap_(size)            _Post_valid_impl_)
@@ -387,11 +383,7 @@ enum __SAL_YesNo {_SAL_notpresent, _SAL_no, _SAL_maybe, _SAL_yes, _SAL_default};
 #define _Out_writes_to_ptr_opt_(ptr)           _SAL2_Source_(_Out_writes_to_ptr_opt_, (ptr), _Pre_opt_ptrdiff_cap_(ptr) _Post_valid_impl_)
 #define _Out_writes_to_ptr_z_(ptr)             _SAL2_Source_(_Out_writes_to_ptr_z_, (ptr), _Pre_ptrdiff_cap_(ptr)     _Post_valid_impl_ Post_z_)
 #define _Out_writes_to_ptr_opt_z_(ptr)         _SAL2_Source_(_Out_writes_to_ptr_opt_z_, (ptr), _Pre_opt_ptrdiff_cap_(ptr) _Post_valid_impl_ Post_z_)
-<<<<<<< HEAD
 #endif
-=======
-
->>>>>>> miniblink49
 
 // Inout parameters ----------------------------
 
@@ -400,11 +392,8 @@ enum __SAL_YesNo {_SAL_notpresent, _SAL_no, _SAL_maybe, _SAL_yes, _SAL_default};
 //          void ModifyPoint( _Inout_ POINT* pPT );
 //          void ModifyPointByRef( _Inout_ POINT& pPT );
 
-<<<<<<< HEAD
 #ifndef _Inout_
 
-=======
->>>>>>> miniblink49
 #define _Inout_                                _SAL2_Source_(_Inout_, (), _Prepost_valid_)
 #define _Inout_opt_                            _SAL2_Source_(_Inout_opt_, (), _Prepost_opt_valid_)
 
@@ -435,10 +424,7 @@ enum __SAL_YesNo {_SAL_notpresent, _SAL_no, _SAL_maybe, _SAL_yes, _SAL_default};
 #define _Inout_updates_bytes_all_(size)        _SAL2_Source_(_Inout_updates_bytes_all_, (size), _Inout_updates_bytes_to_(_Old_(size), _Old_(size)))
 #define _Inout_updates_bytes_all_opt_(size)    _SAL2_Source_(_Inout_updates_bytes_all_opt_, (size), _Inout_updates_bytes_to_opt_(_Old_(size), _Old_(size)))
 
-<<<<<<< HEAD
 #endif
-=======
->>>>>>> miniblink49
 
 // Pointer to pointer parameters -------------------------
 

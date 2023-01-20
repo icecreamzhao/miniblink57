@@ -27,17 +27,10 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "platform/geometry/FloatPolygon.h"
 
 #include "wtf/MathExtras.h"
 #include <memory>
-=======
-#include "config.h"
-#include "platform/geometry/FloatPolygon.h"
-
-#include "wtf/MathExtras.h"
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -46,28 +39,19 @@ static inline float determinant(const FloatSize& a, const FloatSize& b)
     return a.width() * b.height() - a.height() * b.width();
 }
 
-<<<<<<< HEAD
 static inline bool areCollinearPoints(const FloatPoint& p0,
     const FloatPoint& p1,
     const FloatPoint& p2)
-=======
-static inline bool areCollinearPoints(const FloatPoint& p0, const FloatPoint& p1, const FloatPoint& p2)
->>>>>>> miniblink49
 {
     return !determinant(p1 - p0, p2 - p0);
 }
 
-<<<<<<< HEAD
 static inline bool areCoincidentPoints(const FloatPoint& p0,
     const FloatPoint& p1)
-=======
-static inline bool areCoincidentPoints(const FloatPoint& p0, const FloatPoint& p1)
->>>>>>> miniblink49
 {
     return p0.x() == p1.x() && p0.y() == p1.y();
 }
 
-<<<<<<< HEAD
 static inline bool isPointOnLineSegment(const FloatPoint& vertex1,
     const FloatPoint& vertex2,
     const FloatPoint& point)
@@ -78,27 +62,13 @@ static inline bool isPointOnLineSegment(const FloatPoint& vertex1,
 static inline unsigned nextVertexIndex(unsigned vertexIndex,
     unsigned nVertices,
     bool clockwise)
-=======
-static inline bool isPointOnLineSegment(const FloatPoint& vertex1, const FloatPoint& vertex2, const FloatPoint& point)
-{
-    return point.x() >= std::min(vertex1.x(), vertex2.x())
-        && point.x() <= std::max(vertex1.x(), vertex2.x())
-        && areCollinearPoints(vertex1, vertex2, point);
-}
-
-static inline unsigned nextVertexIndex(unsigned vertexIndex, unsigned nVertices, bool clockwise)
->>>>>>> miniblink49
 {
     return ((clockwise) ? vertexIndex + 1 : vertexIndex - 1 + nVertices) % nVertices;
 }
 
-<<<<<<< HEAD
 static unsigned findNextEdgeVertexIndex(const FloatPolygon& polygon,
     unsigned vertexIndex1,
     bool clockwise)
-=======
-static unsigned findNextEdgeVertexIndex(const FloatPolygon& polygon, unsigned vertexIndex1, bool clockwise)
->>>>>>> miniblink49
 {
     unsigned nVertices = polygon.numberOfVertices();
     unsigned vertexIndex2 = nextVertexIndex(vertexIndex1, nVertices, clockwise);
@@ -108,13 +78,9 @@ static unsigned findNextEdgeVertexIndex(const FloatPolygon& polygon, unsigned ve
 
     while (vertexIndex2) {
         unsigned vertexIndex3 = nextVertexIndex(vertexIndex2, nVertices, clockwise);
-<<<<<<< HEAD
         if (!areCollinearPoints(polygon.vertexAt(vertexIndex1),
                 polygon.vertexAt(vertexIndex2),
                 polygon.vertexAt(vertexIndex3)))
-=======
-        if (!areCollinearPoints(polygon.vertexAt(vertexIndex1), polygon.vertexAt(vertexIndex2), polygon.vertexAt(vertexIndex3)))
->>>>>>> miniblink49
             break;
         vertexIndex2 = vertexIndex3;
     }
@@ -122,14 +88,9 @@ static unsigned findNextEdgeVertexIndex(const FloatPolygon& polygon, unsigned ve
     return vertexIndex2;
 }
 
-<<<<<<< HEAD
 FloatPolygon::FloatPolygon(std::unique_ptr<Vector<FloatPoint>> vertices,
     WindRule fillRule)
     : m_vertices(std::move(vertices))
-=======
-FloatPolygon::FloatPolygon(PassOwnPtr<Vector<FloatPoint>> vertices, WindRule fillRule)
-    : m_vertices(vertices)
->>>>>>> miniblink49
     , m_fillRule(fillRule)
 {
     unsigned nVertices = numberOfVertices();
@@ -150,13 +111,9 @@ FloatPolygon::FloatPolygon(PassOwnPtr<Vector<FloatPoint>> vertices, WindRule fil
     }
     FloatPoint nextVertex = vertexAt((minVertexIndex + 1) % nVertices);
     FloatPoint prevVertex = vertexAt((minVertexIndex + nVertices - 1) % nVertices);
-<<<<<<< HEAD
     bool clockwise = determinant(vertexAt(minVertexIndex) - prevVertex,
                          nextVertex - prevVertex)
         > 0;
-=======
-    bool clockwise = determinant(vertexAt(minVertexIndex) - prevVertex, nextVertex - prevVertex) > 0;
->>>>>>> miniblink49
 
     unsigned edgeIndex = 0;
     unsigned vertexIndex1 = 0;
@@ -174,12 +131,8 @@ FloatPolygon::FloatPolygon(PassOwnPtr<Vector<FloatPoint>> vertices, WindRule fil
     if (edgeIndex > 3) {
         const FloatPolygonEdge& firstEdge = m_edges[0];
         const FloatPolygonEdge& lastEdge = m_edges[edgeIndex - 1];
-<<<<<<< HEAD
         if (areCollinearPoints(lastEdge.vertex1(), lastEdge.vertex2(),
                 firstEdge.vertex2())) {
-=======
-        if (areCollinearPoints(lastEdge.vertex1(), lastEdge.vertex2(), firstEdge.vertex2())) {
->>>>>>> miniblink49
             m_edges[0].m_vertexIndex1 = lastEdge.m_vertexIndex1;
             edgeIndex--;
         }
@@ -197,7 +150,6 @@ FloatPolygon::FloatPolygon(PassOwnPtr<Vector<FloatPoint>> vertices, WindRule fil
     }
 }
 
-<<<<<<< HEAD
 bool FloatPolygon::overlappingEdges(
     float minY,
     float maxY,
@@ -211,29 +163,15 @@ bool FloatPolygon::overlappingEdges(
     for (unsigned i = 0; i < overlappingEdgeIntervalsSize; ++i) {
         const FloatPolygonEdge* edge = static_cast<const FloatPolygonEdge*>(
             overlappingEdgeIntervals[i].data());
-=======
-bool FloatPolygon::overlappingEdges(float minY, float maxY, Vector<const FloatPolygonEdge*>& result) const
-{
-    Vector<FloatPolygon::EdgeInterval> overlappingEdgeIntervals;
-    m_edgeTree.allOverlaps(FloatPolygon::EdgeInterval(minY, maxY, 0), overlappingEdgeIntervals);
-    unsigned overlappingEdgeIntervalsSize = overlappingEdgeIntervals.size();
-    result.resize(overlappingEdgeIntervalsSize);
-    for (unsigned i = 0; i < overlappingEdgeIntervalsSize; ++i) {
-        const FloatPolygonEdge* edge = static_cast<const FloatPolygonEdge*>(overlappingEdgeIntervals[i].data());
->>>>>>> miniblink49
         ASSERT(edge);
         result[i] = edge;
     }
     return overlappingEdgeIntervalsSize > 0;
 }
 
-<<<<<<< HEAD
 static inline float leftSide(const FloatPoint& vertex1,
     const FloatPoint& vertex2,
     const FloatPoint& point)
-=======
-static inline float leftSide(const FloatPoint& vertex1, const FloatPoint& vertex2, const FloatPoint& point)
->>>>>>> miniblink49
 {
     return ((point.x() - vertex1.x()) * (vertex2.y() - vertex1.y())) - ((vertex2.x() - vertex1.x()) * (point.y() - vertex1.y()));
 }
@@ -247,11 +185,7 @@ bool FloatPolygon::containsEvenOdd(const FloatPoint& point) const
         if (isPointOnLineSegment(vertex1, vertex2, point))
             return true;
         if ((vertex1.y() <= point.y() && vertex2.y() > point.y()) || (vertex1.y() > point.y() && vertex2.y() <= point.y())) {
-<<<<<<< HEAD
             float vt = (point.y() - vertex1.y()) / (vertex2.y() - vertex1.y());
-=======
-            float vt = (point.y()  - vertex1.y()) / (vertex2.y() - vertex1.y());
->>>>>>> miniblink49
             if (point.x() < vertex1.x() + vt * (vertex2.x() - vertex1.x()))
                 ++crossingCount;
         }
@@ -282,7 +216,6 @@ bool FloatPolygon::contains(const FloatPoint& point) const
 {
     if (!m_boundingBox.contains(point))
         return false;
-<<<<<<< HEAD
     return (fillRule() == RULE_NONZERO) ? containsNonZero(point)
                                         : containsEvenOdd(point);
 }
@@ -292,14 +225,6 @@ bool VertexPair::intersection(const VertexPair& other,
 {
     // See: http://paulbourke.net/geometry/pointlineplane/,
     // "Intersection point of two lines in 2 dimensions"
-=======
-    return (fillRule() == RULE_NONZERO) ? containsNonZero(point) : containsEvenOdd(point);
-}
-
-bool VertexPair::intersection(const VertexPair& other, FloatPoint& point) const
-{
-    // See: http://paulbourke.net/geometry/pointlineplane/, "Intersection point of two lines in 2 dimensions"
->>>>>>> miniblink49
 
     const FloatSize& thisDelta = vertex2() - vertex1();
     const FloatSize& otherDelta = other.vertex2() - other.vertex1();
@@ -307,16 +232,10 @@ bool VertexPair::intersection(const VertexPair& other, FloatPoint& point) const
     if (!denominator)
         return false;
 
-<<<<<<< HEAD
     // The two line segments: "this" vertex1,vertex2 and "other" vertex1,vertex2,
     // have been defined in parametric form. Each point on the line segment is:
     // vertex1 + u * (vertex2 - vertex1), when 0 <= u <= 1. We're computing the
     // values of u for each line at their intersection point.
-=======
-    // The two line segments: "this" vertex1,vertex2 and "other" vertex1,vertex2, have been defined
-    // in parametric form. Each point on the line segment is: vertex1 + u * (vertex2 - vertex1),
-    // when 0 <= u <= 1. We're computing the values of u for each line at their intersection point.
->>>>>>> miniblink49
 
     const FloatSize& vertex1Delta = vertex1() - other.vertex1();
     float uThisLine = determinant(otherDelta, vertex1Delta) / denominator;

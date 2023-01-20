@@ -25,11 +25,6 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-<<<<<<< HEAD
-=======
-#include "config.h"
-
->>>>>>> miniblink49
 #include "fast-dtoa.h"
 
 #include "cached-powers.h"
@@ -49,10 +44,6 @@ namespace double_conversion {
     static const int kMinimalTargetExponent = -60;
     static const int kMaximalTargetExponent = -32;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
     // Adjusts the last digit of the generated number, and screens out generated
     // solutions that may be inaccurate. A solution may be inaccurate if it is
     // outside the safe interval, or if we cannot prove that it is closer to the
@@ -69,7 +60,6 @@ namespace double_conversion {
     //    representable number to the input.
     //  Modifies the generated digits in the buffer to approach (round towards) w.
     static bool RoundWeed(Vector<char> buffer,
-<<<<<<< HEAD
         int length,
         uint64_t distance_too_high_w,
         uint64_t unsafe_interval,
@@ -77,14 +67,6 @@ namespace double_conversion {
         uint64_t ten_kappa,
         uint64_t unit)
     {
-=======
-                          int length,
-                          uint64_t distance_too_high_w,
-                          uint64_t unsafe_interval,
-                          uint64_t rest,
-                          uint64_t ten_kappa,
-                          uint64_t unit) {
->>>>>>> miniblink49
         uint64_t small_distance = distance_too_high_w - unit;
         uint64_t big_distance = distance_too_high_w + unit;
         // Let w_low  = too_high - big_distance, and
@@ -159,7 +141,6 @@ namespace double_conversion {
         // We need to do the following tests in this order to avoid over- and
         // underflows.
         ASSERT(rest <= unsafe_interval);
-<<<<<<< HEAD
         while (rest < small_distance && // Negated condition 1
             unsafe_interval - rest >= ten_kappa && // Negated condition 2
             (rest + ten_kappa < small_distance || // buffer{-1} > w_high
@@ -167,31 +148,13 @@ namespace double_conversion {
             buffer[length - 1]--;
             rest += ten_kappa;
         }
-=======
-        while (rest < small_distance &&  // Negated condition 1
-               unsafe_interval - rest >= ten_kappa &&  // Negated condition 2
-               (rest + ten_kappa < small_distance ||  // buffer{-1} > w_high
-                small_distance - rest >= rest + ten_kappa - small_distance)) {
-                   buffer[length - 1]--;
-                   rest += ten_kappa;
-               }
->>>>>>> miniblink49
 
         // We have approached w+ as much as possible. We now test if approaching w-
         // would require changing the buffer. If yes, then we have two possible
         // representations close to w, but we cannot decide which one is closer.
-<<<<<<< HEAD
         if (rest < big_distance && unsafe_interval - rest >= ten_kappa && (rest + ten_kappa < big_distance || big_distance - rest > rest + ten_kappa - big_distance)) {
             return false;
         }
-=======
-        if (rest < big_distance &&
-            unsafe_interval - rest >= ten_kappa &&
-            (rest + ten_kappa < big_distance ||
-             big_distance - rest > rest + ten_kappa - big_distance)) {
-                return false;
-            }
->>>>>>> miniblink49
 
         // Weeding test.
         //   The safe interval is [too_low + 2 ulp; too_high - 2 ulp]
@@ -201,10 +164,6 @@ namespace double_conversion {
         return (2 * unit <= rest) && (rest <= unsafe_interval - 4 * unit);
     }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
     // Rounds the buffer upwards if the result is closer to v by possibly adding
     // 1 to the buffer. If the precision of the calculation is not sufficient to
     // round correctly, return false.
@@ -218,20 +177,12 @@ namespace double_conversion {
     //
     // Precondition: rest < ten_kappa.
     static bool RoundWeedCounted(Vector<char> buffer,
-<<<<<<< HEAD
         int length,
         uint64_t rest,
         uint64_t ten_kappa,
         uint64_t unit,
         int* kappa)
     {
-=======
-                                 int length,
-                                 uint64_t rest,
-                                 uint64_t ten_kappa,
-                                 uint64_t unit,
-                                 int* kappa) {
->>>>>>> miniblink49
         ASSERT(rest < ten_kappa);
         // The following tests are done in a specific order to avoid overflows. They
         // will work correctly with any uint64 values of rest < ten_kappa and unit.
@@ -239,7 +190,6 @@ namespace double_conversion {
         // If the unit is too big, then we don't know which way to round. For example
         // a unit of 50 means that the real number lies within rest +/- 50. If
         // 10^kappa == 40 then there is no way to tell which way to round.
-<<<<<<< HEAD
         if (unit >= ten_kappa)
             return false;
         // Even if unit is just half the size of 10^kappa we are already completely
@@ -247,13 +197,6 @@ namespace double_conversion {
         // over/underflow.)
         if (ten_kappa - unit <= unit)
             return false;
-=======
-        if (unit >= ten_kappa) return false;
-        // Even if unit is just half the size of 10^kappa we are already completely
-        // lost. (And after the previous test we know that the expression will not
-        // over/underflow.)
-        if (ten_kappa - unit <= unit) return false;
->>>>>>> miniblink49
         // If 2 * (rest + unit) <= 10^kappa we can safely round down.
         if ((ten_kappa - rest > rest) && (ten_kappa - 2 * rest >= 2 * unit)) {
             return true;
@@ -263,12 +206,8 @@ namespace double_conversion {
             // Increment the last digit recursively until we find a non '9' digit.
             buffer[length - 1]++;
             for (int i = length - 1; i > 0; --i) {
-<<<<<<< HEAD
                 if (buffer[i] != '0' + 10)
                     break;
-=======
-                if (buffer[i] != '0' + 10) break;
->>>>>>> miniblink49
                 buffer[i] = '0';
                 buffer[i - 1]++;
             }
@@ -285,10 +224,6 @@ namespace double_conversion {
         return false;
     }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
     static const uint32_t kTen4 = 10000;
     static const uint32_t kTen5 = 100000;
     static const uint32_t kTen6 = 1000000;
@@ -302,7 +237,6 @@ namespace double_conversion {
     // The number of bits must be <= 32.
     // Precondition: number < (1 << (number_bits + 1)).
     static void BiggestPowerTen(uint32_t number,
-<<<<<<< HEAD
         int number_bits,
         uint32_t* power,
         int* exponent)
@@ -404,109 +338,6 @@ namespace double_conversion {
         }
     }
 
-=======
-                                int number_bits,
-                                uint32_t* power,
-                                int* exponent) {
-        ASSERT(number < (uint32_t)(1 << (number_bits + 1)));
-
-        switch (number_bits) {
-            case 32:
-            case 31:
-            case 30:
-                if (kTen9 <= number) {
-                    *power = kTen9;
-                    *exponent = 9;
-                    break;
-                }  // else fallthrough
-            case 29:
-            case 28:
-            case 27:
-                if (kTen8 <= number) {
-                    *power = kTen8;
-                    *exponent = 8;
-                    break;
-                }  // else fallthrough
-            case 26:
-            case 25:
-            case 24:
-                if (kTen7 <= number) {
-                    *power = kTen7;
-                    *exponent = 7;
-                    break;
-                }  // else fallthrough
-            case 23:
-            case 22:
-            case 21:
-            case 20:
-                if (kTen6 <= number) {
-                    *power = kTen6;
-                    *exponent = 6;
-                    break;
-                }  // else fallthrough
-            case 19:
-            case 18:
-            case 17:
-                if (kTen5 <= number) {
-                    *power = kTen5;
-                    *exponent = 5;
-                    break;
-                }  // else fallthrough
-            case 16:
-            case 15:
-            case 14:
-                if (kTen4 <= number) {
-                    *power = kTen4;
-                    *exponent = 4;
-                    break;
-                }  // else fallthrough
-            case 13:
-            case 12:
-            case 11:
-            case 10:
-                if (1000 <= number) {
-                    *power = 1000;
-                    *exponent = 3;
-                    break;
-                }  // else fallthrough
-            case 9:
-            case 8:
-            case 7:
-                if (100 <= number) {
-                    *power = 100;
-                    *exponent = 2;
-                    break;
-                }  // else fallthrough
-            case 6:
-            case 5:
-            case 4:
-                if (10 <= number) {
-                    *power = 10;
-                    *exponent = 1;
-                    break;
-                }  // else fallthrough
-            case 3:
-            case 2:
-            case 1:
-                if (1 <= number) {
-                    *power = 1;
-                    *exponent = 0;
-                    break;
-                }  // else fallthrough
-            case 0:
-                *power = 0;
-                *exponent = -1;
-                break;
-            default:
-                // Following assignments are here to silence compiler warnings.
-                *power = 0;
-                *exponent = 0;
-                UNREACHABLE();
-        }
-    }
-
-
->>>>>>> miniblink49
     // Generates the digits of input number w.
     // w is a floating-point number (DiyFp), consisting of a significand and an
     // exponent. Its exponent is bounded by kMinimalTargetExponent and
@@ -550,20 +381,12 @@ namespace double_conversion {
     // represents w. However we have to pay attention to low, high and w's
     // imprecision.
     static bool DigitGen(DiyFp low,
-<<<<<<< HEAD
         DiyFp w,
         DiyFp high,
         Vector<char> buffer,
         int* length,
         int* kappa)
     {
-=======
-                         DiyFp w,
-                         DiyFp high,
-                         Vector<char> buffer,
-                         int* length,
-                         int* kappa) {
->>>>>>> miniblink49
         ASSERT(low.e() == w.e() && w.e() == high.e());
         ASSERT(low.f() + 1 <= high.f() - 1);
         ASSERT(kMinimalTargetExponent <= w.e() && w.e() <= kMaximalTargetExponent);
@@ -599,11 +422,7 @@ namespace double_conversion {
         uint32_t divisor;
         int divisor_exponent;
         BiggestPowerTen(integrals, DiyFp::kSignificandSize - (-one.e()),
-<<<<<<< HEAD
             &divisor, &divisor_exponent);
-=======
-                        &divisor, &divisor_exponent);
->>>>>>> miniblink49
         *kappa = divisor_exponent + 1;
         *length = 0;
         // Loop invariant: buffer = too_high / 10^kappa  (integer division)
@@ -618,25 +437,15 @@ namespace double_conversion {
             (*kappa)--;
             // Note that kappa now equals the exponent of the divisor and that the
             // invariant thus holds again.
-<<<<<<< HEAD
             uint64_t rest = (static_cast<uint64_t>(integrals) << -one.e()) + fractionals;
-=======
-            uint64_t rest =
-            (static_cast<uint64_t>(integrals) << -one.e()) + fractionals;
->>>>>>> miniblink49
             // Invariant: too_high = buffer * 10^kappa + DiyFp(rest, one.e())
             // Reminder: unsafe_interval.e() == one.e()
             if (rest < unsafe_interval.f()) {
                 // Rounding down (by not emitting the remaining digits) yields a number
                 // that lies within the unsafe interval.
                 return RoundWeed(buffer, *length, DiyFp::Minus(too_high, w).f(),
-<<<<<<< HEAD
                     unsafe_interval.f(), rest,
                     static_cast<uint64_t>(divisor) << -one.e(), unit);
-=======
-                                 unsafe_interval.f(), rest,
-                                 static_cast<uint64_t>(divisor) << -one.e(), unit);
->>>>>>> miniblink49
             }
             divisor /= 10;
         }
@@ -658,28 +467,15 @@ namespace double_conversion {
             char digit = static_cast<char>(fractionals >> -one.e());
             buffer[*length] = '0' + digit;
             (*length)++;
-<<<<<<< HEAD
             fractionals &= one.f() - 1; // Modulo by one.
             (*kappa)--;
             if (fractionals < unsafe_interval.f()) {
                 return RoundWeed(buffer, *length, DiyFp::Minus(too_high, w).f() * unit,
                     unsafe_interval.f(), fractionals, one.f(), unit);
-=======
-            fractionals &= one.f() - 1;  // Modulo by one.
-            (*kappa)--;
-            if (fractionals < unsafe_interval.f()) {
-                return RoundWeed(buffer, *length, DiyFp::Minus(too_high, w).f() * unit,
-                                 unsafe_interval.f(), fractionals, one.f(), unit);
->>>>>>> miniblink49
             }
         }
     }
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> miniblink49
     // Generates (at most) requested_digits digits of input number w.
     // w is a floating-point number (DiyFp), consisting of a significand and an
     // exponent. Its exponent is bounded by kMinimalTargetExponent and
@@ -709,18 +505,11 @@ namespace double_conversion {
     //   then false is returned. This usually happens rarely, but the failure-rate
     //   increases with higher requested_digits.
     static bool DigitGenCounted(DiyFp w,
-<<<<<<< HEAD
         int requested_digits,
         Vector<char> buffer,
         int* length,
         int* kappa)
     {
-=======
-                                int requested_digits,
-                                Vector<char> buffer,
-                                int* length,
-                                int* kappa) {
->>>>>>> miniblink49
         ASSERT(kMinimalTargetExponent <= w.e() && w.e() <= kMaximalTargetExponent);
         ASSERT(kMinimalTargetExponent >= -60);
         ASSERT(kMaximalTargetExponent <= -32);
@@ -739,11 +528,7 @@ namespace double_conversion {
         uint32_t divisor;
         int divisor_exponent;
         BiggestPowerTen(integrals, DiyFp::kSignificandSize - (-one.e()),
-<<<<<<< HEAD
             &divisor, &divisor_exponent);
-=======
-                        &divisor, &divisor_exponent);
->>>>>>> miniblink49
         *kappa = divisor_exponent + 1;
         *length = 0;
 
@@ -760,28 +545,16 @@ namespace double_conversion {
             (*kappa)--;
             // Note that kappa now equals the exponent of the divisor and that the
             // invariant thus holds again.
-<<<<<<< HEAD
             if (requested_digits == 0)
                 break;
-=======
-            if (requested_digits == 0) break;
->>>>>>> miniblink49
             divisor /= 10;
         }
 
         if (requested_digits == 0) {
-<<<<<<< HEAD
             uint64_t rest = (static_cast<uint64_t>(integrals) << -one.e()) + fractionals;
             return RoundWeedCounted(buffer, *length, rest,
                 static_cast<uint64_t>(divisor) << -one.e(), w_error,
                 kappa);
-=======
-            uint64_t rest =
-            (static_cast<uint64_t>(integrals) << -one.e()) + fractionals;
-            return RoundWeedCounted(buffer, *length, rest,
-                                    static_cast<uint64_t>(divisor) << -one.e(), w_error,
-                                    kappa);
->>>>>>> miniblink49
         }
 
         // The integrals have been generated. We are at the point of the decimal
@@ -801,7 +574,6 @@ namespace double_conversion {
             buffer[*length] = '0' + digit;
             (*length)++;
             requested_digits--;
-<<<<<<< HEAD
             fractionals &= one.f() - 1; // Modulo by one.
             (*kappa)--;
         }
@@ -811,17 +583,6 @@ namespace double_conversion {
             kappa);
     }
 
-=======
-            fractionals &= one.f() - 1;  // Modulo by one.
-            (*kappa)--;
-        }
-        if (requested_digits != 0) return false;
-        return RoundWeedCounted(buffer, *length, fractionals, one.f(), w_error,
-                                kappa);
-    }
-
-
->>>>>>> miniblink49
     // Provides a decimal representation of v.
     // Returns true if it succeeds, otherwise the result cannot be trusted.
     // There will be *length digits inside the buffer (not null-terminated).
@@ -834,16 +595,10 @@ namespace double_conversion {
     // digits might correctly yield 'v' when read again, the closest will be
     // computed.
     static bool Grisu3(double v,
-<<<<<<< HEAD
         Vector<char> buffer,
         int* length,
         int* decimal_exponent)
     {
-=======
-                       Vector<char> buffer,
-                       int* length,
-                       int* decimal_exponent) {
->>>>>>> miniblink49
         DiyFp w = Double(v).AsNormalizedDiyFp();
         // boundary_minus and boundary_plus are the boundaries between v and its
         // closest floating-point neighbors. Any number strictly between
@@ -852,7 +607,6 @@ namespace double_conversion {
         DiyFp boundary_minus, boundary_plus;
         Double(v).NormalizedBoundaries(&boundary_minus, &boundary_plus);
         ASSERT(boundary_plus.e() == w.e());
-<<<<<<< HEAD
         DiyFp ten_mk; // Cached power of ten: 10^-k
         int mk; // -k
         int ten_mk_minimal_binary_exponent = kMinimalTargetExponent - (w.e() + DiyFp::kSignificandSize);
@@ -862,22 +616,6 @@ namespace double_conversion {
             ten_mk_maximal_binary_exponent,
             &ten_mk, &mk);
         ASSERT((kMinimalTargetExponent <= w.e() + ten_mk.e() + DiyFp::kSignificandSize) && (kMaximalTargetExponent >= w.e() + ten_mk.e() + DiyFp::kSignificandSize));
-=======
-        DiyFp ten_mk;  // Cached power of ten: 10^-k
-        int mk;        // -k
-        int ten_mk_minimal_binary_exponent =
-        kMinimalTargetExponent - (w.e() + DiyFp::kSignificandSize);
-        int ten_mk_maximal_binary_exponent =
-        kMaximalTargetExponent - (w.e() + DiyFp::kSignificandSize);
-        PowersOfTenCache::GetCachedPowerForBinaryExponentRange(
-                                                               ten_mk_minimal_binary_exponent,
-                                                               ten_mk_maximal_binary_exponent,
-                                                               &ten_mk, &mk);
-        ASSERT((kMinimalTargetExponent <= w.e() + ten_mk.e() +
-                DiyFp::kSignificandSize) &&
-               (kMaximalTargetExponent >= w.e() + ten_mk.e() +
-                DiyFp::kSignificandSize));
->>>>>>> miniblink49
         // Note that ten_mk is only an approximation of 10^-k. A DiyFp only contains a
         // 64 bit significand and ten_mk is thus only precise up to 64 bits.
 
@@ -888,23 +626,14 @@ namespace double_conversion {
         // In other words: let f = scaled_w.f() and e = scaled_w.e(), then
         //           (f-1) * 2^e < w*10^k < (f+1) * 2^e
         DiyFp scaled_w = DiyFp::Times(w, ten_mk);
-<<<<<<< HEAD
         ASSERT(scaled_w.e() == boundary_plus.e() + ten_mk.e() + DiyFp::kSignificandSize);
-=======
-        ASSERT(scaled_w.e() ==
-               boundary_plus.e() + ten_mk.e() + DiyFp::kSignificandSize);
->>>>>>> miniblink49
         // In theory it would be possible to avoid some recomputations by computing
         // the difference between w and boundary_minus/plus (a power of 2) and to
         // compute scaled_boundary_minus/plus by subtracting/adding from
         // scaled_w. However the code becomes much less readable and the speed
         // enhancements are not terriffic.
         DiyFp scaled_boundary_minus = DiyFp::Times(boundary_minus, ten_mk);
-<<<<<<< HEAD
         DiyFp scaled_boundary_plus = DiyFp::Times(boundary_plus, ten_mk);
-=======
-        DiyFp scaled_boundary_plus  = DiyFp::Times(boundary_plus,  ten_mk);
->>>>>>> miniblink49
 
         // DigitGen will generate the digits of scaled_w. Therefore we have
         // v == (double) (scaled_w * 10^-mk).
@@ -914,26 +643,17 @@ namespace double_conversion {
         // decreased by 2.
         int kappa;
         bool result = DigitGen(scaled_boundary_minus, scaled_w, scaled_boundary_plus,
-<<<<<<< HEAD
             buffer, length, &kappa);
-=======
-                               buffer, length, &kappa);
->>>>>>> miniblink49
         *decimal_exponent = -mk + kappa;
         return result;
     }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
     // The "counted" version of grisu3 (see above) only generates requested_digits
     // number of digits. This version does not generate the shortest representation,
     // and with enough requested digits 0.1 will at some point print as 0.9999999...
     // Grisu3 is too imprecise for real halfway cases (1.5 will not work) and
     // therefore the rounding strategy for halfway cases is irrelevant.
     static bool Grisu3Counted(double v,
-<<<<<<< HEAD
         int requested_digits,
         Vector<char> buffer,
         int* length,
@@ -949,27 +669,6 @@ namespace double_conversion {
             ten_mk_maximal_binary_exponent,
             &ten_mk, &mk);
         ASSERT((kMinimalTargetExponent <= w.e() + ten_mk.e() + DiyFp::kSignificandSize) && (kMaximalTargetExponent >= w.e() + ten_mk.e() + DiyFp::kSignificandSize));
-=======
-                              int requested_digits,
-                              Vector<char> buffer,
-                              int* length,
-                              int* decimal_exponent) {
-        DiyFp w = Double(v).AsNormalizedDiyFp();
-        DiyFp ten_mk;  // Cached power of ten: 10^-k
-        int mk;        // -k
-        int ten_mk_minimal_binary_exponent =
-        kMinimalTargetExponent - (w.e() + DiyFp::kSignificandSize);
-        int ten_mk_maximal_binary_exponent =
-        kMaximalTargetExponent - (w.e() + DiyFp::kSignificandSize);
-        PowersOfTenCache::GetCachedPowerForBinaryExponentRange(
-                                                               ten_mk_minimal_binary_exponent,
-                                                               ten_mk_maximal_binary_exponent,
-                                                               &ten_mk, &mk);
-        ASSERT((kMinimalTargetExponent <= w.e() + ten_mk.e() +
-                DiyFp::kSignificandSize) &&
-               (kMaximalTargetExponent >= w.e() + ten_mk.e() +
-                DiyFp::kSignificandSize));
->>>>>>> miniblink49
         // Note that ten_mk is only an approximation of 10^-k. A DiyFp only contains a
         // 64 bit significand and ten_mk is thus only precise up to 64 bits.
 
@@ -988,16 +687,11 @@ namespace double_conversion {
         // limited number of digits.)
         int kappa;
         bool result = DigitGenCounted(scaled_w, requested_digits,
-<<<<<<< HEAD
             buffer, length, &kappa);
-=======
-                                      buffer, length, &kappa);
->>>>>>> miniblink49
         *decimal_exponent = -mk + kappa;
         return result;
     }
 
-<<<<<<< HEAD
     bool FastDtoa(double v,
         FastDtoaMode mode,
         int requested_digits,
@@ -1005,22 +699,12 @@ namespace double_conversion {
         int* length,
         int* decimal_point)
     {
-=======
-
-    bool FastDtoa(double v,
-                  FastDtoaMode mode,
-                  int requested_digits,
-                  Vector<char> buffer,
-                  int* length,
-                  int* decimal_point) {
->>>>>>> miniblink49
         ASSERT(v > 0);
         ASSERT(!Double(v).IsSpecial());
 
         bool result = false;
         int decimal_exponent = 0;
         switch (mode) {
-<<<<<<< HEAD
         case FAST_DTOA_SHORTEST:
             result = Grisu3(v, buffer, length, &decimal_exponent);
             break;
@@ -1030,17 +714,6 @@ namespace double_conversion {
             break;
         default:
             UNREACHABLE();
-=======
-            case FAST_DTOA_SHORTEST:
-                result = Grisu3(v, buffer, length, &decimal_exponent);
-                break;
-            case FAST_DTOA_PRECISION:
-                result = Grisu3Counted(v, requested_digits,
-                                       buffer, length, &decimal_exponent);
-                break;
-            default:
-                UNREACHABLE();
->>>>>>> miniblink49
         }
         if (result) {
             *decimal_point = *length + decimal_exponent;
@@ -1049,10 +722,6 @@ namespace double_conversion {
         return result;
     }
 
-<<<<<<< HEAD
 } // namespace double_conversion
-=======
-}  // namespace double_conversion
->>>>>>> miniblink49
 
 } // namespace WTF

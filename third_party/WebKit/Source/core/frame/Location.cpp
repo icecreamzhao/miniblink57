@@ -26,9 +26,9 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/frame/Location.h"
 
+#include "bindings/core/v8/BindingSecurity.h"
 #include "bindings/core/v8/ExceptionState.h"
 #include "bindings/core/v8/V8DOMActivityLogger.h"
 #include "core/dom/DOMURLUtilsReadOnly.h"
@@ -55,8 +55,11 @@ DEFINE_TRACE(Location)
 inline const KURL& Location::url() const
 {
     const KURL& url = toLocalFrame(m_frame)->document()->url();
-    if (!url.isValid())
-        return blankURL(); // Use "about:blank" while the page is still loading (before we have a frame).
+    if (!url.isValid()) {
+        // Use "about:blank" while the page is still loading (before we have a
+        // frame).
+        return blankURL();
+    }
 
     return url;
 }
@@ -65,6 +68,7 @@ String Location::href() const
 {
     if (!m_frame)
         return String();
+
     return url().strippedForUseAsHref();
 }
 
@@ -117,14 +121,16 @@ String Location::origin() const
     return DOMURLUtilsReadOnly::origin(url());
 }
 
-PassRefPtrWillBeRawPtr<DOMStringList> Location::ancestorOrigins() const
+DOMStringList* Location::ancestorOrigins() const
 {
-    RefPtrWillBeRawPtr<DOMStringList> origins = DOMStringList::create(DOMStringList::Location);
+    DOMStringList* origins = DOMStringList::create();
     if (!m_frame)
-        return origins.release();
-    for (Frame* frame = m_frame->tree().parent(); frame; frame = frame->tree().parent())
-        origins->append(frame->securityContext()->securityOrigin()->toString());
-    return origins.release();
+        return origins;
+    for (Frame* frame = m_frame->tree().parent(); frame;
+         frame = frame->tree().parent()) {
+        origins->append(frame->securityContext()->getSecurityOrigin()->toString());
+    }
+    return origins;
 }
 
 String Location::hash() const
@@ -135,71 +141,96 @@ String Location::hash() const
     return DOMURLUtilsReadOnly::hash(url());
 }
 
-void Location::setHref(LocalDOMWindow* callingWindow, LocalDOMWindow* enteredWindow, const String& url)
+void Location::setHref(LocalDOMWindow* currentWindow,
+    LocalDOMWindow* enteredWindow,
+    const String& url,
+    ExceptionState& exceptionState)
 {
     if (!m_frame)
         return;
-    setLocation(url, callingWindow, enteredWindow);
+    setLocation(url, currentWindow, enteredWindow, &exceptionState);
 }
 
-void Location::setProtocol(LocalDOMWindow* callingWindow, LocalDOMWindow* enteredWindow, const String& protocol, ExceptionState& exceptionState)
+void Location::setProtocol(LocalDOMWindow* currentWindow,
+    LocalDOMWindow* enteredWindow,
+    const String& protocol,
+    ExceptionState& exceptionState)
 {
     if (!m_frame)
         return;
     KURL url = toLocalFrame(m_frame)->document()->url();
     if (!url.setProtocol(protocol)) {
-        exceptionState.throwDOMException(SyntaxError, "'" + protocol + "' is an invalid protocol.");
+        exceptionState.throwDOMException(
+            SyntaxError, "'" + protocol + "' is an invalid protocol.");
         return;
     }
-    setLocation(url.string(), callingWindow, enteredWindow);
+    setLocation(url.getString(), currentWindow, enteredWindow, &exceptionState);
 }
 
-void Location::setHost(LocalDOMWindow* callingWindow, LocalDOMWindow* enteredWindow, const String& host)
+void Location::setHost(LocalDOMWindow* currentWindow,
+    LocalDOMWindow* enteredWindow,
+    const String& host,
+    ExceptionState& exceptionState)
 {
     if (!m_frame)
         return;
     KURL url = toLocalFrame(m_frame)->document()->url();
     url.setHostAndPort(host);
-    setLocation(url.string(), callingWindow, enteredWindow);
+    setLocation(url.getString(), currentWindow, enteredWindow, &exceptionState);
 }
 
-void Location::setHostname(LocalDOMWindow* callingWindow, LocalDOMWindow* enteredWindow, const String& hostname)
+void Location::setHostname(LocalDOMWindow* currentWindow,
+    LocalDOMWindow* enteredWindow,
+    const String& hostname,
+    ExceptionState& exceptionState)
 {
     if (!m_frame)
         return;
     KURL url = toLocalFrame(m_frame)->document()->url();
     url.setHost(hostname);
-    setLocation(url.string(), callingWindow, enteredWindow);
+    setLocation(url.getString(), currentWindow, enteredWindow, &exceptionState);
 }
 
-void Location::setPort(LocalDOMWindow* callingWindow, LocalDOMWindow* enteredWindow, const String& portString)
+void Location::setPort(LocalDOMWindow* currentWindow,
+    LocalDOMWindow* enteredWindow,
+    const String& portString,
+    ExceptionState& exceptionState)
 {
     if (!m_frame)
         return;
     KURL url = toLocalFrame(m_frame)->document()->url();
     url.setPort(portString);
-    setLocation(url.string(), callingWindow, enteredWindow);
+    setLocation(url.getString(), currentWindow, enteredWindow, &exceptionState);
 }
 
-void Location::setPathname(LocalDOMWindow* callingWindow, LocalDOMWindow* enteredWindow, const String& pathname)
+void Location::setPathname(LocalDOMWindow* currentWindow,
+    LocalDOMWindow* enteredWindow,
+    const String& pathname,
+    ExceptionState& exceptionState)
 {
     if (!m_frame)
         return;
     KURL url = toLocalFrame(m_frame)->document()->url();
     url.setPath(pathname);
-    setLocation(url.string(), callingWindow, enteredWindow);
+    setLocation(url.getString(), currentWindow, enteredWindow, &exceptionState);
 }
 
-void Location::setSearch(LocalDOMWindow* callingWindow, LocalDOMWindow* enteredWindow, const String& search)
+void Location::setSearch(LocalDOMWindow* currentWindow,
+    LocalDOMWindow* enteredWindow,
+    const String& search,
+    ExceptionState& exceptionState)
 {
     if (!m_frame)
         return;
     KURL url = toLocalFrame(m_frame)->document()->url();
     url.setQuery(search);
-    setLocation(url.string(), callingWindow, enteredWindow);
+    setLocation(url.getString(), currentWindow, enteredWindow, &exceptionState);
 }
 
-void Location::setHash(LocalDOMWindow* callingWindow, LocalDOMWindow* enteredWindow, const String& hash)
+void Location::setHash(LocalDOMWindow* currentWindow,
+    LocalDOMWindow* enteredWindow,
+    const String& hash,
+    ExceptionState& exceptionState)
 {
     if (!m_frame)
         return;
@@ -214,40 +245,72 @@ void Location::setHash(LocalDOMWindow* callingWindow, LocalDOMWindow* enteredWin
     // cases where fragment identifiers are ignored or invalid.
     if (equalIgnoringNullity(oldFragmentIdentifier, url.fragmentIdentifier()))
         return;
-    setLocation(url.string(), callingWindow, enteredWindow);
+    setLocation(url.getString(), currentWindow, enteredWindow, &exceptionState);
 }
 
-void Location::assign(LocalDOMWindow* callingWindow, LocalDOMWindow* enteredWindow, const String& url)
+void Location::assign(LocalDOMWindow* currentWindow,
+    LocalDOMWindow* enteredWindow,
+    const String& url,
+    ExceptionState& exceptionState)
+{
+    // TODO(yukishiino): Remove this check once we remove [CrossOrigin] from
+    // the |assign| DOM operation's definition in Location.idl.  See the comment
+    // in Location.idl for details.
+    if (!BindingSecurity::shouldAllowAccessTo(currentWindow, this,
+            exceptionState)) {
+        return;
+    }
+
+    if (!m_frame)
+        return;
+    setLocation(url, currentWindow, enteredWindow, &exceptionState);
+}
+
+void Location::replace(LocalDOMWindow* currentWindow,
+    LocalDOMWindow* enteredWindow,
+    const String& url,
+    ExceptionState& exceptionState)
 {
     if (!m_frame)
         return;
-    setLocation(url, callingWindow, enteredWindow);
+    setLocation(url, currentWindow, enteredWindow, &exceptionState,
+        SetLocationPolicy::ReplaceThisFrame);
 }
 
-void Location::replace(LocalDOMWindow* callingWindow, LocalDOMWindow* enteredWindow, const String& url)
-{
-    if (!m_frame)
-        return;
-    setLocation(url, callingWindow, enteredWindow, SetLocation::ReplaceThisFrame);
-}
-
-void Location::reload(LocalDOMWindow* callingWindow)
+void Location::reload(LocalDOMWindow* currentWindow)
 {
     if (!m_frame)
         return;
     if (protocolIsJavaScript(toLocalFrame(m_frame)->document()->url()))
         return;
-    m_frame->reload(FrameLoadTypeReload, ClientRedirect);
+    FrameLoadType reloadType = RuntimeEnabledFeatures::fasterLocationReloadEnabled()
+        ? FrameLoadTypeReloadMainResource
+        : FrameLoadTypeReload;
+    m_frame->reload(reloadType, ClientRedirectPolicy::ClientRedirect);
 }
 
-void Location::setLocation(const String& url, LocalDOMWindow* callingWindow, LocalDOMWindow* enteredWindow, SetLocation locationPolicy)
+void Location::setLocation(const String& url,
+    LocalDOMWindow* currentWindow,
+    LocalDOMWindow* enteredWindow,
+    ExceptionState* exceptionState,
+    SetLocationPolicy setLocationPolicy)
 {
-    ASSERT(m_frame);
+    DCHECK(m_frame);
     if (!m_frame || !m_frame->host())
         return;
 
-    if (!callingWindow->frame() || !callingWindow->frame()->canNavigate(*m_frame))
+    if (!currentWindow->frame())
         return;
+
+    if (!currentWindow->frame()->canNavigate(*m_frame)) {
+        if (exceptionState) {
+            exceptionState->throwSecurityError(
+                "The current window does not have permission to navigate the target "
+                "frame to '"
+                + url + "'.");
+        }
+        return;
+    }
 
     Document* enteredDocument = enteredWindow->document();
     if (!enteredDocument)
@@ -256,20 +319,28 @@ void Location::setLocation(const String& url, LocalDOMWindow* callingWindow, Loc
     KURL completedURL = enteredDocument->completeURL(url);
     if (completedURL.isNull())
         return;
+    if (exceptionState && !completedURL.isValid()) {
+        exceptionState->throwDOMException(SyntaxError,
+            "'" + url + "' is not a valid URL.");
+        return;
+    }
 
-    if (m_frame->domWindow()->isInsecureScriptAccess(*callingWindow, completedURL))
+    if (m_frame->domWindow()->isInsecureScriptAccess(*currentWindow,
+            completedURL))
         return;
 
     V8DOMActivityLogger* activityLogger = V8DOMActivityLogger::currentActivityLoggerIfIsolatedWorld();
     if (activityLogger) {
         Vector<String> argv;
-        argv.append("LocalDOMWindow");
-        argv.append("url");
-        argv.append(enteredDocument->url());
-        argv.append(completedURL);
+        argv.push_back("LocalDOMWindow");
+        argv.push_back("url");
+        argv.push_back(enteredDocument->url());
+        argv.push_back(completedURL);
         activityLogger->logEvent("blinkSetAttribute", argv.size(), argv.data());
     }
-    m_frame->navigate(*callingWindow->document(), completedURL, locationPolicy == SetLocation::ReplaceThisFrame, UserGestureStatus::None);
+    m_frame->navigate(*currentWindow->document(), completedURL,
+        setLocationPolicy == SetLocationPolicy::ReplaceThisFrame,
+        UserGestureStatus::None);
 }
 
 } // namespace blink

@@ -6,10 +6,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #ifndef SkDrawPath_DEFINED
 #define SkDrawPath_DEFINED
 
@@ -22,7 +18,6 @@ class SkDrawPath : public SkBoundable {
     DECLARE_DRAW_MEMBER_INFO(Path);
     SkDrawPath();
     virtual ~SkDrawPath();
-<<<<<<< HEAD
     bool addChild(SkAnimateMaker&, SkDisplayable* child) override;
     bool childHasID() { return SkToBool(fChildHasID); }
     bool childrenNeedDisposing() const override;
@@ -31,21 +26,10 @@ class SkDrawPath : public SkBoundable {
     SkDisplayable* getParent() const override;
 #ifdef SK_DUMP_ENABLED
     void dump(SkAnimateMaker*) override;
-=======
-    bool addChild(SkAnimateMaker& , SkDisplayable* child) override;
-    bool childHasID() { return SkToBool(fChildHasID); }
-    bool childrenNeedDisposing() const override;
-    void dirty() override;
-    bool draw(SkAnimateMaker& ) override;
-    SkDisplayable* getParent() const override;
-#ifdef SK_DUMP_ENABLED
-    void dump(SkAnimateMaker* ) override;
->>>>>>> miniblink49
 #endif
     SkPath& getPath();
     bool getProperty(int index, SkScriptValue* value) const override;
     bool setProperty(int index, SkScriptValue& value) override;
-<<<<<<< HEAD
     void onEndElement(SkAnimateMaker&) override;
     void setChildHasID() override;
     bool setParent(SkDisplayable* parent) override;
@@ -54,14 +38,6 @@ class SkDrawPath : public SkBoundable {
 public:
     SkPath fPath;
 
-=======
-    void onEndElement(SkAnimateMaker& ) override;
-    void setChildHasID() override;
-    bool setParent(SkDisplayable* parent) override;
-    bool isPath() const override { return true; }
-public:
-    SkPath fPath;
->>>>>>> miniblink49
 protected:
     void parseSVG();
     SkString d;
@@ -70,41 +46,27 @@ protected:
     SkDisplayable* fParent; // SkPolyToPoly or SkFromPath, for instance
     SkBool8 fChildHasID;
     SkBool8 fDirty;
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 private:
     typedef SkBoundable INHERITED;
 };
 
 class SkPolyline : public SkDrawPath {
     DECLARE_MEMBER_INFO(Polyline);
-<<<<<<< HEAD
     bool addChild(SkAnimateMaker&, SkDisplayable*) override;
     void onEndElement(SkAnimateMaker&) override;
 
 protected:
     SkTDScalarArray points;
 
-=======
-    bool addChild(SkAnimateMaker& , SkDisplayable*) override;
-    void onEndElement(SkAnimateMaker& ) override;
-protected:
-    SkTDScalarArray points;
->>>>>>> miniblink49
 private:
     typedef SkDrawPath INHERITED;
 };
 
 class SkPolygon : public SkPolyline {
     DECLARE_MEMBER_INFO(Polygon);
-<<<<<<< HEAD
     void onEndElement(SkAnimateMaker&) override;
 
-=======
-    void onEndElement(SkAnimateMaker& ) override;
->>>>>>> miniblink49
 private:
     typedef SkPolyline INHERITED;
 };

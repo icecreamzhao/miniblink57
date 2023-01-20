@@ -1,5 +1,4 @@
 include_rules = [
-<<<<<<< HEAD
     # To whitelist base/ stuff Blink is allowed to include, we list up all
     # directories and files instead of writing 'base/'.
     "+base/bind.h",
@@ -44,17 +43,6 @@ include_rules = [
     "+url",
     "+webp",
     "+build/win",
-=======
-    "+mozilla",
-    "+platform",
-    "+public/platform",
-    "+skia/ext",
-    "+third_party/khronos",
-    "+third_party/skia",
-    "+url",
-    "+webp",
-    "+heap",
->>>>>>> miniblink49
     "-bindings",
     "-core",
     "-modules",

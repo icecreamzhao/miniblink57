@@ -23,10 +23,6 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "public/platform/modules/indexeddb/WebIDBKeyRange.h"
 
 #include "modules/indexeddb/IDBKey.h"
@@ -40,19 +36,14 @@ void WebIDBKeyRange::assign(const WebIDBKeyRange& other)
     m_private = other.m_private;
 }
 
-<<<<<<< HEAD
 void WebIDBKeyRange::assign(const WebIDBKey& lower,
     const WebIDBKey& upper,
     bool lowerOpen,
     bool upperOpen)
-=======
-void WebIDBKeyRange::assign(const WebIDBKey& lower, const WebIDBKey& upper, bool lowerOpen, bool upperOpen)
->>>>>>> miniblink49
 {
     if (!lower.isValid() && !upper.isValid())
         m_private.reset();
     else
-<<<<<<< HEAD
         m_private = IDBKeyRange::create(
             lower, upper,
             lowerOpen ? IDBKeyRange::LowerBoundOpen : IDBKeyRange::LowerBoundClosed,
@@ -60,20 +51,10 @@ void WebIDBKeyRange::assign(const WebIDBKey& lower, const WebIDBKey& upper, bool
                       : IDBKeyRange::UpperBoundClosed);
 }
 
-=======
-        m_private = IDBKeyRange::create(lower, upper, lowerOpen ? IDBKeyRange::LowerBoundOpen : IDBKeyRange::LowerBoundClosed, upperOpen ? IDBKeyRange::UpperBoundOpen : IDBKeyRange::UpperBoundClosed);
-}
-
-#if BLINK_WEB_IMPLEMENTATION || !LINK_CORE_MODULES_SEPARATELY
->>>>>>> miniblink49
 void WebIDBKeyRange::reset()
 {
     m_private.reset();
 }
-<<<<<<< HEAD
-=======
-#endif
->>>>>>> miniblink49
 
 WebIDBKey WebIDBKeyRange::lower() const
 {

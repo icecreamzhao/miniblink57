@@ -28,29 +28,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "modules/websockets/WebSocketChannel.h"
 
 #include "bindings/core/v8/SourceLocation.h"
 #include "core/dom/Document.h"
 #include "core/dom/ExecutionContext.h"
-=======
-#include "config.h"
-
-#include "modules/websockets/WebSocketChannel.h"
-
-#include "bindings/core/v8/ScriptCallStackFactory.h"
-#include "core/dom/Document.h"
-#include "core/dom/ExecutionContext.h"
-#include "core/inspector/ScriptCallStack.h"
->>>>>>> miniblink49
 #include "core/workers/WorkerGlobalScope.h"
 #include "core/workers/WorkerThread.h"
 #include "modules/websockets/DocumentWebSocketChannel.h"
 #include "modules/websockets/WebSocketChannelClient.h"
 #include "modules/websockets/WorkerWebSocketChannel.h"
 #include "net/websocket/WebSocketChannelImpl.h"
-<<<<<<< HEAD
 #include <memory>
 
 namespace blink {
@@ -72,40 +60,6 @@ WebSocketChannel* WebSocketChannel::create(ExecutionContext* context,
     Document* document = toDocument(context);
     //return DocumentWebSocketChannel::create(document, client, std::move(location));
     return net::WebSocketChannelImpl::create(document, client, location->url(), location->lineNumber());
-=======
-
-namespace blink {
-
-WebSocketChannel* WebSocketChannel::create(ExecutionContext* context, WebSocketChannelClient* client)
-{
-    ASSERT(context);
-    ASSERT(client);
-
-    String sourceURL;
-    unsigned lineNumber = 0;
-    RefPtrWillBeRawPtr<ScriptCallStack> callStack = createScriptCallStack(1, true);
-    if (callStack && callStack->size()) {
-        sourceURL = callStack->at(0).sourceURL();
-        lineNumber = callStack->at(0).lineNumber();
-    }
-
-    if (context->isWorkerGlobalScope()) {
-#if 1 // MINIBLINK_NOT_IMPLEMENTED
-        WorkerGlobalScope* workerGlobalScope = toWorkerGlobalScope(context);
-        return WorkerWebSocketChannel::create(*workerGlobalScope, client, sourceURL, lineNumber);
-#else
-        notImplemented();
-        return nullptr;
-#endif
-    }
-
-    Document* document = toDocument(context);
-#if MINIBLINK_NOT_IMPLEMENTED
-    return DocumentWebSocketChannel::create(document, client, sourceURL, lineNumber);
-#else
-    return net::WebSocketChannelImpl::create(document, client, sourceURL, lineNumber, nullptr);
-#endif
->>>>>>> miniblink49
 }
 
 } // namespace blink

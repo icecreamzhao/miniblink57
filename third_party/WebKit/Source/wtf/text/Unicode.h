@@ -20,13 +20,8 @@
  *
  */
 
-<<<<<<< HEAD
 #ifndef WTF_Unicode_h
 #define WTF_Unicode_h
-=======
-#ifndef WTF_UNICODE_H
-#define WTF_UNICODE_H
->>>>>>> miniblink49
 
 #include "wtf/Assertions.h"
 
@@ -35,7 +30,6 @@ typedef unsigned char LChar;
 
 #ifdef MINIBLINK_NOT_IMPLEMENTED
 #include "wtf/text/icu/UnicodeIcu.h"
-<<<<<<< HEAD
 #else
 #include "wtf/text/qt4/UnicodeQt4.h"
 #endif // MINIBLINK_NOT_IMPLEMENTED
@@ -43,11 +37,3 @@ typedef unsigned char LChar;
 static_assert(sizeof(UChar) == 2, "UChar should be two bytes");
 
 #endif // WTF_Unicode_h
-=======
-#endif // MINIBLINK_NOT_IMPLEMENTED
-#include "wtf/text/qt4/UnicodeQt4.h"
-
-static_assert(sizeof(UChar) == 2, "UChar should be two bytes");
-
-#endif // WTF_UNICODE_H
->>>>>>> miniblink49

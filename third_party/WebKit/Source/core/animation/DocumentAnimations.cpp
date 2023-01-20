@@ -28,70 +28,55 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/animation/DocumentAnimations.h"
 
 #include "core/animation/AnimationClock.h"
-#include "core/animation/AnimationTimeline.h"
+#include "core/animation/CompositorPendingAnimations.h"
+#include "core/animation/DocumentTimeline.h"
 #include "core/dom/Document.h"
 #include "core/dom/Element.h"
 #include "core/dom/Node.h"
 #include "core/dom/NodeComputedStyle.h"
 #include "core/frame/FrameView.h"
 #include "core/frame/LocalFrame.h"
-#include "core/layout/LayoutView.h"
 
 namespace blink {
 
 namespace {
 
-void updateAnimationTiming(Document& document, TimingUpdateReason reason)
-{
-    document.timeline().serviceAnimations(reason);
-}
+    void updateAnimationTiming(Document& document, TimingUpdateReason reason)
+    {
+        document.timeline().serviceAnimations(reason);
+    }
 
 } // namespace
 
-void DocumentAnimations::updateAnimationTimingForAnimationFrame(Document& document, double monotonicAnimationStartTime)
+void DocumentAnimations::updateAnimationTimingForAnimationFrame(
+    Document& document)
 {
-    document.animationClock().updateTime(monotonicAnimationStartTime);
     updateAnimationTiming(document, TimingUpdateForAnimationFrame);
+}
+
+bool DocumentAnimations::needsAnimationTimingUpdate(const Document& document)
+{
+    return document.timeline().hasOutdatedAnimation() || document.timeline().needsAnimationTimingUpdate();
 }
 
 void DocumentAnimations::updateAnimationTimingIfNeeded(Document& document)
 {
-    if (needsOutdatedAnimationUpdate(document) || document.timeline().needsAnimationTimingUpdate())
+    if (needsAnimationTimingUpdate(document))
         updateAnimationTiming(document, TimingUpdateOnDemand);
 }
 
-void DocumentAnimations::updateAnimationTimingForGetComputedStyle(Node& node, CSSPropertyID property)
+void DocumentAnimations::updateAnimations(Document& document)
 {
-    if (!node.isElementNode())
-        return;
-    const Element& element = toElement(node);
-    if (const ComputedStyle* style = element.computedStyle()) {
-        bool isTransformProperty = property == CSSPropertyRotate
-            || property == CSSPropertyScale
-            || property == CSSPropertyTransform
-            || property == CSSPropertyTranslate;
-        if ((property == CSSPropertyOpacity && style->isRunningOpacityAnimationOnCompositor())
-            || (isTransformProperty && style->isRunningTransformAnimationOnCompositor())
-            || (property == CSSPropertyWebkitFilter && style->isRunningFilterAnimationOnCompositor())) {
-            updateAnimationTiming(element.document(), TimingUpdateOnDemand);
-        }
-    }
-}
+    if (!RuntimeEnabledFeatures::slimmingPaintV2Enabled())
+        DCHECK(document.lifecycle().state() >= DocumentLifecycle::CompositingClean);
+    else
+        DCHECK(document.lifecycle().state() >= DocumentLifecycle::LayoutClean);
 
-bool DocumentAnimations::needsOutdatedAnimationUpdate(const Document& document)
-{
-    return document.timeline().hasOutdatedAnimation();
-}
-
-void DocumentAnimations::updateCompositorAnimations(Document& document)
-{
-    ASSERT(document.lifecycle().state() == DocumentLifecycle::CompositingClean);
     if (document.compositorPendingAnimations().update()) {
-        ASSERT(document.view());
+        DCHECK(document.view());
         document.view()->scheduleAnimation();
     }
 

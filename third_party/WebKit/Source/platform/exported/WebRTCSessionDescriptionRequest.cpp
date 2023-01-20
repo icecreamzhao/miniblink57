@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "public/platform/WebRTCSessionDescriptionRequest.h"
 
 #include "platform/peerconnection/RTCSessionDescriptionRequest.h"
@@ -39,43 +38,12 @@ namespace blink {
 
 WebRTCSessionDescriptionRequest::WebRTCSessionDescriptionRequest(
     RTCSessionDescriptionRequest* constraints)
-=======
-#include "config.h"
-
-#include "public/platform/WebRTCSessionDescriptionRequest.h"
-
-#include "platform/mediastream/RTCSessionDescriptionRequest.h"
-#include "public/platform/WebRTCSessionDescription.h"
-#include "wtf/PassOwnPtr.h"
-
-namespace blink {
-
-namespace {
-
-class ExtraDataContainer : public RTCSessionDescriptionRequest::ExtraData {
-public:
-    ExtraDataContainer(PassOwnPtr<WebRTCSessionDescriptionRequest::ExtraData> extraData) : m_extraData(extraData) { }
-
-    WebRTCSessionDescriptionRequest::ExtraData* extraData() { return m_extraData.get(); }
-
-private:
-    OwnPtr<WebRTCSessionDescriptionRequest::ExtraData> m_extraData;
-};
-
-} // namespace
-
-WebRTCSessionDescriptionRequest::WebRTCSessionDescriptionRequest(RTCSessionDescriptionRequest* constraints)
->>>>>>> miniblink49
     : m_private(constraints)
 {
 }
 
-<<<<<<< HEAD
 void WebRTCSessionDescriptionRequest::assign(
     const WebRTCSessionDescriptionRequest& other)
-=======
-void WebRTCSessionDescriptionRequest::assign(const WebRTCSessionDescriptionRequest& other)
->>>>>>> miniblink49
 {
     m_private = other.m_private;
 }
@@ -85,44 +53,18 @@ void WebRTCSessionDescriptionRequest::reset()
     m_private.reset();
 }
 
-<<<<<<< HEAD
 void WebRTCSessionDescriptionRequest::requestSucceeded(
     const WebRTCSessionDescription& sessionDescription) const
-=======
-void WebRTCSessionDescriptionRequest::requestSucceeded(const WebRTCSessionDescription& sessionDescription) const
->>>>>>> miniblink49
 {
     ASSERT(m_private.get());
     m_private->requestSucceeded(sessionDescription);
 }
 
-<<<<<<< HEAD
 void WebRTCSessionDescriptionRequest::requestFailed(
     const WebString& error) const
-=======
-void WebRTCSessionDescriptionRequest::requestFailed(const WebString& error) const
->>>>>>> miniblink49
 {
     ASSERT(m_private.get());
     m_private->requestFailed(error);
 }
 
-<<<<<<< HEAD
 } // namespace blink
-=======
-WebRTCSessionDescriptionRequest::ExtraData* WebRTCSessionDescriptionRequest::extraData() const
-{
-    RTCSessionDescriptionRequest::ExtraData* data = m_private->extraData();
-    if (!data)
-        return 0;
-    return static_cast<ExtraDataContainer*>(data)->extraData();
-}
-
-void WebRTCSessionDescriptionRequest::setExtraData(ExtraData* extraData)
-{
-    m_private->setExtraData(adoptPtr(new ExtraDataContainer(adoptPtr(extraData))));
-}
-
-} // namespace blink
-
->>>>>>> miniblink49

@@ -28,47 +28,28 @@
 
 #include "core/CoreExport.h"
 #include "core/events/EventDispatcher.h"
-#include "core/events/MouseRelatedEvent.h"
-#include "platform/PlatformGestureEvent.h"
+#include "core/events/UIEventWithKeyState.h"
+#include "public/platform/WebGestureEvent.h"
 
 namespace blink {
 
-class CORE_EXPORT GestureEvent final : public MouseRelatedEvent {
+class CORE_EXPORT GestureEvent final : public UIEventWithKeyState {
 public:
-    virtual ~GestureEvent() { }
+    static GestureEvent* create(AbstractView*, const WebGestureEvent&);
+    ~GestureEvent() override { }
 
-    static PassRefPtrWillBeRawPtr<GestureEvent> create(PassRefPtrWillBeRawPtr<AbstractView>, const PlatformGestureEvent&);
+    bool isGestureEvent() const override;
 
-    virtual bool isGestureEvent() const override;
+    const AtomicString& interfaceName() const override;
 
-    virtual const AtomicString& interfaceName() const override;
-
-    float deltaX() const { return m_deltaX; }
-    float deltaY() const { return m_deltaY; }
+    const WebGestureEvent& nativeEvent() const { return m_nativeEvent; }
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
-    GestureEvent();
-    GestureEvent(const AtomicString& type, PassRefPtrWillBeRawPtr<AbstractView>, int screenX, int screenY, int clientX, int clientY, bool ctrlKey, bool altKey, bool shiftKey, bool metaKey, float deltaX, float deltaY, double uiTimeStamp);
+    GestureEvent(const AtomicString&, AbstractView*, const WebGestureEvent&);
 
-    float m_deltaX;
-    float m_deltaY;
-};
-
-class GestureEventDispatchMediator final : public EventDispatchMediator {
-public:
-    static PassRefPtrWillBeRawPtr<GestureEventDispatchMediator> create(PassRefPtrWillBeRawPtr<GestureEvent> gestureEvent)
-    {
-        return adoptRefWillBeNoop(new GestureEventDispatchMediator(gestureEvent));
-    }
-
-private:
-    explicit GestureEventDispatchMediator(PassRefPtrWillBeRawPtr<GestureEvent>);
-
-    GestureEvent& event() const;
-
-    virtual bool dispatchEvent(EventDispatcher&) const override;
+    WebGestureEvent m_nativeEvent;
 };
 
 DEFINE_EVENT_TYPE_CASTS(GestureEvent);

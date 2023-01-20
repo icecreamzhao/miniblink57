@@ -6,12 +6,7 @@
 #define SK_CONVOLVER_H
 
 #include "SkSize.h"
-<<<<<<< HEAD
 #include "SkTDArray.h"
-=======
-#include "SkTypes.h"
-#include "SkTArray.h"
->>>>>>> miniblink49
 
 // avoid confusion with Mac OS X's math library (Carbon)
 #if defined(__APPLE__)
@@ -40,7 +35,6 @@ public:
     SK_API ~SkConvolutionFilter1D();
 
     // Convert between floating point and our ConvolutionFixed point representation.
-<<<<<<< HEAD
     static ConvolutionFixed FloatToFixed(float f)
     {
         return static_cast<ConvolutionFixed>(f * (1 << kShiftBits));
@@ -55,19 +49,6 @@ public:
         // the platforms we care about all (16) bits will fit into
         // the mantissa of a (32-bit) float.
         static_assert(sizeof(ConvolutionFixed) == 2, "ConvolutionFixed_type_should_fit_in_float_mantissa");
-=======
-    static ConvolutionFixed FloatToFixed(float f) {
-        return static_cast<ConvolutionFixed>(f * (1 << kShiftBits));
-    }
-    static unsigned char FixedToChar(ConvolutionFixed x) {
-        return static_cast<unsigned char>(x >> kShiftBits);
-    }
-    static float FixedToFloat(ConvolutionFixed x) {
-        // The cast relies on ConvolutionFixed being a short, implying that on
-        // the platforms we care about all (16) bits will fit into
-        // the mantissa of a (32-bit) float.
-        SK_COMPILE_ASSERT(sizeof(ConvolutionFixed) == 2, ConvolutionFixed_type_should_fit_in_float_mantissa);
->>>>>>> miniblink49
         float raw = static_cast<float>(x);
         return ldexpf(raw, -kShiftBits);
     }
@@ -79,15 +60,12 @@ public:
     // output image.
     int numValues() const { return static_cast<int>(fFilters.count()); }
 
-<<<<<<< HEAD
     void reserveAdditional(int filterCount, int filterValueCount)
     {
         fFilters.setReserve(fFilters.count() + filterCount);
         fFilterValues.setReserve(fFilterValues.count() + filterValueCount);
     }
 
-=======
->>>>>>> miniblink49
     // Appends the given list of scaling values for generating a given output
     // pixel. |filterOffset| is the distance from the edge of the image to where
     // the scaling factors start. The scaling factors apply to the source pixels
@@ -98,22 +76,9 @@ public:
     // brighness of the image.
     //
     // The filterLength must be > 0.
-<<<<<<< HEAD
     void AddFilter(int filterOffset,
         const ConvolutionFixed* filterValues,
         int filterLength);
-=======
-    //
-    // This version will automatically convert your input to ConvolutionFixed point.
-    SK_API void AddFilter(int filterOffset,
-                          const float* filterValues,
-                          int filterLength);
-
-    // Same as the above version, but the input is already ConvolutionFixed point.
-    void AddFilter(int filterOffset,
-                   const ConvolutionFixed* filterValues,
-                   int filterLength);
->>>>>>> miniblink49
 
     // Retrieves a filter for the given |valueOffset|, a position in the output
     // image in the direction we're convolving. The offset and length of the
@@ -121,28 +86,18 @@ public:
     // above for what these mean), and a pointer to the first scaling factor is
     // returned. There will be |filterLength| values in this array.
     inline const ConvolutionFixed* FilterForValue(int valueOffset,
-<<<<<<< HEAD
         int* filterOffset,
         int* filterLength) const
     {
-=======
-                                       int* filterOffset,
-                                       int* filterLength) const {
->>>>>>> miniblink49
         const FilterInstance& filter = fFilters[valueOffset];
         *filterOffset = filter.fOffset;
         *filterLength = filter.fTrimmedLength;
         if (filter.fTrimmedLength == 0) {
-<<<<<<< HEAD
             return nullptr;
-=======
-            return NULL;
->>>>>>> miniblink49
         }
         return &fFilterValues[filter.fDataLocation];
     }
 
-<<<<<<< HEAD
     // Retrieves the filter for the offset 0, presumed to be the one and only.
     // The offset and length of the filter values are put into the corresponding
     // out arguments (see AddFilter). Note that |filterLegth| and
@@ -151,16 +106,6 @@ public:
     // There will be |filterLength| values in the return array.
     // Returns nullptr if the filter is 0-length (for instance when all floating
     // point values passed to AddFilter were clipped to 0).
-=======
-  // Retrieves the filter for the offset 0, presumed to be the one and only.
-  // The offset and length of the filter values are put into the corresponding
-  // out arguments (see AddFilter). Note that |filterLegth| and
-  // |specifiedFilterLength| may be different if leading/trailing zeros of the
-  // original floating point form were clipped.
-  // There will be |filterLength| values in the return array.
-  // Returns NULL if the filter is 0-length (for instance when all floating
-  // point values passed to AddFilter were clipped to 0).
->>>>>>> miniblink49
     SK_API const ConvolutionFixed* GetSingleFilter(int* specifiedFilterLength,
         int* filterOffset,
         int* filterLength) const;
@@ -168,17 +113,11 @@ public:
     // Add another value to the fFilterValues array -- useful for
     // SIMD padding which happens outside of this class.
 
-<<<<<<< HEAD
     void addFilterValue(ConvolutionFixed val)
     {
         fFilterValues.push(val);
     }
 
-=======
-    void addFilterValue( ConvolutionFixed val ) {
-        fFilterValues.push_back( val );
-    }
->>>>>>> miniblink49
 private:
     struct FilterInstance {
         // Offset within filterValues for this instance of the filter.
@@ -197,20 +136,12 @@ private:
     };
 
     // Stores the information for each filter added to this class.
-<<<<<<< HEAD
     SkTDArray<FilterInstance> fFilters;
-=======
-    SkTArray<FilterInstance> fFilters;
->>>>>>> miniblink49
 
     // We store all the filter values in this flat list, indexed by
     // |FilterInstance.data_location| to avoid the mallocs required for storing
     // each one separately.
-<<<<<<< HEAD
     SkTDArray<ConvolutionFixed> fFilterValues;
-=======
-    SkTArray<ConvolutionFixed> fFilterValues;
->>>>>>> miniblink49
 
     // The maximum size of any filter we've added.
     int fMaxFilter;
@@ -237,13 +168,8 @@ typedef void (*SkConvolveFilterPadding_pointer)(
     SkConvolutionFilter1D* filter);
 
 struct SkConvolutionProcs {
-<<<<<<< HEAD
     // This is how many extra pixels may be read by the
     // conolve*horizontally functions.
-=======
-  // This is how many extra pixels may be read by the
-  // conolve*horizontally functions.
->>>>>>> miniblink49
     int fExtraHorizontalReads;
     SkConvolveVertically_pointer fConvolveVertically;
     SkConvolve4RowsHorizontally_pointer fConvolve4RowsHorizontally;
@@ -251,11 +177,6 @@ struct SkConvolutionProcs {
     SkConvolveFilterPadding_pointer fApplySIMDPadding;
 };
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> miniblink49
 // Does a two-dimensional convolution on the given source image.
 //
 // It is assumed the source pixel offsets referenced in the input filters
@@ -274,15 +195,11 @@ struct SkConvolutionProcs {
 //
 // The layout in memory is assumed to be 4-bytes per pixel in B-G-R-A order
 // (this is ARGB when loaded into 32-bit words on a little-endian machine).
-<<<<<<< HEAD
 /**
  *  Returns false if it was unable to perform the convolution/rescale. in which case the output
  *  buffer is assumed to be undefined.
  */
 SK_API bool BGRAConvolve2D(const unsigned char* sourceData,
-=======
-SK_API void BGRAConvolve2D(const unsigned char* sourceData,
->>>>>>> miniblink49
     int sourceByteRowStride,
     bool sourceHasAlpha,
     const SkConvolutionFilter1D& xfilter,
@@ -292,8 +209,4 @@ SK_API void BGRAConvolve2D(const unsigned char* sourceData,
     const SkConvolutionProcs&,
     bool useSimdIfPossible);
 
-<<<<<<< HEAD
 #endif // SK_CONVOLVER_H
-=======
-#endif  // SK_CONVOLVER_H
->>>>>>> miniblink49

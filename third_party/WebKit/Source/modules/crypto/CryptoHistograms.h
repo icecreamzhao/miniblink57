@@ -118,13 +118,9 @@ void histogramKey(ExecutionContext*, const WebCryptoKey&);
 
 // This is a convenience function for calling histogramAlgorithm() and
 // histogramKey().
-<<<<<<< HEAD
 void histogramAlgorithmAndKey(ExecutionContext*,
     const WebCryptoAlgorithm&,
     const WebCryptoKey&);
-=======
-void histogramAlgorithmAndKey(ExecutionContext*, const WebCryptoAlgorithm&, const WebCryptoKey&);
->>>>>>> miniblink49
 
 } // namespace blink
 

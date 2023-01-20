@@ -6,9 +6,5 @@
     RuntimeEnabled=NetworkInformation,
     Exposed=Worker
 ] partial interface WorkerNavigator {
-<<<<<<< HEAD
     [CallWith=ScriptState, MeasureAs=NetInfo] readonly attribute NetworkInformation connection;
-=======
-    [CallWith=ExecutionContext, MeasureAs=NetInfo] readonly attribute NetworkInformation connection;
->>>>>>> miniblink49
 };

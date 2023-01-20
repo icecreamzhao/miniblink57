@@ -18,21 +18,14 @@
       'type': 'none',
       'dependencies': [
         'most.gyp:most',
-<<<<<<< HEAD
         'skiaserve.gyp:skiaserve',
       ],
       'conditions': [
         ['skia_os in ("ios", "android")', {
-=======
-      ],
-      'conditions': [
-        ['skia_os in ("ios", "android", "chromeos") or (skia_os == "mac" and skia_arch_width == 32)', {
->>>>>>> miniblink49
           # debugger is not supported on this platform
         }, {
           'dependencies': [
             'debugger.gyp:debugger',
-<<<<<<< HEAD
             #'v8.gyp:SkV8Example',
           ],
         }],
@@ -41,12 +34,6 @@
             'android_system.gyp:SampleApp_APK',
           ],
         }],
-=======
-            'pdfviewer.gyp:pdfviewer',
-            #'v8.gyp:SkV8Example',
-          ],
-        }],
->>>>>>> miniblink49
       ],
     },
   ],

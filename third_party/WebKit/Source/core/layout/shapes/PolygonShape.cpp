@@ -27,7 +27,6 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/layout/shapes/PolygonShape.h"
 
 #include "platform/geometry/LayoutPoint.h"
@@ -43,7 +42,8 @@ static inline FloatSize inwardEdgeNormal(const FloatPolygonEdge& edge)
     if (!edgeDelta.height())
         return FloatSize(0, (edgeDelta.width() > 0 ? 1 : -1));
     float edgeLength = edgeDelta.diagonalLength();
-    return FloatSize(-edgeDelta.height() / edgeLength, edgeDelta.width() / edgeLength);
+    return FloatSize(-edgeDelta.height() / edgeLength,
+        edgeDelta.width() / edgeLength);
 }
 
 static inline FloatSize outwardEdgeNormal(const FloatPolygonEdge& edge)
@@ -51,7 +51,10 @@ static inline FloatSize outwardEdgeNormal(const FloatPolygonEdge& edge)
     return -inwardEdgeNormal(edge);
 }
 
-static inline bool overlapsYRange(const FloatRect& rect, float y1, float y2) { return !rect.isEmpty() && y2 >= y1 && y2 >= rect.y() && y1 <= rect.maxY(); }
+static inline bool overlapsYRange(const FloatRect& rect, float y1, float y2)
+{
+    return !rect.isEmpty() && y2 >= y1 && y2 >= rect.y() && y1 <= rect.maxY();
+}
 
 float OffsetPolygonEdge::xIntercept(float y) const
 {
@@ -67,7 +70,8 @@ float OffsetPolygonEdge::xIntercept(float y) const
     return vertex1().x() + ((y - vertex1().y()) * (vertex2().x() - vertex1().x()) / (vertex2().y() - vertex1().y()));
 }
 
-FloatShapeInterval OffsetPolygonEdge::clippedEdgeXRange(float y1, float y2) const
+FloatShapeInterval OffsetPolygonEdge::clippedEdgeXRange(float y1,
+    float y2) const
 {
     if (!overlapsYRange(y1, y2) || (y1 == maxY() && minY() <= y1) || (y2 == minY() && maxY() >= y2))
         return FloatShapeInterval();
@@ -98,7 +102,10 @@ static float circleXIntercept(float y, float radius)
     return radius * sqrt(1 - (y * y) / (radius * radius));
 }
 
-static FloatShapeInterval clippedCircleXRange(const FloatPoint& center, float radius, float y1, float y2)
+static FloatShapeInterval clippedCircleXRange(const FloatPoint& center,
+    float radius,
+    float y1,
+    float y2)
 {
     if (y1 >= center.y() + radius || y2 <= center.y() - radius)
         return FloatShapeInterval();
@@ -106,10 +113,10 @@ static FloatShapeInterval clippedCircleXRange(const FloatPoint& center, float ra
     if (center.y() >= y1 && center.y() <= y2)
         return FloatShapeInterval(center.x() - radius, center.x() + radius);
 
-    // Clip the circle to the vertical range y1,y2 and return the extent of the clipped circle's
-    // projection on the X axis
+    // Clip the circle to the vertical range y1,y2 and return the extent of the
+    // clipped circle's projection on the X axis
 
-    float xi =  circleXIntercept((y2 < center.y() ? y2 : y1) - center.y(), radius);
+    float xi = circleXIntercept((y2 < center.y() ? y2 : y1) - center.y(), radius);
     return FloatShapeInterval(center.x() - xi, center.x() + xi);
 }
 
@@ -120,7 +127,8 @@ LayoutRect PolygonShape::shapeMarginLogicalBoundingBox() const
     return LayoutRect(box);
 }
 
-LineSegment PolygonShape::getExcludedInterval(LayoutUnit logicalTop, LayoutUnit logicalHeight) const
+LineSegment PolygonShape::getExcludedInterval(LayoutUnit logicalTop,
+    LayoutUnit logicalHeight) const
 {
     float y1 = logicalTop.toFloat();
     float y2 = logicalTop.toFloat() + logicalHeight.toFloat();
@@ -129,7 +137,8 @@ LineSegment PolygonShape::getExcludedInterval(LayoutUnit logicalTop, LayoutUnit 
         return LineSegment();
 
     Vector<const FloatPolygonEdge*> overlappingEdges;
-    if (!m_polygon.overlappingEdges(y1 - shapeMargin(), y2 + shapeMargin(), overlappingEdges))
+    if (!m_polygon.overlappingEdges(y1 - shapeMargin(), y2 + shapeMargin(),
+            overlappingEdges))
         return LineSegment();
 
     FloatShapeInterval excludedInterval;
@@ -138,12 +147,19 @@ LineSegment PolygonShape::getExcludedInterval(LayoutUnit logicalTop, LayoutUnit 
         if (edge.maxY() == edge.minY())
             continue;
         if (!shapeMargin()) {
-            excludedInterval.unite(OffsetPolygonEdge(edge, FloatSize()).clippedEdgeXRange(y1, y2));
+            excludedInterval.unite(
+                OffsetPolygonEdge(edge, FloatSize()).clippedEdgeXRange(y1, y2));
         } else {
-            excludedInterval.unite(OffsetPolygonEdge(edge, outwardEdgeNormal(edge) * shapeMargin()).clippedEdgeXRange(y1, y2));
-            excludedInterval.unite(OffsetPolygonEdge(edge, inwardEdgeNormal(edge) * shapeMargin()).clippedEdgeXRange(y1, y2));
-            excludedInterval.unite(clippedCircleXRange(edge.vertex1(), shapeMargin(), y1, y2));
-            excludedInterval.unite(clippedCircleXRange(edge.vertex2(), shapeMargin(), y1, y2));
+            excludedInterval.unite(
+                OffsetPolygonEdge(edge, outwardEdgeNormal(edge) * shapeMargin())
+                    .clippedEdgeXRange(y1, y2));
+            excludedInterval.unite(
+                OffsetPolygonEdge(edge, inwardEdgeNormal(edge) * shapeMargin())
+                    .clippedEdgeXRange(y1, y2));
+            excludedInterval.unite(
+                clippedCircleXRange(edge.vertex1(), shapeMargin(), y1, y2));
+            excludedInterval.unite(
+                clippedCircleXRange(edge.vertex2(), shapeMargin(), y1, y2));
         }
     }
 

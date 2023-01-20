@@ -9,7 +9,6 @@
 #define SkBlitter_DEFINED
 
 #include "SkBitmapProcShader.h"
-<<<<<<< HEAD
 #include "SkColor.h"
 #include "SkRect.h"
 #include "SkRegion.h"
@@ -26,26 +25,12 @@ struct SkMask;
     A SkBlitter subclass contains all the context needed to generate pixels
     for the destination and how src/generated pixels map to the destination.
     The coordinates passed to the blitX calls are in destination pixel space.
-=======
-#include "SkMask.h"
-#include "SkMatrix.h"
-#include "SkPaint.h"
-#include "SkPixmap.h"
-#include "SkRefCnt.h"
-#include "SkRegion.h"
-#include "SkShader.h"
-#include "SkSmallAllocator.h"
-
-/** SkBlitter and its subclasses are responsible for actually writing pixels
-    into memory. Besides efficiency, they handle clipping and antialiasing.
->>>>>>> miniblink49
 */
 class SkBlitter {
 public:
     virtual ~SkBlitter();
 
     /// Blit a horizontal run of one or more pixels.
-<<<<<<< HEAD
     virtual void blitH(int x, int y, int width) = 0;
 
     /// Blit a horizontal run of antialiased pixels; runs[] is a *sparse*
@@ -68,57 +53,30 @@ public:
     /// Blit a solid rectangle one or more pixels wide.
     virtual void blitRect(int x, int y, int width, int height);
 
-=======
-    virtual void blitH(int x, int y, int width);
-    /// Blit a horizontal run of antialiased pixels; runs[] is a *sparse*
-    /// zero-terminated run-length encoding of spans of constant alpha values.
-    virtual void blitAntiH(int x, int y, const SkAlpha antialias[],
-                           const int16_t runs[]);
-
-    /// Blit a vertical run of pixels with a constant alpha value.
-    virtual void blitV(int x, int y, int height, SkAlpha alpha);
-    /// Blit a solid rectangle one or more pixels wide.
-    virtual void blitRect(int x, int y, int width, int height);
->>>>>>> miniblink49
     /** Blit a rectangle with one alpha-blended column on the left,
         width (zero or more) opaque pixels, and one alpha-blended column
         on the right.
         The result will always be at least two pixels wide.
     */
     virtual void blitAntiRect(int x, int y, int width, int height,
-<<<<<<< HEAD
         SkAlpha leftAlpha, SkAlpha rightAlpha);
 
-=======
-                              SkAlpha leftAlpha, SkAlpha rightAlpha);
->>>>>>> miniblink49
     /// Blit a pattern of pixels defined by a rectangle-clipped mask;
     /// typically used for text.
     virtual void blitMask(const SkMask&, const SkIRect& clip);
 
     /** If the blitter just sets a single value for each pixel, return the
-<<<<<<< HEAD
         bitmap it draws into, and assign value. If not, return nullptr and ignore
-=======
-        bitmap it draws into, and assign value. If not, return NULL and ignore
->>>>>>> miniblink49
         the value parameter.
     */
     virtual const SkPixmap* justAnOpaqueColor(uint32_t* value);
 
     // (x, y), (x + 1, y)
-<<<<<<< HEAD
     virtual void blitAntiH2(int x, int y, U8CPU a0, U8CPU a1)
     {
         int16_t runs[3];
         uint8_t aa[2];
 
-=======
-    virtual void blitAntiH2(int x, int y, U8CPU a0, U8CPU a1) {
-        int16_t runs[3];
-        uint8_t aa[2];
-        
->>>>>>> miniblink49
         runs[0] = 1;
         runs[1] = 1;
         runs[2] = 0;
@@ -128,18 +86,11 @@ public:
     }
 
     // (x, y), (x, y + 1)
-<<<<<<< HEAD
     virtual void blitAntiV2(int x, int y, U8CPU a0, U8CPU a1)
     {
         int16_t runs[2];
         uint8_t aa[1];
 
-=======
-    virtual void blitAntiV2(int x, int y, U8CPU a0, U8CPU a1) {
-        int16_t runs[2];
-        uint8_t aa[1];
-        
->>>>>>> miniblink49
         runs[0] = 1;
         runs[1] = 0;
         aa[0] = SkToU8(a0);
@@ -150,11 +101,7 @@ public:
         aa[0] = SkToU8(a1);
         this->blitAntiH(x, y + 1, aa, runs);
     }
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> miniblink49
     /**
      *  Special method just to identify the null blitter, which is returned
      *  from Choose() if the request cannot be fulfilled. Default impl
@@ -180,16 +127,10 @@ public:
      * This function allocates memory for the blitter that the blitter then owns.
      * The memory can be used by the calling function at will, but it will be
      * released when the blitter's destructor is called. This function returns
-<<<<<<< HEAD
      * nullptr if no persistent memory is needed by the blitter.
      */
     virtual void* allocBlitMemory(size_t sz)
     {
-=======
-     * NULL if no persistent memory is needed by the blitter.
-     */
-    virtual void* allocBlitMemory(size_t sz) {
->>>>>>> miniblink49
         return fBlitMemory.reset(sz, SkAutoMalloc::kReuse_OnShrink);
     }
 
@@ -203,7 +144,6 @@ public:
         Return the correct blitter to use given the specified context.
      */
     static SkBlitter* Choose(const SkPixmap& dst,
-<<<<<<< HEAD
         const SkMatrix& matrix,
         const SkPaint& paint,
         SkTBlitterAllocator*,
@@ -218,20 +158,6 @@ public:
 
     static SkShader::ContextRec::DstType PreferredShaderDest(const SkImageInfo&);
 
-=======
-                             const SkMatrix& matrix,
-                             const SkPaint& paint,
-                             SkTBlitterAllocator*,
-                             bool drawCoverage = false);
-
-    static SkBlitter* ChooseSprite(const SkPixmap& dst,
-                                   const SkPaint&,
-                                   const SkPixmap& src,
-                                   int left, int top,
-                                   SkTBlitterAllocator*);
-    ///@}
-
->>>>>>> miniblink49
 protected:
     SkAutoMalloc fBlitMemory;
 };
@@ -255,12 +181,8 @@ public:
 */
 class SkRectClipBlitter : public SkBlitter {
 public:
-<<<<<<< HEAD
     void init(SkBlitter* blitter, const SkIRect& clipRect)
     {
-=======
-    void init(SkBlitter* blitter, const SkIRect& clipRect) {
->>>>>>> miniblink49
         SkASSERT(!clipRect.isEmpty());
         fBlitter = blitter;
         fClipRect = clipRect;
@@ -271,7 +193,6 @@ public:
     void blitV(int x, int y, int height, SkAlpha alpha) override;
     void blitRect(int x, int y, int width, int height) override;
     virtual void blitAntiRect(int x, int y, int width, int height,
-<<<<<<< HEAD
         SkAlpha leftAlpha, SkAlpha rightAlpha) override;
     void blitMask(const SkMask&, const SkIRect& clip) override;
     const SkPixmap* justAnOpaqueColor(uint32_t* value) override;
@@ -283,28 +204,12 @@ public:
 
     void* allocBlitMemory(size_t sz) override
     {
-=======
-                     SkAlpha leftAlpha, SkAlpha rightAlpha) override;
-    void blitMask(const SkMask&, const SkIRect& clip) override;
-    const SkPixmap* justAnOpaqueColor(uint32_t* value) override;
-
-    int requestRowsPreserved() const override {
-        return fBlitter->requestRowsPreserved();
-    }
-
-    void* allocBlitMemory(size_t sz) override {
->>>>>>> miniblink49
         return fBlitter->allocBlitMemory(sz);
     }
 
 private:
-<<<<<<< HEAD
     SkBlitter* fBlitter;
     SkIRect fClipRect;
-=======
-    SkBlitter*  fBlitter;
-    SkIRect     fClipRect;
->>>>>>> miniblink49
 };
 
 /** Wraps another (real) blitter, and ensures that the real blitter is only
@@ -313,12 +218,8 @@ private:
 */
 class SkRgnClipBlitter : public SkBlitter {
 public:
-<<<<<<< HEAD
     void init(SkBlitter* blitter, const SkRegion* clipRgn)
     {
-=======
-    void init(SkBlitter* blitter, const SkRegion* clipRgn) {
->>>>>>> miniblink49
         SkASSERT(clipRgn && !clipRgn->isEmpty());
         fBlitter = blitter;
         fRgn = clipRgn;
@@ -329,7 +230,6 @@ public:
     void blitV(int x, int y, int height, SkAlpha alpha) override;
     void blitRect(int x, int y, int width, int height) override;
     void blitAntiRect(int x, int y, int width, int height,
-<<<<<<< HEAD
         SkAlpha leftAlpha, SkAlpha rightAlpha) override;
     void blitMask(const SkMask&, const SkIRect& clip) override;
     const SkPixmap* justAnOpaqueColor(uint32_t* value) override;
@@ -341,26 +241,11 @@ public:
 
     void* allocBlitMemory(size_t sz) override
     {
-=======
-                      SkAlpha leftAlpha, SkAlpha rightAlpha) override;
-    void blitMask(const SkMask&, const SkIRect& clip) override;
-    const SkPixmap* justAnOpaqueColor(uint32_t* value) override;
-
-    int requestRowsPreserved() const override {
-        return fBlitter->requestRowsPreserved();
-    }
-
-    void* allocBlitMemory(size_t sz) override {
->>>>>>> miniblink49
         return fBlitter->allocBlitMemory(sz);
     }
 
 private:
-<<<<<<< HEAD
     SkBlitter* fBlitter;
-=======
-    SkBlitter*      fBlitter;
->>>>>>> miniblink49
     const SkRegion* fRgn;
 };
 
@@ -370,7 +255,6 @@ private:
 */
 class SkBlitterClipper {
 public:
-<<<<<<< HEAD
     SkBlitter* apply(SkBlitter* blitter, const SkRegion* clip,
         const SkIRect* bounds = nullptr);
 
@@ -378,15 +262,6 @@ private:
     SkNullBlitter fNullBlitter;
     SkRectClipBlitter fRectBlitter;
     SkRgnClipBlitter fRgnBlitter;
-=======
-    SkBlitter*  apply(SkBlitter* blitter, const SkRegion* clip,
-                      const SkIRect* bounds = NULL);
-
-private:
-    SkNullBlitter       fNullBlitter;
-    SkRectClipBlitter   fRectBlitter;
-    SkRgnClipBlitter    fRgnBlitter;
->>>>>>> miniblink49
 };
 
 #endif

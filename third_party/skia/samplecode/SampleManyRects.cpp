@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2013 Google Inc.
  *
@@ -10,21 +6,13 @@
  */
 #include "SampleCode.h"
 #include "SkCanvas.h"
-<<<<<<< HEAD
-=======
-#include "SkDevice.h"
->>>>>>> miniblink49
 #include "SkPaint.h"
 #include "SkRandom.h"
 #include "SkShader.h"
 #include "SkView.h"
 
 /**
-<<<<<<< HEAD
  * Animated sample used to develop batched rect implementation in GrBufferedDrawTarget.
-=======
- * Animated sample used to develop batched rect implementation in GrInOrderDrawBuffer.
->>>>>>> miniblink49
  */
 class ManyRectsView : public SampleView {
 private:
@@ -33,18 +21,11 @@ private:
     };
 
 public:
-<<<<<<< HEAD
     ManyRectsView() { }
 
 protected:
     bool onQuery(SkEvent* evt) override
     {
-=======
-    ManyRectsView() {}
-
-protected:
-    bool onQuery(SkEvent* evt) override {
->>>>>>> miniblink49
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "ManyRects");
             return true;
@@ -52,22 +33,14 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-<<<<<<< HEAD
     void onDrawContent(SkCanvas* canvas) override
     {
-=======
-    virtual void onDrawContent(SkCanvas* canvas) {
->>>>>>> miniblink49
         SkISize dsize = canvas->getDeviceSize();
         canvas->clear(0xFFF0E0F0);
 
         for (int i = 0; i < N; ++i) {
             SkRect rect = SkRect::MakeWH(SkIntToScalar(fRandom.nextRangeU(10, 100)),
-<<<<<<< HEAD
                 SkIntToScalar(fRandom.nextRangeU(10, 100)));
-=======
-                                         SkIntToScalar(fRandom.nextRangeU(10, 100)));
->>>>>>> miniblink49
             int x = fRandom.nextRangeU(0, dsize.fWidth);
             int y = fRandom.nextRangeU(0, dsize.fHeight);
             canvas->save();
@@ -78,13 +51,8 @@ protected:
             if (false) {
                 SkMatrix rotate;
                 rotate.setRotate(fRandom.nextUScalar1() * 360,
-<<<<<<< HEAD
                     SkIntToScalar(x) + SkScalarHalf(rect.fRight),
                     SkIntToScalar(y) + SkScalarHalf(rect.fBottom));
-=======
-                                 SkIntToScalar(x) + SkScalarHalf(rect.fRight),
-                                 SkIntToScalar(y) + SkScalarHalf(rect.fBottom));
->>>>>>> miniblink49
                 canvas->concat(rotate);
             }
             SkRect clipRect = rect;
@@ -97,11 +65,7 @@ protected:
             canvas->drawRect(rect, paint);
             canvas->restore();
         }
-<<<<<<< HEAD
         this->inval(nullptr);
-=======
-        this->inval(NULL);
->>>>>>> miniblink49
     }
 
 private:

@@ -23,10 +23,6 @@
 #ifndef __UMACHINE_H__
 #define __UMACHINE_H__
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /**
  * \file
  * \brief Basic types and constants for UTF
@@ -51,10 +47,7 @@
  * stddef.h defines wchar_t
  */
 #include <stddef.h>
-<<<<<<< HEAD
 #include <stdint.h>
-=======
->>>>>>> miniblink49
 
 /*==========================================================================*/
 /* For C wrappers, we use the symbol U_STABLE.                                */
@@ -81,7 +74,6 @@
  */
 
 #ifdef __cplusplus
-<<<<<<< HEAD
 #define U_CFUNC extern "C"
 #define U_CDECL_BEGIN extern "C" {
 #define U_CDECL_END }
@@ -89,15 +81,6 @@
 #define U_CFUNC extern
 #define U_CDECL_BEGIN
 #define U_CDECL_END
-=======
-#   define U_CFUNC extern "C"
-#   define U_CDECL_BEGIN extern "C" {
-#   define U_CDECL_END   }
-#else
-#   define U_CFUNC extern
-#   define U_CDECL_BEGIN
-#   define U_CDECL_END
->>>>>>> miniblink49
 #endif
 
 #ifndef U_ATTRIBUTE_DEPRECATED
@@ -107,26 +90,16 @@
  * @internal
  */
 #if U_GCC_MAJOR_MINOR >= 302
-<<<<<<< HEAD
 #define U_ATTRIBUTE_DEPRECATED __attribute__((deprecated))
-=======
-#    define U_ATTRIBUTE_DEPRECATED __attribute__ ((deprecated))
->>>>>>> miniblink49
 /**
  * \def U_ATTRIBUTE_DEPRECATED
  * This is used for Visual C++ specific attributes 
  * @internal
  */
 #elif defined(_MSC_VER) && (_MSC_VER >= 1400)
-<<<<<<< HEAD
 #define U_ATTRIBUTE_DEPRECATED __declspec(deprecated)
 #else
 #define U_ATTRIBUTE_DEPRECATED
-=======
-#    define U_ATTRIBUTE_DEPRECATED __declspec(deprecated)
-#else
-#    define U_ATTRIBUTE_DEPRECATED
->>>>>>> miniblink49
 #endif
 #endif
 
@@ -135,11 +108,7 @@
 /** This is used to declare a function as a stable public ICU C API*/
 #define U_STABLE U_CAPI
 /** This is used to declare a function as a draft public ICU C API  */
-<<<<<<< HEAD
 #define U_DRAFT U_CAPI
-=======
-#define U_DRAFT  U_CAPI
->>>>>>> miniblink49
 /** This is used to declare a function as a deprecated public ICU C API  */
 #define U_DEPRECATED U_CAPI U_ATTRIBUTE_DEPRECATED
 /** This is used to declare a function as an obsolete public ICU C API  */
@@ -163,11 +132,7 @@
  * @internal
  */
 
-<<<<<<< HEAD
 #if defined(__cplusplus) && __cplusplus >= 201103L
-=======
-#if defined(__cplusplus) && __cplusplus>=201103L
->>>>>>> miniblink49
 /* C++11 */
 #ifndef U_OVERRIDE
 #define U_OVERRIDE override
@@ -191,7 +156,6 @@
 
 #ifndef INT8_MIN
 /** The smallest value an 8 bit signed integer can hold @stable ICU 2.0 */
-<<<<<<< HEAD
 #define INT8_MIN ((int8_t)(-128))
 #endif
 #ifndef INT16_MIN
@@ -201,22 +165,10 @@
 #ifndef INT32_MIN
 /** The smallest value a 32 bit signed integer can hold @stable ICU 2.0 */
 #define INT32_MIN ((int32_t)(-2147483647 - 1))
-=======
-#   define INT8_MIN        ((int8_t)(-128))
-#endif
-#ifndef INT16_MIN
-/** The smallest value a 16 bit signed integer can hold @stable ICU 2.0 */
-#   define INT16_MIN       ((int16_t)(-32767-1))
-#endif
-#ifndef INT32_MIN
-/** The smallest value a 32 bit signed integer can hold @stable ICU 2.0 */
-#   define INT32_MIN       ((int32_t)(-2147483647-1))
->>>>>>> miniblink49
 #endif
 
 #ifndef INT8_MAX
 /** The largest value an 8 bit signed integer can hold @stable ICU 2.0 */
-<<<<<<< HEAD
 #define INT8_MAX ((int8_t)(127))
 #endif
 #ifndef INT16_MAX
@@ -226,22 +178,10 @@
 #ifndef INT32_MAX
 /** The largest value a 32 bit signed integer can hold @stable ICU 2.0 */
 #define INT32_MAX ((int32_t)(2147483647))
-=======
-#   define INT8_MAX        ((int8_t)(127))
-#endif
-#ifndef INT16_MAX
-/** The largest value a 16 bit signed integer can hold @stable ICU 2.0 */
-#   define INT16_MAX       ((int16_t)(32767))
-#endif
-#ifndef INT32_MAX
-/** The largest value a 32 bit signed integer can hold @stable ICU 2.0 */
-#   define INT32_MAX       ((int32_t)(2147483647))
->>>>>>> miniblink49
 #endif
 
 #ifndef UINT8_MAX
 /** The largest value an 8 bit unsigned integer can hold @stable ICU 2.0 */
-<<<<<<< HEAD
 #define UINT8_MAX ((uint8_t)(255U))
 #endif
 #ifndef UINT16_MAX
@@ -257,43 +197,19 @@
 #error int64_t is required for decimal format and rule-based number format.
 #else
 #ifndef INT64_C
-=======
-#   define UINT8_MAX       ((uint8_t)(255U))
-#endif
-#ifndef UINT16_MAX
-/** The largest value a 16 bit unsigned integer can hold @stable ICU 2.0 */
-#   define UINT16_MAX      ((uint16_t)(65535U))
-#endif
-#ifndef UINT32_MAX
-/** The largest value a 32 bit unsigned integer can hold @stable ICU 2.0 */
-#   define UINT32_MAX      ((uint32_t)(4294967295U))
-#endif
-
-#if defined(U_INT64_T_UNAVAILABLE)
-# error int64_t is required for decimal format and rule-based number format.
-#else
-# ifndef INT64_C
->>>>>>> miniblink49
 /**
  * Provides a platform independent way to specify a signed 64-bit integer constant.
  * note: may be wrong for some 64 bit platforms - ensure your compiler provides INT64_C
  * @stable ICU 2.8
  */
-<<<<<<< HEAD
 #define INT64_C(c) c##LL
 #endif
 #ifndef UINT64_C
-=======
-#   define INT64_C(c) c ## LL
-# endif
-# ifndef UINT64_C
->>>>>>> miniblink49
 /**
  * Provides a platform independent way to specify an unsigned 64-bit integer constant.
  * note: may be wrong for some 64 bit platforms - ensure your compiler provides UINT64_C
  * @stable ICU 2.8
  */
-<<<<<<< HEAD
 #define UINT64_C(c) c##ULL
 #endif
 #ifndef U_INT64_MIN
@@ -308,22 +224,6 @@
 /** The largest value a 64 bit unsigned integer can hold @stable ICU 2.8 */
 #define U_UINT64_MAX ((uint64_t)(UINT64_C(18446744073709551615)))
 #endif
-=======
-#   define UINT64_C(c) c ## ULL
-# endif
-# ifndef U_INT64_MIN
-/** The smallest value a 64 bit signed integer can hold @stable ICU 2.8 */
-#     define U_INT64_MIN       ((int64_t)(INT64_C(-9223372036854775807)-1))
-# endif
-# ifndef U_INT64_MAX
-/** The largest value a 64 bit signed integer can hold @stable ICU 2.8 */
-#     define U_INT64_MAX       ((int64_t)(INT64_C(9223372036854775807)))
-# endif
-# ifndef U_UINT64_MAX
-/** The largest value a 64 bit unsigned integer can hold @stable ICU 2.8 */
-#     define U_UINT64_MAX      ((uint64_t)(UINT64_C(18446744073709551615)))
-# endif
->>>>>>> miniblink49
 #endif
 
 /*==========================================================================*/
@@ -335,7 +235,6 @@ typedef int8_t UBool;
 
 #ifndef TRUE
 /** The TRUE value of a UBool @stable ICU 2.0 */
-<<<<<<< HEAD
 #define TRUE 1
 #endif
 #ifndef FALSE
@@ -343,16 +242,6 @@ typedef int8_t UBool;
 #define FALSE 0
 #endif
 
-=======
-#   define TRUE  1
-#endif
-#ifndef FALSE
-/** The FALSE value of a UBool @stable ICU 2.0 */
-#   define FALSE 0
-#endif
-
-
->>>>>>> miniblink49
 /*==========================================================================*/
 /* Unicode data types                                                       */
 /*==========================================================================*/
@@ -374,7 +263,6 @@ typedef int8_t UBool;
  * @stable ICU 2.0
  */
 #if !defined(U_WCHAR_IS_UTF16) && !defined(U_WCHAR_IS_UTF32)
-<<<<<<< HEAD
 #ifdef __STDC_ISO_10646__
 #if (U_SIZEOF_WCHAR_T == 2)
 #define U_WCHAR_IS_UTF16
@@ -394,27 +282,6 @@ typedef int8_t UBool;
 #elif U_PLATFORM_HAS_WIN32_API
 #define U_WCHAR_IS_UTF16
 #endif
-=======
-#   ifdef __STDC_ISO_10646__
-#       if (U_SIZEOF_WCHAR_T==2)
-#           define U_WCHAR_IS_UTF16
-#       elif (U_SIZEOF_WCHAR_T==4)
-#           define  U_WCHAR_IS_UTF32
-#       endif
-#   elif defined __UCS2__
-#       if (U_PF_OS390 <= U_PLATFORM && U_PLATFORM <= U_PF_OS400) && (U_SIZEOF_WCHAR_T==2)
-#           define U_WCHAR_IS_UTF16
-#       endif
-#   elif defined(__UCS4__) || (U_PLATFORM == U_PF_OS400 && defined(__UTF32__))
-#       if (U_SIZEOF_WCHAR_T==4)
-#           define U_WCHAR_IS_UTF32
-#       endif
-#   elif U_PLATFORM_IS_DARWIN_BASED || (U_SIZEOF_WCHAR_T==4 && U_PLATFORM_IS_LINUX_BASED)
-#       define U_WCHAR_IS_UTF32
-#   elif U_PLATFORM_HAS_WIN32_API
-#       define U_WCHAR_IS_UTF16
-#   endif
->>>>>>> miniblink49
 #endif
 
 /* UChar and UChar32 definitions -------------------------------------------- */
@@ -438,11 +305,7 @@ typedef int8_t UBool;
     typedef UCHAR_TYPE UChar;
 /* Not #elif U_HAVE_CHAR16_T -- because that is type-incompatible with pre-C++11 callers
     typedef char16_t UChar;  */
-<<<<<<< HEAD
 #elif U_SIZEOF_WCHAR_T == 2
-=======
-#elif U_SIZEOF_WCHAR_T==2
->>>>>>> miniblink49
     typedef wchar_t UChar;
 #elif defined(__CHAR16_TYPE__)
     typedef __CHAR16_TYPE__ UChar;

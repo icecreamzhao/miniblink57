@@ -6,10 +6,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #ifndef SkHitTest_DEFINED
 #define SkHitTest_DEFINED
 
@@ -19,18 +15,11 @@
 class SkHitTest : public SkADrawable {
     DECLARE_MEMBER_INFO(HitTest);
     SkHitTest();
-<<<<<<< HEAD
     bool draw(SkAnimateMaker&) override;
     bool enable(SkAnimateMaker&) override;
     bool hasEnable() const override;
     const SkMemberInfo* preferredChild(SkDisplayTypes type) override;
 
-=======
-    bool draw(SkAnimateMaker& ) override;
-    bool enable(SkAnimateMaker& ) override;
-    bool hasEnable() const override;
-    const SkMemberInfo* preferredChild(SkDisplayTypes type) override;
->>>>>>> miniblink49
 private:
     SkTDDisplayableArray bullets;
     SkTDIntArray hits;

@@ -31,6 +31,7 @@
 #ifndef GridPosition_h
 #define GridPosition_h
 
+#include "wtf/Allocator.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
@@ -43,6 +44,8 @@ enum GridPositionType {
 };
 
 class GridPosition {
+    DISALLOW_NEW();
+
 public:
     GridPosition()
         : m_type(AutoPosition)
@@ -57,7 +60,7 @@ public:
     bool isSpan() const { return m_type == SpanPosition; }
     bool isNamedGridArea() const { return m_type == NamedGridAreaPosition; }
 
-    void setExplicitPosition(int position, const String& namedGridLine)
+    void setExplicitPosition(int position, const AtomicString& namedGridLine)
     {
         m_type = ExplicitPosition;
         m_integerPosition = position;
@@ -70,17 +73,17 @@ public:
         m_integerPosition = 0;
     }
 
-    // 'span' values cannot be negative, yet we reuse the <integer> position which can
-    // be. This means that we have to convert the span position to an integer, losing
-    // some precision here. It shouldn't be an issue in practice though.
-    void setSpanPosition(int position, const String& namedGridLine)
+    // 'span' values cannot be negative, yet we reuse the <integer> position which
+    // can be. This means that we have to convert the span position to an integer,
+    // losing some precision here. It shouldn't be an issue in practice though.
+    void setSpanPosition(int position, const AtomicString& namedGridLine)
     {
         m_type = SpanPosition;
         m_integerPosition = position;
         m_namedGridLine = namedGridLine;
     }
 
-    void setNamedGridArea(const String& namedGridArea)
+    void setNamedGridArea(const AtomicString& namedGridArea)
     {
         m_type = NamedGridAreaPosition;
         m_namedGridLine = namedGridArea;
@@ -92,7 +95,7 @@ public:
         return m_integerPosition;
     }
 
-    String namedGridLine() const
+    AtomicString namedGridLine() const
     {
         ASSERT(type() == ExplicitPosition || type() == SpanPosition || type() == NamedGridAreaPosition);
         return m_namedGridLine;
@@ -113,10 +116,11 @@ public:
     {
         return isAuto() || isSpan();
     }
+
 private:
     GridPositionType m_type;
     int m_integerPosition;
-    String m_namedGridLine;
+    AtomicString m_namedGridLine;
 };
 
 } // namespace blink

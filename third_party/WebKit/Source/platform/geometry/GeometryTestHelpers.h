@@ -10,17 +10,12 @@
 namespace blink {
 namespace GeometryTest {
 
-<<<<<<< HEAD
     bool ApproximatelyEqual(float, float, float testEpsilon);
     ::testing::AssertionResult AssertAlmostEqual(const char* actual_expr,
         const char* expected_expr,
         float actual,
         float expected,
         float testEpsilon = 1e-6);
-=======
-bool ApproximatelyEqual(float, float, float testEpsilon);
-::testing::AssertionResult AssertAlmostEqual(const char* actual_expr, const char* expected_expr, float actual, float expected, float testEpsilon = 1e-6);
->>>>>>> miniblink49
 
 } // namespace GeometryTest
 } // namespace blink

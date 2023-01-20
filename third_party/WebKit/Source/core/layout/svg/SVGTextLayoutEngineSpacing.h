@@ -20,6 +20,7 @@
 #ifndef SVGTextLayoutEngineSpacing_h
 #define SVGTextLayoutEngineSpacing_h
 
+#include "wtf/Allocator.h"
 #include "wtf/Noncopyable.h"
 #include "wtf/text/Unicode.h"
 
@@ -27,9 +28,12 @@ namespace blink {
 
 class Font;
 
-// Helper class used by SVGTextLayoutEngine to handle 'letter-spacing' and 'word-spacing'.
+// Helper class used by SVGTextLayoutEngine to handle 'letter-spacing' and
+// 'word-spacing'.
 class SVGTextLayoutEngineSpacing {
+    STACK_ALLOCATED();
     WTF_MAKE_NONCOPYABLE(SVGTextLayoutEngineSpacing);
+
 public:
     SVGTextLayoutEngineSpacing(const Font&, float effectiveZoom);
 

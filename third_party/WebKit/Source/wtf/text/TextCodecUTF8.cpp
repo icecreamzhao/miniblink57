@@ -23,20 +23,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "wtf/text/TextCodecUTF8.h"
 
 #include "wtf/PtrUtil.h"
-=======
-#include "config.h"
-#include "wtf/text/TextCodecUTF8.h"
-
->>>>>>> miniblink49
 #include "wtf/text/CString.h"
 #include "wtf/text/CharacterNames.h"
 #include "wtf/text/StringBuffer.h"
 #include "wtf/text/TextCodecASCIIFastPath.h"
-<<<<<<< HEAD
 #include <memory>
 
 namespace WTF {
@@ -58,20 +51,6 @@ std::unique_ptr<TextCodec> TextCodecUTF8::create(const TextEncoding&,
     const void*)
 {
     return WTF::wrapUnique(new TextCodecUTF8);
-=======
-
-using namespace WTF;
-using namespace WTF::Unicode;
-using namespace std;
-
-namespace WTF {
-
-const int nonCharacter = -1;
-
-PassOwnPtr<TextCodec> TextCodecUTF8::create(const TextEncoding&, const void*)
-{
-    return adoptPtr(new TextCodecUTF8);
->>>>>>> miniblink49
 }
 
 void TextCodecUTF8::registerEncodingNames(EncodingNameRegistrar registrar)
@@ -87,12 +66,8 @@ void TextCodecUTF8::registerEncodingNames(EncodingNameRegistrar registrar)
     registrar("utf8", "UTF-8");
     registrar("x-unicode20utf8", "UTF-8");
 
-<<<<<<< HEAD
     // Additional aliases present in the WHATWG Encoding Standard
     // (http://encoding.spec.whatwg.org/)
-=======
-    // Additional aliases present in the WHATWG Encoding Standard (http://encoding.spec.whatwg.org/)
->>>>>>> miniblink49
     // and Firefox (24), but not in ICU 4.6.
     registrar("unicode-1-1-utf-8", "UTF-8");
 }
@@ -105,7 +80,6 @@ void TextCodecUTF8::registerCodecs(TextCodecRegistrar registrar)
 static inline int nonASCIISequenceLength(uint8_t firstByte)
 {
     static const uint8_t lengths[256] = {
-<<<<<<< HEAD
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -116,29 +90,11 @@ static inline int nonASCIISequenceLength(uint8_t firstByte)
         2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
         2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
         2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
-=======
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-        3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
->>>>>>> miniblink49
         4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     };
     return lengths[firstByte];
 }
 
-<<<<<<< HEAD
 static inline int decodeNonASCIISequence(const uint8_t* sequence,
     unsigned length)
 {
@@ -191,75 +147,16 @@ static inline int decodeNonASCIISequence(const uint8_t* sequence,
         return nonCharacter2;
     if (sequence[3] < 0x80 || sequence[3] > 0xBF)
         return nonCharacter3;
-=======
-static inline int decodeNonASCIISequence(const uint8_t* sequence, unsigned length)
-{
-    ASSERT(!isASCII(sequence[0]));
-    if (length == 2) {
-        ASSERT(sequence[0] <= 0xDF);
-        if (sequence[0] < 0xC2)
-            return nonCharacter;
-        if (sequence[1] < 0x80 || sequence[1] > 0xBF)
-            return nonCharacter;
-        return ((sequence[0] << 6) + sequence[1]) - 0x00003080;
-    }
-    if (length == 3) {
-        ASSERT(sequence[0] >= 0xE0 && sequence[0] <= 0xEF);
-        switch (sequence[0]) {
-        case 0xE0:
-            if (sequence[1] < 0xA0 || sequence[1] > 0xBF)
-                return nonCharacter;
-            break;
-        case 0xED:
-            if (sequence[1] < 0x80 || sequence[1] > 0x9F)
-                return nonCharacter;
-            break;
-        default:
-            if (sequence[1] < 0x80 || sequence[1] > 0xBF)
-                return nonCharacter;
-        }
-        if (sequence[2] < 0x80 || sequence[2] > 0xBF)
-            return nonCharacter;
-        return ((sequence[0] << 12) + (sequence[1] << 6) + sequence[2]) - 0x000E2080;
-    }
-    ASSERT(length == 4);
-    ASSERT(sequence[0] >= 0xF0 && sequence[0] <= 0xF4);
-    switch (sequence[0]) {
-    case 0xF0:
-        if (sequence[1] < 0x90 || sequence[1] > 0xBF)
-            return nonCharacter;
-        break;
-    case 0xF4:
-        if (sequence[1] < 0x80 || sequence[1] > 0x8F)
-            return nonCharacter;
-        break;
-    default:
-        if (sequence[1] < 0x80 || sequence[1] > 0xBF)
-            return nonCharacter;
-    }
-    if (sequence[2] < 0x80 || sequence[2] > 0xBF)
-        return nonCharacter;
-    if (sequence[3] < 0x80 || sequence[3] > 0xBF)
-        return nonCharacter;
->>>>>>> miniblink49
     return ((sequence[0] << 18) + (sequence[1] << 12) + (sequence[2] << 6) + sequence[3]) - 0x03C82080;
 }
 
 static inline UChar* appendCharacter(UChar* destination, int character)
 {
-<<<<<<< HEAD
     DCHECK(!isNonCharacter(character));
     DCHECK(!U_IS_SURROGATE(character));
     if (U_IS_BMP(character)) {
         *destination++ = static_cast<UChar>(character);
     } else {
-=======
-    ASSERT(character != nonCharacter);
-    ASSERT(!U_IS_SURROGATE(character));
-    if (U_IS_BMP(character))
-        *destination++ = static_cast<UChar>(character);
-    else {
->>>>>>> miniblink49
         *destination++ = U16_LEAD(character);
         *destination++ = U16_TRAIL(character);
     }
@@ -272,13 +169,9 @@ void TextCodecUTF8::consumePartialSequenceByte()
     memmove(m_partialSequence, m_partialSequence + 1, m_partialSequenceSize);
 }
 
-<<<<<<< HEAD
 void TextCodecUTF8::handleError(UChar*& destination,
     bool stopOnError,
     bool& sawError)
-=======
-void TextCodecUTF8::handleError(UChar*& destination, bool stopOnError, bool& sawError)
->>>>>>> miniblink49
 {
     sawError = true;
     if (stopOnError)
@@ -289,7 +182,6 @@ void TextCodecUTF8::handleError(UChar*& destination, bool stopOnError, bool& saw
 }
 
 template <>
-<<<<<<< HEAD
 bool TextCodecUTF8::handlePartialSequence<LChar>(LChar*& destination,
     const uint8_t*& source,
     const uint8_t* end,
@@ -298,11 +190,6 @@ bool TextCodecUTF8::handlePartialSequence<LChar>(LChar*& destination,
     bool&)
 {
     DCHECK(m_partialSequenceSize);
-=======
-bool TextCodecUTF8::handlePartialSequence<LChar>(LChar*& destination, const uint8_t*& source, const uint8_t* end, bool flush, bool, bool&)
-{
-    ASSERT(m_partialSequenceSize);
->>>>>>> miniblink49
     do {
         if (isASCII(m_partialSequence[0])) {
             *destination++ = m_partialSequence[0];
@@ -318,7 +205,6 @@ bool TextCodecUTF8::handlePartialSequence<LChar>(LChar*& destination, const uint
                 if (!flush) {
                     // The new data is not enough to complete the sequence, so
                     // add it to the existing partial sequence.
-<<<<<<< HEAD
                     memcpy(m_partialSequence + m_partialSequenceSize, source,
                         end - source);
                     m_partialSequenceSize += end - source;
@@ -331,18 +217,6 @@ bool TextCodecUTF8::handlePartialSequence<LChar>(LChar*& destination, const uint
             }
             memcpy(m_partialSequence + m_partialSequenceSize, source,
                 count - m_partialSequenceSize);
-=======
-                    memcpy(m_partialSequence + m_partialSequenceSize, source, end - source);
-                    m_partialSequenceSize += end - source;
-                    return false;
-                }
-                // An incomplete partial sequence at the end is an error, but it will create
-                // a 16 bit string due to the replacementCharacter. Let the 16 bit path handle
-                // the error.
-                return true;
-            }
-            memcpy(m_partialSequence + m_partialSequenceSize, source, count - m_partialSequenceSize);
->>>>>>> miniblink49
             source += count - m_partialSequenceSize;
             m_partialSequenceSize = count;
         }
@@ -358,7 +232,6 @@ bool TextCodecUTF8::handlePartialSequence<LChar>(LChar*& destination, const uint
 }
 
 template <>
-<<<<<<< HEAD
 bool TextCodecUTF8::handlePartialSequence<UChar>(UChar*& destination,
     const uint8_t*& source,
     const uint8_t* end,
@@ -367,11 +240,6 @@ bool TextCodecUTF8::handlePartialSequence<UChar>(UChar*& destination,
     bool& sawError)
 {
     DCHECK(m_partialSequenceSize);
-=======
-bool TextCodecUTF8::handlePartialSequence<UChar>(UChar*& destination, const uint8_t*& source, const uint8_t* end, bool flush, bool stopOnError, bool& sawError)
-{
-    ASSERT(m_partialSequenceSize);
->>>>>>> miniblink49
     do {
         if (isASCII(m_partialSequence[0])) {
             *destination++ = m_partialSequence[0];
@@ -390,12 +258,8 @@ bool TextCodecUTF8::handlePartialSequence<UChar>(UChar*& destination, const uint
                 if (!flush) {
                     // The new data is not enough to complete the sequence, so
                     // add it to the existing partial sequence.
-<<<<<<< HEAD
                     memcpy(m_partialSequence + m_partialSequenceSize, source,
                         end - source);
-=======
-                    memcpy(m_partialSequence + m_partialSequenceSize, source, end - source);
->>>>>>> miniblink49
                     m_partialSequenceSize += end - source;
                     return false;
                 }
@@ -405,21 +269,13 @@ bool TextCodecUTF8::handlePartialSequence<UChar>(UChar*& destination, const uint
                     return false;
                 continue;
             }
-<<<<<<< HEAD
             memcpy(m_partialSequence + m_partialSequenceSize, source,
                 count - m_partialSequenceSize);
-=======
-            memcpy(m_partialSequence + m_partialSequenceSize, source, count - m_partialSequenceSize);
->>>>>>> miniblink49
             source += count - m_partialSequenceSize;
             m_partialSequenceSize = count;
         }
         int character = decodeNonASCIISequence(m_partialSequence, count);
-<<<<<<< HEAD
         if (isNonCharacter(character)) {
-=======
-        if (character == nonCharacter) {
->>>>>>> miniblink49
             handleError(destination, stopOnError, sawError);
             if (stopOnError)
                 return false;
@@ -433,15 +289,11 @@ bool TextCodecUTF8::handlePartialSequence<UChar>(UChar*& destination, const uint
     return false;
 }
 
-<<<<<<< HEAD
 String TextCodecUTF8::decode(const char* bytes,
     size_t length,
     FlushBehavior flush,
     bool stopOnError,
     bool& sawError)
-=======
-String TextCodecUTF8::decode(const char* bytes, size_t length, FlushBehavior flush, bool stopOnError, bool& sawError)
->>>>>>> miniblink49
 {
     // Each input byte might turn into a character.
     // That includes all bytes in the partial-sequence buffer because
@@ -455,7 +307,6 @@ String TextCodecUTF8::decode(const char* bytes, size_t length, FlushBehavior flu
 
     do {
         if (m_partialSequenceSize) {
-<<<<<<< HEAD
             // Explicitly copy destination and source pointers to avoid taking
             // pointers to the local variables, which may harm code generation by
             // disabling some optimizations in some compilers.
@@ -464,14 +315,6 @@ String TextCodecUTF8::decode(const char* bytes, size_t length, FlushBehavior flu
             if (handlePartialSequence(destinationForHandlePartialSequence,
                     sourceForHandlePartialSequence, end, flush,
                     stopOnError, sawError)) {
-=======
-            // Explicitly copy destination and source pointers to avoid taking pointers to the
-            // local variables, which may harm code generation by disabling some optimizations
-            // in some compilers.
-            LChar* destinationForHandlePartialSequence = destination;
-            const uint8_t* sourceForHandlePartialSequence = source;
-            if (handlePartialSequence(destinationForHandlePartialSequence, sourceForHandlePartialSequence, end, flush, stopOnError, sawError)) {
->>>>>>> miniblink49
                 source = sourceForHandlePartialSequence;
                 goto upConvertTo16Bit;
             }
@@ -503,21 +346,12 @@ String TextCodecUTF8::decode(const char* bytes, size_t length, FlushBehavior flu
             }
             int count = nonASCIISequenceLength(*source);
             int character;
-<<<<<<< HEAD
             if (count == 0) {
                 character = nonCharacter1;
             } else {
                 if (count > end - source) {
                     SECURITY_DCHECK(end - source < static_cast<ptrdiff_t>(sizeof(m_partialSequence)));
                     DCHECK(!m_partialSequenceSize);
-=======
-            if (!count)
-                character = nonCharacter;
-            else {
-                if (count > end - source) {
-                    ASSERT_WITH_SECURITY_IMPLICATION(end - source < static_cast<ptrdiff_t>(sizeof(m_partialSequence)));
-                    ASSERT(!m_partialSequenceSize);
->>>>>>> miniblink49
                     m_partialSequenceSize = end - source;
                     memcpy(m_partialSequence, source, m_partialSequenceSize);
                     source = end;
@@ -525,11 +359,7 @@ String TextCodecUTF8::decode(const char* bytes, size_t length, FlushBehavior flu
                 }
                 character = decodeNonASCIISequence(source, count);
             }
-<<<<<<< HEAD
             if (isNonCharacter(character)) {
-=======
-            if (character == nonCharacter) {
->>>>>>> miniblink49
                 sawError = true;
                 if (stopOnError)
                     break;
@@ -559,7 +389,6 @@ upConvertTo16Bit:
 
     do {
         if (m_partialSequenceSize) {
-<<<<<<< HEAD
             // Explicitly copy destination and source pointers to avoid taking
             // pointers to the local variables, which may harm code generation by
             // disabling some optimizations in some compilers.
@@ -568,14 +397,6 @@ upConvertTo16Bit:
             handlePartialSequence(destinationForHandlePartialSequence,
                 sourceForHandlePartialSequence, end, flush,
                 stopOnError, sawError);
-=======
-            // Explicitly copy destination and source pointers to avoid taking pointers to the
-            // local variables, which may harm code generation by disabling some optimizations
-            // in some compilers.
-            UChar* destinationForHandlePartialSequence = destination16;
-            const uint8_t* sourceForHandlePartialSequence = source;
-            handlePartialSequence(destinationForHandlePartialSequence, sourceForHandlePartialSequence, end, flush, stopOnError, sawError);
->>>>>>> miniblink49
             destination16 = destinationForHandlePartialSequence;
             source = sourceForHandlePartialSequence;
             if (m_partialSequenceSize)
@@ -604,21 +425,12 @@ upConvertTo16Bit:
             }
             int count = nonASCIISequenceLength(*source);
             int character;
-<<<<<<< HEAD
             if (count == 0) {
                 character = nonCharacter1;
             } else {
                 if (count > end - source) {
                     SECURITY_DCHECK(end - source < static_cast<ptrdiff_t>(sizeof(m_partialSequence)));
                     DCHECK(!m_partialSequenceSize);
-=======
-            if (!count)
-                character = nonCharacter;
-            else {
-                if (count > end - source) {
-                    ASSERT_WITH_SECURITY_IMPLICATION(end - source < static_cast<ptrdiff_t>(sizeof(m_partialSequence)));
-                    ASSERT(!m_partialSequenceSize);
->>>>>>> miniblink49
                     m_partialSequenceSize = end - source;
                     memcpy(m_partialSequence, source, m_partialSequenceSize);
                     source = end;
@@ -626,7 +438,6 @@ upConvertTo16Bit:
                 }
                 character = decodeNonASCIISequence(source, count);
             }
-<<<<<<< HEAD
             if (isNonCharacter(character)) {
                 sawError = true;
                 if (stopOnError)
@@ -639,15 +450,6 @@ upConvertTo16Bit:
                 // of broken bytes.
                 *destination16++ = replacementCharacter;
                 source -= character;
-=======
-            if (character == nonCharacter) {
-                sawError = true;
-                if (stopOnError)
-                    break;
-                // Each error generates a replacement character and consumes one byte.
-                *destination16++ = replacementCharacter;
-                ++source;
->>>>>>> miniblink49
                 continue;
             }
             source += count;
@@ -660,7 +462,6 @@ upConvertTo16Bit:
     return String::adopt(buffer16);
 }
 
-<<<<<<< HEAD
 template <typename CharType>
 CString TextCodecUTF8::encodeCommon(const CharType* characters, size_t length)
 {
@@ -670,15 +471,6 @@ CString TextCodecUTF8::encodeCommon(const CharType* characters, size_t length)
     // Non-BMP characters take two UTF-16 code units and can take up to 4 bytes
     // (2x).
     if (length > std::numeric_limits<size_t>::max() / 3)
-=======
-template<typename CharType>
-CString TextCodecUTF8::encodeCommon(const CharType* characters, size_t length)
-{
-    // The maximum number of UTF-8 bytes needed per UTF-16 code unit is 3.
-    // BMP characters take only one UTF-16 code unit and can take up to 3 bytes (3x).
-    // Non-BMP characters take two UTF-16 code units and can take up to 4 bytes (2x).
-    if (length > numeric_limits<size_t>::max() / 3)
->>>>>>> miniblink49
         CRASH();
     Vector<uint8_t> bytes(length * 3);
 
@@ -687,14 +479,9 @@ CString TextCodecUTF8::encodeCommon(const CharType* characters, size_t length)
     while (i < length) {
         UChar32 character;
         U16_NEXT(characters, i, length, character);
-<<<<<<< HEAD
         // U16_NEXT will simply emit a surrogate code point if an unmatched
         // surrogate is encountered; we must convert it to a
         // U+FFFD (REPLACEMENT CHARACTER) here.
-=======
-        // U16_NEXT will simply emit a surrogate code point if an unmatched surrogate
-        // is encountered; we must convert it to a U+FFFD (REPLACEMENT CHARACTER) here.
->>>>>>> miniblink49
         if (0xD800 <= character && character <= 0xDFFF)
             character = replacementCharacter;
         U8_APPEND_UNSAFE(bytes.data(), bytesWritten, character);
@@ -703,24 +490,16 @@ CString TextCodecUTF8::encodeCommon(const CharType* characters, size_t length)
     return CString(reinterpret_cast<char*>(bytes.data()), bytesWritten);
 }
 
-<<<<<<< HEAD
 CString TextCodecUTF8::encode(const UChar* characters,
     size_t length,
     UnencodableHandling)
-=======
-CString TextCodecUTF8::encode(const UChar* characters, size_t length, UnencodableHandling)
->>>>>>> miniblink49
 {
     return encodeCommon(characters, length);
 }
 
-<<<<<<< HEAD
 CString TextCodecUTF8::encode(const LChar* characters,
     size_t length,
     UnencodableHandling)
-=======
-CString TextCodecUTF8::encode(const LChar* characters, size_t length, UnencodableHandling)
->>>>>>> miniblink49
 {
     return encodeCommon(characters, length);
 }

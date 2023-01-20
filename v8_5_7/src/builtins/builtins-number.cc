@@ -4,10 +4,7 @@
 
 #include "src/builtins/builtins-utils.h"
 #include "src/builtins/builtins.h"
-<<<<<<< HEAD
 #include "src/builtins/simple-locale.h"
-=======
->>>>>>> miniblink49
 #include "src/code-factory.h"
 #include "src/code-stub-assembler.h"
 
@@ -360,13 +357,8 @@ BUILTIN(NumberPrototypeToExponential) {
       isolate, fraction_digits, Object::ToInteger(isolate, fraction_digits));
   double const fraction_digits_number = fraction_digits->Number();
 
-<<<<<<< HEAD
   if (std_isnan(value_number)) return isolate->heap()->nan_string();
   if (std_isinf(value_number)) {
-=======
-  if (std::isnan(value_number)) return isolate->heap()->nan_string();
-  if (std::isinf(value_number)) {
->>>>>>> miniblink49
     return (value_number < 0.0) ? isolate->heap()->minus_infinity_string()
                                 : isolate->heap()->infinity_string();
   }
@@ -416,13 +408,8 @@ BUILTIN(NumberPrototypeToFixed) {
                                    "toFixed() digits")));
   }
 
-<<<<<<< HEAD
   if (std_isnan(value_number)) return isolate->heap()->nan_string();
   if (std_isinf(value_number)) {
-=======
-  if (std::isnan(value_number)) return isolate->heap()->nan_string();
-  if (std::isinf(value_number)) {
->>>>>>> miniblink49
     return (value_number < 0.0) ? isolate->heap()->minus_infinity_string()
                                 : isolate->heap()->infinity_string();
   }
@@ -449,15 +436,10 @@ BUILTIN(NumberPrototypeToLocaleString) {
                                   "Number.prototype.toLocaleString")));
   }
 
-<<<<<<< HEAD
   return LocaleNumberPrototypeToLocaleString(isolate, args, value); // weolar
 
   // Turn the {value} into a String.
   //return *isolate->factory()->NumberToString(value);
-=======
-  // Turn the {value} into a String.
-  return *isolate->factory()->NumberToString(value);
->>>>>>> miniblink49
 }
 
 // ES6 section 20.1.3.5 Number.prototype.toPrecision ( precision )
@@ -488,13 +470,8 @@ BUILTIN(NumberPrototypeToPrecision) {
                                      Object::ToInteger(isolate, precision));
   double const precision_number = precision->Number();
 
-<<<<<<< HEAD
   if (std_isnan(value_number)) return isolate->heap()->nan_string();
   if (std_isinf(value_number)) {
-=======
-  if (std::isnan(value_number)) return isolate->heap()->nan_string();
-  if (std::isinf(value_number)) {
->>>>>>> miniblink49
     return (value_number < 0.0) ? isolate->heap()->minus_infinity_string()
                                 : isolate->heap()->infinity_string();
   }
@@ -556,13 +533,8 @@ BUILTIN(NumberPrototypeToString) {
   }
 
   // Slow case.
-<<<<<<< HEAD
   if (std_isnan(value_number)) return isolate->heap()->nan_string();
   if (std_isinf(value_number)) {
-=======
-  if (std::isnan(value_number)) return isolate->heap()->nan_string();
-  if (std::isinf(value_number)) {
->>>>>>> miniblink49
     return (value_number < 0.0) ? isolate->heap()->minus_infinity_string()
                                 : isolate->heap()->infinity_string();
   }

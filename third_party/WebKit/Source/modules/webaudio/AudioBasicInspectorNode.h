@@ -10,7 +10,6 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
-<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -22,18 +21,6 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
-=======
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
->>>>>>> miniblink49
  */
 
 #ifndef AudioBasicInspectorNode_h
@@ -43,7 +30,6 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 class BaseAudioContext;
 class ExceptionState;
 
@@ -59,16 +45,6 @@ public:
         AudioNode&,
         float sampleRate,
         unsigned outputChannelCount);
-=======
-class ExceptionState;
-
-// AudioBasicInspectorNode is an AudioNode with one input and one output where the output might not necessarily connect to another node's input.
-// If the output is not connected to any other node, then the AudioBasicInspectorNode's processIfNecessary() function will be called automatically by
-// AudioContext before the end of each render quantum so that it can inspect the audio stream.
-class AudioBasicInspectorHandler : public AudioHandler {
-public:
-    AudioBasicInspectorHandler(NodeType, AudioNode&, float sampleRate, unsigned outputChannelCount);
->>>>>>> miniblink49
 
     // AudioHandler
     void pullInputs(size_t framesToProcess) final;
@@ -77,37 +53,25 @@ public:
     void updatePullStatus();
 
 private:
-<<<<<<< HEAD
     // When setting to true, AudioBasicInspectorHandler will be pulled
     // automaticlly by BaseAudioContext before the end of each render quantum.
     bool m_needAutomaticPull;
-=======
-    bool m_needAutomaticPull; // When setting to true, AudioBasicInspectorHandler will be pulled automaticlly by AudioContext before the end of each render quantum.
->>>>>>> miniblink49
 };
 
 class AudioBasicInspectorNode : public AudioNode {
 protected:
-<<<<<<< HEAD
     explicit AudioBasicInspectorNode(BaseAudioContext& context)
         : AudioNode(context)
     {
     }
-=======
-    explicit AudioBasicInspectorNode(AudioContext& context) : AudioNode(context) { }
->>>>>>> miniblink49
 
 private:
     // TODO(tkent): Should AudioBasicInspectorNode override other variants of
     // connect() and disconnect()?
-<<<<<<< HEAD
     AudioNode* connect(AudioNode*,
         unsigned outputIndex,
         unsigned inputIndex,
         ExceptionState&) final;
-=======
-    void connect(AudioNode*, unsigned outputIndex, unsigned inputIndex, ExceptionState&) final;
->>>>>>> miniblink49
     void disconnect(unsigned outputIndex, ExceptionState&) final;
 };
 

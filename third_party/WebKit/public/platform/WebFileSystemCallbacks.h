@@ -38,13 +38,9 @@
 #include "WebPrivatePtr.h"
 #include "WebVector.h"
 
-<<<<<<< HEAD
 #if INSIDE_BLINK
 #include <memory>
 #endif
-=======
-namespace WTF { template <typename T> class PassOwnPtr; }
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -70,12 +66,8 @@ public:
     BLINK_PLATFORM_EXPORT void assign(const WebFileSystemCallbacks&);
 
 #if INSIDE_BLINK
-<<<<<<< HEAD
     BLINK_PLATFORM_EXPORT WebFileSystemCallbacks(
         std::unique_ptr<AsyncFileSystemCallbacks>&&);
-=======
-    BLINK_PLATFORM_EXPORT WebFileSystemCallbacks(const WTF::PassOwnPtr<AsyncFileSystemCallbacks>&);
->>>>>>> miniblink49
 #endif
 
     // Callback for WebFileSystem's various operations that don't require
@@ -94,7 +86,6 @@ public:
     // file entries in the requested directory. This callback might be called
     // multiple times if the directory has many entries. |hasMore| must be
     // true when there are more entries.
-<<<<<<< HEAD
     BLINK_PLATFORM_EXPORT void didReadDirectory(
         const WebVector<WebFileSystemEntry>&,
         bool hasMore);
@@ -103,36 +94,21 @@ public:
     // root URL for the FileSystem when the request is accepted.
     BLINK_PLATFORM_EXPORT void didOpenFileSystem(const WebString& name,
         const WebURL& rootURL);
-=======
-    BLINK_PLATFORM_EXPORT void didReadDirectory(const WebVector<WebFileSystemEntry>&, bool hasMore);
-
-    // Callback for WebFileSystem::openFileSystem. Called with a name and
-    // root URL for the FileSystem when the request is accepted.
-    BLINK_PLATFORM_EXPORT void didOpenFileSystem(const WebString& name, const WebURL& rootURL);
->>>>>>> miniblink49
 
     // Callback for WebFileSystem::resolveURL. Called with a name, root URL and
     // file path for the FileSystem when the request is accepted. |isDirectory|
     // must be true when an entry to be resolved is a directory.
-<<<<<<< HEAD
     BLINK_PLATFORM_EXPORT void didResolveURL(const WebString& name,
         const WebURL& rootURL,
         WebFileSystemType,
         const WebString& filePath,
         bool isDirectory);
-=======
-    BLINK_PLATFORM_EXPORT void didResolveURL(const WebString& name, const WebURL& rootURL, WebFileSystemType, const WebString& filePath, bool isDirectory);
->>>>>>> miniblink49
 
     // Callback for WebFileSystem::createFileWriter. Called with an instance
     // of WebFileWriter and the target file length. The writer's ownership
     // is transferred to the callback.
-<<<<<<< HEAD
     BLINK_PLATFORM_EXPORT void didCreateFileWriter(WebFileWriter*,
         long long length);
-=======
-    BLINK_PLATFORM_EXPORT void didCreateFileWriter(WebFileWriter*, long long length);
->>>>>>> miniblink49
 
     // Called with an error code when a requested operation hasn't been
     // completed.

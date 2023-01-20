@@ -2,10 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "modules/plugins/NavigatorPlugins.h"
 
 #include "core/frame/LocalFrame.h"
@@ -17,15 +13,7 @@
 namespace blink {
 
 NavigatorPlugins::NavigatorPlugins(Navigator& navigator)
-<<<<<<< HEAD
     : Supplement<Navigator>(navigator)
-=======
-    : DOMWindowProperty(navigator.frame())
-{
-}
-
-NavigatorPlugins::~NavigatorPlugins()
->>>>>>> miniblink49
 {
 }
 
@@ -43,12 +31,8 @@ NavigatorPlugins& NavigatorPlugins::from(Navigator& navigator)
 // static
 NavigatorPlugins* NavigatorPlugins::toNavigatorPlugins(Navigator& navigator)
 {
-<<<<<<< HEAD
     return static_cast<NavigatorPlugins*>(
         Supplement<Navigator>::from(navigator, supplementName()));
-=======
-    return static_cast<NavigatorPlugins*>(HeapSupplement<Navigator>::from(navigator, supplementName()));
->>>>>>> miniblink49
 }
 
 // static
@@ -72,11 +56,7 @@ DOMMimeTypeArray* NavigatorPlugins::mimeTypes(Navigator& navigator)
 // static
 bool NavigatorPlugins::javaEnabled(Navigator& navigator)
 {
-<<<<<<< HEAD
     return false;
-=======
-    return NavigatorPlugins::from(navigator).javaEnabled(navigator.frame());
->>>>>>> miniblink49
 }
 
 DOMPluginArray* NavigatorPlugins::plugins(LocalFrame* frame) const
@@ -93,27 +73,11 @@ DOMMimeTypeArray* NavigatorPlugins::mimeTypes(LocalFrame* frame) const
     return m_mimeTypes.get();
 }
 
-<<<<<<< HEAD
-=======
-bool NavigatorPlugins::javaEnabled(LocalFrame* frame) const
-{
-    if (!frame || !frame->settings())
-        return false;
-
-    return frame->settings()->javaEnabled();
-}
-
->>>>>>> miniblink49
 DEFINE_TRACE(NavigatorPlugins)
 {
     visitor->trace(m_plugins);
     visitor->trace(m_mimeTypes);
-<<<<<<< HEAD
     Supplement<Navigator>::trace(visitor);
-=======
-    HeapSupplement<Navigator>::trace(visitor);
-    DOMWindowProperty::trace(visitor);
->>>>>>> miniblink49
 }
 
 } // namespace blink

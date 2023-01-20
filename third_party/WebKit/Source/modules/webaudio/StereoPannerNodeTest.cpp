@@ -2,26 +2,16 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
 #include "modules/webaudio/StereoPannerNode.h"
 #include "core/testing/DummyPageHolder.h"
 #include "modules/webaudio/OfflineAudioContext.h"
 #include "testing/gtest/include/gtest/gtest.h"
 #include <memory>
-=======
-#include "config.h"
-#include "modules/webaudio/StereoPannerNode.h"
-
-#include "core/testing/DummyPageHolder.h"
-#include "modules/webaudio/OfflineAudioContext.h"
-#include <gtest/gtest.h>
->>>>>>> miniblink49
 
 namespace blink {
 
 TEST(StereoPannerNodeTest, StereoPannerLifetime)
 {
-<<<<<<< HEAD
     std::unique_ptr<DummyPageHolder> page = DummyPageHolder::create();
     OfflineAudioContext* context = OfflineAudioContext::create(
         &page->document(), 2, 1, 48000, ASSERT_NO_EXCEPTION);
@@ -29,14 +19,6 @@ TEST(StereoPannerNodeTest, StereoPannerLifetime)
     StereoPannerHandler& handler = static_cast<StereoPannerHandler&>(node->handler());
     EXPECT_TRUE(handler.m_stereoPanner);
     BaseAudioContext::AutoLocker locker(context);
-=======
-    OwnPtr<DummyPageHolder> page = DummyPageHolder::create();
-    OfflineAudioContext* context = OfflineAudioContext::create(&page->document(), 2, 1, 48000, ASSERT_NO_EXCEPTION);
-    StereoPannerNode* node = context->createStereoPanner(ASSERT_NO_EXCEPTION);
-    StereoPannerHandler& handler = static_cast<StereoPannerHandler&>(node->handler());
-    EXPECT_TRUE(handler.m_stereoPanner);
-    AudioContext::AutoLocker locker(context);
->>>>>>> miniblink49
     handler.dispose();
     // m_stereoPanner should live after dispose() because an audio thread is
     // using it.

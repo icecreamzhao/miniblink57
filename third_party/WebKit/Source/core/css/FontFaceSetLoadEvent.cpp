@@ -28,30 +28,26 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/css/FontFaceSetLoadEvent.h"
 
 namespace blink {
 
-FontFaceSetLoadEvent::FontFaceSetLoadEvent()
-{
-}
-
-FontFaceSetLoadEvent::FontFaceSetLoadEvent(const AtomicString& type, const FontFaceArray& fontfaces)
+FontFaceSetLoadEvent::FontFaceSetLoadEvent(const AtomicString& type,
+    const FontFaceArray& fontfaces)
     : Event(type, false, false)
     , m_fontfaces(fontfaces)
 {
 }
 
-FontFaceSetLoadEvent::FontFaceSetLoadEvent(const AtomicString& type, const FontFaceSetLoadEventInit& initializer)
+FontFaceSetLoadEvent::FontFaceSetLoadEvent(
+    const AtomicString& type,
+    const FontFaceSetLoadEventInit& initializer)
     : Event(type, initializer)
     , m_fontfaces(initializer.fontfaces())
 {
 }
 
-FontFaceSetLoadEvent::~FontFaceSetLoadEvent()
-{
-}
+FontFaceSetLoadEvent::~FontFaceSetLoadEvent() { }
 
 const AtomicString& FontFaceSetLoadEvent::interfaceName() const
 {

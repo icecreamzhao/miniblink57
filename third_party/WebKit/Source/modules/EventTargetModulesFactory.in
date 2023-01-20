@@ -2,40 +2,27 @@ namespace="EventTarget"
 suffix="Modules"
 
 modules/battery/BatteryManager
-<<<<<<< HEAD
 modules/bluetooth/BluetoothDevice
 modules/bluetooth/BluetoothRemoteGATTCharacteristic
-=======
->>>>>>> miniblink49
 modules/compositorworker/CompositorWorker
 modules/compositorworker/CompositorWorkerGlobalScope
 modules/encryptedmedia/MediaKeySession
 modules/filesystem/FileWriter
-<<<<<<< HEAD
 modules/imagecapture/ImageCapture
-=======
->>>>>>> miniblink49
 modules/indexeddb/IDBDatabase
 modules/indexeddb/IDBOpenDBRequest
 modules/indexeddb/IDBRequest
 modules/indexeddb/IDBTransaction
-<<<<<<< HEAD
 modules/mediarecorder/MediaRecorder
 modules/mediasource/MediaSource
 modules/mediasource/SourceBuffer
 modules/mediasource/SourceBufferList
 modules/mediastream/MediaDevices
-=======
-modules/mediasource/MediaSource
-modules/mediasource/SourceBuffer
-modules/mediasource/SourceBufferList
->>>>>>> miniblink49
 modules/mediastream/MediaStream
 modules/mediastream/MediaStreamTrack
 modules/mediastream/RTCDTMFSender
 modules/mediastream/RTCDataChannel
 modules/mediastream/RTCPeerConnection
-<<<<<<< HEAD
 modules/netinfo/NetworkInformation
 modules/notifications/Notification
 modules/payments/PaymentRequest
@@ -47,40 +34,18 @@ modules/presentation/PresentationRequest
 modules/remoteplayback/RemotePlayback
 modules/screen_orientation/ScreenOrientation
 modules/sensor/Sensor
-=======
-modules/navigatorconnect/ServicePortCollection
-modules/netinfo/NetworkInformation
-modules/notifications/Notification
-modules/permissions/PermissionStatus
-modules/presentation/Presentation
-modules/presentation/PresentationAvailability
-modules/presentation/PresentationSession
-modules/screen_orientation/ScreenOrientation
->>>>>>> miniblink49
 modules/serviceworkers/ServiceWorker
 modules/serviceworkers/ServiceWorkerContainer
 modules/serviceworkers/ServiceWorkerGlobalScope
 modules/serviceworkers/ServiceWorkerRegistration
-<<<<<<< HEAD
 modules/speech/SpeechRecognition
 modules/speech/SpeechSynthesis
 modules/speech/SpeechSynthesisUtterance
 modules/vr/VRDisplay
 modules/webaudio/AudioContext
 modules/webaudio/AudioNode
-=======
-modules/serviceworkers/StashedPortCollection
-modules/speech/SpeechRecognition
-modules/speech/SpeechSynthesis
-modules/speech/SpeechSynthesisUtterance
-modules/webaudio/AudioContext Conditional=WEB_AUDIO
-modules/webaudio/AudioNode Conditional=WEB_AUDIO
->>>>>>> miniblink49
 modules/webmidi/MIDIAccess
 modules/webmidi/MIDIInput
 modules/webmidi/MIDIPort
 modules/websockets/WebSocket ImplementedAs=DOMWebSocket
-<<<<<<< HEAD
 modules/webusb/USB
-=======
->>>>>>> miniblink49

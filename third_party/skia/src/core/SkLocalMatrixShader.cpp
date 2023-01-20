@@ -7,7 +7,6 @@
 
 #include "SkLocalMatrixShader.h"
 
-<<<<<<< HEAD
 #if SK_SUPPORT_GPU
 #include "GrFragmentProcessor.h"
 #endif
@@ -39,30 +38,13 @@ sk_sp<SkFlattenable> SkLocalMatrixShader::CreateProc(SkReadBuffer& buffer)
 
 void SkLocalMatrixShader::flatten(SkWriteBuffer& buffer) const
 {
-=======
-SkFlattenable* SkLocalMatrixShader::CreateProc(SkReadBuffer& buffer) {
-    SkMatrix lm;
-    buffer.readMatrix(&lm);
-    SkAutoTUnref<SkShader> shader(buffer.readShader());
-    if (!shader.get()) {
-        return NULL;
-    }
-    return SkShader::CreateLocalMatrixShader(shader, lm);
-}
-
-void SkLocalMatrixShader::flatten(SkWriteBuffer& buffer) const {
->>>>>>> miniblink49
     buffer.writeMatrix(this->getLocalMatrix());
     buffer.writeFlattenable(fProxyShader.get());
 }
 
 SkShader::Context* SkLocalMatrixShader::onCreateContext(const ContextRec& rec,
-<<<<<<< HEAD
     void* storage) const
 {
-=======
-                                                        void* storage) const {
->>>>>>> miniblink49
     ContextRec newRec(rec);
     SkMatrix tmp;
     if (rec.fLocalMatrix) {
@@ -75,12 +57,8 @@ SkShader::Context* SkLocalMatrixShader::onCreateContext(const ContextRec& rec,
 }
 
 #ifndef SK_IGNORE_TO_STRING
-<<<<<<< HEAD
 void SkLocalMatrixShader::toString(SkString* str) const
 {
-=======
-void SkLocalMatrixShader::toString(SkString* str) const {
->>>>>>> miniblink49
     str->append("SkLocalMatrixShader: (");
 
     fProxyShader->toString(str);
@@ -91,25 +69,14 @@ void SkLocalMatrixShader::toString(SkString* str) const {
 }
 #endif
 
-<<<<<<< HEAD
 sk_sp<SkShader> SkShader::makeWithLocalMatrix(const SkMatrix& localMatrix) const
 {
     if (localMatrix.isIdentity()) {
         return sk_ref_sp(const_cast<SkShader*>(this));
-=======
-SkShader* SkShader::CreateLocalMatrixShader(SkShader* proxy, const SkMatrix& localMatrix) {
-    if (NULL == proxy) {
-        return NULL;
-    }
-
-    if (localMatrix.isIdentity()) {
-        return SkRef(proxy);
->>>>>>> miniblink49
     }
 
     const SkMatrix* lm = &localMatrix;
 
-<<<<<<< HEAD
     SkShader* baseShader = const_cast<SkShader*>(this);
     SkMatrix otherLocalMatrix;
     SkAutoTUnref<SkShader> proxy(this->refAsALocalMatrixShader(&otherLocalMatrix));
@@ -120,15 +87,4 @@ SkShader* SkShader::CreateLocalMatrixShader(SkShader* proxy, const SkMatrix& loc
     }
 
     return sk_make_sp<SkLocalMatrixShader>(baseShader, *lm);
-=======
-    SkMatrix otherLocalMatrix;
-    SkAutoTUnref<SkShader> otherProxy(proxy->refAsALocalMatrixShader(&otherLocalMatrix));
-    if (otherProxy.get()) {
-        otherLocalMatrix.preConcat(localMatrix);
-        lm = &otherLocalMatrix;
-        proxy = otherProxy.get();
-    }
-
-    return SkNEW_ARGS(SkLocalMatrixShader, (proxy, *lm));
->>>>>>> miniblink49
 }

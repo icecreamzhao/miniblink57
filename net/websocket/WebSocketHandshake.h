@@ -36,7 +36,7 @@
 #include "net/websocket/WebSocketExtensionDispatcher.h"
 #include "net/websocket/WebSocketExtensionProcessor.h"
 #include "third_party/WebKit/Source/wtf/text/WTFString.h"
-#include "third_party/WebKit/Source/wtf/FastAllocBase.h"
+#include "third_party/WebKit/Source/wtf/allocator/PartitionAllocator.h"
 #include "third_party/WebKit/Source/wtf/Noncopyable.h"
 #include "third_party/WebKit/Source/wtf/PassOwnPtr.h"
 

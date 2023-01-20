@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -9,7 +5,6 @@
  * found in the LICENSE file.
  */
 #include "SampleCode.h"
-<<<<<<< HEAD
 #include "SkBlurDrawLooper.h"
 #include "SkCanvas.h"
 #include "SkGradientShader.h"
@@ -21,18 +16,6 @@ typedef SkScalar (*MakePathProc)(SkPath*);
 
 static SkScalar make_frame(SkPath* path)
 {
-=======
-#include "SkView.h"
-#include "SkCanvas.h"
-#include "SkGraphics.h"
-#include "SkRandom.h"
-#include "SkBlurDrawLooper.h"
-#include "SkGradientShader.h"
-
-typedef SkScalar (*MakePathProc)(SkPath*);
-
-static SkScalar make_frame(SkPath* path) {
->>>>>>> miniblink49
     SkRect r = { 10, 10, 630, 470 };
     path->addRoundRect(r, 15, 15);
 
@@ -43,12 +26,8 @@ static SkScalar make_frame(SkPath* path) {
     return 15;
 }
 
-<<<<<<< HEAD
 static SkScalar make_triangle(SkPath* path)
 {
-=======
-static SkScalar make_triangle(SkPath* path) {
->>>>>>> miniblink49
     static const int gCoord[] = {
         10, 20, 15, 5, 30, 30
     };
@@ -60,36 +39,24 @@ static SkScalar make_triangle(SkPath* path) {
     return SkIntToScalar(30);
 }
 
-<<<<<<< HEAD
 static SkScalar make_rect(SkPath* path)
 {
-=======
-static SkScalar make_rect(SkPath* path) {
->>>>>>> miniblink49
     SkRect r = { 10, 10, 30, 30 };
     path->addRect(r);
     path->offset(10, 0);
     return SkIntToScalar(30);
 }
 
-<<<<<<< HEAD
 static SkScalar make_oval(SkPath* path)
 {
-=======
-static SkScalar make_oval(SkPath* path) {
->>>>>>> miniblink49
     SkRect r = { 10, 10, 30, 30 };
     path->addOval(r);
     path->offset(10, 0);
     return SkIntToScalar(30);
 }
 
-<<<<<<< HEAD
 static SkScalar make_sawtooth(SkPath* path)
 {
-=======
-static SkScalar make_sawtooth(SkPath* path) {
->>>>>>> miniblink49
     SkScalar x = SkIntToScalar(20);
     SkScalar y = SkIntToScalar(20);
     const SkScalar x0 = x;
@@ -109,12 +76,8 @@ static SkScalar make_sawtooth(SkPath* path) {
     return SkIntToScalar(30);
 }
 
-<<<<<<< HEAD
 static SkScalar make_star(SkPath* path, int n)
 {
-=======
-static SkScalar make_star(SkPath* path, int n) {
->>>>>>> miniblink49
     const SkScalar c = SkIntToScalar(45);
     const SkScalar r = SkIntToScalar(20);
 
@@ -144,7 +107,6 @@ static const MakePathProc gProcs[] = {
     make_star_13
 };
 
-<<<<<<< HEAD
 #define N SK_ARRAY_COUNT(gProcs)
 
 class PathFillView : public SampleView {
@@ -154,16 +116,6 @@ class PathFillView : public SampleView {
 public:
     PathFillView()
     {
-=======
-#define N   SK_ARRAY_COUNT(gProcs)
-
-class PathFillView : public SampleView {
-    SkPath  fPath[N];
-    SkScalar fDY[N];
-
-public:
-    PathFillView() {
->>>>>>> miniblink49
         for (size_t i = 0; i < N; i++) {
             fDY[i] = gProcs[i](&fPath[i]);
         }
@@ -172,12 +124,8 @@ public:
 
 protected:
     // overrides from SkEventSink
-<<<<<<< HEAD
     virtual bool onQuery(SkEvent* evt)
     {
-=======
-    virtual bool onQuery(SkEvent* evt) {
->>>>>>> miniblink49
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "PathFill");
             return true;
@@ -185,12 +133,8 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-<<<<<<< HEAD
     virtual void onDrawContent(SkCanvas* canvas)
     {
-=======
-    virtual void onDrawContent(SkCanvas* canvas) {
->>>>>>> miniblink49
         SkPaint paint;
         paint.setAntiAlias(true);
 

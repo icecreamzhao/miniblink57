@@ -28,13 +28,9 @@ struct WebPrintPresetOptions {
     WebPrintPresetOptions()
         : isScalingDisabled(false)
         , copies(0)
-<<<<<<< HEAD
         , duplexMode(WebUnknownDuplexMode)
     {
     }
-=======
-        , duplexMode(WebUnknownDuplexMode) { }
->>>>>>> miniblink49
 
     // Specifies whether scaling is disabled.
     bool isScalingDisabled;

@@ -29,7 +29,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "public/platform/WebBlobData.h"
 
 #include "platform/blob/BlobData.h"
@@ -40,24 +39,6 @@ namespace blink {
 WebBlobData::WebBlobData() { }
 
 WebBlobData::~WebBlobData() { }
-=======
-#include "config.h"
-#include "public/platform/WebBlobData.h"
-
-#include "platform/blob/BlobData.h"
-#include "wtf/PassOwnPtr.h"
-
-namespace blink {
-
-WebBlobData::WebBlobData()
-{
-}
-
-WebBlobData::~WebBlobData()
-{
-    m_private.reset(0);
-}
->>>>>>> miniblink49
 
 size_t WebBlobData::itemCount() const
 {
@@ -108,7 +89,6 @@ WebString WebBlobData::contentType() const
     return m_private->contentType();
 }
 
-<<<<<<< HEAD
 WebBlobData::WebBlobData(std::unique_ptr<BlobData> data)
     : m_private(std::move(data))
 {
@@ -123,22 +103,6 @@ WebBlobData& WebBlobData::operator=(std::unique_ptr<BlobData> data)
 WebBlobData::operator std::unique_ptr<BlobData>()
 {
     return std::move(m_private);
-=======
-WebBlobData::WebBlobData(const PassOwnPtr<BlobData>& data)
-    : m_private(data)
-{
-}
-
-WebBlobData& WebBlobData::operator=(const PassOwnPtr<BlobData>& data)
-{
-    m_private.reset(data);
-    return *this;
-}
-
-WebBlobData::operator PassOwnPtr<BlobData>()
-{
-    return m_private.release();
->>>>>>> miniblink49
 }
 
 } // namespace blink

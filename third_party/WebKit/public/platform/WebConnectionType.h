@@ -33,7 +33,6 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 // A superset of Connection types from http://w3c.github.io/netinfo/.
 enum WebConnectionType {
     WebConnectionTypeCellular2G = 0,
@@ -47,18 +46,6 @@ enum WebConnectionType {
     WebConnectionTypeNone,
     WebConnectionTypeUnknown,
     WebConnectionTypeLast = WebConnectionTypeUnknown
-=======
-// Connection types from http://w3c.github.io/netinfo/.
-enum WebConnectionType {
-    ConnectionTypeCellular = 0,
-    ConnectionTypeBluetooth,
-    ConnectionTypeEthernet,
-    ConnectionTypeWifi,
-    ConnectionTypeOther,
-    ConnectionTypeNone,
-    ConnectionTypeUnknown,
-    ConnectionTypeLast = ConnectionTypeUnknown
->>>>>>> miniblink49
 };
 
 } // namespace blink

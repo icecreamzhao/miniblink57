@@ -9,37 +9,22 @@
 
 #include "Test.h"
 
-<<<<<<< HEAD
 DEF_TEST(SkBase64, reporter)
 {
     char all[256];
     for (int index = 0; index < 256; ++index) {
         all[index] = (signed char)(index + 1);
-=======
-DEF_TEST(SkBase64, reporter) {
-    char all[256];
-    for (int index = 0; index < 256; ++index) {
-        all[index] = (signed char) (index + 1);
->>>>>>> miniblink49
     }
 
     for (int offset = 0; offset < 6; ++offset) {
         size_t length = 256 - offset;
-<<<<<<< HEAD
         size_t encodeLength = SkBase64::Encode(all + offset, length, nullptr);
-=======
-        size_t encodeLength = SkBase64::Encode(all + offset, length, NULL);
->>>>>>> miniblink49
         SkAutoTMalloc<char> src(encodeLength + 1);
         SkBase64::Encode(all + offset, length, src.get());
         src[SkToInt(encodeLength)] = '\0';
         SkBase64 tryMe;
         tryMe.decode(src.get(), encodeLength);
-<<<<<<< HEAD
         REPORTER_ASSERT(reporter, (strcmp((const char*)(all + offset), tryMe.getData()) == 0));
-=======
-        REPORTER_ASSERT(reporter, (strcmp((const char*) (all + offset), tryMe.getData()) == 0));
->>>>>>> miniblink49
         delete[] tryMe.getData();
     }
 }

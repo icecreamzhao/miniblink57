@@ -5,36 +5,55 @@
 #ifndef V8BindingForTesting_h
 #define V8BindingForTesting_h
 
-#include "bindings/core/v8/DOMWrapperWorld.h"
+#include "bindings/core/v8/ExceptionState.h"
 #include "bindings/core/v8/ScriptState.h"
+#include "wtf/Allocator.h"
 #include "wtf/Forward.h"
-
 #include <v8.h>
 
 namespace blink {
 
+class Document;
+class DOMWrapperWorld;
+class DummyPageHolder;
+class ExecutionContext;
+class LocalFrame;
+class Page;
+
 class ScriptStateForTesting : public ScriptState {
 public:
-    static PassRefPtr<ScriptStateForTesting> create(v8::Local<v8::Context>, PassRefPtr<DOMWrapperWorld>);
-    ExecutionContext* executionContext() const override;
+    static PassRefPtr<ScriptStateForTesting> create(v8::Local<v8::Context>,
+        PassRefPtr<DOMWrapperWorld>);
+    ExecutionContext* getExecutionContext() const override;
     void setExecutionContext(ExecutionContext*) override;
+
 private:
     ScriptStateForTesting(v8::Local<v8::Context>, PassRefPtr<DOMWrapperWorld>);
-    ExecutionContext* m_executionContext;
+    Persistent<ExecutionContext> m_executionContext;
 };
 
 class V8TestingScope {
+    STACK_ALLOCATED();
+
 public:
-    explicit V8TestingScope(v8::Isolate*);
-    ScriptState* scriptState() const;
+    V8TestingScope();
+    ScriptState* getScriptState() const;
+    ExecutionContext* getExecutionContext() const;
     v8::Isolate* isolate() const;
     v8::Local<v8::Context> context() const;
+    ExceptionState& getExceptionState();
+    Page& page();
+    LocalFrame& frame();
+    Document& document();
     ~V8TestingScope();
 
 private:
+    std::unique_ptr<DummyPageHolder> m_holder;
     v8::HandleScope m_handleScope;
+    v8::Local<v8::Context> m_context;
     v8::Context::Scope m_contextScope;
-    RefPtr<ScriptState> m_scriptState;
+    v8::TryCatch m_tryCatch;
+    DummyExceptionStateForTesting m_exceptionState;
 };
 
 } // namespace blink

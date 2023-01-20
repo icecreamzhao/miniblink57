@@ -26,7 +26,6 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "platform/audio/DynamicsCompressorKernel.h"
 #include "platform/audio/AudioUtilities.h"
 #include "platform/audio/DenormalDisabler.h"
@@ -34,18 +33,6 @@
 #include "wtf/PtrUtil.h"
 #include <algorithm>
 #include <cmath>
-=======
-#include "config.h"
-
-#if ENABLE(WEB_AUDIO)
-
-#include "platform/audio/DynamicsCompressorKernel.h"
-
-#include <algorithm>
-#include "platform/audio/AudioUtilities.h"
-#include "platform/audio/DenormalDisabler.h"
-#include "wtf/MathExtras.h"
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -56,12 +43,8 @@ const float meteringReleaseTimeConstant = 0.325f;
 
 const float uninitializedValue = -1;
 
-<<<<<<< HEAD
 DynamicsCompressorKernel::DynamicsCompressorKernel(float sampleRate,
     unsigned numberOfChannels)
-=======
-DynamicsCompressorKernel::DynamicsCompressorKernel(float sampleRate, unsigned numberOfChannels)
->>>>>>> miniblink49
     : m_sampleRate(sampleRate)
     , m_lastPreDelayFrames(DefaultPreDelayFrames)
     , m_preDelayReadIndex(0)
@@ -74,23 +57,15 @@ DynamicsCompressorKernel::DynamicsCompressorKernel(float sampleRate, unsigned nu
     , m_kneeThreshold(uninitializedValue)
     , m_kneeThresholdDb(uninitializedValue)
     , m_ykneeThresholdDb(uninitializedValue)
-<<<<<<< HEAD
     , m_knee(uninitializedValue)
-=======
-    , m_K(uninitializedValue)
->>>>>>> miniblink49
 {
     setNumberOfChannels(numberOfChannels);
 
     // Initializes most member variables
     reset();
 
-<<<<<<< HEAD
     m_meteringReleaseK = static_cast<float>(discreteTimeConstantForSampleRate(
         meteringReleaseTimeConstant, sampleRate));
-=======
-    m_meteringReleaseK = static_cast<float>(discreteTimeConstantForSampleRate(meteringReleaseTimeConstant, sampleRate));
->>>>>>> miniblink49
 }
 
 void DynamicsCompressorKernel::setNumberOfChannels(unsigned numberOfChannels)
@@ -99,15 +74,10 @@ void DynamicsCompressorKernel::setNumberOfChannels(unsigned numberOfChannels)
         return;
 
     m_preDelayBuffers.clear();
-<<<<<<< HEAD
     for (unsigned i = 0; i < numberOfChannels; ++i) {
         m_preDelayBuffers.push_back(
             WTF::makeUnique<AudioFloatArray>(MaxPreDelayFrames));
     }
-=======
-    for (unsigned i = 0; i < numberOfChannels; ++i)
-        m_preDelayBuffers.append(adoptPtr(new AudioFloatArray(MaxPreDelayFrames)));
->>>>>>> miniblink49
 }
 
 void DynamicsCompressorKernel::setPreDelayTime(float preDelayTime)
@@ -128,12 +98,8 @@ void DynamicsCompressorKernel::setPreDelayTime(float preDelayTime)
 }
 
 // Exponential curve for the knee.
-<<<<<<< HEAD
 // It is 1st derivative matched at m_linearThreshold and asymptotically
 // approaches the value m_linearThreshold + 1 / k.
-=======
-// It is 1st derivative matched at m_linearThreshold and asymptotically approaches the value m_linearThreshold + 1 / k.
->>>>>>> miniblink49
 float DynamicsCompressorKernel::kneeCurve(float x, float k)
 {
     // Linear up to threshold.
@@ -193,12 +159,8 @@ float DynamicsCompressorKernel::kAtSlope(float desiredSlope)
     float k = 5;
 
     for (int i = 0; i < 15; ++i) {
-<<<<<<< HEAD
         // A high value for k will more quickly asymptotically approach a slope of
         // 0.
-=======
-        // A high value for k will more quickly asymptotically approach a slope of 0.
->>>>>>> miniblink49
         float slope = slopeAt(x, k);
 
         if (slope < desiredSlope) {
@@ -216,13 +178,9 @@ float DynamicsCompressorKernel::kAtSlope(float desiredSlope)
     return k;
 }
 
-<<<<<<< HEAD
 float DynamicsCompressorKernel::updateStaticCurveParameters(float dbThreshold,
     float dbKnee,
     float ratio)
-=======
-float DynamicsCompressorKernel::updateStaticCurveParameters(float dbThreshold, float dbKnee, float ratio)
->>>>>>> miniblink49
 {
     if (dbThreshold != m_dbThreshold || dbKnee != m_dbKnee || ratio != m_ratio) {
         // Threshold and knee.
@@ -241,7 +199,6 @@ float DynamicsCompressorKernel::updateStaticCurveParameters(float dbThreshold, f
 
         m_ykneeThresholdDb = linearToDecibels(kneeCurve(m_kneeThreshold, k));
 
-<<<<<<< HEAD
         m_knee = k;
     }
     return m_knee;
@@ -266,32 +223,6 @@ void DynamicsCompressorKernel::process(
     float releaseZone2,
     float releaseZone3,
     float releaseZone4)
-=======
-        m_K = k;
-    }
-    return m_K;
-}
-
-void DynamicsCompressorKernel::process(const float* sourceChannels[],
-                                       float* destinationChannels[],
-                                       unsigned numberOfChannels,
-                                       unsigned framesToProcess,
-
-                                       float dbThreshold,
-                                       float dbKnee,
-                                       float ratio,
-                                       float attackTime,
-                                       float releaseTime,
-                                       float preDelayTime,
-                                       float dbPostGain,
-                                       float effectBlend, /* equal power crossfade */
-
-                                       float releaseZone1,
-                                       float releaseZone2,
-                                       float releaseZone3,
-                                       float releaseZone4
-                                       )
->>>>>>> miniblink49
 {
     ASSERT(m_preDelayBuffers.size() == numberOfChannels);
 
@@ -332,7 +263,6 @@ void DynamicsCompressorKernel::process(const float* sourceChannels[],
     float y3 = releaseFrames * releaseZone3;
     float y4 = releaseFrames * releaseZone4;
 
-<<<<<<< HEAD
     // All of these coefficients were derived for 4th order polynomial curve
     // fitting where the y values match the evenly spaced x values as follows:
     // (y1 : x == 0, y2 : x == 1, y3 : x == 2, y4 : x == 3)
@@ -341,25 +271,12 @@ void DynamicsCompressorKernel::process(const float* sourceChannels[],
     float c = 0.5334142869106424f * y1 - 1.272736789213631f * y2 + 0.9258856042207512f * y3 - 0.18656310191776226f * y4;
     float d = 0.08783463138207234f * y1 - 0.1694162967925622f * y2 + 0.08588057951595272f * y3 - 0.00429891410546283f * y4;
     float e = -0.042416883008123074f * y1 + 0.1115693827987602f * y2 - 0.09764676325265872f * y3 + 0.028494263462021576f * y4;
-=======
-    // All of these coefficients were derived for 4th order polynomial curve fitting where the y values
-    // match the evenly spaced x values as follows: (y1 : x == 0, y2 : x == 1, y3 : x == 2, y4 : x == 3)
-    float kA = 0.9999999999999998f*y1 + 1.8432219684323923e-16f*y2 - 1.9373394351676423e-16f*y3 + 8.824516011816245e-18f*y4;
-    float kB = -1.5788320352845888f*y1 + 2.3305837032074286f*y2 - 0.9141194204840429f*y3 + 0.1623677525612032f*y4;
-    float kC = 0.5334142869106424f*y1 - 1.272736789213631f*y2 + 0.9258856042207512f*y3 - 0.18656310191776226f*y4;
-    float kD = 0.08783463138207234f*y1 - 0.1694162967925622f*y2 + 0.08588057951595272f*y3 - 0.00429891410546283f*y4;
-    float kE = -0.042416883008123074f*y1 + 0.1115693827987602f*y2 - 0.09764676325265872f*y3 + 0.028494263462021576f*y4;
->>>>>>> miniblink49
 
     // x ranges from 0 -> 3       0    1    2   3
     //                           -15  -10  -5   0db
 
-<<<<<<< HEAD
     // y calculates adaptive release frames depending on the amount of
     // compression.
-=======
-    // y calculates adaptive release frames depending on the amount of compression.
->>>>>>> miniblink49
 
     setPreDelayTime(preDelayTime);
 
@@ -374,15 +291,9 @@ void DynamicsCompressorKernel::process(const float* sourceChannels[],
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         // Fix gremlins.
-<<<<<<< HEAD
         if (std_isnan(m_detectorAverage))
             m_detectorAverage = 1;
         if (std_isinf(m_detectorAverage))
-=======
-        if (std::isnan(m_detectorAverage))
-            m_detectorAverage = 1;
-        if (std::isinf(m_detectorAverage))
->>>>>>> miniblink49
             m_detectorAverage = 1;
 
         float desiredGain = m_detectorAverage;
@@ -394,24 +305,15 @@ void DynamicsCompressorKernel::process(const float* sourceChannels[],
         // Deal with envelopes
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-<<<<<<< HEAD
         // envelopeRate is the rate we slew from current compressor level to the
         // desired level.  The exact rate depends on if we're attacking or
         // releasing and by how much.
-=======
-        // envelopeRate is the rate we slew from current compressor level to the desired level.
-        // The exact rate depends on if we're attacking or releasing and by how much.
->>>>>>> miniblink49
         float envelopeRate;
 
         bool isReleasing = scaledDesiredGain > m_compressorGain;
 
-<<<<<<< HEAD
         // compressionDiffDb is the difference between current compression level and
         // the desired level.
-=======
-        // compressionDiffDb is the difference between current compression level and the desired level.
->>>>>>> miniblink49
         float compressionDiffDb = linearToDecibels(m_compressorGain / scaledDesiredGain);
 
         if (isReleasing) {
@@ -419,7 +321,6 @@ void DynamicsCompressorKernel::process(const float* sourceChannels[],
             m_maxAttackCompressionDiffDb = -1;
 
             // Fix gremlins.
-<<<<<<< HEAD
             if (std_isnan(compressionDiffDb))
                 compressionDiffDb = -1;
             if (std_isinf(compressionDiffDb))
@@ -440,27 +341,6 @@ void DynamicsCompressorKernel::process(const float* sourceChannels[],
             float x3 = x2 * x;
             float x4 = x2 * x2;
             float releaseFrames = a + b * x + c * x2 + d * x3 + e * x4;
-=======
-            if (std::isnan(compressionDiffDb))
-                compressionDiffDb = -1;
-            if (std::isinf(compressionDiffDb))
-                compressionDiffDb = -1;
-
-            // Adaptive release - higher compression (lower compressionDiffDb)  releases faster.
-
-            // Contain within range: -12 -> 0 then scale to go from 0 -> 3
-            float x = compressionDiffDb;
-            x = std::max(-12.0f, x);
-            x = std::min(0.0f, x);
-            x = 0.25f * (x + 12);
-
-            // Compute adaptive release curve using 4th order polynomial.
-            // Normal values for the polynomial coefficients would create a monotonically increasing function.
-            float x2 = x * x;
-            float x3 = x2 * x;
-            float x4 = x2 * x2;
-            float releaseFrames = kA + kB * x + kC * x2 + kD * x3 + kE * x4;
->>>>>>> miniblink49
 
 #define kSpacingDb 5
             float dbPerFrame = kSpacingDb / releaseFrames;
@@ -470,15 +350,9 @@ void DynamicsCompressorKernel::process(const float* sourceChannels[],
             // Attack mode - compressionDiffDb should be positive dB
 
             // Fix gremlins.
-<<<<<<< HEAD
             if (std_isnan(compressionDiffDb))
                 compressionDiffDb = 1;
             if (std_isinf(compressionDiffDb))
-=======
-            if (std::isnan(compressionDiffDb))
-                compressionDiffDb = 1;
-            if (std::isinf(compressionDiffDb))
->>>>>>> miniblink49
                 compressionDiffDb = 1;
 
             // As long as we're still in attack mode, use a rate based off
@@ -506,12 +380,8 @@ void DynamicsCompressorKernel::process(const float* sourceChannels[],
             while (loopFrames--) {
                 float compressorInput = 0;
 
-<<<<<<< HEAD
                 // Predelay signal, computing compression amount from un-delayed
                 // version.
-=======
-                // Predelay signal, computing compression amount from un-delayed version.
->>>>>>> miniblink49
                 for (unsigned i = 0; i < numberOfChannels; ++i) {
                     float* delayBuffer = m_preDelayBuffers[i]->data();
                     float undelayedSource = sourceChannels[i][frameIndex];
@@ -528,16 +398,10 @@ void DynamicsCompressorKernel::process(const float* sourceChannels[],
                 float absInput = scaledInput > 0 ? scaledInput : -scaledInput;
 
                 // Put through shaping curve.
-<<<<<<< HEAD
                 // This is linear up to the threshold, then enters a "knee" portion
                 // followed by the "ratio" portion.  The transition from the threshold
                 // to the knee is smooth (1st derivative matched).  The transition from
                 // the knee to the ratio portion is smooth (1st derivative matched).
-=======
-                // This is linear up to the threshold, then enters a "knee" portion followed by the "ratio" portion.
-                // The transition from the threshold to the knee is smooth (1st derivative matched).
-                // The transition from the knee to the ratio portion is smooth (1st derivative matched).
->>>>>>> miniblink49
                 float shapedInput = saturate(absInput, k);
 
                 float attenuation = absInput <= 0.0001f ? 1 : shapedInput / absInput;
@@ -556,15 +420,9 @@ void DynamicsCompressorKernel::process(const float* sourceChannels[],
                 detectorAverage = std::min(1.0f, detectorAverage);
 
                 // Fix gremlins.
-<<<<<<< HEAD
                 if (std_isnan(detectorAverage))
                     detectorAverage = 1;
                 if (std_isinf(detectorAverage))
-=======
-                if (std::isnan(detectorAverage))
-                    detectorAverage = 1;
-                if (std::isinf(detectorAverage))
->>>>>>> miniblink49
                     detectorAverage = 1;
 
                 // Exponential approach to desired gain.
@@ -577,12 +435,8 @@ void DynamicsCompressorKernel::process(const float* sourceChannels[],
                     compressorGain = std::min(1.0f, compressorGain);
                 }
 
-<<<<<<< HEAD
                 // Warp pre-compression gain to smooth out sharp exponential transition
                 // points.
-=======
-                // Warp pre-compression gain to smooth out sharp exponential transition points.
->>>>>>> miniblink49
                 float postWarpCompressorGain = sinf(piOverTwoFloat * compressorGain);
 
                 // Calculate total gain using master gain and effect blend.
@@ -632,8 +486,3 @@ void DynamicsCompressorKernel::reset()
 }
 
 } // namespace blink
-<<<<<<< HEAD
-=======
-
-#endif // ENABLE(WEB_AUDIO)
->>>>>>> miniblink49

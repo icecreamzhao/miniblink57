@@ -28,27 +28,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "platform/SharedBuffer.h"
 
 #include "testing/gtest/include/gtest/gtest.h"
 #include "wtf/PtrUtil.h"
-=======
-#include "config.h"
-#include "platform/SharedBuffer.h"
-
-#include "platform/TestingPlatformSupport.h"
-#include "public/platform/WebDiscardableMemory.h"
->>>>>>> miniblink49
 #include "wtf/RefPtr.h"
 #include "wtf/Vector.h"
 #include <algorithm>
 #include <cstdlib>
-<<<<<<< HEAD
 #include <memory>
-=======
-#include <gtest/gtest.h>
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -62,22 +50,15 @@ TEST(SharedBufferTest, getAsBytes)
     sharedBuffer->append(testData1, strlen(testData1));
     sharedBuffer->append(testData2, strlen(testData2));
 
-<<<<<<< HEAD
     const size_t size = sharedBuffer->size();
     std::unique_ptr<char[]> data = wrapArrayUnique(new char[size]);
     sharedBuffer->getAsBytes(data.get(), size);
-=======
-    const unsigned size = sharedBuffer->size();
-    OwnPtr<char[]> data = adoptArrayPtr(new char[size]);
-    ASSERT_TRUE(sharedBuffer->getAsBytes(data.get(), size));
->>>>>>> miniblink49
 
     char expectedConcatenation[] = "HelloWorldGoodbye";
     ASSERT_EQ(strlen(expectedConcatenation), size);
     EXPECT_EQ(0, memcmp(expectedConcatenation, data.get(), strlen(expectedConcatenation)));
 }
 
-<<<<<<< HEAD
 TEST(SharedBufferTest, getPartAsBytes)
 {
     char testData0[] = "Hello";
@@ -105,8 +86,6 @@ TEST(SharedBufferTest, getPartAsBytes)
     }
 }
 
-=======
->>>>>>> miniblink49
 TEST(SharedBufferTest, getAsBytesLargeSegments)
 {
     Vector<char> vector0(0x4000);
@@ -123,15 +102,9 @@ TEST(SharedBufferTest, getAsBytesLargeSegments)
     sharedBuffer->append(vector1);
     sharedBuffer->append(vector2);
 
-<<<<<<< HEAD
     const size_t size = sharedBuffer->size();
     std::unique_ptr<char[]> data = wrapArrayUnique(new char[size]);
     sharedBuffer->getAsBytes(data.get(), size);
-=======
-    const unsigned size = sharedBuffer->size();
-    OwnPtr<char[]> data = adoptArrayPtr(new char[size]);
-    ASSERT_TRUE(sharedBuffer->getAsBytes(data.get(), size));
->>>>>>> miniblink49
 
     ASSERT_EQ(0x4000U + 0x4000U + 0x4000U, size);
     int position = 0;
@@ -154,21 +127,13 @@ TEST(SharedBufferTest, copy)
     Vector<char> testData(10000);
     std::generate(testData.begin(), testData.end(), &std::rand);
 
-<<<<<<< HEAD
     size_t length = testData.size();
-=======
-    unsigned length = testData.size();
->>>>>>> miniblink49
     RefPtr<SharedBuffer> sharedBuffer = SharedBuffer::create(testData.data(), length);
     sharedBuffer->append(testData.data(), length);
     sharedBuffer->append(testData.data(), length);
     sharedBuffer->append(testData.data(), length);
-<<<<<<< HEAD
     // sharedBuffer must contain data more than segmentSize (= 0x1000) to check
     // copy().
-=======
-    // sharedBuffer must contain data more than segmentSize (= 0x1000) to check copy().
->>>>>>> miniblink49
     ASSERT_EQ(length * 4, sharedBuffer->size());
 
     RefPtr<SharedBuffer> clone = sharedBuffer->copy();
@@ -181,7 +146,6 @@ TEST(SharedBufferTest, copy)
 
 TEST(SharedBufferTest, constructorWithSizeOnly)
 {
-<<<<<<< HEAD
     size_t length = 10000;
     RefPtr<SharedBuffer> sharedBuffer = SharedBuffer::create(length);
     ASSERT_EQ(length, sharedBuffer->size());
@@ -190,40 +154,6 @@ TEST(SharedBufferTest, constructorWithSizeOnly)
     // getSomeData() should directly return the full size.
     const char* data;
     ASSERT_EQ(length, sharedBuffer->getSomeData(data, static_cast<size_t>(0u)));
-=======
-    unsigned length = 10000;
-    RefPtr<SharedBuffer> sharedBuffer = SharedBuffer::create(length);
-    ASSERT_EQ(length, sharedBuffer->size());
-
-    // The internal flat buffer should have been resized to |length| therefore getSomeData() should
-    // directly return the full size.
-    const char* data;
-    ASSERT_EQ(length, sharedBuffer->getSomeData(data, 0));
-}
-
-TEST(SharedBufferTest, createPurgeable)
-{
-    Vector<char> testData(30000);
-    std::generate(testData.begin(), testData.end(), &std::rand);
-
-    TestingPlatformSupport::Config config;
-    config.hasDiscardableMemorySupport = true;
-    TestingPlatformSupport platformWithDiscardableMemorySupport(config);
-
-    unsigned length = testData.size();
-    RefPtr<SharedBuffer> sharedBuffer = SharedBuffer::createPurgeable(testData.data(), length);
-    ASSERT_EQ(length, sharedBuffer->size());
-    // Merge the segments into a single vector.
-    const char* data = sharedBuffer->data();
-    ASSERT_EQ(0, memcmp(data, testData.data(), length));
-
-    // Do another append + merge the segments again.
-    size_t previousTestDataSize = testData.size();
-    testData.resize(2 * previousTestDataSize);
-    std::generate(testData.begin() + previousTestDataSize, testData.end(), &std::rand);
-    sharedBuffer->append(testData.data() + previousTestDataSize, previousTestDataSize);
-    ASSERT_EQ(0, memcmp(data, testData.data(), length));
->>>>>>> miniblink49
 }
 
 } // namespace blink

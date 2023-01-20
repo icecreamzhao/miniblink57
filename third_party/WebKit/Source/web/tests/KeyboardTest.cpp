@@ -28,33 +28,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
-
->>>>>>> miniblink49
 #include "core/editing/EditingBehavior.h"
 #include "core/editing/Editor.h"
 #include "core/events/EventTarget.h"
 #include "core/events/KeyboardEvent.h"
 #include "core/frame/Settings.h"
 #include "platform/KeyboardCodes.h"
-<<<<<<< HEAD
 #include "public/platform/Platform.h"
 #include "public/platform/WebInputEvent.h"
 #include "testing/gtest/include/gtest/gtest.h"
 #include <memory>
-=======
-#include "public/web/WebInputEvent.h"
-#include "web/WebInputEventConversion.h"
-#include <gtest/gtest.h>
->>>>>>> miniblink49
 
 namespace blink {
 
 class KeyboardTest : public testing::Test {
 public:
-<<<<<<< HEAD
     // Pass a WebKeyboardEvent into the EditorClient and get back the string
     // name of which editing event that key causes.
     // E.g., sending in the enter key gives back "InsertNewline".
@@ -76,34 +64,6 @@ public:
         event.windowsKeyCode = keyCode;
         event.domKey = Platform::current()->domKeyEnumFromString(key);
         return event;
-=======
-
-    // Pass a WebKeyboardEvent into the EditorClient and get back the string
-    // name of which editing event that key causes.
-    // E.g., sending in the enter key gives back "InsertNewline".
-    const char* interpretKeyEvent(
-        const WebKeyboardEvent& webKeyboardEvent,
-        PlatformEvent::Type keyType)
-    {
-        PlatformKeyboardEventBuilder evt(webKeyboardEvent);
-        evt.setKeyType(keyType);
-        RefPtrWillBeRawPtr<KeyboardEvent> keyboardEvent = KeyboardEvent::create(evt, 0);
-        OwnPtr<Settings> settings = Settings::create();
-        EditingBehavior behavior(settings->editingBehaviorType());
-        return behavior.interpretKeyEvent(*keyboardEvent);
-    }
-
-    // Set up a WebKeyboardEvent KEY_DOWN event with key code and modifiers.
-    void setupKeyDownEvent(WebKeyboardEvent* keyboardEvent,
-                           char keyCode,
-                           int modifiers)
-    {
-        keyboardEvent->windowsKeyCode = keyCode;
-        keyboardEvent->modifiers = modifiers;
-        keyboardEvent->type = WebInputEvent::KeyDown;
-        keyboardEvent->text[0] = keyCode;
-        keyboardEvent->setKeyIdentifierFromWindowsKeyCode();
->>>>>>> miniblink49
     }
 
     // Like interpretKeyEvent, but with pressing down OSModifier+|keyCode|.
@@ -111,54 +71,32 @@ public:
     // platforms, but meta (command) on Mac.
     const char* interpretOSModifierKeyPress(char keyCode)
     {
-<<<<<<< HEAD
-=======
-        WebKeyboardEvent keyboardEvent;
->>>>>>> miniblink49
 #if OS(MACOSX)
         WebInputEvent::Modifiers osModifier = WebInputEvent::MetaKey;
 #else
         WebInputEvent::Modifiers osModifier = WebInputEvent::ControlKey;
 #endif
-<<<<<<< HEAD
         return interpretKeyEvent(createFakeKeyboardEvent(
             keyCode, osModifier, WebInputEvent::RawKeyDown));
-=======
-        setupKeyDownEvent(&keyboardEvent, keyCode, osModifier);
-        return interpretKeyEvent(keyboardEvent, PlatformEvent::RawKeyDown);
->>>>>>> miniblink49
     }
 
     // Like interpretKeyEvent, but with pressing down ctrl+|keyCode|.
     const char* interpretCtrlKeyPress(char keyCode)
     {
-<<<<<<< HEAD
         return interpretKeyEvent(createFakeKeyboardEvent(
             keyCode, WebInputEvent::ControlKey, WebInputEvent::RawKeyDown));
-=======
-        WebKeyboardEvent keyboardEvent;
-        setupKeyDownEvent(&keyboardEvent, keyCode, WebInputEvent::ControlKey);
-        return interpretKeyEvent(keyboardEvent, PlatformEvent::RawKeyDown);
->>>>>>> miniblink49
     }
 
     // Like interpretKeyEvent, but with typing a tab.
     const char* interpretTab(int modifiers)
     {
-<<<<<<< HEAD
         return interpretKeyEvent(
             createFakeKeyboardEvent('\t', modifiers, WebInputEvent::Char));
-=======
-        WebKeyboardEvent keyboardEvent;
-        setupKeyDownEvent(&keyboardEvent, '\t', modifiers);
-        return interpretKeyEvent(keyboardEvent, PlatformEvent::Char);
->>>>>>> miniblink49
     }
 
     // Like interpretKeyEvent, but with typing a newline.
     const char* interpretNewLine(int modifiers)
     {
-<<<<<<< HEAD
         return interpretKeyEvent(
             createFakeKeyboardEvent('\r', modifiers, WebInputEvent::Char));
     }
@@ -167,11 +105,6 @@ public:
     {
         return interpretKeyEvent(createFakeKeyboardEvent(
             0, noModifiers, WebInputEvent::RawKeyDown, key));
-=======
-        WebKeyboardEvent keyboardEvent;
-        setupKeyDownEvent(&keyboardEvent, '\r', modifiers);
-        return interpretKeyEvent(keyboardEvent, PlatformEvent::Char);
->>>>>>> miniblink49
     }
 
     // A name for "no modifiers set".
@@ -227,16 +160,8 @@ TEST_F(KeyboardTest, TestOSModifierV)
 
 TEST_F(KeyboardTest, TestEscape)
 {
-<<<<<<< HEAD
     const char* result = interpretKeyEvent(createFakeKeyboardEvent(
         VKEY_ESCAPE, noModifiers, WebInputEvent::RawKeyDown));
-=======
-    WebKeyboardEvent keyboardEvent;
-    setupKeyDownEvent(&keyboardEvent, VKEY_ESCAPE, noModifiers);
-
-    const char* result = interpretKeyEvent(keyboardEvent,
-                                           PlatformEvent::RawKeyDown);
->>>>>>> miniblink49
     EXPECT_STREQ("Cancel", result);
 }
 
@@ -255,20 +180,11 @@ TEST_F(KeyboardTest, TestInsertNewline)
     EXPECT_STREQ("InsertNewline", interpretNewLine(noModifiers));
 }
 
-<<<<<<< HEAD
-=======
-TEST_F(KeyboardTest, TestInsertNewline2)
-{
-    EXPECT_STREQ("InsertNewline", interpretNewLine(WebInputEvent::ControlKey));
-}
-
->>>>>>> miniblink49
 TEST_F(KeyboardTest, TestInsertLineBreak)
 {
     EXPECT_STREQ("InsertLineBreak", interpretNewLine(WebInputEvent::ShiftKey));
 }
 
-<<<<<<< HEAD
 TEST_F(KeyboardTest, TestDomKeyMap)
 {
     struct TestCase {
@@ -282,18 +198,6 @@ TEST_F(KeyboardTest, TestDomKeyMap)
 
     for (const auto& test_case : kDomKeyTestCases)
         EXPECT_STREQ(test_case.command, interpretDomKey(test_case.key));
-=======
-TEST_F(KeyboardTest, TestInsertNewline3)
-{
-    EXPECT_STREQ("InsertNewline", interpretNewLine(WebInputEvent::AltKey));
-}
-
-TEST_F(KeyboardTest, TestInsertNewline4)
-{
-    int modifiers = WebInputEvent::AltKey | WebInputEvent::ShiftKey;
-    const char* result = interpretNewLine(modifiers);
-    EXPECT_STREQ("InsertNewline", result);
->>>>>>> miniblink49
 }
 
 } // namespace blink

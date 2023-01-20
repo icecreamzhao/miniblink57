@@ -44,7 +44,6 @@ class LayoutPoint;
 class LayoutRect;
 class LayoutSize;
 
-<<<<<<< HEAD
 class PLATFORM_EXPORT TextStream final {
     STACK_ALLOCATED();
 
@@ -54,12 +53,6 @@ public:
             : value(number)
         {
         }
-=======
-class PLATFORM_EXPORT TextStream {
-public:
-    struct FormatNumberRespectingIntegers {
-        FormatNumberRespectingIntegers(double number) : value(number) { }
->>>>>>> miniblink49
         double value;
     };
 
@@ -95,11 +88,7 @@ PLATFORM_EXPORT TextStream& operator<<(TextStream&, const LayoutSize&);
 
 PLATFORM_EXPORT void writeIndent(TextStream&, int indent);
 
-<<<<<<< HEAD
 template <typename Item>
-=======
-template<typename Item>
->>>>>>> miniblink49
 TextStream& operator<<(TextStream& ts, const Vector<Item>& vector)
 {
     ts << "[";
@@ -115,10 +104,6 @@ TextStream& operator<<(TextStream& ts, const Vector<Item>& vector)
     return ts;
 }
 
-<<<<<<< HEAD
 } // namespace blink
-=======
-}
->>>>>>> miniblink49
 
 #endif

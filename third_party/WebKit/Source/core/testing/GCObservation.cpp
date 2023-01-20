@@ -28,12 +28,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/testing/GCObservation.h"
 
 namespace blink {
 
-static void setWeakCallbackForGCObservation(const v8::WeakCallbackInfo<GCObservation>& data)
+static void setWeakCallbackForGCObservation(
+    const v8::WeakCallbackInfo<GCObservation>& data)
 {
     data.GetParameter()->setWasCollected();
 }

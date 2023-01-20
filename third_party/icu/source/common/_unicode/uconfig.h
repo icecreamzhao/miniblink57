@@ -15,10 +15,6 @@
 #ifndef __UCONFIG_H__
 #define __UCONFIG_H__
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*!
  * \file
  * \brief User-configurable settings
@@ -64,28 +60,16 @@
  * @internal
  */
 #ifdef U_DEBUG
-<<<<<<< HEAD
 /* Use the predefined value. */
 #elif defined(_DEBUG)
 /*
-=======
-    /* Use the predefined value. */
-#elif defined(_DEBUG)
-    /*
->>>>>>> miniblink49
      * _DEBUG is defined by Visual Studio debug compilation.
      * Do *not* test for its NDEBUG macro: It is an orthogonal macro
      * which disables assert().
      */
-<<<<<<< HEAD
 #define U_DEBUG 1
 #else
 #define U_DEBUG 0
-=======
-#   define U_DEBUG 1
-# else
-#   define U_DEBUG 0
->>>>>>> miniblink49
 #endif
 
 /**
@@ -114,21 +98,11 @@
  * @stable ICU 49
  */
 #ifdef U_NO_DEFAULT_INCLUDE_UTF_HEADERS
-<<<<<<< HEAD
 /* Use the predefined value. */
 #elif defined(U_COMBINED_IMPLEMENTATION) || defined(U_COMMON_IMPLEMENTATION) || defined(U_I18N_IMPLEMENTATION) || defined(U_IO_IMPLEMENTATION) || defined(U_LAYOUT_IMPLEMENTATION) || defined(U_LAYOUTEX_IMPLEMENTATION) || defined(U_TOOLUTIL_IMPLEMENTATION)
 #define U_NO_DEFAULT_INCLUDE_UTF_HEADERS 1
 #else
 #define U_NO_DEFAULT_INCLUDE_UTF_HEADERS 0
-=======
-    /* Use the predefined value. */
-#elif defined(U_COMBINED_IMPLEMENTATION) || defined(U_COMMON_IMPLEMENTATION) || defined(U_I18N_IMPLEMENTATION) || \
-      defined(U_IO_IMPLEMENTATION) || defined(U_LAYOUT_IMPLEMENTATION) || defined(U_LAYOUTEX_IMPLEMENTATION) || \
-      defined(U_TOOLUTIL_IMPLEMENTATION)
-#   define U_NO_DEFAULT_INCLUDE_UTF_HEADERS 1
-#else
-#   define U_NO_DEFAULT_INCLUDE_UTF_HEADERS 0
->>>>>>> miniblink49
 #endif
 
 /**
@@ -175,10 +149,6 @@
 #define U_CHECK_DYLOAD 1
 #endif
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /**
  * \def U_DEFAULT_SHOW_DRAFT
  * Do we allow ICU users to use the draft APIs by default?
@@ -198,15 +168,9 @@
  * @internal
  */
 #ifdef U_HAVE_LIB_SUFFIX
-<<<<<<< HEAD
 /* Use the predefined value. */
 #elif defined(U_LIB_SUFFIX_C_NAME)
 #define U_HAVE_LIB_SUFFIX 1
-=======
-    /* Use the predefined value. */
-#elif defined(U_LIB_SUFFIX_C_NAME)
-#   define U_HAVE_LIB_SUFFIX 1
->>>>>>> miniblink49
 #endif
 
 /**
@@ -215,21 +179,12 @@
  * @internal
  */
 #ifdef U_LIB_SUFFIX_C_NAME_STRING
-<<<<<<< HEAD
 /* Use the predefined value. */
 #elif defined(U_LIB_SUFFIX_C_NAME)
 #define CONVERT_TO_STRING(s) #s
 #define U_LIB_SUFFIX_C_NAME_STRING CONVERT_TO_STRING(U_LIB_SUFFIX_C_NAME)
 #else
 #define U_LIB_SUFFIX_C_NAME_STRING ""
-=======
-    /* Use the predefined value. */
-#elif defined(U_LIB_SUFFIX_C_NAME)
-#   define CONVERT_TO_STRING(s) #s
-#   define U_LIB_SUFFIX_C_NAME_STRING CONVERT_TO_STRING(U_LIB_SUFFIX_C_NAME)
-#else
-#   define U_LIB_SUFFIX_C_NAME_STRING ""
->>>>>>> miniblink49
 #endif
 
 /* common/i18n library switches --------------------------------------------- */
@@ -246,7 +201,6 @@
  * @stable ICU 2.4
  */
 #ifndef UCONFIG_ONLY_COLLATION
-<<<<<<< HEAD
 #define UCONFIG_ONLY_COLLATION 0
 #endif
 
@@ -262,23 +216,6 @@
 #define UCONFIG_NO_FORMATTING 1
 #define UCONFIG_NO_TRANSLITERATION 1
 #define UCONFIG_NO_REGULAR_EXPRESSIONS 1
-=======
-#   define UCONFIG_ONLY_COLLATION 0
-#endif
-
-#if UCONFIG_ONLY_COLLATION
-    /* common library */
-#   define UCONFIG_NO_BREAK_ITERATION 1
-#   define UCONFIG_NO_IDNA 1
-
-    /* i18n library */
-#   if UCONFIG_NO_COLLATION
-#       error Contradictory collation switches in uconfig.h.
-#   endif
-#   define UCONFIG_NO_FORMATTING 1
-#   define UCONFIG_NO_TRANSLITERATION 1
-#   define UCONFIG_NO_REGULAR_EXPRESSIONS 1
->>>>>>> miniblink49
 #endif
 
 /* common library switches -------------------------------------------------- */
@@ -302,19 +239,11 @@
  * @stable ICU 3.6
  */
 #ifndef UCONFIG_NO_FILE_IO
-<<<<<<< HEAD
 #define UCONFIG_NO_FILE_IO 0
 #endif
 
 #if UCONFIG_NO_FILE_IO && defined(U_TIMEZONE_FILES_DIR)
 #error Contradictory file io switches in uconfig.h.
-=======
-#   define UCONFIG_NO_FILE_IO 0
-#endif
-
-#if UCONFIG_NO_FILE_IO && defined(U_TIMEZONE_FILES_DIR) 
-#   error Contradictory file io switches in uconfig.h.
->>>>>>> miniblink49
 #endif
 
 /**
@@ -329,19 +258,11 @@
  * @see U_CHARSET_IS_UTF8
  */
 #ifndef UCONFIG_NO_CONVERSION
-<<<<<<< HEAD
 #define UCONFIG_NO_CONVERSION 0
 #endif
 
 #if UCONFIG_NO_CONVERSION
 #define UCONFIG_NO_LEGACY_CONVERSION 1
-=======
-#   define UCONFIG_NO_CONVERSION 0
-#endif
-
-#if UCONFIG_NO_CONVERSION
-#   define UCONFIG_NO_LEGACY_CONVERSION 1
->>>>>>> miniblink49
 #endif
 
 /**
@@ -365,11 +286,7 @@
  * @stable ICU 2.4
  */
 #ifndef UCONFIG_NO_LEGACY_CONVERSION
-<<<<<<< HEAD
 #define UCONFIG_NO_LEGACY_CONVERSION 0
-=======
-#   define UCONFIG_NO_LEGACY_CONVERSION 0
->>>>>>> miniblink49
 #endif
 
 /**
@@ -381,7 +298,6 @@
  * @stable ICU 2.6
  */
 #ifndef UCONFIG_NO_NORMALIZATION
-<<<<<<< HEAD
 #define UCONFIG_NO_NORMALIZATION 0
 #elif UCONFIG_NO_NORMALIZATION
 /* common library */
@@ -396,22 +312,6 @@
 #endif
 #define UCONFIG_NO_COLLATION 1
 #define UCONFIG_NO_TRANSLITERATION 1
-=======
-#   define UCONFIG_NO_NORMALIZATION 0
-#elif UCONFIG_NO_NORMALIZATION
-    /* common library */
-    /* ICU 50 CJK dictionary BreakIterator uses normalization */
-#   define UCONFIG_NO_BREAK_ITERATION 1
-    /* IDNA (UTS #46) is implemented via normalization */
-#   define UCONFIG_NO_IDNA 1
-
-    /* i18n library */
-#   if UCONFIG_ONLY_COLLATION
-#       error Contradictory collation switches in uconfig.h.
-#   endif
-#   define UCONFIG_NO_COLLATION 1
-#   define UCONFIG_NO_TRANSLITERATION 1
->>>>>>> miniblink49
 #endif
 
 /**
@@ -421,11 +321,7 @@
  * @stable ICU 2.4
  */
 #ifndef UCONFIG_NO_BREAK_ITERATION
-<<<<<<< HEAD
 #define UCONFIG_NO_BREAK_ITERATION 0
-=======
-#   define UCONFIG_NO_BREAK_ITERATION 0
->>>>>>> miniblink49
 #endif
 
 /**
@@ -435,11 +331,7 @@
  * @stable ICU 2.6
  */
 #ifndef UCONFIG_NO_IDNA
-<<<<<<< HEAD
 #define UCONFIG_NO_IDNA 0
-=======
-#   define UCONFIG_NO_IDNA 0
->>>>>>> miniblink49
 #endif
 
 /**
@@ -450,11 +342,7 @@
  * @stable ICU 4.8
  */
 #ifndef UCONFIG_MSGPAT_DEFAULT_APOSTROPHE_MODE
-<<<<<<< HEAD
 #define UCONFIG_MSGPAT_DEFAULT_APOSTROPHE_MODE UMSGPAT_APOS_DOUBLE_OPTIONAL
-=======
-#   define UCONFIG_MSGPAT_DEFAULT_APOSTROPHE_MODE UMSGPAT_APOS_DOUBLE_OPTIONAL
->>>>>>> miniblink49
 #endif
 
 /* i18n library switches ---------------------------------------------------- */
@@ -466,11 +354,7 @@
  * @stable ICU 2.4
  */
 #ifndef UCONFIG_NO_COLLATION
-<<<<<<< HEAD
 #define UCONFIG_NO_COLLATION 0
-=======
-#   define UCONFIG_NO_COLLATION 0
->>>>>>> miniblink49
 #endif
 
 /**
@@ -480,11 +364,7 @@
  * @stable ICU 2.4
  */
 #ifndef UCONFIG_NO_FORMATTING
-<<<<<<< HEAD
 #define UCONFIG_NO_FORMATTING 0
-=======
-#   define UCONFIG_NO_FORMATTING 0
->>>>>>> miniblink49
 #endif
 
 /**
@@ -494,11 +374,7 @@
  * @stable ICU 2.4
  */
 #ifndef UCONFIG_NO_TRANSLITERATION
-<<<<<<< HEAD
 #define UCONFIG_NO_TRANSLITERATION 0
-=======
-#   define UCONFIG_NO_TRANSLITERATION 0
->>>>>>> miniblink49
 #endif
 
 /**
@@ -508,11 +384,7 @@
  * @stable ICU 2.4
  */
 #ifndef UCONFIG_NO_REGULAR_EXPRESSIONS
-<<<<<<< HEAD
 #define UCONFIG_NO_REGULAR_EXPRESSIONS 0
-=======
-#   define UCONFIG_NO_REGULAR_EXPRESSIONS 0
->>>>>>> miniblink49
 #endif
 
 /**
@@ -522,11 +394,7 @@
  * @stable ICU 3.2
  */
 #ifndef UCONFIG_NO_SERVICE
-<<<<<<< HEAD
 #define UCONFIG_NO_SERVICE 0
-=======
-#   define UCONFIG_NO_SERVICE 0
->>>>>>> miniblink49
 #endif
 
 /**
@@ -536,16 +404,9 @@
  * @internal
  */
 #ifndef UCONFIG_HAVE_PARSEALLINPUT
-<<<<<<< HEAD
 #define UCONFIG_HAVE_PARSEALLINPUT 1
 #endif
 
-=======
-#   define UCONFIG_HAVE_PARSEALLINPUT 1
-#endif
-
-
->>>>>>> miniblink49
 /**
  * \def UCONFIG_FORMAT_FASTPATHS_49
  * This switch turns on other formatting fastpaths. Binary incompatible in object DecimalFormat and DecimalFormatSymbols
@@ -553,11 +414,7 @@
  * @internal
  */
 #ifndef UCONFIG_FORMAT_FASTPATHS_49
-<<<<<<< HEAD
 #define UCONFIG_FORMAT_FASTPATHS_49 1
-=======
-#   define UCONFIG_FORMAT_FASTPATHS_49 1
->>>>>>> miniblink49
 #endif
 
 /**
@@ -567,13 +424,7 @@
  * @internal
  */
 #ifndef UCONFIG_NO_FILTERED_BREAK_ITERATION
-<<<<<<< HEAD
 #define UCONFIG_NO_FILTERED_BREAK_ITERATION 0
-=======
-#   define UCONFIG_NO_FILTERED_BREAK_ITERATION 0
-
-
->>>>>>> miniblink49
 
 #endif
 

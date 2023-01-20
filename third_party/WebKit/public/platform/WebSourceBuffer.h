@@ -37,7 +37,6 @@ namespace blink {
 
 class WebSourceBufferClient;
 
-<<<<<<< HEAD
 // Interface for actuating the media engine implementation of Media Source
 // extension's SourceBuffer. See also the mediasource module in Blink, and the
 // WebSourceBufferClient interface.
@@ -45,14 +44,6 @@ class WebSourceBuffer {
 public:
     enum AppendMode { AppendModeSegments,
         AppendModeSequence };
-=======
-class WebSourceBuffer {
-public:
-    enum AppendMode {
-        AppendModeSegments,
-        AppendModeSequence
-    };
->>>>>>> miniblink49
 
     virtual ~WebSourceBuffer() { }
 
@@ -63,7 +54,6 @@ public:
     virtual bool setMode(AppendMode) = 0;
     virtual WebTimeRanges buffered() = 0;
 
-<<<<<<< HEAD
     // Returns the highest buffered presentation timestamp of all buffered coded
     // frames, or 0 if nothing is buffered.
     virtual double highestPresentationTimestamp() = 0;
@@ -89,13 +79,6 @@ public:
         = 0;
 
     virtual void resetParserState() = 0;
-=======
-    // Appends data and runs the segment parser loop algorithm.
-    // The algorithm may update |*timestampOffset| if |timestampOffset| is not null.
-    virtual void append(const unsigned char* data, unsigned length, double* timestampOffset) = 0;
-
-    virtual void abort() = 0;
->>>>>>> miniblink49
     virtual void remove(double start, double end) = 0;
     virtual bool setTimestampOffset(double) = 0;
 

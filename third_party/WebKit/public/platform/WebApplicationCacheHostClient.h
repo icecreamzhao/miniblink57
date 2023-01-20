@@ -39,17 +39,12 @@ namespace blink {
 // This interface is used by the embedder to call into webkit.
 class WebApplicationCacheHostClient {
 public:
-<<<<<<< HEAD
     // Called when a different cache, including possibly no cache, is associated
     // with the host.
-=======
-    // Called when a different cache, including possibly no cache, is associated with the host.
->>>>>>> miniblink49
     virtual void didChangeCacheAssociation() = 0;
 
     // Called to fire events in the scriptable interface.
     virtual void notifyEventListener(WebApplicationCacheHost::EventID) = 0;
-<<<<<<< HEAD
     virtual void notifyProgressEventListener(const WebURL&,
         int num_total,
         int num_complete)
@@ -59,10 +54,6 @@ public:
         int status,
         const WebString& message)
         = 0;
-=======
-    virtual void notifyProgressEventListener(const WebURL&, int num_total, int num_complete) = 0;
-    virtual void notifyErrorEventListener(WebApplicationCacheHost::ErrorReason, const WebURL&, int status, const WebString& message) = 0;
->>>>>>> miniblink49
 
 protected:
     // Should not be deleted by the embedder.

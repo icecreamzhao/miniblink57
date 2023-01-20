@@ -29,18 +29,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "platform/graphics/filters/SpotLightSource.h"
 
 #include "platform/text/TextStream.h"
 #include "wtf/MathExtras.h"
-=======
-#include "config.h"
-#include "platform/graphics/filters/SpotLightSource.h"
-
-#include "platform/text/TextStream.h"
-#include <algorithm>
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -62,11 +54,7 @@ bool SpotLightSource::setPointsAt(const FloatPoint3D& direction)
 
 bool SpotLightSource::setSpecularExponent(float specularExponent)
 {
-<<<<<<< HEAD
     specularExponent = clampTo(specularExponent, 1.0f, 128.0f);
-=======
-    specularExponent = std::min(std::max(specularExponent, 1.0f), 128.0f);
->>>>>>> miniblink49
     if (m_specularExponent == specularExponent)
         return false;
     m_specularExponent = specularExponent;

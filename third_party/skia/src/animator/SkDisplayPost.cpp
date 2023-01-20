@@ -6,10 +6,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #include "SkDisplayPost.h"
 #include "SkAnimateMaker.h"
 #include "SkAnimator.h"
@@ -30,11 +26,7 @@ enum SkPost_Properties {
 
 const SkMemberInfo SkPost::fInfo[] = {
     SK_MEMBER(delay, MSec),
-<<<<<<< HEAD
     //  SK_MEMBER(initialized, Boolean),
-=======
-//  SK_MEMBER(initialized, Boolean),
->>>>>>> miniblink49
     SK_MEMBER(mode, EventMode),
     SK_MEMBER(sink, String),
     SK_MEMBER_PROPERTY(target, String),
@@ -45,7 +37,6 @@ const SkMemberInfo SkPost::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkPost);
 
-<<<<<<< HEAD
 SkPost::SkPost()
     : delay(0)
     , /*initialized(SkBool(-1)), */ mode(kImmediate)
@@ -67,25 +58,10 @@ bool SkPost::addChild(SkAnimateMaker&, SkDisplayable* child)
 {
     SkASSERT(child && child->isDataInput());
     SkDataInput* part = (SkDataInput*)child;
-=======
-SkPost::SkPost() : delay(0), /*initialized(SkBool(-1)), */ mode(kImmediate), fMaker(NULL),
-    fSinkID(0), fTargetMaker(NULL), fChildHasID(false), fDirty(false) {
-}
-
-SkPost::~SkPost() {
-    for (SkDataInput** part = fParts.begin(); part < fParts.end();  part++)
-        delete *part;
-}
-
-bool SkPost::addChild(SkAnimateMaker& , SkDisplayable* child) {
-    SkASSERT(child && child->isDataInput());
-    SkDataInput* part = (SkDataInput*) child;
->>>>>>> miniblink49
     *fParts.append() = part;
     return true;
 }
 
-<<<<<<< HEAD
 bool SkPost::childrenNeedDisposing() const
 {
     return false;
@@ -93,48 +69,27 @@ bool SkPost::childrenNeedDisposing() const
 
 void SkPost::dirty()
 {
-=======
-bool SkPost::childrenNeedDisposing() const {
-    return false;
-}
-
-void SkPost::dirty() {
->>>>>>> miniblink49
     fDirty = true;
 }
 
 #ifdef SK_DUMP_ENABLED
-<<<<<<< HEAD
 void SkPost::dump(SkAnimateMaker* maker)
 {
-=======
-void SkPost::dump(SkAnimateMaker* maker) {
->>>>>>> miniblink49
     dumpBase(maker);
     SkString* eventType = new SkString();
     fEvent.getType(eventType);
     if (eventType->equals("user")) {
         const char* target = fEvent.findString("id");
         SkDebugf("target=\"%s\" ", target);
-<<<<<<< HEAD
     } else
-=======
-    }
-    else
->>>>>>> miniblink49
         SkDebugf("type=\"%s\" ", eventType->c_str());
     delete eventType;
 
     if (delay > 0) {
         SkDebugf("delay=\"%g\" ", delay * 0.001);
     }
-<<<<<<< HEAD
     //  if (initialized == false)
     //      SkDebugf("(uninitialized) ");
-=======
-//  if (initialized == false)
-//      SkDebugf("(uninitialized) ");
->>>>>>> miniblink49
     SkString string;
     SkDump::GetEnumString(SkType_EventMode, mode, &string);
     if (!string.equals("immediate"))
@@ -147,11 +102,7 @@ void SkPost::dump(SkAnimateMaker* maker) {
     }
     const SkMetaData& meta = fEvent.getMetaData();
     SkMetaData::Iter iter(meta);
-<<<<<<< HEAD
     SkMetaData::Type type;
-=======
-    SkMetaData::Type    type;
->>>>>>> miniblink49
     int number;
     const char* name;
     bool closedYet = false;
@@ -163,11 +114,7 @@ void SkPost::dump(SkAnimateMaker* maker) {
     //SkDataInput** ptr = fParts.end();
     //SkDataInput* data;
     //const char* ID;
-<<<<<<< HEAD
     while ((name = iter.next(&type, &number)) != nullptr) {
-=======
-    while ((name = iter.next(&type, &number)) != NULL) {
->>>>>>> miniblink49
         //ptr--;
         if (strcmp(name, "id") == 0)
             continue;
@@ -182,7 +129,6 @@ void SkPost::dump(SkAnimateMaker* maker) {
         //    ID = "";
         SkDebugf("%*s<data name=\"%s\" ", SkDisplayList::fIndent, "", name);
         switch (type) {
-<<<<<<< HEAD
         case SkMetaData::kS32_Type: {
             int32_t s32;
             meta.findS32(name, &s32);
@@ -212,37 +158,6 @@ void SkPost::dump(SkAnimateMaker* maker) {
         SkDebugf("/>\n");
         //ptr++;
         /*      perhaps this should only be done in the case of a pointer?
-=======
-            case SkMetaData::kS32_Type: {
-                int32_t s32;
-                meta.findS32(name, &s32);
-                SkDebugf("int=\"%d\" ", s32);
-                } break;
-            case SkMetaData::kScalar_Type: {
-                SkScalar scalar;
-                meta.findScalar(name, &scalar);
-                SkDebugf("float=\"%g\" ", SkScalarToFloat(scalar));
-                } break;
-            case SkMetaData::kString_Type:
-                SkDebugf("string=\"%s\" ", meta.findString(name));
-                break;
-            case SkMetaData::kPtr_Type: {//when do we have a pointer
-                    void* ptr;
-                    meta.findPtr(name, &ptr);
-                    SkDebugf("0x%08x ", ptr);
-                } break;
-            case SkMetaData::kBool_Type: {
-                bool boolean;
-                meta.findBool(name, &boolean);
-                SkDebugf("boolean=\"%s\" ", boolean ? "true " : "false ");
-                } break;
-            default:
-                break;
-        }
-        SkDebugf("/>\n");
-        //ptr++;
-/*      perhaps this should only be done in the case of a pointer?
->>>>>>> miniblink49
         SkDisplayable* displayable;
         if (maker->find(name, &displayable))
             displayable->dump(maker);
@@ -254,19 +169,11 @@ void SkPost::dump(SkAnimateMaker* maker) {
         dumpEnd(maker);
     else
         SkDebugf("/>\n");
-<<<<<<< HEAD
 }
 #endif
 
 bool SkPost::enable(SkAnimateMaker& maker)
 {
-=======
-
-}
-#endif
-
-bool SkPost::enable(SkAnimateMaker& maker ) {
->>>>>>> miniblink49
     if (maker.hasError())
         return true;
     if (fDirty) {
@@ -277,11 +184,7 @@ bool SkPost::enable(SkAnimateMaker& maker ) {
             fEvent.getMetaData().reset();
             if (preserveID.size() > 0)
                 fEvent.setString("id", preserveID);
-<<<<<<< HEAD
             for (SkDataInput** part = fParts.begin(); part < fParts.end(); part++) {
-=======
-            for (SkDataInput** part = fParts.begin(); part < fParts.end();  part++) {
->>>>>>> miniblink49
                 if ((*part)->add())
                     maker.setErrorCode(SkDisplayXMLParserError::kErrorAddingDataToPost);
             }
@@ -305,11 +208,7 @@ bool SkPost::enable(SkAnimateMaker& maker ) {
     debugOut.appendS32(delay);
 #endif
 #endif
-<<<<<<< HEAD
     //  SkMSec adjustedDelay = maker.adjustDelay(maker.fEnableTime, delay);
-=======
-//  SkMSec adjustedDelay = maker.adjustDelay(maker.fEnableTime, delay);
->>>>>>> miniblink49
     SkMSec futureTime = maker.fEnableTime + delay;
     fEvent.setFast32(futureTime);
 #if defined SK_DEBUG && defined SK_DEBUG_ANIMATION_TIMING
@@ -321,11 +220,7 @@ bool SkPost::enable(SkAnimateMaker& maker ) {
     bool isAnimatorEvent = true;
     SkAnimator* anim = maker.getAnimator();
     if (targetID == 0) {
-<<<<<<< HEAD
         isAnimatorEvent = fEvent.findString("id") != nullptr;
-=======
-        isAnimatorEvent = fEvent.findString("id") != NULL;
->>>>>>> miniblink49
         if (isAnimatorEvent)
             targetID = anim->getSinkID();
         else if (maker.fHostEventSinkID)
@@ -344,24 +239,15 @@ bool SkPost::enable(SkAnimateMaker& maker ) {
     return true;
 }
 
-<<<<<<< HEAD
 void SkPost::findSinkID()
 {
-=======
-void SkPost::findSinkID() {
->>>>>>> miniblink49
     // get the next delimiter '.' if any
     fTargetMaker = fMaker;
     const char* ch = sink.c_str();
     do {
         const char* end = strchr(ch, '.');
-<<<<<<< HEAD
         size_t len = end ? (size_t)(end - ch) : strlen(ch);
         SkDisplayable* displayable = nullptr;
-=======
-        size_t len = end ? (size_t) (end - ch) : strlen(ch);
-        SkDisplayable* displayable = NULL;
->>>>>>> miniblink49
         if (SK_LITERAL_STR_EQUAL("parent", ch, len)) {
             if (fTargetMaker->fParentMaker)
                 fTargetMaker = fTargetMaker->fParentMaker;
@@ -371,7 +257,6 @@ void SkPost::findSinkID() {
             }
         } else {
             fTargetMaker->find(ch, len, &displayable);
-<<<<<<< HEAD
             if (displayable == nullptr || displayable->getType() != SkType_Movie) {
                 fTargetMaker->setErrorCode(SkDisplayXMLParserError::kExpectedMovie);
                 return;
@@ -380,16 +265,6 @@ void SkPost::findSinkID() {
             fTargetMaker = movie->fMovie.fMaker;
         }
         if (end == nullptr)
-=======
-            if (displayable == NULL || displayable->getType() != SkType_Movie) {
-                fTargetMaker->setErrorCode(SkDisplayXMLParserError::kExpectedMovie);
-                return;
-            }
-            SkDisplayMovie* movie = (SkDisplayMovie*) displayable;
-            fTargetMaker = movie->fMovie.fMaker;
-        }
-        if (end == NULL)
->>>>>>> miniblink49
             break;
         ch = ++end;
     } while (true);
@@ -397,7 +272,6 @@ void SkPost::findSinkID() {
     fSinkID = anim->getSinkID();
 }
 
-<<<<<<< HEAD
 bool SkPost::hasEnable() const
 {
     return true;
@@ -408,22 +282,11 @@ void SkPost::onEndElement(SkAnimateMaker& maker)
     fTargetMaker = fMaker = &maker;
     if (fChildHasID == false) {
         for (SkDataInput** part = fParts.begin(); part < fParts.end(); part++)
-=======
-bool SkPost::hasEnable() const {
-    return true;
-}
-
-void SkPost::onEndElement(SkAnimateMaker& maker) {
-    fTargetMaker = fMaker = &maker;
-    if (fChildHasID == false) {
-        for (SkDataInput** part = fParts.begin(); part < fParts.end();  part++)
->>>>>>> miniblink49
             delete *part;
         fParts.reset();
     }
 }
 
-<<<<<<< HEAD
 void SkPost::setChildHasID()
 {
     fChildHasID = true;
@@ -445,27 +308,6 @@ bool SkPost::setProperty(int index, SkScriptValue& value)
     default:
         SkASSERT(0);
         return false;
-=======
-void SkPost::setChildHasID() {
-    fChildHasID = true;
-}
-
-bool SkPost::setProperty(int index, SkScriptValue& value) {
-    SkASSERT(value.fType == SkType_String);
-    SkString* string = value.fOperand.fString;
-    switch(index) {
-        case SK_PROPERTY(target): {
-            fEvent.setType("user");
-            fEvent.setString("id", *string);
-            mode = kImmediate;
-            } break;
-        case SK_PROPERTY(type):
-            fEvent.setType(*string);
-            break;
-        default:
-            SkASSERT(0);
-            return false;
->>>>>>> miniblink49
     }
     return true;
 }

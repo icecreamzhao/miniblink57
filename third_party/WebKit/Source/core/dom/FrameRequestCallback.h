@@ -35,7 +35,8 @@
 
 namespace blink {
 
-class FrameRequestCallback : public GarbageCollectedFinalized<FrameRequestCallback> {
+class FrameRequestCallback
+    : public GarbageCollectedFinalized<FrameRequestCallback> {
 public:
     virtual ~FrameRequestCallback() { }
     DEFINE_INLINE_VIRTUAL_TRACE() { }
@@ -46,6 +47,6 @@ public:
     bool m_useLegacyTimeBase;
 };
 
-}
+} // namespace blink
 
 #endif // FrameRequestCallback_h

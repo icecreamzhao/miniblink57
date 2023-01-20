@@ -8,12 +8,8 @@
 #include "gm.h"
 #include "sk_tool_utils.h"
 
-<<<<<<< HEAD
 static void make_bm(SkBitmap* bm)
 {
-=======
-static void make_bm(SkBitmap* bm) {
->>>>>>> miniblink49
     const SkColor colors[4] = {
         SK_ColorRED, SK_ColorGREEN,
         SK_ColorBLUE, SK_ColorWHITE
@@ -25,13 +21,8 @@ static void make_bm(SkBitmap* bm) {
     SkColorTable* ctable = new SkColorTable(colorsPM, 4);
 
     bm->allocPixels(SkImageInfo::Make(2, 2, kIndex_8_SkColorType,
-<<<<<<< HEAD
                         kPremul_SkAlphaType),
         nullptr, ctable);
-=======
-                                      kPremul_SkAlphaType),
-                    NULL, ctable);
->>>>>>> miniblink49
     ctable->unref();
 
     *bm->getAddr8(0, 0) = 0;
@@ -41,7 +32,6 @@ static void make_bm(SkBitmap* bm) {
 }
 
 static SkScalar draw_bm(SkCanvas* canvas, const SkBitmap& bm,
-<<<<<<< HEAD
     SkScalar x, SkScalar y, SkPaint* paint)
 {
     canvas->drawBitmap(bm, x, y, paint);
@@ -51,15 +41,6 @@ static SkScalar draw_bm(SkCanvas* canvas, const SkBitmap& bm,
 static SkScalar draw_set(SkCanvas* c, const SkBitmap& bm, SkScalar x,
     SkPaint* p)
 {
-=======
-                        SkScalar x, SkScalar y, SkPaint* paint) {
-    canvas->drawBitmap(bm, x, y, paint);
-    return SkIntToScalar(bm.width()) * 5/4;
-}
-
-static SkScalar draw_set(SkCanvas* c, const SkBitmap& bm, SkScalar x,
-                         SkPaint* p) {
->>>>>>> miniblink49
     x += draw_bm(c, bm, x, 0, p);
     p->setFilterQuality(kLow_SkFilterQuality);
     x += draw_bm(c, bm, x, 0, p);
@@ -67,12 +48,8 @@ static SkScalar draw_set(SkCanvas* c, const SkBitmap& bm, SkScalar x,
     return x + draw_bm(c, bm, x, 0, p);
 }
 
-<<<<<<< HEAD
 static SkScalar draw_row(SkCanvas* canvas, const SkBitmap& bm)
 {
-=======
-static SkScalar draw_row(SkCanvas* canvas, const SkBitmap& bm) {
->>>>>>> miniblink49
     SkAutoCanvasRestore acr(canvas, true);
 
     SkPaint paint;
@@ -80,17 +57,10 @@ static SkScalar draw_row(SkCanvas* canvas, const SkBitmap& bm) {
     const int scale = 32;
 
     paint.setAntiAlias(true);
-<<<<<<< HEAD
     sk_tool_utils::set_portable_typeface(&paint);
     const char* name = sk_tool_utils::colortype_name(bm.colorType());
     canvas->drawText(name, strlen(name), x, SkIntToScalar(bm.height()) * scale * 5 / 8,
         paint);
-=======
-    sk_tool_utils::set_portable_typeface_always(&paint);
-    const char* name = sk_tool_utils::colortype_name(bm.colorType());
-    canvas->drawText(name, strlen(name), x, SkIntToScalar(bm.height())*scale*5/8,
-                     paint);
->>>>>>> miniblink49
     canvas->translate(SkIntToScalar(48), 0);
 
     canvas->scale(SkIntToScalar(scale), SkIntToScalar(scale));
@@ -103,12 +73,8 @@ static SkScalar draw_row(SkCanvas* canvas, const SkBitmap& bm) {
 }
 
 class FilterGM : public skiagm::GM {
-<<<<<<< HEAD
     void onOnceBeforeDraw() override
     {
-=======
-    void onOnceBeforeDraw() override {
->>>>>>> miniblink49
         make_bm(&fBM8);
         fBM8.copyTo(&fBM4444, kARGB_4444_SkColorType);
         fBM8.copyTo(&fBM16, kRGB_565_SkColorType);
@@ -116,21 +82,14 @@ class FilterGM : public skiagm::GM {
     }
 
 public:
-<<<<<<< HEAD
     SkBitmap fBM8, fBM4444, fBM16, fBM32;
 
     FilterGM()
     {
-=======
-    SkBitmap    fBM8, fBM4444, fBM16, fBM32;
-
-    FilterGM() {
->>>>>>> miniblink49
         this->setBGColor(sk_tool_utils::color_to_565(0xFFDDDDDD));
     }
 
 protected:
-<<<<<<< HEAD
     SkString onShortName() override
     {
         return SkString("bitmapfilters");
@@ -143,17 +102,6 @@ protected:
 
     void onDraw(SkCanvas* canvas) override
     {
-=======
-    SkString onShortName() override {
-        return SkString("bitmapfilters");
-    }
-
-    SkISize onISize() override {
-        return SkISize::Make(540, 330);
-    }
-
-    void onDraw(SkCanvas* canvas) override {
->>>>>>> miniblink49
         SkScalar x = SkIntToScalar(10);
         SkScalar y = SkIntToScalar(10);
 
@@ -170,21 +118,13 @@ protected:
 private:
     typedef skiagm::GM INHERITED;
 };
-<<<<<<< HEAD
 DEF_GM(return new FilterGM;)
-=======
-DEF_GM( return new FilterGM; )
->>>>>>> miniblink49
 
 //////////////////////////////////////////////////////////////////////////////
 
 class TestExtractAlphaGM : public skiagm::GM {
-<<<<<<< HEAD
     void onOnceBeforeDraw() override
     {
-=======
-    void onOnceBeforeDraw() override {
->>>>>>> miniblink49
         // Make a bitmap with per-pixels alpha (stroked circle)
         fBitmap.allocN32Pixels(100, 100);
         SkCanvas canvas(fBitmap);
@@ -201,7 +141,6 @@ class TestExtractAlphaGM : public skiagm::GM {
 
         fBitmap.extractAlpha(&fAlpha);
     }
-<<<<<<< HEAD
 
 public:
     SkBitmap fBitmap, fAlpha;
@@ -219,28 +158,11 @@ protected:
 
     void onDraw(SkCanvas* canvas) override
     {
-=======
-    
-public:
-    SkBitmap fBitmap, fAlpha;
-    
-protected:
-    SkString onShortName() override {
-        return SkString("extractalpha");
-    }
-    
-    SkISize onISize() override {
-        return SkISize::Make(540, 330);
-    }
-    
-    void onDraw(SkCanvas* canvas) override {
->>>>>>> miniblink49
         SkPaint paint;
         paint.setAntiAlias(true);
         paint.setFilterQuality(kLow_SkFilterQuality);
         paint.setColor(SK_ColorRED);
 
-<<<<<<< HEAD
         canvas->drawBitmap(fBitmap, 10, 10, &paint); // should stay blue (ignore paint's color)
         canvas->drawBitmap(fAlpha, 120, 10, &paint); // should draw red
     }
@@ -249,14 +171,3 @@ private:
     typedef skiagm::GM INHERITED;
 };
 DEF_GM(return new TestExtractAlphaGM;)
-=======
-        canvas->drawBitmap(fBitmap, 10, 10, &paint);    // should stay blue (ignore paint's color)
-        canvas->drawBitmap(fAlpha, 120, 10, &paint);    // should draw red
-    }
-    
-private:
-    typedef skiagm::GM INHERITED;
-};
-DEF_GM( return new TestExtractAlphaGM; )
-
->>>>>>> miniblink49

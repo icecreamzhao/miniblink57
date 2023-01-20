@@ -10,7 +10,6 @@
 #include "SkSurface.h"
 #include "Test.h"
 
-<<<<<<< HEAD
 #ifdef SK_SUPPORT_LEGACY_DRAWFILTER
 
 namespace {
@@ -18,12 +17,6 @@ class TestFilter : public SkDrawFilter {
 public:
     bool filter(SkPaint* p, Type) override
     {
-=======
-namespace {
-class TestFilter : public SkDrawFilter {
-public:
-    bool filter(SkPaint* p, Type) override {
->>>>>>> miniblink49
         return true;
     }
 };
@@ -34,7 +27,6 @@ public:
  *  do the following: save / modify-drawfilter / restore, the current drawfilter should be what
  *  it was before the save.
  */
-<<<<<<< HEAD
 static void test_saverestore(skiatest::Reporter* reporter)
 {
     auto surface(SkSurface::MakeRasterN32Premul(10, 10));
@@ -58,25 +50,3 @@ DEF_TEST(DrawFilter, reporter)
 }
 
 #endif
-=======
-static void test_saverestore(skiatest::Reporter* reporter) {
-    SkAutoTUnref<SkSurface> surface(SkSurface::NewRasterN32Premul(10, 10));
-    SkCanvas* canvas = surface->getCanvas();
-
-
-    SkAutoTUnref<TestFilter> df(SkNEW(TestFilter));
-
-    REPORTER_ASSERT(reporter, NULL == canvas->getDrawFilter());
-
-    canvas->save();
-    canvas->setDrawFilter(df);
-    REPORTER_ASSERT(reporter, NULL != canvas->getDrawFilter());
-    canvas->restore();
-
-    REPORTER_ASSERT(reporter, NULL == canvas->getDrawFilter());
-}
-
-DEF_TEST(DrawFilter, reporter) {
-    test_saverestore(reporter);
-}
->>>>>>> miniblink49

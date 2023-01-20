@@ -30,7 +30,6 @@
 #define WEBPImageDecoder_h
 
 #include "platform/image-decoders/ImageDecoder.h"
-<<<<<<< HEAD
 #include "third_party/skia/include/core/SkData.h"
 #include "webp/decode.h"
 #include "webp/demux.h"
@@ -43,35 +42,14 @@ class PLATFORM_EXPORT WEBPImageDecoder final : public ImageDecoder {
 
 public:
     WEBPImageDecoder(AlphaOption, const ColorBehavior&, size_t maxDecodedBytes);
-=======
-
-#include "webp/decode.h"
-#include "webp/demux.h"
-
-namespace blink {
-
-class PLATFORM_EXPORT WEBPImageDecoder : public ImageDecoder {
-    WTF_MAKE_NONCOPYABLE(WEBPImageDecoder);
-public:
-    WEBPImageDecoder(ImageSource::AlphaOption, ImageSource::GammaAndColorProfileOption, size_t maxDecodedBytes);
->>>>>>> miniblink49
     ~WEBPImageDecoder() override;
 
     // ImageDecoder:
     String filenameExtension() const override { return "webp"; }
-<<<<<<< HEAD
     void onSetData(SegmentReader* data) override;
     int repetitionCount() const override;
     bool frameIsCompleteAtIndex(size_t) const override;
     float frameDurationAtIndex(size_t) const override;
-=======
-    bool hasColorProfile() const override { return m_hasColorProfile; }
-    void setData(SharedBuffer* data, bool allDataReceived) override;
-    int repetitionCount() const override;
-    bool frameIsCompleteAtIndex(size_t) const override;
-    float frameDurationAtIndex(size_t) const override;
-    size_t clearCacheExceptFrame(size_t) override;
->>>>>>> miniblink49
 
 private:
     // ImageDecoder:
@@ -80,7 +58,6 @@ private:
     void initializeNewFrame(size_t) override;
     void decode(size_t) override;
 
-<<<<<<< HEAD
     bool decodeSingleFrame(const uint8_t* dataBytes,
         size_t dataSize,
         size_t frameIndex);
@@ -96,15 +73,11 @@ private:
         DCHECK(index < m_frameBufferCache.size());
         return m_frameBufferCache[index].getStatus() == ImageFrame::FrameComplete;
     }
-=======
-    bool decodeSingleFrame(const uint8_t* dataBytes, size_t dataSize, size_t frameIndex);
->>>>>>> miniblink49
 
     WebPIDecoder* m_decoder;
     WebPDecBuffer m_decoderBuffer;
     int m_formatFlags;
     bool m_frameBackgroundHasAlpha;
-<<<<<<< HEAD
 
     void readColorProfile();
     bool updateDemuxer();
@@ -119,21 +92,6 @@ private:
     // method, the caller must verify that the frame exists.
     bool canReusePreviousFrameBuffer(size_t frameIndex) const override;
 
-=======
-    bool m_hasColorProfile;
-
-#if USE(QCMSLIB)
-    qcms_transform* colorTransform() const { return m_transform; }
-    bool createColorTransform(const char* data, size_t);
-    void clearColorTransform();
-    void readColorProfile();
-
-    qcms_transform* m_transform;
-#endif
-
-    bool updateDemuxer();
-    bool initFrameBuffer(size_t frameIndex);
->>>>>>> miniblink49
     void applyPostProcessing(size_t frameIndex);
     void clearFrameBuffer(size_t frameIndex) override;
 
@@ -148,13 +106,10 @@ private:
 
     void clear();
     void clearDecoder();
-<<<<<<< HEAD
 
     // FIXME: Update libwebp's API so it does not require copying the data on each
     // update.
     sk_sp<SkData> m_consolidatedData;
-=======
->>>>>>> miniblink49
 };
 
 } // namespace blink

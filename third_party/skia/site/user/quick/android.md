@@ -4,7 +4,6 @@ Android
 Prerequisites
 -------------
 
-<<<<<<< HEAD
 _Currently we only support building Skia for Android on a Linux or Mac host! In addition,
  we only use the Mac build for local development. All shipping variants are compiled on
  Linux for performance reasons._
@@ -17,37 +16,14 @@ Check out the source code
 -------------------------
 
 Follow the instructions [here](../download) for downloading the Skia source. 
-=======
-_Currently we only support building Skia for Android on a Linux or Mac host!_
-
-The following libraries/utilities are required in addition to those needed for a standard skia checkout:
-
-  * Apache Ant
-  * The Android SDK: http://developer.android.com/sdk/
-
-~~~~
-$ sudo apt-get install ant git
-~~~~
-
-Check out the source code
--------------------------
-
-Follow the instructions [here](../download) for downloading the Skia source. Modify .gclient to add the following line to
-the bottom, and then run gclient sync again:
-
-    target_os = ["android"]
->>>>>>> miniblink49
 
 Inside your Skia checkout, `platform_tools/android` contains the Android setup
 scripts, Android specific dependencies, and the Android Sample App.
 
-<<<<<<< HEAD
 You may need to [install other dependencies](./linux#prerequisites):
 
     tools/install_dependencies.sh
 
-=======
->>>>>>> miniblink49
 Setup the Android SDK
 ---------------------
 
@@ -58,7 +34,6 @@ where you installed the SDK and run the following commands
     # You may want to add this export to your shell's .bash_profile or .profile
     export ANDROID_SDK_ROOT=/path/to/android/sdk
 
-<<<<<<< HEAD
     $ANDROID_SDK_ROOT/tools/android update sdk --no-ui --filter android-19
     $ANDROID_SDK_ROOT/tools/android update sdk --no-ui --filter android-23
     $ANDROID_SDK_ROOT/tools/android update sdk -a -u -t 8
@@ -72,15 +47,6 @@ are required to have these two in order to complete the Skia build process.
 The last line in the script installs Android SDK Build-tools 22.0.1.
 Alternatively you can download the above packages with Android Studio, by clicking 
 the Launch Standalone SDK Manager link in Tools > Android > SDK Manger.
-=======
-    $ ANDROID_SDK_ROOT/tools/android update sdk --no-ui --filter android-19
-
-From here you will need to type 'y' to approve the license agreement and that
-is all.  You will then have downloaded the SDK for API level 19 (Android 4.4
-KitKat) which will be used to build the Skia SampleApp.  You can download as
-many other Android add-ons or APIs as you want, but you only are required to
-have this one in order to complete the Skia build process.
->>>>>>> miniblink49
 
 Setup Environment for Android
 -----------------------------
@@ -89,7 +55,6 @@ The Android build needs to set up some specific variables needed by both GYP
 and Make. We make this setup easy for developers by encapsulating all the
 details into a custom script that acts as a replacement for make.
 
-<<<<<<< HEAD
 Syncing the Source
 -----------------------------
 We provide a utility to sync both our git repository as well as any third-party
@@ -99,8 +64,6 @@ dependencies.  Simply run the command below:
     # Sync the source
     ./bin/sync
 
-=======
->>>>>>> miniblink49
 Custom Android Build Script
 ---------------------------
 
@@ -111,10 +74,7 @@ the -d option plus any of the options or arguments you would normally pass to
 ninja (see descriptions of some of the other flags here).
 
     export ANDROID_SDK_ROOT=/path/to/android/sdk
-<<<<<<< HEAD
     export ANDROID_HOME=/path/to/android/sdk
-=======
->>>>>>> miniblink49
     export PATH=$PATH:/path/to/depot_tools
 
     cd skia
@@ -125,29 +85,13 @@ architecture such as MIPS (generic), x86 (generic) and ARM (generic and device
 specific flavors for Nexus devices). This in turn allows Skia to take
 advantage of specific device optimizations (e.g. NEON instructions).
 
-<<<<<<< HEAD
-=======
-Generate build file from GYP
-----------------------------
-
-We use the open-source gyp tool to generate build files from our multiplatform
-"gyp" files. While most other platforms enable you to regenerate these files
-using `./gyp_skia` it is recommend that you do NOT do this for Android.  Instead
-you can rely on it being run automatically by android_ninja.
-
->>>>>>> miniblink49
 Faster rebuilds
 ---------------
 
 You can use ccache to improve the speed of rebuilding:
 
-<<<<<<< HEAD
     # You may want to add this export to your shell's .bash_profile or .profile
     export ANDROID_MAKE_CCACHE=[ccache]
-=======
-  # You may want to add this export to your shell's .bash_profile or .profile
-  export ANDROID_MAKE_CCACHE=[ccache]
->>>>>>> miniblink49
 
 Build and run executables on the device
 ---------------------------------------
@@ -195,11 +139,7 @@ Build and run SampleApp
 
 The SampleApp on Android provides a simple UI for viewing sample slides and gm images.
 
-<<<<<<< HEAD
     BUILDTYPE=Debug ./platform_tools/android/bin/android_ninja -d $TARGET_DEVICE SampleApp_APK
-=======
-    BUILDTYPE=Debug ./platform_tools/android/bin/android_ninja -d $TARGET_DEVICE
->>>>>>> miniblink49
 
 Then, install the app onto the device:
 
@@ -208,26 +148,17 @@ Then, install the app onto the device:
 Finally to run the application you can either navigate to the Skia Samples
 application using the application launcher on your device or from the command
 line.  The command line option allows you to pass additional details to the
-<<<<<<< HEAD
 application (similar to other operating system) that specify where to find
-=======
-application (similiar to other operating system) that specify where to find
->>>>>>> miniblink49
 skp files and other resources.
 
     ./platform_tools/android/bin/android_launch_app --resourcePath /data/local/tmp/resources
 
 By default if no additional parameters are specified the app will use the default
-<<<<<<< HEAD
 parameters...
-=======
-params...
->>>>>>> miniblink49
 
     --resourcePath /data/local/tmp/skia_resoures 
     --pictureDir /data/local/tmp/skia_skp
 
-<<<<<<< HEAD
 
 Android Studio Support
 -----------------------
@@ -250,8 +181,6 @@ That should be all the setup you need.  You should now be able to build and depl
 SampleApp on ARM, Intel, and MIPS devices.
 
 
-=======
->>>>>>> miniblink49
 Build tools
 -----------
 
@@ -278,15 +207,7 @@ Note: The debugging scripts do not build the app - you'll have to do that first.
     
     # SAMPLE APP
     # make sure you've installed the app on the device first
-<<<<<<< HEAD
     ./platform_tools/android/bin/android_gdb_app [-d device_id]
 
 When the gdb client is ready, insert a breakpoint, and continue to let the
 program resume execution.
-=======
-    ./platform_tools/android/bin/android_gdb_app
-
-When the gdb client is ready, insert a breakpoint, and continue to let the
-program resume execution.
-
->>>>>>> miniblink49

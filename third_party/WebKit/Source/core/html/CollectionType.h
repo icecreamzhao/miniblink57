@@ -1,7 +1,8 @@
 /*
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
  *           (C) 1999 Antti Koivisto (koivisto@kde.org)
- * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008 Apple Inc. All rights reserved.
+ * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008 Apple Inc. All rights
+ * reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,21 +28,21 @@ namespace blink {
 
 enum CollectionType {
     // Unnamed HTMLCollection types cached in the document.
-    DocImages,    // all <img> elements in the document
-    DocApplets,   // all <object> and <applet> elements
-    DocEmbeds,    // all <embed> elements
-    DocForms,     // all <form> elements
-    DocLinks,     // all <a> _and_ <area> elements with a value for href
-    DocAnchors,   // all <a> elements with a value for name
-    DocScripts,   // all <script> elements
-    DocAll,       // "all" elements (IE)
+    DocImages, // all <img> elements in the document
+    DocApplets, // all <object> and <applet> elements
+    DocEmbeds, // all <embed> elements
+    DocForms, // all <form> elements
+    DocLinks, // all <a> _and_ <area> elements with a value for href
+    DocAnchors, // all <a> elements with a value for name
+    DocScripts, // all <script> elements
+    DocAll, // "all" elements (IE)
 
     // Unnamed HTMLCollection types cached in elements.
     NodeChildren, // first-level children (ParentNode DOM interface)
     TableTBodies, // all <tbody> elements in this table
     TSectionRows, // all row elements in this table section
     TableRows,
-    TRCells,      // all cells in this row
+    TRCells, // all cells in this row
     SelectOptions,
     SelectedOptions,
     DataListOptions,
@@ -82,6 +83,6 @@ inline bool isLiveNodeListType(CollectionType type)
     return type >= FirstLiveNodeListType;
 }
 
-} // namespace
+} // namespace blink
 
 #endif

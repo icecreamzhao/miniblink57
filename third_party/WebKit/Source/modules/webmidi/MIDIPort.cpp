@@ -28,10 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "modules/webmidi/MIDIPort.h"
 
 #include "bindings/core/v8/ScriptPromise.h"
@@ -39,7 +35,6 @@
 #include "modules/webmidi/MIDIAccess.h"
 #include "modules/webmidi/MIDIConnectionEvent.h"
 
-<<<<<<< HEAD
 using midi::mojom::PortState;
 
 namespace blink {
@@ -52,35 +47,17 @@ MIDIPort::MIDIPort(MIDIAccess* access,
     const String& version,
     PortState state)
     : ContextLifecycleObserver(access->getExecutionContext())
-=======
-namespace blink {
-
-using PortState = MIDIAccessor::MIDIPortState;
-
-MIDIPort::MIDIPort(MIDIAccess* access, const String& id, const String& manufacturer, const String& name, TypeCode type, const String& version, PortState state)
-    : ActiveDOMObject(access->executionContext())
->>>>>>> miniblink49
     , m_id(id)
     , m_manufacturer(manufacturer)
     , m_name(name)
     , m_type(type)
     , m_version(version)
-<<<<<<< HEAD
     , m_access(this, access)
     , m_connection(ConnectionStateClosed)
 {
     DCHECK(access);
     DCHECK(type == TypeInput || type == TypeOutput);
     DCHECK(state == PortState::DISCONNECTED || state == PortState::CONNECTED);
-=======
-    , m_access(access)
-    , m_connection(ConnectionStateClosed)
-{
-    ASSERT(access);
-    ASSERT(type == TypeInput || type == TypeOutput);
-    ASSERT(state == PortState::MIDIPortStateDisconnected
-        || state == PortState::MIDIPortStateConnected);
->>>>>>> miniblink49
     m_state = state;
 }
 
@@ -100,18 +77,12 @@ String MIDIPort::connection() const
 String MIDIPort::state() const
 {
     switch (m_state) {
-<<<<<<< HEAD
     case PortState::DISCONNECTED:
         return "disconnected";
     case PortState::CONNECTED:
         return "connected";
     case PortState::OPENED:
         NOTREACHED();
-=======
-    case PortState::MIDIPortStateDisconnected:
-        return "disconnected";
-    case PortState::MIDIPortStateConnected:
->>>>>>> miniblink49
         return "connected";
     }
     return emptyString();
@@ -147,7 +118,6 @@ ScriptPromise MIDIPort::close(ScriptState* scriptState)
 void MIDIPort::setState(PortState state)
 {
     switch (state) {
-<<<<<<< HEAD
     case PortState::DISCONNECTED:
         switch (m_connection) {
         case ConnectionStateOpen:
@@ -164,29 +134,10 @@ void MIDIPort::setState(PortState state)
         switch (m_connection) {
         case ConnectionStateOpen:
             NOTREACHED();
-=======
-    case PortState::MIDIPortStateDisconnected:
-        switch (m_connection) {
-        case ConnectionStateOpen:
-        case ConnectionStatePending:
-            setStates(PortState::MIDIPortStateDisconnected, ConnectionStatePending);
-            break;
-        case ConnectionStateClosed:
-            // Will do nothing.
-            setStates(PortState::MIDIPortStateDisconnected, ConnectionStateClosed);
-            break;
-        }
-        break;
-    case PortState::MIDIPortStateConnected:
-        switch (m_connection) {
-        case ConnectionStateOpen:
-            ASSERT_NOT_REACHED();
->>>>>>> miniblink49
             break;
         case ConnectionStatePending:
             // We do not use |setStates| in order not to dispatch events twice.
             // |open| calls |setStates|.
-<<<<<<< HEAD
             m_state = PortState::CONNECTED;
             open();
             break;
@@ -204,22 +155,6 @@ void MIDIPort::setState(PortState state)
 ExecutionContext* MIDIPort::getExecutionContext() const
 {
     return m_access->getExecutionContext();
-=======
-            m_state = PortState::MIDIPortStateConnected;
-            open();
-            break;
-        case ConnectionStateClosed:
-            setStates(PortState::MIDIPortStateConnected, ConnectionStateClosed);
-            break;
-        }
-        break;
-    }
-}
-
-ExecutionContext* MIDIPort::executionContext() const
-{
-    return m_access->executionContext();
->>>>>>> miniblink49
 }
 
 bool MIDIPort::hasPendingActivity() const
@@ -229,11 +164,7 @@ bool MIDIPort::hasPendingActivity() const
     return m_connection != ConnectionStateClosed;
 }
 
-<<<<<<< HEAD
 void MIDIPort::contextDestroyed(ExecutionContext*)
-=======
-void MIDIPort::stop()
->>>>>>> miniblink49
 {
     // Should be "closed" to assume there are no pending activities.
     m_connection = ConnectionStateClosed;
@@ -242,7 +173,6 @@ void MIDIPort::stop()
 DEFINE_TRACE(MIDIPort)
 {
     visitor->trace(m_access);
-<<<<<<< HEAD
     EventTargetWithInlineData::trace(visitor);
     ContextLifecycleObserver::trace(visitor);
 }
@@ -251,42 +181,27 @@ DEFINE_TRACE_WRAPPERS(MIDIPort)
 {
     visitor->traceWrappers(m_access);
     EventTargetWithInlineData::traceWrappers(visitor);
-=======
-    RefCountedGarbageCollectedEventTargetWithInlineData<MIDIPort>::trace(visitor);
-    ActiveDOMObject::trace(visitor);
->>>>>>> miniblink49
 }
 
 void MIDIPort::open()
 {
     switch (m_state) {
-<<<<<<< HEAD
     case PortState::DISCONNECTED:
         setStates(m_state, ConnectionStatePending);
         break;
     case PortState::CONNECTED:
-=======
-    case PortState::MIDIPortStateDisconnected:
-        setStates(m_state, ConnectionStatePending);
-        break;
-    case PortState::MIDIPortStateConnected:
->>>>>>> miniblink49
         // TODO(toyoshim): Add blink API to perform a real open and close
         // operation.
         setStates(m_state, ConnectionStateOpen);
         break;
-<<<<<<< HEAD
     case PortState::OPENED:
         NOTREACHED();
         break;
-=======
->>>>>>> miniblink49
     }
 }
 
 ScriptPromise MIDIPort::accept(ScriptState* scriptState)
 {
-<<<<<<< HEAD
     return ScriptPromise::cast(
         scriptState,
         ToV8(this, scriptState->context()->Global(), scriptState->isolate()));
@@ -298,23 +213,11 @@ ScriptPromise MIDIPort::reject(ScriptState* scriptState,
 {
     return ScriptPromise::rejectWithDOMException(
         scriptState, DOMException::create(ec, message));
-=======
-    return ScriptPromise::cast(scriptState, toV8(this, scriptState->context()->Global(), scriptState->isolate()));
-}
-
-ScriptPromise MIDIPort::reject(ScriptState* scriptState, ExceptionCode ec, const String& message)
-{
-    return ScriptPromise::rejectWithDOMException(scriptState, DOMException::create(ec, message));
->>>>>>> miniblink49
 }
 
 void MIDIPort::setStates(PortState state, ConnectionState connection)
 {
-<<<<<<< HEAD
     DCHECK(state != PortState::DISCONNECTED || connection != ConnectionStateOpen);
-=======
-    ASSERT(state != PortState::MIDIPortStateDisconnected || connection != ConnectionStateOpen);
->>>>>>> miniblink49
     if (m_state == state && m_connection == connection)
         return;
     m_state = state;

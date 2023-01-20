@@ -28,13 +28,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 // https://wicg.github.io/entries-api/#html-data
 
 partial interface DataTransferItem {
     [CallWith=ScriptState, Measure] Entry? webkitGetAsEntry();
-=======
-partial interface DataTransferItem {
-    [CallWith=ExecutionContext] Entry webkitGetAsEntry();
->>>>>>> miniblink49
 };

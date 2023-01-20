@@ -19,47 +19,47 @@ class WrappableBase;
 // Base class for gin::Wrappable-derived classes that want to implement a
 // property interceptor.
 class GIN_EXPORT NamedPropertyInterceptor {
- public:
-  NamedPropertyInterceptor(v8::Isolate* isolate, WrappableBase* base);
-  virtual ~NamedPropertyInterceptor();
+public:
+    NamedPropertyInterceptor(v8::Isolate* isolate, WrappableBase* base);
+    virtual ~NamedPropertyInterceptor();
 
-  virtual v8::Local<v8::Value> GetNamedProperty(v8::Isolate* isolate,
-                                                const std::string& property);
-  // Return true if the set was interecepted.
-  virtual bool SetNamedProperty(v8::Isolate* isolate,
-                                const std::string& property,
-                                v8::Local<v8::Value> value);
-  virtual std::vector<std::string> EnumerateNamedProperties(
-      v8::Isolate* isolate);
+    virtual v8::Local<v8::Value> GetNamedProperty(v8::Isolate* isolate,
+        const std::string& property);
+    // Return true if the set was interecepted.
+    virtual bool SetNamedProperty(v8::Isolate* isolate,
+        const std::string& property,
+        v8::Local<v8::Value> value);
+    virtual std::vector<std::string> EnumerateNamedProperties(
+        v8::Isolate* isolate);
 
- private:
-  v8::Isolate* isolate_;
-  WrappableBase* base_;
+private:
+    v8::Isolate* isolate_;
+    WrappableBase* base_;
 
-  DISALLOW_COPY_AND_ASSIGN(NamedPropertyInterceptor);
+    DISALLOW_COPY_AND_ASSIGN(NamedPropertyInterceptor);
 };
 
 class GIN_EXPORT IndexedPropertyInterceptor {
- public:
-  IndexedPropertyInterceptor(v8::Isolate* isolate, WrappableBase* base);
-  virtual ~IndexedPropertyInterceptor();
+public:
+    IndexedPropertyInterceptor(v8::Isolate* isolate, WrappableBase* base);
+    virtual ~IndexedPropertyInterceptor();
 
-  virtual v8::Local<v8::Value> GetIndexedProperty(v8::Isolate* isolate,
-                                                  uint32_t index);
-  // Return true if the set was interecepted.
-  virtual bool SetIndexedProperty(v8::Isolate* isolate,
-                                  uint32_t index,
-                                  v8::Local<v8::Value> value);
-  virtual std::vector<uint32_t> EnumerateIndexedProperties(
-      v8::Isolate* isolate);
+    virtual v8::Local<v8::Value> GetIndexedProperty(v8::Isolate* isolate,
+        uint32_t index);
+    // Return true if the set was interecepted.
+    virtual bool SetIndexedProperty(v8::Isolate* isolate,
+        uint32_t index,
+        v8::Local<v8::Value> value);
+    virtual std::vector<uint32_t> EnumerateIndexedProperties(
+        v8::Isolate* isolate);
 
- private:
-  v8::Isolate* isolate_;
-  WrappableBase* base_;
+private:
+    v8::Isolate* isolate_;
+    WrappableBase* base_;
 
-  DISALLOW_COPY_AND_ASSIGN(IndexedPropertyInterceptor);
+    DISALLOW_COPY_AND_ASSIGN(IndexedPropertyInterceptor);
 };
 
-}  // namespace gin
+} // namespace gin
 
-#endif  // GIN_INTERCEPTOR_H_
+#endif // GIN_INTERCEPTOR_H_

@@ -2,11 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
 // https://html.spec.whatwg.org/multipage/webstorage.html#the-storageevent-interface
-=======
-// http://dev.w3.org/html5/webstorage/#the-storage-event
->>>>>>> miniblink49
 
 dictionary StorageEventInit : EventInit {
     DOMString? key;

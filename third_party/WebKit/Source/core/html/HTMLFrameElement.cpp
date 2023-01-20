@@ -21,7 +21,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/html/HTMLFrameElement.h"
 
 #include "core/HTMLNames.h"
@@ -45,7 +44,7 @@ DEFINE_NODE_FACTORY(HTMLFrameElement)
 bool HTMLFrameElement::layoutObjectIsNeeded(const ComputedStyle&)
 {
     // For compatibility, frames render even when display: none is set.
-    return isURLAllowed();
+    return contentFrame();
 }
 
 LayoutObject* HTMLFrameElement::createLayoutObject(const ComputedStyle&)
@@ -58,9 +57,9 @@ bool HTMLFrameElement::noResize() const
     return hasAttribute(noresizeAttr);
 }
 
-void HTMLFrameElement::attach(const AttachContext& context)
+void HTMLFrameElement::attachLayoutTree(const AttachContext& context)
 {
-    HTMLFrameElementBase::attach(context);
+    HTMLFrameElementBase::attachLayoutTree(context);
 
     if (HTMLFrameSetElement* frameSetElement = Traversal<HTMLFrameSetElement>::firstAncestor(*this)) {
         if (!m_frameBorderSet)
@@ -68,17 +67,18 @@ void HTMLFrameElement::attach(const AttachContext& context)
     }
 }
 
-void HTMLFrameElement::parseAttribute(const QualifiedName& name, const AtomicString& value)
+void HTMLFrameElement::parseAttribute(
+    const AttributeModificationParams& params)
 {
-    if (name == frameborderAttr) {
-        m_frameBorder = value.toInt();
-        m_frameBorderSet = !value.isNull();
+    if (params.name == frameborderAttr) {
+        m_frameBorder = params.newValue.toInt();
+        m_frameBorderSet = !params.newValue.isNull();
         // FIXME: If we are already attached, this has no effect.
-    } else if (name == noresizeAttr) {
+    } else if (params.name == noresizeAttr) {
         if (layoutObject())
             layoutObject()->updateFromElement();
     } else {
-        HTMLFrameElementBase::parseAttribute(name, value);
+        HTMLFrameElementBase::parseAttribute(params);
     }
 }
 

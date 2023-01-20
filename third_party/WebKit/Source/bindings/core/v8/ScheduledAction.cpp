@@ -28,11 +28,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "bindings/core/v8/ScheduledAction.h"
 
 #include "bindings/core/v8/ScriptController.h"
 #include "bindings/core/v8/ScriptSourceCode.h"
+#include "bindings/core/v8/SourceLocation.h"
 #include "bindings/core/v8/V8Binding.h"
 #include "bindings/core/v8/V8GCController.h"
 #include "bindings/core/v8/V8ScriptRunner.h"
@@ -41,20 +41,22 @@
 #include "core/frame/LocalFrame.h"
 #include "core/workers/WorkerGlobalScope.h"
 #include "core/workers/WorkerThread.h"
-#include "platform/Logging.h"
-#include "platform/TraceEvent.h"
+#include "platform/instrumentation/tracing/TraceEvent.h"
 
 namespace blink {
 
-PassOwnPtrWillBeRawPtr<ScheduledAction> ScheduledAction::create(ScriptState* scriptState, const ScriptValue& handler, const Vector<ScriptValue>& arguments)
+ScheduledAction* ScheduledAction::create(ScriptState* scriptState,
+    const ScriptValue& handler,
+    const Vector<ScriptValue>& arguments)
 {
     ASSERT(handler.isFunction());
-    return adoptPtrWillBeNoop(new ScheduledAction(scriptState, handler, arguments));
+    return new ScheduledAction(scriptState, handler, arguments);
 }
 
-PassOwnPtrWillBeRawPtr<ScheduledAction> ScheduledAction::create(ScriptState* scriptState, const String& handler)
+ScheduledAction* ScheduledAction::create(ScriptState* scriptState,
+    const String& handler)
 {
-    return adoptPtrWillBeNoop(new ScheduledAction(scriptState, handler));
+    return new ScheduledAction(scriptState, handler);
 }
 
 DEFINE_TRACE(ScheduledAction)
@@ -64,6 +66,16 @@ DEFINE_TRACE(ScheduledAction)
 
 ScheduledAction::~ScheduledAction()
 {
+    // Verify that owning DOMTimer has eagerly disposed.
+    DCHECK(m_info.IsEmpty());
+}
+
+void ScheduledAction::dispose()
+{
+    m_code.dispose();
+    m_info.Clear();
+    m_function.clear();
+    m_scriptState.clear();
 }
 
 void ScheduledAction::execute(ExecutionContext* context)
@@ -71,27 +83,31 @@ void ScheduledAction::execute(ExecutionContext* context)
     if (context->isDocument()) {
         LocalFrame* frame = toDocument(context)->frame();
         if (!frame) {
-            WTF_LOG(Timers, "ScheduledAction::execute %p: no frame", this);
+            DVLOG(1) << "ScheduledAction::execute " << this << ": no frame";
             return;
         }
         if (!frame->script().canExecuteScripts(AboutToExecuteScript)) {
-            WTF_LOG(Timers, "ScheduledAction::execute %p: frame can not execute scripts", this);
+            DVLOG(1) << "ScheduledAction::execute " << this
+                     << ": frame can not execute scripts";
             return;
         }
         execute(frame);
     } else {
-        WTF_LOG(Timers, "ScheduledAction::execute %p: worker scope", this);
+        DVLOG(1) << "ScheduledAction::execute " << this << ": worker scope";
         execute(toWorkerGlobalScope(context));
     }
 }
 
-ScheduledAction::ScheduledAction(ScriptState* scriptState, const ScriptValue& function, const Vector<ScriptValue>& arguments)
+ScheduledAction::ScheduledAction(ScriptState* scriptState,
+    const ScriptValue& function,
+    const Vector<ScriptValue>& arguments)
     : m_scriptState(scriptState)
     , m_info(scriptState->isolate())
     , m_code(String(), KURL(), TextPosition::belowRangePosition())
 {
     ASSERT(function.isFunction());
-    m_function.set(scriptState->isolate(), v8::Local<v8::Function>::Cast(function.v8Value()));
+    m_function.set(scriptState->isolate(),
+        v8::Local<v8::Function>::Cast(function.v8Value()));
     m_info.ReserveCapacity(arguments.size());
     for (const ScriptValue& argument : arguments)
         m_info.Append(argument.v8Value());
@@ -107,46 +123,71 @@ ScheduledAction::ScheduledAction(ScriptState* scriptState, const String& code)
 void ScheduledAction::execute(LocalFrame* frame)
 {
     if (!m_scriptState->contextIsValid()) {
-        WTF_LOG(Timers, "ScheduledAction::execute %p: context is empty", this);
+        DVLOG(1) << "ScheduledAction::execute " << this << ": context is empty";
         return;
     }
 
     TRACE_EVENT0("v8", "ScheduledAction::execute");
     ScriptState::Scope scope(m_scriptState.get());
     if (!m_function.isEmpty()) {
-        WTF_LOG(Timers, "ScheduledAction::execute %p: have function", this);
+        DVLOG(1) << "ScheduledAction::execute " << this << ": have function";
+        v8::Local<v8::Function> function = m_function.newLocal(m_scriptState->isolate());
+        ScriptState* scriptStateForFunc = ScriptState::from(function->CreationContext());
+        if (!scriptStateForFunc->contextIsValid()) {
+            DVLOG(1) << "ScheduledAction::execute " << this
+                     << ": function's context is empty";
+            return;
+        }
         Vector<v8::Local<v8::Value>> info;
         createLocalHandlesForArgs(&info);
-        frame->script().callFunction(m_function.newLocal(m_scriptState->isolate()), m_scriptState->context()->Global(), info.size(), info.data());
+        V8ScriptRunner::callFunction(
+            function, frame->document(), m_scriptState->context()->Global(),
+            info.size(), info.data(), m_scriptState->isolate());
     } else {
-        WTF_LOG(Timers, "ScheduledAction::execute %p: executing from source", this);
-        frame->script().executeScriptAndReturnValue(m_scriptState->context(), ScriptSourceCode(m_code));
+        DVLOG(1) << "ScheduledAction::execute " << this
+                 << ": executing from source";
+        frame->script().executeScriptAndReturnValue(m_scriptState->context(),
+            ScriptSourceCode(m_code));
     }
 
-    // The frame might be invalid at this point because JavaScript could have released it.
+    // The frame might be invalid at this point because JavaScript could have
+    // released it.
 }
 
 void ScheduledAction::execute(WorkerGlobalScope* worker)
 {
-#ifndef MINIBLINK_NOT_IMPLEMENTED_WEBWORKER
     ASSERT(worker->thread()->isCurrentThread());
-    ASSERT(m_scriptState->contextIsValid());
+
+    if (!m_scriptState->contextIsValid()) {
+        DVLOG(1) << "ScheduledAction::execute " << this << ": context is empty";
+        return;
+    }
+
     if (!m_function.isEmpty()) {
         ScriptState::Scope scope(m_scriptState.get());
+        v8::Local<v8::Function> function = m_function.newLocal(m_scriptState->isolate());
+        ScriptState* scriptStateForFunc = ScriptState::from(function->CreationContext());
+        if (!scriptStateForFunc->contextIsValid()) {
+            DVLOG(1) << "ScheduledAction::execute " << this
+                     << ": function's context is empty";
+            return;
+        }
         Vector<v8::Local<v8::Value>> info;
         createLocalHandlesForArgs(&info);
-        V8ScriptRunner::callFunction(m_function.newLocal(m_scriptState->isolate()), worker, m_scriptState->context()->Global(), info.size(), info.data(), m_scriptState->isolate());
+        V8ScriptRunner::callFunction(
+            function, worker, m_scriptState->context()->Global(), info.size(),
+            info.data(), m_scriptState->isolate());
     } else {
-        worker->script()->evaluate(m_code);
+        worker->scriptController()->evaluate(m_code);
     }
-#endif // MINIBLINK_NOT_IMPLEMENTED_WEBWORKER
 }
 
-void ScheduledAction::createLocalHandlesForArgs(Vector<v8::Local<v8::Value>>* handles)
+void ScheduledAction::createLocalHandlesForArgs(
+    Vector<v8::Local<v8::Value>>* handles)
 {
     handles->reserveCapacity(m_info.Size());
     for (size_t i = 0; i < m_info.Size(); ++i)
-        handles->append(m_info.Get(i));
+        handles->push_back(m_info.Get(i));
 }
 
 } // namespace blink

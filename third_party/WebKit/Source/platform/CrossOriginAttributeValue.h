@@ -16,7 +16,3 @@ enum CrossOriginAttributeValue {
 } // namespace blink
 
 #endif
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49

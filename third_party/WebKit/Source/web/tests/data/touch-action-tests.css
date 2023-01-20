@@ -70,14 +70,11 @@ body {
   overflow: scroll;
   height: 50px;
 }
-<<<<<<< HEAD
 iframe {
   height: 50px;
   display: block;
   margin: 5px;
 }
-=======
->>>>>>> miniblink49
 .spacer {
   height: 500px;
 }

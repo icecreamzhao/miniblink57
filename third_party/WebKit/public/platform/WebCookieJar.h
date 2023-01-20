@@ -36,7 +36,6 @@
 namespace blink {
 
 class WebURL;
-<<<<<<< HEAD
 
 class WebCookieJar {
 public:
@@ -52,17 +51,6 @@ public:
     {
         return true;
     }
-=======
-struct WebCookie;
-template <typename T> class WebVector;
-
-class WebCookieJar {
-public:
-    virtual void setCookie(const WebURL&, const WebURL& firstPartyForCookies, const WebString& cookie) { }
-    virtual WebString cookies(const WebURL&, const WebURL& firstPartyForCookies) { return WebString(); }
-    virtual WebString cookieRequestHeaderFieldValue(const WebURL&, const WebURL& firstPartyForCookies) { return WebString(); }
-    virtual bool cookiesEnabled(const WebURL&, const WebURL& firstPartyForCookies) { return true; }
->>>>>>> miniblink49
 
 protected:
     ~WebCookieJar() { }

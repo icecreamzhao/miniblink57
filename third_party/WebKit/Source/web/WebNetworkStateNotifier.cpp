@@ -28,10 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "public/web/WebNetworkStateNotifier.h"
 
 #include "core/page/NetworkStateNotifier.h"
@@ -43,16 +39,10 @@ void WebNetworkStateNotifier::setOnLine(bool onLine)
     networkStateNotifier().setOnLine(onLine);
 }
 
-<<<<<<< HEAD
 void WebNetworkStateNotifier::setWebConnection(WebConnectionType type,
     double maxBandwidthMbps)
 {
     networkStateNotifier().setWebConnection(type, maxBandwidthMbps);
-=======
-void WebNetworkStateNotifier::setWebConnectionType(WebConnectionType type)
-{
-    networkStateNotifier().setWebConnectionType(type);
->>>>>>> miniblink49
 }
 
 } // namespace blink

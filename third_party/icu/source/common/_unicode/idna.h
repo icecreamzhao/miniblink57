@@ -86,13 +86,8 @@ public:
      * @return the UTS #46 IDNA instance, if successful
      * @stable ICU 4.6
      */
-<<<<<<< HEAD
     static IDNA*
     createUTS46Instance(uint32_t options, UErrorCode& errorCode);
-=======
-    static IDNA *
-    createUTS46Instance(uint32_t options, UErrorCode &errorCode);
->>>>>>> miniblink49
 
     /**
      * Converts a single domain name label into its ASCII form for DNS lookup.
@@ -114,15 +109,9 @@ public:
      * @return dest
      * @stable ICU 4.6
      */
-<<<<<<< HEAD
     virtual UnicodeString&
     labelToASCII(const UnicodeString& label, UnicodeString& dest,
         IDNAInfo& info, UErrorCode& errorCode) const = 0;
-=======
-    virtual UnicodeString &
-    labelToASCII(const UnicodeString &label, UnicodeString &dest,
-                 IDNAInfo &info, UErrorCode &errorCode) const = 0;
->>>>>>> miniblink49
 
     /**
      * Converts a single domain name label into its Unicode form for human-readable display.
@@ -142,15 +131,9 @@ public:
      * @return dest
      * @stable ICU 4.6
      */
-<<<<<<< HEAD
     virtual UnicodeString&
     labelToUnicode(const UnicodeString& label, UnicodeString& dest,
         IDNAInfo& info, UErrorCode& errorCode) const = 0;
-=======
-    virtual UnicodeString &
-    labelToUnicode(const UnicodeString &label, UnicodeString &dest,
-                   IDNAInfo &info, UErrorCode &errorCode) const = 0;
->>>>>>> miniblink49
 
     /**
      * Converts a whole domain name into its ASCII form for DNS lookup.
@@ -172,15 +155,9 @@ public:
      * @return dest
      * @stable ICU 4.6
      */
-<<<<<<< HEAD
     virtual UnicodeString&
     nameToASCII(const UnicodeString& name, UnicodeString& dest,
         IDNAInfo& info, UErrorCode& errorCode) const = 0;
-=======
-    virtual UnicodeString &
-    nameToASCII(const UnicodeString &name, UnicodeString &dest,
-                IDNAInfo &info, UErrorCode &errorCode) const = 0;
->>>>>>> miniblink49
 
     /**
      * Converts a whole domain name into its Unicode form for human-readable display.
@@ -200,15 +177,9 @@ public:
      * @return dest
      * @stable ICU 4.6
      */
-<<<<<<< HEAD
     virtual UnicodeString&
     nameToUnicode(const UnicodeString& name, UnicodeString& dest,
         IDNAInfo& info, UErrorCode& errorCode) const = 0;
-=======
-    virtual UnicodeString &
-    nameToUnicode(const UnicodeString &name, UnicodeString &dest,
-                  IDNAInfo &info, UErrorCode &errorCode) const = 0;
->>>>>>> miniblink49
 
     // UTF-8 versions of the processing methods ---------------------------- ***
 
@@ -227,13 +198,8 @@ public:
      * @stable ICU 4.6
      */
     virtual void
-<<<<<<< HEAD
     labelToASCII_UTF8(const StringPiece& label, ByteSink& dest,
         IDNAInfo& info, UErrorCode& errorCode) const;
-=======
-    labelToASCII_UTF8(const StringPiece &label, ByteSink &dest,
-                      IDNAInfo &info, UErrorCode &errorCode) const;
->>>>>>> miniblink49
 
     /**
      * Converts a single domain name label into its Unicode form for human-readable display.
@@ -250,13 +216,8 @@ public:
      * @stable ICU 4.6
      */
     virtual void
-<<<<<<< HEAD
     labelToUnicodeUTF8(const StringPiece& label, ByteSink& dest,
         IDNAInfo& info, UErrorCode& errorCode) const;
-=======
-    labelToUnicodeUTF8(const StringPiece &label, ByteSink &dest,
-                       IDNAInfo &info, UErrorCode &errorCode) const;
->>>>>>> miniblink49
 
     /**
      * Converts a whole domain name into its ASCII form for DNS lookup.
@@ -273,13 +234,8 @@ public:
      * @stable ICU 4.6
      */
     virtual void
-<<<<<<< HEAD
     nameToASCII_UTF8(const StringPiece& name, ByteSink& dest,
         IDNAInfo& info, UErrorCode& errorCode) const;
-=======
-    nameToASCII_UTF8(const StringPiece &name, ByteSink &dest,
-                     IDNAInfo &info, UErrorCode &errorCode) const;
->>>>>>> miniblink49
 
     /**
      * Converts a whole domain name into its Unicode form for human-readable display.
@@ -296,13 +252,8 @@ public:
      * @stable ICU 4.6
      */
     virtual void
-<<<<<<< HEAD
     nameToUnicodeUTF8(const StringPiece& name, ByteSink& dest,
         IDNAInfo& info, UErrorCode& errorCode) const;
-=======
-    nameToUnicodeUTF8(const StringPiece &name, ByteSink &dest,
-                      IDNAInfo &info, UErrorCode &errorCode) const;
->>>>>>> miniblink49
 };
 
 class UTS46;
@@ -318,7 +269,6 @@ public:
      * Constructor for stack allocation.
      * @stable ICU 4.6
      */
-<<<<<<< HEAD
     IDNAInfo()
         : errors(0)
         , labelErrors(0)
@@ -327,19 +277,12 @@ public:
         , isOkBiDi(TRUE)
     {
     }
-=======
-    IDNAInfo() : errors(0), labelErrors(0), isTransDiff(FALSE), isBiDi(FALSE), isOkBiDi(TRUE) {}
->>>>>>> miniblink49
     /**
      * Were there IDNA processing errors?
      * @return TRUE if there were processing errors
      * @stable ICU 4.6
      */
-<<<<<<< HEAD
     UBool hasErrors() const { return errors != 0; }
-=======
-    UBool hasErrors() const { return errors!=0; }
->>>>>>> miniblink49
     /**
      * Returns a bit set indicating IDNA processing errors.
      * See UIDNA_ERROR_... constants in uidna.h.
@@ -365,7 +308,6 @@ public:
 private:
     friend class UTS46;
 
-<<<<<<< HEAD
     IDNAInfo(const IDNAInfo& other); // no copying
     IDNAInfo& operator=(const IDNAInfo& other); // no copying
 
@@ -375,16 +317,6 @@ private:
         isTransDiff = FALSE;
         isBiDi = FALSE;
         isOkBiDi = TRUE;
-=======
-    IDNAInfo(const IDNAInfo &other);  // no copying
-    IDNAInfo &operator=(const IDNAInfo &other);  // no copying
-
-    void reset() {
-        errors=labelErrors=0;
-        isTransDiff=FALSE;
-        isBiDi=FALSE;
-        isOkBiDi=TRUE;
->>>>>>> miniblink49
     }
 
     uint32_t errors, labelErrors;
@@ -395,10 +327,5 @@ private:
 
 U_NAMESPACE_END
 
-<<<<<<< HEAD
 #endif // UCONFIG_NO_IDNA
 #endif // __IDNA_H__
-=======
-#endif  // UCONFIG_NO_IDNA
-#endif  // __IDNA_H__
->>>>>>> miniblink49

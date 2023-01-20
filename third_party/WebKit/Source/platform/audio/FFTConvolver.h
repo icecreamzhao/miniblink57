@@ -31,48 +31,32 @@
 
 #include "platform/audio/AudioArray.h"
 #include "platform/audio/FFTFrame.h"
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/Noncopyable.h"
-=======
->>>>>>> miniblink49
 
 namespace blink {
 
 class PLATFORM_EXPORT FFTConvolver {
-<<<<<<< HEAD
     USING_FAST_MALLOC(FFTConvolver);
     WTF_MAKE_NONCOPYABLE(FFTConvolver);
 
-=======
->>>>>>> miniblink49
 public:
     // fftSize must be a power of two
     FFTConvolver(size_t fftSize);
 
-<<<<<<< HEAD
     // For now, with multiple calls to Process(), framesToProcess MUST add up
     // EXACTLY to fftSize / 2
     //
     // FIXME: Later, we can do more sophisticated buffering to relax this
     // requirement...
-=======
-    // For now, with multiple calls to Process(), framesToProcess MUST add up EXACTLY to fftSize / 2
-    //
-    // FIXME: Later, we can do more sophisticated buffering to relax this requirement...
->>>>>>> miniblink49
     //
     // The input to output latency is equal to fftSize / 2
     //
     // Processing in-place is allowed...
-<<<<<<< HEAD
     void process(FFTFrame* fftKernel,
         const float* sourceP,
         float* destP,
         size_t framesToProcess);
-=======
-    void process(FFTFrame* fftKernel, const float* sourceP, float* destP, size_t framesToProcess);
->>>>>>> miniblink49
 
     void reset();
 
@@ -88,12 +72,8 @@ private:
     // Stores output which we read a little at a time
     AudioFloatArray m_outputBuffer;
 
-<<<<<<< HEAD
     // Saves the 2nd half of the FFT buffer, so we can do an overlap-add with the
     // 1st half of the next one
-=======
-    // Saves the 2nd half of the FFT buffer, so we can do an overlap-add with the 1st half of the next one
->>>>>>> miniblink49
     AudioFloatArray m_lastOverlapBuffer;
 };
 

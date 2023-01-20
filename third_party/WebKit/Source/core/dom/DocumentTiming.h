@@ -26,35 +26,53 @@
 #ifndef DocumentTiming_h
 #define DocumentTiming_h
 
+#include "platform/heap/Handle.h"
+
 namespace blink {
 
-class DocumentTiming {
+class Document;
+class LocalFrame;
+
+class DocumentTiming final {
+    DISALLOW_NEW();
+
 public:
-    DocumentTiming();
+    explicit DocumentTiming(Document&);
 
-    void setDomLoading(double);
-    void setDomInteractive(double);
-    void setDomContentLoadedEventStart(double);
-    void setDomContentLoadedEventEnd(double);
-    void setDomComplete(double);
-    void setFirstLayout(double);
+    void markDomLoading();
+    void markDomInteractive();
+    void markDomContentLoadedEventStart();
+    void markDomContentLoadedEventEnd();
+    void markDomComplete();
+    void markFirstLayout();
 
+    // These return monotonically-increasing seconds.
     double domLoading() const { return m_domLoading; }
     double domInteractive() const { return m_domInteractive; }
-    double domContentLoadedEventStart() const { return m_domContentLoadedEventStart; }
+    double domContentLoadedEventStart() const
+    {
+        return m_domContentLoadedEventStart;
+    }
     double domContentLoadedEventEnd() const { return m_domContentLoadedEventEnd; }
     double domComplete() const { return m_domComplete; }
     double firstLayout() const { return m_firstLayout; }
 
+    DECLARE_TRACE();
+
 private:
-    double m_domLoading;
-    double m_domInteractive;
-    double m_domContentLoadedEventStart;
-    double m_domContentLoadedEventEnd;
-    double m_domComplete;
-    double m_firstLayout;
+    LocalFrame* frame() const;
+    void notifyDocumentTimingChanged();
+
+    double m_domLoading = 0.0;
+    double m_domInteractive = 0.0;
+    double m_domContentLoadedEventStart = 0.0;
+    double m_domContentLoadedEventEnd = 0.0;
+    double m_domComplete = 0.0;
+    double m_firstLayout = 0.0;
+
+    Member<Document> m_document;
 };
 
-}
+} // namespace blink
 
 #endif

@@ -2,17 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
 #include "platform/weborigin/KnownPorts.h"
 #include "platform/weborigin/KURL.h"
 
 #include "testing/gtest/include/gtest/gtest.h"
-=======
-#include "config.h"
-#include "platform/weborigin/KnownPorts.h"
-
-#include <gtest/gtest.h>
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -22,21 +15,12 @@ TEST(KnownPortsTest, IsDefaultPortForProtocol)
         const unsigned short port;
         const char* protocol;
         const bool isKnown;
-<<<<<<< HEAD
     } inputs[] = {
         // Known ones.
         { 80, "http", true },
         { 443, "https", true },
         { 80, "ws", true },
         { 443, "wss", true },
-=======
-    };
-
-    TestCase inputs[] = {
-        // Known ones.
-        { 80, "http", true },
-        { 443, "https", true },
->>>>>>> miniblink49
         { 21, "ftp", true },
         { 990, "ftps", true },
 
@@ -52,17 +36,12 @@ TEST(KnownPortsTest, IsDefaultPortForProtocol)
         { 443, "Https", false },
     };
 
-<<<<<<< HEAD
     for (const TestCase& test : inputs) {
-=======
-    for (TestCase test : inputs) {
->>>>>>> miniblink49
         bool result = isDefaultPortForProtocol(test.port, test.protocol);
         EXPECT_EQ(test.isKnown, result);
     }
 }
 
-<<<<<<< HEAD
 TEST(KnownPortsTest, DefaultPortForProtocol)
 {
     struct TestCase {
@@ -112,6 +91,4 @@ TEST(KnownPortsTest, IsPortAllowedForScheme)
             isPortAllowedForScheme(KURL(ParsedURLString, test.url)));
 }
 
-=======
->>>>>>> miniblink49
 } // namespace blink

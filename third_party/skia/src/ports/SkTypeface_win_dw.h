@@ -11,7 +11,6 @@
 #include "SkAdvancedTypefaceMetrics.h"
 #include "SkDWrite.h"
 #include "SkHRESULT.h"
-<<<<<<< HEAD
 #include "SkLeanWindows.h"
 #include "SkTScopedComPtr.h"
 #include "SkTypeface.h"
@@ -20,22 +19,11 @@
 #include <dwrite.h>
 #if SK_HAS_DWRITE_1_H
 #include <dwrite_1.h>
-=======
-#include "SkTScopedComPtr.h"
-#include "SkTypeface.h"
-#include "SkTypefaceCache.h"
-#include "SkTypes.h"
-
-#include <dwrite.h>
-#if SK_HAS_DWRITE_1_H
-#  include <dwrite_1.h>
->>>>>>> miniblink49
 #endif
 
 class SkFontDescriptor;
 struct SkScalerContextRec;
 
-<<<<<<< HEAD
 static SkFontStyle get_style(IDWriteFont* font)
 {
     int weight = font->GetWeight();
@@ -56,36 +44,17 @@ static SkFontStyle get_style(IDWriteFont* font)
         break;
     }
     return SkFontStyle(weight, width, slant);
-=======
-static SkFontStyle get_style(IDWriteFont* font) {
-    DWRITE_FONT_STYLE dwStyle = font->GetStyle();
-    return SkFontStyle(font->GetWeight(),
-                       font->GetStretch(),
-                       (DWRITE_FONT_STYLE_OBLIQUE == dwStyle ||
-                        DWRITE_FONT_STYLE_ITALIC  == dwStyle)
-                                                   ? SkFontStyle::kItalic_Slant
-                                                   : SkFontStyle::kUpright_Slant);
->>>>>>> miniblink49
 }
 
 class DWriteFontTypeface : public SkTypeface {
 private:
     DWriteFontTypeface(const SkFontStyle& style, SkFontID fontID,
-<<<<<<< HEAD
         IDWriteFactory* factory,
         IDWriteFontFace* fontFace,
         IDWriteFont* font,
         IDWriteFontFamily* fontFamily,
         IDWriteFontFileLoader* fontFileLoader = nullptr,
         IDWriteFontCollectionLoader* fontCollectionLoader = nullptr)
-=======
-                       IDWriteFactory* factory,
-                       IDWriteFontFace* fontFace,
-                       IDWriteFont* font,
-                       IDWriteFontFamily* fontFamily,
-                       IDWriteFontFileLoader* fontFileLoader = NULL,
-                       IDWriteFontCollectionLoader* fontCollectionLoader = NULL)
->>>>>>> miniblink49
         : SkTypeface(style, fontID, false)
         , fFactory(SkRefComPtr(factory))
         , fDWriteFontCollectionLoader(SkSafeRefComPtr(fontCollectionLoader))
@@ -96,15 +65,9 @@ private:
     {
 #if SK_HAS_DWRITE_1_H
         if (!SUCCEEDED(fDWriteFontFace->QueryInterface(&fDWriteFontFace1))) {
-<<<<<<< HEAD
             // IUnknown::QueryInterface states that if it fails, punk will be set to nullptr.
             // http://blogs.msdn.com/b/oldnewthing/archive/2004/03/26/96777.aspx
             SkASSERT_RELEASE(nullptr == fDWriteFontFace1.get());
-=======
-            // IUnknown::QueryInterface states that if it fails, punk will be set to NULL.
-            // http://blogs.msdn.com/b/oldnewthing/archive/2004/03/26/96777.aspx
-            SK_ALWAYSBREAK(NULL == fDWriteFontFace1.get());
->>>>>>> miniblink49
         }
 #endif
     }
@@ -121,7 +84,6 @@ public:
 #endif
 
     static DWriteFontTypeface* Create(IDWriteFactory* factory,
-<<<<<<< HEAD
         IDWriteFontFace* fontFace,
         IDWriteFont* font,
         IDWriteFontFamily* fontFamily,
@@ -136,21 +98,6 @@ public:
 protected:
     void weak_dispose() const override
     {
-=======
-                                      IDWriteFontFace* fontFace,
-                                      IDWriteFont* font,
-                                      IDWriteFontFamily* fontFamily,
-                                      IDWriteFontFileLoader* fontFileLoader = NULL,
-                                      IDWriteFontCollectionLoader* fontCollectionLoader = NULL) {
-        SkFontID fontID = SkTypefaceCache::NewFontID();
-        return SkNEW_ARGS(DWriteFontTypeface, (get_style(font), fontID,
-                                               factory, fontFace, font, fontFamily,
-                                               fontFileLoader, fontCollectionLoader));
-    }
-
-protected:
-    void weak_dispose() const override {
->>>>>>> miniblink49
         if (fDWriteFontCollectionLoader.get()) {
             HRV(fFactory->UnregisterFontCollectionLoader(fDWriteFontCollectionLoader.get()));
         }
@@ -163,7 +110,6 @@ protected:
     }
 
     SkStreamAsset* onOpenStream(int* ttcIndex) const override;
-<<<<<<< HEAD
     SkScalerContext* onCreateScalerContext(const SkScalerContextEffects&,
         const SkDescriptor*) const override;
     void onFilterRec(SkScalerContextRec*) const override;
@@ -172,26 +118,13 @@ protected:
     void onGetFontDescriptor(SkFontDescriptor*, bool*) const override;
     virtual int onCharsToGlyphs(const void* chars, Encoding encoding,
         uint16_t glyphs[], int glyphCount) const override;
-=======
-    SkScalerContext* onCreateScalerContext(const SkDescriptor*) const override;
-    void onFilterRec(SkScalerContextRec*) const override;
-    SkAdvancedTypefaceMetrics* onGetAdvancedTypefaceMetrics(
-                                PerGlyphInfo, const uint32_t*, uint32_t) const override;
-    void onGetFontDescriptor(SkFontDescriptor*, bool*) const override;
-    virtual int onCharsToGlyphs(const void* chars, Encoding encoding,
-                                uint16_t glyphs[], int glyphCount) const override;
->>>>>>> miniblink49
     int onCountGlyphs() const override;
     int onGetUPEM() const override;
     void onGetFamilyName(SkString* familyName) const override;
     SkTypeface::LocalizedStrings* onCreateFamilyNameIterator() const override;
     int onGetTableTags(SkFontTableTag tags[]) const override;
     virtual size_t onGetTableData(SkFontTableTag, size_t offset,
-<<<<<<< HEAD
         size_t length, void* data) const override;
-=======
-                                  size_t length, void* data) const override;
->>>>>>> miniblink49
 
 private:
     typedef SkTypeface INHERITED;

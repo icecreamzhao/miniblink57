@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/dom/PresentationAttributeStyle.h"
 
 #include "core/css/StylePropertySet.h"
@@ -39,42 +38,52 @@
 #include "wtf/HashFunctions.h"
 #include "wtf/HashMap.h"
 #include "wtf/text/CString.h"
+#include <algorithm>
 
 namespace blink {
 
 using namespace HTMLNames;
 
 struct PresentationAttributeCacheKey {
-    PresentationAttributeCacheKey() : tagName(nullptr) { }
+    PresentationAttributeCacheKey()
+        : tagName(nullptr)
+    {
+    }
     StringImpl* tagName;
     Vector<std::pair<StringImpl*, AtomicString>, 3> attributesAndValues;
 };
 
-static bool operator!=(const PresentationAttributeCacheKey& a, const PresentationAttributeCacheKey& b)
+static bool operator!=(const PresentationAttributeCacheKey& a,
+    const PresentationAttributeCacheKey& b)
 {
     if (a.tagName != b.tagName)
         return true;
     return a.attributesAndValues != b.attributesAndValues;
 }
 
-struct PresentationAttributeCacheEntry final : public NoBaseWillBeGarbageCollectedFinalized<PresentationAttributeCacheEntry> {
-    WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(PresentationAttributeCacheEntry);
+struct PresentationAttributeCacheEntry final
+    : public GarbageCollectedFinalized<PresentationAttributeCacheEntry> {
 public:
     DEFINE_INLINE_TRACE() { visitor->trace(value); }
 
     PresentationAttributeCacheKey key;
-    RefPtrWillBeMember<StylePropertySet> value;
+    Member<StylePropertySet> value;
 };
 
-using PresentationAttributeCache = WillBeHeapHashMap<unsigned, OwnPtrWillBeMember<PresentationAttributeCacheEntry>, AlreadyHashed>;
+using PresentationAttributeCache = HeapHashMap<unsigned,
+    Member<PresentationAttributeCacheEntry>,
+    AlreadyHashed>;
 static PresentationAttributeCache& presentationAttributeCache()
 {
-    DEFINE_STATIC_LOCAL(OwnPtrWillBePersistent<PresentationAttributeCache>, cache, (adoptPtrWillBeNoop(new PresentationAttributeCache())));
-    return *cache;
+    DEFINE_STATIC_LOCAL(PresentationAttributeCache, cache,
+        (new PresentationAttributeCache));
+    return cache;
 }
 
 class PresentationAttributeCacheCleaner {
-    WTF_MAKE_NONCOPYABLE(PresentationAttributeCacheCleaner); WTF_MAKE_FAST_ALLOCATED(PresentationAttributeCacheCleaner);
+    WTF_MAKE_NONCOPYABLE(PresentationAttributeCacheCleaner);
+    USING_FAST_MALLOC(PresentationAttributeCacheCleaner);
+
 public:
     PresentationAttributeCacheCleaner()
         : m_hitCount(0)
@@ -90,7 +99,8 @@ public:
         m_hitCount++;
 
         if (!m_cleanTimer.isActive())
-            m_cleanTimer.startOneShot(presentationAttributeCacheCleanTimeInSeconds, FROM_HERE);
+            m_cleanTimer.startOneShot(presentationAttributeCacheCleanTimeInSeconds,
+                BLINK_FROM_HERE);
     }
 
 private:
@@ -98,9 +108,9 @@ private:
     static const unsigned minimumPresentationAttributeCacheSizeForCleaning = 100;
     static const unsigned minimumPresentationAttributeCacheHitCountPerMinute = (100 * presentationAttributeCacheCleanTimeInSeconds) / 60;
 
-    void cleanCache(Timer<PresentationAttributeCacheCleaner>* timer)
+    void cleanCache(TimerBase* timer)
     {
-        ASSERT_UNUSED(timer, timer == &m_cleanTimer);
+        DCHECK_EQ(timer, &m_cleanTimer);
         unsigned hitCount = m_hitCount;
         m_hitCount = 0;
         if (hitCount > minimumPresentationAttributeCacheHitCountPerMinute)
@@ -112,18 +122,23 @@ private:
     Timer<PresentationAttributeCacheCleaner> m_cleanTimer;
 };
 
-static bool attributeNameSort(const pair<StringImpl*, AtomicString>& p1, const pair<StringImpl*, AtomicString>& p2)
+static bool attributeNameSort(const std::pair<StringImpl*, AtomicString>& p1,
+    const std::pair<StringImpl*, AtomicString>& p2)
 {
-    // Sort based on the attribute name pointers. It doesn't matter what the order is as long as it is always the same.
+    // Sort based on the attribute name pointers. It doesn't matter what the order
+    // is as long as it is always the same.
     return p1.first < p2.first;
 }
 
-static void makePresentationAttributeCacheKey(Element& element, PresentationAttributeCacheKey& result)
+static void makePresentationAttributeCacheKey(
+    Element& element,
+    PresentationAttributeCacheKey& result)
 {
     // FIXME: Enable for SVG.
     if (!element.isHTMLElement())
         return;
-    // Interpretation of the size attributes on <input> depends on the type attribute.
+    // Interpretation of the size attributes on <input> depends on the type
+    // attribute.
     if (isHTMLInputElement(element))
         return;
     AttributeCollection attributes = element.attributesWithoutUpdate();
@@ -132,33 +147,39 @@ static void makePresentationAttributeCacheKey(Element& element, PresentationAttr
             continue;
         if (!attr.namespaceURI().isNull())
             return;
-        // FIXME: Background URL may depend on the base URL and can't be shared. Disallow caching.
+        // FIXME: Background URL may depend on the base URL and can't be shared.
+        // Disallow caching.
         if (attr.name() == backgroundAttr)
             return;
-        result.attributesAndValues.append(std::make_pair(attr.localName().impl(), attr.value()));
+        result.attributesAndValues.push_back(
+            std::make_pair(attr.localName().impl(), attr.value()));
     }
     if (result.attributesAndValues.isEmpty())
         return;
     // Attribute order doesn't matter. Sort for easy equality comparison.
-    std::sort(result.attributesAndValues.begin(), result.attributesAndValues.end(), attributeNameSort);
+    std::sort(result.attributesAndValues.begin(),
+        result.attributesAndValues.end(), attributeNameSort);
     // The cache key is non-null when the tagName is set.
     result.tagName = element.localName().impl();
 }
 
-static unsigned computePresentationAttributeCacheHash(const PresentationAttributeCacheKey& key)
+static unsigned computePresentationAttributeCacheHash(
+    const PresentationAttributeCacheKey& key)
 {
     if (!key.tagName)
         return 0;
-    ASSERT(key.attributesAndValues.size());
-    unsigned attributeHash = StringHasher::hashMemory(key.attributesAndValues.data(), key.attributesAndValues.size() * sizeof(key.attributesAndValues[0]));
-    return WTF::pairIntHash(key.tagName->existingHash(), attributeHash);
+    DCHECK(key.attributesAndValues.size());
+    unsigned attributeHash = StringHasher::hashMemory(
+        key.attributesAndValues.data(),
+        key.attributesAndValues.size() * sizeof(key.attributesAndValues[0]));
+    return WTF::hashInts(key.tagName->existingHash(), attributeHash);
 }
 
-PassRefPtrWillBeRawPtr<StylePropertySet> computePresentationAttributeStyle(Element& element)
+StylePropertySet* computePresentationAttributeStyle(Element& element)
 {
     DEFINE_STATIC_LOCAL(PresentationAttributeCacheCleaner, cacheCleaner, ());
 
-    ASSERT(element.isStyledElement());
+    DCHECK(element.isStyledElement());
 
     PresentationAttributeCacheKey cacheKey;
     makePresentationAttributeCacheKey(element, cacheKey);
@@ -174,21 +195,23 @@ PassRefPtrWillBeRawPtr<StylePropertySet> computePresentationAttributeStyle(Eleme
         cacheValue = nullptr;
     }
 
-    RefPtrWillBeRawPtr<StylePropertySet> style = nullptr;
+    StylePropertySet* style = nullptr;
     if (cacheHash && cacheValue->value) {
         style = cacheValue->value->value;
         cacheCleaner.didHitPresentationAttributeCache();
     } else {
-        style = MutableStylePropertySet::create(element.isSVGElement() ? SVGAttributeMode : HTMLAttributeMode);
+        style = MutableStylePropertySet::create(
+            element.isSVGElement() ? SVGAttributeMode : HTMLStandardMode);
         AttributeCollection attributes = element.attributesWithoutUpdate();
         for (const Attribute& attr : attributes)
-            element.collectStyleForPresentationAttribute(attr.name(), attr.value(), toMutableStylePropertySet(style));
+            element.collectStyleForPresentationAttribute(
+                attr.name(), attr.value(), toMutableStylePropertySet(style));
     }
 
     if (!cacheHash || cacheValue->value)
-        return style.release();
+        return style;
 
-    OwnPtrWillBeRawPtr<PresentationAttributeCacheEntry> newEntry = adoptPtrWillBeNoop(new PresentationAttributeCacheEntry);
+    PresentationAttributeCacheEntry* newEntry = new PresentationAttributeCacheEntry;
     newEntry->key = cacheKey;
     newEntry->value = style;
 
@@ -197,12 +220,12 @@ PassRefPtrWillBeRawPtr<StylePropertySet> computePresentationAttributeStyle(Eleme
         // FIXME: Discarding the entire cache when it gets too big is probably bad
         // since it creates a perf "cliff". Perhaps we should use an LRU?
         presentationAttributeCache().clear();
-        presentationAttributeCache().set(cacheHash, newEntry.release());
+        presentationAttributeCache().set(cacheHash, newEntry);
     } else {
-        cacheValue->value = newEntry.release();
+        cacheValue->value = newEntry;
     }
 
-    return style.release();
+    return style;
 }
 
 } // namespace blink

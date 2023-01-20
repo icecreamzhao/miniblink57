@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/svg/SVGPointList.h"
 
 #include "core/svg/SVGAnimationElement.h"
@@ -29,20 +28,9 @@
 
 namespace blink {
 
-inline PassRefPtrWillBeRawPtr<SVGPointList> toSVGPointList(PassRefPtrWillBeRawPtr<SVGPropertyBase> passBase)
-{
-    RefPtrWillBeRawPtr<SVGPropertyBase> base = passBase;
-    ASSERT(base->type() == SVGPointList::classType());
-    return static_pointer_cast<SVGPointList>(base.release());
-}
+SVGPointList::SVGPointList() { }
 
-SVGPointList::SVGPointList()
-{
-}
-
-SVGPointList::~SVGPointList()
-{
-}
+SVGPointList::~SVGPointList() { }
 
 String SVGPointList::valueAsString() const
 {
@@ -64,63 +52,54 @@ String SVGPointList::valueAsString() const
 }
 
 template <typename CharType>
-bool SVGPointList::parse(const CharType*& ptr, const CharType* end)
+SVGParsingError SVGPointList::parse(const CharType*& ptr, const CharType* end)
 {
-    clear();
+    if (!skipOptionalSVGSpaces(ptr, end))
+        return SVGParseStatus::NoError;
 
-    skipOptionalSVGSpaces(ptr, end);
-    if (ptr >= end)
-        return true;
-
+    const CharType* listStart = ptr;
     for (;;) {
-        float x = 0.0f;
-        float y = 0.0f;
-        bool valid = parseNumber(ptr, end, x) && parseNumber(ptr, end, y, DisallowWhitespace);
-        if (!valid) {
-            return false;
-        }
+        float x = 0;
+        float y = 0;
+        if (!parseNumber(ptr, end, x) || !parseNumber(ptr, end, y, DisallowWhitespace))
+            return SVGParsingError(SVGParseStatus::ExpectedNumber, ptr - listStart);
+
         append(SVGPoint::create(FloatPoint(x, y)));
 
-        skipOptionalSVGSpaces(ptr, end);
-        if (ptr < end && *ptr == ',') {
+        if (!skipOptionalSVGSpaces(ptr, end))
+            break;
+
+        if (*ptr == ',') {
             ++ptr;
             skipOptionalSVGSpaces(ptr, end);
 
             // ',' requires the list to be continued
             continue;
         }
-
-        // check end of list
-        if (ptr >= end)
-            return true;
     }
+    return SVGParseStatus::NoError;
 }
 
-void SVGPointList::setValueAsString(const String& value, ExceptionState& exceptionState)
+SVGParsingError SVGPointList::setValueAsString(const String& value)
 {
-    if (value.isEmpty()) {
-        clear();
-        return;
-    }
+    clear();
 
-    bool valid = false;
+    if (value.isEmpty())
+        return SVGParseStatus::NoError;
+
     if (value.is8Bit()) {
         const LChar* ptr = value.characters8();
         const LChar* end = ptr + value.length();
-        valid = parse(ptr, end);
-    } else {
-        const UChar* ptr = value.characters16();
-        const UChar* end = ptr + value.length();
-        valid = parse(ptr, end);
+        return parse(ptr, end);
     }
-
-    if (!valid)
-        exceptionState.throwDOMException(SyntaxError, "Problem parsing points=\""+value+"\"");
+    const UChar* ptr = value.characters16();
+    const UChar* end = ptr + value.length();
+    return parse(ptr, end);
 }
 
-void SVGPointList::add(PassRefPtrWillBeRawPtr<SVGPropertyBase> other, SVGElement* contextElement)
+void SVGPointList::add(SVGPropertyBase* other, SVGElement* contextElement)
 {
-    RefPtrWillBeRawPtr<SVGPointList> otherList = toSVGPointList(other);
+    SVGPointList* otherList = toSVGPointList(other);
 
     if (length() != otherList->length())
         return;
@@ -129,17 +108,25 @@ void SVGPointList::add(PassRefPtrWillBeRawPtr<SVGPropertyBase> other, SVGElement
         at(i)->setValue(at(i)->value() + otherList->at(i)->value());
 }
 
-void SVGPointList::calculateAnimatedValue(SVGAnimationElement* animationElement, float percentage, unsigned repeatCount, PassRefPtrWillBeRawPtr<SVGPropertyBase> fromValue, PassRefPtrWillBeRawPtr<SVGPropertyBase> toValue, PassRefPtrWillBeRawPtr<SVGPropertyBase> toAtEndOfDurationValue, SVGElement* contextElement)
+void SVGPointList::calculateAnimatedValue(
+    SVGAnimationElement* animationElement,
+    float percentage,
+    unsigned repeatCount,
+    SVGPropertyBase* fromValue,
+    SVGPropertyBase* toValue,
+    SVGPropertyBase* toAtEndOfDurationValue,
+    SVGElement* contextElement)
 {
-    RefPtrWillBeRawPtr<SVGPointList> fromList = toSVGPointList(fromValue);
-    RefPtrWillBeRawPtr<SVGPointList> toList = toSVGPointList(toValue);
-    RefPtrWillBeRawPtr<SVGPointList> toAtEndOfDurationList = toSVGPointList(toAtEndOfDurationValue);
+    SVGPointList* fromList = toSVGPointList(fromValue);
+    SVGPointList* toList = toSVGPointList(toValue);
+    SVGPointList* toAtEndOfDurationList = toSVGPointList(toAtEndOfDurationValue);
 
     size_t fromPointListSize = fromList->length();
     size_t toPointListSize = toList->length();
     size_t toAtEndOfDurationListSize = toAtEndOfDurationList->length();
 
-    if (!adjustFromToListValues(fromList, toList, percentage, animationElement->animationMode()))
+    if (!adjustFromToListValues(fromList, toList, percentage,
+            animationElement->getAnimationMode()))
         return;
 
     for (size_t i = 0; i < toPointListSize; ++i) {
@@ -154,16 +141,21 @@ void SVGPointList::calculateAnimatedValue(SVGAnimationElement* animationElement,
         if (i < toAtEndOfDurationListSize)
             effectiveToAtEnd = toAtEndOfDurationList->at(i)->value();
 
-        animationElement->animateAdditiveNumber(percentage, repeatCount, effectiveFrom.x(), effectiveTo.x(), effectiveToAtEnd.x(), animatedX);
-        animationElement->animateAdditiveNumber(percentage, repeatCount, effectiveFrom.y(), effectiveTo.y(), effectiveToAtEnd.y(), animatedY);
+        animationElement->animateAdditiveNumber(percentage, repeatCount,
+            effectiveFrom.x(), effectiveTo.x(),
+            effectiveToAtEnd.x(), animatedX);
+        animationElement->animateAdditiveNumber(percentage, repeatCount,
+            effectiveFrom.y(), effectiveTo.y(),
+            effectiveToAtEnd.y(), animatedY);
         at(i)->setValue(FloatPoint(animatedX, animatedY));
     }
 }
 
-float SVGPointList::calculateDistance(PassRefPtrWillBeRawPtr<SVGPropertyBase> to, SVGElement*)
+float SVGPointList::calculateDistance(SVGPropertyBase* to, SVGElement*)
 {
-    // FIXME: Distance calculation is not possible for SVGPointList right now. We need the distance for every single value.
+    // FIXME: Distance calculation is not possible for SVGPointList right now. We
+    // need the distance for every single value.
     return -1;
 }
 
-}
+} // namespace blink

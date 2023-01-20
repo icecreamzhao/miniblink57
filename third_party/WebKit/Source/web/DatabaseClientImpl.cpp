@@ -28,10 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "web/DatabaseClientImpl.h"
 
 #include "core/dom/Document.h"
@@ -41,61 +37,34 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 DatabaseClientImpl* DatabaseClientImpl::create()
 {
     return new DatabaseClientImpl();
 }
 
 DatabaseClientImpl::~DatabaseClientImpl() { }
-=======
-PassOwnPtrWillBeRawPtr<DatabaseClientImpl> DatabaseClientImpl::create()
-{
-    return adoptPtrWillBeNoop(new DatabaseClientImpl());
-}
-
-DatabaseClientImpl::~DatabaseClientImpl()
-{
-}
->>>>>>> miniblink49
 
 DEFINE_TRACE(DatabaseClientImpl)
 {
     DatabaseClient::trace(visitor);
 }
 
-<<<<<<< HEAD
 bool DatabaseClientImpl::allowDatabase(ExecutionContext* executionContext,
     const String& name,
     const String& displayName,
     unsigned estimatedSize)
 {
     DCHECK(executionContext->isContextThread());
-=======
-bool DatabaseClientImpl::allowDatabase(ExecutionContext* executionContext, const String& name, const String& displayName, unsigned long estimatedSize)
-{
-    ASSERT(executionContext->isContextThread());
->>>>>>> miniblink49
     Document* document = toDocument(executionContext);
     WebLocalFrameImpl* webFrame = WebLocalFrameImpl::fromFrame(document->frame());
     if (!webFrame)
         return false;
     if (webFrame->contentSettingsClient())
-<<<<<<< HEAD
         return webFrame->contentSettingsClient()->allowDatabase(name, displayName,
             estimatedSize);
     return true;
 }
 
 DatabaseClientImpl::DatabaseClientImpl() { }
-=======
-        return webFrame->contentSettingsClient()->allowDatabase(name, displayName, estimatedSize);
-    return true;
-}
-
-DatabaseClientImpl::DatabaseClientImpl()
-{
-}
->>>>>>> miniblink49
 
 } // namespace blink

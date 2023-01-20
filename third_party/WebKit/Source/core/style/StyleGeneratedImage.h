@@ -34,34 +34,40 @@ class CSSImageGeneratorValue;
 
 class CORE_EXPORT StyleGeneratedImage final : public StyleImage {
 public:
-    static PassRefPtr<StyleGeneratedImage> create(CSSImageGeneratorValue* value)
+    static StyleGeneratedImage* create(const CSSImageGeneratorValue& value)
     {
-        return adoptRef(new StyleGeneratedImage(value));
+        return new StyleGeneratedImage(value);
     }
 
-    virtual WrappedImagePtr data() const override { return m_imageGeneratorValue.get(); }
+    WrappedImagePtr data() const override { return m_imageGeneratorValue.get(); }
 
-    virtual PassRefPtrWillBeRawPtr<CSSValue> cssValue() const override;
+    CSSValue* cssValue() const override;
+    CSSValue* computedCSSValue() const override;
 
-    virtual LayoutSize imageSize(const LayoutObject*, float multiplier) const override;
-    virtual bool imageHasRelativeWidth() const override { return !m_fixedSize; }
-    virtual bool imageHasRelativeHeight() const override { return !m_fixedSize; }
-    virtual void computeIntrinsicDimensions(const LayoutObject*, Length& intrinsicWidth, Length& intrinsicHeight, FloatSize& intrinsicRatio) override;
-    virtual bool usesImageContainerSize() const override { return !m_fixedSize; }
-    virtual void setContainerSizeForLayoutObject(const LayoutObject*, const IntSize& containerSize, float) override { m_containerSize = containerSize; }
-    virtual void addClient(LayoutObject*) override;
-    virtual void removeClient(LayoutObject*) override;
-    virtual PassRefPtr<Image> image(LayoutObject*, const IntSize&) const override;
-    virtual bool knownToBeOpaque(const LayoutObject*) const override;
+    LayoutSize imageSize(const LayoutObject&,
+        float multiplier,
+        const LayoutSize& defaultObjectSize) const override;
+    bool imageHasRelativeSize() const override { return !m_fixedSize; }
+    bool usesImageContainerSize() const override { return !m_fixedSize; }
+    void addClient(LayoutObject*) override;
+    void removeClient(LayoutObject*) override;
+    PassRefPtr<Image> image(const LayoutObject&,
+        const IntSize&,
+        float) const override;
+    bool knownToBeOpaque(const LayoutObject&) const override;
+
+    DECLARE_VIRTUAL_TRACE();
 
 private:
-    StyleGeneratedImage(PassRefPtrWillBeRawPtr<CSSImageGeneratorValue>);
+    StyleGeneratedImage(const CSSImageGeneratorValue&);
 
-    // FIXME: oilpan: change to member once StyleImage is moved to the oilpan heap
-    RefPtrWillBePersistent<CSSImageGeneratorValue> m_imageGeneratorValue;
-    IntSize m_containerSize;
-    bool m_fixedSize;
+    // TODO(sashab): Replace this with <const CSSImageGeneratorValue> once
+    // Member<> supports const types.
+    Member<CSSImageGeneratorValue> m_imageGeneratorValue;
+    const bool m_fixedSize;
 };
 
-}
+DEFINE_STYLE_IMAGE_TYPE_CASTS(StyleGeneratedImage, isGeneratedImage());
+
+} // namespace blink
 #endif

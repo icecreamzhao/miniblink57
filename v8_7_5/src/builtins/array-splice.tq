@@ -53,11 +53,7 @@ namespace array_splice {
 
   macro FastSplice<FixedArrayType: type, ElementType: type>(implicit context:
                                                                   Context)(
-<<<<<<< HEAD
       args: Arguments, a: JSArray, length: Smi, newLength: Smi,
-=======
-      args: constexpr Arguments, a: JSArray, length: Smi, newLength: Smi,
->>>>>>> miniblink49
       lengthDelta: Smi, actualStart: Smi, insertCount: Smi,
       actualDeleteCount: Smi): void labels Bailout {
     // Make sure elements are writable.
@@ -99,12 +95,8 @@ namespace array_splice {
     if (insertCount > 0) {
       const typedNewElements: FixedArrayType =
           UnsafeCast<FixedArrayType>(a.elements);
-<<<<<<< HEAD
       for (let i: intptr = 2; i < args.length; ++i) {
         const e: Object = args[i];
-=======
-      for (let e: Object of args [2: ]) {
->>>>>>> miniblink49
         // The argument elements were already validated to be an appropriate
         // {ElementType} to store in {FixedArrayType}.
         typedNewElements[k++] = UnsafeCast<ElementType>(e);
@@ -116,11 +108,7 @@ namespace array_splice {
   }
 
   transitioning macro FastArraySplice(
-<<<<<<< HEAD
       context: Context, args: Arguments, o: JSReceiver,
-=======
-      context: Context, args: constexpr Arguments, o: JSReceiver,
->>>>>>> miniblink49
       originalLengthNumber: Number, actualStartNumber: Number, insertCount: Smi,
       actualDeleteCountNumber: Number): Object
       labels Bailout {
@@ -144,12 +132,8 @@ namespace array_splice {
     if (!IsFastElementsKind(elementsKind)) goto Bailout;
 
     const oldElementsKind: ElementsKind = elementsKind;
-<<<<<<< HEAD
     for (let i: intptr = 2; i < args.length; ++i) {
       const e: Object = args[i];
-=======
-    for (let e: Object of args [2: ]) {
->>>>>>> miniblink49
       if (IsFastSmiElementsKind(elementsKind)) {
         if (TaggedIsNotSmi(e)) {
           const heapObject: HeapObject = UnsafeCast<HeapObject>(e);
@@ -314,13 +298,8 @@ namespace array_splice {
   }
 
   transitioning macro SlowSplice(
-<<<<<<< HEAD
       context: Context, arguments: Arguments, o: JSReceiver, len: Number,
       actualStart: Number, insertCount: Smi,
-=======
-      context: Context, arguments: constexpr Arguments, o: JSReceiver,
-      len: Number, actualStart: Number, insertCount: Smi,
->>>>>>> miniblink49
       actualDeleteCount: Number): Object {
     const affected: Number = len - actualStart - actualDeleteCount;
 
@@ -355,12 +334,8 @@ namespace array_splice {
     //   a. Remove the first element from items and let E be the value of that
     //   element.
     if (arguments.length > 2) {
-<<<<<<< HEAD
       for (let i: intptr = 2; i < arguments.length; ++i) {
         const e: Object = arguments[i];
-=======
-      for (let e: Object of arguments [2: ]) {
->>>>>>> miniblink49
         // b. Perform ? Set(O, ! ToString(k), E, true).
         SetProperty(o, k, e);
 

@@ -5,17 +5,13 @@
 #ifndef ServiceWorkerRegistrationSync_h
 #define ServiceWorkerRegistrationSync_h
 
-<<<<<<< HEAD
 #include "modules/serviceworkers/ServiceWorkerRegistration.h"
-=======
->>>>>>> miniblink49
 #include "platform/Supplementable.h"
 #include "platform/heap/Handle.h"
 
 namespace blink {
 
 class SyncManager;
-<<<<<<< HEAD
 class ServiceWorkerRegistration;
 
 class ServiceWorkerRegistrationSync final
@@ -24,26 +20,12 @@ class ServiceWorkerRegistrationSync final
     USING_GARBAGE_COLLECTED_MIXIN(ServiceWorkerRegistrationSync);
     WTF_MAKE_NONCOPYABLE(ServiceWorkerRegistrationSync);
 
-=======
-class PeriodicSyncManager;
-class ServiceWorkerRegistration;
-
-class ServiceWorkerRegistrationSync final : public GarbageCollectedFinalized<ServiceWorkerRegistrationSync>, public HeapSupplement<ServiceWorkerRegistration> {
-    USING_GARBAGE_COLLECTED_MIXIN(ServiceWorkerRegistrationSync);
-    WTF_MAKE_NONCOPYABLE(ServiceWorkerRegistrationSync);
->>>>>>> miniblink49
 public:
     virtual ~ServiceWorkerRegistrationSync();
     static ServiceWorkerRegistrationSync& from(ServiceWorkerRegistration&);
 
     static SyncManager* sync(ServiceWorkerRegistration&);
-<<<<<<< HEAD
     SyncManager* sync();
-=======
-    static PeriodicSyncManager* periodicSync(ServiceWorkerRegistration&);
-    SyncManager* sync();
-    PeriodicSyncManager* periodicSync();
->>>>>>> miniblink49
 
     DECLARE_VIRTUAL_TRACE();
 
@@ -53,10 +35,6 @@ private:
 
     Member<ServiceWorkerRegistration> m_registration;
     Member<SyncManager> m_syncManager;
-<<<<<<< HEAD
-=======
-    Member<PeriodicSyncManager> m_periodicSyncManager;
->>>>>>> miniblink49
 };
 
 } // namespace blink

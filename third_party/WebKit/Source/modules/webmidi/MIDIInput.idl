@@ -28,11 +28,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 // https://webaudio.github.io/web-midi-api/#MIDIInput
 
-=======
->>>>>>> miniblink49
 [
     SetWrapperReferenceTo(MIDIAccess midiAccess),
 ] interface MIDIInput : MIDIPort {

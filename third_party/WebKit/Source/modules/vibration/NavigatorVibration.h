@@ -20,7 +20,6 @@
 #ifndef NavigatorVibration_h
 #define NavigatorVibration_h
 
-<<<<<<< HEAD
 #include "core/dom/ContextLifecycleObserver.h"
 #include "core/frame/Navigator.h"
 #include "modules/ModulesExport.h"
@@ -28,20 +27,12 @@
 #include "platform/heap/GarbageCollected.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Noncopyable.h"
-=======
-#include "core/page/Page.h"
-#include "core/page/PageLifecycleObserver.h"
-#include "modules/ModulesExport.h"
-#include "platform/Timer.h"
-#include "wtf/PassOwnPtr.h"
->>>>>>> miniblink49
 #include "wtf/Vector.h"
 
 namespace blink {
 
 class LocalFrame;
 class Navigator;
-<<<<<<< HEAD
 class VibrationController;
 
 enum NavigatorVibrationType {
@@ -72,42 +63,10 @@ public:
     static bool vibrate(Navigator&, const VibrationPattern&);
 
     VibrationController* controller(const LocalFrame&);
-=======
-class UnsignedLongOrUnsignedLongSequence;
-
-class MODULES_EXPORT NavigatorVibration final
-    : public NoBaseWillBeGarbageCollectedFinalized<NavigatorVibration>
-    , public WillBeHeapSupplement<Page>
-    , public PageLifecycleObserver {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(NavigatorVibration);
-public:
-    typedef Vector<unsigned> VibrationPattern;
-
-    virtual ~NavigatorVibration();
-
-    bool vibrate(const VibrationPattern&);
-    void cancelVibration();
-    void timerStartFired(Timer<NavigatorVibration>*);
-    void timerStopFired(Timer<NavigatorVibration>*);
-
-    // Inherited from PageLifecycleObserver
-    void pageVisibilityChanged() override;
-    void didCommitLoad(LocalFrame*) override;
-
-    static bool vibrate(Navigator&, unsigned time);
-    static bool vibrate(Navigator&, const VibrationPattern&);
-    static NavigatorVibration& from(Page&);
-    static VibrationPattern sanitizeVibrationPattern(const UnsignedLongOrUnsignedLongSequence&);
-
-    bool isVibrating() const { return m_isVibrating; }
-
-    VibrationPattern pattern() const { return m_pattern; }
->>>>>>> miniblink49
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
-<<<<<<< HEAD
     static const char* supplementName();
 
     explicit NavigatorVibration(Navigator&);
@@ -118,15 +77,6 @@ private:
     static void collectHistogramMetrics(const LocalFrame&);
 
     Member<VibrationController> m_controller;
-=======
-    explicit NavigatorVibration(Page&);
-    static const char* supplementName();
-
-    Timer<NavigatorVibration> m_timerStart;
-    Timer<NavigatorVibration> m_timerStop;
-    bool m_isVibrating;
-    VibrationPattern m_pattern;
->>>>>>> miniblink49
 };
 
 } // namespace blink

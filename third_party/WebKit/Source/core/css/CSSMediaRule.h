@@ -23,25 +23,27 @@
 #ifndef CSSMediaRule_h
 #define CSSMediaRule_h
 
-#include "core/css/CSSGroupingRule.h"
+#include "core/css/CSSConditionRule.h"
 #include "core/css/MediaList.h"
 
 namespace blink {
 
 class StyleRuleMedia;
 
-class CSSMediaRule final : public CSSGroupingRule {
+class CSSMediaRule final : public CSSConditionRule {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<CSSMediaRule> create(StyleRuleMedia* rule, CSSStyleSheet* sheet)
+    static CSSMediaRule* create(StyleRuleMedia* rule, CSSStyleSheet* sheet)
     {
-        return adoptRefWillBeNoop(new CSSMediaRule(rule, sheet));
+        return new CSSMediaRule(rule, sheet);
     }
 
-    virtual ~CSSMediaRule();
+    ~CSSMediaRule() override;
 
-    virtual void reattach(StyleRuleBase*) override;
-    virtual String cssText() const override;
+    void reattach(StyleRuleBase*) override;
+    String cssText() const override;
+    String conditionText() const override;
 
     MediaList* media() const;
 
@@ -50,14 +52,14 @@ public:
 private:
     CSSMediaRule(StyleRuleMedia*, CSSStyleSheet*);
 
-    virtual CSSRule::Type type() const override { return MEDIA_RULE; }
+    CSSRule::Type type() const override { return kMediaRule; }
 
     MediaQuerySet* mediaQueries() const;
 
-    mutable RefPtrWillBeMember<MediaList> m_mediaCSSOMWrapper;
+    mutable Member<MediaList> m_mediaCSSOMWrapper;
 };
 
-DEFINE_CSS_RULE_TYPE_CASTS(CSSMediaRule, MEDIA_RULE);
+DEFINE_CSS_RULE_TYPE_CASTS(CSSMediaRule, kMediaRule);
 
 } // namespace blink
 

@@ -6,24 +6,10 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #include "SkDisplayInclude.h"
 #include "SkAnimateMaker.h"
 #include "SkAnimator.h"
 
-<<<<<<< HEAD
-=======
-#if 0
-#undef SK_MEMBER
-#define SK_MEMBER(_member, _type) \
-    { #_member, SK_OFFSETOF(BASE_CLASS::_A, _member), SkType_##_type, \
-    sizeof(((BASE_CLASS::_A*) 0)->_member) / sizeof(SkScalar) }
-#endif
-
->>>>>>> miniblink49
 #if SK_USE_CONDENSED_INFO == 0
 
 const SkMemberInfo SkInclude::fInfo[] = {
@@ -42,7 +28,6 @@ DEFINE_GET_MEMBER(SkInclude);
 //  src.unref();
 //}
 
-<<<<<<< HEAD
 bool SkInclude::enable(SkAnimateMaker&)
 {
     return true;
@@ -55,17 +40,6 @@ bool SkInclude::hasEnable() const
 
 void SkInclude::onEndElement(SkAnimateMaker& maker)
 {
-=======
-bool SkInclude::enable(SkAnimateMaker & ) {
-    return true;
-}
-
-bool SkInclude::hasEnable() const {
-    return true;
-}
-
-void SkInclude::onEndElement(SkAnimateMaker& maker) {
->>>>>>> miniblink49
     maker.fInInclude = true;
     if (src.size() == 0 || maker.decodeURI(src.c_str()) == false) {
         if (maker.getErrorCode() != SkXMLParserError::kNoError || maker.getNativeCode() != -1) {

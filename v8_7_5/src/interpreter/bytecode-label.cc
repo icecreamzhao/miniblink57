@@ -9,7 +9,6 @@
 
 namespace v8 {
 namespace internal {
-<<<<<<< HEAD
     namespace interpreter {
 
         BytecodeLabel* BytecodeLabels::New()
@@ -31,24 +30,3 @@ namespace internal {
     } // namespace interpreter
 } // namespace internal
 } // namespace v8
-=======
-namespace interpreter {
-
-BytecodeLabel* BytecodeLabels::New() {
-  DCHECK(!is_bound());
-  labels_.emplace_back(BytecodeLabel());
-  return &labels_.back();
-}
-
-void BytecodeLabels::Bind(BytecodeArrayBuilder* builder) {
-  DCHECK(!is_bound_);
-  is_bound_ = true;
-  for (auto& label : labels_) {
-    builder->Bind(&label);
-  }
-}
-
-}  // namespace interpreter
-}  // namespace internal
-}  // namespace v8
->>>>>>> miniblink49

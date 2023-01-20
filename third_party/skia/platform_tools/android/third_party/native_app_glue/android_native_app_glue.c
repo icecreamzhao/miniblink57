@@ -419,7 +419,6 @@ static void onInputQueueDestroyed(ANativeActivity* activity, AInputQueue* queue)
     android_app_set_input((struct android_app*)activity->instance, NULL);
 }
 
-<<<<<<< HEAD
 static void onContentRectChanged(ANativeActivity* activity, const ARect* rect) {
 	struct android_app* android_app = (struct android_app*)activity->instance;
     LOGV("OnContentRectChanged: %p\n", activity);
@@ -427,8 +426,6 @@ static void onContentRectChanged(ANativeActivity* activity, const ARect* rect) {
     android_app_write_cmd(android_app, APP_CMD_CONTENT_RECT_CHANGED);
 }
 
-=======
->>>>>>> miniblink49
 void ANativeActivity_onCreate(ANativeActivity* activity,
         void* savedState, size_t savedStateSize) {
     LOGV("Creating: %p\n", activity);
@@ -445,10 +442,7 @@ void ANativeActivity_onCreate(ANativeActivity* activity,
     activity->callbacks->onNativeWindowDestroyed = onNativeWindowDestroyed;
     activity->callbacks->onInputQueueCreated = onInputQueueCreated;
     activity->callbacks->onInputQueueDestroyed = onInputQueueDestroyed;
-<<<<<<< HEAD
     activity->callbacks->onContentRectChanged = onContentRectChanged;
-=======
->>>>>>> miniblink49
 
     activity->instance = android_app_create(activity, savedState, savedStateSize);
 }

@@ -30,19 +30,13 @@
 #define TextRunIterator_h
 
 #include "platform/text/TextRun.h"
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
-=======
->>>>>>> miniblink49
 
 namespace blink {
 
 class TextRunIterator {
-<<<<<<< HEAD
     DISALLOW_NEW();
 
-=======
->>>>>>> miniblink49
 public:
     TextRunIterator()
         : m_textRun(0)
@@ -69,15 +63,11 @@ public:
     void increment() { m_offset++; }
     bool atEnd() const { return m_offset >= m_length; }
     UChar current() const { return (*m_textRun)[m_offset]; }
-<<<<<<< HEAD
     WTF::Unicode::CharDirection direction() const
     {
         return atEnd() ? WTF::Unicode::OtherNeutral
                        : WTF::Unicode::direction(current());
     }
-=======
-    WTF::Unicode::Direction direction() const { return atEnd() ? WTF::Unicode::OtherNeutral : WTF::Unicode::direction(current()); }
->>>>>>> miniblink49
     bool atParagraphSeparator() const { return current() == '\n'; }
 
     bool operator==(const TextRunIterator& other)
@@ -93,10 +83,6 @@ private:
     unsigned m_length;
 };
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 } // namespace blink
 
 #endif // TextRunIterator_h

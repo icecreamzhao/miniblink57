@@ -2,11 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
 // https://notifications.spec.whatwg.org/#api
-=======
-// http://notifications.spec.whatwg.org/#api
->>>>>>> miniblink49
 
 enum NotificationDirection {
     "auto",
@@ -19,7 +15,6 @@ dictionary NotificationOptions {
     DOMString lang = "";
     DOMString body = "";
     DOMString tag = "";
-<<<<<<< HEAD
     [RuntimeEnabled=NotificationContentImage] USVString image;
     USVString icon;
     [RuntimeEnabled=NotificationBadge] USVString badge;
@@ -31,11 +26,4 @@ dictionary NotificationOptions {
     boolean requireInteraction = false;
     any data = null;
     sequence<NotificationAction> actions = [];
-=======
-    DOMString icon;
-    // TODO(sh919.park): vibrate should be ([Clamp] unsigned long or sequence<unsigned long>)
-    (unsigned long or sequence<unsigned long>) vibrate;
-    boolean silent = false;
-    any data = null;
->>>>>>> miniblink49
 };

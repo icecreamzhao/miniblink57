@@ -21,31 +21,46 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
-
 #include "core/svg/SVGFilterElement.h"
 
-#include "core/XLinkNames.h"
 #include "core/frame/UseCounter.h"
 #include "core/layout/svg/LayoutSVGResourceFilter.h"
-#include "core/svg/SVGParserUtilities.h"
 
 namespace blink {
 
 inline SVGFilterElement::SVGFilterElement(Document& document)
     : SVGElement(SVGNames::filterTag, document)
     , SVGURIReference(this)
-    , m_x(SVGAnimatedLength::create(this, SVGNames::xAttr, SVGLength::create(SVGLengthMode::Width), AllowNegativeLengths))
-    , m_y(SVGAnimatedLength::create(this, SVGNames::yAttr, SVGLength::create(SVGLengthMode::Height), AllowNegativeLengths))
-    , m_width(SVGAnimatedLength::create(this, SVGNames::widthAttr, SVGLength::create(SVGLengthMode::Width), ForbidNegativeLengths))
-    , m_height(SVGAnimatedLength::create(this, SVGNames::heightAttr, SVGLength::create(SVGLengthMode::Height), ForbidNegativeLengths))
-    , m_filterUnits(SVGAnimatedEnumeration<SVGUnitTypes::SVGUnitType>::create(this, SVGNames::filterUnitsAttr, SVGUnitTypes::SVG_UNIT_TYPE_OBJECTBOUNDINGBOX))
-    , m_primitiveUnits(SVGAnimatedEnumeration<SVGUnitTypes::SVGUnitType>::create(this, SVGNames::primitiveUnitsAttr, SVGUnitTypes::SVG_UNIT_TYPE_USERSPACEONUSE))
+    , m_x(SVGAnimatedLength::create(this,
+          SVGNames::xAttr,
+          SVGLength::create(SVGLengthMode::Width)))
+    , m_y(SVGAnimatedLength::create(this,
+          SVGNames::yAttr,
+          SVGLength::create(SVGLengthMode::Height)))
+    , m_width(
+          SVGAnimatedLength::create(this,
+              SVGNames::widthAttr,
+              SVGLength::create(SVGLengthMode::Width)))
+    , m_height(
+          SVGAnimatedLength::create(this,
+              SVGNames::heightAttr,
+              SVGLength::create(SVGLengthMode::Height)))
+    , m_filterUnits(SVGAnimatedEnumeration<SVGUnitTypes::SVGUnitType>::create(
+          this,
+          SVGNames::filterUnitsAttr,
+          SVGUnitTypes::kSvgUnitTypeObjectboundingbox))
+    , m_primitiveUnits(
+          SVGAnimatedEnumeration<SVGUnitTypes::SVGUnitType>::create(
+              this,
+              SVGNames::primitiveUnitsAttr,
+              SVGUnitTypes::kSvgUnitTypeUserspaceonuse))
 {
-    // Spec: If the x/y attribute is not specified, the effect is as if a value of "-10%" were specified.
-    // Spec: If the width/height attribute is not specified, the effect is as if a value of "120%" were specified.
+    // Spec: If the x/y attribute is not specified, the effect is as if a value of
+    // "-10%" were specified.
     m_x->setDefaultValueAsString("-10%");
     m_y->setDefaultValueAsString("-10%");
+    // Spec: If the width/height attribute is not specified, the effect is as if a
+    // value of "120%" were specified.
     m_width->setDefaultValueAsString("120%");
     m_height->setDefaultValueAsString("120%");
 
@@ -57,35 +72,29 @@ inline SVGFilterElement::SVGFilterElement(Document& document)
     addToPropertyMap(m_primitiveUnits);
 }
 
+SVGFilterElement::~SVGFilterElement() { }
+
 DEFINE_NODE_FACTORY(SVGFilterElement)
 
 DEFINE_TRACE(SVGFilterElement)
 {
-#if ENABLE(OILPAN)
     visitor->trace(m_x);
     visitor->trace(m_y);
     visitor->trace(m_width);
     visitor->trace(m_height);
     visitor->trace(m_filterUnits);
     visitor->trace(m_primitiveUnits);
-    visitor->trace(m_clientsToAdd);
-#endif
     SVGElement::trace(visitor);
     SVGURIReference::trace(visitor);
 }
 
 void SVGFilterElement::svgAttributeChanged(const QualifiedName& attrName)
 {
-    bool isXYWH = attrName == SVGNames::xAttr
-        || attrName == SVGNames::yAttr
-        || attrName == SVGNames::widthAttr
-        || attrName == SVGNames::heightAttr;
+    bool isXYWH = attrName == SVGNames::xAttr || attrName == SVGNames::yAttr || attrName == SVGNames::widthAttr || attrName == SVGNames::heightAttr;
     if (isXYWH)
         updateRelativeLengthsInformation();
 
-    if (isXYWH
-        || attrName == SVGNames::filterUnitsAttr
-        || attrName == SVGNames::primitiveUnitsAttr) {
+    if (isXYWH || attrName == SVGNames::filterUnitsAttr || attrName == SVGNames::primitiveUnitsAttr) {
         SVGElement::InvalidationGuard invalidationGuard(this);
         LayoutSVGResourceContainer* layoutObject = toLayoutSVGResourceContainer(this->layoutObject());
         if (layoutObject)
@@ -105,38 +114,18 @@ void SVGFilterElement::childrenChanged(const ChildrenChange& change)
         return;
 
     if (LayoutObject* object = layoutObject())
-        object->setNeedsLayoutAndFullPaintInvalidation(LayoutInvalidationReason::ChildChanged);
+        object->setNeedsLayoutAndFullPaintInvalidation(
+            LayoutInvalidationReason::ChildChanged);
 }
 
 LayoutObject* SVGFilterElement::createLayoutObject(const ComputedStyle&)
 {
-    LayoutSVGResourceFilter* layoutObject = new LayoutSVGResourceFilter(this);
-
-    for (const RefPtrWillBeMember<Node>& node : m_clientsToAdd)
-        layoutObject->addClientLayer(node.get());
-    m_clientsToAdd.clear();
-
-    return layoutObject;
+    return new LayoutSVGResourceFilter(this);
 }
 
 bool SVGFilterElement::selfHasRelativeLengths() const
 {
-    return m_x->currentValue()->isRelative()
-        || m_y->currentValue()->isRelative()
-        || m_width->currentValue()->isRelative()
-        || m_height->currentValue()->isRelative();
-}
-
-void SVGFilterElement::addClient(Node* client)
-{
-    ASSERT(client);
-    m_clientsToAdd.add(client);
-}
-
-void SVGFilterElement::removeClient(Node* client)
-{
-    ASSERT(client);
-    m_clientsToAdd.remove(client);
+    return m_x->currentValue()->isRelative() || m_y->currentValue()->isRelative() || m_width->currentValue()->isRelative() || m_height->currentValue()->isRelative();
 }
 
 } // namespace blink

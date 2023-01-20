@@ -43,10 +43,6 @@ public:
     // didChooseColor callbacks anymore.
     virtual void endChooser() { }
 };
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 }
 
 #endif // WebColorChooser_h

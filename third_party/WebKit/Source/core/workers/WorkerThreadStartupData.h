@@ -31,15 +31,19 @@
 #ifndef WorkerThreadStartupData_h
 #define WorkerThreadStartupData_h
 
-#include "bindings/core/v8/V8CacheOptions.h"
+#include "bindings/core/v8/WorkerV8Settings.h"
 #include "core/CoreExport.h"
 #include "core/frame/csp/ContentSecurityPolicy.h"
 #include "core/workers/WorkerClients.h"
+#include "core/workers/WorkerSettings.h"
 #include "core/workers/WorkerThread.h"
 #include "platform/network/ContentSecurityPolicyParsers.h"
 #include "platform/weborigin/KURL.h"
+#include "public/platform/WebAddressSpace.h"
 #include "wtf/Forward.h"
 #include "wtf/Noncopyable.h"
+#include "wtf/PtrUtil.h"
+#include <memory>
 
 namespace blink {
 
@@ -47,11 +51,29 @@ class WorkerClients;
 
 class CORE_EXPORT WorkerThreadStartupData final {
     WTF_MAKE_NONCOPYABLE(WorkerThreadStartupData);
-    WTF_MAKE_FAST_ALLOCATED(WorkerThreadStartupData);
+    USING_FAST_MALLOC(WorkerThreadStartupData);
+
 public:
-    static PassOwnPtr<WorkerThreadStartupData> create(const KURL& scriptURL, const String& userAgent, const String& sourceCode, PassOwnPtr<Vector<char>> cachedMetaData, WorkerThreadStartMode startMode, const PassOwnPtr<Vector<CSPHeaderAndType>> contentSecurityPolicyHeaders, const SecurityOrigin* starterOrigin, PassOwnPtrWillBeRawPtr<WorkerClients> workerClients, V8CacheOptions v8CacheOptions = V8CacheOptionsDefault)
+    static std::unique_ptr<WorkerThreadStartupData> create(
+        const KURL& scriptURL,
+        const String& userAgent,
+        const String& sourceCode,
+        std::unique_ptr<Vector<char>> cachedMetaData,
+        WorkerThreadStartMode startMode,
+        const Vector<CSPHeaderAndType>* contentSecurityPolicyHeaders,
+        const String& referrerPolicy,
+        const SecurityOrigin* starterOrigin,
+        WorkerClients* workerClients,
+        WebAddressSpace addressSpace,
+        const Vector<String>* originTrialTokens,
+        std::unique_ptr<WorkerSettings> workerSettings,
+        WorkerV8Settings workerV8Settings)
     {
-        return adoptPtr(new WorkerThreadStartupData(scriptURL, userAgent, sourceCode, cachedMetaData, startMode, contentSecurityPolicyHeaders, starterOrigin, workerClients, v8CacheOptions));
+        return WTF::wrapUnique(new WorkerThreadStartupData(
+            scriptURL, userAgent, sourceCode, std::move(cachedMetaData), startMode,
+            contentSecurityPolicyHeaders, referrerPolicy, starterOrigin,
+            workerClients, addressSpace, originTrialTokens,
+            std::move(workerSettings), workerV8Settings));
     }
 
     ~WorkerThreadStartupData();
@@ -59,9 +81,11 @@ public:
     KURL m_scriptURL;
     String m_userAgent;
     String m_sourceCode;
-    OwnPtr<Vector<char>> m_cachedMetaData;
+    std::unique_ptr<Vector<char>> m_cachedMetaData;
     WorkerThreadStartMode m_startMode;
-    OwnPtr<Vector<CSPHeaderAndType>> m_contentSecurityPolicyHeaders;
+    std::unique_ptr<Vector<CSPHeaderAndType>> m_contentSecurityPolicyHeaders;
+    String m_referrerPolicy;
+    std::unique_ptr<Vector<String>> m_originTrialTokens;
 
     // The SecurityOrigin of the Document creating a Worker may have
     // been configured with extra policy privileges when it was created
@@ -70,13 +94,9 @@ public:
     // global scope, supply the Document's SecurityOrigin as the
     // 'starter origin'.
     //
-    // Ownership of this optional starter origin remain with the caller,
-    // and is assumed to stay alive until the new Worker thread has been
-    // initialized.
-    //
     // See SecurityOrigin::transferPrivilegesFrom() for details on what
     // privileges are transferred.
-    const SecurityOrigin* m_starterOrigin;
+    std::unique_ptr<SecurityOrigin::PrivilegeData> m_starterOriginPrivilegeData;
 
     // This object is created and initialized on the thread creating
     // a new worker context, but ownership of it and this WorkerThreadStartupData
@@ -86,12 +106,29 @@ public:
     // to happen on a thread different than the thread creating the
     // persistent reference. If the worker thread creation context
     // supplies no extra 'clients', m_workerClients can be left as empty/null.
-    OwnPtrWillBeCrossThreadPersistent<WorkerClients> m_workerClients;
+    CrossThreadPersistent<WorkerClients> m_workerClients;
 
-    V8CacheOptions m_v8CacheOptions;
+    WebAddressSpace m_addressSpace;
+
+    std::unique_ptr<WorkerSettings> m_workerSettings;
+
+    WorkerV8Settings m_workerV8Settings;
 
 private:
-    WorkerThreadStartupData(const KURL& scriptURL, const String& userAgent, const String& sourceCode, PassOwnPtr<Vector<char>> cachedMetaData, WorkerThreadStartMode, const PassOwnPtr<Vector<CSPHeaderAndType>> contentSecurityPolicyHeaders, const SecurityOrigin*, PassOwnPtrWillBeRawPtr<WorkerClients>, V8CacheOptions);
+    WorkerThreadStartupData(
+        const KURL& scriptURL,
+        const String& userAgent,
+        const String& sourceCode,
+        std::unique_ptr<Vector<char>> cachedMetaData,
+        WorkerThreadStartMode,
+        const Vector<CSPHeaderAndType>* contentSecurityPolicyHeaders,
+        const String& referrerPolicy,
+        const SecurityOrigin*,
+        WorkerClients*,
+        WebAddressSpace,
+        const Vector<String>* originTrialTokens,
+        std::unique_ptr<WorkerSettings>,
+        WorkerV8Settings);
 };
 
 } // namespace blink

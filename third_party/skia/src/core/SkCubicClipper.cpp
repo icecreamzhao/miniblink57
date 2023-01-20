@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2009 The Android Open Source Project
  *
@@ -9,7 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "SkCubicClipper.h"
 #include "SkGeometry.h"
 
@@ -20,57 +15,32 @@ SkCubicClipper::SkCubicClipper()
 
 void SkCubicClipper::setClip(const SkIRect& clip)
 {
-=======
-
-#include "SkCubicClipper.h"
-#include "SkGeometry.h"
-
-SkCubicClipper::SkCubicClipper() {
-    fClip.setEmpty();
-}
-
-void SkCubicClipper::setClip(const SkIRect& clip) {
->>>>>>> miniblink49
     // conver to scalars, since that's where we'll see the points
     fClip.set(clip);
 }
 
-<<<<<<< HEAD
 bool SkCubicClipper::ChopMonoAtY(const SkPoint pts[4], SkScalar y, SkScalar* t)
 {
-=======
-
-static bool chopMonoCubicAtY(SkPoint pts[4], SkScalar y, SkScalar* t) {
->>>>>>> miniblink49
     SkScalar ycrv[4];
     ycrv[0] = pts[0].fY - y;
     ycrv[1] = pts[1].fY - y;
     ycrv[2] = pts[2].fY - y;
     ycrv[3] = pts[3].fY - y;
 
-<<<<<<< HEAD
 #ifdef NEWTON_RAPHSON // Quadratic convergence, typically <= 3 iterations.
-=======
-#ifdef NEWTON_RAPHSON    // Quadratic convergence, typically <= 3 iterations.
->>>>>>> miniblink49
     // Initial guess.
     // TODO(turk): Check for zero denominator? Shouldn't happen unless the curve
     // is not only monotonic but degenerate.
     SkScalar t1 = ycrv[0] / (ycrv[0] - ycrv[3]);
 
     // Newton's iterations.
-<<<<<<< HEAD
     const SkScalar tol = SK_Scalar1 / 16384; // This leaves 2 fixed noise bits.
-=======
-    const SkScalar tol = SK_Scalar1 / 16384;  // This leaves 2 fixed noise bits.
->>>>>>> miniblink49
     SkScalar t0;
     const int maxiters = 5;
     int iters = 0;
     bool converged;
     do {
         t0 = t1;
-<<<<<<< HEAD
         SkScalar y01 = SkScalarInterp(ycrv[0], ycrv[1], t0);
         SkScalar y12 = SkScalarInterp(ycrv[1], ycrv[2], t0);
         SkScalar y23 = SkScalarInterp(ycrv[2], ycrv[3], t0);
@@ -84,26 +54,10 @@ static bool chopMonoCubicAtY(SkPoint pts[4], SkScalar y, SkScalar* t) {
         ++iters;
     } while (!converged && (iters < maxiters));
     *t = t1; // Return the result.
-=======
-        SkScalar y01   = SkScalarInterp(ycrv[0], ycrv[1], t0);
-        SkScalar y12   = SkScalarInterp(ycrv[1], ycrv[2], t0);
-        SkScalar y23   = SkScalarInterp(ycrv[2], ycrv[3], t0);
-        SkScalar y012  = SkScalarInterp(y01,  y12,  t0);
-        SkScalar y123  = SkScalarInterp(y12,  y23,  t0);
-        SkScalar y0123 = SkScalarInterp(y012, y123, t0);
-        SkScalar yder  = (y123 - y012) * 3;
-        // TODO(turk): check for yder==0: horizontal.
-        t1 -= y0123 / yder;
-        converged = SkScalarAbs(t1 - t0) <= tol;  // NaN-safe
-        ++iters;
-    } while (!converged && (iters < maxiters));
-    *t = t1;                  // Return the result.
->>>>>>> miniblink49
 
     // The result might be valid, even if outside of the range [0, 1], but
     // we never evaluate a Bezier outside this interval, so we return false.
     if (t1 < 0 || t1 > SK_Scalar1)
-<<<<<<< HEAD
         return false; // This shouldn't happen, but check anyway.
     return converged;
 
@@ -111,15 +65,6 @@ static bool chopMonoCubicAtY(SkPoint pts[4], SkScalar y, SkScalar* t) {
 
     // Check that the endpoints straddle zero.
     SkScalar tNeg, tPos; // Negative and positive function parameters.
-=======
-        return false;         // This shouldn't happen, but check anyway.
-    return converged;
-
-#else  // BISECTION    // Linear convergence, typically 16 iterations.
-
-    // Check that the endpoints straddle zero.
-    SkScalar tNeg, tPos;    // Negative and positive function parameters.
->>>>>>> miniblink49
     if (ycrv[0] < 0) {
         if (ycrv[3] < 0)
             return false;
@@ -135,7 +80,6 @@ static bool chopMonoCubicAtY(SkPoint pts[4], SkScalar y, SkScalar* t) {
         return true;
     }
 
-<<<<<<< HEAD
     const SkScalar tol = SK_Scalar1 / 65536; // 1 for fixed, 1e-5 for float.
     int iters = 0;
     do {
@@ -146,23 +90,10 @@ static bool chopMonoCubicAtY(SkPoint pts[4], SkScalar y, SkScalar* t) {
         SkScalar y012 = SkScalarInterp(y01, y12, tMid);
         SkScalar y123 = SkScalarInterp(y12, y23, tMid);
         SkScalar y0123 = SkScalarInterp(y012, y123, tMid);
-=======
-    const SkScalar tol = SK_Scalar1 / 65536;  // 1 for fixed, 1e-5 for float.
-    int iters = 0;
-    do {
-        SkScalar tMid = (tPos + tNeg) / 2;
-        SkScalar y01   = SkScalarInterp(ycrv[0], ycrv[1], tMid);
-        SkScalar y12   = SkScalarInterp(ycrv[1], ycrv[2], tMid);
-        SkScalar y23   = SkScalarInterp(ycrv[2], ycrv[3], tMid);
-        SkScalar y012  = SkScalarInterp(y01,     y12,     tMid);
-        SkScalar y123  = SkScalarInterp(y12,     y23,     tMid);
-        SkScalar y0123 = SkScalarInterp(y012,    y123,    tMid);
->>>>>>> miniblink49
         if (y0123 == 0) {
             *t = tMid;
             return true;
         }
-<<<<<<< HEAD
         if (y0123 < 0)
             tNeg = tMid;
         else
@@ -177,20 +108,6 @@ static bool chopMonoCubicAtY(SkPoint pts[4], SkScalar y, SkScalar* t) {
 
 bool SkCubicClipper::clipCubic(const SkPoint srcPts[4], SkPoint dst[4])
 {
-=======
-        if (y0123 < 0)  tNeg = tMid;
-        else            tPos = tMid;
-        ++iters;
-    } while (!(SkScalarAbs(tPos - tNeg) <= tol));   // Nan-safe
-
-    *t = (tNeg + tPos) / 2;
-    return true;
-#endif  // BISECTION
-}
-
-
-bool SkCubicClipper::clipCubic(const SkPoint srcPts[4], SkPoint dst[4]) {
->>>>>>> miniblink49
     bool reverse;
 
     // we need the data to be monotonically descending in Y
@@ -216,11 +133,7 @@ bool SkCubicClipper::clipCubic(const SkPoint srcPts[4], SkPoint dst[4]) {
     SkPoint tmp[7]; // for SkChopCubicAt
 
     // are we partially above
-<<<<<<< HEAD
     if (dst[0].fY < ctop && ChopMonoAtY(dst, ctop, &t)) {
-=======
-    if (dst[0].fY < ctop && chopMonoCubicAtY(dst, ctop, &t)) {
->>>>>>> miniblink49
         SkChopCubicAt(dst, tmp, t);
         dst[0] = tmp[3];
         dst[1] = tmp[4];
@@ -228,11 +141,7 @@ bool SkCubicClipper::clipCubic(const SkPoint srcPts[4], SkPoint dst[4]) {
     }
 
     // are we partially below
-<<<<<<< HEAD
     if (dst[3].fY > cbot && ChopMonoAtY(dst, cbot, &t)) {
-=======
-    if (dst[3].fY > cbot && chopMonoCubicAtY(dst, cbot, &t)) {
->>>>>>> miniblink49
         SkChopCubicAt(dst, tmp, t);
         dst[1] = tmp[1];
         dst[2] = tmp[2];

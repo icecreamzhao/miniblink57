@@ -37,7 +37,6 @@ class StorageEventInit;
 
 class StorageEvent final : public Event {
     DEFINE_WRAPPERTYPEINFO();
-<<<<<<< HEAD
 
 public:
     static StorageEvent* create();
@@ -48,12 +47,6 @@ public:
         const String& url,
         Storage* storageArea);
     static StorageEvent* create(const AtomicString&, const StorageEventInit&);
-=======
-public:
-    static PassRefPtrWillBeRawPtr<StorageEvent> create();
-    static PassRefPtrWillBeRawPtr<StorageEvent> create(const AtomicString& type, const String& key, const String& oldValue, const String& newValue, const String& url, Storage* storageArea);
-    static PassRefPtrWillBeRawPtr<StorageEvent> create(const AtomicString&, const StorageEventInit&);
->>>>>>> miniblink49
     ~StorageEvent() override;
 
     const String& key() const { return m_key; }
@@ -62,7 +55,6 @@ public:
     const String& url() const { return m_url; }
     Storage* storageArea() const { return m_storageArea.get(); }
 
-<<<<<<< HEAD
     void initStorageEvent(const AtomicString& type,
         bool canBubble,
         bool cancelable,
@@ -77,12 +69,6 @@ public:
     //     in boolean canBubbleArg, in boolean cancelableArg, in DOMString keyArg,
     //     in DOMString oldValueArg, in DOMString newValueArg,
     //     in DOMString urlArg, Storage storageAreaArg);
-=======
-    void initStorageEvent(const AtomicString& type, bool canBubble, bool cancelable, const String& key, const String& oldValue, const String& newValue, const String& url, Storage* storageArea);
-
-    // Needed once we support init<blank>EventNS
-    // void initStorageEventNS(in DOMString namespaceURI, in DOMString typeArg, in boolean canBubbleArg, in boolean cancelableArg, in DOMString keyArg, in DOMString oldValueArg, in DOMString newValueArg, in DOMString urlArg, Storage storageAreaArg);
->>>>>>> miniblink49
 
     const AtomicString& interfaceName() const override;
 
@@ -90,27 +76,19 @@ public:
 
 private:
     StorageEvent();
-<<<<<<< HEAD
     StorageEvent(const AtomicString& type,
         const String& key,
         const String& oldValue,
         const String& newValue,
         const String& url,
         Storage* storageArea);
-=======
-    StorageEvent(const AtomicString& type, const String& key, const String& oldValue, const String& newValue, const String& url, Storage* storageArea);
->>>>>>> miniblink49
     StorageEvent(const AtomicString&, const StorageEventInit&);
 
     String m_key;
     String m_oldValue;
     String m_newValue;
     String m_url;
-<<<<<<< HEAD
     Member<Storage> m_storageArea;
-=======
-    PersistentWillBeMember<Storage> m_storageArea;
->>>>>>> miniblink49
 };
 
 } // namespace blink

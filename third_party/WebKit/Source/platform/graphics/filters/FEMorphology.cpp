@@ -22,10 +22,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/graphics/filters/FEMorphology.h"
 
 #include "SkMorphologyImageFilter.h"
@@ -35,7 +31,6 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 FEMorphology::FEMorphology(Filter* filter,
     MorphologyOperatorType type,
     float radiusX,
@@ -53,19 +48,6 @@ FEMorphology* FEMorphology::create(Filter* filter,
     float radiusY)
 {
     return new FEMorphology(filter, type, radiusX, radiusY);
-=======
-FEMorphology::FEMorphology(Filter* filter, MorphologyOperatorType type, float radiusX, float radiusY)
-    : FilterEffect(filter)
-    , m_type(type)
-    , m_radiusX(radiusX)
-    , m_radiusY(radiusY)
-{
-}
-
-PassRefPtrWillBeRawPtr<FEMorphology> FEMorphology::create(Filter* filter, MorphologyOperatorType type, float radiusX, float radiusY)
-{
-    return adoptRefWillBeNoop(new FEMorphology(filter, type, radiusX, radiusY));
->>>>>>> miniblink49
 }
 
 MorphologyOperatorType FEMorphology::morphologyOperator() const
@@ -88,10 +70,7 @@ float FEMorphology::radiusX() const
 
 bool FEMorphology::setRadiusX(float radiusX)
 {
-<<<<<<< HEAD
     radiusX = std::max(0.0f, radiusX);
-=======
->>>>>>> miniblink49
     if (m_radiusX == radiusX)
         return false;
     m_radiusX = radiusX;
@@ -103,29 +82,15 @@ float FEMorphology::radiusY() const
     return m_radiusY;
 }
 
-<<<<<<< HEAD
 bool FEMorphology::setRadiusY(float radiusY)
 {
     radiusY = std::max(0.0f, radiusY);
-=======
-FloatRect FEMorphology::mapRect(const FloatRect& rect, bool)
-{
-    FloatRect result = rect;
-    result.inflateX(filter()->applyHorizontalScale(m_radiusX));
-    result.inflateY(filter()->applyVerticalScale(m_radiusY));
-    return result;
-}
-
-bool FEMorphology::setRadiusY(float radiusY)
-{
->>>>>>> miniblink49
     if (m_radiusY == radiusY)
         return false;
     m_radiusY = radiusY;
     return true;
 }
 
-<<<<<<< HEAD
 FloatRect FEMorphology::mapEffect(const FloatRect& rect) const
 {
     FloatRect result = rect;
@@ -148,20 +113,6 @@ sk_sp<SkImageFilter> FEMorphology::createImageFilter()
 
 static TextStream& operator<<(TextStream& ts,
     const MorphologyOperatorType& type)
-=======
-PassRefPtr<SkImageFilter> FEMorphology::createImageFilter(SkiaImageFilterBuilder* builder)
-{
-    RefPtr<SkImageFilter> input(builder->build(inputEffect(0), operatingColorSpace()));
-    SkScalar radiusX = SkFloatToScalar(filter()->applyHorizontalScale(m_radiusX));
-    SkScalar radiusY = SkFloatToScalar(filter()->applyVerticalScale(m_radiusY));
-    SkImageFilter::CropRect rect = getCropRect(builder->cropOffset());
-    if (m_type == FEMORPHOLOGY_OPERATOR_DILATE)
-        return adoptRef(SkDilateImageFilter::Create(radiusX, radiusY, input.get(), &rect));
-    return adoptRef(SkErodeImageFilter::Create(radiusX, radiusY, input.get(), &rect));
-}
-
-static TextStream& operator<<(TextStream& ts, const MorphologyOperatorType& type)
->>>>>>> miniblink49
 {
     switch (type) {
     case FEMORPHOLOGY_OPERATOR_UNKNOWN:
@@ -177,22 +128,14 @@ static TextStream& operator<<(TextStream& ts, const MorphologyOperatorType& type
     return ts;
 }
 
-<<<<<<< HEAD
 TextStream& FEMorphology::externalRepresentation(TextStream& ts,
     int indent) const
-=======
-TextStream& FEMorphology::externalRepresentation(TextStream& ts, int indent) const
->>>>>>> miniblink49
 {
     writeIndent(ts, indent);
     ts << "[feMorphology";
     FilterEffect::externalRepresentation(ts);
     ts << " operator=\"" << morphologyOperator() << "\" "
-<<<<<<< HEAD
        << "radius=\"" << radiusX() << ", " << radiusY() << "\"]\n";
-=======
-        << "radius=\"" << radiusX() << ", " << radiusY() << "\"]\n";
->>>>>>> miniblink49
     inputEffect(0)->externalRepresentation(ts, indent + 1);
     return ts;
 }

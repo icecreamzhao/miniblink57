@@ -39,21 +39,11 @@
 namespace blink {
 
 struct WebMenuItemInfo {
-<<<<<<< HEAD
     enum Type { Option,
         CheckableOption,
         Group,
         Separator,
         SubMenu };
-=======
-    enum Type {
-        Option,
-        CheckableOption,
-        Group,
-        Separator,
-        SubMenu
-    };
->>>>>>> miniblink49
 
     WebMenuItemInfo()
         : type(Option)

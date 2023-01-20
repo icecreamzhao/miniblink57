@@ -10,7 +10,6 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
-<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -28,40 +27,13 @@
 #include "platform/audio/AudioUtilities.h"
 #include "wtf/MathExtras.h"
 #include <cmath>
-=======
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-
-#include "config.h"
-
-#if ENABLE(WEB_AUDIO)
-
-#include "platform/audio/AudioDelayDSPKernel.h"
-
-#include "platform/audio/AudioUtilities.h"
-#include "wtf/MathExtras.h"
-#include <algorithm>
->>>>>>> miniblink49
 
 namespace blink {
 
 const float SmoothingTimeConstant = 0.020f; // 20ms
 
-<<<<<<< HEAD
 AudioDelayDSPKernel::AudioDelayDSPKernel(AudioDSPKernelProcessor* processor,
     size_t processingSizeInFrames)
-=======
-AudioDelayDSPKernel::AudioDelayDSPKernel(AudioDSPKernelProcessor* processor, size_t processingSizeInFrames)
->>>>>>> miniblink49
     : AudioDSPKernel(processor)
     , m_writeIndex(0)
     , m_firstTime(true)
@@ -75,13 +47,8 @@ AudioDelayDSPKernel::AudioDelayDSPKernel(double maxDelayTime, float sampleRate)
     , m_writeIndex(0)
     , m_firstTime(true)
 {
-<<<<<<< HEAD
     ASSERT(maxDelayTime > 0.0 && !std_isnan(maxDelayTime));
     if (maxDelayTime <= 0.0 || std_isnan(maxDelayTime))
-=======
-    ASSERT(maxDelayTime > 0.0 && !std::isnan(maxDelayTime));
-    if (maxDelayTime <= 0.0 || std::isnan(maxDelayTime))
->>>>>>> miniblink49
         return;
 
     size_t bufferLength = bufferLengthForDelay(maxDelayTime, sampleRate);
@@ -92,7 +59,6 @@ AudioDelayDSPKernel::AudioDelayDSPKernel(double maxDelayTime, float sampleRate)
     m_buffer.allocate(bufferLength);
     m_buffer.zero();
 
-<<<<<<< HEAD
     m_smoothingRate = AudioUtilities::discreteTimeConstantForSampleRate(
         SmoothingTimeConstant, sampleRate);
 }
@@ -103,15 +69,6 @@ size_t AudioDelayDSPKernel::bufferLengthForDelay(double maxDelayTime,
     // Compute the length of the buffer needed to handle a max delay of
     // |maxDelayTime|. One is added to handle the case where the actual delay
     // equals the maximum delay.
-=======
-    m_smoothingRate = AudioUtilities::discreteTimeConstantForSampleRate(SmoothingTimeConstant, sampleRate);
-}
-
-size_t AudioDelayDSPKernel::bufferLengthForDelay(double maxDelayTime, double sampleRate) const
-{
-    // Compute the length of the buffer needed to handle a max delay of |maxDelayTime|. One is
-    // added to handle the case where the actual delay equals the maximum delay.
->>>>>>> miniblink49
     return 1 + AudioUtilities::timeToSampleFrame(maxDelayTime, sampleRate);
 }
 
@@ -122,11 +79,7 @@ bool AudioDelayDSPKernel::hasSampleAccurateValues()
 
 void AudioDelayDSPKernel::calculateSampleAccurateValues(float*, size_t)
 {
-<<<<<<< HEAD
     NOTREACHED();
-=======
-    ASSERT_NOT_REACHED();
->>>>>>> miniblink49
 }
 
 double AudioDelayDSPKernel::delayTime(float sampleRate)
@@ -134,13 +87,9 @@ double AudioDelayDSPKernel::delayTime(float sampleRate)
     return m_desiredDelayFrames / sampleRate;
 }
 
-<<<<<<< HEAD
 void AudioDelayDSPKernel::process(const float* source,
     float* destination,
     size_t framesToProcess)
-=======
-void AudioDelayDSPKernel::process(const float* source, float* destination, size_t framesToProcess)
->>>>>>> miniblink49
 {
     size_t bufferLength = m_buffer.size();
     float* buffer = m_buffer.data();
@@ -166,12 +115,7 @@ void AudioDelayDSPKernel::process(const float* source, float* destination, size_
         delayTime = this->delayTime(sampleRate);
 
         // Make sure the delay time is in a valid range.
-<<<<<<< HEAD
         delayTime = clampTo(delayTime, 0.0, maxTime);
-=======
-        delayTime = std::min(maxTime, delayTime);
-        delayTime = std::max(0.0, delayTime);
->>>>>>> miniblink49
 
         if (m_firstTime) {
             m_currentDelayTime = delayTime;
@@ -182,15 +126,10 @@ void AudioDelayDSPKernel::process(const float* source, float* destination, size_
     for (unsigned i = 0; i < framesToProcess; ++i) {
         if (sampleAccurate) {
             delayTime = delayTimes[i];
-<<<<<<< HEAD
             if (std_isnan(delayTime))
                 delayTime = maxTime;
             else
                 delayTime = clampTo(delayTime, 0.0, maxTime);
-=======
-            delayTime = std::min(maxTime, delayTime);
-            delayTime = std::max(0.0, delayTime);
->>>>>>> miniblink49
             m_currentDelayTime = delayTime;
         } else {
             // Approach desired delay time.
@@ -240,8 +179,3 @@ double AudioDelayDSPKernel::latencyTime() const
 }
 
 } // namespace blink
-<<<<<<< HEAD
-=======
-
-#endif // ENABLE(WEB_AUDIO)
->>>>>>> miniblink49

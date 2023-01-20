@@ -8,25 +8,13 @@
 namespace ots {
 
 // Compute the size of the final uncompressed font, or 0 on error.
-<<<<<<< HEAD
 size_t ComputeWOFF2FinalSize(const uint8_t* data, size_t length);
-=======
-size_t ComputeWOFF2FinalSize(const uint8_t *data, size_t length);
->>>>>>> miniblink49
 
 // Decompresses the font into the target buffer. The result_length should
 // be the same as determined by ComputeFinalSize(). Returns true on successful
 // decompression.
-<<<<<<< HEAD
 bool ConvertWOFF2ToTTF(uint8_t* result, size_t result_length,
     const uint8_t* data, size_t length);
 }
 
 #endif // OTS_WOFF2_H_
-=======
-bool ConvertWOFF2ToTTF(uint8_t *result, size_t result_length,
-                       const uint8_t *data, size_t length);
-}
-
-#endif  // OTS_WOFF2_H_
->>>>>>> miniblink49

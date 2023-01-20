@@ -6,10 +6,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #include "SkAnimateActive.h"
 #include "SkAnimateBase.h"
 #include "SkAnimateMaker.h"
@@ -21,7 +17,6 @@
 
 // SkActive holds array of interpolators
 
-<<<<<<< HEAD
 SkActive::SkActive(SkApply& apply, SkAnimateMaker& maker)
     : fApply(apply)
     , fMaxTime(0)
@@ -29,10 +24,6 @@ SkActive::SkActive(SkApply& apply, SkAnimateMaker& maker)
     , fDrawIndex(0)
     , fDrawMax(0)
 {
-=======
-SkActive::SkActive(SkApply& apply, SkAnimateMaker& maker) : fApply(apply),
-    fMaxTime(0), fMaker(maker), fDrawIndex(0), fDrawMax(0) {
->>>>>>> miniblink49
 }
 
 void SkActive::init()
@@ -44,7 +35,6 @@ void SkActive::init()
     fState.setCount(animators);
     int index;
     for (index = 0; index < animators; index++)
-<<<<<<< HEAD
         fInterpolators[index] = new SkOperandInterpolator;
     initState(&fApply, 0);
     //  for (index = 0; index < animators; index++)
@@ -54,16 +44,6 @@ void SkActive::init()
 
 SkActive::~SkActive()
 {
-=======
-        fInterpolators[index] = SkNEW(SkOperandInterpolator);
-    initState(&fApply, 0);
-//  for (index = 0; index < animators; index++)
-//      fState[index].bumpSave();
-    SkASSERT(fInterpolators.count() == fAnimators.count());
-}
-
-SkActive::~SkActive() {
->>>>>>> miniblink49
     int index;
     for (index = 0; index < fSaveRestore.count(); index++)
         delete[] fSaveRestore[index];
@@ -73,23 +53,15 @@ SkActive::~SkActive() {
         delete fInterpolators[index];
 }
 
-<<<<<<< HEAD
 void SkActive::advance()
 {
-=======
-void SkActive::advance() {
->>>>>>> miniblink49
     if (fDrawMax < fDrawIndex)
         fDrawMax = fDrawIndex;
     fDrawIndex += fAnimators.count();
 }
 
-<<<<<<< HEAD
 void SkActive::append(SkApply* apply)
 {
-=======
-void SkActive::append(SkApply* apply) {
->>>>>>> miniblink49
     int oldCount = fAnimators.count();
     SkTDAnimateArray& animates = apply->fAnimators;
     int newCount = animates.count();
@@ -100,46 +72,26 @@ void SkActive::append(SkApply* apply) {
     fInterpolators.setCount(total);
     memset(&fInterpolators.begin()[oldCount], 0, newCount * sizeof(SkOperandInterpolator*));
     for (index = oldCount; index < total; index++)
-<<<<<<< HEAD
         fInterpolators[index] = new SkOperandInterpolator;
     fAnimators.setCount(total);
     memcpy(&fAnimators[oldCount], animates.begin(), sizeof(fAnimators[0]) * newCount);
-=======
-        fInterpolators[index] = SkNEW(SkOperandInterpolator);
-    fAnimators.setCount(total);
-    memcpy(&fAnimators[oldCount], animates.begin(), sizeof(fAnimators[0]) *
-        newCount);
->>>>>>> miniblink49
     fState.setCount(total);
     initState(apply, oldCount);
     SkASSERT(fApply.scope == apply->scope);
     for (index = 0; index < newCount; index++) {
         SkAnimateBase* test = animates[index];
-<<<<<<< HEAD
         //      SkASSERT(fApply.scope == test->fTarget || fApply.scope->contains(test->fTarget));
-=======
-//      SkASSERT(fApply.scope == test->fTarget || fApply.scope->contains(test->fTarget));
->>>>>>> miniblink49
         SkActive::SkState& testState = fState[oldCount + index];
         for (int inner = 0; inner < oldCount; inner++) {
             SkAnimateBase* oldGuard = fAnimators[inner];
             SkActive::SkState& oldState = fState[inner];
-<<<<<<< HEAD
             if (oldGuard->fTarget == test->fTarget && oldGuard->fFieldInfo == test->fFieldInfo && testState.fBegin == oldState.fBegin) {
-=======
-            if (oldGuard->fTarget == test->fTarget && oldGuard->fFieldInfo == test->fFieldInfo &&
-                    testState.fBegin == oldState.fBegin) {
->>>>>>> miniblink49
                 delete fInterpolators[inner];
                 fInterpolators.remove(inner);
                 fAnimators.remove(inner);
                 testState.fSave = oldState.fSave;
                 if (oldState.fUnpostedEndEvent) {
-<<<<<<< HEAD
                     //                  SkDEBUGF(("%8x %8x active append: post on end\n", this, oldGuard));
-=======
-//                  SkDEBUGF(("%8x %8x active append: post on end\n", this, oldGuard));
->>>>>>> miniblink49
                     fMaker.postOnEnd(oldGuard, oldState.fBegin + oldState.fDuration);
                 }
                 fState.remove(inner);
@@ -160,7 +112,6 @@ void SkActive::append(SkApply* apply) {
             }
         }
     }
-<<<<<<< HEAD
     //  total = oldCount + newCount;
     //  for (index = oldCount; index < total; index++)
     //      fState[index].bumpSave();
@@ -170,16 +121,6 @@ void SkActive::append(SkApply* apply) {
 void SkActive::appendSave(int oldCount)
 {
     SkASSERT(fDrawMax == 0); // if true, we can optimize below quite a bit
-=======
-//  total = oldCount + newCount;
-//  for (index = oldCount; index < total; index++)
-//      fState[index].bumpSave();
-    SkASSERT(fInterpolators.count() == fAnimators.count());
-}
-
-void SkActive::appendSave(int oldCount) {
-    SkASSERT(fDrawMax == 0);    // if true, we can optimize below quite a bit
->>>>>>> miniblink49
     int newCount = fAnimators.count();
     int saveIndex = fSaveRestore.count();
     SkASSERT(fSaveInterpolators.count() == saveIndex);
@@ -208,7 +149,6 @@ void SkActive::calcDurations(int index)
     SkMSec duration = animate->dur;
     SkState& state = fState[index];
     switch (state.fMode) {
-<<<<<<< HEAD
     case SkApply::kMode_immediate:
     case SkApply::kMode_create:
         duration = state.fSteps ? state.fSteps * SK_MSec1 : 1;
@@ -223,22 +163,6 @@ void SkActive::calcDurations(int index)
         //      duration = value.fOperand.fS32 * SK_MSec1;
         //      break;
         //    }
-=======
-      case SkApply::kMode_immediate:
-      case SkApply::kMode_create:
-        duration = state.fSteps ? state.fSteps * SK_MSec1 : 1;
-        break;
-//    case SkApply::kMode_hold: {
-//      int entries = animate->entries();
-//      SkScriptValue value;
-//      value.fOperand = animate->getValues()[entries - 1];
-//      value.fType = animate->getValuesType();
-//      bool result = SkScriptEngine::ConvertTo(NULL, SkType_Int, &value);
-//      SkASSERT(result);
-//      duration = value.fOperand.fS32 * SK_MSec1;
-//      break;
-//    }
->>>>>>> miniblink49
     }
     state.fDuration = duration;
     SkMSec maxTime = state.fBegin + duration;
@@ -246,12 +170,8 @@ void SkActive::calcDurations(int index)
         fMaxTime = maxTime;
 }
 
-<<<<<<< HEAD
 void SkActive::create(SkADrawable* drawable, SkMSec time)
 {
-=======
-void SkActive::create(SkADrawable* drawable, SkMSec time) {
->>>>>>> miniblink49
     fApply.fLastTime = time;
     fApply.refresh(fMaker);
     for (int index = 0; index < fAnimators.count(); index++) {
@@ -261,11 +181,7 @@ void SkActive::create(SkADrawable* drawable, SkMSec time) {
         if (animate->formula.size() > 0) {
             SkTDOperandArray values;
             values.setCount(count);
-<<<<<<< HEAD
             SkDEBUGCODE(bool success =) animate->fFieldInfo->setValue(fMaker, &values, 0, 0, nullptr,
-=======
-            SkDEBUGCODE(bool success = ) animate->fFieldInfo->setValue(fMaker, &values, 0, 0, NULL,
->>>>>>> miniblink49
                 animate->getValuesType(), animate->formula);
             SkASSERT(success);
             fApply.applyValues(index, values.begin(), count, animate->getValuesType(), time);
@@ -279,12 +195,8 @@ void SkActive::create(SkADrawable* drawable, SkMSec time) {
     SkASSERT(fAnimators.count() == fInterpolators.count());
 }
 
-<<<<<<< HEAD
 bool SkActive::immediate(bool enable)
 {
-=======
-bool SkActive::immediate(bool enable) {
->>>>>>> miniblink49
     SkMSec time = 0;
     bool result = false;
     SkADrawable* drawable = fApply.scope;
@@ -308,11 +220,7 @@ bool SkActive::immediate(bool enable) {
             if (animate->formula.size() > 0) {
                 SkTDOperandArray values;
                 values.setCount(count);
-<<<<<<< HEAD
                 SkDEBUGCODE(bool success =) animate->fFieldInfo->setValue(fMaker, &values, 0, 0, nullptr,
-=======
-                SkDEBUGCODE(bool success = ) animate->fFieldInfo->setValue(fMaker, &values, 0, 0, NULL,
->>>>>>> miniblink49
                     animate->getValuesType(), animate->formula);
                 SkASSERT(success);
                 fApply.applyValues(index, values.begin(), count, animate->getValuesType(), time);
@@ -331,12 +239,8 @@ bool SkActive::immediate(bool enable) {
     return result;
 }
 
-<<<<<<< HEAD
 void SkActive::fixInterpolator(SkBool save)
 {
-=======
-void SkActive::fixInterpolator(SkBool save) {
->>>>>>> miniblink49
     int animators = fAnimators.count();
     for (int index = 0; index < animators; index++) {
         SkAnimateBase* animate = fAnimators[index];
@@ -350,22 +254,14 @@ void SkActive::fixInterpolator(SkBool save) {
     }
 }
 
-<<<<<<< HEAD
 SkMSec SkActive::getTime(SkMSec inTime, int animatorIndex)
 {
-=======
-SkMSec SkActive::getTime(SkMSec inTime, int animatorIndex) {
->>>>>>> miniblink49
     fState[animatorIndex].fTicks = inTime;
     return inTime - fState[animatorIndex].fStartTime;
 }
 
-<<<<<<< HEAD
 bool SkActive::initializeSave()
 {
-=======
-bool SkActive::initializeSave() {
->>>>>>> miniblink49
     int animators = fAnimators.count();
     int activeTotal = fDrawIndex + animators;
     int oldCount = fSaveRestore.count();
@@ -381,12 +277,8 @@ bool SkActive::initializeSave() {
     return false;
 }
 
-<<<<<<< HEAD
 void SkActive::initState(SkApply* apply, int offset)
 {
-=======
-void SkActive::initState(SkApply* apply, int offset) {
->>>>>>> miniblink49
     int count = fState.count();
     for (int index = offset; index < count; index++) {
         SkState& state = fState[index];
@@ -402,20 +294,12 @@ void SkActive::initState(SkApply* apply, int offset) {
 #if 0
         state.fPickup = (SkBool8) apply->pickup;
 #endif
-<<<<<<< HEAD
         state.fRestore = (SkBool8)apply->restore;
-=======
-        state.fRestore = (SkBool8) apply->restore;
->>>>>>> miniblink49
         state.fSave = apply->begin;
         state.fStarted = false;
         state.fSteps = apply->steps;
         state.fTicks = 0;
-<<<<<<< HEAD
         state.fUnpostedEndEvent = (SkBool8)animate->fHasEndEvent;
-=======
-        state.fUnpostedEndEvent = (SkBool8) animate->fHasEndEvent;
->>>>>>> miniblink49
         calcDurations(index);
         setInterpolator(index, from);
     }
@@ -423,12 +307,8 @@ void SkActive::initState(SkApply* apply, int offset) {
         fMaxTime = apply->begin + apply->steps * SK_MSec1;
 }
 
-<<<<<<< HEAD
 void SkActive::pickUp(SkActive* existing)
 {
-=======
-void SkActive::pickUp(SkActive* existing) {
->>>>>>> miniblink49
     SkTDOperandArray existingValues;
     for (int index = 0; index < fAnimators.count(); index++) {
         SkAnimateBase* animate = fAnimators[index];
@@ -450,11 +330,7 @@ void SkActive::pickUp(SkActive* existing) {
         if (workingSum < originalSum) {
             SkScalar originalDistance = SkScalarSqrt(originalSum);
             SkScalar workingDistance = SkScalarSqrt(workingSum);
-<<<<<<< HEAD
             existing->fState[index].fDuration = (SkMSec)SkScalarMulDiv(fState[index].fDuration,
-=======
-            existing->fState[index].fDuration = (SkMSec) SkScalarMulDiv(fState[index].fDuration,
->>>>>>> miniblink49
                 workingDistance, originalDistance);
         }
         fInterpolators[index]->reset(components, 2, SkType_Float);
@@ -463,12 +339,8 @@ void SkActive::pickUp(SkActive* existing) {
     }
 }
 
-<<<<<<< HEAD
 void SkActive::resetInterpolators()
 {
-=======
-void SkActive::resetInterpolators() {
->>>>>>> miniblink49
     int animators = fAnimators.count();
     for (int index = 0; index < animators; index++) {
         SkAnimateBase* animate = fAnimators[index];
@@ -477,12 +349,8 @@ void SkActive::resetInterpolators() {
     }
 }
 
-<<<<<<< HEAD
 void SkActive::resetState()
 {
-=======
-void SkActive::resetState() {
->>>>>>> miniblink49
     fDrawIndex = 0;
     int count = fState.count();
     for (int index = 0; index < count; index++) {
@@ -498,21 +366,14 @@ void SkActive::resetState() {
     }
 }
 
-<<<<<<< HEAD
 void SkActive::restoreInterpolatorValues(int index)
 {
     SkOperandInterpolator& interpolator = *fInterpolators[index];
     index += fDrawIndex;
-=======
-void SkActive::restoreInterpolatorValues(int index) {
-    SkOperandInterpolator& interpolator = *fInterpolators[index];
-    index += fDrawIndex ;
->>>>>>> miniblink49
     int count = interpolator.getValuesCount();
     memcpy(interpolator.getValues(), fSaveInterpolators[index], count * sizeof(SkOperand));
 }
 
-<<<<<<< HEAD
 void SkActive::saveInterpolatorValues(int index)
 {
     SkOperandInterpolator& interpolator = *fInterpolators[index];
@@ -526,19 +387,6 @@ void SkActive::saveInterpolatorValues(int index)
 void SkActive::setInterpolator(int index, SkOperand* from)
 {
     if (from == nullptr) // legitimate for set string
-=======
-void SkActive::saveInterpolatorValues(int index) {
-    SkOperandInterpolator& interpolator = *fInterpolators[index];
-    index += fDrawIndex ;
-    int count = interpolator.getValuesCount();
-    SkOperand* cache = new SkOperand[count];    // this should use sk_malloc/sk_free since SkOperand does not have a constructor/destructor
-    fSaveInterpolators[index] = cache;
-    memcpy(cache,   interpolator.getValues(), count * sizeof(SkOperand));
-}
-
-void SkActive::setInterpolator(int index, SkOperand* from) {
-    if (from == NULL) // legitimate for set string
->>>>>>> miniblink49
         return;
     SkAnimateBase* animate = fAnimators[index];
     int entries = animate->entries();
@@ -563,12 +411,8 @@ void SkActive::setInterpolator(int index, SkOperand* from) {
     }
 }
 
-<<<<<<< HEAD
 void SkActive::setSteps(int steps)
 {
-=======
-void SkActive::setSteps(int steps) {
->>>>>>> miniblink49
     int count = fState.count();
     fMaxTime = 0;
     for (int index = 0; index < count; index++) {
@@ -578,12 +422,8 @@ void SkActive::setSteps(int steps) {
     }
 }
 
-<<<<<<< HEAD
 void SkActive::start()
 {
-=======
-void SkActive::start() {
->>>>>>> miniblink49
     int count = fState.count();
     SkASSERT(count == fAnimators.count());
     SkASSERT(count == fInterpolators.count());
@@ -635,25 +475,16 @@ void SkActive::start() {
 }
 
 #ifdef SK_DEBUG
-<<<<<<< HEAD
 void SkActive::validate()
 {
-=======
-void SkActive::validate() {
->>>>>>> miniblink49
     int count = fState.count();
     SkASSERT(count == fAnimators.count());
     SkASSERT(count == fInterpolators.count());
     for (int index = 0; index < count; index++) {
         SkASSERT(fAnimators[index]);
         SkASSERT(fInterpolators[index]);
-<<<<<<< HEAD
         //      SkAnimateBase* test = fAnimators[index];
         //      SkASSERT(fApply.scope == test->fTarget || fApply.scope->contains(test->fTarget));
-=======
-//      SkAnimateBase* test = fAnimators[index];
-//      SkASSERT(fApply.scope == test->fTarget || fApply.scope->contains(test->fTarget));
->>>>>>> miniblink49
     }
 }
 #endif
@@ -679,20 +510,12 @@ void SkActive::validate() {
 //      fSave += SK_MSec1;
 //}
 
-<<<<<<< HEAD
 SkMSec SkActive::SkState::getRelativeTime(SkMSec time)
 {
     SkMSec result = time;
     //  if (fMode == SkApply::kMode_hold)
     //      result = fSave;
     //  else
-=======
-SkMSec SkActive::SkState::getRelativeTime(SkMSec time) {
-    SkMSec result = time;
-//  if (fMode == SkApply::kMode_hold)
-//      result = fSave;
-//  else
->>>>>>> miniblink49
     if (fTransition == SkApply::kTransition_reverse) {
         if (SkMSec_LT(fDuration, time))
             result = 0;

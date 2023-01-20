@@ -10,12 +10,8 @@
 
 #include "SkSurfaceProps.h"
 
-<<<<<<< HEAD
 static inline SkSurfaceProps SkSurfacePropsCopyOrDefault(const SkSurfaceProps* props)
 {
-=======
-static inline SkSurfaceProps SkSurfacePropsCopyOrDefault(const SkSurfaceProps* props) {
->>>>>>> miniblink49
     if (props) {
         return *props;
     } else {
@@ -23,12 +19,8 @@ static inline SkSurfaceProps SkSurfacePropsCopyOrDefault(const SkSurfaceProps* p
     }
 }
 
-<<<<<<< HEAD
 static inline SkPixelGeometry SkSurfacePropsDefaultPixelGeometry()
 {
-=======
-static inline SkPixelGeometry SkSurfacePropsDefaultPixelGeometry() {
->>>>>>> miniblink49
     return SkSurfaceProps(SkSurfaceProps::kLegacyFontHost_InitType).pixelGeometry();
 }
 

@@ -5,11 +5,7 @@
 // https://notifications.spec.whatwg.org/#notificationevent
 
 dictionary NotificationEventInit : ExtendableEventInit {
-<<<<<<< HEAD
     required Notification notification;
     DOMString action = "";
     [RuntimeEnabled=NotificationInlineReplies] DOMString? reply = "";
-=======
-    Notification notification;
->>>>>>> miniblink49
 };

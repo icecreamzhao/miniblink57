@@ -33,17 +33,13 @@
 
 #include "platform/PlatformExport.h"
 #include "platform/weborigin/KURL.h"
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
-=======
->>>>>>> miniblink49
 #include "wtf/MathExtras.h"
 #include "wtf/text/WTFString.h"
 #include <time.h>
 
 namespace blink {
 
-<<<<<<< HEAD
 inline double invalidFileTime()
 {
     return std::numeric_limits<double>::quiet_NaN();
@@ -56,12 +52,6 @@ inline bool isValidFileTime(double time)
 class FileMetadata {
     DISALLOW_NEW();
 
-=======
-inline double invalidFileTime() { return std::numeric_limits<double>::quiet_NaN(); }
-inline bool isValidFileTime(double time) { return std::isfinite(time); }
-
-class FileMetadata {
->>>>>>> miniblink49
 public:
     FileMetadata()
         : modificationTime(invalidFileTime())

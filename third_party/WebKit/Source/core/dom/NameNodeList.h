@@ -32,10 +32,12 @@ namespace blink {
 // NodeList which lists all Nodes in a Element with a given "name" attribute
 class NameNodeList final : public LiveNodeList {
 public:
-    static PassRefPtrWillBeRawPtr<NameNodeList> create(ContainerNode& rootNode, CollectionType type, const AtomicString& name)
+    static NameNodeList* create(ContainerNode& rootNode,
+        CollectionType type,
+        const AtomicString& name)
     {
-        ASSERT_UNUSED(type, type == NameNodeListType);
-        return adoptRefWillBeNoop(new NameNodeList(rootNode, name));
+        DCHECK_EQ(type, NameNodeListType);
+        return new NameNodeList(rootNode, name);
     }
 
     ~NameNodeList() override;

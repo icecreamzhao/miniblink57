@@ -5,7 +5,6 @@
 // https://notifications.spec.whatwg.org/#service-worker-api
 
 [
-<<<<<<< HEAD
     Constructor(DOMString type, NotificationEventInit eventInitDict),
     Exposed=ServiceWorker,
     RuntimeEnabled=Notifications,
@@ -13,12 +12,4 @@
     [ImplementedAs=getNotification] readonly attribute Notification notification;
     readonly attribute DOMString action;
     [RuntimeEnabled=NotificationInlineReplies] readonly attribute DOMString? reply;
-=======
-    Constructor(DOMString type, optional NotificationEventInit eventInitDict),
-    Exposed=ServiceWorker,
-    RuntimeEnabled=ServiceWorkerNotifications,
-    TypeChecking=Interface,
-] interface NotificationEvent : ExtendableEvent {
-    readonly attribute Notification notification;
->>>>>>> miniblink49
 };

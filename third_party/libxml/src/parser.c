@@ -768,11 +768,7 @@ const xmlChar * info3)
 * Returns zero (0) if the feature does not exist or an unknown
 * unknown feature is requested, non-zero otherwise.
 */
-<<<<<<< HEAD
 int XMLCALL
-=======
-int
->>>>>>> miniblink49
 xmlHasFeature(xmlFeature feature)
 {
     switch (feature) {

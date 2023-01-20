@@ -30,28 +30,18 @@
 #ifndef WebDOMMessageEvent_h
 #define WebDOMMessageEvent_h
 
-<<<<<<< HEAD
 #include "public/platform/WebMessagePortChannel.h"
 #include "public/platform/WebString.h"
 #include "public/web/WebDOMEvent.h"
 #include "public/web/WebDocument.h"
 #include "public/web/WebSerializedScriptValue.h"
 #if BLINK_IMPLEMENTATION
-=======
-#include "../platform/WebMessagePortChannel.h"
-#include "WebDOMEvent.h"
-#include "WebSerializedScriptValue.h"
-
-#if BLINK_IMPLEMENTATION
-#include "core/events/Event.h"
->>>>>>> miniblink49
 #include "core/events/MessageEvent.h"
 #endif
 
 namespace blink {
 
 class WebFrame;
-<<<<<<< HEAD
 
 // An interface for posting message events to the target frame. The message
 // events are used for communication between documents and described here:
@@ -65,14 +55,6 @@ public:
         const WebDocument& targetDocument = WebDocument(),
         const WebMessagePortChannelArray& channels = WebMessagePortChannelArray());
     WebDOMMessageEvent() { }
-=======
-class WebString;
-
-class WebDOMMessageEvent : public WebDOMEvent {
-public:
-    WebDOMMessageEvent() { }
-    BLINK_EXPORT void initMessageEvent(const WebString& type, bool canBubble, bool cancelable, const WebSerializedScriptValue& messageData, const WebString& origin, const WebFrame* sourceFrame, const WebString& lastEventId, const WebMessagePortChannelArray& channels = WebMessagePortChannelArray());
->>>>>>> miniblink49
 
     BLINK_EXPORT WebSerializedScriptValue data() const;
     BLINK_EXPORT WebString origin() const;
@@ -80,14 +62,10 @@ public:
     BLINK_EXPORT WebMessagePortChannelArray releaseChannels();
 
 #if BLINK_IMPLEMENTATION
-<<<<<<< HEAD
     explicit WebDOMMessageEvent(MessageEvent* e)
         : WebDOMEvent(e)
     {
     }
-=======
-    explicit WebDOMMessageEvent(const PassRefPtrWillBeRawPtr<MessageEvent>& e) : WebDOMEvent(e) { }
->>>>>>> miniblink49
 #endif
 };
 

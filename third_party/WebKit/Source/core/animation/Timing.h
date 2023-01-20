@@ -31,30 +31,23 @@
 #ifndef Timing_h
 #define Timing_h
 
+#include "core/style/DataEquivalency.h"
+#include "platform/animation/CompositorAnimation.h"
 #include "platform/animation/TimingFunction.h"
+#include "wtf/Allocator.h"
 #include "wtf/MathExtras.h"
 #include "wtf/RefPtr.h"
 
 namespace blink {
 
 struct Timing {
-    enum FillMode {
-        FillModeAuto,
-        FillModeNone,
-        FillModeForwards,
-        FillModeBackwards,
-        FillModeBoth
-    };
+    USING_FAST_MALLOC(Timing);
+
+public:
+    using FillMode = CompositorAnimation::FillMode;
+    using PlaybackDirection = CompositorAnimation::Direction;
 
     static String fillModeString(FillMode);
-
-    enum PlaybackDirection {
-        PlaybackDirectionNormal,
-        PlaybackDirectionReverse,
-        PlaybackDirectionAlternate,
-        PlaybackDirectionAlternateReverse
-    };
-
     static String playbackDirectionString(PlaybackDirection);
 
     static const Timing& defaults()
@@ -66,41 +59,34 @@ struct Timing {
     Timing()
         : startDelay(0)
         , endDelay(0)
-        , fillMode(FillModeAuto)
+        , fillMode(FillMode::AUTO)
         , iterationStart(0)
         , iterationCount(1)
         , iterationDuration(std::numeric_limits<double>::quiet_NaN())
         , playbackRate(1)
-        , direction(PlaybackDirectionNormal)
+        , direction(PlaybackDirection::NORMAL)
         , timingFunction(LinearTimingFunction::shared())
     {
     }
 
     void assertValid() const
     {
-        ASSERT(std::isfinite(startDelay));
-        ASSERT(std::isfinite(endDelay));
-        ASSERT(std::isfinite(iterationStart));
-        ASSERT(iterationStart >= 0);
-        ASSERT(iterationCount >= 0);
-        ASSERT(std::isnan(iterationDuration) || iterationDuration >= 0);
-        ASSERT(std::isfinite(playbackRate));
-        ASSERT(timingFunction);
+        DCHECK(std_isfinite(startDelay));
+        DCHECK(std_isfinite(endDelay));
+        DCHECK(std_isfinite(iterationStart));
+        DCHECK_GE(iterationStart, 0);
+        DCHECK_GE(iterationCount, 0);
+        DCHECK(std_isnan(iterationDuration) || iterationDuration >= 0);
+        DCHECK(std_isfinite(playbackRate));
+        DCHECK(timingFunction);
     }
 
-    bool operator==(const Timing &other) const
+    bool operator==(const Timing& other) const
     {
-        return startDelay == other.startDelay && endDelay == other.endDelay
-            && fillMode == other.fillMode && iterationStart == other.iterationStart
-            && iterationCount == other.iterationCount && iterationDuration == other.iterationDuration
-            && playbackRate == other.playbackRate && direction == other.direction
-            && *timingFunction == *other.timingFunction;
+        return startDelay == other.startDelay && endDelay == other.endDelay && fillMode == other.fillMode && iterationStart == other.iterationStart && iterationCount == other.iterationCount && ((/*std::*/isnan(iterationDuration) && /*std::*/isnan(other.iterationDuration)) || iterationDuration == other.iterationDuration) && playbackRate == other.playbackRate && direction == other.direction && dataEquivalent(timingFunction.get(), other.timingFunction.get());
     }
 
-    bool operator!=(const Timing &other) const
-    {
-        return !(*this == other);
-    }
+    bool operator!=(const Timing& other) const { return !(*this == other); }
 
     double startDelay;
     double endDelay;
@@ -108,6 +94,8 @@ struct Timing {
     double iterationStart;
     double iterationCount;
     double iterationDuration;
+
+    // TODO(crbug.com/630915) Remove playbackRate
     double playbackRate;
     PlaybackDirection direction;
     RefPtr<TimingFunction> timingFunction;

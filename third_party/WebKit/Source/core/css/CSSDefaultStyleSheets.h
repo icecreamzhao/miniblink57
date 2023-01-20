@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
- * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc. All rights reserved.
+ * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc.
+ * All rights reserved.
  * Copyright (C) 2013 Google Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
@@ -24,6 +25,7 @@
 #define CSSDefaultStyleSheets_h
 
 #include "platform/heap/Handle.h"
+#include "wtf/Allocator.h"
 
 namespace blink {
 
@@ -31,47 +33,66 @@ class Element;
 class RuleSet;
 class StyleSheetContents;
 
-class CSSDefaultStyleSheets : public NoBaseWillBeGarbageCollected<CSSDefaultStyleSheets> {
+class CSSDefaultStyleSheets : public GarbageCollected<CSSDefaultStyleSheets> {
+    WTF_MAKE_NONCOPYABLE(CSSDefaultStyleSheets);
+
 public:
     static CSSDefaultStyleSheets& instance();
 
-    void ensureDefaultStyleSheetsForElement(const Element&, bool& changedDefaultStyle);
+    bool ensureDefaultStyleSheetsForElement(const Element&);
+    void ensureDefaultStyleSheetForFullscreen();
 
     RuleSet* defaultStyle() { return m_defaultStyle.get(); }
     RuleSet* defaultQuirksStyle() { return m_defaultQuirksStyle.get(); }
     RuleSet* defaultPrintStyle() { return m_defaultPrintStyle.get(); }
     RuleSet* defaultViewSourceStyle();
-    RuleSet* defaultMobileViewportStyle();
 
-    // FIXME: Remove WAP support.
-    RuleSet* defaultXHTMLMobileProfileStyle();
+    StyleSheetContents* ensureMobileViewportStyleSheet();
+    StyleSheetContents* ensureTelevisionViewportStyleSheet();
+    StyleSheetContents* ensureXHTMLMobileProfileStyleSheet();
+#if ENABLE_WML
+    StyleSheetContents* ensureWMLStyleSheetsForElement();
+    StyleSheetContents* wmlDefaultStyleSheet() { return m_wmlDefaultStyleSheet.get(); }
+#endif
 
-    StyleSheetContents* defaultStyleSheet() { return m_defaultStyleSheet.get(); }
+    StyleSheetContents* defaultStyleSheet()
+    {
+        return m_defaultStyleSheet.get();
+    }
     StyleSheetContents* quirksStyleSheet() { return m_quirksStyleSheet.get(); }
     StyleSheetContents* svgStyleSheet() { return m_svgStyleSheet.get(); }
     StyleSheetContents* mathmlStyleSheet() { return m_mathmlStyleSheet.get(); }
-    StyleSheetContents* mediaControlsStyleSheet() { return m_mediaControlsStyleSheet.get(); }
-    StyleSheetContents* fullscreenStyleSheet() { return m_fullscreenStyleSheet.get(); }
+    StyleSheetContents* mediaControlsStyleSheet()
+    {
+        return m_mediaControlsStyleSheet.get();
+    }
+    StyleSheetContents* fullscreenStyleSheet()
+    {
+        return m_fullscreenStyleSheet.get();
+    }
 
     DECLARE_TRACE();
 
 private:
     CSSDefaultStyleSheets();
 
-    OwnPtrWillBeMember<RuleSet> m_defaultStyle;
-    OwnPtrWillBeMember<RuleSet> m_defaultMobileViewportStyle;
-    OwnPtrWillBeMember<RuleSet> m_defaultQuirksStyle;
-    OwnPtrWillBeMember<RuleSet> m_defaultPrintStyle;
-    OwnPtrWillBeMember<RuleSet> m_defaultViewSourceStyle;
-    OwnPtrWillBeMember<RuleSet> m_defaultXHTMLMobileProfileStyle;
+    Member<RuleSet> m_defaultStyle;
+    Member<RuleSet> m_defaultQuirksStyle;
+    Member<RuleSet> m_defaultPrintStyle;
+    Member<RuleSet> m_defaultViewSourceStyle;
 
-    RefPtrWillBeMember<StyleSheetContents> m_defaultStyleSheet;
-    RefPtrWillBeMember<StyleSheetContents> m_mobileViewportStyleSheet;
-    RefPtrWillBeMember<StyleSheetContents> m_quirksStyleSheet;
-    RefPtrWillBeMember<StyleSheetContents> m_svgStyleSheet;
-    RefPtrWillBeMember<StyleSheetContents> m_mathmlStyleSheet;
-    RefPtrWillBeMember<StyleSheetContents> m_mediaControlsStyleSheet;
-    RefPtrWillBeMember<StyleSheetContents> m_fullscreenStyleSheet;
+    Member<StyleSheetContents> m_defaultStyleSheet;
+    Member<StyleSheetContents> m_mobileViewportStyleSheet;
+    Member<StyleSheetContents> m_televisionViewportStyleSheet;
+    Member<StyleSheetContents> m_xhtmlMobileProfileStyleSheet;
+    Member<StyleSheetContents> m_quirksStyleSheet;
+    Member<StyleSheetContents> m_svgStyleSheet;
+    Member<StyleSheetContents> m_mathmlStyleSheet;
+    Member<StyleSheetContents> m_mediaControlsStyleSheet;
+    Member<StyleSheetContents> m_fullscreenStyleSheet;
+#if ENABLE_WML
+    Member<StyleSheetContents> m_wmlDefaultStyleSheet;
+#endif
 };
 
 } // namespace blink

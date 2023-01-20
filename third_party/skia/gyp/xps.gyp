@@ -16,26 +16,15 @@
             'skia_lib.gyp:skia_lib',
           ],
           'include_dirs': [
-<<<<<<< HEAD
             '../include/private',
-=======
-            '../include/device/xps',
->>>>>>> miniblink49
             '../include/utils/win',
             '../src/core', # needed to get SkGlyphCache.h
             '../src/utils', # needed to get SkBitSet.h
           ],
           'sources': [
-<<<<<<< HEAD
             '../src/xps/SkDocument_XPS.cpp',
             '../src/xps/SkXPSDevice.cpp',
             '../src/xps/SkXPSDevice.h',
-=======
-            '../include/device/xps/SkConstexprMath.h',
-            '../include/device/xps/SkXPSDevice.h',
-            '../src/device/xps/SkXPSDevice.cpp',
-            '../src/doc/SkDocument_XPS.cpp',
->>>>>>> miniblink49
           ],
           'link_settings': {
             'libraries': [
@@ -51,11 +40,7 @@
             ],
           },
         },{ #else if 'skia_os != "win"'
-<<<<<<< HEAD
           'sources': [ '../src/xps/SkDocument_XPS_None.cpp', ],
-=======
-          'sources': [ '../src/doc/SkDocument_XPS_None.cpp', ],
->>>>>>> miniblink49
           'dependencies': [ 'skia_lib.gyp:skia_lib', ],
         }],
       ],

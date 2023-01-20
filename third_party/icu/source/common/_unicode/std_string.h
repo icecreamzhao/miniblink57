@@ -28,7 +28,6 @@
 #if U_HAVE_STD_STRING
 
 #if !defined(_MSC_VER)
-<<<<<<< HEAD
 namespace std {
 class type_info;
 } // WORKAROUND: http://llvm.org/bugs/show_bug.cgi?id=13364
@@ -38,12 +37,3 @@ class type_info;
 #endif // U_HAVE_STD_STRING
 
 #endif // __STD_STRING_H__
-=======
-namespace std { class type_info; } // WORKAROUND: http://llvm.org/bugs/show_bug.cgi?id=13364
-#endif
-#include <string>
-
-#endif  // U_HAVE_STD_STRING
-
-#endif  // __STD_STRING_H__
->>>>>>> miniblink49

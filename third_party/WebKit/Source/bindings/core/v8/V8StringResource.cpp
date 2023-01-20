@@ -23,21 +23,20 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "bindings/core/v8/V8StringResource.h"
 
 #include "bindings/core/v8/V8Binding.h"
-#include "wtf/MainThread.h"
 
 namespace blink {
 
-template<class StringClass> struct StringTraits {
+template <class StringClass>
+struct StringTraits {
     static const StringClass& fromStringResource(WebCoreStringResourceBase*);
     template <typename V8StringTrait>
     static StringClass fromV8String(v8::Local<v8::String>, int);
 };
 
-template<>
+template <>
 struct StringTraits<String> {
     static const String& fromStringResource(WebCoreStringResourceBase* resource)
     {
@@ -47,11 +46,12 @@ struct StringTraits<String> {
     static String fromV8String(v8::Local<v8::String>, int);
 };
 
-template<>
+template <>
 struct StringTraits<AtomicString> {
-    static const AtomicString& fromStringResource(WebCoreStringResourceBase* resource)
+    static const AtomicString& fromStringResource(
+        WebCoreStringResourceBase* resource)
     {
-        return resource->atomicString();
+        return resource->getAtomicString();
     }
     template <typename V8StringTrait>
     static AtomicString fromV8String(v8::Local<v8::String>, int);
@@ -59,7 +59,9 @@ struct StringTraits<AtomicString> {
 
 struct V8StringTwoBytesTrait {
     typedef UChar CharType;
-    ALWAYS_INLINE static void write(v8::Local<v8::String> v8String, CharType* buffer, int length)
+    ALWAYS_INLINE static void write(v8::Local<v8::String> v8String,
+        CharType* buffer,
+        int length)
     {
         v8String->Write(reinterpret_cast<uint16_t*>(buffer), 0, length);
     }
@@ -67,14 +69,17 @@ struct V8StringTwoBytesTrait {
 
 struct V8StringOneByteTrait {
     typedef LChar CharType;
-    ALWAYS_INLINE static void write(v8::Local<v8::String> v8String, CharType* buffer, int length)
+    ALWAYS_INLINE static void write(v8::Local<v8::String> v8String,
+        CharType* buffer,
+        int length)
     {
         v8String->WriteOneByte(buffer, 0, length);
     }
 };
 
 template <typename V8StringTrait>
-String StringTraits<String>::fromV8String(v8::Local<v8::String> v8String, int length)
+String StringTraits<String>::fromV8String(v8::Local<v8::String> v8String,
+    int length)
 {
     ASSERT(v8String->Length() == length);
     typename V8StringTrait::CharType* buffer;
@@ -84,7 +89,9 @@ String StringTraits<String>::fromV8String(v8::Local<v8::String> v8String, int le
 }
 
 template <typename V8StringTrait>
-AtomicString StringTraits<AtomicString>::fromV8String(v8::Local<v8::String> v8String, int length)
+AtomicString StringTraits<AtomicString>::fromV8String(
+    v8::Local<v8::String> v8String,
+    int length)
 {
     ASSERT(v8String->Length() == length);
     static const int inlineBufferSize = 32 / sizeof(typename V8StringTrait::CharType);
@@ -99,8 +106,9 @@ AtomicString StringTraits<AtomicString>::fromV8String(v8::Local<v8::String> v8St
     return AtomicString(string);
 }
 
-template<typename StringType>
-StringType v8StringToWebCoreString(v8::Local<v8::String> v8String, ExternalMode external)
+template <typename StringType>
+StringType v8StringToWebCoreString(v8::Local<v8::String> v8String,
+    ExternalMode external)
 {
     {
         // This portion of this function is very hot in certain Dromeao benchmarks.
@@ -121,7 +129,10 @@ StringType v8StringToWebCoreString(v8::Local<v8::String> v8String, ExternalMode 
         return StringType("");
 
     bool oneByte = v8String->ContainsOnlyOneByte();
-    StringType result(oneByte ? StringTraits<StringType>::template fromV8String<V8StringOneByteTrait>(v8String, length) : StringTraits<StringType>::template fromV8String<V8StringTwoBytesTrait>(v8String, length));
+    StringType result(oneByte ? StringTraits<StringType>::template fromV8String<
+                          V8StringOneByteTrait>(v8String, length)
+                              : StringTraits<StringType>::template fromV8String<
+                                  V8StringTwoBytesTrait>(v8String, length));
 
     if (external != Externalize || !v8String->CanMakeExternal())
         return result;
@@ -138,19 +149,24 @@ StringType v8StringToWebCoreString(v8::Local<v8::String> v8String, ExternalMode 
     return result;
 }
 
-// Explicitly instantiate the above template with the expected parameterizations,
-// to ensure the compiler generates the code; otherwise link errors can result in GCC 4.4.
-template String v8StringToWebCoreString<String>(v8::Local<v8::String>, ExternalMode);
-template AtomicString v8StringToWebCoreString<AtomicString>(v8::Local<v8::String>, ExternalMode);
+// Explicitly instantiate the above template with the expected
+// parameterizations, to ensure the compiler generates the code; otherwise link
+// errors can result in GCC 4.4.
+template String v8StringToWebCoreString<String>(v8::Local<v8::String>,
+    ExternalMode);
+template AtomicString v8StringToWebCoreString<AtomicString>(
+    v8::Local<v8::String>,
+    ExternalMode);
 
 // Fast but non thread-safe version.
 String int32ToWebCoreStringFast(int value)
 {
-    // Caching of small strings below is not thread safe: newly constructed AtomicString
-    // are not safely published.
+    // Caching of small strings below is not thread safe: newly constructed
+    // AtomicString are not safely published.
     ASSERT(isMainThread());
 
-    // Most numbers used are <= 100. Even if they aren't used there's very little cost in using the space.
+    // Most numbers used are <= 100. Even if they aren't used there's very little
+    // cost in using the space.
     const int kLowNumbers = 100;
     DEFINE_STATIC_LOCAL(Vector<AtomicString>, lowNumbers, (kLowNumbers + 1));
     String webCoreString;
@@ -169,7 +185,8 @@ String int32ToWebCoreStringFast(int value)
 
 String int32ToWebCoreString(int value)
 {
-    // If we are on the main thread (this should always true for non-workers), call the faster one.
+    // If we are on the main thread (this should always true for non-workers),
+    // call the faster one.
     if (isMainThread())
         return int32ToWebCoreStringFast(value);
     return String::number(value);

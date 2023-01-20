@@ -19,7 +19,6 @@
 class GrConvolutionEffect : public Gr1DKernelEffect {
 
 public:
-<<<<<<< HEAD
     /// Convolve with an arbitrary user-specified kernel
     static sk_sp<GrFragmentProcessor> Make(GrTexture* tex,
         Direction dir,
@@ -42,41 +41,6 @@ public:
     {
         return sk_sp<GrFragmentProcessor>(
             new GrConvolutionEffect(tex, dir, halfWidth, gaussianSigma, useBounds, bounds));
-=======
-
-    /// Convolve with an arbitrary user-specified kernel
-    static GrFragmentProcessor* Create(GrProcessorDataManager* procDataManager,
-                                       GrTexture* tex,
-                                       Direction dir,
-                                       int halfWidth,
-                                       const float* kernel,
-                                       bool useBounds,
-                                       float bounds[2]) {
-        return SkNEW_ARGS(GrConvolutionEffect, (procDataManager,
-                                                tex,
-                                                dir,
-                                                halfWidth,
-                                                kernel,
-                                                useBounds,
-                                                bounds));
-    }
-
-    /// Convolve with a Gaussian kernel
-    static GrFragmentProcessor* CreateGaussian(GrProcessorDataManager* procDataManager,
-                                               GrTexture* tex,
-                                               Direction dir,
-                                               int halfWidth,
-                                               float gaussianSigma,
-                                               bool useBounds,
-                                               float bounds[2]) {
-        return SkNEW_ARGS(GrConvolutionEffect, (procDataManager,
-                                                tex,
-                                                dir,
-                                                halfWidth,
-                                                gaussianSigma,
-                                                useBounds,
-                                                bounds));
->>>>>>> miniblink49
     }
 
     virtual ~GrConvolutionEffect();
@@ -88,13 +52,6 @@ public:
 
     const char* name() const override { return "Convolution"; }
 
-<<<<<<< HEAD
-=======
-    void getGLProcessorKey(const GrGLSLCaps&, GrProcessorKeyBuilder*) const override;
-
-    GrGLFragmentProcessor* createGLInstance() const override;
-
->>>>>>> miniblink49
     enum {
         // This was decided based on the min allowed value for the max texture
         // samples per fragment program run in DX9SM2 (32). A sigma param of 4.0
@@ -107,16 +64,11 @@ public:
     };
 
 protected:
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
     float fKernel[kMaxKernelWidth];
     bool fUseBounds;
     float fBounds[2];
 
 private:
-<<<<<<< HEAD
     GrConvolutionEffect(GrTexture*, Direction,
         int halfWidth,
         const float* kernel,
@@ -138,26 +90,6 @@ private:
 
     void onComputeInvariantOutput(GrInvariantOutput* inout) const override
     {
-=======
-    GrConvolutionEffect(GrProcessorDataManager*,
-                        GrTexture*, Direction,
-                        int halfWidth,
-                        const float* kernel,
-                        bool useBounds,
-                        float bounds[2]);
-
-    /// Convolve with a Gaussian kernel
-    GrConvolutionEffect(GrProcessorDataManager*,
-                        GrTexture*, Direction,
-                        int halfWidth,
-                        float gaussianSigma,
-                        bool useBounds,
-                        float bounds[2]);
-
-    bool onIsEqual(const GrFragmentProcessor&) const override;
-
-    void onComputeInvariantOutput(GrInvariantOutput* inout) const override {
->>>>>>> miniblink49
         // If the texture was opaque we could know that the output color if we knew the sum of the
         // kernel values.
         inout->mulByUnknownFourComponents();

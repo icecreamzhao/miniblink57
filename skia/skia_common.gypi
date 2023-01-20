@@ -6,6 +6,9 @@
 # Skia build.
 {
   'includes': [
+    # chromium_skia_defines.gypi defines chromium_skia_defines
+    'chromium_skia_defines.gypi',
+
     # skia_for_chromium_defines.gypi defines skia_for_chromium_defines
     '../third_party/skia/gyp/skia_for_chromium_defines.gypi',
   ],
@@ -21,11 +24,6 @@
          ['exclude', '_android\\.(cc|cpp)$'],
       ],
     }],
-    [ 'OS == "android"', {
-      'defines': [
-        'SK_FONTHOST_DOES_NOT_USE_FONTMGR',
-      ],
-    }],
     [ 'OS != "ios"', {
       'sources/': [
          ['exclude', '_ios\\.(cc|cpp|mm?)$'],
@@ -33,7 +31,12 @@
     }],
     [ 'OS == "ios"', {
       'defines': [
+        # When targetting iOS and using gyp to generate the build files, it is
+        # not possible to select files to build depending on the architecture
+        # (i.e. it is not possible to use hand optimized assembly version). In
+        # that configuration, disable all optimisation.
         'SK_BUILD_FOR_IOS',
+        'SK_BUILD_NO_OPTS',
       ],
     }],
     [ 'OS != "mac"', {
@@ -56,6 +59,7 @@
         # size.
         # http://crbug.com/314387
         'SK_DEFAULT_FONT_CACHE_COUNT_LIMIT=256',
+        'GR_GL_FUNCTION_TYPE=__stdcall',
       ],
     }],
     [ 'desktop_linux == 0 and chromeos == 0', {
@@ -70,7 +74,6 @@
       'defines': [
         'SK_GAMMA_EXPONENT=1.2',
         'SK_GAMMA_CONTRAST=0.2',
-        'SK_HIGH_QUALITY_IS_LANCZOS',
       ],
     }],
     ['OS == "android"', {
@@ -79,45 +82,29 @@
         'SK_GAMMA_EXPONENT=1.4',
         'SK_GAMMA_CONTRAST=0.0',
       ],
-      'android_enable_fdo': 1,
     }],
     ['OS == "win"', {
       'defines': [
         'SK_GAMMA_SRGB',
         'SK_GAMMA_CONTRAST=0.5',
-        'SK_HIGH_QUALITY_IS_LANCZOS',
       ],
     }],
     ['OS == "mac"', {
       'defines': [
         'SK_GAMMA_SRGB',
         'SK_GAMMA_CONTRAST=0.0',
-        'SK_HIGH_QUALITY_IS_LANCZOS',
       ],
-    }],
-
-    # For POSIX platforms, prefer the Mutex implementation provided by Skia
-    # since it does not generate static initializers.
-    [ 'os_posix == 1', {
-      'defines+': [
-        'SK_USE_POSIX_THREADS',
-      ],
-      'direct_dependent_settings': {
-        'defines': [
-          'SK_USE_POSIX_THREADS',
-        ],
-      },
     }],
 
     # Neon support.
     [ 'target_arch == "arm" and arm_version >= 7 and arm_neon == 1', {
       'defines': [
-        '__ARM_HAVE_NEON',
+        'SK_ARM_HAS_NEON',
       ],
     }],
-    [ 'target_arch == "arm" and arm_version >= 7 and arm_neon_optional == 1', {
+    [ 'target_arch == "arm" and arm_version >= 7 and arm_neon == 0 and arm_neon_optional == 1', {
       'defines': [
-        '__ARM_HAVE_OPTIONAL_NEON_SUPPORT',
+        'SK_ARM_HAS_OPTIONAL_NEON',
       ],
     }],
   ],
@@ -130,7 +117,7 @@
         }, {
           'skia_support_gpu': 1,
         }],
-        ['OS=="ios" or enable_printing == 0', {
+        ['OS=="ios" or (enable_basic_printing==0 and enable_print_preview==0)', {
           'skia_support_pdf': 0,
         }, {
           'skia_support_pdf': 1,
@@ -147,18 +134,15 @@
     # This list will contain all defines that also need to be exported to
     # dependent components.
     'skia_export_defines': [
-      'SK_ENABLE_INST_COUNT=0',
       'SK_SUPPORT_GPU=<(skia_support_gpu)',
-      'GR_GL_CUSTOM_SETUP_HEADER="GrGLConfig_chrome.h"',
-      'SK_ENABLE_LEGACY_API_ALIASING=1',
-      'SK_ATTR_DEPRECATED=SK_NOTHING_ARG1',
-      'GR_GL_IGNORE_ES3_MSAA=0',
-      'SK_WILL_NEVER_DRAW_PERSPECTIVE_TEXT',
+
+      # This variable contains additional defines, specified in the
+      # chromium_skia_defines.gypi file.
+      '<@(chromium_skia_defines)',
 
       # This variable contains additional defines, specified in skia's
       # skia_for_chromium_defines.gypi file.
       '<@(skia_for_chromium_defines)',
-      'SK_SUPPORT_LEGACY_GETTOTALCLIP',
     ],
 
     'default_font_cache_limit%': '(20*1024*1024)',
@@ -179,32 +163,7 @@
   'defines': [
     '<@(skia_export_defines)',
 
-    # skia uses static initializers to initialize the serialization logic
-    # of its "pictures" library. This is currently not used in chrome; if
-    # it ever gets used the processes that use it need to call
-    # SkGraphics::Init().
-    'SK_ALLOW_STATIC_GLOBAL_INITIALIZERS=0',
-
-    # Forcing the unoptimized path for the offset image filter in skia until
-    # all filters used in Blink support the optimized path properly
-    'SK_DISABLE_OFFSETIMAGEFILTER_OPTIMIZATION',
-
-    # Disable this check because it is too strict for some Chromium-specific
-    # subclasses of SkPixelRef. See bug: crbug.com/171776.
-    'SK_DISABLE_PIXELREF_LOCKCOUNT_BALANCE_CHECK',
-
-    'IGNORE_ROT_AA_RECT_OPT',
-
-    'SK_IGNORE_BLURRED_RRECT_OPT',
-
-    'SK_IGNORE_QUAD_RR_CORNERS_OPT',
-
-    # this flag forces Skia not to use typographic metrics with GDI.
-    'SK_GDI_ALWAYS_USE_TEXTMETRICS_FOR_FONT_METRICS',
-
     'SK_DEFAULT_FONT_CACHE_LIMIT=<(default_font_cache_limit)',
-
-    'SK_USE_DISCARDABLE_SCALEDIMAGECACHE',
   ],
 
   'direct_dependent_settings': {

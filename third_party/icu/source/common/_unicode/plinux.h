@@ -30,11 +30,7 @@
 
 /* This file should be included before uvernum.h. */
 #if defined(UVERNUM_H)
-<<<<<<< HEAD
 #error Do not include unicode/uvernum.h before #including unicode/platform.h.  Instead of unicode/uvernum.h, #include unicode/uversion.h
-=======
-# error Do not include unicode/uvernum.h before #including unicode/platform.h.  Instead of unicode/uvernum.h, #include unicode/uversion.h
->>>>>>> miniblink49
 #endif
 
 /**
@@ -151,11 +147,7 @@
 #endif
 
 /* 1 or 0 to enable or disable threads.  If undefined, default is: enable threads. */
-<<<<<<< HEAD
 #ifndef ICU_USE_THREADS
-=======
-#ifndef ICU_USE_THREADS 
->>>>>>> miniblink49
 #define ICU_USE_THREADS 1
 #endif
 
@@ -208,10 +200,6 @@
 #define U_CHECK_DYLOAD 1
 #endif
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /** Do we allow ICU users to use the draft APIs by default? */
 #ifndef U_DEFAULT_SHOW_DRAFT
 #define U_DEFAULT_SHOW_DRAFT 1
@@ -224,11 +212,7 @@
 /*===========================================================================*/
 
 #if ((defined(OS390) && (!defined(__CHARSET_LIB) || !__CHARSET_LIB))) || defined(OS400)
-<<<<<<< HEAD
 #define U_CHARSET_FAMILY 1
-=======
-#   define U_CHARSET_FAMILY 1
->>>>>>> miniblink49
 #endif
 
 /** @} */
@@ -238,7 +222,6 @@
 /*===========================================================================*/
 
 #ifndef U_HAVE_WCHAR_H
-<<<<<<< HEAD
 #define U_HAVE_WCHAR_H 1
 #endif
 
@@ -248,17 +231,6 @@
 
 #ifndef U_HAVE_WCSCPY
 #define U_HAVE_WCSCPY 1
-=======
-#define U_HAVE_WCHAR_H      1
-#endif
-
-#ifndef U_SIZEOF_WCHAR_T
-#define U_SIZEOF_WCHAR_T    4
-#endif
-
-#ifndef U_HAVE_WCSCPY
-#define U_HAVE_WCSCPY       1
->>>>>>> miniblink49
 #endif
 
 /** @} */
@@ -278,7 +250,6 @@
 #endif
 #if 1 || defined(U_CHECK_UTF16_STRING)
 #if (defined(__xlC__) && defined(__IBM_UTF_LITERAL) && U_SIZEOF_WCHAR_T != 2) \
-<<<<<<< HEAD
     || (defined(__HP_aCC) && __HP_aCC >= 035000)                              \
     || (defined(__HP_cc) && __HP_cc >= 111106)                                \
     || U_GNUC_UTF16_STRING
@@ -290,19 +261,6 @@
 #elif U_SIZEOF_WCHAR_T == 2 \
     && (U_CHARSET_FAMILY == 0 || ((defined(OS390) || defined(OS400)) && defined(__UCS2__)))
 #define U_DECLARE_UTF16(string) L##string
-=======
-    || (defined(__HP_aCC) && __HP_aCC >= 035000) \
-    || (defined(__HP_cc) && __HP_cc >= 111106) \
-    || U_GNUC_UTF16_STRING
-#define U_DECLARE_UTF16(string) u ## string
-#elif (defined(__SUNPRO_CC) && __SUNPRO_CC >= 0x550)
-/* || (defined(__SUNPRO_C) && __SUNPRO_C >= 0x580) */
-/* Sun's C compiler has issues with this notation, and it's unreliable. */
-#define U_DECLARE_UTF16(string) U ## string
-#elif U_SIZEOF_WCHAR_T == 2 \
-    && (U_CHARSET_FAMILY == 0 || ((defined(OS390) || defined(OS400)) && defined(__UCS2__)))
-#define U_DECLARE_UTF16(string) L ## string
->>>>>>> miniblink49
 #endif
 #endif
 
@@ -313,7 +271,6 @@
 /*===========================================================================*/
 
 #ifndef U_HAVE_NL_LANGINFO_CODESET
-<<<<<<< HEAD
 #define U_HAVE_NL_LANGINFO_CODESET 1
 #endif
 
@@ -333,27 +290,6 @@
 
 #define U_HAVE_MMAP 1
 #define U_HAVE_POPEN 1
-=======
-#define U_HAVE_NL_LANGINFO_CODESET  1
-#endif
-
-#ifndef U_NL_LANGINFO_CODESET
-#define U_NL_LANGINFO_CODESET       CODESET
-#endif
-
-#if 1
-#define U_TZSET         tzset
-#endif
-#if !defined(__UCLIBC__)
-#define U_TIMEZONE      __timezone
-#endif
-#if 1
-#define U_TZNAME        tzname
-#endif
-
-#define U_HAVE_MMAP     1
-#define U_HAVE_POPEN    1
->>>>>>> miniblink49
 
 /** @} */
 
@@ -366,11 +302,7 @@
 #elif 1
 #define U_EXPORT __attribute__((visibility("default")))
 #elif (defined(__SUNPRO_CC) && __SUNPRO_CC >= 0x550) \
-<<<<<<< HEAD
     || (defined(__SUNPRO_C) && __SUNPRO_C >= 0x550)
-=======
-   || (defined(__SUNPRO_C) && __SUNPRO_C >= 0x550) 
->>>>>>> miniblink49
 #define U_EXPORT __global
 /*#elif defined(__HP_aCC) || defined(__HP_cc)
 #define U_EXPORT __declspec(dllexport)*/
@@ -385,11 +317,7 @@
 #if defined(U_CYGWIN) && !defined(__GNUC__)
 #define U_IMPORT __declspec(dllimport)
 #else
-<<<<<<< HEAD
 #define U_IMPORT
-=======
-#define U_IMPORT 
->>>>>>> miniblink49
 #endif
 
 /* @} */
@@ -399,7 +327,6 @@
 /*===========================================================================*/
 
 #ifndef U_INLINE
-<<<<<<< HEAD
 #ifdef __cplusplus
 #define U_INLINE inline
 #else
@@ -409,17 +336,6 @@
 
 #ifndef U_ALIGN_CODE
 #define U_ALIGN_CODE(n)
-=======
-#   ifdef __cplusplus
-#       define U_INLINE inline
-#   else
-#       define U_INLINE __inline__
-#   endif
-#endif
-
-#ifndef U_ALIGN_CODE
-#define U_ALIGN_CODE(n) 
->>>>>>> miniblink49
 #endif
 
 /** @} */
@@ -447,11 +363,7 @@
  * What program to execute to run 'make'
  */
 #ifndef U_MAKE
-<<<<<<< HEAD
 #define U_MAKE "make"
-=======
-#define U_MAKE  "make"
->>>>>>> miniblink49
 #endif
 
 /** @} */
@@ -466,25 +378,16 @@
  * Define the library suffix with C syntax.
  * @internal
  */
-<<<<<<< HEAD
 #define U_LIB_SUFFIX_C_NAME
-=======
-# define U_LIB_SUFFIX_C_NAME 
->>>>>>> miniblink49
 /**
  * Define the library suffix as a string with C syntax
  * @internal
  */
-<<<<<<< HEAD
 #define U_LIB_SUFFIX_C_NAME_STRING ""
-=======
-# define U_LIB_SUFFIX_C_NAME_STRING ""
->>>>>>> miniblink49
 /**
  * 1 if a custom library suffix is set
  * @internal
  */
-<<<<<<< HEAD
 #define U_HAVE_LIB_SUFFIX 0
 
 #if U_HAVE_LIB_SUFFIX
@@ -494,17 +397,6 @@
 #define U_DEF_ICUDATA_ENTRY_POINT(major, minor) icudt####major##minor##_dat
 
 #endif
-=======
-# define U_HAVE_LIB_SUFFIX 0
-
-#if U_HAVE_LIB_SUFFIX
-# ifndef U_ICU_ENTRY_POINT_RENAME
-/* Renaming pattern:    u_strcpy_41_suffix */
-#  define U_ICU_ENTRY_POINT_RENAME(x)    x ## _ ## 46 ## 
-#  define U_DEF_ICUDATA_ENTRY_POINT(major, minor) icudt####major##minor##_dat
-
-# endif
->>>>>>> miniblink49
 #endif
 
 #endif

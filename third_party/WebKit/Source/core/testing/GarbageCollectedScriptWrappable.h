@@ -12,8 +12,11 @@
 
 namespace blink {
 
-class GarbageCollectedScriptWrappable : public GarbageCollectedFinalized<GarbageCollectedScriptWrappable>, public ScriptWrappable {
+class GarbageCollectedScriptWrappable
+    : public GarbageCollectedFinalized<GarbageCollectedScriptWrappable>,
+      public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     GarbageCollectedScriptWrappable(const String&);
     virtual ~GarbageCollectedScriptWrappable();

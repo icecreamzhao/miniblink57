@@ -17,32 +17,21 @@
 
 class GrShaderCaps;
 class GrGLSLCaps;
-<<<<<<< HEAD
 class GrGLSLXferProcessor;
 class GrProcOptInfo;
 struct GrPipelineOptimizations;
-=======
-class GrGLXferProcessor;
-class GrProcOptInfo;
->>>>>>> miniblink49
 
 /**
  * Barriers for blending. When a shader reads the dst directly, an Xfer barrier is sometimes
  * required after a pixel has been written, before it can be safely read again.
  */
 enum GrXferBarrierType {
-<<<<<<< HEAD
     kNone_GrXferBarrierType = 0, //<! No barrier is required
     kTexture_GrXferBarrierType, //<! Required when a shader reads and renders to the same texture.
     kBlend_GrXferBarrierType, //<! Required by certain blend extensions.
 };
 /** Should be able to treat kNone as false in boolean expressions */
 GR_STATIC_ASSERT(SkToBool(kNone_GrXferBarrierType) == false);
-=======
-    kTexture_GrXferBarrierType, //<! Required when a shader reads and renders to the same texture.
-    kBlend_GrXferBarrierType,   //<! Required by certain blend extensions.
-};
->>>>>>> miniblink49
 
 /**
  * GrXferProcessor is responsible for implementing the xfer mode that blends the src color and dst
@@ -71,30 +60,19 @@ public:
     public:
         DstTexture() { fOffset.set(0, 0); }
 
-<<<<<<< HEAD
         DstTexture(const DstTexture& other)
         {
-=======
-        DstTexture(const DstTexture& other) {
->>>>>>> miniblink49
             *this = other;
         }
 
         DstTexture(GrTexture* texture, const SkIPoint& offset)
             : fTexture(SkSafeRef(texture))
-<<<<<<< HEAD
             , fOffset(offset)
         {
         }
 
         DstTexture& operator=(const DstTexture& other)
         {
-=======
-            , fOffset(offset) {
-        }
-
-        DstTexture& operator=(const DstTexture& other) {
->>>>>>> miniblink49
             fTexture.reset(SkSafeRef(other.fTexture.get()));
             fOffset = other.fOffset;
             return *this;
@@ -107,19 +85,14 @@ public:
 
         GrTexture* texture() const { return fTexture.get(); }
 
-<<<<<<< HEAD
         GrTexture* setTexture(GrTexture* texture)
         {
-=======
-        GrTexture* setTexture(GrTexture* texture) {
->>>>>>> miniblink49
             fTexture.reset(SkSafeRef(texture));
             return texture;
         }
 
     private:
         SkAutoTUnref<GrTexture> fTexture;
-<<<<<<< HEAD
         SkIPoint fOffset;
     };
 
@@ -128,25 +101,11 @@ public:
      * specific subclass's key.
      */
     void getGLSLProcessorKey(const GrGLSLCaps& caps, GrProcessorKeyBuilder* b) const;
-=======
-        SkIPoint                fOffset;
-    };
-
-    /**
-     * Sets a unique key on the GrProcessorKeyBuilder calls onGetGLProcessorKey(...) to get the
-     * specific subclass's key.
-     */ 
-    void getGLProcessorKey(const GrGLSLCaps& caps, GrProcessorKeyBuilder* b) const;
->>>>>>> miniblink49
 
     /** Returns a new instance of the appropriate *GL* implementation class
         for the given GrXferProcessor; caller is responsible for deleting
         the object. */
-<<<<<<< HEAD
     virtual GrGLSLXferProcessor* createGLSLInstance() const = 0;
-=======
-    virtual GrGLXferProcessor* createGLInstance() const = 0;
->>>>>>> miniblink49
 
     /**
      * Optimizations for blending / coverage that an OptDrawState should apply to itself.
@@ -155,7 +114,6 @@ public:
         /**
          * The draw can be skipped completely.
          */
-<<<<<<< HEAD
         kSkipDraw_OptFlag = 0x1,
         /**
          * GrXferProcessor will ignore color, thus no need to provide
@@ -169,21 +127,6 @@ public:
          * Clear color stages and override input color to that returned by getOptimizations
          */
         kOverrideColor_OptFlag = 0x8,
-=======
-        kSkipDraw_OptFlag                 = 0x1,
-        /**
-         * GrXferProcessor will ignore color, thus no need to provide
-         */
-        kIgnoreColor_OptFlag              = 0x2,
-        /**
-         * GrXferProcessor will ignore coverage, thus no need to provide
-         */
-        kIgnoreCoverage_OptFlag           = 0x4,
-        /**
-         * Clear color stages and override input color to that returned by getOptimizations
-         */
-        kOverrideColor_OptFlag            = 0x8,
->>>>>>> miniblink49
         /**
          * Can tweak alpha for coverage. Currently this flag should only be used by a batch
          */
@@ -203,37 +146,20 @@ public:
      * A caller who calls this function on a XP is required to honor the returned OptFlags
      * and color values for its draw.
      */
-<<<<<<< HEAD
     OptFlags getOptimizations(const GrPipelineOptimizations& optimizations,
         bool doesStencilWrite,
         GrColor* overrideColor,
         const GrCaps& caps) const;
-=======
-    OptFlags getOptimizations(const GrProcOptInfo& colorPOI,
-                              const GrProcOptInfo& coveragePOI,
-                              bool doesStencilWrite,
-                              GrColor* overrideColor,
-                              const GrCaps& caps);
->>>>>>> miniblink49
 
     /**
      * Returns whether this XP will require an Xfer barrier on the given rt. If true, outBarrierType
      * is updated to contain the type of barrier needed.
      */
-<<<<<<< HEAD
     GrXferBarrierType xferBarrierType(const GrRenderTarget* rt, const GrCaps& caps) const;
 
     struct BlendInfo {
         void reset()
         {
-=======
-    bool willNeedXferBarrier(const GrRenderTarget* rt,
-                             const GrCaps& caps,
-                             GrXferBarrierType* outBarrierType) const;
-
-    struct BlendInfo {
-        void reset() {
->>>>>>> miniblink49
             fEquation = kAdd_GrBlendEquation;
             fSrcBlend = kOne_GrBlendCoeff;
             fDstBlend = kZero_GrBlendCoeff;
@@ -243,19 +169,11 @@ public:
 
         SkDEBUGCODE(SkString dump() const;)
 
-<<<<<<< HEAD
             GrBlendEquation fEquation;
         GrBlendCoeff fSrcBlend;
         GrBlendCoeff fDstBlend;
         GrColor fBlendConstant;
         bool fWriteColor;
-=======
-        GrBlendEquation fEquation;
-        GrBlendCoeff    fSrcBlend;
-        GrBlendCoeff    fDstBlend;
-        GrColor         fBlendConstant;
-        bool            fWriteColor;
->>>>>>> miniblink49
     };
 
     void getBlendInfo(BlendInfo* blendInfo) const;
@@ -273,12 +191,8 @@ public:
      * Returns the offset in device coords to use when accessing the dst texture to get the dst
      * pixel color in the shader. This value is only valid if getDstTexture() != NULL.
      */
-<<<<<<< HEAD
     const SkIPoint& dstTextureOffset() const
     {
-=======
-    const SkIPoint& dstTextureOffset() const {
->>>>>>> miniblink49
         SkASSERT(this->getDstTexture());
         return fDstTextureOffset;
     }
@@ -291,14 +205,6 @@ public:
     bool dstReadUsesMixedSamples() const { return fDstReadUsesMixedSamples; }
 
     /**
-<<<<<<< HEAD
-=======
-     * Returns whether or not the XP will look at coverage when doing its blending.
-     */
-    bool readsCoverage() const { return fReadsCoverage; }
-
-    /**
->>>>>>> miniblink49
      * Returns whether or not this xferProcossor will set a secondary output to be used with dual
      * source blending.
      */
@@ -309,29 +215,17 @@ public:
         from getFactory()).
 
         A return value of true from isEqual() should not be used to test whether the processor would
-<<<<<<< HEAD
         generate the same shader code. To test for identical code generation use getGLSLProcessorKey
       */
 
     bool isEqual(const GrXferProcessor& that) const
     {
-=======
-        generate the same shader code. To test for identical code generation use getGLProcessorKey*/
-    
-    bool isEqual(const GrXferProcessor& that) const {
->>>>>>> miniblink49
         if (this->classID() != that.classID()) {
             return false;
         }
         if (this->fWillReadDstColor != that.fWillReadDstColor) {
             return false;
         }
-<<<<<<< HEAD
-=======
-        if (this->fReadsCoverage != that.fReadsCoverage) {
-            return false;
-        }
->>>>>>> miniblink49
         if (this->fDstTexture.getTexture() != that.fDstTexture.getTexture()) {
             return false;
         }
@@ -343,36 +237,23 @@ public:
         }
         return this->onIsEqual(that);
     }
-<<<<<<< HEAD
 
-=======
-   
->>>>>>> miniblink49
 protected:
     GrXferProcessor();
     GrXferProcessor(const DstTexture*, bool willReadDstColor, bool hasMixedSamples);
 
 private:
-<<<<<<< HEAD
     void notifyRefCntIsZero() const final { }
 
     virtual OptFlags onGetOptimizations(const GrPipelineOptimizations& optimizations,
         bool doesStencilWrite,
         GrColor* overrideColor,
         const GrCaps& caps) const = 0;
-=======
-    virtual OptFlags onGetOptimizations(const GrProcOptInfo& colorPOI,
-                                        const GrProcOptInfo& coveragePOI,
-                                        bool doesStencilWrite,
-                                        GrColor* overrideColor,
-                                        const GrCaps& caps) = 0;
->>>>>>> miniblink49
 
     /**
      * Sets a unique key on the GrProcessorKeyBuilder that is directly associated with this xfer
      * processor's GL backend implementation.
      */
-<<<<<<< HEAD
     virtual void onGetGLSLProcessorKey(const GrGLSLCaps& caps,
         GrProcessorKeyBuilder* b) const = 0;
 
@@ -384,19 +265,6 @@ private:
     virtual GrXferBarrierType onXferBarrier(const GrRenderTarget*, const GrCaps&) const
     {
         return kNone_GrXferBarrierType;
-=======
-    virtual void onGetGLProcessorKey(const GrGLSLCaps& caps,
-                                     GrProcessorKeyBuilder* b) const = 0;
-
-    /**
-     * If not using a texture barrier, retrieves whether the subclass will require a different type
-     * of barrier.
-     */
-    virtual bool onWillNeedXferBarrier(const GrRenderTarget*,
-                                       const GrCaps&,
-                                       GrXferBarrierType* outBarrierType SK_UNUSED) const {
-        return false;
->>>>>>> miniblink49
     }
 
     /**
@@ -411,7 +279,6 @@ private:
      * subclass. When using dst reads, the base class controls the fixed-function blend state and
      * this method will not be called. The BlendInfo struct comes initialized to "no blending".
      */
-<<<<<<< HEAD
     virtual void onGetBlendInfo(BlendInfo*) const { }
 
     virtual bool onIsEqual(const GrXferProcessor&) const = 0;
@@ -420,17 +287,6 @@ private:
     bool fDstReadUsesMixedSamples;
     SkIPoint fDstTextureOffset;
     GrTextureAccess fDstTexture;
-=======
-    virtual void onGetBlendInfo(BlendInfo*) const {}
-
-    virtual bool onIsEqual(const GrXferProcessor&) const = 0;
-
-    bool                    fWillReadDstColor;
-    bool                    fDstReadUsesMixedSamples;
-    bool                    fReadsCoverage;
-    SkIPoint                fDstTextureOffset;
-    GrTextureAccess         fDstTexture;
->>>>>>> miniblink49
 
     typedef GrFragmentProcessor INHERITED;
 };
@@ -453,39 +309,17 @@ GR_MAKE_BITFIELD_OPS(GrXferProcessor::OptFlags);
 class GrXPFactory : public SkRefCnt {
 public:
     typedef GrXferProcessor::DstTexture DstTexture;
-<<<<<<< HEAD
     GrXferProcessor* createXferProcessor(const GrPipelineOptimizations& optimizations,
         bool hasMixedSamples,
         const DstTexture*,
         const GrCaps& caps) const;
-=======
-    GrXferProcessor* createXferProcessor(const GrProcOptInfo& colorPOI,
-                                         const GrProcOptInfo& coveragePOI,
-                                         bool hasMixedSamples,
-                                         const DstTexture*,
-                                         const GrCaps& caps) const;
-
-    /**
-     * This function returns true if the GrXferProcessor generated from this factory will be able to
-     * correctly blend when using RGB coverage. The knownColor and knownColorFlags represent the
-     * final computed color from the color stages.
-     */
-    virtual bool supportsRGBCoverage(GrColor knownColor, uint32_t knownColorFlags) const = 0;
-
->>>>>>> miniblink49
     /**
      * Known color information after blending, but before accounting for any coverage.
      */
     struct InvariantBlendedColor {
-<<<<<<< HEAD
         bool fWillBlendWithDst;
         GrColor fKnownColor;
         GrColorComponentFlags fKnownColorFlags;
-=======
-        bool                     fWillBlendWithDst;
-        GrColor                  fKnownColor;
-        GrColorComponentFlags    fKnownColorFlags;
->>>>>>> miniblink49
     };
 
     /** 
@@ -495,21 +329,12 @@ public:
      * information returned by this function.
      */
     virtual void getInvariantBlendedColor(const GrProcOptInfo& colorPOI,
-<<<<<<< HEAD
         InvariantBlendedColor*) const = 0;
 
     bool willNeedDstTexture(const GrCaps& caps, const GrPipelineOptimizations& optimizations) const;
 
     bool isEqual(const GrXPFactory& that) const
     {
-=======
-                                          InvariantBlendedColor*) const = 0;
-
-    bool willNeedDstTexture(const GrCaps& caps, const GrProcOptInfo& colorPOI,
-                            const GrProcOptInfo& coveragePOI, bool hasMixedSamples) const;
-
-    bool isEqual(const GrXPFactory& that) const {
->>>>>>> miniblink49
         if (this->classID() != that.classID()) {
             return false;
         }
@@ -519,7 +344,6 @@ public:
     /**
       * Helper for down-casting to a GrXPFactory subclass
       */
-<<<<<<< HEAD
     template <typename T>
     const T& cast() const { return *static_cast<const T*>(this); }
 
@@ -540,25 +364,12 @@ protected:
     {
         static uint32_t kClassID = GenClassID();
         fClassID = kClassID;
-=======
-    template <typename T> const T& cast() const { return *static_cast<const T*>(this); }
-
-    uint32_t classID() const { SkASSERT(kIllegalXPFClassID != fClassID); return fClassID; }
-
-protected:
-    GrXPFactory() : fClassID(kIllegalXPFClassID) {}
-
-    template <typename XPF_SUBCLASS> void initClassID() {
-         static uint32_t kClassID = GenClassID();
-         fClassID = kClassID;
->>>>>>> miniblink49
     }
 
     uint32_t fClassID;
 
 private:
     virtual GrXferProcessor* onCreateXferProcessor(const GrCaps& caps,
-<<<<<<< HEAD
         const GrPipelineOptimizations& optimizations,
         bool hasMixedSamples,
         const DstTexture*) const = 0;
@@ -566,31 +377,14 @@ private:
     virtual bool onIsEqual(const GrXPFactory&) const = 0;
 
     bool willReadDstColor(const GrCaps&, const GrPipelineOptimizations&) const;
-=======
-                                                   const GrProcOptInfo& colorPOI,
-                                                   const GrProcOptInfo& coveragePOI,
-                                                   bool hasMixedSamples,
-                                                   const DstTexture*) const = 0;
->>>>>>> miniblink49
     /**
      *  Returns true if the XP generated by this factory will explicitly read dst in the fragment
      *  shader.
      */
-<<<<<<< HEAD
     virtual bool onWillReadDstColor(const GrCaps&, const GrPipelineOptimizations&) const = 0;
 
     static uint32_t GenClassID()
     {
-=======
-    virtual bool willReadDstColor(const GrCaps& caps,
-                                  const GrProcOptInfo& colorPOI,
-                                  const GrProcOptInfo& coveragePOI,
-                                  bool hasMixedSamples) const = 0;
-
-    virtual bool onIsEqual(const GrXPFactory&) const = 0;
-
-    static uint32_t GenClassID() {
->>>>>>> miniblink49
         // fCurrXPFactoryID has been initialized to kIllegalXPFactoryID. The
         // atomic inc returns the old value not the incremented value. So we add
         // 1 to the returned value.
@@ -611,7 +405,3 @@ private:
 };
 
 #endif
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49

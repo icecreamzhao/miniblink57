@@ -5,7 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "SkData.h"
 #include "SkGraphics.h"
 #include "SkLua.h"
@@ -22,21 +21,6 @@ extern "C" {
 
 static SkData* read_into_data(const char file[])
 {
-=======
-#include "SkLua.h"
-#include "SkGraphics.h"
-#include "SkStream.h"
-#include "SkData.h"
-#include "SkOSFile.h"
-
-extern "C" {
-    #include "lua.h"
-    #include "lualib.h"
-    #include "lauxlib.h"
-}
-
-static SkData* read_into_data(const char file[]) {
->>>>>>> miniblink49
     SkData* data = SkData::NewFromFileName(file);
     if (!data) {
         data = SkData::NewEmpty();
@@ -45,29 +29,17 @@ static SkData* read_into_data(const char file[]) {
 }
 
 int tool_main(int argc, char** argv);
-<<<<<<< HEAD
 int tool_main(int argc, char** argv)
 {
-=======
-int tool_main(int argc, char** argv) {
->>>>>>> miniblink49
     SkAutoGraphics ag;
     SkLua L;
 
     for (int i = 1; i < argc; ++i) {
-<<<<<<< HEAD
         SkData* data = nullptr;
         const void* ptr;
         size_t len;
 
         if (!strcmp(argv[i], "--lua") && i < argc - 1) {
-=======
-        SkData* data = NULL;
-        const void* ptr;
-        size_t len;
-
-        if (!strcmp(argv[i], "--lua") && i < argc-1) {
->>>>>>> miniblink49
             ptr = argv[i + 1];
             len = strlen(argv[i + 1]);
             i += 1;
@@ -86,13 +58,8 @@ int tool_main(int argc, char** argv) {
 }
 
 #if !defined SK_BUILD_FOR_IOS
-<<<<<<< HEAD
 int main(int argc, char* const argv[])
 {
     return tool_main(argc, (char**)argv);
-=======
-int main(int argc, char * const argv[]) {
-    return tool_main(argc, (char**) argv);
->>>>>>> miniblink49
 }
 #endif

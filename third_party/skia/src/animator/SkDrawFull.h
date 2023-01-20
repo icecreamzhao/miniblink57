@@ -6,10 +6,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #ifndef SkDrawFull_DEFINED
 #define SkDrawFull_DEFINED
 
@@ -17,12 +13,8 @@
 
 class SkFull : public SkBoundable {
     DECLARE_EMPTY_MEMBER_INFO(Full);
-<<<<<<< HEAD
     bool draw(SkAnimateMaker&) override;
 
-=======
-    bool draw(SkAnimateMaker& ) override;
->>>>>>> miniblink49
 private:
     typedef SkBoundable INHERITED;
 };

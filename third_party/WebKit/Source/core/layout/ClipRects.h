@@ -32,13 +32,10 @@
 namespace blink {
 
 class ClipRects : public RefCounted<ClipRects> {
-    WTF_MAKE_FAST_ALLOCATED(ClipRects);
-public:
-    static PassRefPtr<ClipRects> create()
-    {
-        return adoptRef(new ClipRects);
-    }
+    USING_FAST_MALLOC(ClipRects);
 
+public:
+    static PassRefPtr<ClipRects> create() { return adoptRef(new ClipRects); }
     static PassRefPtr<ClipRects> create(const ClipRects& other)
     {
         return adoptRef(new ClipRects(other));
@@ -61,7 +58,7 @@ public:
     void setOverflowClipRect(const ClipRect& r) { m_overflowClipRect = r; }
 
     const ClipRect& fixedClipRect() const { return m_fixedClipRect; }
-    void setFixedClipRect(const ClipRect&r) { m_fixedClipRect = r; }
+    void setFixedClipRect(const ClipRect& r) { m_fixedClipRect = r; }
 
     const ClipRect& posClipRect() const { return m_posClipRect; }
     void setPosClipRect(const ClipRect& r) { m_posClipRect = r; }
@@ -71,11 +68,10 @@ public:
 
     bool operator==(const ClipRects& other) const
     {
-        return m_overflowClipRect == other.overflowClipRect()
-            && m_fixedClipRect == other.fixedClipRect()
-            && m_posClipRect == other.posClipRect()
-            && fixed() == other.fixed();
+        return m_overflowClipRect == other.overflowClipRect() && m_fixedClipRect == other.fixedClipRect() && m_posClipRect == other.posClipRect() && fixed() == other.fixed();
     }
+
+    bool operator!=(const ClipRects& other) const { return !(*this == other); }
 
     ClipRects& operator=(const ClipRects& other)
     {

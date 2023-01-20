@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2014 Google Inc.
  *
@@ -16,11 +12,7 @@
 #include "GrGpuResourcePriv.h"
 
 namespace skiatest {
-<<<<<<< HEAD
 class Reporter;
-=======
-    class Reporter;
->>>>>>> miniblink49
 }
 
 /**
@@ -32,7 +24,6 @@ private:
      * Is the resource currently cached as scratch? This means it is cached, has a valid scratch
      * key, and does not have a unique key.
      */
-<<<<<<< HEAD
     bool isScratch() const
     {
         return !fResource->getUniqueKey().isValid() && fResource->fScratchKey.isValid() && SkBudgeted::kYes == fResource->resourcePriv().isBudgeted();
@@ -46,55 +37,17 @@ private:
         fResource->release();
         if (fResource->isPurgeable()) {
             delete fResource;
-=======
-    bool isScratch() const {
-        return !fResource->getUniqueKey().isValid() && fResource->fScratchKey.isValid() &&
-                fResource->resourcePriv().isBudgeted();
-    }
-
-    /**
-     * Is the resource object wrapping an externally allocated GPU resource?
-     */
-    bool isExternal() const { return fResource->isExternal(); }
-
-    /**
-     * Is the resource object wrapping an externally allocated GPU resource that Skia has not taken
-     * ownership of.
-     */
-    bool isBorrowed() const { return GrGpuResource::kBorrowed_LifeCycle == fResource->fLifeCycle; }
-
-    /**
-     * Is the resource object wrapping an externally allocated GPU resource that Skia has taken
-     * ownership of.
-     */
-    bool isAdopted() const { return GrGpuResource::kAdopted_LifeCycle == fResource->fLifeCycle; }
- 
-    /**
-     * Called by the cache to delete the resource under normal circumstances.
-     */
-    void release() {
-        fResource->release();
-        if (fResource->isPurgeable()) {            
-            SkDELETE(fResource);
->>>>>>> miniblink49
         }
     }
 
     /**
      * Called by the cache to delete the resource when the backend 3D context is no longer valid.
      */
-<<<<<<< HEAD
     void abandon()
     {
         fResource->abandon();
         if (fResource->isPurgeable()) {
             delete fResource;
-=======
-    void abandon() {
-        fResource->abandon();
-        if (fResource->isPurgeable()) {            
-            SkDELETE(fResource);
->>>>>>> miniblink49
         }
     }
 
@@ -109,7 +62,6 @@ private:
 
     int* accessCacheIndex() const { return &fResource->fCacheArrayIndex; }
 
-<<<<<<< HEAD
     CacheAccess(GrGpuResource* resource)
         : fResource(resource)
     {
@@ -118,10 +70,6 @@ private:
         : fResource(that.fResource)
     {
     }
-=======
-    CacheAccess(GrGpuResource* resource) : fResource(resource) {}
-    CacheAccess(const CacheAccess& that) : fResource(that.fResource) {}
->>>>>>> miniblink49
     CacheAccess& operator=(const CacheAccess&); // unimpl
 
     // No taking addresses of this type.
@@ -137,12 +85,8 @@ private:
 
 inline GrGpuResource::CacheAccess GrGpuResource::cacheAccess() { return CacheAccess(this); }
 
-<<<<<<< HEAD
 inline const GrGpuResource::CacheAccess GrGpuResource::cacheAccess() const
 {
-=======
-inline const GrGpuResource::CacheAccess GrGpuResource::cacheAccess() const {
->>>>>>> miniblink49
     return CacheAccess(const_cast<GrGpuResource*>(this));
 }
 

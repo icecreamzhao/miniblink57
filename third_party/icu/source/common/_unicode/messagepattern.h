@@ -266,11 +266,7 @@ typedef enum UMessagePatternArgType UMessagePatternArgType;
  * @stable ICU 50
  */
 #define UMSGPAT_ARG_TYPE_HAS_PLURAL_STYLE(argType) \
-<<<<<<< HEAD
     ((argType) == UMSGPAT_ARG_TYPE_PLURAL || (argType) == UMSGPAT_ARG_TYPE_SELECTORDINAL)
-=======
-    ((argType)==UMSGPAT_ARG_TYPE_PLURAL || (argType)==UMSGPAT_ARG_TYPE_SELECTORDINAL)
->>>>>>> miniblink49
 
 enum {
     /**
@@ -278,11 +274,7 @@ enum {
      * the string is a valid "pattern identifier" but not a number.
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     UMSGPAT_ARG_NAME_NOT_NUMBER = -1,
-=======
-    UMSGPAT_ARG_NAME_NOT_NUMBER=-1,
->>>>>>> miniblink49
 
     /**
      * Return value from MessagePattern.validateArgumentName() for when
@@ -291,11 +283,7 @@ enum {
      * or it have only ASCII digits but there is a leading zero or the number is too large.
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     UMSGPAT_ARG_NAME_NOT_VALID = -2
-=======
-    UMSGPAT_ARG_NAME_NOT_VALID=-2
->>>>>>> miniblink49
 };
 
 /**
@@ -377,11 +365,7 @@ public:
      *                  function chaining. (See User Guide for details.)
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     MessagePattern(UErrorCode& errorCode);
-=======
-    MessagePattern(UErrorCode &errorCode);
->>>>>>> miniblink49
 
     /**
      * Constructs an empty MessagePattern.
@@ -392,11 +376,7 @@ public:
      *                  function chaining. (See User Guide for details.)
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     MessagePattern(UMessagePatternApostropheMode mode, UErrorCode& errorCode);
-=======
-    MessagePattern(UMessagePatternApostropheMode mode, UErrorCode &errorCode);
->>>>>>> miniblink49
 
     /**
      * Constructs a MessagePattern with default UMessagePatternApostropheMode and
@@ -416,22 +396,14 @@ public:
      * @throws NumberFormatException if a number could not be parsed
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     MessagePattern(const UnicodeString& pattern, UParseError* parseError, UErrorCode& errorCode);
-=======
-    MessagePattern(const UnicodeString &pattern, UParseError *parseError, UErrorCode &errorCode);
->>>>>>> miniblink49
 
     /**
      * Copy constructor.
      * @param other Object to copy.
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     MessagePattern(const MessagePattern& other);
-=======
-    MessagePattern(const MessagePattern &other);
->>>>>>> miniblink49
 
     /**
      * Assignment operator.
@@ -439,11 +411,7 @@ public:
      * @return *this=other
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     MessagePattern& operator=(const MessagePattern& other);
-=======
-    MessagePattern &operator=(const MessagePattern &other);
->>>>>>> miniblink49
 
     /**
      * Destructor.
@@ -468,13 +436,8 @@ public:
      * @throws NumberFormatException if a number could not be parsed
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     MessagePattern& parse(const UnicodeString& pattern,
         UParseError* parseError, UErrorCode& errorCode);
-=======
-    MessagePattern &parse(const UnicodeString &pattern,
-                          UParseError *parseError, UErrorCode &errorCode);
->>>>>>> miniblink49
 
     /**
      * Parses a ChoiceFormat pattern string.
@@ -493,13 +456,8 @@ public:
      * @throws NumberFormatException if a number could not be parsed
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     MessagePattern& parseChoiceStyle(const UnicodeString& pattern,
         UParseError* parseError, UErrorCode& errorCode);
-=======
-    MessagePattern &parseChoiceStyle(const UnicodeString &pattern,
-                                     UParseError *parseError, UErrorCode &errorCode);
->>>>>>> miniblink49
 
     /**
      * Parses a PluralFormat pattern string.
@@ -518,13 +476,8 @@ public:
      * @throws NumberFormatException if a number could not be parsed
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     MessagePattern& parsePluralStyle(const UnicodeString& pattern,
         UParseError* parseError, UErrorCode& errorCode);
-=======
-    MessagePattern &parsePluralStyle(const UnicodeString &pattern,
-                                     UParseError *parseError, UErrorCode &errorCode);
->>>>>>> miniblink49
 
     /**
      * Parses a SelectFormat pattern string.
@@ -543,13 +496,8 @@ public:
      * @throws NumberFormatException if a number could not be parsed
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     MessagePattern& parseSelectStyle(const UnicodeString& pattern,
         UParseError* parseError, UErrorCode& errorCode);
-=======
-    MessagePattern &parseSelectStyle(const UnicodeString &pattern,
-                                     UParseError *parseError, UErrorCode &errorCode);
->>>>>>> miniblink49
 
     /**
      * Clears this MessagePattern.
@@ -564,16 +512,10 @@ public:
      * @param mode The new UMessagePatternApostropheMode.
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     void clearPatternAndSetApostropheMode(UMessagePatternApostropheMode mode)
     {
         clear();
         aposMode = mode;
-=======
-    void clearPatternAndSetApostropheMode(UMessagePatternApostropheMode mode) {
-        clear();
-        aposMode=mode;
->>>>>>> miniblink49
     }
 
     /**
@@ -581,23 +523,15 @@ public:
      * @return TRUE if this object is equivalent to the other one.
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     UBool operator==(const MessagePattern& other) const;
-=======
-    UBool operator==(const MessagePattern &other) const;
->>>>>>> miniblink49
 
     /**
      * @param other another object to compare with.
      * @return FALSE if this object is equivalent to the other one.
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     inline UBool operator!=(const MessagePattern& other) const
     {
-=======
-    inline UBool operator!=(const MessagePattern &other) const {
->>>>>>> miniblink49
         return !operator==(other);
     }
 
@@ -611,12 +545,8 @@ public:
      * @return this instance's UMessagePatternApostropheMode.
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     UMessagePatternApostropheMode getApostropheMode() const
     {
-=======
-    UMessagePatternApostropheMode getApostropheMode() const {
->>>>>>> miniblink49
         return aposMode;
     }
 
@@ -627,12 +557,8 @@ public:
      * @return the parsed pattern string (null if none was parsed).
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     const UnicodeString& getPatternString() const
     {
-=======
-    const UnicodeString &getPatternString() const {
->>>>>>> miniblink49
         return msg;
     }
 
@@ -641,12 +567,8 @@ public:
      * @return TRUE if the parsed pattern has at least one named argument.
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     UBool hasNamedArguments() const
     {
-=======
-    UBool hasNamedArguments() const {
->>>>>>> miniblink49
         return hasArgNames;
     }
 
@@ -655,12 +577,8 @@ public:
      * @return TRUE if the parsed pattern has at least one numbered argument.
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     UBool hasNumberedArguments() const
     {
-=======
-    UBool hasNumberedArguments() const {
->>>>>>> miniblink49
         return hasArgNumbers;
     }
 
@@ -675,11 +593,7 @@ public:
      *         ARG_NAME_NOT_VALID (-2) if it is neither.
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     static int32_t validateArgumentName(const UnicodeString& name);
-=======
-    static int32_t validateArgumentName(const UnicodeString &name);
->>>>>>> miniblink49
 
     /**
      * Returns a version of the parsed pattern string where each ASCII apostrophe
@@ -701,12 +615,8 @@ public:
      * @return the number of pattern parts.
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     int32_t countParts() const
     {
-=======
-    int32_t countParts() const {
->>>>>>> miniblink49
         return partsLength;
     }
 
@@ -716,12 +626,8 @@ public:
      * @return the i-th pattern "part".
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     const Part& getPart(int32_t i) const
     {
-=======
-    const Part &getPart(int32_t i) const {
->>>>>>> miniblink49
         return parts[i];
     }
 
@@ -732,12 +638,8 @@ public:
      * @return The UMessagePatternPartType of the i-th Part.
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     UMessagePatternPartType getPartType(int32_t i) const
     {
-=======
-    UMessagePatternPartType getPartType(int32_t i) const {
->>>>>>> miniblink49
         return getPart(i).type;
     }
 
@@ -748,12 +650,8 @@ public:
      * @return The pattern index of this Part.
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     int32_t getPatternIndex(int32_t partIndex) const
     {
-=======
-    int32_t getPatternIndex(int32_t partIndex) const {
->>>>>>> miniblink49
         return getPart(partIndex).index;
     }
 
@@ -764,12 +662,8 @@ public:
      * @return the substring associated with part.
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     UnicodeString getSubstring(const Part& part) const
     {
-=======
-    UnicodeString getSubstring(const Part &part) const {
->>>>>>> miniblink49
         return msg.tempSubString(part.index, part.length);
     }
 
@@ -780,14 +674,9 @@ public:
      * @return TRUE if getSubstring(part).equals(s).
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     UBool partSubstringMatches(const Part& part, const UnicodeString& s) const
     {
         return 0 == msg.compare(part.index, part.length, s);
-=======
-    UBool partSubstringMatches(const Part &part, const UnicodeString &s) const {
-        return 0==msg.compare(part.index, part.length, s);
->>>>>>> miniblink49
     }
 
     /**
@@ -796,11 +685,7 @@ public:
      * @return the part's numeric value, or UMSGPAT_NO_NUMERIC_VALUE if this is not a numeric part.
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     double getNumericValue(const Part& part) const;
-=======
-    double getNumericValue(const Part &part) const;
->>>>>>> miniblink49
 
     /**
      * Returns the "offset:" value of a PluralFormat argument, or 0 if none is specified.
@@ -818,16 +703,10 @@ public:
      *         or start itself if getPartType(msgStart)!=ARG|MSG_START.
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     int32_t getLimitPartIndex(int32_t start) const
     {
         int32_t limit = getPart(start).limitPartIndex;
         if (limit < start) {
-=======
-    int32_t getLimitPartIndex(int32_t start) const {
-        int32_t limit=getPart(start).limitPartIndex;
-        if(limit<start) {
->>>>>>> miniblink49
             return start;
         }
         return limit;
@@ -846,23 +725,15 @@ public:
          * Default constructor, do not use.
          * @internal
          */
-<<<<<<< HEAD
         Part() { }
-=======
-        Part() {}
->>>>>>> miniblink49
 
         /**
          * Returns the type of this part.
          * @return the part type.
          * @stable ICU 4.8
          */
-<<<<<<< HEAD
         UMessagePatternPartType getType() const
         {
-=======
-        UMessagePatternPartType getType() const {
->>>>>>> miniblink49
             return type;
         }
 
@@ -871,12 +742,8 @@ public:
          * @return this part's pattern string index.
          * @stable ICU 4.8
          */
-<<<<<<< HEAD
         int32_t getIndex() const
         {
-=======
-        int32_t getIndex() const {
->>>>>>> miniblink49
             return index;
         }
 
@@ -886,12 +753,8 @@ public:
          * @return this part's pattern substring length.
          * @stable ICU 4.8
          */
-<<<<<<< HEAD
         int32_t getLength() const
         {
-=======
-        int32_t getLength() const {
->>>>>>> miniblink49
             return length;
         }
 
@@ -901,14 +764,9 @@ public:
          * @return this part's pattern string limit index, same as getIndex()+getLength().
          * @stable ICU 4.8
          */
-<<<<<<< HEAD
         int32_t getLimit() const
         {
             return index + length;
-=======
-        int32_t getLimit() const {
-            return index+length;
->>>>>>> miniblink49
         }
 
         /**
@@ -917,12 +775,8 @@ public:
          * @return the part value.
          * @stable ICU 4.8
          */
-<<<<<<< HEAD
         int32_t getValue() const
         {
-=======
-        int32_t getValue() const {
->>>>>>> miniblink49
             return value;
         }
 
@@ -932,16 +786,10 @@ public:
          * @return the argument type for this part.
          * @stable ICU 4.8
          */
-<<<<<<< HEAD
         UMessagePatternArgType getArgType() const
         {
             UMessagePatternPartType type = getType();
             if (type == UMSGPAT_PART_TYPE_ARG_START || type == UMSGPAT_PART_TYPE_ARG_LIMIT) {
-=======
-        UMessagePatternArgType getArgType() const {
-            UMessagePatternPartType type=getType();
-            if(type==UMSGPAT_PART_TYPE_ARG_START || type==UMSGPAT_PART_TYPE_ARG_LIMIT) {
->>>>>>> miniblink49
                 return (UMessagePatternArgType)value;
             } else {
                 return UMSGPAT_ARG_TYPE_NONE;
@@ -955,14 +803,9 @@ public:
          * @return TRUE if the Part type has a numeric value.
          * @stable ICU 4.8
          */
-<<<<<<< HEAD
         static UBool hasNumericValue(UMessagePatternPartType type)
         {
             return type == UMSGPAT_PART_TYPE_ARG_INT || type == UMSGPAT_PART_TYPE_ARG_DOUBLE;
-=======
-        static UBool hasNumericValue(UMessagePatternPartType type) {
-            return type==UMSGPAT_PART_TYPE_ARG_INT || type==UMSGPAT_PART_TYPE_ARG_DOUBLE;
->>>>>>> miniblink49
         }
 
         /**
@@ -970,23 +813,15 @@ public:
          * @return TRUE if this object is equivalent to the other one.
          * @stable ICU 4.8
          */
-<<<<<<< HEAD
         UBool operator==(const Part& other) const;
-=======
-        UBool operator==(const Part &other) const;
->>>>>>> miniblink49
 
         /**
          * @param other another object to compare with.
          * @return FALSE if this object is equivalent to the other one.
          * @stable ICU 4.8
          */
-<<<<<<< HEAD
         inline UBool operator!=(const Part& other) const
         {
-=======
-        inline UBool operator!=(const Part &other) const {
->>>>>>> miniblink49
             return !operator==(other);
         }
 
@@ -994,26 +829,16 @@ public:
          * @return A hash code for this object.
          * @stable ICU 4.8
          */
-<<<<<<< HEAD
         int32_t hashCode() const
         {
             return ((type * 37 + index) * 37 + length) * 37 + value;
-=======
-        int32_t hashCode() const {
-            return ((type*37+index)*37+length)*37+value;
->>>>>>> miniblink49
         }
 
     private:
         friend class MessagePattern;
 
-<<<<<<< HEAD
         static const int32_t MAX_LENGTH = 0xffff;
         static const int32_t MAX_VALUE = 0x7fff;
-=======
-        static const int32_t MAX_LENGTH=0xffff;
-        static const int32_t MAX_VALUE=0x7fff;
->>>>>>> miniblink49
 
         // Some fields are not final because they are modified during pattern parsing.
         // After pattern parsing, the parts are effectively immutable.
@@ -1025,16 +850,11 @@ public:
     };
 
 private:
-<<<<<<< HEAD
     void preParse(const UnicodeString& pattern, UParseError* parseError, UErrorCode& errorCode);
-=======
-    void preParse(const UnicodeString &pattern, UParseError *parseError, UErrorCode &errorCode);
->>>>>>> miniblink49
 
     void postParse();
 
     int32_t parseMessage(int32_t index, int32_t msgStartLength,
-<<<<<<< HEAD
         int32_t nestingLevel, UMessagePatternArgType parentType,
         UParseError* parseError, UErrorCode& errorCode);
 
@@ -1048,21 +868,6 @@ private:
 
     int32_t parsePluralOrSelectStyle(UMessagePatternArgType argType, int32_t index, int32_t nestingLevel,
         UParseError* parseError, UErrorCode& errorCode);
-=======
-                         int32_t nestingLevel, UMessagePatternArgType parentType,
-                         UParseError *parseError, UErrorCode &errorCode);
-
-    int32_t parseArg(int32_t index, int32_t argStartLength, int32_t nestingLevel,
-                     UParseError *parseError, UErrorCode &errorCode);
-
-    int32_t parseSimpleStyle(int32_t index, UParseError *parseError, UErrorCode &errorCode);
-
-    int32_t parseChoiceStyle(int32_t index, int32_t nestingLevel,
-                             UParseError *parseError, UErrorCode &errorCode);
-
-    int32_t parsePluralOrSelectStyle(UMessagePatternArgType argType, int32_t index, int32_t nestingLevel,
-                                     UParseError *parseError, UErrorCode &errorCode);
->>>>>>> miniblink49
 
     /**
      * Validates and parses an argument name or argument number string.
@@ -1072,16 +877,10 @@ private:
      *         ARG_NAME_NOT_VALID (-2) if it is neither.
      * @see #validateArgumentName(String)
      */
-<<<<<<< HEAD
     static int32_t parseArgNumber(const UnicodeString& s, int32_t start, int32_t limit);
 
     int32_t parseArgNumber(int32_t start, int32_t limit)
     {
-=======
-    static int32_t parseArgNumber(const UnicodeString &s, int32_t start, int32_t limit);
-
-    int32_t parseArgNumber(int32_t start, int32_t limit) {
->>>>>>> miniblink49
         return parseArgNumber(msg, start, limit);
     }
 
@@ -1094,11 +893,7 @@ private:
      * @param errorCode
      */
     void parseDouble(int32_t start, int32_t limit, UBool allowInfinity,
-<<<<<<< HEAD
         UParseError* parseError, UErrorCode& errorCode);
-=======
-                     UParseError *parseError, UErrorCode &errorCode);
->>>>>>> miniblink49
 
     // Java has package-private appendReducedApostrophes() here.
     // In C++, this is declared in the MessageImpl class.
@@ -1136,7 +931,6 @@ private:
     UBool inTopLevelChoiceMessage(int32_t nestingLevel, UMessagePatternArgType parentType);
 
     void addPart(UMessagePatternPartType type, int32_t index, int32_t length,
-<<<<<<< HEAD
         int32_t value, UErrorCode& errorCode);
 
     void addLimitPart(int32_t start,
@@ -1149,39 +943,16 @@ private:
 
     UBool init(UErrorCode& errorCode);
     UBool copyStorage(const MessagePattern& other, UErrorCode& errorCode);
-=======
-                 int32_t value, UErrorCode &errorCode);
-
-    void addLimitPart(int32_t start,
-                      UMessagePatternPartType type, int32_t index, int32_t length,
-                      int32_t value, UErrorCode &errorCode);
-
-    void addArgDoublePart(double numericValue, int32_t start, int32_t length, UErrorCode &errorCode);
-
-    void setParseError(UParseError *parseError, int32_t index);
-
-    UBool init(UErrorCode &errorCode);
-    UBool copyStorage(const MessagePattern &other, UErrorCode &errorCode);
->>>>>>> miniblink49
 
     UMessagePatternApostropheMode aposMode;
     UnicodeString msg;
     // ArrayList<Part> parts=new ArrayList<Part>();
-<<<<<<< HEAD
     MessagePatternPartsList* partsList;
     Part* parts;
     int32_t partsLength;
     // ArrayList<Double> numericValues;
     MessagePatternDoubleList* numericValuesList;
     double* numericValues;
-=======
-    MessagePatternPartsList *partsList;
-    Part *parts;
-    int32_t partsLength;
-    // ArrayList<Double> numericValues;
-    MessagePatternDoubleList *numericValuesList;
-    double *numericValues;
->>>>>>> miniblink49
     int32_t numericValuesLength;
     UBool hasArgNames;
     UBool hasArgNumbers;
@@ -1190,12 +961,6 @@ private:
 
 U_NAMESPACE_END
 
-<<<<<<< HEAD
 #endif // !UCONFIG_NO_FORMATTING
 
 #endif // __MESSAGEPATTERN_H__
-=======
-#endif  // !UCONFIG_NO_FORMATTING
-
-#endif  // __MESSAGEPATTERN_H__
->>>>>>> miniblink49

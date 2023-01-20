@@ -38,12 +38,8 @@
 namespace v8 {
 class Isolate;
 class Object;
-<<<<<<< HEAD
 template <class T>
 class Local;
-=======
-template <class T> class Local;
->>>>>>> miniblink49
 }
 
 namespace blink {
@@ -59,16 +55,12 @@ class WebString;
 // ExceptionCode and the WebString to a (non-localized) debug string.
 //
 // [1] http://www.w3.org/TR/WebCryptoAPI/#algorithm-normalizing-rules
-<<<<<<< HEAD
 BLINK_EXPORT WebCryptoAlgorithm
 normalizeCryptoAlgorithm(v8::Local<v8::Object>,
     WebCryptoOperation,
     int* exceptionCode,
     WebString* errorDetails,
     v8::Isolate*);
-=======
-BLINK_EXPORT WebCryptoAlgorithm normalizeCryptoAlgorithm(v8::Local<v8::Object>, WebCryptoOperation, int* exceptionCode, WebString* errorDetails, v8::Isolate*);
->>>>>>> miniblink49
 
 } // namespace blink
 

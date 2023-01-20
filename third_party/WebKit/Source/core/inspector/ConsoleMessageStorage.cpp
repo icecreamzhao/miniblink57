@@ -1,14 +1,11 @@
-// Copyright 2014 The Chromium Authors. All rights reserved.
+// Copyright 2016 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "core/inspector/ConsoleMessageStorage.h"
 
-#include "core/frame/FrameHost.h"
-#include "core/frame/LocalDOMWindow.h"
 #include "core/inspector/ConsoleMessage.h"
-#include "core/inspector/InspectorConsoleInstrumentation.h"
+#include "core/inspector/InspectorInstrumentation.h"
 
 namespace blink {
 
@@ -19,17 +16,11 @@ ConsoleMessageStorage::ConsoleMessageStorage()
 {
 }
 
-void ConsoleMessageStorage::reportMessage(ExecutionContext* context, PassRefPtrWillBeRawPtr<ConsoleMessage> prpMessage)
+void ConsoleMessageStorage::addConsoleMessage(ExecutionContext* context,
+    ConsoleMessage* message)
 {
-    RefPtrWillBeRawPtr<ConsoleMessage> message = prpMessage;
-    message->collectCallStack();
-
-    if (message->type() == ClearMessageType)
-        clear(context);
-
-    InspectorInstrumentation::addMessageToConsole(context, message.get());
-
-    ASSERT(m_messages.size() <= maxConsoleMessageCount);
+    InspectorInstrumentation::consoleMessageAdded(context, message);
+    DCHECK(m_messages.size() <= maxConsoleMessageCount);
     if (m_messages.size() == maxConsoleMessageCount) {
         ++m_expiredCount;
         m_messages.removeFirst();
@@ -37,33 +28,10 @@ void ConsoleMessageStorage::reportMessage(ExecutionContext* context, PassRefPtrW
     m_messages.append(message);
 }
 
-void ConsoleMessageStorage::clear(ExecutionContext* context)
+void ConsoleMessageStorage::clear()
 {
-    InspectorInstrumentation::consoleMessagesCleared(context);
     m_messages.clear();
     m_expiredCount = 0;
-}
-
-Vector<unsigned> ConsoleMessageStorage::argumentCounts() const
-{
-    Vector<unsigned> result(m_messages.size());
-    for (size_t i = 0; i < m_messages.size(); ++i)
-        result[i] = m_messages[i]->argumentCount();
-    return result;
-}
-
-void ConsoleMessageStorage::adoptWorkerMessagesAfterTermination(WorkerGlobalScopeProxy* workerGlobalScopeProxy)
-{
-    for (size_t i = 0; i < m_messages.size(); ++i) {
-        if (m_messages[i]->workerGlobalScopeProxy() == workerGlobalScopeProxy)
-            m_messages[i]->setWorkerGlobalScopeProxy(nullptr);
-    }
-}
-
-void ConsoleMessageStorage::frameWindowDiscarded(LocalDOMWindow* window)
-{
-    for (size_t i = 0; i < m_messages.size(); ++i)
-        m_messages[i]->frameWindowDiscarded(window);
 }
 
 size_t ConsoleMessageStorage::size() const

@@ -20,7 +20,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/events/MutationEvent.h"
 
 namespace blink {
@@ -30,9 +29,14 @@ MutationEvent::MutationEvent()
 {
 }
 
-MutationEvent::MutationEvent(const AtomicString& type, bool canBubble, bool cancelable, PassRefPtrWillBeRawPtr<Node> relatedNode,
-                             const String& prevValue, const String& newValue,
-                             const String& attrName, unsigned short attrChange)
+MutationEvent::MutationEvent(const AtomicString& type,
+    bool canBubble,
+    bool cancelable,
+    Node* relatedNode,
+    const String& prevValue,
+    const String& newValue,
+    const String& attrName,
+    unsigned short attrChange)
     : Event(type, canBubble, cancelable)
     , m_relatedNode(relatedNode)
     , m_prevValue(prevValue)
@@ -42,15 +46,18 @@ MutationEvent::MutationEvent(const AtomicString& type, bool canBubble, bool canc
 {
 }
 
-MutationEvent::~MutationEvent()
-{
-}
+MutationEvent::~MutationEvent() { }
 
-void MutationEvent::initMutationEvent(const AtomicString& type, bool canBubble, bool cancelable, PassRefPtrWillBeRawPtr<Node> relatedNode,
-                                      const String& prevValue, const String& newValue,
-                                      const String& attrName, unsigned short attrChange)
+void MutationEvent::initMutationEvent(const AtomicString& type,
+    bool canBubble,
+    bool cancelable,
+    Node* relatedNode,
+    const String& prevValue,
+    const String& newValue,
+    const String& attrName,
+    unsigned short attrChange)
 {
-    if (dispatched())
+    if (isBeingDispatched())
         return;
 
     initEvent(type, canBubble, cancelable);

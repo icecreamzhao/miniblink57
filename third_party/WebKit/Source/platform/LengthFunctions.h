@@ -28,16 +28,12 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 class FloatPoint;
-=======
->>>>>>> miniblink49
 class FloatSize;
 class LayoutUnit;
 class Length;
 class LengthSize;
 
-<<<<<<< HEAD
 struct LengthPoint;
 
 PLATFORM_EXPORT int intValueForLength(const Length&, int maximumValue);
@@ -52,14 +48,6 @@ PLATFORM_EXPORT FloatSize floatSizeForLengthSize(const LengthSize&,
     const FloatSize& boxSize);
 PLATFORM_EXPORT FloatPoint floatPointForLengthPoint(const LengthPoint&,
     const FloatSize& boxSize);
-=======
-PLATFORM_EXPORT int intValueForLength(const Length&, LayoutUnit maximumValue);
-PLATFORM_EXPORT float floatValueForLength(const Length&, float maximumValue);
-PLATFORM_EXPORT LayoutUnit minimumValueForLength(const Length&, LayoutUnit maximumValue);
-PLATFORM_EXPORT LayoutUnit roundedMinimumValueForLength(const Length&, LayoutUnit maximumValue);
-PLATFORM_EXPORT LayoutUnit valueForLength(const Length&, LayoutUnit maximumValue);
-PLATFORM_EXPORT FloatSize floatSizeForLengthSize(const LengthSize&, const FloatSize& boxSize);
->>>>>>> miniblink49
 
 } // namespace blink
 

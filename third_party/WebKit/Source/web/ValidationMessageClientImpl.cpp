@@ -23,18 +23,10 @@
  * SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "web/ValidationMessageClientImpl.h"
 
 #include "core/dom/Element.h"
 #include "core/frame/FrameView.h"
-<<<<<<< HEAD
-=======
-#include "core/layout/LayoutObject.h"
->>>>>>> miniblink49
 #include "platform/HostWindow.h"
 #include "public/platform/WebRect.h"
 #include "public/platform/WebString.h"
@@ -54,7 +46,6 @@ ValidationMessageClientImpl::ValidationMessageClientImpl(WebViewImpl& webView)
 {
 }
 
-<<<<<<< HEAD
 ValidationMessageClientImpl* ValidationMessageClientImpl::create(
     WebViewImpl& webView)
 {
@@ -62,32 +53,18 @@ ValidationMessageClientImpl* ValidationMessageClientImpl::create(
 }
 
 ValidationMessageClientImpl::~ValidationMessageClientImpl() { }
-=======
-PassOwnPtrWillBeRawPtr<ValidationMessageClientImpl> ValidationMessageClientImpl::create(WebViewImpl& webView)
-{
-    return adoptPtrWillBeNoop(new ValidationMessageClientImpl(webView));
-}
-
-ValidationMessageClientImpl::~ValidationMessageClientImpl()
-{
-}
->>>>>>> miniblink49
 
 FrameView* ValidationMessageClientImpl::currentView()
 {
     return m_currentAnchor->document().view();
 }
 
-<<<<<<< HEAD
 void ValidationMessageClientImpl::showValidationMessage(
     const Element& anchor,
     const String& message,
     TextDirection messageDir,
     const String& subMessage,
     TextDirection subMessageDir)
-=======
-void ValidationMessageClientImpl::showValidationMessage(const Element& anchor, const String& message, TextDirection messageDir, const String& subMessage, TextDirection subMessageDir)
->>>>>>> miniblink49
 {
     if (message.isEmpty()) {
         hideValidationMessage(anchor);
@@ -99,35 +76,22 @@ void ValidationMessageClientImpl::showValidationMessage(const Element& anchor, c
         hideValidationMessage(*m_currentAnchor);
     m_currentAnchor = &anchor;
     IntRect anchorInViewport = currentView()->contentsToViewport(anchor.pixelSnappedBoundingBox());
-<<<<<<< HEAD
     m_lastAnchorRectInScreen = currentView()->getHostWindow()->viewportToScreen(
         anchorInViewport, currentView());
-=======
-    m_lastAnchorRectInScreen = currentView()->hostWindow()->viewportToScreen(anchorInViewport);
->>>>>>> miniblink49
     m_lastPageScaleFactor = m_webView.pageScaleFactor();
     m_message = message;
     const double minimumSecondToShowValidationMessage = 5.0;
     const double secondPerCharacter = 0.05;
     const double statusCheckInterval = 0.1;
 
-<<<<<<< HEAD
     m_webView.client()->showValidationMessage(
         anchorInViewport, m_message, toWebTextDirection(messageDir), subMessage,
         toWebTextDirection(subMessageDir));
-=======
-    m_webView.client()->showValidationMessage(anchorInViewport, m_message, toWebTextDirection(messageDir),
-        subMessage, toWebTextDirection(subMessageDir));
->>>>>>> miniblink49
 
     m_finishTime = monotonicallyIncreasingTime() + std::max(minimumSecondToShowValidationMessage, (message.length() + subMessage.length()) * secondPerCharacter);
     // FIXME: We should invoke checkAnchorStatus actively when layout, scroll,
     // or page scale change happen.
-<<<<<<< HEAD
     m_timer.startRepeating(statusCheckInterval, BLINK_FROM_HERE);
-=======
-    m_timer.startRepeating(statusCheckInterval, FROM_HERE);
->>>>>>> miniblink49
 }
 
 void ValidationMessageClientImpl::hideValidationMessage(const Element& anchor)
@@ -141,12 +105,8 @@ void ValidationMessageClientImpl::hideValidationMessage(const Element& anchor)
     m_webView.client()->hideValidationMessage();
 }
 
-<<<<<<< HEAD
 bool ValidationMessageClientImpl::isValidationMessageVisible(
     const Element& anchor)
-=======
-bool ValidationMessageClientImpl::isValidationMessageVisible(const Element& anchor)
->>>>>>> miniblink49
 {
     return m_currentAnchor == &anchor;
 }
@@ -157,43 +117,22 @@ void ValidationMessageClientImpl::documentDetached(const Document& document)
         hideValidationMessage(*m_currentAnchor);
 }
 
-<<<<<<< HEAD
 void ValidationMessageClientImpl::checkAnchorStatus(TimerBase*)
 {
     DCHECK(m_currentAnchor);
-=======
-void ValidationMessageClientImpl::checkAnchorStatus(Timer<ValidationMessageClientImpl>*)
-{
-    ASSERT(m_currentAnchor);
->>>>>>> miniblink49
     if (monotonicallyIncreasingTime() >= m_finishTime || !currentView()) {
         hideValidationMessage(*m_currentAnchor);
         return;
     }
 
-<<<<<<< HEAD
     IntRect newAnchorRectInViewport = m_currentAnchor->visibleBoundsInVisualViewport();
-=======
-    // Check the visibility of the element.
-    // FIXME: Can we check invisibility by scrollable non-frame elements?
-    IntRect newAnchorRectInViewport = currentView()->contentsToViewport(m_currentAnchor->pixelSnappedBoundingBox());
-
-    // FIXME: This intersection eliminates the part of the rect outside the root view.
-    // If this is meant as a visiblity test, intersecting it against the viewport rect
-    // likely makes more sense.
-    newAnchorRectInViewport = intersection(currentView()->convertToContainingWindow(currentView()->boundsRect()), newAnchorRectInViewport);
->>>>>>> miniblink49
     if (newAnchorRectInViewport.isEmpty()) {
         hideValidationMessage(*m_currentAnchor);
         return;
     }
 
-<<<<<<< HEAD
     IntRect newAnchorRectInViewportInScreen = currentView()->getHostWindow()->viewportToScreen(newAnchorRectInViewport,
         currentView());
-=======
-    IntRect newAnchorRectInViewportInScreen = currentView()->hostWindow()->viewportToScreen(newAnchorRectInViewport);
->>>>>>> miniblink49
     if (newAnchorRectInViewportInScreen == m_lastAnchorRectInScreen && m_webView.pageScaleFactor() == m_lastPageScaleFactor)
         return;
     m_lastAnchorRectInScreen = newAnchorRectInViewportInScreen;

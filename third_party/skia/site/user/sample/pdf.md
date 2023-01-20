@@ -4,7 +4,6 @@ Using Skia's PDF Backend
 Here is an example of using Skia's PDF backend in the recommended way:
 via the SkDocument and SkCanvas APIs.
 
-<<<<<<< HEAD
 <!--?prettify lang=cc?-->
 
     #include "SkDocument.h"
@@ -26,17 +25,6 @@ via the SkDocument and SkCanvas APIs.
                 outputStream, SK_ScalarDefaultRasterDPI, metadata,
                 nullptr, true);
         assert(pdfDocument);
-=======
-<!--?prettify?-->
-
-    #include "SkDocument.h"
-
-    bool WritePDF() {
-        SkWStream* output = ....;
-
-        SkAutoTUnref<SkDocument> pdfDocument(
-                SkDocument::CreatePDF(outputStream));
->>>>>>> miniblink49
 
         int numberOfPages = ....;
         for (int page = 0; page < numberOfPages; ++page) {

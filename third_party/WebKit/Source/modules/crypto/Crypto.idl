@@ -27,17 +27,9 @@
  */
 
 [
-<<<<<<< HEAD
-=======
-    GarbageCollected,
->>>>>>> miniblink49
     Exposed=(Window,Worker)
 ] interface Crypto {
     [RaisesException, MeasureAs=CryptoGetRandomValues] ArrayBufferView getRandomValues(ArrayBufferView array);
 
     readonly attribute SubtleCrypto subtle;
 };
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49

@@ -7,7 +7,6 @@
 #include "src/simulator.h"
 #include "src/trap-handler/trap-handler.h"
 
-<<<<<<< HEAD
 #include "src/objects-inl.h" // weolar
 
 namespace v8 {
@@ -34,26 +33,3 @@ namespace internal {
 
 } // namespace internal
 } // namespace v8
-=======
-namespace v8 {
-namespace internal {
-
-void ThreadLocalTop::Initialize(Isolate* isolate) {
-  *this = ThreadLocalTop();
-  isolate_ = isolate;
-#ifdef USE_SIMULATOR
-  simulator_ = Simulator::current(isolate);
-#endif
-  thread_id_ = ThreadId::Current();
-  thread_in_wasm_flag_address_ = reinterpret_cast<Address>(
-      trap_handler::GetThreadInWasmThreadLocalAddress());
-}
-
-void ThreadLocalTop::Free() {
-  // Match unmatched PopPromise calls.
-  while (promise_on_stack_) isolate_->PopPromise();
-}
-
-}  // namespace internal
-}  // namespace v8
->>>>>>> miniblink49

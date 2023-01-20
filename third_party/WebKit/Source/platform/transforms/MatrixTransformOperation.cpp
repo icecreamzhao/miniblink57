@@ -19,24 +19,16 @@
  *
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/transforms/MatrixTransformOperation.h"
 
 #include <algorithm>
 
 namespace blink {
 
-<<<<<<< HEAD
 PassRefPtr<TransformOperation> MatrixTransformOperation::blend(
     const TransformOperation* from,
     double progress,
     bool blendToIdentity)
-=======
-PassRefPtr<TransformOperation> MatrixTransformOperation::blend(const TransformOperation* from, double progress, bool blendToIdentity)
->>>>>>> miniblink49
 {
     if (from && !from->isSameType(*this))
         return this;
@@ -54,7 +46,6 @@ PassRefPtr<TransformOperation> MatrixTransformOperation::blend(const TransformOp
         std::swap(fromT, toT);
 
     toT.blend(fromT, progress);
-<<<<<<< HEAD
     return MatrixTransformOperation::create(toT.a(), toT.b(), toT.c(), toT.d(),
         toT.e(), toT.f());
 }
@@ -62,9 +53,6 @@ PassRefPtr<TransformOperation> MatrixTransformOperation::blend(const TransformOp
 PassRefPtr<TransformOperation> MatrixTransformOperation::zoom(double factor)
 {
     return create(m_a, m_b, m_c, m_d, m_e * factor, m_f * factor);
-=======
-    return MatrixTransformOperation::create(toT.a(), toT.b(), toT.c(), toT.d(), toT.e(), toT.f());
->>>>>>> miniblink49
 }
 
 } // namespace blink

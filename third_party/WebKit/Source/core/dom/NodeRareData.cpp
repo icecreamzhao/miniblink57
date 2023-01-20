@@ -28,24 +28,24 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/dom/NodeRareData.h"
 
+#include "bindings/core/v8/ScriptWrappableVisitor.h"
 #include "core/dom/Element.h"
 #include "core/dom/ElementRareData.h"
 #include "core/frame/FrameHost.h"
-#include "core/layout/LayoutObject.h"
 #include "platform/heap/Handle.h"
 
 namespace blink {
 
 struct SameSizeAsNodeRareData {
-    void* m_pointer[2];
-    OwnPtrWillBeMember<NodeMutationObserverData> m_mutationObserverData;
+    void* m_pointer;
+    Member<void*> m_willbeMember[2];
     unsigned m_bitfields;
 };
 
-static_assert(sizeof(NodeRareData) == sizeof(SameSizeAsNodeRareData), "NodeRareData should stay small");
+static_assert(sizeof(NodeRareData) == sizeof(SameSizeAsNodeRareData),
+    "NodeRareData should stay small");
 
 DEFINE_TRACE_AFTER_DISPATCH(NodeRareData)
 {
@@ -65,6 +65,21 @@ DEFINE_TRACE(NodeRareData)
         traceAfterDispatch(visitor);
 }
 
+DEFINE_TRACE_WRAPPERS(NodeRareData)
+{
+    if (m_isElementRareData)
+        static_cast<const ElementRareData*>(this)->traceWrappersAfterDispatch(
+            visitor);
+    else
+        traceWrappersAfterDispatch(visitor);
+}
+
+DEFINE_TRACE_WRAPPERS_AFTER_DISPATCH(NodeRareData)
+{
+    visitor->traceWrappersWithManualWriteBarrier(m_nodeLists);
+    visitor->traceWrappersWithManualWriteBarrier(m_mutationObserverData);
+}
+
 void NodeRareData::finalizeGarbageCollectedObject()
 {
     RELEASE_ASSERT(!layoutObject());
@@ -74,13 +89,14 @@ void NodeRareData::finalizeGarbageCollectedObject()
         this->~NodeRareData();
 }
 
-void NodeRareData::incrementConnectedSubframeCount(unsigned amount)
+void NodeRareData::incrementConnectedSubframeCount()
 {
-    RELEASE_ASSERT_WITH_SECURITY_IMPLICATION((m_connectedFrameCount + amount) <= FrameHost::maxNumberOfFrames);
-    m_connectedFrameCount += amount;
+    SECURITY_CHECK((m_connectedFrameCount + 1) <= FrameHost::maxNumberOfFrames);
+    ++m_connectedFrameCount;
 }
 
 // Ensure the 10 bits reserved for the m_connectedFrameCount cannot overflow
-static_assert(FrameHost::maxNumberOfFrames < (1 << NodeRareData::ConnectedFrameCountBits), "Frame limit should fit in rare data count");
+static_assert(FrameHost::maxNumberOfFrames < (1 << NodeRareData::ConnectedFrameCountBits),
+    "Frame limit should fit in rare data count");
 
 } // namespace blink

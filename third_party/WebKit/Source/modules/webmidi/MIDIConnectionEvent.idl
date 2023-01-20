@@ -28,11 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 // https://webaudio.github.io/web-midi-api/#MIDIConnectionEvent
-=======
-// http://webaudio.github.io/web-midi-api/#idl-def-MIDIConnectionEvent
->>>>>>> miniblink49
 
 [
     Constructor(DOMString type, optional MIDIConnectionEventInit eventInitDict),

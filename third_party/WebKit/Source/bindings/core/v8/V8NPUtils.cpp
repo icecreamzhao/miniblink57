@@ -95,7 +95,7 @@ v8::Local<v8::Value> convertNPVariantToV8Object(v8::Isolate* isolate, const NPVa
         return v8::Undefined(isolate);
     case NPVariantType_String: {
         NPString src = NPVARIANT_TO_STRING(*variant);
-        return v8AtomicString(isolate, src.UTF8Characters, src.UTF8Length);
+        return v8StringFromUtf8(isolate, src.UTF8Characters, src.UTF8Length);
     }
     case NPVariantType_Object: {
         NPObject* object = NPVARIANT_TO_OBJECT(*variant);

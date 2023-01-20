@@ -33,23 +33,15 @@ public:
     SkDeviceLooper(const SkPixmap& base, const SkRasterClip&, const SkIRect& bounds, bool aa);
     ~SkDeviceLooper();
 
-<<<<<<< HEAD
     const SkPixmap& getPixmap() const
     {
-=======
-    const SkPixmap& getPixmap() const {
->>>>>>> miniblink49
         SkASSERT(kDone_State != fState);
         SkASSERT(fCurrDst);
         return *fCurrDst;
     }
 
-<<<<<<< HEAD
     const SkRasterClip& getRC() const
     {
-=======
-    const SkRasterClip& getRC() const {
->>>>>>> miniblink49
         SkASSERT(kDone_State != fState);
         SkASSERT(fCurrRC);
         return *fCurrRC;
@@ -70,26 +62,16 @@ public:
     bool next();
 
 private:
-<<<<<<< HEAD
     const SkPixmap& fBaseDst;
     const SkRasterClip& fBaseRC;
 
     enum State {
         kDone_State, // iteration is complete, getters will assert
         kSimple_State, // no translate/clip mods needed
-=======
-    const SkPixmap&     fBaseDst;
-    const SkRasterClip& fBaseRC;
-
-    enum State {
-        kDone_State,    // iteration is complete, getters will assert
-        kSimple_State,  // no translate/clip mods needed
->>>>>>> miniblink49
         kComplex_State
     };
 
     // storage for our tiled versions. Perhaps could use SkTLazy
-<<<<<<< HEAD
     SkPixmap fSubsetDst;
     SkRasterClip fSubsetRC;
 
@@ -107,24 +89,6 @@ private:
 
     bool fitsInDelta(const SkIRect& r) const
     {
-=======
-    SkPixmap            fSubsetDst;
-    SkRasterClip        fSubsetRC;
-
-    const SkPixmap*     fCurrDst;
-    const SkRasterClip* fCurrRC;
-    SkIRect             fClippedBounds;
-    SkIPoint            fCurrOffset;
-    int                 fDelta;
-    State               fState;
-
-    enum Delta {
-        kBW_Delta = 1 << 14,        // 16K, gives room to spare for fixedpoint
-        kAA_Delta = kBW_Delta >> 2  // supersample 4x
-    };
-
-    bool fitsInDelta(const SkIRect& r) const {
->>>>>>> miniblink49
         return r.right() < fDelta && r.bottom() < fDelta;
     }
 

@@ -6,30 +6,18 @@
  */
 
 #include "SkXMLAnimatorWriter.h"
-<<<<<<< HEAD
 #include "SkAnimateMaker.h"
 #include "SkAnimator.h"
 #include "SkDisplayXMLParser.h"
 
 SkXMLAnimatorWriter::SkXMLAnimatorWriter(SkAnimator* animator)
     : fAnimator(animator)
-=======
-#include "SkAnimator.h"
-#include "SkAnimateMaker.h"
-#include "SkDisplayXMLParser.h"
-
-SkXMLAnimatorWriter::SkXMLAnimatorWriter(SkAnimator* animator) : fAnimator(animator)
->>>>>>> miniblink49
 {
     fParser = new SkDisplayXMLParser(*fAnimator->fMaker);
 }
 
-<<<<<<< HEAD
 SkXMLAnimatorWriter::~SkXMLAnimatorWriter()
 {
-=======
-SkXMLAnimatorWriter::~SkXMLAnimatorWriter() {
->>>>>>> miniblink49
     delete fParser;
 }
 
@@ -38,12 +26,8 @@ void SkXMLAnimatorWriter::onAddAttributeLen(const char name[], const char value[
     fParser->onAddAttributeLen(name, value, length);
 }
 
-<<<<<<< HEAD
 void SkXMLAnimatorWriter::onAddText(const char text[], size_t length)
 {
-=======
-void SkXMLAnimatorWriter::onAddText(const char text[], size_t length) {
->>>>>>> miniblink49
     SkDebugf("not implemented: SkXMLAnimatorWriter::onAddText()\n");
 }
 
@@ -70,7 +54,6 @@ void SkXMLAnimatorWriter::writeHeader()
 
 void SkXMLAnimatorWriter::UnitTest(SkCanvas* canvas)
 {
-<<<<<<< HEAD
     SkAnimator s;
     SkXMLAnimatorWriter w(&s);
     w.startElement("screenplay");
@@ -95,32 +78,6 @@ void SkXMLAnimatorWriter::UnitTest(SkCanvas* canvas)
     w.addAttribute("scope", "line");
     w.endElement();
     w.endElement();
-=======
-    SkAnimator  s;
-    SkXMLAnimatorWriter     w(&s);
-    w.startElement("screenplay");
-        w.startElement("animateField");
-            w.addAttribute("field", "x1");
-            w.addAttribute("id", "to100");
-            w.addAttribute("from", "0");
-            w.addAttribute("to", "100");
-            w.addAttribute("dur", "1");
-        w.endElement();
-        w.startElement("event");
-            w.addAttribute("kind", "onLoad");
-            w.startElement("line");
-                w.addAttribute("id", "line");
-                w.addAttribute("x1", "-1");
-                w.addAttribute("y1", "20");
-                w.addAttribute("x2", "150");
-                w.addAttribute("y2", "40");
-            w.endElement();
-            w.startElement("apply");
-                w.addAttribute("animator", "to100");
-                w.addAttribute("scope", "line");
-            w.endElement();
-        w.endElement();
->>>>>>> miniblink49
     w.endElement();
     SkPaint paint;
     canvas->drawColor(SK_ColorWHITE);

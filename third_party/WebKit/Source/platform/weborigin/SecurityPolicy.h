@@ -32,10 +32,7 @@
 #include "platform/PlatformExport.h"
 #include "platform/weborigin/Referrer.h"
 #include "platform/weborigin/ReferrerPolicy.h"
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
-=======
->>>>>>> miniblink49
 #include "wtf/text/WTFString.h"
 
 namespace blink {
@@ -44,11 +41,8 @@ class KURL;
 class SecurityOrigin;
 
 class PLATFORM_EXPORT SecurityPolicy {
-<<<<<<< HEAD
     STATIC_ONLY(SecurityPolicy);
 
-=======
->>>>>>> miniblink49
 public:
     // This must be called during initialization (before we create
     // other threads).
@@ -57,16 +51,11 @@ public:
     // True if the referrer should be omitted according to the
     // ReferrerPolicyNoReferrerWhenDowngrade. If you intend to send a
     // referrer header, you should use generateReferrer instead.
-<<<<<<< HEAD
     static bool shouldHideReferrer(const KURL&, const KURL& referrer);
-=======
-    static bool shouldHideReferrer(const KURL&, const String& referrer);
->>>>>>> miniblink49
 
     // Returns the referrer modified according to the referrer policy for a
     // navigation to a given URL. If the referrer returned is empty, the
     // referrer header should be omitted.
-<<<<<<< HEAD
     static Referrer generateReferrer(ReferrerPolicy,
         const KURL&,
         const String& referrer);
@@ -96,19 +85,6 @@ public:
     static bool referrerPolicyFromStringWithLegacyKeywords(
         const String& policy,
         ReferrerPolicy* result);
-=======
-    static Referrer generateReferrer(ReferrerPolicy, const KURL&, const String& referrer);
-
-    static void addOriginAccessWhitelistEntry(const SecurityOrigin& sourceOrigin, const String& destinationProtocol, const String& destinationDomain, bool allowDestinationSubdomains);
-    static void removeOriginAccessWhitelistEntry(const SecurityOrigin& sourceOrigin, const String& destinationProtocol, const String& destinationDomain, bool allowDestinationSubdomains);
-    static void resetOriginAccessWhitelists();
-
-    static bool isAccessWhiteListed(const SecurityOrigin* activeOrigin, const SecurityOrigin* targetOrigin);
-    static bool isAccessToURLWhiteListed(const SecurityOrigin* activeOrigin, const KURL&);
-
-    static void addOriginTrustworthyWhiteList(PassRefPtr<SecurityOrigin>);
-    static bool isOriginWhiteListedTrustworthy(const SecurityOrigin&);
->>>>>>> miniblink49
 };
 
 } // namespace blink

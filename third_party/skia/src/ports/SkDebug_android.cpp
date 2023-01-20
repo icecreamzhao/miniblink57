@@ -6,11 +6,8 @@
  */
 
 #include "SkTypes.h"
-<<<<<<< HEAD
 #if defined(SK_BUILD_FOR_ANDROID)
 
-=======
->>>>>>> miniblink49
 #include <stdio.h>
 
 #define LOG_TAG "skia"
@@ -21,12 +18,8 @@
 // gyp dependency.
 bool gSkDebugToStdOut = false;
 
-<<<<<<< HEAD
 void SkDebugf(const char format[], ...)
 {
-=======
-void SkDebugf(const char format[], ...) {
->>>>>>> miniblink49
     va_list args1, args2;
     va_start(args1, format);
 
@@ -40,8 +33,5 @@ void SkDebugf(const char format[], ...) {
 
     va_end(args1);
 }
-<<<<<<< HEAD
 
 #endif //defined(SK_BUILD_FOR_ANDROID)
-=======
->>>>>>> miniblink49

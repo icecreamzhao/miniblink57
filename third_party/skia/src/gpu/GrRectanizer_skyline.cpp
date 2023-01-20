@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2013 Google Inc.
  *
@@ -12,15 +8,9 @@
 #include "GrRectanizer_skyline.h"
 #include "SkPoint.h"
 
-<<<<<<< HEAD
 bool GrRectanizerSkyline::addRect(int width, int height, SkIPoint16* loc)
 {
     if ((unsigned)width > (unsigned)this->width() || (unsigned)height > (unsigned)this->height()) {
-=======
-bool GrRectanizerSkyline::addRect(int width, int height, SkIPoint16* loc) {
-    if ((unsigned)width > (unsigned)this->width() ||
-        (unsigned)height > (unsigned)this->height()) {
->>>>>>> miniblink49
         return false;
     }
 
@@ -48,11 +38,7 @@ bool GrRectanizerSkyline::addRect(int width, int height, SkIPoint16* loc) {
         loc->fX = bestX;
         loc->fY = bestY;
 
-<<<<<<< HEAD
         fAreaSoFar += width * height;
-=======
-        fAreaSoFar += width*height;
->>>>>>> miniblink49
         return true;
     }
 
@@ -61,12 +47,8 @@ bool GrRectanizerSkyline::addRect(int width, int height, SkIPoint16* loc) {
     return false;
 }
 
-<<<<<<< HEAD
 bool GrRectanizerSkyline::rectangleFits(int skylineIndex, int width, int height, int* ypos) const
 {
-=======
-bool GrRectanizerSkyline::rectangleFits(int skylineIndex, int width, int height, int* ypos) const {
->>>>>>> miniblink49
     int x = fSkyline[skylineIndex].fX;
     if (x + width > this->width()) {
         return false;
@@ -89,12 +71,8 @@ bool GrRectanizerSkyline::rectangleFits(int skylineIndex, int width, int height,
     return true;
 }
 
-<<<<<<< HEAD
 void GrRectanizerSkyline::addSkylineLevel(int skylineIndex, int x, int y, int width, int height)
 {
-=======
-void GrRectanizerSkyline::addSkylineLevel(int skylineIndex, int x, int y, int width, int height) {
->>>>>>> miniblink49
     SkylineSegment newSegment;
     newSegment.fX = x;
     newSegment.fY = y + height;
@@ -105,21 +83,12 @@ void GrRectanizerSkyline::addSkylineLevel(int skylineIndex, int x, int y, int wi
     SkASSERT(newSegment.fY <= this->height());
 
     // delete width of the new skyline segment from following ones
-<<<<<<< HEAD
     for (int i = skylineIndex + 1; i < fSkyline.count(); ++i) {
         // The new segment subsumes all or part of fSkyline[i]
         SkASSERT(fSkyline[i - 1].fX <= fSkyline[i].fX);
 
         if (fSkyline[i].fX < fSkyline[i - 1].fX + fSkyline[i - 1].fWidth) {
             int shrink = fSkyline[i - 1].fX + fSkyline[i - 1].fWidth - fSkyline[i].fX;
-=======
-    for (int i = skylineIndex+1; i < fSkyline.count(); ++i) {
-        // The new segment subsumes all or part of fSkyline[i]
-        SkASSERT(fSkyline[i-1].fX <= fSkyline[i].fX);
-
-        if (fSkyline[i].fX < fSkyline[i-1].fX + fSkyline[i-1].fWidth) {
-            int shrink = fSkyline[i-1].fX + fSkyline[i-1].fWidth - fSkyline[i].fX;
->>>>>>> miniblink49
 
             fSkyline[i].fX += shrink;
             fSkyline[i].fWidth -= shrink;
@@ -138,17 +107,10 @@ void GrRectanizerSkyline::addSkylineLevel(int skylineIndex, int x, int y, int wi
     }
 
     // merge fSkylines
-<<<<<<< HEAD
     for (int i = 0; i < fSkyline.count() - 1; ++i) {
         if (fSkyline[i].fY == fSkyline[i + 1].fY) {
             fSkyline[i].fWidth += fSkyline[i + 1].fWidth;
             fSkyline.remove(i + 1);
-=======
-    for (int i = 0; i < fSkyline.count()-1; ++i) {
-        if (fSkyline[i].fY == fSkyline[i+1].fY) {
-            fSkyline[i].fWidth += fSkyline[i+1].fWidth;
-            fSkyline.remove(i+1);
->>>>>>> miniblink49
             --i;
         }
     }
@@ -156,12 +118,7 @@ void GrRectanizerSkyline::addSkylineLevel(int skylineIndex, int x, int y, int wi
 
 ///////////////////////////////////////////////////////////////////////////////
 
-<<<<<<< HEAD
 GrRectanizer* GrRectanizer::Factory(int width, int height)
 {
     return new GrRectanizerSkyline(width, height);
-=======
-GrRectanizer* GrRectanizer::Factory(int width, int height) {
-    return SkNEW_ARGS(GrRectanizerSkyline, (width, height));
->>>>>>> miniblink49
 }

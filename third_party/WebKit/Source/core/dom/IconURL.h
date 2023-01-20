@@ -33,6 +33,7 @@
 
 #include "platform/geometry/IntSize.h"
 #include "platform/weborigin/KURL.h"
+#include "wtf/Allocator.h"
 
 namespace blink {
 
@@ -44,6 +45,7 @@ enum IconType {
 };
 
 struct IconURL {
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
     IconType m_iconType;
     Vector<IntSize> m_sizes;
     String m_mimeType;
@@ -56,7 +58,10 @@ struct IconURL {
     {
     }
 
-    IconURL(const KURL& url, const Vector<IntSize>& sizes, const String& mimeType, IconType type)
+    IconURL(const KURL& url,
+        const Vector<IntSize>& sizes,
+        const String& mimeType,
+        IconType type)
         : m_iconType(type)
         , m_sizes(sizes)
         , m_mimeType(mimeType)
@@ -70,6 +75,6 @@ struct IconURL {
 
 bool operator==(const IconURL&, const IconURL&);
 
-}
+} // namespace blink
 
 #endif // IconURL_h

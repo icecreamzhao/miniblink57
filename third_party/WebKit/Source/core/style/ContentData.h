@@ -2,7 +2,8 @@
  * Copyright (C) 2000 Lars Knoll (knoll@kde.org)
  *           (C) 2000 Antti Koivisto (koivisto@kde.org)
  *           (C) 2000 Dirk Mueller (mueller@kde.org)
- * Copyright (C) 2003, 2005, 2006, 2007, 2008, 2010 Apple Inc. All rights reserved.
+ * Copyright (C) 2003, 2005, 2006, 2007, 2008, 2010 Apple Inc. All rights
+ * reserved.
  * Copyright (C) 2006 Graham Dennis (graham.dennis@gmail.com)
  *
  * This library is free software; you can redistribute it and/or
@@ -27,8 +28,8 @@
 
 #include "core/style/CounterContent.h"
 #include "core/style/StyleImage.h"
-#include "wtf/OwnPtr.h"
-#include "wtf/PassOwnPtr.h"
+#include "wtf/PtrUtil.h"
+#include <memory>
 
 namespace blink {
 
@@ -36,13 +37,12 @@ class Document;
 class LayoutObject;
 class ComputedStyle;
 
-class ContentData {
-    WTF_MAKE_FAST_ALLOCATED(ContentData);
+class ContentData : public GarbageCollectedFinalized<ContentData> {
 public:
-    static PassOwnPtr<ContentData> create(PassRefPtr<StyleImage>);
-    static PassOwnPtr<ContentData> create(const String&);
-    static PassOwnPtr<ContentData> create(PassOwnPtr<CounterContent>);
-    static PassOwnPtr<ContentData> create(QuoteType);
+    static ContentData* create(StyleImage*);
+    static ContentData* create(const String&);
+    static ContentData* create(std::unique_ptr<CounterContent>);
+    static ContentData* create(QuoteType);
 
     virtual ~ContentData() { }
 
@@ -53,66 +53,78 @@ public:
 
     virtual LayoutObject* createLayoutObject(Document&, ComputedStyle&) const = 0;
 
-    virtual PassOwnPtr<ContentData> clone() const;
+    virtual ContentData* clone() const;
 
     ContentData* next() const { return m_next.get(); }
-    void setNext(PassOwnPtr<ContentData> next) { m_next = next; }
+    void setNext(ContentData* next) { m_next = next; }
 
     virtual bool equals(const ContentData&) const = 0;
 
-private:
-    virtual PassOwnPtr<ContentData> cloneInternal() const = 0;
+    DECLARE_VIRTUAL_TRACE();
 
-    OwnPtr<ContentData> m_next;
+private:
+    virtual ContentData* cloneInternal() const = 0;
+
+    Member<ContentData> m_next;
 };
 
-#define DEFINE_CONTENT_DATA_TYPE_CASTS(typeName) \
-    DEFINE_TYPE_CASTS(typeName##ContentData, ContentData, content, content->is##typeName(), content.is##typeName())
+#define DEFINE_CONTENT_DATA_TYPE_CASTS(typeName)                   \
+    DEFINE_TYPE_CASTS(typeName##ContentData, ContentData, content, \
+        content->is##typeName(), content.is##typeName())
 
 class ImageContentData final : public ContentData {
     friend class ContentData;
+
 public:
     const StyleImage* image() const { return m_image.get(); }
     StyleImage* image() { return m_image.get(); }
-    void setImage(PassRefPtr<StyleImage> image) { m_image = image; }
+    void setImage(StyleImage* image)
+    {
+        ASSERT(image);
+        m_image = image;
+    }
 
-    virtual bool isImage() const override { return true; }
-    virtual LayoutObject* createLayoutObject(Document&, ComputedStyle&) const override;
+    bool isImage() const override { return true; }
+    LayoutObject* createLayoutObject(Document&, ComputedStyle&) const override;
 
-    virtual bool equals(const ContentData& data) const override
+    bool equals(const ContentData& data) const override
     {
         if (!data.isImage())
             return false;
         return *static_cast<const ImageContentData&>(data).image() == *image();
     }
 
+    DECLARE_VIRTUAL_TRACE();
+
 private:
-    ImageContentData(PassRefPtr<StyleImage> image)
+    ImageContentData(StyleImage* image)
         : m_image(image)
     {
+        ASSERT(m_image);
     }
 
-    virtual PassOwnPtr<ContentData> cloneInternal() const override
+    ContentData* cloneInternal() const override
     {
-        RefPtr<StyleImage> image = const_cast<StyleImage*>(this->image());
-        return create(image.release());
+        StyleImage* image = const_cast<StyleImage*>(this->image());
+        return create(image);
     }
 
-    RefPtr<StyleImage> m_image;
+    Member<StyleImage> m_image;
 };
 
 DEFINE_CONTENT_DATA_TYPE_CASTS(Image);
 
 class TextContentData final : public ContentData {
     friend class ContentData;
+
 public:
     const String& text() const { return m_text; }
     void setText(const String& text) { m_text = text; }
 
-    virtual bool isText() const override { return true; }
-    virtual LayoutObject* createLayoutObject(Document&, ComputedStyle&) const override;
+    bool isText() const override { return true; }
+    LayoutObject* createLayoutObject(Document&, ComputedStyle&) const override;
 
-    virtual bool equals(const ContentData& data) const override
+    bool equals(const ContentData& data) const override
     {
         if (!data.isText())
             return false;
@@ -125,7 +137,7 @@ private:
     {
     }
 
-    virtual PassOwnPtr<ContentData> cloneInternal() const override { return create(text()); }
+    ContentData* cloneInternal() const override { return create(text()); }
 
     String m_text;
 };
@@ -134,47 +146,52 @@ DEFINE_CONTENT_DATA_TYPE_CASTS(Text);
 
 class CounterContentData final : public ContentData {
     friend class ContentData;
+
 public:
     const CounterContent* counter() const { return m_counter.get(); }
-    void setCounter(PassOwnPtr<CounterContent> counter) { m_counter = counter; }
+    void setCounter(std::unique_ptr<CounterContent> counter)
+    {
+        m_counter = std::move(counter);
+    }
 
-    virtual bool isCounter() const override { return true; }
-    virtual LayoutObject* createLayoutObject(Document&, ComputedStyle&) const override;
+    bool isCounter() const override { return true; }
+    LayoutObject* createLayoutObject(Document&, ComputedStyle&) const override;
 
 private:
-    CounterContentData(PassOwnPtr<CounterContent> counter)
-        : m_counter(counter)
+    CounterContentData(std::unique_ptr<CounterContent> counter)
+        : m_counter(std::move(counter))
     {
     }
 
-    virtual PassOwnPtr<ContentData> cloneInternal() const override
+    ContentData* cloneInternal() const override
     {
-        OwnPtr<CounterContent> counterData = adoptPtr(new CounterContent(*counter()));
-        return create(counterData.release());
+        std::unique_ptr<CounterContent> counterData = WTF::wrapUnique(new CounterContent(*counter()));
+        return create(std::move(counterData));
     }
 
-    virtual bool equals(const ContentData& data) const override
+    bool equals(const ContentData& data) const override
     {
         if (!data.isCounter())
             return false;
         return *static_cast<const CounterContentData&>(data).counter() == *counter();
     }
 
-    OwnPtr<CounterContent> m_counter;
+    std::unique_ptr<CounterContent> m_counter;
 };
 
 DEFINE_CONTENT_DATA_TYPE_CASTS(Counter);
 
 class QuoteContentData final : public ContentData {
     friend class ContentData;
+
 public:
     QuoteType quote() const { return m_quote; }
     void setQuote(QuoteType quote) { m_quote = quote; }
 
-    virtual bool isQuote() const override { return true; }
-    virtual LayoutObject* createLayoutObject(Document&, ComputedStyle&) const override;
+    bool isQuote() const override { return true; }
+    LayoutObject* createLayoutObject(Document&, ComputedStyle&) const override;
 
-    virtual bool equals(const ContentData& data) const override
+    bool equals(const ContentData& data) const override
     {
         if (!data.isQuote())
             return false;
@@ -187,7 +204,7 @@ private:
     {
     }
 
-    virtual PassOwnPtr<ContentData> cloneInternal() const override { return create(quote()); }
+    ContentData* cloneInternal() const override { return create(quote()); }
 
     QuoteType m_quote;
 };

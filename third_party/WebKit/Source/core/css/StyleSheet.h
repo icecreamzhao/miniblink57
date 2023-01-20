@@ -24,7 +24,6 @@
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
-#include "wtf/RefCounted.h"
 
 namespace blink {
 
@@ -34,8 +33,10 @@ class MediaList;
 class Node;
 class StyleSheet;
 
-class CORE_EXPORT StyleSheet : public RefCountedWillBeGarbageCollectedFinalized<StyleSheet>, public ScriptWrappable {
+class CORE_EXPORT StyleSheet : public GarbageCollectedFinalized<StyleSheet>,
+                               public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     StyleSheet() { }
     virtual ~StyleSheet();

@@ -28,10 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 [
-<<<<<<< HEAD
-=======
-    GarbageCollected,
->>>>>>> miniblink49
     RuntimeEnabled=MediaSourceExperimental,
 ] interface VideoPlaybackQuality {
     readonly attribute double creationTime;

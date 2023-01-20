@@ -33,7 +33,6 @@
 
 namespace WTF {
 
-<<<<<<< HEAD
 template <>
 struct IntHash<SkSize> {
     STATIC_ONLY(IntHash);
@@ -41,15 +40,10 @@ struct IntHash<SkSize> {
     {
         return hashInts(key.width(), key.height());
     }
-=======
-template<> struct IntHash<SkSize> {
-    static unsigned hash(const SkSize& key) { return pairIntHash(key.width(), key.height()); }
->>>>>>> miniblink49
     static bool equal(const SkSize& a, const SkSize& b) { return a == b; }
     static const bool safeToCompareToEmptyOrDeleted = true;
 };
 
-<<<<<<< HEAD
 template <>
 struct DefaultHash<SkSize> {
     STATIC_ONLY(DefaultHash);
@@ -59,13 +53,6 @@ struct DefaultHash<SkSize> {
 template <>
 struct HashTraits<SkSize> : GenericHashTraits<SkSize> {
     STATIC_ONLY(HashTraits);
-=======
-template<> struct DefaultHash<SkSize> {
-    typedef IntHash<SkSize> Hash;
-};
-
-template<> struct HashTraits<SkSize> : GenericHashTraits<SkSize> {
->>>>>>> miniblink49
     static const bool emptyValueIsZero = true;
     static SkSize emptyValue() { return SkSize::Make(0, 0); }
     static void constructDeletedValue(SkSize& slot, bool)
@@ -78,7 +65,6 @@ template<> struct HashTraits<SkSize> : GenericHashTraits<SkSize> {
     }
 };
 
-<<<<<<< HEAD
 template <>
 struct IntHash<SkISize> {
     STATIC_ONLY(IntHash);
@@ -86,15 +72,10 @@ struct IntHash<SkISize> {
     {
         return hashInts(key.width(), key.height());
     }
-=======
-template<> struct IntHash<SkISize> {
-    static unsigned hash(const SkISize& key) { return pairIntHash(key.width(), key.height()); }
->>>>>>> miniblink49
     static bool equal(const SkISize& a, const SkISize& b) { return a == b; }
     static const bool safeToCompareToEmptyOrDeleted = true;
 };
 
-<<<<<<< HEAD
 template <>
 struct DefaultHash<SkISize> {
     STATIC_ONLY(DefaultHash);
@@ -104,13 +85,6 @@ struct DefaultHash<SkISize> {
 template <>
 struct HashTraits<SkISize> : GenericHashTraits<SkISize> {
     STATIC_ONLY(HashTraits);
-=======
-template<> struct DefaultHash<SkISize> {
-    typedef IntHash<SkISize> Hash;
-};
-
-template<> struct HashTraits<SkISize> : GenericHashTraits<SkISize> {
->>>>>>> miniblink49
     static const bool emptyValueIsZero = true;
     static SkISize emptyValue() { return SkISize::Make(0, 0); }
     static void constructDeletedValue(SkISize& slot, bool)

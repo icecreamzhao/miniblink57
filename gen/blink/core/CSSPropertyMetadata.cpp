@@ -2,17 +2,35 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "core/css/CSSPropertyMetadata.h"
 
 #include "platform/RuntimeEnabledFeatures.h"
-#include "wtf/BitArray.h"
+#include <bitset>
 
 namespace blink {
 
+bool CSSPropertyMetadata::isDescriptorOnly(CSSPropertyID property)
+{
+    switch (property) {
+    case CSSPropertyInvalid:
+        ASSERT_NOT_REACHED();
+        return false;
+    case CSSPropertyFontDisplay:
+    case CSSPropertyMinZoom:
+    case CSSPropertyOrientation:
+    case CSSPropertyUnicodeRange:
+    case CSSPropertyMaxZoom:
+    case CSSPropertyUserZoom:
+    case CSSPropertySrc:
+        return true;
+    default:
+        return false;
+    }
+}
+
 bool CSSPropertyMetadata::isInterpolableProperty(CSSPropertyID property)
 {
-    switch(property) {
+    switch (property) {
     case CSSPropertyInvalid:
         ASSERT_NOT_REACHED();
         return false;
@@ -22,15 +40,20 @@ bool CSSPropertyMetadata::isInterpolableProperty(CSSPropertyID property)
     case CSSPropertyShapeOutside:
     case CSSPropertyTextDecorationColor:
     case CSSPropertyOutlineWidth:
+    case CSSPropertyColumnRuleWidth:
     case CSSPropertyStrokeOpacity:
-    case CSSPropertyWebkitColumnWidth:
+    case CSSPropertyOffsetRotate:
+    case CSSPropertyWebkitMaskImage:
     case CSSPropertyHeight:
+    case CSSPropertyBorderImageSource:
     case CSSPropertyBorderBottomLeftRadius:
     case CSSPropertyWebkitMaskPositionY:
     case CSSPropertyWebkitMaskPositionX:
+    case CSSPropertyFilter:
     case CSSPropertyShapeMargin:
     case CSSPropertyOutlineColor:
     case CSSPropertyPaddingBottom:
+    case CSSPropertyClipPath:
     case CSSPropertyStopOpacity:
     case CSSPropertyBorderTopRightRadius:
     case CSSPropertyFontWeight:
@@ -38,25 +61,23 @@ bool CSSPropertyMetadata::isInterpolableProperty(CSSPropertyID property)
     case CSSPropertyRy:
     case CSSPropertyRx:
     case CSSPropertyMarginRight:
-    case CSSPropertyWebkitColumnRuleColor:
-    case CSSPropertyWebkitTextStrokeColor:
     case CSSPropertyOpacity:
     case CSSPropertyWebkitMaskBoxImageOutset:
-    case CSSPropertyWebkitMaskBoxImageSource:
-    case CSSPropertyMotionRotation:
+    case CSSPropertyPaddingRight:
     case CSSPropertyWebkitBorderHorizontalSpacing:
+    case CSSPropertyColumnCount:
     case CSSPropertyStrokeDasharray:
     case CSSPropertyFlexBasis:
     case CSSPropertyWidows:
-    case CSSPropertyLetterSpacing:
-    case CSSPropertyWebkitTransformOriginZ:
+    case CSSPropertyFlexShrink:
     case CSSPropertyWebkitTransformOriginY:
     case CSSPropertyWebkitTransformOriginX:
     case CSSPropertyTransform:
+    case CSSPropertyWebkitTextStrokeColor:
     case CSSPropertyFill:
     case CSSPropertyStopColor:
+    case CSSPropertyWordSpacing:
     case CSSPropertyPerspectiveOrigin:
-    case CSSPropertyWebkitColumnCount:
     case CSSPropertyBorderBottomRightRadius:
     case CSSPropertyBorderRightWidth:
     case CSSPropertyBorderTopLeftRadius:
@@ -67,42 +88,42 @@ bool CSSPropertyMetadata::isInterpolableProperty(CSSPropertyID property)
     case CSSPropertyBorderTopWidth:
     case CSSPropertyBottom:
     case CSSPropertyTop:
-    case CSSPropertyWebkitColumnGap:
     case CSSPropertyTransformOrigin:
     case CSSPropertyMarginTop:
     case CSSPropertyMaxWidth:
     case CSSPropertyTextIndent:
     case CSSPropertyTextShadow:
     case CSSPropertyBorderImageOutset:
-    case CSSPropertyPaddingRight:
+    case CSSPropertyColumnRuleColor:
     case CSSPropertyPerspective:
     case CSSPropertyLineHeight:
+    case CSSPropertyColumnGap:
     case CSSPropertyScale:
     case CSSPropertyStrokeDashoffset:
     case CSSPropertyBaselineShift:
     case CSSPropertyPaddingLeft:
     case CSSPropertyVerticalAlign:
-    case CSSPropertyWordSpacing:
+    case CSSPropertyOffsetPosition:
+    case CSSPropertyBackdropFilter:
     case CSSPropertyBorderRightColor:
-    case CSSPropertyStroke:
+    case CSSPropertyOffsetAnchor:
     case CSSPropertyLeft:
     case CSSPropertyWidth:
-    case CSSPropertyWebkitClipPath:
+    case CSSPropertyWebkitMaskBoxImageSource:
     case CSSPropertyStrokeMiterlimit:
     case CSSPropertyMarginBottom:
-    case CSSPropertyWebkitFilter:
     case CSSPropertyOutlineOffset:
     case CSSPropertyWebkitMaskSize:
     case CSSPropertyRotate:
     case CSSPropertyBorderImageWidth:
     case CSSPropertyFlexGrow:
-    case CSSPropertyWebkitMaskImage:
-    case CSSPropertyWebkitColumnRuleWidth:
     case CSSPropertyX:
     case CSSPropertyY:
     case CSSPropertyR:
-    case CSSPropertyFontSizeAdjust:
-    case CSSPropertyFlexShrink:
+    case CSSPropertyOffsetDistance:
+    case CSSPropertyLetterSpacing:
+    case CSSPropertyWebkitTransformOriginZ:
+    case CSSPropertyD:
     case CSSPropertyRight:
     case CSSPropertyBackgroundSize:
     case CSSPropertyClip:
@@ -113,13 +134,17 @@ bool CSSPropertyMetadata::isInterpolableProperty(CSSPropertyID property)
     case CSSPropertyBorderLeftColor:
     case CSSPropertyFloodColor:
     case CSSPropertyMaxHeight:
+    case CSSPropertyStroke:
     case CSSPropertyWebkitMaskBoxImageSlice:
+    case CSSPropertyOrphans:
     case CSSPropertyBackgroundPositionY:
     case CSSPropertyBackgroundPositionX:
     case CSSPropertyMinWidth:
+    case CSSPropertyWebkitPerspectiveOriginY:
+    case CSSPropertyCaretColor:
+    case CSSPropertyColumnWidth:
+    case CSSPropertyOffsetRotation:
     case CSSPropertyBorderBottomWidth:
-    case CSSPropertyBorderImageSource:
-    case CSSPropertyMotionOffset:
     case CSSPropertyStrokeWidth:
     case CSSPropertyTranslate:
     case CSSPropertyBorderTopColor:
@@ -131,9 +156,8 @@ bool CSSPropertyMetadata::isInterpolableProperty(CSSPropertyID property)
     case CSSPropertyFloodOpacity:
     case CSSPropertyLightingColor:
     case CSSPropertyObjectPosition:
-    case CSSPropertyOrphans:
-    case CSSPropertyWebkitPerspectiveOriginY:
     case CSSPropertyWebkitPerspectiveOriginX:
+    case CSSPropertyFontSizeAdjust:
     case CSSPropertyBorderBottomColor:
     case CSSPropertyFontSize:
     case CSSPropertyVisibility:
@@ -145,67 +169,71 @@ bool CSSPropertyMetadata::isInterpolableProperty(CSSPropertyID property)
 
 bool CSSPropertyMetadata::isInheritedProperty(CSSPropertyID property)
 {
-    switch(property) {
+    switch (property) {
     case CSSPropertyInvalid:
         ASSERT_NOT_REACHED();
         return false;
     case CSSPropertyFillRule:
-    //case CSSPropertyWebkitLineBoxContain:
+    case CSSPropertyFontVariantNumeric:
     case CSSPropertyWebkitHyphenateCharacter:
     case CSSPropertyStrokeOpacity:
     case CSSPropertyFontFamily:
     case CSSPropertyPaintOrder:
     case CSSPropertyTextRendering:
     case CSSPropertyColorInterpolation:
+    case CSSPropertyFontVariationSettings:
     case CSSPropertyImageRendering:
-    case CSSPropertyWebkitUserSelect:
     case CSSPropertyWebkitTextEmphasisStyle:
     case CSSPropertyQuotes:
+    case CSSPropertyWebkitTextFillColor:
     case CSSPropertyWebkitBoxDirection:
     case CSSPropertyWebkitUserModify:
     case CSSPropertyFontKerning:
     case CSSPropertyFontWeight:
     case CSSPropertyWebkitFontSmoothing:
-    case CSSPropertyWebkitFontFeatureSettings:
-    case CSSPropertyWebkitTextStrokeColor:
+    case CSSPropertyDominantBaseline:
+    case CSSPropertyTextCombineUpright:
     case CSSPropertyWebkitBorderHorizontalSpacing:
     case CSSPropertyWebkitTapHighlightColor:
     case CSSPropertyCaptionSide:
     case CSSPropertyWebkitPrintColorAdjust:
     case CSSPropertyStrokeDasharray:
     case CSSPropertyWidows:
-    case CSSPropertyLetterSpacing:
     case CSSPropertyWebkitRubyPosition:
+    case CSSPropertyWebkitTextStrokeColor:
     case CSSPropertyFill:
+    case CSSPropertyWebkitTextEmphasisPosition:
     case CSSPropertyTextJustify:
+    case CSSPropertyWordSpacing:
     case CSSPropertyTextAnchor:
     case CSSPropertyFontStyle:
-    case CSSPropertyFontVariant:
     case CSSPropertyWritingMode:
     case CSSPropertyWebkitTextSecurity:
     case CSSPropertyWebkitLineBreak:
-    //case CSSPropertyGlyphOrientationHorizontal:
     case CSSPropertyFillOpacity:
     case CSSPropertyBorderCollapse:
-    case CSSPropertyWebkitRtlOrdering:
+    case CSSPropertyWebkitWritingMode:
     case CSSPropertyWordWrap:
+    case CSSPropertyWebkitRtlOrdering:
     case CSSPropertyTextIndent:
     case CSSPropertyTextShadow:
+    case CSSPropertyFontVariantCaps:
+    case CSSPropertyHyphens:
+    case CSSPropertyTextSizeAdjust:
+    case CSSPropertyUserSelect:
     case CSSPropertyLineHeight:
+    case CSSPropertySnapHeight:
     case CSSPropertyWebkitTextStrokeWidth:
     case CSSPropertyStrokeDashoffset:
-    //case CSSPropertyGlyphOrientationVertical:
     case CSSPropertyWebkitTextDecorationsInEffect:
-    case CSSPropertyWebkitTextFillColor:
     case CSSPropertyFontStretch:
     case CSSPropertyWhiteSpace:
     case CSSPropertyOverflowWrap:
     case CSSPropertyWebkitLocale:
-    case CSSPropertyWebkitTextEmphasisPosition:
-    case CSSPropertyWordSpacing:
     case CSSPropertyMarkerEnd:
-    case CSSPropertyStroke:
     case CSSPropertyTextUnderlinePosition:
+    case CSSPropertyTextDecorationSkip:
+    case CSSPropertyFontFeatureSettings:
     case CSSPropertyStrokeMiterlimit:
     case CSSPropertyListStylePosition:
     case CSSPropertyShapeRendering:
@@ -216,15 +244,18 @@ bool CSSPropertyMetadata::isInheritedProperty(CSSPropertyID property)
     case CSSPropertyFontVariantLigatures:
     case CSSPropertyMarkerMid:
     case CSSPropertyWebkitTextCombine:
-    case CSSPropertyFontSizeAdjust:
+    case CSSPropertyLetterSpacing:
     case CSSPropertyWebkitTextOrientation:
     case CSSPropertyColorInterpolationFilters:
     case CSSPropertyTextTransform:
     case CSSPropertyDirection:
+    case CSSPropertyTextOrientation:
     case CSSPropertyColor:
     case CSSPropertyWebkitBorderVerticalSpacing:
-    case CSSPropertyWebkitWritingMode:
+    case CSSPropertyStroke:
+    case CSSPropertyOrphans:
     case CSSPropertyTextAlignLast:
+    case CSSPropertyCaretColor:
     case CSSPropertyCursor:
     case CSSPropertyTabSize:
     case CSSPropertyWebkitHighlight:
@@ -237,10 +268,46 @@ bool CSSPropertyMetadata::isInheritedProperty(CSSPropertyID property)
     case CSSPropertyListStyleImage:
     case CSSPropertyClipRule:
     case CSSPropertyListStyleType:
+    case CSSPropertyImageOrientation:
     case CSSPropertyTextAlign:
-    case CSSPropertyOrphans:
+    case CSSPropertyFontSizeAdjust:
     case CSSPropertyFontSize:
     case CSSPropertyVisibility:
+    case CSSPropertyVariable:
+        return true;
+    default:
+        return false;
+    }
+}
+
+bool CSSPropertyMetadata::propertySupportsPercentage(CSSPropertyID property)
+{
+    switch (property) {
+    case CSSPropertyInvalid:
+        ASSERT_NOT_REACHED();
+        return false;
+    case CSSPropertyHeight:
+    case CSSPropertyBorderTopWidth:
+    case CSSPropertyBottom:
+    case CSSPropertyTop:
+    case CSSPropertyLeft:
+    case CSSPropertyWidth:
+    case CSSPropertyRight:
+        return true;
+    default:
+        return false;
+    }
+}
+
+bool CSSPropertyMetadata::propertyIsRepeated(CSSPropertyID property)
+{
+    switch (property) {
+    case CSSPropertyInvalid:
+        ASSERT_NOT_REACHED();
+        return false;
+    case CSSPropertyContent:
+    case CSSPropertyAnimationIterationCount:
+    case CSSPropertyAnimationDirection:
         return true;
     default:
         return false;
@@ -250,110 +317,128 @@ bool CSSPropertyMetadata::isInheritedProperty(CSSPropertyID property)
 bool CSSPropertyMetadata::isEnabledProperty(CSSPropertyID unresolvedProperty)
 {
     CSSPropertyID property = resolveCSSPropertyID(unresolvedProperty);
-    static BitArray<numCSSProperties>* enabledProperties = 0;
+    static std::bitset<numCSSProperties>* enabledProperties = nullptr;
     if (!enabledProperties) {
-        enabledProperties = new BitArray<numCSSProperties>(true); // All bits sets to 1.
+        enabledProperties = new std::bitset<numCSSProperties>();
+        enabledProperties->set(); // All bits sets to 1.
+        if (!RuntimeEnabledFeatures::cssFontDisplayEnabled())
+            enabledProperties->reset(CSSPropertyFontDisplay - 3);
         if (!RuntimeEnabledFeatures::css3TextDecorationsEnabled())
-            enabledProperties->clear(CSSPropertyTextDecorationColor - firstCSSProperty);
-//         if (!RuntimeEnabledFeatures::cssMotionPathEnabled())
-//             enabledProperties->clear(CSSPropertyMotion - firstCSSProperty);
+            enabledProperties->reset(CSSPropertyTextDecorationColor - 3);
+        if (!RuntimeEnabledFeatures::cssOffsetRotateEnabled())
+            enabledProperties->reset(CSSPropertyOffsetRotate - 3);
+        if (!RuntimeEnabledFeatures::cssContainmentEnabled())
+            enabledProperties->reset(CSSPropertyContain - 3);
+        if (!RuntimeEnabledFeatures::cssVariableFontsEnabled())
+            enabledProperties->reset(CSSPropertyFontVariationSettings - 3);
         if (!RuntimeEnabledFeatures::cssGridLayoutEnabled())
-            enabledProperties->clear(CSSPropertyGridTemplate - firstCSSProperty);
+            enabledProperties->reset(CSSPropertyGridTemplate - 3);
         if (!RuntimeEnabledFeatures::css3TextDecorationsEnabled())
-            enabledProperties->clear(CSSPropertyTextDecorationLine - firstCSSProperty);
+            enabledProperties->reset(CSSPropertyTextDecorationLine - 3);
         if (!RuntimeEnabledFeatures::cssScrollSnapPointsEnabled())
-            enabledProperties->clear(CSSPropertyScrollSnapType - firstCSSProperty);
+            enabledProperties->reset(CSSPropertyScrollSnapType - 3);
         if (!RuntimeEnabledFeatures::cssGridLayoutEnabled())
-            enabledProperties->clear(CSSPropertyGridAutoRows - firstCSSProperty);
+            enabledProperties->reset(CSSPropertyGridGap - 3);
         if (!RuntimeEnabledFeatures::cssGridLayoutEnabled())
-            enabledProperties->clear(CSSPropertyGridColumn - firstCSSProperty);
-//         if (!RuntimeEnabledFeatures::cssMotionPathEnabled())
-//             enabledProperties->clear(CSSPropertyMotionRotation - firstCSSProperty);
+            enabledProperties->reset(CSSPropertyGridAutoRows - 3);
         if (!RuntimeEnabledFeatures::cssGridLayoutEnabled())
-            enabledProperties->clear(CSSPropertyGrid - firstCSSProperty);
-//         if (!RuntimeEnabledFeatures::cssScrollBlocksOnEnabled())
-//             enabledProperties->clear(CSSPropertyScrollBlocksOn - firstCSSProperty);
+            enabledProperties->reset(CSSPropertyGridColumn - 3);
         if (!RuntimeEnabledFeatures::cssGridLayoutEnabled())
-            enabledProperties->clear(CSSPropertyGridTemplateRows - firstCSSProperty);
+            enabledProperties->reset(CSSPropertyGrid - 3);
+        if (!RuntimeEnabledFeatures::cssGridLayoutEnabled())
+            enabledProperties->reset(CSSPropertyGridTemplateRows - 3);
         if (!RuntimeEnabledFeatures::cssomSmoothScrollEnabled())
-            enabledProperties->clear(CSSPropertyScrollBehavior - firstCSSProperty);
+            enabledProperties->reset(CSSPropertyScrollBehavior - 3);
         if (!RuntimeEnabledFeatures::cssGridLayoutEnabled())
-            enabledProperties->clear(CSSPropertyGridAutoFlow - firstCSSProperty);
-//         if (!RuntimeEnabledFeatures::cssMotionPathEnabled())
-//             enabledProperties->clear(CSSPropertyMotionPath - firstCSSProperty);
+            enabledProperties->reset(CSSPropertyGridAutoFlow - 3);
         if (!RuntimeEnabledFeatures::cssGridLayoutEnabled())
-            enabledProperties->clear(CSSPropertyJustifySelf - firstCSSProperty);
+            enabledProperties->reset(CSSPropertyJustifySelf - 3);
         if (!RuntimeEnabledFeatures::css3TextEnabled())
-            enabledProperties->clear(CSSPropertyTextJustify - firstCSSProperty);
-        if (!RuntimeEnabledFeatures::cssCompositingEnabled())
-            enabledProperties->clear(CSSPropertyIsolation - firstCSSProperty);
+            enabledProperties->reset(CSSPropertyTextJustify - 3);
         if (!RuntimeEnabledFeatures::cssScrollSnapPointsEnabled())
-            enabledProperties->clear(CSSPropertyScrollSnapPointsX - firstCSSProperty);
+            enabledProperties->reset(CSSPropertyScrollSnapPointsX - 3);
         if (!RuntimeEnabledFeatures::cssScrollSnapPointsEnabled())
-            enabledProperties->clear(CSSPropertyScrollSnapPointsY - firstCSSProperty);
-        if (!RuntimeEnabledFeatures::columnFillEnabled())
-            enabledProperties->clear(CSSPropertyColumnFill - firstCSSProperty);
+            enabledProperties->reset(CSSPropertyScrollSnapPointsY - 3);
+        if (!RuntimeEnabledFeatures::cssHyphensEnabled())
+            enabledProperties->reset(CSSPropertyHyphens - 3);
         if (!RuntimeEnabledFeatures::cssGridLayoutEnabled())
-            enabledProperties->clear(CSSPropertyGridTemplateColumns - firstCSSProperty);
+            enabledProperties->reset(CSSPropertyGridTemplateColumns - 3);
         if (!RuntimeEnabledFeatures::cssMaskSourceTypeEnabled())
-            enabledProperties->clear(CSSPropertyMaskSourceType - firstCSSProperty);
+            enabledProperties->reset(CSSPropertyMaskSourceType - 3);
+        if (!RuntimeEnabledFeatures::cssSnapSizeEnabled())
+            enabledProperties->reset(CSSPropertySnapHeight - 3);
         if (!RuntimeEnabledFeatures::cssIndependentTransformPropertiesEnabled())
-            enabledProperties->clear(CSSPropertyScale - firstCSSProperty);
+            enabledProperties->reset(CSSPropertyScale - 3);
         if (!RuntimeEnabledFeatures::cssGridLayoutEnabled())
-            enabledProperties->clear(CSSPropertyGridAutoColumns - firstCSSProperty);
+            enabledProperties->reset(CSSPropertyGridAutoColumns - 3);
         if (!RuntimeEnabledFeatures::cssGridLayoutEnabled())
-            enabledProperties->clear(CSSPropertyGridRowStart - firstCSSProperty);
-        if (!RuntimeEnabledFeatures::cssCompositingEnabled())
-            enabledProperties->clear(CSSPropertyMixBlendMode - firstCSSProperty);
+            enabledProperties->reset(CSSPropertyGridRowStart - 3);
+        if (!RuntimeEnabledFeatures::cssOffsetPositionAnchorEnabled())
+            enabledProperties->reset(CSSPropertyOffsetPosition - 3);
+        if (!RuntimeEnabledFeatures::cssBackdropFilterEnabled())
+            enabledProperties->reset(CSSPropertyBackdropFilter - 3);
+        if (!RuntimeEnabledFeatures::cssOffsetPositionAnchorEnabled())
+            enabledProperties->reset(CSSPropertyOffsetAnchor - 3);
         if (!RuntimeEnabledFeatures::cssGridLayoutEnabled())
-            enabledProperties->clear(CSSPropertyGridRowEnd - firstCSSProperty);
+            enabledProperties->reset(CSSPropertyGridRowGap - 3);
+        if (!RuntimeEnabledFeatures::cssGridLayoutEnabled())
+            enabledProperties->reset(CSSPropertyGridRowEnd - 3);
         if (!RuntimeEnabledFeatures::css3TextDecorationsEnabled())
-            enabledProperties->clear(CSSPropertyTextUnderlinePosition - firstCSSProperty);
+            enabledProperties->reset(CSSPropertyTextUnderlinePosition - 3);
         if (!RuntimeEnabledFeatures::cssGridLayoutEnabled())
-            enabledProperties->clear(CSSPropertyGridRow - firstCSSProperty);
+            enabledProperties->reset(CSSPropertyGridRow - 3);
+        if (!RuntimeEnabledFeatures::css3TextDecorationsEnabled())
+            enabledProperties->reset(CSSPropertyTextDecorationSkip - 3);
+        if (!RuntimeEnabledFeatures::scrollAnchoringEnabled())
+            enabledProperties->reset(CSSPropertyOverflowAnchor - 3);
         if (!RuntimeEnabledFeatures::cssGridLayoutEnabled())
-            enabledProperties->clear(CSSPropertyGridColumnStart - firstCSSProperty);
+            enabledProperties->reset(CSSPropertyGridColumnStart - 3);
         if (!RuntimeEnabledFeatures::cssGridLayoutEnabled())
-            enabledProperties->clear(CSSPropertyJustifyItems - firstCSSProperty);
+            enabledProperties->reset(CSSPropertyJustifyItems - 3);
         if (!RuntimeEnabledFeatures::cssIndependentTransformPropertiesEnabled())
-            enabledProperties->clear(CSSPropertyRotate - firstCSSProperty);
+            enabledProperties->reset(CSSPropertyRotate - 3);
         if (!RuntimeEnabledFeatures::cssGridLayoutEnabled())
-            enabledProperties->clear(CSSPropertyGridTemplateAreas - firstCSSProperty);
+            enabledProperties->reset(CSSPropertyGridTemplateAreas - 3);
+        if (!RuntimeEnabledFeatures::cssGridLayoutEnabled())
+            enabledProperties->reset(CSSPropertyGridColumnEnd - 3);
+        if (!RuntimeEnabledFeatures::cssScrollSnapPointsEnabled())
+            enabledProperties->reset(CSSPropertyScrollSnapCoordinate - 3);
+        if (!RuntimeEnabledFeatures::cssGridLayoutEnabled())
+            enabledProperties->reset(CSSPropertyGridArea - 3);
+        if (!RuntimeEnabledFeatures::cssOffsetRotationEnabled())
+            enabledProperties->reset(CSSPropertyOffsetRotation - 3);
+        if (!RuntimeEnabledFeatures::css3TextDecorationsEnabled())
+            enabledProperties->reset(CSSPropertyTextDecorationStyle - 3);
+        if (!RuntimeEnabledFeatures::cssIndependentTransformPropertiesEnabled())
+            enabledProperties->reset(CSSPropertyTranslate - 3);
+        if (!RuntimeEnabledFeatures::imageOrientationEnabled())
+            enabledProperties->reset(CSSPropertyImageOrientation - 3);
+        if (!RuntimeEnabledFeatures::cssGridLayoutEnabled())
+            enabledProperties->reset(CSSPropertyGridColumnGap - 3);
+        if (!RuntimeEnabledFeatures::cssScrollSnapPointsEnabled())
+            enabledProperties->reset(CSSPropertyScrollSnapDestination - 3);
         if (!RuntimeEnabledFeatures::cssFontSizeAdjustEnabled())
-            enabledProperties->clear(CSSPropertyFontSizeAdjust - firstCSSProperty);
-        if (!RuntimeEnabledFeatures::cssGridLayoutEnabled())
-            enabledProperties->clear(CSSPropertyGridColumnEnd - firstCSSProperty);
-        if (!RuntimeEnabledFeatures::cssScrollSnapPointsEnabled())
-            enabledProperties->clear(CSSPropertyScrollSnapCoordinate - firstCSSProperty);
-        if (!RuntimeEnabledFeatures::cssGridLayoutEnabled())
-            enabledProperties->clear(CSSPropertyGridArea - firstCSSProperty);
-        if (!RuntimeEnabledFeatures::css3TextEnabled())
-            enabledProperties->clear(CSSPropertyTextAlignLast - firstCSSProperty);
-//         if (!RuntimeEnabledFeatures::cssMotionPathEnabled())
-//             enabledProperties->clear(CSSPropertyMotionOffset - firstCSSProperty);
-        if (!RuntimeEnabledFeatures::css3TextDecorationsEnabled())
-            enabledProperties->clear(CSSPropertyTextDecorationStyle - firstCSSProperty);
-        if (!RuntimeEnabledFeatures::cssIndependentTransformPropertiesEnabled())
-            enabledProperties->clear(CSSPropertyTranslate - firstCSSProperty);
-        if (!RuntimeEnabledFeatures::cssScrollSnapPointsEnabled())
-            enabledProperties->clear(CSSPropertyScrollSnapDestination - firstCSSProperty);
+            enabledProperties->reset(CSSPropertyFontSizeAdjust - 3);
     }
 
-	if (unresolvedProperty >= firstCSSProperty)
-		return enabledProperties->get(property - firstCSSProperty);
+    if (unresolvedProperty >= 3)
+        return enabledProperties->test(property - 3);
 
-	if (unresolvedProperty == CSSPropertyVariable)
-		return true;
-
-	return false;
+    if (unresolvedProperty == CSSPropertyVariable)
+        return true;
+    ASSERT(unresolvedProperty == CSSPropertyApplyAtRule);
+    return RuntimeEnabledFeatures::cssApplyAtRulesEnabled();
 }
 
-void CSSPropertyMetadata::filterEnabledCSSPropertiesIntoVector(const CSSPropertyID* properties, size_t propertyCount, Vector<CSSPropertyID>& outVector)
+void CSSPropertyMetadata::filterEnabledCSSPropertiesIntoVector(
+    const CSSPropertyID* properties,
+    size_t propertyCount,
+    Vector<CSSPropertyID>& outVector)
 {
     for (unsigned i = 0; i < propertyCount; i++) {
         CSSPropertyID property = properties[i];
         if (isEnabledProperty(property))
-            outVector.append(property);
+            outVector.push_back(property);
     }
 }
 

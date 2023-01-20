@@ -17,7 +17,6 @@
 class SkDrawable;
 class SkLayerInfo;
 
-<<<<<<< HEAD
 // Calculate conservative identity space bounds for each op in the record.
 void SkRecordFillBounds(const SkRect& cullRect, const SkRecord&, SkRect bounds[]);
 
@@ -31,19 +30,6 @@ void SkRecordComputeLayers(const SkRect& cullRect, const SkRecord&, SkRect bound
 void SkRecordDraw(const SkRecord&, SkCanvas*, SkPicture const* const drawablePicts[],
     SkDrawable* const drawables[], int drawableCount,
     const SkBBoxHierarchy*, SkPicture::AbortCallback*);
-=======
-// Fill a BBH to be used by SkRecordDraw to accelerate playback.
-void SkRecordFillBounds(const SkRect& cullRect, const SkRecord&, SkBBoxHierarchy*);
-
-void SkRecordComputeLayers(const SkRect& cullRect, const SkRecord& record,
-                           const SkBigPicture::SnapshotArray*,
-                           SkBBoxHierarchy* bbh, SkLayerInfo* data);
-
-// Draw an SkRecord into an SkCanvas.  A convenience wrapper around SkRecords::Draw.
-void SkRecordDraw(const SkRecord&, SkCanvas*, SkPicture const* const drawablePicts[],
-                  SkDrawable* const drawables[], int drawableCount,
-                  const SkBBoxHierarchy*, SkPicture::AbortCallback*);
->>>>>>> miniblink49
 
 // Draw a portion of an SkRecord into an SkCanvas.
 // When drawing a portion of an SkRecord the CTM on the passed in canvas must be
@@ -51,13 +37,8 @@ void SkRecordDraw(const SkRecord&, SkCanvas*, SkPicture const* const drawablePic
 // of the record that is being replayed). For setMatrix calls to behave correctly
 // the initialCTM parameter must set to just the replay matrix.
 void SkRecordPartialDraw(const SkRecord&, SkCanvas*,
-<<<<<<< HEAD
     SkPicture const* const drawablePicts[], int drawableCount,
     int start, int stop, const SkMatrix& initialCTM);
-=======
-                         SkPicture const* const drawablePicts[], int drawableCount,
-                         unsigned start, unsigned stop, const SkMatrix& initialCTM);
->>>>>>> miniblink49
 
 namespace SkRecords {
 
@@ -65,35 +46,22 @@ namespace SkRecords {
 class Draw : SkNoncopyable {
 public:
     explicit Draw(SkCanvas* canvas, SkPicture const* const drawablePicts[],
-<<<<<<< HEAD
         SkDrawable* const drawables[], int drawableCount,
         const SkMatrix* initialCTM = nullptr)
-=======
-                  SkDrawable* const drawables[], int drawableCount,
-                  const SkMatrix* initialCTM = NULL)
->>>>>>> miniblink49
         : fInitialCTM(initialCTM ? *initialCTM : canvas->getTotalMatrix())
         , fCanvas(canvas)
         , fDrawablePicts(drawablePicts)
         , fDrawables(drawables)
         , fDrawableCount(drawableCount)
-<<<<<<< HEAD
     {
     }
-=======
-    {}
->>>>>>> miniblink49
 
     // This operator calls methods on the |canvas|. The various draw() wrapper
     // methods around SkCanvas are defined by the DRAW() macro in
     // SkRecordDraw.cpp.
-<<<<<<< HEAD
     template <typename T>
     void operator()(const T& r)
     {
-=======
-    template <typename T> void operator()(const T& r) {
->>>>>>> miniblink49
         this->draw(r);
     }
 
@@ -103,12 +71,8 @@ protected:
 
 private:
     // No base case, so we'll be compile-time checked that we implement all possibilities.
-<<<<<<< HEAD
     template <typename T>
     void draw(const T&);
-=======
-    template <typename T> void draw(const T&);
->>>>>>> miniblink49
 
     const SkMatrix fInitialCTM;
     SkCanvas* fCanvas;
@@ -117,12 +81,6 @@ private:
     int fDrawableCount;
 };
 
-<<<<<<< HEAD
 } // namespace SkRecords
 
 #endif //SkRecordDraw_DEFINED
-=======
-}  // namespace SkRecords
-
-#endif//SkRecordDraw_DEFINED
->>>>>>> miniblink49

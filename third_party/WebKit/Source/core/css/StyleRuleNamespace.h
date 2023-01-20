@@ -12,24 +12,32 @@ namespace blink {
 // This class is never actually stored anywhere currently, but only used for
 // the parser to pass to a stylesheet
 class StyleRuleNamespace final : public StyleRuleBase {
-    WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(StyleRuleNamespace);
 public:
-    static PassRefPtrWillBeRawPtr<StyleRuleNamespace> create(AtomicString prefix, AtomicString uri)
+    static StyleRuleNamespace* create(AtomicString prefix, AtomicString uri)
     {
-        return adoptRefWillBeNoop(new StyleRuleNamespace(prefix, uri));
+        return new StyleRuleNamespace(prefix, uri);
+    }
+
+    StyleRuleNamespace* copy() const
+    {
+        return new StyleRuleNamespace(m_prefix, m_uri);
     }
 
     AtomicString prefix() const { return m_prefix; }
     AtomicString uri() const { return m_uri; }
 
-    DEFINE_INLINE_TRACE_AFTER_DISPATCH() { StyleRuleBase::traceAfterDispatch(visitor); }
+    DEFINE_INLINE_TRACE_AFTER_DISPATCH()
+    {
+        StyleRuleBase::traceAfterDispatch(visitor);
+    }
 
 private:
     StyleRuleNamespace(AtomicString prefix, AtomicString uri)
-    : StyleRuleBase(Namespace)
-    , m_prefix(prefix)
-    , m_uri(uri)
-    { }
+        : StyleRuleBase(Namespace)
+        , m_prefix(prefix)
+        , m_uri(uri)
+    {
+    }
 
     AtomicString m_prefix;
     AtomicString m_uri;

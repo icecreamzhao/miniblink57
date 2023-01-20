@@ -4,7 +4,6 @@
 
 #include "src/d8.h"
 
-<<<<<<< HEAD
 namespace v8 {
 
 void Shell::AddOSMethods(Isolate* isolate, Local<ObjectTemplate> os_templ) { }
@@ -16,17 +15,3 @@ char* Shell::ReadCharsFromTcpPort(const char* name, int* size_out)
 }
 
 } // namespace v8
-=======
-
-namespace v8 {
-
-
-void Shell::AddOSMethods(Isolate* isolate, Local<ObjectTemplate> os_templ) {}
-
-char* Shell::ReadCharsFromTcpPort(const char* name, int* size_out) {
-  // TODO(leszeks): No reason this shouldn't exist on windows.
-  return nullptr;
-}
-
-}  // namespace v8
->>>>>>> miniblink49

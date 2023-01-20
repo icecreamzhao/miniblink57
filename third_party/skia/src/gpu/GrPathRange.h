@@ -9,17 +9,10 @@
 #define GrPathRange_DEFINED
 
 #include "GrGpuResource.h"
-<<<<<<< HEAD
 #include "SkPath.h"
 #include "SkRefCnt.h"
 #include "SkTArray.h"
 
-=======
-#include "SkRefCnt.h"
-#include "SkTArray.h"
-
-class SkPath;
->>>>>>> miniblink49
 class SkDescriptor;
 
 /**
@@ -30,29 +23,16 @@ class SkDescriptor;
 
 class GrPathRange : public GrGpuResource {
 public:
-<<<<<<< HEAD
     enum PathIndexType {
         kU8_PathIndexType, //!< uint8_t
         kU16_PathIndexType, //!< uint16_t
         kU32_PathIndexType, //!< uint32_t
-=======
-    
-
-    enum PathIndexType {
-        kU8_PathIndexType,   //!< uint8_t
-        kU16_PathIndexType,  //!< uint16_t
-        kU32_PathIndexType,  //!< uint32_t
->>>>>>> miniblink49
 
         kLast_PathIndexType = kU32_PathIndexType
     };
 
-<<<<<<< HEAD
     static inline int PathIndexSizeInBytes(PathIndexType type)
     {
-=======
-    static inline int PathIndexSizeInBytes(PathIndexType type) {
->>>>>>> miniblink49
         GR_STATIC_ASSERT(0 == kU8_PathIndexType);
         GR_STATIC_ASSERT(1 == kU16_PathIndexType);
         GR_STATIC_ASSERT(2 == kU32_PathIndexType);
@@ -69,7 +49,6 @@ public:
         virtual int getNumPaths() = 0;
         virtual void generatePath(int index, SkPath* out) = 0;
 #ifdef SK_DEBUG
-<<<<<<< HEAD
         virtual bool isEqualTo(const SkDescriptor&) const
         {
             return false;
@@ -78,11 +57,6 @@ public:
         virtual ~PathGenerator()
         {
         }
-=======
-        virtual bool isEqualTo(const SkDescriptor&) const { return false; }
-#endif
-        virtual ~PathGenerator() {}
->>>>>>> miniblink49
     };
 
     /**
@@ -100,7 +74,6 @@ public:
     int getNumPaths() const { return fNumPaths; }
     const PathGenerator* getPathGenerator() const { return fPathGenerator.get(); }
 
-<<<<<<< HEAD
     void loadPathsIfNeeded(const void* indices, PathIndexType, int count) const;
 
     template <typename IndexType>
@@ -166,11 +139,6 @@ public:
     virtual bool isEqualTo(const SkDescriptor& desc) const
     {
         return nullptr != fPathGenerator.get() && fPathGenerator->isEqualTo(desc);
-=======
-#ifdef SK_DEBUG
-    virtual bool isEqualTo(const SkDescriptor& desc) const {
-        return NULL != fPathGenerator.get() && fPathGenerator->isEqualTo(desc);
->>>>>>> miniblink49
     }
 #endif
 protected:
@@ -180,16 +148,9 @@ protected:
     virtual void onInitPath(int index, const SkPath&) const = 0;
 
 private:
-<<<<<<< HEAD
     enum {
         kPathsPerGroup = 16 // Paths get tracked in groups of 16 for lazy loading.
     };
-=======
-    // Notify when paths will be drawn in case this is a lazy-loaded path range.
-    friend class GrPathRendering;
-    void willDrawPaths(const void* indices, PathIndexType, int count) const;
-    template<typename IndexType> void willDrawPaths(const void* indices, int count) const;
->>>>>>> miniblink49
 
     mutable SkAutoTUnref<PathGenerator> fPathGenerator;
     mutable SkTArray<uint8_t, true /*MEM_COPY*/> fGeneratedPaths;

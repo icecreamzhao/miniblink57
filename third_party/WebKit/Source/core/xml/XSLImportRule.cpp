@@ -19,7 +19,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/xml/XSLImportRule.h"
 
 #include "core/dom/Document.h"
@@ -27,7 +26,7 @@
 #include "core/fetch/FetchRequest.h"
 #include "core/fetch/RawResource.h"
 #include "core/fetch/ResourceFetcher.h"
-#include "core/fetch/XSLStyleSheetResource.h"
+#include "core/loader/resource/XSLStyleSheetResource.h"
 #include "platform/SharedBuffer.h"
 #include "wtf/text/TextEncoding.h"
 
@@ -40,15 +39,11 @@ XSLImportRule::XSLImportRule(XSLStyleSheet* parent, const String& href)
 {
 }
 
-XSLImportRule::~XSLImportRule()
-{
-#if !ENABLE(OILPAN)
-    if (m_styleSheet)
-        m_styleSheet->setParentStyleSheet(0);
-#endif
-}
+XSLImportRule::~XSLImportRule() { }
 
-void XSLImportRule::setXSLStyleSheet(const String& href, const KURL& baseURL, const String& sheet)
+void XSLImportRule::setXSLStyleSheet(const String& href,
+    const KURL& baseURL,
+    const String& sheet)
 {
     if (m_styleSheet)
         m_styleSheet->setParentStyleSheet(0);
@@ -88,26 +83,28 @@ void XSLImportRule::loadSheet()
     XSLStyleSheet* parentSheet = parentStyleSheet();
     if (!parentSheet->baseURL().isNull()) {
         // Use parent styleheet's URL as the base URL
-        absHref = KURL(parentSheet->baseURL(), m_strHref).string();
+        absHref = KURL(parentSheet->baseURL(), m_strHref).getString();
     }
 
     // Check for a cycle in our import chain. If we encounter a stylesheet in
     // our parent chain with the same URL, then just bail.
-    for (XSLStyleSheet* parentSheet = parentStyleSheet(); parentSheet; parentSheet = parentSheet->parentStyleSheet()) {
-        if (absHref == parentSheet->baseURL().string())
+    for (XSLStyleSheet* parentSheet = parentStyleSheet(); parentSheet;
+         parentSheet = parentSheet->parentStyleSheet()) {
+        if (absHref == parentSheet->baseURL().getString())
             return;
     }
 
     ResourceLoaderOptions fetchOptions(ResourceFetcher::defaultResourceOptions());
-    FetchRequest request(ResourceRequest(ownerDocument->completeURL(absHref)), FetchInitiatorTypeNames::xml, fetchOptions);
+    FetchRequest request(ResourceRequest(ownerDocument->completeURL(absHref)),
+        FetchInitiatorTypeNames::xml, fetchOptions);
     request.setOriginRestriction(FetchRequest::RestrictToSameOrigin);
-    ResourcePtr<Resource> resource = RawResource::fetchSynchronously(request, ownerDocument->fetcher());
-    if (!resource)
+    XSLStyleSheetResource* resource = XSLStyleSheetResource::fetchSynchronously(
+        request, ownerDocument->fetcher());
+    if (!resource || !resource->sheet())
         return;
 
-    ASSERT(!m_styleSheet);
-    if (SharedBuffer* data = resource->resourceBuffer())
-        setXSLStyleSheet(absHref, resource->response().url(), UTF8Encoding().decode(data->data(), data->size()));
+    DCHECK(!m_styleSheet);
+    setXSLStyleSheet(absHref, resource->response().url(), resource->sheet());
 }
 
 DEFINE_TRACE(XSLImportRule)

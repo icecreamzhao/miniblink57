@@ -12,7 +12,6 @@
 #include "SkMaskGamma.h"
 
 class SkLinearColorSpaceLuminance : public SkColorSpaceLuminance {
-<<<<<<< HEAD
     SkScalar toLuma(SkScalar SkDEBUGCODE(gamma), SkScalar luminance) const override
     {
         SkASSERT(SK_Scalar1 == gamma);
@@ -20,43 +19,25 @@ class SkLinearColorSpaceLuminance : public SkColorSpaceLuminance {
     }
     SkScalar fromLuma(SkScalar SkDEBUGCODE(gamma), SkScalar luma) const override
     {
-=======
-    SkScalar toLuma(SkScalar SkDEBUGCODE(gamma), SkScalar luminance) const override {
-        SkASSERT(SK_Scalar1 == gamma);
-        return luminance;
-    }
-    SkScalar fromLuma(SkScalar SkDEBUGCODE(gamma), SkScalar luma) const override {
->>>>>>> miniblink49
         SkASSERT(SK_Scalar1 == gamma);
         return luma;
     }
 };
 
 class SkGammaColorSpaceLuminance : public SkColorSpaceLuminance {
-<<<<<<< HEAD
     SkScalar toLuma(SkScalar gamma, SkScalar luminance) const override
     {
         return SkScalarPow(luminance, gamma);
     }
     SkScalar fromLuma(SkScalar gamma, SkScalar luma) const override
     {
-=======
-    SkScalar toLuma(SkScalar gamma, SkScalar luminance) const override {
-        return SkScalarPow(luminance, gamma);
-    }
-    SkScalar fromLuma(SkScalar gamma, SkScalar luma) const override {
->>>>>>> miniblink49
         return SkScalarPow(luma, SkScalarInvert(gamma));
     }
 };
 
 class SkSRGBColorSpaceLuminance : public SkColorSpaceLuminance {
-<<<<<<< HEAD
     SkScalar toLuma(SkScalar SkDEBUGCODE(gamma), SkScalar luminance) const override
     {
-=======
-    SkScalar toLuma(SkScalar SkDEBUGCODE(gamma), SkScalar luminance) const override {
->>>>>>> miniblink49
         SkASSERT(0 == gamma);
         //The magic numbers are derived from the sRGB specification.
         //See http://www.color.org/chardata/rgb/srgb.xalter .
@@ -64,16 +45,10 @@ class SkSRGBColorSpaceLuminance : public SkColorSpaceLuminance {
             return luminance / 12.92f;
         }
         return SkScalarPow((luminance + 0.055f) / 1.055f,
-<<<<<<< HEAD
             2.4f);
     }
     SkScalar fromLuma(SkScalar SkDEBUGCODE(gamma), SkScalar luma) const override
     {
-=======
-                        2.4f);
-    }
-    SkScalar fromLuma(SkScalar SkDEBUGCODE(gamma), SkScalar luma) const override {
->>>>>>> miniblink49
         SkASSERT(0 == gamma);
         //The magic numbers are derived from the sRGB specification.
         //See http://www.color.org/chardata/rgb/srgb.xalter .
@@ -81,20 +56,12 @@ class SkSRGBColorSpaceLuminance : public SkColorSpaceLuminance {
             return luma * 12.92f;
         }
         return 1.055f * SkScalarPow(luma, SkScalarInvert(2.4f))
-<<<<<<< HEAD
             - 0.055f;
     }
 };
 
 /*static*/ const SkColorSpaceLuminance& SkColorSpaceLuminance::Fetch(SkScalar gamma)
 {
-=======
-               - 0.055f;
-    }
-};
-
-/*static*/ const SkColorSpaceLuminance& SkColorSpaceLuminance::Fetch(SkScalar gamma) {
->>>>>>> miniblink49
     static SkLinearColorSpaceLuminance gSkLinearColorSpaceLuminance;
     static SkGammaColorSpaceLuminance gSkGammaColorSpaceLuminance;
     static SkSRGBColorSpaceLuminance gSkSRGBColorSpaceLuminance;
@@ -108,24 +75,15 @@ class SkSRGBColorSpaceLuminance : public SkColorSpaceLuminance {
     }
 }
 
-<<<<<<< HEAD
 static float apply_contrast(float srca, float contrast)
 {
-=======
-static float apply_contrast(float srca, float contrast) {
->>>>>>> miniblink49
     return srca + ((1.0f - srca) * contrast * srca);
 }
 
 void SkTMaskGamma_build_correcting_lut(uint8_t table[256], U8CPU srcI, SkScalar contrast,
-<<<<<<< HEAD
     const SkColorSpaceLuminance& srcConvert, SkScalar srcGamma,
     const SkColorSpaceLuminance& dstConvert, SkScalar dstGamma)
 {
-=======
-                                       const SkColorSpaceLuminance& srcConvert, SkScalar srcGamma,
-                                       const SkColorSpaceLuminance& dstConvert, SkScalar dstGamma) {
->>>>>>> miniblink49
     const float src = (float)srcI / 255.0f;
     const float linSrc = srcConvert.toLuma(srcGamma, src);
     //Guess at the dst. The perceptual inverse provides smaller visual

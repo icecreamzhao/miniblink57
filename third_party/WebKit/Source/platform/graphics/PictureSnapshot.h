@@ -31,7 +31,6 @@
 #ifndef PictureSnapshot_h
 #define PictureSnapshot_h
 
-<<<<<<< HEAD
 #include "platform/PlatformExport.h"
 #include "platform/graphics/GraphicsContext.h"
 #include "platform/json/JSONValues.h"
@@ -40,26 +39,14 @@
 #include "third_party/skia/include/core/SkRefCnt.h"
 #include "wtf/RefCounted.h"
 #include <memory>
-=======
-#include "platform/JSONValues.h"
-#include "platform/PlatformExport.h"
-#include "platform/graphics/GraphicsContext.h"
-#include "third_party/skia/include/core/SkPicture.h"
-#include "third_party/skia/include/core/SkPictureRecorder.h"
-#include "wtf/RefCounted.h"
->>>>>>> miniblink49
 
 namespace blink {
 
 class FloatRect;
 
 class PLATFORM_EXPORT PictureSnapshot : public RefCounted<PictureSnapshot> {
-<<<<<<< HEAD
     WTF_MAKE_NONCOPYABLE(PictureSnapshot);
 
-=======
-WTF_MAKE_NONCOPYABLE(PictureSnapshot);
->>>>>>> miniblink49
 public:
     typedef Vector<Vector<double>> Timings;
 
@@ -68,7 +55,6 @@ public:
         Vector<char> data;
     };
 
-<<<<<<< HEAD
     static PassRefPtr<PictureSnapshot> load(
         const Vector<RefPtr<TilePictureStream>>&);
 
@@ -87,21 +73,6 @@ private:
     std::unique_ptr<SkBitmap> createBitmap() const;
 
     sk_sp<const SkPicture> m_picture;
-=======
-    static PassRefPtr<PictureSnapshot> load(const Vector<RefPtr<TilePictureStream>>&);
-
-    PictureSnapshot(PassRefPtr<const SkPicture>);
-
-    PassOwnPtr<Vector<char>> replay(unsigned fromStep = 0, unsigned toStep = 0, double scale = 1.0) const;
-    PassOwnPtr<Timings> profile(unsigned minIterations, double minDuration, const FloatRect* clipRect) const;
-    PassRefPtr<JSONArray> snapshotCommandLog() const;
-    bool isEmpty() const;
-
-private:
-    PassOwnPtr<SkBitmap> createBitmap() const;
-
-    RefPtr<const SkPicture> m_picture;
->>>>>>> miniblink49
 };
 
 } // namespace blink

@@ -1,10 +1,6 @@
 include_rules = [
     "+bindings",
     "+core",
-<<<<<<< HEAD
-=======
-    "+heap",
->>>>>>> miniblink49
     "-modules",
     "+modules/EventModules.h",
     "+modules/background_sync",

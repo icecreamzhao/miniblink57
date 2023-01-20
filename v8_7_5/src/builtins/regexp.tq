@@ -6,13 +6,8 @@
 
 namespace regexp {
 
-<<<<<<< HEAD
   extern macro RegExpBuiltinsAssembler::BranchIfFastRegExp(
       implicit context: Context)(HeapObject): never labels IsFast,
       IsSlow;
-=======
-  extern macro RegExpBuiltinsAssembler::BranchIfFastRegExp(Context, Object):
-      never labels IsFast, IsSlow;
->>>>>>> miniblink49
 
 }

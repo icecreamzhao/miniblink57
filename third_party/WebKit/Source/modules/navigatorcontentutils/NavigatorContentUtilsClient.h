@@ -27,18 +27,13 @@
 #define NavigatorContentUtilsClient_h
 
 #include "modules/ModulesExport.h"
-<<<<<<< HEAD
 #include "platform/heap/Handle.h"
 #include "platform/weborigin/KURL.h"
 #include "wtf/Allocator.h"
-=======
-#include "platform/weborigin/KURL.h"
->>>>>>> miniblink49
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 class NavigatorContentUtilsClient
     : public GarbageCollectedFinalized<NavigatorContentUtilsClient> {
 public:
@@ -47,14 +42,6 @@ public:
         const KURL&,
         const String& title)
         = 0;
-=======
-class LocalFrame;
-
-class NavigatorContentUtilsClient {
-public:
-    virtual ~NavigatorContentUtilsClient() { }
-    virtual void registerProtocolHandler(const String& scheme, const KURL&, const String& title) = 0;
->>>>>>> miniblink49
 
     enum CustomHandlersState {
         CustomHandlersNew,
@@ -62,7 +49,6 @@ public:
         CustomHandlersDeclined
     };
 
-<<<<<<< HEAD
     virtual CustomHandlersState isProtocolHandlerRegistered(const String& scheme,
         const KURL&)
         = 0;
@@ -72,14 +58,5 @@ public:
 };
 
 } // namespace blink
-=======
-    virtual CustomHandlersState isProtocolHandlerRegistered(const String& scheme, const KURL&) = 0;
-    virtual void unregisterProtocolHandler(const String& scheme, const KURL&) = 0;
-};
-
-MODULES_EXPORT void provideNavigatorContentUtilsTo(LocalFrame&, PassOwnPtr<NavigatorContentUtilsClient>);
-
-}
->>>>>>> miniblink49
 
 #endif // NavigatorContentUtilsClient_h

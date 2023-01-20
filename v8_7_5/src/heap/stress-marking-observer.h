@@ -10,7 +10,6 @@
 namespace v8 {
 namespace internal {
 
-<<<<<<< HEAD
     class StressMarkingObserver : public AllocationObserver {
     public:
         explicit StressMarkingObserver(Heap& heap);
@@ -25,19 +24,3 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_HEAP_STRESS_MARKING_OBSERVER_H_
-=======
-class StressMarkingObserver : public AllocationObserver {
- public:
-  explicit StressMarkingObserver(Heap& heap);
-
-  void Step(int bytes_allocated, Address soon_object, size_t size) override;
-
- private:
-  Heap& heap_;
-};
-
-}  // namespace internal
-}  // namespace v8
-
-#endif  // V8_HEAP_STRESS_MARKING_OBSERVER_H_
->>>>>>> miniblink49

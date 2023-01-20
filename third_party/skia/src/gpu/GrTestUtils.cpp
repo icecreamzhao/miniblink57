@@ -6,23 +6,16 @@
  */
 
 #include "GrTestUtils.h"
-<<<<<<< HEAD
 #include "GrStyle.h"
 #include "SkDashPathPriv.h"
-=======
->>>>>>> miniblink49
 #include "SkMatrix.h"
 #include "SkPath.h"
 #include "SkRRect.h"
 
 #ifdef GR_TEST_UTILS
 
-<<<<<<< HEAD
 static const SkMatrix& test_matrix(SkRandom* random, bool includePerspective)
 {
-=======
-static const SkMatrix& test_matrix(SkRandom* random, bool includePerspective) {
->>>>>>> miniblink49
     static SkMatrix gMatrices[5];
     static const int kPerspectiveCount = 1;
     static bool gOnce;
@@ -52,12 +45,8 @@ static const SkMatrix& test_matrix(SkRandom* random, bool includePerspective) {
 namespace GrTest {
 const SkMatrix& TestMatrix(SkRandom* random) { return test_matrix(random, true); }
 
-<<<<<<< HEAD
 const SkMatrix& TestMatrixPreservesRightAngles(SkRandom* random)
 {
-=======
-const SkMatrix& TestMatrixPreservesRightAngles(SkRandom* random) {
->>>>>>> miniblink49
     static SkMatrix gMatrices[5];
     static bool gOnce;
     if (!gOnce) {
@@ -83,12 +72,8 @@ const SkMatrix& TestMatrixPreservesRightAngles(SkRandom* random) {
     return gMatrices[random->nextULessThan(static_cast<uint32_t>(SK_ARRAY_COUNT(gMatrices)))];
 }
 
-<<<<<<< HEAD
 const SkMatrix& TestMatrixRectStaysRect(SkRandom* random)
 {
-=======
-const SkMatrix& TestMatrixRectStaysRect(SkRandom* random) {
->>>>>>> miniblink49
     static SkMatrix gMatrices[6];
     static bool gOnce;
     if (!gOnce) {
@@ -116,12 +101,8 @@ const SkMatrix& TestMatrixRectStaysRect(SkRandom* random) {
 
 const SkMatrix& TestMatrixInvertible(SkRandom* random) { return test_matrix(random, false); }
 
-<<<<<<< HEAD
 const SkRect& TestRect(SkRandom* random)
 {
-=======
-const SkRect& TestRect(SkRandom* random) {
->>>>>>> miniblink49
     static SkRect gRects[7];
     static bool gOnce;
     if (!gOnce) {
@@ -129,26 +110,16 @@ const SkRect& TestRect(SkRandom* random) {
         gRects[0] = SkRect::MakeWH(1.f, 1.f);
         gRects[1] = SkRect::MakeWH(1.0f, 256.0f);
         gRects[2] = SkRect::MakeWH(256.0f, 1.0f);
-<<<<<<< HEAD
         gRects[3] = SkRect::MakeLargest();
         gRects[4] = SkRect::MakeLTRB(-65535.0f, -65535.0f, 65535.0f, 65535.0f);
         gRects[5] = SkRect::MakeLTRB(-10.0f, -10.0f, 10.0f, 10.0f);
-=======
-        gRects[4] = SkRect::MakeLargest();
-        gRects[5] = SkRect::MakeLTRB(-65535.0f, -65535.0f, 65535.0f, 65535.0f);
-        gRects[6] = SkRect::MakeLTRB(-10.0f, -10.0f, 10.0f, 10.0f);
->>>>>>> miniblink49
     }
     return gRects[random->nextULessThan(static_cast<uint32_t>(SK_ARRAY_COUNT(gRects)))];
 }
 
 // Just some simple rects for code which expects its input very sanitized
-<<<<<<< HEAD
 const SkRect& TestSquare(SkRandom* random)
 {
-=======
-const SkRect& TestSquare(SkRandom* random) {
->>>>>>> miniblink49
     static SkRect gRects[2];
     static bool gOnce;
     if (!gOnce) {
@@ -159,12 +130,8 @@ const SkRect& TestSquare(SkRandom* random) {
     return gRects[random->nextULessThan(static_cast<uint32_t>(SK_ARRAY_COUNT(gRects)))];
 }
 
-<<<<<<< HEAD
 const SkRRect& TestRRectSimple(SkRandom* random)
 {
-=======
-const SkRRect& TestRRectSimple(SkRandom* random) {
->>>>>>> miniblink49
     static SkRRect gRRect[2];
     static bool gOnce;
     if (!gOnce) {
@@ -182,12 +149,8 @@ const SkRRect& TestRRectSimple(SkRandom* random) {
     return gRRect[random->nextULessThan(static_cast<uint32_t>(SK_ARRAY_COUNT(gRRect)))];
 }
 
-<<<<<<< HEAD
 const SkPath& TestPath(SkRandom* random)
 {
-=======
-const SkPath& TestPath(SkRandom* random) {
->>>>>>> miniblink49
     static SkPath gPath[7];
     static bool gOnce;
     if (!gOnce) {
@@ -228,12 +191,8 @@ const SkPath& TestPath(SkRandom* random) {
     return gPath[random->nextULessThan(static_cast<uint32_t>(SK_ARRAY_COUNT(gPath)))];
 }
 
-<<<<<<< HEAD
 const SkPath& TestPathConvex(SkRandom* random)
 {
-=======
-const SkPath& TestPathConvex(SkRandom* random) {
->>>>>>> miniblink49
     static SkPath gPath[3];
     static bool gOnce;
     if (!gOnce) {
@@ -241,7 +200,6 @@ const SkPath& TestPathConvex(SkRandom* random) {
         // narrow rect
         gPath[0].moveTo(-1.5f, -50.0f);
         gPath[0].lineTo(-1.5f, -50.0f);
-<<<<<<< HEAD
         gPath[0].lineTo(1.5f, -50.0f);
         gPath[0].lineTo(1.5f, 50.0f);
         gPath[0].lineTo(-1.5f, 50.0f);
@@ -259,25 +217,6 @@ const SkPath& TestPathConvex(SkRandom* random) {
         gPath[2].lineTo(40.0f, 50.0f);
         gPath[2].lineTo(-40.0f, 50.0f);
         gPath[2].lineTo(-50.0f, 31.0f);
-=======
-        gPath[0].lineTo( 1.5f, -50.0f);
-        gPath[0].lineTo( 1.5f,  50.0f);
-        gPath[0].lineTo(-1.5f,  50.0f);
-        // degenerate
-        gPath[1].moveTo(-0.025f, -0.025f);
-        gPath[1].lineTo(-0.025f, -0.025f);
-        gPath[1].lineTo( 0.025f, -0.025f);
-        gPath[1].lineTo( 0.025f,  0.025f);
-        gPath[1].lineTo(-0.025f,  0.025f);
-        // clipped triangle
-        gPath[2].moveTo(-10.0f, -50.0f);
-        gPath[2].lineTo(-10.0f, -50.0f);
-        gPath[2].lineTo( 10.0f, -50.0f);
-        gPath[2].lineTo( 50.0f,  31.0f);
-        gPath[2].lineTo( 40.0f,  50.0f);
-        gPath[2].lineTo(-40.0f,  50.0f);
-        gPath[2].lineTo(-50.0f,  31.0f);
->>>>>>> miniblink49
 
         for (size_t i = 0; i < SK_ARRAY_COUNT(gPath); i++) {
             SkASSERT(SkPath::kConvex_Convexity == gPath[i].getConvexity());
@@ -287,26 +226,15 @@ const SkPath& TestPathConvex(SkRandom* random) {
     return gPath[random->nextULessThan(static_cast<uint32_t>(SK_ARRAY_COUNT(gPath)))];
 }
 
-<<<<<<< HEAD
 static void randomize_stroke_rec(SkStrokeRec* rec, SkRandom* random)
 {
     bool strokeAndFill = random->nextBool();
     SkScalar strokeWidth = random->nextBool() ? 0.f : 1.f;
     rec->setStrokeStyle(strokeWidth, strokeAndFill);
-=======
-SkStrokeRec TestStrokeRec(SkRandom* random) {
-    SkStrokeRec::InitStyle style =
-            SkStrokeRec::InitStyle(random->nextULessThan(SkStrokeRec::kFill_InitStyle + 1));
-    SkStrokeRec rec(style);
-    bool strokeAndFill = random->nextBool();
-    SkScalar strokeWidth = random->nextBool() ? 0.f : 1.f;
-    rec.setStrokeStyle(strokeWidth, strokeAndFill);
->>>>>>> miniblink49
 
     SkPaint::Cap cap = SkPaint::Cap(random->nextULessThan(SkPaint::kCapCount));
     SkPaint::Join join = SkPaint::Join(random->nextULessThan(SkPaint::kJoinCount));
     SkScalar miterLimit = random->nextRangeScalar(1.f, 5.f);
-<<<<<<< HEAD
     rec->setStrokeParams(cap, join, miterLimit);
 }
 
@@ -368,12 +296,5 @@ SkPathEffect::DashType TestDashPathEffect::asADash(DashInfo* info) const
 }
 
 } // namespace GrTest
-=======
-    rec.setStrokeParams(cap, join, miterLimit);
-    return rec;
-}
-
-};
->>>>>>> miniblink49
 
 #endif

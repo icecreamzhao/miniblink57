@@ -27,31 +27,18 @@
 #define MediaDevicesRequest_h
 
 #include "bindings/core/v8/ScriptPromise.h"
-<<<<<<< HEAD
 #include "core/dom/ContextLifecycleObserver.h"
 #include "modules/ModulesExport.h"
 #include "modules/mediastream/MediaDeviceInfo.h"
 #include "platform/heap/Handle.h"
-=======
-#include "core/dom/ActiveDOMObject.h"
-#include "modules/ModulesExport.h"
-#include "modules/mediastream/MediaDeviceInfo.h"
-#include "platform/heap/Handle.h"
-#include "wtf/PassOwnPtr.h"
->>>>>>> miniblink49
 
 namespace blink {
 
 class Document;
-<<<<<<< HEAD
-=======
-class ExceptionState;
->>>>>>> miniblink49
 class UserMediaController;
 class ScriptState;
 class ScriptPromiseResolver;
 
-<<<<<<< HEAD
 class MODULES_EXPORT MediaDevicesRequest final
     : public GarbageCollectedFinalized<MediaDevicesRequest>,
       public ContextLifecycleObserver {
@@ -60,13 +47,6 @@ class MODULES_EXPORT MediaDevicesRequest final
 public:
     static MediaDevicesRequest* create(ScriptState*, UserMediaController*);
     virtual ~MediaDevicesRequest();
-=======
-class MODULES_EXPORT MediaDevicesRequest final : public GarbageCollectedFinalized<MediaDevicesRequest>, public ActiveDOMObject {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(MediaDevicesRequest);
-public:
-    static MediaDevicesRequest* create(ScriptState*, UserMediaController*);
-    ~MediaDevicesRequest() override;
->>>>>>> miniblink49
 
     Document* ownerDocument();
 
@@ -74,26 +54,16 @@ public:
 
     void succeed(const MediaDeviceInfoVector&);
 
-<<<<<<< HEAD
     // ContextLifecycleObserver
     void contextDestroyed(ExecutionContext*) override;
-=======
-    // ActiveDOMObject
-    void stop() override;
->>>>>>> miniblink49
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
     MediaDevicesRequest(ScriptState*, UserMediaController*);
 
-<<<<<<< HEAD
     Member<UserMediaController> m_controller;
     Member<ScriptPromiseResolver> m_resolver;
-=======
-    RawPtrWillBeMember<UserMediaController> m_controller;
-    RefPtrWillBeMember<ScriptPromiseResolver> m_resolver;
->>>>>>> miniblink49
 };
 
 } // namespace blink

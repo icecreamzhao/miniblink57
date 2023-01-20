@@ -18,11 +18,7 @@ public:
 protected:
     const char* onGetName() override;
     bool isSuitableFor(Backend) override;
-<<<<<<< HEAD
     void onDraw(int loops, SkCanvas*) override;
-=======
-    void onDraw(const int loops, SkCanvas*) override;
->>>>>>> miniblink49
     SkIPoint onGetSize() override;
 
 private:
@@ -33,8 +29,4 @@ private:
     typedef Benchmark INHERITED;
 };
 
-<<<<<<< HEAD
 #endif //RecordingBench_DEFINED
-=======
-#endif//RecordingBench_DEFINED
->>>>>>> miniblink49

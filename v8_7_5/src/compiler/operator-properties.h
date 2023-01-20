@@ -10,7 +10,6 @@
 
 namespace v8 {
 namespace internal {
-<<<<<<< HEAD
     namespace compiler {
 
         // Forward declarations.
@@ -45,37 +44,3 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_COMPILER_OPERATOR_PROPERTIES_H_
-=======
-namespace compiler {
-
-// Forward declarations.
-class Operator;
-
-class V8_EXPORT_PRIVATE OperatorProperties final {
- public:
-  static bool HasContextInput(const Operator* op);
-  static int GetContextInputCount(const Operator* op) {
-    return HasContextInput(op) ? 1 : 0;
-  }
-
-  static bool NeedsExactContext(const Operator* op);
-
-  static bool HasFrameStateInput(const Operator* op);
-  static int GetFrameStateInputCount(const Operator* op) {
-    return HasFrameStateInput(op) ? 1 : 0;
-  }
-
-  static int GetTotalInputCount(const Operator* op);
-
-  static bool IsBasicBlockBegin(const Operator* op);
-
- private:
-  DISALLOW_COPY_AND_ASSIGN(OperatorProperties);
-};
-
-}  // namespace compiler
-}  // namespace internal
-}  // namespace v8
-
-#endif  // V8_COMPILER_OPERATOR_PROPERTIES_H_
->>>>>>> miniblink49

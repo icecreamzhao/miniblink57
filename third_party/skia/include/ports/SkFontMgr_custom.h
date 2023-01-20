@@ -15,10 +15,7 @@ class SkFontMgr;
 /** Create a custom font manager which scans a given directory for font files. */
 SK_API SkFontMgr* SkFontMgr_New_Custom_Directory(const char* dir);
 
-<<<<<<< HEAD
 /** Create a custom font manager that contains no built-in fonts. */
 SK_API SkFontMgr* SkFontMgr_New_Custom_Empty();
 
-=======
->>>>>>> miniblink49
 #endif // SkFontMgr_custom_DEFINED

@@ -26,7 +26,6 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "platform/audio/HRTFDatabaseLoader.h"
 
 #include "platform/CrossThreadFunctional.h"
@@ -35,62 +34,32 @@
 #include "public/platform/Platform.h"
 #include "public/platform/WebTraceLocation.h"
 #include "wtf/PtrUtil.h"
-=======
-#include "config.h"
-
-#if ENABLE(WEB_AUDIO)
-
-#include "platform/audio/HRTFDatabaseLoader.h"
-
-#include "platform/Task.h"
-#include "platform/TaskSynchronizer.h"
-#include "platform/ThreadSafeFunctional.h"
-#include "public/platform/Platform.h"
-#include "public/platform/WebTraceLocation.h"
-#include "wtf/MainThread.h"
->>>>>>> miniblink49
 
 namespace blink {
 
 using LoaderMap = HashMap<double, HRTFDatabaseLoader*>;
 
-<<<<<<< HEAD
 // getLoaderMap() returns the static hash map that contains the mapping between
 // the sample rate and the corresponding HRTF database.
 static LoaderMap& getLoaderMap()
-=======
-static LoaderMap& loaderMap()
->>>>>>> miniblink49
 {
     DEFINE_STATIC_LOCAL(LoaderMap*, map, (new LoaderMap));
     return *map;
 }
 
-<<<<<<< HEAD
 PassRefPtr<HRTFDatabaseLoader>
 HRTFDatabaseLoader::createAndLoadAsynchronouslyIfNecessary(float sampleRate)
 {
     ASSERT(isMainThread());
 
     RefPtr<HRTFDatabaseLoader> loader = getLoaderMap().get(sampleRate);
-=======
-PassRefPtr<HRTFDatabaseLoader> HRTFDatabaseLoader::createAndLoadAsynchronouslyIfNecessary(float sampleRate)
-{
-    ASSERT(isMainThread());
-
-    RefPtr<HRTFDatabaseLoader> loader = loaderMap().get(sampleRate);
->>>>>>> miniblink49
     if (loader) {
         ASSERT(sampleRate == loader->databaseSampleRate());
         return loader.release();
     }
 
     loader = adoptRef(new HRTFDatabaseLoader(sampleRate));
-<<<<<<< HEAD
     getLoaderMap().add(sampleRate, loader.get());
-=======
-    loaderMap().add(sampleRate, loader.get());
->>>>>>> miniblink49
     loader->loadAsynchronously();
     return loader.release();
 }
@@ -105,16 +74,11 @@ HRTFDatabaseLoader::~HRTFDatabaseLoader()
 {
     ASSERT(isMainThread());
     ASSERT(!m_thread);
-<<<<<<< HEAD
     getLoaderMap().remove(m_databaseSampleRate);
-=======
-    loaderMap().remove(m_databaseSampleRate);
->>>>>>> miniblink49
 }
 
 void HRTFDatabaseLoader::loadTask()
 {
-<<<<<<< HEAD
     DCHECK(!isMainThread());
     DCHECK(!m_hrtfDatabase);
 
@@ -123,24 +87,12 @@ void HRTFDatabaseLoader::loadTask()
     MutexLocker locker(m_lock);
     // Load the default HRTF database.
     m_hrtfDatabase = HRTFDatabase::create(m_databaseSampleRate);
-=======
-    ASSERT(!isMainThread());
-
-    {
-        MutexLocker locker(m_lock);
-        if (!m_hrtfDatabase) {
-            // Load the default HRTF database.
-            m_hrtfDatabase = HRTFDatabase::create(m_databaseSampleRate);
-        }
-    }
->>>>>>> miniblink49
 }
 
 void HRTFDatabaseLoader::loadAsynchronously()
 {
     ASSERT(isMainThread());
 
-<<<<<<< HEAD
     // m_hrtfDatabase and m_thread should both be unset because this should be a
     // new HRTFDatabaseLoader object that was just created by
     // createAndLoadAsynchronouslyIfNecessary and because we haven't started
@@ -168,33 +120,13 @@ HRTFDatabase* HRTFDatabaseLoader::database()
         return nullptr;
 
     return m_hrtfDatabase.get();
-=======
-    MutexLocker locker(m_lock);
-    if (!m_hrtfDatabase && !m_thread) {
-        // Start the asynchronous database loading process.
-        m_thread = adoptPtr(Platform::current()->createThread("HRTF database loader"));
-        m_thread->postTask(FROM_HERE, new Task(threadSafeBind(&HRTFDatabaseLoader::loadTask, AllowCrossThreadAccess(this))));
-    }
-}
-
-bool HRTFDatabaseLoader::isLoaded()
-{
-    MutexLocker locker(m_lock);
-    return m_hrtfDatabase;
->>>>>>> miniblink49
 }
 
 // This cleanup task is needed just to make sure that the loader thread finishes
 // the load task and thus the loader thread doesn't touch m_thread any more.
-<<<<<<< HEAD
 void HRTFDatabaseLoader::cleanupTask(WaitableEvent* sync)
 {
     sync->signal();
-=======
-void HRTFDatabaseLoader::cleanupTask(TaskSynchronizer* sync)
-{
-    sync->taskCompleted();
->>>>>>> miniblink49
 }
 
 void HRTFDatabaseLoader::waitForLoaderThreadCompletion()
@@ -202,7 +134,6 @@ void HRTFDatabaseLoader::waitForLoaderThreadCompletion()
     if (!m_thread)
         return;
 
-<<<<<<< HEAD
     WaitableEvent sync;
     // TODO(alexclarke): Should this be posted as a loading task?
     m_thread->getWebTaskRunner()->postTask(
@@ -212,14 +143,3 @@ void HRTFDatabaseLoader::waitForLoaderThreadCompletion()
 }
 
 } // namespace blink
-=======
-    TaskSynchronizer sync;
-    m_thread->postTask(FROM_HERE, new Task(threadSafeBind(&HRTFDatabaseLoader::cleanupTask, AllowCrossThreadAccess(this), AllowCrossThreadAccess(&sync))));
-    sync.waitForTaskCompletion();
-    m_thread.clear();
-}
-
-} // namespace blink
-
-#endif // ENABLE(WEB_AUDIO)
->>>>>>> miniblink49

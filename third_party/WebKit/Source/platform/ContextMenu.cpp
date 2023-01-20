@@ -23,21 +23,13 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/ContextMenu.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 static const ContextMenuItem* findItemWithAction(
     unsigned action,
     const Vector<ContextMenuItem>& items)
-=======
-static const ContextMenuItem* findItemWithAction(unsigned action, const Vector<ContextMenuItem>& items)
->>>>>>> miniblink49
 {
     for (size_t i = 0; i < items.size(); ++i) {
         const ContextMenuItem& item = items[i];

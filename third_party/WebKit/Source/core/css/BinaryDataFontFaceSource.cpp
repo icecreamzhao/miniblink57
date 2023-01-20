@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "core/css/BinaryDataFontFaceSource.h"
 
 #include "platform/SharedBuffer.h"
@@ -12,26 +11,30 @@
 
 namespace blink {
 
-BinaryDataFontFaceSource::BinaryDataFontFaceSource(SharedBuffer* data, String& otsParseMessage)
-    : m_customPlatformData(FontCustomPlatformData::create(data, otsParseMessage))
+BinaryDataFontFaceSource::BinaryDataFontFaceSource(SharedBuffer* data,
+    String& otsParseMessage)
+    : m_customPlatformData(
+        FontCustomPlatformData::create(data, otsParseMessage))
 {
 }
 
-BinaryDataFontFaceSource::~BinaryDataFontFaceSource()
-{
-}
+BinaryDataFontFaceSource::~BinaryDataFontFaceSource() { }
 
 bool BinaryDataFontFaceSource::isValid() const
 {
-    return m_customPlatformData;
+    return m_customPlatformData.get();
 }
 
-PassRefPtr<SimpleFontData> BinaryDataFontFaceSource::createFontData(const FontDescription& fontDescription)
+PassRefPtr<SimpleFontData> BinaryDataFontFaceSource::createFontData(
+    const FontDescription& fontDescription)
 {
     return SimpleFontData::create(
-        m_customPlatformData->fontPlatformData(fontDescription.effectiveFontSize(),
-            fontDescription.isSyntheticBold(), fontDescription.isSyntheticItalic(),
-            fontDescription.orientation()), CustomFontData::create());
+        m_customPlatformData->fontPlatformData(
+            fontDescription.effectiveFontSize(),
+            fontDescription.isSyntheticBold(),
+            fontDescription.isSyntheticItalic(), fontDescription.orientation(),
+            fontDescription.variationSettings()),
+        CustomFontData::create());
 }
 
 } // namespace blink

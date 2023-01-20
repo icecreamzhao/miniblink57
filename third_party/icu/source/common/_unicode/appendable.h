@@ -20,13 +20,8 @@
  * \brief C++ API: Appendable class: Sink for Unicode code points and 16-bit code units (UChars).
  */
 
-<<<<<<< HEAD
 #include "unicode/uobject.h"
 #include "unicode/utypes.h"
-=======
-#include "unicode/utypes.h"
-#include "unicode/uobject.h"
->>>>>>> miniblink49
 
 U_NAMESPACE_BEGIN
 
@@ -84,11 +79,7 @@ public:
      * @return TRUE if the operation succeeded
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     virtual UBool appendString(const UChar* s, int32_t length);
-=======
-    virtual UBool appendString(const UChar *s, int32_t length);
->>>>>>> miniblink49
 
     /**
      * Tells the object that the caller is going to append roughly
@@ -145,17 +136,10 @@ public:
      * @return a buffer with *resultCapacity>=minCapacity
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     virtual UChar* getAppendBuffer(int32_t minCapacity,
         int32_t desiredCapacityHint,
         UChar* scratch, int32_t scratchCapacity,
         int32_t* resultCapacity);
-=======
-    virtual UChar *getAppendBuffer(int32_t minCapacity,
-                                   int32_t desiredCapacityHint,
-                                   UChar *scratch, int32_t scratchCapacity,
-                                   int32_t *resultCapacity);
->>>>>>> miniblink49
 };
 
 /**
@@ -171,14 +155,10 @@ public:
      * @param s The UnicodeString to which this Appendable will write.
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     explicit UnicodeStringAppendable(UnicodeString& s)
         : str(s)
     {
     }
-=======
-    explicit UnicodeStringAppendable(UnicodeString &s) : str(s) {}
->>>>>>> miniblink49
 
     /**
      * Destructor.
@@ -209,11 +189,7 @@ public:
      * @return TRUE if the operation succeeded
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     virtual UBool appendString(const UChar* s, int32_t length);
-=======
-    virtual UBool appendString(const UChar *s, int32_t length);
->>>>>>> miniblink49
 
     /**
      * Tells the UnicodeString that the caller is going to append roughly
@@ -245,7 +221,6 @@ public:
      * @return a buffer with *resultCapacity>=minCapacity
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     virtual UChar* getAppendBuffer(int32_t minCapacity,
         int32_t desiredCapacityHint,
         UChar* scratch, int32_t scratchCapacity,
@@ -253,21 +228,8 @@ public:
 
 private:
     UnicodeString& str;
-=======
-    virtual UChar *getAppendBuffer(int32_t minCapacity,
-                                   int32_t desiredCapacityHint,
-                                   UChar *scratch, int32_t scratchCapacity,
-                                   int32_t *resultCapacity);
-
-private:
-    UnicodeString &str;
->>>>>>> miniblink49
 };
 
 U_NAMESPACE_END
 
-<<<<<<< HEAD
 #endif // __APPENDABLE_H__
-=======
-#endif  // __APPENDABLE_H__
->>>>>>> miniblink49

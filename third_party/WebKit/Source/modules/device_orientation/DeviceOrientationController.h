@@ -12,7 +12,6 @@
 namespace blink {
 
 class DeviceOrientationData;
-<<<<<<< HEAD
 class DeviceOrientationDispatcher;
 class Event;
 
@@ -21,12 +20,6 @@ class MODULES_EXPORT DeviceOrientationController
       public Supplement<Document> {
     USING_GARBAGE_COLLECTED_MIXIN(DeviceOrientationController);
 
-=======
-class Event;
-
-class MODULES_EXPORT DeviceOrientationController final : public DeviceSingleWindowEventController, public WillBeHeapSupplement<Document> {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(DeviceOrientationController);
->>>>>>> miniblink49
 public:
     ~DeviceOrientationController() override;
 
@@ -35,51 +28,33 @@ public:
 
     // Inherited from DeviceSingleWindowEventController.
     void didUpdateData() override;
-<<<<<<< HEAD
     void didAddEventListener(LocalDOMWindow*,
         const AtomicString& eventType) override;
-=======
-    void didAddEventListener(LocalDOMWindow*, const AtomicString& eventType) override;
->>>>>>> miniblink49
 
     void setOverride(DeviceOrientationData*);
     void clearOverride();
 
     DECLARE_VIRTUAL_TRACE();
 
-<<<<<<< HEAD
 protected:
     explicit DeviceOrientationController(Document&);
 
     virtual DeviceOrientationDispatcher& dispatcherInstance() const;
 
 private:
-=======
-private:
-    explicit DeviceOrientationController(Document&);
-
->>>>>>> miniblink49
     // Inherited from DeviceEventControllerBase.
     void registerWithDispatcher() override;
     void unregisterWithDispatcher() override;
     bool hasLastData() override;
 
     // Inherited from DeviceSingleWindowEventController.
-<<<<<<< HEAD
     Event* lastEvent() const override;
-=======
-    PassRefPtrWillBeRawPtr<Event> lastEvent() const override;
->>>>>>> miniblink49
     const AtomicString& eventTypeName() const override;
     bool isNullEvent(Event*) const override;
 
     DeviceOrientationData* lastData() const;
 
-<<<<<<< HEAD
     Member<DeviceOrientationData> m_overrideOrientationData;
-=======
-    PersistentWillBeMember<DeviceOrientationData> m_overrideOrientationData;
->>>>>>> miniblink49
 };
 
 } // namespace blink

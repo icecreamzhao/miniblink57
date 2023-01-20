@@ -30,7 +30,6 @@
 #ifndef ServiceWorkerGlobalScope_h
 #define ServiceWorkerGlobalScope_h
 
-<<<<<<< HEAD
 #include "bindings/modules/v8/RequestOrUSVString.h"
 #include "core/workers/WorkerGlobalScope.h"
 #include "modules/ModulesExport.h"
@@ -39,71 +38,41 @@
 #include "wtf/Assertions.h"
 #include "wtf/Forward.h"
 #include <memory>
-=======
-#include "bindings/modules/v8/UnionTypesModules.h"
-#include "core/workers/WorkerGlobalScope.h"
-#include "modules/ModulesExport.h"
-#include "platform/heap/Handle.h"
-#include "wtf/Assertions.h"
-#include "wtf/PassRefPtr.h"
-#include "wtf/RefCounted.h"
->>>>>>> miniblink49
 
 namespace blink {
 
 class Dictionary;
-<<<<<<< HEAD
-=======
-class Request;
->>>>>>> miniblink49
 class ScriptPromise;
 class ScriptState;
 class ServiceWorkerClients;
 class ServiceWorkerRegistration;
 class ServiceWorkerThread;
-<<<<<<< HEAD
 class WaitUntilObserver;
-=======
-class StashedPortCollection;
-class WaitUntilObserver;
-class WebServiceWorkerRegistration;
->>>>>>> miniblink49
 class WorkerThreadStartupData;
 
 typedef RequestOrUSVString RequestInfo;
 
 class MODULES_EXPORT ServiceWorkerGlobalScope final : public WorkerGlobalScope {
     DEFINE_WRAPPERTYPEINFO();
-<<<<<<< HEAD
 
 public:
     static ServiceWorkerGlobalScope* create(
         ServiceWorkerThread*,
         std::unique_ptr<WorkerThreadStartupData>);
-=======
-public:
-    static PassRefPtrWillBeRawPtr<ServiceWorkerGlobalScope> create(ServiceWorkerThread*, PassOwnPtr<WorkerThreadStartupData>);
->>>>>>> miniblink49
 
     ~ServiceWorkerGlobalScope() override;
     bool isServiceWorkerGlobalScope() const override { return true; }
 
-<<<<<<< HEAD
     // Counts an evaluated script and its size. Called for each of the main
     // worker script and imported scripts.
     void countScript(size_t scriptSize, size_t cachedMetadataSize);
 
     // Called when the main worker script is evaluated.
     void didEvaluateWorkerScript();
-=======
-    // WorkerGlobalScope
-    void didEvaluateWorkerScript() override;
->>>>>>> miniblink49
 
     // ServiceWorkerGlobalScope.idl
     ServiceWorkerClients* clients();
     ServiceWorkerRegistration* registration();
-<<<<<<< HEAD
 
     ScriptPromise fetch(ScriptState*,
         const RequestInfo&,
@@ -118,30 +87,11 @@ public:
     const AtomicString& interfaceName() const override;
 
     void dispatchExtendableEvent(Event*, WaitUntilObserver*);
-=======
-    StashedPortCollection* ports();
-
-    ScriptPromise fetch(ScriptState*, const RequestInfo&, const Dictionary&, ExceptionState&);
-
-    void close(ExceptionState&);
-
-    ScriptPromise skipWaiting(ScriptState*);
-
-    void setRegistration(WebServiceWorkerRegistration*);
-
-    // EventTarget
-    bool addEventListener(const AtomicString& eventType, PassRefPtr<EventListener>, bool useCapture = false) override;
-    const AtomicString& interfaceName() const override;
-    bool dispatchEvent(PassRefPtrWillBeRawPtr<Event>) override;
-
-    void dispatchExtendableEvent(PassRefPtrWillBeRawPtr<Event>, WaitUntilObserver*);
->>>>>>> miniblink49
 
     DEFINE_ATTRIBUTE_EVENT_LISTENER(install);
     DEFINE_ATTRIBUTE_EVENT_LISTENER(activate);
     DEFINE_ATTRIBUTE_EVENT_LISTENER(fetch);
     DEFINE_ATTRIBUTE_EVENT_LISTENER(message);
-<<<<<<< HEAD
     DEFINE_ATTRIBUTE_EVENT_LISTENER(foreignfetch);
 
     DECLARE_VIRTUAL_TRACE();
@@ -169,24 +119,6 @@ private:
 
     Member<ServiceWorkerClients> m_clients;
     Member<ServiceWorkerRegistration> m_registration;
-=======
-    DEFINE_ATTRIBUTE_EVENT_LISTENER(sync);
-
-    DECLARE_VIRTUAL_TRACE();
-
-private:
-    class SkipWaitingCallback;
-
-    ServiceWorkerGlobalScope(const KURL&, const String& userAgent, ServiceWorkerThread*, double timeOrigin, const SecurityOrigin*, PassOwnPtrWillBeRawPtr<WorkerClients>);
-    void importScripts(const Vector<String>& urls, ExceptionState&) override;
-    PassOwnPtr<CachedMetadataHandler> createWorkerScriptCachedMetadataHandler(const KURL& scriptURL, const Vector<char>* metaData) override;
-    void logExceptionToConsole(const String& errorMessage, int scriptId, const String& sourceURL, int lineNumber, int columnNumber, PassRefPtrWillBeRawPtr<ScriptCallStack>) override;
-    void scriptLoaded(size_t scriptSize, size_t cachedMetadataSize) override;
-
-    PersistentWillBeMember<ServiceWorkerClients> m_clients;
-    PersistentWillBeMember<ServiceWorkerRegistration> m_registration;
-    PersistentWillBeMember<StashedPortCollection> m_ports;
->>>>>>> miniblink49
     bool m_didEvaluateScript;
     bool m_hadErrorInTopLevelEventHandler;
     unsigned m_eventNestingLevel;
@@ -195,15 +127,11 @@ private:
     size_t m_scriptCachedMetadataTotalSize;
 };
 
-<<<<<<< HEAD
 DEFINE_TYPE_CASTS(ServiceWorkerGlobalScope,
     ExecutionContext,
     context,
     context->isServiceWorkerGlobalScope(),
     context.isServiceWorkerGlobalScope());
-=======
-DEFINE_TYPE_CASTS(ServiceWorkerGlobalScope, ExecutionContext, context, context->isServiceWorkerGlobalScope(), context.isServiceWorkerGlobalScope());
->>>>>>> miniblink49
 
 } // namespace blink
 

@@ -6,8 +6,4 @@
     RuntimeEnabled=BackgroundSync,
 ] partial interface ServiceWorkerGlobalScope {
     attribute EventHandler onsync;
-<<<<<<< HEAD
-=======
-    attribute EventHandler onperiodicsync;
->>>>>>> miniblink49
 };

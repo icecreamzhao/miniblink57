@@ -10,7 +10,6 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
-<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -94,36 +93,6 @@ BiquadFilterNode* BiquadFilterNode::create(BaseAudioContext* context,
         node->gain()->setValue(options.gain());
 
     return node;
-=======
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-
-#include "config.h"
-#if ENABLE(WEB_AUDIO)
-#include "modules/webaudio/BiquadFilterNode.h"
-
-#include "modules/webaudio/AudioBasicProcessorHandler.h"
-
-namespace blink {
-
-BiquadFilterNode::BiquadFilterNode(AudioContext& context, float sampleRate)
-    : AudioNode(context)
-    , m_frequency(AudioParam::create(context, 350.0))
-    , m_q(AudioParam::create(context, 1))
-    , m_gain(AudioParam::create(context, 0.0))
-    , m_detune(AudioParam::create(context, 0.0))
-{
-    setHandler(AudioBasicProcessorHandler::create(AudioHandler::NodeTypeBiquadFilter, *this, sampleRate, adoptPtr(new BiquadProcessor(sampleRate, 1, m_frequency->handler(), m_q->handler(), m_gain->handler(), m_detune->handler()))));
->>>>>>> miniblink49
 }
 
 DEFINE_TRACE(BiquadFilterNode)
@@ -135,25 +104,15 @@ DEFINE_TRACE(BiquadFilterNode)
     AudioNode::trace(visitor);
 }
 
-<<<<<<< HEAD
 BiquadProcessor* BiquadFilterNode::getBiquadProcessor() const
 {
     return static_cast<BiquadProcessor*>(
         static_cast<AudioBasicProcessorHandler&>(handler()).processor());
-=======
-BiquadProcessor* BiquadFilterNode::biquadProcessor() const
-{
-    return static_cast<BiquadProcessor*>(static_cast<AudioBasicProcessorHandler&>(handler()).processor());
->>>>>>> miniblink49
 }
 
 String BiquadFilterNode::type() const
 {
-<<<<<<< HEAD
     switch (const_cast<BiquadFilterNode*>(this)->getBiquadProcessor()->type()) {
-=======
-    switch (const_cast<BiquadFilterNode*>(this)->biquadProcessor()->type()) {
->>>>>>> miniblink49
     case BiquadProcessor::LowPass:
         return "lowpass";
     case BiquadProcessor::HighPass:
@@ -178,7 +137,6 @@ String BiquadFilterNode::type() const
 
 void BiquadFilterNode::setType(const String& type)
 {
-<<<<<<< HEAD
     // For the Q histogram, we need to change the name of the AudioParam for the
     // lowpass and highpass filters so we know to count the Q value when it is
     // set. And explicitly set the value to itself so the histograms know the
@@ -205,24 +163,6 @@ void BiquadFilterNode::setType(const String& type)
     } else if (type == "allpass") {
         setType(BiquadProcessor::Allpass);
     }
-=======
-    if (type == "lowpass")
-        setType(BiquadProcessor::LowPass);
-    else if (type == "highpass")
-        setType(BiquadProcessor::HighPass);
-    else if (type == "bandpass")
-        setType(BiquadProcessor::BandPass);
-    else if (type == "lowshelf")
-        setType(BiquadProcessor::LowShelf);
-    else if (type == "highshelf")
-        setType(BiquadProcessor::HighShelf);
-    else if (type == "peaking")
-        setType(BiquadProcessor::Peaking);
-    else if (type == "notch")
-        setType(BiquadProcessor::Notch);
-    else if (type == "allpass")
-        setType(BiquadProcessor::Allpass);
->>>>>>> miniblink49
 }
 
 bool BiquadFilterNode::setType(unsigned type)
@@ -230,7 +170,6 @@ bool BiquadFilterNode::setType(unsigned type)
     if (type > BiquadProcessor::Allpass)
         return false;
 
-<<<<<<< HEAD
     DEFINE_STATIC_LOCAL(
         EnumerationHistogram, filterTypeHistogram,
         ("WebAudio.BiquadFilter.Type", BiquadProcessor::Allpass + 1));
@@ -256,22 +195,3 @@ void BiquadFilterNode::getFrequencyResponse(const DOMFloat32Array* frequencyHz,
 }
 
 } // namespace blink
-=======
-    biquadProcessor()->setType(static_cast<BiquadProcessor::FilterType>(type));
-    return true;
-}
-
-void BiquadFilterNode::getFrequencyResponse(const DOMFloat32Array* frequencyHz, DOMFloat32Array* magResponse, DOMFloat32Array* phaseResponse)
-{
-    if (!frequencyHz || !magResponse || !phaseResponse)
-        return;
-
-    int n = std::min(frequencyHz->length(), std::min(magResponse->length(), phaseResponse->length()));
-    if (n)
-        biquadProcessor()->getFrequencyResponse(n, frequencyHz->data(), magResponse->data(), phaseResponse->data());
-}
-
-} // namespace blink
-
-#endif // ENABLE(WEB_AUDIO)
->>>>>>> miniblink49

@@ -19,29 +19,31 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
-
 #include "core/svg/SVGGraphicsElement.h"
 
 #include "core/SVGNames.h"
-#include "core/css/resolver/StyleResolver.h"
-#include "core/layout/svg/LayoutSVGPath.h"
+#include "core/dom/StyleChangeReason.h"
+#include "core/layout/LayoutObject.h"
 #include "core/svg/SVGElementRareData.h"
+#include "core/svg/SVGMatrixTearOff.h"
+#include "core/svg/SVGRectTearOff.h"
 #include "platform/transforms/AffineTransform.h"
 
 namespace blink {
 
-SVGGraphicsElement::SVGGraphicsElement(const QualifiedName& tagName, Document& document, ConstructionType constructionType)
+SVGGraphicsElement::SVGGraphicsElement(const QualifiedName& tagName,
+    Document& document,
+    ConstructionType constructionType)
     : SVGElement(tagName, document, constructionType)
     , SVGTests(this)
-    , m_transform(SVGAnimatedTransformList::create(this, SVGNames::transformAttr, SVGTransformList::create()))
+    , m_transform(SVGAnimatedTransformList::create(this,
+          SVGNames::transformAttr,
+          CSSPropertyTransform))
 {
     addToPropertyMap(m_transform);
 }
 
-SVGGraphicsElement::~SVGGraphicsElement()
-{
-}
+SVGGraphicsElement::~SVGGraphicsElement() { }
 
 DEFINE_TRACE(SVGGraphicsElement)
 {
@@ -50,45 +52,30 @@ DEFINE_TRACE(SVGGraphicsElement)
     SVGTests::trace(visitor);
 }
 
-PassRefPtrWillBeRawPtr<SVGMatrixTearOff> SVGGraphicsElement::getTransformToElement(SVGElement* target, ExceptionState& exceptionState)
-{
-    AffineTransform ctm = getCTM(AllowStyleUpdate);
-
-    if (target && target->isSVGGraphicsElement()) {
-        AffineTransform targetCTM = toSVGGraphicsElement(target)->getCTM(AllowStyleUpdate);
-        if (!targetCTM.isInvertible()) {
-            exceptionState.throwDOMException(InvalidStateError, "The target transformation is not invertable.");
-            return nullptr;
-        }
-        ctm = targetCTM.inverse() * ctm;
-    }
-
-    return SVGMatrixTearOff::create(ctm);
-}
-
 static bool isViewportElement(const Element& element)
 {
-    return (isSVGSVGElement(element)
-        || isSVGSymbolElement(element)
-        || isSVGForeignObjectElement(element)
-        || isSVGImageElement(element));
+    return (isSVGSVGElement(element) || isSVGSymbolElement(element) || isSVGForeignObjectElement(element) || isSVGImageElement(element));
 }
 
-AffineTransform SVGGraphicsElement::computeCTM(SVGElement::CTMScope mode,
-    SVGGraphicsElement::StyleUpdateStrategy styleUpdateStrategy, const SVGGraphicsElement* ancestor) const
+AffineTransform SVGGraphicsElement::computeCTM(
+    SVGElement::CTMScope mode,
+    SVGGraphicsElement::StyleUpdateStrategy styleUpdateStrategy,
+    const SVGGraphicsElement* ancestor) const
 {
     if (styleUpdateStrategy == AllowStyleUpdate)
-        document().updateLayoutIgnorePendingStylesheets();
+        document().updateStyleAndLayoutIgnorePendingStylesheets();
 
     AffineTransform ctm;
     bool done = false;
 
     for (const Element* currentElement = this; currentElement && !done;
-        currentElement = currentElement->parentOrShadowHostElement()) {
+         currentElement = currentElement->parentOrShadowHostElement()) {
         if (!currentElement->isSVGElement())
             break;
 
-        ctm = toSVGElement(currentElement)->localCoordinateSpaceTransform(mode).multiply(ctm);
+        ctm = toSVGElement(currentElement)
+                  ->localCoordinateSpaceTransform(mode)
+                  .multiply(ctm);
 
         switch (mode) {
         case NearestViewportScope:
@@ -108,77 +95,39 @@ AffineTransform SVGGraphicsElement::computeCTM(SVGElement::CTMScope mode,
     return ctm;
 }
 
-AffineTransform SVGGraphicsElement::getCTM(StyleUpdateStrategy styleUpdateStrategy)
+AffineTransform SVGGraphicsElement::getCTM(
+    StyleUpdateStrategy styleUpdateStrategy)
 {
     return computeCTM(NearestViewportScope, styleUpdateStrategy);
 }
 
-AffineTransform SVGGraphicsElement::getScreenCTM(StyleUpdateStrategy styleUpdateStrategy)
+AffineTransform SVGGraphicsElement::getScreenCTM(
+    StyleUpdateStrategy styleUpdateStrategy)
 {
     return computeCTM(ScreenScope, styleUpdateStrategy);
 }
 
-PassRefPtrWillBeRawPtr<SVGMatrixTearOff> SVGGraphicsElement::getCTMFromJavascript()
+SVGMatrixTearOff* SVGGraphicsElement::getCTMFromJavascript()
 {
     return SVGMatrixTearOff::create(getCTM());
 }
 
-PassRefPtrWillBeRawPtr<SVGMatrixTearOff> SVGGraphicsElement::getScreenCTMFromJavascript()
+SVGMatrixTearOff* SVGGraphicsElement::getScreenCTMFromJavascript()
 {
     return SVGMatrixTearOff::create(getScreenCTM());
 }
 
-bool SVGGraphicsElement::hasAnimatedLocalTransform() const
+void SVGGraphicsElement::collectStyleForPresentationAttribute(
+    const QualifiedName& name,
+    const AtomicString& value,
+    MutableStylePropertySet* style)
 {
-    const ComputedStyle* style = layoutObject() ? layoutObject()->style() : nullptr;
-
-    // Each of these is used in SVGGraphicsElement::calculateAnimatedLocalTransform to create an animated local transform.
-    return (style && style->hasTransform()) || !m_transform->currentValue()->isEmpty() || hasSVGRareData();
-}
-
-AffineTransform SVGGraphicsElement::calculateAnimatedLocalTransform() const
-{
-    AffineTransform matrix;
-    const ComputedStyle* style = layoutObject() ? layoutObject()->style() : nullptr;
-
-    // If CSS property was set, use that, otherwise fallback to attribute (if set).
-    if (style && style->hasTransform()) {
-        TransformationMatrix transform;
-        float zoom = style->effectiveZoom();
-
-        // SVGTextElements need special handling for the text positioning code.
-        if (isSVGTextElement(this)) {
-            // Do not take into account SVG's zoom rules, transform-origin, or percentage values.
-            style->applyTransform(transform, LayoutSize(0, 0), ComputedStyle::ExcludeTransformOrigin, ComputedStyle::IncludeMotionPath, ComputedStyle::IncludeIndependentTransformProperties);
-        } else {
-            // CSS transforms operate with pre-scaled lengths. To make this work with SVG
-            // (which applies the zoom factor globally, at the root level) we
-            //
-            //   * pre-scale the bounding box (to bring it into the same space as the other CSS values)
-            //   * invert the zoom factor (to effectively compute the CSS transform under a 1.0 zoom)
-            //
-            // Note: objectBoundingBox is an emptyRect for elements like pattern or clipPath.
-            // See the "Object bounding box units" section of http://dev.w3.org/csswg/css3-transforms/
-            if (zoom != 1) {
-                FloatRect scaledBBox = layoutObject()->objectBoundingBox();
-                scaledBBox.scale(zoom);
-                transform.scale(1 / zoom);
-                style->applyTransform(transform, scaledBBox, ComputedStyle::IncludeTransformOrigin, ComputedStyle::IncludeMotionPath, ComputedStyle::IncludeIndependentTransformProperties);
-                transform.scale(zoom);
-            } else {
-                style->applyTransform(transform, layoutObject()->objectBoundingBox(), ComputedStyle::IncludeTransformOrigin, ComputedStyle::IncludeMotionPath, ComputedStyle::IncludeIndependentTransformProperties);
-            }
-        }
-
-        // Flatten any 3D transform.
-        matrix = transform.toAffineTransform();
-    } else {
-        m_transform->currentValue()->concatenate(matrix);
+    if (name == SVGNames::transformAttr) {
+        addPropertyToPresentationAttributeStyle(
+            style, CSSPropertyTransform, m_transform->currentValue()->cssValue());
+        return;
     }
-
-    if (hasSVGRareData())
-        return *svgRareData()->animateMotionTransform() * matrix;
-    return matrix;
+    SVGElement::collectStyleForPresentationAttribute(name, value, style);
 }
 
 AffineTransform* SVGGraphicsElement::animateMotionTransform()
@@ -188,7 +137,8 @@ AffineTransform* SVGGraphicsElement::animateMotionTransform()
 
 void SVGGraphicsElement::svgAttributeChanged(const QualifiedName& attrName)
 {
-    // Reattach so the isValid() check will be run again during layoutObject creation.
+    // Reattach so the isValid() check will be run again during layoutObject
+    // creation.
     if (SVGTests::isKnownAttribute(attrName)) {
         SVGElement::InvalidationGuard invalidationGuard(this);
         lazyReattachIfAttached();
@@ -196,13 +146,16 @@ void SVGGraphicsElement::svgAttributeChanged(const QualifiedName& attrName)
     }
 
     if (attrName == SVGNames::transformAttr) {
-        LayoutObject* object = layoutObject();
-        if (!object)
-            return;
-
         SVGElement::InvalidationGuard invalidationGuard(this);
-        object->setNeedsTransformUpdate();
-        markForLayoutAndParentResourceInvalidation(object);
+        invalidateSVGPresentationAttributeStyle();
+        // TODO(fs): The InvalidationGuard will make sure all instances are
+        // invalidated, but the style recalc will propagate to instances too. So
+        // there is some redundant operations being performed here. Could we get
+        // away with removing the InvalidationGuard?
+        setNeedsStyleRecalc(LocalStyleChange,
+            StyleChangeReasonForTracing::fromAttribute(attrName));
+        if (LayoutObject* object = layoutObject())
+            markForLayoutAndParentResourceInvalidation(object);
         return;
     }
 
@@ -211,7 +164,8 @@ void SVGGraphicsElement::svgAttributeChanged(const QualifiedName& attrName)
 
 SVGElement* SVGGraphicsElement::nearestViewportElement() const
 {
-    for (Element* current = parentOrShadowHostElement(); current; current = current->parentOrShadowHostElement()) {
+    for (Element* current = parentOrShadowHostElement(); current;
+         current = current->parentOrShadowHostElement()) {
         if (isViewportElement(*current))
             return toSVGElement(current);
     }
@@ -222,7 +176,8 @@ SVGElement* SVGGraphicsElement::nearestViewportElement() const
 SVGElement* SVGGraphicsElement::farthestViewportElement() const
 {
     SVGElement* farthest = 0;
-    for (Element* current = parentOrShadowHostElement(); current; current = current->parentOrShadowHostElement()) {
+    for (Element* current = parentOrShadowHostElement(); current;
+         current = current->parentOrShadowHostElement()) {
         if (isViewportElement(*current))
             farthest = toSVGElement(current);
     }
@@ -231,7 +186,7 @@ SVGElement* SVGGraphicsElement::farthestViewportElement() const
 
 FloatRect SVGGraphicsElement::getBBox()
 {
-    document().updateLayoutIgnorePendingStylesheets();
+    document().updateStyleAndLayoutIgnorePendingStylesheets();
 
     // FIXME: Eventually we should support getBBox for detached elements.
     if (!layoutObject())
@@ -240,9 +195,10 @@ FloatRect SVGGraphicsElement::getBBox()
     return layoutObject()->objectBoundingBox();
 }
 
-PassRefPtrWillBeRawPtr<SVGRectTearOff> SVGGraphicsElement::getBBoxFromJavascript()
+SVGRectTearOff* SVGGraphicsElement::getBBoxFromJavascript()
 {
-    return SVGRectTearOff::create(SVGRect::create(getBBox()), 0, PropertyIsNotAnimVal);
+    return SVGRectTearOff::create(SVGRect::create(getBBox()), 0,
+        PropertyIsNotAnimVal);
 }
 
-}
+} // namespace blink

@@ -28,19 +28,12 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "platform/geometry/FloatQuad.h"
 
 #include "third_party/skia/include/core/SkPoint.h"
 #include "wtf/text/WTFString.h"
 #include <algorithm>
 #include <cmath>
-=======
-#include "config.h"
-#include "platform/geometry/FloatQuad.h"
-
-#include <algorithm>
->>>>>>> miniblink49
 #include <limits>
 
 namespace blink {
@@ -65,14 +58,10 @@ inline float determinant(const FloatSize& a, const FloatSize& b)
     return a.width() * b.height() - a.height() * b.width();
 }
 
-<<<<<<< HEAD
 inline bool isPointInTriangle(const FloatPoint& p,
     const FloatPoint& t1,
     const FloatPoint& t2,
     const FloatPoint& t3)
-=======
-inline bool isPointInTriangle(const FloatPoint& p, const FloatPoint& t1, const FloatPoint& t2, const FloatPoint& t3)
->>>>>>> miniblink49
 {
     // Compute vectors
     FloatSize v0 = t3 - t1;
@@ -95,7 +84,6 @@ inline bool isPointInTriangle(const FloatPoint& p, const FloatPoint& t1, const F
     return (u >= 0) && (v >= 0) && (u + v <= 1);
 }
 
-<<<<<<< HEAD
 static inline float saturateInf(float value)
 {
     if (UNLIKELY(std_isinf(value))) {
@@ -112,15 +100,6 @@ FloatRect FloatQuad::boundingBox() const
 
     float right = saturateInf(max4(m_p1.x(), m_p2.x(), m_p3.x(), m_p4.x()));
     float bottom = saturateInf(max4(m_p1.y(), m_p2.y(), m_p3.y(), m_p4.y()));
-=======
-FloatRect FloatQuad::boundingBox() const
-{
-    float left   = min4(m_p1.x(), m_p2.x(), m_p3.x(), m_p4.x());
-    float top    = min4(m_p1.y(), m_p2.y(), m_p3.y(), m_p4.y());
-
-    float right  = max4(m_p1.x(), m_p2.x(), m_p3.x(), m_p4.x());
-    float bottom = max4(m_p1.y(), m_p2.y(), m_p3.y(), m_p4.y());
->>>>>>> miniblink49
 
     return FloatRect(left, top, right - left, bottom - top);
 }
@@ -130,7 +109,6 @@ static inline bool withinEpsilon(float a, float b)
     return fabs(a - b) < std::numeric_limits<float>::epsilon();
 }
 
-<<<<<<< HEAD
 FloatQuad::FloatQuad(const SkPoint (&quad)[4])
     : FloatQuad(FloatPoint(quad[0]),
         FloatPoint(quad[1]),
@@ -142,12 +120,6 @@ FloatQuad::FloatQuad(const SkPoint (&quad)[4])
 bool FloatQuad::isRectilinear() const
 {
     return (withinEpsilon(m_p1.x(), m_p2.x()) && withinEpsilon(m_p2.y(), m_p3.y()) && withinEpsilon(m_p3.x(), m_p4.x()) && withinEpsilon(m_p4.y(), m_p1.y())) || (withinEpsilon(m_p1.y(), m_p2.y()) && withinEpsilon(m_p2.x(), m_p3.x()) && withinEpsilon(m_p3.y(), m_p4.y()) && withinEpsilon(m_p4.x(), m_p1.x()));
-=======
-bool FloatQuad::isRectilinear() const
-{
-    return (withinEpsilon(m_p1.x(), m_p2.x()) && withinEpsilon(m_p2.y(), m_p3.y()) && withinEpsilon(m_p3.x(), m_p4.x()) && withinEpsilon(m_p4.y(), m_p1.y()))
-        || (withinEpsilon(m_p1.y(), m_p2.y()) && withinEpsilon(m_p2.x(), m_p3.x()) && withinEpsilon(m_p3.y(), m_p4.y()) && withinEpsilon(m_p4.x(), m_p1.x()));
->>>>>>> miniblink49
 }
 
 bool FloatQuad::containsPoint(const FloatPoint& p) const
@@ -161,7 +133,6 @@ bool FloatQuad::containsQuad(const FloatQuad& other) const
     return containsPoint(other.p1()) && containsPoint(other.p2()) && containsPoint(other.p3()) && containsPoint(other.p4());
 }
 
-<<<<<<< HEAD
 static inline FloatPoint rightMostCornerToVector(const FloatRect& rect,
     const FloatSize& vector)
 {
@@ -174,18 +145,6 @@ static inline FloatPoint rightMostCornerToVector(const FloatRect& rect,
     // QQQ XXX   If the lower left corner of X is left of the vector that goes
     //  QQQ      from the top corner of Q to the right corner of Q, then all of X
     //   Q       is left of the vector, and intersection impossible.
-=======
-static inline FloatPoint rightMostCornerToVector(const FloatRect& rect, const FloatSize& vector)
-{
-    // Return the corner of the rectangle that if it is to the left of the vector
-    // would mean all of the rectangle is to the left of the vector.
-    // The vector here represents the side between two points in a clockwise convex polygon.
-    //
-    //  Q  XXX
-    // QQQ XXX   If the lower left corner of X is left of the vector that goes from the top corner of Q to
-    //  QQQ      the right corner of Q, then all of X is left of the vector, and intersection impossible.
-    //   Q
->>>>>>> miniblink49
     //
     FloatPoint point;
     if (vector.width() >= 0)
@@ -201,15 +160,9 @@ static inline FloatPoint rightMostCornerToVector(const FloatRect& rect, const Fl
 
 bool FloatQuad::intersectsRect(const FloatRect& rect) const
 {
-<<<<<<< HEAD
     // For each side of the quad clockwise we check if the rectangle is to the
     // left of it since only content on the right can onlap with the quad.  This
     // only works if the quad is convex.
-=======
-    // For each side of the quad clockwise we check if the rectangle is to the left of it
-    // since only content on the right can onlap with the quad.
-    // This only works if the quad is convex.
->>>>>>> miniblink49
     FloatSize v1, v2, v3, v4;
 
     // Ensure we use clockwise vectors.
@@ -241,25 +194,16 @@ bool FloatQuad::intersectsRect(const FloatRect& rect) const
     if (determinant(v4, p - m_p4) < 0)
         return false;
 
-<<<<<<< HEAD
     // If not all of the rectangle is outside one of the quad's four sides, then
     // that means at least a part of the rectangle is overlapping the quad.
-=======
-    // If not all of the rectangle is outside one of the quad's four sides, then that means at least
-    // a part of the rectangle is overlapping the quad.
->>>>>>> miniblink49
     return true;
 }
 
 // Tests whether the line is contained by or intersected with the circle.
-<<<<<<< HEAD
 static inline bool lineIntersectsCircle(const FloatPoint& center,
     float radius,
     const FloatPoint& p0,
     const FloatPoint& p1)
-=======
-static inline bool lineIntersectsCircle(const FloatPoint& center, float radius, const FloatPoint& p0, const FloatPoint& p1)
->>>>>>> miniblink49
 {
     float x0 = p0.x() - center.x(), y0 = p0.y() - center.y();
     float x1 = p1.x() - center.x(), y1 = p1.y() - center.y();
@@ -279,22 +223,14 @@ static inline bool lineIntersectsCircle(const FloatPoint& center, float radius, 
         return false;
 
     // The nearest point on the line is between p0 and p1?
-<<<<<<< HEAD
     float x = -a * c / (a * a + b * b);
     float y = -b * c / (a * a + b * b);
 
     return (((x0 <= x && x <= x1) || (x0 >= x && x >= x1)) && ((y0 <= y && y <= y1) || (y1 <= y && y <= y0)));
-=======
-    float x = - a * c / (a * a + b * b);
-    float y = - b * c / (a * a + b * b);
-    return (((x0 <= x && x <= x1) || (x0 >= x && x >= x1))
-        && ((y0 <= y && y <= y1) || (y1 <= y && y <= y0)));
->>>>>>> miniblink49
 }
 
 bool FloatQuad::intersectsCircle(const FloatPoint& center, float radius) const
 {
-<<<<<<< HEAD
     return containsPoint(
                center) // The circle may be totally contained by the quad.
         || lineIntersectsCircle(center, radius, m_p1, m_p2) || lineIntersectsCircle(center, radius, m_p2, m_p3) || lineIntersectsCircle(center, radius, m_p3, m_p4) || lineIntersectsCircle(center, radius, m_p4, m_p1);
@@ -306,36 +242,17 @@ bool FloatQuad::intersectsEllipse(const FloatPoint& center,
     // Transform the ellipse to an origin-centered circle whose radius is the
     // product of major radius and minor radius.  Here we apply the same
     // transformation to the quad.
-=======
-    return containsPoint(center) // The circle may be totally contained by the quad.
-        || lineIntersectsCircle(center, radius, m_p1, m_p2)
-        || lineIntersectsCircle(center, radius, m_p2, m_p3)
-        || lineIntersectsCircle(center, radius, m_p3, m_p4)
-        || lineIntersectsCircle(center, radius, m_p4, m_p1);
-}
-
-bool FloatQuad::intersectsEllipse(const FloatPoint& center, const FloatSize& radii) const
-{
-    // Transform the ellipse to an origin-centered circle whose radius is the product of major radius and minor radius.
-    // Here we apply the same transformation to the quad.
->>>>>>> miniblink49
     FloatQuad transformedQuad(*this);
     transformedQuad.move(-center.x(), -center.y());
     transformedQuad.scale(radii.height(), radii.width());
 
     FloatPoint originPoint;
-<<<<<<< HEAD
     return transformedQuad.intersectsCircle(originPoint,
         radii.height() * radii.width());
-=======
-    return transformedQuad.intersectsCircle(originPoint, radii.height() * radii.width());
-
->>>>>>> miniblink49
 }
 
 bool FloatQuad::isCounterclockwise() const
 {
-<<<<<<< HEAD
     // Return if the two first vectors are turning clockwise. If the quad is
     // convex then all following vectors will turn the same way.
     return determinant(m_p2 - m_p1, m_p3 - m_p2) < 0;
@@ -349,10 +266,4 @@ String FloatQuad::toString() const
         m_p4.toString().ascii().data());
 }
 
-=======
-    // Return if the two first vectors are turning clockwise. If the quad is convex then all following vectors will turn the same way.
-    return determinant(m_p2 - m_p1, m_p3 - m_p2) < 0;
-}
-
->>>>>>> miniblink49
 } // namespace blink

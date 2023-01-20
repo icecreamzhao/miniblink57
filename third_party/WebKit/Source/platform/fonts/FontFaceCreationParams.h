@@ -31,10 +31,7 @@
 #ifndef FontFaceCreationParams_h
 #define FontFaceCreationParams_h
 
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
-=======
->>>>>>> miniblink49
 #include "wtf/Assertions.h"
 #include "wtf/StringHasher.h"
 #include "wtf/text/AtomicString.h"
@@ -48,7 +45,6 @@ enum FontFaceCreationType {
 };
 
 class FontFaceCreationParams {
-<<<<<<< HEAD
     USING_FAST_MALLOC(FontFaceCreationParams);
 
 public:
@@ -58,22 +54,10 @@ public:
         , m_filename(CString())
         , m_fontconfigInterfaceId(0)
         , m_ttcIndex(0)
-=======
-    FontFaceCreationType m_creationType;
-    AtomicString m_family;
-    CString m_filename;
-    int m_fontconfigInterfaceId;
-    int m_ttcIndex;
-
-public:
-    FontFaceCreationParams()
-        : m_creationType(CreateFontByFamily), m_family(AtomicString()), m_filename(CString()), m_fontconfigInterfaceId(0), m_ttcIndex(0)
->>>>>>> miniblink49
     {
     }
 
     explicit FontFaceCreationParams(AtomicString family)
-<<<<<<< HEAD
         : m_creationType(CreateFontByFamily)
         , m_family(family)
         , m_filename(CString())
@@ -86,28 +70,14 @@ public:
         // IE disregards "@" regardless of the orientation, so we follow the behavior and
         // normalize the family name.
         m_family = (m_family.isEmpty() || m_family[0] != '@') ? m_family : AtomicString(m_family.impl()->substring(1));
-=======
-        : m_creationType(CreateFontByFamily), m_family(family), m_filename(CString()), m_fontconfigInterfaceId(0), m_ttcIndex(0)
-    {
-#if OS(WIN)
-    // Leading "@" in the font name enables Windows vertical flow flag for the font.
-    // Because we do vertical flow by ourselves, we don't want to use the Windows feature.
-    // IE disregards "@" regardless of the orientation, so we follow the behavior and
-    // normalize the family name.
-    m_family = (m_family.isEmpty() || m_family[0] != '@') ? m_family : AtomicString(m_family.impl()->substring(1));
->>>>>>> miniblink49
 #endif
     }
 
     FontFaceCreationParams(CString filename, int fontconfigInterfaceId, int ttcIndex = 0)
-<<<<<<< HEAD
         : m_creationType(CreateFontByFciIdAndTtcIndex)
         , m_filename(filename)
         , m_fontconfigInterfaceId(fontconfigInterfaceId)
         , m_ttcIndex(ttcIndex)
-=======
-        : m_creationType(CreateFontByFciIdAndTtcIndex), m_filename(filename), m_fontconfigInterfaceId(fontconfigInterfaceId), m_ttcIndex(ttcIndex)
->>>>>>> miniblink49
     {
     }
 
@@ -158,15 +128,12 @@ public:
             && m_ttcIndex == other.m_ttcIndex;
     }
 
-<<<<<<< HEAD
 private:
     FontFaceCreationType m_creationType;
     AtomicString m_family;
     CString m_filename;
     int m_fontconfigInterfaceId;
     int m_ttcIndex;
-=======
->>>>>>> miniblink49
 };
 
 } // namespace blink

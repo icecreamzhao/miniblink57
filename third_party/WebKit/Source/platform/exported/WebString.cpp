@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "public/platform/WebString.h"
 
 #include "base/strings/string_util.h"
@@ -51,17 +50,6 @@ STATIC_ASSERT_ENUM(
     WTF::StrictUTF8ConversionReplacingUnpairedSurrogatesWithFFFD,
     blink::WebString::UTF8ConversionMode::kStrictReplacingErrorsWithFFFD);
 
-=======
-#include "config.h"
-#include "public/platform/WebString.h"
-
-#include "public/platform/WebCString.h"
-#include "wtf/text/AtomicString.h"
-#include "wtf/text/CString.h"
-#include "wtf/text/StringUTF8Adaptor.h"
-#include "wtf/text/WTFString.h"
-
->>>>>>> miniblink49
 namespace blink {
 
 void WebString::reset()
@@ -84,15 +72,6 @@ size_t WebString::length() const
     return m_private.isNull() ? 0 : m_private->length();
 }
 
-<<<<<<< HEAD
-=======
-WebUChar WebString::at(unsigned i) const
-{
-    ASSERT(!m_private.isNull());
-    return (*m_private.get())[i];
-}
-
->>>>>>> miniblink49
 bool WebString::is8Bit() const
 {
     return m_private->is8Bit();
@@ -108,16 +87,10 @@ const WebUChar* WebString::data16() const
     return !m_private.isNull() && !is8Bit() ? m_private->characters16() : 0;
 }
 
-<<<<<<< HEAD
 std::string WebString::utf8(UTF8ConversionMode mode) const
 {
     StringUTF8Adaptor utf8(m_private.get(),
         static_cast<WTF::UTF8ConversionMode>(mode));
-=======
-std::string WebString::utf8() const
-{
-    StringUTF8Adaptor utf8(m_private.get());
->>>>>>> miniblink49
     return std::string(utf8.data(), utf8.length());
 }
 
@@ -131,7 +104,6 @@ WebString WebString::fromUTF8(const char* data)
     return String::fromUTF8(data);
 }
 
-<<<<<<< HEAD
 WebString WebString::fromUTF16(const base::string16& s)
 {
     WebString string;
@@ -149,8 +121,6 @@ WebString WebString::fromUTF16(const base::NullableString16& s)
     return string;
 }
 
-=======
->>>>>>> miniblink49
 std::string WebString::latin1() const
 {
     String string(m_private.get());
@@ -159,16 +129,10 @@ std::string WebString::latin1() const
         return std::string();
 
     if (string.is8Bit())
-<<<<<<< HEAD
         return std::string(reinterpret_cast<const char*>(string.characters8()),
             string.length());
 
     CString latin1 = string.latin1();
-=======
-        return std::string(reinterpret_cast<const char*>(string.characters8()), string.length());
-
-    WebCString latin1 = string.latin1();
->>>>>>> miniblink49
     return std::string(latin1.data(), latin1.length());
 }
 
@@ -177,7 +141,6 @@ WebString WebString::fromLatin1(const WebLChar* data, size_t length)
     return String(data, length);
 }
 
-<<<<<<< HEAD
 std::string WebString::ascii() const
 {
     DCHECK(containsOnlyASCII());
@@ -205,21 +168,16 @@ WebString WebString::fromASCII(const std::string& s)
     return fromLatin1(s);
 }
 
-=======
->>>>>>> miniblink49
 bool WebString::equals(const WebString& s) const
 {
     return equal(m_private.get(), s.m_private.get());
 }
 
-<<<<<<< HEAD
 bool WebString::equals(const char* characters) const
 {
     return equal(m_private.get(), reinterpret_cast<const LChar*>(characters));
 }
 
-=======
->>>>>>> miniblink49
 WebString::WebString(const WTF::String& s)
     : m_private(s.impl())
 {
@@ -236,7 +194,6 @@ WebString::operator WTF::String() const
     return m_private.get();
 }
 
-<<<<<<< HEAD
 WebString::operator WTF::StringView() const
 {
     return StringView(m_private.get());
@@ -245,20 +202,11 @@ WebString::operator WTF::StringView() const
 WebString::WebString(const WTF::AtomicString& s)
 {
     assign(s.getString());
-=======
-WebString::WebString(const WTF::AtomicString& s)
-{
-    assign(s.string());
->>>>>>> miniblink49
 }
 
 WebString& WebString::operator=(const WTF::AtomicString& s)
 {
-<<<<<<< HEAD
     assign(s.getString());
-=======
-    assign(s.string());
->>>>>>> miniblink49
     return *this;
 }
 

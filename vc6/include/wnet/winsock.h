@@ -94,24 +94,18 @@ extern int PASCAL FAR __WSAFDIsSet(SOCKET, fd_set FAR *);
 /*
  * Structure used in select() call, taken from the BSD file sys/time.h.
  */
-<<<<<<< HEAD
 #ifndef HAVE_STRUCT_TIMEVAL_VC6
 #define HAVE_STRUCT_TIMEVAL_VC6
-=======
->>>>>>> miniblink49
 struct timeval {
         long    tv_sec;         /* seconds */
         long    tv_usec;        /* and microseconds */
 };
 
-<<<<<<< HEAD
 typedef struct timeval  TIMEVAL;
 typedef struct timeval* PTIMEVAL;
 typedef struct timeval  FAR* LPTIMEVAL;
 #endif
 
-=======
->>>>>>> miniblink49
 /*
  * Operations on timevals.
  *
@@ -1051,13 +1045,6 @@ typedef struct protoent PROTOENT;
 typedef struct protoent *PPROTOENT;
 typedef struct protoent FAR *LPPROTOENT;
 
-<<<<<<< HEAD
-=======
-typedef struct timeval TIMEVAL;
-typedef struct timeval *PTIMEVAL;
-typedef struct timeval FAR *LPTIMEVAL;
-
->>>>>>> miniblink49
 /*
  * Windows message parameter composition and decomposition
  * macros.

@@ -5,23 +5,28 @@
 #ifndef CSSSupportsParser_h
 #define CSSSupportsParser_h
 
+#include "platform/heap/Handle.h"
+
 namespace blink {
 
 class CSSParserImpl;
 class CSSParserTokenRange;
 
 class CSSSupportsParser {
+    STACK_ALLOCATED();
+
 public:
-    enum SupportsResult {
-        Unsupported = false,
+    enum SupportsResult { Unsupported = false,
         Supported = true,
-        Invalid
-    };
+        Invalid };
 
     static SupportsResult supportsCondition(CSSParserTokenRange, CSSParserImpl&);
 
 private:
-    CSSSupportsParser(CSSParserImpl& parser) : m_parser(parser) { }
+    CSSSupportsParser(CSSParserImpl& parser)
+        : m_parser(parser)
+    {
+    }
 
     SupportsResult consumeCondition(CSSParserTokenRange);
     SupportsResult consumeNegation(CSSParserTokenRange);

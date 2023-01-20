@@ -28,17 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 dictionary StorageInfo {
     unsigned long long usage;
     unsigned long long quota;
-=======
-[
-    GarbageCollected,
-    NoInterfaceObject,
-    RuntimeEnabled=QuotaPromise
-] interface StorageInfo {
-    readonly attribute unsigned long long usage;
-    readonly attribute unsigned long long quota;
->>>>>>> miniblink49
 };

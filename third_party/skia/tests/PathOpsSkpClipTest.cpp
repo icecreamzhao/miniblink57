@@ -13,42 +13,23 @@
 #include "SkColor.h"
 #include "SkColorPriv.h"
 #include "SkCommandLineFlags.h"
-<<<<<<< HEAD
 #include "SkForceLinking.h"
 #include "SkGraphics.h"
-=======
-#include "SkDevice.h"
-#include "SkForceLinking.h"
-#include "SkGraphics.h"
-#include "SkImageDecoder.h"
->>>>>>> miniblink49
 #include "SkImageEncoder.h"
 #include "SkOSFile.h"
 #include "SkPathOpsDebug.h"
 #include "SkPicture.h"
 #include "SkRTConf.h"
-<<<<<<< HEAD
-=======
-#include "SkRunnable.h"
-#include "SkTSort.h"
->>>>>>> miniblink49
 #include "SkStream.h"
 #include "SkString.h"
 #include "SkTArray.h"
 #include "SkTDArray.h"
-<<<<<<< HEAD
 #include "SkTSort.h"
-=======
->>>>>>> miniblink49
 #include "SkTaskGroup.h"
 #include "SkTemplates.h"
 #include "SkTime.h"
 
-<<<<<<< HEAD
 #include <stdlib.h>
-=======
-__SK_FORCE_IMAGE_DECODER_LINKING;
->>>>>>> miniblink49
 
 /* add local exceptions here */
 /* TODO : add command flag interface */
@@ -57,7 +38,6 @@ const struct SkipOverTest {
     const char* filename;
     bool blamePathOps;
 } skipOver[] = {
-<<<<<<< HEAD
     { 2, "http___www_groupon_sg_.skp", false }, // SkAAClip::Builder::addRun SkASSERT(fBounds.contains(x, y));
     { 6, "http___www_googleventures_com_.skp", true }, // addTCoincident SkASSERT(test->fT < 1);
     { 7, "http___www_foxsports_nl_.skp", true }, // (no repro on mac) addT SkASSERT(this != other || fVerb == SkPath::kCubic_Verb)
@@ -78,43 +58,16 @@ const struct SkipOverTest {
     { 88, "http___www_apuntesdelechuza_wordpress_com_.skp", true }, // bumpSpan SkASSERT "span->fOppValue >= 0"
     { 89, "http___www_mobilizedconsulting_com_.skp", true }, // addTCancel SkASSERT(oIndex > 0);
     { 93, "http___www_simple_living_in_suffolk_co_uk_.skp", true }, // bumpSpan SkASSERT "span->fOppValue >= 0"
-=======
-    { 2, "http___www_groupon_sg_.skp", false},  // SkAAClip::Builder::addRun SkASSERT(fBounds.contains(x, y));
-    { 6, "http___www_googleventures_com_.skp", true},  // addTCoincident SkASSERT(test->fT < 1);
-    { 7, "http___www_foxsports_nl_.skp", true},  // (no repro on mac) addT SkASSERT(this != other || fVerb == SkPath::kCubic_Verb)
-    {13, "http___www_modernqigong_com_.skp", false},  // SkAAClip::Builder::addRun SkASSERT(fBounds.contains(x, y));
-    {14, "http___www_devbridge_com_.skp", true},  // checkSmallCoincidence SkASSERT(!next->fSmall || checkMultiple);
-    {16, "http___www_1023world_net_.skp", false},  // bitmap decode assert (corrupt skp?)
-    {19, "http___www_alamdi_com_.skp", true},  // cubic/quad intersection
-    {26, "http___www_liveencounters_net_.skp", true},  // (no repro on mac) checkSmall addT:549 (line, expects cubic)
-    {28, "http___www_encros_fr_.skp", false},  // SkAAClip::Builder::addRun SkASSERT(fBounds.contains(x, y));
-    {37, "http___www_familysurvivalprotocol_wordpress_com_.skp", true},  // bumpSpan SkASSERT(span->fOppValue >= 0);
-    {39, "http___sufeinet_com_.skp", false}, // bitmap decode assert (corrupt skp?)
-    {41, "http___www_rano360_com_.skp", true}, // checkSmallCoincidence SkASSERT(!next->fSmall || checkMultiple);
-    {44, "http___www_firstunitedbank_com_.skp", true},  // addTCancel SkASSERT(oIndex > 0);
-    {46, "http___www_shinydemos_com_.skp", true},  // addSimpleAngle SkASSERT(index == count() - 2);
-    {48, "http___www_familysurvivalprotocol_com_.skp", true},  // bumpSpan SkASSERT "span->fOppValue >= 0"
-    {57, "http___www_lptemp_com_.skp", true}, // addTCoincident oPeek = &other->fTs[++oPeekIndex];
-    {71, "http___www_1milyonkahraman_org_.skp", true},  // addTCoincident SkASSERT(test->fT < 1);
-    {88, "http___www_apuntesdelechuza_wordpress_com_.skp", true},  // bumpSpan SkASSERT "span->fOppValue >= 0"
-    {89, "http___www_mobilizedconsulting_com_.skp", true}, // addTCancel SkASSERT(oIndex > 0);
-    {93, "http___www_simple_living_in_suffolk_co_uk_.skp", true},  // bumpSpan SkASSERT "span->fOppValue >= 0"
->>>>>>> miniblink49
 };
 
 size_t skipOverCount = sizeof(skipOver) / sizeof(skipOver[0]);
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /* customize file in/out here */
 /* TODO : add command flag interface */
 #define CHROME_VERSION "1e5dfa4-4a995df"
 #define SUMMARY_RUN 1
 
 #ifdef SK_BUILD_FOR_WIN
-<<<<<<< HEAD
 #define DRIVE_SPEC "D:"
 #define PATH_SLASH "\\"
 #else
@@ -133,25 +86,6 @@ static const char outStatusDir[] = "statusTest";
 
 static SkString get_in_path(int dirNo, const char* filename)
 {
-=======
-    #define DRIVE_SPEC "D:"
-    #define PATH_SLASH "\\"
-#else
-    #define DRIVE_SPEC ""
-    #define PATH_SLASH "/"
-#endif
-
-#define IN_DIR_PRE  DRIVE_SPEC PATH_SLASH "skps"   PATH_SLASH "slave"
-#define OUT_DIR_PRE DRIVE_SPEC PATH_SLASH "skpOut" PATH_SLASH "slave"
-#define OUT_DIR_SUM DRIVE_SPEC PATH_SLASH "skpOut" PATH_SLASH "summary"
-#define DIR_POST               PATH_SLASH "All"    PATH_SLASH CHROME_VERSION
-
-static const char outOpDir[]     = "opClip";
-static const char outOldDir[]    = "oldClip";
-static const char outStatusDir[] = "statusTest";
-
-static SkString get_in_path(int dirNo, const char* filename) {
->>>>>>> miniblink49
     SkString path;
     SkASSERT(dirNo);
     path.appendf("%s%d%s", IN_DIR_PRE, dirNo, DIR_POST);
@@ -169,21 +103,13 @@ static SkString get_in_path(int dirNo, const char* filename) {
     return path;
 }
 
-<<<<<<< HEAD
 static void make_recursive_dir(const SkString& path)
 {
-=======
-static void make_recursive_dir(const SkString& path) {
->>>>>>> miniblink49
     if (sk_exists(path.c_str())) {
         return;
     }
     const char* pathStr = path.c_str();
-<<<<<<< HEAD
     int last = (int)path.size();
-=======
-    int last = (int) path.size();
->>>>>>> miniblink49
     do {
         while (last > 0 && pathStr[--last] != PATH_SLASH[0])
             ;
@@ -194,7 +120,6 @@ static void make_recursive_dir(const SkString& path) {
         }
     } while (true);
     do {
-<<<<<<< HEAD
         while (last < (int)path.size() && pathStr[++last] != PATH_SLASH[0])
             ;
         SkString shorter(pathStr, last);
@@ -204,16 +129,6 @@ static void make_recursive_dir(const SkString& path) {
 
 static SkString get_out_path(int dirNo, const char* dirName)
 {
-=======
-        while (last < (int) path.size() && pathStr[++last] != PATH_SLASH[0])
-            ;
-        SkString shorter(pathStr, last);
-        SkAssertResult(sk_mkdir(shorter.c_str()));
-    } while (last < (int) path.size());
-}
-
-static SkString get_out_path(int dirNo, const char* dirName) {
->>>>>>> miniblink49
     SkString path;
     SkASSERT(dirNo);
     SkASSERT(dirName);
@@ -222,12 +137,8 @@ static SkString get_out_path(int dirNo, const char* dirName) {
     return path;
 }
 
-<<<<<<< HEAD
 static SkString get_sum_path(const char* dirName)
 {
-=======
-static SkString get_sum_path(const char* dirName) {
->>>>>>> miniblink49
     SkString path;
     SkASSERT(dirName);
     path.appendf("%s%d%s%s", OUT_DIR_SUM, SUMMARY_RUN, PATH_SLASH, dirName);
@@ -236,12 +147,8 @@ static SkString get_sum_path(const char* dirName) {
     return path;
 }
 
-<<<<<<< HEAD
 static SkString make_png_name(const char* filename)
 {
-=======
-static SkString make_png_name(const char* filename) {
->>>>>>> miniblink49
     SkString pngName = SkString(filename);
     pngName.remove(pngName.size() - 3, 3);
     pngName.append("png");
@@ -262,47 +169,31 @@ enum {
 };
 
 struct TestResult {
-<<<<<<< HEAD
     void init(int dirNo)
     {
-=======
-    void init(int dirNo) {
->>>>>>> miniblink49
         fDirNo = dirNo;
         sk_bzero(fFilename, sizeof(fFilename));
         fTestStep = kCompareBits;
         fScale = 1;
     }
 
-<<<<<<< HEAD
     void init(int dirNo, const SkString& filename)
     {
-=======
-    void init(int dirNo, const SkString& filename) {
->>>>>>> miniblink49
         fDirNo = dirNo;
         strcpy(fFilename, filename.c_str());
         fTestStep = kCompareBits;
         fScale = 1;
     }
 
-<<<<<<< HEAD
     SkString status()
     {
-=======
-    SkString status() {
->>>>>>> miniblink49
         SkString outStr;
         outStr.printf("%s %d %d\n", fFilename, fPixelError, fTime);
         return outStr;
     }
 
-<<<<<<< HEAD
     SkString progress()
     {
-=======
-    SkString progress() {
->>>>>>> miniblink49
         SkString outStr;
         outStr.printf("dir=%d %s ", fDirNo, fFilename);
         if (fPixelError) {
@@ -316,17 +207,10 @@ struct TestResult {
         }
         outStr.appendf("\n");
         return outStr;
-<<<<<<< HEAD
     }
 
     void test(int dirNo, const SkString& filename)
     {
-=======
-
-    }
-
-    void test(int dirNo, const SkString& filename) {
->>>>>>> miniblink49
         init(dirNo);
         strcpy(fFilename, filename.c_str());
         testOne();
@@ -338,57 +222,37 @@ struct TestResult {
     TestStep fTestStep;
     int fDirNo;
     int fPixelError;
-<<<<<<< HEAD
     SkMSec fTime;
-=======
-    int fTime;
->>>>>>> miniblink49
     int fScale;
 };
 
 class SortByPixel : public TestResult {
 public:
-<<<<<<< HEAD
     bool operator<(const SortByPixel& rh) const
     {
-=======
-    bool operator<(const SortByPixel& rh) const {
->>>>>>> miniblink49
         return fPixelError < rh.fPixelError;
     }
 };
 
 class SortByTime : public TestResult {
 public:
-<<<<<<< HEAD
     bool operator<(const SortByTime& rh) const
     {
-=======
-    bool operator<(const SortByTime& rh) const {
->>>>>>> miniblink49
         return fTime < rh.fTime;
     }
 };
 
 class SortByName : public TestResult {
 public:
-<<<<<<< HEAD
     bool operator<(const SortByName& rh) const
     {
-=======
-    bool operator<(const SortByName& rh) const {
->>>>>>> miniblink49
         return strcmp(fFilename, rh.fFilename) < 0;
     }
 };
 
 struct TestState {
-<<<<<<< HEAD
     void init(int dirNo)
     {
-=======
-    void init(int dirNo) {
->>>>>>> miniblink49
         fResult.init(dirNo);
     }
 
@@ -403,16 +267,10 @@ struct TestRunner {
     SkTDArray<class TestRunnable*> fRunnables;
 };
 
-<<<<<<< HEAD
 class TestRunnable {
 public:
     void operator()()
     {
-=======
-class TestRunnable : public SkRunnable {
-public:
-    void run() override {
->>>>>>> miniblink49
         SkGraphics::SetTLSFontCacheLimit(1 * 1024 * 1024);
         (*fTestFun)(&fState);
     }
@@ -421,7 +279,6 @@ public:
     void (*fTestFun)(TestState*);
 };
 
-<<<<<<< HEAD
 class TestRunnableDir : public TestRunnable {
 public:
     TestRunnableDir(void (*testFun)(TestState*), int dirNo, TestRunner* runner)
@@ -429,26 +286,12 @@ public:
         fState.init(dirNo);
         fTestFun = testFun;
     }
-=======
-
-class TestRunnableDir : public TestRunnable {
-public:
-    TestRunnableDir(void (*testFun)(TestState*), int dirNo, TestRunner* runner) {
-        fState.init(dirNo);
-        fTestFun = testFun;
-    }
-
->>>>>>> miniblink49
 };
 
 class TestRunnableFile : public TestRunnable {
 public:
-<<<<<<< HEAD
     TestRunnableFile(void (*testFun)(TestState*), int dirNo, const char* name, TestRunner* runner)
     {
-=======
-    TestRunnableFile(void (*testFun)(TestState*), int dirNo, const char* name, TestRunner* runner) {
->>>>>>> miniblink49
         fState.init(dirNo);
         strcpy(fState.fResult.fFilename, name);
         fTestFun = testFun;
@@ -458,17 +301,12 @@ public:
 class TestRunnableEncode : public TestRunnableFile {
 public:
     TestRunnableEncode(void (*testFun)(TestState*), int dirNo, const char* name, TestRunner* runner)
-<<<<<<< HEAD
         : TestRunnableFile(testFun, dirNo, name, runner)
     {
-=======
-        : TestRunnableFile(testFun, dirNo, name, runner) {
->>>>>>> miniblink49
         fState.fResult.fTestStep = kEncodeFiles;
     }
 };
 
-<<<<<<< HEAD
 TestRunner::~TestRunner()
 {
     for (int index = 0; index < fRunnables.count(); index++) {
@@ -480,31 +318,13 @@ void TestRunner::render()
 {
     SkTaskGroup().batch(fRunnables.count(), [&](int i) {
         (*fRunnables[i])();
-=======
-TestRunner::~TestRunner() {
-    for (int index = 0; index < fRunnables.count(); index++) {
-        SkDELETE(fRunnables[index]);
-    }
-}
-
-void TestRunner::render() {
-    // TODO: this doesn't really need to use SkRunnables any more.
-    // We can just write the code to run in the for-loop directly.
-    sk_parallel_for(fRunnables.count(), [&](int i) {
-        fRunnables[i]->run();
->>>>>>> miniblink49
     });
 }
 
 ////////////////////////////////////////////////
 
-<<<<<<< HEAD
 static int similarBits(const SkBitmap& gr, const SkBitmap& sk)
 {
-=======
-
-static int similarBits(const SkBitmap& gr, const SkBitmap& sk) {
->>>>>>> miniblink49
     const int kRowCount = 3;
     const int kThreshold = 3;
     int width = SkTMin(gr.width(), sk.width());
@@ -536,7 +356,6 @@ static int similarBits(const SkBitmap& gr, const SkBitmap& sk) {
                 continue;
             }
             if (base[x - 2] < kThreshold
-<<<<<<< HEAD
                 || base[width + x - 2] < kThreshold
                 || base[width * 2 + x - 2] < kThreshold
                 || base[x - 1] < kThreshold
@@ -545,16 +364,6 @@ static int similarBits(const SkBitmap& gr, const SkBitmap& sk) {
                 || base[x] < kThreshold
                 || base[width + x] < kThreshold
                 || base[width * 2 + x] < kThreshold) {
-=======
-                    || base[width + x - 2] < kThreshold
-                    || base[width * 2 + x - 2] < kThreshold
-                    || base[x - 1] < kThreshold
-                    || base[width + x - 1] < kThreshold
-                    || base[width * 2 + x - 1] < kThreshold
-                    || base[x] < kThreshold
-                    || base[width + x] < kThreshold
-                    || base[width * 2 + x] < kThreshold) {
->>>>>>> miniblink49
                 continue;
             }
             errorTotal += error;
@@ -563,12 +372,8 @@ static int similarBits(const SkBitmap& gr, const SkBitmap& sk) {
     return errorTotal;
 }
 
-<<<<<<< HEAD
 static bool addError(TestState* data, const TestResult& testResult)
 {
-=======
-static bool addError(TestState* data, const TestResult& testResult) {
->>>>>>> miniblink49
     if (testResult.fPixelError <= 0 && testResult.fTime <= 0) {
         return false;
     }
@@ -577,58 +382,34 @@ static bool addError(TestState* data, const TestResult& testResult) {
     if (pixelError > 0) {
         for (int index = 0; index < worstCount; ++index) {
             if (pixelError > data->fPixelWorst[index].fPixelError) {
-<<<<<<< HEAD
                 data->fPixelWorst[index] = *(SortByPixel*)&testResult;
-=======
-                data->fPixelWorst[index] = *(SortByPixel*) &testResult;
->>>>>>> miniblink49
                 return true;
             }
         }
     }
     int slowCount = data->fSlowest.count();
-<<<<<<< HEAD
     SkMSec time = testResult.fTime;
     if (time > 0) {
         for (int index = 0; index < slowCount; ++index) {
             if (time > data->fSlowest[index].fTime) {
                 data->fSlowest[index] = *(SortByTime*)&testResult;
-=======
-    int time = testResult.fTime;
-    if (time > 0) {
-        for (int index = 0; index < slowCount; ++index) {
-            if (time > data->fSlowest[index].fTime) {
-                data->fSlowest[index] = *(SortByTime*) &testResult;
->>>>>>> miniblink49
                 return true;
             }
         }
     }
     if (pixelError > 0 && worstCount < kMaxFiles) {
-<<<<<<< HEAD
         *data->fPixelWorst.append() = *(SortByPixel*)&testResult;
         return true;
     }
     if (time > 0 && slowCount < kMaxFiles) {
         *data->fSlowest.append() = *(SortByTime*)&testResult;
-=======
-        *data->fPixelWorst.append() = *(SortByPixel*) &testResult;
-        return true;
-    }
-    if (time > 0 && slowCount < kMaxFiles) {
-        *data->fSlowest.append() = *(SortByTime*) &testResult;
->>>>>>> miniblink49
         return true;
     }
     return false;
 }
 
-<<<<<<< HEAD
 static SkMSec timePict(SkPicture* pic, SkCanvas* canvas)
 {
-=======
-static SkMSec timePict(SkPicture* pic, SkCanvas* canvas) {
->>>>>>> miniblink49
     canvas->save();
     SkScalar pWidth = pic->cullRect().width();
     SkScalar pHeight = pic->cullRect().height();
@@ -636,15 +417,9 @@ static SkMSec timePict(SkPicture* pic, SkCanvas* canvas) {
     const int slices = 3;
     SkScalar xInterval = SkTMax(pWidth - maxDimension, 0.0f) / (slices - 1);
     SkScalar yInterval = SkTMax(pHeight - maxDimension, 0.0f) / (slices - 1);
-<<<<<<< HEAD
     SkRect rect = { 0, 0, SkTMin(maxDimension, pWidth), SkTMin(maxDimension, pHeight) };
     canvas->clipRect(rect);
     double start = SkTime::GetMSecs();
-=======
-    SkRect rect = {0, 0, SkTMin(maxDimension, pWidth), SkTMin(maxDimension, pHeight) };
-    canvas->clipRect(rect);
-    SkMSec start = SkTime::GetMSecs();
->>>>>>> miniblink49
     for (int x = 0; x < slices; ++x) {
         for (int y = 0; y < slices; ++y) {
             pic->playback(canvas);
@@ -652,7 +427,6 @@ static SkMSec timePict(SkPicture* pic, SkCanvas* canvas) {
         }
         canvas->translate(xInterval, -yInterval * slices);
     }
-<<<<<<< HEAD
     double end = SkTime::GetMSecs();
     canvas->restore();
     return static_cast<SkMSec>(end - start);
@@ -660,14 +434,6 @@ static SkMSec timePict(SkPicture* pic, SkCanvas* canvas) {
 
 static void drawPict(SkPicture* pic, SkCanvas* canvas, int scale)
 {
-=======
-    SkMSec end = SkTime::GetMSecs();
-    canvas->restore();
-    return end - start;
-}
-
-static void drawPict(SkPicture* pic, SkCanvas* canvas, int scale) {
->>>>>>> miniblink49
     canvas->clear(SK_ColorWHITE);
     if (scale != 1) {
         canvas->save();
@@ -679,17 +445,12 @@ static void drawPict(SkPicture* pic, SkCanvas* canvas, int scale) {
     }
 }
 
-<<<<<<< HEAD
 static void writePict(const SkBitmap& bitmap, const char* outDir, const char* pngName)
 {
-=======
-static void writePict(const SkBitmap& bitmap, const char* outDir, const char* pngName) {
->>>>>>> miniblink49
     SkString outFile = get_sum_path(outDir);
     outFile.appendf("%s%s", PATH_SLASH, pngName);
     if (!SkImageEncoder::EncodeFile(outFile.c_str(), bitmap, SkImageEncoder::kPNG_Type, 100)) {
         SkDebugf("unable to encode gr %s (width=%d height=%d)\n", pngName,
-<<<<<<< HEAD
             bitmap.width(), bitmap.height());
     }
 }
@@ -699,16 +460,6 @@ void TestResult::testOne()
     sk_sp<SkPicture> pic;
     {
 #if DEBUG_SHOW_TEST_NAME
-=======
-                    bitmap.width(), bitmap.height());
-    }
-}
-
-void TestResult::testOne() {
-    SkPicture* pic = NULL;
-    {
-    #if DEBUG_SHOW_TEST_NAME
->>>>>>> miniblink49
         if (fTestStep == kCompareBits) {
             SkString testName(fFilename);
             const char http[] = "http";
@@ -729,30 +480,17 @@ void TestResult::testOne() {
         } else if (fTestStep == kEncodeFiles) {
             strncpy(DEBUG_FILENAME_STRING, "", DEBUG_FILENAME_STRING_LENGTH);
         }
-<<<<<<< HEAD
 #endif
-=======
-    #endif
->>>>>>> miniblink49
         SkString path = get_in_path(fDirNo, fFilename);
         SkFILEStream stream(path.c_str());
         if (!stream.isValid()) {
             SkDebugf("invalid stream %s\n", path.c_str());
-<<<<<<< HEAD
             return;
         }
         pic = SkPicture::MakeFromStream(&stream);
         if (!pic) {
             SkDebugf("unable to decode %s\n", fFilename);
             return;
-=======
-            goto finish;
-        }
-        pic = SkPicture::CreateFromStream(&stream, &SkImageDecoder::DecodeMemory);
-        if (!pic) {
-            SkDebugf("unable to decode %s\n", fFilename);
-            goto finish;
->>>>>>> miniblink49
         }
         SkScalar width = pic->cullRect().width();
         SkScalar height = pic->cullRect().height();
@@ -771,13 +509,8 @@ void TestResult::testOne() {
         } while (++fScale < 256);
         if (fScale >= 256) {
             SkDebugf("unable to allocate bitmap for %s (w=%f h=%f)\n", fFilename,
-<<<<<<< HEAD
                 width, height);
             return;
-=======
-                    width, height);
-            goto finish;
->>>>>>> miniblink49
         }
         oldBitmap.eraseColor(SK_ColorWHITE);
         SkCanvas oldCanvas(oldBitmap);
@@ -785,7 +518,6 @@ void TestResult::testOne() {
         opBitmap.eraseColor(SK_ColorWHITE);
         SkCanvas opCanvas(opBitmap);
         opCanvas.setAllowSimplifyClip(true);
-<<<<<<< HEAD
         drawPict(pic.get(), &oldCanvas, fScale);
         drawPict(pic.get(), &opCanvas, fScale);
         if (fTestStep == kCompareBits) {
@@ -793,15 +525,6 @@ void TestResult::testOne() {
             SkMSec oldTime = timePict(pic.get(), &oldCanvas);
             SkMSec opTime = timePict(pic.get(), &opCanvas);
             fTime = SkTMax(static_cast<SkMSec>(0), oldTime - opTime);
-=======
-        drawPict(pic, &oldCanvas, fScale);
-        drawPict(pic, &opCanvas, fScale);
-        if (fTestStep == kCompareBits) {
-            fPixelError = similarBits(oldBitmap, opBitmap);
-            int oldTime = timePict(pic, &oldCanvas);
-            int opTime = timePict(pic, &opCanvas);
-            fTime = SkTMax(0, oldTime - opTime);
->>>>>>> miniblink49
         } else if (fTestStep == kEncodeFiles) {
             SkString pngStr = make_png_name(fFilename);
             const char* pngName = pngStr.c_str();
@@ -809,7 +532,6 @@ void TestResult::testOne() {
             writePict(opBitmap, outOpDir, pngName);
         }
     }
-<<<<<<< HEAD
 }
 
 DEFINE_string2(match, m, "PathOpsSkpClipThreaded",
@@ -823,57 +545,26 @@ DEFINE_string2(match, m, "PathOpsSkpClipThreaded",
     "it is skipped unless some list entry starts with ~");
 DEFINE_string2(dir, d, nullptr, "range of directories (e.g., 1-100)");
 DEFINE_string2(skp, s, nullptr, "skp to test");
-=======
-finish:
-    if (pic) {
-        pic->unref();
-    }
-}
-
-DEFINE_string2(match, m, "PathOpsSkpClipThreaded",
-        "[~][^]substring[$] [...] of test name to run.\n"
-        "Multiple matches may be separated by spaces.\n"
-        "~ causes a matching test to always be skipped\n"
-        "^ requires the start of the test to match\n"
-        "$ requires the end of the test to match\n"
-        "^ and $ requires an exact match\n"
-        "If a test does not match any list entry,\n"
-        "it is skipped unless some list entry starts with ~");
-DEFINE_string2(dir, d, NULL, "range of directories (e.g., 1-100)");
-DEFINE_string2(skp, s, NULL, "skp to test");
->>>>>>> miniblink49
 DEFINE_bool2(single, z, false, "run tests on a single thread internally.");
 DEFINE_int32(testIndex, 0, "override local test index (PathOpsSkpClipOneOff only).");
 DEFINE_bool2(verbose, v, false, "enable verbose output.");
 
-<<<<<<< HEAD
 static bool verbose()
 {
-=======
-static bool verbose() {
->>>>>>> miniblink49
     return FLAGS_verbose;
 }
 
 class Dirs {
 public:
-<<<<<<< HEAD
     Dirs()
     {
-=======
-    Dirs() {
->>>>>>> miniblink49
         reset();
         sk_bzero(fRun, sizeof(fRun));
         fSet = false;
     }
 
-<<<<<<< HEAD
     int first() const
     {
-=======
-    int first() const {
->>>>>>> miniblink49
         int index = 0;
         while (++index < kMaxDir) {
             if (fRun[index]) {
@@ -884,24 +575,16 @@ public:
         return -1;
     }
 
-<<<<<<< HEAD
     int last() const
     {
-=======
-    int last() const {
->>>>>>> miniblink49
         int index = kMaxDir;
         while (--index > 0 && !fRun[index])
             ;
         return index;
     }
 
-<<<<<<< HEAD
     int next()
     {
-=======
-    int next() {
->>>>>>> miniblink49
         while (++fIndex < kMaxDir) {
             if (fRun[fIndex]) {
                 return fIndex;
@@ -910,7 +593,6 @@ public:
         return -1;
     }
 
-<<<<<<< HEAD
     void reset()
     {
         fIndex = -1;
@@ -918,25 +600,14 @@ public:
 
     void set(int start, int end)
     {
-=======
-    void reset() {
-        fIndex = -1;
-    }
-
-    void set(int start, int end) {
->>>>>>> miniblink49
         while (start < end) {
             fRun[start++] = 1;
         }
         fSet = true;
     }
 
-<<<<<<< HEAD
     void setDefault()
     {
-=======
-    void setDefault() {
->>>>>>> miniblink49
         if (!fSet) {
             set(1, 100);
         }
@@ -944,11 +615,7 @@ public:
 
 private:
     enum {
-<<<<<<< HEAD
         kMaxDir = 101
-=======
-         kMaxDir = 101
->>>>>>> miniblink49
     };
     char fRun[kMaxDir];
     int fIndex;
@@ -958,7 +625,6 @@ private:
 class Filenames {
 public:
     Filenames()
-<<<<<<< HEAD
         : fIndex(-1)
     {
     }
@@ -973,19 +639,6 @@ public:
 
     void set(const SkCommandLineFlags::StringArray& names)
     {
-=======
-        : fIndex(-1) {
-    }
-
-    const char* next() {
-        while (fNames && ++fIndex < fNames->count()) {
-            return (*fNames)[fIndex];
-        }
-        return NULL;
-    }
-
-    void set(const SkCommandLineFlags::StringArray& names) {
->>>>>>> miniblink49
         fNames = &names;
     }
 
@@ -995,12 +648,8 @@ private:
 } gNames;
 
 static bool buildTestDir(int dirNo, int firstDirNo,
-<<<<<<< HEAD
     SkTDArray<TestResult>* tests, SkTDArray<SortByName*>* sorted)
 {
-=======
-        SkTDArray<TestResult>* tests, SkTDArray<SortByName*>* sorted) {
->>>>>>> miniblink49
     SkString dirName = get_out_path(dirNo, outStatusDir);
     if (!dirName.size()) {
         return false;
@@ -1012,22 +661,14 @@ static bool buildTestDir(int dirNo, int firstDirNo,
         test.init(dirNo);
         SkString spaceFile(filename);
         char* spaces = spaceFile.writable_str();
-<<<<<<< HEAD
         int spaceSize = (int)spaceFile.size();
-=======
-        int spaceSize = (int) spaceFile.size();
->>>>>>> miniblink49
         for (int index = 0; index < spaceSize; ++index) {
             if (spaces[index] == '.') {
                 spaces[index] = ' ';
             }
         }
         int success = sscanf(spaces, "%s %d %d skp", test.fFilename,
-<<<<<<< HEAD
             &test.fPixelError, &test.fTime);
-=======
-                &test.fPixelError, &test.fTime);
->>>>>>> miniblink49
         if (success < 3) {
             SkDebugf("failed to scan %s matched=%d\n", filename.c_str(), success);
             return false;
@@ -1040,19 +681,11 @@ static bool buildTestDir(int dirNo, int firstDirNo,
     SkTDArray<TestResult>& testSet = tests[dirNo - firstDirNo];
     int count = testSet.count();
     for (int index = 0; index < count; ++index) {
-<<<<<<< HEAD
         *sorted[dirNo - firstDirNo].append() = (SortByName*)&testSet[index];
     }
     if (sorted[dirNo - firstDirNo].count()) {
         SkTQSort<SortByName>(sorted[dirNo - firstDirNo].begin(),
             sorted[dirNo - firstDirNo].end() - 1);
-=======
-        *sorted[dirNo - firstDirNo].append() = (SortByName*) &testSet[index];
-    }
-    if (sorted[dirNo - firstDirNo].count()) {
-        SkTQSort<SortByName>(sorted[dirNo - firstDirNo].begin(),
-                sorted[dirNo - firstDirNo].end() - 1);
->>>>>>> miniblink49
         if (verbose()) {
             SkDebugf("+");
         }
@@ -1060,12 +693,8 @@ static bool buildTestDir(int dirNo, int firstDirNo,
     return true;
 }
 
-<<<<<<< HEAD
 static void testSkpClip(TestState* data)
 {
-=======
-static void testSkpClip(TestState* data) {
->>>>>>> miniblink49
     data->fResult.testOne();
     SkString statName(data->fResult.fFilename);
     SkASSERT(statName.endsWith(".skp"));
@@ -1077,17 +706,10 @@ static void testSkpClip(TestState* data) {
         return;
     }
     statusFile.appendf("%s%s", PATH_SLASH, statName.c_str());
-<<<<<<< HEAD
     FILE* file = sk_fopen(statusFile.c_str(), kWrite_SkFILE_Flag);
     if (!file) {
         SkDebugf("failed to create %s", statusFile.c_str());
         return;
-=======
-    SkFILE* file = sk_fopen(statusFile.c_str(), kWrite_SkFILE_Flag);
-    if (!file) {
-            SkDebugf("failed to create %s", statusFile.c_str());
-            return;
->>>>>>> miniblink49
     }
     sk_fclose(file);
     if (verbose()) {
@@ -1100,7 +722,6 @@ static void testSkpClip(TestState* data) {
 }
 
 bool Less(const SortByName& a, const SortByName& b);
-<<<<<<< HEAD
 bool Less(const SortByName& a, const SortByName& b)
 {
     return a < b;
@@ -1110,15 +731,6 @@ static bool doOneDir(TestState* state, bool threaded)
 {
     int dirNo = state->fResult.fDirNo;
     SkString dirName = get_in_path(dirNo, nullptr);
-=======
-bool Less(const SortByName& a, const SortByName& b) {
-    return a < b;
-}
-
-static bool doOneDir(TestState* state, bool threaded) {
-    int dirNo = state->fResult.fDirNo;
-    SkString dirName = get_in_path(dirNo, NULL);
->>>>>>> miniblink49
     if (!dirName.size()) {
         return false;
     }
@@ -1132,31 +744,19 @@ static bool doOneDir(TestState* state, bool threaded) {
     while (iter.next(&filename)) {
         for (size_t index = 0; index < skipOverCount; ++index) {
             if (skipOver[index].directory == dirNo
-<<<<<<< HEAD
                 && strcmp(filename.c_str(), skipOver[index].filename) == 0) {
-=======
-                    && strcmp(filename.c_str(), skipOver[index].filename) == 0) {
->>>>>>> miniblink49
                 goto checkEarlyExit;
             }
         }
         {
             SortByName name;
             name.init(dirNo);
-<<<<<<< HEAD
             strncpy(name.fFilename, filename.c_str(), filename.size() - 4); // drop .skp
-=======
-            strncpy(name.fFilename, filename.c_str(), filename.size() - 4);  // drop .skp
->>>>>>> miniblink49
             int count = sorted[0].count();
             int idx = SkTSearch<SortByName, Less>(sorted[0].begin(), count, &name, sizeof(&name));
             if (idx >= 0) {
                 SortByName* found = sorted[0][idx];
-<<<<<<< HEAD
                 (void)addError(state, *found);
-=======
-                (void) addError(state, *found);
->>>>>>> miniblink49
                 continue;
             }
             TestResult test;
@@ -1170,46 +770,29 @@ static bool doOneDir(TestState* state, bool threaded) {
             }
 #endif
         }
-<<<<<<< HEAD
     checkEarlyExit:;
-=======
-checkEarlyExit:
-        ;
->>>>>>> miniblink49
     }
     return true;
 }
 
-<<<<<<< HEAD
 static void initTest()
 {
-=======
-static void initTest() {
->>>>>>> miniblink49
 #if !defined SK_BUILD_FOR_WIN && !defined SK_BUILD_FOR_MAC
     SK_CONF_SET("images.jpeg.suppressDecoderWarnings", true);
     SK_CONF_SET("images.png.suppressDecoderWarnings", true);
 #endif
 }
 
-<<<<<<< HEAD
 static void testSkpClipEncode(TestState* data)
 {
-=======
-static void testSkpClipEncode(TestState* data) {
->>>>>>> miniblink49
     data->fResult.testOne();
     if (verbose()) {
         SkDebugf("+");
     }
 }
 
-<<<<<<< HEAD
 static void encodeFound(TestState& state)
 {
-=======
-static void encodeFound(TestState& state) {
->>>>>>> miniblink49
     if (verbose()) {
         if (state.fPixelWorst.count()) {
             SkTDArray<SortByPixel*> worst;
@@ -1243,20 +826,14 @@ static void encodeFound(TestState& state) {
         if (!filename.endsWith(".skp")) {
             filename.append(".skp");
         }
-<<<<<<< HEAD
         *testRunner.fRunnables.append() = new TestRunnableEncode(&testSkpClipEncode, result.fDirNo,
             filename.c_str(), &testRunner);
-=======
-        *testRunner.fRunnables.append() = SkNEW_ARGS(TestRunnableEncode,
-                (&testSkpClipEncode, result.fDirNo, filename.c_str(), &testRunner));
->>>>>>> miniblink49
     }
     testRunner.render();
 }
 
 class Test {
 public:
-<<<<<<< HEAD
     Test() { }
     virtual ~Test() { }
 
@@ -1265,12 +842,6 @@ public:
         onGetName(&fName);
         return fName.c_str();
     }
-=======
-    Test() {}
-    virtual ~Test() {}
-
-    const char* getName() { onGetName(&fName); return fName.c_str(); }
->>>>>>> miniblink49
     void run() { onRun(); }
 
 protected:
@@ -1278,7 +849,6 @@ protected:
     virtual void onRun() = 0;
 
 private:
-<<<<<<< HEAD
     SkString fName;
 };
 
@@ -1299,28 +869,6 @@ typedef SkTRegistry<Test* (*)(void*)> TestRegistry;
 
 DEF_TEST(PathOpsSkpClip)
 {
-=======
-    SkString    fName;
-};
-
-typedef SkTRegistry<Test*(*)(void*)> TestRegistry;
-
-#define DEF_TEST(name)                                        \
-    static void test_##name();                       \
-    class name##Class : public Test {                                   \
-    public:                                                             \
-        static Test* Factory(void*) { return SkNEW(name##Class); }      \
-    protected:                                                          \
-        void onGetName(SkString* name) override {            \
-            name->set(#name);                                           \
-        }                                                               \
-        void onRun() override { test_##name(); } \
-    };                                                                  \
-    static TestRegistry gReg_##name##Class(name##Class::Factory);       \
-    static void test_##name()
-
-DEF_TEST(PathOpsSkpClip) {
->>>>>>> miniblink49
     gDirs.setDefault();
     initTest();
     SkTArray<TestResult, true> errors;
@@ -1340,7 +888,6 @@ DEF_TEST(PathOpsSkpClip) {
     encodeFound(state);
 }
 
-<<<<<<< HEAD
 static void testSkpClipMain(TestState* data)
 {
     (void)doOneDir(data, true);
@@ -1348,25 +895,13 @@ static void testSkpClipMain(TestState* data)
 
 DEF_TEST(PathOpsSkpClipThreaded)
 {
-=======
-static void testSkpClipMain(TestState* data) {
-        (void) doOneDir(data, true);
-}
-
-DEF_TEST(PathOpsSkpClipThreaded) {
->>>>>>> miniblink49
     gDirs.setDefault();
     initTest();
     TestRunner testRunner;
     int dirNo;
     gDirs.reset();
     while ((dirNo = gDirs.next()) > 0) {
-<<<<<<< HEAD
         *testRunner.fRunnables.append() = new TestRunnableDir(&testSkpClipMain, dirNo, &testRunner);
-=======
-        *testRunner.fRunnables.append() = SkNEW_ARGS(TestRunnableDir,
-                (&testSkpClipMain, dirNo, &testRunner));
->>>>>>> miniblink49
     }
     testRunner.render();
     TestState state;
@@ -1385,12 +920,8 @@ DEF_TEST(PathOpsSkpClipThreaded) {
     encodeFound(state);
 }
 
-<<<<<<< HEAD
 static bool buildTests(SkTDArray<TestResult>* tests, SkTDArray<SortByName*>* sorted)
 {
-=======
-static bool buildTests(SkTDArray<TestResult>* tests, SkTDArray<SortByName*>* sorted) {
->>>>>>> miniblink49
     int firstDirNo = gDirs.first();
     int dirNo;
     while ((dirNo = gDirs.next()) > 0) {
@@ -1401,24 +932,15 @@ static bool buildTests(SkTDArray<TestResult>* tests, SkTDArray<SortByName*>* sor
     return true;
 }
 
-<<<<<<< HEAD
 DEF_TEST(PathOpsSkpClipUberThreaded)
 {
-=======
-DEF_TEST(PathOpsSkpClipUberThreaded) {
->>>>>>> miniblink49
     gDirs.setDefault();
     const int firstDirNo = gDirs.next();
     const int lastDirNo = gDirs.last();
     initTest();
     int dirCount = lastDirNo - firstDirNo + 1;
-<<<<<<< HEAD
     SkAutoTDeleteArray<SkTDArray<TestResult>> tests(new SkTDArray<TestResult>[dirCount]);
     SkAutoTDeleteArray<SkTDArray<SortByName*>> sorted(new SkTDArray<SortByName*>[dirCount]);
-=======
-    SkAutoTDeleteArray<SkTDArray<TestResult> > tests(new SkTDArray<TestResult>[dirCount]);
-    SkAutoTDeleteArray<SkTDArray<SortByName*> > sorted(new SkTDArray<SortByName*>[dirCount]);
->>>>>>> miniblink49
     if (!buildTests(tests.get(), sorted.get())) {
         return;
     }
@@ -1426,11 +948,7 @@ DEF_TEST(PathOpsSkpClipUberThreaded) {
     int dirNo;
     gDirs.reset();
     while ((dirNo = gDirs.next()) > 0) {
-<<<<<<< HEAD
         SkString dirName = get_in_path(dirNo, nullptr);
-=======
-        SkString dirName = get_in_path(dirNo, NULL);
->>>>>>> miniblink49
         if (!dirName.size()) {
             continue;
         }
@@ -1439,18 +957,13 @@ DEF_TEST(PathOpsSkpClipUberThreaded) {
         while (iter.next(&filename)) {
             for (size_t index = 0; index < skipOverCount; ++index) {
                 if (skipOver[index].directory == dirNo
-<<<<<<< HEAD
                     && strcmp(filename.c_str(), skipOver[index].filename) == 0) {
-=======
-                        && strcmp(filename.c_str(), skipOver[index].filename) == 0) {
->>>>>>> miniblink49
                     goto checkEarlyExit;
                 }
             }
             {
                 SortByName name;
                 name.init(dirNo);
-<<<<<<< HEAD
                 strncpy(name.fFilename, filename.c_str(), filename.size() - 4); // drop .skp
                 int count = sorted.get()[dirNo - firstDirNo].count();
                 if (SkTSearch<SortByName, Less>(sorted.get()[dirNo - firstDirNo].begin(),
@@ -1466,24 +979,6 @@ DEF_TEST(PathOpsSkpClipUberThreaded) {
     testRunner.render();
     SkAutoTDeleteArray<SkTDArray<TestResult>> results(new SkTDArray<TestResult>[dirCount]);
     if (!buildTests(results.get(), nullptr)) {
-=======
-                strncpy(name.fFilename, filename.c_str(), filename.size() - 4);  // drop .skp
-                int count = sorted.get()[dirNo - firstDirNo].count();
-                if (SkTSearch<SortByName, Less>(sorted.get()[dirNo - firstDirNo].begin(),
-                        count, &name, sizeof(&name)) < 0) {
-                    *testRunner.fRunnables.append() = SkNEW_ARGS(TestRunnableFile,
-                            (&testSkpClip, dirNo, filename.c_str(), &testRunner));
-                }
-            }
-    checkEarlyExit:
-            ;
-        }
-
-    }
-    testRunner.render();
-    SkAutoTDeleteArray<SkTDArray<TestResult> > results(new SkTDArray<TestResult>[dirCount]);
-    if (!buildTests(results.get(), NULL)) {
->>>>>>> miniblink49
         return;
     }
     SkTDArray<TestResult> allResults;
@@ -1495,13 +990,8 @@ DEF_TEST(PathOpsSkpClipUberThreaded) {
     SkTDArray<SortByPixel*> pixels;
     SkTDArray<SortByTime*> times;
     for (int index = 0; index < allCount; ++index) {
-<<<<<<< HEAD
         *pixels.append() = (SortByPixel*)&allResults[index];
         *times.append() = (SortByTime*)&allResults[index];
-=======
-        *pixels.append() = (SortByPixel*) &allResults[index];
-        *times.append() = (SortByTime*) &allResults[index];
->>>>>>> miniblink49
     }
     TestState state;
     if (pixels.count()) {
@@ -1519,12 +1009,8 @@ DEF_TEST(PathOpsSkpClipUberThreaded) {
     encodeFound(state);
 }
 
-<<<<<<< HEAD
 DEF_TEST(PathOpsSkpClipOneOff)
 {
-=======
-DEF_TEST(PathOpsSkpClipOneOff) {
->>>>>>> miniblink49
     const int testIndex = FLAGS_testIndex;
     int dirNo = gDirs.next();
     if (dirNo < 0) {
@@ -1546,12 +1032,8 @@ DEF_TEST(PathOpsSkpClipOneOff) {
     state.testOne();
 }
 
-<<<<<<< HEAD
 DEF_TEST(PathOpsTestSkipped)
 {
-=======
-DEF_TEST(PathOpsTestSkipped) {
->>>>>>> miniblink49
     for (size_t index = 0; index < skipOverCount; ++index) {
         const SkipOverTest& skip = skipOver[index];
         if (!skip.blamePathOps) {
@@ -1572,12 +1054,8 @@ DEF_TEST(PathOpsTestSkipped) {
     }
 }
 
-<<<<<<< HEAD
 DEF_TEST(PathOpsCopyFails)
 {
-=======
-DEF_TEST(PathOpsCopyFails) {
->>>>>>> miniblink49
     FLAGS_verbose = true;
     for (size_t index = 0; index < skipOverCount; ++index) {
         int dirNo = skipOver[index].directory;
@@ -1587,12 +1065,8 @@ DEF_TEST(PathOpsCopyFails) {
         int dirNo = skipOver[index].directory;
         const char* filename = skipOver[index].filename;
         SkDebugf("rsync -av cary-linux.cnc:/tera" PATH_SLASH "skps" PATH_SLASH "slave"
-<<<<<<< HEAD
                  "%d" DIR_POST "/%s " IN_DIR_PRE "%d" DIR_POST "\n",
             dirNo, filename, dirNo);
-=======
-            "%d" DIR_POST "/%s " IN_DIR_PRE "%d" DIR_POST "\n", dirNo, filename, dirNo);
->>>>>>> miniblink49
     }
 }
 
@@ -1603,7 +1077,6 @@ public:
     Iter() { this->reset(); }
     void reset() { fReg = TestRegistry::Head(); }
 
-<<<<<<< HEAD
     Test* next()
     {
         if (fReg) {
@@ -1613,16 +1086,6 @@ public:
             return test;
         }
         return nullptr;
-=======
-    Test* next() {
-        if (fReg) {
-            TestRegistry::Factory fact = fReg->factory();
-            fReg = fReg->next();
-            Test* test = fact(NULL);
-            return test;
-        }
-        return NULL;
->>>>>>> miniblink49
     }
 
 private:
@@ -1630,12 +1093,8 @@ private:
 };
 
 int tool_main(int argc, char** argv);
-<<<<<<< HEAD
 int tool_main(int argc, char** argv)
 {
-=======
-int tool_main(int argc, char** argv) {
->>>>>>> miniblink49
     SetupCrashHandler();
     SkCommandLineFlags::SetUsage("");
     SkCommandLineFlags::Parse(argc, argv);
@@ -1672,41 +1131,24 @@ int tool_main(int argc, char** argv) {
 #else
     header.append(" SK_RELEASE");
 #endif
-<<<<<<< HEAD
-=======
-    header.appendf(" skia_arch_width=%d", (int)sizeof(void*) * 8);
->>>>>>> miniblink49
     if (FLAGS_verbose) {
         header.appendf("\n");
     }
     SkDebugf("%s", header.c_str());
     Iter iter;
     Test* test;
-<<<<<<< HEAD
     while ((test = iter.next()) != nullptr) {
-=======
-    while ((test = iter.next()) != NULL) {
->>>>>>> miniblink49
         SkAutoTDelete<Test> owned(test);
         if (!SkCommandLineFlags::ShouldSkip(FLAGS_match, test->getName())) {
             test->run();
         }
     }
-<<<<<<< HEAD
-=======
-    SkGraphics::Term();
->>>>>>> miniblink49
     return 0;
 }
 
 #if !defined(SK_BUILD_FOR_IOS)
-<<<<<<< HEAD
 int main(int argc, char* const argv[])
 {
     return tool_main(argc, (char**)argv);
-=======
-int main(int argc, char * const argv[]) {
-    return tool_main(argc, (char**) argv);
->>>>>>> miniblink49
 }
 #endif

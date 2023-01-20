@@ -11,17 +11,22 @@ namespace blink {
 
 class CSSKeyframeRule;
 
-class KeyframeStyleRuleCSSStyleDeclaration final : public StyleRuleCSSStyleDeclaration {
+class KeyframeStyleRuleCSSStyleDeclaration final
+    : public StyleRuleCSSStyleDeclaration {
 public:
-    static PassRefPtrWillBeRawPtr<KeyframeStyleRuleCSSStyleDeclaration> create(MutableStylePropertySet& propertySet, CSSKeyframeRule* parentRule)
+    static KeyframeStyleRuleCSSStyleDeclaration* create(
+        MutableStylePropertySet& propertySet,
+        CSSKeyframeRule* parentRule)
     {
-        return adoptRefWillBeNoop(new KeyframeStyleRuleCSSStyleDeclaration(propertySet, parentRule));
+        return new KeyframeStyleRuleCSSStyleDeclaration(propertySet, parentRule);
     }
 
 private:
-    KeyframeStyleRuleCSSStyleDeclaration(MutableStylePropertySet&, CSSKeyframeRule*);
+    KeyframeStyleRuleCSSStyleDeclaration(MutableStylePropertySet&,
+        CSSKeyframeRule*);
 
-    virtual void didMutate(MutationType) override;
+    void didMutate(MutationType) override;
+    bool isKeyframeStyle() const final { return true; }
 };
 
 } // namespace blink

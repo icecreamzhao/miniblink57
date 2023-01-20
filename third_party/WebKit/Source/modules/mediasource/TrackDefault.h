@@ -12,7 +12,6 @@ namespace blink {
 
 class ExceptionState;
 
-<<<<<<< HEAD
 class TrackDefault final : public GarbageCollectedFinalized<TrackDefault>,
                            public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
@@ -28,12 +27,6 @@ public:
         const Vector<String>& kinds,
         const String& byteStreamTrackID,
         ExceptionState&);
-=======
-class TrackDefault final : public GarbageCollectedFinalized<TrackDefault>, public ScriptWrappable {
-    DEFINE_WRAPPERTYPEINFO();
-public:
-    static TrackDefault* create(const AtomicString& type, const String& language, const String& label, const Vector<String>& kinds, const String& byteStreamTrackID, ExceptionState&);
->>>>>>> miniblink49
 
     virtual ~TrackDefault();
 
@@ -47,15 +40,11 @@ public:
     DEFINE_INLINE_TRACE() { }
 
 private:
-<<<<<<< HEAD
     TrackDefault(const AtomicString& type,
         const String& language,
         const String& label,
         const Vector<String>& kinds,
         const String& byteStreamTrackID);
-=======
-    TrackDefault(const AtomicString& type, const String& language, const String& label, const Vector<String>& kinds, const String& byteStreamTrackID);
->>>>>>> miniblink49
 
     const AtomicString m_type;
     const String m_byteStreamTrackID;

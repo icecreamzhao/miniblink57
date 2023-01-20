@@ -6,16 +6,10 @@
  */
 
 #include "SkClampRange.h"
-<<<<<<< HEAD
 #include "SkMathPriv.h"
 
 static int SkCLZ64(uint64_t value)
 {
-=======
-#include "SkMath.h"
-
-static int SkCLZ64(uint64_t value) {
->>>>>>> miniblink49
     int count = 0;
     if (value >> 32) {
         value >>= 32;
@@ -25,12 +19,8 @@ static int SkCLZ64(uint64_t value) {
     return count + SkCLZ(SkToU32(value));
 }
 
-<<<<<<< HEAD
 static bool sk_64_smul_check(int64_t a, int64_t b, int64_t* result)
 {
-=======
-static bool sk_64_smul_check(int64_t a, int64_t b, int64_t* result) {
->>>>>>> miniblink49
     // Do it the slow way until we have some assembly.
     int64_t ua = SkTAbs(a);
     int64_t ub = SkTAbs(b);
@@ -49,12 +39,8 @@ static bool sk_64_smul_check(int64_t a, int64_t b, int64_t* result) {
  *  returns [0..count] for the number of steps (<= count) for which x0 <= edge
  *  given each step is followed by x0 += dx
  */
-<<<<<<< HEAD
 static int chop(int64_t x0, SkGradFixed edge, int64_t x1, int64_t dx, int count)
 {
-=======
-static int chop(int64_t x0, SkGradFixed edge, int64_t x1, int64_t dx, int count) {
->>>>>>> miniblink49
     SkASSERT(dx > 0);
     SkASSERT(count >= 0);
 
@@ -70,12 +56,8 @@ static int chop(int64_t x0, SkGradFixed edge, int64_t x1, int64_t dx, int count)
     return (int)n;
 }
 
-<<<<<<< HEAD
 void SkClampRange::initFor1(SkGradFixed fx)
 {
-=======
-void SkClampRange::initFor1(SkGradFixed fx) {
->>>>>>> miniblink49
     fCount0 = fCount1 = fCount2 = 0;
     if (fx <= 0) {
         fCount0 = 1;
@@ -87,12 +69,8 @@ void SkClampRange::initFor1(SkGradFixed fx) {
     }
 }
 
-<<<<<<< HEAD
 void SkClampRange::init(SkGradFixed fx0, SkGradFixed dx0, int count, int v0, int v1)
 {
-=======
-void SkClampRange::init(SkGradFixed fx0, SkGradFixed dx0, int count, int v0, int v1) {
->>>>>>> miniblink49
     SkASSERT(count > 0);
 
     fV0 = v0;
@@ -148,10 +126,6 @@ void SkClampRange::init(SkGradFixed fx0, SkGradFixed dx0, int count, int v0, int
         dx = -dx;
     }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
     fCount0 = chop(fx, 0, ex, dx, count);
     SkASSERT(fCount0 >= 0);
     SkASSERT(fCount0 <= count);

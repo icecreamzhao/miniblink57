@@ -28,16 +28,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "public/web/WebDOMEvent.h"
 
-=======
-#include "config.h"
-#include "public/web/WebDOMEvent.h"
-
-#include "core/EventNames.h"
-#include "core/dom/Node.h"
->>>>>>> miniblink49
 #include "core/events/Event.h"
 #include "wtf/PassRefPtr.h"
 
@@ -53,160 +45,19 @@ void WebDOMEvent::assign(const WebDOMEvent& other)
     m_private = other.m_private;
 }
 
-<<<<<<< HEAD
 void WebDOMEvent::assign(Event* event)
-=======
-void WebDOMEvent::assign(const PassRefPtrWillBeRawPtr<Event>& event)
->>>>>>> miniblink49
 {
     m_private = event;
 }
 
-<<<<<<< HEAD
 WebDOMEvent::WebDOMEvent(Event* event)
-=======
-WebDOMEvent::WebDOMEvent(const PassRefPtrWillBeRawPtr<Event>& event)
->>>>>>> miniblink49
     : m_private(event)
 {
 }
 
-<<<<<<< HEAD
 WebDOMEvent::operator Event*() const
-=======
-WebDOMEvent::operator PassRefPtrWillBeRawPtr<Event>() const
->>>>>>> miniblink49
 {
     return m_private.get();
 }
 
-<<<<<<< HEAD
-=======
-WebString WebDOMEvent::type() const
-{
-    ASSERT(m_private.get());
-    return m_private->type();
-}
-
-WebNode WebDOMEvent::target() const
-{
-    ASSERT(m_private.get());
-    return WebNode(m_private->target()->toNode());
-}
-
-WebNode WebDOMEvent::currentTarget() const
-{
-    ASSERT(m_private.get());
-    return WebNode(m_private->currentTarget()->toNode());
-}
-
-WebDOMEvent::PhaseType WebDOMEvent::eventPhase() const
-{
-    ASSERT(m_private.get());
-    return static_cast<WebDOMEvent::PhaseType>(m_private->eventPhase());
-}
-
-bool WebDOMEvent::bubbles() const
-{
-    ASSERT(m_private.get());
-    return m_private->bubbles();
-}
-
-bool WebDOMEvent::cancelable() const
-{
-    ASSERT(m_private.get());
-    return m_private->cancelable();
-}
-
-bool WebDOMEvent::isUIEvent() const
-{
-    ASSERT(m_private.get());
-    return m_private->isUIEvent();
-}
-
-bool WebDOMEvent::isMouseEvent() const
-{
-    ASSERT(m_private.get());
-    return m_private->isMouseEvent();
-}
-
-bool WebDOMEvent::isKeyboardEvent() const
-{
-    ASSERT(m_private.get());
-    return m_private->isKeyboardEvent();
-}
-
-bool WebDOMEvent::isMutationEvent() const
-{
-    ASSERT(m_private.get());
-    return m_private->hasInterface(EventNames::MutationEvent);
-}
-
-bool WebDOMEvent::isTextEvent() const
-{
-    ASSERT(m_private.get());
-    return m_private->hasInterface(EventNames::TextEvent);
-}
-
-bool WebDOMEvent::isCompositionEvent() const
-{
-    ASSERT(m_private.get());
-    return m_private->hasInterface(EventNames::CompositionEvent);
-}
-
-bool WebDOMEvent::isDragEvent() const
-{
-    ASSERT(m_private.get());
-    return m_private->isDragEvent();
-}
-
-bool WebDOMEvent::isClipboardEvent() const
-{
-    ASSERT(m_private.get());
-    return m_private->isClipboardEvent();
-}
-
-bool WebDOMEvent::isMessageEvent() const
-{
-    ASSERT(m_private.get());
-    return m_private->hasInterface(EventNames::MessageEvent);
-}
-
-bool WebDOMEvent::isWheelEvent() const
-{
-    ASSERT(m_private.get());
-    return m_private->hasInterface(EventNames::WheelEvent);
-}
-
-bool WebDOMEvent::isBeforeTextInsertedEvent() const
-{
-    ASSERT(m_private.get());
-    return m_private->isBeforeTextInsertedEvent();
-}
-
-bool WebDOMEvent::isPageTransitionEvent() const
-{
-    ASSERT(m_private.get());
-    return m_private->hasInterface(EventNames::PageTransitionEvent);
-}
-
-bool WebDOMEvent::isPopStateEvent() const
-{
-    ASSERT(m_private.get());
-    return m_private->hasInterface(EventNames::PopStateEvent);
-}
-
-bool WebDOMEvent::isProgressEvent() const
-{
-    ASSERT(m_private.get());
-    return m_private->hasInterface(EventNames::ProgressEvent);
-}
-
-bool WebDOMEvent::isXMLHttpRequestProgressEvent() const
-{
-    ASSERT(m_private.get());
-    return m_private->hasInterface(EventNames::XMLHttpRequestProgressEvent);
-}
-
->>>>>>> miniblink49
 } // namespace blink

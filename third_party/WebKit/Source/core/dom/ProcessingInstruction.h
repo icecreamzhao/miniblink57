@@ -23,27 +23,29 @@
 #define ProcessingInstruction_h
 
 #include "core/dom/CharacterData.h"
+#include "core/dom/StyleEngineContext.h"
 #include "core/fetch/ResourceOwner.h"
-#include "core/fetch/StyleSheetResource.h"
-#include "core/fetch/StyleSheetResourceClient.h"
+#include "core/loader/resource/StyleSheetResource.h"
+#include "core/loader/resource/StyleSheetResourceClient.h"
 
 namespace blink {
 
 class StyleSheet;
-class CSSStyleSheet;
 class EventListener;
 
-class ProcessingInstruction final : public CharacterData, private ResourceOwner<StyleSheetResource> {
+class ProcessingInstruction final : public CharacterData,
+                                    private ResourceOwner<StyleSheetResource> {
     DEFINE_WRAPPERTYPEINFO();
+    USING_GARBAGE_COLLECTED_MIXIN(ProcessingInstruction);
+
 public:
-    static PassRefPtrWillBeRawPtr<ProcessingInstruction> create(Document&, const String& target, const String& data);
+    static ProcessingInstruction* create(Document&,
+        const String& target,
+        const String& data);
     ~ProcessingInstruction() override;
     DECLARE_VIRTUAL_TRACE();
 
     const String& target() const { return m_target; }
-
-    void setCreatedByParser(bool createdByParser) { m_createdByParser = createdByParser; }
-
     const String& localHref() const { return m_localHref; }
     StyleSheet* sheet() const { return m_sheet.get(); }
 
@@ -54,24 +56,20 @@ public:
     bool isLoading() const;
 
     // For XSLT
-    class DetachableEventListener {
+    class DetachableEventListener : public GarbageCollectedMixin {
     public:
         virtual ~DetachableEventListener() { }
-
-        void ref() { refDetachableEventListener(); }
-        void deref() { derefDetachableEventListener(); }
-
         virtual EventListener* toEventListener() = 0;
-
         // Detach event listener from its processing instruction.
         virtual void detach() = 0;
 
-    private:
-        virtual void refDetachableEventListener() = 0;
-        virtual void derefDetachableEventListener() = 0;
+        DEFINE_INLINE_VIRTUAL_TRACE() { }
     };
 
-    void setEventListenerForXSLT(PassRefPtr<DetachableEventListener> listener) { m_listenerForXSLT = listener; }
+    void setEventListenerForXSLT(DetachableEventListener* listener)
+    {
+        m_listenerForXSLT = listener;
+    }
     EventListener* eventListenerForXSLT();
     void clearEventListenerForXSLT();
 
@@ -79,8 +77,8 @@ private:
     ProcessingInstruction(Document&, const String& target, const String& data);
 
     String nodeName() const override;
-    NodeType nodeType() const override;
-    PassRefPtrWillBeRawPtr<Node> cloneNode(bool deep = true) override;
+    NodeType getNodeType() const override;
+    Node* cloneNode(bool deep) override;
 
     InsertionNotificationRequest insertedInto(ContainerNode*) override;
     void removedFrom(ContainerNode*) override;
@@ -88,33 +86,41 @@ private:
     bool checkStyleSheet(String& href, String& charset);
     void process(const String& href, const String& charset);
 
-    void setCSSStyleSheet(const String& href, const KURL& baseURL, const String& charset, const CSSStyleSheetResource*) override;
-    void setXSLStyleSheet(const String& href, const KURL& baseURL, const String& sheet) override;
+    void setCSSStyleSheet(const String& href,
+        const KURL& baseURL,
+        const String& charset,
+        const CSSStyleSheetResource*) override;
+    void setXSLStyleSheet(const String& href,
+        const KURL& baseURL,
+        const String& sheet) override;
 
     bool sheetLoaded() override;
 
     void parseStyleSheet(const String& sheet);
     void clearSheet();
 
+    String debugName() const override { return "ProcessingInstruction"; }
+
     String m_target;
     String m_localHref;
     String m_title;
     String m_media;
-    RefPtrWillBeMember<StyleSheet> m_sheet;
+    Member<StyleSheet> m_sheet;
+    StyleEngineContext m_styleEngineContext;
     bool m_loading;
     bool m_alternate;
-    bool m_createdByParser;
     bool m_isCSS;
     bool m_isXSL;
 
-    RefPtr<DetachableEventListener> m_listenerForXSLT;
+    Member<DetachableEventListener> m_listenerForXSLT;
 };
 
-DEFINE_NODE_TYPE_CASTS(ProcessingInstruction, nodeType() == Node::PROCESSING_INSTRUCTION_NODE);
+DEFINE_NODE_TYPE_CASTS(ProcessingInstruction,
+    getNodeType() == Node::kProcessingInstructionNode);
 
 inline bool isXSLStyleSheet(const Node& node)
 {
-    return node.nodeType() == Node::PROCESSING_INSTRUCTION_NODE && toProcessingInstruction(node).isXSL();
+    return node.getNodeType() == Node::kProcessingInstructionNode && toProcessingInstruction(node).isXSL();
 }
 
 } // namespace blink

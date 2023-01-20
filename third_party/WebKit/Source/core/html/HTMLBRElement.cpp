@@ -20,7 +20,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/html/HTMLBRElement.h"
 
 #include "core/CSSPropertyNames.h"
@@ -46,14 +45,19 @@ bool HTMLBRElement::isPresentationAttribute(const QualifiedName& name) const
     return HTMLElement::isPresentationAttribute(name);
 }
 
-void HTMLBRElement::collectStyleForPresentationAttribute(const QualifiedName& name, const AtomicString& value, MutableStylePropertySet* style)
+void HTMLBRElement::collectStyleForPresentationAttribute(
+    const QualifiedName& name,
+    const AtomicString& value,
+    MutableStylePropertySet* style)
 {
     if (name == clearAttr) {
         // If the string is empty, then don't add the clear property.
-        // <br clear> and <br clear=""> are just treated like <br> by Gecko, Mac IE, etc. -dwh
+        // <br clear> and <br clear=""> are just treated like <br> by Gecko, Mac IE,
+        // etc. -dwh
         if (!value.isEmpty()) {
             if (equalIgnoringCase(value, "all"))
-                addPropertyToPresentationAttributeStyle(style, CSSPropertyClear, CSSValueBoth);
+                addPropertyToPresentationAttributeStyle(style, CSSPropertyClear,
+                    CSSValueBoth);
             else
                 addPropertyToPresentationAttributeStyle(style, CSSPropertyClear, value);
         }
@@ -69,4 +73,4 @@ LayoutObject* HTMLBRElement::createLayoutObject(const ComputedStyle& style)
     return new LayoutBR(this);
 }
 
-}
+} // namespace blink

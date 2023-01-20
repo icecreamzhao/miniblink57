@@ -8,17 +8,11 @@
 #ifndef SkDrawable_DEFINED
 #define SkDrawable_DEFINED
 
-<<<<<<< HEAD
 #include "SkFlattenable.h"
 #include "SkScalar.h"
 
 class SkCanvas;
 class SkMatrix;
-=======
-#include "SkRefCnt.h"
-
-class SkCanvas;
->>>>>>> miniblink49
 class SkPicture;
 struct SkRect;
 
@@ -29,11 +23,7 @@ struct SkRect;
  *  allow for clients of the drawable that may want to cache the results, the drawable must
  *  change its generation ID whenever its internal state changes such that it will draw differently.
  */
-<<<<<<< HEAD
 class SkDrawable : public SkFlattenable {
-=======
-class SkDrawable : public SkRefCnt {
->>>>>>> miniblink49
 public:
     SkDrawable();
 
@@ -70,7 +60,6 @@ public:
      */
     void notifyDrawingChanged();
 
-<<<<<<< HEAD
     SK_DEFINE_FLATTENABLE_TYPE(SkDrawable)
     Factory getFactory() const override { return nullptr; }
 
@@ -78,12 +67,6 @@ protected:
     virtual SkRect onGetBounds() = 0;
     virtual void onDraw(SkCanvas*) = 0;
 
-=======
-protected:
-    virtual SkRect onGetBounds() = 0;
-    virtual void onDraw(SkCanvas*) = 0;
-    
->>>>>>> miniblink49
     /**
      *  Default implementation calls onDraw() with a canvas that records into a picture. Subclasses
      *  may override if they have a more efficient way to return a picture for the current state

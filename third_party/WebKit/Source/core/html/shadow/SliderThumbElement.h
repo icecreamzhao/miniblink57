@@ -34,17 +34,17 @@
 
 #include "core/HTMLNames.h"
 #include "core/html/HTMLDivElement.h"
-#include "core/layout/LayoutBlockFlow.h"
 #include "wtf/Forward.h"
 
 namespace blink {
 
 class HTMLInputElement;
 class Event;
+class TouchEvent;
 
 class SliderThumbElement final : public HTMLDivElement {
 public:
-    static PassRefPtrWillBeRawPtr<SliderThumbElement> create(Document&);
+    static SliderThumbElement* create(Document&);
 
     void setPositionFromValue();
 
@@ -52,7 +52,7 @@ public:
     void defaultEventHandler(Event*) override;
     bool willRespondToMouseMoveEvents() override;
     bool willRespondToMouseClickEvents() override;
-    void detach(const AttachContext& = AttachContext()) override;
+    void detachLayoutTree(const AttachContext& = AttachContext()) override;
     const AtomicString& shadowPseudoId() const override;
     HTMLInputElement* hostInput() const;
     void setPositionFromPoint(const LayoutPoint&);
@@ -61,7 +61,7 @@ public:
 private:
     SliderThumbElement(Document&);
     LayoutObject* createLayoutObject(const ComputedStyle&) override;
-    PassRefPtrWillBeRawPtr<Element> cloneElementWithoutAttributesAndChildren() override;
+    Element* cloneElementWithoutAttributesAndChildren() override;
     bool isDisabledFormControl() const override;
     bool matchesReadOnlyPseudoClass() const override;
     bool matchesReadWritePseudoClass() const override;
@@ -71,7 +71,7 @@ private:
     bool m_inDragMode;
 };
 
-inline PassRefPtrWillBeRawPtr<Element> SliderThumbElement::cloneElementWithoutAttributesAndChildren()
+inline Element* SliderThumbElement::cloneElementWithoutAttributesAndChildren()
 {
     return create(document());
 }
@@ -81,14 +81,33 @@ DEFINE_ELEMENT_TYPE_CASTS(SliderThumbElement, isHTMLElement());
 
 class SliderContainerElement final : public HTMLDivElement {
 public:
+    enum Direction {
+        Horizontal,
+        Vertical,
+        NoMove,
+    };
+
     DECLARE_NODE_FACTORY(SliderContainerElement);
+    HTMLInputElement* hostInput() const;
+    void defaultEventHandler(Event*) override;
+    void handleTouchEvent(TouchEvent*);
+    void updateTouchEventHandlerRegistry();
+    void didMoveToNewDocument(Document&) override;
+    void removeAllEventListeners() override;
 
 private:
     explicit SliderContainerElement(Document&);
     LayoutObject* createLayoutObject(const ComputedStyle&) override;
     const AtomicString& shadowPseudoId() const override;
+    Direction getDirection(LayoutPoint&, LayoutPoint&);
+    bool canSlide();
+
+    bool m_hasTouchEventHandler;
+    bool m_touchStarted;
+    Direction m_slidingDirection;
+    LayoutPoint m_startPoint;
 };
 
-}
+} // namespace blink
 
 #endif

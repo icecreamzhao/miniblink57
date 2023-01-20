@@ -6,7 +6,6 @@
  */
 
 #include "GrGLSL.h"
-<<<<<<< HEAD
 #include "GrGLSLCaps.h"
 #include "SkString.h"
 
@@ -23,25 +22,10 @@ bool GrGLSLSupportsNamedFragmentShaderOutputs(GrGLSLGeneration gen)
     case k310es_GrGLSLGeneration:
     case k320es_GrGLSLGeneration:
         return true;
-=======
-#include "SkString.h"
-
-bool GrGLSLSupportsNamedFragmentShaderOutputs(GrGLSLGeneration gen) {
-    switch (gen) {
-        case k110_GrGLSLGeneration:
-            return false;
-        case k130_GrGLSLGeneration:
-        case k140_GrGLSLGeneration:
-        case k150_GrGLSLGeneration:
-        case k330_GrGLSLGeneration:
-        case k310es_GrGLSLGeneration:
-            return true;
->>>>>>> miniblink49
     }
     return false;
 }
 
-<<<<<<< HEAD
 void GrGLSLAppendDefaultFloatPrecisionDeclaration(GrSLPrecision p,
     const GrGLSLCaps& glslCaps,
     SkString* out)
@@ -65,9 +49,6 @@ void GrGLSLAppendDefaultFloatPrecisionDeclaration(GrSLPrecision p,
 
 void GrGLSLMulVarBy4f(SkString* outAppend, const char* vec4VarName, const GrGLSLExpr4& mulFactor)
 {
-=======
-void GrGLSLMulVarBy4f(SkString* outAppend, const char* vec4VarName, const GrGLSLExpr4& mulFactor) {
->>>>>>> miniblink49
     if (mulFactor.isOnes()) {
         *outAppend = SkString();
     }

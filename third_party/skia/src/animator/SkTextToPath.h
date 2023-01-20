@@ -6,10 +6,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #ifndef SkTextToPath_DEFINED
 #define SkTextToPath_DEFINED
 
@@ -23,14 +19,9 @@ class SkText;
 class SkTextToPath : public SkADrawable {
     DECLARE_MEMBER_INFO(TextToPath);
     SkTextToPath();
-<<<<<<< HEAD
     bool draw(SkAnimateMaker&) override;
     void onEndElement(SkAnimateMaker&) override;
 
-=======
-    bool draw(SkAnimateMaker& ) override;
-    void onEndElement(SkAnimateMaker& ) override;
->>>>>>> miniblink49
 private:
     SkDrawPaint* paint;
     SkDrawPath* path;

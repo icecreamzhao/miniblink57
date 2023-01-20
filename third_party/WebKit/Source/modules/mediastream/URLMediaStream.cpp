@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "modules/mediastream/URLMediaStream.h"
 
 #include "core/dom/DOMURL.h"
@@ -50,26 +49,4 @@ String URLMediaStream::createObjectURL(ExecutionContext* executionContext,
     return DOMURL::createPublicURL(executionContext, stream);
 }
 
-=======
-#include "config.h"
-#include "modules/mediastream/URLMediaStream.h"
-
-#include "core/dom/DOMURL.h"
-#include "modules/mediastream/MediaStream.h"
-#include "wtf/MainThread.h"
-
-namespace blink {
-
-String URLMediaStream::createObjectURL(ExecutionContext* executionContext, MediaStream* stream)
-{
-    // Since WebWorkers cannot obtain Stream objects, we should be on the main thread.
-    ASSERT(isMainThread());
-
-    if (!executionContext || !stream)
-        return String();
-    return DOMURL::createPublicURL(executionContext, stream);
-}
-
-
->>>>>>> miniblink49
 } // namespace blink

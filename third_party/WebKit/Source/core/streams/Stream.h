@@ -31,9 +31,8 @@
 #ifndef Stream_h
 #define Stream_h
 
-#include "bindings/core/v8/ScriptWrappable.h"
 #include "core/CoreExport.h"
-#include "core/dom/ActiveDOMObject.h"
+#include "core/dom/SuspendableObject.h"
 #include "platform/heap/Handle.h"
 #include "platform/weborigin/KURL.h"
 #include "wtf/text/WTFString.h"
@@ -42,9 +41,10 @@ namespace blink {
 
 class ExecutionContext;
 
-class CORE_EXPORT Stream final : public GarbageCollectedFinalized<Stream>, public ScriptWrappable, public ActiveDOMObject {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(Stream);
-    DEFINE_WRAPPERTYPEINFO();
+class CORE_EXPORT Stream final : public GarbageCollectedFinalized<Stream>,
+                                 public SuspendableObject {
+    USING_GARBAGE_COLLECTED_MIXIN(Stream);
+
 public:
     static Stream* create(ExecutionContext* context, const String& mediaType)
     {
@@ -77,21 +77,22 @@ public:
     void neuter() { m_isNeutered = true; }
     bool isNeutered() const { return m_isNeutered; }
 
-    // Implementation of ActiveDOMObject.
+    // Implementation of SuspendableObject.
     //
     // FIXME: Implement suspend() and resume() when necessary.
     void suspend() override;
     void resume() override;
-    void stop() override;
+    void contextDestroyed(ExecutionContext*) override;
 
     DECLARE_VIRTUAL_TRACE();
 
 protected:
     Stream(ExecutionContext*, const String& mediaType);
 
-    // This is an internal URL referring to the blob data associated with this object. It serves
-    // as an identifier for this blob. The internal URL is never used to source the blob's content
-    // into an HTML or for FileRead'ing, public blob URLs must be used for those purposes.
+    // This is an internal URL referring to the blob data associated with this
+    // object. It serves as an identifier for this blob. The internal URL is never
+    // used to source the blob's content into an HTML or for FileRead'ing, public
+    // blob URLs must be used for those purposes.
     KURL m_internalURL;
 
     String m_mediaType;

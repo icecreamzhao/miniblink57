@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -9,34 +5,20 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #include "SkStrokerPriv.h"
 #include "SkGeometry.h"
 #include "SkPath.h"
 
 static void ButtCapper(SkPath* path, const SkPoint& pivot,
-<<<<<<< HEAD
     const SkVector& normal, const SkPoint& stop,
     SkPath*)
-=======
-                       const SkVector& normal, const SkPoint& stop,
-                       SkPath*)
->>>>>>> miniblink49
 {
     path->lineTo(stop.fX, stop.fY);
 }
 
 static void RoundCapper(SkPath* path, const SkPoint& pivot,
-<<<<<<< HEAD
     const SkVector& normal, const SkPoint& stop,
     SkPath*)
-=======
-                        const SkVector& normal, const SkPoint& stop,
-                        SkPath*)
->>>>>>> miniblink49
 {
     SkVector parallel;
     normal.rotateCW(&parallel);
@@ -48,31 +30,16 @@ static void RoundCapper(SkPath* path, const SkPoint& pivot,
 }
 
 static void SquareCapper(SkPath* path, const SkPoint& pivot,
-<<<<<<< HEAD
     const SkVector& normal, const SkPoint& stop,
     SkPath* otherPath)
-=======
-                         const SkVector& normal, const SkPoint& stop,
-                         SkPath* otherPath)
->>>>>>> miniblink49
 {
     SkVector parallel;
     normal.rotateCW(&parallel);
 
-<<<<<<< HEAD
     if (otherPath) {
         path->setLastPt(pivot.fX + normal.fX + parallel.fX, pivot.fY + normal.fY + parallel.fY);
         path->lineTo(pivot.fX - normal.fX + parallel.fX, pivot.fY - normal.fY + parallel.fY);
     } else {
-=======
-    if (otherPath)
-    {
-        path->setLastPt(pivot.fX + normal.fX + parallel.fX, pivot.fY + normal.fY + parallel.fY);
-        path->lineTo(pivot.fX - normal.fX + parallel.fX, pivot.fY - normal.fY + parallel.fY);
-    }
-    else
-    {
->>>>>>> miniblink49
         path->lineTo(pivot.fX + normal.fX + parallel.fX, pivot.fY + normal.fY + parallel.fY);
         path->lineTo(pivot.fX - normal.fX + parallel.fX, pivot.fY - normal.fY + parallel.fY);
         path->lineTo(stop.fX, stop.fY);
@@ -95,21 +62,12 @@ enum AngleType {
 
 static AngleType Dot2AngleType(SkScalar dot)
 {
-<<<<<<< HEAD
     // need more precise fixed normalization
     //  SkASSERT(SkScalarAbs(dot) <= SK_Scalar1 + SK_ScalarNearlyZero);
 
     if (dot >= 0) // shallow or line
         return SkScalarNearlyZero(SK_Scalar1 - dot) ? kNearlyLine_AngleType : kShallow_AngleType;
     else // sharp or 180
-=======
-// need more precise fixed normalization
-//  SkASSERT(SkScalarAbs(dot) <= SK_Scalar1 + SK_ScalarNearlyZero);
-
-    if (dot >= 0)   // shallow or line
-        return SkScalarNearlyZero(SK_Scalar1 - dot) ? kNearlyLine_AngleType : kShallow_AngleType;
-    else            // sharp or 180
->>>>>>> miniblink49
         return SkScalarNearlyZero(SK_Scalar1 + dot) ? kNearly180_AngleType : kSharp_AngleType;
 }
 
@@ -129,7 +87,6 @@ static void HandleInnerJoin(SkPath* inner, const SkPoint& pivot, const SkVector&
 }
 
 static void BluntJoiner(SkPath* outer, SkPath* inner, const SkVector& beforeUnitNormal,
-<<<<<<< HEAD
     const SkPoint& pivot, const SkVector& afterUnitNormal,
     SkScalar radius, SkScalar invMiterLimit, bool, bool)
 {
@@ -137,16 +94,6 @@ static void BluntJoiner(SkPath* outer, SkPath* inner, const SkVector& beforeUnit
     afterUnitNormal.scale(radius, &after);
 
     if (!is_clockwise(beforeUnitNormal, afterUnitNormal)) {
-=======
-                        const SkPoint& pivot, const SkVector& afterUnitNormal,
-                        SkScalar radius, SkScalar invMiterLimit, bool, bool)
-{
-    SkVector    after;
-    afterUnitNormal.scale(radius, &after);
-
-    if (!is_clockwise(beforeUnitNormal, afterUnitNormal))
-    {
->>>>>>> miniblink49
         SkTSwap<SkPath*>(outer, inner);
         after.negate();
     }
@@ -156,48 +103,27 @@ static void BluntJoiner(SkPath* outer, SkPath* inner, const SkVector& beforeUnit
 }
 
 static void RoundJoiner(SkPath* outer, SkPath* inner, const SkVector& beforeUnitNormal,
-<<<<<<< HEAD
     const SkPoint& pivot, const SkVector& afterUnitNormal,
     SkScalar radius, SkScalar invMiterLimit, bool, bool)
 {
     SkScalar dotProd = SkPoint::DotProduct(beforeUnitNormal, afterUnitNormal);
     AngleType angleType = Dot2AngleType(dotProd);
-=======
-                        const SkPoint& pivot, const SkVector& afterUnitNormal,
-                        SkScalar radius, SkScalar invMiterLimit, bool, bool)
-{
-    SkScalar    dotProd = SkPoint::DotProduct(beforeUnitNormal, afterUnitNormal);
-    AngleType   angleType = Dot2AngleType(dotProd);
->>>>>>> miniblink49
 
     if (angleType == kNearlyLine_AngleType)
         return;
 
-<<<<<<< HEAD
     SkVector before = beforeUnitNormal;
     SkVector after = afterUnitNormal;
     SkRotationDirection dir = kCW_SkRotationDirection;
 
     if (!is_clockwise(before, after)) {
-=======
-    SkVector            before = beforeUnitNormal;
-    SkVector            after = afterUnitNormal;
-    SkRotationDirection dir = kCW_SkRotationDirection;
-
-    if (!is_clockwise(before, after))
-    {
->>>>>>> miniblink49
         SkTSwap<SkPath*>(outer, inner);
         before.negate();
         after.negate();
         dir = kCCW_SkRotationDirection;
     }
 
-<<<<<<< HEAD
     SkMatrix matrix;
-=======
-    SkMatrix    matrix;
->>>>>>> miniblink49
     matrix.setScale(radius, radius);
     matrix.postTranslate(pivot.fX, pivot.fY);
     SkConic conics[SkConic::kMaxConicsForArc];
@@ -211,7 +137,6 @@ static void RoundJoiner(SkPath* outer, SkPath* inner, const SkVector& beforeUnit
     }
 }
 
-<<<<<<< HEAD
 #define kOneOverSqrt2 (0.707106781f)
 
 static void MiterJoiner(SkPath* outer, SkPath* inner, const SkVector& beforeUnitNormal,
@@ -231,39 +156,12 @@ static void MiterJoiner(SkPath* outer, SkPath* inner, const SkVector& beforeUnit
     if (angleType == kNearlyLine_AngleType)
         return;
     if (angleType == kNearly180_AngleType) {
-=======
-#define kOneOverSqrt2   (0.707106781f)
-
-static void MiterJoiner(SkPath* outer, SkPath* inner, const SkVector& beforeUnitNormal,
-                        const SkPoint& pivot, const SkVector& afterUnitNormal,
-                        SkScalar radius, SkScalar invMiterLimit,
-                        bool prevIsLine, bool currIsLine)
-{
-    // negate the dot since we're using normals instead of tangents
-    SkScalar    dotProd = SkPoint::DotProduct(beforeUnitNormal, afterUnitNormal);
-    AngleType   angleType = Dot2AngleType(dotProd);
-    SkVector    before = beforeUnitNormal;
-    SkVector    after = afterUnitNormal;
-    SkVector    mid;
-    SkScalar    sinHalfAngle;
-    bool        ccw;
-
-    if (angleType == kNearlyLine_AngleType)
-        return;
-    if (angleType == kNearly180_AngleType)
-    {
->>>>>>> miniblink49
         currIsLine = false;
         goto DO_BLUNT;
     }
 
     ccw = !is_clockwise(before, after);
-<<<<<<< HEAD
     if (ccw) {
-=======
-    if (ccw)
-    {
->>>>>>> miniblink49
         SkTSwap<SkPath*>(outer, inner);
         before.negate();
         after.negate();
@@ -275,16 +173,9 @@ static void MiterJoiner(SkPath* outer, SkPath* inner, const SkVector& beforeUnit
         that (for speed an accuracy).
         Note: we only need to check one normal if dot==0
     */
-<<<<<<< HEAD
     if (0 == dotProd && invMiterLimit <= kOneOverSqrt2) {
         mid.set(SkScalarMul(before.fX + after.fX, radius),
             SkScalarMul(before.fY + after.fY, radius));
-=======
-    if (0 == dotProd && invMiterLimit <= kOneOverSqrt2)
-    {
-        mid.set(SkScalarMul(before.fX + after.fX, radius),
-                SkScalarMul(before.fY + after.fY, radius));
->>>>>>> miniblink49
         goto DO_MITER;
     }
 
@@ -297,32 +188,17 @@ static void MiterJoiner(SkPath* outer, SkPath* inner, const SkVector& beforeUnit
         hence 1 + dot instead of 1 - dot in the formula
     */
     sinHalfAngle = SkScalarSqrt(SkScalarHalf(SK_Scalar1 + dotProd));
-<<<<<<< HEAD
     if (sinHalfAngle < invMiterLimit) {
-=======
-    if (sinHalfAngle < invMiterLimit)
-    {
->>>>>>> miniblink49
         currIsLine = false;
         goto DO_BLUNT;
     }
 
     // choose the most accurate way to form the initial mid-vector
-<<<<<<< HEAD
     if (angleType == kSharp_AngleType) {
         mid.set(after.fY - before.fY, before.fX - after.fX);
         if (ccw)
             mid.negate();
     } else
-=======
-    if (angleType == kSharp_AngleType)
-    {
-        mid.set(after.fY - before.fY, before.fX - after.fX);
-        if (ccw)
-            mid.negate();
-    }
-    else
->>>>>>> miniblink49
         mid.set(before.fX + after.fX, before.fY + after.fY);
 
     mid.setLength(radius / sinHalfAngle);

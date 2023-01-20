@@ -28,14 +28,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/timing/MemoryInfo.h"
 
 #include "core/frame/LocalFrame.h"
 #include "core/frame/Settings.h"
 #include "platform/RuntimeEnabledFeatures.h"
 #include "wtf/CurrentTime.h"
-#include "wtf/MainThread.h"
 #include "wtf/MathExtras.h"
 #include "wtf/ThreadSpecific.h"
 #include <limits>
@@ -55,7 +53,9 @@ static void getHeapSize(HeapInfo& info)
 }
 
 class HeapSizeCache {
-    WTF_MAKE_NONCOPYABLE(HeapSizeCache); WTF_MAKE_FAST_ALLOCATED(HeapSizeCache);
+    WTF_MAKE_NONCOPYABLE(HeapSizeCache);
+    USING_FAST_MALLOC(HeapSizeCache);
+
 public:
     HeapSizeCache()
         : m_lastUpdateTime(monotonicallyIncreasingTime() - TwentyMinutesInSeconds)
@@ -70,15 +70,18 @@ public:
 
     static HeapSizeCache& forCurrentThread()
     {
-        AtomicallyInitializedStaticReference(ThreadSpecific<HeapSizeCache>, heapSizeCache, new ThreadSpecific<HeapSizeCache>);
+        DEFINE_THREAD_SAFE_STATIC_LOCAL(ThreadSpecific<HeapSizeCache>,
+            heapSizeCache,
+            new ThreadSpecific<HeapSizeCache>);
         return *heapSizeCache;
     }
 
 private:
     void maybeUpdate()
     {
-        // We rate-limit queries to once every twenty minutes to make it more difficult
-        // for attackers to compare memory usage before and after some event.
+        // We rate-limit queries to once every twenty minutes to make it more
+        // difficult for attackers to compare memory usage before and after some
+        // event.
         double now = monotonicallyIncreasingTime();
         if (now - m_lastUpdateTime >= TwentyMinutesInSeconds) {
             update();
@@ -99,10 +102,10 @@ private:
     HeapInfo m_info;
 };
 
-// We quantize the sizes to make it more difficult for an attacker to see precise
-// impact of operations on memory. The values are used for performance tuning,
-// and hence don't need to be as refined when the value is large, so we threshold
-// at a list of exponentially separated buckets.
+// We quantize the sizes to make it more difficult for an attacker to see
+// precise impact of operations on memory. The values are used for performance
+// tuning, and hence don't need to be as refined when the value is large, so we
+// threshold at a list of exponentially separated buckets.
 size_t quantizeMemorySize(size_t size)
 {
     const int numberOfBuckets = 100;

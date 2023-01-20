@@ -23,10 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/speech/PlatformSpeechSynthesizer.h"
 
 #include "platform/exported/WebSpeechSynthesizerClientImpl.h"
@@ -35,27 +31,18 @@
 #include "public/platform/WebSpeechSynthesisUtterance.h"
 #include "public/platform/WebSpeechSynthesizer.h"
 #include "public/platform/WebSpeechSynthesizerClient.h"
-<<<<<<< HEAD
 #include "wtf/PtrUtil.h"
 
 namespace blink {
 
 PlatformSpeechSynthesizer* PlatformSpeechSynthesizer::create(
     PlatformSpeechSynthesizerClient* client)
-=======
-#include "wtf/RetainPtr.h"
-
-namespace blink {
-
-PlatformSpeechSynthesizer* PlatformSpeechSynthesizer::create(PlatformSpeechSynthesizerClient* client)
->>>>>>> miniblink49
 {
     PlatformSpeechSynthesizer* synthesizer = new PlatformSpeechSynthesizer(client);
     synthesizer->initializeVoiceList();
     return synthesizer;
 }
 
-<<<<<<< HEAD
 PlatformSpeechSynthesizer::PlatformSpeechSynthesizer(
     PlatformSpeechSynthesizerClient* client)
     : m_speechSynthesizerClient(client)
@@ -69,20 +56,6 @@ PlatformSpeechSynthesizer::~PlatformSpeechSynthesizer() { }
 
 void PlatformSpeechSynthesizer::speak(
     PlatformSpeechSynthesisUtterance* utterance)
-=======
-PlatformSpeechSynthesizer::PlatformSpeechSynthesizer(PlatformSpeechSynthesizerClient* client)
-    : m_speechSynthesizerClient(client)
-{
-    m_webSpeechSynthesizerClient = new WebSpeechSynthesizerClientImpl(this, client);
-    m_webSpeechSynthesizer = adoptPtr(Platform::current()->createSpeechSynthesizer(m_webSpeechSynthesizerClient));
-}
-
-PlatformSpeechSynthesizer::~PlatformSpeechSynthesizer()
-{
-}
-
-void PlatformSpeechSynthesizer::speak(PlatformSpeechSynthesisUtterance* utterance)
->>>>>>> miniblink49
 {
     if (m_webSpeechSynthesizer && m_webSpeechSynthesizerClient)
         m_webSpeechSynthesizer->speak(WebSpeechSynthesisUtterance(utterance));
@@ -90,61 +63,37 @@ void PlatformSpeechSynthesizer::speak(PlatformSpeechSynthesisUtterance* utteranc
 
 void PlatformSpeechSynthesizer::pause()
 {
-<<<<<<< HEAD
     if (m_webSpeechSynthesizer)
-=======
-    if (m_webSpeechSynthesizer.get())
->>>>>>> miniblink49
         m_webSpeechSynthesizer->pause();
 }
 
 void PlatformSpeechSynthesizer::resume()
 {
-<<<<<<< HEAD
     if (m_webSpeechSynthesizer)
-=======
-    if (m_webSpeechSynthesizer.get())
->>>>>>> miniblink49
         m_webSpeechSynthesizer->resume();
 }
 
 void PlatformSpeechSynthesizer::cancel()
 {
-<<<<<<< HEAD
     if (m_webSpeechSynthesizer)
         m_webSpeechSynthesizer->cancel();
 }
 
 void PlatformSpeechSynthesizer::setVoiceList(
     Vector<RefPtr<PlatformSpeechSynthesisVoice>>& voices)
-=======
-    if (m_webSpeechSynthesizer.get())
-        m_webSpeechSynthesizer->cancel();
-}
-
-void PlatformSpeechSynthesizer::setVoiceList(HeapVector<Member<PlatformSpeechSynthesisVoice>>& voices)
->>>>>>> miniblink49
 {
     m_voiceList = voices;
 }
 
 void PlatformSpeechSynthesizer::initializeVoiceList()
 {
-<<<<<<< HEAD
     if (m_webSpeechSynthesizer)
-=======
-    if (m_webSpeechSynthesizer.get())
->>>>>>> miniblink49
         m_webSpeechSynthesizer->updateVoiceList();
 }
 
 DEFINE_TRACE(PlatformSpeechSynthesizer)
 {
     visitor->trace(m_speechSynthesizerClient);
-<<<<<<< HEAD
-=======
-    visitor->trace(m_voiceList);
->>>>>>> miniblink49
     visitor->trace(m_webSpeechSynthesizerClient);
 }
 

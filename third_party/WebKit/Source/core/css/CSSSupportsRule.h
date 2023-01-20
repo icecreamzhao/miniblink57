@@ -29,35 +29,33 @@
 #ifndef CSSSupportsRule_h
 #define CSSSupportsRule_h
 
-#include "core/css/CSSGroupingRule.h"
+#include "core/css/CSSConditionRule.h"
 
 namespace blink {
 
 class StyleRuleSupports;
 
-class CSSSupportsRule final : public CSSGroupingRule {
+class CSSSupportsRule final : public CSSConditionRule {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<CSSSupportsRule> create(StyleRuleSupports* rule, CSSStyleSheet* sheet)
+    static CSSSupportsRule* create(StyleRuleSupports* rule,
+        CSSStyleSheet* sheet)
     {
-        return adoptRefWillBeNoop(new CSSSupportsRule(rule, sheet));
+        return new CSSSupportsRule(rule, sheet);
     }
 
-    virtual ~CSSSupportsRule() { }
+    ~CSSSupportsRule() override { }
 
-    virtual String cssText() const override;
-
-    String conditionText() const;
-
-    DEFINE_INLINE_VIRTUAL_TRACE() { CSSGroupingRule::trace(visitor); }
+    String cssText() const override;
 
 private:
     CSSSupportsRule(StyleRuleSupports*, CSSStyleSheet*);
 
-    virtual CSSRule::Type type() const override { return SUPPORTS_RULE; }
+    CSSRule::Type type() const override { return kSupportsRule; }
 };
 
-DEFINE_CSS_RULE_TYPE_CASTS(CSSSupportsRule, SUPPORTS_RULE);
+DEFINE_CSS_RULE_TYPE_CASTS(CSSSupportsRule, kSupportsRule);
 
 } // namespace blink
 

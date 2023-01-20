@@ -31,6 +31,7 @@
 #ifndef SVGAnimatedNumber_h
 #define SVGAnimatedNumber_h
 
+#include "bindings/core/v8/ScriptWrappable.h"
 #include "core/svg/SVGNumberTearOff.h"
 #include "core/svg/properties/SVGAnimatedProperty.h"
 #include "platform/heap/Handle.h"
@@ -40,31 +41,42 @@ namespace blink {
 class SVGAnimatedNumberOptionalNumber;
 
 // SVG Spec: http://www.w3.org/TR/SVG11/types.html#InterfaceSVGAnimatedNumber
-class SVGAnimatedNumber : public SVGAnimatedProperty<SVGNumber> {
+class SVGAnimatedNumber : public SVGAnimatedProperty<SVGNumber>,
+                          public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<SVGAnimatedNumber> create(SVGElement* contextElement, const QualifiedName& attributeName, PassRefPtrWillBeRawPtr<SVGNumber> initialValue)
+    static SVGAnimatedNumber* create(SVGElement* contextElement,
+        const QualifiedName& attributeName,
+        SVGNumber* initialValue)
     {
-        return adoptRefWillBeNoop(new SVGAnimatedNumber(contextElement, attributeName, initialValue));
+        return new SVGAnimatedNumber(contextElement, attributeName, initialValue);
     }
 
     void synchronizeAttribute() override;
 
-    void setParentOptionalNumber(SVGAnimatedNumberOptionalNumber* numberOptionalNumber)
+    void setParentOptionalNumber(
+        SVGAnimatedNumberOptionalNumber* numberOptionalNumber)
     {
         m_parentNumberOptionalNumber = numberOptionalNumber;
     }
 
     DECLARE_VIRTUAL_TRACE();
 
+    DECLARE_VIRTUAL_TRACE_WRAPPERS();
+
 protected:
-    SVGAnimatedNumber(SVGElement* contextElement, const QualifiedName& attributeName, PassRefPtrWillBeRawPtr<SVGNumber> initialValue)
-        : SVGAnimatedProperty<SVGNumber>(contextElement, attributeName, initialValue)
+    SVGAnimatedNumber(SVGElement* contextElement,
+        const QualifiedName& attributeName,
+        SVGNumber* initialValue)
+        : SVGAnimatedProperty<SVGNumber>(contextElement,
+            attributeName,
+            initialValue)
         , m_parentNumberOptionalNumber(nullptr)
     {
     }
 
-    RawPtrWillBeMember<SVGAnimatedNumberOptionalNumber> m_parentNumberOptionalNumber;
+    Member<SVGAnimatedNumberOptionalNumber> m_parentNumberOptionalNumber;
 };
 
 } // namespace blink

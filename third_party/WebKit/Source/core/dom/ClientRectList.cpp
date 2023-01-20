@@ -24,20 +24,17 @@
  *
  */
 
-#include "config.h"
 #include "core/dom/ClientRectList.h"
 
 namespace blink {
 
-ClientRectList::ClientRectList()
-{
-}
+ClientRectList::ClientRectList() { }
 
 ClientRectList::ClientRectList(const Vector<FloatQuad>& quads)
 {
     m_list.reserveInitialCapacity(quads.size());
-    for (size_t i = 0; i < quads.size(); ++i)
-        m_list.append(ClientRect::create(quads[i].boundingBox()));
+    for (const auto& quad : quads)
+        m_list.push_back(ClientRect::create(quad.boundingBox()));
 }
 
 unsigned ClientRectList::length() const

@@ -27,11 +27,8 @@
 #define DateTimeFormat_h
 
 #include "platform/PlatformExport.h"
-<<<<<<< HEAD
 #include "platform/heap/Handle.h"
 #include "wtf/Allocator.h"
-=======
->>>>>>> miniblink49
 #include "wtf/Forward.h"
 
 namespace blink {
@@ -40,11 +37,8 @@ namespace blink {
 // standard 35, Locale Data Markup Language (LDML)[1].
 // [1] LDML http://unicode.org/reports/tr35/tr35-6.html#Date_Format_Patterns
 class PLATFORM_EXPORT DateTimeFormat {
-<<<<<<< HEAD
     STATIC_ONLY(DateTimeFormat);
 
-=======
->>>>>>> miniblink49
 public:
     enum FieldType {
         FieldTypeInvalid,
@@ -105,15 +99,11 @@ public:
     };
 
     class TokenHandler {
-<<<<<<< HEAD
         STACK_ALLOCATED();
         WTF_MAKE_NONCOPYABLE(TokenHandler);
 
     public:
         TokenHandler() { }
-=======
-    public:
->>>>>>> miniblink49
         virtual ~TokenHandler() { }
         virtual void visitField(FieldType, int numberOfPatternCharacters) = 0;
         virtual void visitLiteral(const String&) = 0;
@@ -121,11 +111,7 @@ public:
 
     // Returns true if succeeded, false if failed.
     static bool parse(const String&, TokenHandler&);
-<<<<<<< HEAD
     static void quoteAndappend(const String&, StringBuilder&);
-=======
-    static void quoteAndAppendLiteral(const String&, StringBuilder&);
->>>>>>> miniblink49
 };
 
 } // namespace blink

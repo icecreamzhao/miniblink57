@@ -5,7 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "SkOpts.h"
 #include "SkSmallAllocator.h"
 #include "SkSpriteBlitter.h"
@@ -17,21 +16,12 @@ SkSpriteBlitter::SkSpriteBlitter(const SkPixmap& source)
 
 void SkSpriteBlitter::setup(const SkPixmap& dst, int left, int top, const SkPaint& paint)
 {
-=======
-#include "SkSmallAllocator.h"
-#include "SkSpriteBlitter.h"
-
-SkSpriteBlitter::SkSpriteBlitter(const SkPixmap& source) : fSource(source) {}
-
-void SkSpriteBlitter::setup(const SkPixmap& dst, int left, int top, const SkPaint& paint) {
->>>>>>> miniblink49
     fDst = dst;
     fLeft = left;
     fTop = top;
     fPaint = &paint;
 }
 
-<<<<<<< HEAD
 void SkSpriteBlitter::blitH(int x, int y, int width)
 {
     SkDEBUGFAIL("how did we get here?");
@@ -170,33 +160,6 @@ private:
 SkBlitter* SkBlitter::ChooseSprite(const SkPixmap& dst, const SkPaint& paint,
     const SkPixmap& source, int left, int top, SkTBlitterAllocator* allocator)
 {
-=======
-#ifdef SK_DEBUG
-void SkSpriteBlitter::blitH(int x, int y, int width) {
-    SkDEBUGFAIL("how did we get here?");
-}
-
-void SkSpriteBlitter::blitAntiH(int x, int y, const SkAlpha antialias[],
-                                const int16_t runs[]) {
-    SkDEBUGFAIL("how did we get here?");
-}
-
-void SkSpriteBlitter::blitV(int x, int y, int height, SkAlpha alpha) {
-    SkDEBUGFAIL("how did we get here?");
-}
-
-void SkSpriteBlitter::blitMask(const SkMask&, const SkIRect& clip) {
-    SkDEBUGFAIL("how did we get here?");
-}
-#endif
-
-///////////////////////////////////////////////////////////////////////////////
-
-// returning null means the caller will call SkBlitter::Choose() and
-// have wrapped the source bitmap inside a shader
-SkBlitter* SkBlitter::ChooseSprite(const SkPixmap& dst, const SkPaint& paint,
-        const SkPixmap& source, int left, int top, SkTBlitterAllocator* allocator) {
->>>>>>> miniblink49
     /*  We currently ignore antialiasing and filtertype, meaning we will take our
         special blitters regardless of these settings. Ignoring filtertype seems fine
         since by definition there is no scale in the matrix. Ignoring antialiasing is
@@ -206,7 +169,6 @@ SkBlitter* SkBlitter::ChooseSprite(const SkPixmap& dst, const SkPaint& paint,
         paint and return null if it is set, forcing the client to take the slow shader case
         (which does respect soft edges).
     */
-<<<<<<< HEAD
     SkASSERT(allocator != nullptr);
 
     // Defer to the general code if the pixels are unpremultipled. This case is not common,
@@ -221,18 +183,10 @@ SkBlitter* SkBlitter::ChooseSprite(const SkPixmap& dst, const SkPaint& paint,
         blitter = allocator->createT<SkSpriteBlitter_Src_SrcOver>(source);
     } else {
         switch (dst.colorType()) {
-=======
-    SkASSERT(allocator != NULL);
-
-    SkSpriteBlitter* blitter;
-
-    switch (dst.colorType()) {
->>>>>>> miniblink49
         case kRGB_565_SkColorType:
             blitter = SkSpriteBlitter::ChooseD16(source, paint, allocator);
             break;
         case kN32_SkColorType:
-<<<<<<< HEAD
             if (dst.info().gammaCloseToSRGB()) {
                 blitter = SkSpriteBlitter::ChooseS32(source, paint, allocator);
             } else {
@@ -245,13 +199,6 @@ SkBlitter* SkBlitter::ChooseSprite(const SkPixmap& dst, const SkPaint& paint,
         default:
             break;
         }
-=======
-            blitter = SkSpriteBlitter::ChooseD32(source, paint, allocator);
-            break;
-        default:
-            blitter = NULL;
-            break;
->>>>>>> miniblink49
     }
 
     if (blitter) {

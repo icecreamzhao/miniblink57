@@ -13,7 +13,6 @@
 namespace v8 {
 namespace internal {
 
-<<<<<<< HEAD
     class CpuProfiler;
     class Isolate;
 
@@ -43,34 +42,3 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_PROFILER_TRACING_CPU_PROFILER_H_
-=======
-class CpuProfiler;
-class Isolate;
-
-class TracingCpuProfilerImpl final
-    : private v8::TracingController::TraceStateObserver {
- public:
-  explicit TracingCpuProfilerImpl(Isolate*);
-  ~TracingCpuProfilerImpl() override;
-
-  // v8::TracingController::TraceStateObserver
-  void OnTraceEnabled() final;
-  void OnTraceDisabled() final;
-
- private:
-  void StartProfiling();
-  void StopProfiling();
-
-  Isolate* isolate_;
-  std::unique_ptr<CpuProfiler> profiler_;
-  bool profiling_enabled_;
-  base::Mutex mutex_;
-
-  DISALLOW_COPY_AND_ASSIGN(TracingCpuProfilerImpl);
-};
-
-}  // namespace internal
-}  // namespace v8
-
-#endif  // V8_PROFILER_TRACING_CPU_PROFILER_H_
->>>>>>> miniblink49

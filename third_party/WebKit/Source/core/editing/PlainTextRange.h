@@ -27,7 +27,9 @@
 #define PlainTextRange_h
 
 #include "core/CoreExport.h"
+#include "core/editing/EphemeralRange.h"
 #include "platform/heap/Handle.h"
+#include "wtf/Allocator.h"
 #include "wtf/NotFound.h"
 #include "wtf/PassRefPtr.h"
 
@@ -37,28 +39,45 @@ class ContainerNode;
 class Range;
 
 class CORE_EXPORT PlainTextRange {
+    STACK_ALLOCATED();
+
 public:
     PlainTextRange();
     PlainTextRange(const PlainTextRange&);
     explicit PlainTextRange(int location);
     PlainTextRange(int start, int end);
 
-    size_t end() const { ASSERT(!isNull()); return m_end; }
-    size_t start() const { ASSERT(!isNull()); return m_start; }
+    size_t end() const
+    {
+        DCHECK(isNotNull());
+        return m_end;
+    }
+    size_t start() const
+    {
+        DCHECK(isNotNull());
+        return m_start;
+    }
     bool isNull() const { return m_start == kNotFound; }
     bool isNotNull() const { return m_start != kNotFound; }
-    size_t length() const { ASSERT(!isNull()); return m_end - m_start; }
+    size_t length() const
+    {
+        DCHECK(isNotNull());
+        return m_end - m_start;
+    }
 
-    PassRefPtrWillBeRawPtr<Range> createRange(const ContainerNode& scope) const;
-    PassRefPtrWillBeRawPtr<Range> createRangeForSelection(const ContainerNode& scope) const;
+    EphemeralRange createRange(const ContainerNode& scope) const;
+    EphemeralRange createRangeForSelection(const ContainerNode& scope) const;
 
+    static PlainTextRange create(const ContainerNode& scope,
+        const EphemeralRange&);
     static PlainTextRange create(const ContainerNode& scope, const Range&);
 
 private:
     PlainTextRange& operator=(const PlainTextRange&) = delete;
 
-    enum GetRangeFor { ForGeneric, ForSelection };
-    PassRefPtrWillBeRawPtr<Range> createRangeFor(const ContainerNode& scope, GetRangeFor) const;
+    enum GetRangeFor { ForGeneric,
+        ForSelection };
+    EphemeralRange createRangeFor(const ContainerNode& scope, GetRangeFor) const;
 
     const size_t m_start;
     const size_t m_end;

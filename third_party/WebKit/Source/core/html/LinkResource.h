@@ -31,6 +31,7 @@
 #ifndef LinkResource_h
 #define LinkResource_h
 
+#include "core/CoreExport.h"
 #include "core/fetch/FetchRequest.h"
 #include "platform/heap/Handle.h"
 #include "platform/weborigin/KURL.h"
@@ -41,14 +42,15 @@ namespace blink {
 class HTMLLinkElement;
 class LocalFrame;
 
-class LinkResource : public NoBaseWillBeGarbageCollectedFinalized<LinkResource>  {
-    WTF_MAKE_NONCOPYABLE(LinkResource); WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(LinkResource);
+class CORE_EXPORT LinkResource
+    : public GarbageCollectedFinalized<LinkResource> {
+    WTF_MAKE_NONCOPYABLE(LinkResource);
+
 public:
-    enum Type {
-        Style,
+    enum LinkResourceType { Style,
         Import,
-        Manifest
-    };
+        Manifest,
+        Other };
 
     explicit LinkResource(HTMLLinkElement*);
     virtual ~LinkResource();
@@ -56,7 +58,7 @@ public:
     bool shouldLoadResource() const;
     LocalFrame* loadingFrame() const;
 
-    virtual Type type() const = 0;
+    virtual LinkResourceType type() const = 0;
     virtual void process() = 0;
     virtual void ownerRemoved() { }
     virtual void ownerInserted() { }
@@ -65,21 +67,22 @@ public:
     DECLARE_VIRTUAL_TRACE();
 
 protected:
-    RawPtrWillBeMember<HTMLLinkElement> m_owner;
+    Member<HTMLLinkElement> m_owner;
 };
 
 class LinkRequestBuilder {
     STACK_ALLOCATED();
+
 public:
     explicit LinkRequestBuilder(HTMLLinkElement* owner);
 
     bool isValid() const { return !m_url.isEmpty() && m_url.isValid(); }
     const KURL& url() const { return m_url; }
     const AtomicString& charset() const { return m_charset; }
-    FetchRequest build(bool blocking) const;
+    FetchRequest build(bool lowPriority) const;
 
 private:
-    RawPtrWillBeMember<HTMLLinkElement> m_owner;
+    Member<HTMLLinkElement> m_owner;
     KURL m_url;
     AtomicString m_charset;
 };

@@ -31,15 +31,19 @@
 
 namespace blink {
 
+// See WebFrameLoadType in public/web/WebFrameLoadType.h for details.
 enum FrameLoadType {
     FrameLoadTypeStandard,
     FrameLoadTypeBackForward,
     FrameLoadTypeReload,
-    FrameLoadTypeSame, // user loads same URL again (but not reload button)
-    FrameLoadTypeRedirectWithLockedBackForwardList,
+    FrameLoadTypeReloadMainResource,
+    FrameLoadTypeReplaceCurrentItem,
     FrameLoadTypeInitialInChildFrame,
+#if ENABLE_WML
+    FrameLoadTypeBackWMLDeckNotAccessible,
+#endif
     FrameLoadTypeInitialHistoryLoad,
-    FrameLoadTypeReloadFromOrigin,
+    FrameLoadTypeReloadBypassingCache,
 };
 
 enum NavigationType {
@@ -56,13 +60,13 @@ enum ObjectContentType {
     ObjectContentImage,
     ObjectContentFrame,
     ObjectContentNetscapePlugin,
-    ObjectContentOtherPlugin
 };
 
-enum ShouldSendReferrer {
-    MaybeSendReferrer,
-    NeverSendReferrer
-};
+enum ShouldSendReferrer { MaybeSendReferrer,
+    NeverSendReferrer };
+
+enum ShouldSetOpener { MaybeSetOpener,
+    NeverSetOpener };
 
 enum ReasonForCallingAllowPlugins {
     AboutToInstantiatePlugin,
@@ -79,10 +83,8 @@ enum SameDocumentNavigationSource {
     SameDocumentNavigationHistoryApi,
 };
 
-enum HistoryLoadType {
-    HistorySameDocumentLoad,
-    HistoryDifferentDocumentLoad
-};
+enum HistoryLoadType { HistorySameDocumentLoad,
+    HistoryDifferentDocumentLoad };
 
 enum HistoryCommitType {
     StandardCommit,
@@ -96,6 +98,13 @@ enum HistoryScrollRestorationType {
     ScrollRestorationManual
 };
 
-}
+enum class ProgressBarCompletion {
+    LoadEvent,
+    ResourcesBeforeDCL,
+    DOMContentLoaded,
+    ResourcesBeforeDCLAndSameOriginIFrames
+};
+
+} // namespace blink
 
 #endif

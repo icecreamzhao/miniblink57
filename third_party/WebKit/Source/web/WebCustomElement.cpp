@@ -28,27 +28,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "public/web/WebCustomElement.h"
 
 #include "core/dom/custom/V0CustomElement.h"
-=======
-#include "config.h"
-#include "public/web/WebCustomElement.h"
-
-#include "core/dom/custom/CustomElement.h"
->>>>>>> miniblink49
 #include "public/platform/WebString.h"
 
 namespace blink {
 
 void WebCustomElement::addEmbedderCustomElementName(const WebString& name)
 {
-<<<<<<< HEAD
     V0CustomElement::addEmbedderCustomElementName(name);
-=======
-    CustomElement::addEmbedderCustomElementName(name);
->>>>>>> miniblink49
 }
 
 } // namespace blink

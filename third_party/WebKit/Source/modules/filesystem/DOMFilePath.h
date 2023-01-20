@@ -31,21 +31,15 @@
 #ifndef DOMFilePath_h
 #define DOMFilePath_h
 
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
-=======
->>>>>>> miniblink49
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
 // DOMFileSystem path utilities. All methods in this class are static.
 class DOMFilePath {
-<<<<<<< HEAD
     STATIC_ONLY(DOMFilePath);
 
-=======
->>>>>>> miniblink49
 public:
     static const char separator;
     static const char root[];
@@ -56,24 +50,16 @@ public:
     // Returns the parent directory path of the given path.
     static String getDirectory(const String& path);
 
-<<<<<<< HEAD
     // Checks if a given path is a parent of mayBeChild. This method assumes given
     // paths are absolute and do not have extra references to a parent (i.e.
     // "../").
-=======
-    // Checks if a given path is a parent of mayBeChild. This method assumes given paths are absolute and do not have extra references to a parent (i.e. "../").
->>>>>>> miniblink49
     static bool isParentOf(const String& path, const String& mayBeChild);
 
     // Appends the separator at the end of the path if it's not there already.
     static String ensureDirectoryPath(const String& path);
 
-<<<<<<< HEAD
     // Returns a new path by appending a separator and the supplied path component
     // to the path.
-=======
-    // Returns a new path by appending a separator and the supplied path component to the path.
->>>>>>> miniblink49
     static String append(const String& path, const String& component);
 
     static bool isAbsolute(const String& path)
@@ -86,12 +72,8 @@ public:
         return path[path.length() - 1] == DOMFilePath::separator;
     }
 
-<<<<<<< HEAD
     // Evaluates all "../" and "./" segments. Note that "/../" expands to "/", so
     // you can't ever refer to anything above the root directory.
-=======
-    // Evaluates all "../" and "./" segments. Note that "/../" expands to "/", so you can't ever refer to anything above the root directory.
->>>>>>> miniblink49
     static String removeExtraParentReferences(const String& path);
 
     // Checks if the given path follows the FileSystem API naming restrictions.
@@ -99,12 +81,6 @@ public:
 
     // Checks if the given name follows the FileSystem API naming restrictions.
     static bool isValidName(const String& name);
-<<<<<<< HEAD
-=======
-
-private:
-    DOMFilePath() { }
->>>>>>> miniblink49
 };
 
 } // namespace blink

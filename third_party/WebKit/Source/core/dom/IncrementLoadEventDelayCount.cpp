@@ -2,47 +2,43 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "core/dom/IncrementLoadEventDelayCount.h"
 
 #include "core/dom/Document.h"
-
-#ifndef NDEBUG
-#include <set>
-std::set<void*>* g_activatingIncrementLoadEventDelayCount = nullptr;
-#endif
+#include "wtf/PtrUtil.h"
+#include <memory>
 
 namespace blink {
 
-PassOwnPtr<IncrementLoadEventDelayCount> IncrementLoadEventDelayCount::create(Document& document, void* objectForDebug)
+std::unique_ptr<IncrementLoadEventDelayCount>
+IncrementLoadEventDelayCount::create(Document& document)
 {
-    return adoptPtr(new IncrementLoadEventDelayCount(document, objectForDebug));
+    return WTF::wrapUnique(new IncrementLoadEventDelayCount(document));
 }
 
-IncrementLoadEventDelayCount::IncrementLoadEventDelayCount(Document& document, void* objectForDebug)
+IncrementLoadEventDelayCount::IncrementLoadEventDelayCount(Document& document)
     : m_document(&document)
 {
     document.incrementLoadEventDelayCount();
-#ifndef NDEBUG
-    if (!g_activatingIncrementLoadEventDelayCount)
-        g_activatingIncrementLoadEventDelayCount = new std::set<void*>();
-    g_activatingIncrementLoadEventDelayCount->insert(this);
-#endif
-    m_objectForDebug = objectForDebug;
 }
 
 IncrementLoadEventDelayCount::~IncrementLoadEventDelayCount()
 {
-    m_document->decrementLoadEventDelayCount();
-#ifndef NDEBUG
-    g_activatingIncrementLoadEventDelayCount->erase(this);
-#endif
+    if (m_document)
+        m_document->decrementLoadEventDelayCount();
+}
+
+void IncrementLoadEventDelayCount::clearAndCheckLoadEvent()
+{
+    m_document->decrementLoadEventDelayCountAndCheckLoadEvent();
+    m_document = nullptr;
 }
 
 void IncrementLoadEventDelayCount::documentChanged(Document& newDocument)
 {
     newDocument.incrementLoadEventDelayCount();
-    m_document->decrementLoadEventDelayCount();
+    if (m_document)
+        m_document->decrementLoadEventDelayCount();
     m_document = &newDocument;
 }
-}
+} // namespace blink

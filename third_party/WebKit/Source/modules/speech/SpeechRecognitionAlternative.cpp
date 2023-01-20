@@ -23,33 +23,20 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
-
->>>>>>> miniblink49
 #include "modules/speech/SpeechRecognitionAlternative.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 SpeechRecognitionAlternative* SpeechRecognitionAlternative::create(
     const String& transcript,
     double confidence)
-=======
-SpeechRecognitionAlternative* SpeechRecognitionAlternative::create(const String& transcript, double confidence)
->>>>>>> miniblink49
 {
     return new SpeechRecognitionAlternative(transcript, confidence);
 }
 
-<<<<<<< HEAD
 SpeechRecognitionAlternative::SpeechRecognitionAlternative(
     const String& transcript,
     double confidence)
-=======
-SpeechRecognitionAlternative::SpeechRecognitionAlternative(const String& transcript, double confidence)
->>>>>>> miniblink49
     : m_transcript(transcript)
     , m_confidence(confidence)
 {

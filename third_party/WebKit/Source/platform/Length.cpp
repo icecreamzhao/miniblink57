@@ -2,12 +2,8 @@
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
  *           (C) 1999 Antti Koivisto (koivisto@kde.org)
  *           (C) 2001 Dirk Mueller ( mueller@kde.org )
-<<<<<<< HEAD
  * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008 Apple Inc. All rights
  * reserved.
-=======
- * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008 Apple Inc. All rights reserved.
->>>>>>> miniblink49
  * Copyright (C) 2006 Andrew Wellington (proton@wiretapped.net)
  *
  * This library is free software; you can redistribute it and/or
@@ -27,105 +23,19 @@
  *
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/Length.h"
 
 #include "platform/CalculationValue.h"
 #include "platform/animation/AnimationUtilities.h"
-<<<<<<< HEAD
-=======
-#include "wtf/ASCIICType.h"
-#include "wtf/text/StringBuffer.h"
-#include "wtf/text/WTFString.h"
->>>>>>> miniblink49
 
 using namespace WTF;
 
 namespace blink {
 
-<<<<<<< HEAD
 class CalculationValueHandleMap {
     USING_FAST_MALLOC(CalculationValueHandleMap);
     WTF_MAKE_NONCOPYABLE(CalculationValueHandleMap);
 
-=======
-template<typename CharType>
-static unsigned splitLength(const CharType* data, unsigned length, unsigned& intLength, unsigned& doubleLength)
-{
-    ASSERT(length);
-
-    unsigned i = 0;
-    while (i < length && isSpaceOrNewline(data[i]))
-        ++i;
-    if (i < length && (data[i] == '+' || data[i] == '-'))
-        ++i;
-    while (i < length && isASCIIDigit(data[i]))
-        ++i;
-    intLength = i;
-    while (i < length && (isASCIIDigit(data[i]) || data[i] == '.'))
-        ++i;
-    doubleLength = i;
-
-    // IE quirk: Skip whitespace between the number and the % character (20 % => 20%).
-    while (i < length && isSpaceOrNewline(data[i]))
-        ++i;
-
-    return i;
-}
-
-template<typename CharType>
-static Length parseHTMLAreaCoordinate(const CharType* data, unsigned length)
-{
-    unsigned intLength;
-    unsigned doubleLength;
-    splitLength(data, length, intLength, doubleLength);
-
-    return Length(charactersToIntStrict(data, intLength), Fixed);
-}
-
-// FIXME: Per HTML5, this should follow the "rules for parsing a list of integers".
-Vector<Length> parseHTMLAreaElementCoords(const String& string)
-{
-    unsigned length = string.length();
-    StringBuffer<LChar> spacified(length);
-    for (unsigned i = 0; i < length; i++) {
-        UChar cc = string[i];
-        if (cc > '9' || (cc < '0' && cc != '-' && cc != '.'))
-            spacified[i] = ' ';
-        else
-            spacified[i] = cc;
-    }
-    RefPtr<StringImpl> str = spacified.release();
-    str = str->simplifyWhiteSpace();
-    ASSERT(str->is8Bit());
-
-    if (!str->length())
-        return Vector<Length>();
-
-    unsigned len = str->count(' ') + 1;
-    Vector<Length> r(len);
-
-    unsigned i = 0;
-    unsigned pos = 0;
-    size_t pos2;
-
-    while ((pos2 = str->find(' ', pos)) != kNotFound) {
-        r[i++] = parseHTMLAreaCoordinate(str->characters8() + pos, pos2 - pos);
-        pos = pos2 + 1;
-    }
-    r[i] = parseHTMLAreaCoordinate(str->characters8() + pos, str->length() - pos);
-
-    ASSERT(i == len - 1);
-
-    return r;
-}
-
-class CalculationValueHandleMap {
-    WTF_MAKE_FAST_ALLOCATED(CalculationValueHandleMap);
->>>>>>> miniblink49
 public:
     CalculationValueHandleMap()
         : m_index(1)
@@ -136,21 +46,12 @@ public:
     {
         ASSERT(m_index);
         // FIXME calc(): https://bugs.webkit.org/show_bug.cgi?id=80489
-<<<<<<< HEAD
         // This monotonically increasing handle generation scheme is potentially
         // wasteful of the handle space. Consider reusing empty handles.
         while (m_map.contains(m_index))
             m_index++;
 
         m_map.set(m_index, std::move(calcValue));
-=======
-        // This monotonically increasing handle generation scheme is potentially wasteful
-        // of the handle space. Consider reusing empty handles.
-        while (m_map.contains(m_index))
-            m_index++;
-
-        m_map.set(m_index, calcValue);
->>>>>>> miniblink49
 
         return m_index;
     }
@@ -172,12 +73,8 @@ public:
         ASSERT(m_map.contains(index));
         CalculationValue* value = m_map.get(index);
         if (value->hasOneRef()) {
-<<<<<<< HEAD
             // Force the CalculationValue destructor early to avoid a potential
             // recursive call inside HashMap remove().
-=======
-            // Force the CalculationValue destructor early to avoid a potential recursive call inside HashMap remove().
->>>>>>> miniblink49
             m_map.set(index, nullptr);
             m_map.remove(index);
         } else {
@@ -201,7 +98,6 @@ Length::Length(PassRefPtr<CalculationValue> calc)
     , m_type(Calculated)
     , m_isFloat(false)
 {
-<<<<<<< HEAD
     m_intValue = calcHandles().insert(std::move(calc));
 }
 
@@ -222,23 +118,6 @@ Length Length::blendMixedTypes(const Length& from,
 }
 
 PixelsAndPercent Length::getPixelsAndPercent() const
-=======
-    m_intValue = calcHandles().insert(calc);
-}
-
-Length Length::blendMixedTypes(const Length& from, double progress, ValueRange range) const
-{
-    ASSERT(from.isSpecified());
-    ASSERT(isSpecified());
-    PixelsAndPercent fromPixelsAndPercent = from.pixelsAndPercent();
-    PixelsAndPercent toPixelsAndPercent = pixelsAndPercent();
-    const float pixels = blink::blend(fromPixelsAndPercent.pixels, toPixelsAndPercent.pixels, progress);
-    const float percent = blink::blend(fromPixelsAndPercent.percent, toPixelsAndPercent.percent, progress);
-    return Length(CalculationValue::create(PixelsAndPercent(pixels, percent), range));
-}
-
-PixelsAndPercent Length::pixelsAndPercent() const
->>>>>>> miniblink49
 {
     switch (type()) {
     case Fixed:
@@ -246,11 +125,7 @@ PixelsAndPercent Length::pixelsAndPercent() const
     case Percent:
         return PixelsAndPercent(0, value());
     case Calculated:
-<<<<<<< HEAD
         return getCalculationValue().getPixelsAndPercent();
-=======
-        return calculationValue().pixelsAndPercent();
->>>>>>> miniblink49
     default:
         ASSERT_NOT_REACHED();
         return PixelsAndPercent(0, 0);
@@ -259,11 +134,7 @@ PixelsAndPercent Length::pixelsAndPercent() const
 
 Length Length::subtractFromOneHundredPercent() const
 {
-<<<<<<< HEAD
     PixelsAndPercent result = getPixelsAndPercent();
-=======
-    PixelsAndPercent result = pixelsAndPercent();
->>>>>>> miniblink49
     result.pixels = -result.pixels;
     result.percent = 100 - result.percent;
     if (result.pixels && result.percent)
@@ -273,7 +144,6 @@ Length Length::subtractFromOneHundredPercent() const
     return Length(result.pixels, Fixed);
 }
 
-<<<<<<< HEAD
 Length Length::zoom(double factor) const
 {
     switch (type()) {
@@ -291,9 +161,6 @@ Length Length::zoom(double factor) const
 }
 
 CalculationValue& Length::getCalculationValue() const
-=======
-CalculationValue& Length::calculationValue() const
->>>>>>> miniblink49
 {
     ASSERT(isCalculated());
     return calcHandles().get(calculationHandle());
@@ -302,11 +169,7 @@ CalculationValue& Length::calculationValue() const
 void Length::incrementCalculatedRef() const
 {
     ASSERT(isCalculated());
-<<<<<<< HEAD
     getCalculationValue().ref();
-=======
-    calculationValue().ref();
->>>>>>> miniblink49
 }
 
 void Length::decrementCalculatedRef() const
@@ -318,35 +181,22 @@ void Length::decrementCalculatedRef() const
 float Length::nonNanCalculatedValue(LayoutUnit maxValue) const
 {
     ASSERT(isCalculated());
-<<<<<<< HEAD
     float result = getCalculationValue().evaluate(maxValue.toFloat());
     if (std_isnan(result))
-=======
-    float result = calculationValue().evaluate(maxValue.toFloat());
-    if (std::isnan(result))
->>>>>>> miniblink49
         return 0;
     return result;
 }
 
 bool Length::isCalculatedEqual(const Length& o) const
 {
-<<<<<<< HEAD
     return isCalculated() && (&getCalculationValue() == &o.getCalculationValue() || getCalculationValue() == o.getCalculationValue());
-=======
-    return isCalculated() && (&calculationValue() == &o.calculationValue() || calculationValue() == o.calculationValue());
->>>>>>> miniblink49
 }
 
 struct SameSizeAsLength {
     int32_t value;
     int32_t metaData;
 };
-<<<<<<< HEAD
 static_assert(sizeof(Length) == sizeof(SameSizeAsLength),
     "length should stay small");
-=======
-static_assert(sizeof(Length) == sizeof(SameSizeAsLength), "length should stay small");
->>>>>>> miniblink49
 
 } // namespace blink

@@ -33,30 +33,34 @@
 
 #include "core/CoreExport.h"
 #include "platform/heap/Handle.h"
+#include "wtf/Allocator.h"
 #include <v8.h>
 
 namespace blink {
 
+class ExecutionContext;
 class Node;
 
 class CORE_EXPORT V8GCController {
-public:
-    static void gcPrologue(v8::GCType, v8::GCCallbackFlags);
-    static void gcEpilogue(v8::GCType, v8::GCCallbackFlags);
-    static void minorGCPrologue(v8::Isolate*);
-    static void minorGCEpilogue(v8::Isolate*);
-    static void majorGCPrologue(v8::Isolate*, bool constructRetainedObjectInfos);
-    static void majorGCEpilogue(v8::Isolate*);
+    STATIC_ONLY(V8GCController);
 
-    static void collectGarbage(v8::Isolate*);
+public:
+    static void gcPrologue(v8::Isolate*, v8::GCType, v8::GCCallbackFlags);
+    static void gcEpilogue(v8::Isolate*, v8::GCType, v8::GCCallbackFlags);
+
+    static void collectGarbage(v8::Isolate*, bool onlyMinorGC = false);
+    // You should use collectAllGarbageForTesting() when you want to collect all
+    // V8 & Blink objects. It runs multiple V8 GCs to collect references
+    // that cross the binding boundary. collectAllGarbage() also runs multipe
+    // Oilpan GCs to collect a chain of persistent handles.
+    static void collectAllGarbageForTesting(v8::Isolate*);
 
     static Node* opaqueRootForGC(v8::Isolate*, Node*);
 
-    static void reportDOMMemoryUsageToV8(v8::Isolate*);
-
     static void traceDOMWrappers(v8::Isolate*, Visitor*);
+    static bool hasPendingActivity(v8::Isolate*, ExecutionContext*);
 };
 
-}
+} // namespace blink
 
 #endif // V8GCController_h

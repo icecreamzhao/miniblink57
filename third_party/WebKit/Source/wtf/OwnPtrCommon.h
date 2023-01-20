@@ -37,11 +37,7 @@ namespace WTF {
 class RefCountedBase;
 class ThreadSafeRefCountedBase;
 
-<<<<<<< HEAD
 template <typename T>
-=======
-template<typename T>
->>>>>>> miniblink49
 struct IsRefCounted {
     static const bool value = IsSubclass<T, RefCountedBase>::value
         || IsSubclass<T, ThreadSafeRefCountedBase>::value;

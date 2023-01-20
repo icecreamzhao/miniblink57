@@ -26,13 +26,12 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/xml/XSLTUnicodeSort.h"
 
 #include "wtf/text/Collator.h"
 #include "wtf/text/WTFString.h"
-#include "third_party/libxslt/libxslt/templates.h"
-#include "third_party/libxslt/libxslt/xsltutils.h"
+#include <third_party/libxslt/libxslt/templates.h>
+#include <third_party/libxslt/libxslt/xsltutils.h>
 
 namespace blink {
 
@@ -43,7 +42,9 @@ inline const xmlChar* toXMLChar(const char* string)
 
 // Based on default implementation from libxslt 1.1.22 and xsltICUSort.c
 // example.
-void xsltUnicodeSortFunction(xsltTransformContextPtr ctxt, xmlNodePtr *sorts, int nbsorts)
+void xsltUnicodeSortFunction(xsltTransformContextPtr ctxt,
+    xmlNodePtr* sorts,
+    int nbsorts)
 {
 // #ifdef XSLT_REFACTORED
 //     xsltStyleItemSortPtr comp;
@@ -73,7 +74,8 @@ void xsltUnicodeSortFunction(xsltTransformContextPtr ctxt, xmlNodePtr *sorts, in
 //         comp = static_cast<xsltStylePreComp*>(sorts[j]->psvi);
 //         tempstype[j] = 0;
 //         if (!comp->stype && comp->has_stype) {
-//             comp->stype = xsltEvalAttrValueTemplate(ctxt, sorts[j], toXMLChar("data-type"), XSLT_NAMESPACE);
+//             comp->stype = xsltEvalAttrValueTemplate(
+//                 ctxt, sorts[j], toXMLChar("data-type"), XSLT_NAMESPACE);
 //             if (comp->stype) {
 //                 tempstype[j] = 1;
 //                 if (xmlStrEqual(comp->stype, toXMLChar("text"))) {
@@ -81,14 +83,18 @@ void xsltUnicodeSortFunction(xsltTransformContextPtr ctxt, xmlNodePtr *sorts, in
 //                 } else if (xmlStrEqual(comp->stype, toXMLChar("number"))) {
 //                     comp->number = 1;
 //                 } else {
-//                     xsltTransformError(ctxt, 0, sorts[j], "xsltDoSortFunction: no support for data-type = %s\n", comp->stype);
+//                     xsltTransformError(
+//                         ctxt, 0, sorts[j],
+//                         "xsltDoSortFunction: no support for data-type = %s\n",
+//                         comp->stype);
 //                     comp->number = 0; // Use default.
 //                 }
 //             }
 //         }
 //         temporder[j] = 0;
 //         if (!comp->order && comp->has_order) {
-//             comp->order = xsltEvalAttrValueTemplate(ctxt, sorts[j], toXMLChar("order"), XSLT_NAMESPACE);
+//             comp->order = xsltEvalAttrValueTemplate(
+//                 ctxt, sorts[j], toXMLChar("order"), XSLT_NAMESPACE);
 //             if (comp->order) {
 //                 temporder[j] = 1;
 //                 if (xmlStrEqual(comp->order, toXMLChar("ascending"))) {
@@ -96,7 +102,9 @@ void xsltUnicodeSortFunction(xsltTransformContextPtr ctxt, xmlNodePtr *sorts, in
 //                 } else if (xmlStrEqual(comp->order, toXMLChar("descending"))) {
 //                     comp->descending = 1;
 //                 } else {
-//                     xsltTransformError(ctxt, 0, sorts[j], "xsltDoSortFunction: invalid value %s for order\n", comp->order);
+//                     xsltTransformError(ctxt, 0, sorts[j],
+//                         "xsltDoSortFunction: invalid value %s for order\n",
+//                         comp->order);
 //                     comp->descending = 0; // Use default.
 //                 }
 //             }
@@ -122,7 +130,8 @@ void xsltUnicodeSortFunction(xsltTransformContextPtr ctxt, xmlNodePtr *sorts, in
 //     // both "en-US" and "en_US", for example. This lets an author to really
 //     // specify sorting rules, e.g. "de_DE@collation=phonebook", which isn't
 //     // possible with language alone.
-//     Collator collator(comp->has_lang ? reinterpret_cast<const char*>(comp->lang) : "en");
+//     Collator collator(comp->has_lang ? reinterpret_cast<const char*>(comp->lang)
+//                                      : "en");
 //     collator.setOrderLowerFirst(comp->lower_first);
 // 
 //     // Shell's sort of node-set.
@@ -157,9 +166,14 @@ void xsltUnicodeSortFunction(xsltTransformContextPtr ctxt, xmlNodePtr *sorts, in
 //                     } else {
 //                         Vector<UChar> string1;
 //                         Vector<UChar> string2;
-//                         String::fromUTF8(reinterpret_cast<const char*>(results[j]->stringval)).appendTo(string1);
-//                         String::fromUTF8(reinterpret_cast<const char*>(results[j + incr]->stringval)).appendTo(string2);
-//                         tst = collator.collate(string1.data(), string1.size(), string2.data(), string2.size());
+//                         String::fromUTF8(
+//                             reinterpret_cast<const char*>(results[j]->stringval))
+//                             .appendTo(string1);
+//                         String::fromUTF8(
+//                             reinterpret_cast<const char*>(results[j + incr]->stringval))
+//                             .appendTo(string2);
+//                         tst = collator.collate(string1.data(), string1.size(),
+//                             string2.data(), string2.size());
 //                     }
 //                     if (descending)
 //                         tst = -tst;
@@ -207,9 +221,14 @@ void xsltUnicodeSortFunction(xsltTransformContextPtr ctxt, xmlNodePtr *sorts, in
 //                             } else {
 //                                 Vector<UChar> string1;
 //                                 Vector<UChar> string2;
-//                                 String::fromUTF8(reinterpret_cast<const char*>(res[j]->stringval)).appendTo(string1);
-//                                 String::fromUTF8(reinterpret_cast<const char*>(res[j + incr]->stringval)).appendTo(string2);
-//                                 tst = collator.collate(string1.data(), string1.size(), string2.data(), string2.size());
+//                                 String::fromUTF8(
+//                                     reinterpret_cast<const char*>(res[j]->stringval))
+//                                     .appendTo(string1);
+//                                 String::fromUTF8(
+//                                     reinterpret_cast<const char*>(res[j + incr]->stringval))
+//                                     .appendTo(string2);
+//                                 tst = collator.collate(string1.data(), string1.size(),
+//                                     string2.data(), string2.size());
 //                             }
 //                             if (desc)
 //                                 tst = -tst;

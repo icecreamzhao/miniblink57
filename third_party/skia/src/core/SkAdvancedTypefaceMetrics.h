@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -9,19 +5,12 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #ifndef SkAdvancedTypefaceMetrics_DEFINED
 #define SkAdvancedTypefaceMetrics_DEFINED
 
 #include "SkRect.h"
 #include "SkRefCnt.h"
-<<<<<<< HEAD
 #include "SkSinglyLinkedList.h"
-=======
->>>>>>> miniblink49
 #include "SkString.h"
 #include "SkTDArray.h"
 #include "SkTemplates.h"
@@ -35,10 +24,6 @@
 
 class SkAdvancedTypefaceMetrics : public SkRefCnt {
 public:
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
     SkAdvancedTypefaceMetrics()
         : fType(SkAdvancedTypefaceMetrics::kOther_Font)
         , fFlags(SkAdvancedTypefaceMetrics::kEmpty_FontFlag)
@@ -50,7 +35,6 @@ public:
         , fDescent(0)
         , fStemV(0)
         , fCapHeight(0)
-<<<<<<< HEAD
         , fBBox(SkIRect::MakeEmpty())
     {
     }
@@ -76,9 +60,6 @@ public:
         const uint32_t* subsetGlyphIDs,
         uint32_t subsetGlyphIDsLength,
         GetAdvance getAdvance);
-=======
-        , fBBox(SkIRect::MakeEmpty()) {}
->>>>>>> miniblink49
 
     SkString fFontName;
 
@@ -95,23 +76,15 @@ public:
     FontType fType;
 
     enum FontFlags {
-<<<<<<< HEAD
         kEmpty_FontFlag = 0x0, //!<No flags set
         kMultiMaster_FontFlag = 0x1, //!<May be true for Type1, CFF, or TrueType fonts.
         kNotEmbeddable_FontFlag = 0x2, //!<May not be embedded.
         kNotSubsettable_FontFlag = 0x4, //!<May not be subset.
-=======
-        kEmpty_FontFlag          = 0x0,  //!<No flags set
-        kMultiMaster_FontFlag    = 0x1,  //!<May be true for Type1, CFF, or TrueType fonts.
-        kNotEmbeddable_FontFlag  = 0x2,  //!<May not be embedded.
-        kNotSubsettable_FontFlag = 0x4,  //!<May not be subset.
->>>>>>> miniblink49
     };
     // Global font flags.
     FontFlags fFlags;
 
     uint16_t fLastGlyphID; // The last valid glyph ID in the font.
-<<<<<<< HEAD
     uint16_t fEmSize; // The size of the em box (defines font units).
 
     // These enum values match the values used in the PDF file format.
@@ -134,49 +107,18 @@ public:
     int16_t fCapHeight; // Height (from baseline) of top of flat capitals.
 
     SkIRect fBBox; // The bounding box of all glyphs (in font units).
-=======
-    uint16_t fEmSize;  // The size of the em box (defines font units).
-
-    // These enum values match the values used in the PDF file format.
-    enum StyleFlags {
-        kFixedPitch_Style  = 0x00001,
-        kSerif_Style       = 0x00002,
-        kScript_Style      = 0x00008,
-        kItalic_Style      = 0x00040,
-        kAllCaps_Style     = 0x10000,
-        kSmallCaps_Style   = 0x20000,
-        kForceBold_Style   = 0x40000
-    };
-    uint16_t fStyle;        // Font style characteristics.
-    int16_t fItalicAngle;   // Counterclockwise degrees from vertical of the
-                            // dominant vertical stroke for an Italic face.
-    // The following fields are all in font units.
-    int16_t fAscent;       // Max height above baseline, not including accents.
-    int16_t fDescent;      // Max depth below baseline (negative).
-    int16_t fStemV;        // Thickness of dominant vertical stem.
-    int16_t fCapHeight;    // Height (from baseline) of top of flat capitals.
-
-    SkIRect fBBox;  // The bounding box of all glyphs (in font units).
->>>>>>> miniblink49
 
     template <typename Data>
     struct AdvanceMetric {
         enum MetricType {
-<<<<<<< HEAD
             kDefault, // Default advance: fAdvance.count = 1
             kRange, // Advances for a range: fAdvance.count = fEndID-fStartID
             kRun // fStartID-fEndID have same advance: fAdvance.count = 1
-=======
-            kDefault,  // Default advance: fAdvance.count = 1
-            kRange,    // Advances for a range: fAdvance.count = fEndID-fStartID
-            kRun       // fStartID-fEndID have same advance: fAdvance.count = 1
->>>>>>> miniblink49
         };
         MetricType fType;
         uint16_t fStartId;
         uint16_t fEndId;
         SkTDArray<Data> fAdvance;
-<<<<<<< HEAD
         AdvanceMetric(uint16_t startId)
             : fStartId(startId)
         {
@@ -198,94 +140,34 @@ public:
         }
         AdvanceMetric(const AdvanceMetric&) = delete;
         AdvanceMetric& operator=(const AdvanceMetric&) = delete;
-=======
-        SkAutoTDelete<AdvanceMetric<Data> > fNext;
->>>>>>> miniblink49
     };
 
     struct VerticalMetric {
         int16_t fVerticalAdvance;
-<<<<<<< HEAD
         int16_t fOriginXDisp; // Horiz. displacement of the secondary origin.
         int16_t fOriginYDisp; // Vert. displacement of the secondary origin.
-=======
-        int16_t fOriginXDisp;  // Horiz. displacement of the secondary origin.
-        int16_t fOriginYDisp;  // Vert. displacement of the secondary origin.
->>>>>>> miniblink49
     };
     typedef AdvanceMetric<int16_t> WidthRange;
     typedef AdvanceMetric<VerticalMetric> VerticalAdvanceRange;
 
     // This is indexed by glyph id.
-<<<<<<< HEAD
     SkSinglyLinkedList<WidthRange> fGlyphWidths;
     // Only used for Vertical CID fonts.
     SkSinglyLinkedList<VerticalAdvanceRange> fVerticalMetrics;
 
     // The names of each glyph, only populated for postscript fonts.
     SkAutoTDelete<SkAutoTArray<SkString>> fGlyphNames;
-=======
-    SkAutoTDelete<WidthRange> fGlyphWidths;
-    // Only used for Vertical CID fonts.
-    SkAutoTDelete<VerticalAdvanceRange> fVerticalMetrics;
-
-    // The names of each glyph, only populated for postscript fonts.
-    SkAutoTDelete<SkAutoTArray<SkString> > fGlyphNames;
->>>>>>> miniblink49
 
     // The mapping from glyph to Unicode, only populated if
     // kToUnicode_PerGlyphInfo is passed to GetAdvancedTypefaceMetrics.
     SkTDArray<SkUnichar> fGlyphToUnicode;
 
-<<<<<<< HEAD
     static void FinishRange(WidthRange* range,
         int endId,
         WidthRange::MetricType type);
 
-=======
->>>>>>> miniblink49
 private:
     typedef SkRefCnt INHERITED;
 };
 
-<<<<<<< HEAD
-=======
-namespace skia_advanced_typeface_metrics_utils {
-
-template <typename Data>
-void resetRange(SkAdvancedTypefaceMetrics::AdvanceMetric<Data>* range,
-                       int startId);
-
-template <typename Data>
-SkAdvancedTypefaceMetrics::AdvanceMetric<Data>* appendRange(
-        SkAutoTDelete<SkAdvancedTypefaceMetrics::AdvanceMetric<Data> >* nextSlot,
-        int startId);
-
-template <typename Data>
-void finishRange(
-        SkAdvancedTypefaceMetrics::AdvanceMetric<Data>* range,
-        int endId,
-        typename SkAdvancedTypefaceMetrics::AdvanceMetric<Data>::MetricType
-                type);
-
-/** Retrieve advance data for glyphs. Used by the PDF backend. It calls
-    underlying platform dependent API getAdvance to acquire the data.
-    @param num_glyphs    Total number of glyphs in the given font.
-    @param glyphIDs      For per-glyph info, specify subset of the font by
-                         giving glyph ids.  Each integer represents a glyph
-                         id.  Passing NULL means all glyphs in the font.
-    @param glyphIDsCount Number of elements in subsetGlyphIds. Ignored if
-                         glyphIDs is NULL.
-*/
-template <typename Data, typename FontHandle>
-SkAdvancedTypefaceMetrics::AdvanceMetric<Data>* getAdvanceData(
-        FontHandle fontHandle,
-        int num_glyphs,
-        const uint32_t* glyphIDs,
-        uint32_t glyphIDsCount,
-        bool (*getAdvance)(FontHandle fontHandle, int gId, Data* data));
-
-} // namespace skia_advanced_typeface_metrics_utils
-
->>>>>>> miniblink49
 #endif

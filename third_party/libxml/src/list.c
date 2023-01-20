@@ -184,11 +184,7 @@ xmlListLinkReverseSearch(xmlListPtr l, void *data)
  *
  * Returns the new list or NULL in case of error
  */
-<<<<<<< HEAD
 xmlListPtr XMLCALL
-=======
-xmlListPtr
->>>>>>> miniblink49
 xmlListCreate(xmlListDeallocator deallocator, xmlListDataCompare compare)
 {
     xmlListPtr l;
@@ -231,11 +227,7 @@ xmlListCreate(xmlListDeallocator deallocator, xmlListDataCompare compare)
  *
  * Returns the value associated to @data or NULL in case of error
  */
-<<<<<<< HEAD
 void * XMLCALL
-=======
-void *
->>>>>>> miniblink49
 xmlListSearch(xmlListPtr l, void *data) 
 {
     xmlLinkPtr lk;
@@ -256,11 +248,7 @@ xmlListSearch(xmlListPtr l, void *data)
  *
  * Returns the value associated to @data or NULL in case of error
  */
-<<<<<<< HEAD
 void * XMLCALL
-=======
-void *
->>>>>>> miniblink49
 xmlListReverseSearch(xmlListPtr l, void *data) 
 {
     xmlLinkPtr lk;
@@ -281,11 +269,7 @@ xmlListReverseSearch(xmlListPtr l, void *data)
  *
  * Returns 0 in case of success, 1 in case of failure
  */
-<<<<<<< HEAD
 int XMLCALL
-=======
-int
->>>>>>> miniblink49
 xmlListInsert(xmlListPtr l, void *data) 
 {
     xmlLinkPtr lkPlace, lkNew;
@@ -318,11 +302,7 @@ xmlListInsert(xmlListPtr l, void *data)
  *
  * Returns 0 in case of success, 1 in case of failure
  */
-<<<<<<< HEAD
 int XMLCALL xmlListAppend(xmlListPtr l, void *data)
-=======
-int xmlListAppend(xmlListPtr l, void *data) 
->>>>>>> miniblink49
 {
     xmlLinkPtr lkPlace, lkNew;
 
@@ -350,11 +330,7 @@ int xmlListAppend(xmlListPtr l, void *data)
  *
  * Deletes the list and its associated data
  */
-<<<<<<< HEAD
 void XMLCALL xmlListDelete(xmlListPtr l)
-=======
-void xmlListDelete(xmlListPtr l)
->>>>>>> miniblink49
 {
     if (l == NULL)
         return;
@@ -373,11 +349,7 @@ void xmlListDelete(xmlListPtr l)
  *
  * Returns 1 if a deallocation occured, or 0 if not found
  */
-<<<<<<< HEAD
 int XMLCALL
-=======
-int
->>>>>>> miniblink49
 xmlListRemoveFirst(xmlListPtr l, void *data)
 {
     xmlLinkPtr lk;
@@ -402,11 +374,7 @@ xmlListRemoveFirst(xmlListPtr l, void *data)
  *
  * Returns 1 if a deallocation occured, or 0 if not found
  */
-<<<<<<< HEAD
 int XMLCALL
-=======
-int
->>>>>>> miniblink49
 xmlListRemoveLast(xmlListPtr l, void *data)
 {
     xmlLinkPtr lk;
@@ -431,11 +399,7 @@ xmlListRemoveLast(xmlListPtr l, void *data)
  *
  * Returns the number of deallocation, or 0 if not found
  */
-<<<<<<< HEAD
 int XMLCALL
-=======
-int
->>>>>>> miniblink49
 xmlListRemoveAll(xmlListPtr l, void *data)
 {
     int count=0;
@@ -454,11 +418,7 @@ xmlListRemoveAll(xmlListPtr l, void *data)
  *
  * Remove the all data in the list
  */
-<<<<<<< HEAD
 void XMLCALL
-=======
-void
->>>>>>> miniblink49
 xmlListClear(xmlListPtr l)
 {
     xmlLinkPtr  lk;
@@ -482,11 +442,7 @@ xmlListClear(xmlListPtr l)
  *
  * Returns 1 if the list is empty, 0 if not empty and -1 in case of error
  */
-<<<<<<< HEAD
 int XMLCALL
-=======
-int
->>>>>>> miniblink49
 xmlListEmpty(xmlListPtr l)
 {
     if (l == NULL)
@@ -502,11 +458,7 @@ xmlListEmpty(xmlListPtr l)
  *
  * Returns the first element in the list, or NULL
  */
-<<<<<<< HEAD
 xmlLinkPtr XMLCALL
-=======
-xmlLinkPtr 
->>>>>>> miniblink49
 xmlListFront(xmlListPtr l)
 {
     if (l == NULL)
@@ -522,11 +474,7 @@ xmlListFront(xmlListPtr l)
  *
  * Returns the last element in the list, or NULL
  */
-<<<<<<< HEAD
 xmlLinkPtr XMLCALL
-=======
-xmlLinkPtr 
->>>>>>> miniblink49
 xmlListEnd(xmlListPtr l)
 {
     if (l == NULL)
@@ -542,11 +490,7 @@ xmlListEnd(xmlListPtr l)
  *
  * Returns the number of elements in the list or -1 in case of error
  */
-<<<<<<< HEAD
 int XMLCALL
-=======
-int
->>>>>>> miniblink49
 xmlListSize(xmlListPtr l)
 {
     xmlLinkPtr lk;
@@ -565,11 +509,7 @@ xmlListSize(xmlListPtr l)
  *
  * Removes the first element in the list
  */
-<<<<<<< HEAD
 void XMLCALL
-=======
-void
->>>>>>> miniblink49
 xmlListPopFront(xmlListPtr l)
 {
     if(!xmlListEmpty(l))
@@ -582,11 +522,7 @@ xmlListPopFront(xmlListPtr l)
  *
  * Removes the last element in the list
  */
-<<<<<<< HEAD
 void XMLCALL
-=======
-void
->>>>>>> miniblink49
 xmlListPopBack(xmlListPtr l)
 {
     if(!xmlListEmpty(l))
@@ -602,11 +538,7 @@ xmlListPopBack(xmlListPtr l)
  *
  * Returns 1 if successful, 0 otherwise
  */
-<<<<<<< HEAD
 int XMLCALL
-=======
-int
->>>>>>> miniblink49
 xmlListPushFront(xmlListPtr l, void *data) 
 {
     xmlLinkPtr lkPlace, lkNew;
@@ -638,11 +570,7 @@ xmlListPushFront(xmlListPtr l, void *data)
  *
  * Returns 1 if successful, 0 otherwise
  */
-<<<<<<< HEAD
 int XMLCALL
-=======
-int
->>>>>>> miniblink49
 xmlListPushBack(xmlListPtr l, void *data) 
 {
     xmlLinkPtr lkPlace, lkNew;
@@ -672,11 +600,7 @@ xmlListPushBack(xmlListPtr l, void *data)
  *
  * Returns a pointer to the data referenced from this link
  */
-<<<<<<< HEAD
 void * XMLCALL
-=======
-void *
->>>>>>> miniblink49
 xmlLinkGetData(xmlLinkPtr lk)
 {
     if (lk == NULL)
@@ -690,11 +614,7 @@ xmlLinkGetData(xmlLinkPtr lk)
  *
  * Reverse the order of the elements in the list
  */
-<<<<<<< HEAD
 void XMLCALL
-=======
-void
->>>>>>> miniblink49
 xmlListReverse(xmlListPtr l)
 {
     xmlLinkPtr lk;
@@ -719,11 +639,7 @@ xmlListReverse(xmlListPtr l)
  *
  * Sort all the elements in the list
  */
-<<<<<<< HEAD
 void XMLCALL
-=======
-void
->>>>>>> miniblink49
 xmlListSort(xmlListPtr l)
 {
     xmlListPtr lTemp;
@@ -756,11 +672,7 @@ xmlListSort(xmlListPtr l)
  * Walk all the element of the first from first to last and
  * apply the walker function to it
  */
-<<<<<<< HEAD
 void XMLCALL
-=======
-void
->>>>>>> miniblink49
 xmlListWalk(xmlListPtr l, xmlListWalker walker, const void *user) {
     xmlLinkPtr lk;
 
@@ -781,11 +693,7 @@ xmlListWalk(xmlListPtr l, xmlListWalker walker, const void *user) {
  * Walk all the element of the list in reverse order and
  * apply the walker function to it
  */
-<<<<<<< HEAD
 void XMLCALL
-=======
-void
->>>>>>> miniblink49
 xmlListReverseWalk(xmlListPtr l, xmlListWalker walker, const void *user) {
     xmlLinkPtr lk;
 
@@ -805,11 +713,7 @@ xmlListReverseWalk(xmlListPtr l, xmlListWalker walker, const void *user) {
  * include all the elements of the second list in the first one and
  * clear the second list
  */
-<<<<<<< HEAD
 void XMLCALL
-=======
-void
->>>>>>> miniblink49
 xmlListMerge(xmlListPtr l1, xmlListPtr l2)
 {
     xmlListCopy(l1, l2);
@@ -824,11 +728,7 @@ xmlListMerge(xmlListPtr l1, xmlListPtr l2)
  * 
  * Returns a new copy of the list or NULL in case of error
  */
-<<<<<<< HEAD
 xmlListPtr XMLCALL
-=======
-xmlListPtr 
->>>>>>> miniblink49
 xmlListDup(const xmlListPtr old)
 {
     xmlListPtr cur;
@@ -857,11 +757,7 @@ xmlListDup(const xmlListPtr old)
  * 
  * Returns 0 in case of success 1 in case of error
  */
-<<<<<<< HEAD
 int XMLCALL
-=======
-int
->>>>>>> miniblink49
 xmlListCopy(xmlListPtr cur, const xmlListPtr old)
 {
     /* Walk the old tree and insert the data into the new one */

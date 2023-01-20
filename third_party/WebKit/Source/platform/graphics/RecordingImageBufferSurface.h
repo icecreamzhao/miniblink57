@@ -8,20 +8,12 @@
 #include "platform/graphics/GraphicsContext.h"
 #include "platform/graphics/ImageBufferSurface.h"
 #include "public/platform/WebThread.h"
-<<<<<<< HEAD
 #include "third_party/skia/include/core/SkRefCnt.h"
 #include "wtf/Allocator.h"
 #include "wtf/Noncopyable.h"
 #include <memory>
 
 class SkCanvas;
-=======
-#include "third_party/skia/include/core/SkCanvas.h"
-#include "wtf/LinkedStack.h"
-#include "wtf/OwnPtr.h"
-#include "wtf/RefPtr.h"
-
->>>>>>> miniblink49
 class SkPicture;
 class SkPictureRecorder;
 
@@ -31,7 +23,6 @@ class ImageBuffer;
 class RecordingImageBufferSurfaceTest;
 
 class RecordingImageBufferFallbackSurfaceFactory {
-<<<<<<< HEAD
     USING_FAST_MALLOC(RecordingImageBufferFallbackSurfaceFactory);
     WTF_MAKE_NONCOPYABLE(RecordingImageBufferFallbackSurfaceFactory);
 
@@ -87,46 +78,15 @@ public:
         const FloatRect& destRect,
         const FloatRect& srcRect,
         SkBlendMode) override;
-=======
-public:
-    virtual PassOwnPtr<ImageBufferSurface> createSurface(const IntSize&, OpacityMode) = 0;
-    virtual ~RecordingImageBufferFallbackSurfaceFactory() { }
-};
-
-class PLATFORM_EXPORT RecordingImageBufferSurface : public ImageBufferSurface {
-    WTF_MAKE_NONCOPYABLE(RecordingImageBufferSurface); WTF_MAKE_FAST_ALLOCATED(RecordingImageBufferSurface);
-public:
-    RecordingImageBufferSurface(const IntSize&, PassOwnPtr<RecordingImageBufferFallbackSurfaceFactory> fallbackFactory, OpacityMode = NonOpaque);
-    ~RecordingImageBufferSurface() override;
-
-    // Implementation of ImageBufferSurface interfaces
-    SkCanvas* canvas() const override;
-    PassRefPtr<SkPicture> getPicture() override;
-    void willDrawVideo() override;
-    void didDraw(const FloatRect&) override;
-    bool isValid() const override { return true; }
-    bool isRecording() const override { return !m_fallbackSurface; }
-    void willAccessPixels() override;
-    void willOverwriteCanvas() override;
-    virtual void finalizeFrame(const FloatRect&);
-    void setImageBuffer(ImageBuffer*) override;
-    PassRefPtr<SkImage> newImageSnapshot() const override;
-    void draw(GraphicsContext*, const FloatRect& destRect, const FloatRect& srcRect, SkXfermode::Mode) override;
->>>>>>> miniblink49
     bool isExpensiveToPaint() override;
     void setHasExpensiveOp() override { m_currentFrameHasExpensiveOp = true; }
 
     // Passthroughs to fallback surface
-<<<<<<< HEAD
-=======
-    const SkBitmap& bitmap() override;
->>>>>>> miniblink49
     bool restore() override;
     WebLayer* layer() const override;
     bool isAccelerated() const override;
     void setIsHidden(bool) override;
 
-<<<<<<< HEAD
     // This enum is used in a UMA histogram.
     enum FallbackReason {
         FallbackReasonUnknown = 0, // This value should never appear in production histograms
@@ -171,18 +131,6 @@ private:
     std::unique_ptr<SkPictureRecorder> m_currentFrame;
     sk_sp<SkPicture> m_previousFrame;
     std::unique_ptr<ImageBufferSurface> m_fallbackSurface;
-=======
-private:
-    friend class RecordingImageBufferSurfaceTest; // for unit testing
-    void fallBackToRasterCanvas();
-    bool initializeCurrentFrame();
-    bool finalizeFrameInternal();
-    int approximateOpCount();
-
-    OwnPtr<SkPictureRecorder> m_currentFrame;
-    RefPtr<SkPicture> m_previousFrame;
-    OwnPtr<ImageBufferSurface> m_fallbackSurface;
->>>>>>> miniblink49
     ImageBuffer* m_imageBuffer;
     int m_initialSaveCount;
     int m_currentFramePixelCount;
@@ -191,11 +139,7 @@ private:
     bool m_didRecordDrawCommandsInCurrentFrame;
     bool m_currentFrameHasExpensiveOp;
     bool m_previousFrameHasExpensiveOp;
-<<<<<<< HEAD
     std::unique_ptr<RecordingImageBufferFallbackSurfaceFactory> m_fallbackFactory;
-=======
-    OwnPtr<RecordingImageBufferFallbackSurfaceFactory> m_fallbackFactory;
->>>>>>> miniblink49
 };
 
 } // namespace blink

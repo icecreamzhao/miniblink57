@@ -20,17 +20,10 @@
 #ifndef __BYTESTRIEBUILDER_H__
 #define __BYTESTRIEBUILDER_H__
 
-<<<<<<< HEAD
 #include "unicode/bytestrie.h"
 #include "unicode/stringpiece.h"
 #include "unicode/stringtriebuilder.h"
 #include "unicode/utypes.h"
-=======
-#include "unicode/utypes.h"
-#include "unicode/bytestrie.h"
-#include "unicode/stringpiece.h"
-#include "unicode/stringtriebuilder.h"
->>>>>>> miniblink49
 
 U_NAMESPACE_BEGIN
 
@@ -50,11 +43,7 @@ public:
      * @param errorCode Standard ICU error code.
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     BytesTrieBuilder(UErrorCode& errorCode);
-=======
-    BytesTrieBuilder(UErrorCode &errorCode);
->>>>>>> miniblink49
 
     /**
      * Destructor.
@@ -76,11 +65,7 @@ public:
      * @return *this
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     BytesTrieBuilder& add(const StringPiece& s, int32_t value, UErrorCode& errorCode);
-=======
-    BytesTrieBuilder &add(const StringPiece &s, int32_t value, UErrorCode &errorCode);
->>>>>>> miniblink49
 
     /**
      * Builds a BytesTrie for the add()ed data.
@@ -100,11 +85,7 @@ public:
      * @return A new BytesTrie for the add()ed data.
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     BytesTrie* build(UStringTrieBuildOption buildOption, UErrorCode& errorCode);
-=======
-    BytesTrie *build(UStringTrieBuildOption buildOption, UErrorCode &errorCode);
->>>>>>> miniblink49
 
     /**
      * Builds a BytesTrie for the add()ed data and byte-serializes it.
@@ -128,11 +109,7 @@ public:
      * @return A StringPiece which refers to the byte-serialized BytesTrie for the add()ed data.
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     StringPiece buildStringPiece(UStringTrieBuildOption buildOption, UErrorCode& errorCode);
-=======
-    StringPiece buildStringPiece(UStringTrieBuildOption buildOption, UErrorCode &errorCode);
->>>>>>> miniblink49
 
     /**
      * Removes all (byte sequence, value) pairs.
@@ -140,7 +117,6 @@ public:
      * @return *this
      * @stable ICU 4.8
      */
-<<<<<<< HEAD
     BytesTrieBuilder& clear();
 
 private:
@@ -148,15 +124,6 @@ private:
     BytesTrieBuilder& operator=(const BytesTrieBuilder& other); // no assignment operator
 
     void buildBytes(UStringTrieBuildOption buildOption, UErrorCode& errorCode);
-=======
-    BytesTrieBuilder &clear();
-
-private:
-    BytesTrieBuilder(const BytesTrieBuilder &other);  // no copy constructor
-    BytesTrieBuilder &operator=(const BytesTrieBuilder &other);  // no assignment operator
-
-    void buildBytes(UStringTrieBuildOption buildOption, UErrorCode &errorCode);
->>>>>>> miniblink49
 
     virtual int32_t getElementStringLength(int32_t i) const;
     virtual UChar getElementUnit(int32_t i, int32_t byteIndex) const;
@@ -179,7 +146,6 @@ private:
      */
     class BTLinearMatchNode : public LinearMatchNode {
     public:
-<<<<<<< HEAD
         BTLinearMatchNode(const char* units, int32_t len, Node* nextNode);
         virtual UBool operator==(const Node& other) const;
         virtual void write(StringTrieBuilder& builder);
@@ -194,51 +160,23 @@ private:
     UBool ensureCapacity(int32_t length);
     virtual int32_t write(int32_t byte);
     int32_t write(const char* b, int32_t length);
-=======
-        BTLinearMatchNode(const char *units, int32_t len, Node *nextNode);
-        virtual UBool operator==(const Node &other) const;
-        virtual void write(StringTrieBuilder &builder);
-    private:
-        const char *s;
-    };
-
-    virtual Node *createLinearMatchNode(int32_t i, int32_t byteIndex, int32_t length,
-                                        Node *nextNode) const;
-
-    UBool ensureCapacity(int32_t length);
-    virtual int32_t write(int32_t byte);
-    int32_t write(const char *b, int32_t length);
->>>>>>> miniblink49
     virtual int32_t writeElementUnits(int32_t i, int32_t byteIndex, int32_t length);
     virtual int32_t writeValueAndFinal(int32_t i, UBool isFinal);
     virtual int32_t writeValueAndType(UBool hasValue, int32_t value, int32_t node);
     virtual int32_t writeDeltaTo(int32_t jumpTarget);
 
-<<<<<<< HEAD
     CharString* strings; // Pointer not object so we need not #include internal charstr.h.
     BytesTrieElement* elements;
-=======
-    CharString *strings;  // Pointer not object so we need not #include internal charstr.h.
-    BytesTrieElement *elements;
->>>>>>> miniblink49
     int32_t elementsCapacity;
     int32_t elementsLength;
 
     // Byte serialization of the trie.
     // Grows from the back: bytesLength measures from the end of the buffer!
-<<<<<<< HEAD
     char* bytes;
-=======
-    char *bytes;
->>>>>>> miniblink49
     int32_t bytesCapacity;
     int32_t bytesLength;
 };
 
 U_NAMESPACE_END
 
-<<<<<<< HEAD
 #endif // __BYTESTRIEBUILDER_H__
-=======
-#endif  // __BYTESTRIEBUILDER_H__
->>>>>>> miniblink49

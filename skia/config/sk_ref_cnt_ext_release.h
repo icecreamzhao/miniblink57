@@ -12,8 +12,15 @@
 // Alternate implementation of SkRefCnt for Chromium release builds
 class SK_API SkRefCnt : public SkRefCntBase {
 public:
-  void deref() const { SkRefCntBase::unref(); }
+    void deref() const { SkRefCntBase::unref(); }
 };
 
-#endif
+namespace WTF {
+inline void adopted(const SkRefCnt* object) { }
+inline void requireAdoption(const SkRefCnt* object) { }
+};
 
+using WTF::adopted;
+using WTF::requireAdoption;
+
+#endif

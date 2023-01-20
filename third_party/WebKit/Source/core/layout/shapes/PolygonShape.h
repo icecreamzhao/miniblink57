@@ -33,10 +33,13 @@
 #include "core/layout/shapes/Shape.h"
 #include "core/layout/shapes/ShapeInterval.h"
 #include "platform/geometry/FloatPolygon.h"
+#include <memory>
 
 namespace blink {
 
 class OffsetPolygonEdge final : public VertexPair {
+    DISALLOW_NEW();
+
 public:
     OffsetPolygonEdge(const FloatPolygonEdge& edge, const FloatSize& offset)
         : m_vertex1(edge.vertex1() + offset)
@@ -44,11 +47,17 @@ public:
     {
     }
 
-    virtual const FloatPoint& vertex1() const override { return m_vertex1; }
-    virtual const FloatPoint& vertex2() const override { return m_vertex2; }
+    const FloatPoint& vertex1() const override { return m_vertex1; }
+    const FloatPoint& vertex2() const override { return m_vertex2; }
 
-    bool isWithinYRange(float y1, float y2) const { return y1 <= minY() && y2 >= maxY(); }
-    bool overlapsYRange(float y1, float y2) const { return y2 >= minY() && y1 <= maxY(); }
+    bool isWithinYRange(float y1, float y2) const
+    {
+        return y1 <= minY() && y2 >= maxY();
+    }
+    bool overlapsYRange(float y1, float y2) const
+    {
+        return y2 >= minY() && y1 <= maxY();
+    }
     float xIntercept(float y) const;
     FloatShapeInterval clippedEdgeXRange(float y1, float y2) const;
 
@@ -59,17 +68,19 @@ private:
 
 class PolygonShape final : public Shape {
     WTF_MAKE_NONCOPYABLE(PolygonShape);
+
 public:
-    PolygonShape(PassOwnPtr<Vector<FloatPoint>> vertices, WindRule fillRule)
+    PolygonShape(std::unique_ptr<Vector<FloatPoint>> vertices, WindRule fillRule)
         : Shape()
-        , m_polygon(vertices, fillRule)
+        , m_polygon(std::move(vertices), fillRule)
     {
     }
 
-    virtual LayoutRect shapeMarginLogicalBoundingBox() const override;
-    virtual bool isEmpty() const override { return m_polygon.isEmpty(); }
-    virtual LineSegment getExcludedInterval(LayoutUnit logicalTop, LayoutUnit logicalHeight) const override;
-    virtual void buildDisplayPaths(DisplayPaths&) const override;
+    LayoutRect shapeMarginLogicalBoundingBox() const override;
+    bool isEmpty() const override { return m_polygon.isEmpty(); }
+    LineSegment getExcludedInterval(LayoutUnit logicalTop,
+        LayoutUnit logicalHeight) const override;
+    void buildDisplayPaths(DisplayPaths&) const override;
 
 private:
     FloatPolygon m_polygon;

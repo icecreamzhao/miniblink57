@@ -24,7 +24,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/clipboard/DataTransferItemList.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -35,7 +34,8 @@
 
 namespace blink {
 
-DataTransferItemList* DataTransferItemList::create(DataTransfer* dataTransfer, DataObject* list)
+DataTransferItemList* DataTransferItemList::create(DataTransfer* dataTransfer,
+    DataObject* list)
 {
     return new DataTransferItemList(dataTransfer, list);
 }
@@ -58,10 +58,12 @@ DataTransferItem* DataTransferItemList::item(unsigned long index)
     return DataTransferItem::create(m_dataTransfer, item);
 }
 
-void DataTransferItemList::deleteItem(unsigned long index, ExceptionState& exceptionState)
+void DataTransferItemList::deleteItem(unsigned long index,
+    ExceptionState& exceptionState)
 {
     if (!m_dataTransfer->canWriteData()) {
-        exceptionState.throwDOMException(InvalidStateError, "The list is not writable.");
+        exceptionState.throwDOMException(InvalidStateError,
+            "The list is not writable.");
         return;
     }
     m_dataObject->deleteItem(index);
@@ -74,13 +76,16 @@ void DataTransferItemList::clear()
     m_dataObject->clearAll();
 }
 
-DataTransferItem* DataTransferItemList::add(const String& data, const String& type, ExceptionState& exceptionState)
+DataTransferItem* DataTransferItemList::add(const String& data,
+    const String& type,
+    ExceptionState& exceptionState)
 {
     if (!m_dataTransfer->canWriteData())
         return nullptr;
     DataObjectItem* item = m_dataObject->add(data, type);
     if (!item) {
-        exceptionState.throwDOMException(NotSupportedError, "An item already exists for type '" + type + "'.");
+        exceptionState.throwDOMException(
+            NotSupportedError, "An item already exists for type '" + type + "'.");
         return nullptr;
     }
     return DataTransferItem::create(m_dataTransfer, item);
@@ -96,7 +101,8 @@ DataTransferItem* DataTransferItemList::add(File* file)
     return DataTransferItem::create(m_dataTransfer, item);
 }
 
-DataTransferItemList::DataTransferItemList(DataTransfer* dataTransfer, DataObject* dataObject)
+DataTransferItemList::DataTransferItemList(DataTransfer* dataTransfer,
+    DataObject* dataObject)
     : m_dataTransfer(dataTransfer)
     , m_dataObject(dataObject)
 {

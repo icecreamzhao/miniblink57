@@ -27,10 +27,11 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/layout/shapes/RasterShape.h"
 
 #include "wtf/MathExtras.h"
+#include "wtf/PtrUtil.h"
+#include <memory>
 
 namespace blink {
 
@@ -69,14 +70,20 @@ void MarginIntervalGenerator::set(int y, const IntShapeInterval& interval)
 IntShapeInterval MarginIntervalGenerator::intervalAt(int y) const
 {
     unsigned xInterceptsIndex = abs(y - m_y);
-    int dx = (xInterceptsIndex >= m_xIntercepts.size()) ? 0 : m_xIntercepts[xInterceptsIndex];
+    int dx = (xInterceptsIndex >= m_xIntercepts.size())
+        ? 0
+        : m_xIntercepts[xInterceptsIndex];
     return IntShapeInterval(m_x1 - dx, m_x2 + dx);
 }
 
-PassOwnPtr<RasterShapeIntervals> RasterShapeIntervals::computeShapeMarginIntervals(int shapeMargin) const
+std::unique_ptr<RasterShapeIntervals>
+RasterShapeIntervals::computeShapeMarginIntervals(int shapeMargin) const
 {
-    int marginIntervalsSize = (offset() > shapeMargin) ? size() : size() - offset() * 2 + shapeMargin * 2;
-    OwnPtr<RasterShapeIntervals> result = adoptPtr(new RasterShapeIntervals(marginIntervalsSize, std::max(shapeMargin, offset())));
+    int marginIntervalsSize = (offset() > shapeMargin)
+        ? size()
+        : size() - offset() * 2 + shapeMargin * 2;
+    std::unique_ptr<RasterShapeIntervals> result = WTF::wrapUnique(new RasterShapeIntervals(
+        marginIntervalsSize, std::max(shapeMargin, offset())));
     MarginIntervalGenerator marginIntervalGenerator(shapeMargin);
 
     for (int y = bounds().y(); y < bounds().maxY(); ++y) {
@@ -91,7 +98,8 @@ PassOwnPtr<RasterShapeIntervals> RasterShapeIntervals::computeShapeMarginInterva
         for (int marginY = y - 1; marginY >= marginY0; --marginY) {
             if (marginY > bounds().y() && intervalAt(marginY).contains(intervalAtY))
                 break;
-            result->intervalAt(marginY).unite(marginIntervalGenerator.intervalAt(marginY));
+            result->intervalAt(marginY).unite(
+                marginIntervalGenerator.intervalAt(marginY));
         }
 
         result->intervalAt(y).unite(marginIntervalGenerator.intervalAt(y));
@@ -99,12 +107,13 @@ PassOwnPtr<RasterShapeIntervals> RasterShapeIntervals::computeShapeMarginInterva
         for (int marginY = y + 1; marginY < marginY1; ++marginY) {
             if (marginY < bounds().maxY() && intervalAt(marginY).contains(intervalAtY))
                 break;
-            result->intervalAt(marginY).unite(marginIntervalGenerator.intervalAt(marginY));
+            result->intervalAt(marginY).unite(
+                marginIntervalGenerator.intervalAt(marginY));
         }
     }
 
     result->initializeBounds();
-    return result.release();
+    return result;
 }
 
 void RasterShapeIntervals::initializeBounds()
@@ -145,19 +154,21 @@ const RasterShapeIntervals& RasterShape::marginIntervals() const
     int shapeMarginInt = clampTo<int>(ceil(shapeMargin()), 0);
     int maxShapeMarginInt = std::max(m_marginRectSize.width(), m_marginRectSize.height()) * sqrtf(2);
     if (!m_marginIntervals)
-        m_marginIntervals = m_intervals->computeShapeMarginIntervals(std::min(shapeMarginInt, maxShapeMarginInt));
+        m_marginIntervals = m_intervals->computeShapeMarginIntervals(
+            std::min(shapeMarginInt, maxShapeMarginInt));
 
     return *m_marginIntervals;
 }
 
-LineSegment RasterShape::getExcludedInterval(LayoutUnit logicalTop, LayoutUnit logicalHeight) const
+LineSegment RasterShape::getExcludedInterval(LayoutUnit logicalTop,
+    LayoutUnit logicalHeight) const
 {
     const RasterShapeIntervals& intervals = marginIntervals();
     if (intervals.isEmpty())
         return LineSegment();
 
-    int y1 = logicalTop;
-    int y2 = logicalTop + logicalHeight;
+    int y1 = logicalTop.toInt();
+    int y2 = (logicalTop + logicalHeight).toInt();
     ASSERT(y2 >= y1);
     if (y2 < intervals.bounds().y() || y1 >= intervals.bounds().maxY())
         return LineSegment();

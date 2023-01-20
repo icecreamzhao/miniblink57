@@ -38,22 +38,26 @@ class SerializedScriptValue;
 
 class PopStateEvent final : public Event {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    virtual ~PopStateEvent();
-    static PassRefPtrWillBeRawPtr<PopStateEvent> create();
-    static PassRefPtrWillBeRawPtr<PopStateEvent> create(PassRefPtr<SerializedScriptValue>, History*);
-    static PassRefPtrWillBeRawPtr<PopStateEvent> create(const AtomicString&, const PopStateEventInit&);
+    ~PopStateEvent() override;
+    static PopStateEvent* create();
+    static PopStateEvent* create(PassRefPtr<SerializedScriptValue>, History*);
+    static PopStateEvent* create(const AtomicString&, const PopStateEventInit&);
 
     ScriptValue state() const { return m_state; }
-    SerializedScriptValue* serializedState() const { return m_serializedState.get(); }
+    SerializedScriptValue* serializedState() const
+    {
+        return m_serializedState.get();
+    }
     void setSerializedState(PassRefPtr<SerializedScriptValue> state)
     {
-        ASSERT(!m_serializedState);
+        DCHECK(!m_serializedState);
         m_serializedState = state;
     }
     History* history() const { return m_history.get(); }
 
-    virtual const AtomicString& interfaceName() const override;
+    const AtomicString& interfaceName() const override;
 
     DECLARE_VIRTUAL_TRACE();
 
@@ -64,7 +68,7 @@ private:
 
     RefPtr<SerializedScriptValue> m_serializedState;
     ScriptValue m_state;
-    PersistentWillBeMember<History> m_history;
+    Member<History> m_history;
 };
 
 } // namespace blink

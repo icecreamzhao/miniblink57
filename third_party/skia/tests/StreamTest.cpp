@@ -11,7 +11,6 @@
 #include "SkOSFile.h"
 #include "SkRandom.h"
 #include "SkStream.h"
-<<<<<<< HEAD
 #include "SkStreamPriv.h"
 #include "Test.h"
 
@@ -25,19 +24,6 @@
 static void test_loop_stream(skiatest::Reporter* reporter, SkStream* stream,
     const void* src, size_t len, int repeat)
 {
-=======
-#include "Test.h"
-
-#ifndef SK_BUILD_FOR_WIN
-#include <unistd.h>
-#include <fcntl.h>
-#endif
-
-#define MAX_SIZE    (256 * 1024)
-
-static void test_loop_stream(skiatest::Reporter* reporter, SkStream* stream,
-                             const void* src, size_t len, int repeat) {
->>>>>>> miniblink49
     SkAutoSMalloc<256> storage(len);
     void* tmp = storage.get();
 
@@ -54,12 +40,8 @@ static void test_loop_stream(skiatest::Reporter* reporter, SkStream* stream,
     REPORTER_ASSERT(reporter, stream->isAtEnd());
 }
 
-<<<<<<< HEAD
 static void test_filestreams(skiatest::Reporter* reporter, const char* tmpDir)
 {
-=======
-static void test_filestreams(skiatest::Reporter* reporter, const char* tmpDir) {
->>>>>>> miniblink49
     SkString path = SkOSPath::Join(tmpDir, "wstream_test");
 
     const char s[] = "abcdefghijklmnopqrstuvwxyz";
@@ -96,14 +78,9 @@ static void test_filestreams(skiatest::Reporter* reporter, const char* tmpDir) {
     }
 }
 
-<<<<<<< HEAD
 static void TestWStream(skiatest::Reporter* reporter)
 {
     SkDynamicMemoryWStream ds;
-=======
-static void TestWStream(skiatest::Reporter* reporter) {
-    SkDynamicMemoryWStream  ds;
->>>>>>> miniblink49
     const char s[] = "abcdefghijklmnopqrstuvwxyz";
     int i;
     for (i = 0; i < 100; i++) {
@@ -112,15 +89,9 @@ static void TestWStream(skiatest::Reporter* reporter) {
     REPORTER_ASSERT(reporter, ds.getOffset() == 100 * 26);
 
     char* dst = new char[100 * 26 + 1];
-<<<<<<< HEAD
     dst[100 * 26] = '*';
     ds.copyTo(dst);
     REPORTER_ASSERT(reporter, dst[100 * 26] == '*');
-=======
-    dst[100*26] = '*';
-    ds.copyTo(dst);
-    REPORTER_ASSERT(reporter, dst[100*26] == '*');
->>>>>>> miniblink49
     for (i = 0; i < 100; i++) {
         REPORTER_ASSERT(reporter, memcmp(&dst[i * 26], s, 26) == 0);
     }
@@ -171,12 +142,8 @@ static void TestWStream(skiatest::Reporter* reporter) {
     }
 }
 
-<<<<<<< HEAD
 static void TestPackedUInt(skiatest::Reporter* reporter)
 {
-=======
-static void TestPackedUInt(skiatest::Reporter* reporter) {
->>>>>>> miniblink49
     // we know that packeduint tries to write 1, 2 or 4 bytes for the length,
     // so we test values around each of those transitions (and a few others)
     const size_t sizes[] = {
@@ -186,10 +153,6 @@ static void TestPackedUInt(skiatest::Reporter* reporter) {
         0x7FFFFFFE, 0x7FFFFFFF, 0x80000000, 0x80000001, 0xFFFFFFFE, 0xFFFFFFFF
     };
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
     size_t i;
     char buffer[sizeof(sizes) * 4];
 
@@ -204,7 +167,6 @@ static void TestPackedUInt(skiatest::Reporter* reporter) {
     for (i = 0; i < SK_ARRAY_COUNT(sizes); ++i) {
         size_t n = rstream.readPackedUInt();
         if (sizes[i] != n) {
-<<<<<<< HEAD
             ERRORF(reporter, "sizes:%x != n:%x\n", i, sizes[i], n);
         }
     }
@@ -215,46 +177,22 @@ static void TestPackedUInt(skiatest::Reporter* reporter) {
 static void TestDereferencingData(SkMemoryStream* memStream)
 {
     memStream->read(nullptr, 0);
-=======
-            SkDebugf("-- %d: sizes:%x n:%x\n", i, sizes[i], n);
-        }
-        REPORTER_ASSERT(reporter, sizes[i] == n);
-    }
-}
-
-// Test that setting an SkMemoryStream to a NULL data does not result in a crash when calling
-// methods that access fData.
-static void TestDereferencingData(SkMemoryStream* memStream) {
-    memStream->read(NULL, 0);
->>>>>>> miniblink49
     memStream->getMemoryBase();
     SkAutoDataUnref data(memStream->copyToData());
 }
 
-<<<<<<< HEAD
 static void TestNullData()
 {
     SkData* nullData = nullptr;
-=======
-static void TestNullData() {
-    SkData* nullData = NULL;
->>>>>>> miniblink49
     SkMemoryStream memStream(nullData);
     TestDereferencingData(&memStream);
 
     memStream.setData(nullData);
     TestDereferencingData(&memStream);
-<<<<<<< HEAD
 }
 
 DEF_TEST(Stream, reporter)
 {
-=======
-
-}
-
-DEF_TEST(Stream, reporter) {
->>>>>>> miniblink49
     TestWStream(reporter);
     TestPackedUInt(reporter);
     TestNullData();
@@ -263,18 +201,11 @@ DEF_TEST(Stream, reporter) {
 /**
  *  Tests peeking and then reading the same amount. The two should provide the
  *  same results.
-<<<<<<< HEAD
  *  Returns the amount successfully read minus the amount successfully peeked.
  */
 static size_t compare_peek_to_read(skiatest::Reporter* reporter,
     SkStream* stream, size_t bytesToPeek)
 {
-=======
- *  Returns whether the stream could peek.
- */
-static bool compare_peek_to_read(skiatest::Reporter* reporter,
-                                 SkStream* stream, size_t bytesToPeek) {
->>>>>>> miniblink49
     // The rest of our tests won't be very interesting if bytesToPeek is zero.
     REPORTER_ASSERT(reporter, bytesToPeek > 0);
     SkAutoMalloc peekStorage(bytesToPeek);
@@ -282,13 +213,7 @@ static bool compare_peek_to_read(skiatest::Reporter* reporter,
     void* peekPtr = peekStorage.get();
     void* readPtr = peekStorage.get();
 
-<<<<<<< HEAD
     const size_t bytesPeeked = stream->peek(peekPtr, bytesToPeek);
-=======
-    if (!stream->peek(peekPtr, bytesToPeek)) {
-        return false;
-    }
->>>>>>> miniblink49
     const size_t bytesRead = stream->read(readPtr, bytesToPeek);
 
     // bytesRead should only be less than attempted if the stream is at the
@@ -297,7 +222,6 @@ static bool compare_peek_to_read(skiatest::Reporter* reporter,
 
     // peek and read should behave the same, except peek returned to the
     // original position, so they read the same data.
-<<<<<<< HEAD
     REPORTER_ASSERT(reporter, !memcmp(peekPtr, readPtr, bytesPeeked));
 
     // A stream should never be able to peek more than it can read.
@@ -332,25 +256,11 @@ static void test_peeking_front_buffered_stream(skiatest::Reporter* r,
             // We have reached the end of the buffer. Verify that it was at least
             // bufferSize.
             REPORTER_ASSERT(r, peeked + i - unpeekableBytes >= bufferSize);
-=======
-    REPORTER_ASSERT(reporter, !memcmp(peekPtr, readPtr, bytesRead));
-
-    return true;
-}
-
-static void test_peeking_stream(skiatest::Reporter* r, SkStream* stream, size_t limit) {
-    size_t peeked = 0;
-    for (size_t i = 1; !stream->isAtEnd(); i++) {
-        const bool couldPeek = compare_peek_to_read(r, stream, i);
-        if (!couldPeek) {
-            REPORTER_ASSERT(r, peeked + i > limit);
->>>>>>> miniblink49
             // No more peeking is supported.
             break;
         }
         peeked += i;
     }
-<<<<<<< HEAD
 
     // Test that attempting to peek beyond the length of the buffer does not prevent rewinding.
     bufferedStream.reset(SkFrontBufferedStream::Create(original.duplicate(), bufferSize));
@@ -391,29 +301,6 @@ DEF_TEST(StreamPeek, reporter)
     const char gAbcs[] = "abcdefghijklmnopqrstuvwxyz";
     SkMemoryStream memStream(gAbcs, strlen(gAbcs), false);
     test_fully_peekable_stream(reporter, &memStream, memStream.getLength());
-=======
-}
-
-static void test_peeking_front_buffered_stream(skiatest::Reporter* r,
-                                               const SkStream& original,
-                                               size_t bufferSize) {
-    SkStream* dupe = original.duplicate();
-    REPORTER_ASSERT(r, dupe != NULL);
-    SkAutoTDelete<SkStream> bufferedStream(SkFrontBufferedStream::Create(dupe, bufferSize));
-    REPORTER_ASSERT(r, bufferedStream != NULL);
-    test_peeking_stream(r, bufferedStream, bufferSize);
-}
-
-// This test uses file system operations that don't work out of the 
-// box on iOS. It's likely that we don't need them on iOS. Ignoring for now. 
-// TODO(stephana): Re-evaluate if we need this in the future. 
-#ifndef SK_BUILD_FOR_IOS
-DEF_TEST(StreamPeek, reporter) {
-    // Test a memory stream.
-    const char gAbcs[] = "abcdefghijklmnopqrstuvwxyz";
-    SkMemoryStream memStream(gAbcs, strlen(gAbcs), false);
-    test_peeking_stream(reporter, &memStream, memStream.getLength());
->>>>>>> miniblink49
 
     // Test an arbitrary file stream. file streams do not support peeking.
     SkFILEStream fileStream(GetResourcePath("baby_tux.webp").c_str());
@@ -423,11 +310,7 @@ DEF_TEST(StreamPeek, reporter) {
     }
     SkAutoMalloc storage(fileStream.getLength());
     for (size_t i = 1; i < fileStream.getLength(); i++) {
-<<<<<<< HEAD
         REPORTER_ASSERT(reporter, fileStream.peek(storage.get(), i) == 0);
-=======
-        REPORTER_ASSERT(reporter, !fileStream.peek(storage.get(), i));
->>>>>>> miniblink49
     }
 
     // Now test some FrontBufferedStreams
@@ -439,14 +322,9 @@ DEF_TEST(StreamPeek, reporter) {
 
 // Asserts that asset == expected and is peekable.
 static void stream_peek_test(skiatest::Reporter* rep,
-<<<<<<< HEAD
     SkStreamAsset* asset,
     const SkData* expected)
 {
-=======
-                             SkStreamAsset* asset,
-                             const SkData* expected) {
->>>>>>> miniblink49
     if (asset->getLength() != expected->size()) {
         ERRORF(rep, "Unexpected length.");
         return;
@@ -455,21 +333,12 @@ static void stream_peek_test(skiatest::Reporter* rep,
     uint8_t buffer[4096];
     const uint8_t* expect = expected->bytes();
     for (size_t i = 0; i < asset->getLength(); ++i) {
-<<<<<<< HEAD
         uint32_t maxSize = SkToU32(SkTMin(sizeof(buffer), asset->getLength() - i));
-=======
-        uint32_t maxSize =
-                SkToU32(SkTMin(sizeof(buffer), asset->getLength() - i));
->>>>>>> miniblink49
         size_t size = rand.nextRangeU(1, maxSize);
         SkASSERT(size >= 1);
         SkASSERT(size <= sizeof(buffer));
         SkASSERT(size + i <= asset->getLength());
-<<<<<<< HEAD
         if (asset->peek(buffer, size) < size) {
-=======
-        if (!asset->peek(buffer, size)) {
->>>>>>> miniblink49
             ERRORF(rep, "Peek Failed!");
             return;
         }
@@ -486,12 +355,8 @@ static void stream_peek_test(skiatest::Reporter* rep,
     }
 }
 
-<<<<<<< HEAD
 DEF_TEST(StreamPeek_BlockMemoryStream, rep)
 {
-=======
-DEF_TEST(StreamPeek_BlockMemoryStream, rep) {
->>>>>>> miniblink49
     const static int kSeed = 1234;
     SkRandom valueSource(kSeed);
     SkRandom rand(kSeed << 1);
@@ -508,11 +373,7 @@ DEF_TEST(StreamPeek_BlockMemoryStream, rep) {
     SkAutoTDelete<SkStreamAsset> asset(dynamicMemoryWStream.detachAsStream());
     SkAutoTUnref<SkData> expected(SkData::NewUninitialized(asset->getLength()));
     uint8_t* expectedPtr = static_cast<uint8_t*>(expected->writable_data());
-<<<<<<< HEAD
     valueSource.setSeed(kSeed); // reseed.
-=======
-    valueSource.setSeed(kSeed);  // reseed.
->>>>>>> miniblink49
     // We want the exact same same "random" string of numbers to put
     // in expected. i.e.: don't rely on SkDynamicMemoryStream to work
     // correctly while we are testing SkDynamicMemoryStream.
@@ -521,7 +382,6 @@ DEF_TEST(StreamPeek_BlockMemoryStream, rep) {
     }
     stream_peek_test(rep, asset, expected);
 }
-<<<<<<< HEAD
 
 namespace {
 class DumbStream : public SkStream {
@@ -594,5 +454,3 @@ DEF_TEST(StreamEmptyStreamMemoryBase, r)
     SkAutoTDelete<SkStreamAsset> asset(tmp.detachAsStream());
     REPORTER_ASSERT(r, nullptr == asset->getMemoryBase());
 }
-=======
->>>>>>> miniblink49

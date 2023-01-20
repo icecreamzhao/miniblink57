@@ -28,103 +28,108 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/html/shadow/ShadowElementNames.h"
 
 namespace blink {
 
 namespace ShadowElementNames {
 
-const AtomicString& detailsContent()
-{
-    DEFINE_STATIC_LOCAL(AtomicString, name, ("details-content", AtomicString::ConstructFromLiteral));
-    return name;
-}
+    const AtomicString& detailsContent()
+    {
+        DEFINE_STATIC_LOCAL(AtomicString, name, ("details-content"));
+        return name;
+    }
 
-const AtomicString& detailsSummary()
-{
-    DEFINE_STATIC_LOCAL(AtomicString, name, ("details-summary", AtomicString::ConstructFromLiteral));
-    return name;
-}
+    const AtomicString& detailsSummary()
+    {
+        DEFINE_STATIC_LOCAL(AtomicString, name, ("details-summary"));
+        return name;
+    }
 
-const AtomicString& detailsMarker()
-{
-    DEFINE_STATIC_LOCAL(AtomicString, name, ("details-marker", AtomicString::ConstructFromLiteral));
-    return name;
-}
+    const AtomicString& detailsMarker()
+    {
+        DEFINE_STATIC_LOCAL(AtomicString, name, ("details-marker"));
+        return name;
+    }
 
-const AtomicString& dateTimeEdit()
-{
-    DEFINE_STATIC_LOCAL(AtomicString, name, ("date-time-edit", AtomicString::ConstructFromLiteral));
-    return name;
-}
+    const AtomicString& dateTimeEdit()
+    {
+        DEFINE_STATIC_LOCAL(AtomicString, name, ("date-time-edit"));
+        return name;
+    }
 
-const AtomicString& spinButton()
-{
-    DEFINE_STATIC_LOCAL(AtomicString, name, ("spin", AtomicString::ConstructFromLiteral));
-    return name;
-}
+    const AtomicString& spinButton()
+    {
+        DEFINE_STATIC_LOCAL(AtomicString, name, ("spin"));
+        return name;
+    }
 
-const AtomicString& clearButton()
-{
-    DEFINE_STATIC_LOCAL(AtomicString, name, ("clear", AtomicString::ConstructFromLiteral));
-    return name;
-}
+    const AtomicString& clearButton()
+    {
+        DEFINE_STATIC_LOCAL(AtomicString, name, ("clear"));
+        return name;
+    }
 
-const AtomicString& editingViewPort()
-{
-    DEFINE_STATIC_LOCAL(AtomicString, name, ("editing-view-port", AtomicString::ConstructFromLiteral));
-    return name;
-}
+    const AtomicString& editingViewPort()
+    {
+        DEFINE_STATIC_LOCAL(AtomicString, name, ("editing-view-port"));
+        return name;
+    }
 
-const AtomicString& innerEditor()
-{
-    DEFINE_STATIC_LOCAL(AtomicString, name, ("inner-editor", AtomicString::ConstructFromLiteral));
-    return name;
-}
+    const AtomicString& innerEditor()
+    {
+        DEFINE_STATIC_LOCAL(AtomicString, name, ("inner-editor"));
+        return name;
+    }
 
-const AtomicString& pickerIndicator()
-{
-    DEFINE_STATIC_LOCAL(AtomicString, name, ("picker", AtomicString::ConstructFromLiteral));
-    return name;
-}
+    const AtomicString& pickerIndicator()
+    {
+        DEFINE_STATIC_LOCAL(AtomicString, name, ("picker"));
+        return name;
+    }
 
-const AtomicString& placeholder()
-{
-    DEFINE_STATIC_LOCAL(AtomicString, name, ("placeholder", AtomicString::ConstructFromLiteral));
-    return name;
-}
+    const AtomicString& placeholder()
+    {
+        DEFINE_STATIC_LOCAL(AtomicString, name, ("placeholder"));
+        return name;
+    }
 
-const AtomicString& searchDecoration()
-{
-    DEFINE_STATIC_LOCAL(AtomicString, name, ("decoration", AtomicString::ConstructFromLiteral));
-    return name;
-}
+    const AtomicString& searchClearButton()
+    {
+        DEFINE_STATIC_LOCAL(AtomicString, name, ("search-clear"));
+        return name;
+    }
 
-const AtomicString& sliderThumb()
-{
-    DEFINE_STATIC_LOCAL(AtomicString, name, ("thumb", AtomicString::ConstructFromLiteral));
-    return name;
-}
+    const AtomicString& searchDecoration()
+    {
+        DEFINE_STATIC_LOCAL(AtomicString, name, ("decoration"));
+        return name;
+    }
 
-const AtomicString& sliderTrack()
-{
-    DEFINE_STATIC_LOCAL(AtomicString, name, ("track", AtomicString::ConstructFromLiteral));
-    return name;
-}
+    const AtomicString& sliderThumb()
+    {
+        DEFINE_STATIC_LOCAL(AtomicString, name, ("thumb"));
+        return name;
+    }
 
-const AtomicString& textFieldContainer()
-{
-    DEFINE_STATIC_LOCAL(AtomicString, name, ("text-field-container", AtomicString::ConstructFromLiteral));
-    return name;
-}
+    const AtomicString& sliderTrack()
+    {
+        DEFINE_STATIC_LOCAL(AtomicString, name, ("track"));
+        return name;
+    }
 
-const AtomicString& optGroupLabel()
-{
-    DEFINE_STATIC_LOCAL(AtomicString, name, ("optgroup-label", AtomicString::ConstructFromLiteral));
-    return name;
-}
+    const AtomicString& textFieldContainer()
+    {
+        DEFINE_STATIC_LOCAL(AtomicString, name, ("text-field-container"));
+        return name;
+    }
 
-}
+    const AtomicString& optGroupLabel()
+    {
+        DEFINE_STATIC_LOCAL(AtomicString, name, ("optgroup-label"));
+        return name;
+    }
 
-}
+} // namespace ShadowElementNames
+
+} // namespace blink

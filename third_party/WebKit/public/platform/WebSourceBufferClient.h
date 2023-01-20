@@ -5,7 +5,6 @@
 #ifndef WebSourceBufferClient_h
 #define WebSourceBufferClient_h
 
-<<<<<<< HEAD
 #include "WebMediaPlayer.h"
 #include "WebString.h"
 #include "WebVector.h"
@@ -14,15 +13,10 @@ namespace blink {
 
 // Interface that the media engine uses to signal Blink's Media Source
 // extensions module.
-=======
-namespace blink {
-
->>>>>>> miniblink49
 class WebSourceBufferClient {
 public:
     virtual ~WebSourceBufferClient() { }
 
-<<<<<<< HEAD
     // Complete media track info: track type, unique track id, kind, label,
     // language.
     struct MediaTrackInfo {
@@ -41,10 +35,6 @@ public:
     virtual bool initializationSegmentReceived(
         const WebVector<MediaTrackInfo>& tracks)
         = 0;
-=======
-    // FIXME: Add a track collection parameter here.
-    virtual void initializationSegmentReceived() = 0;
->>>>>>> miniblink49
 };
 
 } // namespace blink

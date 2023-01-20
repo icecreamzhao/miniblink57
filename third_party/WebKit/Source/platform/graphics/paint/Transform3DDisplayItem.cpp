@@ -2,10 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/graphics/paint/Transform3DDisplayItem.h"
 
 #include "platform/graphics/GraphicsContext.h"
@@ -14,7 +10,6 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 void BeginTransform3DDisplayItem::replay(GraphicsContext& context) const
 {
     TransformationMatrix transform(m_transform);
@@ -60,31 +55,13 @@ void BeginTransform3DDisplayItem::dumpPropertiesAsDebugString(
 #endif
 
 void EndTransform3DDisplayItem::replay(GraphicsContext& context) const
-=======
-void BeginTransform3DDisplayItem::replay(GraphicsContext& context)
-{
-    context.save();
-    context.concatCTM(m_transform.toAffineTransform());
-}
-
-void BeginTransform3DDisplayItem::appendToWebDisplayItemList(WebDisplayItemList* list) const
-{
-    list->appendTransformItem(TransformationMatrix::toSkMatrix44(m_transform));
-}
-
-void EndTransform3DDisplayItem::replay(GraphicsContext& context)
->>>>>>> miniblink49
 {
     context.restore();
 }
 
-<<<<<<< HEAD
 void EndTransform3DDisplayItem::appendToWebDisplayItemList(
     const IntRect& visualRect,
     WebDisplayItemList* list) const
-=======
-void EndTransform3DDisplayItem::appendToWebDisplayItemList(WebDisplayItemList* list) const
->>>>>>> miniblink49
 {
     list->appendEndTransformItem();
 }

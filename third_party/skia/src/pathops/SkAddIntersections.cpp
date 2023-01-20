@@ -11,7 +11,6 @@
 #if DEBUG_ADD_INTERSECTING_TS
 
 static void debugShowLineIntersection(int pts, const SkIntersectionHelper& wt,
-<<<<<<< HEAD
     const SkIntersectionHelper& wn, const SkIntersections& i)
 {
     SkASSERT(i.used() == pts);
@@ -22,17 +21,6 @@ static void debugShowLineIntersection(int pts, const SkIntersectionHelper& wt,
     }
     SkDebugf("%s " T_DEBUG_STR(wtTs, 0) " " LINE_DEBUG_STR " " PT_DEBUG_STR, __FUNCTION__,
         i[0][0], LINE_DEBUG_DATA(wt.pts()), PT_DEBUG_DATA(i, 0));
-=======
-                                      const SkIntersectionHelper& wn, const SkIntersections& i) {
-    SkASSERT(i.used() == pts);
-    if (!pts) {
-        SkDebugf("%s no intersect " LINE_DEBUG_STR " " LINE_DEBUG_STR "\n",
-                __FUNCTION__, LINE_DEBUG_DATA(wt.pts()), LINE_DEBUG_DATA(wn.pts()));
-        return;
-    }
-    SkDebugf("%s " T_DEBUG_STR(wtTs, 0) " " LINE_DEBUG_STR " " PT_DEBUG_STR, __FUNCTION__,
-            i[0][0], LINE_DEBUG_DATA(wt.pts()), PT_DEBUG_DATA(i, 0));
->>>>>>> miniblink49
     if (pts == 2) {
         SkDebugf(" " T_DEBUG_STR(wtTs, 1) " " PT_DEBUG_STR, i[0][1], PT_DEBUG_DATA(i, 1));
     }
@@ -44,7 +32,6 @@ static void debugShowLineIntersection(int pts, const SkIntersectionHelper& wt,
 }
 
 static void debugShowQuadLineIntersection(int pts, const SkIntersectionHelper& wt,
-<<<<<<< HEAD
     const SkIntersectionHelper& wn,
     const SkIntersections& i)
 {
@@ -56,18 +43,6 @@ static void debugShowQuadLineIntersection(int pts, const SkIntersectionHelper& w
     }
     SkDebugf("%s " T_DEBUG_STR(wtTs, 0) " " QUAD_DEBUG_STR " " PT_DEBUG_STR, __FUNCTION__,
         i[0][0], QUAD_DEBUG_DATA(wt.pts()), PT_DEBUG_DATA(i, 0));
-=======
-                                          const SkIntersectionHelper& wn,
-                                          const SkIntersections& i) {
-    SkASSERT(i.used() == pts);
-    if (!pts) {
-        SkDebugf("%s no intersect " QUAD_DEBUG_STR " " LINE_DEBUG_STR "\n",
-                __FUNCTION__, QUAD_DEBUG_DATA(wt.pts()), LINE_DEBUG_DATA(wn.pts()));
-        return;
-    }
-    SkDebugf("%s " T_DEBUG_STR(wtTs, 0) " " QUAD_DEBUG_STR " " PT_DEBUG_STR, __FUNCTION__,
-            i[0][0], QUAD_DEBUG_DATA(wt.pts()), PT_DEBUG_DATA(i, 0));
->>>>>>> miniblink49
     for (int n = 1; n < pts; ++n) {
         SkDebugf(" " TX_DEBUG_STR(wtTs) " " PT_DEBUG_STR, n, i[0][n], PT_DEBUG_DATA(i, n));
     }
@@ -79,7 +54,6 @@ static void debugShowQuadLineIntersection(int pts, const SkIntersectionHelper& w
 }
 
 static void debugShowQuadIntersection(int pts, const SkIntersectionHelper& wt,
-<<<<<<< HEAD
     const SkIntersectionHelper& wn, const SkIntersections& i)
 {
     SkASSERT(i.used() == pts);
@@ -90,17 +64,6 @@ static void debugShowQuadIntersection(int pts, const SkIntersectionHelper& wt,
     }
     SkDebugf("%s " T_DEBUG_STR(wtTs, 0) " " QUAD_DEBUG_STR " " PT_DEBUG_STR, __FUNCTION__,
         i[0][0], QUAD_DEBUG_DATA(wt.pts()), PT_DEBUG_DATA(i, 0));
-=======
-        const SkIntersectionHelper& wn, const SkIntersections& i) {
-    SkASSERT(i.used() == pts);
-    if (!pts) {
-        SkDebugf("%s no intersect " QUAD_DEBUG_STR " " QUAD_DEBUG_STR "\n",
-                __FUNCTION__, QUAD_DEBUG_DATA(wt.pts()), QUAD_DEBUG_DATA(wn.pts()));
-        return;
-    }
-    SkDebugf("%s " T_DEBUG_STR(wtTs, 0) " " QUAD_DEBUG_STR " " PT_DEBUG_STR, __FUNCTION__,
-            i[0][0], QUAD_DEBUG_DATA(wt.pts()), PT_DEBUG_DATA(i, 0));
->>>>>>> miniblink49
     for (int n = 1; n < pts; ++n) {
         SkDebugf(" " TX_DEBUG_STR(wtTs) " " PT_DEBUG_STR, n, i[0][n], PT_DEBUG_DATA(i, n));
     }
@@ -112,7 +75,6 @@ static void debugShowQuadIntersection(int pts, const SkIntersectionHelper& wt,
 }
 
 static void debugShowConicLineIntersection(int pts, const SkIntersectionHelper& wt,
-<<<<<<< HEAD
     const SkIntersectionHelper& wn, const SkIntersections& i)
 {
     SkASSERT(i.used() == pts);
@@ -123,17 +85,6 @@ static void debugShowConicLineIntersection(int pts, const SkIntersectionHelper& 
     }
     SkDebugf("%s " T_DEBUG_STR(wtTs, 0) " " CONIC_DEBUG_STR " " PT_DEBUG_STR, __FUNCTION__,
         i[0][0], CONIC_DEBUG_DATA(wt.pts(), wt.weight()), PT_DEBUG_DATA(i, 0));
-=======
-        const SkIntersectionHelper& wn, const SkIntersections& i) {
-    SkASSERT(i.used() == pts);
-    if (!pts) {
-        SkDebugf("%s no intersect " CONIC_DEBUG_STR " " LINE_DEBUG_STR "\n",
-                __FUNCTION__, CONIC_DEBUG_DATA(wt.pts(), wt.weight()), LINE_DEBUG_DATA(wn.pts()));
-        return;
-    }
-    SkDebugf("%s " T_DEBUG_STR(wtTs, 0) " " CONIC_DEBUG_STR " " PT_DEBUG_STR, __FUNCTION__,
-            i[0][0], CONIC_DEBUG_DATA(wt.pts(), wt.weight()), PT_DEBUG_DATA(i, 0));
->>>>>>> miniblink49
     for (int n = 1; n < pts; ++n) {
         SkDebugf(" " TX_DEBUG_STR(wtTs) " " PT_DEBUG_STR, n, i[0][n], PT_DEBUG_DATA(i, n));
     }
@@ -145,7 +96,6 @@ static void debugShowConicLineIntersection(int pts, const SkIntersectionHelper& 
 }
 
 static void debugShowConicQuadIntersection(int pts, const SkIntersectionHelper& wt,
-<<<<<<< HEAD
     const SkIntersectionHelper& wn, const SkIntersections& i)
 {
     SkASSERT(i.used() == pts);
@@ -156,17 +106,6 @@ static void debugShowConicQuadIntersection(int pts, const SkIntersectionHelper& 
     }
     SkDebugf("%s " T_DEBUG_STR(wtTs, 0) " " CONIC_DEBUG_STR " " PT_DEBUG_STR, __FUNCTION__,
         i[0][0], CONIC_DEBUG_DATA(wt.pts(), wt.weight()), PT_DEBUG_DATA(i, 0));
-=======
-        const SkIntersectionHelper& wn, const SkIntersections& i) {
-    SkASSERT(i.used() == pts);
-    if (!pts) {
-        SkDebugf("%s no intersect " CONIC_DEBUG_STR " " QUAD_DEBUG_STR "\n",
-                __FUNCTION__, CONIC_DEBUG_DATA(wt.pts(), wt.weight()), QUAD_DEBUG_DATA(wn.pts()));
-        return;
-    }
-    SkDebugf("%s " T_DEBUG_STR(wtTs, 0) " " CONIC_DEBUG_STR " " PT_DEBUG_STR, __FUNCTION__,
-            i[0][0], CONIC_DEBUG_DATA(wt.pts(), wt.weight()), PT_DEBUG_DATA(i, 0));
->>>>>>> miniblink49
     for (int n = 1; n < pts; ++n) {
         SkDebugf(" " TX_DEBUG_STR(wtTs) " " PT_DEBUG_STR, n, i[0][n], PT_DEBUG_DATA(i, n));
     }
@@ -178,7 +117,6 @@ static void debugShowConicQuadIntersection(int pts, const SkIntersectionHelper& 
 }
 
 static void debugShowConicIntersection(int pts, const SkIntersectionHelper& wt,
-<<<<<<< HEAD
     const SkIntersectionHelper& wn, const SkIntersections& i)
 {
     SkASSERT(i.used() == pts);
@@ -190,18 +128,6 @@ static void debugShowConicIntersection(int pts, const SkIntersectionHelper& wt,
     }
     SkDebugf("%s " T_DEBUG_STR(wtTs, 0) " " CONIC_DEBUG_STR " " PT_DEBUG_STR, __FUNCTION__,
         i[0][0], CONIC_DEBUG_DATA(wt.pts(), wt.weight()), PT_DEBUG_DATA(i, 0));
-=======
-        const SkIntersectionHelper& wn, const SkIntersections& i) {
-    SkASSERT(i.used() == pts);
-    if (!pts) {
-        SkDebugf("%s no intersect " CONIC_DEBUG_STR " " CONIC_DEBUG_STR "\n",
-                __FUNCTION__, CONIC_DEBUG_DATA(wt.pts(), wt.weight()),
-                CONIC_DEBUG_DATA(wn.pts(), wn.weight()));
-        return;
-    }
-    SkDebugf("%s " T_DEBUG_STR(wtTs, 0) " " CONIC_DEBUG_STR " " PT_DEBUG_STR, __FUNCTION__,
-            i[0][0], CONIC_DEBUG_DATA(wt.pts(), wt.weight()), PT_DEBUG_DATA(i, 0));
->>>>>>> miniblink49
     for (int n = 1; n < pts; ++n) {
         SkDebugf(" " TX_DEBUG_STR(wtTs) " " PT_DEBUG_STR, n, i[0][n], PT_DEBUG_DATA(i, n));
     }
@@ -213,7 +139,6 @@ static void debugShowConicIntersection(int pts, const SkIntersectionHelper& wt,
 }
 
 static void debugShowCubicLineIntersection(int pts, const SkIntersectionHelper& wt,
-<<<<<<< HEAD
     const SkIntersectionHelper& wn, const SkIntersections& i)
 {
     SkASSERT(i.used() == pts);
@@ -224,17 +149,6 @@ static void debugShowCubicLineIntersection(int pts, const SkIntersectionHelper& 
     }
     SkDebugf("%s " T_DEBUG_STR(wtTs, 0) " " CUBIC_DEBUG_STR " " PT_DEBUG_STR, __FUNCTION__,
         i[0][0], CUBIC_DEBUG_DATA(wt.pts()), PT_DEBUG_DATA(i, 0));
-=======
-        const SkIntersectionHelper& wn, const SkIntersections& i) {
-    SkASSERT(i.used() == pts);
-    if (!pts) {
-        SkDebugf("%s no intersect " CUBIC_DEBUG_STR " " LINE_DEBUG_STR "\n",
-                __FUNCTION__, CUBIC_DEBUG_DATA(wt.pts()), LINE_DEBUG_DATA(wn.pts()));
-        return;
-    }
-    SkDebugf("%s " T_DEBUG_STR(wtTs, 0) " " CUBIC_DEBUG_STR " " PT_DEBUG_STR, __FUNCTION__,
-            i[0][0], CUBIC_DEBUG_DATA(wt.pts()), PT_DEBUG_DATA(i, 0));
->>>>>>> miniblink49
     for (int n = 1; n < pts; ++n) {
         SkDebugf(" " TX_DEBUG_STR(wtTs) " " PT_DEBUG_STR, n, i[0][n], PT_DEBUG_DATA(i, n));
     }
@@ -246,7 +160,6 @@ static void debugShowCubicLineIntersection(int pts, const SkIntersectionHelper& 
 }
 
 static void debugShowCubicQuadIntersection(int pts, const SkIntersectionHelper& wt,
-<<<<<<< HEAD
     const SkIntersectionHelper& wn, const SkIntersections& i)
 {
     SkASSERT(i.used() == pts);
@@ -257,17 +170,6 @@ static void debugShowCubicQuadIntersection(int pts, const SkIntersectionHelper& 
     }
     SkDebugf("%s " T_DEBUG_STR(wtTs, 0) " " CUBIC_DEBUG_STR " " PT_DEBUG_STR, __FUNCTION__,
         i[0][0], CUBIC_DEBUG_DATA(wt.pts()), PT_DEBUG_DATA(i, 0));
-=======
-        const SkIntersectionHelper& wn, const SkIntersections& i) {
-    SkASSERT(i.used() == pts);
-    if (!pts) {
-        SkDebugf("%s no intersect " CUBIC_DEBUG_STR " " QUAD_DEBUG_STR "\n",
-                __FUNCTION__, CUBIC_DEBUG_DATA(wt.pts()), QUAD_DEBUG_DATA(wn.pts()));
-        return;
-    }
-    SkDebugf("%s " T_DEBUG_STR(wtTs, 0) " " CUBIC_DEBUG_STR " " PT_DEBUG_STR, __FUNCTION__,
-            i[0][0], CUBIC_DEBUG_DATA(wt.pts()), PT_DEBUG_DATA(i, 0));
->>>>>>> miniblink49
     for (int n = 1; n < pts; ++n) {
         SkDebugf(" " TX_DEBUG_STR(wtTs) " " PT_DEBUG_STR, n, i[0][n], PT_DEBUG_DATA(i, n));
     }
@@ -279,7 +181,6 @@ static void debugShowCubicQuadIntersection(int pts, const SkIntersectionHelper& 
 }
 
 static void debugShowCubicConicIntersection(int pts, const SkIntersectionHelper& wt,
-<<<<<<< HEAD
     const SkIntersectionHelper& wn, const SkIntersections& i)
 {
     SkASSERT(i.used() == pts);
@@ -290,17 +191,6 @@ static void debugShowCubicConicIntersection(int pts, const SkIntersectionHelper&
     }
     SkDebugf("%s " T_DEBUG_STR(wtTs, 0) " " CUBIC_DEBUG_STR " " PT_DEBUG_STR, __FUNCTION__,
         i[0][0], CUBIC_DEBUG_DATA(wt.pts()), PT_DEBUG_DATA(i, 0));
-=======
-        const SkIntersectionHelper& wn, const SkIntersections& i) {
-    SkASSERT(i.used() == pts);
-    if (!pts) {
-        SkDebugf("%s no intersect " CUBIC_DEBUG_STR " " CONIC_DEBUG_STR "\n",
-                __FUNCTION__, CUBIC_DEBUG_DATA(wt.pts()), CONIC_DEBUG_DATA(wn.pts(), wn.weight()));
-        return;
-    }
-    SkDebugf("%s " T_DEBUG_STR(wtTs, 0) " " CUBIC_DEBUG_STR " " PT_DEBUG_STR, __FUNCTION__,
-            i[0][0], CUBIC_DEBUG_DATA(wt.pts()), PT_DEBUG_DATA(i, 0));
->>>>>>> miniblink49
     for (int n = 1; n < pts; ++n) {
         SkDebugf(" " TX_DEBUG_STR(wtTs) " " PT_DEBUG_STR, n, i[0][n], PT_DEBUG_DATA(i, n));
     }
@@ -312,7 +202,6 @@ static void debugShowCubicConicIntersection(int pts, const SkIntersectionHelper&
 }
 
 static void debugShowCubicIntersection(int pts, const SkIntersectionHelper& wt,
-<<<<<<< HEAD
     const SkIntersectionHelper& wn, const SkIntersections& i)
 {
     SkASSERT(i.used() == pts);
@@ -323,17 +212,6 @@ static void debugShowCubicIntersection(int pts, const SkIntersectionHelper& wt,
     }
     SkDebugf("%s " T_DEBUG_STR(wtTs, 0) " " CUBIC_DEBUG_STR " " PT_DEBUG_STR, __FUNCTION__,
         i[0][0], CUBIC_DEBUG_DATA(wt.pts()), PT_DEBUG_DATA(i, 0));
-=======
-        const SkIntersectionHelper& wn, const SkIntersections& i) {
-    SkASSERT(i.used() == pts);
-    if (!pts) {
-        SkDebugf("%s no intersect " CUBIC_DEBUG_STR " " CUBIC_DEBUG_STR "\n",
-                __FUNCTION__, CUBIC_DEBUG_DATA(wt.pts()), CUBIC_DEBUG_DATA(wn.pts()));
-        return;
-    }
-    SkDebugf("%s " T_DEBUG_STR(wtTs, 0) " " CUBIC_DEBUG_STR " " PT_DEBUG_STR, __FUNCTION__,
-            i[0][0], CUBIC_DEBUG_DATA(wt.pts()), PT_DEBUG_DATA(i, 0));
->>>>>>> miniblink49
     for (int n = 1; n < pts; ++n) {
         SkDebugf(" " TX_DEBUG_STR(wtTs) " " PT_DEBUG_STR, n, i[0][n], PT_DEBUG_DATA(i, n));
     }
@@ -345,7 +223,6 @@ static void debugShowCubicIntersection(int pts, const SkIntersectionHelper& wt,
 }
 
 #else
-<<<<<<< HEAD
 static void debugShowLineIntersection(int, const SkIntersectionHelper&,
     const SkIntersectionHelper&, const SkIntersections&)
 {
@@ -394,56 +271,12 @@ static void debugShowCubicConicIntersection(int, const SkIntersectionHelper&,
 static void debugShowCubicIntersection(int, const SkIntersectionHelper&,
     const SkIntersectionHelper&, const SkIntersections&)
 {
-=======
-static void debugShowLineIntersection(int , const SkIntersectionHelper& ,
-        const SkIntersectionHelper& , const SkIntersections& ) {
-}
-
-static void debugShowQuadLineIntersection(int , const SkIntersectionHelper& ,
-        const SkIntersectionHelper& , const SkIntersections& ) {
-}
-
-static void debugShowQuadIntersection(int , const SkIntersectionHelper& ,
-        const SkIntersectionHelper& , const SkIntersections& ) {
-}
-
-static void debugShowConicLineIntersection(int , const SkIntersectionHelper& ,
-        const SkIntersectionHelper& , const SkIntersections& ) {
-}
-
-static void debugShowConicQuadIntersection(int , const SkIntersectionHelper& ,
-        const SkIntersectionHelper& , const SkIntersections& ) {
-}
-
-static void debugShowConicIntersection(int , const SkIntersectionHelper& ,
-        const SkIntersectionHelper& , const SkIntersections& ) {
-}
-
-static void debugShowCubicLineIntersection(int , const SkIntersectionHelper& ,
-        const SkIntersectionHelper& , const SkIntersections& ) {
-}
-
-static void debugShowCubicQuadIntersection(int , const SkIntersectionHelper& ,
-        const SkIntersectionHelper& , const SkIntersections& ) {
-}
-
-static void debugShowCubicConicIntersection(int , const SkIntersectionHelper& ,
-        const SkIntersectionHelper& , const SkIntersections& ) {
-}
-
-static void debugShowCubicIntersection(int , const SkIntersectionHelper& ,
-        const SkIntersectionHelper& , const SkIntersections& ) {
->>>>>>> miniblink49
 }
 #endif
 
 bool AddIntersectTs(SkOpContour* test, SkOpContour* next, SkOpCoincidence* coincidence,
-<<<<<<< HEAD
     SkChunkAlloc* allocator)
 {
-=======
-        SkChunkAlloc* allocator) {
->>>>>>> miniblink49
     if (test != next) {
         if (AlmostLessUlps(test->bounds().fBottom, next->bounds().fTop)) {
             return false;
@@ -468,17 +301,12 @@ bool AddIntersectTs(SkOpContour* test, SkOpContour* next, SkOpCoincidence* coinc
                 continue;
             }
             int pts = 0;
-<<<<<<< HEAD
             SkIntersections ts { SkDEBUGCODE(test->globalState()) };
-=======
-            SkIntersections ts;
->>>>>>> miniblink49
             bool swap = false;
             SkDQuad quad1, quad2;
             SkDConic conic1, conic2;
             SkDCubic cubic1, cubic2;
             switch (wt.segmentType()) {
-<<<<<<< HEAD
             case SkIntersectionHelper::kHorizontalLine_Segment:
                 swap = true;
                 switch (wn.segmentType()) {
@@ -693,219 +521,6 @@ bool AddIntersectTs(SkOpContour* test, SkOpContour* next, SkOpCoincidence* coinc
 #if DEBUG_T_SECT_LOOP_COUNT
             test->globalState()->debugAddLoopCount(&ts, wt, wn);
 #endif
-=======
-                case SkIntersectionHelper::kHorizontalLine_Segment:
-                    swap = true;
-                    switch (wn.segmentType()) {
-                        case SkIntersectionHelper::kHorizontalLine_Segment:
-                        case SkIntersectionHelper::kVerticalLine_Segment:
-                        case SkIntersectionHelper::kLine_Segment:
-                            pts = ts.lineHorizontal(wn.pts(), wt.left(),
-                                    wt.right(), wt.y(), wt.xFlipped());
-                            debugShowLineIntersection(pts, wn, wt, ts);
-                            break;
-                        case SkIntersectionHelper::kQuad_Segment:
-                            pts = ts.quadHorizontal(wn.pts(), wt.left(),
-                                    wt.right(), wt.y(), wt.xFlipped());
-                            debugShowQuadLineIntersection(pts, wn, wt, ts);
-                            break;
-                        case SkIntersectionHelper::kConic_Segment:
-                            pts = ts.conicHorizontal(wn.pts(), wn.weight(), wt.left(),
-                                    wt.right(), wt.y(), wt.xFlipped());
-                            debugShowConicLineIntersection(pts, wn, wt, ts);
-                            break;
-                        case SkIntersectionHelper::kCubic_Segment:
-                            pts = ts.cubicHorizontal(wn.pts(), wt.left(),
-                                    wt.right(), wt.y(), wt.xFlipped());
-                            debugShowCubicLineIntersection(pts, wn, wt, ts);
-                            break;
-                        default:
-                            SkASSERT(0);
-                    }
-                    break;
-                case SkIntersectionHelper::kVerticalLine_Segment:
-                    swap = true;
-                    switch (wn.segmentType()) {
-                        case SkIntersectionHelper::kHorizontalLine_Segment:
-                        case SkIntersectionHelper::kVerticalLine_Segment:
-                        case SkIntersectionHelper::kLine_Segment: {
-                            pts = ts.lineVertical(wn.pts(), wt.top(),
-                                    wt.bottom(), wt.x(), wt.yFlipped());
-                            debugShowLineIntersection(pts, wn, wt, ts);
-                            break;
-                        }
-                        case SkIntersectionHelper::kQuad_Segment: {
-                            pts = ts.quadVertical(wn.pts(), wt.top(),
-                                    wt.bottom(), wt.x(), wt.yFlipped());
-                            debugShowQuadLineIntersection(pts, wn, wt, ts);
-                            break;
-                        }
-                        case SkIntersectionHelper::kConic_Segment: {
-                            pts = ts.conicVertical(wn.pts(), wn.weight(), wt.top(),
-                                    wt.bottom(), wt.x(), wt.yFlipped());
-                            debugShowConicLineIntersection(pts, wn, wt, ts);
-                            break;
-                        }
-                        case SkIntersectionHelper::kCubic_Segment: {
-                            pts = ts.cubicVertical(wn.pts(), wt.top(),
-                                    wt.bottom(), wt.x(), wt.yFlipped());
-                            debugShowCubicLineIntersection(pts, wn, wt, ts);
-                            break;
-                        }
-                        default:
-                            SkASSERT(0);
-                    }
-                    break;
-                case SkIntersectionHelper::kLine_Segment:
-                    switch (wn.segmentType()) {
-                        case SkIntersectionHelper::kHorizontalLine_Segment:
-                            pts = ts.lineHorizontal(wt.pts(), wn.left(),
-                                    wn.right(), wn.y(), wn.xFlipped());
-                            debugShowLineIntersection(pts, wt, wn, ts);
-                            break;
-                        case SkIntersectionHelper::kVerticalLine_Segment:
-                            pts = ts.lineVertical(wt.pts(), wn.top(),
-                                    wn.bottom(), wn.x(), wn.yFlipped());
-                            debugShowLineIntersection(pts, wt, wn, ts);
-                            break;
-                        case SkIntersectionHelper::kLine_Segment:
-                            pts = ts.lineLine(wt.pts(), wn.pts());
-                            debugShowLineIntersection(pts, wt, wn, ts);
-                            break;
-                        case SkIntersectionHelper::kQuad_Segment:
-                            swap = true;
-                            pts = ts.quadLine(wn.pts(), wt.pts());
-                            debugShowQuadLineIntersection(pts, wn, wt, ts);
-                            break;
-                        case SkIntersectionHelper::kConic_Segment:
-                            swap = true;
-                            pts = ts.conicLine(wn.pts(), wn.weight(), wt.pts());
-                            debugShowConicLineIntersection(pts, wn, wt, ts);
-                            break;
-                        case SkIntersectionHelper::kCubic_Segment:
-                            swap = true;
-                            pts = ts.cubicLine(wn.pts(), wt.pts());
-                            debugShowCubicLineIntersection(pts, wn, wt, ts);
-                            break;
-                        default:
-                            SkASSERT(0);
-                    }
-                    break;
-                case SkIntersectionHelper::kQuad_Segment:
-                    switch (wn.segmentType()) {
-                        case SkIntersectionHelper::kHorizontalLine_Segment:
-                            pts = ts.quadHorizontal(wt.pts(), wn.left(),
-                                    wn.right(), wn.y(), wn.xFlipped());
-                            debugShowQuadLineIntersection(pts, wt, wn, ts);
-                            break;
-                        case SkIntersectionHelper::kVerticalLine_Segment:
-                            pts = ts.quadVertical(wt.pts(), wn.top(),
-                                    wn.bottom(), wn.x(), wn.yFlipped());
-                            debugShowQuadLineIntersection(pts, wt, wn, ts);
-                            break;
-                        case SkIntersectionHelper::kLine_Segment:
-                            pts = ts.quadLine(wt.pts(), wn.pts());
-                            debugShowQuadLineIntersection(pts, wt, wn, ts);
-                            break;
-                        case SkIntersectionHelper::kQuad_Segment: {
-                            pts = ts.intersect(quad1.set(wt.pts()), quad2.set(wn.pts()));
-                            debugShowQuadIntersection(pts, wt, wn, ts);
-                            break;
-                        }
-                        case SkIntersectionHelper::kConic_Segment: {
-                            swap = true;
-                            pts = ts.intersect(conic2.set(wn.pts(), wn.weight()),
-                                    quad1.set(wt.pts()));
-                            debugShowConicQuadIntersection(pts, wn, wt, ts);
-                            break;
-                        }
-                        case SkIntersectionHelper::kCubic_Segment: {
-                            swap = true;
-                            pts = ts.intersect(cubic2.set(wn.pts()), quad1.set(wt.pts()));
-                            debugShowCubicQuadIntersection(pts, wn, wt, ts);
-                            break;
-                        }
-                        default:
-                            SkASSERT(0);
-                    }
-                    break;
-                case SkIntersectionHelper::kConic_Segment:
-                    switch (wn.segmentType()) {
-                        case SkIntersectionHelper::kHorizontalLine_Segment:
-                            pts = ts.conicHorizontal(wt.pts(), wt.weight(), wn.left(),
-                                    wn.right(), wn.y(), wn.xFlipped());
-                            debugShowConicLineIntersection(pts, wt, wn, ts);
-                            break;
-                        case SkIntersectionHelper::kVerticalLine_Segment:
-                            pts = ts.conicVertical(wt.pts(), wt.weight(), wn.top(),
-                                    wn.bottom(), wn.x(), wn.yFlipped());
-                            debugShowConicLineIntersection(pts, wt, wn, ts);
-                            break;
-                        case SkIntersectionHelper::kLine_Segment:
-                            pts = ts.conicLine(wt.pts(), wt.weight(), wn.pts());
-                            debugShowConicLineIntersection(pts, wt, wn, ts);
-                            break;
-                        case SkIntersectionHelper::kQuad_Segment: {
-                            pts = ts.intersect(conic1.set(wt.pts(), wt.weight()),
-                                    quad2.set(wn.pts()));
-                            debugShowConicQuadIntersection(pts, wt, wn, ts);
-                            break;
-                        }
-                        case SkIntersectionHelper::kConic_Segment: {
-                            pts = ts.intersect(conic1.set(wt.pts(), wt.weight()),
-                                    conic2.set(wn.pts(), wn.weight()));
-                            debugShowConicIntersection(pts, wt, wn, ts);
-                            break;
-                        }
-                        case SkIntersectionHelper::kCubic_Segment: {
-                            swap = true;
-                            pts = ts.intersect(cubic2.set(wn.pts()),
-                                    conic1.set(wt.pts(), wt.weight()));
-                            debugShowCubicConicIntersection(pts, wn, wt, ts);
-                            break;
-                        }
-                    }
-                    break;
-                case SkIntersectionHelper::kCubic_Segment:
-                    switch (wn.segmentType()) {
-                        case SkIntersectionHelper::kHorizontalLine_Segment:
-                            pts = ts.cubicHorizontal(wt.pts(), wn.left(),
-                                    wn.right(), wn.y(), wn.xFlipped());
-                            debugShowCubicLineIntersection(pts, wt, wn, ts);
-                            break;
-                        case SkIntersectionHelper::kVerticalLine_Segment:
-                            pts = ts.cubicVertical(wt.pts(), wn.top(),
-                                    wn.bottom(), wn.x(), wn.yFlipped());
-                            debugShowCubicLineIntersection(pts, wt, wn, ts);
-                            break;
-                        case SkIntersectionHelper::kLine_Segment:
-                            pts = ts.cubicLine(wt.pts(), wn.pts());
-                            debugShowCubicLineIntersection(pts, wt, wn, ts);
-                            break;
-                        case SkIntersectionHelper::kQuad_Segment: {
-                            pts = ts.intersect(cubic1.set(wt.pts()), quad2.set(wn.pts()));
-                            debugShowCubicQuadIntersection(pts, wt, wn, ts);
-                            break;
-                        }
-                        case SkIntersectionHelper::kConic_Segment: {
-                            pts = ts.intersect(cubic1.set(wt.pts()),
-                                    conic2.set(wn.pts(), wn.weight()));
-                            debugShowCubicConicIntersection(pts, wt, wn, ts);
-                            break;
-                        }
-                        case SkIntersectionHelper::kCubic_Segment: {
-                            pts = ts.intersect(cubic1.set(wt.pts()), cubic2.set(wn.pts()));
-                            debugShowCubicIntersection(pts, wt, wn, ts);
-                            break;
-                        }
-                        default:
-                            SkASSERT(0);
-                    }
-                    break;
-                default:
-                    SkASSERT(0);
-            }
->>>>>>> miniblink49
             int coinIndex = -1;
             SkOpPtT* coinPtT[2];
             for (int pt = 0; pt < pts; ++pt) {
@@ -913,17 +528,10 @@ bool AddIntersectTs(SkOpContour* test, SkOpContour* next, SkOpCoincidence* coinc
                 SkASSERT(ts[1][pt] >= 0 && ts[1][pt] <= 1);
                 wt.segment()->debugValidate();
                 SkOpPtT* testTAt = wt.segment()->addT(ts[swap][pt], SkOpSegment::kAllowAlias,
-<<<<<<< HEAD
                     allocator);
                 wn.segment()->debugValidate();
                 SkOpPtT* nextTAt = wn.segment()->addT(ts[!swap][pt], SkOpSegment::kAllowAlias,
                     allocator);
-=======
-                        allocator);
-                wn.segment()->debugValidate();
-                SkOpPtT* nextTAt = wn.segment()->addT(ts[!swap][pt], SkOpSegment::kAllowAlias,
-                        allocator);
->>>>>>> miniblink49
                 testTAt->addOpp(nextTAt);
                 if (testTAt->fPt != nextTAt->fPt) {
                     testTAt->span()->unaligned();
@@ -945,11 +553,7 @@ bool AddIntersectTs(SkOpContour* test, SkOpContour* next, SkOpCoincidence* coinc
                     continue;
                 }
                 if (coinPtT[1]->span() == nextTAt->span()) {
-<<<<<<< HEAD
                     coinIndex = -1; // coincidence span collapsed
-=======
-                    coinIndex = -1;  // coincidence span collapsed
->>>>>>> miniblink49
                     continue;
                 }
                 if (swap) {
@@ -962,11 +566,7 @@ bool AddIntersectTs(SkOpContour* test, SkOpContour* next, SkOpCoincidence* coinc
                 wn.segment()->debugValidate();
                 coinIndex = -1;
             }
-<<<<<<< HEAD
             SkASSERT(coinIndex < 0); // expect coincidence to be paired
-=======
-            SkASSERT(coinIndex < 0);  // expect coincidence to be paired
->>>>>>> miniblink49
         } while (wn.advance());
     } while (wt.advance());
     return true;

@@ -24,10 +24,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "modules/canvas2d/CanvasGradient.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -42,19 +38,14 @@ CanvasGradient::CanvasGradient(const FloatPoint& p0, const FloatPoint& p1)
 {
 }
 
-<<<<<<< HEAD
 CanvasGradient::CanvasGradient(const FloatPoint& p0,
     float r0,
     const FloatPoint& p1,
     float r1)
-=======
-CanvasGradient::CanvasGradient(const FloatPoint& p0, float r0, const FloatPoint& p1, float r1)
->>>>>>> miniblink49
     : m_gradient(Gradient::create(p0, r0, p1, r1))
 {
 }
 
-<<<<<<< HEAD
 void CanvasGradient::addColorStop(float value,
     const String& colorString,
     ExceptionState& exceptionState)
@@ -76,22 +67,3 @@ void CanvasGradient::addColorStop(float value,
 }
 
 } // namespace blink
-=======
-void CanvasGradient::addColorStop(float value, const String& color, ExceptionState& exceptionState)
-{
-    if (!(value >= 0 && value <= 1.0f)) {
-        exceptionState.throwDOMException(IndexSizeError, "The provided value (" + String::number(value) + ") is outside the range (0.0, 1.0).");
-        return;
-    }
-
-    RGBA32 rgba = 0;
-    if (!parseColorOrCurrentColor(rgba, color, 0 /*canvas*/)) {
-        exceptionState.throwDOMException(SyntaxError, "The value provided ('" + color + "') could not be parsed as a color.");
-        return;
-    }
-
-    m_gradient->addColorStop(value, Color(rgba));
-}
-
-} // namespace
->>>>>>> miniblink49

@@ -17,7 +17,8 @@ public:
         return document.getElementById(id);
     }
 
-    static Element* getElementById(DocumentFragment& fragment, const AtomicString& id)
+    static Element* getElementById(DocumentFragment& fragment,
+        const AtomicString& id)
     {
         return fragment.getElementById(id);
     }

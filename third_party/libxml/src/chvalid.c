@@ -164,11 +164,7 @@ const xmlChRangeGroup xmlIsIdeographicGroup =
  *
  * Returns: true if character valid, false otherwise
  */
-<<<<<<< HEAD
 int __cdecl
-=======
-int
->>>>>>> miniblink49
 xmlCharInRange (unsigned int val, const xmlChRangeGroup *rptr) {
     int low, high, mid;
     const xmlChSRange *sptr;
@@ -226,11 +222,7 @@ xmlCharInRange (unsigned int val, const xmlChRangeGroup *rptr) {
  *
  * Returns true if argument valid, false otherwise
  */
-<<<<<<< HEAD
 int __cdecl
-=======
-int
->>>>>>> miniblink49
 xmlIsBaseChar(unsigned int ch) {
     return(xmlIsBaseCharQ(ch));
 }
@@ -245,11 +237,7 @@ xmlIsBaseChar(unsigned int ch) {
  *
  * Returns true if argument valid, false otherwise
  */
-<<<<<<< HEAD
 int __cdecl
-=======
-int
->>>>>>> miniblink49
 xmlIsBlank(unsigned int ch) {
     return(xmlIsBlankQ(ch));
 }
@@ -264,11 +252,7 @@ xmlIsBlank(unsigned int ch) {
  *
  * Returns true if argument valid, false otherwise
  */
-<<<<<<< HEAD
 int __cdecl
-=======
-int
->>>>>>> miniblink49
 xmlIsChar(unsigned int ch) {
     return(xmlIsCharQ(ch));
 }
@@ -283,11 +267,7 @@ xmlIsChar(unsigned int ch) {
  *
  * Returns true if argument valid, false otherwise
  */
-<<<<<<< HEAD
 int __cdecl
-=======
-int
->>>>>>> miniblink49
 xmlIsCombining(unsigned int ch) {
     return(xmlIsCombiningQ(ch));
 }
@@ -302,11 +282,7 @@ xmlIsCombining(unsigned int ch) {
  *
  * Returns true if argument valid, false otherwise
  */
-<<<<<<< HEAD
 int __cdecl
-=======
-int
->>>>>>> miniblink49
 xmlIsDigit(unsigned int ch) {
     return(xmlIsDigitQ(ch));
 }
@@ -321,11 +297,7 @@ xmlIsDigit(unsigned int ch) {
  *
  * Returns true if argument valid, false otherwise
  */
-<<<<<<< HEAD
 int __cdecl
-=======
-int
->>>>>>> miniblink49
 xmlIsExtender(unsigned int ch) {
     return(xmlIsExtenderQ(ch));
 }
@@ -340,11 +312,7 @@ xmlIsExtender(unsigned int ch) {
  *
  * Returns true if argument valid, false otherwise
  */
-<<<<<<< HEAD
 int __cdecl
-=======
-int
->>>>>>> miniblink49
 xmlIsIdeographic(unsigned int ch) {
     return(xmlIsIdeographicQ(ch));
 }
@@ -359,11 +327,7 @@ xmlIsIdeographic(unsigned int ch) {
  *
  * Returns true if argument valid, false otherwise
  */
-<<<<<<< HEAD
 int __cdecl
-=======
-int
->>>>>>> miniblink49
 xmlIsPubidChar(unsigned int ch) {
     return(xmlIsPubidCharQ(ch));
 }

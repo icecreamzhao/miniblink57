@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -9,7 +5,6 @@
  * found in the LICENSE file.
  */
 #include "SampleCode.h"
-<<<<<<< HEAD
 #include "SkCanvas.h"
 #include "SkDashPathEffect.h"
 #include "SkGraphics.h"
@@ -19,27 +14,13 @@
 
 static void setBitmapDash(SkPaint* paint, int width)
 {
-=======
-#include "SkView.h"
-#include "SkCanvas.h"
-#include "SkGraphics.h"
-#include "SkRandom.h"
-#include "SkDashPathEffect.h"
-#include "SkShader.h"
-
-static void setBitmapDash(SkPaint* paint, int width) {
->>>>>>> miniblink49
     SkColor c = paint->getColor();
 
     SkBitmap bm;
     bm.allocN32Pixels(2, 1);
     bm.lockPixels();
     *bm.getAddr32(0, 0) = SkPreMultiplyARGB(0xFF, SkColorGetR(c),
-<<<<<<< HEAD
         SkColorGetG(c), SkColorGetB(c));
-=======
-                                            SkColorGetG(c), SkColorGetB(c));
->>>>>>> miniblink49
     *bm.getAddr32(1, 0) = 0;
     bm.unlockPixels();
 
@@ -47,34 +28,22 @@ static void setBitmapDash(SkPaint* paint, int width) {
     matrix.setScale(SkIntToScalar(width), SK_Scalar1);
 
     SkShader* s = SkShader::CreateBitmapShader(bm, SkShader::kRepeat_TileMode,
-<<<<<<< HEAD
         SkShader::kClamp_TileMode, &matrix);
-=======
-                                               SkShader::kClamp_TileMode, &matrix);
->>>>>>> miniblink49
 
     paint->setShader(s)->unref();
 }
 
 class DashView : public SampleView {
 public:
-<<<<<<< HEAD
     DashView()
     {
-=======
-    DashView() {
->>>>>>> miniblink49
         this->setBGColor(0xFFDDDDDD);
     }
 
 protected:
     // overrides from SkEventSink
-<<<<<<< HEAD
     virtual bool onQuery(SkEvent* evt)
     {
-=======
-    virtual bool onQuery(SkEvent* evt) {
->>>>>>> miniblink49
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "Dash");
             return true;
@@ -82,12 +51,8 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-<<<<<<< HEAD
     virtual void onDrawContent(SkCanvas* canvas)
     {
-=======
-    virtual void onDrawContent(SkCanvas* canvas) {
->>>>>>> miniblink49
         static const char* gStr[] = {
             "11",
             "44",
@@ -111,11 +76,7 @@ protected:
             SkDashPathEffect dash(interval, len, 0);
             paint.setPathEffect(&dash);
             canvas->drawLine(x0, y0, x1, y0, paint);
-<<<<<<< HEAD
             paint.setPathEffect(nullptr);
-=======
-            paint.setPathEffect(NULL);
->>>>>>> miniblink49
 
             y0 += paint.getStrokeWidth() * 3;
         }

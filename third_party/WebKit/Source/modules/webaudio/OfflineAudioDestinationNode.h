@@ -10,7 +10,6 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
-<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -22,18 +21,6 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
-=======
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
->>>>>>> miniblink49
  */
 
 #ifndef OfflineAudioDestinationNode_h
@@ -41,7 +28,6 @@
 
 #include "modules/webaudio/AudioBuffer.h"
 #include "modules/webaudio/AudioDestinationNode.h"
-<<<<<<< HEAD
 #include "modules/webaudio/OfflineAudioContext.h"
 #include "public/platform/WebThread.h"
 #include "wtf/PassRefPtr.h"
@@ -59,20 +45,6 @@ public:
     static PassRefPtr<OfflineAudioDestinationHandler> create(
         AudioNode&,
         AudioBuffer* renderTarget);
-=======
-#include "public/platform/WebThread.h"
-#include "wtf/PassRefPtr.h"
-#include "wtf/RefPtr.h"
-
-namespace blink {
-
-class AudioBus;
-class AudioContext;
-
-class OfflineAudioDestinationHandler final : public AudioDestinationHandler {
-public:
-    static PassRefPtr<OfflineAudioDestinationHandler> create(AudioNode&, AudioBuffer* renderTarget);
->>>>>>> miniblink49
     ~OfflineAudioDestinationHandler() override;
 
     // AudioHandler
@@ -80,7 +52,6 @@ public:
     void initialize() override;
     void uninitialize() override;
 
-<<<<<<< HEAD
     OfflineAudioContext* context() const final;
 
     // AudioDestinationHandler
@@ -130,22 +101,6 @@ private:
         AudioBus* destinationBus,
         size_t numberOfFrames);
 
-=======
-    // AudioDestinationHandler
-    void startRendering() override;
-    void stopRendering() override;
-
-    float sampleRate()  const override { return m_renderTarget->sampleRate(); }
-
-private:
-    OfflineAudioDestinationHandler(AudioNode&, AudioBuffer* renderTarget);
-    void offlineRender();
-    void offlineRenderInternal();
-
-    // For completion callback on main thread.
-    void notifyComplete();
-
->>>>>>> miniblink49
     // This AudioHandler renders into this AudioBuffer.
     // This Persistent doesn't make a reference cycle including the owner
     // OfflineAudioDestinationNode.
@@ -154,7 +109,6 @@ private:
     RefPtr<AudioBus> m_renderBus;
 
     // Rendering thread.
-<<<<<<< HEAD
     std::unique_ptr<WebThread> m_renderThread;
 
     // These variables are for counting the number of frames for the current
@@ -169,26 +123,15 @@ private:
 
     // This flag indicates whether the rendering should be suspended or not.
     bool m_shouldSuspend;
-=======
-    OwnPtr<WebThread> m_renderThread;
-    bool m_startedRendering;
->>>>>>> miniblink49
 };
 
 class OfflineAudioDestinationNode final : public AudioDestinationNode {
 public:
-<<<<<<< HEAD
     static OfflineAudioDestinationNode* create(BaseAudioContext*,
         AudioBuffer* renderTarget);
 
 private:
     OfflineAudioDestinationNode(BaseAudioContext&, AudioBuffer* renderTarget);
-=======
-    static OfflineAudioDestinationNode* create(AudioContext*, AudioBuffer* renderTarget);
-
-private:
-    OfflineAudioDestinationNode(AudioContext&, AudioBuffer* renderTarget);
->>>>>>> miniblink49
 };
 
 } // namespace blink

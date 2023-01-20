@@ -28,10 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "public/web/WebPluginDocument.h"
 
 #include "core/dom/Document.h"
@@ -41,15 +37,8 @@
 
 #include "wtf/PassRefPtr.h"
 
-<<<<<<< HEAD
 namespace blink {
 
-=======
-
-namespace blink {
-
-
->>>>>>> miniblink49
 WebPlugin* WebPluginDocument::plugin()
 {
     if (!isPluginDocument())
@@ -59,34 +48,21 @@ WebPlugin* WebPluginDocument::plugin()
     return container ? container->plugin() : 0;
 }
 
-<<<<<<< HEAD
 WebPluginDocument::WebPluginDocument(PluginDocument* elem)
-=======
-
-WebPluginDocument::WebPluginDocument(const PassRefPtrWillBeRawPtr<PluginDocument>& elem)
->>>>>>> miniblink49
     : WebDocument(elem)
 {
 }
 
-<<<<<<< HEAD
 DEFINE_WEB_NODE_TYPE_CASTS(WebPluginDocument,
     isDocumentNode() && constUnwrap<Document>()->isPluginDocument());
 
 WebPluginDocument& WebPluginDocument::operator=(PluginDocument* elem)
-=======
-WebPluginDocument& WebPluginDocument::operator=(const PassRefPtrWillBeRawPtr<PluginDocument>& elem)
->>>>>>> miniblink49
 {
     m_private = elem;
     return *this;
 }
 
-<<<<<<< HEAD
 WebPluginDocument::operator PluginDocument*() const
-=======
-WebPluginDocument::operator PassRefPtrWillBeRawPtr<PluginDocument>() const
->>>>>>> miniblink49
 {
     return static_cast<PluginDocument*>(m_private.get());
 }

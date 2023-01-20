@@ -4,7 +4,7 @@
 #include "third_party/WebKit/public/platform/WebThread.h"
 #include "third_party/WebKit/public/platform/WebTraceLocation.h"
 #include "third_party/WebKit/public/platform/Platform.h"
-#include <wtf/MainThread.h>
+//#include <wtf/MainThread.h>
 #include <functional>
 
 namespace net {

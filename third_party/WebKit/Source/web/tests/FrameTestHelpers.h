@@ -34,7 +34,6 @@
 #include "core/frame/Settings.h"
 #include "platform/RuntimeEnabledFeatures.h"
 #include "platform/scroll/ScrollbarTheme.h"
-<<<<<<< HEAD
 #include "public/platform/WebMouseEvent.h"
 #include "public/platform/WebString.h"
 #include "public/platform/WebURLRequest.h"
@@ -48,22 +47,10 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <memory>
-=======
-#include "public/platform/WebURLRequest.h"
-#include "public/web/WebFrameClient.h"
-#include "public/web/WebHistoryItem.h"
-#include "public/web/WebRemoteFrameClient.h"
-#include "public/web/WebViewClient.h"
-#include "web/WebViewImpl.h"
-#include "wtf/PassOwnPtr.h"
-#include <gmock/gmock.h>
-#include <gtest/gtest.h>
->>>>>>> miniblink49
 #include <string>
 
 namespace blink {
 
-<<<<<<< HEAD
 class WebFrame;
 class WebLocalFrameImpl;
 class WebRemoteFrameImpl;
@@ -292,122 +279,6 @@ namespace FrameTestHelpers {
     private:
         Persistent<WebRemoteFrameImpl> const m_frame;
     };
-=======
-namespace FrameTestHelpers {
-
-class TestWebFrameClient;
-
-// Loads a url into the specified WebFrame for testing purposes. Pumps any
-// pending resource requests, as well as waiting for the threaded parser to
-// finish, before returning.
-void loadFrame(WebFrame*, const std::string& url);
-// Same as above, but for WebFrame::loadHTMLString().
-void loadHTMLString(WebFrame*, const std::string& html, const WebURL& baseURL);
-// Same as above, but for WebFrame::loadHistoryItem().
-void loadHistoryItem(WebFrame*, const WebHistoryItem&, WebHistoryLoadType, WebURLRequest::CachePolicy);
-// Same as above, but for WebFrame::reload().
-void reloadFrame(WebFrame*);
-void reloadFrameIgnoringCache(WebFrame*);
-
-// Pumps pending resource requests while waiting for a frame to load. Don't use
-// this. Use one of the above helpers.
-void pumpPendingRequestsDoNotUse(WebFrame*);
-
-class SettingOverrider {
-public:
-    virtual void overrideSettings(WebSettings*) = 0;
-};
-
-// Convenience class for handling the lifetime of a WebView and its associated mainframe in tests.
-class WebViewHelper {
-    WTF_MAKE_NONCOPYABLE(WebViewHelper);
-public:
-    WebViewHelper(SettingOverrider* = 0);
-    ~WebViewHelper();
-
-    // Creates and initializes the WebView. Implicitly calls reset() first. IF a
-    // WebFrameClient or a WebViewClient are passed in, they must outlive the
-    // WebViewHelper.
-    WebViewImpl* initialize(bool enableJavascript = false, TestWebFrameClient* = 0, WebViewClient* = 0, void (*updateSettingsFunc)(WebSettings*) = 0);
-
-    // Same as initialize() but also performs the initial load of the url. Only
-    // returns once the load is complete.
-    WebViewImpl* initializeAndLoad(const std::string& url, bool enableJavascript = false, TestWebFrameClient* = 0, WebViewClient* = 0, void (*updateSettingsFunc)(WebSettings*) = 0);
-
-    void reset();
-
-    WebView* webView() const { return m_webView; }
-    WebViewImpl* webViewImpl() const { return m_webView; }
-
-private:
-    WebViewImpl* m_webView;
-    SettingOverrider* m_settingOverrider;
-};
-
-// Minimal implementation of WebFrameClient needed for unit tests that load frames. Tests that load
-// frames and need further specialization of WebFrameClient behavior should subclass this.
-class TestWebFrameClient : public WebFrameClient {
-public:
-    TestWebFrameClient();
-
-    WebFrame* createChildFrame(WebLocalFrame* parent, WebTreeScopeType, const WebString& frameName, WebSandboxFlags) override;
-    void frameDetached(WebFrame*, DetachType) override;
-    void didStartLoading(bool) override;
-    void didStopLoading() override;
-
-    bool isLoading() { return m_loadsInProgress > 0; }
-    void waitForLoadToComplete();
-
-private:
-    int m_loadsInProgress;
-};
-
-// Minimal implementation of WebRemoteFrameClient needed for unit tests that load remote frames. Tests that load
-// frames and need further specialization of WebFrameClient behavior should subclass this.
-class TestWebRemoteFrameClient : public WebRemoteFrameClient {
-public:
-    TestWebRemoteFrameClient();
-
-    WebRemoteFrame* frame() const { return m_frame; }
-
-    // WebRemoteFrameClient overrides:
-    void frameDetached(DetachType) override;
-    void postMessageEvent(
-        WebLocalFrame* sourceFrame,
-        WebRemoteFrame* targetFrame,
-        WebSecurityOrigin targetOrigin,
-        WebDOMMessageEvent) override { }
-
-private:
-    WebRemoteFrame* const m_frame;
-};
-
-class TestWebViewClient : public WebViewClient {
-public:
-    virtual ~TestWebViewClient() { }
-    void initializeLayerTreeView() override;
-    WebLayerTreeView* layerTreeView() override { return m_layerTreeView.get(); }
-
-private:
-    OwnPtr<WebLayerTreeView> m_layerTreeView;
-};
-
-class UseMockScrollbarSettings {
-public:
-    UseMockScrollbarSettings()
-    {
-        Settings::setMockScrollbarsEnabled(true);
-        RuntimeEnabledFeatures::setOverlayScrollbarsEnabled(true);
-        EXPECT_TRUE(ScrollbarTheme::theme()->usesOverlayScrollbars());
-    }
-
-    ~UseMockScrollbarSettings()
-    {
-        Settings::setMockScrollbarsEnabled(false);
-        RuntimeEnabledFeatures::setOverlayScrollbarsEnabled(false);
-    }
-};
->>>>>>> miniblink49
 
 } // namespace FrameTestHelpers
 } // namespace blink

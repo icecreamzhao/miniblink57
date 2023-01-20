@@ -40,11 +40,7 @@ public:
     virtual void visitHeader(const WebString& name, const WebString& value) = 0;
 
 protected:
-<<<<<<< HEAD
     virtual ~WebHTTPHeaderVisitor() { }
-=======
-    ~WebHTTPHeaderVisitor() { }
->>>>>>> miniblink49
 };
 
 } // namespace blink

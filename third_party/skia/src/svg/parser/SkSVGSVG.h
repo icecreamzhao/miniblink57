@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -9,10 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #ifndef SkSVGSVG_DEFINED
 #define SkSVGSVG_DEFINED
 
@@ -21,10 +13,7 @@
 class SkSVGSVG : public SkSVGElement {
     DECLARE_SVG_INFO(SVG);
     virtual bool isFlushable();
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 private:
     SkString f_enable_background;
     SkString f_height;

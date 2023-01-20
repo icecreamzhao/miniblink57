@@ -35,15 +35,9 @@
  * \brief C++ API: Interface for writing bytes, and implementation classes.
  */
 
-<<<<<<< HEAD
 #include "unicode/std_string.h"
 #include "unicode/uobject.h"
 #include "unicode/utypes.h"
-=======
-#include "unicode/utypes.h"
-#include "unicode/uobject.h"
-#include "unicode/std_string.h"
->>>>>>> miniblink49
 
 U_NAMESPACE_BEGIN
 
@@ -53,7 +47,6 @@ U_NAMESPACE_BEGIN
  */
 class U_COMMON_API ByteSink : public UMemory {
 public:
-<<<<<<< HEAD
     /**
    * Default constructor.
    * @stable ICU 4.2
@@ -66,34 +59,14 @@ public:
     virtual ~ByteSink();
 
     /**
-=======
-  /**
-   * Default constructor.
-   * @stable ICU 4.2
-   */
-  ByteSink() { }
-  /**
-   * Virtual destructor.
-   * @stable ICU 4.2
-   */
-  virtual ~ByteSink();
-
-  /**
->>>>>>> miniblink49
    * Append "bytes[0,n-1]" to this.
    * @param bytes the pointer to the bytes
    * @param n the number of bytes; must be non-negative
    * @stable ICU 4.2
    */
-<<<<<<< HEAD
     virtual void Append(const char* bytes, int32_t n) = 0;
 
     /**
-=======
-  virtual void Append(const char* bytes, int32_t n) = 0;
-
-  /**
->>>>>>> miniblink49
    * Returns a writable buffer for appending and writes the buffer's capacity to
    * *result_capacity. Guarantees *result_capacity>=min_capacity.
    * May return a pointer to the caller-owned scratch buffer which must have
@@ -135,21 +108,12 @@ public:
    * @return a buffer with *result_capacity>=min_capacity
    * @stable ICU 4.2
    */
-<<<<<<< HEAD
     virtual char* GetAppendBuffer(int32_t min_capacity,
         int32_t desired_capacity_hint,
         char* scratch, int32_t scratch_capacity,
         int32_t* result_capacity);
 
     /**
-=======
-  virtual char* GetAppendBuffer(int32_t min_capacity,
-                                int32_t desired_capacity_hint,
-                                char* scratch, int32_t scratch_capacity,
-                                int32_t* result_capacity);
-
-  /**
->>>>>>> miniblink49
    * Flush internal buffers.
    * Some byte sinks use internal buffers or provide buffering
    * and require calling Flush() at the end of the stream.
@@ -157,19 +121,11 @@ public:
    * The default implementation of Flush() does nothing.
    * @stable ICU 4.2
    */
-<<<<<<< HEAD
     virtual void Flush();
 
 private:
     ByteSink(const ByteSink&); // copy constructor not implemented
     ByteSink& operator=(const ByteSink&); // assignment operator not implemented
-=======
-  virtual void Flush();
-
-private:
-  ByteSink(const ByteSink &); // copy constructor not implemented
-  ByteSink &operator=(const ByteSink &); // assignment operator not implemented
->>>>>>> miniblink49
 };
 
 // -------------------------------------------------------------
@@ -186,17 +142,12 @@ private:
  */
 class U_COMMON_API CheckedArrayByteSink : public ByteSink {
 public:
-<<<<<<< HEAD
     /**
-=======
-  /**
->>>>>>> miniblink49
    * Constructs a ByteSink that will write to outbuf[0..capacity-1].
    * @param outbuf buffer to write to
    * @param capacity size of the buffer
    * @stable ICU 4.2
    */
-<<<<<<< HEAD
     CheckedArrayByteSink(char* outbuf, int32_t capacity);
     /**
    * Destructor.
@@ -204,15 +155,6 @@ public:
    */
     virtual ~CheckedArrayByteSink();
     /**
-=======
-  CheckedArrayByteSink(char* outbuf, int32_t capacity);
-  /**
-   * Destructor.
-   * @stable ICU 4.2
-   */
-  virtual ~CheckedArrayByteSink();
-  /**
->>>>>>> miniblink49
    * Returns the sink to its original state, without modifying the buffer.
    * Useful for reusing both the buffer and the sink for multiple streams.
    * Resets the state to NumberOfBytesWritten()=NumberOfBytesAppended()=0
@@ -220,25 +162,15 @@ public:
    * @return *this
    * @stable ICU 4.6
    */
-<<<<<<< HEAD
     virtual CheckedArrayByteSink& Reset();
     /**
-=======
-  virtual CheckedArrayByteSink& Reset();
-  /**
->>>>>>> miniblink49
    * Append "bytes[0,n-1]" to this.
    * @param bytes the pointer to the bytes
    * @param n the number of bytes; must be non-negative
    * @stable ICU 4.2
    */
-<<<<<<< HEAD
     virtual void Append(const char* bytes, int32_t n);
     /**
-=======
-  virtual void Append(const char* bytes, int32_t n);
-  /**
->>>>>>> miniblink49
    * Returns a writable buffer for appending and writes the buffer's capacity to
    * *result_capacity. For details see the base class documentation.
    * @param min_capacity required minimum capacity of the returned buffer;
@@ -252,49 +184,30 @@ public:
    * @return a buffer with *result_capacity>=min_capacity
    * @stable ICU 4.2
    */
-<<<<<<< HEAD
     virtual char* GetAppendBuffer(int32_t min_capacity,
         int32_t desired_capacity_hint,
         char* scratch, int32_t scratch_capacity,
         int32_t* result_capacity);
     /**
-=======
-  virtual char* GetAppendBuffer(int32_t min_capacity,
-                                int32_t desired_capacity_hint,
-                                char* scratch, int32_t scratch_capacity,
-                                int32_t* result_capacity);
-  /**
->>>>>>> miniblink49
    * Returns the number of bytes actually written to the sink.
    * @return number of bytes written to the buffer
    * @stable ICU 4.2
    */
-<<<<<<< HEAD
     int32_t NumberOfBytesWritten() const { return size_; }
     /**
-=======
-  int32_t NumberOfBytesWritten() const { return size_; }
-  /**
->>>>>>> miniblink49
    * Returns true if any bytes were discarded, i.e., if there was an
    * attempt to write more than 'capacity' bytes.
    * @return TRUE if more than 'capacity' bytes were Append()ed
    * @stable ICU 4.2
    */
-<<<<<<< HEAD
     UBool Overflowed() const { return overflowed_; }
     /**
-=======
-  UBool Overflowed() const { return overflowed_; }
-  /**
->>>>>>> miniblink49
    * Returns the number of bytes appended to the sink.
    * If Overflowed() then NumberOfBytesAppended()>NumberOfBytesWritten()
    * else they return the same number.
    * @return number of bytes written to the buffer
    * @stable ICU 4.6
    */
-<<<<<<< HEAD
     int32_t NumberOfBytesAppended() const { return appended_; }
 
 private:
@@ -306,18 +219,6 @@ private:
     CheckedArrayByteSink(); ///< default constructor not implemented
     CheckedArrayByteSink(const CheckedArrayByteSink&); ///< copy constructor not implemented
     CheckedArrayByteSink& operator=(const CheckedArrayByteSink&); ///< assignment operator not implemented
-=======
-  int32_t NumberOfBytesAppended() const { return appended_; }
-private:
-  char* outbuf_;
-  const int32_t capacity_;
-  int32_t size_;
-  int32_t appended_;
-  UBool overflowed_;
-  CheckedArrayByteSink(); ///< default constructor not implemented 
-  CheckedArrayByteSink(const CheckedArrayByteSink &); ///< copy constructor not implemented
-  CheckedArrayByteSink &operator=(const CheckedArrayByteSink &); ///< assignment operator not implemented
->>>>>>> miniblink49
 };
 
 #if U_HAVE_STD_STRING
@@ -327,37 +228,24 @@ private:
  * The StringClass is usually instantiated with a std::string.
  * @stable ICU 4.2
  */
-<<<<<<< HEAD
 template <typename StringClass>
 class StringByteSink : public ByteSink {
 public:
     /**
-=======
-template<typename StringClass>
-class StringByteSink : public ByteSink {
- public:
-  /**
->>>>>>> miniblink49
    * Constructs a ByteSink that will append bytes to the dest string.
    * @param dest pointer to string object to append to
    * @stable ICU 4.2
    */
-<<<<<<< HEAD
     StringByteSink(StringClass* dest)
         : dest_(dest)
     {
     }
     /**
-=======
-  StringByteSink(StringClass* dest) : dest_(dest) { }
-  /**
->>>>>>> miniblink49
    * Append "bytes[0,n-1]" to this.
    * @param data the pointer to the bytes
    * @param n the number of bytes; must be non-negative
    * @stable ICU 4.2
    */
-<<<<<<< HEAD
     virtual void Append(const char* data, int32_t n) { dest_->append(data, n); }
 
 private:
@@ -365,22 +253,10 @@ private:
     StringByteSink(); ///< default constructor not implemented
     StringByteSink(const StringByteSink&); ///< copy constructor not implemented
     StringByteSink& operator=(const StringByteSink&); ///< assignment operator not implemented
-=======
-  virtual void Append(const char* data, int32_t n) { dest_->append(data, n); }
- private:
-  StringClass* dest_;
-  StringByteSink(); ///< default constructor not implemented 
-  StringByteSink(const StringByteSink &); ///< copy constructor not implemented
-  StringByteSink &operator=(const StringByteSink &); ///< assignment operator not implemented
->>>>>>> miniblink49
 };
 
 #endif
 
 U_NAMESPACE_END
 
-<<<<<<< HEAD
 #endif // __BYTESTREAM_H__
-=======
-#endif  // __BYTESTREAM_H__
->>>>>>> miniblink49

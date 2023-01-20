@@ -24,7 +24,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/dom/StyleSheetCandidate.h"
 
 #include "core/HTMLNames.h"
@@ -62,7 +61,7 @@ bool StyleSheetCandidate::isCSSStyle() const
 
 Document* StyleSheetCandidate::importedDocument() const
 {
-    ASSERT(isImport());
+    DCHECK(isImport());
     return toHTMLLinkElement(node()).import();
 }
 
@@ -83,17 +82,20 @@ bool StyleSheetCandidate::isEnabledAndLoading() const
     return isHTMLLink() && !toHTMLLinkElement(node()).isDisabled() && toHTMLLinkElement(node()).styleSheetIsLoading();
 }
 
-bool StyleSheetCandidate::hasPreferrableName(const String& currentPreferrableName) const
-{
-    ASSERT(isEnabledAndLoading() || sheet());
-    return !isEnabledViaScript() && !title().isEmpty() && !isAlternate() && currentPreferrableName.isEmpty();
-}
-
-bool StyleSheetCandidate::canBeActivated(const String& currentPreferrableName) const
+bool StyleSheetCandidate::canBeActivated(
+    const String& currentPreferrableName) const
 {
     StyleSheet* sheet = this->sheet();
     if (!sheet || sheet->disabled() || !sheet->isCSSStyleSheet())
         return false;
+
+    if (sheet->ownerNode() && sheet->ownerNode()->isInShadowTree()) {
+        if (isCSSStyle())
+            return true;
+        if (isHTMLLink() && !isImport())
+            return !isAlternate();
+    }
+
     const AtomicString& title = this->title();
     if (!isEnabledViaScript() && !title.isEmpty() && title != currentPreferrableName)
         return false;
@@ -105,7 +107,7 @@ bool StyleSheetCandidate::canBeActivated(const String& currentPreferrableName) c
 
 StyleSheetCandidate::Type StyleSheetCandidate::typeOf(Node& node)
 {
-    if (node.nodeType() == Node::PROCESSING_INSTRUCTION_NODE)
+    if (node.getNodeType() == Node::kProcessingInstructionNode)
         return Pi;
 
     if (node.isHTMLElement()) {
@@ -114,14 +116,14 @@ StyleSheetCandidate::Type StyleSheetCandidate::typeOf(Node& node)
         if (isHTMLStyleElement(node))
             return HTMLStyle;
 
-        ASSERT_NOT_REACHED();
+        NOTREACHED();
         return HTMLStyle;
     }
 
     if (isSVGStyleElement(node))
         return SVGStyle;
 
-    ASSERT_NOT_REACHED();
+    NOTREACHED();
     return HTMLStyle;
 }
 
@@ -138,8 +140,8 @@ StyleSheet* StyleSheetCandidate::sheet() const
         return toProcessingInstruction(node()).sheet();
     }
 
-    ASSERT_NOT_REACHED();
+    NOTREACHED();
     return 0;
 }
 
-}
+} // namespace blink

@@ -9,12 +9,8 @@
 #include "Test.h"
 
 // Tests for some of the helpers in SkTemplates.h
-<<<<<<< HEAD
 static void test_automalloc_realloc(skiatest::Reporter* reporter)
 {
-=======
-static void test_automalloc_realloc(skiatest::Reporter* reporter) {
->>>>>>> miniblink49
     SkAutoSTMalloc<1, int> array;
 
     // test we have a valid pointer, should not crash
@@ -72,7 +68,6 @@ static void test_automalloc_realloc(skiatest::Reporter* reporter) {
     REPORTER_ASSERT(reporter, array[0] == 1);
 }
 
-<<<<<<< HEAD
 DEF_TEST(Templates, reporter)
 {
     test_automalloc_realloc(reporter);
@@ -138,8 +133,3 @@ DEF_TEST(AutoReallocToZero, reporter)
     test_realloc_to_zero<SkAutoTMalloc<int>>(reporter);
     test_realloc_to_zero<SkAutoSTMalloc<kStackPreallocCount, int>>(reporter);
 }
-=======
-DEF_TEST(Templates, reporter) {
-    test_automalloc_realloc(reporter);
-}
->>>>>>> miniblink49

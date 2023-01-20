@@ -28,29 +28,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "public/web/WebScopedWindowFocusAllowedIndicator.h"
 
 #include "core/dom/Document.h"
 #include "public/web/WebDocument.h"
-<<<<<<< HEAD
 #include "testing/gtest/include/gtest/gtest.h"
-=======
-#include <gtest/gtest.h>
->>>>>>> miniblink49
 
 namespace blink {
 
 TEST(WebScopedWindowFocusAllowedIndicatorTest, Basic)
 {
-<<<<<<< HEAD
     Persistent<Document> document = Document::create();
-=======
-    RefPtrWillBePersistent<Document> document = Document::create();
->>>>>>> miniblink49
     WebDocument webDocument(document);
 
     EXPECT_FALSE(document->isWindowInteractionAllowed());

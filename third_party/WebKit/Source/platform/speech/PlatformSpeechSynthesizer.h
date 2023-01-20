@@ -30,81 +30,53 @@
 #include "platform/heap/Handle.h"
 #include "platform/speech/PlatformSpeechSynthesisVoice.h"
 #include "wtf/Vector.h"
-<<<<<<< HEAD
 #include <memory>
 
 namespace blink {
 
 enum SpeechBoundary { SpeechWordBoundary,
     SpeechSentenceBoundary };
-=======
-
-namespace blink {
-
-enum SpeechBoundary {
-    SpeechWordBoundary,
-    SpeechSentenceBoundary
-};
->>>>>>> miniblink49
 
 class PlatformSpeechSynthesisUtterance;
 class WebSpeechSynthesizer;
 class WebSpeechSynthesizerClientImpl;
 
-<<<<<<< HEAD
 class PLATFORM_EXPORT PlatformSpeechSynthesizerClient
     : public GarbageCollectedMixin {
-=======
-class PLATFORM_EXPORT PlatformSpeechSynthesizerClient : public GarbageCollectedMixin {
->>>>>>> miniblink49
 public:
     virtual void didStartSpeaking(PlatformSpeechSynthesisUtterance*) = 0;
     virtual void didFinishSpeaking(PlatformSpeechSynthesisUtterance*) = 0;
     virtual void didPauseSpeaking(PlatformSpeechSynthesisUtterance*) = 0;
     virtual void didResumeSpeaking(PlatformSpeechSynthesisUtterance*) = 0;
     virtual void speakingErrorOccurred(PlatformSpeechSynthesisUtterance*) = 0;
-<<<<<<< HEAD
     virtual void boundaryEventOccurred(PlatformSpeechSynthesisUtterance*,
         SpeechBoundary,
         unsigned charIndex)
         = 0;
-=======
-    virtual void boundaryEventOccurred(PlatformSpeechSynthesisUtterance*, SpeechBoundary, unsigned charIndex) = 0;
->>>>>>> miniblink49
     virtual void voicesDidChange() = 0;
 
 protected:
     virtual ~PlatformSpeechSynthesizerClient() { }
 };
 
-<<<<<<< HEAD
 class PLATFORM_EXPORT PlatformSpeechSynthesizer
     : public GarbageCollectedFinalized<PlatformSpeechSynthesizer> {
     WTF_MAKE_NONCOPYABLE(PlatformSpeechSynthesizer);
 
-=======
-class PLATFORM_EXPORT PlatformSpeechSynthesizer : public GarbageCollectedFinalized<PlatformSpeechSynthesizer> {
-    WTF_MAKE_NONCOPYABLE(PlatformSpeechSynthesizer);
->>>>>>> miniblink49
 public:
     static PlatformSpeechSynthesizer* create(PlatformSpeechSynthesizerClient*);
 
     virtual ~PlatformSpeechSynthesizer();
 
-<<<<<<< HEAD
     const Vector<RefPtr<PlatformSpeechSynthesisVoice>>& voiceList() const
     {
         return m_voiceList;
     }
-=======
-    const HeapVector<Member<PlatformSpeechSynthesisVoice>>& voiceList() const { return m_voiceList; }
->>>>>>> miniblink49
     virtual void speak(PlatformSpeechSynthesisUtterance*);
     virtual void pause();
     virtual void resume();
     virtual void cancel();
 
-<<<<<<< HEAD
     PlatformSpeechSynthesizerClient* client() const
     {
         return m_speechSynthesizerClient;
@@ -122,20 +94,6 @@ public:
     // notification methods in the other directions by way of
     // m_webSpeechSynthesizerClient. Eagerly releasing WebSpeechSynthesizer
     // prevents such unsafe accesses.
-=======
-    PlatformSpeechSynthesizerClient* client() const { return m_speechSynthesizerClient; }
-
-    void setVoiceList(HeapVector<Member<PlatformSpeechSynthesisVoice>>&);
-
-    // Eager finalization is required to promptly release the owned WebSpeechSynthesizer.
-    //
-    // If not and delayed until lazily swept, m_webSpeechSynthesizerClient may end up
-    // being lazily swept first (i.e., before this PlatformSpeechSynthesizer), leaving
-    // m_webSpeechSynthesizer with a dangling pointer to a finalized object --
-    // WebSpeechSynthesizer embedder implementations calling notification methods in the
-    // other directions by way of m_webSpeechSynthesizerClient. Eagerly releasing
-    // WebSpeechSynthesizer prevents such unsafe accesses.
->>>>>>> miniblink49
     EAGERLY_FINALIZE();
     DECLARE_VIRTUAL_TRACE();
 
@@ -144,20 +102,12 @@ protected:
 
     virtual void initializeVoiceList();
 
-<<<<<<< HEAD
     Vector<RefPtr<PlatformSpeechSynthesisVoice>> m_voiceList;
-=======
-    HeapVector<Member<PlatformSpeechSynthesisVoice>> m_voiceList;
->>>>>>> miniblink49
 
 private:
     Member<PlatformSpeechSynthesizerClient> m_speechSynthesizerClient;
 
-<<<<<<< HEAD
     std::unique_ptr<WebSpeechSynthesizer> m_webSpeechSynthesizer;
-=======
-    OwnPtr<WebSpeechSynthesizer> m_webSpeechSynthesizer;
->>>>>>> miniblink49
     Member<WebSpeechSynthesizerClientImpl> m_webSpeechSynthesizerClient;
 };
 

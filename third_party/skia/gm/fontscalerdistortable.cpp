@@ -4,37 +4,25 @@
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-<<<<<<< HEAD
-=======
-#include "gm.h"
->>>>>>> miniblink49
 #include "Resources.h"
 #include "SkFixed.h"
 #include "SkFontDescriptor.h"
 #include "SkFontMgr.h"
 #include "SkTypeface.h"
-<<<<<<< HEAD
 #include "gm.h"
-=======
->>>>>>> miniblink49
 
 namespace skiagm {
 
 class FontScalerDistortableGM : public GM {
 public:
-<<<<<<< HEAD
     FontScalerDistortableGM()
     {
-=======
-    FontScalerDistortableGM() {
->>>>>>> miniblink49
         this->setBGColor(0xFFFFFFFF);
     }
 
     virtual ~FontScalerDistortableGM() { }
 
 protected:
-<<<<<<< HEAD
     SkString onShortName() override
     {
         return SkString("fontscalerdistortable");
@@ -47,36 +35,17 @@ protected:
 
     static void rotate_about(SkCanvas* canvas, SkScalar degrees, SkScalar px, SkScalar py)
     {
-=======
-
-    SkString onShortName() override {
-        return SkString("fontscalerdistortable");
-    }
-
-    SkISize onISize() override {
-        return SkISize::Make(550, 700);
-    }
-
-    static void rotate_about(SkCanvas* canvas, SkScalar degrees, SkScalar px, SkScalar py) {
->>>>>>> miniblink49
         canvas->translate(px, py);
         canvas->rotate(degrees);
         canvas->translate(-px, -py);
     }
 
-<<<<<<< HEAD
     void onDraw(SkCanvas* canvas) override
     {
         SkPaint paint;
         paint.setAntiAlias(true);
         paint.setLCDRenderText(true);
         SkAutoTUnref<SkFontMgr> fontMgr(SkFontMgr::RefDefault());
-=======
-    void onDraw(SkCanvas* canvas) override {
-        SkPaint paint;
-        paint.setAntiAlias(true);
-        paint.setLCDRenderText(true);
->>>>>>> miniblink49
 
         SkAutoTDelete<SkStreamAsset> distortable(GetResourceAsStream("/fonts/Distortable.ttf"));
         if (!distortable) {
@@ -90,18 +59,11 @@ protected:
                 SkScalar x = SkIntToScalar(10);
                 SkScalar y = SkIntToScalar(20);
 
-<<<<<<< HEAD
                 SkFourByteTag tag = SkSetFourByteTag('w', 'g', 'h', 't');
                 SkScalar styleValue = SkDoubleToScalar(0.5 + (5 * j + i) * ((2.0 - 0.5) / (2 * 5)));
                 SkFontMgr::FontParameters::Axis axes[] = { { tag, styleValue } };
                 paint.setTypeface(sk_sp<SkTypeface>(fontMgr->createFromStream(
                     distortable->duplicate(), SkFontMgr::FontParameters().setAxes(axes, 1))));
-=======
-                SkFixed axis = SkDoubleToFixed(0.5 + (5*j + i) * ((2.0 - 0.5) / (2 * 5)));
-                SkAutoTUnref<SkTypeface> typeface(SkTypeface::CreateFromFontData(
-                    new SkFontData(distortable->duplicate(), 0, &axis, 1)));
-                paint.setTypeface(typeface);
->>>>>>> miniblink49
 
                 SkAutoCanvasRestore acr(canvas, true);
                 canvas->translate(SkIntToScalar(30 + i * 100), SkIntToScalar(20));
@@ -112,22 +74,14 @@ protected:
                     p.setAntiAlias(true);
                     SkRect r;
                     r.set(x - SkIntToScalar(3), SkIntToScalar(15),
-<<<<<<< HEAD
                         x - SkIntToScalar(1), SkIntToScalar(280));
-=======
-                          x - SkIntToScalar(1), SkIntToScalar(280));
->>>>>>> miniblink49
                     canvas->drawRect(r, p);
                 }
 
                 for (int ps = 6; ps <= 22; ps++) {
                     paint.setTextSize(SkIntToScalar(ps));
                     canvas->drawText(text, textLen, x, y, paint);
-<<<<<<< HEAD
                     y += paint.getFontMetrics(nullptr);
-=======
-                    y += paint.getFontMetrics(NULL);
->>>>>>> miniblink49
                 }
             }
             canvas->translate(0, SkIntToScalar(360));

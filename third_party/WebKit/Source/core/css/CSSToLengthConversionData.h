@@ -32,6 +32,9 @@
 #define CSSToLengthConversionData_h
 
 #include "core/CoreExport.h"
+#include "core/css/CSSPrimitiveValue.h"
+#include "platform/geometry/DoubleSize.h"
+#include "wtf/Allocator.h"
 #include "wtf/Assertions.h"
 #include "wtf/MathExtras.h"
 #include <limits>
@@ -39,15 +42,23 @@
 namespace blink {
 
 class ComputedStyle;
-class LayoutView;
+class LayoutViewItem;
 class Font;
 
 class CORE_EXPORT CSSToLengthConversionData {
-public:
+    DISALLOW_NEW();
 
+public:
     class FontSizes {
+        DISALLOW_NEW();
+
     public:
-        FontSizes() : m_em(0), m_rem(0), m_font(nullptr) { }
+        FontSizes()
+            : m_em(0)
+            , m_rem(0)
+            , m_font(nullptr)
+        {
+        }
         FontSizes(float em, float rem, const Font*);
         FontSizes(const ComputedStyle*, const ComputedStyle* rootStyle);
 
@@ -55,6 +66,7 @@ public:
         float rem() const { return m_rem; }
         float ex() const;
         float ch() const;
+
     private:
         float m_em;
         float m_rem;
@@ -62,26 +74,41 @@ public:
     };
 
     class ViewportSize {
-    public:
-        ViewportSize() : m_width(0), m_height(0) { }
-        ViewportSize(double width, double height) : m_width(width), m_height(height) { }
-        explicit ViewportSize(const LayoutView*);
+        DISALLOW_NEW();
 
-        double width() const { return m_width; }
-        double height() const { return m_height; }
+    public:
+        ViewportSize() { }
+        ViewportSize(double width, double height)
+            : m_size(width, height)
+        {
+        }
+        explicit ViewportSize(const LayoutViewItem&);
+
+        double width() const { return m_size.width(); }
+        double height() const { return m_size.height(); }
+
     private:
-        double m_width;
-        double m_height;
+        DoubleSize m_size;
     };
 
-    CSSToLengthConversionData() { }
-    CSSToLengthConversionData(const ComputedStyle*, const FontSizes&, const ViewportSize&, float zoom);
-    CSSToLengthConversionData(const ComputedStyle* currStyle, const ComputedStyle* rootStyle, const LayoutView*, float zoom);
+    CSSToLengthConversionData()
+        : m_style(nullptr)
+        , m_zoom(1)
+    {
+    }
+    CSSToLengthConversionData(const ComputedStyle*,
+        const FontSizes&,
+        const ViewportSize&,
+        float zoom);
+    CSSToLengthConversionData(const ComputedStyle* currStyle,
+        const ComputedStyle* rootStyle,
+        const LayoutViewItem&,
+        float zoom);
 
     float zoom() const { return m_zoom; }
 
     float emFontSize() const { return m_fontSizes.em(); }
-    float remFontSize() const { return m_fontSizes.rem(); }
+    float remFontSize() const;
     float exFontSize() const { return m_fontSizes.ex(); }
     float chFontSize() const { return m_fontSizes.ch(); }
 
@@ -94,14 +121,17 @@ public:
     void setFontSizes(const FontSizes& fontSizes) { m_fontSizes = fontSizes; }
     void setZoom(float zoom)
     {
-        ASSERT(std::isfinite(zoom) && zoom > 0);
+        ASSERT(std_isfinite(zoom) && zoom > 0);
         m_zoom = zoom;
     }
 
     CSSToLengthConversionData copyWithAdjustedZoom(float newZoom) const
     {
-        return CSSToLengthConversionData(m_style, m_fontSizes, m_viewportSize, newZoom);
+        return CSSToLengthConversionData(m_style, m_fontSizes, m_viewportSize,
+            newZoom);
     }
+
+    double zoomedComputedPixels(double value, CSSPrimitiveValue::UnitType) const;
 
 private:
     const ComputedStyle* m_style;

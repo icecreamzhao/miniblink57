@@ -19,22 +19,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/StylePropertyShorthand.h"
 
 namespace blink {
-
-const StylePropertyShorthand& borderShorthandForParsing()
-{
-    static const CSSPropertyID borderShorthandProperties[] = { CSSPropertyBorderWidth, CSSPropertyBorderStyle, CSSPropertyBorderColor };
-    static const StylePropertyShorthand* propertiesForInitialization[] = {
-        &borderWidthShorthand(),
-        &borderStyleShorthand(),
-        &borderColorShorthand(),
-    };
-    DEFINE_STATIC_LOCAL(StylePropertyShorthand, borderForParsingLonghands, (CSSPropertyBorder, borderShorthandProperties, propertiesForInitialization, WTF_ARRAY_LENGTH(borderShorthandProperties)));
-    return borderForParsingLonghands;
-}
 
 const StylePropertyShorthand& animationShorthandForParsing()
 {
@@ -48,29 +35,29 @@ const StylePropertyShorthand& animationShorthandForParsing()
     // And in the spec (editor's draft) at:
     // http://dev.w3.org/csswg/css3-animations/#animation-shorthand-property
     static const CSSPropertyID animationPropertiesForParsing[] = {
-        CSSPropertyAnimationDuration,
-        CSSPropertyAnimationTimingFunction,
-        CSSPropertyAnimationDelay,
-        CSSPropertyAnimationIterationCount,
-        CSSPropertyAnimationDirection,
-        CSSPropertyAnimationFillMode,
-        CSSPropertyAnimationPlayState,
-        CSSPropertyAnimationName
+        CSSPropertyAnimationDuration, CSSPropertyAnimationTimingFunction,
+        CSSPropertyAnimationDelay, CSSPropertyAnimationIterationCount,
+        CSSPropertyAnimationDirection, CSSPropertyAnimationFillMode,
+        CSSPropertyAnimationPlayState, CSSPropertyAnimationName
     };
-    DEFINE_STATIC_LOCAL(StylePropertyShorthand, webkitAnimationLonghandsForParsing, (CSSPropertyAnimation, animationPropertiesForParsing, WTF_ARRAY_LENGTH(animationPropertiesForParsing)));
+    DEFINE_STATIC_LOCAL(StylePropertyShorthand,
+        webkitAnimationLonghandsForParsing,
+        (CSSPropertyAnimation, animationPropertiesForParsing,
+            WTF_ARRAY_LENGTH(animationPropertiesForParsing)));
     return webkitAnimationLonghandsForParsing;
 }
 
-// Similar to animations, we have property after timing-function and delay after duration
+// Similar to animations, we have property after timing-function and delay after
+// duration
 const StylePropertyShorthand& transitionShorthandForParsing()
 {
     static const CSSPropertyID transitionProperties[] = {
-        CSSPropertyTransitionDuration,
-        CSSPropertyTransitionTimingFunction,
-        CSSPropertyTransitionDelay,
-        CSSPropertyTransitionProperty
+        CSSPropertyTransitionDuration, CSSPropertyTransitionTimingFunction,
+        CSSPropertyTransitionDelay, CSSPropertyTransitionProperty
     };
-    DEFINE_STATIC_LOCAL(StylePropertyShorthand, transitionLonghands, (CSSPropertyTransition, transitionProperties, WTF_ARRAY_LENGTH(transitionProperties)));
+    DEFINE_STATIC_LOCAL(StylePropertyShorthand, transitionLonghands,
+        (CSSPropertyTransition, transitionProperties,
+            WTF_ARRAY_LENGTH(transitionProperties)));
     return transitionLonghands;
 }
 
@@ -79,7 +66,9 @@ bool isShorthandProperty(CSSPropertyID id)
     return shorthandForProperty(id).length();
 }
 
-unsigned indexOfShorthandForLonghand(CSSPropertyID shorthandID, const Vector<StylePropertyShorthand, 4>& shorthands)
+unsigned indexOfShorthandForLonghand(
+    CSSPropertyID shorthandID,
+    const Vector<StylePropertyShorthand, 4>& shorthands)
 {
     for (unsigned i = 0; i < shorthands.size(); ++i) {
         if (shorthands.at(i).id() == shorthandID)

@@ -28,26 +28,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "public/web/mac/WebScrollbarTheme.h"
 
 #import <AppKit/AppKit.h>
 
 #include "platform/mac/NSScrollerImpDetails.h"
-<<<<<<< HEAD
 #include "platform/scroll/ScrollbarThemeMac.h"
-=======
-#include "platform/scroll/ScrollbarThemeMacCommon.h"
->>>>>>> miniblink49
 
 using namespace blink;
 
 namespace blink {
 
-<<<<<<< HEAD
 static_assert(static_cast<NSScrollerStyle>(ScrollerStyleLegacy) ==
                   NSScrollerStyleLegacy,
               "ScrollerStyleLegacy must match NSScrollerStyleLegacy");
@@ -72,22 +63,3 @@ void WebScrollbarTheme::updateScrollbarsWithNSDefaults(
 }
 
 }  // namespace blink
-=======
-static_assert(static_cast<NSScrollerStyle>(ScrollerStyleLegacy) == NSScrollerStyleLegacy, "ScrollerStyleLegacy must match NSScrollerStyleLegacy");
-static_assert(static_cast<NSScrollerStyle>(ScrollerStyleOverlay) == NSScrollerStyleOverlay, "ScrollerStyleOverlay must match NSScrollerStyleOverlay");
-
-void WebScrollbarTheme::updateScrollbars(
-    float initialButtonDelay, float autoscrollButtonDelay,
-    ScrollerStyle preferredScrollerStyle, bool redraw)
-{
-    ScrollbarTheme* theme = ScrollbarTheme::theme();
-    if (theme->isMockTheme())
-        return;
-
-    static_cast<ScrollbarThemeMacCommon*>(ScrollbarTheme::theme())->preferencesChanged(
-        initialButtonDelay, autoscrollButtonDelay,
-        static_cast<NSScrollerStyle>(preferredScrollerStyle), redraw);
-}
-
-} // namespace blink
->>>>>>> miniblink49

@@ -28,21 +28,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 interface SourceBufferList : EventTarget {
     readonly attribute unsigned long length;
     attribute EventHandler onaddsourcebuffer;
     attribute EventHandler onremovesourcebuffer;
     [ImplementedAs=item] getter SourceBuffer (unsigned long index);
 };
-=======
-[
-    GarbageCollected,
-    NoInterfaceObject,
-    RuntimeEnabled=MediaSource,
-] interface SourceBufferList : EventTarget {
-    readonly attribute unsigned long length;
-    [ImplementedAs=item] getter SourceBuffer (unsigned long index);
-};
-
->>>>>>> miniblink49

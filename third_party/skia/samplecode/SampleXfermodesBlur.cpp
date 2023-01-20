@@ -6,7 +6,6 @@
  */
 
 #include "SampleCode.h"
-<<<<<<< HEAD
 #include "SkBlurMask.h"
 #include "SkCanvas.h"
 #include "SkColorFilter.h"
@@ -14,20 +13,10 @@
 #include "SkCornerPathEffect.h"
 #include "SkGradientShader.h"
 #include "SkGraphics.h"
-=======
-#include "SkView.h"
-#include "SkBlurMask.h"
-#include "SkCanvas.h"
-#include "SkCornerPathEffect.h"
-#include "SkGradientShader.h"
-#include "SkGraphics.h"
-#include "SkImageDecoder.h"
->>>>>>> miniblink49
 #include "SkPath.h"
 #include "SkRandom.h"
 #include "SkRegion.h"
 #include "SkShader.h"
-<<<<<<< HEAD
 #include "SkTime.h"
 #include "SkTypeface.h"
 #include "SkUtils.h"
@@ -41,31 +30,11 @@
 static void setNamedTypeface(SkPaint* paint, const char name[])
 {
     paint->setTypeface(SkTypeface::MakeFromName(name, SkFontStyle()));
-=======
-#include "SkUtils.h"
-#include "SkColorPriv.h"
-#include "SkColorFilter.h"
-#include "SkTime.h"
-#include "SkTypeface.h"
-#include "SkXfermode.h"
-
-#include "SkStream.h"
-#include "SkXMLParser.h"
-#include "SkColorPriv.h"
-#include "SkImageDecoder.h"
-#include "SkBlurMaskFilter.h"
-
-static void setNamedTypeface(SkPaint* paint, const char name[]) {
-    SkTypeface* face = SkTypeface::CreateFromName(name, SkTypeface::kNormal);
-    paint->setTypeface(face);
-    SkSafeUnref(face);
->>>>>>> miniblink49
 }
 
 static uint16_t gBG[] = { 0xFFFF, 0xCCCF, 0xCCCF, 0xFFFF };
 
 class XfermodesBlurView : public SampleView {
-<<<<<<< HEAD
     SkBitmap fBG;
     SkBitmap fSrcB, fDstB;
 
@@ -76,18 +45,6 @@ class XfermodesBlurView : public SampleView {
         p.setMaskFilter(SkBlurMaskFilter::Make(kNormal_SkBlurStyle,
             SkBlurMask::ConvertRadiusToSigma(5),
             SkBlurMaskFilter::kNone_BlurFlag));
-=======
-    SkBitmap    fBG;
-    SkBitmap    fSrcB, fDstB;
-
-    void draw_mode(SkCanvas* canvas, SkXfermode* mode, int alpha,
-                   SkScalar x, SkScalar y) {
-        SkPaint p;
-        SkMaskFilter* mf = SkBlurMaskFilter::Create(kNormal_SkBlurStyle,
-                                       SkBlurMask::ConvertRadiusToSigma(SkIntToScalar(5)),
-                                       SkBlurMaskFilter::kNone_BlurFlag);
-        p.setMaskFilter(mf)->unref();
->>>>>>> miniblink49
 
         SkScalar ww = SkIntToScalar(W);
         SkScalar hh = SkIntToScalar(H);
@@ -96,28 +53,16 @@ class XfermodesBlurView : public SampleView {
         // left three quarters of the canvas
         p.setColor(0xFFCC44FF);
         SkRect r;
-<<<<<<< HEAD
         r.set(0, 0, ww * 3 / 4, hh * 3 / 4);
         r.offset(x, y);
         canvas->drawOval(r, p);
 
         p.setXfermode(std::move(mode));
-=======
-        r.set(0, 0, ww*3/4, hh*3/4);
-        r.offset(x, y);
-        canvas->drawOval(r, p);
-
-        p.setXfermode(mode);
->>>>>>> miniblink49
 
         // draw a square overlapping the circle
         // in the lower right of the canvas
         p.setColor(0x00AA6633 | alpha << 24);
-<<<<<<< HEAD
         r.set(ww / 3, hh / 3, ww * 19 / 20, hh * 19 / 20);
-=======
-        r.set(ww/3, hh/3, ww*19/20, hh*19/20);
->>>>>>> miniblink49
         r.offset(x, y);
         canvas->drawRect(r, p);
     }
@@ -125,26 +70,16 @@ class XfermodesBlurView : public SampleView {
 public:
     const static int W = 64;
     const static int H = 64;
-<<<<<<< HEAD
     XfermodesBlurView()
     {
         fBG.installPixels(SkImageInfo::Make(2, 2, kARGB_4444_SkColorType, kPremul_SkAlphaType),
             gBG, 4);
-=======
-    XfermodesBlurView() {
-        fBG.installPixels(SkImageInfo::Make(2, 2, kARGB_4444_SkColorType, kPremul_SkAlphaType),
-                          gBG, 4);
->>>>>>> miniblink49
     }
 
 protected:
     // overrides from SkEventSink
-<<<<<<< HEAD
     virtual bool onQuery(SkEvent* evt)
     {
-=======
-    virtual bool onQuery(SkEvent* evt) {
->>>>>>> miniblink49
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "XfermodesBlur");
             return true;
@@ -152,24 +87,15 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-<<<<<<< HEAD
     virtual void onDrawContent(SkCanvas* canvas)
     {
-=======
-    virtual void onDrawContent(SkCanvas* canvas) {
->>>>>>> miniblink49
         canvas->translate(SkIntToScalar(10), SkIntToScalar(20));
 
         if (false) {
             SkPaint paint;
             paint.setAntiAlias(true);
             paint.setTextSize(50);
-<<<<<<< HEAD
             paint.setTypeface(SkTypeface::MakeFromName("Arial Unicode MS", SkFontStyle()));
-=======
-            paint.setTypeface(SkTypeface::CreateFromName("Arial Unicode MS", SkTypeface::kNormal));
-            SkSafeUnref(paint.getTypeface());
->>>>>>> miniblink49
             char buffer[10];
             size_t len = SkUTF8_FromUnichar(0x8500, buffer);
             canvas->drawText(buffer, len, 40, 40, paint);
@@ -189,7 +115,6 @@ protected:
         }
 
         const struct {
-<<<<<<< HEAD
             SkXfermode::Mode fMode;
             const char* fLabel;
         } gModes[] = {
@@ -207,25 +132,6 @@ protected:
             { SkXfermode::kXor_Mode, "Xor" },
 
             { SkXfermode::kPlus_Mode, "Plus" },
-=======
-            SkXfermode::Mode  fMode;
-            const char*         fLabel;
-        } gModes[] = {
-            { SkXfermode::kClear_Mode,    "Clear"     },
-            { SkXfermode::kSrc_Mode,      "Src"       },
-            { SkXfermode::kDst_Mode,      "Dst"       },
-            { SkXfermode::kSrcOver_Mode,  "SrcOver"   },
-            { SkXfermode::kDstOver_Mode,  "DstOver"   },
-            { SkXfermode::kSrcIn_Mode,    "SrcIn"     },
-            { SkXfermode::kDstIn_Mode,    "DstIn"     },
-            { SkXfermode::kSrcOut_Mode,   "SrcOut"    },
-            { SkXfermode::kDstOut_Mode,   "DstOut"    },
-            { SkXfermode::kSrcATop_Mode,  "SrcATop"   },
-            { SkXfermode::kDstATop_Mode,  "DstATop"   },
-            { SkXfermode::kXor_Mode,      "Xor"       },
-
-            { SkXfermode::kPlus_Mode,         "Plus"          },
->>>>>>> miniblink49
             /*{ SkXfermode::kModulate_Mode,     "Modulate"      },
             { SkXfermode::kScreen_Mode,       "Screen"        },
             { SkXfermode::kOverlay_Mode,      "Overlay"       },
@@ -243,15 +149,8 @@ protected:
         const SkScalar h = SkIntToScalar(H);
         SkMatrix m;
         m.setScale(SkIntToScalar(6), SkIntToScalar(6));
-<<<<<<< HEAD
         auto s = SkShader::MakeBitmapShader(fBG, SkShader::kRepeat_TileMode,
             SkShader::kRepeat_TileMode, &m);
-=======
-        SkShader* s = SkShader::CreateBitmapShader(fBG,
-                                                   SkShader::kRepeat_TileMode,
-                                                   SkShader::kRepeat_TileMode,
-                                                   &m);
->>>>>>> miniblink49
 
         SkPaint labelP;
         labelP.setAntiAlias(true);
@@ -265,46 +164,26 @@ protected:
         for (int twice = 0; twice < 2; twice++) {
             SkScalar x = x0, y = 0;
             for (size_t i = 0; i < SK_ARRAY_COUNT(gModes); i++) {
-<<<<<<< HEAD
                 SkRect r;
                 r.set(x, y, x + w, y + h);
-=======
-                SkXfermode* mode = SkXfermode::Create(gModes[i].fMode);
-                SkAutoUnref aur(mode);
-                SkRect r;
-                r.set(x, y, x+w, y+h);
->>>>>>> miniblink49
 
                 SkPaint p;
                 p.setStyle(SkPaint::kFill_Style);
                 p.setShader(s);
                 canvas->drawRect(r, p);
 
-<<<<<<< HEAD
                 canvas->saveLayer(&r, nullptr);
                 draw_mode(canvas, SkXfermode::Make(gModes[i].fMode),
                     twice ? 0x88 : 0xFF, r.fLeft, r.fTop);
-=======
-                canvas->saveLayer(&r, NULL);
-                draw_mode(canvas, mode, twice ? 0x88 : 0xFF, r.fLeft, r.fTop);
->>>>>>> miniblink49
                 canvas->restore();
 
                 r.inset(-SK_ScalarHalf, -SK_ScalarHalf);
                 p.setStyle(SkPaint::kStroke_Style);
-<<<<<<< HEAD
                 p.setShader(nullptr);
                 canvas->drawRect(r, p);
 
                 canvas->drawText(gModes[i].fLabel, strlen(gModes[i].fLabel),
                     x + w / 2, y - labelP.getTextSize() / 2, labelP);
-=======
-                p.setShader(NULL);
-                canvas->drawRect(r, p);
-
-                canvas->drawText(gModes[i].fLabel, strlen(gModes[i].fLabel),
-                                 x + w/2, y - labelP.getTextSize()/2, labelP);
->>>>>>> miniblink49
                 x += w + SkIntToScalar(10);
                 if ((i % W) == W - 1) {
                     x = x0;
@@ -313,10 +192,6 @@ protected:
             }
             x0 += SkIntToScalar(400);
         }
-<<<<<<< HEAD
-=======
-        s->unref();
->>>>>>> miniblink49
     }
 
 private:

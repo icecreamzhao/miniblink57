@@ -31,14 +31,13 @@
 #ifndef ShadowList_h
 #define ShadowList_h
 
-#include "core/style/ComputedStyle.h"
 #include "core/style/ShadowData.h"
 #include "platform/geometry/FloatRectOutsets.h"
 #include "platform/geometry/LayoutRect.h"
 #include "platform/graphics/DrawLooperBuilder.h"
-#include "wtf/PassOwnPtr.h"
 #include "wtf/RefCounted.h"
 #include "wtf/Vector.h"
+#include <memory>
 
 namespace blink {
 
@@ -57,10 +56,16 @@ public:
         return adoptRef(new ShadowList(shadows));
     }
     const ShadowDataVector& shadows() const { return m_shadows; }
-    bool operator==(const ShadowList& o) const { return m_shadows == o.m_shadows; }
+    bool operator==(const ShadowList& o) const
+    {
+        return m_shadows == o.m_shadows;
+    }
     bool operator!=(const ShadowList& o) const { return !(*this == o); }
 
-    static PassRefPtr<ShadowList> blend(const ShadowList* from, const ShadowList* to, double progress, const Color& currentColor);
+    static PassRefPtr<ShadowList> blend(const ShadowList* from,
+        const ShadowList* to,
+        double progress,
+        const Color& currentColor);
 
     // Outsets needed to include all shadows in this list, as well as the
     // source (i.e. no outsets will be negative).
@@ -68,7 +73,9 @@ public:
 
     void adjustRectForShadow(FloatRect&) const;
 
-    PassOwnPtr<DrawLooperBuilder> createDrawLooper(DrawLooperBuilder::ShadowAlphaMode, const Color& currentColor, bool isHorizontal = true) const;
+    sk_sp<SkDrawLooper> createDrawLooper(DrawLooperBuilder::ShadowAlphaMode,
+        const Color& currentColor,
+        bool isHorizontal = true) const;
 
 private:
     ShadowList(ShadowDataVector& shadows)

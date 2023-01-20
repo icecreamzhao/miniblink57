@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2014 Google Inc.
  *
@@ -16,7 +12,6 @@
 
 class GrGpuTraceMarker {
 public:
-<<<<<<< HEAD
     GrGpuTraceMarker(const char* marker, int idCounter)
         : fMarker(marker)
         , fID(idCounter)
@@ -30,16 +25,6 @@ public:
 
     bool operator==(const GrGpuTraceMarker& rhs) const
     {
-=======
-    GrGpuTraceMarker() {};
-    GrGpuTraceMarker(const char* marker, int idCounter) : fMarker(marker), fID(idCounter) {}
-
-    bool operator<(const GrGpuTraceMarker& rhs) const {
-        return this->fMarker < rhs.fMarker || (this->fMarker == rhs.fMarker && this->fID < rhs.fID);
-    }
-
-    bool operator==(const GrGpuTraceMarker& rhs) const {
->>>>>>> miniblink49
         return (this->fID == rhs.fID && this->fMarker == rhs.fMarker);
     }
 
@@ -53,11 +38,7 @@ class SkString;
 
 class GrTraceMarkerSet {
 public:
-<<<<<<< HEAD
     GrTraceMarkerSet() { }
-=======
-    GrTraceMarkerSet() {}
->>>>>>> miniblink49
 
     GrTraceMarkerSet(const GrTraceMarkerSet& other);
 
@@ -93,32 +74,20 @@ private:
 class GrTraceMarkerSet::Iter {
 public:
     Iter() {};
-<<<<<<< HEAD
     Iter& operator=(const Iter& i)
     {
-=======
-    Iter& operator=(const Iter& i) {
->>>>>>> miniblink49
         fCurrentIndex = i.fCurrentIndex;
         fMarkers = i.fMarkers;
         return *this;
     }
-<<<<<<< HEAD
     bool operator==(const Iter& i) const
     {
-=======
-    bool operator==(const Iter& i) const {
->>>>>>> miniblink49
         return fCurrentIndex == i.fCurrentIndex && fMarkers == i.fMarkers;
     }
     bool operator!=(const Iter& i) const { return !(*this == i); }
     const GrGpuTraceMarker& operator*() const { return fMarkers->fMarkerArray[fCurrentIndex]; }
-<<<<<<< HEAD
     Iter& operator++()
     {
-=======
-    Iter& operator++() {
->>>>>>> miniblink49
         SkASSERT(*this != fMarkers->end());
         ++fCurrentIndex;
         return *this;
@@ -127,13 +96,9 @@ public:
 private:
     friend class GrTraceMarkerSet;
     Iter(const GrTraceMarkerSet* markers, int index)
-<<<<<<< HEAD
         : fMarkers(markers)
         , fCurrentIndex(index)
     {
-=======
-            : fMarkers(markers), fCurrentIndex(index) {
->>>>>>> miniblink49
         SkASSERT(markers);
     }
 

@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
 // https://fetch.spec.whatwg.org/#response-class
 
 enum ResponseType { "basic", "cors", "default", "error", "opaque", "opaqueredirect" };
@@ -22,42 +21,14 @@ enum ResponseType { "basic", "cors", "default", "error", "opaque", "opaqueredire
     readonly attribute ResponseType type;
     readonly attribute USVString url;
     readonly attribute boolean redirected;
-=======
-// http://fetch.spec.whatwg.org/#response-class
-
-enum ResponseType { "basic", "cors", "default", "error", "opaque" };
-
-// FIXME: Add union type: URLSearchParams
-typedef (Blob or ArrayBuffer or ArrayBufferView or FormData or USVString) BodyInit;
-
-[
-    Constructor(optional BodyInit body, optional Dictionary responseInitDict),
-    ConstructorCallWith=ExecutionContext,
-    Exposed=(Window,Worker),
-    RaisesException=Constructor,
-    ActiveDOMObject,
-    GarbageCollected,
-    TypeChecking=Interface,
-] interface Response {
-    [CallWith=ExecutionContext] static Response error();
-    [CallWith=ExecutionContext, RaisesException] static Response redirect(USVString url, optional unsigned short status = 302);
-    readonly attribute ResponseType type;
-    readonly attribute USVString url;
->>>>>>> miniblink49
     readonly attribute unsigned short status;
     readonly attribute boolean ok;
     readonly attribute ByteString statusText;
     readonly attribute Headers headers;
 
-<<<<<<< HEAD
     [RaisesException, CallWith=ScriptState] Response clone();
 
     [CallWith=ScriptState, ImplementedAs=bodyWithUseCounter] readonly attribute any body;
-=======
-    [RaisesException] Response clone();
-
-    readonly attribute ReadableByteStream body;
->>>>>>> miniblink49
 };
 
 Response implements Body;

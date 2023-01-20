@@ -35,45 +35,81 @@
 #include "core/animation/EffectModel.h"
 #include "core/animation/Timing.h"
 #include "platform/animation/TimingFunction.h"
+#include "wtf/Allocator.h"
 #include "wtf/Vector.h"
+#include <memory>
 
 namespace blink {
 
 class Animation;
+class CompositorAnimation;
 class Element;
 class FloatBox;
+class KeyframeEffectModelBase;
 
 class CORE_EXPORT CompositorAnimations {
+    STATIC_ONLY(CompositorAnimations);
+
 public:
-    static CompositorAnimations* instance() { return instance(0); }
-    static void setInstanceForTesting(CompositorAnimations* newInstance) { instance(newInstance); }
     static bool isCompositableProperty(CSSPropertyID);
-    static const CSSPropertyID compositableProperties[6];
+    static const CSSPropertyID compositableProperties[7];
 
-    virtual bool isCandidateForAnimationOnCompositor(const Timing&, const Element&, const Animation*, const EffectModel&, double animationPlaybackRate);
-    virtual void cancelIncompatibleAnimationsOnCompositor(const Element&, const Animation&, const EffectModel&);
-    virtual bool canStartAnimationOnCompositor(const Element&);
-    // FIXME: This should return void. We should know ahead of time whether these animations can be started.
-    virtual bool startAnimationOnCompositor(const Element&, int group, double startTime, double timeOffset, const Timing&, const Animation&, const EffectModel&, Vector<int>& startedAnimationIds, double animationPlaybackRate);
-    virtual void cancelAnimationOnCompositor(const Element&, const Animation&, int id);
-    virtual void pauseAnimationForTestingOnCompositor(const Element&, const Animation&, int id, double pauseTime);
+    static bool isCandidateForAnimationOnCompositor(const Timing&,
+        const Element&,
+        const Animation*,
+        const EffectModel&,
+        double animationPlaybackRate);
+    static void cancelIncompatibleAnimationsOnCompositor(const Element&,
+        const Animation&,
+        const EffectModel&);
+    static bool canStartAnimationOnCompositor(const Element&);
+    static void startAnimationOnCompositor(const Element&,
+        int group,
+        double startTime,
+        double timeOffset,
+        const Timing&,
+        const Animation&,
+        const EffectModel&,
+        Vector<int>& startedAnimationIds,
+        double animationPlaybackRate);
+    static void cancelAnimationOnCompositor(const Element&,
+        const Animation&,
+        int id);
+    static void pauseAnimationForTestingOnCompositor(const Element&,
+        const Animation&,
+        int id,
+        double pauseTime);
 
-    virtual bool canAttachCompositedLayers(const Element&, const Animation&);
-    virtual void attachCompositedLayers(const Element&, const Animation&);
+    static void attachCompositedLayers(Element&, const Animation&);
 
-    virtual bool getAnimatedBoundingBox(FloatBox&, const EffectModel&, double minValue, double maxValue) const;
-protected:
-    CompositorAnimations() { }
+    static bool getAnimatedBoundingBox(FloatBox&,
+        const EffectModel&,
+        double minValue,
+        double maxValue);
 
-private:
-    static CompositorAnimations* instance(CompositorAnimations* newInstance)
-    {
-        static CompositorAnimations* instance = new CompositorAnimations();
-        if (newInstance) {
-            instance = newInstance;
-        }
-        return instance;
-    }
+    struct CompositorTiming {
+        Timing::PlaybackDirection direction;
+        double scaledDuration;
+        double scaledTimeOffset;
+        double adjustedIterationCount;
+        double playbackRate;
+        Timing::FillMode fillMode;
+        double iterationStart;
+    };
+
+    static bool convertTimingForCompositor(const Timing&,
+        double timeOffset,
+        CompositorTiming& out,
+        double animationPlaybackRate);
+
+    static void getAnimationOnCompositor(
+        const Timing&,
+        int group,
+        double startTime,
+        double timeOffset,
+        const KeyframeEffectModelBase&,
+        Vector<std::unique_ptr<CompositorAnimation>>& animations,
+        double animationPlaybackRate);
 };
 
 } // namespace blink

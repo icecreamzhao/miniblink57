@@ -28,10 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "web/LocalFileSystemClient.h"
 
 #include "core/dom/Document.h"
@@ -42,7 +38,6 @@
 #include "public/web/WebContentSettingsClient.h"
 #include "web/WebLocalFrameImpl.h"
 #include "web/WorkerContentSettingsClient.h"
-<<<<<<< HEAD
 #include "wtf/PtrUtil.h"
 #include "wtf/text/WTFString.h"
 #include <memory>
@@ -78,38 +73,6 @@ void LocalFileSystemClient::requestFileSystemAccessAsync(
     DCHECK(context);
     if (!context->isDocument()) {
         NOTREACHED();
-=======
-#include "wtf/text/WTFString.h"
-
-namespace blink {
-
-PassOwnPtr<FileSystemClient> LocalFileSystemClient::create()
-{
-    return adoptPtr(static_cast<FileSystemClient*>(new LocalFileSystemClient()));
-}
-
-LocalFileSystemClient::~LocalFileSystemClient()
-{
-}
-
-bool LocalFileSystemClient::requestFileSystemAccessSync(ExecutionContext* context)
-{
-    ASSERT(context);
-    if (context->isDocument()) {
-        ASSERT_NOT_REACHED();
-        return false;
-    }
-
-    ASSERT(context->isWorkerGlobalScope());
-    return WorkerContentSettingsClient::from(*toWorkerGlobalScope(context))->requestFileSystemAccessSync();
-}
-
-void LocalFileSystemClient::requestFileSystemAccessAsync(ExecutionContext* context, PassOwnPtr<ContentSettingCallbacks> callbacks)
-{
-    ASSERT(context);
-    if (!context->isDocument()) {
-        ASSERT_NOT_REACHED();
->>>>>>> miniblink49
         return;
     }
 
@@ -119,19 +82,10 @@ void LocalFileSystemClient::requestFileSystemAccessAsync(ExecutionContext* conte
         callbacks->onAllowed();
         return;
     }
-<<<<<<< HEAD
     webFrame->contentSettingsClient()->requestFileSystemAccessAsync(
         std::move(callbacks));
 }
 
 LocalFileSystemClient::LocalFileSystemClient() { }
-=======
-    webFrame->contentSettingsClient()->requestFileSystemAccessAsync(callbacks);
-}
-
-LocalFileSystemClient::LocalFileSystemClient()
-{
-}
->>>>>>> miniblink49
 
 } // namespace blink

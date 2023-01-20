@@ -23,16 +23,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "platform/geometry/TransformState.h"
 
-=======
-#include "config.h"
-#include "platform/geometry/TransformState.h"
-
-#include "wtf/PassOwnPtr.h"
-
->>>>>>> miniblink49
 namespace blink {
 
 TransformState& TransformState::operator=(const TransformState& other)
@@ -45,7 +37,6 @@ TransformState& TransformState::operator=(const TransformState& other)
     if (m_mapQuad)
         m_lastPlanarQuad = other.m_lastPlanarQuad;
     m_accumulatingTransform = other.m_accumulatingTransform;
-<<<<<<< HEAD
     m_forceAccumulatingTransform = other.m_forceAccumulatingTransform;
     m_direction = other.m_direction;
 
@@ -53,14 +44,6 @@ TransformState& TransformState::operator=(const TransformState& other)
 
     if (other.m_accumulatedTransform)
         m_accumulatedTransform = TransformationMatrix::create(*other.m_accumulatedTransform);
-=======
-    m_direction = other.m_direction;
-
-    m_accumulatedTransform.clear();
-
-    if (other.m_accumulatedTransform)
-        m_accumulatedTransform = adoptPtr(new TransformationMatrix(*other.m_accumulatedTransform));
->>>>>>> miniblink49
 
     return *this;
 }
@@ -68,61 +51,37 @@ TransformState& TransformState::operator=(const TransformState& other)
 void TransformState::translateTransform(const LayoutSize& offset)
 {
     if (m_direction == ApplyTransformDirection)
-<<<<<<< HEAD
         m_accumulatedTransform->translateRight(offset.width().toDouble(),
             offset.height().toDouble());
     else
         m_accumulatedTransform->translate(offset.width().toDouble(),
             offset.height().toDouble());
-=======
-        m_accumulatedTransform->translateRight(offset.width().toDouble(), offset.height().toDouble());
-    else
-        m_accumulatedTransform->translate(offset.width().toDouble(), offset.height().toDouble());
->>>>>>> miniblink49
 }
 
 void TransformState::translateMappedCoordinates(const LayoutSize& offset)
 {
-<<<<<<< HEAD
     FloatSize adjustedOffset((m_direction == ApplyTransformDirection) ? offset
                                                                       : -offset);
-=======
-    FloatSize adjustedOffset((m_direction == ApplyTransformDirection) ? offset : -offset);
->>>>>>> miniblink49
     if (m_mapPoint)
         m_lastPlanarPoint.move(adjustedOffset);
     if (m_mapQuad)
         m_lastPlanarQuad.move(adjustedOffset);
 }
 
-<<<<<<< HEAD
 void TransformState::move(const LayoutSize& offset,
     TransformAccumulation accumulate)
 {
     if (m_forceAccumulatingTransform)
         accumulate = AccumulateTransform;
 
-=======
-void TransformState::move(const LayoutSize& offset, TransformAccumulation accumulate)
-{
->>>>>>> miniblink49
     if (accumulate == FlattenTransform || !m_accumulatedTransform) {
         m_accumulatedOffset += offset;
     } else {
         applyAccumulatedOffset();
         if (m_accumulatingTransform && m_accumulatedTransform) {
-<<<<<<< HEAD
             // If we're accumulating into an existing transform, apply the
             // translation.
             translateTransform(offset);
-=======
-            // If we're accumulating into an existing transform, apply the translation.
-            translateTransform(offset);
-
-            // Then flatten if necessary.
-            if (accumulate == FlattenTransform)
-                flatten();
->>>>>>> miniblink49
         } else {
             // Just move the point and/or quad.
             translateMappedCoordinates(offset);
@@ -145,7 +104,6 @@ void TransformState::applyAccumulatedOffset()
     }
 }
 
-<<<<<<< HEAD
 // FIXME: We transform AffineTransform to TransformationMatrix. This is rather
 // inefficient.
 void TransformState::applyTransform(
@@ -161,50 +119,29 @@ void TransformState::applyTransform(
     const TransformationMatrix& transformFromContainer,
     TransformAccumulation accumulate,
     bool* wasClamped)
-=======
-// FIXME: We transform AffineTransform to TransformationMatrix. This is rather inefficient.
-void TransformState::applyTransform(const AffineTransform& transformFromContainer, TransformAccumulation accumulate, bool* wasClamped)
-{
-    applyTransform(transformFromContainer.toTransformationMatrix(), accumulate, wasClamped);
-}
-
-void TransformState::applyTransform(const TransformationMatrix& transformFromContainer, TransformAccumulation accumulate, bool* wasClamped)
->>>>>>> miniblink49
 {
     if (wasClamped)
         *wasClamped = false;
 
     if (transformFromContainer.isIntegerTranslation()) {
-<<<<<<< HEAD
         move(LayoutSize(LayoutUnit(transformFromContainer.e()),
                  LayoutUnit(transformFromContainer.f())),
             accumulate);
-=======
-        move(LayoutSize(transformFromContainer.e(), transformFromContainer.f()), accumulate);
->>>>>>> miniblink49
         return;
     }
 
     applyAccumulatedOffset();
 
-<<<<<<< HEAD
     // If we have an accumulated transform from last time, multiply in this
     // transform
     if (m_accumulatedTransform) {
         if (m_direction == ApplyTransformDirection)
             m_accumulatedTransform = TransformationMatrix::create(
                 transformFromContainer * *m_accumulatedTransform);
-=======
-    // If we have an accumulated transform from last time, multiply in this transform
-    if (m_accumulatedTransform) {
-        if (m_direction == ApplyTransformDirection)
-            m_accumulatedTransform = adoptPtr(new TransformationMatrix(transformFromContainer * *m_accumulatedTransform));
->>>>>>> miniblink49
         else
             m_accumulatedTransform->multiply(transformFromContainer);
     } else if (accumulate == AccumulateTransform) {
         // Make one if we started to accumulate
-<<<<<<< HEAD
         m_accumulatedTransform = TransformationMatrix::create(transformFromContainer);
     }
 
@@ -218,24 +155,11 @@ void TransformState::applyTransform(const TransformationMatrix& transformFromCon
         }
     }
     m_accumulatingTransform = accumulate == AccumulateTransform || m_forceAccumulatingTransform;
-=======
-        m_accumulatedTransform = adoptPtr(new TransformationMatrix(transformFromContainer));
-    }
-
-    if (accumulate == FlattenTransform) {
-        const TransformationMatrix* finalTransform = m_accumulatedTransform ? m_accumulatedTransform.get() : &transformFromContainer;
-        flattenWithTransform(*finalTransform, wasClamped);
-    }
-    m_accumulatingTransform = accumulate == AccumulateTransform;
->>>>>>> miniblink49
 }
 
 void TransformState::flatten(bool* wasClamped)
 {
-<<<<<<< HEAD
     ASSERT(!m_forceAccumulatingTransform);
-=======
->>>>>>> miniblink49
     if (wasClamped)
         *wasClamped = false;
 
@@ -255,12 +179,8 @@ FloatPoint TransformState::mappedPoint(bool* wasClamped) const
         *wasClamped = false;
 
     FloatPoint point = m_lastPlanarPoint;
-<<<<<<< HEAD
     point.move((m_direction == ApplyTransformDirection) ? m_accumulatedOffset
                                                         : -m_accumulatedOffset);
-=======
-    point.move((m_direction == ApplyTransformDirection) ? m_accumulatedOffset : -m_accumulatedOffset);
->>>>>>> miniblink49
     if (!m_accumulatedTransform)
         return point;
 
@@ -276,13 +196,9 @@ FloatQuad TransformState::mappedQuad(bool* wasClamped) const
         *wasClamped = false;
 
     FloatQuad quad = m_lastPlanarQuad;
-<<<<<<< HEAD
     quad.move(FloatSize((m_direction == ApplyTransformDirection)
             ? m_accumulatedOffset
             : -m_accumulatedOffset));
-=======
-    quad.move(FloatSize((m_direction == ApplyTransformDirection) ? m_accumulatedOffset : -m_accumulatedOffset));
->>>>>>> miniblink49
     if (!m_accumulatedTransform)
         return quad;
 
@@ -292,7 +208,6 @@ FloatQuad TransformState::mappedQuad(bool* wasClamped) const
     return m_accumulatedTransform->inverse().projectQuad(quad, wasClamped);
 }
 
-<<<<<<< HEAD
 const TransformationMatrix& TransformState::accumulatedTransform() const
 {
     ASSERT(m_forceAccumulatingTransform && m_accumulatingTransform);
@@ -301,9 +216,6 @@ const TransformationMatrix& TransformState::accumulatedTransform() const
 
 void TransformState::flattenWithTransform(const TransformationMatrix& t,
     bool* wasClamped)
-=======
-void TransformState::flattenWithTransform(const TransformationMatrix& t, bool* wasClamped)
->>>>>>> miniblink49
 {
     if (m_direction == ApplyTransformDirection) {
         if (m_mapPoint)

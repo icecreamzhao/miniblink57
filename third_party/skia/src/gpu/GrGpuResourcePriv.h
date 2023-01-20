@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2015 Google Inc.
  *
@@ -47,7 +43,6 @@ public:
     /**
      * Does the resource count against the resource budget?
      */
-<<<<<<< HEAD
     SkBudgeted isBudgeted() const
     {
         bool ret = SkBudgeted::kYes == fResource->fBudgeted;
@@ -61,15 +56,6 @@ public:
     bool refsWrappedObjects() const { return fResource->fRefsWrappedObjects; }
 
     /**
-=======
-    bool isBudgeted() const {
-        bool ret = GrGpuResource::kCached_LifeCycle == fResource->fLifeCycle;
-        SkASSERT(ret || !fResource->getUniqueKey().isValid());
-        return ret;
-    }
-
-    /** 
->>>>>>> miniblink49
      * If this resource can be used as a scratch resource this returns a valid scratch key.
      * Otherwise it returns a key for which isNullScratch is true. The resource may currently be
      * used as a uniquely keyed resource rather than scratch. Check isScratch().
@@ -80,7 +66,6 @@ public:
      * If the resource has a scratch key, the key will be removed. Since scratch keys are installed
      * at resource creation time, this means the resource will never again be used as scratch.
      */
-<<<<<<< HEAD
     void removeScratchKey() const { fResource->removeScratchKey(); }
 
 protected:
@@ -92,13 +77,6 @@ protected:
         : fResource(that.fResource)
     {
     }
-=======
-    void removeScratchKey() const { fResource->removeScratchKey();  }
-
-protected:
-    ResourcePriv(GrGpuResource* resource) : fResource(resource) {   }
-    ResourcePriv(const ResourcePriv& that) : fResource(that.fResource) {}
->>>>>>> miniblink49
     ResourcePriv& operator=(const CacheAccess&); // unimpl
 
     // No taking addresses of this type.
@@ -112,12 +90,8 @@ protected:
 
 inline GrGpuResource::ResourcePriv GrGpuResource::resourcePriv() { return ResourcePriv(this); }
 
-<<<<<<< HEAD
 inline const GrGpuResource::ResourcePriv GrGpuResource::resourcePriv() const
 {
-=======
-inline const GrGpuResource::ResourcePriv GrGpuResource::resourcePriv() const {
->>>>>>> miniblink49
     return ResourcePriv(const_cast<GrGpuResource*>(this));
 }
 

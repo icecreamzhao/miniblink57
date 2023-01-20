@@ -27,12 +27,14 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/html/track/vtt/VTTScanner.h"
+
+#include "wtf/text/StringToNumber.h"
 
 namespace blink {
 
-VTTScanner::VTTScanner(const String& line) : m_is8Bit(line.is8Bit())
+VTTScanner::VTTScanner(const String& line)
+    : m_is8Bit(line.is8Bit())
 {
     if (m_is8Bit) {
         m_data.characters8 = line.characters8();
@@ -53,7 +55,8 @@ bool VTTScanner::scan(char c)
 
 bool VTTScanner::scan(const LChar* characters, size_t charactersCount)
 {
-    unsigned matchLength = m_is8Bit ? m_end.characters8 - m_data.characters8 : m_end.characters16 - m_data.characters16;
+    unsigned matchLength = m_is8Bit ? m_end.characters8 - m_data.characters8
+                                    : m_end.characters16 - m_data.characters16;
     if (matchLength < charactersCount)
         return false;
     bool matched;
@@ -68,10 +71,10 @@ bool VTTScanner::scan(const LChar* characters, size_t charactersCount)
 
 bool VTTScanner::scanRun(const Run& run, const String& toMatch)
 {
-    ASSERT(run.start() == position());
-    ASSERT(run.start() <= end());
-    ASSERT(run.end() >= run.start());
-    ASSERT(run.end() <= end());
+    DCHECK_EQ(run.start(), getPosition());
+    DCHECK_LE(run.start(), end());
+    DCHECK_GE(run.end(), run.start());
+    DCHECK_LE(run.end(), end());
     size_t matchLength = run.length();
     if (toMatch.length() > matchLength)
         return false;
@@ -87,18 +90,18 @@ bool VTTScanner::scanRun(const Run& run, const String& toMatch)
 
 void VTTScanner::skipRun(const Run& run)
 {
-    ASSERT(run.start() <= end());
-    ASSERT(run.end() >= run.start());
-    ASSERT(run.end() <= end());
+    DCHECK_LE(run.start(), end());
+    DCHECK_GE(run.end(), run.start());
+    DCHECK_LE(run.end(), end());
     seekTo(run.end());
 }
 
 String VTTScanner::extractString(const Run& run)
 {
-    ASSERT(run.start() == position());
-    ASSERT(run.start() <= end());
-    ASSERT(run.end() >= run.start());
-    ASSERT(run.end() <= end());
+    DCHECK_EQ(run.start(), getPosition());
+    DCHECK_LE(run.start(), end());
+    DCHECK_GE(run.end(), run.start());
+    DCHECK_LE(run.end(), end());
     String s;
     if (m_is8Bit)
         s = String(m_data.characters8, run.length());
@@ -110,7 +113,7 @@ String VTTScanner::extractString(const Run& run)
 
 String VTTScanner::restOfInputAsString()
 {
-    Run rest(position(), end(), m_is8Bit);
+    Run rest(getPosition(), end(), m_is8Bit);
     return extractString(rest);
 }
 
@@ -143,7 +146,7 @@ bool VTTScanner::scanFloat(float& number)
 {
     Run integerRun = collectWhile<isASCIIDigit>();
     seekTo(integerRun.end());
-    Run decimalRun(position(), position(), m_is8Bit);
+    Run decimalRun(getPosition(), getPosition(), m_is8Bit);
     if (scan('.')) {
         decimalRun = collectWhile<isASCIIDigit>();
         seekTo(decimalRun.end());
@@ -156,12 +159,13 @@ bool VTTScanner::scanFloat(float& number)
         return false;
     }
 
-    size_t lengthOfFloat = Run(integerRun.start(), position(), m_is8Bit).length();
+    size_t lengthOfFloat = Run(integerRun.start(), getPosition(), m_is8Bit).length();
     bool validNumber;
     if (m_is8Bit)
         number = charactersToFloat(integerRun.start(), lengthOfFloat, &validNumber);
     else
-        number = charactersToFloat(reinterpret_cast<const UChar*>(integerRun.start()), lengthOfFloat, &validNumber);
+        number = charactersToFloat(reinterpret_cast<const UChar*>(integerRun.start()),
+            lengthOfFloat, &validNumber);
 
     if (!validNumber)
         number = std::numeric_limits<float>::max();
@@ -170,7 +174,7 @@ bool VTTScanner::scanFloat(float& number)
 
 bool VTTScanner::scanPercentage(float& percentage)
 {
-    Position savedPosition = position();
+    Position savedPosition = getPosition();
     if (!scanFloat(percentage))
         return false;
     if (scan('%'))
@@ -180,4 +184,4 @@ bool VTTScanner::scanPercentage(float& percentage)
     return false;
 }
 
-}
+} // namespace blink

@@ -28,13 +28,7 @@
 
 // Mac OS X - specific FFTFrame implementation
 
-<<<<<<< HEAD
 #include "wtf/build_config.h"
-=======
-#include "config.h"
-
-#if ENABLE(WEB_AUDIO)
->>>>>>> miniblink49
 
 #if OS(MACOSX)
 
@@ -98,25 +92,14 @@ FFTFrame::FFTFrame(const FFTFrame& frame)
     memcpy(imagData(), frame.m_frame.imagp, nbytes);
 }
 
-<<<<<<< HEAD
 FFTFrame::~FFTFrame() { }
-=======
-FFTFrame::~FFTFrame()
-{
-}
->>>>>>> miniblink49
 
 void FFTFrame::doFFT(const float* data)
 {
     AudioFloatArray scaledData(m_FFTSize);
-<<<<<<< HEAD
     // veclib fft returns a result that is twice as large as would be expected.
     // Compensate for that by scaling the input by half so the FFT has the
     // correct scaling.
-=======
-    // veclib fft returns a result that is twice as large as would be expected. Compensate for that
-    // by scaling the input by half so the FFT has the correct scaling.
->>>>>>> miniblink49
     float scale = 0.5f;
     VectorMath::vsmul(data, 1, &scale, scaledData.data(), 1, m_FFTSize);
 
@@ -149,13 +132,7 @@ FFTSetup FFTFrame::fftSetupForSize(unsigned fftSize)
     return fftSetups[pow2size];
 }
 
-<<<<<<< HEAD
 void FFTFrame::initialize() { }
-=======
-void FFTFrame::initialize()
-{
-}
->>>>>>> miniblink49
 
 void FFTFrame::cleanup()
 {
@@ -174,8 +151,3 @@ void FFTFrame::cleanup()
 } // namespace blink
 
 #endif // #if OS(MACOSX)
-<<<<<<< HEAD
-=======
-
-#endif // ENABLE(WEB_AUDIO)
->>>>>>> miniblink49

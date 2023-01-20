@@ -49,11 +49,13 @@
 #include "third_party/npapi/bindings/npfunctions.h"
 #include "web/WebViewImpl.h"
 #include "wtf/OwnPtr.h"
+#include "wtf/PassOwnPtr.h"
 #include "wtf/StringExtras.h"
 #include "wtf/text/WTFString.h"
+
 #include <stdio.h>
 
-extern "C" WINBASEAPI BOOL WINAPI InternetSetCookieA(LPCSTR lpszUrl, LPCSTR lpszCookieName, LPCSTR lpszCookieData);
+extern "C" BOOL WINAPI InternetSetCookieA(LPCSTR lpszUrl, LPCSTR lpszCookieName, LPCSTR lpszCookieData);
 
 #if ENABLE_WKE
 extern NPNetscapeFuncs s_wkeBrowserFuncs;
@@ -65,15 +67,22 @@ namespace blink {
 
 namespace {
 
-    void trace(Visitor*, ScriptWrappable*)
-    {
-    }
+void trace(Visitor*, ScriptWrappable*)
+{
+}
+
+static void traceWrappers(WrapperVisitor* visitor, ScriptWrappable* scriptWrappable)
+{
+    //visitor->traceWrappers(scriptWrappable->toImpl<Animation>());
+}
 
 } // namespace
 
 const WrapperTypeInfo* npObjectTypeInfo()
 {
-    static const WrapperTypeInfo typeInfo = { gin::kEmbedderBlink, 0, 0, 0, trace, 0, 0, 0, 0, "NPObject", 0, WrapperTypeInfo::WrapperTypeObjectPrototype, WrapperTypeInfo::ObjectClassId, WrapperTypeInfo::NotInheritFromEventTarget, WrapperTypeInfo::Dependent, WrapperTypeInfo::RefCountedObject };
+    static const WrapperTypeInfo typeInfo = { gin::kEmbedderBlink, nullptr, trace, traceWrappers, 0, nullptr, "NPObject", nullptr, 
+        WrapperTypeInfo::WrapperTypeObjectPrototype, WrapperTypeInfo::ObjectClassId, WrapperTypeInfo::NotInheritFromEventTarget, 
+        WrapperTypeInfo::Dependent};
     return &typeInfo;
 }
 
@@ -110,7 +119,8 @@ static ScriptState* mainWorldScriptState(v8::Isolate* isolate, NPObject* npObjec
     return scriptState;
 }
 
-static PassOwnPtr<v8::Local<v8::Value>[]> createValueListFromVariantArgs(v8::Isolate* isolate, const NPVariant* arguments, uint32_t argumentCount, NPObject* owner) {
+static PassOwnPtr<v8::Local<v8::Value>[]> createValueListFromVariantArgs(v8::Isolate* isolate, const NPVariant* arguments, uint32_t argumentCount, NPObject* owner)
+{
     OwnPtr<v8::Local<v8::Value>[]> argv = adoptArrayPtr(new v8::Local<v8::Value>[argumentCount]);
     for (uint32_t index = 0; index < argumentCount; index++) {
         const NPVariant* arg = &arguments[index];
@@ -291,7 +301,7 @@ bool _NPN_Invoke(NPP npp, NPObject* npObject, NPIdentifier methodName, const NPV
     // If we had an error, return false.  The spec is a little unclear here, but says "Returns true if the method was
     // successfully invoked".  If we get an error return value, was that successfully invoked?
     v8::Local<v8::Value> resultObject;
-    if (!frame->script().callFunction(function, v8Object, argumentCount, argv.get()).ToLocal(&resultObject))
+    if (!blink::V8ScriptRunner::callFunction(function, scriptState->getExecutionContext(), v8Object, argumentCount, argv.get(), isolate).ToLocal(&resultObject))
         return false;
 
     convertV8ObjectToNPVariant(isolate, resultObject, npObject, result);
@@ -342,7 +352,8 @@ bool _NPN_InvokeDefault(NPP npp, NPObject* npObject, const NPVariant* arguments,
     // If we had an error, return false.  The spec is a little unclear here, but says "Returns true if the method was
     // successfully invoked".  If we get an error return value, was that successfully invoked?
     v8::Local<v8::Value> resultObject;
-    if (!frame->script().callFunction(function, functionObject, argumentCount, argv.get()).ToLocal(&resultObject))
+    //if (!frame->script().callFunction(function, functionObject, argumentCount, argv.get()).ToLocal(&resultObject))
+    if (!blink::V8ScriptRunner::callFunction(function, scriptState->getExecutionContext(), functionObject, argumentCount, argv.get(), isolate).ToLocal(&resultObject))
         return false;
 
     convertV8ObjectToNPVariant(isolate, resultObject, npObject, result);
@@ -393,6 +404,56 @@ void parseCookieKeyValue(const String& cookie, Vector<String>* keys, Vector<Stri
     }
 }
 
+#ifndef MINIBLINK_NOT_IMPLEMENTED
+
+// fix "https://icorepnbs.pingan.com.cn/" swfupload bug, in which flash send http with cookie from IE
+static void fixSwfUpload(LocalFrame* frame)
+{
+#if defined(OS_WIN) 
+    Document* doc = frame->document();
+    const KURL& url = doc->url();
+    if (!url.protocolIsInHTTPFamily())
+        return;
+
+    ChromeClient& chromeClient = frame->chromeClient();
+    WebViewImpl* view = (WebViewImpl*)chromeClient.webView();
+    if (!view)
+        return;
+    content::WebPageImpl* page = (content::WebPageImpl*)view->client();
+    if (!page)
+        return;
+    net::WebCookieJarImpl* cookieJar = page->getCookieJar();
+    if (!cookieJar)
+        return;
+    String cookie = cookieJar->getCookiesForSession(KURL(), doc->cookieURL(), true);
+    String host = url.protocol();
+
+    host.append("://");
+    host.append(url.host());
+
+    // ::InternetSetCookieA(sURL, NULL, "JSESSIONID=null;path=/;expires=Thu, 01-Jan-1970 00:00:01 GMT");
+    // ::InternetSetCookieA(sURL, "JSESSIONID", "1111111111;path=/;expires=Thu, 01-Jan-2022 00:00:01 GMT");
+
+    Vector<String> keys;
+    Vector<String> values;
+    parseCookieKeyValue(cookie.utf8().data(), &keys, &values);
+    for (size_t i = 0; i < keys.size(); ++i) {
+        String key = keys[i];
+        String value = values[i];
+
+        String temp = key;
+        temp.append("=null;path=/;expires=Thu, 01-Jan-1970 00:00:01 GMT");
+        ::InternetSetCookieA(host.utf8().data(), NULL, temp.utf8().data());
+
+        temp = value;
+        temp.append(";path=/;expires=Thu, 01-Jan-2022 00:00:01 GMT");
+        ::InternetSetCookieA(host.utf8().data(), key.utf8().data(), temp.utf8().data());
+    }
+#endif
+}
+
+#endif
+
 bool _NPN_EvaluateHelper(NPP npp, bool popupsAllowed, NPObject* npObject, NPString* npScript, NPVariant* result)
 {
     if (result) {
@@ -434,7 +495,12 @@ bool _NPN_EvaluateHelper(NPP npp, bool popupsAllowed, NPObject* npObject, NPStri
 
     String script = String::fromUTF8(npScript->UTF8Characters, npScript->UTF8Length);
 
-    UserGestureIndicator gestureIndicator(popupsAllowed ? DefinitelyProcessingNewUserGesture : PossiblyProcessingUserGesture);
+#ifndef MINIBLINK_NOT_IMPLEMENTED
+    if (WTF::kNotFound != script.find("SWFUpload") && WTF::kNotFound != script.find("uploadStart("))
+        fixSwfUpload(frame);
+#endif
+
+    //UserGestureIndicator gestureIndicator(popupsAllowed ? DefinitelyProcessingNewUserGesture : PossiblyProcessingUserGesture);
     v8::Local<v8::Value> v8result = frame->script().executeScriptAndReturnValue(scriptState->context(), ScriptSourceCode(script, KURL(ParsedURLString, filename)));
 
     if (v8result.IsEmpty())
@@ -593,11 +659,16 @@ bool _NPN_HasMethod(NPP npp, NPObject* npObject, NPIdentifier methodName)
 
 void _NPN_SetException(NPObject* npObject, const NPUTF8* message)
 {
+    OutputDebugStringA("_NPN_SetException:");
+    OutputDebugStringA(message);
+    OutputDebugStringA("\n");
+    return;
+
     if (!npObject || !npObjectToV8NPObject(npObject)) {
         v8::HandleScope handleScope(v8::Isolate::GetCurrent());
         // We won't be able to find a proper scope for this exception, so just throw it.
         // This is consistent with JSC, which throws a global exception all the time.
-        V8ThrowException::throwGeneralError(v8::Isolate::GetCurrent(), message);
+        V8ThrowException::throwError(v8::Isolate::GetCurrent(), message);
         return;
     }
 
@@ -609,7 +680,7 @@ void _NPN_SetException(NPObject* npObject, const NPUTF8* message)
     ScriptState::Scope scope(scriptState);
     ExceptionCatcher exceptionCatcher(isolate);
 
-    V8ThrowException::throwGeneralError(isolate, message);
+    V8ThrowException::throwError(isolate, message);
 }
 
 bool _NPN_Enumerate(NPP npp, NPObject* npObject, NPIdentifier** identifier, uint32_t* count)

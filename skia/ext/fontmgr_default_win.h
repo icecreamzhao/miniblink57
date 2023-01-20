@@ -11,4 +11,4 @@ class SkFontMgr;
 
 void SK_API SetDefaultSkiaFactory(SkFontMgr* fontmgr);
 
-#endif  // SKIA_EXT_FONTMGR_DEFAULT_WIN_H_
+#endif // SKIA_EXT_FONTMGR_DEFAULT_WIN_H_

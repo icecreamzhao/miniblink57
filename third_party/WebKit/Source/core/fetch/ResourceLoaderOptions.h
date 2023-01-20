@@ -32,15 +32,15 @@
 #define ResourceLoaderOptions_h
 
 #include "core/fetch/FetchInitiatorInfo.h"
+#include "core/fetch/IntegrityMetadata.h"
 #include "platform/CrossThreadCopier.h"
 #include "platform/weborigin/SecurityOrigin.h"
+#include "wtf/Allocator.h"
 
 namespace blink {
 
-enum DataBufferingPolicy {
-    BufferData,
-    DoNotBufferData
-};
+enum DataBufferingPolicy { BufferData,
+    DoNotBufferData };
 
 enum ContentSecurityPolicyDisposition {
     CheckContentSecurityPolicy,
@@ -52,33 +52,39 @@ enum RequestInitiatorContext {
     WorkerContext,
 };
 
-enum StoredCredentials {
-    AllowStoredCredentials,
-    DoNotAllowStoredCredentials
-};
+enum StoredCredentials { AllowStoredCredentials,
+    DoNotAllowStoredCredentials };
 
-// APIs like XMLHttpRequest and EventSource let the user decide
-// whether to send credentials, but they're always sent for
-// same-origin requests. Additional information is needed to handle
-// cross-origin redirects correctly.
+// APIs like XMLHttpRequest and EventSource let the user decide whether to send
+// credentials, but they're always sent for same-origin requests. Additional
+// information is needed to handle cross-origin redirects correctly.
 enum CredentialRequest {
     ClientRequestedCredentials,
     ClientDidNotRequestCredentials
 };
 
-enum SynchronousPolicy {
-    RequestSynchronously,
-    RequestAsynchronously
-};
+enum SynchronousPolicy { RequestSynchronously,
+    RequestAsynchronously };
 
-// A resource fetch can be marked as being CORS enabled. The loader
-// must perform an access check upon seeing the response.
-enum CORSEnabled {
-    NotCORSEnabled,
-    IsCORSEnabled
+// A resource fetch can be marked as being CORS enabled. The loader must perform
+// an access check upon seeing the response.
+enum CORSEnabled { NotCORSEnabled,
+    IsCORSEnabled };
+
+// Was the request generated from a "parser-inserted" element?
+// https://html.spec.whatwg.org/multipage/scripting.html#parser-inserted
+enum ParserDisposition { ParserInserted,
+    NotParserInserted };
+
+enum CacheAwareLoadingEnabled {
+    NotCacheAwareLoadingEnabled,
+    IsCacheAwareLoadingEnabled
 };
 
 struct ResourceLoaderOptions {
+    USING_FAST_MALLOC(ResourceLoaderOptions);
+
+public:
     ResourceLoaderOptions()
         : dataBufferingPolicy(BufferData)
         , allowCredentials(DoNotAllowStoredCredentials)
@@ -87,6 +93,8 @@ struct ResourceLoaderOptions {
         , requestInitiatorContext(DocumentContext)
         , synchronousPolicy(RequestAsynchronously)
         , corsEnabled(NotCORSEnabled)
+        , parserDisposition(ParserInserted)
+        , cacheAwareLoadingEnabled(NotCacheAwareLoadingEnabled)
     {
     }
 
@@ -103,12 +111,14 @@ struct ResourceLoaderOptions {
         , requestInitiatorContext(requestInitiatorContext)
         , synchronousPolicy(RequestAsynchronously)
         , corsEnabled(NotCORSEnabled)
+        , parserDisposition(ParserInserted)
+        , cacheAwareLoadingEnabled(NotCacheAwareLoadingEnabled)
     {
     }
 
-    // Answers the question "can a separate request with these
-    // different options be re-used" (e.g. preload request)
-    // The safe (but possibly slow) answer is always false.
+    // Answers the question "can a separate request with these different options
+    // be re-used" (e.g. preload request) The safe (but possibly slow) answer is
+    // always false.
     bool canReuseRequest(const ResourceLoaderOptions& other) const
     {
         // dataBufferingPolicy differences are believed to be safe for re-use.
@@ -117,27 +127,43 @@ struct ResourceLoaderOptions {
         // FIXME: check contentSecurityPolicyOption.
         // initiatorInfo is purely informational and should be benign for re-use.
         // requestInitiatorContext is benign (indicates document vs. worker)
-        // synchronousPolicy (safe to re-use an async XHR response for sync, etc.)
+        if (synchronousPolicy != other.synchronousPolicy)
+            return false;
         return corsEnabled == other.corsEnabled;
-        // securityOrigin has more complicated checks which callers are responsible for.
+        // securityOrigin has more complicated checks which callers are responsible
+        // for.
     }
 
     // When adding members, CrossThreadResourceLoaderOptionsData should be
     // updated.
     DataBufferingPolicy dataBufferingPolicy;
-    StoredCredentials allowCredentials; // Whether HTTP credentials and cookies are sent with the request.
-    CredentialRequest credentialsRequested; // Whether the client (e.g. XHR) wanted credentials in the first place.
+
+    // Whether HTTP credentials and cookies are sent with the request.
+    StoredCredentials allowCredentials;
+
+    // Whether the client (e.g. XHR) wanted credentials in the first place.
+    CredentialRequest credentialsRequested;
+
     ContentSecurityPolicyDisposition contentSecurityPolicyOption;
     FetchInitiatorInfo initiatorInfo;
     RequestInitiatorContext requestInitiatorContext;
     SynchronousPolicy synchronousPolicy;
-    CORSEnabled corsEnabled; // If the resource is loaded out-of-origin, whether or not to use CORS.
+
+    // If the resource is loaded out-of-origin, whether or not to use CORS.
+    CORSEnabled corsEnabled;
+
     RefPtr<SecurityOrigin> securityOrigin;
+    String contentSecurityPolicyNonce;
+    IntegrityMetadataSet integrityMetadata;
+    ParserDisposition parserDisposition;
+    CacheAwareLoadingEnabled cacheAwareLoadingEnabled;
 };
 
 // Encode AtomicString (in FetchInitiatorInfo) as String to cross threads.
 struct CrossThreadResourceLoaderOptionsData {
-    explicit CrossThreadResourceLoaderOptionsData(const ResourceLoaderOptions& options)
+    DISALLOW_NEW();
+    explicit CrossThreadResourceLoaderOptionsData(
+        const ResourceLoaderOptions& options)
         : dataBufferingPolicy(options.dataBufferingPolicy)
         , allowCredentials(options.allowCredentials)
         , credentialsRequested(options.credentialsRequested)
@@ -146,7 +172,15 @@ struct CrossThreadResourceLoaderOptionsData {
         , requestInitiatorContext(options.requestInitiatorContext)
         , synchronousPolicy(options.synchronousPolicy)
         , corsEnabled(options.corsEnabled)
-        , securityOrigin(options.securityOrigin ? options.securityOrigin->isolatedCopy() : nullptr) { }
+        , securityOrigin(options.securityOrigin
+                  ? options.securityOrigin->isolatedCopy()
+                  : nullptr)
+        , contentSecurityPolicyNonce(options.contentSecurityPolicyNonce)
+        , integrityMetadata(options.integrityMetadata)
+        , parserDisposition(options.parserDisposition)
+        , cacheAwareLoadingEnabled(options.cacheAwareLoadingEnabled)
+    {
+    }
 
     operator ResourceLoaderOptions() const
     {
@@ -160,6 +194,10 @@ struct CrossThreadResourceLoaderOptionsData {
         options.synchronousPolicy = synchronousPolicy;
         options.corsEnabled = corsEnabled;
         options.securityOrigin = securityOrigin;
+        options.contentSecurityPolicyNonce = contentSecurityPolicyNonce;
+        options.integrityMetadata = integrityMetadata;
+        options.parserDisposition = parserDisposition;
+        options.cacheAwareLoadingEnabled = cacheAwareLoadingEnabled;
         return options;
     }
 
@@ -172,10 +210,15 @@ struct CrossThreadResourceLoaderOptionsData {
     SynchronousPolicy synchronousPolicy;
     CORSEnabled corsEnabled;
     RefPtr<SecurityOrigin> securityOrigin;
+    String contentSecurityPolicyNonce;
+    IntegrityMetadataSet integrityMetadata;
+    ParserDisposition parserDisposition;
+    CacheAwareLoadingEnabled cacheAwareLoadingEnabled;
 };
 
-template<> struct CrossThreadCopierBase<false, false, false, ResourceLoaderOptions> {
-    typedef CrossThreadResourceLoaderOptionsData Type;
+template <>
+struct CrossThreadCopier<ResourceLoaderOptions> {
+    using Type = CrossThreadResourceLoaderOptionsData;
     static Type copy(const ResourceLoaderOptions& options)
     {
         return CrossThreadResourceLoaderOptionsData(options);

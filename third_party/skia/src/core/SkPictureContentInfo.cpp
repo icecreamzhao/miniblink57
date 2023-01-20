@@ -5,7 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "SkPictureContentInfo.h"
 #include "SkPaint.h"
 #include "SkPathEffect.h"
@@ -13,38 +12,17 @@
 bool SkPictureContentInfo::suitableForGpuRasterization(GrContext* context, const char** reason,
     int sampleCount) const
 {
-=======
-#include "SkPaint.h"
-#include "SkPathEffect.h"
-#include "SkPictureContentInfo.h"
-
-bool SkPictureContentInfo::suitableForGpuRasterization(GrContext* context, const char **reason,
-                                                       int sampleCount) const {
->>>>>>> miniblink49
     // TODO: the heuristic used here needs to be refined
     static const int kNumPaintWithPathEffectUsesTol = 1;
     static const int kNumAAConcavePaths = 5;
 
     SkASSERT(fNumAAHairlineConcavePaths <= fNumAAConcavePaths);
 
-<<<<<<< HEAD
     int numNonDashedPathEffects = fNumPaintWithPathEffectUses - fNumFastPathDashEffects;
 
     bool suitableForDash = (0 == fNumPaintWithPathEffectUses) || (numNonDashedPathEffects < kNumPaintWithPathEffectUsesTol && 0 == sampleCount);
 
     bool ret = suitableForDash && (fNumAAConcavePaths - fNumAAHairlineConcavePaths - fNumAADFEligibleConcavePaths) < kNumAAConcavePaths;
-=======
-    int numNonDashedPathEffects = fNumPaintWithPathEffectUses -
-                                  fNumFastPathDashEffects;
-
-    bool suitableForDash = (0 == fNumPaintWithPathEffectUses) ||
-                           (numNonDashedPathEffects < kNumPaintWithPathEffectUsesTol
-                            && 0 == sampleCount);
-
-    bool ret = suitableForDash &&
-                    (fNumAAConcavePaths - fNumAAHairlineConcavePaths - fNumAADFEligibleConcavePaths)
-                    < kNumAAConcavePaths;
->>>>>>> miniblink49
     if (!ret && reason) {
         if (!suitableForDash) {
             if (0 != sampleCount) {
@@ -53,11 +31,7 @@ bool SkPictureContentInfo::suitableForGpuRasterization(GrContext* context, const
                 *reason = "Too many non dashed path effects.";
             }
         } else if ((fNumAAConcavePaths - fNumAAHairlineConcavePaths - fNumAADFEligibleConcavePaths)
-<<<<<<< HEAD
             >= kNumAAConcavePaths) {
-=======
-                    >= kNumAAConcavePaths) {
->>>>>>> miniblink49
             *reason = "Too many anti-aliased concave paths.";
         } else {
             *reason = "Unknown reason for GPU unsuitability.";
@@ -66,32 +40,19 @@ bool SkPictureContentInfo::suitableForGpuRasterization(GrContext* context, const
     return ret;
 }
 
-<<<<<<< HEAD
 void SkPictureContentInfo::onDrawPoints(size_t count, const SkPaint& paint)
 {
     if (paint.getPathEffect() != nullptr) {
         SkPathEffect::DashInfo info;
         SkPathEffect::DashType dashType = paint.getPathEffect()->asADash(&info);
         if (2 == count && SkPaint::kRound_Cap != paint.getStrokeCap() && SkPathEffect::kDash_DashType == dashType && 2 == info.fCount) {
-=======
-void SkPictureContentInfo::onDrawPoints(size_t count, const SkPaint& paint) {
-    if (paint.getPathEffect() != NULL) {
-        SkPathEffect::DashInfo info;
-        SkPathEffect::DashType dashType = paint.getPathEffect()->asADash(&info);
-        if (2 == count && SkPaint::kRound_Cap != paint.getStrokeCap() &&
-            SkPathEffect::kDash_DashType == dashType && 2 == info.fCount) {
->>>>>>> miniblink49
             ++fNumFastPathDashEffects;
         }
     }
 }
 
-<<<<<<< HEAD
 void SkPictureContentInfo::onDrawPath(const SkPath& path, const SkPaint& paint)
 {
-=======
-void SkPictureContentInfo::onDrawPath(const SkPath& path, const SkPaint& paint) {
->>>>>>> miniblink49
     if (paint.isAntiAlias() && !path.isConvex()) {
         ++fNumAAConcavePaths;
 
@@ -99,29 +60,19 @@ void SkPictureContentInfo::onDrawPath(const SkPath& path, const SkPaint& paint) 
         const SkRect& pathBounds = path.getBounds();
         if (SkPaint::kStroke_Style == paint.getStyle() && 0 == paint.getStrokeWidth()) {
             ++fNumAAHairlineConcavePaths;
-<<<<<<< HEAD
         } else if (SkPaint::kFill_Style == paintStyle && pathBounds.width() < 64.f && pathBounds.height() < 64.f && !path.isVolatile()) {
-=======
-        } else if (SkPaint::kFill_Style == paintStyle && pathBounds.width() < 64.f &&
-                   pathBounds.height() < 64.f && !path.isVolatile()) {
->>>>>>> miniblink49
             ++fNumAADFEligibleConcavePaths;
         }
     }
 }
 
-<<<<<<< HEAD
 void SkPictureContentInfo::onAddPaintPtr(const SkPaint* paint)
 {
-=======
-void SkPictureContentInfo::onAddPaintPtr(const SkPaint* paint) {
->>>>>>> miniblink49
     if (paint && paint->getPathEffect()) {
         ++fNumPaintWithPathEffectUses;
     }
 }
 
-<<<<<<< HEAD
 void SkPictureContentInfo::onSaveLayer()
 {
     *fSaveStack.append() = kSaveLayer_Flag;
@@ -134,17 +85,6 @@ void SkPictureContentInfo::onSave()
 
 void SkPictureContentInfo::onRestore()
 {
-=======
-void SkPictureContentInfo::onSaveLayer() {
-    *fSaveStack.append() = kSaveLayer_Flag;
-}
-
-void SkPictureContentInfo::onSave() {
-    *fSaveStack.append() = kSave_Flag;
-}
-
-void SkPictureContentInfo::onRestore() {
->>>>>>> miniblink49
     SkASSERT(fSaveStack.count() > 0);
 
     bool containedSaveLayer = fSaveStack.top() & kContainedSaveLayer_Flag;
@@ -166,12 +106,8 @@ void SkPictureContentInfo::onRestore() {
     }
 }
 
-<<<<<<< HEAD
 void SkPictureContentInfo::rescindLastSave()
 {
-=======
-void SkPictureContentInfo::rescindLastSave() {
->>>>>>> miniblink49
     SkASSERT(fSaveStack.count() > 0);
     SkASSERT(fSaveStack.top() & kSave_Flag);
 
@@ -184,12 +120,8 @@ void SkPictureContentInfo::rescindLastSave() {
     }
 }
 
-<<<<<<< HEAD
 void SkPictureContentInfo::rescindLastSaveLayer()
 {
-=======
-void SkPictureContentInfo::rescindLastSaveLayer() {
->>>>>>> miniblink49
     SkASSERT(fSaveStack.count() > 0);
     SkASSERT(fSaveStack.top() & kSaveLayer_Flag);
 
@@ -202,12 +134,8 @@ void SkPictureContentInfo::rescindLastSaveLayer() {
     }
 }
 
-<<<<<<< HEAD
 void SkPictureContentInfo::set(const SkPictureContentInfo& src)
 {
-=======
-void SkPictureContentInfo::set(const SkPictureContentInfo& src) {
->>>>>>> miniblink49
     fNumOperations = src.fNumOperations;
     fNumTexts = src.fNumTexts;
     fNumPaintWithPathEffectUses = src.fNumPaintWithPathEffectUses;
@@ -221,12 +149,8 @@ void SkPictureContentInfo::set(const SkPictureContentInfo& src) {
     fSaveStack = src.fSaveStack;
 }
 
-<<<<<<< HEAD
 void SkPictureContentInfo::reset()
 {
-=======
-void SkPictureContentInfo::reset() {
->>>>>>> miniblink49
     fNumOperations = 0;
     fNumTexts = 0;
     fNumPaintWithPathEffectUses = 0;
@@ -240,12 +164,8 @@ void SkPictureContentInfo::reset() {
     fSaveStack.rewind();
 }
 
-<<<<<<< HEAD
 void SkPictureContentInfo::swap(SkPictureContentInfo* other)
 {
-=======
-void SkPictureContentInfo::swap(SkPictureContentInfo* other) {
->>>>>>> miniblink49
     SkTSwap(fNumOperations, other->fNumOperations);
     SkTSwap(fNumTexts, other->fNumTexts);
     SkTSwap(fNumPaintWithPathEffectUses, other->fNumPaintWithPathEffectUses);

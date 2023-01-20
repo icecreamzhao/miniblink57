@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/testing/LayerRectList.h"
 
 #include "core/dom/ClientRect.h"
@@ -37,9 +36,7 @@
 
 namespace blink {
 
-LayerRectList::LayerRectList()
-{
-}
+LayerRectList::LayerRectList() { }
 
 unsigned LayerRectList::length() const
 {
@@ -54,9 +51,14 @@ LayerRect* LayerRectList::item(unsigned index)
     return m_list[index].get();
 }
 
-void LayerRectList::append(PassRefPtrWillBeRawPtr<Node> layerRootNode, const String& layerType, int layerOffsetX, int layerOffsetY, ClientRect* layerRelativeRect)
+void LayerRectList::append(Node* layerRootNode,
+    const String& layerType,
+    int layerOffsetX,
+    int layerOffsetY,
+    ClientRect* layerRelativeRect)
 {
-    m_list.append(LayerRect::create(layerRootNode, layerType, layerOffsetX, layerOffsetY, layerRelativeRect));
+    m_list.push_back(LayerRect::create(layerRootNode, layerType, layerOffsetX,
+        layerOffsetY, layerRelativeRect));
 }
 
 DEFINE_TRACE(LayerRectList)

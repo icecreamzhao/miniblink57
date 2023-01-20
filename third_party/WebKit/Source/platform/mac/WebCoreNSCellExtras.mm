@@ -26,7 +26,6 @@
 #import "platform/mac/WebCoreNSCellExtras.h"
 
 @interface NSCell (LionSDKDeclarations)
-<<<<<<< HEAD
 - (void)drawFocusRingMaskWithFrame:(NSRect)cellFrame
                             inView:(NSView*)controlView;
 @end
@@ -44,22 +43,6 @@
   [self drawFocusRingMaskWithFrame:cellFrame inView:controlView];
   CGContextEndTransparencyLayer(cgContext);
   CGContextRestoreGState(cgContext);
-=======
-- (void)drawFocusRingMaskWithFrame:(NSRect)cellFrame inView:(NSView *)controlView;
-@end
-
-@implementation NSCell (WebCoreFocusRingDrawing)
-
-- (void)cr_drawFocusRingWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
-{
-    CGContextRef cgContext = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
-    CGContextSaveGState(cgContext);
-    NSSetFocusRingStyle(NSFocusRingOnly);
-    CGContextBeginTransparencyLayerWithRect(cgContext, NSRectToCGRect(cellFrame), 0);
-    [self drawFocusRingMaskWithFrame:cellFrame inView:controlView];
-    CGContextEndTransparencyLayer(cgContext);
-    CGContextRestoreGState(cgContext);
->>>>>>> miniblink49
 }
 
 @end

@@ -355,11 +355,7 @@ _hb_unsigned_int_mul_overflows (unsigned int count, unsigned int size)
 
 
 /* Type of bsearch() / qsort() compare function */
-<<<<<<< HEAD
 typedef int (__cdecl*hb_compare_func_t) (const void *, const void *);
-=======
-typedef int (*hb_compare_func_t) (const void *, const void *);
->>>>>>> miniblink49
 
 
 

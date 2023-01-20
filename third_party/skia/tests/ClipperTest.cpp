@@ -11,12 +11,8 @@
 #include "SkPath.h"
 #include "Test.h"
 
-<<<<<<< HEAD
 static void test_hairclipping(skiatest::Reporter* reporter)
 {
-=======
-static void test_hairclipping(skiatest::Reporter* reporter) {
->>>>>>> miniblink49
     SkBitmap bm;
     bm.allocN32Pixels(4, 4);
     bm.eraseColor(SK_ColorWHITE);
@@ -27,11 +23,7 @@ static void test_hairclipping(skiatest::Reporter* reporter) {
     SkCanvas canvas(bm);
     canvas.clipRect(SkRect::MakeWH(SkIntToScalar(4), SkIntToScalar(2)));
     canvas.drawLine(1.5f, 1.5f,
-<<<<<<< HEAD
         3.5f, 3.5f, paint);
-=======
-                    3.5f, 3.5f, paint);
->>>>>>> miniblink49
 
     /**
      *  We had a bug where we misinterpreted the bottom of the clip, and
@@ -56,20 +48,12 @@ static void test_hairclipping(skiatest::Reporter* reporter) {
     }
 }
 
-<<<<<<< HEAD
 static void test_edgeclipper()
 {
     SkEdgeClipper clipper(false);
 
     const SkPoint pts[] = {
         { 3.0995476e+010f, 42.929779f },
-=======
-static void test_edgeclipper() {
-    SkEdgeClipper clipper(false);
-
-    const SkPoint pts[] = {
-        { 3.0995476e+010f,  42.929779f },
->>>>>>> miniblink49
         { -3.0995163e+010f, 51.050385f },
         { -3.0995157e+010f, 51.050392f },
         { -3.0995134e+010f, 51.050400f },
@@ -83,12 +67,8 @@ static void test_edgeclipper() {
     clipper.clipCubic(pts, clip);
 }
 
-<<<<<<< HEAD
 static void test_intersectline(skiatest::Reporter* reporter)
 {
-=======
-static void test_intersectline(skiatest::Reporter* reporter) {
->>>>>>> miniblink49
     static const SkScalar L = 0;
     static const SkScalar T = 0;
     static const SkScalar R = SkIntToScalar(100);
@@ -102,7 +82,6 @@ static void test_intersectline(skiatest::Reporter* reporter) {
 
     static const SkPoint gEmpty[] = {
         // sides
-<<<<<<< HEAD
         { L, CY },
         { L - 10, CY },
         { R, CY },
@@ -120,33 +99,17 @@ static void test_intersectline(skiatest::Reporter* reporter) {
         { R + 10, T - 10 },
         { R, B },
         { R + 10, B + 10 },
-=======
-        { L, CY }, { L - 10, CY },
-        { R, CY }, { R + 10, CY },
-        { CX, T }, { CX, T - 10 },
-        { CX, B }, { CX, B + 10 },
-        // corners
-        { L, T }, { L - 10, T - 10 },
-        { L, B }, { L - 10, B + 10 },
-        { R, T }, { R + 10, T - 10 },
-        { R, B }, { R + 10, B + 10 },
->>>>>>> miniblink49
     };
     for (i = 0; i < SK_ARRAY_COUNT(gEmpty); i += 2) {
         bool valid = SkLineClipper::IntersectLine(&gEmpty[i], gR, dst);
         if (valid) {
-<<<<<<< HEAD
             SkDebugf("----- [%d] %g %g -> %g %g\n", i / 2, dst[0].fX, dst[0].fY, dst[1].fX, dst[1].fY);
-=======
-            SkDebugf("----- [%d] %g %g -> %g %g\n", i/2, dst[0].fX, dst[0].fY, dst[1].fX, dst[1].fY);
->>>>>>> miniblink49
         }
         REPORTER_ASSERT(reporter, !valid);
     }
 
     static const SkPoint gFull[] = {
         // diagonals, chords
-<<<<<<< HEAD
         { L, T },
         { R, B },
         { L, B },
@@ -172,36 +135,16 @@ static void test_intersectline(skiatest::Reporter* reporter) {
         { R, T },
         { L, B },
         { R, B },
-=======
-        { L, T }, { R, B },
-        { L, B }, { R, T },
-        { CX, T }, { CX, B },
-        { L, CY }, { R, CY },
-        { CX, T }, { R, CY },
-        { CX, T }, { L, CY },
-        { L, CY }, { CX, B },
-        { R, CY }, { CX, B },
-        // edges
-        { L, T }, { L, B },
-        { R, T }, { R, B },
-        { L, T }, { R, T },
-        { L, B }, { R, B },
->>>>>>> miniblink49
     };
     for (i = 0; i < SK_ARRAY_COUNT(gFull); i += 2) {
         bool valid = SkLineClipper::IntersectLine(&gFull[i], gR, dst);
         if (!valid || memcmp(&gFull[i], dst, sizeof(dst))) {
-<<<<<<< HEAD
             SkDebugf("++++ [%d] %g %g -> %g %g\n", i / 2, dst[0].fX, dst[0].fY, dst[1].fX, dst[1].fY);
-=======
-            SkDebugf("++++ [%d] %g %g -> %g %g\n", i/2, dst[0].fX, dst[0].fY, dst[1].fX, dst[1].fY);
->>>>>>> miniblink49
         }
         REPORTER_ASSERT(reporter, valid && !memcmp(&gFull[i], dst, sizeof(dst)));
     }
 
     static const SkPoint gPartial[] = {
-<<<<<<< HEAD
         { L - 10, CY },
         { CX, CY },
         { L, CY },
@@ -247,30 +190,6 @@ static void test_intersectline(skiatest::Reporter* reporter) {
 
 DEF_TEST(Clipper, reporter)
 {
-=======
-        { L - 10, CY }, { CX, CY }, { L, CY }, { CX, CY },
-        { CX, T - 10 }, { CX, CY }, { CX, T }, { CX, CY },
-        { R + 10, CY }, { CX, CY }, { R, CY }, { CX, CY },
-        { CX, B + 10 }, { CX, CY }, { CX, B }, { CX, CY },
-        // extended edges
-        { L, T - 10 }, { L, B + 10 }, { L, T }, { L, B },
-        { R, T - 10 }, { R, B + 10 }, { R, T }, { R, B },
-        { L - 10, T }, { R + 10, T }, { L, T }, { R, T },
-        { L - 10, B }, { R + 10, B }, { L, B }, { R, B },
-    };
-    for (i = 0; i < SK_ARRAY_COUNT(gPartial); i += 4) {
-        bool valid = SkLineClipper::IntersectLine(&gPartial[i], gR, dst);
-        if (!valid || memcmp(&gPartial[i+2], dst, sizeof(dst))) {
-            SkDebugf("++++ [%d] %g %g -> %g %g\n", i/2, dst[0].fX, dst[0].fY, dst[1].fX, dst[1].fY);
-        }
-        REPORTER_ASSERT(reporter, valid &&
-                                  !memcmp(&gPartial[i+2], dst, sizeof(dst)));
-    }
-
-}
-
-DEF_TEST(Clipper, reporter) {
->>>>>>> miniblink49
     test_intersectline(reporter);
     test_edgeclipper();
     test_hairclipping(reporter);

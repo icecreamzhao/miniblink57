@@ -31,10 +31,7 @@
 #ifndef DOMFileSystemBase_h
 #define DOMFileSystemBase_h
 
-<<<<<<< HEAD
 #include "core/fileapi/FileError.h"
-=======
->>>>>>> miniblink49
 #include "modules/ModulesExport.h"
 #include "modules/filesystem/FileSystemFlags.h"
 #include "platform/FileSystemType.h"
@@ -52,14 +49,8 @@ class DirectoryReaderBase;
 class EntriesCallback;
 class EntryBase;
 class EntryCallback;
-<<<<<<< HEAD
 class ErrorCallbackBase;
 class File;
-=======
-class ErrorCallback;
-class File;
-class FileError;
->>>>>>> miniblink49
 class FileMetadata;
 class MetadataCallback;
 class ExecutionContext;
@@ -67,25 +58,16 @@ class SecurityOrigin;
 class VoidCallback;
 
 // A common base class for DOMFileSystem and DOMFileSystemSync.
-<<<<<<< HEAD
 class MODULES_EXPORT DOMFileSystemBase
     : public GarbageCollectedFinalized<DOMFileSystemBase> {
-=======
-class MODULES_EXPORT DOMFileSystemBase : public GarbageCollectedFinalized<DOMFileSystemBase> {
->>>>>>> miniblink49
 public:
     enum SynchronousType {
         Synchronous,
         Asynchronous,
     };
 
-<<<<<<< HEAD
     // Path prefixes that are used in the filesystem URLs (that can be obtained by
     // toURL()).  http://www.w3.org/TR/file-system-api/#widl-Entry-toURL
-=======
-    // Path prefixes that are used in the filesystem URLs (that can be obtained by toURL()).
-    // http://www.w3.org/TR/file-system-api/#widl-Entry-toURL
->>>>>>> miniblink49
     static const char persistentPathPrefix[];
     static const char temporaryPathPrefix[];
     static const char isolatedPathPrefix[];
@@ -100,21 +82,13 @@ public:
     virtual void removePendingCallbacks() { }
 
     // Overridden by subclasses to handle sync vs async error-handling.
-<<<<<<< HEAD
     virtual void reportError(ErrorCallbackBase*, FileError::ErrorCode) = 0;
-=======
-    virtual void reportError(ErrorCallback*, FileError*) = 0;
->>>>>>> miniblink49
 
     const String& name() const { return m_name; }
     FileSystemType type() const { return m_type; }
     KURL rootURL() const { return m_filesystemRootURL; }
     WebFileSystem* fileSystem() const;
-<<<<<<< HEAD
     SecurityOrigin* getSecurityOrigin() const;
-=======
-    SecurityOrigin* securityOrigin() const;
->>>>>>> miniblink49
 
     // The clonable flag is used in the structured clone algorithm to test
     // whether the FileSystem API object is permitted to be cloned. It defaults
@@ -123,15 +97,10 @@ public:
     bool clonable() const { return m_clonable; }
 
     static bool isValidType(FileSystemType);
-<<<<<<< HEAD
-=======
-    static bool crackFileSystemURL(const KURL&, FileSystemType&, String& filePath);
->>>>>>> miniblink49
     static KURL createFileSystemRootURL(const String& origin, FileSystemType);
     bool supportsToURL() const;
     KURL createFileSystemURL(const EntryBase*) const;
     KURL createFileSystemURL(const String& fullPath) const;
-<<<<<<< HEAD
     static bool pathToAbsolutePath(FileSystemType,
         const EntryBase*,
         String path,
@@ -187,66 +156,30 @@ public:
         EntriesCallback*,
         ErrorCallbackBase*,
         SynchronousType = Asynchronous);
-=======
-    static bool pathToAbsolutePath(FileSystemType, const EntryBase*, String path, String& absolutePath);
-    static bool pathPrefixToFileSystemType(const String& pathPrefix, FileSystemType&);
-    static File* createFile(const FileMetadata&, const KURL& fileSystemURL, FileSystemType, const String name);
-
-    // Actual FileSystem API implementations. All the validity checks on virtual paths are done at this level.
-    void getMetadata(const EntryBase*, MetadataCallback*, ErrorCallback*, SynchronousType = Asynchronous);
-    void move(const EntryBase* source, EntryBase* parent, const String& name, EntryCallback*, ErrorCallback*, SynchronousType = Asynchronous);
-    void copy(const EntryBase* source, EntryBase* parent, const String& name, EntryCallback*, ErrorCallback*, SynchronousType = Asynchronous);
-    void remove(const EntryBase*, VoidCallback*, ErrorCallback*, SynchronousType = Asynchronous);
-    void removeRecursively(const EntryBase*, VoidCallback*, ErrorCallback*, SynchronousType = Asynchronous);
-    void getParent(const EntryBase*, EntryCallback*, ErrorCallback*);
-    void getFile(const EntryBase*, const String& path, const FileSystemFlags&, EntryCallback*, ErrorCallback*, SynchronousType = Asynchronous);
-    void getDirectory(const EntryBase*, const String& path, const FileSystemFlags&, EntryCallback*, ErrorCallback*, SynchronousType = Asynchronous);
-    int readDirectory(DirectoryReaderBase*, const String& path, EntriesCallback*, ErrorCallback*, SynchronousType = Asynchronous);
->>>>>>> miniblink49
     bool waitForAdditionalResult(int callbacksId);
 
     DECLARE_VIRTUAL_TRACE();
 
 protected:
-<<<<<<< HEAD
     DOMFileSystemBase(ExecutionContext*,
         const String& name,
         FileSystemType,
         const KURL& rootURL);
-=======
-    DOMFileSystemBase(ExecutionContext*, const String& name, FileSystemType, const KURL& rootURL);
->>>>>>> miniblink49
 
     friend class DOMFileSystemBaseTest;
     friend class DOMFileSystemSync;
 
-<<<<<<< HEAD
     Member<ExecutionContext> m_context;
-=======
-    RawPtrWillBeMember<ExecutionContext> m_context;
->>>>>>> miniblink49
     String m_name;
     FileSystemType m_type;
     KURL m_filesystemRootURL;
     bool m_clonable;
-<<<<<<< HEAD
 };
 
 inline bool operator==(const DOMFileSystemBase& a, const DOMFileSystemBase& b)
 {
     return a.name() == b.name() && a.type() == b.type() && a.rootURL() == b.rootURL();
 }
-=======
-
-private:
-    // This does the same thing with encodeWithURLEscapeSequences defined in
-    // KURL.h other than the unicode normalization (NFC).
-    // See http://crbug.com/252551 for more details.
-    static String encodeFilePathAsURIComponent(const String& fullPath);
-};
-
-inline bool operator==(const DOMFileSystemBase& a, const DOMFileSystemBase& b) { return a.name() == b.name() && a.type() == b.type() && a.rootURL() == b.rootURL(); }
->>>>>>> miniblink49
 
 } // namespace blink
 

@@ -29,7 +29,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/html/forms/ResetInputType.h"
 
 #include "core/InputTypeNames.h"
@@ -37,13 +36,12 @@
 #include "core/html/HTMLFormElement.h"
 #include "core/html/HTMLInputElement.h"
 #include "platform/text/PlatformLocale.h"
-#include "wtf/PassOwnPtr.h"
 
 namespace blink {
 
-PassRefPtrWillBeRawPtr<InputType> ResetInputType::create(HTMLInputElement& element)
+InputType* ResetInputType::create(HTMLInputElement& element)
 {
-    return adoptRefWillBeNoop(new ResetInputType(element));
+    return new ResetInputType(element);
 }
 
 const AtomicString& ResetInputType::formControlType() const
@@ -64,7 +62,7 @@ void ResetInputType::handleDOMActivateEvent(Event* event)
     event->setDefaultHandled();
 }
 
-String ResetInputType::defaultValue() const
+String ResetInputType::defaultLabel() const
 {
     return locale().queryString(WebLocalizedString::ResetButtonDefaultLabel);
 }

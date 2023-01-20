@@ -49,11 +49,7 @@ extern "C" {
  *
  * Callback for freeing some parser input allocations.
  */
-<<<<<<< HEAD
 typedef void (XMLCALL* xmlParserInputDeallocate)(xmlChar *str);
-=======
-typedef void (* xmlParserInputDeallocate)(xmlChar *str);
->>>>>>> miniblink49
 
 struct _xmlParserInput {
     /* Input buffer */
@@ -320,17 +316,10 @@ struct _xmlParserCtxt {
  * A SAX Locator.
  */
 struct _xmlSAXLocator {
-<<<<<<< HEAD
     const xmlChar *(XMLCALL*getPublicId)(void *ctx);
     const xmlChar *(XMLCALL*getSystemId)(void *ctx);
     int (XMLCALL*getLineNumber)(void *ctx);
     int (XMLCALL*getColumnNumber)(void *ctx);
-=======
-    const xmlChar *(*getPublicId)(void *ctx);
-    const xmlChar *(*getSystemId)(void *ctx);
-    int (*getLineNumber)(void *ctx);
-    int (*getColumnNumber)(void *ctx);
->>>>>>> miniblink49
 };
 
 /**
@@ -355,11 +344,7 @@ struct _xmlSAXLocator {
  *
  * Returns the xmlParserInputPtr if inlined or NULL for DOM behaviour.
  */
-<<<<<<< HEAD
 typedef xmlParserInputPtr (XMLCALL*resolveEntitySAXFunc) (void *ctx,
-=======
-typedef xmlParserInputPtr (*resolveEntitySAXFunc) (void *ctx,
->>>>>>> miniblink49
 				const xmlChar *publicId,
 				const xmlChar *systemId);
 /**
@@ -371,11 +356,7 @@ typedef xmlParserInputPtr (*resolveEntitySAXFunc) (void *ctx,
  *
  * Callback on internal subset declaration.
  */
-<<<<<<< HEAD
 typedef void (XMLCALL*internalSubsetSAXFunc) (void *ctx,
-=======
-typedef void (*internalSubsetSAXFunc) (void *ctx,
->>>>>>> miniblink49
 				const xmlChar *name,
 				const xmlChar *ExternalID,
 				const xmlChar *SystemID);
@@ -388,11 +369,7 @@ typedef void (*internalSubsetSAXFunc) (void *ctx,
  *
  * Callback on external subset declaration.
  */
-<<<<<<< HEAD
 typedef void (XMLCALL*externalSubsetSAXFunc) (void *ctx,
-=======
-typedef void (*externalSubsetSAXFunc) (void *ctx,
->>>>>>> miniblink49
 				const xmlChar *name,
 				const xmlChar *ExternalID,
 				const xmlChar *SystemID);
@@ -405,11 +382,7 @@ typedef void (*externalSubsetSAXFunc) (void *ctx,
  *
  * Returns the xmlEntityPtr if found.
  */
-<<<<<<< HEAD
 typedef xmlEntityPtr (XMLCALL*getEntitySAXFunc) (void *ctx,
-=======
-typedef xmlEntityPtr (*getEntitySAXFunc) (void *ctx,
->>>>>>> miniblink49
 				const xmlChar *name);
 /**
  * getParameterEntitySAXFunc:
@@ -420,11 +393,7 @@ typedef xmlEntityPtr (*getEntitySAXFunc) (void *ctx,
  *
  * Returns the xmlEntityPtr if found.
  */
-<<<<<<< HEAD
 typedef xmlEntityPtr (XMLCALL*getParameterEntitySAXFunc) (void *ctx,
-=======
-typedef xmlEntityPtr (*getParameterEntitySAXFunc) (void *ctx,
->>>>>>> miniblink49
 				const xmlChar *name);
 /**
  * entityDeclSAXFunc:
@@ -437,11 +406,7 @@ typedef xmlEntityPtr (*getParameterEntitySAXFunc) (void *ctx,
  *
  * An entity definition has been parsed.
  */
-<<<<<<< HEAD
 typedef void (XMLCALL*entityDeclSAXFunc) (void *ctx,
-=======
-typedef void (*entityDeclSAXFunc) (void *ctx,
->>>>>>> miniblink49
 				const xmlChar *name,
 				int type,
 				const xmlChar *publicId,
@@ -456,11 +421,7 @@ typedef void (*entityDeclSAXFunc) (void *ctx,
  *
  * What to do when a notation declaration has been parsed.
  */
-<<<<<<< HEAD
 typedef void (XMLCALL*notationDeclSAXFunc)(void *ctx,
-=======
-typedef void (*notationDeclSAXFunc)(void *ctx,
->>>>>>> miniblink49
 				const xmlChar *name,
 				const xmlChar *publicId,
 				const xmlChar *systemId);
@@ -476,11 +437,7 @@ typedef void (*notationDeclSAXFunc)(void *ctx,
  *
  * An attribute definition has been parsed.
  */
-<<<<<<< HEAD
 typedef void (XMLCALL*attributeDeclSAXFunc)(void *ctx,
-=======
-typedef void (*attributeDeclSAXFunc)(void *ctx,
->>>>>>> miniblink49
 				const xmlChar *elem,
 				const xmlChar *fullname,
 				int type,
@@ -496,11 +453,7 @@ typedef void (*attributeDeclSAXFunc)(void *ctx,
  *
  * An element definition has been parsed.
  */
-<<<<<<< HEAD
 typedef void (XMLCALL*elementDeclSAXFunc)(void *ctx,
-=======
-typedef void (*elementDeclSAXFunc)(void *ctx,
->>>>>>> miniblink49
 				const xmlChar *name,
 				int type,
 				xmlElementContentPtr content);
@@ -514,11 +467,7 @@ typedef void (*elementDeclSAXFunc)(void *ctx,
  *
  * What to do when an unparsed entity declaration is parsed.
  */
-<<<<<<< HEAD
 typedef void (XMLCALL*unparsedEntityDeclSAXFunc)(void *ctx,
-=======
-typedef void (*unparsedEntityDeclSAXFunc)(void *ctx,
->>>>>>> miniblink49
 				const xmlChar *name,
 				const xmlChar *publicId,
 				const xmlChar *systemId,
@@ -531,11 +480,7 @@ typedef void (*unparsedEntityDeclSAXFunc)(void *ctx,
  * Receive the document locator at startup, actually xmlDefaultSAXLocator.
  * Everything is available on the context, so this is useless in our case.
  */
-<<<<<<< HEAD
 typedef void (XMLCALL*setDocumentLocatorSAXFunc) (void *ctx,
-=======
-typedef void (*setDocumentLocatorSAXFunc) (void *ctx,
->>>>>>> miniblink49
 				xmlSAXLocatorPtr loc);
 /**
  * startDocumentSAXFunc:
@@ -543,22 +488,14 @@ typedef void (*setDocumentLocatorSAXFunc) (void *ctx,
  *
  * Called when the document start being processed.
  */
-<<<<<<< HEAD
 typedef void (XMLCALL*startDocumentSAXFunc) (void *ctx);
-=======
-typedef void (*startDocumentSAXFunc) (void *ctx);
->>>>>>> miniblink49
 /**
  * endDocumentSAXFunc:
  * @ctx:  the user data (XML parser context)
  *
  * Called when the document end has been detected.
  */
-<<<<<<< HEAD
 typedef void (XMLCALL*endDocumentSAXFunc) (void *ctx);
-=======
-typedef void (*endDocumentSAXFunc) (void *ctx);
->>>>>>> miniblink49
 /**
  * startElementSAXFunc:
  * @ctx:  the user data (XML parser context)
@@ -567,11 +504,7 @@ typedef void (*endDocumentSAXFunc) (void *ctx);
  *
  * Called when an opening tag has been processed.
  */
-<<<<<<< HEAD
 typedef void (XMLCALL*startElementSAXFunc) (void *ctx,
-=======
-typedef void (*startElementSAXFunc) (void *ctx,
->>>>>>> miniblink49
 				const xmlChar *name,
 				const xmlChar **atts);
 /**
@@ -581,11 +514,7 @@ typedef void (*startElementSAXFunc) (void *ctx,
  *
  * Called when the end of an element has been detected.
  */
-<<<<<<< HEAD
 typedef void (XMLCALL*endElementSAXFunc) (void *ctx,
-=======
-typedef void (*endElementSAXFunc) (void *ctx,
->>>>>>> miniblink49
 				const xmlChar *name);
 /**
  * attributeSAXFunc:
@@ -598,11 +527,7 @@ typedef void (*endElementSAXFunc) (void *ctx,
  * DOM subtree and past it in a new xmlAttr element added to
  * the element.
  */
-<<<<<<< HEAD
 typedef void (XMLCALL*attributeSAXFunc) (void *ctx,
-=======
-typedef void (*attributeSAXFunc) (void *ctx,
->>>>>>> miniblink49
 				const xmlChar *name,
 				const xmlChar *value);
 /**
@@ -612,11 +537,7 @@ typedef void (*attributeSAXFunc) (void *ctx,
  *
  * Called when an entity reference is detected. 
  */
-<<<<<<< HEAD
 typedef void (XMLCALL*referenceSAXFunc) (void *ctx,
-=======
-typedef void (*referenceSAXFunc) (void *ctx,
->>>>>>> miniblink49
 				const xmlChar *name);
 /**
  * charactersSAXFunc:
@@ -626,11 +547,7 @@ typedef void (*referenceSAXFunc) (void *ctx,
  *
  * Receiving some chars from the parser.
  */
-<<<<<<< HEAD
 typedef void (XMLCALL*charactersSAXFunc) (void *ctx,
-=======
-typedef void (*charactersSAXFunc) (void *ctx,
->>>>>>> miniblink49
 				const xmlChar *ch,
 				int len);
 /**
@@ -642,11 +559,7 @@ typedef void (*charactersSAXFunc) (void *ctx,
  * Receiving some ignorable whitespaces from the parser.
  * UNUSED: by default the DOM building will use characters.
  */
-<<<<<<< HEAD
 typedef void (XMLCALL*ignorableWhitespaceSAXFunc) (void *ctx,
-=======
-typedef void (*ignorableWhitespaceSAXFunc) (void *ctx,
->>>>>>> miniblink49
 				const xmlChar *ch,
 				int len);
 /**
@@ -657,11 +570,7 @@ typedef void (*ignorableWhitespaceSAXFunc) (void *ctx,
  *
  * A processing instruction has been parsed.
  */
-<<<<<<< HEAD
 typedef void (XMLCALL*processingInstructionSAXFunc) (void *ctx,
-=======
-typedef void (*processingInstructionSAXFunc) (void *ctx,
->>>>>>> miniblink49
 				const xmlChar *target,
 				const xmlChar *data);
 /**
@@ -671,11 +580,7 @@ typedef void (*processingInstructionSAXFunc) (void *ctx,
  *
  * A comment has been parsed.
  */
-<<<<<<< HEAD
 typedef void (XMLCALL*commentSAXFunc) (void *ctx,
-=======
-typedef void (*commentSAXFunc) (void *ctx,
->>>>>>> miniblink49
 				const xmlChar *value);
 /**
  * cdataBlockSAXFunc:
@@ -685,11 +590,7 @@ typedef void (*commentSAXFunc) (void *ctx,
  *
  * Called when a pcdata block has been parsed.
  */
-<<<<<<< HEAD
 typedef void (XMLCALL*cdataBlockSAXFunc) (
-=======
-typedef void (*cdataBlockSAXFunc) (
->>>>>>> miniblink49
 	                        void *ctx,
 				const xmlChar *value,
 				int len);
@@ -733,11 +634,7 @@ typedef void (XMLCDECL *fatalErrorSAXFunc) (void *ctx,
  *
  * Returns 1 if true
  */
-<<<<<<< HEAD
 typedef int (XMLCALL*isStandaloneSAXFunc) (void *ctx);
-=======
-typedef int (*isStandaloneSAXFunc) (void *ctx);
->>>>>>> miniblink49
 /**
  * hasInternalSubsetSAXFunc:
  * @ctx:  the user data (XML parser context)
@@ -746,11 +643,7 @@ typedef int (*isStandaloneSAXFunc) (void *ctx);
  *
  * Returns 1 if true
  */
-<<<<<<< HEAD
 typedef int (XMLCALL*hasInternalSubsetSAXFunc) (void *ctx);
-=======
-typedef int (*hasInternalSubsetSAXFunc) (void *ctx);
->>>>>>> miniblink49
 
 /**
  * hasExternalSubsetSAXFunc:
@@ -760,11 +653,7 @@ typedef int (*hasInternalSubsetSAXFunc) (void *ctx);
  *
  * Returns 1 if true
  */
-<<<<<<< HEAD
 typedef int (XMLCALL*hasExternalSubsetSAXFunc) (void *ctx);
-=======
-typedef int (*hasExternalSubsetSAXFunc) (void *ctx);
->>>>>>> miniblink49
 
 /************************************************************************
  *									*
@@ -797,11 +686,7 @@ typedef int (*hasExternalSubsetSAXFunc) (void *ctx);
  * the new namespace declarations on the element.
  */
 
-<<<<<<< HEAD
 typedef void (XMLCALL*startElementNsSAX2Func) (void *ctx,
-=======
-typedef void (*startElementNsSAX2Func) (void *ctx,
->>>>>>> miniblink49
 					const xmlChar *localname,
 					const xmlChar *prefix,
 					const xmlChar *URI,
@@ -822,11 +707,7 @@ typedef void (*startElementNsSAX2Func) (void *ctx,
  * It provides the namespace informations for the element.
  */
 
-<<<<<<< HEAD
 typedef void (XMLCALL*endElementNsSAX2Func)   (void *ctx,
-=======
-typedef void (*endElementNsSAX2Func)   (void *ctx,
->>>>>>> miniblink49
 					const xmlChar *localname,
 					const xmlChar *prefix,
 					const xmlChar *URI);
@@ -915,11 +796,7 @@ struct _xmlSAXHandlerV1 {
  *
  * Returns the entity input parser.
  */
-<<<<<<< HEAD
 typedef xmlParserInputPtr (XMLCALL*xmlExternalEntityLoader) (const char *URL,
-=======
-typedef xmlParserInputPtr (*xmlExternalEntityLoader) (const char *URL,
->>>>>>> miniblink49
 					 const char *ID,
 					 xmlParserCtxtPtr context);
 

@@ -23,30 +23,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/speech/PlatformSpeechSynthesisUtterance.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 PlatformSpeechSynthesisUtterance* PlatformSpeechSynthesisUtterance::create(
     PlatformSpeechSynthesisUtteranceClient* client)
-=======
-PlatformSpeechSynthesisUtterance* PlatformSpeechSynthesisUtterance::create(PlatformSpeechSynthesisUtteranceClient* client)
->>>>>>> miniblink49
 {
     return new PlatformSpeechSynthesisUtterance(client);
 }
 
-<<<<<<< HEAD
 PlatformSpeechSynthesisUtterance::PlatformSpeechSynthesisUtterance(
     PlatformSpeechSynthesisUtteranceClient* client)
-=======
-PlatformSpeechSynthesisUtterance::PlatformSpeechSynthesisUtterance(PlatformSpeechSynthesisUtteranceClient* client)
->>>>>>> miniblink49
     : m_client(client)
     , m_volume(1.0f)
     , m_rate(1.0f)
@@ -57,10 +45,6 @@ PlatformSpeechSynthesisUtterance::PlatformSpeechSynthesisUtterance(PlatformSpeec
 DEFINE_TRACE(PlatformSpeechSynthesisUtterance)
 {
     visitor->trace(m_client);
-<<<<<<< HEAD
-=======
-    visitor->trace(m_voice);
->>>>>>> miniblink49
 }
 
 } // namespace blink

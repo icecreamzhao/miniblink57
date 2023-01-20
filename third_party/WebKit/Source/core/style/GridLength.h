@@ -32,13 +32,17 @@
 #define GridLength_h
 
 #include "platform/Length.h"
+#include "wtf/Allocator.h"
 
 namespace blink {
 
-// This class wraps the <track-breadth> which can be either a <percentage>, <length>, min-content, max-content
-// or <flex>. This class avoids spreading the knowledge of <flex> throughout the layout directory by adding
-// an new unit to Length.h.
+// This class wraps the <track-breadth> which can be either a <percentage>,
+// <length>, min-content, max-content or <flex>. This class avoids spreading the
+// knowledge of <flex> throughout the layout directory by adding an new unit to
+// Length.h.
 class GridLength {
+    DISALLOW_NEW();
+
 public:
     GridLength(const Length& length)
         : m_length(length)
@@ -56,28 +60,42 @@ public:
     bool isLength() const { return m_type == LengthType; }
     bool isFlex() const { return m_type == FlexType; }
 
-    const Length& length() const { ASSERT(isLength()); return m_length; }
+    const Length& length() const
+    {
+        ASSERT(isLength());
+        return m_length;
+    }
 
-    double flex() const { ASSERT(isFlex()); return m_flex; }
+    double flex() const
+    {
+        ASSERT(isFlex());
+        return m_flex;
+    }
 
-    bool hasPercentage() const { return m_type == LengthType && m_length.hasPercent(); }
+    bool hasPercentage() const
+    {
+        return m_type == LengthType && m_length.isPercentOrCalc();
+    }
 
     bool operator==(const GridLength& o) const
     {
         return m_length == o.m_length && m_flex == o.m_flex && m_type == o.m_type;
     }
 
-    bool isContentSized() const { return m_type == LengthType && (m_length.isAuto() || m_length.isMinContent() || m_length.isMaxContent()); }
+    bool isContentSized() const
+    {
+        return m_type == LengthType && (m_length.isAuto() || m_length.isMinContent() || m_length.isMaxContent());
+    }
+
+    bool isAuto() const { return m_type == LengthType && m_length.isAuto(); }
 
 private:
-    // Ideally we would put the 2 following fields in a union, but Length has a constructor,
-    // a destructor and a copy assignment which isn't allowed.
+    // Ideally we would put the 2 following fields in a union, but Length has a
+    // constructor, a destructor and a copy assignment which isn't allowed.
     Length m_length;
     double m_flex;
-    enum GridLengthType {
-        LengthType,
-        FlexType
-    };
+    enum GridLengthType { LengthType,
+        FlexType };
     GridLengthType m_type;
 };
 

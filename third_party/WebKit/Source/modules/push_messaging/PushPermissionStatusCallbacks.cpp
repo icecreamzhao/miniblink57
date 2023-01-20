@@ -2,33 +2,21 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "modules/push_messaging/PushPermissionStatusCallbacks.h"
 
 #include "bindings/core/v8/ScriptPromiseResolver.h"
 #include "modules/push_messaging/PushError.h"
-<<<<<<< HEAD
 #include "wtf/Assertions.h"
-=======
->>>>>>> miniblink49
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 PushPermissionStatusCallbacks::PushPermissionStatusCallbacks(
     ScriptPromiseResolver* resolver)
-=======
-PushPermissionStatusCallbacks::PushPermissionStatusCallbacks(PassRefPtrWillBeRawPtr<ScriptPromiseResolver> resolver)
->>>>>>> miniblink49
     : m_resolver(resolver)
 {
 }
 
-<<<<<<< HEAD
 PushPermissionStatusCallbacks::~PushPermissionStatusCallbacks() { }
 
 void PushPermissionStatusCallbacks::onSuccess(WebPushPermissionStatus status)
@@ -46,27 +34,6 @@ void PushPermissionStatusCallbacks::onError(const WebPushError& error)
 // static
 String PushPermissionStatusCallbacks::permissionString(
     WebPushPermissionStatus status)
-=======
-PushPermissionStatusCallbacks::~PushPermissionStatusCallbacks()
-{
-}
-
-void PushPermissionStatusCallbacks::onSuccess(WebPushPermissionStatus* status)
-{
-    m_resolver->resolve(permissionString(*status));
-}
-
-void PushPermissionStatusCallbacks::onError(WebPushError* error)
-{
-    OwnPtr<WebPushError> ownError = adoptPtr(error);
-    if (!m_resolver->executionContext() || m_resolver->executionContext()->activeDOMObjectsAreStopped())
-        return;
-    m_resolver->reject(PushError::take(m_resolver.get(), ownError.release()));
-}
-
-// static
-String PushPermissionStatusCallbacks::permissionString(WebPushPermissionStatus status)
->>>>>>> miniblink49
 {
     switch (status) {
     case WebPushPermissionStatusGranted:
@@ -77,11 +44,7 @@ String PushPermissionStatusCallbacks::permissionString(WebPushPermissionStatus s
         return "prompt";
     }
 
-<<<<<<< HEAD
     NOTREACHED();
-=======
-    ASSERT_NOT_REACHED();
->>>>>>> miniblink49
     return "denied";
 }
 

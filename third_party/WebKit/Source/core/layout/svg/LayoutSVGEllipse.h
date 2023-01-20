@@ -34,21 +34,27 @@ namespace blink {
 class LayoutSVGEllipse final : public LayoutSVGShape {
 public:
     explicit LayoutSVGEllipse(SVGGeometryElement*);
-    virtual ~LayoutSVGEllipse();
+    ~LayoutSVGEllipse() override;
 
-    virtual ShapeGeometryCodePath geometryCodePath() const override { return m_usePathFallback ? PathGeometry : EllipseGeometryFastPath; }
+    ShapeGeometryCodePath geometryCodePath() const override
+    {
+        return m_usePathFallback ? PathGeometry : EllipseGeometryFastPath;
+    }
 
-    virtual const char* name() const override { return "LayoutSVGEllipse"; }
+    const char* name() const override { return "LayoutSVGEllipse"; }
 
 private:
-    void styleDidChange(StyleDifference, const ComputedStyle* oldStyle) override;
     void updateShapeFromElement() override;
-    void updateStrokeAndFillBoundingBoxes() override;
-    virtual bool isShapeEmpty() const override { return m_usePathFallback ? LayoutSVGShape::isShapeEmpty() : m_fillBoundingBox.isEmpty(); }
-    virtual bool shapeDependentStrokeContains(const FloatPoint&) override;
-    virtual bool shapeDependentFillContains(const FloatPoint&, const WindRule) const override;
+    bool isShapeEmpty() const override
+    {
+        return m_usePathFallback ? LayoutSVGShape::isShapeEmpty()
+                                 : m_fillBoundingBox.isEmpty();
+    }
+    bool shapeDependentStrokeContains(const FloatPoint&) override;
+    bool shapeDependentFillContains(const FloatPoint&,
+        const WindRule) const override;
     void calculateRadiiAndCenter();
-    bool hasContinuousStroke(const SVGComputedStyle&) const;
+    bool hasContinuousStroke() const;
 
 private:
     FloatPoint m_center;
@@ -56,6 +62,6 @@ private:
     bool m_usePathFallback;
 };
 
-}
+} // namespace blink
 
 #endif

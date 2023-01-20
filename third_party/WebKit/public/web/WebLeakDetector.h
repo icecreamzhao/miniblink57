@@ -31,26 +31,18 @@
 #ifndef WebLeakDetector_h
 #define WebLeakDetector_h
 
-<<<<<<< HEAD
-=======
-#include "WebFrame.h"
->>>>>>> miniblink49
 #include "public/platform/WebCommon.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 class WebFrame;
 
-=======
->>>>>>> miniblink49
 class WebLeakDetectorClient {
 public:
     struct Result {
         unsigned numberOfLiveAudioNodes;
         unsigned numberOfLiveDocuments;
         unsigned numberOfLiveNodes;
-<<<<<<< HEAD
         unsigned numberOfLiveLayoutObjects;
         unsigned numberOfLiveResources;
         unsigned numberOfLiveSuspendableObjects;
@@ -58,35 +50,21 @@ public:
         unsigned numberOfLiveFrames;
         unsigned numberOfLiveV8PerContextData;
         unsigned numberOfWorkerGlobalScopes;
-=======
-        // FIXME: Deprecated, remove once chrome is updated.
-        unsigned numberOfLiveRenderObjects;
-        unsigned numberOfLiveLayoutObjects;
-        unsigned numberOfLiveResources;
-        unsigned numberOfLiveActiveDOMObjects;
-        unsigned numberOfLiveScriptPromises;
-        unsigned numberOfLiveFrames;
-        unsigned numberOfLiveV8PerContextData;
->>>>>>> miniblink49
     };
 
     virtual void onLeakDetectionComplete(const Result&) = 0;
 };
 
-<<<<<<< HEAD
 // |WebLeakDetector| detects leaks of various Blink objects, counting
 // the ones remaining after having reset Blink's global state and
 // collected all garbage. See |WebLeakDetectorClient::Results|
 // for the kinds of objects supported.
-=======
->>>>>>> miniblink49
 class WebLeakDetector {
 public:
     virtual ~WebLeakDetector() { }
 
     BLINK_EXPORT static WebLeakDetector* create(WebLeakDetectorClient*);
 
-<<<<<<< HEAD
     // Leak detection is performed in two stages,
     // |prepareForLeakDetection()| and |collectGarbageAndReport()|.
     //
@@ -109,11 +87,6 @@ public:
     // |WebLeakDetectorClient::onLeakDetectionComplete()| is called
     // upon completion.
     virtual void collectGarbageAndReport() = 0;
-=======
-    // Cleans up the DOM objects and counts them. |WebLeakDetectorClient::onLeakDetectionComplete()| is called when done.
-    // This is supposed to be used for detecting DOM-object leaks.
-    virtual void collectGarbageAndGetDOMCounts(WebLocalFrame*) = 0;
->>>>>>> miniblink49
 };
 
 } // namespace blink

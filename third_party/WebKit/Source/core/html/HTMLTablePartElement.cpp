@@ -22,7 +22,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/html/HTMLTablePartElement.h"
 
 #include "core/CSSPropertyNames.h"
@@ -31,7 +30,7 @@
 #include "core/css/CSSImageValue.h"
 #include "core/css/StylePropertySet.h"
 #include "core/dom/Document.h"
-#include "core/dom/shadow/ComposedTreeTraversal.h"
+#include "core/dom/shadow/FlatTreeTraversal.h"
 #include "core/html/HTMLTableElement.h"
 #include "core/html/parser/HTMLParserIdioms.h"
 #include "platform/weborigin/Referrer.h"
@@ -40,46 +39,61 @@ namespace blink {
 
 using namespace HTMLNames;
 
-bool HTMLTablePartElement::isPresentationAttribute(const QualifiedName& name) const
+bool HTMLTablePartElement::isPresentationAttribute(
+    const QualifiedName& name) const
 {
     if (name == bgcolorAttr || name == backgroundAttr || name == valignAttr || name == alignAttr || name == heightAttr)
         return true;
     return HTMLElement::isPresentationAttribute(name);
 }
 
-void HTMLTablePartElement::collectStyleForPresentationAttribute(const QualifiedName& name, const AtomicString& value, MutableStylePropertySet* style)
+void HTMLTablePartElement::collectStyleForPresentationAttribute(
+    const QualifiedName& name,
+    const AtomicString& value,
+    MutableStylePropertySet* style)
 {
     if (name == bgcolorAttr) {
         addHTMLColorToStyle(style, CSSPropertyBackgroundColor, value);
     } else if (name == backgroundAttr) {
         String url = stripLeadingAndTrailingHTMLSpaces(value);
         if (!url.isEmpty()) {
-            RefPtrWillBeRawPtr<CSSImageValue> imageValue = CSSImageValue::create(url, document().completeURL(url));
-            imageValue->setReferrer(Referrer(document().outgoingReferrer(), document().referrerPolicy()));
-            style->setProperty(CSSProperty(CSSPropertyBackgroundImage, imageValue.release()));
+            CSSImageValue* imageValue = CSSImageValue::create(url, document().completeURL(url));
+            imageValue->setReferrer(Referrer(document().outgoingReferrer(),
+                document().getReferrerPolicy()));
+            style->setProperty(CSSProperty(CSSPropertyBackgroundImage, *imageValue));
         }
     } else if (name == valignAttr) {
         if (equalIgnoringCase(value, "top"))
-            addPropertyToPresentationAttributeStyle(style, CSSPropertyVerticalAlign, CSSValueTop);
+            addPropertyToPresentationAttributeStyle(style, CSSPropertyVerticalAlign,
+                CSSValueTop);
         else if (equalIgnoringCase(value, "middle"))
-            addPropertyToPresentationAttributeStyle(style, CSSPropertyVerticalAlign, CSSValueMiddle);
+            addPropertyToPresentationAttributeStyle(style, CSSPropertyVerticalAlign,
+                CSSValueMiddle);
         else if (equalIgnoringCase(value, "bottom"))
-            addPropertyToPresentationAttributeStyle(style, CSSPropertyVerticalAlign, CSSValueBottom);
+            addPropertyToPresentationAttributeStyle(style, CSSPropertyVerticalAlign,
+                CSSValueBottom);
         else if (equalIgnoringCase(value, "baseline"))
-            addPropertyToPresentationAttributeStyle(style, CSSPropertyVerticalAlign, CSSValueBaseline);
+            addPropertyToPresentationAttributeStyle(style, CSSPropertyVerticalAlign,
+                CSSValueBaseline);
         else
-            addPropertyToPresentationAttributeStyle(style, CSSPropertyVerticalAlign, value);
+            addPropertyToPresentationAttributeStyle(style, CSSPropertyVerticalAlign,
+                value);
     } else if (name == alignAttr) {
         if (equalIgnoringCase(value, "middle") || equalIgnoringCase(value, "center"))
-            addPropertyToPresentationAttributeStyle(style, CSSPropertyTextAlign, CSSValueWebkitCenter);
+            addPropertyToPresentationAttributeStyle(style, CSSPropertyTextAlign,
+                CSSValueWebkitCenter);
         else if (equalIgnoringCase(value, "absmiddle"))
-            addPropertyToPresentationAttributeStyle(style, CSSPropertyTextAlign, CSSValueCenter);
+            addPropertyToPresentationAttributeStyle(style, CSSPropertyTextAlign,
+                CSSValueCenter);
         else if (equalIgnoringCase(value, "left"))
-            addPropertyToPresentationAttributeStyle(style, CSSPropertyTextAlign, CSSValueWebkitLeft);
+            addPropertyToPresentationAttributeStyle(style, CSSPropertyTextAlign,
+                CSSValueWebkitLeft);
         else if (equalIgnoringCase(value, "right"))
-            addPropertyToPresentationAttributeStyle(style, CSSPropertyTextAlign, CSSValueWebkitRight);
+            addPropertyToPresentationAttributeStyle(style, CSSPropertyTextAlign,
+                CSSValueWebkitRight);
         else
-            addPropertyToPresentationAttributeStyle(style, CSSPropertyTextAlign, value);
+            addPropertyToPresentationAttributeStyle(style, CSSPropertyTextAlign,
+                value);
     } else if (name == heightAttr) {
         if (!value.isEmpty())
             addHTMLLengthToStyle(style, CSSPropertyHeight, value);
@@ -90,10 +104,10 @@ void HTMLTablePartElement::collectStyleForPresentationAttribute(const QualifiedN
 
 HTMLTableElement* HTMLTablePartElement::findParentTable() const
 {
-    ContainerNode* parent = ComposedTreeTraversal::parent(*this);
+    ContainerNode* parent = FlatTreeTraversal::parent(*this);
     while (parent && !isHTMLTableElement(*parent))
-        parent = ComposedTreeTraversal::parent(*parent);
+        parent = FlatTreeTraversal::parent(*parent);
     return toHTMLTableElement(parent);
 }
 
-}
+} // namespace blink

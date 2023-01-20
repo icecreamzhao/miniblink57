@@ -28,10 +28,6 @@
 
 [
     NoInterfaceObject,
-<<<<<<< HEAD
     DependentLifetime
-=======
-    Conditional=WEB_AUDIO
->>>>>>> miniblink49
 ] interface AudioSourceNode : AudioNode {
 };

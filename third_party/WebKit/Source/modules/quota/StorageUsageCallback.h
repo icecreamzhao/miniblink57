@@ -35,7 +35,6 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 class StorageUsageCallback
     : public GarbageCollectedFinalized<StorageUsageCallback> {
 public:
@@ -44,13 +43,6 @@ public:
     virtual void handleEvent(unsigned long long currentUsageInBytes,
         unsigned long long currentQuotaInBytes)
         = 0;
-=======
-class StorageUsageCallback : public GarbageCollectedFinalized<StorageUsageCallback> {
-public:
-    virtual ~StorageUsageCallback() { }
-    DEFINE_INLINE_VIRTUAL_TRACE() { }
-    virtual void handleEvent(unsigned long long currentUsageInBytes, unsigned long long currentQuotaInBytes) = 0;
->>>>>>> miniblink49
 };
 
 } // namespace

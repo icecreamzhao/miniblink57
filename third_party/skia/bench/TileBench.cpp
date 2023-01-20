@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2013 Google Inc.
  *
@@ -15,12 +11,8 @@
 #include "SkShader.h"
 #include "SkString.h"
 
-<<<<<<< HEAD
 static void create_gradient(SkBitmap* bm)
 {
-=======
-static void create_gradient(SkBitmap* bm) {
->>>>>>> miniblink49
     SkASSERT(1 == bm->width());
     const int height = bm->height();
 
@@ -29,11 +21,7 @@ static void create_gradient(SkBitmap* bm) {
 
     SkAutoLockPixels lock(*bm);
     for (int y = 0; y < height; y++) {
-<<<<<<< HEAD
         *bm->getAddr32(0, y) = SkColorSetRGB(0, 0, (U8CPU)blue);
-=======
-        *bm->getAddr32(0, y) = SkColorSetRGB(0, 0, (U8CPU) blue);
->>>>>>> miniblink49
         blue -= deltaB;
     }
 }
@@ -41,25 +29,16 @@ static void create_gradient(SkBitmap* bm) {
 // Test out the special case of a tiled 1xN texture. Test out opacity,
 // filtering and the different tiling modes
 class ConstXTileBench : public Benchmark {
-<<<<<<< HEAD
     SkPaint fPaint;
     SkString fName;
     bool fDoFilter;
     bool fDoTrans;
     bool fDoScale;
-=======
-    SkPaint             fPaint;
-    SkString            fName;
-    bool                fDoFilter;
-    bool                fDoTrans;
-    bool                fDoScale;
->>>>>>> miniblink49
     static const int kWidth = 1;
     static const int kHeight = 300;
 
 public:
     ConstXTileBench(SkShader::TileMode xTile,
-<<<<<<< HEAD
         SkShader::TileMode yTile,
         bool doFilter,
         bool doTrans,
@@ -68,15 +47,6 @@ public:
         , fDoTrans(doTrans)
         , fDoScale(doScale)
     {
-=======
-                    SkShader::TileMode yTile,
-                    bool doFilter,
-                    bool doTrans,
-                    bool doScale)
-        : fDoFilter(doFilter)
-        , fDoTrans(doTrans)
-        , fDoScale(doScale) {
->>>>>>> miniblink49
         SkBitmap bm;
 
         bm.allocN32Pixels(kWidth, kHeight, true);
@@ -84,12 +54,7 @@ public:
 
         create_gradient(&bm);
 
-<<<<<<< HEAD
         fPaint.setShader(SkShader::MakeBitmapShader(bm, xTile, yTile));
-=======
-        SkShader* s = SkShader::CreateBitmapShader(bm, xTile, yTile);
-        fPaint.setShader(s)->unref();
->>>>>>> miniblink49
 
         fName.printf("constXTile_");
 
@@ -111,7 +76,6 @@ public:
     }
 
 protected:
-<<<<<<< HEAD
     virtual const char* onGetName()
     {
         return fName.c_str();
@@ -119,13 +83,6 @@ protected:
 
     virtual void onDraw(int loops, SkCanvas* canvas)
     {
-=======
-    virtual const char* onGetName() {
-        return fName.c_str();
-    }
-
-    virtual void onDraw(const int loops, SkCanvas* canvas) {
->>>>>>> miniblink49
         SkPaint paint(fPaint);
         this->setupPaint(&paint);
         paint.setFilterQuality(fDoFilter ? kLow_SkFilterQuality

@@ -44,11 +44,7 @@ static xmlMutexPtr xmlThrDefMutex = NULL;
  *
  * Additional initialisation for multi-threading
  */
-<<<<<<< HEAD
 void XMLCALL xmlInitGlobals(void)
-=======
-void xmlInitGlobals(void)
->>>>>>> miniblink49
 {
     if (xmlThrDefMutex == NULL)
         xmlThrDefMutex = xmlNewMutex();
@@ -59,11 +55,7 @@ void xmlInitGlobals(void)
  *
  * Additional cleanup for multi-threading
  */
-<<<<<<< HEAD
 void XMLCALL xmlCleanupGlobals(void)
-=======
-void xmlCleanupGlobals(void)
->>>>>>> miniblink49
 {
     if (xmlThrDefMutex != NULL) {
 	xmlFreeMutex(xmlThrDefMutex);
@@ -596,11 +588,7 @@ xmlInitializeGlobalState(xmlGlobalStatePtr gs)
  * DOC_DISABLE : we ignore missing doc for the xmlThrDef functions,
  *               those are really internal work
  */
-<<<<<<< HEAD
 void XMLCALL
-=======
-void
->>>>>>> miniblink49
 xmlThrDefSetGenericErrorFunc(void *ctx, xmlGenericErrorFunc handler) {
     xmlMutexLock(xmlThrDefMutex);
     xmlGenericErrorContextThrDef = ctx;
@@ -611,11 +599,7 @@ xmlThrDefSetGenericErrorFunc(void *ctx, xmlGenericErrorFunc handler) {
     xmlMutexUnlock(xmlThrDefMutex);
 }
 
-<<<<<<< HEAD
 void XMLCALL
-=======
-void
->>>>>>> miniblink49
 xmlThrDefSetStructuredErrorFunc(void *ctx, xmlStructuredErrorFunc handler) {
     xmlMutexLock(xmlThrDefMutex);
     xmlStructuredErrorContextThrDef = ctx;
@@ -631,11 +615,7 @@ xmlThrDefSetStructuredErrorFunc(void *ctx, xmlStructuredErrorFunc handler) {
  *
  * Returns the old value of the registration function
  */
-<<<<<<< HEAD
 xmlRegisterNodeFunc XMLCALL
-=======
-xmlRegisterNodeFunc
->>>>>>> miniblink49
 xmlRegisterNodeDefault(xmlRegisterNodeFunc func)
 {
     xmlRegisterNodeFunc old = xmlRegisterNodeDefaultValue;
@@ -645,11 +625,7 @@ xmlRegisterNodeDefault(xmlRegisterNodeFunc func)
     return(old);
 }
 
-<<<<<<< HEAD
 xmlRegisterNodeFunc XMLCALL
-=======
-xmlRegisterNodeFunc
->>>>>>> miniblink49
 xmlThrDefRegisterNodeDefault(xmlRegisterNodeFunc func)
 {
     xmlRegisterNodeFunc old;
@@ -672,11 +648,7 @@ xmlThrDefRegisterNodeDefault(xmlRegisterNodeFunc func)
  *
  * Returns the previous value of the deregistration function
  */
-<<<<<<< HEAD
 xmlDeregisterNodeFunc XMLCALL
-=======
-xmlDeregisterNodeFunc
->>>>>>> miniblink49
 xmlDeregisterNodeDefault(xmlDeregisterNodeFunc func)
 {
     xmlDeregisterNodeFunc old = xmlDeregisterNodeDefaultValue;
@@ -686,11 +658,7 @@ xmlDeregisterNodeDefault(xmlDeregisterNodeFunc func)
     return(old);
 }
 
-<<<<<<< HEAD
 xmlDeregisterNodeFunc XMLCALL
-=======
-xmlDeregisterNodeFunc
->>>>>>> miniblink49
 xmlThrDefDeregisterNodeDefault(xmlDeregisterNodeFunc func)
 {
     xmlDeregisterNodeFunc old;
@@ -705,11 +673,7 @@ xmlThrDefDeregisterNodeDefault(xmlDeregisterNodeFunc func)
     return(old);
 }
 
-<<<<<<< HEAD
 xmlParserInputBufferCreateFilenameFunc XMLCALL
-=======
-xmlParserInputBufferCreateFilenameFunc
->>>>>>> miniblink49
 xmlThrDefParserInputBufferCreateFilenameDefault(xmlParserInputBufferCreateFilenameFunc func)
 {
     xmlParserInputBufferCreateFilenameFunc old;
@@ -726,11 +690,7 @@ xmlThrDefParserInputBufferCreateFilenameDefault(xmlParserInputBufferCreateFilena
     return(old);
 }
 
-<<<<<<< HEAD
 xmlOutputBufferCreateFilenameFunc XMLCALL
-=======
-xmlOutputBufferCreateFilenameFunc
->>>>>>> miniblink49
 xmlThrDefOutputBufferCreateFilenameDefault(xmlOutputBufferCreateFilenameFunc func)
 {
     xmlOutputBufferCreateFilenameFunc old;
@@ -761,11 +721,7 @@ __docbDefaultSAXHandler(void) {
 
 #ifdef LIBXML_HTML_ENABLED
 #undef	htmlDefaultSAXHandler
-<<<<<<< HEAD
 xmlSAXHandlerV1 * XMLCALL
-=======
-xmlSAXHandlerV1 *
->>>>>>> miniblink49
 __htmlDefaultSAXHandler(void) {
     if (IS_MAIN_THREAD)
 	return (&htmlDefaultSAXHandler);
@@ -775,11 +731,7 @@ __htmlDefaultSAXHandler(void) {
 #endif
 
 #undef xmlLastError
-<<<<<<< HEAD
 xmlError * XMLCALL
-=======
-xmlError *
->>>>>>> miniblink49
 __xmlLastError(void) {
     if (IS_MAIN_THREAD)
 	return (&xmlLastError);
@@ -847,11 +799,7 @@ __xmlMemStrdup(void){
 
 
 #undef	oldXMLWDcompatibility
-<<<<<<< HEAD
 int * XMLCALL
-=======
-int *
->>>>>>> miniblink49
 __oldXMLWDcompatibility(void) {
     if (IS_MAIN_THREAD)
 	return (&oldXMLWDcompatibility);
@@ -860,22 +808,14 @@ __oldXMLWDcompatibility(void) {
 }
 
 #undef	xmlBufferAllocScheme
-<<<<<<< HEAD
 xmlBufferAllocationScheme * XMLCALL
-=======
-xmlBufferAllocationScheme *
->>>>>>> miniblink49
 __xmlBufferAllocScheme(void) {
     if (IS_MAIN_THREAD)
 	return (&xmlBufferAllocScheme);
     else
 	return (&xmlGetGlobalState()->xmlBufferAllocScheme);
 }
-<<<<<<< HEAD
 xmlBufferAllocationScheme XMLCALL xmlThrDefBufferAllocScheme(xmlBufferAllocationScheme v) {
-=======
-xmlBufferAllocationScheme xmlThrDefBufferAllocScheme(xmlBufferAllocationScheme v) {
->>>>>>> miniblink49
     xmlBufferAllocationScheme ret;
     xmlMutexLock(xmlThrDefMutex);
     ret = xmlBufferAllocSchemeThrDef;
@@ -885,22 +825,14 @@ xmlBufferAllocationScheme xmlThrDefBufferAllocScheme(xmlBufferAllocationScheme v
 }
 
 #undef	xmlDefaultBufferSize
-<<<<<<< HEAD
 int * XMLCALL
-=======
-int *
->>>>>>> miniblink49
 __xmlDefaultBufferSize(void) {
     if (IS_MAIN_THREAD)
 	return (&xmlDefaultBufferSize);
     else
 	return (&xmlGetGlobalState()->xmlDefaultBufferSize);
 }
-<<<<<<< HEAD
 int XMLCALL xmlThrDefDefaultBufferSize(int v) {
-=======
-int xmlThrDefDefaultBufferSize(int v) {
->>>>>>> miniblink49
     int ret;
     xmlMutexLock(xmlThrDefMutex);
     ret = xmlDefaultBufferSizeThrDef;
@@ -921,11 +853,7 @@ __xmlDefaultSAXHandler(void) {
 #endif /* LIBXML_SAX1_ENABLED */
 
 #undef	xmlDefaultSAXLocator
-<<<<<<< HEAD
 xmlSAXLocator * XMLCALL
-=======
-xmlSAXLocator *
->>>>>>> miniblink49
 __xmlDefaultSAXLocator(void) {
     if (IS_MAIN_THREAD)
 	return (&xmlDefaultSAXLocator);
@@ -934,22 +862,14 @@ __xmlDefaultSAXLocator(void) {
 }
 
 #undef	xmlDoValidityCheckingDefaultValue
-<<<<<<< HEAD
 int * XMLCALL
-=======
-int *
->>>>>>> miniblink49
 __xmlDoValidityCheckingDefaultValue(void) {
     if (IS_MAIN_THREAD)
 	return (&xmlDoValidityCheckingDefaultValue);
     else
 	return (&xmlGetGlobalState()->xmlDoValidityCheckingDefaultValue);
 }
-<<<<<<< HEAD
 int XMLCALL xmlThrDefDoValidityCheckingDefaultValue(int v) {
-=======
-int xmlThrDefDoValidityCheckingDefaultValue(int v) {
->>>>>>> miniblink49
     int ret;
     xmlMutexLock(xmlThrDefMutex);
     ret = xmlDoValidityCheckingDefaultValueThrDef;
@@ -959,11 +879,7 @@ int xmlThrDefDoValidityCheckingDefaultValue(int v) {
 }
 
 #undef	xmlGenericError
-<<<<<<< HEAD
 xmlGenericErrorFunc * XMLCALL
-=======
-xmlGenericErrorFunc *
->>>>>>> miniblink49
 __xmlGenericError(void) {
     if (IS_MAIN_THREAD)
 	return (&xmlGenericError);
@@ -972,11 +888,7 @@ __xmlGenericError(void) {
 }
 
 #undef	xmlStructuredError
-<<<<<<< HEAD
 xmlStructuredErrorFunc * XMLCALL
-=======
-xmlStructuredErrorFunc *
->>>>>>> miniblink49
 __xmlStructuredError(void) {
     if (IS_MAIN_THREAD)
 	return (&xmlStructuredError);
@@ -985,11 +897,7 @@ __xmlStructuredError(void) {
 }
 
 #undef	xmlGenericErrorContext
-<<<<<<< HEAD
 void * * XMLCALL
-=======
-void * *
->>>>>>> miniblink49
 __xmlGenericErrorContext(void) {
     if (IS_MAIN_THREAD)
 	return (&xmlGenericErrorContext);
@@ -998,11 +906,7 @@ __xmlGenericErrorContext(void) {
 }
 
 #undef	xmlStructuredErrorContext
-<<<<<<< HEAD
 void * * XMLCALL
-=======
-void * *
->>>>>>> miniblink49
 __xmlStructuredErrorContext(void) {
     if (IS_MAIN_THREAD)
 	return (&xmlStructuredErrorContext);
@@ -1011,22 +915,14 @@ __xmlStructuredErrorContext(void) {
 }
 
 #undef	xmlGetWarningsDefaultValue
-<<<<<<< HEAD
 int * XMLCALL
-=======
-int *
->>>>>>> miniblink49
 __xmlGetWarningsDefaultValue(void) {
     if (IS_MAIN_THREAD)
 	return (&xmlGetWarningsDefaultValue);
     else
 	return (&xmlGetGlobalState()->xmlGetWarningsDefaultValue);
 }
-<<<<<<< HEAD
 int XMLCALL xmlThrDefGetWarningsDefaultValue(int v) {
-=======
-int xmlThrDefGetWarningsDefaultValue(int v) {
->>>>>>> miniblink49
     int ret;
     xmlMutexLock(xmlThrDefMutex);
     ret = xmlGetWarningsDefaultValueThrDef;
@@ -1036,22 +932,14 @@ int xmlThrDefGetWarningsDefaultValue(int v) {
 }
 
 #undef	xmlIndentTreeOutput
-<<<<<<< HEAD
 int * XMLCALL
-=======
-int *
->>>>>>> miniblink49
 __xmlIndentTreeOutput(void) {
     if (IS_MAIN_THREAD)
 	return (&xmlIndentTreeOutput);
     else
 	return (&xmlGetGlobalState()->xmlIndentTreeOutput);
 }
-<<<<<<< HEAD
 int XMLCALL xmlThrDefIndentTreeOutput(int v) {
-=======
-int xmlThrDefIndentTreeOutput(int v) {
->>>>>>> miniblink49
     int ret;
     xmlMutexLock(xmlThrDefMutex);
     ret = xmlIndentTreeOutputThrDef;
@@ -1061,22 +949,14 @@ int xmlThrDefIndentTreeOutput(int v) {
 }
 
 #undef	xmlTreeIndentString
-<<<<<<< HEAD
 const char * * XMLCALL
-=======
-const char * *
->>>>>>> miniblink49
 __xmlTreeIndentString(void) {
     if (IS_MAIN_THREAD)
 	return (&xmlTreeIndentString);
     else
 	return (&xmlGetGlobalState()->xmlTreeIndentString);
 }
-<<<<<<< HEAD
 const char * XMLCALL xmlThrDefTreeIndentString(const char * v) {
-=======
-const char * xmlThrDefTreeIndentString(const char * v) {
->>>>>>> miniblink49
     const char * ret;
     xmlMutexLock(xmlThrDefMutex);
     ret = xmlTreeIndentStringThrDef;
@@ -1086,22 +966,14 @@ const char * xmlThrDefTreeIndentString(const char * v) {
 }
 
 #undef	xmlKeepBlanksDefaultValue
-<<<<<<< HEAD
 int * XMLCALL
-=======
-int *
->>>>>>> miniblink49
 __xmlKeepBlanksDefaultValue(void) {
     if (IS_MAIN_THREAD)
 	return (&xmlKeepBlanksDefaultValue);
     else
 	return (&xmlGetGlobalState()->xmlKeepBlanksDefaultValue);
 }
-<<<<<<< HEAD
 int XMLCALL xmlThrDefKeepBlanksDefaultValue(int v) {
-=======
-int xmlThrDefKeepBlanksDefaultValue(int v) {
->>>>>>> miniblink49
     int ret;
     xmlMutexLock(xmlThrDefMutex);
     ret = xmlKeepBlanksDefaultValueThrDef;
@@ -1111,22 +983,14 @@ int xmlThrDefKeepBlanksDefaultValue(int v) {
 }
 
 #undef	xmlLineNumbersDefaultValue
-<<<<<<< HEAD
 int * XMLCALL
-=======
-int *
->>>>>>> miniblink49
 __xmlLineNumbersDefaultValue(void) {
     if (IS_MAIN_THREAD)
 	return (&xmlLineNumbersDefaultValue);
     else
 	return (&xmlGetGlobalState()->xmlLineNumbersDefaultValue);
 }
-<<<<<<< HEAD
 int XMLCALL xmlThrDefLineNumbersDefaultValue(int v) {
-=======
-int xmlThrDefLineNumbersDefaultValue(int v) {
->>>>>>> miniblink49
     int ret;
     xmlMutexLock(xmlThrDefMutex);
     ret = xmlLineNumbersDefaultValueThrDef;
@@ -1136,22 +1000,14 @@ int xmlThrDefLineNumbersDefaultValue(int v) {
 }
 
 #undef	xmlLoadExtDtdDefaultValue
-<<<<<<< HEAD
 int * XMLCALL
-=======
-int *
->>>>>>> miniblink49
 __xmlLoadExtDtdDefaultValue(void) {
     if (IS_MAIN_THREAD)
 	return (&xmlLoadExtDtdDefaultValue);
     else
 	return (&xmlGetGlobalState()->xmlLoadExtDtdDefaultValue);
 }
-<<<<<<< HEAD
 int XMLCALL xmlThrDefLoadExtDtdDefaultValue(int v) {
-=======
-int xmlThrDefLoadExtDtdDefaultValue(int v) {
->>>>>>> miniblink49
     int ret;
     xmlMutexLock(xmlThrDefMutex);
     ret = xmlLoadExtDtdDefaultValueThrDef;
@@ -1161,22 +1017,14 @@ int xmlThrDefLoadExtDtdDefaultValue(int v) {
 }
 
 #undef	xmlParserDebugEntities
-<<<<<<< HEAD
 int * XMLCALL
-=======
-int *
->>>>>>> miniblink49
 __xmlParserDebugEntities(void) {
     if (IS_MAIN_THREAD)
 	return (&xmlParserDebugEntities);
     else
 	return (&xmlGetGlobalState()->xmlParserDebugEntities);
 }
-<<<<<<< HEAD
 int XMLCALL xmlThrDefParserDebugEntities(int v) {
-=======
-int xmlThrDefParserDebugEntities(int v) {
->>>>>>> miniblink49
     int ret;
     xmlMutexLock(xmlThrDefMutex);
     ret = xmlParserDebugEntitiesThrDef;
@@ -1186,11 +1034,7 @@ int xmlThrDefParserDebugEntities(int v) {
 }
 
 #undef	xmlParserVersion
-<<<<<<< HEAD
 const char * * XMLCALL
-=======
-const char * *
->>>>>>> miniblink49
 __xmlParserVersion(void) {
     if (IS_MAIN_THREAD)
 	return (&xmlParserVersion);
@@ -1199,22 +1043,14 @@ __xmlParserVersion(void) {
 }
 
 #undef	xmlPedanticParserDefaultValue
-<<<<<<< HEAD
 int * XMLCALL
-=======
-int *
->>>>>>> miniblink49
 __xmlPedanticParserDefaultValue(void) {
     if (IS_MAIN_THREAD)
 	return (&xmlPedanticParserDefaultValue);
     else
 	return (&xmlGetGlobalState()->xmlPedanticParserDefaultValue);
 }
-<<<<<<< HEAD
 int XMLCALL xmlThrDefPedanticParserDefaultValue(int v) {
-=======
-int xmlThrDefPedanticParserDefaultValue(int v) {
->>>>>>> miniblink49
     int ret;
     xmlMutexLock(xmlThrDefMutex);
     ret = xmlPedanticParserDefaultValueThrDef;
@@ -1224,22 +1060,14 @@ int xmlThrDefPedanticParserDefaultValue(int v) {
 }
 
 #undef	xmlSaveNoEmptyTags
-<<<<<<< HEAD
 int * XMLCALL
-=======
-int *
->>>>>>> miniblink49
 __xmlSaveNoEmptyTags(void) {
     if (IS_MAIN_THREAD)
 	return (&xmlSaveNoEmptyTags);
     else
 	return (&xmlGetGlobalState()->xmlSaveNoEmptyTags);
 }
-<<<<<<< HEAD
 int XMLCALL xmlThrDefSaveNoEmptyTags(int v) {
-=======
-int xmlThrDefSaveNoEmptyTags(int v) {
->>>>>>> miniblink49
     int ret;
     xmlMutexLock(xmlThrDefMutex);
     ret = xmlSaveNoEmptyTagsThrDef;
@@ -1249,22 +1077,14 @@ int xmlThrDefSaveNoEmptyTags(int v) {
 }
 
 #undef	xmlSubstituteEntitiesDefaultValue
-<<<<<<< HEAD
 int * XMLCALL
-=======
-int *
->>>>>>> miniblink49
 __xmlSubstituteEntitiesDefaultValue(void) {
     if (IS_MAIN_THREAD)
 	return (&xmlSubstituteEntitiesDefaultValue);
     else
 	return (&xmlGetGlobalState()->xmlSubstituteEntitiesDefaultValue);
 }
-<<<<<<< HEAD
 int XMLCALL xmlThrDefSubstituteEntitiesDefaultValue(int v) {
-=======
-int xmlThrDefSubstituteEntitiesDefaultValue(int v) {
->>>>>>> miniblink49
     int ret;
     xmlMutexLock(xmlThrDefMutex);
     ret = xmlSubstituteEntitiesDefaultValueThrDef;
@@ -1274,11 +1094,7 @@ int xmlThrDefSubstituteEntitiesDefaultValue(int v) {
 }
 
 #undef	xmlRegisterNodeDefaultValue
-<<<<<<< HEAD
 xmlRegisterNodeFunc * XMLCALL
-=======
-xmlRegisterNodeFunc *
->>>>>>> miniblink49
 __xmlRegisterNodeDefaultValue(void) {
     if (IS_MAIN_THREAD)
 	return (&xmlRegisterNodeDefaultValue);
@@ -1287,11 +1103,7 @@ __xmlRegisterNodeDefaultValue(void) {
 }
 
 #undef	xmlDeregisterNodeDefaultValue
-<<<<<<< HEAD
 xmlDeregisterNodeFunc * XMLCALL
-=======
-xmlDeregisterNodeFunc *
->>>>>>> miniblink49
 __xmlDeregisterNodeDefaultValue(void) {
     if (IS_MAIN_THREAD)
 	return (&xmlDeregisterNodeDefaultValue);
@@ -1300,11 +1112,7 @@ __xmlDeregisterNodeDefaultValue(void) {
 }
 
 #undef	xmlParserInputBufferCreateFilenameValue
-<<<<<<< HEAD
 xmlParserInputBufferCreateFilenameFunc * XMLCALL
-=======
-xmlParserInputBufferCreateFilenameFunc *
->>>>>>> miniblink49
 __xmlParserInputBufferCreateFilenameValue(void) {
     if (IS_MAIN_THREAD)
 	return (&xmlParserInputBufferCreateFilenameValue);
@@ -1313,11 +1121,7 @@ __xmlParserInputBufferCreateFilenameValue(void) {
 }
 
 #undef	xmlOutputBufferCreateFilenameValue
-<<<<<<< HEAD
 xmlOutputBufferCreateFilenameFunc * XMLCALL
-=======
-xmlOutputBufferCreateFilenameFunc *
->>>>>>> miniblink49
 __xmlOutputBufferCreateFilenameValue(void) {
     if (IS_MAIN_THREAD)
 	return (&xmlOutputBufferCreateFilenameValue);

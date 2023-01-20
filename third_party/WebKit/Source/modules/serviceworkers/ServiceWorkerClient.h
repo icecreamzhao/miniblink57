@@ -10,19 +10,13 @@
 #include "bindings/core/v8/SerializedScriptValue.h"
 #include "modules/ModulesExport.h"
 #include "platform/heap/Handle.h"
-<<<<<<< HEAD
 #include "public/platform/modules/serviceworker/WebServiceWorkerClientsInfo.h"
 #include "wtf/Forward.h"
 #include <memory>
-=======
-#include "public/platform/WebServiceWorkerClientsInfo.h"
-#include "wtf/Forward.h"
->>>>>>> miniblink49
 
 namespace blink {
 
 class ExecutionContext;
-<<<<<<< HEAD
 class ScriptPromiseResolver;
 
 class MODULES_EXPORT ServiceWorkerClient
@@ -36,13 +30,6 @@ public:
 
     static ServiceWorkerClient* take(ScriptPromiseResolver*,
         std::unique_ptr<WebServiceWorkerClientInfo>);
-=======
-class ScriptState;
-
-class MODULES_EXPORT ServiceWorkerClient : public GarbageCollectedFinalized<ServiceWorkerClient>, public ScriptWrappable {
-    DEFINE_WRAPPERTYPEINFO();
-public:
->>>>>>> miniblink49
     static ServiceWorkerClient* create(const WebServiceWorkerClientInfo&);
 
     virtual ~ServiceWorkerClient();
@@ -51,16 +38,12 @@ public:
     String url() const { return m_url; }
     String frameType() const;
     String id() const { return m_uuid; }
-<<<<<<< HEAD
     void postMessage(ExecutionContext*,
         PassRefPtr<SerializedScriptValue> message,
         const MessagePortArray&,
         ExceptionState&);
 
     static bool canTransferArrayBuffersAndImageBitmaps() { return false; }
-=======
-    void postMessage(ExecutionContext*, PassRefPtr<SerializedScriptValue> message, const MessagePortArray*, ExceptionState&);
->>>>>>> miniblink49
 
     DEFINE_INLINE_VIRTUAL_TRACE() { }
 

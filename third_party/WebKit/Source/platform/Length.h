@@ -25,13 +25,8 @@
 
 #include "platform/PlatformExport.h"
 #include "platform/animation/AnimationUtilities.h"
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/Assertions.h"
-=======
-#include "wtf/Assertions.h"
-#include "wtf/FastAllocBase.h"
->>>>>>> miniblink49
 #include "wtf/Forward.h"
 #include "wtf/HashMap.h"
 #include "wtf/MathExtras.h"
@@ -43,7 +38,6 @@ namespace blink {
 // FIXME: This enum makes it hard to tell in general what values may be
 // appropriate for any given Length.
 enum LengthType {
-<<<<<<< HEAD
     Auto,
     Percent,
     Fixed,
@@ -63,22 +57,6 @@ enum ValueRange { ValueRangeAll,
 
 struct PixelsAndPercent {
     DISALLOW_NEW();
-=======
-    Auto, Percent, Fixed,
-    Intrinsic, MinIntrinsic,
-    MinContent, MaxContent, FillAvailable, FitContent,
-    Calculated,
-    ExtendToZoom, DeviceWidth, DeviceHeight,
-    MaxSizeNone
-};
-
-enum ValueRange {
-    ValueRangeAll,
-    ValueRangeNonNegative
-};
-
-struct PixelsAndPercent {
->>>>>>> miniblink49
     PixelsAndPercent(float pixels, float percent)
         : pixels(pixels)
         , percent(percent)
@@ -91,7 +69,6 @@ struct PixelsAndPercent {
 class CalculationValue;
 
 class PLATFORM_EXPORT Length {
-<<<<<<< HEAD
     DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
 public:
@@ -100,75 +77,49 @@ public:
         , m_quirk(false)
         , m_type(Auto)
         , m_isFloat(false)
-=======
-    WTF_MAKE_FAST_ALLOCATED(Length);
-public:
-    Length()
-        :  m_intValue(0), m_quirk(false), m_type(Auto), m_isFloat(false)
->>>>>>> miniblink49
     {
     }
 
     Length(LengthType t)
-<<<<<<< HEAD
         : m_intValue(0)
         , m_quirk(false)
         , m_type(t)
         , m_isFloat(false)
-=======
-        : m_intValue(0), m_quirk(false), m_type(t), m_isFloat(false)
->>>>>>> miniblink49
     {
         ASSERT(t != Calculated);
     }
 
     Length(int v, LengthType t, bool q = false)
-<<<<<<< HEAD
         : m_intValue(v)
         , m_quirk(q)
         , m_type(t)
         , m_isFloat(false)
-=======
-        : m_intValue(v), m_quirk(q), m_type(t), m_isFloat(false)
->>>>>>> miniblink49
     {
         ASSERT(t != Calculated);
     }
 
     Length(LayoutUnit v, LengthType t, bool q = false)
-<<<<<<< HEAD
         : m_floatValue(v.toFloat())
         , m_quirk(q)
         , m_type(t)
         , m_isFloat(true)
-=======
-        : m_floatValue(v.toFloat()), m_quirk(q), m_type(t), m_isFloat(true)
->>>>>>> miniblink49
     {
         ASSERT(t != Calculated);
     }
 
     Length(float v, LengthType t, bool q = false)
-<<<<<<< HEAD
         : m_floatValue(v)
         , m_quirk(q)
         , m_type(t)
         , m_isFloat(true)
-=======
-        : m_floatValue(v), m_quirk(q), m_type(t), m_isFloat(true)
->>>>>>> miniblink49
     {
         ASSERT(t != Calculated);
     }
 
     Length(double v, LengthType t, bool q = false)
-<<<<<<< HEAD
         : m_quirk(q)
         , m_type(t)
         , m_isFloat(true)
-=======
-        : m_quirk(q), m_type(t), m_isFloat(true)
->>>>>>> miniblink49
     {
         m_floatValue = static_cast<float>(v);
     }
@@ -198,14 +149,10 @@ public:
             decrementCalculatedRef();
     }
 
-<<<<<<< HEAD
     bool operator==(const Length& o) const
     {
         return (m_type == o.m_type) && (m_quirk == o.m_quirk) && (isMaxSizeNone() || (getFloatValue() == o.getFloatValue()) || isCalculatedEqual(o));
     }
-=======
-    bool operator==(const Length& o) const { return (m_type == o.m_type) && (m_quirk == o.m_quirk) && (isMaxSizeNone() || (getFloatValue() == o.getFloatValue()) || isCalculatedEqual(o)); }
->>>>>>> miniblink49
     bool operator!=(const Length& o) const { return !(*this == o); }
 
     const Length& operator*=(float v)
@@ -223,17 +170,11 @@ public:
         return *this;
     }
 
-<<<<<<< HEAD
     // FIXME: Make this private (if possible) or at least rename it
     // (http://crbug.com/432707).
     inline float value() const
     {
         ASSERT(!isCalculated());
-=======
-    // FIXME: Make this private (if possible) or at least rename it (http://crbug.com/432707).
-    inline float value() const
-    {
->>>>>>> miniblink49
         return getFloatValue();
     }
 
@@ -246,42 +187,26 @@ public:
         return getIntValue();
     }
 
-<<<<<<< HEAD
     float pixels() const
     {
         ASSERT(type() == Fixed);
         return getFloatValue();
     }
 
-=======
->>>>>>> miniblink49
     float percent() const
     {
         ASSERT(type() == Percent);
         return getFloatValue();
     }
-<<<<<<< HEAD
 
     PixelsAndPercent getPixelsAndPercent() const;
 
     CalculationValue& getCalculationValue() const;
-=======
-    PixelsAndPercent pixelsAndPercent() const;
-
-    CalculationValue& calculationValue() const;
->>>>>>> miniblink49
 
     LengthType type() const { return static_cast<LengthType>(m_type); }
     bool quirk() const { return m_quirk; }
 
-<<<<<<< HEAD
     void setQuirk(bool quirk) { m_quirk = quirk; }
-=======
-    void setQuirk(bool quirk)
-    {
-        m_quirk = quirk;
-    }
->>>>>>> miniblink49
 
     void setValue(LengthType t, int value)
     {
@@ -313,7 +238,6 @@ public:
         m_isFloat = true;
     }
 
-<<<<<<< HEAD
     void setValue(float value) { *this = Length(value, Fixed); }
 
     bool isMaxSizeNone() const { return type() == MaxSizeNone; }
@@ -322,19 +246,6 @@ public:
     // Length always contains a percentage, and without a maxValue passed to these
     // functions it's impossible to determine the sign or zero-ness. We assume all
     // calc values are positive and non-zero for now.
-=======
-    void setValue(float value)
-    {
-        *this = Length(value, Fixed);
-    }
-
-    bool isMaxSizeNone() const { return type() == MaxSizeNone; }
-
-    // FIXME calc: https://bugs.webkit.org/show_bug.cgi?id=80357. A calculated Length
-    // always contains a percentage, and without a maxValue passed to these functions
-    // it's impossible to determine the sign or zero-ness. We assume all calc values
-    // are positive and non-zero for now.
->>>>>>> miniblink49
     bool isZero() const
     {
         ASSERT(!isMaxSizeNone());
@@ -362,7 +273,6 @@ public:
 
     bool isAuto() const { return type() == Auto; }
     bool isFixed() const { return type() == Fixed; }
-<<<<<<< HEAD
     bool isIntrinsicOrAuto() const { return type() == Auto || isIntrinsic(); }
     bool isIntrinsic() const
     {
@@ -372,12 +282,6 @@ public:
     {
         return type() == Fixed || type() == Percent || type() == Calculated;
     }
-=======
-    bool isIntrinsicOrAuto() const { return type() == Auto || isLegacyIntrinsic() || isIntrinsic(); }
-    bool isLegacyIntrinsic() const { return type() == Intrinsic || type() == MinIntrinsic; }
-    bool isIntrinsic() const { return type() == MinContent || type() == MaxContent || type() == FillAvailable || type() == FitContent; }
-    bool isSpecified() const { return type() == Fixed || type() == Percent || type() == Calculated; }
->>>>>>> miniblink49
     bool isSpecifiedOrIntrinsic() const { return isSpecified() || isIntrinsic(); }
     bool isCalculated() const { return type() == Calculated; }
     bool isCalculatedEqual(const Length&) const;
@@ -385,15 +289,11 @@ public:
     bool isMaxContent() const { return type() == MaxContent; }
     bool isFillAvailable() const { return type() == FillAvailable; }
     bool isFitContent() const { return type() == FitContent; }
-<<<<<<< HEAD
     bool isPercent() const { return type() == Percent; }
     bool isPercentOrCalc() const
     {
         return type() == Percent || type() == Calculated;
     }
-=======
-    bool hasPercent() const { return type() == Percent || type() == Calculated; }
->>>>>>> miniblink49
 
     Length blend(const Length& from, double progress, ValueRange range) const
     {
@@ -433,11 +333,8 @@ public:
 
     Length subtractFromOneHundredPercent() const;
 
-<<<<<<< HEAD
     Length zoom(double factor) const;
 
-=======
->>>>>>> miniblink49
 private:
     int getIntValue() const
     {
@@ -464,11 +361,6 @@ private:
     bool m_isFloat;
 };
 
-<<<<<<< HEAD
-=======
-PLATFORM_EXPORT Vector<Length> parseHTMLAreaElementCoords(const String&);
-
->>>>>>> miniblink49
 } // namespace blink
 
 #endif // Length_h

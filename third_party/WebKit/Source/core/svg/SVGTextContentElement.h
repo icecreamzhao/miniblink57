@@ -21,49 +21,56 @@
 #ifndef SVGTextContentElement_h
 #define SVGTextContentElement_h
 
-#include "core/svg/SVGAnimatedBoolean.h"
 #include "core/svg/SVGAnimatedEnumeration.h"
 #include "core/svg/SVGAnimatedLength.h"
 #include "core/svg/SVGGraphicsElement.h"
-#include "core/svg/SVGPointTearOff.h"
 #include "platform/heap/Handle.h"
 
 namespace blink {
 
 class ExceptionState;
+class LineLayoutItem;
+class SVGPointTearOff;
 
 enum SVGLengthAdjustType {
     SVGLengthAdjustUnknown,
     SVGLengthAdjustSpacing,
     SVGLengthAdjustSpacingAndGlyphs
 };
-template<> const SVGEnumerationStringEntries& getStaticStringEntries<SVGLengthAdjustType>();
+template <>
+const SVGEnumerationStringEntries&
+getStaticStringEntries<SVGLengthAdjustType>();
 
 class SVGTextContentElement : public SVGGraphicsElement {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     // Forward declare enumerations in the W3C naming scheme, for IDL generation.
     enum {
-        LENGTHADJUST_UNKNOWN = SVGLengthAdjustUnknown,
-        LENGTHADJUST_SPACING = SVGLengthAdjustSpacing,
-        LENGTHADJUST_SPACINGANDGLYPHS = SVGLengthAdjustSpacingAndGlyphs
+        kLengthadjustUnknown = SVGLengthAdjustUnknown,
+        kLengthadjustSpacing = SVGLengthAdjustSpacing,
+        kLengthadjustSpacingandglyphs = SVGLengthAdjustSpacingAndGlyphs
     };
 
     unsigned getNumberOfChars();
     float getComputedTextLength();
     float getSubStringLength(unsigned charnum, unsigned nchars, ExceptionState&);
-    PassRefPtrWillBeRawPtr<SVGPointTearOff> getStartPositionOfChar(unsigned charnum, ExceptionState&);
-    PassRefPtrWillBeRawPtr<SVGPointTearOff> getEndPositionOfChar(unsigned charnum, ExceptionState&);
-    PassRefPtrWillBeRawPtr<SVGRectTearOff> getExtentOfChar(unsigned charnum, ExceptionState&);
+    SVGPointTearOff* getStartPositionOfChar(unsigned charnum, ExceptionState&);
+    SVGPointTearOff* getEndPositionOfChar(unsigned charnum, ExceptionState&);
+    SVGRectTearOff* getExtentOfChar(unsigned charnum, ExceptionState&);
     float getRotationOfChar(unsigned charnum, ExceptionState&);
-    int getCharNumAtPosition(PassRefPtrWillBeRawPtr<SVGPointTearOff>, ExceptionState&);
+    int getCharNumAtPosition(SVGPointTearOff*, ExceptionState&);
     void selectSubString(unsigned charnum, unsigned nchars, ExceptionState&);
 
-    static SVGTextContentElement* elementFromLayoutObject(LayoutObject*);
+    static SVGTextContentElement* elementFromLineLayoutItem(
+        const LineLayoutItem&);
 
     SVGAnimatedLength* textLength() { return m_textLength.get(); }
     bool textLengthIsSpecifiedByUser() { return m_textLengthIsSpecifiedByUser; }
-    SVGAnimatedEnumeration<SVGLengthAdjustType>* lengthAdjust() { return m_lengthAdjust.get(); }
+    SVGAnimatedEnumeration<SVGLengthAdjustType>* lengthAdjust()
+    {
+        return m_lengthAdjust.get();
+    }
 
     DECLARE_VIRTUAL_TRACE();
 
@@ -71,7 +78,9 @@ protected:
     SVGTextContentElement(const QualifiedName&, Document&);
 
     bool isPresentationAttribute(const QualifiedName&) const final;
-    void collectStyleForPresentationAttribute(const QualifiedName&, const AtomicString&, MutableStylePropertySet*) final;
+    void collectStyleForPresentationAttribute(const QualifiedName&,
+        const AtomicString&,
+        MutableStylePropertySet*) final;
     void svgAttributeChanged(const QualifiedName&) override;
 
     bool selfHasRelativeLengths() const override;
@@ -79,9 +88,9 @@ protected:
 private:
     bool isTextContent() const final { return true; }
 
-    RefPtrWillBeMember<SVGAnimatedLength> m_textLength;
+    Member<SVGAnimatedLength> m_textLength;
     bool m_textLengthIsSpecifiedByUser;
-    RefPtrWillBeMember<SVGAnimatedEnumeration<SVGLengthAdjustType>> m_lengthAdjust;
+    Member<SVGAnimatedEnumeration<SVGLengthAdjustType>> m_lengthAdjust;
 };
 
 inline bool isSVGTextContentElement(const SVGElement& element)

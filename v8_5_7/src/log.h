@@ -213,11 +213,7 @@ class Logger : public CodeEventListener {
   static void EnterExternal(Isolate* isolate);
   static void LeaveExternal(Isolate* isolate);
 
-<<<<<<< HEAD
   static void V8CALL DefaultEventLoggerSentinel(const char* name, int event) {}
-=======
-  static void DefaultEventLoggerSentinel(const char* name, int event) {}
->>>>>>> miniblink49
 
   INLINE(static void CallEventLogger(Isolate* isolate, const char* name,
                                      StartEnd se, bool expose_to_api));

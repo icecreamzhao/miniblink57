@@ -27,16 +27,12 @@
 
 #include "platform/geometry/LayoutSize.h"
 #include "platform/transforms/TransformOperation.h"
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
-=======
->>>>>>> miniblink49
 #include "wtf/RefPtr.h"
 #include "wtf/Vector.h"
 
 namespace blink {
 class FloatBox;
-<<<<<<< HEAD
 
 class PLATFORM_EXPORT EmptyTransformOperations final {
     DISALLOW_NEW();
@@ -51,18 +47,6 @@ public:
 
     bool operator==(const TransformOperations& o) const;
     bool operator!=(const TransformOperations& o) const { return !(*this == o); }
-=======
-class PLATFORM_EXPORT TransformOperations {
-    WTF_MAKE_FAST_ALLOCATED(TransformOperations);
-public:
-    explicit TransformOperations(bool makeIdentity = false);
-
-    bool operator==(const TransformOperations& o) const;
-    bool operator!=(const TransformOperations& o) const
-    {
-        return !(*this == o);
-    }
->>>>>>> miniblink49
 
     void apply(const FloatSize& sz, TransformationMatrix& t) const
     {
@@ -70,13 +54,8 @@ public:
             m_operations[i]->apply(t, sz);
     }
 
-<<<<<<< HEAD
     // Return true if any of the operation types are 3D operation types (even if
     // the values describe affine transforms)
-=======
-    // Return true if any of the operation types are 3D operation types (even if the
-    // values describe affine transforms)
->>>>>>> miniblink49
     bool has3DOperation() const
     {
         for (unsigned i = 0; i < m_operations.size(); ++i)
@@ -96,7 +75,6 @@ public:
 
     bool operationsMatch(const TransformOperations&) const;
 
-<<<<<<< HEAD
     void clear() { m_operations.clear(); }
 
     Vector<RefPtr<TransformOperation>>& operations() { return m_operations; }
@@ -125,24 +103,6 @@ public:
         double progress) const;
     TransformOperations add(const TransformOperations& addend) const;
     TransformOperations zoom(double factor) const;
-=======
-    void clear()
-    {
-        m_operations.clear();
-    }
-
-    Vector<RefPtr<TransformOperation>>& operations() { return m_operations; }
-    const Vector<RefPtr<TransformOperation>>& operations() const { return m_operations; }
-
-    size_t size() const { return m_operations.size(); }
-    const TransformOperation* at(size_t index) const { return index < m_operations.size() ? m_operations.at(index).get() : 0; }
-
-    bool blendedBoundsForBox(const FloatBox&, const TransformOperations& from, const double& minProgress, const double& maxProgress, FloatBox* bounds) const;
-    TransformOperations blendByMatchingOperations(const TransformOperations& from, const double& progress) const;
-    TransformOperations blendByUsingMatrixInterpolation(const TransformOperations& from, double progress) const;
-    TransformOperations blend(const TransformOperations& from, double progress) const;
-    TransformOperations add(const TransformOperations& addend) const;
->>>>>>> miniblink49
 
 private:
     Vector<RefPtr<TransformOperation>> m_operations;

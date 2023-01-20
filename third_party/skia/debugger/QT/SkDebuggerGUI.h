@@ -9,7 +9,6 @@
 #ifndef SKDEBUGGERUI_H
 #define SKDEBUGGERUI_H
 
-<<<<<<< HEAD
 #include "SkCanvas.h"
 #include "SkCanvasWidget.h"
 #include "SkDebugger.h"
@@ -20,18 +19,6 @@
 #include "SkRasterWidget.h"
 #include "SkSettingsWidget.h"
 #include <QtCore/QFileSystemWatcher>
-=======
-
-#include "SkCanvas.h"
-#include "SkCanvasWidget.h"
-#include "SkDebugger.h"
-#include "SkGLWidget.h"
-#include "SkListWidget.h"
-#include "SkInspectorWidget.h"
-#include "SkRasterWidget.h"
-#include "SkDrawCommandGeometryWidget.h"
-#include "SkSettingsWidget.h"
->>>>>>> miniblink49
 #include <QtCore/QSignalMapper>
 #include <QtCore/QVariant>
 #include <QtGui/QAction>
@@ -42,30 +29,15 @@
 #include <QtGui/QListView>
 #include <QtGui/QListWidget>
 #include <QtGui/QMainWindow>
-<<<<<<< HEAD
 #include <QtGui/QMenu>
 #include <QtGui/QMenuBar>
-=======
->>>>>>> miniblink49
 #include <QtGui/QSplitter>
 #include <QtGui/QStatusBar>
 #include <QtGui/QToolBar>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QWidget>
-<<<<<<< HEAD
 #include <vector>
 
-=======
-#include <QtGui/QMenu>
-#include <QtGui/QMenuBar>
-#include <vector>
-
-class SkTimedPicture;
-namespace sk_tools {
-    class PictureRenderer;
-}
-
->>>>>>> miniblink49
 /** \class SkDebuggerGUI
 
     Container for the UI and it's functions.
@@ -78,11 +50,7 @@ public:
         Constructs the view of the application.
         @param parent  The parent container of this widget.
      */
-<<<<<<< HEAD
     SkDebuggerGUI(QWidget* parent = 0);
-=======
-    SkDebuggerGUI(QWidget *parent = 0);
->>>>>>> miniblink49
 
     /**
         Updates the directory widget with the latest directory path stored in
@@ -95,31 +63,16 @@ public:
     */
     void openFile(const QString& filename);
 
-<<<<<<< HEAD
 Q_SIGNALS:
     void commandChanged(int command);
 
 private Q_SLOTS:
-=======
-signals:
-    void commandChanged(int command);
-
-private slots:
->>>>>>> miniblink49
     /**
         Toggles breakpoint view in the list widget.
      */
     void actionBreakpoints();
 
     /**
-<<<<<<< HEAD
-=======
-        Profile the commands
-     */
-    void actionProfile();
-
-    /**
->>>>>>> miniblink49
         Cancels the command filter in the list widget.
      */
     void actionCancel();
@@ -220,11 +173,7 @@ private slots:
     /**
         Loads an skpicture selected from the directory.
      */
-<<<<<<< HEAD
     void loadFile(QListWidgetItem* item);
-=======
-    void loadFile(QListWidgetItem *item);
->>>>>>> miniblink49
 
     /**
         Toggles a dialog with a file browser for navigating to a skpicture. Loads
@@ -264,15 +213,12 @@ private slots:
     void toggleDirectory();
 
     /**
-<<<<<<< HEAD
         Populates the contents of the directory widget with the skp files in the
         current directory pointed to by fFile.
      */
     void populateDirectoryWidget();
 
     /**
-=======
->>>>>>> miniblink49
         Filters the list widgets command visibility based on the currently
         active selection.
      */
@@ -281,10 +227,7 @@ private slots:
     void updateHit(int newHit);
 
     void updateImage();
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 private:
     QSplitter fCentralSplitter;
     QStatusBar fStatusBar;
@@ -292,10 +235,6 @@ private:
 
     QAction fActionOpen;
     QAction fActionBreakpoint;
-<<<<<<< HEAD
-=======
-    QAction fActionProfile;
->>>>>>> miniblink49
     QAction fActionCancel;
     QAction fActionClearBreakpoints;
     QAction fActionClearDeletes;
@@ -330,11 +269,8 @@ private:
     QListWidget fListWidget;
     QListWidget fDirectoryWidget;
 
-<<<<<<< HEAD
     QFileSystemWatcher fDirectoryWatcher;
 
-=======
->>>>>>> miniblink49
     SkDebugger fDebugger;
     SkCanvasWidget fCanvasWidget;
 
@@ -353,10 +289,6 @@ private:
     QString fPath;
     SkString fFileName;
     SkTDArray<bool> fSkipCommands; // has a specific command been deleted?
-<<<<<<< HEAD
-=======
-    bool fDirectoryWidgetActive;
->>>>>>> miniblink49
 
     QMenuBar fMenuBar;
     QMenu fMenuFile;
@@ -371,11 +303,7 @@ private:
     /**
         Creates the entire UI.
      */
-<<<<<<< HEAD
     void setupUi(QMainWindow* SkDebuggerGUI);
-=======
-    void setupUi(QMainWindow *SkDebuggerGUI);
->>>>>>> miniblink49
 
     /**
         Pipes a QString in with the location of the filename, proceeds to updating
@@ -403,21 +331,8 @@ private:
      */
     void setupOverviewText(const SkTDArray<double>* typeTimes, double totTime, int numRuns);
 
-<<<<<<< HEAD
     bool isPaused() const
     {
-=======
-
-    /**
-        Render the supplied picture several times tracking the time consumed
-        by each command.
-     */
-    void run(const SkPicture* pict,
-             sk_tools::PictureRenderer* renderer,
-             int repeats);
-
-    bool isPaused() const {
->>>>>>> miniblink49
         return fActionPause.isChecked();
     }
 };

@@ -12,17 +12,10 @@
 #include "SkBBHFactory.h"
 #include "SkBBoxHierarchy.h"
 #include "SkBitmap.h"
-<<<<<<< HEAD
 #include "SkBitmapRegionDecoder.h"
 #include "SkCanvas.h"
 #include "SkData.h"
 #include "SkMultiPictureDocumentReader.h"
-=======
-#include "SkCanvas.h"
-#include "SkCodec.h"
-#include "SkData.h"
-#include "SkGPipe.h"
->>>>>>> miniblink49
 #include "SkPicture.h"
 #include "gm.h"
 
@@ -31,7 +24,6 @@ namespace DM {
 // This is just convenience.  It lets you use either return "foo" or return SkStringPrintf(...).
 struct ImplicitString : public SkString {
     template <typename T>
-<<<<<<< HEAD
     ImplicitString(const T& s)
         : SkString(s)
     {
@@ -40,16 +32,12 @@ struct ImplicitString : public SkString {
         : SkString("")
     {
     }
-=======
-    ImplicitString(const T& s) : SkString(s) {}
->>>>>>> miniblink49
 };
 typedef ImplicitString Name;
 typedef ImplicitString Path;
 
 class Error {
 public:
-<<<<<<< HEAD
     Error(const SkString& s)
         : fMsg(s)
         , fFatal(!this->isEmpty())
@@ -67,16 +55,6 @@ public:
     static Error Nonfatal(const SkString& s) { return Nonfatal(s.c_str()); }
     static Error Nonfatal(const char* s)
     {
-=======
-    Error(const SkString& s) : fMsg(s), fFatal(!this->isEmpty()) {}
-    Error(const char* s)     : fMsg(s), fFatal(!this->isEmpty()) {}
-
-    Error(const Error&)            = default;
-    Error& operator=(const Error&) = default;
-
-    static Error Nonfatal(const SkString& s) { return Nonfatal(s.c_str()); }
-    static Error Nonfatal(const char* s) {
->>>>>>> miniblink49
         Error e(s);
         e.fFatal = false;
         return e;
@@ -88,7 +66,6 @@ public:
 
 private:
     SkString fMsg;
-<<<<<<< HEAD
     bool fFatal;
 };
 
@@ -134,35 +111,6 @@ struct Sink {
     virtual SinkFlags flags() const = 0;
 };
 
-=======
-    bool     fFatal;
-};
-
-struct Src {
-    // All Srcs must be thread safe.
-    virtual ~Src() {}
-    virtual Error SK_WARN_UNUSED_RESULT draw(SkCanvas*) const = 0;
-    virtual SkISize size() const = 0;
-    virtual Name name() const = 0;
-    virtual void modifyGrContextOptions(GrContextOptions* options) const {}
-};
-
-struct Sink {
-    virtual ~Sink() {}
-    // You may write to either the bitmap or stream.  If you write to log, we'll print that out.
-    virtual Error SK_WARN_UNUSED_RESULT draw(const Src&, SkBitmap*, SkWStream*, SkString* log)
-        const = 0;
-    // Sinks in the same enclave (except kAnyThread_Enclave) will run serially on the same thread.
-    virtual int enclave() const = 0;
-
-    // File extension for the content draw() outputs, e.g. "png", "pdf".
-    virtual const char* fileExtension() const  = 0;
-};
-
-enum { kAnyThread_Enclave, kGPU_Enclave };
-static const int kNumEnclaves = kGPU_Enclave + 1;
-
->>>>>>> miniblink49
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 class GMSrc : public Src {
@@ -181,7 +129,6 @@ private:
 class CodecSrc : public Src {
 public:
     enum Mode {
-<<<<<<< HEAD
         kCodec_Mode,
         // We choose to test only one mode with zero initialized memory.
         // This will exercise all of the interesting cases in SkSwizzler
@@ -191,30 +138,18 @@ public:
         kStripe_Mode, // Tests the skipping of scanlines
         kCroppedScanline_Mode, // Tests (jpeg) cropped scanline optimization
         kSubset_Mode, // For codecs that support subsets directly.
-=======
-        kNormal_Mode,
-        kScanline_Mode,
-        kScanline_Subset_Mode,
-        kStripe_Mode, // Tests the skipping of scanlines
->>>>>>> miniblink49
     };
     enum DstColorType {
         kGetFromCanvas_DstColorType,
         kIndex8_Always_DstColorType,
         kGrayscale_Always_DstColorType,
-<<<<<<< HEAD
         kNonNative8888_Always_DstColorType,
     };
     CodecSrc(Path, Mode, DstColorType, SkAlphaType, float);
-=======
-    };
-    CodecSrc(Path, Mode, DstColorType, float);
->>>>>>> miniblink49
 
     Error draw(SkCanvas*) const override;
     SkISize size() const override;
     Name name() const override;
-<<<<<<< HEAD
     bool veto(SinkFlags) const override;
     bool serial() const override { return fRunSerially; }
 
@@ -230,26 +165,10 @@ private:
 class AndroidCodecSrc : public Src {
 public:
     AndroidCodecSrc(Path, CodecSrc::DstColorType, SkAlphaType, int sampleSize);
-=======
-private:
-    Path                   fPath;
-    Mode                   fMode;
-    DstColorType           fDstColorType;
-    float                  fScale;
-};
-
-
-class ImageSrc : public Src {
-public:
-    // divisor == 0 means decode the whole image
-    // divisor > 0 means decode in subsets, dividing into a divisor x divisor grid.
-    explicit ImageSrc(Path path, int divisor = 0);
->>>>>>> miniblink49
 
     Error draw(SkCanvas*) const override;
     SkISize size() const override;
     Name name() const override;
-<<<<<<< HEAD
     bool veto(SinkFlags) const override;
     bool serial() const override { return fRunSerially; }
 
@@ -340,11 +259,6 @@ public:
 private:
     Path fPath;
     Mode fMode;
-=======
-private:
-    Path fPath;
-    const int  fDivisor;
->>>>>>> miniblink49
 };
 
 class SKPSrc : public Src {
@@ -354,17 +268,13 @@ public:
     Error draw(SkCanvas*) const override;
     SkISize size() const override;
     Name name() const override;
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 private:
     Path fPath;
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-<<<<<<< HEAD
 class MSKPSrc : public Src {
 public:
     explicit MSKPSrc(Path path);
@@ -412,36 +322,10 @@ private:
     SkColorType fColorType;
     sk_sp<SkColorSpace> fColorSpace;
     bool fThreaded;
-=======
-class NullSink : public Sink {
-public:
-    NullSink() {}
-
-    Error draw(const Src& src, SkBitmap*, SkWStream*, SkString*) const override;
-    int enclave() const override { return kAnyThread_Enclave; }
-    const char* fileExtension() const override { return ""; }
-};
-
-
-class GPUSink : public Sink {
-public:
-    GPUSink(GrContextFactory::GLContextType, GrGLStandard, int samples, bool dfText, bool threaded);
-
-    Error draw(const Src&, SkBitmap*, SkWStream*, SkString*) const override;
-    int enclave() const override;
-    const char* fileExtension() const override { return "png"; }
-private:
-    GrContextFactory::GLContextType fContextType;
-    GrGLStandard                    fGpuAPI;
-    int                             fSampleCount;
-    bool                            fUseDFText;
-    bool                            fThreaded;
->>>>>>> miniblink49
 };
 
 class PDFSink : public Sink {
 public:
-<<<<<<< HEAD
     PDFSink(bool pdfa = false)
         : fPDFA(pdfa)
     {
@@ -450,13 +334,6 @@ public:
     const char* fileExtension() const override { return "pdf"; }
     SinkFlags flags() const override { return SinkFlags { SinkFlags::kVector, SinkFlags::kDirect }; }
     bool fPDFA;
-=======
-    PDFSink();
-
-    Error draw(const Src&, SkBitmap*, SkWStream*, SkString*) const override;
-    int enclave() const override { return kAnyThread_Enclave; }
-    const char* fileExtension() const override { return "pdf"; }
->>>>>>> miniblink49
 };
 
 class XPSSink : public Sink {
@@ -464,18 +341,12 @@ public:
     XPSSink();
 
     Error draw(const Src&, SkBitmap*, SkWStream*, SkString*) const override;
-<<<<<<< HEAD
     const char* fileExtension() const override { return "xps"; }
     SinkFlags flags() const override { return SinkFlags { SinkFlags::kVector, SinkFlags::kDirect }; }
-=======
-    int enclave() const override { return kAnyThread_Enclave; }
-    const char* fileExtension() const override { return "xps"; }
->>>>>>> miniblink49
 };
 
 class RasterSink : public Sink {
 public:
-<<<<<<< HEAD
     explicit RasterSink(SkColorType, sk_sp<SkColorSpace> = nullptr);
 
     Error draw(const Src&, SkBitmap*, SkWStream*, SkString*) const override;
@@ -485,15 +356,6 @@ public:
 private:
     SkColorType fColorType;
     sk_sp<SkColorSpace> fColorSpace;
-=======
-    explicit RasterSink(SkColorType);
-
-    Error draw(const Src&, SkBitmap*, SkWStream*, SkString*) const override;
-    int enclave() const override { return kAnyThread_Enclave; }
-    const char* fileExtension() const override { return "png"; }
-private:
-    SkColorType    fColorType;
->>>>>>> miniblink49
 };
 
 class SKPSink : public Sink {
@@ -501,13 +363,8 @@ public:
     SKPSink();
 
     Error draw(const Src&, SkBitmap*, SkWStream*, SkString*) const override;
-<<<<<<< HEAD
     const char* fileExtension() const override { return "skp"; }
     SinkFlags flags() const override { return SinkFlags { SinkFlags::kVector, SinkFlags::kDirect }; }
-=======
-    int enclave() const override { return kAnyThread_Enclave; }
-    const char* fileExtension() const override { return "skp"; }
->>>>>>> miniblink49
 };
 
 class SVGSink : public Sink {
@@ -515,23 +372,14 @@ public:
     SVGSink();
 
     Error draw(const Src&, SkBitmap*, SkWStream*, SkString*) const override;
-<<<<<<< HEAD
     const char* fileExtension() const override { return "svg"; }
     SinkFlags flags() const override { return SinkFlags { SinkFlags::kVector, SinkFlags::kDirect }; }
 };
 
-=======
-    int enclave() const override { return kAnyThread_Enclave; }
-    const char* fileExtension() const override { return "svg"; }
-};
-
-
->>>>>>> miniblink49
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 class Via : public Sink {
 public:
-<<<<<<< HEAD
     explicit Via(Sink* sink)
         : fSink(sink)
     {
@@ -545,11 +393,6 @@ public:
         return flags;
     }
 
-=======
-    explicit Via(Sink* sink) : fSink(sink) {}
-    const char* fileExtension() const override { return fSink->fileExtension(); }
-    int               enclave() const override { return fSink->enclave(); }
->>>>>>> miniblink49
 protected:
     SkAutoTDelete<Sink> fSink;
 };
@@ -558,10 +401,7 @@ class ViaMatrix : public Via {
 public:
     ViaMatrix(SkMatrix, Sink*);
     Error draw(const Src&, SkBitmap*, SkWStream*, SkString*) const override;
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 private:
     const SkMatrix fMatrix;
 };
@@ -570,15 +410,11 @@ class ViaUpright : public Via {
 public:
     ViaUpright(SkMatrix, Sink*);
     Error draw(const Src&, SkBitmap*, SkWStream*, SkString*) const override;
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 private:
     const SkMatrix fMatrix;
 };
 
-<<<<<<< HEAD
 class ViaSerialization : public Via {
 public:
     explicit ViaSerialization(Sink* sink)
@@ -594,23 +430,6 @@ public:
         : Via(sink)
     {
     }
-=======
-class ViaPipe : public Via {
-public:
-    explicit ViaPipe(Sink* sink) : Via(sink) {}
-    Error draw(const Src&, SkBitmap*, SkWStream*, SkString*) const override;
-};
-
-class ViaDeferred : public Via {
-public:
-    explicit ViaDeferred(Sink* sink) : Via(sink) {}
-    Error draw(const Src&, SkBitmap*, SkWStream*, SkString*) const override;
-};
-
-class ViaSerialization : public Via {
-public:
-    explicit ViaSerialization(Sink* sink) : Via(sink) {}
->>>>>>> miniblink49
     Error draw(const Src&, SkBitmap*, SkWStream*, SkString*) const override;
 };
 
@@ -618,46 +437,32 @@ class ViaTiles : public Via {
 public:
     ViaTiles(int w, int h, SkBBHFactory*, Sink*);
     Error draw(const Src&, SkBitmap*, SkWStream*, SkString*) const override;
-<<<<<<< HEAD
 
 private:
     const int fW, fH;
-=======
-private:
-    const int                   fW, fH;
->>>>>>> miniblink49
     SkAutoTDelete<SkBBHFactory> fFactory;
 };
 
 class ViaSecondPicture : public Via {
 public:
-<<<<<<< HEAD
     explicit ViaSecondPicture(Sink* sink)
         : Via(sink)
     {
     }
-=======
-    explicit ViaSecondPicture(Sink* sink) : Via(sink) {}
->>>>>>> miniblink49
     Error draw(const Src&, SkBitmap*, SkWStream*, SkString*) const override;
 };
 
 class ViaSingletonPictures : public Via {
 public:
-<<<<<<< HEAD
     explicit ViaSingletonPictures(Sink* sink)
         : Via(sink)
     {
     }
-=======
-    explicit ViaSingletonPictures(Sink* sink) : Via(sink) {}
->>>>>>> miniblink49
     Error draw(const Src&, SkBitmap*, SkWStream*, SkString*) const override;
 };
 
 class ViaTwice : public Via {
 public:
-<<<<<<< HEAD
     explicit ViaTwice(Sink* sink)
         : Via(sink)
     {
@@ -677,12 +482,3 @@ public:
 } // namespace DM
 
 #endif //DMSrcSink_DEFINED
-=======
-    explicit ViaTwice(Sink* sink) : Via(sink) {}
-    Error draw(const Src&, SkBitmap*, SkWStream*, SkString*) const override;
-};
-
-}  // namespace DM
-
-#endif//DMSrcSink_DEFINED
->>>>>>> miniblink49

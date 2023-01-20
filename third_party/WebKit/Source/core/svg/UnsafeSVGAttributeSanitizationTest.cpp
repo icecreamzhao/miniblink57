@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 // FIXME(dominicc): Poor confused check-webkit-style demands Attribute.h here.
 #include "core/dom/Attribute.h"
 
@@ -24,10 +23,11 @@
 #include "core/testing/DummyPageHolder.h"
 #include "platform/geometry/IntSize.h"
 #include "platform/weborigin/KURL.h"
+#include "testing/gtest/include/gtest/gtest.h"
 #include "wtf/Vector.h"
 #include "wtf/text/AtomicString.h"
 #include "wtf/text/WTFString.h"
-#include <gtest/gtest.h>
+#include <memory>
 
 // Test that SVG content with JavaScript URLs is sanitized by removing
 // the URLs. This sanitization happens when the content is pasted or
@@ -35,7 +35,7 @@
 //
 // There are two vectors for JavaScript URLs in SVG content:
 //
-// 1. Attributes, for example xlink:href in an <svg:a> element.
+// 1. Attributes, for example xlink:href/href in an <svg:a> element.
 // 2. Animations which set those attributes, for example
 //    <animate attributeName="xlink:href" values="javascript:...
 //
@@ -50,8 +50,7 @@ namespace blink {
 
 // Pastes htmlToPaste into the body of pageHolder's document, and
 // returns the new content of the body.
-String contentAfterPastingHTML(
-    DummyPageHolder* pageHolder,
+String contentAfterPastingHTML(DummyPageHolder* pageHolder,
     const char* htmlToPaste)
 {
     LocalFrame& frame = pageHolder->frame();
@@ -59,10 +58,12 @@ String contentAfterPastingHTML(
 
     // Make the body editable, and put the caret in it.
     body->setAttribute(HTMLNames::contenteditableAttr, "true");
-    frame.selection().setSelection(VisibleSelection::selectionFromContentsOfNode(body));
-    EXPECT_EQ(CaretSelection, frame.selection().selectionType());
-    EXPECT_TRUE(frame.selection().isContentEditable()) <<
-        "We should be pasting into something editable.";
+    frame.document()->updateStyleAndLayout();
+    frame.selection().setSelection(
+        SelectionInDOMTree::Builder().selectAllChildren(*body).build());
+    EXPECT_EQ(CaretSelection, frame.selection().getSelectionType());
+    EXPECT_TRUE(frame.selection().isContentEditable())
+        << "We should be pasting into something editable.";
 
     Pasteboard* pasteboard = Pasteboard::generalPasteboard();
     pasteboard->writeHTML(htmlToPaste, blankURL(), "", false);
@@ -73,73 +74,121 @@ String contentAfterPastingHTML(
 
 // Integration tests.
 
-TEST(
-    UnsafeSVGAttributeSanitizationTest,
-    pasteAnchor_javaScriptHrefIsStripped)
+TEST(UnsafeSVGAttributeSanitizationTest, pasteAnchor_javaScriptHrefIsStripped)
 {
-    OwnPtr<DummyPageHolder> pageHolder = DummyPageHolder::create(IntSize(1, 1));
-    static const char unsafeContent[] =
-        "<svg xmlns='http://www.w3.org/2000/svg' "
-        "     xmlns:xlink='http://www.w3.org/1999/xlink'"
-        "     width='1cm' height='1cm'>"
-        "  <a xlink:href='javascript:alert()'></a>"
-        "</svg>";
-    String sanitizedContent =
-        contentAfterPastingHTML(pageHolder.get(), unsafeContent);
+    std::unique_ptr<DummyPageHolder> pageHolder = DummyPageHolder::create(IntSize(1, 1));
+    static const char unsafeContent[] = "<svg xmlns='http://www.w3.org/2000/svg' "
+                                        "     width='1cm' height='1cm'>"
+                                        "  <a href='javascript:alert()'></a>"
+                                        "</svg>";
+    String sanitizedContent = contentAfterPastingHTML(pageHolder.get(), unsafeContent);
 
-    EXPECT_TRUE(sanitizedContent.contains("</a>")) <<
-        "We should have pasted *something*; the document is: " <<
-        sanitizedContent.utf8().data();
-    EXPECT_FALSE(sanitizedContent.contains(":alert()")) <<
-        "The JavaScript URL is unsafe and should have been stripped; "
-        "instead: " <<
-        sanitizedContent.utf8().data();
+    EXPECT_TRUE(sanitizedContent.contains("</a>"))
+        << "We should have pasted *something*; the document is: "
+        << sanitizedContent.utf8().data();
+    EXPECT_FALSE(sanitizedContent.contains(":alert()"))
+        << "The JavaScript URL is unsafe and should have been stripped; "
+           "instead: "
+        << sanitizedContent.utf8().data();
 }
 
-TEST(
-    UnsafeSVGAttributeSanitizationTest,
+TEST(UnsafeSVGAttributeSanitizationTest,
+    pasteAnchor_javaScriptXlinkHrefIsStripped)
+{
+    std::unique_ptr<DummyPageHolder> pageHolder = DummyPageHolder::create(IntSize(1, 1));
+    static const char unsafeContent[] = "<svg xmlns='http://www.w3.org/2000/svg' "
+                                        "     xmlns:xlink='http://www.w3.org/1999/xlink'"
+                                        "     width='1cm' height='1cm'>"
+                                        "  <a xlink:href='javascript:alert()'></a>"
+                                        "</svg>";
+    String sanitizedContent = contentAfterPastingHTML(pageHolder.get(), unsafeContent);
+
+    EXPECT_TRUE(sanitizedContent.contains("</a>"))
+        << "We should have pasted *something*; the document is: "
+        << sanitizedContent.utf8().data();
+    EXPECT_FALSE(sanitizedContent.contains(":alert()"))
+        << "The JavaScript URL is unsafe and should have been stripped; "
+           "instead: "
+        << sanitizedContent.utf8().data();
+}
+
+TEST(UnsafeSVGAttributeSanitizationTest,
     pasteAnchor_javaScriptHrefIsStripped_caseAndEntityInProtocol)
 {
-    OwnPtr<DummyPageHolder> pageHolder = DummyPageHolder::create(IntSize(1, 1));
-    static const char unsafeContent[] =
-        "<svg xmlns='http://www.w3.org/2000/svg' "
-        "     xmlns:xlink='http://www.w3.org/1999/xlink'"
-        "     width='1cm' height='1cm'>"
-        "  <a xlink:href='j&#x41;vascriPT:alert()'></a>"
-        "</svg>";
-    String sanitizedContent =
-        contentAfterPastingHTML(pageHolder.get(), unsafeContent);
+    std::unique_ptr<DummyPageHolder> pageHolder = DummyPageHolder::create(IntSize(1, 1));
+    static const char unsafeContent[] = "<svg xmlns='http://www.w3.org/2000/svg' "
+                                        "     width='1cm' height='1cm'>"
+                                        "  <a href='j&#x41;vascriPT:alert()'></a>"
+                                        "</svg>";
+    String sanitizedContent = contentAfterPastingHTML(pageHolder.get(), unsafeContent);
 
-    EXPECT_TRUE(sanitizedContent.contains("</a>")) <<
-        "We should have pasted *something*; the document is: " <<
-        sanitizedContent.utf8().data();
-    EXPECT_FALSE(sanitizedContent.contains(":alert()")) <<
-        "The JavaScript URL is unsafe and should have been stripped; "
-        "instead: " <<
-        sanitizedContent.utf8().data();
+    EXPECT_TRUE(sanitizedContent.contains("</a>"))
+        << "We should have pasted *something*; the document is: "
+        << sanitizedContent.utf8().data();
+    EXPECT_FALSE(sanitizedContent.contains(":alert()"))
+        << "The JavaScript URL is unsafe and should have been stripped; "
+           "instead: "
+        << sanitizedContent.utf8().data();
+}
+
+TEST(UnsafeSVGAttributeSanitizationTest,
+    pasteAnchor_javaScriptXlinkHrefIsStripped_caseAndEntityInProtocol)
+{
+    std::unique_ptr<DummyPageHolder> pageHolder = DummyPageHolder::create(IntSize(1, 1));
+    static const char unsafeContent[] = "<svg xmlns='http://www.w3.org/2000/svg' "
+                                        "     xmlns:xlink='http://www.w3.org/1999/xlink'"
+                                        "     width='1cm' height='1cm'>"
+                                        "  <a xlink:href='j&#x41;vascriPT:alert()'></a>"
+                                        "</svg>";
+    String sanitizedContent = contentAfterPastingHTML(pageHolder.get(), unsafeContent);
+
+    EXPECT_TRUE(sanitizedContent.contains("</a>"))
+        << "We should have pasted *something*; the document is: "
+        << sanitizedContent.utf8().data();
+    EXPECT_FALSE(sanitizedContent.contains(":alert()"))
+        << "The JavaScript URL is unsafe and should have been stripped; "
+           "instead: "
+        << sanitizedContent.utf8().data();
+}
+
+TEST(UnsafeSVGAttributeSanitizationTest,
+    pasteAnchor_javaScriptHrefIsStripped_entityWithoutSemicolonInProtocol)
+{
+    std::unique_ptr<DummyPageHolder> pageHolder = DummyPageHolder::create(IntSize(1, 1));
+    static const char unsafeContent[] = "<svg xmlns='http://www.w3.org/2000/svg' "
+                                        "     width='1cm' height='1cm'>"
+                                        "  <a href='jav&#x61script:alert()'></a>"
+                                        "</svg>";
+    String sanitizedContent = contentAfterPastingHTML(pageHolder.get(), unsafeContent);
+
+    EXPECT_TRUE(sanitizedContent.contains("</a>"))
+        << "We should have pasted *something*; the document is: "
+        << sanitizedContent.utf8().data();
+    EXPECT_FALSE(sanitizedContent.contains(":alert()"))
+        << "The JavaScript URL is unsafe and should have been stripped; "
+           "instead: "
+        << sanitizedContent.utf8().data();
 }
 
 TEST(
     UnsafeSVGAttributeSanitizationTest,
-    pasteAnchor_javaScriptHrefIsStripped_entityWithoutSemicolonInProtocol)
+    pasteAnchor_javaScriptXlinkHrefIsStripped_entityWithoutSemicolonInProtocol)
 {
-    OwnPtr<DummyPageHolder> pageHolder = DummyPageHolder::create(IntSize(1, 1));
-    static const char unsafeContent[] =
-        "<svg xmlns='http://www.w3.org/2000/svg' "
-        "     xmlns:xlink='http://www.w3.org/1999/xlink'"
-        "     width='1cm' height='1cm'>"
-        "  <a xlink:href='jav&#x61script:alert()'></a>"
-        "</svg>";
-    String sanitizedContent =
-        contentAfterPastingHTML(pageHolder.get(), unsafeContent);
+    std::unique_ptr<DummyPageHolder> pageHolder = DummyPageHolder::create(IntSize(1, 1));
+    static const char unsafeContent[] = "<svg xmlns='http://www.w3.org/2000/svg' "
+                                        "     xmlns:xlink='http://www.w3.org/1999/xlink'"
+                                        "     width='1cm' height='1cm'>"
+                                        "  <a xlink:href='jav&#x61script:alert()'></a>"
+                                        "</svg>";
+    String sanitizedContent = contentAfterPastingHTML(pageHolder.get(), unsafeContent);
 
-    EXPECT_TRUE(sanitizedContent.contains("</a>")) <<
-        "We should have pasted *something*; the document is: " <<
-        sanitizedContent.utf8().data();
-    EXPECT_FALSE(sanitizedContent.contains(":alert()")) <<
-        "The JavaScript URL is unsafe and should have been stripped; "
-        "instead: " <<
-        sanitizedContent.utf8().data();
+    EXPECT_TRUE(sanitizedContent.contains("</a>"))
+        << "We should have pasted *something*; the document is: "
+        << sanitizedContent.utf8().data();
+    EXPECT_FALSE(sanitizedContent.contains(":alert()"))
+        << "The JavaScript URL is unsafe and should have been stripped; "
+           "instead: "
+        << sanitizedContent.utf8().data();
 }
 
 // Other sanitization integration tests are layout tests that use
@@ -147,30 +196,50 @@ TEST(
 // paste. However SVG animation elements are not serialized when
 // copying, which means we can't test sanitizing these attributes in
 // layout tests: there is nowhere to source the unsafe content from.
-TEST(
-    UnsafeSVGAttributeSanitizationTest,
+TEST(UnsafeSVGAttributeSanitizationTest,
     pasteAnimatedAnchor_javaScriptHrefIsStripped_caseAndEntityInProtocol)
 {
-    OwnPtr<DummyPageHolder> pageHolder = DummyPageHolder::create(IntSize(1, 1));
-    static const char unsafeContent[] =
-        "<svg xmlns='http://www.w3.org/2000/svg' "
-        "     xmlns:xlink='http://www.w3.org/1999/xlink'"
-        "     width='1cm' height='1cm'>"
-        "  <a xlink:href='https://www.google.com/'>"
-        "    <animate xmlns:ng='http://www.w3.org/1999/xlink' "
-        "             attributeName='ng:href' values='evil;J&#x61VaSCRIpT:alert()'>"
-        "  </a>"
-        "</svg>";
-    String sanitizedContent =
-        contentAfterPastingHTML(pageHolder.get(), unsafeContent);
+    std::unique_ptr<DummyPageHolder> pageHolder = DummyPageHolder::create(IntSize(1, 1));
+    static const char unsafeContent[] = "<svg xmlns='http://www.w3.org/2000/svg' "
+                                        "     width='1cm' height='1cm'>"
+                                        "  <a href='https://www.google.com/'>"
+                                        "    <animate attributeName='href' values='evil;J&#x61VaSCRIpT:alert()'>"
+                                        "  </a>"
+                                        "</svg>";
+    String sanitizedContent = contentAfterPastingHTML(pageHolder.get(), unsafeContent);
 
-    EXPECT_TRUE(sanitizedContent.contains("<a xlink:href=\"https://www.goo")) <<
-        "We should have pasted *something*; the document is: " <<
-        sanitizedContent.utf8().data();
-    EXPECT_FALSE(sanitizedContent.contains(":alert()")) <<
-        "The JavaScript URL is unsafe and should have been stripped; "
-        "instead: " <<
-        sanitizedContent.utf8().data();
+    EXPECT_TRUE(sanitizedContent.contains("<a href=\"https://www.goo"))
+        << "We should have pasted *something*; the document is: "
+        << sanitizedContent.utf8().data();
+    EXPECT_FALSE(sanitizedContent.contains(":alert()"))
+        << "The JavaScript URL is unsafe and should have been stripped; "
+           "instead: "
+        << sanitizedContent.utf8().data();
+}
+
+TEST(
+    UnsafeSVGAttributeSanitizationTest,
+    pasteAnimatedAnchor_javaScriptXlinkHrefIsStripped_caseAndEntityInProtocol)
+{
+    std::unique_ptr<DummyPageHolder> pageHolder = DummyPageHolder::create(IntSize(1, 1));
+    static const char unsafeContent[] = "<svg xmlns='http://www.w3.org/2000/svg' "
+                                        "     xmlns:xlink='http://www.w3.org/1999/xlink'"
+                                        "     width='1cm' height='1cm'>"
+                                        "  <a xlink:href='https://www.google.com/'>"
+                                        "    <animate xmlns:ng='http://www.w3.org/1999/xlink' "
+                                        "             attributeName='ng:href' "
+                                        "values='evil;J&#x61VaSCRIpT:alert()'>"
+                                        "  </a>"
+                                        "</svg>";
+    String sanitizedContent = contentAfterPastingHTML(pageHolder.get(), unsafeContent);
+
+    EXPECT_TRUE(sanitizedContent.contains("<a xlink:href=\"https://www.goo"))
+        << "We should have pasted *something*; the document is: "
+        << sanitizedContent.utf8().data();
+    EXPECT_FALSE(sanitizedContent.contains(":alert()"))
+        << "The JavaScript URL is unsafe and should have been stripped; "
+           "instead: "
+        << sanitizedContent.utf8().data();
 }
 
 // Unit tests
@@ -182,93 +251,110 @@ TEST(
 // SVG animation attributes.
 TEST(UnsafeSVGAttributeSanitizationTest, stringsShouldNotSupportAddition)
 {
-    RefPtrWillBeRawPtr<Document> document = Document::create();
-    RefPtrWillBeRawPtr<SVGElement> target = SVGAElement::create(*document);
-    RefPtrWillBeRawPtr<SVGAnimateElement> element = SVGAnimateElement::create(*document);
-    element->setTargetElement(target.get());
+    Document* document = Document::create();
+    SVGElement* target = SVGAElement::create(*document);
+    SVGAnimateElement* element = SVGAnimateElement::create(*document);
+    element->setTargetElement(target);
     element->setAttributeName(XLinkNames::hrefAttr);
 
     // Sanity check that xlink:href was identified as a "string" attribute
     EXPECT_EQ(AnimatedString, element->animatedPropertyType());
 
     EXPECT_FALSE(element->animatedPropertyTypeSupportsAddition());
+
+    element->setAttributeName(SVGNames::hrefAttr);
+
+    // Sanity check that href was identified as a "string" attribute
+    EXPECT_EQ(AnimatedString, element->animatedPropertyType());
+
+    EXPECT_FALSE(element->animatedPropertyTypeSupportsAddition());
 }
 
-TEST(
-    UnsafeSVGAttributeSanitizationTest,
+TEST(UnsafeSVGAttributeSanitizationTest,
     stripScriptingAttributes_animateElement)
 {
     Vector<Attribute> attributes;
-    attributes.append(Attribute(XLinkNames::hrefAttr, "javascript:alert()"));
-    attributes.append(Attribute(SVGNames::fromAttr, "/home"));
-    attributes.append(Attribute(SVGNames::toAttr, "javascript:own3d()"));
+    attributes.push_back(Attribute(XLinkNames::hrefAttr, "javascript:alert()"));
+    attributes.push_back(Attribute(SVGNames::hrefAttr, "javascript:alert()"));
+    attributes.push_back(Attribute(SVGNames::fromAttr, "/home"));
+    attributes.push_back(Attribute(SVGNames::toAttr, "javascript:own3d()"));
 
-    RefPtrWillBeRawPtr<Document> document = Document::create();
-    RefPtrWillBeRawPtr<Element> element = SVGAnimateElement::create(*document);
+    Document* document = Document::create();
+    Element* element = SVGAnimateElement::create(*document);
     element->stripScriptingAttributes(attributes);
 
-    EXPECT_EQ(2ul, attributes.size()) <<
-        "One of the attributes should have been stripped.";
-    EXPECT_EQ(XLinkNames::hrefAttr, attributes[0].name()) <<
-        "The 'xlink:href' attribute should not have been stripped from "
-        "<animate> because it is not a URL attribute of <animate>.";
-    EXPECT_EQ(SVGNames::fromAttr, attributes[1].name()) <<
-        "The 'from' attribute should not have been strippef from <animate> "
-        "because its value is innocuous.";
+    EXPECT_EQ(3ul, attributes.size())
+        << "One of the attributes should have been stripped.";
+    EXPECT_EQ(XLinkNames::hrefAttr, attributes[0].name())
+        << "The 'xlink:href' attribute should not have been stripped from "
+           "<animate> because it is not a URL attribute of <animate>.";
+    EXPECT_EQ(SVGNames::hrefAttr, attributes[1].name())
+        << "The 'href' attribute should not have been stripped from "
+           "<animate> because it is not a URL attribute of <animate>.";
+    EXPECT_EQ(SVGNames::fromAttr, attributes[2].name())
+        << "The 'from' attribute should not have been strippef from <animate> "
+           "because its value is innocuous.";
 }
 
-TEST(
-    UnsafeSVGAttributeSanitizationTest,
+TEST(UnsafeSVGAttributeSanitizationTest,
+    isJavaScriptURLAttribute_hrefContainingJavascriptURL)
+{
+    Attribute attribute(SVGNames::hrefAttr, "javascript:alert()");
+    Document* document = Document::create();
+    Element* element = SVGAElement::create(*document);
+    EXPECT_TRUE(element->isJavaScriptURLAttribute(attribute))
+        << "The 'a' element should identify an 'href' attribute with a "
+           "JavaScript URL value as a JavaScript URL attribute";
+}
+
+TEST(UnsafeSVGAttributeSanitizationTest,
     isJavaScriptURLAttribute_xlinkHrefContainingJavascriptURL)
 {
     Attribute attribute(XLinkNames::hrefAttr, "javascript:alert()");
-    RefPtrWillBeRawPtr<Document> document = Document::create();
-    RefPtrWillBeRawPtr<Element> element = SVGAElement::create(*document);
-    EXPECT_TRUE(
-        element->isJavaScriptURLAttribute(attribute)) <<
-        "The 'a' element should identify an 'xlink:href' attribute with a "
-        "JavaScript URL value as a JavaScript URL attribute";
+    Document* document = Document::create();
+    Element* element = SVGAElement::create(*document);
+    EXPECT_TRUE(element->isJavaScriptURLAttribute(attribute))
+        << "The 'a' element should identify an 'xlink:href' attribute with a "
+           "JavaScript URL value as a JavaScript URL attribute";
 }
 
 TEST(
     UnsafeSVGAttributeSanitizationTest,
     isJavaScriptURLAttribute_xlinkHrefContainingJavascriptURL_alternatePrefix)
 {
-    QualifiedName hrefAlternatePrefix(
-        "foo", "href", XLinkNames::xlinkNamespaceURI);
+    QualifiedName hrefAlternatePrefix("foo", "href",
+        XLinkNames::xlinkNamespaceURI);
     Attribute evilAttribute(hrefAlternatePrefix, "javascript:alert()");
-    RefPtrWillBeRawPtr<Document> document = Document::create();
-    RefPtrWillBeRawPtr<Element> element = SVGAElement::create(*document);
-    EXPECT_TRUE(element->isJavaScriptURLAttribute(evilAttribute)) <<
-        "The XLink 'href' attribute with a JavaScript URL value should be "
-        "identified as a JavaScript URL attribute, even if the attribute "
-        "doesn't use the typical 'xlink' prefix.";
+    Document* document = Document::create();
+    Element* element = SVGAElement::create(*document);
+    EXPECT_TRUE(element->isJavaScriptURLAttribute(evilAttribute))
+        << "The XLink 'href' attribute with a JavaScript URL value should be "
+           "identified as a JavaScript URL attribute, even if the attribute "
+           "doesn't use the typical 'xlink' prefix.";
 }
 
-TEST(
-    UnsafeSVGAttributeSanitizationTest,
+TEST(UnsafeSVGAttributeSanitizationTest,
     isSVGAnimationAttributeSettingJavaScriptURL_fromContainingJavaScriptURL)
 {
     Attribute evilAttribute(SVGNames::fromAttr, "javascript:alert()");
-    RefPtrWillBeRawPtr<Document> document = Document::create();
-    RefPtrWillBeRawPtr<Element> element = SVGAnimateElement::create(*document);
+    Document* document = Document::create();
+    Element* element = SVGAnimateElement::create(*document);
     EXPECT_TRUE(
-        element->isSVGAnimationAttributeSettingJavaScriptURL(evilAttribute)) <<
-        "The animate element should identify a 'from' attribute with a "
-        "JavaScript URL value as setting a JavaScript URL.";
+        element->isSVGAnimationAttributeSettingJavaScriptURL(evilAttribute))
+        << "The animate element should identify a 'from' attribute with a "
+           "JavaScript URL value as setting a JavaScript URL.";
 }
 
-TEST(
-    UnsafeSVGAttributeSanitizationTest,
+TEST(UnsafeSVGAttributeSanitizationTest,
     isSVGAnimationAttributeSettingJavaScriptURL_toContainingJavaScripURL)
 {
     Attribute evilAttribute(SVGNames::toAttr, "javascript:window.close()");
-    RefPtrWillBeRawPtr<Document> document = Document::create();
-    RefPtrWillBeRawPtr<Element> element = SVGSetElement::create(*document);
+    Document* document = Document::create();
+    Element* element = SVGSetElement::create(*document);
     EXPECT_TRUE(
-        element->isSVGAnimationAttributeSettingJavaScriptURL(evilAttribute)) <<
-        "The set element should identify a 'to' attribute with a JavaScript "
-        "URL value as setting a JavaScript URL.";
+        element->isSVGAnimationAttributeSettingJavaScriptURL(evilAttribute))
+        << "The set element should identify a 'to' attribute with a JavaScript "
+           "URL value as setting a JavaScript URL.";
 }
 
 TEST(
@@ -276,26 +362,25 @@ TEST(
     isSVGAnimationAttributeSettingJavaScriptURL_valuesContainingJavaScriptURL)
 {
     Attribute evilAttribute(SVGNames::valuesAttr, "hi!; javascript:confirm()");
-    RefPtrWillBeRawPtr<Document> document = Document::create();
-    RefPtrWillBeRawPtr<Element> element = SVGAnimateElement::create(*document);
+    Document* document = Document::create();
+    Element* element = SVGAnimateElement::create(*document);
     element = SVGAnimateElement::create(*document);
     EXPECT_TRUE(
-        element->isSVGAnimationAttributeSettingJavaScriptURL(evilAttribute)) <<
-        "The animate element should identify a 'values' attribute with a "
-        "JavaScript URL value as setting a JavaScript URL.";
+        element->isSVGAnimationAttributeSettingJavaScriptURL(evilAttribute))
+        << "The animate element should identify a 'values' attribute with a "
+           "JavaScript URL value as setting a JavaScript URL.";
 }
 
-TEST(
-    UnsafeSVGAttributeSanitizationTest,
+TEST(UnsafeSVGAttributeSanitizationTest,
     isSVGAnimationAttributeSettingJavaScriptURL_innocuousAnimationAttribute)
 {
     Attribute fineAttribute(SVGNames::fromAttr, "hello, world!");
-    RefPtrWillBeRawPtr<Document> document = Document::create();
-    RefPtrWillBeRawPtr<Element> element = SVGSetElement::create(*document);
+    Document* document = Document::create();
+    Element* element = SVGSetElement::create(*document);
     EXPECT_FALSE(
-        element->isSVGAnimationAttributeSettingJavaScriptURL(fineAttribute)) <<
-        "The animate element should not identify a 'from' attribute with an "
-        "innocuous value as setting a JavaScript URL.";
+        element->isSVGAnimationAttributeSettingJavaScriptURL(fineAttribute))
+        << "The animate element should not identify a 'from' attribute with an "
+           "innocuous value as setting a JavaScript URL.";
 }
 
 } // namespace blink

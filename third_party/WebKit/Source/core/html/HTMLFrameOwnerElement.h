@@ -27,46 +27,45 @@
 #include "core/html/HTMLElement.h"
 #include "platform/heap/Handle.h"
 #include "platform/scroll/ScrollTypes.h"
+#include "platform/weborigin/SecurityPolicy.h"
 #include "wtf/HashCountedSet.h"
 
 namespace blink {
 
-class LocalDOMWindow;
 class ExceptionState;
 class Frame;
 class LayoutPart;
 class Widget;
 
-class CORE_EXPORT HTMLFrameOwnerElement : public HTMLElement, public FrameOwner {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(HTMLFrameOwnerElement);
+class CORE_EXPORT HTMLFrameOwnerElement : public HTMLElement,
+                                          public FrameOwner {
+    USING_GARBAGE_COLLECTED_MIXIN(HTMLFrameOwnerElement);
+
 public:
     ~HTMLFrameOwnerElement() override;
 
-    Frame* contentFrame() const { return m_contentFrame; }
     DOMWindow* contentWindow() const;
     Document* contentDocument() const;
 
-    void setContentFrame(Frame&);
-    void clearContentFrame();
-
     virtual void disconnectContentFrame();
 
-    // Most subclasses use LayoutPart (either LayoutEmbeddedObject or LayoutIFrame)
-    // except for HTMLObjectElement and HTMLEmbedElement which may return any
-    // LayoutObject when using fallback content.
+    // Most subclasses use LayoutPart (either LayoutEmbeddedObject or
+    // LayoutIFrame) except for HTMLObjectElement and HTMLEmbedElement which may
+    // return any LayoutObject when using fallback content.
     LayoutPart* layoutPart() const;
 
     Document* getSVGDocument(ExceptionState&) const;
 
-    virtual ScrollbarMode scrollingMode() const { return ScrollbarAuto; }
-
     virtual bool loadedNonEmptyDocument() const { return false; }
     virtual void didLoadNonEmptyDocument() { }
 
-    void setWidget(PassRefPtrWillBeRawPtr<Widget>);
+    void setWidget(Widget*);
+    Widget* releaseWidget();
     Widget* ownedWidget() const;
 
     class UpdateSuspendScope {
+        STACK_ALLOCATED();
+
     public:
         UpdateSuspendScope();
         ~UpdateSuspendScope();
@@ -76,10 +75,24 @@ public:
     };
 
     // FrameOwner overrides:
-    bool isLocal() const override { return true; }
-    void dispatchLoad() override;
-    SandboxFlags sandboxFlags() const override { return m_sandboxFlags; }
+    Frame* contentFrame() const final { return m_contentFrame; }
+    void setContentFrame(Frame&) final;
+    void clearContentFrame() final;
+    void dispatchLoad() final;
+    SandboxFlags getSandboxFlags() const final { return m_sandboxFlags; }
+    bool canRenderFallbackContent() const override { return false; }
     void renderFallbackContent() override { }
+    AtomicString browsingContextContainerName() const override
+    {
+        return getAttribute(HTMLNames::nameAttr);
+    }
+    ScrollbarMode scrollingMode() const override { return ScrollbarAuto; }
+    int marginWidth() const override { return -1; }
+    int marginHeight() const override { return -1; }
+    bool allowFullscreen() const override { return false; }
+    bool allowPaymentRequest() const override { return false; }
+    AtomicString csp() const override { return nullAtom; }
+    const WebVector<WebPermissionType>& delegatedPermissions() const override;
 
     DECLARE_VIRTUAL_TRACE();
 
@@ -87,14 +100,28 @@ protected:
     HTMLFrameOwnerElement(const QualifiedName& tagName, Document&);
     void setSandboxFlags(SandboxFlags);
 
-    bool loadOrRedirectSubframe(const KURL&, const AtomicString& frameName, bool lockBackForwardList);
+    bool loadOrRedirectSubframe(const KURL&,
+        const AtomicString& frameName,
+        bool replaceCurrentItem);
+    bool isKeyboardFocusable() const override;
+
+    void disposeWidgetSoon(Widget*);
 
 private:
-    bool isKeyboardFocusable() const override;
+    // Intentionally private to prevent redundant checks when the type is
+    // already HTMLFrameOwnerElement.
+    bool isLocal() const final { return true; }
+    bool isRemote() const final { return false; }
+
     bool isFrameOwnerElement() const final { return true; }
 
-    RawPtrWillBeMember<Frame> m_contentFrame;
-    RefPtrWillBeMember<Widget> m_widget;
+    virtual ReferrerPolicy referrerPolicyAttribute()
+    {
+        return ReferrerPolicyDefault;
+    }
+
+    Member<Frame> m_contentFrame;
+    Member<Widget> m_widget;
     SandboxFlags m_sandboxFlags;
 };
 
@@ -102,22 +129,28 @@ DEFINE_ELEMENT_TYPE_CASTS(HTMLFrameOwnerElement, isFrameOwnerElement());
 
 class SubframeLoadingDisabler {
     STACK_ALLOCATED();
+
 public:
     explicit SubframeLoadingDisabler(Node& root)
+        : SubframeLoadingDisabler(&root)
+    {
+    }
+
+    explicit SubframeLoadingDisabler(Node* root)
         : m_root(root)
     {
-        disabledSubtreeRoots().add(m_root);
+        if (m_root)
+            disabledSubtreeRoots().add(m_root);
     }
 
     ~SubframeLoadingDisabler()
     {
-        disabledSubtreeRoots().remove(m_root);
+        if (m_root)
+            disabledSubtreeRoots().remove(m_root);
     }
 
     static bool canLoadFrame(HTMLFrameOwnerElement& owner)
     {
-        if (owner.document().unloadStarted())
-            return false;
         for (Node* node = &owner; node; node = node->parentOrShadowHostNode()) {
             if (disabledSubtreeRoots().contains(node))
                 return false;
@@ -126,12 +159,23 @@ public:
     }
 
 private:
-    static WillBeHeapHashCountedSet<RawPtrWillBeMember<Node>>& disabledSubtreeRoots();
+    // The use of UntracedMember<Node>  is safe as all SubtreeRootSet
+    // references are on the stack and reachable in case a conservative
+    // GC hits.
+    // TODO(sof): go back to HeapHashSet<> once crbug.com/684551 has been
+    // resolved.
+    using SubtreeRootSet = HashCountedSet<UntracedMember<Node>>;
 
-    RawPtrWillBeMember<Node> m_root;
+    CORE_EXPORT static SubtreeRootSet& disabledSubtreeRoots();
+
+    Member<Node> m_root;
 };
 
-DEFINE_TYPE_CASTS(HTMLFrameOwnerElement, FrameOwner, owner, owner->isLocal(), owner.isLocal());
+DEFINE_TYPE_CASTS(HTMLFrameOwnerElement,
+    FrameOwner,
+    owner,
+    owner->isLocal(),
+    owner.isLocal());
 
 } // namespace blink
 

@@ -40,21 +40,13 @@ class TextRun;
 struct GlyphData;
 
 struct PLATFORM_EXPORT SimpleShaper : public Shaper {
-<<<<<<< HEAD
-=======
-    WTF_MAKE_FAST_ALLOCATED(SimpleShaper);
->>>>>>> miniblink49
 public:
     SimpleShaper(const Font*, const TextRun&, const GlyphData* emphasisData = nullptr,
         HashSet<const SimpleFontData*>* fallbackFonts = nullptr, FloatRect* = nullptr);
 
-<<<<<<< HEAD
     // TODO(sk.kumar): This function should be updated to take an unsigned value, and callers
     // should be updated to not pass negative values. See: crbug.com/540047.
     unsigned advance(int to, GlyphBuffer* = 0);
-=======
-    unsigned advance(unsigned to, GlyphBuffer* = 0);
->>>>>>> miniblink49
     bool advanceOneCharacter(float& width);
 
     const TextRun& run() const { return m_textRun; }
@@ -66,10 +58,7 @@ private:
     float m_runWidthSoFar;
 
     struct CharacterData {
-<<<<<<< HEAD
         STACK_ALLOCATED();
-=======
->>>>>>> miniblink49
         UChar32 character;
         unsigned clusterLength;
         int characterOffset;

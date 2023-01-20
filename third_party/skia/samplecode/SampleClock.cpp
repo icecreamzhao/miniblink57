@@ -7,14 +7,9 @@
 #include "SampleCode.h"
 
 #include "SkCanvas.h"
-<<<<<<< HEAD
 #include "SkPath.h"
 #include "SkRRect.h"
 #include "SkRandom.h"
-=======
-#include "SkRandom.h"
-#include "SkRRect.h"
->>>>>>> miniblink49
 #include "SkTime.h"
 
 // Implementation in C++ of Mozilla Canvas2D benchmark Canvas Clock Test
@@ -24,20 +19,12 @@
 
 class ClockView : public SampleView {
 public:
-<<<<<<< HEAD
     ClockView() { }
 
 protected:
     // overrides from SkEventSink
     bool onQuery(SkEvent* evt) override
     {
-=======
-    ClockView() {}
-
-protected:
-    // overrides from SkEventSink
-    bool onQuery(SkEvent* evt) override {
->>>>>>> miniblink49
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "Clock");
             return true;
@@ -45,27 +32,16 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-<<<<<<< HEAD
     void onDrawContent(SkCanvas* canvas) override
     {
         SkPaint paintFill;
         SkPaint paintStroke;
         SkPath path;
-=======
-    void onDrawContent(SkCanvas* canvas) override {
-        SkPaint paintFill;
-        SkPaint paintStroke;
-        SkPath  path;
->>>>>>> miniblink49
 
         canvas->save();
         canvas->translate(150, 150);
         canvas->scale(0.4f, 0.4f);
-<<<<<<< HEAD
         canvas->rotate(-180.f / 2.f);
-=======
-        canvas->rotate(-180.f/2.f);
->>>>>>> miniblink49
 
         paintFill.setAntiAlias(true);
         paintFill.setColor(SK_ColorBLACK);
@@ -78,7 +54,6 @@ protected:
         // Hour marks
         SkRect rect;
 #ifndef USE_PATH
-<<<<<<< HEAD
         rect = SkRect::MakeLTRB(200 - 4, -4, 240 + 4, 4);
         SkRRect rrect;
         SkVector radii[4] = { { 4, 4 }, { 4, 4 }, { 4, 4 }, { 4,
@@ -92,20 +67,6 @@ protected:
             path.reset();
             path.moveTo(200, 0);
             path.lineTo(240, 0);
-=======
-        rect = SkRect::MakeLTRB(200-4, -4, 240+4, 4);
-        SkRRect rrect;
-        SkVector radii[4] = {{4,4}, {4,4}, {4,4}, {4,4}};
-        rrect.setRectRadii(rect, radii);
-#endif
-        canvas->save();
-        for (int i=0;i<12;i++){
-            canvas->rotate(180.f/6.f);
-#ifdef USE_PATH
-            path.reset();
-            path.moveTo(200,0);
-            path.lineTo(240,0);
->>>>>>> miniblink49
             canvas->drawPath(path, paintStroke);
 #else
             canvas->drawRRect(rrect, paintFill);
@@ -119,7 +80,6 @@ protected:
         paintStroke.setStrokeWidth(5);
 #else
         rect = SkRect::MakeLTRB(231.5f, -2.5f, 242.5, 2.5f);
-<<<<<<< HEAD
         radii[0] = SkPoint::Make(2.5f, 2.5f);
         radii[1] = SkPoint::Make(2.5f, 2.5f);
         radii[2] = SkPoint::Make(2.5f, 2.5f);
@@ -129,52 +89,27 @@ protected:
         for (int i = 0; i < 60; i++) {
             if (i % 5 == 0) {
                 canvas->rotate(180.f / 30.f);
-=======
-        radii[0] = SkPoint::Make(2.5f,2.5f);
-        radii[1] = SkPoint::Make(2.5f,2.5f);
-        radii[2] = SkPoint::Make(2.5f,2.5f);
-        radii[3] = SkPoint::Make(2.5f,2.5f);
-        rrect.setRectRadii(rect, radii);
-#endif
-        for (int i=0;i<60;i++){
-            if (i%5 == 0) {
-                canvas->rotate(180.f/30.f);
->>>>>>> miniblink49
                 continue;
             }
 #ifdef USE_PATH
             path.reset();
-<<<<<<< HEAD
             path.moveTo(234, 0);
             path.lineTo(240, 0);
-=======
-            path.moveTo(234,0);
-            path.lineTo(240,0);
->>>>>>> miniblink49
             canvas->drawPath(path, paintStroke);
 #else
             canvas->drawRRect(rrect, paintFill);
 #endif
-<<<<<<< HEAD
             canvas->rotate(180.f / 30.f);
-=======
-            canvas->rotate(180.f/30.f);
->>>>>>> miniblink49
         }
         canvas->restore();
 
         SkTime::DateTime time;
         SkTime::GetDateTime(&time);
-<<<<<<< HEAD
         time.fHour = time.fHour >= 12 ? time.fHour - 12 : time.fHour;
-=======
-        time.fHour = time.fHour >= 12 ? time.fHour-12 : time.fHour;
->>>>>>> miniblink49
         paintFill.setColor(SK_ColorBLACK);
 
         // Write hours
         canvas->save();
-<<<<<<< HEAD
         canvas->rotate(time.fHour * (180.f / 6.f) + time.fMinute * (180.f / 360.f)
             + time.fSecond * (180.f / 21600.f));
 #ifdef USE_PATH
@@ -189,22 +124,6 @@ protected:
         radii[1] = SkPoint::Make(7, 7);
         radii[2] = SkPoint::Make(7, 7);
         radii[3] = SkPoint::Make(7, 7);
-=======
-        canvas->rotate(time.fHour*(180.f/6.f) + time.fMinute*(180.f/360.f)
-                       + time.fSecond*(180.f/21600.f) );
-#ifdef USE_PATH
-        paintStroke.setStrokeWidth(14);
-        path.reset();
-        path.moveTo(-20,0);
-        path.lineTo(80,0);
-        canvas->drawPath(path, paintStroke);
-#else
-        rect = SkRect::MakeLTRB(-20-7, -7, 80+7, 7);
-        radii[0] = SkPoint::Make(7,7);
-        radii[1] = SkPoint::Make(7,7);
-        radii[2] = SkPoint::Make(7,7);
-        radii[3] = SkPoint::Make(7,7);
->>>>>>> miniblink49
         rrect.setRectRadii(rect, radii);
         canvas->drawRRect(rrect, paintFill);
 #endif
@@ -212,7 +131,6 @@ protected:
 
         // Write minutes
         canvas->save();
-<<<<<<< HEAD
         canvas->rotate(time.fMinute * (180.f / 30.f)
             + time.fSecond * (180.f / 1800.f));
 #ifdef USE_PATH
@@ -227,22 +145,6 @@ protected:
         radii[1] = SkPoint::Make(5, 5);
         radii[2] = SkPoint::Make(5, 5);
         radii[3] = SkPoint::Make(5, 5);
-=======
-        canvas->rotate(time.fMinute*(180.f/30.f)
-                       + time.fSecond*(180.f/1800.f) );
-#ifdef USE_PATH
-        paintStroke.setStrokeWidth(10);
-        path.reset();
-        path.moveTo(-56,0);
-        path.lineTo(224,0);
-        canvas->drawPath(path, paintStroke);
-#else
-        rect = SkRect::MakeLTRB(-56-5, -5, 224+5, 5);
-        radii[0] = SkPoint::Make(5,5);
-        radii[1] = SkPoint::Make(5,5);
-        radii[2] = SkPoint::Make(5,5);
-        radii[3] = SkPoint::Make(5,5);
->>>>>>> miniblink49
         rrect.setRectRadii(rect, radii);
         canvas->drawRRect(rrect, paintFill);
 #endif
@@ -250,17 +152,12 @@ protected:
 
         // Write seconds
         canvas->save();
-<<<<<<< HEAD
         canvas->rotate(time.fSecond * (180.f / 30.f));
-=======
-        canvas->rotate(time.fSecond*(180.f/30.f));
->>>>>>> miniblink49
         paintFill.setColor(0xffd40000);
         paintStroke.setColor(0xffd40000);
         paintStroke.setStrokeWidth(6);
 #ifdef USE_PATH
         path.reset();
-<<<<<<< HEAD
         path.moveTo(-60, 0);
         path.lineTo(166, 0);
         canvas->drawPath(path, paintStroke);
@@ -270,17 +167,6 @@ protected:
         radii[1] = SkPoint::Make(3, 3);
         radii[2] = SkPoint::Make(3, 3);
         radii[3] = SkPoint::Make(3, 3);
-=======
-        path.moveTo(-60,0);
-        path.lineTo(166,0);
-        canvas->drawPath(path, paintStroke);
-#else
-        rect = SkRect::MakeLTRB(-60-3, -3, 166+3, 3);
-        radii[0] = SkPoint::Make(3,3);
-        radii[1] = SkPoint::Make(3,3);
-        radii[2] = SkPoint::Make(3,3);
-        radii[3] = SkPoint::Make(3,3);
->>>>>>> miniblink49
         rrect.setRectRadii(rect, radii);
         canvas->drawRRect(rrect, paintFill);
 #endif
@@ -294,11 +180,7 @@ protected:
 #else
         canvas->drawOval(rect, paintFill);
 #endif
-<<<<<<< HEAD
         rect = SkRect::MakeLTRB(-20 + 190, -20, 20 + 190, 20);
-=======
-        rect = SkRect::MakeLTRB(-20+190, -20, 20+190, 20);
->>>>>>> miniblink49
 #ifdef USE_PATH
         path.reset();
         path.arcTo(rect, 0, 0, false);
@@ -336,7 +218,6 @@ protected:
 #endif
 
         canvas->restore();
-<<<<<<< HEAD
     }
 
     bool onAnimate(const SkAnimTimer&) override
@@ -345,14 +226,6 @@ protected:
     }
 
 private:
-=======
-
-        this->inval(NULL);
-    }
-
-private:
-
->>>>>>> miniblink49
     typedef SampleView INHERITED;
 };
 

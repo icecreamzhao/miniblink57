@@ -36,20 +36,24 @@ namespace blink {
 class ExceptionState;
 class PerformanceBase;
 
-typedef unsigned long long (PerformanceTiming::*NavigationTimingFunction)() const;
+typedef unsigned long long (
+    PerformanceTiming::*NavigationTimingFunction)() const;
 using PerformanceEntryMap = HeapHashMap<String, PerformanceEntryVector>;
 
 class UserTiming final : public GarbageCollected<UserTiming> {
 public:
-    static UserTiming* create(PerformanceBase* performance)
+    static UserTiming* create(PerformanceBase& performance)
     {
         return new UserTiming(performance);
     }
 
-    void mark(const String& markName, ExceptionState&);
+    PerformanceEntry* mark(const String& markName, ExceptionState&);
     void clearMarks(const String& markName);
 
-    void measure(const String& measureName, const String& startMark, const String& endMark, ExceptionState&);
+    PerformanceEntry* measure(const String& measureName,
+        const String& startMark,
+        const String& endMark,
+        ExceptionState&);
     void clearMeasures(const String& measureName);
 
     PerformanceEntryVector getMarks() const;
@@ -61,7 +65,7 @@ public:
     DECLARE_TRACE();
 
 private:
-    explicit UserTiming(PerformanceBase*);
+    explicit UserTiming(PerformanceBase&);
 
     double findExistingMarkStartTime(const String& markName, ExceptionState&);
 

@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
 #include "platform/heap/PersistentNode.h"
 
 #include "base/debug/alias.h"
@@ -18,13 +17,6 @@ namespace {
     };
 }
 
-=======
-#include "config.h"
-#include "platform/heap/PersistentNode.h"
-
-namespace blink {
-
->>>>>>> miniblink49
 PersistentRegion::~PersistentRegion()
 {
     PersistentNodeSlots* slots = m_slots;
@@ -44,7 +36,6 @@ int PersistentRegion::numberOfPersistents()
                 ++persistentCount;
         }
     }
-<<<<<<< HEAD
 #if DCHECK_IS_ON()
     DCHECK_EQ(persistentCount, m_persistentCount);
 #endif
@@ -53,13 +44,6 @@ int PersistentRegion::numberOfPersistents()
 
 void PersistentRegion::ensurePersistentNodeSlots(void* self,
     TraceCallback trace)
-=======
-    ASSERT(persistentCount == m_persistentCount);
-    return persistentCount;
-}
-
-void PersistentRegion::ensurePersistentNodeSlots(void* self, TraceCallback trace)
->>>>>>> miniblink49
 {
     ASSERT(!m_freeListHead);
     PersistentNodeSlots* slots = new PersistentNodeSlots;
@@ -73,7 +57,6 @@ void PersistentRegion::ensurePersistentNodeSlots(void* self, TraceCallback trace
     m_slots = slots;
 }
 
-<<<<<<< HEAD
 void PersistentRegion::releasePersistentNode(
     PersistentNode* persistentNode,
     ThreadState::PersistentClearCallback callback)
@@ -91,23 +74,16 @@ void PersistentRegion::releasePersistentNode(
     ASSERT(persistentNode->isUnused());
 }
 
-=======
->>>>>>> miniblink49
 // This function traces all PersistentNodes. If we encounter
 // a PersistentNodeSlot that contains only freed PersistentNodes,
 // we delete the PersistentNodeSlot. This function rebuilds the free
 // list of PersistentNodes.
-<<<<<<< HEAD
 void PersistentRegion::tracePersistentNodes(Visitor* visitor,
     ShouldTraceCallback shouldTrace)
 {
     size_t debugMarkedObjectSize = ProcessHeap::totalMarkedObjectSize();
     base::debug::Alias(&debugMarkedObjectSize);
 
-=======
-void PersistentRegion::tracePersistentNodes(Visitor* visitor)
-{
->>>>>>> miniblink49
     m_freeListHead = nullptr;
     int persistentCount = 0;
     PersistentNodeSlots** prevNext = &m_slots;
@@ -125,16 +101,11 @@ void PersistentRegion::tracePersistentNodes(Visitor* visitor)
                 freeListNext = node;
                 ++freeCount;
             } else {
-<<<<<<< HEAD
                 ++persistentCount;
                 if (!shouldTrace(visitor, node))
                     continue;
                 node->tracePersistentNode(visitor);
                 debugMarkedObjectSize = ProcessHeap::totalMarkedObjectSize();
-=======
-                node->tracePersistentNode(visitor);
-                ++persistentCount;
->>>>>>> miniblink49
             }
         }
         if (freeCount == PersistentNodeSlots::slotCount) {
@@ -153,7 +124,6 @@ void PersistentRegion::tracePersistentNodes(Visitor* visitor)
             slots = slots->m_next;
         }
     }
-<<<<<<< HEAD
 #if DCHECK_IS_ON()
     DCHECK_EQ(persistentCount, m_persistentCount);
 #endif
@@ -234,9 +204,4 @@ void CrossThreadPersistentRegion::unpoisonCrossThreadPersistents()
 }
 #endif
 
-=======
-    ASSERT(persistentCount == m_persistentCount);
-}
-
->>>>>>> miniblink49
 } // namespace blink

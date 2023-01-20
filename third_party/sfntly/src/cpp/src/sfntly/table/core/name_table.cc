@@ -640,13 +640,9 @@ UConverter* NameTable::GetCharset(int32_t platform_id, int32_t encoding_id) {
 //   if (conv) {
 //     ucnv_close(conv);
 //   }
-<<<<<<< HEAD
   *(int*)1 = 1;
   printf("name_table.cc,NameTable::GetCharset is empty\n");
 
-=======
-  DebugBreak();
->>>>>>> miniblink49
   return NULL;
 }
 
@@ -678,12 +674,8 @@ void NameTable::ConvertToNameBytes(const wchar_t* name,
 //     b->clear();
 //   }
 //   ucnv_close(cs);
-<<<<<<< HEAD
     * (int*)1 = 1;
     printf("name_table.cc,NameTable::ConvertToNameBytes is empty\n");
-=======
-  DebugBreak();
->>>>>>> miniblink49
 }
 
 wchar_t* NameTable::ConvertFromNameBytes(ByteVector* name_bytes,
@@ -734,11 +726,7 @@ wchar_t* NameTable::ConvertFromNameBytes(ByteVector* name_bytes,
 
   byte_t* ptr = &name_bytes->at(0);
   
-<<<<<<< HEAD
   wchar_t* output_buffer = new wchar_t[name_bytes->size() + 1];
-=======
-  wchar_t* output_buffer = new wchar_t[name_bytes->size() + 1];
->>>>>>> miniblink49
   memset(output_buffer, 0, sizeof(wchar_t) * (name_bytes->size() + 1));
 
   const char* encoding = GetEncodingName(platform_id, encoding_id);

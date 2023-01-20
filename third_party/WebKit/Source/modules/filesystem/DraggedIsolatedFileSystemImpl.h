@@ -34,10 +34,7 @@
 #include "core/clipboard/DataObject.h"
 #include "core/clipboard/DraggedIsolatedFileSystem.h"
 #include "platform/heap/Handle.h"
-<<<<<<< HEAD
 #include "platform/heap/HeapAllocator.h"
-=======
->>>>>>> miniblink49
 #include "wtf/Forward.h"
 #include "wtf/text/WTFString.h"
 
@@ -45,7 +42,6 @@ namespace blink {
 
 class DOMFileSystem;
 
-<<<<<<< HEAD
 class DraggedIsolatedFileSystemImpl final
     : public GarbageCollectedFinalized<DraggedIsolatedFileSystemImpl>,
       public DraggedIsolatedFileSystem,
@@ -56,38 +52,18 @@ public:
     static DOMFileSystem* getDOMFileSystem(DataObject* host,
         ExecutionContext*,
         const DataObjectItem&);
-=======
-class DraggedIsolatedFileSystemImpl final : public GarbageCollectedFinalized<DraggedIsolatedFileSystemImpl>, public DraggedIsolatedFileSystem, public HeapSupplement<DataObject> {
-    USING_GARBAGE_COLLECTED_MIXIN(DraggedIsolatedFileSystemImpl);
-public:
-    static DraggedIsolatedFileSystemImpl* create(DataObject& host, const String& filesystemId)
-    {
-        return new DraggedIsolatedFileSystemImpl(host, filesystemId);
-    }
-
-    static DOMFileSystem* getDOMFileSystem(DataObject* host, ExecutionContext*);
->>>>>>> miniblink49
 
     static const char* supplementName();
     static DraggedIsolatedFileSystemImpl* from(DataObject*);
 
     DECLARE_TRACE();
 
-<<<<<<< HEAD
     static void prepareForDataObject(DataObject*);
 
 private:
     DraggedIsolatedFileSystemImpl() = default;
 
     HeapHashMap<String, Member<DOMFileSystem>> m_filesystems;
-=======
-    static void prepareForDataObject(DataObject*, const String& filesystemId);
-
-private:
-    DraggedIsolatedFileSystemImpl(DataObject& host, const String& filesystemId);
-
-    Member<DOMFileSystem> m_filesystem;
->>>>>>> miniblink49
 };
 
 } // namespace blink

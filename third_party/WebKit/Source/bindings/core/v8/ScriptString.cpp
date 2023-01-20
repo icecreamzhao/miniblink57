@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "bindings/core/v8/ScriptString.h"
 
 #include "bindings/core/v8/V8Binding.h"
@@ -69,7 +68,8 @@ ScriptString ScriptString::concatenateWith(const String& string)
     v8::Local<v8::String> targetString = v8String(nonNullIsolate, string);
     if (isEmpty())
         return ScriptString(nonNullIsolate, targetString);
-    return ScriptString(nonNullIsolate, v8::String::Concat(v8Value(), targetString));
+    return ScriptString(nonNullIsolate,
+        v8::String::Concat(v8Value(), targetString));
 }
 
 String ScriptString::flattenToString()

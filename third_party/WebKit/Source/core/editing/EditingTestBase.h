@@ -5,16 +5,21 @@
 #ifndef EditingTestBase_h
 #define EditingTestBase_h
 
-#include "core/dom/Position.h"
-#include "core/testing/CoreTestHelpers.h"
+#include "core/editing/Position.h"
 #include "wtf/Forward.h"
 #include <gtest/gtest.h>
+#include <memory>
+#include <string>
 
 namespace blink {
 
 class DummyPageHolder;
+class FrameSelection;
+class LocalFrame;
 
 class EditingTestBase : public ::testing::Test {
+    USING_FAST_MALLOC(EditingTestBase);
+
 protected:
     EditingTestBase();
     ~EditingTestBase() override;
@@ -22,18 +27,22 @@ protected:
     void SetUp() override;
 
     Document& document() const;
+    DummyPageHolder& dummyPageHolder() const { return *m_dummyPageHolder; }
+    LocalFrame& frame() const;
+    FrameSelection& selection() const;
 
-    static PassRefPtrWillBeRawPtr<ShadowRoot> createShadowRootForElementWithIDAndSetInnerHTML(TreeScope&, const char* hostElementID, const char* shadowRootContent);
+    static ShadowRoot* createShadowRootForElementWithIDAndSetInnerHTML(
+        TreeScope&,
+        const char* hostElementID,
+        const char* shadowRootContent);
 
-    void setBodyContent(const char*);
-    PassRefPtrWillBeRawPtr<ShadowRoot> setShadowContent(const char* shadowContent, const char* host = "host");
-    void updateLayoutAndStyleForPainting();
-
-    static Position positionInDOMTree(Node& anchor, int offset);
-    static PositionInComposedTree positionInComposedTree(Node& anchor, int offset);
+    void setBodyContent(const std::string&);
+    ShadowRoot* setShadowContent(const char* shadowContent,
+        const char* shadowHostId);
+    void updateAllLifecyclePhases();
 
 private:
-    OwnPtr<DummyPageHolder> m_dummyPageHolder;
+    std::unique_ptr<DummyPageHolder> m_dummyPageHolder;
 };
 
 } // namespace blink

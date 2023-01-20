@@ -29,6 +29,7 @@ namespace blink {
 
 class HTMLDirectoryElement final : public HTMLElement {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     DECLARE_NODE_FACTORY(HTMLDirectoryElement);
 

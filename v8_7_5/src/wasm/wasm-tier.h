@@ -9,7 +9,6 @@
 
 namespace v8 {
 namespace internal {
-<<<<<<< HEAD
     namespace wasm {
 
         // All the tiers of WASM execution.
@@ -25,19 +24,3 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_WASM_WASM_TIER_H_
-=======
-namespace wasm {
-
-// All the tiers of WASM execution.
-enum class ExecutionTier : int8_t {
-  kInterpreter,  // Interpreter
-  kBaseline,     // Liftoff
-  kOptimized,    // TurboFan
-};
-
-}  // namespace wasm
-}  // namespace internal
-}  // namespace v8
-
-#endif  // V8_WASM_WASM_TIER_H_
->>>>>>> miniblink49

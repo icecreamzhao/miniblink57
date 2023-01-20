@@ -6,7 +6,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #ifndef SkColorTable_DEFINED
 #define SkColorTable_DEFINED
 
@@ -14,16 +13,6 @@
 #include "SkColor.h"
 #include "SkFlattenable.h"
 #include "SkImageInfo.h"
-=======
-
-#ifndef SkColorTable_DEFINED
-#define SkColorTable_DEFINED
-
-#include "SkColor.h"
-#include "SkFlattenable.h"
-#include "SkImageInfo.h"
-#include "SkLazyPtr.h"
->>>>>>> miniblink49
 
 /** \class SkColorTable
 
@@ -46,12 +35,8 @@ public:
     /** Returns the specified color from the table. In the debug build, this asserts that
      *  the index is in range (0 <= index < count).
      */
-<<<<<<< HEAD
     SkPMColor operator[](int index) const
     {
-=======
-    SkPMColor operator[](int index) const {
->>>>>>> miniblink49
         SkASSERT(fColors != NULL && (unsigned)index < (unsigned)fCount);
         return fColors[index];
     }
@@ -64,7 +49,6 @@ public:
      */
     const uint16_t* read16BitCache() const;
 
-<<<<<<< HEAD
     void writeToBuffer(SkWriteBuffer&) const;
 
     // may return null
@@ -97,20 +81,6 @@ private:
         fCount = count; // update fCount, in case count is smaller
     }
 
-=======
-    explicit SkColorTable(SkReadBuffer&);
-    void writeToBuffer(SkWriteBuffer&) const;
-
-private:
-    static void Free16BitCache(uint16_t*);
-
-    SkPMColor*                          fColors;
-    SkLazyPtr<uint16_t, Free16BitCache> f16BitCache;
-    int                                 fCount;
-
-    void init(const SkPMColor* colors, int count);
-
->>>>>>> miniblink49
     typedef SkRefCnt INHERITED;
 };
 

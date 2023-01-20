@@ -2,111 +2,79 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "bindings/modules/v8/ScriptValueSerializerForModules.h"
 
 #include "bindings/core/v8/SerializationTag.h"
 #include "bindings/core/v8/V8Binding.h"
 #include "bindings/modules/v8/V8CryptoKey.h"
 #include "bindings/modules/v8/V8DOMFileSystem.h"
+#include "bindings/modules/v8/V8RTCCertificate.h"
+#include "bindings/modules/v8/serialization/WebCryptoSubTags.h"
 #include "modules/filesystem/DOMFileSystem.h"
+#include "modules/peerconnection/RTCCertificate.h"
 #include "public/platform/Platform.h"
+#include "public/platform/WebRTCCertificate.h"
+#include "public/platform/WebRTCCertificateGenerator.h"
+#include "wtf/PtrUtil.h"
+#include <memory>
 
 namespace blink {
-#ifndef MINIBLINK_NOT_IMPLEMENTED_WEBWORKER
-enum CryptoKeyAlgorithmTag {
-    AesCbcTag = 1,
-    HmacTag = 2,
-    RsaSsaPkcs1v1_5Tag = 3,
-    // ID 4 was used by RsaEs, while still behind experimental flag.
-    Sha1Tag = 5,
-    Sha256Tag = 6,
-    Sha384Tag = 7,
-    Sha512Tag = 8,
-    AesGcmTag = 9,
-    RsaOaepTag = 10,
-    AesCtrTag = 11,
-    AesKwTag = 12,
-    RsaPssTag = 13,
-    EcdsaTag = 14,
-    EcdhTag = 15,
-    HkdfTag = 16,
-    Pbkdf2Tag = 17,
-    // Maximum allowed value is 2^32-1
-};
 
-enum NamedCurveTag {
-    P256Tag = 1,
-    P384Tag = 2,
-    P521Tag = 3,
-};
-
-enum CryptoKeyUsage {
-    // Extractability is not a "usage" in the WebCryptoKeyUsages sense, however
-    // it fits conveniently into this bitfield.
-    ExtractableUsage = 1 << 0,
-
-    EncryptUsage = 1 << 1,
-    DecryptUsage = 1 << 2,
-    SignUsage = 1 << 3,
-    VerifyUsage = 1 << 4,
-    DeriveKeyUsage = 1 << 5,
-    WrapKeyUsage = 1 << 6,
-    UnwrapKeyUsage = 1 << 7,
-    DeriveBitsUsage = 1 << 8,
-    // Maximum allowed value is 1 << 31
-};
-
-enum CryptoKeySubTag {
-    AesKeyTag = 1,
-    HmacKeyTag = 2,
-    // ID 3 was used by RsaKeyTag, while still behind experimental flag.
-    RsaHashedKeyTag = 4,
-    EcKeyTag = 5,
-    NoParamsKeyTag = 6,
-    // Maximum allowed value is 255
-};
-
-enum AssymetricCryptoKeyType {
-    PublicKeyType = 1,
-    PrivateKeyType = 2,
-    // Maximum allowed value is 2^32-1
-};
-
-#endif // MINIBLINK_NOT_IMPLEMENTED
-
-ScriptValueSerializerForModules::ScriptValueSerializerForModules(SerializedScriptValueWriter& writer, MessagePortArray* messagePorts, ArrayBufferArray* arrayBuffers, WebBlobInfoArray* blobInfo, BlobDataHandleMap& blobDataHandles, v8::TryCatch& tryCatch, ScriptState* scriptState)
-    : ScriptValueSerializer(writer, messagePorts, arrayBuffers, blobInfo, blobDataHandles, tryCatch, scriptState)
+ScriptValueSerializerForModules::ScriptValueSerializerForModules(
+    SerializedScriptValueWriter& writer,
+    WebBlobInfoArray* blobInfo,
+    ScriptState* scriptState)
+    : ScriptValueSerializer(writer, blobInfo, scriptState)
 {
 }
 
-
-ScriptValueSerializer::StateBase* ScriptValueSerializerForModules::writeDOMFileSystem(v8::Local<v8::Value> value, ScriptValueSerializer::StateBase* next)
+ScriptValueSerializer::StateBase*
+ScriptValueSerializerForModules::writeDOMFileSystem(v8::Local<v8::Value> value,
+    StateBase* next)
 {
-#ifdef MINIBLINK_NOT_IMPLEMENTED
     DOMFileSystem* fs = V8DOMFileSystem::toImpl(value.As<v8::Object>());
     if (!fs)
         return 0;
     if (!fs->clonable())
-        return handleError(DataCloneError, "A FileSystem object could not be cloned.", next);
+        return handleError(Status::DataCloneError,
+            "A FileSystem object could not be cloned.", next);
 
-    toSerializedScriptValueWriterForModules(writer()).writeDOMFileSystem(fs->type(), fs->name(), fs->rootURL().string());
-#endif
+    toSerializedScriptValueWriterForModules(writer()).writeDOMFileSystem(
+        fs->type(), fs->name(), fs->rootURL().getString());
     return 0;
 }
 
-bool ScriptValueSerializerForModules::writeCryptoKey(v8::Local<v8::Value> value)
+bool ScriptValueSerializerForModules::writeCryptoKey(
+    v8::Local<v8::Value> value)
 {
-#ifdef MINIBLINK_NOT_IMPLEMENTED
-    CryptoKey* key = V8CryptoKey::toImpl(value.As<v8::Object>());
-    if (!key)
-        return false;
-    return toSerializedScriptValueWriterForModules(writer()).writeCryptoKey(key->key());
-#endif
+    //   CryptoKey* key = V8CryptoKey::toImpl(value.As<v8::Object>());
+    //   if (!key)
+    //     return false;
+    //   return toSerializedScriptValueWriterForModules(writer()).writeCryptoKey(
+    //       key->key());
+    DebugBreak();
     return false;
 }
 
-void SerializedScriptValueWriterForModules::writeDOMFileSystem(int type, const String& name, const String& url)
+ScriptValueSerializer::StateBase*
+ScriptValueSerializerForModules::writeRTCCertificate(v8::Local<v8::Value> value,
+    StateBase* next)
+{
+    //   RTCCertificate* certificate =
+    //       V8RTCCertificate::toImpl(value.As<v8::Object>());
+    //   if (!certificate)
+    //     return handleError(Status::DataCloneError,
+    //                        "An RTCCertificate object could not be cloned.", next);
+    //   toSerializedScriptValueWriterForModules(writer()).writeRTCCertificate(
+    //       *certificate);
+    DebugBreak();
+    return nullptr;
+}
+
+void SerializedScriptValueWriterForModules::writeDOMFileSystem(
+    int type,
+    const String& name,
+    const String& url)
 {
     append(DOMFileSystemTag);
     doWriteUint32(type);
@@ -114,9 +82,9 @@ void SerializedScriptValueWriterForModules::writeDOMFileSystem(int type, const S
     doWriteWebCoreString(url);
 }
 
-bool SerializedScriptValueWriterForModules::writeCryptoKey(const WebCryptoKey& key)
+bool SerializedScriptValueWriterForModules::writeCryptoKey(
+    const WebCryptoKey& key)
 {
-#ifdef MINIBLINK_NOT_IMPLEMENTED
     append(static_cast<uint8_t>(CryptoKeyTag));
 
     switch (key.algorithm().paramsType()) {
@@ -146,27 +114,33 @@ bool SerializedScriptValueWriterForModules::writeCryptoKey(const WebCryptoKey& k
     doWriteUint32(keyData.size());
     append(keyData.data(), keyData.size());
     return true;
-#endif
-    return false;
 }
 
-void SerializedScriptValueWriterForModules::doWriteHmacKey(const WebCryptoKey& key)
+void SerializedScriptValueWriterForModules::writeRTCCertificate(
+    const RTCCertificate& certificate)
 {
-#ifdef MINIBLINK_NOT_IMPLEMENTED
+    //   append(RTCCertificateTag);
+    //
+    //   WebRTCCertificatePEM pem = certificate.certificateShallowCopy()->toPEM();
+    //   doWriteWebCoreString(pem.privateKey());
+    //   doWriteWebCoreString(pem.certificate());
+    DebugBreak();
+}
 
+void SerializedScriptValueWriterForModules::doWriteHmacKey(
+    const WebCryptoKey& key)
+{
     ASSERT(key.algorithm().paramsType() == WebCryptoKeyAlgorithmParamsTypeHmac);
 
     append(static_cast<uint8_t>(HmacKeyTag));
     ASSERT(!(key.algorithm().hmacParams()->lengthBits() % 8));
     doWriteUint32(key.algorithm().hmacParams()->lengthBits() / 8);
     doWriteAlgorithmId(key.algorithm().hmacParams()->hash().id());
-#endif
 }
 
-void SerializedScriptValueWriterForModules::doWriteAesKey(const WebCryptoKey& key)
+void SerializedScriptValueWriterForModules::doWriteAesKey(
+    const WebCryptoKey& key)
 {
-#ifdef MINIBLINK_NOT_IMPLEMENTED
-
     ASSERT(key.algorithm().paramsType() == WebCryptoKeyAlgorithmParamsTypeAes);
 
     append(static_cast<uint8_t>(AesKeyTag));
@@ -175,13 +149,11 @@ void SerializedScriptValueWriterForModules::doWriteAesKey(const WebCryptoKey& ke
     // it fit in 1 byte.
     ASSERT(!(key.algorithm().aesParams()->lengthBits() % 8));
     doWriteUint32(key.algorithm().aesParams()->lengthBits() / 8);
-#endif
 }
 
-void SerializedScriptValueWriterForModules::doWriteRsaHashedKey(const WebCryptoKey& key)
+void SerializedScriptValueWriterForModules::doWriteRsaHashedKey(
+    const WebCryptoKey& key)
 {
-#ifdef MINIBLINK_NOT_IMPLEMENTED
-
     ASSERT(key.algorithm().rsaHashedParams());
     append(static_cast<uint8_t>(RsaHashedKeyTag));
 
@@ -193,34 +165,30 @@ void SerializedScriptValueWriterForModules::doWriteRsaHashedKey(const WebCryptoK
     doWriteUint32(params->publicExponent().size());
     append(params->publicExponent().data(), params->publicExponent().size());
     doWriteAlgorithmId(params->hash().id());
-#endif
 }
 
-void SerializedScriptValueWriterForModules::doWriteEcKey(const WebCryptoKey& key)
+void SerializedScriptValueWriterForModules::doWriteEcKey(
+    const WebCryptoKey& key)
 {
-#ifdef MINIBLINK_NOT_IMPLEMENTED
-
     ASSERT(key.algorithm().ecParams());
     append(static_cast<uint8_t>(EcKeyTag));
 
     doWriteAlgorithmId(key.algorithm().id());
     doWriteAsymmetricKeyType(key.type());
     doWriteNamedCurve(key.algorithm().ecParams()->namedCurve());
-#endif
 }
 
-void SerializedScriptValueWriterForModules::doWriteKeyWithoutParams(const WebCryptoKey& key)
+void SerializedScriptValueWriterForModules::doWriteKeyWithoutParams(
+    const WebCryptoKey& key)
 {
-#ifdef MINIBLINK_NOT_IMPLEMENTED
-
     ASSERT(WebCryptoAlgorithm::isKdf(key.algorithm().id()));
     append(static_cast<uint8_t>(NoParamsKeyTag));
 
     doWriteAlgorithmId(key.algorithm().id());
-#endif
 }
 
-void SerializedScriptValueWriterForModules::doWriteAlgorithmId(WebCryptoAlgorithmId id)
+void SerializedScriptValueWriterForModules::doWriteAlgorithmId(
+    WebCryptoAlgorithmId id)
 {
     switch (id) {
     case WebCryptoAlgorithmIdAesCbc:
@@ -259,10 +227,9 @@ void SerializedScriptValueWriterForModules::doWriteAlgorithmId(WebCryptoAlgorith
     ASSERT_NOT_REACHED();
 }
 
-void SerializedScriptValueWriterForModules::doWriteAsymmetricKeyType(WebCryptoKeyType keyType)
+void SerializedScriptValueWriterForModules::doWriteAsymmetricKeyType(
+    WebCryptoKeyType keyType)
 {
-#ifdef MINIBLINK_NOT_IMPLEMENTED
-
     switch (keyType) {
     case WebCryptoKeyTypePublic:
         doWriteUint32(PublicKeyType);
@@ -273,13 +240,11 @@ void SerializedScriptValueWriterForModules::doWriteAsymmetricKeyType(WebCryptoKe
     case WebCryptoKeyTypeSecret:
         ASSERT_NOT_REACHED();
     }
-#endif
 }
 
-void SerializedScriptValueWriterForModules::doWriteNamedCurve(WebCryptoNamedCurve namedCurve)
+void SerializedScriptValueWriterForModules::doWriteNamedCurve(
+    WebCryptoNamedCurve namedCurve)
 {
-#ifdef MINIBLINK_NOT_IMPLEMENTED
-
     switch (namedCurve) {
     case WebCryptoNamedCurveP256:
         return doWriteUint32(P256Tag);
@@ -289,15 +254,15 @@ void SerializedScriptValueWriterForModules::doWriteNamedCurve(WebCryptoNamedCurv
         return doWriteUint32(P521Tag);
     }
     ASSERT_NOT_REACHED();
-#endif
 }
 
-void SerializedScriptValueWriterForModules::doWriteKeyUsages(const WebCryptoKeyUsageMask usages, bool extractable)
+void SerializedScriptValueWriterForModules::doWriteKeyUsages(
+    const WebCryptoKeyUsageMask usages,
+    bool extractable)
 {
-#ifdef MINIBLINK_NOT_IMPLEMENTED
-
     // Reminder to update this when adding new key usages.
-    static_assert(EndOfWebCryptoKeyUsage == (1 << 7) + 1, "update required when adding new key usages");
+    static_assert(EndOfWebCryptoKeyUsage == (1 << 7) + 1,
+        "update required when adding new key usages");
 
     uint32_t value = 0;
 
@@ -322,35 +287,38 @@ void SerializedScriptValueWriterForModules::doWriteKeyUsages(const WebCryptoKeyU
         value |= DeriveBitsUsage;
 
     doWriteUint32(value);
-#endif
 }
 
-ScriptValueSerializer::StateBase* ScriptValueSerializerForModules::doSerializeValue(v8::Local<v8::Value> value, ScriptValueSerializer::StateBase* next)
+ScriptValueSerializer::StateBase*
+ScriptValueSerializerForModules::doSerializeObject(
+    v8::Local<v8::Object> jsObject,
+    StateBase* next)
 {
-#ifdef MINIBLINK_NOT_IMPLEMENTED
-    bool isDOMFileSystem = V8DOMFileSystem::hasInstance(value, isolate());
-    if (isDOMFileSystem || V8CryptoKey::hasInstance(value, isolate())) {
-        v8::Local<v8::Object> jsObject = value.As<v8::Object>();
-        if (jsObject.IsEmpty())
-            return handleError(DataCloneError, "An object could not be cloned.", next);
-        greyObject(jsObject);
+    DCHECK(!jsObject.IsEmpty());
 
-        if (isDOMFileSystem)
-            return writeDOMFileSystem(value, next);
+    //   if (V8DOMFileSystem::hasInstance(jsObject, isolate())) {
+    //     greyObject(jsObject);
+    //     return writeDOMFileSystem(jsObject, next);
+    //   }
+    //   if (V8CryptoKey::hasInstance(jsObject, isolate())) {
+    //     greyObject(jsObject);
+    //     if (!writeCryptoKey(jsObject))
+    //       return handleError(Status::DataCloneError, "Couldn't serialize key data",
+    //                          next);
+    //     return nullptr;
+    //   }
+    //   if (V8RTCCertificate::hasInstance(jsObject, isolate())) {
+    //     greyObject(jsObject);
+    //     return writeRTCCertificate(jsObject, next);
+    //   }
+    DebugBreak();
 
-        if (!writeCryptoKey(value))
-            return handleError(DataCloneError, "Couldn't serialize key data", next);
-
-        return 0;
-        //return handleError(DataCloneError, "Miniblink Couldn't serialize FileSystem or Crypto key data", next);
-    }
-#endif
-    return ScriptValueSerializer::doSerializeValue(value, next);
+    return ScriptValueSerializer::doSerializeObject(jsObject, next);
 }
 
-#ifndef MINIBLINK_NOT_IMPLEMENTED_WEBWORKER
-
-bool SerializedScriptValueReaderForModules::read(v8::Local<v8::Value>* value, ScriptValueCompositeCreator& creator)
+bool SerializedScriptValueReaderForModules::read(
+    v8::Local<v8::Value>* value,
+    ScriptValueDeserializer& deserializer)
 {
     SerializationTag tag;
     if (!readTag(&tag))
@@ -359,196 +327,237 @@ bool SerializedScriptValueReaderForModules::read(v8::Local<v8::Value>* value, Sc
     case DOMFileSystemTag:
         if (!readDOMFileSystem(value))
             return false;
-        creator.pushObjectReference(*value);
+        deserializer.pushObjectReference(*value);
         break;
     case CryptoKeyTag:
         if (!readCryptoKey(value))
             return false;
-        creator.pushObjectReference(*value);
+        deserializer.pushObjectReference(*value);
+        break;
+    case RTCCertificateTag:
+        if (!readRTCCertificate(value))
+            return false;
+        deserializer.pushObjectReference(*value);
         break;
     default:
-        return SerializedScriptValueReader::readWithTag(tag, value, creator);
+        return SerializedScriptValueReader::readWithTag(tag, value, deserializer);
     }
     return !value->IsEmpty();
 }
 
-bool SerializedScriptValueReaderForModules::readDOMFileSystem(v8::Local<v8::Value>* value)
+bool SerializedScriptValueReaderForModules::readDOMFileSystem(
+    v8::Local<v8::Value>* value)
 {
-#ifdef MINIBLINK_NOT_IMPLEMENTED
-    uint32_t type;
-    String name;
-    String url;
-    if (!doReadUint32(&type))
-        return false;
-    if (!readWebCoreString(&name))
-        return false;
-    if (!readWebCoreString(&url))
-        return false;
-    DOMFileSystem* fs = DOMFileSystem::create(scriptState()->executionContext(), name, static_cast<FileSystemType>(type), KURL(ParsedURLString, url));
-    *value = toV8(fs, scriptState()->context()->Global(), isolate());
-    return !value->IsEmpty();
-#endif
+    //   uint32_t type;
+    //   String name;
+    //   String url;
+    //   if (!doReadUint32(&type))
+    //     return false;
+    //   if (!readWebCoreString(&name))
+    //     return false;
+    //   if (!readWebCoreString(&url))
+    //     return false;
+    //   DOMFileSystem* fs = DOMFileSystem::create(
+    //       getScriptState()->getExecutionContext(), name,
+    //       static_cast<FileSystemType>(type), KURL(ParsedURLString, url));
+    //   *value = ToV8(fs, getScriptState()->context()->Global(), isolate());
+    //   return !value->IsEmpty();
+    DebugBreak();
     return false;
 }
 
-bool SerializedScriptValueReaderForModules::readCryptoKey(v8::Local<v8::Value>* value)
+bool SerializedScriptValueReaderForModules::readCryptoKey(
+    v8::Local<v8::Value>* value)
 {
-#ifdef MINIBLINK_NOT_IMPLEMENTED
-    uint32_t rawKeyType;
-    if (!doReadUint32(&rawKeyType))
-        return false;
-
-    WebCryptoKeyAlgorithm algorithm;
-    WebCryptoKeyType type = WebCryptoKeyTypeSecret;
-
-    switch (static_cast<CryptoKeySubTag>(rawKeyType)) {
-    case AesKeyTag:
-        if (!doReadAesKey(algorithm, type))
-            return false;
-        break;
-    case HmacKeyTag:
-        if (!doReadHmacKey(algorithm, type))
-            return false;
-        break;
-    case RsaHashedKeyTag:
-        if (!doReadRsaHashedKey(algorithm, type))
-            return false;
-        break;
-    case EcKeyTag:
-        if (!doReadEcKey(algorithm, type))
-            return false;
-        break;
-    case NoParamsKeyTag:
-        if (!doReadKeyWithoutParams(algorithm, type))
-            return false;
-        break;
-    default:
-        return false;
-    }
-
-    WebCryptoKeyUsageMask usages;
-    bool extractable;
-    if (!doReadKeyUsages(usages, extractable))
-        return false;
-
-    uint32_t keyDataLength;
-    if (!doReadUint32(&keyDataLength))
-        return false;
-
-    if (position() + keyDataLength > length())
-        return false;
-
-    const uint8_t* keyData = allocate(keyDataLength);
-    WebCryptoKey key = WebCryptoKey::createNull();
-    if (!Platform::current()->crypto()->deserializeKeyForClone(
-        algorithm, type, extractable, usages, keyData, keyDataLength, key)) {
-        return false;
-    }
-
-    *value = toV8(CryptoKey::create(key), scriptState()->context()->Global(), isolate());
-    return !value->IsEmpty();
-#endif
+    //   uint32_t rawKeyType;
+    //   if (!doReadUint32(&rawKeyType))
+    //     return false;
+    //
+    //   WebCryptoKeyAlgorithm algorithm;
+    //   WebCryptoKeyType type = WebCryptoKeyTypeSecret;
+    //
+    //   switch (static_cast<CryptoKeySubTag>(rawKeyType)) {
+    //     case AesKeyTag:
+    //       if (!doReadAesKey(algorithm, type))
+    //         return false;
+    //       break;
+    //     case HmacKeyTag:
+    //       if (!doReadHmacKey(algorithm, type))
+    //         return false;
+    //       break;
+    //     case RsaHashedKeyTag:
+    //       if (!doReadRsaHashedKey(algorithm, type))
+    //         return false;
+    //       break;
+    //     case EcKeyTag:
+    //       if (!doReadEcKey(algorithm, type))
+    //         return false;
+    //       break;
+    //     case NoParamsKeyTag:
+    //       if (!doReadKeyWithoutParams(algorithm, type))
+    //         return false;
+    //       break;
+    //     default:
+    //       return false;
+    //   }
+    //
+    //   WebCryptoKeyUsageMask usages;
+    //   bool extractable;
+    //   if (!doReadKeyUsages(usages, extractable))
+    //     return false;
+    //
+    //   uint32_t keyDataLength;
+    //   if (!doReadUint32(&keyDataLength))
+    //     return false;
+    //
+    //   if (position() + keyDataLength > length())
+    //     return false;
+    //
+    //   const uint8_t* keyData = allocate(keyDataLength);
+    //   WebCryptoKey key = WebCryptoKey::createNull();
+    //   if (!Platform::current()->crypto()->deserializeKeyForClone(
+    //           algorithm, type, extractable, usages, keyData, keyDataLength, key)) {
+    //     return false;
+    //   }
+    //
+    //   *value = ToV8(CryptoKey::create(key), getScriptState()->context()->Global(),
+    //                 isolate());
+    //   return !value->IsEmpty();
+    DebugBreak();
     return false;
 }
 
-bool SerializedScriptValueReaderForModules::doReadHmacKey(WebCryptoKeyAlgorithm& algorithm, WebCryptoKeyType& type)
+bool SerializedScriptValueReaderForModules::readRTCCertificate(
+    v8::Local<v8::Value>* value)
 {
-#ifdef MINIBLINK_NOT_IMPLEMENTED
-    uint32_t lengthBytes;
-    if (!doReadUint32(&lengthBytes))
-        return false;
-    WebCryptoAlgorithmId hash;
-    if (!doReadAlgorithmId(hash))
-        return false;
-    algorithm = WebCryptoKeyAlgorithm::createHmac(hash, lengthBytes * 8);
-    type = WebCryptoKeyTypeSecret;
-    return !algorithm.isNull();
-#endif
+    //   String pemPrivateKey;
+    //   if (!readWebCoreString(&pemPrivateKey))
+    //     return false;
+    //   String pemCertificate;
+    //   if (!readWebCoreString(&pemCertificate))
+    //     return false;
+    //
+    //   std::unique_ptr<WebRTCCertificateGenerator> certificateGenerator =
+    //       WTF::wrapUnique(Platform::current()->createRTCCertificateGenerator());
+    //
+    //   std::unique_ptr<WebRTCCertificate> certificate(
+    //       certificateGenerator->fromPEM(pemPrivateKey, pemCertificate));
+    //   if (!certificate)
+    //     return false;
+    //   RTCCertificate* jsCertificate = new RTCCertificate(std::move(certificate));
+    //
+    //   *value =
+    //       ToV8(jsCertificate, getScriptState()->context()->Global(), isolate());
+    //   return !value->IsEmpty();
+    DebugBreak();
     return false;
 }
 
-bool SerializedScriptValueReaderForModules::doReadAesKey(WebCryptoKeyAlgorithm& algorithm, WebCryptoKeyType& type)
+bool SerializedScriptValueReaderForModules::doReadHmacKey(
+    WebCryptoKeyAlgorithm& algorithm,
+    WebCryptoKeyType& type)
 {
-#ifdef MINIBLINK_NOT_IMPLEMENTED
-    WebCryptoAlgorithmId id;
-    if (!doReadAlgorithmId(id))
-        return false;
-    uint32_t lengthBytes;
-    if (!doReadUint32(&lengthBytes))
-        return false;
-    algorithm = WebCryptoKeyAlgorithm::createAes(id, lengthBytes * 8);
-    type = WebCryptoKeyTypeSecret;
-    return !algorithm.isNull();
-#endif
+    //   uint32_t lengthBytes;
+    //   if (!doReadUint32(&lengthBytes))
+    //     return false;
+    //   WebCryptoAlgorithmId hash;
+    //   if (!doReadAlgorithmId(hash))
+    //     return false;
+    //   algorithm = WebCryptoKeyAlgorithm::createHmac(hash, lengthBytes * 8);
+    //   type = WebCryptoKeyTypeSecret;
+    //   return !algorithm.isNull();
+    DebugBreak();
     return false;
 }
 
-bool SerializedScriptValueReaderForModules::doReadRsaHashedKey(WebCryptoKeyAlgorithm& algorithm, WebCryptoKeyType& type)
+bool SerializedScriptValueReaderForModules::doReadAesKey(
+    WebCryptoKeyAlgorithm& algorithm,
+    WebCryptoKeyType& type)
 {
-#ifdef MINIBLINK_NOT_IMPLEMENTED
-    WebCryptoAlgorithmId id;
-    if (!doReadAlgorithmId(id))
-        return false;
-
-    if (!doReadAsymmetricKeyType(type))
-        return false;
-
-    uint32_t modulusLengthBits;
-    if (!doReadUint32(&modulusLengthBits))
-        return false;
-
-    uint32_t publicExponentSize;
-    if (!doReadUint32(&publicExponentSize))
-        return false;
-
-    if (position() + publicExponentSize > length())
-        return false;
-
-    const uint8_t* publicExponent = allocate(publicExponentSize);
-    WebCryptoAlgorithmId hash;
-    if (!doReadAlgorithmId(hash))
-        return false;
-    algorithm = WebCryptoKeyAlgorithm::createRsaHashed(id, modulusLengthBits, publicExponent, publicExponentSize, hash);
-
-    return !algorithm.isNull();
-#endif
+    //   WebCryptoAlgorithmId id;
+    //   if (!doReadAlgorithmId(id))
+    //     return false;
+    //   uint32_t lengthBytes;
+    //   if (!doReadUint32(&lengthBytes))
+    //     return false;
+    //   algorithm = WebCryptoKeyAlgorithm::createAes(id, lengthBytes * 8);
+    //   type = WebCryptoKeyTypeSecret;
+    //   return !algorithm.isNull();
+    DebugBreak();
     return false;
 }
 
-bool SerializedScriptValueReaderForModules::doReadEcKey(WebCryptoKeyAlgorithm& algorithm, WebCryptoKeyType& type)
+bool SerializedScriptValueReaderForModules::doReadRsaHashedKey(
+    WebCryptoKeyAlgorithm& algorithm,
+    WebCryptoKeyType& type)
 {
-#ifdef MINIBLINK_NOT_IMPLEMENTED
-    WebCryptoAlgorithmId id;
-    if (!doReadAlgorithmId(id))
-        return false;
-
-    if (!doReadAsymmetricKeyType(type))
-        return false;
-
-    WebCryptoNamedCurve namedCurve;
-    if (!doReadNamedCurve(namedCurve))
-        return false;
-
-    algorithm = WebCryptoKeyAlgorithm::createEc(id, namedCurve);
-    return !algorithm.isNull();
-#endif
+    //   WebCryptoAlgorithmId id;
+    //   if (!doReadAlgorithmId(id))
+    //     return false;
+    //
+    //   if (!doReadAsymmetricKeyType(type))
+    //     return false;
+    //
+    //   uint32_t modulusLengthBits;
+    //   if (!doReadUint32(&modulusLengthBits))
+    //     return false;
+    //
+    //   uint32_t publicExponentSize;
+    //   if (!doReadUint32(&publicExponentSize))
+    //     return false;
+    //
+    //   if (position() + publicExponentSize > length())
+    //     return false;
+    //
+    //   const uint8_t* publicExponent = allocate(publicExponentSize);
+    //   WebCryptoAlgorithmId hash;
+    //   if (!doReadAlgorithmId(hash))
+    //     return false;
+    //   algorithm = WebCryptoKeyAlgorithm::createRsaHashed(
+    //       id, modulusLengthBits, publicExponent, publicExponentSize, hash);
+    //
+    //   return !algorithm.isNull();
+    DebugBreak();
     return false;
 }
 
-bool SerializedScriptValueReaderForModules::doReadKeyWithoutParams(WebCryptoKeyAlgorithm& algorithm, WebCryptoKeyType& type)
+bool SerializedScriptValueReaderForModules::doReadEcKey(
+    WebCryptoKeyAlgorithm& algorithm,
+    WebCryptoKeyType& type)
 {
-#ifdef MINIBLINK_NOT_IMPLEMENTED
-    WebCryptoAlgorithmId id;
-    if (!doReadAlgorithmId(id))
-        return false;
-    algorithm = WebCryptoKeyAlgorithm::createWithoutParams(id);
-    type = WebCryptoKeyTypeSecret;
-    return !algorithm.isNull();
-#endif
+    //   WebCryptoAlgorithmId id;
+    //   if (!doReadAlgorithmId(id))
+    //     return false;
+    //
+    //   if (!doReadAsymmetricKeyType(type))
+    //     return false;
+    //
+    //   WebCryptoNamedCurve namedCurve;
+    //   if (!doReadNamedCurve(namedCurve))
+    //     return false;
+    //
+    //   algorithm = WebCryptoKeyAlgorithm::createEc(id, namedCurve);
+    //   return !algorithm.isNull();
+    DebugBreak();
     return false;
 }
 
-bool SerializedScriptValueReaderForModules::doReadAlgorithmId(WebCryptoAlgorithmId& id)
+bool SerializedScriptValueReaderForModules::doReadKeyWithoutParams(
+    WebCryptoKeyAlgorithm& algorithm,
+    WebCryptoKeyType& type)
+{
+    //   WebCryptoAlgorithmId id;
+    //   if (!doReadAlgorithmId(id))
+    //     return false;
+    //   algorithm = WebCryptoKeyAlgorithm::createWithoutParams(id);
+    //   type = WebCryptoKeyTypeSecret;
+    //   return !algorithm.isNull();
+    DebugBreak();
+    return false;
+}
+
+bool SerializedScriptValueReaderForModules::doReadAlgorithmId(
+    WebCryptoAlgorithmId& id)
 {
     uint32_t rawId;
     if (!doReadUint32(&rawId))
@@ -608,14 +617,14 @@ bool SerializedScriptValueReaderForModules::doReadAlgorithmId(WebCryptoAlgorithm
     return false;
 }
 
-bool SerializedScriptValueReaderForModules::doReadAsymmetricKeyType(WebCryptoKeyType& type)
+bool SerializedScriptValueReaderForModules::doReadAsymmetricKeyType(
+    WebCryptoKeyType& type)
 {
-#ifdef MINIBLINK_NOT_IMPLEMENTED
     uint32_t rawType;
     if (!doReadUint32(&rawType))
         return false;
 
-    switch (static_cast<AssymetricCryptoKeyType>(rawType)) {
+    switch (static_cast<AsymmetricCryptoKeyType>(rawType)) {
     case PublicKeyType:
         type = WebCryptoKeyTypePublic;
         return true;
@@ -623,14 +632,13 @@ bool SerializedScriptValueReaderForModules::doReadAsymmetricKeyType(WebCryptoKey
         type = WebCryptoKeyTypePrivate;
         return true;
     }
-#endif
 
     return false;
 }
 
-bool SerializedScriptValueReaderForModules::doReadNamedCurve(WebCryptoNamedCurve& namedCurve)
+bool SerializedScriptValueReaderForModules::doReadNamedCurve(
+    WebCryptoNamedCurve& namedCurve)
 {
-#ifdef MINIBLINK_NOT_IMPLEMENTED
     uint32_t rawName;
     if (!doReadUint32(&rawName))
         return false;
@@ -646,15 +654,17 @@ bool SerializedScriptValueReaderForModules::doReadNamedCurve(WebCryptoNamedCurve
         namedCurve = WebCryptoNamedCurveP521;
         return true;
     }
-#endif
+
     return false;
 }
 
-bool SerializedScriptValueReaderForModules::doReadKeyUsages(WebCryptoKeyUsageMask& usages, bool& extractable)
+bool SerializedScriptValueReaderForModules::doReadKeyUsages(
+    WebCryptoKeyUsageMask& usages,
+    bool& extractable)
 {
-#ifdef MINIBLINK_NOT_IMPLEMENTED
     // Reminder to update this when adding new key usages.
-    static_assert(EndOfWebCryptoKeyUsage == (1 << 7) + 1, "update required when adding new key usages");
+    static_assert(EndOfWebCryptoKeyUsage == (1 << 7) + 1,
+        "update required when adding new key usages");
     const uint32_t allPossibleUsages = ExtractableUsage | EncryptUsage | DecryptUsage | SignUsage | VerifyUsage | DeriveKeyUsage | WrapKeyUsage | UnwrapKeyUsage | DeriveBitsUsage;
 
     uint32_t rawUsages;
@@ -687,12 +697,17 @@ bool SerializedScriptValueReaderForModules::doReadKeyUsages(WebCryptoKeyUsageMas
         usages |= WebCryptoKeyUsageDeriveBits;
 
     return true;
-#endif
-    return false;
 }
 
-ScriptValueDeserializerForModules::ScriptValueDeserializerForModules(SerializedScriptValueReaderForModules& reader, MessagePortArray* messagePorts, ArrayBufferContentsArray* arrayBufferContents)
-    : ScriptValueDeserializer(reader, messagePorts, arrayBufferContents)
+ScriptValueDeserializerForModules::ScriptValueDeserializerForModules(
+    SerializedScriptValueReaderForModules& reader,
+    MessagePortArray* messagePorts,
+    ArrayBufferContentsArray* arrayBufferContents,
+    ImageBitmapContentsArray* imageBitmapContents)
+    : ScriptValueDeserializer(reader,
+        messagePorts,
+        arrayBufferContents,
+        imageBitmapContents)
 {
 }
 
@@ -700,5 +715,5 @@ bool ScriptValueDeserializerForModules::read(v8::Local<v8::Value>* value)
 {
     return toSerializedScriptValueReaderForModules(reader()).read(value, *this);
 }
-#endif // MINIBLINK_NOT_IMPLEMENTED
+
 } // namespace blink

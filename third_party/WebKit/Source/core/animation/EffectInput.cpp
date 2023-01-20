@@ -28,22 +28,23 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/animation/EffectInput.h"
 
 #include "bindings/core/v8/Dictionary.h"
-#include "bindings/core/v8/UnionTypesCore.h"
-#include "core/HTMLNames.h"
-#include "core/SVGNames.h"
-#include "core/XLinkNames.h"
+#include "bindings/core/v8/DictionaryHelperForBindings.h"
+#include "bindings/core/v8/DictionarySequenceOrDictionary.h"
 #include "core/animation/AnimationInputHelpers.h"
+#include "core/animation/CompositorAnimations.h"
 #include "core/animation/KeyframeEffectModel.h"
 #include "core/animation/StringKeyframe.h"
-#include "core/css/resolver/StyleResolver.h"
+#include "core/css/CSSStyleSheet.h"
 #include "core/dom/Document.h"
 #include "core/dom/Element.h"
+#include "core/dom/ExceptionCode.h"
 #include "core/dom/NodeComputedStyle.h"
-#include "core/svg/animation/SVGSMILElement.h"
+#include "core/frame/FrameConsole.h"
+#include "core/frame/LocalFrame.h"
+#include "core/inspector/ConsoleMessage.h"
 #include "wtf/ASCIICType.h"
 #include "wtf/HashSet.h"
 #include "wtf/NonCopyingSort.h"
@@ -52,251 +53,338 @@ namespace blink {
 
 namespace {
 
-bool svgPrefixed(const String& property)
-{
-    return property.length() >= 4 && property.startsWith("svg") && isASCIIUpper(property[3]);
-}
-
-QualifiedName svgAttributeName(String property)
-{
-    // Replace 'svgTransform' with 'transform', etc.
-    ASSERT(svgPrefixed(property));
-    UChar first = toASCIILower(property[3]);
-    property.remove(0, 4);
-    property.insert(&first, 1, 0);
-
-    if (property == "href")
-        return XLinkNames::hrefAttr;
-
-    return QualifiedName(nullAtom, AtomicString(property), SVGNames::amplitudeAttr.namespaceURI());
-}
-
-const QualifiedName* supportedSVGAttribute(const String& property, SVGElement* svgElement)
-{
-    typedef HashMap<QualifiedName, const QualifiedName*> AttributeNameMap;
-    DEFINE_STATIC_LOCAL(AttributeNameMap, supportedAttributes, ());
-    if (supportedAttributes.isEmpty()) {
-        // Fill the set for the first use.
-        // Animatable attributes from http://www.w3.org/TR/SVG/attindex.html
-        const QualifiedName* attributes[] = {
-            &HTMLNames::classAttr,
-            &SVGNames::amplitudeAttr,
-            &SVGNames::azimuthAttr,
-            &SVGNames::baseFrequencyAttr,
-            &SVGNames::biasAttr,
-            &SVGNames::clipPathUnitsAttr,
-            &SVGNames::cxAttr,
-            &SVGNames::cyAttr,
-            &SVGNames::dAttr,
-            &SVGNames::diffuseConstantAttr,
-            &SVGNames::divisorAttr,
-            &SVGNames::dxAttr,
-            &SVGNames::dyAttr,
-            &SVGNames::edgeModeAttr,
-            &SVGNames::elevationAttr,
-            &SVGNames::exponentAttr,
-            &SVGNames::filterUnitsAttr,
-            &SVGNames::fxAttr,
-            &SVGNames::fyAttr,
-            &SVGNames::gradientTransformAttr,
-            &SVGNames::gradientUnitsAttr,
-            &SVGNames::heightAttr,
-            &SVGNames::in2Attr,
-            &SVGNames::inAttr,
-            &SVGNames::interceptAttr,
-            &SVGNames::k1Attr,
-            &SVGNames::k2Attr,
-            &SVGNames::k3Attr,
-            &SVGNames::k4Attr,
-            &SVGNames::kernelMatrixAttr,
-            &SVGNames::kernelUnitLengthAttr,
-            &SVGNames::lengthAdjustAttr,
-            &SVGNames::limitingConeAngleAttr,
-            &SVGNames::markerHeightAttr,
-            &SVGNames::markerUnitsAttr,
-            &SVGNames::markerWidthAttr,
-            &SVGNames::maskContentUnitsAttr,
-            &SVGNames::maskUnitsAttr,
-            &SVGNames::methodAttr,
-            &SVGNames::modeAttr,
-            &SVGNames::numOctavesAttr,
-            &SVGNames::offsetAttr,
-            &SVGNames::operatorAttr,
-            &SVGNames::orderAttr,
-            &SVGNames::orientAttr,
-            &SVGNames::pathLengthAttr,
-            &SVGNames::patternContentUnitsAttr,
-            &SVGNames::patternTransformAttr,
-            &SVGNames::patternUnitsAttr,
-            &SVGNames::pointsAtXAttr,
-            &SVGNames::pointsAtYAttr,
-            &SVGNames::pointsAtZAttr,
-            &SVGNames::pointsAttr,
-            &SVGNames::preserveAlphaAttr,
-            &SVGNames::preserveAspectRatioAttr,
-            &SVGNames::primitiveUnitsAttr,
-            &SVGNames::rAttr,
-            &SVGNames::radiusAttr,
-            &SVGNames::refXAttr,
-            &SVGNames::refYAttr,
-            &SVGNames::resultAttr,
-            &SVGNames::rotateAttr,
-            &SVGNames::rxAttr,
-            &SVGNames::ryAttr,
-            &SVGNames::scaleAttr,
-            &SVGNames::seedAttr,
-            &SVGNames::slopeAttr,
-            &SVGNames::spacingAttr,
-            &SVGNames::specularConstantAttr,
-            &SVGNames::specularExponentAttr,
-            &SVGNames::spreadMethodAttr,
-            &SVGNames::startOffsetAttr,
-            &SVGNames::stdDeviationAttr,
-            &SVGNames::stitchTilesAttr,
-            &SVGNames::surfaceScaleAttr,
-            &SVGNames::tableValuesAttr,
-            &SVGNames::targetAttr,
-            &SVGNames::targetXAttr,
-            &SVGNames::targetYAttr,
-            &SVGNames::textLengthAttr,
-            &SVGNames::transformAttr,
-            &SVGNames::typeAttr,
-            &SVGNames::valuesAttr,
-            &SVGNames::viewBoxAttr,
-            &SVGNames::widthAttr,
-            &SVGNames::x1Attr,
-            &SVGNames::x2Attr,
-            &SVGNames::xAttr,
-            &SVGNames::xChannelSelectorAttr,
-            &SVGNames::y1Attr,
-            &SVGNames::y2Attr,
-            &SVGNames::yAttr,
-            &SVGNames::yChannelSelectorAttr,
-            &SVGNames::zAttr,
-            &XLinkNames::hrefAttr,
-        };
-        for (size_t i = 0; i < WTF_ARRAY_LENGTH(attributes); i++)
-            supportedAttributes.set(*attributes[i], attributes[i]);
+    bool compareKeyframes(const RefPtr<StringKeyframe>& a,
+        const RefPtr<StringKeyframe>& b)
+    {
+        return a->offset() < b->offset();
     }
 
-    if (isSVGSMILElement(*svgElement))
-        return nullptr;
+    // Validates the value of |offset| and throws an exception if out of range.
+    bool checkOffset(double offset,
+        double lastOffset,
+        ExceptionState& exceptionState)
+    {
+        // Keyframes with offsets outside the range [0.0, 1.0] are an error.
+        if (std_isnan(offset)) {
+            exceptionState.throwTypeError("Non numeric offset provided");
+            return false;
+        }
 
-    QualifiedName attributeName = svgAttributeName(property);
+        if (offset < 0 || offset > 1) {
+            exceptionState.throwTypeError("Offsets provided outside the range [0, 1]");
+            return false;
+        }
 
-    auto iter = supportedAttributes.find(attributeName);
-    if (iter == supportedAttributes.end() || !svgElement->propertyFromAttribute(*iter->value))
-        return nullptr;
+        if (offset < lastOffset) {
+            exceptionState.throwTypeError(
+                "Keyframes with specified offsets are not sorted");
+            return false;
+        }
 
-    return iter->value;
-}
+        return true;
+    }
+
+    void setKeyframeValue(Element& element,
+        StringKeyframe& keyframe,
+        const String& property,
+        const String& value,
+        ExecutionContext* executionContext)
+    {
+        StyleSheetContents* styleSheetContents = element.document().elementSheet().contents();
+        CSSPropertyID cssProperty = AnimationInputHelpers::keyframeAttributeToCSSProperty(property,
+            element.document());
+        if (cssProperty != CSSPropertyInvalid) {
+            MutableStylePropertySet::SetResult setResult = cssProperty == CSSPropertyVariable
+                ? keyframe.setCSSPropertyValue(
+                    AtomicString(property), element.document().propertyRegistry(),
+                    value, styleSheetContents)
+                : keyframe.setCSSPropertyValue(cssProperty, value,
+                    styleSheetContents);
+            if (!setResult.didParse && executionContext) {
+                Document& document = toDocument(*executionContext);
+                if (document.frame()) {
+                    document.frame()->console().addMessage(ConsoleMessage::create(
+                        JSMessageSource, WarningMessageLevel,
+                        "Invalid keyframe value for property " + property + ": " + value));
+                }
+            }
+            return;
+        }
+        cssProperty = AnimationInputHelpers::keyframeAttributeToPresentationAttribute(
+            property, element);
+        if (cssProperty != CSSPropertyInvalid) {
+            keyframe.setPresentationAttributeValue(cssProperty, value,
+                styleSheetContents);
+            return;
+        }
+        const QualifiedName* svgAttribute = AnimationInputHelpers::keyframeAttributeToSVGAttribute(property, element);
+        if (svgAttribute)
+            keyframe.setSVGAttributeValue(*svgAttribute, value);
+    }
+
+    EffectModel* createEffectModelFromKeyframes(
+        Element& element,
+        const StringKeyframeVector& keyframes,
+        ExceptionState& exceptionState)
+    {
+        StringKeyframeEffectModel* keyframeEffectModel = StringKeyframeEffectModel::create(keyframes,
+            LinearTimingFunction::shared());
+        if (!RuntimeEnabledFeatures::cssAdditiveAnimationsEnabled()) {
+            for (const auto& keyframeGroup :
+                keyframeEffectModel->getPropertySpecificKeyframeGroups()) {
+                PropertyHandle property = keyframeGroup.key;
+                if (!property.isCSSProperty())
+                    continue;
+
+                for (const auto& keyframe : keyframeGroup.value->keyframes()) {
+                    if (keyframe->isNeutral()) {
+                        exceptionState.throwDOMException(
+                            NotSupportedError, "Partial keyframes are not supported.");
+                        return nullptr;
+                    }
+                    if (keyframe->composite() != EffectModel::CompositeReplace) {
+                        exceptionState.throwDOMException(
+                            NotSupportedError, "Additive animations are not supported.");
+                        return nullptr;
+                    }
+                }
+            }
+        }
+
+        DCHECK(!exceptionState.hadException());
+        return keyframeEffectModel;
+    }
+
+    bool exhaustDictionaryIterator(DictionaryIterator& iterator,
+        ExecutionContext* executionContext,
+        ExceptionState& exceptionState,
+        Vector<Dictionary>& result)
+    {
+        while (iterator.next(executionContext, exceptionState)) {
+            Dictionary dictionary;
+            if (!iterator.valueAsDictionary(dictionary, exceptionState)) {
+                exceptionState.throwTypeError("Keyframes must be objects.");
+                return false;
+            }
+            result.push_back(dictionary);
+        }
+        return !exceptionState.hadException();
+    }
 
 } // namespace
 
-PassRefPtrWillBeRawPtr<EffectModel> EffectInput::convert(Element* element, const Vector<Dictionary>& keyframeDictionaryVector, ExceptionState& exceptionState)
+// Spec: http://w3c.github.io/web-animations/#processing-a-keyframes-argument
+EffectModel* EffectInput::convert(
+    Element* element,
+    const DictionarySequenceOrDictionary& effectInput,
+    ExecutionContext* executionContext,
+    ExceptionState& exceptionState)
 {
-    if (!element)
+    if (effectInput.isNull() || !element)
         return nullptr;
 
-    // TODO(alancutter): Remove this once composited animations no longer depend on AnimatableValues.
-    if (element->inActiveDocument())
-        element->document().updateLayoutTreeForNodeIfNeeded(element);
+    if (effectInput.isDictionarySequence()) {
+        return convertArrayForm(*element, effectInput.getAsDictionarySequence(),
+            executionContext, exceptionState);
+    }
 
-    StyleSheetContents* styleSheetContents = element->document().elementSheet().contents();
+    const Dictionary& dictionary = effectInput.getAsDictionary();
+    DictionaryIterator iterator = dictionary.getIterator(executionContext);
+    if (!iterator.isNull()) {
+        // TODO(alancutter): Convert keyframes during iteration rather than after to
+        // match spec.
+        Vector<Dictionary> keyframeDictionaries;
+        if (exhaustDictionaryIterator(iterator, executionContext, exceptionState,
+                keyframeDictionaries)) {
+            return convertArrayForm(*element, keyframeDictionaries, executionContext,
+                exceptionState);
+        }
+        return nullptr;
+    }
+
+    return convertObjectForm(*element, dictionary, executionContext,
+        exceptionState);
+}
+
+EffectModel* EffectInput::convertArrayForm(
+    Element& element,
+    const Vector<Dictionary>& keyframeDictionaries,
+    ExecutionContext* executionContext,
+    ExceptionState& exceptionState)
+{
     StringKeyframeVector keyframes;
     double lastOffset = 0;
 
-    for (const auto& keyframeDictionary : keyframeDictionaryVector) {
-        RefPtrWillBeRawPtr<StringKeyframe> keyframe = StringKeyframe::create();
+    for (const Dictionary& keyframeDictionary : keyframeDictionaries) {
+        RefPtr<StringKeyframe> keyframe = StringKeyframe::create();
 
-        ScriptValue scriptValue;
-        bool frameHasOffset = DictionaryHelper::get(keyframeDictionary, "offset", scriptValue) && !scriptValue.isNull();
-
-        if (frameHasOffset) {
-            double offset;
-            DictionaryHelper::get(keyframeDictionary, "offset", offset);
-
-            // Keyframes with offsets outside the range [0.0, 1.0] are an error.
-            if (std::isnan(offset)) {
-                exceptionState.throwDOMException(InvalidModificationError, "Non numeric offset provided");
-            }
-
-            if (offset < 0 || offset > 1) {
-                exceptionState.throwDOMException(InvalidModificationError, "Offsets provided outside the range [0, 1]");
+        Nullable<double> offset;
+        if (DictionaryHelper::get(keyframeDictionary, "offset", offset) && !offset.isNull()) {
+            if (!checkOffset(offset.get(), lastOffset, exceptionState))
                 return nullptr;
-            }
 
-            if (offset < lastOffset) {
-                exceptionState.throwDOMException(InvalidModificationError, "Keyframes with specified offsets are not sorted");
-                return nullptr;
-            }
-
-            lastOffset = offset;
-
-            keyframe->setOffset(offset);
+            lastOffset = offset.get();
+            keyframe->setOffset(offset.get());
         }
-        keyframes.append(keyframe);
 
         String compositeString;
         DictionaryHelper::get(keyframeDictionary, "composite", compositeString);
         if (compositeString == "add")
             keyframe->setComposite(EffectModel::CompositeAdd);
+        // TODO(alancutter): Support "accumulate" keyframe composition.
 
         String timingFunctionString;
-        if (DictionaryHelper::get(keyframeDictionary, "easing", timingFunctionString)) {
-            if (RefPtr<TimingFunction> timingFunction = AnimationInputHelpers::parseTimingFunction(timingFunctionString))
-                keyframe->setEasing(timingFunction);
+        if (DictionaryHelper::get(keyframeDictionary, "easing",
+                timingFunctionString)) {
+            RefPtr<TimingFunction> timingFunction = AnimationInputHelpers::parseTimingFunction(
+                timingFunctionString, &element.document(), exceptionState);
+            if (!timingFunction)
+                return nullptr;
+            keyframe->setEasing(timingFunction);
         }
 
-        Vector<String> keyframeProperties;
-        keyframeDictionary.getPropertyNames(keyframeProperties);
+        const Vector<String>& keyframeProperties = keyframeDictionary.getPropertyNames(exceptionState);
+        if (exceptionState.hadException())
+            return nullptr;
         for (const auto& property : keyframeProperties) {
+            if (property == "offset" || property == "composite" || property == "easing") {
+                continue;
+            }
+
+            Vector<String> values;
+            if (DictionaryHelper::get(keyframeDictionary, property, values)) {
+                exceptionState.throwTypeError(
+                    "Lists of values not permitted in array-form list of keyframes");
+                return nullptr;
+            }
+
             String value;
             DictionaryHelper::get(keyframeDictionary, property, value);
-            CSSPropertyID id = AnimationInputHelpers::keyframeAttributeToCSSPropertyID(property);
-            if (id != CSSPropertyInvalid) {
-                keyframe->setPropertyValue(id, value, element, styleSheetContents);
-                continue;
-            }
 
-            if (property == "offset"
-                || property == "composite"
-                || property == "easing") {
-                continue;
-            }
+            setKeyframeValue(element, *keyframe.get(), property, value,
+                executionContext);
+        }
+        keyframes.push_back(keyframe);
+    }
 
-            if (!RuntimeEnabledFeatures::webAnimationsSVGEnabled() || !element->isSVGElement() || !svgPrefixed(property))
-                continue;
+    DCHECK(!exceptionState.hadException());
 
-            SVGElement* svgElement = toSVGElement(element);
-            const QualifiedName* qualifiedName = supportedSVGAttribute(property, svgElement);
+    return createEffectModelFromKeyframes(element, keyframes, exceptionState);
+}
 
-            if (qualifiedName)
-                keyframe->setPropertyValue(*qualifiedName, value, svgElement);
+static bool getPropertyIndexedKeyframeValues(
+    const Dictionary& keyframeDictionary,
+    const String& property,
+    ExecutionContext* executionContext,
+    ExceptionState& exceptionState,
+    Vector<String>& result)
+{
+    DCHECK(result.isEmpty());
+
+    // Array of strings.
+    if (DictionaryHelper::get(keyframeDictionary, property, result))
+        return true;
+
+    Dictionary valuesDictionary;
+    if (!keyframeDictionary.get(property, valuesDictionary) || valuesDictionary.isUndefinedOrNull()) {
+        // Non-object.
+        String value;
+        DictionaryHelper::get(keyframeDictionary, property, value);
+        result.push_back(value);
+        return true;
+    }
+
+    DictionaryIterator iterator = valuesDictionary.getIterator(executionContext);
+    if (iterator.isNull()) {
+        // Non-iterable object.
+        String value;
+        DictionaryHelper::get(keyframeDictionary, property, value);
+        result.push_back(value);
+        return true;
+    }
+
+    // Iterable object.
+    while (iterator.next(executionContext, exceptionState)) {
+        String value;
+        if (!iterator.valueAsString(value)) {
+            exceptionState.throwTypeError("Unable to read keyframe value as string.");
+            return false;
+        }
+        result.push_back(value);
+    }
+    return !exceptionState.hadException();
+}
+
+EffectModel* EffectInput::convertObjectForm(
+    Element& element,
+    const Dictionary& keyframeDictionary,
+    ExecutionContext* executionContext,
+    ExceptionState& exceptionState)
+{
+    StringKeyframeVector keyframes;
+
+    String timingFunctionString;
+    RefPtr<TimingFunction> timingFunction = nullptr;
+    if (DictionaryHelper::get(keyframeDictionary, "easing",
+            timingFunctionString)) {
+        timingFunction = AnimationInputHelpers::parseTimingFunction(
+            timingFunctionString, &element.document(), exceptionState);
+        if (!timingFunction)
+            return nullptr;
+    }
+
+    Nullable<double> offset;
+    if (DictionaryHelper::get(keyframeDictionary, "offset", offset) && !offset.isNull()) {
+        if (!checkOffset(offset.get(), 0.0, exceptionState))
+            return nullptr;
+    }
+
+    String compositeString;
+    DictionaryHelper::get(keyframeDictionary, "composite", compositeString);
+
+    const Vector<String>& keyframeProperties = keyframeDictionary.getPropertyNames(exceptionState);
+    if (exceptionState.hadException())
+        return nullptr;
+    for (const auto& property : keyframeProperties) {
+        if (property == "offset" || property == "composite" || property == "easing") {
+            continue;
+        }
+
+        Vector<String> values;
+        if (!getPropertyIndexedKeyframeValues(keyframeDictionary, property,
+                executionContext, exceptionState,
+                values))
+            return nullptr;
+
+        size_t numKeyframes = values.size();
+        for (size_t i = 0; i < numKeyframes; ++i) {
+            RefPtr<StringKeyframe> keyframe = StringKeyframe::create();
+
+            if (!offset.isNull())
+                keyframe->setOffset(offset.get());
+            else if (numKeyframes == 1)
+                keyframe->setOffset(1.0);
+            else
+                keyframe->setOffset(i / (numKeyframes - 1.0));
+
+            if (timingFunction)
+                keyframe->setEasing(timingFunction);
+
+            if (compositeString == "add")
+                keyframe->setComposite(EffectModel::CompositeAdd);
+            // TODO(alancutter): Support "accumulate" keyframe composition.
+
+            setKeyframeValue(element, *keyframe.get(), property, values[i],
+                executionContext);
+            keyframes.push_back(keyframe);
         }
     }
 
-    RefPtrWillBeRawPtr<StringKeyframeEffectModel> keyframeEffectModel = StringKeyframeEffectModel::create(keyframes);
-    if (keyframeEffectModel->hasSyntheticKeyframes()) {
-        exceptionState.throwDOMException(NotSupportedError, "Partial keyframes are not supported.");
-        return nullptr;
-    }
-    if (!keyframeEffectModel->isReplaceOnly()) {
-        exceptionState.throwDOMException(NotSupportedError, "Additive animations are not supported.");
-        return nullptr;
-    }
-    keyframeEffectModel->forceConversionsToAnimatableValues(*element, element->computedStyle());
+    std::sort(keyframes.begin(), keyframes.end(), compareKeyframes);
 
-    return keyframeEffectModel;
-}
+    DCHECK(!exceptionState.hadException());
 
-PassRefPtrWillBeRawPtr<EffectModel> EffectInput::convert(Element* element, const EffectModelOrDictionarySequence& effectInput, ExceptionState& exceptionState)
-{
-    if (effectInput.isEffectModel())
-        return effectInput.getAsEffectModel();
-    if (effectInput.isDictionarySequence())
-        return convert(element, effectInput.getAsDictionarySequence(), exceptionState);
-    return nullptr;
+    return createEffectModelFromKeyframes(element, keyframes, exceptionState);
 }
 
 } // namespace blink

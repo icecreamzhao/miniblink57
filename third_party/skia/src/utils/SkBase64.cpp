@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -9,40 +5,24 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #include "SkBase64.h"
 
 #define DecodePad -2
 #define EncodePad 64
 
-<<<<<<< HEAD
 static const char default_encode[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                      "abcdefghijklmnopqrstuvwxyz"
                                      "0123456789+/=";
-=======
-static const char default_encode[] =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    "abcdefghijklmnopqrstuvwxyz"
-    "0123456789+/=";
->>>>>>> miniblink49
 
 static const signed char decodeData[] = {
     62, -1, -1, -1, 63,
     52, 53, 54, 55, 56, 57, 58, 59, 60, 61, -1, -1, -1, DecodePad, -1, -1,
-<<<<<<< HEAD
     -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
-=======
-    -1,  0,  1,  2,  3,  4,  5,  6, 7,  8,  9, 10, 11, 12, 13, 14,
->>>>>>> miniblink49
     15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1, -1, -1, -1, -1,
     -1, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
     41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51
 };
 
-<<<<<<< HEAD
 SkBase64::SkBase64()
     : fLength((size_t)-1)
     , fData(nullptr)
@@ -59,20 +39,6 @@ SkBase64::Error SkBase64::decode(const void* srcPtr, size_t size, bool writeDest
     unsigned char* dst = (unsigned char*)fData;
     const unsigned char* dstStart = (const unsigned char*)fData;
     const unsigned char* src = (const unsigned char*)srcPtr;
-=======
-SkBase64::SkBase64() : fLength((size_t) -1), fData(NULL) {
-}
-
-#if defined _WIN32 && _MSC_VER >= 1300  // disable 'two', etc. may be used without having been initialized
-#pragma warning ( push )
-#pragma warning ( disable : 4701 )
-#endif
-
-SkBase64::Error SkBase64::decode(const void* srcPtr, size_t size, bool writeDestination) {
-    unsigned char* dst = (unsigned char*) fData;
-    const unsigned char* dstStart = (const unsigned char*) fData;
-    const unsigned char* src = (const unsigned char*) srcPtr;
->>>>>>> miniblink49
     bool padTwo = false;
     bool padThree = false;
     const unsigned char* end = src + size;
@@ -101,11 +67,7 @@ SkBase64::Error SkBase64::decode(const void* srcPtr, size_t size, bool writeDest
                 goto goHome;
             if (byte == 4)
                 break;
-<<<<<<< HEAD
         handlePad:
-=======
-handlePad:
->>>>>>> miniblink49
             if (byte < 2)
                 return kPadError;
             padThree = true;
@@ -116,7 +78,6 @@ handlePad:
         int two = 0;
         int three = 0;
         if (writeDestination) {
-<<<<<<< HEAD
             int one = (uint8_t)(bytes[0] << 2);
             two = bytes[1];
             one |= two >> 4;
@@ -127,37 +88,17 @@ handlePad:
             three |= bytes[3];
             SkASSERT(one < 256 && two < 256 && three < 256);
             *dst = (unsigned char)one;
-=======
-            int one = (uint8_t) (bytes[0] << 2);
-            two = bytes[1];
-            one |= two >> 4;
-            two = (uint8_t) (two << 4);
-            three = bytes[2];
-            two |= three >> 2;
-            three = (uint8_t) (three << 6);
-            three |= bytes[3];
-            SkASSERT(one < 256 && two < 256 && three < 256);
-            *dst = (unsigned char) one;
->>>>>>> miniblink49
         }
         dst++;
         if (padTwo)
             break;
         if (writeDestination)
-<<<<<<< HEAD
             *dst = (unsigned char)two;
-=======
-            *dst = (unsigned char) two;
->>>>>>> miniblink49
         dst++;
         if (padThree)
             break;
         if (writeDestination)
-<<<<<<< HEAD
             *dst = (unsigned char)three;
-=======
-            *dst = (unsigned char) three;
->>>>>>> miniblink49
         dst++;
     }
 goHome:
@@ -165,7 +106,6 @@ goHome:
     return kNoError;
 }
 
-<<<<<<< HEAD
 #if defined _WIN32
 #pragma warning(pop)
 #endif
@@ -174,26 +114,12 @@ size_t SkBase64::Encode(const void* srcPtr, size_t length, void* dstPtr, const c
 {
     const char* encode;
     if (nullptr == encodeMap) {
-=======
-#if defined _WIN32 && _MSC_VER >= 1300
-#pragma warning ( pop )
-#endif
-
-size_t SkBase64::Encode(const void* srcPtr, size_t length, void* dstPtr, const char* encodeMap) {
-    const char* encode;
-    if (NULL == encodeMap) {
->>>>>>> miniblink49
         encode = default_encode;
     } else {
         encode = encodeMap;
     }
-<<<<<<< HEAD
     const unsigned char* src = (const unsigned char*)srcPtr;
     unsigned char* dst = (unsigned char*)dstPtr;
-=======
-    const unsigned char* src = (const unsigned char*) srcPtr;
-    unsigned char* dst = (unsigned char*) dstPtr;
->>>>>>> miniblink49
     if (dst) {
         size_t remainder = length % 3;
         const unsigned char* end = &src[length - remainder];
@@ -201,11 +127,7 @@ size_t SkBase64::Encode(const void* srcPtr, size_t length, void* dstPtr, const c
             unsigned a = *src++;
             unsigned b = *src++;
             unsigned c = *src++;
-<<<<<<< HEAD
             int d = c & 0x3F;
-=======
-            int      d = c & 0x3F;
->>>>>>> miniblink49
             c = (c >> 6 | b << 2) & 0x3F;
             b = (b >> 4 | a << 4) & 0x3F;
             a = a >> 2;
@@ -217,14 +139,8 @@ size_t SkBase64::Encode(const void* srcPtr, size_t length, void* dstPtr, const c
         if (remainder > 0) {
             int k1 = 0;
             int k2 = EncodePad;
-<<<<<<< HEAD
             int a = (uint8_t)*src++;
             if (remainder == 2) {
-=======
-            int a = (uint8_t) *src++;
-            if (remainder == 2)
-            {
->>>>>>> miniblink49
                 int b = *src++;
                 k1 = b >> 4;
                 k2 = (b << 2) & 0x3F;
@@ -238,21 +154,13 @@ size_t SkBase64::Encode(const void* srcPtr, size_t length, void* dstPtr, const c
     return (length + 2) / 3 * 4;
 }
 
-<<<<<<< HEAD
 SkBase64::Error SkBase64::decode(const char* src, size_t len)
 {
-=======
-SkBase64::Error SkBase64::decode(const char* src, size_t len) {
->>>>>>> miniblink49
     Error err = decode(src, len, false);
     SkASSERT(err == kNoError);
     if (err != kNoError)
         return err;
-<<<<<<< HEAD
     fData = new char[fLength]; // should use sk_malloc/sk_free
-=======
-    fData = new char[fLength];  // should use sk_malloc/sk_free
->>>>>>> miniblink49
     decode(src, len, true);
     return kNoError;
 }

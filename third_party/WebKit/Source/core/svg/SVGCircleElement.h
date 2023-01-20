@@ -22,7 +22,6 @@
 #define SVGCircleElement_h
 
 #include "core/SVGNames.h"
-#include "core/svg/SVGAnimatedBoolean.h"
 #include "core/svg/SVGAnimatedLength.h"
 #include "core/svg/SVGGeometryElement.h"
 #include "platform/heap/Handle.h"
@@ -31,6 +30,7 @@ namespace blink {
 
 class SVGCircleElement final : public SVGGeometryElement {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     DECLARE_NODE_FACTORY(SVGCircleElement);
 
@@ -47,17 +47,17 @@ private:
 
     void svgAttributeChanged(const QualifiedName&) override;
 
-    bool isPresentationAttribute(const QualifiedName&) const override;
-    bool isPresentationAttributeWithSVGDOM(const QualifiedName&) const override;
-    void collectStyleForPresentationAttribute(const QualifiedName&, const AtomicString&, MutableStylePropertySet*) override;
+    void collectStyleForPresentationAttribute(const QualifiedName&,
+        const AtomicString&,
+        MutableStylePropertySet*) override;
 
     bool selfHasRelativeLengths() const override;
 
     LayoutObject* createLayoutObject(const ComputedStyle&) override;
 
-    RefPtrWillBeMember<SVGAnimatedLength> m_cx;
-    RefPtrWillBeMember<SVGAnimatedLength> m_cy;
-    RefPtrWillBeMember<SVGAnimatedLength> m_r;
+    Member<SVGAnimatedLength> m_cx;
+    Member<SVGAnimatedLength> m_cy;
+    Member<SVGAnimatedLength> m_r;
 };
 
 } // namespace blink

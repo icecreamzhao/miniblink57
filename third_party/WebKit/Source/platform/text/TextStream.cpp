@@ -23,10 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/text/TextStream.h"
 
 #include "platform/LayoutUnit.h"
@@ -44,7 +40,6 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 // large enough for any integer or floating point value in string format,
 // including trailing null character
 static const size_t printBufferSize = 100;
@@ -53,13 +48,6 @@ static inline bool hasFractions(double val)
 {
     // We use 0.011 to more than match the number of significant digits we print
     // out when dumping the render tree.
-=======
-static const size_t printBufferSize = 100; // large enough for any integer or floating point value in string format, including trailing null character
-
-static inline bool hasFractions(double val)
-{
-    // We use 0.011 to more than match the number of significant digits we print out when dumping the render tree.
->>>>>>> miniblink49
     static const double s_epsilon = 0.011;
     int ival = static_cast<int>(round(val));
     double dval = static_cast<double>(ival);
@@ -138,12 +126,8 @@ TextStream& TextStream::operator<<(const String& string)
     return *this;
 }
 
-<<<<<<< HEAD
 TextStream& TextStream::operator<<(
     const FormatNumberRespectingIntegers& numberToFormat)
-=======
-TextStream& TextStream::operator<<(const FormatNumberRespectingIntegers& numberToFormat)
->>>>>>> miniblink49
 {
     if (hasFractions(numberToFormat.value))
         return *this << numberToFormat.value;
@@ -161,12 +145,8 @@ String TextStream::release()
 
 TextStream& operator<<(TextStream& ts, const IntRect& r)
 {
-<<<<<<< HEAD
     return ts << "at (" << r.x() << "," << r.y() << ") size " << r.width() << "x"
               << r.height();
-=======
-    return ts << "at (" << r.x() << "," << r.y() << ") size " << r.width() << "x" << r.height();
->>>>>>> miniblink49
 }
 
 TextStream& operator<<(TextStream& ts, const IntPoint& p)
@@ -218,18 +198,10 @@ TextStream& operator<<(TextStream& ts, const LayoutSize& size)
     return ts << FloatSize(size);
 }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 void writeIndent(TextStream& ts, int indent)
 {
     for (int i = 0; i != indent; ++i)
         ts << "  ";
 }
 
-<<<<<<< HEAD
 } // namespace blink
-=======
-}
->>>>>>> miniblink49

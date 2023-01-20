@@ -30,27 +30,23 @@
 #include "core/CoreExport.h"
 #include "core/fileapi/File.h"
 #include "platform/heap/Handle.h"
-#include "wtf/PassRefPtr.h"
-#include "wtf/RefCounted.h"
-#include "wtf/RefPtr.h"
 #include "wtf/Vector.h"
 
 namespace blink {
 
-class CORE_EXPORT FileList final : public GarbageCollected<FileList>, public ScriptWrappable {
+class CORE_EXPORT FileList final : public GarbageCollected<FileList>,
+                                   public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static FileList* create()
-    {
-        return new FileList;
-    }
+    static FileList* create() { return new FileList; }
 
     unsigned length() const { return m_files.size(); }
     File* item(unsigned index) const;
 
     bool isEmpty() const { return m_files.isEmpty(); }
     void clear() { m_files.clear(); }
-    void append(File* file) { m_files.append(file); }
+    void append(File* file) { m_files.push_back(file); }
     Vector<String> pathsForUserVisibleFiles() const;
 
     DECLARE_TRACE();

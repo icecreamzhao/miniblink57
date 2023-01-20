@@ -27,11 +27,10 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/html/track/vtt/VTTScanner.h"
 
+#include "testing/gtest/include/gtest/gtest.h"
 #include "wtf/text/WTFString.h"
-#include <gtest/gtest.h>
 
 namespace blink {
 
@@ -73,17 +72,17 @@ void scanSequenceHelper1(const String& input)
 }
 
 // Run TESTFUNC with DATA in Latin and then UTF-16. (Requires DATA being Latin.)
-#define TEST_WITH(TESTFUNC, DATA) do {      \
-    String data8(DATA);                     \
-    EXPECT_TRUE(data8.is8Bit());            \
-    TESTFUNC(data8);                        \
-    \
-    String data16(data8);                   \
-    data16.ensure16Bit();                   \
-    EXPECT_FALSE(data16.is8Bit());          \
-    TESTFUNC(data16);                       \
-} while (false)
-
+#define TEST_WITH(TESTFUNC, DATA)      \
+    do {                               \
+        String data8(DATA);            \
+        EXPECT_TRUE(data8.is8Bit());   \
+        TESTFUNC(data8);               \
+                                       \
+        String data16(data8);          \
+        data16.ensure16Bit();          \
+        EXPECT_FALSE(data16.is8Bit()); \
+        TESTFUNC(data16);              \
+    } while (false)
 
 // Exercises match(c) and scan(c).
 TEST(VTTScannerTest, BasicOperations1)

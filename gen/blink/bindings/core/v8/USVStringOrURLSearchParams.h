@@ -8,7 +8,7 @@
 // This file has been generated from the Jinja2 template in
 // third_party/WebKit/Source/bindings/templates/union_container.h.tmpl
 
-// clang-format off
+// clang-format on
 #ifndef USVStringOrURLSearchParams_h
 #define USVStringOrURLSearchParams_h
 
@@ -23,7 +23,8 @@ namespace blink {
 class URLSearchParams;
 
 class CORE_EXPORT USVStringOrURLSearchParams final {
-    //DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
+
 public:
     USVStringOrURLSearchParams();
     bool isNull() const { return m_type == SpecificTypeNone; }
@@ -59,7 +60,7 @@ private:
 
 class V8USVStringOrURLSearchParams final {
 public:
-    CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, USVStringOrURLSearchParams&, bool isNullable, ExceptionState&);
+    CORE_EXPORT static void toImpl(v8::Isolate*, v8::Local<v8::Value>, USVStringOrURLSearchParams&, UnionTypeConversionMode, ExceptionState&);
 };
 
 CORE_EXPORT v8::Local<v8::Value> ToV8(const USVStringOrURLSearchParams&, v8::Local<v8::Object>, v8::Isolate*);
@@ -75,7 +76,7 @@ struct NativeValueTraits<USVStringOrURLSearchParams> {
     CORE_EXPORT static USVStringOrURLSearchParams nativeValue(v8::Isolate*, v8::Local<v8::Value>, ExceptionState&);
 };
 
-}  // namespace blink
+} // namespace blink
 
 // We need to set canInitializeWithMemset=true because HeapVector supports
 // items that can initialize with memset or have a vtable. It is safe to
@@ -83,4 +84,4 @@ struct NativeValueTraits<USVStringOrURLSearchParams> {
 // See https://codereview.chromium.org/1118993002/#msg5 for more details.
 WTF_ALLOW_MOVE_AND_INIT_WITH_MEM_FUNCTIONS(blink::USVStringOrURLSearchParams);
 
-#endif  // USVStringOrURLSearchParams_h
+#endif // USVStringOrURLSearchParams_h

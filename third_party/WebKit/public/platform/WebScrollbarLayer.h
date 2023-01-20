@@ -39,10 +39,6 @@ public:
     virtual WebLayer* layer() = 0;
 
     virtual void setScrollLayer(WebLayer*) = 0;
-<<<<<<< HEAD
-=======
-    virtual void setClipLayer(WebLayer*) = 0;
->>>>>>> miniblink49
 };
 
 } // namespace blink

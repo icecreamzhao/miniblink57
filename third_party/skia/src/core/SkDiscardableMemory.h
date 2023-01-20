@@ -19,40 +19,25 @@ class SK_API SkDiscardableMemory {
 public:
     /**
      *  Factory method that creates, initializes and locks an SkDiscardableMemory
-<<<<<<< HEAD
      *  object. If either of these steps fails, a nullptr pointer will be returned.
-=======
-     *  object. If either of these steps fails, a NULL pointer will be returned.
->>>>>>> miniblink49
      */
     static SkDiscardableMemory* Create(size_t bytes);
 
     /**
      *  Factory class that creates, initializes and locks an SkDiscardableMemory
-<<<<<<< HEAD
      *  object. If either of these steps fails, a nullptr pointer will be returned.
-=======
-     *  object. If either of these steps fails, a NULL pointer will be returned.
->>>>>>> miniblink49
      */
     class Factory : public SkRefCnt {
     public:
         virtual SkDiscardableMemory* create(size_t bytes) = 0;
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
     private:
         typedef SkRefCnt INHERITED;
     };
 
     /** Must not be called while locked.
      */
-<<<<<<< HEAD
     virtual ~SkDiscardableMemory() { }
-=======
-    virtual ~SkDiscardableMemory() {}
->>>>>>> miniblink49
 
     /**
      * Locks the memory, prevent it from being discarded. Once locked. you may

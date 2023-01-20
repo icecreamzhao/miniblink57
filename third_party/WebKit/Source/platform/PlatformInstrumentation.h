@@ -32,31 +32,19 @@
 #define PlatformInstrumentation_h
 
 #include "platform/PlatformExport.h"
-<<<<<<< HEAD
 #include "platform/instrumentation/tracing/TraceEvent.h"
-=======
-#include "platform/TraceEvent.h"
-#include "wtf/MainThread.h"
->>>>>>> miniblink49
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
 class PLATFORM_EXPORT PlatformInstrumentation {
 public:
-<<<<<<< HEAD
     class LazyPixelRefTracker : TraceEvent::TraceScopedTrackableObject<void*> {
     public:
         LazyPixelRefTracker(void* instance)
             : TraceEvent::TraceScopedTrackableObject<void*>(CategoryName,
                 LazyPixelRef,
                 instance)
-=======
-    class LazyPixelRefTracker: TraceEvent::TraceScopedTrackableObject<void*> {
-    public:
-        LazyPixelRefTracker(void* instance)
-            : TraceEvent::TraceScopedTrackableObject<void*>(CategoryName, LazyPixelRef, instance)
->>>>>>> miniblink49
         {
         }
     };
@@ -83,12 +71,8 @@ private:
 
 inline void PlatformInstrumentation::willDecodeImage(const String& imageType)
 {
-<<<<<<< HEAD
     TRACE_EVENT_BEGIN1(CategoryName, ImageDecodeEvent, ImageTypeArgument,
         imageType.ascii());
-=======
-    TRACE_EVENT_BEGIN1(CategoryName, ImageDecodeEvent, ImageTypeArgument, imageType.ascii());
->>>>>>> miniblink49
 }
 
 inline void PlatformInstrumentation::didDecodeImage()
@@ -96,7 +80,6 @@ inline void PlatformInstrumentation::didDecodeImage()
     TRACE_EVENT_END0(CategoryName, ImageDecodeEvent);
 }
 
-<<<<<<< HEAD
 inline void PlatformInstrumentation::didDrawLazyPixelRef(
     unsigned long long lazyPixelRefId)
 {
@@ -109,16 +92,6 @@ inline void PlatformInstrumentation::willDecodeLazyPixelRef(
 {
     TRACE_EVENT_BEGIN1(CategoryName, DecodeLazyPixelRefEvent, LazyPixelRef,
         lazyPixelRefId);
-=======
-inline void PlatformInstrumentation::didDrawLazyPixelRef(unsigned long long lazyPixelRefId)
-{
-    TRACE_EVENT_INSTANT1(CategoryName, DrawLazyPixelRefEvent, TRACE_EVENT_SCOPE_THREAD, LazyPixelRef, lazyPixelRefId);
-}
-
-inline void PlatformInstrumentation::willDecodeLazyPixelRef(unsigned long long lazyPixelRefId)
-{
-    TRACE_EVENT_BEGIN1(CategoryName, DecodeLazyPixelRefEvent, LazyPixelRef, lazyPixelRefId);
->>>>>>> miniblink49
 }
 
 inline void PlatformInstrumentation::didDecodeLazyPixelRef()

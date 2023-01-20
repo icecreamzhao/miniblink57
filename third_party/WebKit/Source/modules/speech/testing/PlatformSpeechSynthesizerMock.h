@@ -34,12 +34,8 @@ namespace blink {
 
 class PlatformSpeechSynthesizerMock final : public PlatformSpeechSynthesizer {
 public:
-<<<<<<< HEAD
     static PlatformSpeechSynthesizerMock* create(
         PlatformSpeechSynthesizerClient*);
-=======
-    static PlatformSpeechSynthesizerMock* create(PlatformSpeechSynthesizerClient*);
->>>>>>> miniblink49
 
     ~PlatformSpeechSynthesizerMock() override;
     void speak(PlatformSpeechSynthesisUtterance*) override;
@@ -57,13 +53,8 @@ private:
     void speakNext();
     void speakNow();
 
-<<<<<<< HEAD
     void speakingErrorOccurred(TimerBase*);
     void speakingFinished(TimerBase*);
-=======
-    void speakingErrorOccurred(Timer<PlatformSpeechSynthesizerMock>*);
-    void speakingFinished(Timer<PlatformSpeechSynthesizerMock>*);
->>>>>>> miniblink49
 
     Timer<PlatformSpeechSynthesizerMock> m_speakingErrorOccurredTimer;
     Timer<PlatformSpeechSynthesizerMock> m_speakingFinishedTimer;

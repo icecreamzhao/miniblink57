@@ -13,17 +13,11 @@
 
 #include "platform/PlatformExport.h"
 #include "public/platform/WebCrypto.h"
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/HashSet.h"
 #include "wtf/StringHasher.h"
 #include "wtf/Vector.h"
 #include <memory>
-=======
-#include "wtf/HashSet.h"
-#include "wtf/StringHasher.h"
-#include "wtf/Vector.h"
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -38,7 +32,6 @@ enum HashAlgorithm {
     HashAlgorithmSha512
 };
 
-<<<<<<< HEAD
 PLATFORM_EXPORT bool computeDigest(HashAlgorithm,
     const char* digestable,
     size_t length,
@@ -48,21 +41,13 @@ PLATFORM_EXPORT std::unique_ptr<WebCryptoDigestor> createDigestor(
     HashAlgorithm);
 PLATFORM_EXPORT void finishDigestor(WebCryptoDigestor*,
     DigestValue& digestResult);
-=======
-PLATFORM_EXPORT bool computeDigest(HashAlgorithm, const char* digestable, size_t length, DigestValue& digestResult);
-PLATFORM_EXPORT PassOwnPtr<WebCryptoDigestor> createDigestor(HashAlgorithm);
-PLATFORM_EXPORT void finishDigestor(WebCryptoDigestor*, DigestValue& digestResult);
->>>>>>> miniblink49
 
 } // namespace blink
 
 namespace WTF {
 
 struct DigestValueHash {
-<<<<<<< HEAD
     STATIC_ONLY(DigestValueHash);
-=======
->>>>>>> miniblink49
     static unsigned hash(const blink::DigestValue& v)
     {
         return StringHasher::computeHash(v.data(), v.size());
@@ -75,16 +60,12 @@ struct DigestValueHash {
 };
 template <>
 struct DefaultHash<blink::DigestValue> {
-<<<<<<< HEAD
     STATIC_ONLY(DefaultHash);
-=======
->>>>>>> miniblink49
     typedef DigestValueHash Hash;
 };
 
 template <>
 struct DefaultHash<blink::HashAlgorithm> {
-<<<<<<< HEAD
     STATIC_ONLY(DefaultHash);
     typedef IntHash<blink::HashAlgorithm> Hash;
 };
@@ -92,12 +73,6 @@ template <>
 struct HashTraits<blink::HashAlgorithm>
     : UnsignedWithZeroKeyHashTraits<blink::HashAlgorithm> {
     STATIC_ONLY(HashTraits);
-=======
-    typedef IntHash<blink::HashAlgorithm> Hash;
-};
-template <>
-struct HashTraits<blink::HashAlgorithm> : UnsignedWithZeroKeyHashTraits<blink::HashAlgorithm> {
->>>>>>> miniblink49
 };
 
 } // namespace WTF

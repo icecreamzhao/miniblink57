@@ -10,7 +10,6 @@ namespace internal {
 
 #define ERROR_MESSAGES_TEXTS(C, T) T,
 
-<<<<<<< HEAD
     const char* GetBailoutReason(BailoutReason reason)
     {
         DCHECK_LT(reason, BailoutReason::kLastErrorMessage);
@@ -39,29 +38,3 @@ namespace internal {
 #undef ERROR_MESSAGES_TEXTS
 } // namespace internal
 } // namespace v8
-=======
-const char* GetBailoutReason(BailoutReason reason) {
-  DCHECK_LT(reason, BailoutReason::kLastErrorMessage);
-  DCHECK_GE(reason, BailoutReason::kNoReason);
-  static const char* error_messages_[] = {
-      BAILOUT_MESSAGES_LIST(ERROR_MESSAGES_TEXTS)};
-  return error_messages_[static_cast<int>(reason)];
-}
-
-const char* GetAbortReason(AbortReason reason) {
-  DCHECK_LT(reason, AbortReason::kLastErrorMessage);
-  DCHECK_GE(reason, AbortReason::kNoReason);
-  static const char* error_messages_[] = {
-      ABORT_MESSAGES_LIST(ERROR_MESSAGES_TEXTS)};
-  return error_messages_[static_cast<int>(reason)];
-}
-
-bool IsValidAbortReason(int reason_id) {
-  return reason_id >= static_cast<int>(AbortReason::kNoReason) &&
-         reason_id < static_cast<int>(AbortReason::kLastErrorMessage);
-}
-
-#undef ERROR_MESSAGES_TEXTS
-}  // namespace internal
-}  // namespace v8
->>>>>>> miniblink49

@@ -20,22 +20,28 @@
 #ifndef SVGTextChunkBuilder_h
 #define SVGTextChunkBuilder_h
 
+#include "wtf/Allocator.h"
 #include "wtf/Vector.h"
 
 namespace blink {
 
-class AffineTransform;
 class SVGInlineTextBox;
 struct SVGTextFragment;
 
 // SVGTextChunkBuilder performs the third layout phase for SVG text.
 //
-// Phase one built the layout information from the SVG DOM stored in the LayoutSVGInlineText objects (SVGTextLayoutAttributes).
-// Phase two performed the actual per-character layout, computing the final positions for each character, stored in the SVGInlineTextBox objects (SVGTextFragment).
-// Phase three performs all modifications that have to be applied to each individual text chunk (text-anchor & textLength).
+// Phase one built the layout information from the SVG DOM stored in the
+// LayoutSVGInlineText objects (SVGTextLayoutAttributes).
+// Phase two performed the actual per-character layout, computing the final
+// positions for each character, stored in the SVGInlineTextBox objects
+// (SVGTextFragment).
+// Phase three performs all modifications that have to be applied to each
+// individual text chunk (text-anchor & textLength).
 
 class SVGTextChunkBuilder {
+    STACK_ALLOCATED();
     WTF_MAKE_NONCOPYABLE(SVGTextChunkBuilder);
+
 public:
     SVGTextChunkBuilder();
 
@@ -44,16 +50,26 @@ public:
 protected:
     typedef Vector<SVGInlineTextBox*>::const_iterator BoxListConstIterator;
 
-    virtual void handleTextChunk(BoxListConstIterator boxStart, BoxListConstIterator boxEnd);
+    virtual void handleTextChunk(BoxListConstIterator boxStart,
+        BoxListConstIterator boxEnd);
 
 private:
-    void processTextLengthSpacingCorrection(bool isVerticalText, float textLengthShift, Vector<SVGTextFragment>&, unsigned& atCharacter);
-    void applyTextLengthScaleAdjustment(const AffineTransform&, Vector<SVGTextFragment>&);
-    void processTextAnchorCorrection(bool isVerticalText, float textAnchorShift, Vector<SVGTextFragment>&);
+    void processTextLengthSpacingCorrection(bool isVerticalText,
+        float textLengthShift,
+        Vector<SVGTextFragment>&,
+        unsigned& atCharacter);
+    void applyTextLengthScaleAdjustment(float textLengthScale,
+        float textLengthBias,
+        Vector<SVGTextFragment>&);
+    void processTextAnchorCorrection(bool isVerticalText,
+        float textAnchorShift,
+        Vector<SVGTextFragment>&);
 };
 
 class SVGTextPathChunkBuilder final : public SVGTextChunkBuilder {
+    STACK_ALLOCATED();
     WTF_MAKE_NONCOPYABLE(SVGTextPathChunkBuilder);
+
 public:
     SVGTextPathChunkBuilder();
 
@@ -62,7 +78,8 @@ public:
     float totalTextAnchorShift() const { return m_totalTextAnchorShift; }
 
 private:
-    void handleTextChunk(BoxListConstIterator boxStart, BoxListConstIterator boxEnd) override;
+    void handleTextChunk(BoxListConstIterator boxStart,
+        BoxListConstIterator boxEnd) override;
 
     float m_totalLength;
     unsigned m_totalCharacters;

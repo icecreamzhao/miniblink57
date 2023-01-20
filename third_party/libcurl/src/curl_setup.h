@@ -50,13 +50,7 @@
  * Include configuration script results or hand-crafted
  * configuration file for platforms which lack config tool.
  */
-<<<<<<< HEAD
 #ifdef HAVE_CONFIG_H
-=======
-
-#ifdef HAVE_CONFIG_H
-
->>>>>>> miniblink49
 #include "curl_config.h"
 
 #else /* HAVE_CONFIG_H */

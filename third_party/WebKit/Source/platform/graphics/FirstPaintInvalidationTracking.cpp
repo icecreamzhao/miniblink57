@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
 #include "platform/graphics/FirstPaintInvalidationTracking.h"
 
 namespace blink {
@@ -10,30 +9,3 @@ namespace blink {
 bool FirstPaintInvalidationTracking::s_enabledForShowPaintRects = false;
 
 } // namespace blink
-=======
-#include "config.h"
-#include "platform/graphics/FirstPaintInvalidationTracking.h"
-
-#include "platform/TraceEvent.h"
-
-namespace blink {
-
-static bool showPaintRectsEnabled = false;
-
-bool firstPaintInvalidationTrackingEnabled()
-{
-    if (showPaintRectsEnabled)
-        return true;
-
-    bool isTracingEnabled = false;
-    TRACE_EVENT_CATEGORY_GROUP_ENABLED(TRACE_DISABLED_BY_DEFAULT("blink.invalidation"), &isTracingEnabled);
-    return isTracingEnabled;
-}
-
-void setFirstPaintInvalidationTrackingEnabledForShowPaintRects(bool b)
-{
-    showPaintRectsEnabled = b;
-}
-
-}
->>>>>>> miniblink49

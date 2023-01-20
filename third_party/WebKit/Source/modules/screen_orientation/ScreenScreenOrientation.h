@@ -5,10 +5,7 @@
 #ifndef ScreenScreenOrientation_h
 #define ScreenScreenOrientation_h
 
-<<<<<<< HEAD
 #include "core/frame/Screen.h"
-=======
->>>>>>> miniblink49
 #include "platform/Supplementable.h"
 #include "platform/heap/Handle.h"
 
@@ -18,16 +15,11 @@ class ScreenOrientation;
 class Screen;
 class ScriptState;
 
-<<<<<<< HEAD
 class ScreenScreenOrientation final
     : public GarbageCollected<ScreenScreenOrientation>,
       public Supplement<Screen> {
     USING_GARBAGE_COLLECTED_MIXIN(ScreenScreenOrientation);
 
-=======
-class ScreenScreenOrientation final : public GarbageCollected<ScreenScreenOrientation>, public HeapSupplement<Screen> {
-    USING_GARBAGE_COLLECTED_MIXIN(ScreenScreenOrientation);
->>>>>>> miniblink49
 public:
     static ScreenScreenOrientation& from(Screen&);
 

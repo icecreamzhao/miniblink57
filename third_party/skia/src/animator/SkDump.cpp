@@ -6,10 +6,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #include "SkDump.h"
 
 #ifdef SK_DUMP_ENABLED
@@ -36,7 +32,6 @@ const SkMemberInfo SkDump::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkDump);
 
-<<<<<<< HEAD
 SkDump::SkDump()
     : displayList(-1)
     , eventList(-1)
@@ -48,12 +43,6 @@ SkDump::SkDump()
 
 bool SkDump::enable(SkAnimateMaker& maker)
 {
-=======
-SkDump::SkDump() : displayList(-1), eventList(-1), events(-1), groups(-1), posts(-1) {
-}
-
-bool SkDump::enable(SkAnimateMaker& maker ) {
->>>>>>> miniblink49
     if (script.size() > 0)
         return evaluate(maker);
     bool hasAttr = false;
@@ -72,14 +61,9 @@ bool SkDump::enable(SkAnimateMaker& maker ) {
     return true;
 }
 
-<<<<<<< HEAD
 bool SkDump::evaluate(SkAnimateMaker& maker)
 {
     SkAnimatorScript scriptEngine(maker, nullptr, SkType_Int);
-=======
-bool SkDump::evaluate(SkAnimateMaker &maker) {
-    SkAnimatorScript scriptEngine(maker, NULL, SkType_Int);
->>>>>>> miniblink49
     SkScriptValue value;
     const char* cScript = script.c_str();
     bool success = scriptEngine.evaluateScript(&cScript, &value);
@@ -89,7 +73,6 @@ bool SkDump::evaluate(SkAnimateMaker &maker) {
         return false;
     }
     switch (value.fType) {
-<<<<<<< HEAD
     case SkType_Float:
         SkDebugf("%g\" />\n", SkScalarToFloat(value.fOperand.fScalar));
         break;
@@ -101,24 +84,10 @@ bool SkDump::evaluate(SkAnimateMaker &maker) {
         break;
     default:
         return false;
-=======
-        case SkType_Float:
-            SkDebugf("%g\" />\n", SkScalarToFloat(value.fOperand.fScalar));
-            break;
-        case SkType_Int:
-            SkDebugf("%d\" />\n", value.fOperand.fS32);
-            break;
-        case SkType_String:
-            SkDebugf("%s\" />\n", value.fOperand.fString->c_str());
-            break;
-        default:
-            return false;
->>>>>>> miniblink49
     }
     return true;
 }
 
-<<<<<<< HEAD
 bool SkDump::hasEnable() const
 {
     return true;
@@ -132,19 +101,6 @@ void SkDump::GetEnumString(SkDisplayTypes type, int index, SkString* result)
     while (--index >= 0) {
         str = strchr(str, '|');
         if (str == nullptr) {
-=======
-bool SkDump::hasEnable() const {
-    return true;
-}
-
-void SkDump::GetEnumString(SkDisplayTypes type, int index, SkString* result) {
-    int badEnum = index;
-    const SkDisplayEnumMap& map = SkAnimatorScript::GetEnumValues(type);
-    const char* str  = map.fValues;
-    while (--index >= 0) {
-        str = strchr(str, '|');
-        if (str == NULL) {
->>>>>>> miniblink49
             result->reset();
             result->appendS32(badEnum);
             return;
@@ -152,11 +108,7 @@ void SkDump::GetEnumString(SkDisplayTypes type, int index, SkString* result) {
         str += 1;
     }
     const char* end = strchr(str, '|');
-<<<<<<< HEAD
     if (end == nullptr)
-=======
-    if (end == NULL)
->>>>>>> miniblink49
         end = str + strlen(str);
     result->set(str, end - str);
 }
@@ -192,7 +144,6 @@ const SkMemberInfo SkDump::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkDump);
 
-<<<<<<< HEAD
 bool SkDump::enable(SkAnimateMaker&)
 {
     return true;
@@ -205,17 +156,6 @@ bool SkDump::hasEnable() const
 
 bool SkDump::setProperty(int index, SkScriptValue&)
 {
-=======
-bool SkDump::enable(SkAnimateMaker&) {
-    return true;
-}
-
-bool SkDump::hasEnable() const {
-    return true;
-}
-
-bool SkDump::setProperty(int index, SkScriptValue&) {
->>>>>>> miniblink49
     return index <= SK_PROPERTY(posts);
 }
 

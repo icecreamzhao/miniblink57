@@ -32,15 +32,11 @@
 #define LayoutTestSupport_h
 
 #include "platform/PlatformExport.h"
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
-=======
->>>>>>> miniblink49
 
 namespace blink {
 
 class LayoutTestSupport {
-<<<<<<< HEAD
     STATIC_ONLY(LayoutTestSupport);
 
 public:
@@ -48,11 +44,6 @@ public:
     PLATFORM_EXPORT static void setIsRunningLayoutTest(bool);
     PLATFORM_EXPORT static bool isMockThemeEnabledForTest();
     PLATFORM_EXPORT static void setMockThemeEnabledForTest(bool);
-=======
-public:
-    PLATFORM_EXPORT static bool isRunningLayoutTest();
-    PLATFORM_EXPORT static void setIsRunningLayoutTest(bool);
->>>>>>> miniblink49
     PLATFORM_EXPORT static bool isFontAntialiasingEnabledForTest();
     PLATFORM_EXPORT static void setFontAntialiasingEnabledForTest(bool);
 };

@@ -10,7 +10,6 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
-<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -25,26 +24,6 @@
  */
 
 #include "platform/audio/AudioUtilities.h"
-=======
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-
-#include "config.h"
-
-#if ENABLE(WEB_AUDIO)
-
-#include "platform/audio/AudioUtilities.h"
-
->>>>>>> miniblink49
 #include "wtf/Assertions.h"
 #include "wtf/MathExtras.h"
 
@@ -52,7 +31,6 @@ namespace blink {
 
 namespace AudioUtilities {
 
-<<<<<<< HEAD
     float decibelsToLinear(float decibels)
     {
         return powf(10, 0.05f * decibels);
@@ -113,52 +91,3 @@ namespace AudioUtilities {
 } // namespace AudioUtilities
 
 } // namespace blink
-=======
-float decibelsToLinear(float decibels)
-{
-    return powf(10, 0.05f * decibels);
-}
-
-float linearToDecibels(float linear)
-{
-    // It's not possible to calculate decibels for a zero linear value since it would be -Inf.
-    // -1000.0 dB represents a very tiny linear value in case we ever reach this case.
-    ASSERT(linear);
-    if (!linear)
-        return -1000;
-
-    return 20 * log10f(linear);
-}
-
-double discreteTimeConstantForSampleRate(double timeConstant, double sampleRate)
-{
-    return 1 - exp(-1 / (sampleRate * timeConstant));
-}
-
-size_t timeToSampleFrame(double time, double sampleRate)
-{
-    return static_cast<size_t>(round(time * sampleRate));
-}
-
-bool isValidAudioBufferSampleRate(float sampleRate)
-{
-    return sampleRate >= minAudioBufferSampleRate() && sampleRate <= maxAudioBufferSampleRate();
-}
-
-float minAudioBufferSampleRate()
-{
-    // crbug.com/344375
-    return 3000;
-}
-
-float maxAudioBufferSampleRate()
-{
-    // Windows can support audio sampling rates this high, so allow AudioBuffer rates this high as well.
-    return 192000;
-}
-} // AudioUtilites
-
-} // namespace blink
-
-#endif // ENABLE(WEB_AUDIO)
->>>>>>> miniblink49

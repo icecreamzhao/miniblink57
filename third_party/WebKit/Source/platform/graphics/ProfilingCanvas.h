@@ -38,7 +38,6 @@ namespace blink {
 
 class ProfilingCanvas;
 
-<<<<<<< HEAD
 template <>
 class CanvasInterceptor<ProfilingCanvas>
     : protected InterceptingCanvasBase::CanvasInterceptorBase<ProfilingCanvas> {
@@ -46,12 +45,6 @@ public:
     CanvasInterceptor(InterceptingCanvasBase*);
     ~CanvasInterceptor();
 
-=======
-template<> class CanvasInterceptor<ProfilingCanvas> : protected InterceptingCanvasBase::CanvasInterceptorBase<ProfilingCanvas> {
-public:
-    CanvasInterceptor(InterceptingCanvasBase*);
-    ~CanvasInterceptor();
->>>>>>> miniblink49
 private:
     double m_startTime;
 };

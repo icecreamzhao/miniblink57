@@ -8,12 +8,7 @@
 #ifndef SkThreadUtils_WinData_DEFINED
 #define SkThreadUtils_WinData_DEFINED
 
-<<<<<<< HEAD
 #include "SkLeanWindows.h"
-=======
-#include "SkTypes.h"
-
->>>>>>> miniblink49
 #include "SkThreadUtils.h"
 
 class SkThread_WinData : SkNoncopyable {

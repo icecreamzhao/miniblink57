@@ -1,5 +1,4 @@
 include_rules = [
-<<<<<<< HEAD
     "+base/callback_forward.h",
     "+base/location.h",
     "+base/logging.h",
@@ -23,14 +22,5 @@ include_rules = [
     "+services/service_manager/public/interfaces",
     "+third_party/skia",
     "+url",
-=======
-    "-bindings",
-    "-core",
-    "-modules",
-    "+platform",
-    "+platform/weborigin",
-    "-public/web",
-    "+third_party/skia",
->>>>>>> miniblink49
     "-web",
 ]

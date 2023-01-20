@@ -2,51 +2,78 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "core/html/parser/PreloadRequest.h"
 
 #include "core/dom/Document.h"
 #include "core/fetch/FetchInitiatorInfo.h"
+#include "core/fetch/FetchRequest.h"
+#include "core/fetch/ResourceFetcher.h"
+#include "core/loader/DocumentLoader.h"
+#include "platform/CrossOriginAttributeValue.h"
+#include "platform/weborigin/SecurityPolicy.h"
 
 namespace blink {
 
 bool PreloadRequest::isSafeToSendToAnotherThread() const
 {
-    return m_initiatorName.isSafeToSendToAnotherThread()
-        && m_charset.isSafeToSendToAnotherThread()
-        && m_resourceURL.isSafeToSendToAnotherThread()
-        && m_baseURL.isSafeToSendToAnotherThread();
+    return m_initiatorName.isSafeToSendToAnotherThread() && m_charset.isSafeToSendToAnotherThread() && m_resourceURL.isSafeToSendToAnotherThread() && m_baseURL.isSafeToSendToAnotherThread();
 }
 
 KURL PreloadRequest::completeURL(Document* document)
 {
-    return document->completeURLWithOverride(m_resourceURL, m_baseURL.isEmpty() ? document->url() : m_baseURL);
+    if (!m_baseURL.isEmpty())
+        return document->completeURLWithOverride(m_resourceURL, m_baseURL);
+    return document->completeURL(m_resourceURL);
 }
 
-FetchRequest PreloadRequest::resourceRequest(Document* document)
+Resource* PreloadRequest::start(Document* document)
 {
     ASSERT(isMainThread());
+
     FetchInitiatorInfo initiatorInfo;
     initiatorInfo.name = AtomicString(m_initiatorName);
     initiatorInfo.position = m_initiatorPosition;
-    FetchRequest request(ResourceRequest(completeURL(document)), initiatorInfo);
+
+    const KURL& url = completeURL(document);
+    // Data URLs are filtered out in the preload scanner.
+    DCHECK(!url.protocolIsData());
+
+    ResourceRequest resourceRequest(url);
+    resourceRequest.setHTTPReferrer(SecurityPolicy::generateReferrer(
+        m_referrerPolicy, url, document->outgoingReferrer()));
+    ResourceFetcher::determineRequestContext(resourceRequest, m_resourceType,
+        false);
+
+    FetchRequest request(resourceRequest, initiatorInfo);
 
     if (m_resourceType == Resource::ImportResource) {
-        SecurityOrigin* securityOrigin = document->contextDocument()->securityOrigin();
-        bool sameOrigin = securityOrigin->canRequest(request.url());
+        SecurityOrigin* securityOrigin = document->contextDocument()->getSecurityOrigin();
         request.setCrossOriginAccessControl(securityOrigin,
-            sameOrigin ? AllowStoredCredentials : DoNotAllowStoredCredentials,
-            ClientDidNotRequestCredentials);
+            CrossOriginAttributeAnonymous);
     }
 
-    if (m_isCORSEnabled)
-        request.setCrossOriginAccessControl(document->securityOrigin(), m_allowCredentials);
+    if (m_crossOrigin != CrossOriginAttributeNotSet) {
+        request.setCrossOriginAccessControl(document->getSecurityOrigin(),
+            m_crossOrigin);
+    }
 
     request.setDefer(m_defer);
     request.setResourceWidth(m_resourceWidth);
-    request.setClientHintsPreferences(m_clientHintsPreferences);
+    request.clientHintsPreferences().updateFrom(m_clientHintsPreferences);
+    request.setIntegrityMetadata(m_integrityMetadata);
+    request.setContentSecurityPolicyNonce(m_nonce);
+    request.setParserDisposition(ParserInserted);
 
-    return request;
+    if (m_requestType == RequestTypeLinkRelPreload)
+        request.setLinkPreload(true);
+
+    if (m_resourceType == Resource::Script || m_resourceType == Resource::CSSStyleSheet || m_resourceType == Resource::ImportResource) {
+        request.setCharset(
+            m_charset.isEmpty() ? document->characterSet().getString() : m_charset);
+    }
+    request.setForPreload(true, m_discoveryTime);
+
+    return document->loader()->startPreload(m_resourceType, request);
 }
 
-}
+} // namespace blink

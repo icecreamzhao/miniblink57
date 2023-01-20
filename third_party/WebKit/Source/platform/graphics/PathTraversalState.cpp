@@ -17,10 +17,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/graphics/PathTraversalState.h"
 
 #include "wtf/MathExtras.h"
@@ -28,7 +24,6 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 static inline FloatPoint midPoint(const FloatPoint& first,
     const FloatPoint& second)
 {
@@ -38,23 +33,12 @@ static inline FloatPoint midPoint(const FloatPoint& first,
 
 static inline float distanceLine(const FloatPoint& start,
     const FloatPoint& end)
-=======
-static inline FloatPoint midPoint(const FloatPoint& first, const FloatPoint& second)
-{
-    return FloatPoint((first.x() + second.x()) / 2.0f, (first.y() + second.y()) / 2.0f);
-}
-
-static inline float distanceLine(const FloatPoint& start, const FloatPoint& end)
->>>>>>> miniblink49
 {
     return sqrtf((end.x() - start.x()) * (end.x() - start.x()) + (end.y() - start.y()) * (end.y() - start.y()));
 }
 
 struct QuadraticBezier {
-<<<<<<< HEAD
     DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
-=======
->>>>>>> miniblink49
     QuadraticBezier() { }
     QuadraticBezier(const FloatPoint& s, const FloatPoint& c, const FloatPoint& e)
         : start(s)
@@ -96,17 +80,12 @@ struct QuadraticBezier {
 };
 
 struct CubicBezier {
-<<<<<<< HEAD
     DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
     CubicBezier() { }
     CubicBezier(const FloatPoint& s,
         const FloatPoint& c1,
         const FloatPoint& c2,
         const FloatPoint& e)
-=======
-    CubicBezier() { }
-    CubicBezier(const FloatPoint& s, const FloatPoint& c1, const FloatPoint& c2, const FloatPoint& e)
->>>>>>> miniblink49
         : start(s)
         , control1(c1)
         , control2(c2)
@@ -151,11 +130,7 @@ struct CubicBezier {
     unsigned short splitDepth;
 };
 
-<<<<<<< HEAD
 template <class CurveType>
-=======
-template<class CurveType>
->>>>>>> miniblink49
 static float curveLength(PathTraversalState& traversalState, CurveType curve)
 {
     static const unsigned short curveSplitDepthLimit = 20;
@@ -166,11 +141,7 @@ static float curveLength(PathTraversalState& traversalState, CurveType curve)
         return 0;
 
     Vector<CurveType> curveStack;
-<<<<<<< HEAD
     curveStack.push_back(curve);
-=======
-    curveStack.append(curve);
->>>>>>> miniblink49
 
     float totalLength = 0;
     do {
@@ -181,11 +152,7 @@ static float curveLength(PathTraversalState& traversalState, CurveType curve)
             CurveType rightCurve;
             curve.split(leftCurve, rightCurve);
             curve = leftCurve;
-<<<<<<< HEAD
             curveStack.push_back(rightCurve);
-=======
-            curveStack.append(rightCurve);
->>>>>>> miniblink49
         } else {
             totalLength += length;
             if (traversalState.m_action == PathTraversalState::TraversalPointAtLength || traversalState.m_action == PathTraversalState::TraversalNormalAngleAtLength) {
@@ -194,13 +161,8 @@ static float curveLength(PathTraversalState& traversalState, CurveType curve)
                 if (traversalState.m_totalLength + totalLength > traversalState.m_desiredLength)
                     return totalLength;
             }
-<<<<<<< HEAD
             curve = curveStack.back();
             curveStack.pop_back();
-=======
-            curve = curveStack.last();
-            curveStack.removeLast();
->>>>>>> miniblink49
         }
     } while (!curveStack.isEmpty());
 
@@ -236,18 +198,12 @@ float PathTraversalState::lineTo(const FloatPoint& point)
     return distance;
 }
 
-<<<<<<< HEAD
 float PathTraversalState::cubicBezierTo(const FloatPoint& newControl1,
     const FloatPoint& newControl2,
     const FloatPoint& newEnd)
 {
     float distance = curveLength<CubicBezier>(
         *this, CubicBezier(m_current, newControl1, newControl2, newEnd));
-=======
-float PathTraversalState::cubicBezierTo(const FloatPoint& newControl1, const FloatPoint& newControl2, const FloatPoint& newEnd)
-{
-    float distance = curveLength<CubicBezier>(*this, CubicBezier(m_current, newControl1, newControl2, newEnd));
->>>>>>> miniblink49
 
     if (m_action != TraversalPointAtLength && m_action != TraversalNormalAngleAtLength)
         m_current = newEnd;
@@ -274,7 +230,3 @@ void PathTraversalState::processSegment()
 }
 
 } // namespace blink
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49

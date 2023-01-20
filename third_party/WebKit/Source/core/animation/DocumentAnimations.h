@@ -36,20 +36,21 @@
 namespace blink {
 
 class Document;
-class Node;
 
 class DocumentAnimations {
 public:
-    static void updateAnimationTimingForAnimationFrame(Document&, double monotonicAnimationStartTime);
-    static bool needsOutdatedAnimationUpdate(const Document&);
+    static void updateAnimationTimingForAnimationFrame(Document&);
+    static bool needsAnimationTimingUpdate(const Document&);
     static void updateAnimationTimingIfNeeded(Document&);
-    static void updateAnimationTimingForGetComputedStyle(Node&, CSSPropertyID);
-    static void updateCompositorAnimations(Document&);
+
+    // Updates existing animations as part of generating a new (document
+    // lifecycle) frame.
+    static void updateAnimations(Document&);
 
 private:
     DocumentAnimations() { }
 };
 
-} // namespace
+} // namespace blink
 
 #endif

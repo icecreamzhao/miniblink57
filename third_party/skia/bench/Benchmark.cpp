@@ -15,18 +15,13 @@ const char* SkTriState::Name[] = { "default", "true", "false" };
 
 template BenchRegistry* BenchRegistry::gHead;
 
-<<<<<<< HEAD
 Benchmark::Benchmark()
 {
-=======
-Benchmark::Benchmark() {
->>>>>>> miniblink49
     fForceAlpha = 0xFF;
     fDither = SkTriState::kDefault;
     fOrMask = fClearMask = 0;
 }
 
-<<<<<<< HEAD
 const char* Benchmark::getName()
 {
     return this->onGetName();
@@ -75,38 +70,6 @@ void Benchmark::draw(int loops, SkCanvas* canvas)
 
 void Benchmark::setupPaint(SkPaint* paint)
 {
-=======
-const char* Benchmark::getName() {
-    return this->onGetName();
-}
-
-const char* Benchmark::getUniqueName() {
-    return this->onGetUniqueName();
-}
-
-SkIPoint Benchmark::getSize() {
-    return this->onGetSize();
-}
-
-void Benchmark::preDraw() {
-    this->onPreDraw();
-}
-
-void Benchmark::perCanvasPreDraw(SkCanvas* canvas) {
-    this->onPerCanvasPreDraw(canvas);
-}
-
-void Benchmark::perCanvasPostDraw(SkCanvas* canvas) {
-    this->onPerCanvasPostDraw(canvas);
-}
-
-void Benchmark::draw(const int loops, SkCanvas* canvas) {
-    SkAutoCanvasRestore ar(canvas, true/*save now*/);
-    this->onDraw(loops, canvas);
-}
-
-void Benchmark::setupPaint(SkPaint* paint) {
->>>>>>> miniblink49
     paint->setAlpha(fForceAlpha);
     paint->setAntiAlias(true);
     paint->setFilterQuality(kNone_SkFilterQuality);
@@ -118,11 +81,7 @@ void Benchmark::setupPaint(SkPaint* paint) {
     }
 }
 
-<<<<<<< HEAD
 SkIPoint Benchmark::onGetSize()
 {
-=======
-SkIPoint Benchmark::onGetSize() {
->>>>>>> miniblink49
     return SkIPoint::Make(640, 480);
 }

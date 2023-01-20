@@ -36,13 +36,10 @@
 #include "src/tracing/trace-event.h"
 #include "src/tracing/tracing-category-observer.h"
 
-<<<<<<< HEAD
 namespace wke {
 extern bool g_enableSkipJsError;
 }
 
-=======
->>>>>>> miniblink49
 namespace v8 {
 namespace internal {
 
@@ -672,7 +669,6 @@ void IC::ConfigureVectorState(MapHandleList* maps,
 }
 
 
-<<<<<<< HEAD
 v8::Object* CreateFixErrObj(v8::Isolate* isolate) {
   v8::Local<v8::Context> ctx = (isolate)->GetCurrentContext();
   v8::Local<v8::Object> global = ctx->Global();
@@ -685,8 +681,6 @@ v8::Object* CreateFixErrObj(v8::Isolate* isolate) {
   return v8::Object::Cast(*ret);
 }
 
-=======
->>>>>>> miniblink49
 MaybeHandle<Object> LoadIC::Load(Handle<Object> object, Handle<Name> name) {
   // If the object is undefined or null it's illegal to try to get any
   // of its properties; throw a TypeError in that case.
@@ -698,14 +692,10 @@ MaybeHandle<Object> LoadIC::Load(Handle<Object> object, Handle<Name> name) {
       PatchCache(name, slow_stub());
       TRACE_IC("LoadIC", name);
     }
-<<<<<<< HEAD
     if (wke::g_enableSkipJsError)
       object = Utils::OpenHandle(CreateFixErrObj((v8::Isolate*)isolate())); // weolar
     else
       return TypeError(MessageTemplate::kNonObjectPropertyLoad, object, name);
-=======
-    return TypeError(MessageTemplate::kNonObjectPropertyLoad, object, name);
->>>>>>> miniblink49
   }
 
   bool use_ic = MigrateDeprecated(object) ? false : FLAG_use_ic;
@@ -734,14 +724,10 @@ MaybeHandle<Object> LoadIC::Load(Handle<Object> object, Handle<Name> name) {
       return result;
     }
   }
-<<<<<<< HEAD
   if (wke::g_enableSkipJsError)
     return Utils::OpenHandle(CreateFixErrObj((v8::Isolate*)isolate()));
   else
     return ReferenceError(name);
-=======
-  return ReferenceError(name);
->>>>>>> miniblink49
 }
 
 MaybeHandle<Object> LoadGlobalIC::Load(Handle<Name> name) {
@@ -1661,11 +1647,7 @@ static Handle<Object> TryConvertKey(Handle<Object> key, Isolate* isolate) {
   // non-smi keys of keyed loads/stores to a smi or a string.
   if (key->IsHeapNumber()) {
     double value = Handle<HeapNumber>::cast(key)->value();
-<<<<<<< HEAD
     if (std_isnan(value)) {
-=======
-    if (std::isnan(value)) {
->>>>>>> miniblink49
       key = isolate->factory()->nan_string();
     } else {
       int int_value = FastD2I(value);
@@ -1923,15 +1905,11 @@ MaybeHandle<Object> StoreIC::Store(Handle<Object> object, Handle<Name> name,
       PatchCache(name, slow_stub());
       TRACE_IC("StoreIC", name);
     }
-<<<<<<< HEAD
 
     if (wke::g_enableSkipJsError)
       object = Utils::OpenHandle(CreateFixErrObj((v8::Isolate*)isolate())); // weolar
     else
       return TypeError(MessageTemplate::kNonObjectPropertyStore, object, name);
-=======
-    return TypeError(MessageTemplate::kNonObjectPropertyStore, object, name);
->>>>>>> miniblink49
   }
 
   if (state() != UNINITIALIZED) {
@@ -3302,12 +3280,9 @@ RUNTIME_FUNCTION(Runtime_LoadPropertyWithInterceptor) {
     return isolate->heap()->undefined_value();
   }
 
-<<<<<<< HEAD
   if (wke::g_enableSkipJsError)
     return isolate->heap()->undefined_value();
 
-=======
->>>>>>> miniblink49
   // Throw a reference error.
   THROW_NEW_ERROR_RETURN_FAILURE(
       isolate, NewReferenceError(MessageTemplate::kNotDefined, it.name()));

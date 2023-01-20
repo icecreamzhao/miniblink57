@@ -27,25 +27,17 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "platform/fonts/FontDescription.h"
 
 #include "platform/Language.h"
 #include "platform/RuntimeEnabledFeatures.h"
 #include "wtf/StringHasher.h"
-=======
-#include "config.h"
-#include "platform/fonts/FontDescription.h"
-
-#include "platform/RuntimeEnabledFeatures.h"
->>>>>>> miniblink49
 #include "wtf/text/AtomicStringHash.h"
 #include "wtf/text/StringHash.h"
 
 namespace blink {
 
 struct SameSizeAsFontDescription {
-<<<<<<< HEAD
     DISALLOW_NEW();
     FontFamily familyList;
     RefPtr<FontFeatureSettings> m_featureSettings;
@@ -53,15 +45,6 @@ struct SameSizeAsFontDescription {
     AtomicString locale;
     float sizes[6];
     FieldsAsUnsignedType bitfields;
-=======
-    FontFamily familyList;
-    RefPtr<FontFeatureSettings> m_featureSettings;
-    AtomicString locale;
-    float sizes[6];
-    // FXIME: Make them fit into one word.
-    uint32_t bitfields;
-    uint32_t bitfields2 : 7;
->>>>>>> miniblink49
 };
 
 static_assert(sizeof(FontDescription) == sizeof(SameSizeAsFontDescription), "FontDescription should stay small");
@@ -73,7 +56,6 @@ bool FontDescription::s_useSubpixelTextPositioning = false;
 FontWeight FontDescription::lighterWeight(FontWeight weight)
 {
     switch (weight) {
-<<<<<<< HEAD
     case FontWeight100:
     case FontWeight200:
     case FontWeight300:
@@ -88,22 +70,6 @@ FontWeight FontDescription::lighterWeight(FontWeight weight)
     case FontWeight800:
     case FontWeight900:
         return FontWeight700;
-=======
-        case FontWeight100:
-        case FontWeight200:
-        case FontWeight300:
-        case FontWeight400:
-        case FontWeight500:
-            return FontWeight100;
-
-        case FontWeight600:
-        case FontWeight700:
-            return FontWeight400;
-
-        case FontWeight800:
-        case FontWeight900:
-            return FontWeight700;
->>>>>>> miniblink49
     }
     ASSERT_NOT_REACHED();
     return FontWeightNormal;
@@ -112,7 +78,6 @@ FontWeight FontDescription::lighterWeight(FontWeight weight)
 FontWeight FontDescription::bolderWeight(FontWeight weight)
 {
     switch (weight) {
-<<<<<<< HEAD
     case FontWeight100:
     case FontWeight200:
     case FontWeight300:
@@ -127,22 +92,6 @@ FontWeight FontDescription::bolderWeight(FontWeight weight)
     case FontWeight800:
     case FontWeight900:
         return FontWeight900;
-=======
-        case FontWeight100:
-        case FontWeight200:
-        case FontWeight300:
-            return FontWeight400;
-
-        case FontWeight400:
-        case FontWeight500:
-            return FontWeight700;
-
-        case FontWeight600:
-        case FontWeight700:
-        case FontWeight800:
-        case FontWeight900:
-            return FontWeight900;
->>>>>>> miniblink49
     }
     ASSERT_NOT_REACHED();
     return FontWeightNormal;
@@ -160,17 +109,10 @@ FontDescription::Size FontDescription::smallerSize(const Size& size)
 
 FontTraits FontDescription::traits() const
 {
-<<<<<<< HEAD
     return FontTraits(style(), weight(), stretch());
 }
 
 FontDescription::VariantLigatures FontDescription::getVariantLigatures() const
-=======
-    return FontTraits(style(), variant(), weight(), stretch());
-}
-
-FontDescription::VariantLigatures FontDescription::variantLigatures() const
->>>>>>> miniblink49
 {
     VariantLigatures ligatures;
 
@@ -185,7 +127,6 @@ FontDescription::VariantLigatures FontDescription::variantLigatures() const
 static const AtomicString& defaultLocale()
 {
     DEFINE_STATIC_LOCAL(AtomicString, locale, ());
-<<<<<<< HEAD
     if (locale.isNull()) {
         AtomicString defaultLocale = defaultLanguage();
         if (!defaultLocale.isEmpty())
@@ -216,32 +157,15 @@ const LayoutLocale* FontDescription::locale(bool includeDefault) const
 const LayoutLocale& FontDescription::localeOrDefault() const
 {
     return LayoutLocale::valueOrDefault(m_locale.get());
-=======
-    if (locale.isNull())
-        locale = AtomicString("en");
-    return locale;
-}
-
-const AtomicString& FontDescription::locale(bool includeDefault) const
-{
-    if (m_locale.isNull() && includeDefault)
-        return defaultLocale();
-    return m_locale;
->>>>>>> miniblink49
 }
 
 void FontDescription::setTraits(FontTraits traits)
 {
     setStyle(traits.style());
-<<<<<<< HEAD
-=======
-    setVariant(traits.variant());
->>>>>>> miniblink49
     setWeight(traits.weight());
     setStretch(traits.stretch());
 }
 
-<<<<<<< HEAD
 void FontDescription::setVariantCaps(FontVariantCaps variantCaps)
 {
     m_fields.m_variantCaps = variantCaps;
@@ -262,14 +186,6 @@ void FontDescription::setVariantLigatures(const VariantLigatures& ligatures)
 void FontDescription::setVariantNumeric(const FontVariantNumeric& variantNumeric)
 {
     m_fields.m_variantNumeric = variantNumeric.m_fieldsAsUnsigned;
-=======
-void FontDescription::setVariantLigatures(const VariantLigatures& ligatures)
-{
-    m_commonLigaturesState = ligatures.common;
-    m_discretionaryLigaturesState = ligatures.discretionary;
-    m_historicalLigaturesState = ligatures.historical;
-    m_contextualLigaturesState = ligatures.contextual;
->>>>>>> miniblink49
 
     updateTypesettingFeatures();
 }
@@ -286,28 +202,15 @@ FontCacheKey FontDescription::cacheKey(const FontFaceCreationParams& creationPar
 {
     FontTraits fontTraits = desiredTraits.bitfield() ? desiredTraits : traits();
 
-<<<<<<< HEAD
     unsigned options = static_cast<unsigned>(m_fields.m_syntheticItalic) << 6 | // bit 7
         static_cast<unsigned>(m_fields.m_syntheticBold) << 5 | // bit 6
         static_cast<unsigned>(m_fields.m_textRendering) << 3 | // bits 4-5
         static_cast<unsigned>(m_fields.m_orientation) << 1 | // bit 2-3
         static_cast<unsigned>(m_fields.m_subpixelTextPosition); // bit 1
-=======
-    unsigned options =
-        static_cast<unsigned>(m_syntheticItalic) << 5 | // bit 6
-        static_cast<unsigned>(m_syntheticBold) << 4 | // bit 5
-        static_cast<unsigned>(m_textRendering) << 2 | // bits 3-4
-        static_cast<unsigned>(m_orientation) << 1 | // bit 2
-        static_cast<unsigned>(m_subpixelTextPosition); // bit 1
->>>>>>> miniblink49
 
     return FontCacheKey(creationParams, effectiveFontSize(), options | fontTraits.bitfield() << 8);
 }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 void FontDescription::setDefaultTypesettingFeatures(TypesettingFeatures typesettingFeatures)
 {
     s_defaultTypesettingFeatures = typesettingFeatures;
@@ -318,21 +221,14 @@ TypesettingFeatures FontDescription::defaultTypesettingFeatures()
     return s_defaultTypesettingFeatures;
 }
 
-<<<<<<< HEAD
 void FontDescription::updateTypesettingFeatures()
 {
     m_fields.m_typesettingFeatures = s_defaultTypesettingFeatures;
-=======
-void FontDescription::updateTypesettingFeatures() const
-{
-    m_typesettingFeatures = s_defaultTypesettingFeatures;
->>>>>>> miniblink49
 
     switch (textRendering()) {
     case AutoTextRendering:
         break;
     case OptimizeSpeed:
-<<<<<<< HEAD
         m_fields.m_typesettingFeatures &= ~(blink::Kerning | Ligatures);
         break;
     case GeometricPrecision:
@@ -347,22 +243,6 @@ void FontDescription::updateTypesettingFeatures() const
         break;
     case FontDescription::NormalKerning:
         m_fields.m_typesettingFeatures |= blink::Kerning;
-=======
-        m_typesettingFeatures &= ~(blink::Kerning | Ligatures);
-        break;
-    case GeometricPrecision:
-    case OptimizeLegibility:
-        m_typesettingFeatures |= blink::Kerning | Ligatures;
-        break;
-    }
-
-    switch (kerning()) {
-    case FontDescription::NoneKerning:
-        m_typesettingFeatures &= ~blink::Kerning;
-        break;
-    case FontDescription::NormalKerning:
-        m_typesettingFeatures |= blink::Kerning;
->>>>>>> miniblink49
         break;
     case FontDescription::AutoKerning:
         break;
@@ -375,17 +255,10 @@ void FontDescription::updateTypesettingFeatures() const
     if (m_letterSpacing == 0) {
         switch (commonLigaturesState()) {
         case FontDescription::DisabledLigaturesState:
-<<<<<<< HEAD
             m_fields.m_typesettingFeatures &= ~blink::Ligatures;
             break;
         case FontDescription::EnabledLigaturesState:
             m_fields.m_typesettingFeatures |= blink::Ligatures;
-=======
-            m_typesettingFeatures &= ~Ligatures;
-            break;
-        case FontDescription::EnabledLigaturesState:
-            m_typesettingFeatures |= Ligatures;
->>>>>>> miniblink49
             break;
         case FontDescription::NormalLigaturesState:
             break;
@@ -394,7 +267,6 @@ void FontDescription::updateTypesettingFeatures() const
         if (discretionaryLigaturesState() == FontDescription::EnabledLigaturesState
             || historicalLigaturesState() == FontDescription::EnabledLigaturesState
             || contextualLigaturesState() == FontDescription::EnabledLigaturesState) {
-<<<<<<< HEAD
             m_fields.m_typesettingFeatures |= blink::Ligatures;
         }
     }
@@ -476,11 +348,6 @@ SkFontStyle FontDescription::skiaFontStyle() const
     static_assert(
         static_cast<int>(FontStretchUltraExpanded) == static_cast<int>(SkFontStyle::kUltaExpanded_Width),
         "FontStretchUltraExpanded should map to kUltaExpanded_Width");
-=======
-            m_typesettingFeatures |= blink::Ligatures;
-        }
-    }
->>>>>>> miniblink49
 }
 
 } // namespace blink

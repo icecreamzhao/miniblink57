@@ -28,37 +28,28 @@ namespace blink {
 
 class HashChangeEvent final : public Event {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<HashChangeEvent> create()
+    static HashChangeEvent* create() { return new HashChangeEvent; }
+
+    static HashChangeEvent* create(const String& oldURL, const String& newURL)
     {
-        return adoptRefWillBeNoop(new HashChangeEvent);
+        return new HashChangeEvent(oldURL, newURL);
     }
 
-    static PassRefPtrWillBeRawPtr<HashChangeEvent> create(const String& oldURL, const String& newURL)
+    static HashChangeEvent* create(const AtomicString& type,
+        const HashChangeEventInit& initializer)
     {
-        return adoptRefWillBeNoop(new HashChangeEvent(oldURL, newURL));
-    }
-
-    static PassRefPtrWillBeRawPtr<HashChangeEvent> create(const AtomicString& type, const HashChangeEventInit& initializer)
-    {
-        return adoptRefWillBeNoop(new HashChangeEvent(type, initializer));
-    }
-
-    void initHashChangeEvent(const AtomicString& eventType, bool canBubble, bool cancelable, const String& oldURL, const String& newURL)
-    {
-        if (dispatched())
-            return;
-
-        initEvent(eventType, canBubble, cancelable);
-
-        m_oldURL = oldURL;
-        m_newURL = newURL;
+        return new HashChangeEvent(type, initializer);
     }
 
     const String& oldURL() const { return m_oldURL; }
     const String& newURL() const { return m_newURL; }
 
-    virtual const AtomicString& interfaceName() const override { return EventNames::HashChangeEvent; }
+    const AtomicString& interfaceName() const override
+    {
+        return EventNames::HashChangeEvent;
+    }
 
     DEFINE_INLINE_VIRTUAL_TRACE() { Event::trace(visitor); }
 
@@ -68,9 +59,12 @@ private:
     HashChangeEvent(const String& oldURL, const String& newURL)
         : Event(EventTypeNames::hashchange, false, false)
         , m_oldURL(oldURL)
-        , m_newURL(newURL) { }
+        , m_newURL(newURL)
+    {
+    }
 
-    HashChangeEvent(const AtomicString& type, const HashChangeEventInit& initializer)
+    HashChangeEvent(const AtomicString& type,
+        const HashChangeEventInit& initializer)
         : Event(type, initializer)
     {
         if (initializer.hasOldURL())

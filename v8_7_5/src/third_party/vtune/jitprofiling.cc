@@ -57,17 +57,10 @@
 */
 #include "ittnotify_config.h"
 
-<<<<<<< HEAD
 #if ITT_PLATFORM == ITT_PLATFORM_WIN
 #include <windows.h>
 #pragma optimize("", off)
 #else /* ITT_PLATFORM==ITT_PLATFORM_WIN */
-=======
-#if ITT_PLATFORM==ITT_PLATFORM_WIN
-#include <windows.h>
-#pragma optimize("", off)
-#else  /* ITT_PLATFORM==ITT_PLATFORM_WIN */
->>>>>>> miniblink49
 #include <pthread.h>
 #include <dlfcn.h>
 #endif /* ITT_PLATFORM==ITT_PLATFORM_WIN */
@@ -78,7 +71,6 @@
 
 static const char rcsid[] = "\n@(#) $Revision: 234474 $\n";
 
-<<<<<<< HEAD
 #define DLL_ENVIRONMENT_VAR "VS_PROFILER"
 
 #ifndef NEW_DLL_ENVIRONMENT_VAR
@@ -94,28 +86,10 @@ static const char rcsid[] = "\n@(#) $Revision: 234474 $\n";
 HINSTANCE m_libHandle = NULL;
 #else /* ITT_PLATFORM==ITT_PLATFORM_WIN */
 #define DEFAULT_DLLNAME "libJitPI.so"
-=======
-#define DLL_ENVIRONMENT_VAR		"VS_PROFILER"
-
-#ifndef NEW_DLL_ENVIRONMENT_VAR
-#if ITT_ARCH==ITT_ARCH_IA32
-#define NEW_DLL_ENVIRONMENT_VAR		"INTEL_JIT_PROFILER32"
-#else
-#define NEW_DLL_ENVIRONMENT_VAR		"INTEL_JIT_PROFILER64"
-#endif
-#endif /* NEW_DLL_ENVIRONMENT_VAR */
-
-#if ITT_PLATFORM==ITT_PLATFORM_WIN
-#define DEFAULT_DLLNAME			"JitPI.dll"
-HINSTANCE m_libHandle = NULL;
-#else  /* ITT_PLATFORM==ITT_PLATFORM_WIN */
-#define DEFAULT_DLLNAME			"libJitPI.so"
->>>>>>> miniblink49
 void* m_libHandle = NULL;
 #endif /* ITT_PLATFORM==ITT_PLATFORM_WIN */
 
 /* default location of JIT profiling agent on Android */
-<<<<<<< HEAD
 #define ANDROID_JIT_AGENT_PATH "/data/intel/libittnotify.so"
 
 /* the function pointers */
@@ -124,16 +98,6 @@ static TPInitialize FUNC_Initialize = NULL;
 
 typedef unsigned int (*TPNotify)(unsigned int, void*);
 static TPNotify FUNC_NotifyEvent = NULL;
-=======
-#define ANDROID_JIT_AGENT_PATH  "/data/intel/libittnotify.so"
-
-/* the function pointers */
-typedef unsigned int(*TPInitialize)(void);
-static TPInitialize FUNC_Initialize=NULL;
-
-typedef unsigned int(*TPNotify)(unsigned int, void*);
-static TPNotify FUNC_NotifyEvent=NULL;
->>>>>>> miniblink49
 
 static iJIT_IsProfilingActiveFlags executionMode = iJIT_NOTHING_RUNNING;
 
@@ -157,15 +121,9 @@ static int iJIT_DLL_is_missing = 0;
 ** the top of stack and the current stack increase. Notice that when returning from a function
 ** the stack pointer is the address of the function return.
 */
-<<<<<<< HEAD
 #if ITT_PLATFORM == ITT_PLATFORM_WIN
 static DWORD threadLocalStorageHandle = 0;
 #else /* ITT_PLATFORM==ITT_PLATFORM_WIN */
-=======
-#if ITT_PLATFORM==ITT_PLATFORM_WIN
-static DWORD threadLocalStorageHandle = 0;
-#else  /* ITT_PLATFORM==ITT_PLATFORM_WIN */
->>>>>>> miniblink49
 static pthread_key_t threadLocalStorageHandle = (pthread_key_t)0;
 #endif /* ITT_PLATFORM==ITT_PLATFORM_WIN */
 
@@ -190,11 +148,7 @@ typedef struct
 ** otherwise it will be 0.
 */
 
-<<<<<<< HEAD
 ITT_EXTERN_C int JITAPI iJIT_NotifyEvent(iJIT_JVM_EVENT event_type, void* EventSpecificData)
-=======
-ITT_EXTERN_C int JITAPI iJIT_NotifyEvent(iJIT_JVM_EVENT event_type, void *EventSpecificData)
->>>>>>> miniblink49
 {
     int ReturnValue;
 
@@ -219,12 +173,7 @@ ITT_EXTERN_C int JITAPI iJIT_NotifyEvent(iJIT_JVM_EVENT event_type, void *EventS
     **		will load the functions, and check if we are in Call Graph mode.
     **		(for special treatment).
     */
-<<<<<<< HEAD
     if (!FUNC_NotifyEvent) {
-=======
-    if (!FUNC_NotifyEvent)
-    {
->>>>>>> miniblink49
         if (iJIT_DLL_is_missing)
             return 0;
 
@@ -238,36 +187,21 @@ ITT_EXTERN_C int JITAPI iJIT_NotifyEvent(iJIT_JVM_EVENT event_type, void *EventS
     /* If the event is method entry/exit, check that in the current mode
     ** VTune is allowed to receive it
     */
-<<<<<<< HEAD
     if ((event_type == iJVM_EVENT_TYPE_ENTER_NIDS || event_type == iJVM_EVENT_TYPE_LEAVE_NIDS) && (executionMode != iJIT_CALLGRAPH_ON)) {
-=======
-    if ((event_type == iJVM_EVENT_TYPE_ENTER_NIDS || event_type == iJVM_EVENT_TYPE_LEAVE_NIDS) &&
-        (executionMode != iJIT_CALLGRAPH_ON))
-    {
->>>>>>> miniblink49
         return 0;
     }
     /* This section is performed when method enter event occurs.
     ** It updates the virtual stack, or creates it if this is the first
     ** method entry in the thread. The stack pointer is decreased.
     */
-<<<<<<< HEAD
     if (event_type == iJVM_EVENT_TYPE_ENTER_NIDS) {
 #if ITT_PLATFORM == ITT_PLATFORM_WIN
         pThreadStack threadStack = (pThreadStack)TlsGetValue(threadLocalStorageHandle);
 #else /* ITT_PLATFORM==ITT_PLATFORM_WIN */
-=======
-    if (event_type == iJVM_EVENT_TYPE_ENTER_NIDS)
-    {
-#if ITT_PLATFORM==ITT_PLATFORM_WIN
-        pThreadStack threadStack = (pThreadStack)TlsGetValue (threadLocalStorageHandle);
-#else  /* ITT_PLATFORM==ITT_PLATFORM_WIN */
->>>>>>> miniblink49
         pThreadStack threadStack = (pThreadStack)pthread_getspecific(threadLocalStorageHandle);
 #endif /* ITT_PLATFORM==ITT_PLATFORM_WIN */
 
         // check for use of reserved method IDs
-<<<<<<< HEAD
         if (((piJIT_Method_NIDS)EventSpecificData)->method_id <= 999)
             return 0;
 
@@ -280,30 +214,11 @@ ITT_EXTERN_C int JITAPI iJIT_NotifyEvent(iJIT_JVM_EVENT event_type, void *EventS
             TlsSetValue(threadLocalStorageHandle, (void*)threadStack);
 #else /* ITT_PLATFORM==ITT_PLATFORM_WIN */
             pthread_setspecific(threadLocalStorageHandle, (void*)threadStack);
-=======
-        if ( ((piJIT_Method_NIDS) EventSpecificData)->method_id <= 999 )
-            return 0;
-
-        if (!threadStack)
-        {
-            // initialize the stack.
-            threadStack = (pThreadStack) calloc (sizeof(ThreadStack), 1);
-            threadStack->TopStack = INIT_TOP_Stack;
-            threadStack->CurrentStack = INIT_TOP_Stack;
-#if ITT_PLATFORM==ITT_PLATFORM_WIN
-            TlsSetValue(threadLocalStorageHandle,(void*)threadStack);
-#else  /* ITT_PLATFORM==ITT_PLATFORM_WIN */
-            pthread_setspecific(threadLocalStorageHandle,(void*)threadStack);
->>>>>>> miniblink49
 #endif /* ITT_PLATFORM==ITT_PLATFORM_WIN */
         }
 
         // decrease the stack.
-<<<<<<< HEAD
         ((piJIT_Method_NIDS)EventSpecificData)->stack_id = (threadStack->CurrentStack)--;
-=======
-        ((piJIT_Method_NIDS) EventSpecificData)->stack_id = (threadStack->CurrentStack)--;
->>>>>>> miniblink49
     }
 
     /* This section is performed when method leave event occurs
@@ -312,23 +227,14 @@ ITT_EXTERN_C int JITAPI iJIT_NotifyEvent(iJIT_JVM_EVENT event_type, void *EventS
     **		If the stack pointer reached the top (left the global function)
     **			increase the pointer and the top pointer.
     */
-<<<<<<< HEAD
     if (event_type == iJVM_EVENT_TYPE_LEAVE_NIDS) {
 #if ITT_PLATFORM == ITT_PLATFORM_WIN
         pThreadStack threadStack = (pThreadStack)TlsGetValue(threadLocalStorageHandle);
 #else /* ITT_PLATFORM==ITT_PLATFORM_WIN */
-=======
-    if (event_type == iJVM_EVENT_TYPE_LEAVE_NIDS)
-    {
-#if ITT_PLATFORM==ITT_PLATFORM_WIN
-        pThreadStack threadStack = (pThreadStack)TlsGetValue (threadLocalStorageHandle);
-#else  /* ITT_PLATFORM==ITT_PLATFORM_WIN */
->>>>>>> miniblink49
         pThreadStack threadStack = (pThreadStack)pthread_getspecific(threadLocalStorageHandle);
 #endif /* ITT_PLATFORM==ITT_PLATFORM_WIN */
 
         // check for use of reserved method IDs
-<<<<<<< HEAD
         if (((piJIT_Method_NIDS)EventSpecificData)->method_id <= 999)
             return 0;
 
@@ -346,27 +252,6 @@ ITT_EXTERN_C int JITAPI iJIT_NotifyEvent(iJIT_JVM_EVENT event_type, void *EventS
     if (event_type == iJVM_EVENT_TYPE_METHOD_LOAD_FINISHED) {
         // check for use of reserved method IDs
         if (((piJIT_Method_Load)EventSpecificData)->method_id <= 999)
-=======
-        if ( ((piJIT_Method_NIDS) EventSpecificData)->method_id <= 999 )
-            return 0;
-
-        if (!threadStack)
-        {
-            /* Error: first report in this thread is method exit */
-            exit (1);
-        }
-
-        ((piJIT_Method_NIDS) EventSpecificData)->stack_id = ++(threadStack->CurrentStack) + 1;
-
-        if (((piJIT_Method_NIDS) EventSpecificData)->stack_id > threadStack->TopStack)
-            ((piJIT_Method_NIDS) EventSpecificData)->stack_id = (unsigned int)-1;
-    }
-
-    if (event_type == iJVM_EVENT_TYPE_METHOD_LOAD_FINISHED)
-    {
-        // check for use of reserved method IDs
-        if ( ((piJIT_Method_Load) EventSpecificData)->method_id <= 999 )
->>>>>>> miniblink49
             return 0;
     }
 
@@ -375,20 +260,11 @@ ITT_EXTERN_C int JITAPI iJIT_NotifyEvent(iJIT_JVM_EVENT event_type, void *EventS
     return ReturnValue;
 }
 
-<<<<<<< HEAD
 ITT_EXTERN_C void JITAPI iJIT_RegisterCallbackEx(void* userdata, iJIT_ModeChangedEx NewModeCallBackFuncEx) // The new mode call back routine
 {
     // is it already missing... or the load of functions from the DLL failed
     if (iJIT_DLL_is_missing || !loadiJIT_Funcs()) {
         NewModeCallBackFuncEx(userdata, iJIT_NO_NOTIFICATIONS); // then do not bother with notifications
-=======
-ITT_EXTERN_C void JITAPI iJIT_RegisterCallbackEx(void *userdata, iJIT_ModeChangedEx NewModeCallBackFuncEx) // The new mode call back routine
-{
-    // is it already missing... or the load of functions from the DLL failed
-    if (iJIT_DLL_is_missing || !loadiJIT_Funcs())
-    {
-        NewModeCallBackFuncEx(userdata, iJIT_NO_NOTIFICATIONS);  // then do not bother with notifications
->>>>>>> miniblink49
         /* Error: could not load JIT functions. */
         return;
     }
@@ -400,12 +276,7 @@ ITT_EXTERN_C void JITAPI iJIT_RegisterCallbackEx(void *userdata, iJIT_ModeChange
 */
 ITT_EXTERN_C iJIT_IsProfilingActiveFlags JITAPI iJIT_IsProfilingActive()
 {
-<<<<<<< HEAD
     if (!iJIT_DLL_is_missing) {
-=======
-    if (!iJIT_DLL_is_missing)
-    {
->>>>>>> miniblink49
         loadiJIT_Funcs();
     }
 
@@ -419,22 +290,12 @@ ITT_EXTERN_C iJIT_IsProfilingActiveFlags JITAPI iJIT_IsProfilingActive()
 static int loadiJIT_Funcs()
 {
     static int bDllWasLoaded = 0;
-<<<<<<< HEAD
     char* dllName = (char*)rcsid; // !!! Just to avoid unused code elimination !!!
 #if ITT_PLATFORM == ITT_PLATFORM_WIN
     DWORD dNameLength = 0;
 #endif /* ITT_PLATFORM==ITT_PLATFORM_WIN */
 
     if (bDllWasLoaded) { // dll was already loaded, no need to do it for the second time
-=======
-    char *dllName = (char*)rcsid; // !!! Just to avoid unused code elimination !!!
-#if ITT_PLATFORM==ITT_PLATFORM_WIN
-    DWORD dNameLength = 0;
-#endif /* ITT_PLATFORM==ITT_PLATFORM_WIN */
-
-    if(bDllWasLoaded)
-    {// dll was already loaded, no need to do it for the second time
->>>>>>> miniblink49
         return 1;
     }
 
@@ -442,25 +303,16 @@ static int loadiJIT_Funcs()
     iJIT_DLL_is_missing = 1;
     FUNC_NotifyEvent = NULL;
 
-<<<<<<< HEAD
     if (m_libHandle) {
 #if ITT_PLATFORM == ITT_PLATFORM_WIN
         FreeLibrary(m_libHandle);
 #else /* ITT_PLATFORM==ITT_PLATFORM_WIN */
-=======
-    if (m_libHandle)
-    {
-#if ITT_PLATFORM==ITT_PLATFORM_WIN
-        FreeLibrary(m_libHandle);
-#else  /* ITT_PLATFORM==ITT_PLATFORM_WIN */
->>>>>>> miniblink49
         dlclose(m_libHandle);
 #endif /* ITT_PLATFORM==ITT_PLATFORM_WIN */
         m_libHandle = NULL;
     }
 
     // try to get the dll name from the environment
-<<<<<<< HEAD
 #if ITT_PLATFORM == ITT_PLATFORM_WIN
     dNameLength = GetEnvironmentVariableA(NEW_DLL_ENVIRONMENT_VAR, NULL, 0);
     if (dNameLength) {
@@ -468,17 +320,6 @@ static int loadiJIT_Funcs()
         dllName = (char*)malloc(sizeof(char) * (dNameLength + 1));
         envret = GetEnvironmentVariableA(NEW_DLL_ENVIRONMENT_VAR, dllName, dNameLength);
         if (envret) {
-=======
-#if ITT_PLATFORM==ITT_PLATFORM_WIN
-    dNameLength = GetEnvironmentVariableA(NEW_DLL_ENVIRONMENT_VAR, NULL, 0);
-    if (dNameLength)
-    {
-        DWORD envret = 0;
-        dllName = (char*)malloc(sizeof(char) * (dNameLength + 1));
-        envret = GetEnvironmentVariableA(NEW_DLL_ENVIRONMENT_VAR, dllName, dNameLength);
-        if (envret)
-        {
->>>>>>> miniblink49
             // Try to load the dll from the PATH...
             m_libHandle = LoadLibraryExA(dllName, NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
         }
@@ -486,32 +327,18 @@ static int loadiJIT_Funcs()
     } else {
         // Try to use old VS_PROFILER variable
         dNameLength = GetEnvironmentVariableA(DLL_ENVIRONMENT_VAR, NULL, 0);
-<<<<<<< HEAD
         if (dNameLength) {
             DWORD envret = 0;
             dllName = (char*)malloc(sizeof(char) * (dNameLength + 1));
             envret = GetEnvironmentVariableA(DLL_ENVIRONMENT_VAR, dllName, dNameLength);
             if (envret) {
-=======
-        if (dNameLength)
-        {
-            DWORD envret = 0;
-            dllName = (char*)malloc(sizeof(char) * (dNameLength + 1));
-            envret = GetEnvironmentVariableA(DLL_ENVIRONMENT_VAR, dllName, dNameLength);
-            if (envret)
-            {
->>>>>>> miniblink49
                 // Try to load the dll from the PATH...
                 m_libHandle = LoadLibraryA(dllName);
             }
             free(dllName);
         }
     }
-<<<<<<< HEAD
 #else /* ITT_PLATFORM==ITT_PLATFORM_WIN */
-=======
-#else  /* ITT_PLATFORM==ITT_PLATFORM_WIN */
->>>>>>> miniblink49
     dllName = getenv(NEW_DLL_ENVIRONMENT_VAR);
     if (!dllName) {
         dllName = getenv(DLL_ENVIRONMENT_VAR);
@@ -520,35 +347,21 @@ static int loadiJIT_Funcs()
     if (!dllName)
         dllName = ANDROID_JIT_AGENT_PATH;
 #endif
-<<<<<<< HEAD
     if (dllName) {
-=======
-    if (dllName)
-    {
->>>>>>> miniblink49
         // Try to load the dll from the PATH...
         m_libHandle = dlopen(dllName, RTLD_LAZY);
     }
 #endif /* ITT_PLATFORM==ITT_PLATFORM_WIN */
 
-<<<<<<< HEAD
     if (!m_libHandle) {
 #if ITT_PLATFORM == ITT_PLATFORM_WIN
         m_libHandle = LoadLibraryA(DEFAULT_DLLNAME);
 #else /* ITT_PLATFORM==ITT_PLATFORM_WIN */
-=======
-    if (!m_libHandle)
-    {
-#if ITT_PLATFORM==ITT_PLATFORM_WIN
-        m_libHandle = LoadLibraryA(DEFAULT_DLLNAME);
-#else  /* ITT_PLATFORM==ITT_PLATFORM_WIN */
->>>>>>> miniblink49
         m_libHandle = dlopen(DEFAULT_DLLNAME, RTLD_LAZY);
 #endif /* ITT_PLATFORM==ITT_PLATFORM_WIN */
     }
 
     // if the dll wasn't loaded - exit.
-<<<<<<< HEAD
     if (!m_libHandle) {
         iJIT_DLL_is_missing = 1; // don't try to initialize JIT agent the second time
         return 0;
@@ -559,51 +372,23 @@ static int loadiJIT_Funcs()
     FUNC_NotifyEvent = reinterpret_cast<TPNotify>(reinterpret_cast<intptr_t>(dlsym(m_libHandle, "NotifyEvent")));
 #endif /* ITT_PLATFORM==ITT_PLATFORM_WIN */
     if (!FUNC_NotifyEvent) {
-=======
-    if (!m_libHandle)
-    {
-        iJIT_DLL_is_missing = 1; // don't try to initialize JIT agent the second time
-        return 0;
-    }
-#if ITT_PLATFORM==ITT_PLATFORM_WIN
-    FUNC_NotifyEvent = (TPNotify)GetProcAddress(m_libHandle, "NotifyEvent");
-#else  /* ITT_PLATFORM==ITT_PLATFORM_WIN */
-    FUNC_NotifyEvent = reinterpret_cast<TPNotify>(reinterpret_cast<intptr_t>(dlsym(m_libHandle, "NotifyEvent")));
-#endif /* ITT_PLATFORM==ITT_PLATFORM_WIN */
-    if (!FUNC_NotifyEvent)
-    {
->>>>>>> miniblink49
         FUNC_Initialize = NULL;
         return 0;
     }
 
-<<<<<<< HEAD
 #if ITT_PLATFORM == ITT_PLATFORM_WIN
     FUNC_Initialize = (TPInitialize)GetProcAddress(m_libHandle, "Initialize");
 #else /* ITT_PLATFORM==ITT_PLATFORM_WIN */
     FUNC_Initialize = reinterpret_cast<TPInitialize>(reinterpret_cast<intptr_t>(dlsym(m_libHandle, "Initialize")));
 #endif /* ITT_PLATFORM==ITT_PLATFORM_WIN */
     if (!FUNC_Initialize) {
-=======
-#if ITT_PLATFORM==ITT_PLATFORM_WIN
-    FUNC_Initialize = (TPInitialize)GetProcAddress(m_libHandle, "Initialize");
-#else  /* ITT_PLATFORM==ITT_PLATFORM_WIN */
-    FUNC_Initialize = reinterpret_cast<TPInitialize>(reinterpret_cast<intptr_t>(dlsym(m_libHandle, "Initialize")));
-#endif /* ITT_PLATFORM==ITT_PLATFORM_WIN */
-    if (!FUNC_Initialize)
-    {
->>>>>>> miniblink49
         FUNC_NotifyEvent = NULL;
         return 0;
     }
 
     executionMode = (iJIT_IsProfilingActiveFlags)FUNC_Initialize();
     if (executionMode != iJIT_SAMPLING_ON)
-<<<<<<< HEAD
         executionMode = iJIT_SAMPLING_ON;
-=======
-      executionMode = iJIT_SAMPLING_ON;
->>>>>>> miniblink49
 
     bDllWasLoaded = 1;
     iJIT_DLL_is_missing = 0; // DLL is ok.
@@ -612,7 +397,6 @@ static int loadiJIT_Funcs()
     ** Call Graph mode: init the thread local storage
     ** (need to store the virtual stack there).
     */
-<<<<<<< HEAD
     if (executionMode == iJIT_CALLGRAPH_ON) {
         // Allocate a thread local storage slot for the thread "stack"
         if (!threadLocalStorageHandle)
@@ -620,16 +404,6 @@ static int loadiJIT_Funcs()
             threadLocalStorageHandle = TlsAlloc();
 #else /* ITT_PLATFORM==ITT_PLATFORM_WIN */
             pthread_key_create(&threadLocalStorageHandle, NULL);
-=======
-    if ( executionMode == iJIT_CALLGRAPH_ON )
-    {
-        // Allocate a thread local storage slot for the thread "stack"
-        if (!threadLocalStorageHandle)
-#if ITT_PLATFORM==ITT_PLATFORM_WIN
-            threadLocalStorageHandle = TlsAlloc();
-#else  /* ITT_PLATFORM==ITT_PLATFORM_WIN */
-        pthread_key_create(&threadLocalStorageHandle, NULL);
->>>>>>> miniblink49
 #endif /* ITT_PLATFORM==ITT_PLATFORM_WIN */
     }
 
@@ -642,7 +416,6 @@ static int loadiJIT_Funcs()
 */
 ITT_EXTERN_C void JITAPI FinalizeThread()
 {
-<<<<<<< HEAD
     if (threadLocalStorageHandle) {
 #if ITT_PLATFORM == ITT_PLATFORM_WIN
         pThreadStack threadStack = (pThreadStack)TlsGetValue(threadLocalStorageHandle);
@@ -655,22 +428,6 @@ ITT_EXTERN_C void JITAPI FinalizeThread()
 #if ITT_PLATFORM == ITT_PLATFORM_WIN
             TlsSetValue(threadLocalStorageHandle, threadStack);
 #else /* ITT_PLATFORM==ITT_PLATFORM_WIN */
-=======
-    if (threadLocalStorageHandle)
-    {
-#if ITT_PLATFORM==ITT_PLATFORM_WIN
-        pThreadStack threadStack = (pThreadStack)TlsGetValue (threadLocalStorageHandle);
-#else  /* ITT_PLATFORM==ITT_PLATFORM_WIN */
-        pThreadStack threadStack = (pThreadStack)pthread_getspecific(threadLocalStorageHandle);
-#endif /* ITT_PLATFORM==ITT_PLATFORM_WIN */
-        if (threadStack)
-        {
-            free (threadStack);
-            threadStack = NULL;
-#if ITT_PLATFORM==ITT_PLATFORM_WIN
-            TlsSetValue (threadLocalStorageHandle, threadStack);
-#else  /* ITT_PLATFORM==ITT_PLATFORM_WIN */
->>>>>>> miniblink49
             pthread_setspecific(threadLocalStorageHandle, threadStack);
 #endif /* ITT_PLATFORM==ITT_PLATFORM_WIN */
         }
@@ -683,35 +440,20 @@ ITT_EXTERN_C void JITAPI FinalizeThread()
 */
 ITT_EXTERN_C void JITAPI FinalizeProcess()
 {
-<<<<<<< HEAD
     if (m_libHandle) {
 #if ITT_PLATFORM == ITT_PLATFORM_WIN
         FreeLibrary(m_libHandle);
 #else /* ITT_PLATFORM==ITT_PLATFORM_WIN */
-=======
-    if (m_libHandle)
-    {
-#if ITT_PLATFORM==ITT_PLATFORM_WIN
-        FreeLibrary(m_libHandle);
-#else  /* ITT_PLATFORM==ITT_PLATFORM_WIN */
->>>>>>> miniblink49
         dlclose(m_libHandle);
 #endif /* ITT_PLATFORM==ITT_PLATFORM_WIN */
         m_libHandle = NULL;
     }
 
     if (threadLocalStorageHandle)
-<<<<<<< HEAD
 #if ITT_PLATFORM == ITT_PLATFORM_WIN
         TlsFree(threadLocalStorageHandle);
 #else /* ITT_PLATFORM==ITT_PLATFORM_WIN */
         pthread_key_delete(threadLocalStorageHandle);
-=======
-#if ITT_PLATFORM==ITT_PLATFORM_WIN
-        TlsFree (threadLocalStorageHandle);
-#else  /* ITT_PLATFORM==ITT_PLATFORM_WIN */
-    pthread_key_delete(threadLocalStorageHandle);
->>>>>>> miniblink49
 #endif /* ITT_PLATFORM==ITT_PLATFORM_WIN */
 }
 
@@ -725,15 +467,7 @@ ITT_EXTERN_C unsigned int JITAPI iJIT_GetNewMethodID()
     static unsigned int methodID = 0x100000;
 
     if (methodID == 0)
-<<<<<<< HEAD
         return 0; // ERROR : this is not a valid value
 
     return methodID++;
 }
-=======
-        return 0;	// ERROR : this is not a valid value
-
-    return methodID++;
-}
-
->>>>>>> miniblink49

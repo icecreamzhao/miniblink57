@@ -6,7 +6,6 @@
 #include "src/builtins/builtins.h"
 #include "src/code-stub-assembler.h"
 
-<<<<<<< HEAD
 #include "src/objects-inl.h" // weolar
 
 namespace v8 {
@@ -27,22 +26,3 @@ namespace internal {
 
 } // namespace internal
 } // namespace v8
-=======
-namespace v8 {
-namespace internal {
-
-// ES section #sec-reflect.has
-TF_BUILTIN(ReflectHas, CodeStubAssembler) {
-  Node* target = Parameter(Descriptor::kTarget);
-  Node* key = Parameter(Descriptor::kKey);
-  Node* context = Parameter(Descriptor::kContext);
-
-  ThrowIfNotJSReceiver(context, target, MessageTemplate::kCalledOnNonObject,
-                       "Reflect.has");
-
-  Return(CallBuiltin(Builtins::kHasProperty, context, target, key));
-}
-
-}  // namespace internal
-}  // namespace v8
->>>>>>> miniblink49

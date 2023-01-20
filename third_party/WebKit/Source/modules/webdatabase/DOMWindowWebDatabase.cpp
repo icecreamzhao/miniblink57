@@ -24,19 +24,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
-
->>>>>>> miniblink49
 #include "modules/webdatabase/DOMWindowWebDatabase.h"
 
 #include "bindings/core/v8/ExceptionState.h"
 #include "core/dom/Document.h"
-<<<<<<< HEAD
-=======
-#include "core/dom/ExceptionCode.h"
->>>>>>> miniblink49
 #include "core/frame/LocalDOMWindow.h"
 #include "modules/webdatabase/Database.h"
 #include "modules/webdatabase/DatabaseCallback.h"
@@ -46,7 +37,6 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 Database* DOMWindowWebDatabase::openDatabase(DOMWindow& windowArg,
     const String& name,
     const String& version,
@@ -54,9 +44,6 @@ Database* DOMWindowWebDatabase::openDatabase(DOMWindow& windowArg,
     unsigned estimatedSize,
     DatabaseCallback* creationCallback,
     ExceptionState& exceptionState)
-=======
-Database* DOMWindowWebDatabase::openDatabase(DOMWindow& windowArg, const String& name, const String& version, const String& displayName, unsigned long estimatedSize, DatabaseCallback* creationCallback, ExceptionState& exceptionState)
->>>>>>> miniblink49
 {
     LocalDOMWindow& window = toLocalDOMWindow(windowArg);
     if (!window.isCurrentlyDisplayedInFrame())
@@ -65,7 +52,6 @@ Database* DOMWindowWebDatabase::openDatabase(DOMWindow& windowArg, const String&
     Database* database = nullptr;
     DatabaseManager& dbManager = DatabaseManager::manager();
     DatabaseError error = DatabaseError::None;
-<<<<<<< HEAD
     if (RuntimeEnabledFeatures::databaseEnabled() && window.document()->getSecurityOrigin()->canAccessDatabase()) {
         String errorMessage;
         database = dbManager.openDatabase(window.document(), name, version,
@@ -78,16 +64,6 @@ Database* DOMWindowWebDatabase::openDatabase(DOMWindow& windowArg, const String&
     } else {
         exceptionState.throwSecurityError(
             "Access to the WebDatabase API is denied in this context.");
-=======
-    if (RuntimeEnabledFeatures::databaseEnabled() && window.document()->securityOrigin()->canAccessDatabase()) {
-        String errorMessage;
-        database = dbManager.openDatabase(window.document(), name, version, displayName, estimatedSize, creationCallback, error, errorMessage);
-        ASSERT(database || error != DatabaseError::None);
-        if (error != DatabaseError::None)
-            DatabaseManager::throwExceptionForDatabaseError(error, errorMessage, exceptionState);
-    } else {
-        exceptionState.throwSecurityError("Access to the WebDatabase API is denied in this context.");
->>>>>>> miniblink49
     }
 
     return database;

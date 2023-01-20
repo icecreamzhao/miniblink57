@@ -18,7 +18,6 @@
  *  [     0          0      1 ]
  */
 struct SkRSXform {
-<<<<<<< HEAD
     static SkRSXform Make(SkScalar scos, SkScalar ssin, SkScalar tx, SkScalar ty)
     {
         SkRSXform xform = { scos, ssin, tx, ty };
@@ -51,28 +50,12 @@ struct SkRSXform {
 
     void setIdentity()
     {
-=======
-    SkScalar    fSCos;
-    SkScalar    fSSin;
-    SkScalar    fTx;
-    SkScalar    fTy;
-
-    bool rectStaysRect() const {
-        return 0 == fSCos || 0 == fSSin;
-    }
-    
-    void setIdentity() {
->>>>>>> miniblink49
         fSCos = 1;
         fSSin = fTx = fTy = 0;
     }
 
-<<<<<<< HEAD
     void set(SkScalar scos, SkScalar ssin, SkScalar tx, SkScalar ty)
     {
-=======
-    void set(SkScalar scos, SkScalar ssin, SkScalar tx, SkScalar ty) {
->>>>>>> miniblink49
         fSCos = scos;
         fSSin = ssin;
         fTx = tx;
@@ -80,18 +63,10 @@ struct SkRSXform {
     }
 
     void toQuad(SkScalar width, SkScalar height, SkPoint quad[4]) const;
-<<<<<<< HEAD
     void toQuad(const SkSize& size, SkPoint quad[4]) const
     {
-=======
-    void toQuad(const SkSize& size, SkPoint quad[4]) const {
->>>>>>> miniblink49
         this->toQuad(size.width(), size.height(), quad);
     }
 };
 
 #endif
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49

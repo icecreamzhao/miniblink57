@@ -23,21 +23,11 @@
  * DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "modules/gamepad/GamepadList.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 GamepadList::GamepadList() { }
-=======
-GamepadList::GamepadList()
-{
-}
->>>>>>> miniblink49
 
 void GamepadList::set(unsigned index, Gamepad* gamepad)
 {

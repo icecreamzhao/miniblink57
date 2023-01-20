@@ -10,7 +10,6 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
-<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -27,28 +26,6 @@
 #include "platform/audio/AudioResamplerKernel.h"
 #include "platform/audio/AudioResampler.h"
 #include "wtf/MathExtras.h"
-=======
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-
-#include "config.h"
-
-#if ENABLE(WEB_AUDIO)
-
-#include "platform/audio/AudioResamplerKernel.h"
-
-#include <algorithm>
-#include "platform/audio/AudioResampler.h"
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -56,16 +33,11 @@ const size_t AudioResamplerKernel::MaxFramesToProcess = 128;
 
 AudioResamplerKernel::AudioResamplerKernel(AudioResampler* resampler)
     : m_resampler(resampler)
-<<<<<<< HEAD
     ,
     // The buffer size must be large enough to hold up to two extra sample
     // frames for the linear interpolation.
     m_sourceBuffer(
         2 + static_cast<int>(MaxFramesToProcess * AudioResampler::MaxRate))
-=======
-    // The buffer size must be large enough to hold up to two extra sample frames for the linear interpolation.
-    , m_sourceBuffer(2 + static_cast<int>(MaxFramesToProcess * AudioResampler::MaxRate))
->>>>>>> miniblink49
     , m_virtualReadIndex(0.0)
     , m_fillIndex(0)
 {
@@ -73,7 +45,6 @@ AudioResamplerKernel::AudioResamplerKernel(AudioResampler* resampler)
     m_lastValues[1] = 0.0f;
 }
 
-<<<<<<< HEAD
 float* AudioResamplerKernel::getSourcePointer(
     size_t framesToProcess,
     size_t* numberOfSourceFramesNeededP)
@@ -91,20 +62,6 @@ float* AudioResamplerKernel::getSourcePointer(
     // Determine how many input frames we'll need.
     // We need to fill the buffer up to and including endIndex (so add 1) but
     // we've already buffered m_fillIndex frames from last time.
-=======
-float* AudioResamplerKernel::getSourcePointer(size_t framesToProcess, size_t* numberOfSourceFramesNeededP)
-{
-    ASSERT(framesToProcess <= MaxFramesToProcess);
-
-    // Calculate the next "virtual" index.  After process() is called, m_virtualReadIndex will equal this value.
-    double nextFractionalIndex = m_virtualReadIndex + framesToProcess * rate();
-
-    // Because we're linearly interpolating between the previous and next sample we need to round up so we include the next sample.
-    int endIndex = static_cast<int>(nextFractionalIndex + 1.0); // round up to next integer index
-
-    // Determine how many input frames we'll need.
-    // We need to fill the buffer up to and including endIndex (so add 1) but we've already buffered m_fillIndex frames from last time.
->>>>>>> miniblink49
     size_t framesNeeded = 1 + endIndex - m_fillIndex;
     if (numberOfSourceFramesNeededP)
         *numberOfSourceFramesNeededP = framesNeeded;
@@ -125,12 +82,7 @@ void AudioResamplerKernel::process(float* destination, size_t framesToProcess)
     float* source = m_sourceBuffer.data();
 
     double rate = this->rate();
-<<<<<<< HEAD
     rate = clampTo(rate, 0.0, AudioResampler::MaxRate);
-=======
-    rate = std::max(0.0, rate);
-    rate = std::min(AudioResampler::MaxRate, rate);
->>>>>>> miniblink49
 
     // Start out with the previous saved values (if any).
     if (m_fillIndex > 0) {
@@ -161,12 +113,8 @@ void AudioResamplerKernel::process(float* destination, size_t framesToProcess)
         virtualReadIndex += rate;
     }
 
-<<<<<<< HEAD
     // Save the last two sample-frames which will later be used at the beginning
     // of the source buffer the next time around.
-=======
-    // Save the last two sample-frames which will later be used at the beginning of the source buffer the next time around.
->>>>>>> miniblink49
     int readIndex = static_cast<int>(virtualReadIndex);
     m_lastValues[0] = source[readIndex];
     m_lastValues[1] = source[readIndex + 1];
@@ -193,8 +141,3 @@ double AudioResamplerKernel::rate() const
 }
 
 } // namespace blink
-<<<<<<< HEAD
-=======
-
-#endif // ENABLE(WEB_AUDIO)
->>>>>>> miniblink49

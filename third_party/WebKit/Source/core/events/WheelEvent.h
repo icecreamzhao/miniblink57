@@ -2,7 +2,8 @@
  * Copyright (C) 2001 Peter Kelly (pmk@post.com)
  * Copyright (C) 2001 Tobias Anton (anton@stud.fbi.fh-darmstadt.de)
  * Copyright (C) 2006 Samuel Weinig (sam.weinig@gmail.com)
- * Copyright (C) 2003, 2004, 2005, 2006, 2008, 2010 Apple Inc. All rights reserved.
+ * Copyright (C) 2003, 2004, 2005, 2006, 2008, 2010 Apple Inc. All rights
+ * reserved.
  * Copyright (C) 2013 Samsung Electronics. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
@@ -26,91 +27,75 @@
 #define WheelEvent_h
 
 #include "core/CoreExport.h"
-#include "core/events/EventDispatchMediator.h"
 #include "core/events/MouseEvent.h"
 #include "core/events/WheelEventInit.h"
 #include "platform/geometry/FloatPoint.h"
+#include "public/platform/WebMouseWheelEvent.h"
 
 namespace blink {
 
-class PlatformWheelEvent;
-
 class CORE_EXPORT WheelEvent final : public MouseEvent {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     enum { TickMultiplier = 120 };
 
-    enum DeltaMode {
-        DOM_DELTA_PIXEL = 0,
-        DOM_DELTA_LINE,
-        DOM_DELTA_PAGE
-    };
+    enum DeltaMode { kDomDeltaPixel = 0,
+        kDomDeltaLine,
+        kDomDeltaPage };
 
-    static PassRefPtrWillBeRawPtr<WheelEvent> create()
-    {
-        return adoptRefWillBeNoop(new WheelEvent);
-    }
+    static WheelEvent* create() { return new WheelEvent; }
 
-    static PassRefPtrWillBeRawPtr<WheelEvent> create(const AtomicString& type, const WheelEventInit& initializer)
-    {
-        return adoptRefWillBeNoop(new WheelEvent(type, initializer));
-    }
+    static WheelEvent* create(const WebMouseWheelEvent& nativeEvent,
+        AbstractView*);
 
-    static PassRefPtrWillBeRawPtr<WheelEvent> create(const FloatPoint& wheelTicks,
-        const FloatPoint& rawDelta, unsigned deltaMode, PassRefPtrWillBeRawPtr<AbstractView> view,
-        const IntPoint& screenLocation, const IntPoint& windowLocation,
-        bool ctrlKey, bool altKey, bool shiftKey, bool metaKey, unsigned short buttons, bool canScroll, bool hasPreciseScrollingDeltas, RailsMode railsMode)
+    static WheelEvent* create(const AtomicString& type,
+        const WheelEventInit& initializer)
     {
-        return adoptRefWillBeNoop(new WheelEvent(wheelTicks, rawDelta, deltaMode, view,
-            screenLocation, windowLocation, ctrlKey, altKey, shiftKey, metaKey, buttons, canScroll, hasPreciseScrollingDeltas, railsMode));
+        return new WheelEvent(type, initializer);
     }
 
     double deltaX() const { return m_deltaX; } // Positive when scrolling right.
     double deltaY() const { return m_deltaY; } // Positive when scrolling down.
     double deltaZ() const { return m_deltaZ; }
-    int wheelDelta() const { return wheelDeltaY() ? wheelDeltaY() : wheelDeltaX(); } // Deprecated.
-    int wheelDeltaX() const { return m_wheelDelta.x(); } // Deprecated, negative when scrolling right.
-    int wheelDeltaY() const { return m_wheelDelta.y(); } // Deprecated, negative when scrolling down.
+    int wheelDelta() const
+    {
+        return wheelDeltaY() ? wheelDeltaY() : wheelDeltaX();
+    } // Deprecated.
+    int wheelDeltaX() const
+    {
+        return m_wheelDelta.x();
+    } // Deprecated, negative when scrolling right.
+    int wheelDeltaY() const
+    {
+        return m_wheelDelta.y();
+    } // Deprecated, negative when scrolling down.
     unsigned deltaMode() const { return m_deltaMode; }
-    float ticksX() const { return static_cast<float>(m_wheelDelta.x()) / TickMultiplier; }
-    float ticksY() const { return static_cast<float>(m_wheelDelta.y()) / TickMultiplier; }
-    bool canScroll() const { return m_canScroll; }
-    bool hasPreciseScrollingDeltas() const { return m_hasPreciseScrollingDeltas; }
-    RailsMode railsMode() const { return m_railsMode; }
 
-    virtual const AtomicString& interfaceName() const override;
-    virtual bool isMouseEvent() const override;
-    virtual bool isWheelEvent() const override;
+    const AtomicString& interfaceName() const override;
+    bool isMouseEvent() const override;
+    bool isWheelEvent() const override;
+
+    EventDispatchMediator* createMediator() override;
+
+    const WebMouseWheelEvent& nativeEvent() const { return m_nativeEvent; }
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
     WheelEvent();
     WheelEvent(const AtomicString&, const WheelEventInit&);
-    WheelEvent(const FloatPoint& wheelTicks, const FloatPoint& rawDelta,
-        unsigned, PassRefPtrWillBeRawPtr<AbstractView>, const IntPoint& screenLocation, const IntPoint& windowLocation,
-        bool ctrlKey, bool altKey, bool shiftKey, bool metaKey, unsigned short buttons, bool canScroll, bool hasPreciseScrollingDeltas, RailsMode);
+    WheelEvent(const WebMouseWheelEvent&, AbstractView*);
 
     IntPoint m_wheelDelta;
     double m_deltaX;
     double m_deltaY;
     double m_deltaZ;
     unsigned m_deltaMode;
-    bool m_canScroll;
-    bool m_hasPreciseScrollingDeltas;
-    RailsMode m_railsMode;
+    WebMouseWheelEvent m_nativeEvent;
 };
 
 DEFINE_EVENT_TYPE_CASTS(WheelEvent);
-
-class WheelEventDispatchMediator final : public EventDispatchMediator {
-public:
-    static PassRefPtrWillBeRawPtr<WheelEventDispatchMediator> create(const PlatformWheelEvent&, PassRefPtrWillBeRawPtr<AbstractView>);
-private:
-    WheelEventDispatchMediator(const PlatformWheelEvent&, PassRefPtrWillBeRawPtr<AbstractView>);
-    WheelEvent& event() const;
-    virtual bool dispatchEvent(EventDispatcher&) const override;
-};
 
 } // namespace blink
 

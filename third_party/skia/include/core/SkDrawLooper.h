@@ -6,23 +6,13 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #ifndef SkDrawLooper_DEFINED
 #define SkDrawLooper_DEFINED
 
 #include "SkBlurTypes.h"
-<<<<<<< HEAD
 #include "SkColor.h"
 #include "SkFlattenable.h"
 #include "SkPoint.h"
-=======
-#include "SkFlattenable.h"
-#include "SkPoint.h"
-#include "SkColor.h"
->>>>>>> miniblink49
 
 class SkCanvas;
 class SkPaint;
@@ -47,13 +37,8 @@ public:
      */
     class SK_API Context : ::SkNoncopyable {
     public:
-<<<<<<< HEAD
         Context() { }
         virtual ~Context() { }
-=======
-        Context() {}
-        virtual ~Context() {}
->>>>>>> miniblink49
 
         /**
          *  Called in a loop on objects returned by SkDrawLooper::createContext().
@@ -88,10 +73,6 @@ public:
       */
     virtual size_t contextSize() const = 0;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
     /**
      * The fast bounds functions are used to enable the paint to be culled early
      * in the drawing pipeline. If a subclass can support this feature it must
@@ -106,19 +87,11 @@ public:
     void computeFastBounds(const SkPaint& paint, const SkRect& src, SkRect* dst) const;
 
     struct BlurShadowRec {
-<<<<<<< HEAD
         SkScalar fSigma;
         SkVector fOffset;
         SkColor fColor;
         SkBlurStyle fStyle;
         SkBlurQuality fQuality;
-=======
-        SkScalar        fSigma;
-        SkVector        fOffset;
-        SkColor         fColor;
-        SkBlurStyle     fStyle;
-        SkBlurQuality   fQuality;
->>>>>>> miniblink49
     };
     /**
      *  If this looper can be interpreted as having two layers, such that
@@ -135,11 +108,7 @@ public:
     SK_DEFINE_FLATTENABLE_TYPE(SkDrawLooper)
 
 protected:
-<<<<<<< HEAD
     SkDrawLooper() { }
-=======
-    SkDrawLooper() {}
->>>>>>> miniblink49
 
 private:
     typedef SkFlattenable INHERITED;

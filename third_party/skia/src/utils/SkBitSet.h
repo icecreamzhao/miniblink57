@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -9,20 +5,11 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #ifndef SkBitSet_DEFINED
 #define SkBitSet_DEFINED
 
 #include "SkTDArray.h"
 #include "SkTypes.h"
-=======
-
-#ifndef SkBitSet_DEFINED
-#define SkBitSet_DEFINED
-
-#include "SkTypes.h"
-#include "SkTDArray.h"
->>>>>>> miniblink49
 
 class SkBitSet {
 public:
@@ -41,12 +28,8 @@ public:
 
     /** Set the value of the index-th bit.
      */
-<<<<<<< HEAD
     void setBit(int index, bool value)
     {
-=======
-    void setBit(int index, bool value) {
->>>>>>> miniblink49
         uint32_t mask = 1 << (index & 31);
         uint32_t* chunk = this->internalGet(index);
         if (value) {
@@ -58,12 +41,8 @@ public:
 
     /** Test if bit index is set.
      */
-<<<<<<< HEAD
     bool isBitSet(int index) const
     {
-=======
-    bool isBitSet(int index) const {
->>>>>>> miniblink49
         uint32_t mask = 1 << (index & 31);
         return SkToBool(*this->internalGet(index) & mask);
     }
@@ -75,23 +54,14 @@ public:
 
     /** Export indices of set bits to T array.
      */
-<<<<<<< HEAD
     template <typename T>
     void exportTo(SkTDArray<T>* array) const
     {
-=======
-    template<typename T>
-    void exportTo(SkTDArray<T>* array) const {
->>>>>>> miniblink49
         SkASSERT(array);
         uint32_t* data = reinterpret_cast<uint32_t*>(fBitData.get());
         for (unsigned int i = 0; i < fDwordCount; ++i) {
             uint32_t value = data[i];
-<<<<<<< HEAD
             if (value) { // There are set bits
-=======
-            if (value) {  // There are set bits
->>>>>>> miniblink49
                 unsigned int index = i * 32;
                 for (unsigned int j = 0; j < 32; ++j) {
                     if (0x1 & (value >> j)) {
@@ -108,12 +78,8 @@ private:
     size_t fDwordCount;
     size_t fBitCount;
 
-<<<<<<< HEAD
     uint32_t* internalGet(int index) const
     {
-=======
-    uint32_t* internalGet(int index) const {
->>>>>>> miniblink49
         SkASSERT((size_t)index < fBitCount);
         size_t internalIndex = index / 32;
         SkASSERT(internalIndex < fDwordCount);
@@ -121,8 +87,4 @@ private:
     }
 };
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #endif

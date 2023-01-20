@@ -34,50 +34,66 @@
 #include "core/html/parser/HTMLSourceTracker.h"
 #include "core/html/parser/HTMLTreeBuilderSimulator.h"
 #include "core/html/parser/TextResourceDecoder.h"
+#include "core/html/parser/TokenizedChunkQueue.h"
 #include "core/html/parser/XSSAuditorDelegate.h"
-#include "wtf/PassOwnPtr.h"
 #include "wtf/WeakPtr.h"
+#include <memory>
 
 namespace blink {
 
 class HTMLDocumentParser;
 class XSSAuditor;
-class WebScheduler;
+class WebTaskRunner;
 
 class BackgroundHTMLParser {
-    WTF_MAKE_FAST_ALLOCATED(BackgroundHTMLParser);
+    USING_FAST_MALLOC(BackgroundHTMLParser);
+    WTF_MAKE_NONCOPYABLE(BackgroundHTMLParser);
+
 public:
     struct Configuration {
+        USING_FAST_MALLOC(Configuration);
+
+    public:
         Configuration();
         HTMLParserOptions options;
         WeakPtr<HTMLDocumentParser> parser;
-        OwnPtr<XSSAuditor> xssAuditor;
-        OwnPtr<TokenPreloadScanner> preloadScanner;
-        OwnPtr<TextResourceDecoder> decoder;
+        std::unique_ptr<XSSAuditor> xssAuditor;
+        std::unique_ptr<TextResourceDecoder> decoder;
+        RefPtr<TokenizedChunkQueue> tokenizedChunkQueue;
         // outstandingTokenLimit must be greater than or equal to
         // pendingTokenLimit
         size_t outstandingTokenLimit;
         size_t pendingTokenLimit;
+        bool shouldCoalesceChunks;
     };
 
-    static void start(PassRefPtr<WeakReference<BackgroundHTMLParser>>, PassOwnPtr<Configuration>, WebScheduler*);
+    // The returned BackgroundHTMLParser should only be used on the parser
+    // thread: it must first be initialized by calling init(), and free by
+    // calling stop().
+    static WeakPtr<BackgroundHTMLParser> create(std::unique_ptr<Configuration>,
+        RefPtr<WebTaskRunner>);
+    void init(const KURL& documentURL,
+        std::unique_ptr<CachedDocumentParameters>,
+        const MediaValuesCached::MediaValuesCachedData&);
 
     struct Checkpoint {
+        USING_FAST_MALLOC(Checkpoint);
+
+    public:
         WeakPtr<HTMLDocumentParser> parser;
-        OwnPtr<HTMLToken> token;
-        OwnPtr<HTMLTokenizer> tokenizer;
+        std::unique_ptr<HTMLToken> token;
+        std::unique_ptr<HTMLTokenizer> tokenizer;
         HTMLTreeBuilderSimulator::State treeBuilderState;
         HTMLInputCheckpoint inputCheckpoint;
         TokenPreloadScannerCheckpoint preloadScannerCheckpoint;
         String unparsedInput;
     };
 
-    void appendRawBytesFromParserThread(const char* data, int dataLength);
-
-    void appendRawBytesFromMainThread(PassOwnPtr<Vector<char>>);
-    void setDecoder(PassOwnPtr<TextResourceDecoder>);
+    void appendRawBytesFromMainThread(std::unique_ptr<Vector<char>>,
+        double bytesReceivedTime);
+    void setDecoder(std::unique_ptr<TextResourceDecoder>);
     void flush();
-    void resumeFrom(PassOwnPtr<Checkpoint>);
+    void resumeFrom(std::unique_ptr<Checkpoint>);
     void startedChunkWithCheckpoint(HTMLInputCheckpoint);
     void finish();
     void stop();
@@ -85,39 +101,56 @@ public:
     void forcePlaintextForTextDocument();
 
 private:
-    BackgroundHTMLParser(PassRefPtr<WeakReference<BackgroundHTMLParser>>, PassOwnPtr<Configuration>, WebScheduler*);
+    BackgroundHTMLParser(std::unique_ptr<Configuration>, RefPtr<WebTaskRunner>);
     ~BackgroundHTMLParser();
 
     void appendDecodedBytes(const String&);
     void markEndOfFile();
     void pumpTokenizer();
-    void sendTokensToMainThread();
+
+    // Returns whether or not the HTMLDocumentParser should be notified of
+    // pending chunks.
+    bool queueChunkForMainThread();
+    void notifyMainThreadOfNewChunks();
     void updateDocument(const String& decodedData);
+
+    template <typename FunctionType, typename... Ps>
+    void runOnMainThread(FunctionType, Ps&&...);
 
     WeakPtrFactory<BackgroundHTMLParser> m_weakFactory;
     BackgroundHTMLInputStream m_input;
     HTMLSourceTracker m_sourceTracker;
-    OwnPtr<HTMLToken> m_token;
-    OwnPtr<HTMLTokenizer> m_tokenizer;
+    std::unique_ptr<HTMLToken> m_token;
+    std::unique_ptr<HTMLTokenizer> m_tokenizer;
     HTMLTreeBuilderSimulator m_treeBuilderSimulator;
     HTMLParserOptions m_options;
     const size_t m_outstandingTokenLimit;
     WeakPtr<HTMLDocumentParser> m_parser;
 
-    OwnPtr<CompactHTMLTokenStream> m_pendingTokens;
+    std::unique_ptr<CompactHTMLTokenStream> m_pendingTokens;
     const size_t m_pendingTokenLimit;
     PreloadRequestStream m_pendingPreloads;
+    // Indices into |m_pendingTokens|.
+    Vector<int> m_likelyDocumentWriteScriptIndices;
+    ViewportDescriptionWrapper m_viewportDescription;
     XSSInfoStream m_pendingXSSInfos;
 
-    OwnPtr<XSSAuditor> m_xssAuditor;
-    OwnPtr<TokenPreloadScanner> m_preloadScanner;
-    OwnPtr<TextResourceDecoder> m_decoder;
+    std::unique_ptr<XSSAuditor> m_xssAuditor;
+    std::unique_ptr<TokenPreloadScanner> m_preloadScanner;
+    std::unique_ptr<TextResourceDecoder> m_decoder;
     DocumentEncodingData m_lastSeenEncodingData;
-    WebScheduler* m_scheduler; // NOT OWNED, scheduler will outlive BackgroundHTMLParser
+    RefPtr<WebTaskRunner> m_loadingTaskRunner;
+    RefPtr<TokenizedChunkQueue> m_tokenizedChunkQueue;
+
+    // Index into |m_pendingTokens| of the last <meta> csp token found. Will be
+    // |TokenizedChunk::noPendingToken| if none have been found.
+    int m_pendingCSPMetaTokenIndex;
 
     bool m_startingScript;
+    double m_lastBytesReceivedTime;
+    bool m_shouldCoalesceChunks;
 };
 
-}
+} // namespace blink
 
 #endif

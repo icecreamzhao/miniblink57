@@ -24,7 +24,6 @@ static void testSimplifyQuadralateralsMain(PathOpsThreadState* data)
     int cy = state.fC >> 2;
     int dx = state.fD & 0x03;
     int dy = state.fD >> 2;
-<<<<<<< HEAD
     for (int e = 0; e < 16; ++e) {
         int ex = e & 0x03;
         int ey = e >> 2;
@@ -35,18 +34,6 @@ static void testSimplifyQuadralateralsMain(PathOpsThreadState* data)
                 int gx = g & 0x03;
                 int gy = g >> 2;
                 for (int h = g; h < 16; ++h) {
-=======
-    for (int e = 0 ; e < 16; ++e) {
-        int ex = e & 0x03;
-        int ey = e >> 2;
-        for (int f = e ; f < 16; ++f) {
-            int fx = f & 0x03;
-            int fy = f >> 2;
-            for (int g = f ; g < 16; ++g) {
-                int gx = g & 0x03;
-                int gy = g >> 2;
-                for (int h = g ; h < 16; ++h) {
->>>>>>> miniblink49
                     int hx = h & 0x03;
                     int hy = h >> 2;
                     SkPath path, out;
@@ -62,11 +49,7 @@ static void testSimplifyQuadralateralsMain(PathOpsThreadState* data)
                     path.lineTo(SkIntToScalar(hx), SkIntToScalar(hy));
                     path.close();
                     if (progress) {
-<<<<<<< HEAD
                         // gdb: set print elements 400
-=======
-                       // gdb: set print elements 400
->>>>>>> miniblink49
                         char* str = pathStr;
                         str += sprintf(str, "    path.moveTo(%d, %d);\n", ax, ay);
                         str += sprintf(str, "    path.lineTo(%d, %d);\n", bx, by);
@@ -92,7 +75,6 @@ static void testSimplifyQuadralateralsMain(PathOpsThreadState* data)
     }
 }
 
-<<<<<<< HEAD
 DEF_TEST(PathOpsSimplifyQuadralateralsThreaded, reporter)
 {
     initializeTests(reporter, "testQuadralaterals");
@@ -106,19 +88,6 @@ DEF_TEST(PathOpsSimplifyQuadralateralsThreaded, reporter)
                 }
                 if (!reporter->allowExtendedTest())
                     goto finish;
-=======
-DEF_TEST(PathOpsSimplifyQuadralateralsThreaded, reporter) {
-    initializeTests(reporter, "testQuadralaterals");
-    PathOpsThreadedTestRunner testRunner(reporter);
-    for (int a = 0; a < 16; ++a) {
-        for (int b = a ; b < 16; ++b) {
-            for (int c = b ; c < 16; ++c) {
-                for (int d = c; d < 16; ++d) {
-                    *testRunner.fRunnables.append() = SkNEW_ARGS(PathOpsThreadedRunnable,
-                            (&testSimplifyQuadralateralsMain, a, b, c, d, &testRunner));
-                }
-                if (!reporter->allowExtendedTest()) goto finish;
->>>>>>> miniblink49
             }
         }
     }

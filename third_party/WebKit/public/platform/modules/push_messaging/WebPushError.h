@@ -13,19 +13,12 @@ struct WebPushError {
     enum ErrorType {
         ErrorTypeAbort = 0,
         ErrorTypeNetwork,
-<<<<<<< HEAD
         ErrorTypeNotAllowed,
         ErrorTypeNotFound,
         ErrorTypeNotSupported,
         ErrorTypeUnknown,
         ErrorTypeInvalidState,
         ErrorTypeLast = ErrorTypeInvalidState
-=======
-        ErrorTypeNotFound,
-        ErrorTypeNotSupported,
-        ErrorTypeUnknown,
-        ErrorTypeLast = ErrorTypeUnknown
->>>>>>> miniblink49
     };
 
     WebPushError(ErrorType errorType, const WebString& message)

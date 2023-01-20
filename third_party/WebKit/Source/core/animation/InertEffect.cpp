@@ -28,27 +28,32 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/animation/InertEffect.h"
 
 #include "core/animation/Interpolation.h"
 
 namespace blink {
 
-PassRefPtrWillBeRawPtr<InertEffect> InertEffect::create(PassRefPtrWillBeRawPtr<EffectModel> effect, const Timing& timing, bool paused, double inheritedTime)
+InertEffect* InertEffect::create(EffectModel* effect,
+    const Timing& timing,
+    bool paused,
+    double inheritedTime)
 {
-    return adoptRefWillBeNoop(new InertEffect(effect, timing, paused, inheritedTime));
+    return new InertEffect(effect, timing, paused, inheritedTime);
 }
 
-InertEffect::InertEffect(PassRefPtrWillBeRawPtr<EffectModel> model, const Timing& timing, bool paused, double inheritedTime)
-    : AnimationEffect(timing)
+InertEffect::InertEffect(EffectModel* model,
+    const Timing& timing,
+    bool paused,
+    double inheritedTime)
+    : AnimationEffectReadOnly(timing)
     , m_model(model)
     , m_paused(paused)
     , m_inheritedTime(inheritedTime)
 {
 }
 
-void InertEffect::sample(OwnPtrWillBeRawPtr<WillBeHeapVector<RefPtrWillBeMember<Interpolation>>>& result)
+void InertEffect::sample(Vector<RefPtr<Interpolation>>& result) const
 {
     updateInheritedTime(m_inheritedTime, TimingUpdateOnDemand);
     if (!isInEffect()) {
@@ -57,9 +62,9 @@ void InertEffect::sample(OwnPtrWillBeRawPtr<WillBeHeapVector<RefPtrWillBeMember<
     }
 
     double iteration = currentIteration();
-    ASSERT(iteration >= 0);
-    // FIXME: Handle iteration values which overflow int.
-    return m_model->sample(static_cast<int>(iteration), timeFraction(), iterationDuration(), result);
+    DCHECK_GE(iteration, 0);
+    m_model->sample(clampTo<int>(iteration, 0), progress(), iterationDuration(),
+        result);
 }
 
 double InertEffect::calculateTimeToEffectChange(bool, double, double) const
@@ -70,7 +75,7 @@ double InertEffect::calculateTimeToEffectChange(bool, double, double) const
 DEFINE_TRACE(InertEffect)
 {
     visitor->trace(m_model);
-    AnimationEffect::trace(visitor);
+    AnimationEffectReadOnly::trace(visitor);
 }
 
 } // namespace blink

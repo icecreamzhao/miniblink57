@@ -33,7 +33,6 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 class ScriptState;
 
 class MODULES_EXPORT SpeechGrammarList final
@@ -41,23 +40,13 @@ class MODULES_EXPORT SpeechGrammarList final
       public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
 
-=======
-class ExecutionContext;
-
-class MODULES_EXPORT SpeechGrammarList final : public GarbageCollected<SpeechGrammarList>, public ScriptWrappable {
-    DEFINE_WRAPPERTYPEINFO();
->>>>>>> miniblink49
 public:
     static SpeechGrammarList* create();
 
     unsigned length() const { return m_grammars.size(); }
     SpeechGrammar* item(unsigned) const;
 
-<<<<<<< HEAD
     void addFromUri(ScriptState*, const String& src, double weight = 1.0);
-=======
-    void addFromUri(ExecutionContext*, const String& src, double weight = 1.0);
->>>>>>> miniblink49
     void addFromString(const String&, double weight = 1.0);
 
     DECLARE_TRACE();

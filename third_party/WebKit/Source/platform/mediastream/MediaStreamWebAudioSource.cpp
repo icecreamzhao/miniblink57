@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "platform/mediastream/MediaStreamWebAudioSource.h"
 #include "platform/audio/AudioBus.h"
 #include "public/platform/WebAudioSourceProvider.h"
@@ -46,27 +45,6 @@ MediaStreamWebAudioSource::~MediaStreamWebAudioSource() { }
 
 void MediaStreamWebAudioSource::provideInput(AudioBus* bus,
     size_t framesToProcess)
-=======
-#include "config.h"
-#if ENABLE(WEB_AUDIO)
-#include "platform/mediastream/MediaStreamWebAudioSource.h"
-
-#include "platform/audio/AudioBus.h"
-#include "public/platform/WebAudioSourceProvider.h"
-
-namespace blink {
-
-MediaStreamWebAudioSource::MediaStreamWebAudioSource(PassOwnPtr<WebAudioSourceProvider> provider)
-    : m_webAudioSourceProvider(provider)
-{
-}
-
-MediaStreamWebAudioSource::~MediaStreamWebAudioSource()
-{
-}
-
-void MediaStreamWebAudioSource::provideInput(AudioBus* bus, size_t framesToProcess)
->>>>>>> miniblink49
 {
     ASSERT(bus);
     if (!bus)
@@ -87,8 +65,3 @@ void MediaStreamWebAudioSource::provideInput(AudioBus* bus, size_t framesToProce
 }
 
 } // namespace blink
-<<<<<<< HEAD
-=======
-
-#endif // ENABLE(WEB_AUDIO)
->>>>>>> miniblink49

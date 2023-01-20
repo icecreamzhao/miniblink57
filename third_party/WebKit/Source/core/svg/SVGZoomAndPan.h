@@ -24,7 +24,6 @@
 
 #include "core/SVGNames.h"
 #include "core/dom/QualifiedName.h"
-#include "wtf/HashSet.h"
 
 namespace blink {
 
@@ -40,15 +39,14 @@ class SVGZoomAndPan {
 public:
     // Forward declare enumerations in the W3C naming scheme, for IDL generation.
     enum {
-        SVG_ZOOMANDPAN_UNKNOWN = SVGZoomAndPanUnknown,
-        SVG_ZOOMANDPAN_DISABLE = SVGZoomAndPanDisable,
-        SVG_ZOOMANDPAN_MAGNIFY = SVGZoomAndPanMagnify
+        kSvgZoomandpanUnknown = SVGZoomAndPanUnknown,
+        kSvgZoomandpanDisable = SVGZoomAndPanDisable,
+        kSvgZoomandpanMagnify = SVGZoomAndPanMagnify
     };
 
     virtual ~SVGZoomAndPan() { }
 
     static bool isKnownAttribute(const QualifiedName&);
-    static void addSupportedAttributes(HashSet<QualifiedName>&);
 
     static SVGZoomAndPanType parseFromNumber(unsigned short number)
     {
@@ -81,8 +79,14 @@ public:
 
     // JS API
     SVGZoomAndPanType zoomAndPan() const { return m_zoomAndPan; }
-    virtual void setZoomAndPan(unsigned short value) { m_zoomAndPan = parseFromNumber(value); }
-    virtual void setZoomAndPan(unsigned short value, ExceptionState&) { setZoomAndPan(value); }
+    virtual void setZoomAndPan(unsigned short value)
+    {
+        m_zoomAndPan = parseFromNumber(value);
+    }
+    virtual void setZoomAndPan(unsigned short value, ExceptionState&)
+    {
+        setZoomAndPan(value);
+    }
 
 protected:
     SVGZoomAndPan();

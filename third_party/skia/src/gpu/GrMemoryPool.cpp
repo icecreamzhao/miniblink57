@@ -8,7 +8,6 @@
 #include "GrMemoryPool.h"
 
 #ifdef SK_DEBUG
-<<<<<<< HEAD
 #define VALIDATE this->validate()
 #else
 #define VALIDATE
@@ -16,14 +15,6 @@
 
 GrMemoryPool::GrMemoryPool(size_t preallocSize, size_t minAllocSize)
 {
-=======
-    #define VALIDATE this->validate()
-#else
-    #define VALIDATE
-#endif
-
-GrMemoryPool::GrMemoryPool(size_t preallocSize, size_t minAllocSize) {
->>>>>>> miniblink49
     SkDEBUGCODE(fAllocationCnt = 0);
     SkDEBUGCODE(fAllocBlockCnt = 0);
 
@@ -31,7 +22,6 @@ GrMemoryPool::GrMemoryPool(size_t preallocSize, size_t minAllocSize) {
     fMinAllocSize = GrSizeAlignUp(minAllocSize + kPerAllocPad, kAlignment),
     fPreallocSize = GrSizeAlignUp(preallocSize + kPerAllocPad, kAlignment);
     fPreallocSize = SkTMax(fPreallocSize, fMinAllocSize);
-<<<<<<< HEAD
     fSize = 0;
 
     fHead = CreateBlock(fPreallocSize);
@@ -43,18 +33,6 @@ GrMemoryPool::GrMemoryPool(size_t preallocSize, size_t minAllocSize) {
 
 GrMemoryPool::~GrMemoryPool()
 {
-=======
-    fSize = fPreallocSize;
-
-    fHead = CreateBlock(fPreallocSize);
-    fTail = fHead;
-    fHead->fNext = NULL;
-    fHead->fPrev = NULL;
-    VALIDATE;
-};
-
-GrMemoryPool::~GrMemoryPool() {
->>>>>>> miniblink49
     VALIDATE;
     SkASSERT(0 == fAllocationCnt);
     SkASSERT(fHead == fTail);
@@ -62,51 +40,32 @@ GrMemoryPool::~GrMemoryPool() {
     DeleteBlock(fHead);
 };
 
-<<<<<<< HEAD
 void* GrMemoryPool::allocate(size_t size)
 {
     VALIDATE;
     size += kPerAllocPad;
     size = GrSizeAlignUp(size, kAlignment);
-=======
-void* GrMemoryPool::allocate(size_t size) {
-    VALIDATE;
-    size = GrSizeAlignUp(size, kAlignment);
-    size += kPerAllocPad;
->>>>>>> miniblink49
     if (fTail->fFreeSize < size) {
         size_t blockSize = size;
         blockSize = SkTMax<size_t>(blockSize, fMinAllocSize);
         BlockHeader* block = CreateBlock(blockSize);
 
         block->fPrev = fTail;
-<<<<<<< HEAD
         block->fNext = nullptr;
         SkASSERT(nullptr == fTail->fNext);
-=======
-        block->fNext = NULL;
-        SkASSERT(NULL == fTail->fNext);
->>>>>>> miniblink49
         fTail->fNext = block;
         fTail = block;
         fSize += block->fSize;
         SkDEBUGCODE(++fAllocBlockCnt);
     }
-<<<<<<< HEAD
     SkASSERT(kAssignedMarker == fTail->fBlockSentinal);
-=======
->>>>>>> miniblink49
     SkASSERT(fTail->fFreeSize >= size);
     intptr_t ptr = fTail->fCurrPtr;
     // We stash a pointer to the block header, just before the allocated space,
     // so that we can decrement the live count on delete in constant time.
-<<<<<<< HEAD
     AllocHeader* allocData = reinterpret_cast<AllocHeader*>(ptr);
     SkDEBUGCODE(allocData->fSentinal = kAssignedMarker);
     allocData->fHeader = fTail;
-=======
-    *reinterpret_cast<BlockHeader**>(ptr) = fTail;
->>>>>>> miniblink49
     ptr += kPerAllocPad;
     fTail->fPrevPtr = fTail->fCurrPtr;
     fTail->fCurrPtr += size;
@@ -118,7 +77,6 @@ void* GrMemoryPool::allocate(size_t size) {
     return reinterpret_cast<void*>(ptr);
 }
 
-<<<<<<< HEAD
 void GrMemoryPool::release(void* p)
 {
     VALIDATE;
@@ -128,12 +86,6 @@ void GrMemoryPool::release(void* p)
     SkDEBUGCODE(allocData->fSentinal = kFreedMarker);
     BlockHeader* block = allocData->fHeader;
     SkASSERT(kAssignedMarker == block->fBlockSentinal);
-=======
-void GrMemoryPool::release(void* p) {
-    VALIDATE;
-    intptr_t ptr = reinterpret_cast<intptr_t>(p) - kPerAllocPad;
-    BlockHeader* block = *reinterpret_cast<BlockHeader**>(ptr);
->>>>>>> miniblink49
     if (1 == block->fLiveCount) {
         // the head block is special, it is reset rather than deleted
         if (fHead == block) {
@@ -167,7 +119,6 @@ void GrMemoryPool::release(void* p) {
     VALIDATE;
 }
 
-<<<<<<< HEAD
 GrMemoryPool::BlockHeader* GrMemoryPool::CreateBlock(size_t size)
 {
     size_t paddedSize = size + kHeaderSize;
@@ -179,23 +130,10 @@ GrMemoryPool::BlockHeader* GrMemoryPool::CreateBlock(size_t size)
     block->fFreeSize = size;
     block->fCurrPtr = reinterpret_cast<intptr_t>(block) + kHeaderSize;
     block->fPrevPtr = 0; // gcc warns on assigning nullptr to an intptr_t.
-=======
-GrMemoryPool::BlockHeader* GrMemoryPool::CreateBlock(size_t size) {
-    size_t paddedSize = size + kHeaderSize;
-    BlockHeader* block =
-        reinterpret_cast<BlockHeader*>(sk_malloc_throw(paddedSize));
-    // we assume malloc gives us aligned memory
-    SkASSERT(!(reinterpret_cast<intptr_t>(block) % kAlignment));
-    block->fLiveCount = 0;
-    block->fFreeSize = size;
-    block->fCurrPtr = reinterpret_cast<intptr_t>(block) + kHeaderSize;
-    block->fPrevPtr = 0; // gcc warns on assigning NULL to an intptr_t.
->>>>>>> miniblink49
     block->fSize = paddedSize;
     return block;
 }
 
-<<<<<<< HEAD
 void GrMemoryPool::DeleteBlock(BlockHeader* block)
 {
     SkASSERT(kAssignedMarker == block->fBlockSentinal);
@@ -212,19 +150,6 @@ void GrMemoryPool::validate()
     int allocCount = 0;
     do {
         SkASSERT(kAssignedMarker == block->fBlockSentinal);
-=======
-void GrMemoryPool::DeleteBlock(BlockHeader* block) {
-    sk_free(block);
-}
-
-void GrMemoryPool::validate() {
-#ifdef SK_DEBUG
-    BlockHeader* block = fHead;
-    BlockHeader* prev = NULL;
-    SkASSERT(block);
-    int allocCount = 0;
-    do {
->>>>>>> miniblink49
         allocCount += block->fLiveCount;
         SkASSERT(prev == block->fPrev);
         if (prev) {
@@ -248,7 +173,6 @@ void GrMemoryPool::validate() {
             SkASSERT(userSize == fPreallocSize);
         }
         if (!block->fLiveCount) {
-<<<<<<< HEAD
             SkASSERT(ptrOffset == kHeaderSize);
             SkASSERT(userStart == block->fCurrPtr);
         } else {
@@ -257,21 +181,10 @@ void GrMemoryPool::validate() {
             SkASSERT(block == allocData->fHeader);
         }
 
-=======
-            SkASSERT(ptrOffset ==  kHeaderSize);
-            SkASSERT(userStart == block->fCurrPtr);
-        } else {
-            SkASSERT(block == *reinterpret_cast<BlockHeader**>(userStart));
-        }
->>>>>>> miniblink49
         prev = block;
     } while ((block = block->fNext));
     SkASSERT(allocCount == fAllocationCnt);
     SkASSERT(prev == fTail);
-<<<<<<< HEAD
     SkASSERT(fAllocBlockCnt != 0 || fSize == 0);
-=======
-    SkASSERT(fAllocBlockCnt != 0 || fSize == fPreallocSize);
->>>>>>> miniblink49
 #endif
 }

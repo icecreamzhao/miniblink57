@@ -28,19 +28,14 @@
 #ifndef ResourceRequest_h
 #define ResourceRequest_h
 
-<<<<<<< HEAD
 #include "platform/HTTPNames.h"
 #include "platform/network/EncodedFormData.h"
-=======
-#include "platform/network/FormData.h"
->>>>>>> miniblink49
 #include "platform/network/HTTPHeaderMap.h"
 #include "platform/network/HTTPParsers.h"
 #include "platform/network/ResourceLoadPriority.h"
 #include "platform/weborigin/KURL.h"
 #include "platform/weborigin/Referrer.h"
 #include "platform/weborigin/SecurityOrigin.h"
-<<<<<<< HEAD
 #include "public/platform/WebAddressSpace.h"
 #include "public/platform/WebURLRequest.h"
 #include "wtf/RefCounted.h"
@@ -58,19 +53,6 @@ enum class ResourceRequestBlockedReason {
     SubresourceFilter,
     Other,
     None
-=======
-#include "public/platform/WebURLRequest.h"
-#include "wtf/OwnPtr.h"
-
-namespace blink {
-
-enum ResourceRequestCachePolicy {
-    UseProtocolCachePolicy, // normal load
-    ReloadIgnoringCacheData, // reload
-    ReturnCacheDataElseLoad, // back/forward or encoding change - allow stale data
-    ReturnCacheDataDontLoad, // results of a post - allow stale data and only use cache
-    ReloadBypassingCache, // end-to-end reload
->>>>>>> miniblink49
 };
 
 enum InputToLoadPerfMetricReportPolicy {
@@ -81,7 +63,6 @@ enum InputToLoadPerfMetricReportPolicy {
 
 struct CrossThreadResourceRequestData;
 
-<<<<<<< HEAD
 class PLATFORM_EXPORT ResourceRequest final {
     DISALLOW_NEW();
 
@@ -103,36 +84,6 @@ public:
 
     // Gets a copy of the data suitable for passing to another thread.
     std::unique_ptr<CrossThreadResourceRequestData> copyData() const;
-=======
-class PLATFORM_EXPORT ResourceRequest {
-    WTF_MAKE_FAST_ALLOCATED(ResourceRequest);
-public:
-    class ExtraData : public RefCounted<ExtraData> {
-    public:
-        ExtraData();
-        virtual ~ExtraData();
-    };
-
-    ResourceRequest()
-    {
-        initialize(KURL());
-    }
-
-    ResourceRequest(const String& urlString)
-    {
-        initialize(KURL(ParsedURLString, urlString));
-    }
-
-    ResourceRequest(const KURL& url)
-    {
-        initialize(url);
-    }
-
-    static PassOwnPtr<ResourceRequest> adopt(PassOwnPtr<CrossThreadResourceRequestData>);
-
-    // Gets a copy of the data suitable for passing to another thread.
-    PassOwnPtr<CrossThreadResourceRequestData> copyData() const;
->>>>>>> miniblink49
 
     bool isNull() const;
     bool isEmpty() const;
@@ -142,19 +93,11 @@ public:
 
     void removeCredentials();
 
-<<<<<<< HEAD
     WebCachePolicy getCachePolicy() const;
     void setCachePolicy(WebCachePolicy);
 
     double timeoutInterval() const; // May return 0 when using platform default.
     void setTimeoutInterval(double);
-=======
-    ResourceRequestCachePolicy cachePolicy() const;
-    void setCachePolicy(ResourceRequestCachePolicy cachePolicy);
-
-    double timeoutInterval() const; // May return 0 when using platform default.
-    void setTimeoutInterval(double timeoutInterval);
->>>>>>> miniblink49
 
     const KURL& firstPartyForCookies() const;
     void setFirstPartyForCookies(const KURL& firstPartyForCookies);
@@ -167,18 +110,11 @@ public:
 
     const HTTPHeaderMap& httpHeaderFields() const;
     const AtomicString& httpHeaderField(const AtomicString& name) const;
-<<<<<<< HEAD
     void setHTTPHeaderField(const AtomicString& name, const AtomicString& value);
-=======
-    const AtomicString& httpHeaderField(const char* name) const;
-    void setHTTPHeaderField(const AtomicString& name, const AtomicString& value);
-    void setHTTPHeaderField(const char* name, const AtomicString& value);
->>>>>>> miniblink49
     void addHTTPHeaderField(const AtomicString& name, const AtomicString& value);
     void addHTTPHeaderFields(const HTTPHeaderMap& headerFields);
     void clearHTTPHeaderField(const AtomicString& name);
 
-<<<<<<< HEAD
     const AtomicString& httpContentType() const
     {
         return httpHeaderField(HTTPNames::Content_Type);
@@ -233,31 +169,6 @@ public:
 
     EncodedFormData* attachedCredential() const;
     void setAttachedCredential(PassRefPtr<EncodedFormData>);
-=======
-    const AtomicString& httpContentType() const { return httpHeaderField("Content-Type");  }
-    void setHTTPContentType(const AtomicString& httpContentType) { setHTTPHeaderField("Content-Type", httpContentType); }
-
-    bool didSetHTTPReferrer() const { return m_didSetHTTPReferrer; }
-    const AtomicString& httpReferrer() const { return httpHeaderField("Referer"); }
-    ReferrerPolicy referrerPolicy() const { return m_referrerPolicy; }
-    void setHTTPReferrer(const Referrer&);
-    void clearHTTPReferrer();
-
-    const AtomicString& httpOrigin() const { return httpHeaderField("Origin"); }
-    void setHTTPOrigin(const AtomicString& httpOrigin) { setHTTPHeaderField("Origin", httpOrigin); }
-    void clearHTTPOrigin();
-    void addHTTPOriginIfNeeded(const AtomicString& origin);
-
-    const AtomicString& httpUserAgent() const { return httpHeaderField("User-Agent"); }
-    void setHTTPUserAgent(const AtomicString& httpUserAgent) { setHTTPHeaderField("User-Agent", httpUserAgent); }
-    void clearHTTPUserAgent();
-
-    const AtomicString& httpAccept() const { return httpHeaderField("Accept"); }
-    void setHTTPAccept(const AtomicString& httpAccept) { setHTTPHeaderField("Accept", httpAccept); }
-
-    FormData* httpBody() const;
-    void setHTTPBody(PassRefPtr<FormData> httpBody);
->>>>>>> miniblink49
 
     bool allowStoredCredentials() const;
     void setAllowStoredCredentials(bool allowCredentials);
@@ -270,7 +181,6 @@ public:
     // Whether the associated ResourceHandleClient needs to be notified of
     // upload progress made for that resource.
     bool reportUploadProgress() const { return m_reportUploadProgress; }
-<<<<<<< HEAD
     void setReportUploadProgress(bool reportUploadProgress)
     {
         m_reportUploadProgress = reportUploadProgress;
@@ -283,13 +193,6 @@ public:
     {
         m_reportRawHeaders = reportRawHeaders;
     }
-=======
-    void setReportUploadProgress(bool reportUploadProgress) { m_reportUploadProgress = reportUploadProgress; }
-
-    // Whether actual headers being sent/received should be collected and reported for the request.
-    bool reportRawHeaders() const { return m_reportRawHeaders; }
-    void setReportRawHeaders(bool reportRawHeaders) { m_reportRawHeaders = reportRawHeaders; }
->>>>>>> miniblink49
 
     // Allows the request to be matched up with its requestor.
     int requestorID() const { return m_requestorID; }
@@ -300,14 +203,10 @@ public:
     // request to the plugin process (as it is processed through a render
     // view process).
     int requestorProcessID() const { return m_requestorProcessID; }
-<<<<<<< HEAD
     void setRequestorProcessID(int requestorProcessID)
     {
         m_requestorProcessID = requestorProcessID;
     }
-=======
-    void setRequestorProcessID(int requestorProcessID) { m_requestorProcessID = requestorProcessID; }
->>>>>>> miniblink49
 
     // Allows the request to be matched up with its app cache host.
     int appCacheHostID() const { return m_appCacheHostID; }
@@ -319,19 +218,14 @@ public:
 
     // True if request should be downloaded to file.
     bool downloadToFile() const { return m_downloadToFile; }
-<<<<<<< HEAD
     void setDownloadToFile(bool downloadToFile)
     {
         m_downloadToFile = downloadToFile;
     }
-=======
-    void setDownloadToFile(bool downloadToFile) { m_downloadToFile = downloadToFile; }
->>>>>>> miniblink49
 
     // True if the requestor wants to receive a response body as
     // WebDataConsumerHandle.
     bool useStreamOnResponse() const { return m_useStreamOnResponse; }
-<<<<<<< HEAD
     void setUseStreamOnResponse(bool useStreamOnResponse)
     {
         m_useStreamOnResponse = useStreamOnResponse;
@@ -409,39 +303,11 @@ public:
     {
         m_previewsState = previewsState;
     }
-=======
-    void setUseStreamOnResponse(bool useStreamOnResponse) { m_useStreamOnResponse = useStreamOnResponse; }
-
-    // True if the request should not be handled by the ServiceWorker.
-    bool skipServiceWorker() const { return m_skipServiceWorker; }
-    void setSkipServiceWorker(bool skipServiceWorker) { m_skipServiceWorker = skipServiceWorker; }
-
-    // True if corresponding AppCache group should be resetted.
-    bool shouldResetAppCache() { return m_shouldResetAppCache; }
-    void setShouldResetAppCache(bool shouldResetAppCache) { m_shouldResetAppCache = shouldResetAppCache; }
-
-    // Extra data associated with this request.
-    ExtraData* extraData() const { return m_extraData.get(); }
-    void setExtraData(PassRefPtr<ExtraData> extraData) { m_extraData = extraData; }
-
-    WebURLRequest::RequestContext requestContext() const { return m_requestContext; }
-    void setRequestContext(WebURLRequest::RequestContext context) { m_requestContext = context; }
-
-    WebURLRequest::FrameType frameType() const { return m_frameType; }
-    void setFrameType(WebURLRequest::FrameType frameType) { m_frameType = frameType; }
-
-    WebURLRequest::FetchRequestMode fetchRequestMode() const { return m_fetchRequestMode; }
-    void setFetchRequestMode(WebURLRequest::FetchRequestMode mode) { m_fetchRequestMode = mode; }
-
-    WebURLRequest::FetchCredentialsMode fetchCredentialsMode() const { return m_fetchCredentialsMode; }
-    void setFetchCredentialsMode(WebURLRequest::FetchCredentialsMode mode) { m_fetchCredentialsMode = mode; }
->>>>>>> miniblink49
 
     bool cacheControlContainsNoCache() const;
     bool cacheControlContainsNoStore() const;
     bool hasCacheValidatorFields() const;
 
-<<<<<<< HEAD
     bool checkForBrowserSideNavigation() const
     {
         return m_checkForBrowserSideNavigation;
@@ -486,56 +352,20 @@ private:
     WebCachePolicy m_cachePolicy;
     double m_timeoutInterval; // 0 is a magic value for platform default on
         // platforms that have one.
-=======
-    static bool compare(const ResourceRequest&, const ResourceRequest&);
-
-    bool checkForBrowserSideNavigation() const { return m_checkForBrowserSideNavigation; }
-    void setCheckForBrowserSideNavigation(bool check) { m_checkForBrowserSideNavigation = check; }
-
-    double uiStartTime() const { return m_uiStartTime; }
-    void setUIStartTime(double uiStartTime) { m_uiStartTime = uiStartTime; }
-
-    bool originatesFromReservedIPRange() const { return m_originatesFromReservedIPRange; }
-    void setOriginatesFromReservedIPRange(bool value) { m_originatesFromReservedIPRange = value; }
-
-    InputToLoadPerfMetricReportPolicy inputPerfMetricReportPolicy() const { return m_inputPerfMetricReportPolicy; }
-    void setInputPerfMetricReportPolicy(InputToLoadPerfMetricReportPolicy inputPerfMetricReportPolicy) { m_inputPerfMetricReportPolicy = inputPerfMetricReportPolicy; }
-
-    void setFollowedRedirect(bool followed) { m_followedRedirect = followed; }
-    bool followedRedirect() const { return m_followedRedirect; }
-
-private:
-    void initialize(const KURL&);
-
-    const CacheControlHeader& cacheControlHeader() const;
-
-    KURL m_url;
-    ResourceRequestCachePolicy m_cachePolicy;
-    double m_timeoutInterval; // 0 is a magic value for platform default on platforms that have one.
->>>>>>> miniblink49
     KURL m_firstPartyForCookies;
     RefPtr<SecurityOrigin> m_requestorOrigin;
     AtomicString m_httpMethod;
     HTTPHeaderMap m_httpHeaderFields;
-<<<<<<< HEAD
     RefPtr<EncodedFormData> m_httpBody;
     RefPtr<EncodedFormData> m_attachedCredential;
-=======
-    RefPtr<FormData> m_httpBody;
->>>>>>> miniblink49
     bool m_allowStoredCredentials : 1;
     bool m_reportUploadProgress : 1;
     bool m_reportRawHeaders : 1;
     bool m_hasUserGesture : 1;
     bool m_downloadToFile : 1;
     bool m_useStreamOnResponse : 1;
-<<<<<<< HEAD
     bool m_shouldResetAppCache : 1;
     WebURLRequest::SkipServiceWorker m_skipServiceWorker;
-=======
-    bool m_skipServiceWorker : 1;
-    bool m_shouldResetAppCache : 1;
->>>>>>> miniblink49
     ResourceLoadPriority m_priority;
     int m_intraPriorityValue;
     int m_requestorID;
@@ -546,27 +376,19 @@ private:
     WebURLRequest::FrameType m_frameType;
     WebURLRequest::FetchRequestMode m_fetchRequestMode;
     WebURLRequest::FetchCredentialsMode m_fetchCredentialsMode;
-<<<<<<< HEAD
     WebURLRequest::FetchRedirectMode m_fetchRedirectMode;
     WebURLRequest::PreviewsState m_previewsState;
-=======
->>>>>>> miniblink49
     ReferrerPolicy m_referrerPolicy;
     bool m_didSetHTTPReferrer;
     bool m_checkForBrowserSideNavigation;
     double m_uiStartTime;
-<<<<<<< HEAD
     bool m_isExternalRequest;
-=======
-    bool m_originatesFromReservedIPRange;
->>>>>>> miniblink49
     InputToLoadPerfMetricReportPolicy m_inputPerfMetricReportPolicy;
 
     mutable CacheControlHeader m_cacheControlHeaderCache;
 
     static double s_defaultTimeoutInterval;
 
-<<<<<<< HEAD
     RedirectStatus m_redirectStatus;
 
     double m_navigationStart = 0;
@@ -576,49 +398,24 @@ struct CrossThreadResourceRequestData {
     WTF_MAKE_NONCOPYABLE(CrossThreadResourceRequestData);
     USING_FAST_MALLOC(CrossThreadResourceRequestData);
 
-=======
-    bool m_followedRedirect;
-};
-
-bool equalIgnoringHeaderFields(const ResourceRequest&, const ResourceRequest&);
-
-inline bool operator==(const ResourceRequest& a, const ResourceRequest& b) { return ResourceRequest::compare(a, b); }
-inline bool operator!=(ResourceRequest& a, const ResourceRequest& b) { return !(a == b); }
-
-struct CrossThreadResourceRequestData {
-    WTF_MAKE_NONCOPYABLE(CrossThreadResourceRequestData); WTF_MAKE_FAST_ALLOCATED(CrossThreadResourceRequestData);
->>>>>>> miniblink49
 public:
     CrossThreadResourceRequestData() { }
     KURL m_url;
 
-<<<<<<< HEAD
     WebCachePolicy m_cachePolicy;
-=======
-    ResourceRequestCachePolicy m_cachePolicy;
->>>>>>> miniblink49
     double m_timeoutInterval;
     KURL m_firstPartyForCookies;
     RefPtr<SecurityOrigin> m_requestorOrigin;
 
     String m_httpMethod;
-<<<<<<< HEAD
     std::unique_ptr<CrossThreadHTTPHeaderMapData> m_httpHeaders;
     RefPtr<EncodedFormData> m_httpBody;
     RefPtr<EncodedFormData> m_attachedCredential;
-=======
-    OwnPtr<CrossThreadHTTPHeaderMapData> m_httpHeaders;
-    RefPtr<FormData> m_httpBody;
->>>>>>> miniblink49
     bool m_allowStoredCredentials;
     bool m_reportUploadProgress;
     bool m_hasUserGesture;
     bool m_downloadToFile;
-<<<<<<< HEAD
     WebURLRequest::SkipServiceWorker m_skipServiceWorker;
-=======
-    bool m_skipServiceWorker;
->>>>>>> miniblink49
     bool m_useStreamOnResponse;
     bool m_shouldResetAppCache;
     ResourceLoadPriority m_priority;
@@ -630,24 +427,15 @@ public:
     WebURLRequest::FrameType m_frameType;
     WebURLRequest::FetchRequestMode m_fetchRequestMode;
     WebURLRequest::FetchCredentialsMode m_fetchCredentialsMode;
-<<<<<<< HEAD
     WebURLRequest::FetchRedirectMode m_fetchRedirectMode;
     WebURLRequest::PreviewsState m_previewsState;
-=======
->>>>>>> miniblink49
     ReferrerPolicy m_referrerPolicy;
     bool m_didSetHTTPReferrer;
     bool m_checkForBrowserSideNavigation;
     double m_uiStartTime;
-<<<<<<< HEAD
     bool m_isExternalRequest;
     InputToLoadPerfMetricReportPolicy m_inputPerfMetricReportPolicy;
     ResourceRequest::RedirectStatus m_redirectStatus;
-=======
-    bool m_originatesFromReservedIPRange;
-    InputToLoadPerfMetricReportPolicy m_inputPerfMetricReportPolicy;
-    bool m_followedRedirect;
->>>>>>> miniblink49
 };
 
 } // namespace blink

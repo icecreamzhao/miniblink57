@@ -3,10 +3,12 @@
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
  *           (C) 1999 Antti Koivisto (koivisto@kde.org)
  *           (C) 2001 Dirk Mueller (mueller@kde.org)
- * Copyright (C) 2004, 2005, 2006, 2007, 2009, 2010, 2011 Apple Inc. All rights reserved.
+ * Copyright (C) 2004, 2005, 2006, 2007, 2009, 2010, 2011 Apple Inc. All rights
+ * reserved.
  *           (C) 2006 Alexey Proskuryakov (ap@nypop.com)
  * Copyright (C) 2010 Google Inc. All rights reserved.
- * Copyright (C) 2009 Torch Mobile Inc. All rights reserved. (http://www.torchmobile.com/)
+ * Copyright (C) 2009 Torch Mobile Inc. All rights reserved.
+ * (http://www.torchmobile.com/)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,7 +27,6 @@
  *
  */
 
-#include "config.h"
 #include "core/html/forms/TypeAhead.h"
 
 #include "core/events/KeyboardEvent.h"
@@ -37,12 +38,11 @@ namespace blink {
 
 TypeAhead::TypeAhead(TypeAheadDataSource* dataSource)
     : m_dataSource(dataSource)
-    , m_lastTypeTime(0)
     , m_repeatingChar(0)
 {
 }
 
-static const DOMTimeStamp typeAheadTimeout = 1000;
+static const TimeDelta typeAheadTimeout = TimeDelta::FromSecondsD(1);
 
 static String stripLeadingWhiteSpace(const String& string)
 {
@@ -59,12 +59,12 @@ static String stripLeadingWhiteSpace(const String& string)
 
 int TypeAhead::handleEvent(KeyboardEvent* event, MatchModeFlags matchMode)
 {
-    if (event->timeStamp() < m_lastTypeTime)
+    if (event->platformTimeStamp() < m_lastTypeTime)
         return -1;
 
     int optionCount = m_dataSource->optionCount();
-    DOMTimeStamp delta = event->timeStamp() - m_lastTypeTime;
-    m_lastTypeTime = event->timeStamp();
+    TimeDelta delta = event->platformTimeStamp() - m_lastTypeTime;
+    m_lastTypeTime = event->platformTimeStamp();
 
     UChar c = event->charCode();
 
@@ -98,15 +98,17 @@ int TypeAhead::handleEvent(KeyboardEvent* event, MatchModeFlags matchMode)
         int index = (selected < 0 ? 0 : selected) + searchStartOffset;
         index %= optionCount;
 
-        // Compute a case-folded copy of the prefix string before beginning the search for
-        // a matching element. This code uses foldCase to work around the fact that
-        // String::startWith does not fold non-ASCII characters. This code can be changed
-        // to use startWith once that is fixed.
+        // Compute a case-folded copy of the prefix string before beginning the
+        // search for a matching element. This code uses foldCase to work around the
+        // fact that String::startWith does not fold non-ASCII characters. This code
+        // can be changed to use startWith once that is fixed.
         String prefixWithCaseFolded(prefix.foldCase());
         for (int i = 0; i < optionCount; ++i, index = (index + 1) % optionCount) {
-            // Fold the option string and check if its prefix is equal to the folded prefix.
+            // Fold the option string and check if its prefix is equal to the folded
+            // prefix.
             String text = m_dataSource->optionAtIndex(index);
-            if (stripLeadingWhiteSpace(text).foldCase().startsWith(prefixWithCaseFolded))
+            if (stripLeadingWhiteSpace(text).foldCase().startsWith(
+                    prefixWithCaseFolded))
                 return index;
         }
     }
@@ -122,8 +124,14 @@ int TypeAhead::handleEvent(KeyboardEvent* event, MatchModeFlags matchMode)
 
 bool TypeAhead::hasActiveSession(KeyboardEvent* event)
 {
-    DOMTimeStamp delta = event->timeStamp() - m_lastTypeTime;
+    TimeDelta delta = event->platformTimeStamp() - m_lastTypeTime;
     return delta <= typeAheadTimeout;
+}
+
+void TypeAhead::resetSession()
+{
+    m_lastTypeTime = TimeTicks();
+    m_buffer.clear();
 }
 
 } // namespace blink

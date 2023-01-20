@@ -27,7 +27,6 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 class PLATFORM_EXPORT FESpecularLighting final : public FELighting {
 public:
     static FESpecularLighting* create(Filter*,
@@ -36,12 +35,6 @@ public:
         float,
         float,
         PassRefPtr<LightSource>);
-=======
-class PLATFORM_EXPORT FESpecularLighting : public FELighting {
-public:
-    static PassRefPtrWillBeRawPtr<FESpecularLighting> create(Filter*, const Color&, float, float,
-        float, float, float, PassRefPtr<LightSource>);
->>>>>>> miniblink49
     ~FESpecularLighting() override;
 
     Color lightingColor() const;
@@ -56,31 +49,18 @@ public:
     float specularExponent() const;
     bool setSpecularExponent(float);
 
-<<<<<<< HEAD
-=======
-    float kernelUnitLengthX() const;
-    bool setKernelUnitLengthX(float);
-
-    float kernelUnitLengthY() const;
-    bool setKernelUnitLengthY(float);
-
->>>>>>> miniblink49
     const LightSource* lightSource() const;
     void setLightSource(PassRefPtr<LightSource>);
 
     TextStream& externalRepresentation(TextStream&, int indention) const override;
 
 private:
-<<<<<<< HEAD
     FESpecularLighting(Filter*,
         const Color&,
         float,
         float,
         float,
         PassRefPtr<LightSource>);
-=======
-    FESpecularLighting(Filter*, const Color&, float, float, float, float, float, PassRefPtr<LightSource>);
->>>>>>> miniblink49
 };
 
 } // namespace blink

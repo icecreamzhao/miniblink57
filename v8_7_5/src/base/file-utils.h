@@ -10,7 +10,6 @@
 namespace v8 {
 namespace base {
 
-<<<<<<< HEAD
     // Helper functions to manipulate file paths.
 
     V8_BASE_EXPORT char* RelativePath(char** buffer, const char* exec_path,
@@ -20,14 +19,3 @@ namespace base {
 } // namespace v8
 
 #endif // V8_BASE_FILE_UTILS_H_
-=======
-// Helper functions to manipulate file paths.
-
-V8_BASE_EXPORT char* RelativePath(char** buffer, const char* exec_path,
-                                  const char* name);
-
-}  // namespace base
-}  // namespace v8
-
-#endif  // V8_BASE_FILE_UTILS_H_
->>>>>>> miniblink49

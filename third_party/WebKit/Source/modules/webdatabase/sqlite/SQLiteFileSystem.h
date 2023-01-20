@@ -31,10 +31,7 @@
 #ifndef SQLiteFileSystem_h
 #define SQLiteFileSystem_h
 
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
-=======
->>>>>>> miniblink49
 #include "wtf/Threading.h"
 #include "wtf/text/WTFString.h"
 
@@ -45,11 +42,8 @@ namespace blink {
 // A class that abstracts the file system related operations required
 // by the WebKit database code.
 class SQLiteFileSystem {
-<<<<<<< HEAD
     DISALLOW_NEW();
 
-=======
->>>>>>> miniblink49
 public:
     // Registers a user-defined SQLite VFS.
     static void registerSQLiteVFS();

@@ -5,7 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "SkBlurMaskFilter.h"
 #include "SkCanvas.h"
 #include "SkGraphics.h"
@@ -16,16 +15,6 @@
 
 static SkRect inset(const SkRect& r)
 {
-=======
-#include "gm.h"
-#include "SkCanvas.h"
-#include "SkGraphics.h"
-#include "SkRandom.h"
-#include "SkLayerDrawLooper.h"
-#include "SkBlurMaskFilter.h"
-
-static SkRect inset(const SkRect& r) {
->>>>>>> miniblink49
     SkRect rect = r;
     rect.inset(r.width() / 8, r.height() / 8);
     return rect;
@@ -33,17 +22,12 @@ static SkRect inset(const SkRect& r) {
 
 class PathInteriorGM : public skiagm::GM {
 public:
-<<<<<<< HEAD
     PathInteriorGM()
     {
-=======
-    PathInteriorGM() {
->>>>>>> miniblink49
         this->setBGColor(sk_tool_utils::color_to_565(0xFFDDDDDD));
     }
 
 protected:
-<<<<<<< HEAD
     SkISize onISize() override
     {
         return SkISize::Make(770, 770);
@@ -56,17 +40,6 @@ protected:
 
     void show(SkCanvas* canvas, const SkPath& path)
     {
-=======
-    SkISize onISize() override {
-        return SkISize::Make(770, 770);
-    }
-
-    SkString onShortName() override {
-        return SkString("pathinterior");
-    }
-
-    void show(SkCanvas* canvas, const SkPath& path) {
->>>>>>> miniblink49
         SkPaint paint;
         paint.setAntiAlias(true);
 
@@ -77,11 +50,7 @@ protected:
         bool hasInterior = false;
 #endif
 
-<<<<<<< HEAD
         paint.setColor(sk_tool_utils::color_to_565(hasInterior ? 0xFF8888FF : SK_ColorGRAY));
-=======
-        paint.setColor(hasInterior ? 0xFF8888FF : SK_ColorGRAY);
->>>>>>> miniblink49
         canvas->drawPath(path, paint);
         paint.setStyle(SkPaint::kStroke_Style);
         paint.setColor(SK_ColorRED);
@@ -94,20 +63,12 @@ protected:
         }
     }
 
-<<<<<<< HEAD
     void onDraw(SkCanvas* canvas) override
     {
         canvas->translate(8.5f, 8.5f);
 
         const SkRect rect = { 0, 0, 80, 80 };
         const SkScalar RAD = rect.width() / 8;
-=======
-    void onDraw(SkCanvas* canvas) override {
-        canvas->translate(8.5f, 8.5f);
-
-        const SkRect rect = { 0, 0, 80, 80 };
-        const SkScalar RAD = rect.width()/8;
->>>>>>> miniblink49
 
         int i = 0;
         for (int insetFirst = 0; insetFirst <= 1; ++insetFirst) {
@@ -149,18 +110,9 @@ protected:
     }
 
 private:
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
     typedef GM INHERITED;
 };
 
 //////////////////////////////////////////////////////////////////////////////
 
-<<<<<<< HEAD
 DEF_GM(return new PathInteriorGM;)
-=======
-static skiagm::GM* MyFactory(void*) { return new PathInteriorGM; }
-static skiagm::GMRegistry reg(MyFactory);
->>>>>>> miniblink49

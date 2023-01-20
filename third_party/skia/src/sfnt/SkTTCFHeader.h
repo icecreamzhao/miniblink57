@@ -45,20 +45,11 @@ struct SkTTCFHeader {
         };
         SK_OT_ULONG dsigLength; //Length of DSIG table (in bytes).
         SK_OT_ULONG dsigOffset; //Offset of DSIG table from the beginning of file (in bytes).
-<<<<<<< HEAD
     }; // version2ext (if version == version_2)
-=======
-    };// version2ext (if version == version_2)
->>>>>>> miniblink49
 };
 
 #pragma pack(pop)
 
-<<<<<<< HEAD
 static_assert(sizeof(SkTTCFHeader) == 12, "sizeof_SkTTCFHeader_not_12");
-=======
-
-SK_COMPILE_ASSERT(sizeof(SkTTCFHeader) == 12, sizeof_SkTTCFHeader_not_12);
->>>>>>> miniblink49
 
 #endif

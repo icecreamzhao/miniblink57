@@ -23,12 +23,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/dom/XMLDocument.h"
 
 namespace blink {
 
-XMLDocument::XMLDocument(const DocumentInit& initializer, DocumentClassFlags documentClasses)
+XMLDocument::XMLDocument(const DocumentInit& initializer,
+    DocumentClassFlags documentClasses)
     : Document(initializer, documentClasses)
 {
 }

@@ -39,38 +39,44 @@ namespace blink {
 
 class CORE_EXPORT AnimatableLength final : public AnimatableValue {
 public:
-    static PassRefPtrWillBeRawPtr<AnimatableLength> create(const Length& length, float zoom)
+    static PassRefPtr<AnimatableLength> create(const Length& length, float zoom)
     {
-        return adoptRefWillBeNoop(new AnimatableLength(length, zoom));
+        return adoptRef(new AnimatableLength(length, zoom));
     }
-    Length length(float zoom, ValueRange) const;
+    Length getLength(float zoom, ValueRange) const;
 
     bool hasSameUnits(const AnimatableLength* other) const
     {
         return m_hasPixels == other->m_hasPixels && m_hasPercent == other->m_hasPercent;
     }
 
-    DEFINE_INLINE_VIRTUAL_TRACE() { AnimatableValue::trace(visitor); }
-
 protected:
-    virtual PassRefPtrWillBeRawPtr<AnimatableValue> interpolateTo(const AnimatableValue*, double fraction) const override;
+    PassRefPtr<AnimatableValue> interpolateTo(const AnimatableValue*,
+        double fraction) const override;
 
 private:
-    static PassRefPtrWillBeRawPtr<AnimatableLength> create(double pixels, double percent, bool hasPixels, bool hasPercent)
+    static PassRefPtr<AnimatableLength> create(double pixels,
+        double percent,
+        bool hasPixels,
+        bool hasPercent)
     {
-        return adoptRefWillBeNoop(new AnimatableLength(pixels, percent, hasPixels, hasPercent));
+        return adoptRef(
+            new AnimatableLength(pixels, percent, hasPixels, hasPercent));
     }
     AnimatableLength(const Length&, float zoom);
-    AnimatableLength(double pixels, double percent, bool hasPixels, bool hasPercent)
+    AnimatableLength(double pixels,
+        double percent,
+        bool hasPixels,
+        bool hasPercent)
         : m_pixels(pixels)
         , m_percent(percent)
         , m_hasPixels(hasPixels)
         , m_hasPercent(hasPercent)
     {
-        ASSERT(m_hasPixels || m_hasPercent);
+        DCHECK(m_hasPixels || m_hasPercent);
     }
-    virtual AnimatableType type() const override { return TypeLength; }
-    virtual bool equalTo(const AnimatableValue*) const override;
+    AnimatableType type() const override { return TypeLength; }
+    bool equalTo(const AnimatableValue*) const override;
 
     double m_pixels;
     double m_percent;

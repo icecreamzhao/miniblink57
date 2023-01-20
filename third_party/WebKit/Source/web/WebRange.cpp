@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "public/web/WebRange.h"
 
 #include "core/dom/Document.h"
@@ -71,71 +70,6 @@ EphemeralRange WebRange::createEphemeralRange(LocalFrame* frame) const
     ContainerNode* scope = selectionRoot ? selectionRoot : frame->document()->documentElement();
 
     return PlainTextRange(m_start, m_end).createRange(*scope);
-=======
-#include "config.h"
-#include "public/web/WebRange.h"
-
-#include "bindings/core/v8/ExceptionState.h"
-#include "bindings/core/v8/ExceptionStatePlaceholder.h"
-#include "core/dom/Document.h"
-#include "core/dom/Element.h"
-#include "core/dom/Range.h"
-#include "core/dom/shadow/ShadowRoot.h"
-#include "core/editing/FrameSelection.h"
-#include "core/editing/PlainTextRange.h"
-#include "core/frame/FrameView.h"
-#include "core/frame/LocalFrame.h"
-#include "public/platform/WebString.h"
-#include "public/web/WebExceptionCode.h"
-#include "public/web/WebNode.h"
-#include "web/WebLocalFrameImpl.h"
-#include "wtf/PassRefPtr.h"
-
-namespace blink {
-
-void WebRange::reset()
-{
-    m_private.reset();
-}
-
-void WebRange::assign(const WebRange& other)
-{
-    m_private = other.m_private;
-}
-
-int WebRange::startOffset() const
-{
-    return m_private->startOffset();
-}
-
-int WebRange::endOffset() const
-{
-    return m_private->endOffset();
-}
-
-WebString WebRange::toPlainText() const
-{
-    return m_private->text();
-}
-
-// static
-WebRange WebRange::fromDocumentRange(WebLocalFrame* frame, int start, int length)
-{
-    LocalFrame* webFrame = toWebLocalFrameImpl(frame)->frame();
-    Element* selectionRoot = webFrame->selection().rootEditableElement();
-    ContainerNode* scope = selectionRoot ? selectionRoot : webFrame->document()->documentElement();
-    return PlainTextRange(start, start + length).createRange(*scope);
-}
-
-WebRange::WebRange(const PassRefPtrWillBeRawPtr<Range>& range)
-    : m_private(range)
-{
-}
-
-WebRange::operator PassRefPtrWillBeRawPtr<Range>() const
-{
-    return m_private.get();
->>>>>>> miniblink49
 }
 
 } // namespace blink

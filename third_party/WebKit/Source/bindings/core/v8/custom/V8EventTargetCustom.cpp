@@ -28,40 +28,58 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "bindings/core/v8/V8EventTarget.h"
 
 #include "bindings/core/v8/V8Window.h"
+#include "core/frame/LocalDOMWindow.h"
 #include "core/frame/UseCounter.h"
 
 namespace blink {
 
-void V8EventTarget::addEventListenerMethodPrologueCustom(const v8::FunctionCallbackInfo<v8::Value>& info, EventTarget*)
+void V8EventTarget::addEventListenerMethodPrologueCustom(
+    const v8::FunctionCallbackInfo<v8::Value>& info,
+    EventTarget*)
 {
-    if (info.Length() < 2) {
-        UseCounter::countIfNotPrivateScript(info.GetIsolate(), callingExecutionContext(info.GetIsolate()),
-            info.Length() == 0 ? UseCounter::AddEventListenerNoArguments : UseCounter::AddEventListenerOneArgument);
+    if (info.Length() >= 3 && info[2]->IsObject()) {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()),
+            UseCounter::AddEventListenerThirdArgumentIsObject);
+    }
+    if (info.Length() >= 4) {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()),
+            UseCounter::AddEventListenerFourArguments);
     }
 }
 
-void V8EventTarget::addEventListenerMethodEpilogueCustom(const v8::FunctionCallbackInfo<v8::Value>& info, EventTarget* impl)
+void V8EventTarget::addEventListenerMethodEpilogueCustom(
+    const v8::FunctionCallbackInfo<v8::Value>& info,
+    EventTarget* impl)
 {
     if (info.Length() >= 2 && info[1]->IsObject() && !impl->toNode())
-        addHiddenValueToArray(info.GetIsolate(), info.Holder(), info[1], V8EventTarget::eventListenerCacheIndex);
+        addHiddenValueToArray(info.GetIsolate(), info.Holder(), info[1],
+            V8EventTarget::eventListenerCacheIndex);
 }
 
-void V8EventTarget::removeEventListenerMethodPrologueCustom(const v8::FunctionCallbackInfo<v8::Value>& info, EventTarget*)
+void V8EventTarget::removeEventListenerMethodPrologueCustom(
+    const v8::FunctionCallbackInfo<v8::Value>& info,
+    EventTarget*)
 {
-    if (info.Length() < 2) {
-        UseCounter::countIfNotPrivateScript(info.GetIsolate(), callingExecutionContext(info.GetIsolate()),
-            info.Length() == 0 ? UseCounter::RemoveEventListenerNoArguments : UseCounter::RemoveEventListenerOneArgument);
+    if (info.Length() >= 3 && info[2]->IsObject()) {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()),
+            UseCounter::RemoveEventListenerThirdArgumentIsObject);
+    }
+    if (info.Length() >= 4) {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()),
+            UseCounter::RemoveEventListenerFourArguments);
     }
 }
 
-void V8EventTarget::removeEventListenerMethodEpilogueCustom(const v8::FunctionCallbackInfo<v8::Value>& info, EventTarget* impl)
+void V8EventTarget::removeEventListenerMethodEpilogueCustom(
+    const v8::FunctionCallbackInfo<v8::Value>& info,
+    EventTarget* impl)
 {
     if (info.Length() >= 2 && info[1]->IsObject() && !impl->toNode())
-        removeHiddenValueFromArray(info.GetIsolate(), info.Holder(), info[1], V8EventTarget::eventListenerCacheIndex);
+        removeHiddenValueFromArray(info.GetIsolate(), info.Holder(), info[1],
+            V8EventTarget::eventListenerCacheIndex);
 }
 
 } // namespace blink

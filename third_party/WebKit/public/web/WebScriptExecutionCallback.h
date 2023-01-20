@@ -7,22 +7,14 @@
 
 namespace v8 {
 class Value;
-<<<<<<< HEAD
 template <class T>
 class Local;
-=======
-template <class T> class Local;
->>>>>>> miniblink49
 }
 
 namespace blink {
 
-<<<<<<< HEAD
 template <typename T>
 class WebVector;
-=======
-template <typename T> class WebVector;
->>>>>>> miniblink49
 
 class WebScriptExecutionCallback {
 public:
@@ -30,11 +22,7 @@ public:
 
     // Method to be invoked when the asynchronous script execution is complete.
     // After function call all objects in vector will be collected
-<<<<<<< HEAD
     virtual void completed(const WebVector<v8::Local<v8::Value>>&) { }
-=======
-    virtual void completed(const WebVector<v8::Local<v8::Value> >&) { }
->>>>>>> miniblink49
 };
 
 } // namespace blink

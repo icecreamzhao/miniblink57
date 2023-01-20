@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
 #include "platform/fonts/shaping/CachingWordShaper.h"
 
 #include "platform/fonts/CharacterRange.h"
@@ -13,14 +12,6 @@
 #include "testing/gtest/include/gtest/gtest.h"
 #include "wtf/PtrUtil.h"
 #include <memory>
-=======
-#include "config.h"
-
-#include "platform/fonts/FontCache.h"
-#include "platform/fonts/GlyphBuffer.h"
-#include "platform/fonts/shaping/CachingWordShapeIterator.h"
-#include <gtest/gtest.h>
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -29,7 +20,6 @@ protected:
     void SetUp() override
     {
         fontDescription.setComputedSize(12.0);
-<<<<<<< HEAD
         fontDescription.setLocale("en");
         ASSERT_EQ(USCRIPT_LATIN, fontDescription.script());
         fontDescription.setGenericFamily(FontDescription::StandardFamily);
@@ -39,83 +29,44 @@ protected:
         ASSERT_TRUE(font.canShapeWordByWord());
         fallbackFonts = nullptr;
         cache = wrapUnique(new ShapeCache());
-=======
-        fontDescription.setScript(USCRIPT_LATIN);
-        fontDescription.setGenericFamily(FontDescription::StandardFamily);
-
-        font = new Font(fontDescription);
-        font->update(nullptr);
-        ASSERT_TRUE(font->canShapeWordByWord());
-        fallbackFonts = nullptr;
-        cache = new ShapeCache();
-    }
-
-    void TearDown() override
-    {
-        delete cache;
-        delete font;
->>>>>>> miniblink49
     }
 
     FontCachePurgePreventer fontCachePurgePreventer;
     FontDescription fontDescription;
-<<<<<<< HEAD
     Font font;
     std::unique_ptr<ShapeCache> cache;
-=======
-    Font* font;
-    ShapeCache* cache;
->>>>>>> miniblink49
     HashSet<const SimpleFontData*>* fallbackFonts;
     unsigned startIndex = 0;
     unsigned numGlyphs = 0;
     hb_script_t script = HB_SCRIPT_INVALID;
 };
 
-<<<<<<< HEAD
 static inline const ShapeResultTestInfo* testInfo(
     RefPtr<const ShapeResult>& result)
 {
     return static_cast<const ShapeResultTestInfo*>(result.get());
 }
 
-=======
->>>>>>> miniblink49
 TEST_F(CachingWordShaperTest, LatinLeftToRightByWord)
 {
     TextRun textRun(reinterpret_cast<const LChar*>("ABC DEF."), 8);
 
-<<<<<<< HEAD
     RefPtr<const ShapeResult> result;
     CachingWordShapeIterator iterator(cache.get(), textRun, &font);
     ASSERT_TRUE(iterator.next(&result));
     ASSERT_TRUE(testInfo(result)->runInfoForTesting(0, startIndex, numGlyphs, script));
-=======
-    RefPtr<ShapeResult> result;
-    CachingWordShapeIterator iterator(cache, textRun, font, fallbackFonts);
-    ASSERT_TRUE(iterator.next(&result));
-    ASSERT_TRUE(result->runInfoForTesting(0, startIndex, numGlyphs, script));
->>>>>>> miniblink49
     EXPECT_EQ(0u, startIndex);
     EXPECT_EQ(3u, numGlyphs);
     EXPECT_EQ(HB_SCRIPT_LATIN, script);
 
     ASSERT_TRUE(iterator.next(&result));
-<<<<<<< HEAD
     ASSERT_TRUE(testInfo(result)->runInfoForTesting(0, startIndex, numGlyphs, script));
-=======
-    ASSERT_TRUE(result->runInfoForTesting(0, startIndex, numGlyphs, script));
->>>>>>> miniblink49
     EXPECT_EQ(0u, startIndex);
     EXPECT_EQ(1u, numGlyphs);
     EXPECT_EQ(HB_SCRIPT_COMMON, script);
 
     ASSERT_TRUE(iterator.next(&result));
-<<<<<<< HEAD
     ASSERT_TRUE(testInfo(result)->runInfoForTesting(0, startIndex, numGlyphs, script));
-=======
-    ASSERT_TRUE(result->runInfoForTesting(0, startIndex, numGlyphs, script));
->>>>>>> miniblink49
     EXPECT_EQ(0u, startIndex);
     EXPECT_EQ(4u, numGlyphs);
     EXPECT_EQ(HB_SCRIPT_LATIN, script);
@@ -129,39 +80,24 @@ TEST_F(CachingWordShaperTest, CommonAccentLeftToRightByWord)
     TextRun textRun(str, 5);
 
     unsigned offset = 0;
-<<<<<<< HEAD
     RefPtr<const ShapeResult> result;
     CachingWordShapeIterator iterator(cache.get(), textRun, &font);
     ASSERT_TRUE(iterator.next(&result));
     ASSERT_TRUE(testInfo(result)->runInfoForTesting(0, startIndex, numGlyphs, script));
-=======
-    RefPtr<ShapeResult> result;
-    CachingWordShapeIterator iterator(cache, textRun, font, fallbackFonts);
-    ASSERT_TRUE(iterator.next(&result));
-    ASSERT_TRUE(result->runInfoForTesting(0, startIndex, numGlyphs, script));
->>>>>>> miniblink49
     EXPECT_EQ(0u, offset + startIndex);
     EXPECT_EQ(3u, numGlyphs);
     EXPECT_EQ(HB_SCRIPT_COMMON, script);
     offset += result->numCharacters();
 
     ASSERT_TRUE(iterator.next(&result));
-<<<<<<< HEAD
     ASSERT_TRUE(testInfo(result)->runInfoForTesting(0, startIndex, numGlyphs, script));
-=======
-    ASSERT_TRUE(result->runInfoForTesting(0, startIndex, numGlyphs, script));
->>>>>>> miniblink49
     EXPECT_EQ(3u, offset + startIndex);
     EXPECT_EQ(1u, numGlyphs);
     EXPECT_EQ(HB_SCRIPT_COMMON, script);
     offset += result->numCharacters();
 
     ASSERT_TRUE(iterator.next(&result));
-<<<<<<< HEAD
     ASSERT_TRUE(testInfo(result)->runInfoForTesting(0, startIndex, numGlyphs, script));
-=======
-    ASSERT_TRUE(result->runInfoForTesting(0, startIndex, numGlyphs, script));
->>>>>>> miniblink49
     EXPECT_EQ(4u, offset + startIndex);
     EXPECT_EQ(1u, numGlyphs);
     EXPECT_EQ(HB_SCRIPT_COMMON, script);
@@ -179,7 +115,6 @@ TEST_F(CachingWordShaperTest, CommonAccentLeftToRightFillGlyphBuffer)
     const UChar str[] = { 0x2F, 0x301, 0x2E, 0x20, 0x2E, 0x0 };
     TextRun textRun(str, 5);
 
-<<<<<<< HEAD
     CachingWordShaper shaper(cache.get());
     GlyphBuffer glyphBuffer;
     shaper.fillGlyphBuffer(&font, textRun, fallbackFonts, &glyphBuffer, 0, 3);
@@ -189,16 +124,6 @@ TEST_F(CachingWordShaperTest, CommonAccentLeftToRightFillGlyphBuffer)
     GlyphBuffer referenceGlyphBuffer;
     font.setCanShapeWordByWordForTesting(false);
     referenceShaper.fillGlyphBuffer(&font, textRun, fallbackFonts,
-=======
-    CachingWordShaper shaper;
-    GlyphBuffer glyphBuffer;
-    shaper.fillGlyphBuffer(font, textRun, fallbackFonts, &glyphBuffer, 0, 3);
-
-    CachingWordShaper referenceShaper;
-    GlyphBuffer referenceGlyphBuffer;
-    font->setCanShapeWordByWordForTesting(false);
-    referenceShaper.fillGlyphBuffer(font, textRun, fallbackFonts,
->>>>>>> miniblink49
         &referenceGlyphBuffer, 0, 3);
 
     ASSERT_EQ(referenceGlyphBuffer.glyphAt(0), glyphBuffer.glyphAt(0));
@@ -215,7 +140,6 @@ TEST_F(CachingWordShaperTest, CommonAccentRightToLeftFillGlyphBuffer)
     TextRun textRun(str, 6);
     textRun.setDirection(RTL);
 
-<<<<<<< HEAD
     CachingWordShaper shaper(cache.get());
     GlyphBuffer glyphBuffer;
     shaper.fillGlyphBuffer(&font, textRun, fallbackFonts, &glyphBuffer, 1, 6);
@@ -225,16 +149,6 @@ TEST_F(CachingWordShaperTest, CommonAccentRightToLeftFillGlyphBuffer)
     GlyphBuffer referenceGlyphBuffer;
     font.setCanShapeWordByWordForTesting(false);
     referenceShaper.fillGlyphBuffer(&font, textRun, fallbackFonts,
-=======
-    CachingWordShaper shaper;
-    GlyphBuffer glyphBuffer;
-    shaper.fillGlyphBuffer(font, textRun, fallbackFonts, &glyphBuffer, 1, 6);
-
-    CachingWordShaper referenceShaper;
-    GlyphBuffer referenceGlyphBuffer;
-    font->setCanShapeWordByWordForTesting(false);
-    referenceShaper.fillGlyphBuffer(font, textRun, fallbackFonts,
->>>>>>> miniblink49
         &referenceGlyphBuffer, 1, 6);
 
     ASSERT_EQ(5u, referenceGlyphBuffer.size());
@@ -257,7 +171,6 @@ TEST_F(CachingWordShaperTest, SubRunWithZeroGlyphs)
     };
     TextRun textRun(str, 9);
 
-<<<<<<< HEAD
     CachingWordShaper shaper(cache.get());
     FloatRect glyphBounds;
     ASSERT_GT(shaper.width(&font, textRun, nullptr, &glyphBounds), 0);
@@ -611,19 +524,5 @@ TEST_F(CachingWordShaperTest, GlyphBoundsWithSpaces)
     // The glyph bounds of periods and spaces should be longer than the glyph bounds of periods alone.
     ASSERT_GT(periodsAndSpacesGlyphBounds.width(), periodsGlyphBounds.width());
 }
-=======
-    CachingWordShaper shaper;
-    FloatRect glyphBounds;
-    ASSERT_GT(shaper.width(font, textRun, nullptr, &glyphBounds), 0);
-
-    GlyphBuffer glyphBuffer;
-    shaper.fillGlyphBuffer(font, textRun, fallbackFonts, &glyphBuffer, 0, 8);
-
-    FloatPoint point;
-    int height = 16;
-    shaper.selectionRect(font, textRun, point, height, 0, 8);
-}
-
->>>>>>> miniblink49
 
 } // namespace blink

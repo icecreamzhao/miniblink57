@@ -32,7 +32,6 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 class PositionError final : public GarbageCollectedFinalized<PositionError>,
                             public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
@@ -48,18 +47,6 @@ public:
     {
         return new PositionError(code, message);
     }
-=======
-class PositionError : public GarbageCollectedFinalized<PositionError>, public ScriptWrappable {
-    DEFINE_WRAPPERTYPEINFO();
-public:
-    enum ErrorCode {
-        PERMISSION_DENIED = 1,
-        POSITION_UNAVAILABLE = 2,
-        TIMEOUT = 3
-    };
-
-    static PositionError* create(ErrorCode code, const String& message) { return new PositionError(code, message); }
->>>>>>> miniblink49
     DEFINE_INLINE_TRACE() { }
 
     ErrorCode code() const { return m_code; }
@@ -71,13 +58,9 @@ private:
     PositionError(ErrorCode code, const String& message)
         : m_code(code)
         , m_message(message)
-<<<<<<< HEAD
         , m_isFatal(false)
     {
     }
-=======
-        , m_isFatal(false) { }
->>>>>>> miniblink49
 
     ErrorCode m_code;
     String m_message;

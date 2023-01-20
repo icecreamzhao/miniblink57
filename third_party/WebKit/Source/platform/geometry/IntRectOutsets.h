@@ -31,10 +31,7 @@
 #define IntRectOutsets_h
 
 #include "platform/PlatformExport.h"
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
-=======
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -44,11 +41,8 @@ namespace blink {
 //
 // Negative lengths can be used to express insets.
 class PLATFORM_EXPORT IntRectOutsets {
-<<<<<<< HEAD
     DISALLOW_NEW();
 
-=======
->>>>>>> miniblink49
 public:
     IntRectOutsets()
         : m_top(0)

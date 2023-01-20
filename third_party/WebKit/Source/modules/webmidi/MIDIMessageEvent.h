@@ -40,7 +40,6 @@ class MIDIMessageEventInit;
 
 class MIDIMessageEvent final : public Event {
     DEFINE_WRAPPERTYPEINFO();
-<<<<<<< HEAD
 
 public:
     static MIDIMessageEvent* create(double timeStamp, DOMUint8Array* data)
@@ -81,44 +80,6 @@ private:
         const MIDIMessageEventInit& initializer);
 
     Member<DOMUint8Array> m_data;
-=======
-public:
-    static PassRefPtrWillBeRawPtr<MIDIMessageEvent> create()
-    {
-        return adoptRefWillBeNoop(new MIDIMessageEvent());
-    }
-
-    static PassRefPtrWillBeRawPtr<MIDIMessageEvent> create(double receivedTime, PassRefPtr<DOMUint8Array> data)
-    {
-        return adoptRefWillBeNoop(new MIDIMessageEvent(receivedTime, data));
-    }
-
-    static PassRefPtrWillBeRawPtr<MIDIMessageEvent> create(const AtomicString& type, const MIDIMessageEventInit& initializer)
-    {
-        return adoptRefWillBeNoop(new MIDIMessageEvent(type, initializer));
-    }
-
-    double receivedTime() { return m_receivedTime; }
-    PassRefPtr<DOMUint8Array> data() { return m_data; }
-
-    const AtomicString& interfaceName() const override { return EventNames::MIDIMessageEvent; }
-
-    DEFINE_INLINE_VIRTUAL_TRACE() { Event::trace(visitor); }
-
-private:
-    MIDIMessageEvent()
-        : m_receivedTime(0) { }
-
-    MIDIMessageEvent(double receivedTime, PassRefPtr<DOMUint8Array> data)
-        : Event(EventTypeNames::midimessage, true, false)
-        , m_receivedTime(receivedTime)
-        , m_data(data) { }
-
-    MIDIMessageEvent(const AtomicString& type, const MIDIMessageEventInit& initializer);
-
-    double m_receivedTime;
-    RefPtr<DOMUint8Array> m_data;
->>>>>>> miniblink49
 };
 
 } // namespace blink

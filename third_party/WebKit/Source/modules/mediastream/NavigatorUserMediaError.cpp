@@ -28,22 +28,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "modules/mediastream/NavigatorUserMediaError.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 NavigatorUserMediaError* NavigatorUserMediaError::create(
     Name name,
     const String& message,
     const String& constraintName)
-=======
-NavigatorUserMediaError* NavigatorUserMediaError::create(Name name, const String& message, const String& constraintName)
->>>>>>> miniblink49
 {
     String nameString;
     switch (name) {

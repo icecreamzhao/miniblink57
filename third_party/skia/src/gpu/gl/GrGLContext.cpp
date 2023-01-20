@@ -10,18 +10,11 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-<<<<<<< HEAD
 GrGLContext* GrGLContext::Create(const GrGLInterface* interface, const GrContextOptions& options)
 {
     // We haven't validated the GrGLInterface yet, so check for GetString function pointer
     if (!interface->fFunctions.fGetString) {
         return nullptr;
-=======
-GrGLContext* GrGLContext::Create(const GrGLInterface* interface, const GrContextOptions& options) {
-    // We haven't validated the GrGLInterface yet, so check for GetString function pointer
-    if (!interface->fFunctions.fGetString) {
-        return NULL;
->>>>>>> miniblink49
     }
     ConstructorArgs args;
     args.fInterface = interface;
@@ -35,28 +28,16 @@ GrGLContext* GrGLContext::Create(const GrGLInterface* interface, const GrContext
     const char* renderer = reinterpret_cast<const char*>(rendererUByte);
 
     if (!interface->validate()) {
-<<<<<<< HEAD
         return nullptr;
-=======
-        return NULL;
->>>>>>> miniblink49
     }
 
     args.fGLVersion = GrGLGetVersionFromString(ver);
     if (GR_GL_INVALID_VER == args.fGLVersion) {
-<<<<<<< HEAD
         return nullptr;
     }
 
     if (!GrGLGetGLSLGeneration(interface, &args.fGLSLGeneration)) {
         return nullptr;
-=======
-        return NULL;
-    }
-
-    if (!GrGLGetGLSLGeneration(interface, &args.fGLSLGeneration)) {
-        return NULL;
->>>>>>> miniblink49
     }
 
     args.fVendor = GrGLGetVendor(interface);
@@ -76,7 +57,6 @@ GrGLContext* GrGLContext::Create(const GrGLInterface* interface, const GrContext
     }
 
     GrGLGetDriverInfo(interface->fStandard, args.fVendor, renderer, ver,
-<<<<<<< HEAD
         &args.fDriver, &args.fDriverVersion);
 
     args.fContextOptions = &options;
@@ -86,16 +66,6 @@ GrGLContext* GrGLContext::Create(const GrGLInterface* interface, const GrContext
 
 GrGLContextInfo::GrGLContextInfo(const ConstructorArgs& args)
 {
-=======
-                      &args.fDriver, &args.fDriverVersion);
-
-    args.fContextOptions = &options;
-
-    return SkNEW_ARGS(GrGLContext, (args));
-}
-
-GrGLContextInfo::GrGLContextInfo(const ConstructorArgs& args) {
->>>>>>> miniblink49
     fInterface.reset(SkRef(args.fInterface));
     fGLVersion = args.fGLVersion;
     fGLSLGeneration = args.fGLSLGeneration;
@@ -104,9 +74,5 @@ GrGLContextInfo::GrGLContextInfo(const ConstructorArgs& args) {
     fDriver = args.fDriver;
     fDriverVersion = args.fDriverVersion;
 
-<<<<<<< HEAD
     fGLCaps.reset(new GrGLCaps(*args.fContextOptions, *this, fInterface));
-=======
-    fGLCaps.reset(SkNEW_ARGS(GrGLCaps, (*args.fContextOptions, *this, fInterface)));
->>>>>>> miniblink49
 }

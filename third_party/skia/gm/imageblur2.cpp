@@ -5,15 +5,9 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "SkBlurImageFilter.h"
 #include "SkRandom.h"
 #include "gm.h"
-=======
-#include "gm.h"
-#include "SkBlurImageFilter.h"
-#include "SkRandom.h"
->>>>>>> miniblink49
 
 // TODO deprecate imageblur
 
@@ -21,7 +15,6 @@
 #define HEIGHT 500
 
 static const float kBlurSigmas[] = {
-<<<<<<< HEAD
     0.0, 0.3f, 0.5f, 2.0f, 32.0f, 80.0f
 };
 
@@ -32,35 +25,19 @@ const char* kTestStrings[] = {
     "the lazy@#$",
     "dog.{}!%^&",
     "*()+=-\\'\"/",
-=======
-        0.0, 0.3f, 0.5f, 2.0f, 32.0f, 80.0f };
-
-const char* kTestStrings[] = {
-        "The quick`~",
-        "brown fox[]",
-        "jumped over",
-        "the lazy@#$",
-        "dog.{}!%^&",
-        "*()+=-\\'\"/",
->>>>>>> miniblink49
 };
 
 namespace skiagm {
 
 class BlurImageFilter : public GM {
 public:
-<<<<<<< HEAD
     BlurImageFilter()
     {
-=======
-    BlurImageFilter() {
->>>>>>> miniblink49
         this->setBGColor(0xFFFFFFFF);
         fName.printf("imageblur2");
     }
 
 protected:
-<<<<<<< HEAD
     SkString onShortName() override
     {
         return fName;
@@ -73,18 +50,6 @@ protected:
 
     void onDraw(SkCanvas* canvas) override
     {
-=======
-
-    SkString onShortName() override {
-        return fName;
-    }
-
-    SkISize onISize() override {
-        return SkISize::Make(WIDTH, HEIGHT);
-    }
-
-    void onDraw(SkCanvas* canvas) override {
->>>>>>> miniblink49
         const int sigmaCount = SK_ARRAY_COUNT(kBlurSigmas);
         const int testStringCount = SK_ARRAY_COUNT(kTestStrings);
         SkScalar dx = WIDTH / sigmaCount;
@@ -97,38 +62,22 @@ protected:
                 SkScalar sigmaY = kBlurSigmas[y];
 
                 SkPaint paint;
-<<<<<<< HEAD
                 paint.setImageFilter(SkBlurImageFilter::Make(sigmaX, sigmaY, nullptr));
                 canvas->saveLayer(nullptr, &paint);
-=======
-                paint.setImageFilter(SkBlurImageFilter::Create(sigmaX, sigmaY))->unref();
-                canvas->saveLayer(NULL, &paint);
->>>>>>> miniblink49
 
                 SkRandom rand;
                 SkPaint textPaint;
                 textPaint.setAntiAlias(false);
-<<<<<<< HEAD
                 textPaint.setColor(sk_tool_utils::color_to_565(rand.nextBits(24) | 0xFF000000));
                 sk_tool_utils::set_portable_typeface(&textPaint);
-=======
-                textPaint.setColor(rand.nextBits(24) | 0xFF000000);
->>>>>>> miniblink49
                 textPaint.setTextSize(textSize);
 
                 for (int i = 0; i < testStringCount; i++) {
                     canvas->drawText(kTestStrings[i],
-<<<<<<< HEAD
                         strlen(kTestStrings[i]),
                         SkIntToScalar(x * dx),
                         SkIntToScalar(y * dy + textSize * i + textSize),
                         textPaint);
-=======
-                                     strlen(kTestStrings[i]),
-                                     SkIntToScalar(x * dx),
-                                     SkIntToScalar(y * dy + textSize * i + textSize),
-                                     textPaint);
->>>>>>> miniblink49
                 }
                 canvas->restore();
             }
@@ -143,11 +92,6 @@ private:
 
 //////////////////////////////////////////////////////////////////////////////
 
-<<<<<<< HEAD
 DEF_GM(return new BlurImageFilter;)
-=======
-static GM* MyFactory(void*) { return new BlurImageFilter; }
-static GMRegistry reg(MyFactory);
->>>>>>> miniblink49
 
 }

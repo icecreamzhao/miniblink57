@@ -26,14 +26,10 @@ public:
         , m_lastModified(0)
     {
     }
-<<<<<<< HEAD
     WebBlobInfo(const WebString& uuid,
         const WebString& filePath,
         const WebString& fileName,
         const WebString& type)
-=======
-    WebBlobInfo(const WebString& uuid, const WebString& filePath, const WebString& fileName, const WebString& type)
->>>>>>> miniblink49
         : m_isFile(true)
         , m_uuid(uuid)
         , m_type(type)
@@ -43,16 +39,12 @@ public:
         , m_lastModified(0)
     {
     }
-<<<<<<< HEAD
     WebBlobInfo(const WebString& uuid,
         const WebString& filePath,
         const WebString& fileName,
         const WebString& type,
         double lastModified,
         long long size)
-=======
-    WebBlobInfo(const WebString& uuid, const WebString& filePath, const WebString& fileName, const WebString& type, double lastModified, long long size)
->>>>>>> miniblink49
         : m_isFile(true)
         , m_uuid(uuid)
         , m_type(type)
@@ -62,7 +54,6 @@ public:
         , m_lastModified(lastModified)
     {
     }
-<<<<<<< HEAD
     bool isFile() const { return m_isFile; }
     const WebString& uuid() const { return m_uuid; }
     const WebString& type() const { return m_type; }
@@ -70,36 +61,6 @@ public:
     const WebString& filePath() const { return m_filePath; }
     const WebString& fileName() const { return m_fileName; }
     double lastModified() const { return m_lastModified; }
-=======
-    bool isFile() const
-    {
-        return m_isFile;
-    }
-    const WebString& uuid() const
-    {
-        return m_uuid;
-    }
-    const WebString& type() const
-    {
-        return m_type;
-    }
-    long long size() const
-    {
-        return m_size;
-    }
-    const WebString& filePath() const
-    {
-        return m_filePath;
-    }
-    const WebString& fileName() const
-    {
-        return m_fileName;
-    }
-    double lastModified() const
-    {
-        return m_lastModified;
-    }
->>>>>>> miniblink49
 
 private:
     bool m_isFile;

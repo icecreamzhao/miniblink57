@@ -23,10 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "modules/device_orientation/DeviceOrientationData.h"
 #include "public/platform/modules/device_orientation/WebDeviceOrientationData.h"
 
@@ -37,40 +33,27 @@ DeviceOrientationData* DeviceOrientationData::create()
     return new DeviceOrientationData;
 }
 
-<<<<<<< HEAD
 DeviceOrientationData* DeviceOrientationData::create(
     const Nullable<double>& alpha,
     const Nullable<double>& beta,
     const Nullable<double>& gamma,
     bool absolute)
-=======
-DeviceOrientationData* DeviceOrientationData::create(const Nullable<double>& alpha, const Nullable<double>& beta, const Nullable<double>& gamma, const Nullable<bool>& absolute)
->>>>>>> miniblink49
 {
     return new DeviceOrientationData(alpha, beta, gamma, absolute);
 }
 
-<<<<<<< HEAD
 DeviceOrientationData* DeviceOrientationData::create(
     const WebDeviceOrientationData& data)
-=======
-DeviceOrientationData* DeviceOrientationData::create(const WebDeviceOrientationData& data)
->>>>>>> miniblink49
 {
     Nullable<double> alpha;
     Nullable<double> beta;
     Nullable<double> gamma;
-<<<<<<< HEAD
-=======
-    Nullable<bool> absolute;
->>>>>>> miniblink49
     if (data.hasAlpha)
         alpha = data.alpha;
     if (data.hasBeta)
         beta = data.beta;
     if (data.hasGamma)
         gamma = data.gamma;
-<<<<<<< HEAD
     return DeviceOrientationData::create(alpha, beta, gamma, data.absolute);
 }
 
@@ -80,18 +63,6 @@ DeviceOrientationData::DeviceOrientationData(const Nullable<double>& alpha,
     const Nullable<double>& beta,
     const Nullable<double>& gamma,
     bool absolute)
-=======
-    if (data.hasAbsolute)
-        absolute = data.absolute;
-    return DeviceOrientationData::create(alpha, beta, gamma, absolute);
-}
-
-DeviceOrientationData::DeviceOrientationData()
-{
-}
-
-DeviceOrientationData::DeviceOrientationData(const Nullable<double>& alpha, const Nullable<double>& beta, const Nullable<double>& gamma, const Nullable<bool>& absolute)
->>>>>>> miniblink49
     : m_alpha(alpha)
     , m_beta(beta)
     , m_gamma(gamma)
@@ -116,11 +87,7 @@ double DeviceOrientationData::gamma() const
 
 bool DeviceOrientationData::absolute() const
 {
-<<<<<<< HEAD
     return m_absolute;
-=======
-    return m_absolute.get();
->>>>>>> miniblink49
 }
 
 bool DeviceOrientationData::canProvideAlpha() const
@@ -138,14 +105,6 @@ bool DeviceOrientationData::canProvideGamma() const
     return !m_gamma.isNull();
 }
 
-<<<<<<< HEAD
-=======
-bool DeviceOrientationData::canProvideAbsolute() const
-{
-    return !m_absolute.isNull();
-}
-
->>>>>>> miniblink49
 bool DeviceOrientationData::canProvideEventData() const
 {
     return canProvideAlpha() || canProvideBeta() || canProvideGamma();

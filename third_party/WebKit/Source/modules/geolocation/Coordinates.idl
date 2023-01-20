@@ -24,10 +24,6 @@
  */
 
 [
-<<<<<<< HEAD
-=======
-    GarbageCollected,
->>>>>>> miniblink49
     NoInterfaceObject
 ] interface Coordinates {
     readonly attribute double latitude;

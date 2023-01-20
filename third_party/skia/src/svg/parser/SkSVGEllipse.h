@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -9,10 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #ifndef SkSVGEllipse_DEFINED
 #define SkSVGEllipse_DEFINED
 
@@ -20,10 +12,7 @@
 
 class SkSVGEllipse : public SkSVGElement {
     DECLARE_SVG_INFO(Ellipse);
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 private:
     SkString f_cx;
     SkString f_cy;

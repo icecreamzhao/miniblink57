@@ -34,67 +34,87 @@
 
 namespace blink {
 
-enum NodeListRootType {
-    NodeListIsRootedAtNode,
-    NodeListIsRootedAtDocument
+enum class NodeListRootType {
+    Node,
+    TreeScope,
 };
 
-class CORE_EXPORT LiveNodeListBase : public WillBeGarbageCollectedMixin {
+class CORE_EXPORT LiveNodeListBase : public GarbageCollectedMixin {
 public:
-    LiveNodeListBase(ContainerNode& ownerNode, NodeListRootType rootType, NodeListInvalidationType invalidationType,
+    LiveNodeListBase(ContainerNode& ownerNode,
+        NodeListRootType rootType,
+        NodeListInvalidationType invalidationType,
         CollectionType collectionType)
         : m_ownerNode(ownerNode)
-        , m_rootType(rootType)
+        , m_rootType(static_cast<unsigned>(rootType))
         , m_invalidationType(invalidationType)
         , m_collectionType(collectionType)
     {
-        ASSERT(m_rootType == static_cast<unsigned>(rootType));
-        ASSERT(m_invalidationType == static_cast<unsigned>(invalidationType));
-        ASSERT(m_collectionType == static_cast<unsigned>(collectionType));
-
-        document().registerNodeList(this);
+        DCHECK_EQ(m_rootType, static_cast<unsigned>(rootType));
+        DCHECK_EQ(m_invalidationType, static_cast<unsigned>(invalidationType));
+        DCHECK_EQ(m_collectionType, static_cast<unsigned>(collectionType));
     }
 
-    virtual ~LiveNodeListBase()
-    {
-#if !ENABLE(OILPAN)
-        document().unregisterNodeList(this);
-#endif
-    }
+    virtual ~LiveNodeListBase() { }
 
     ContainerNode& rootNode() const;
 
     void didMoveToDocument(Document& oldDocument, Document& newDocument);
-    ALWAYS_INLINE bool isRootedAtDocument() const { return m_rootType == NodeListIsRootedAtDocument; }
-    ALWAYS_INLINE NodeListInvalidationType invalidationType() const { return static_cast<NodeListInvalidationType>(m_invalidationType); }
-    ALWAYS_INLINE CollectionType type() const { return static_cast<CollectionType>(m_collectionType); }
+    ALWAYS_INLINE bool isRootedAtTreeScope() const
+    {
+        return m_rootType == static_cast<unsigned>(NodeListRootType::TreeScope);
+    }
+    ALWAYS_INLINE NodeListInvalidationType invalidationType() const
+    {
+        return static_cast<NodeListInvalidationType>(m_invalidationType);
+    }
+    ALWAYS_INLINE CollectionType type() const
+    {
+        return static_cast<CollectionType>(m_collectionType);
+    }
     ContainerNode& ownerNode() const { return *m_ownerNode; }
 
     virtual void invalidateCache(Document* oldDocument = 0) const = 0;
     void invalidateCacheForAttribute(const QualifiedName*) const;
 
-    static bool shouldInvalidateTypeOnAttributeChange(NodeListInvalidationType, const QualifiedName&);
+    static bool shouldInvalidateTypeOnAttributeChange(NodeListInvalidationType,
+        const QualifiedName&);
 
 protected:
     Document& document() const { return m_ownerNode->document(); }
 
-    ALWAYS_INLINE NodeListRootType rootType() const { return static_cast<NodeListRootType>(m_rootType); }
+    ALWAYS_INLINE NodeListRootType rootType() const
+    {
+        return static_cast<NodeListRootType>(m_rootType);
+    }
 
     template <typename MatchFunc>
-    static Element* traverseMatchingElementsForwardToOffset(Element& currentElement, const ContainerNode* stayWithin, unsigned offset, unsigned& currentOffset, MatchFunc);
+    static Element* traverseMatchingElementsForwardToOffset(
+        Element& currentElement,
+        const ContainerNode* stayWithin,
+        unsigned offset,
+        unsigned& currentOffset,
+        MatchFunc);
     template <typename MatchFunc>
-    static Element* traverseMatchingElementsBackwardToOffset(Element& currentElement, const ContainerNode* stayWithin, unsigned offset, unsigned& currentOffset, MatchFunc);
+    static Element* traverseMatchingElementsBackwardToOffset(
+        Element& currentElement,
+        const ContainerNode* stayWithin,
+        unsigned offset,
+        unsigned& currentOffset,
+        MatchFunc);
 
     DEFINE_INLINE_VIRTUAL_TRACE() { visitor->trace(m_ownerNode); }
 
 private:
-    RefPtrWillBeMember<ContainerNode> m_ownerNode; // Cannot be null.
+    Member<ContainerNode> m_ownerNode; // Cannot be null.
     const unsigned m_rootType : 1;
     const unsigned m_invalidationType : 4;
     const unsigned m_collectionType : 5;
 };
 
-ALWAYS_INLINE bool LiveNodeListBase::shouldInvalidateTypeOnAttributeChange(NodeListInvalidationType type, const QualifiedName& attrName)
+ALWAYS_INLINE bool LiveNodeListBase::shouldInvalidateTypeOnAttributeChange(
+    NodeListInvalidationType type,
+    const QualifiedName& attrName)
 {
     switch (type) {
     case InvalidateOnClassAttrChange:
@@ -106,8 +126,7 @@ ALWAYS_INLINE bool LiveNodeListBase::shouldInvalidateTypeOnAttributeChange(NodeL
     case InvalidateOnForAttrChange:
         return attrName == HTMLNames::forAttr;
     case InvalidateForFormControls:
-        return attrName == HTMLNames::nameAttr || attrName == HTMLNames::idAttr || attrName == HTMLNames::forAttr
-            || attrName == HTMLNames::formAttr || attrName == HTMLNames::typeAttr;
+        return attrName == HTMLNames::nameAttr || attrName == HTMLNames::idAttr || attrName == HTMLNames::forAttr || attrName == HTMLNames::formAttr || attrName == HTMLNames::typeAttr;
     case InvalidateOnHRefAttrChange:
         return attrName == HTMLNames::hrefAttr;
     case DoNotInvalidateOnAttributeChanges:
@@ -119,10 +138,16 @@ ALWAYS_INLINE bool LiveNodeListBase::shouldInvalidateTypeOnAttributeChange(NodeL
 }
 
 template <typename MatchFunc>
-Element* LiveNodeListBase::traverseMatchingElementsForwardToOffset(Element& currentElement, const ContainerNode* stayWithin, unsigned offset, unsigned& currentOffset, MatchFunc isMatch)
+Element* LiveNodeListBase::traverseMatchingElementsForwardToOffset(
+    Element& currentElement,
+    const ContainerNode* stayWithin,
+    unsigned offset,
+    unsigned& currentOffset,
+    MatchFunc isMatch)
 {
-    ASSERT(currentOffset < offset);
-    for (Element* next = ElementTraversal::next(currentElement, stayWithin, isMatch); next; next = ElementTraversal::next(*next, stayWithin, isMatch)) {
+    DCHECK_LT(currentOffset, offset);
+    for (Element* next = ElementTraversal::next(currentElement, stayWithin, isMatch);
+         next; next = ElementTraversal::next(*next, stayWithin, isMatch)) {
         if (++currentOffset == offset)
             return next;
     }
@@ -130,10 +155,17 @@ Element* LiveNodeListBase::traverseMatchingElementsForwardToOffset(Element& curr
 }
 
 template <typename MatchFunc>
-Element* LiveNodeListBase::traverseMatchingElementsBackwardToOffset(Element& currentElement, const ContainerNode* stayWithin, unsigned offset, unsigned& currentOffset, MatchFunc isMatch)
+Element* LiveNodeListBase::traverseMatchingElementsBackwardToOffset(
+    Element& currentElement,
+    const ContainerNode* stayWithin,
+    unsigned offset,
+    unsigned& currentOffset,
+    MatchFunc isMatch)
 {
-    ASSERT(currentOffset > offset);
-    for (Element* previous = ElementTraversal::previous(currentElement, stayWithin, isMatch); previous; previous = ElementTraversal::previous(*previous, stayWithin, isMatch)) {
+    DCHECK_GT(currentOffset, offset);
+    for (Element* previous = ElementTraversal::previous(currentElement, stayWithin, isMatch);
+         previous;
+         previous = ElementTraversal::previous(*previous, stayWithin, isMatch)) {
         if (--currentOffset == offset)
             return previous;
     }

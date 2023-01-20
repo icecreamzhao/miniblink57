@@ -20,22 +20,25 @@
 
 // https://html.spec.whatwg.org/#the-object-element
 
+// TODO(foolip): HTMLObjectElement should not have
+// [Custom=LegacyCallAsFunction]. https://crbug.com/663662
 // TODO(yukishiino): HTMLObjectElement should not have [OverrideBuiltins].
 [
     Custom=LegacyCallAsFunction,
     OverrideBuiltins,
 ] interface HTMLObjectElement : HTMLElement {
-    [Reflect, URL] attribute DOMString data;
-    [Reflect] attribute DOMString type;
-    // TODO(philipj): attribute boolean typeMustMatch;
-    [Reflect] attribute DOMString name;
-    [Reflect] attribute DOMString useMap;
+    [CEReactions, Reflect, URL] attribute DOMString data;
+    [CEReactions, Reflect] attribute DOMString type;
+    // TODO(foolip): attribute boolean typeMustMatch;
+    [CEReactions, Reflect] attribute DOMString name;
+    [CEReactions, Reflect] attribute DOMString useMap;
     [ImplementedAs=formOwner] readonly attribute HTMLFormElement? form;
-    [Reflect] attribute DOMString width;
-    [Reflect] attribute DOMString height;
-    [CheckSecurity=Node] readonly attribute Document? contentDocument;
-    // TODO(philipj): readonly attribute WindowProxy? contentWindow;
-    [CheckSecurity=Node, RaisesException] Document? getSVGDocument();
+    [CEReactions, Reflect] attribute DOMString width;
+    [CEReactions, Reflect] attribute DOMString height;
+    [CheckSecurity=ReturnValue] readonly attribute Document? contentDocument;
+    // TODO(shanmuga.m): The spec uses the WindowProxy type for this attribute.
+    readonly attribute Window? contentWindow;
+    [CheckSecurity=ReturnValue, RaisesException] Document? getSVGDocument();
 
     readonly attribute boolean willValidate;
     readonly attribute ValidityState validity;
@@ -44,26 +47,21 @@
     boolean reportValidity();
     void setCustomValidity(DOMString error);
 
-    // TODO(philipj): legacycaller any (any... arguments); crbug.com/465009
-
     // obsolete members
     // https://html.spec.whatwg.org/#HTMLObjectElement-partial
-    [Reflect] attribute DOMString align;
-    [Reflect] attribute DOMString archive;
-    [Reflect] attribute DOMString code;
-    [Reflect] attribute boolean declare;
-    // TODO(philipj): hspace and vspace should be unsigned long.
-    [Reflect] attribute long hspace;
-    [Reflect] attribute DOMString standby;
-    [Reflect] attribute long vspace;
-    [Reflect, URL] attribute DOMString codeBase;
-    [Reflect] attribute DOMString codeType;
+    [CEReactions, Reflect] attribute DOMString align;
+    [CEReactions, Reflect] attribute DOMString archive;
+    [CEReactions, Reflect] attribute DOMString code;
+    [CEReactions, Reflect] attribute boolean declare;
+    [CEReactions, Reflect] attribute unsigned long hspace;
+    [CEReactions, Reflect] attribute DOMString standby;
+    [CEReactions, Reflect] attribute unsigned long vspace;
+    [CEReactions, Reflect, URL] attribute DOMString codeBase;
+    [CEReactions, Reflect] attribute DOMString codeType;
 
-    [Reflect, TreatNullAs=EmptyString] attribute DOMString border;
+    [CEReactions, Reflect, TreatNullAs=EmptyString] attribute DOMString border;
 
-    // TODO(philipj): These getters and setters are not in the spec.
-    [Custom, NotEnumerable] getter boolean (unsigned long index);
-    [Custom] setter boolean (unsigned long index, Node value);
+    // TODO(foolip): These getters and setters are not in the spec.
     [Custom, NotEnumerable] getter Node (DOMString name);
     [Custom] setter Node (DOMString name, Node value);
 };

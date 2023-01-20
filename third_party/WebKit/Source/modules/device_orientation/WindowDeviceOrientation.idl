@@ -6,8 +6,5 @@
     ImplementedAs=DOMWindowDeviceOrientation
 ] partial interface Window {
     attribute EventHandler ondeviceorientation;
-<<<<<<< HEAD
     attribute EventHandler ondeviceorientationabsolute;
-=======
->>>>>>> miniblink49
 };

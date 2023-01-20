@@ -29,51 +29,84 @@
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "core/CoreExport.h"
 #include "platform/heap/Handle.h"
-#include "wtf/PassRefPtr.h"
-#include "wtf/RefCounted.h"
 
 namespace blink {
 
-class CORE_EXPORT TextMetrics final : public RefCountedWillBeGarbageCollected<TextMetrics>, public ScriptWrappable {
+class CORE_EXPORT TextMetrics final : public GarbageCollected<TextMetrics>,
+                                      public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<TextMetrics> create() { return adoptRefWillBeNoop(new TextMetrics); }
+    static TextMetrics* create() { return new TextMetrics; }
 
     float width() const { return m_width; }
     void setWidth(float w) { m_width = w; }
 
     float actualBoundingBoxLeft() const { return m_actualBoundingBoxLeft; }
-    void setActualBoundingBoxLeft(float actualBoundingBoxLeft) { m_actualBoundingBoxLeft = actualBoundingBoxLeft; }
+    void setActualBoundingBoxLeft(float actualBoundingBoxLeft)
+    {
+        m_actualBoundingBoxLeft = actualBoundingBoxLeft;
+    }
 
     float actualBoundingBoxRight() const { return m_actualBoundingBoxRight; }
-    void setActualBoundingBoxRight(float actualBoundingBoxRight) { m_actualBoundingBoxRight = actualBoundingBoxRight; }
+    void setActualBoundingBoxRight(float actualBoundingBoxRight)
+    {
+        m_actualBoundingBoxRight = actualBoundingBoxRight;
+    }
 
     float fontBoundingBoxAscent() const { return m_fontBoundingBoxAscent; }
-    void setFontBoundingBoxAscent(float fontBoundingBoxAscent) { m_fontBoundingBoxAscent = fontBoundingBoxAscent; }
+    void setFontBoundingBoxAscent(float fontBoundingBoxAscent)
+    {
+        m_fontBoundingBoxAscent = fontBoundingBoxAscent;
+    }
 
     float fontBoundingBoxDescent() const { return m_fontBoundingBoxDescent; }
-    void setFontBoundingBoxDescent(float fontBoundingBoxDescent) { m_fontBoundingBoxDescent = fontBoundingBoxDescent; }
+    void setFontBoundingBoxDescent(float fontBoundingBoxDescent)
+    {
+        m_fontBoundingBoxDescent = fontBoundingBoxDescent;
+    }
 
     float actualBoundingBoxAscent() const { return m_actualBoundingBoxAscent; }
-    void setActualBoundingBoxAscent(float actualBoundingBoxAscent) { m_actualBoundingBoxAscent = actualBoundingBoxAscent; }
+    void setActualBoundingBoxAscent(float actualBoundingBoxAscent)
+    {
+        m_actualBoundingBoxAscent = actualBoundingBoxAscent;
+    }
 
     float actualBoundingBoxDescent() const { return m_actualBoundingBoxDescent; }
-    void setActualBoundingBoxDescent(float actualBoundingBoxDescent) { m_actualBoundingBoxDescent = actualBoundingBoxDescent; }
+    void setActualBoundingBoxDescent(float actualBoundingBoxDescent)
+    {
+        m_actualBoundingBoxDescent = actualBoundingBoxDescent;
+    }
 
     float emHeightAscent() const { return m_emHeightAscent; }
-    void setEmHeightAscent(float emHeightAscent) { m_emHeightAscent = emHeightAscent; }
+    void setEmHeightAscent(float emHeightAscent)
+    {
+        m_emHeightAscent = emHeightAscent;
+    }
 
     float emHeightDescent() const { return m_emHeightDescent; }
-    void setEmHeightDescent(float emHeightDescent) { m_emHeightDescent = emHeightDescent; }
+    void setEmHeightDescent(float emHeightDescent)
+    {
+        m_emHeightDescent = emHeightDescent;
+    }
 
     float hangingBaseline() const { return m_hangingBaseline; }
-    void setHangingBaseline(float hangingBaseline) { m_hangingBaseline = hangingBaseline; }
+    void setHangingBaseline(float hangingBaseline)
+    {
+        m_hangingBaseline = hangingBaseline;
+    }
 
     float alphabeticBaseline() const { return m_alphabeticBaseline; }
-    void setAlphabeticBaseline(float alphabeticBaseline) { m_alphabeticBaseline = alphabeticBaseline; }
+    void setAlphabeticBaseline(float alphabeticBaseline)
+    {
+        m_alphabeticBaseline = alphabeticBaseline;
+    }
 
     float ideographicBaseline() const { return m_ideographicBaseline; }
-    void setIdeographicBaseline(float ideographicBaseline) { m_ideographicBaseline = ideographicBaseline; }
+    void setIdeographicBaseline(float ideographicBaseline)
+    {
+        m_ideographicBaseline = ideographicBaseline;
+    }
 
     DEFINE_INLINE_TRACE() { }
 
@@ -90,7 +123,9 @@ private:
         , m_emHeightDescent(0)
         , m_hangingBaseline(0)
         , m_alphabeticBaseline(0)
-        , m_ideographicBaseline(0) { }
+        , m_ideographicBaseline(0)
+    {
+    }
 
     // x-direction
     float m_width;

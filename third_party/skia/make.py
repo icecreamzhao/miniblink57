@@ -10,22 +10,14 @@
 #   make clean
 #   make dm
 #   make bench BUILDTYPE=Release
-<<<<<<< HEAD
 #   make gm GYP_DEFINES='skia_gpu=0' BUILDTYPE=Release
-=======
-#   make gm GYP_DEFINES=skia_scalar=fixed BUILDTYPE=Release
->>>>>>> miniblink49
 #   make all
 
 import os
 import shutil
 import sys
 
-<<<<<<< HEAD
 BUILDTYPE = os.environ.get('BUILDTYPE', 'Debug')
-=======
-BUILDTYPE = 'Debug'
->>>>>>> miniblink49
 
 # special targets
 TARGET_ALL     = 'all'

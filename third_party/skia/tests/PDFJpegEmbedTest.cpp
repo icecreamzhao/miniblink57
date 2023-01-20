@@ -5,24 +5,16 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "SkCanvas.h"
 #include "SkData.h"
 #include "SkDocument.h"
 #include "SkImageGenerator.h"
-=======
-#include "SkDocument.h"
-#include "SkCanvas.h"
-#include "SkImageGenerator.h"
-#include "SkData.h"
->>>>>>> miniblink49
 #include "SkStream.h"
 
 #include "Resources.h"
 #include "Test.h"
 
 // Returned bitmap is lazy.  Only lazy bitmaps hold onto the original data.
-<<<<<<< HEAD
 static SkBitmap bitmap_from_data(SkData* data)
 {
     SkASSERT(data);
@@ -33,16 +25,6 @@ static SkBitmap bitmap_from_data(SkData* data)
 
 static bool is_subset_of(SkData* smaller, SkData* larger)
 {
-=======
-static SkBitmap bitmap_from_data(SkData* data) {
-    SkASSERT(data);
-    SkBitmap bm;
-    SkInstallDiscardablePixelRef(data, &bm);
-    return bm;
-}
-
-static bool is_subset_of(SkData* smaller, SkData* larger) {
->>>>>>> miniblink49
     SkASSERT(smaller && larger);
     if (smaller->size() > larger->size()) {
         return false;
@@ -57,7 +39,6 @@ static bool is_subset_of(SkData* smaller, SkData* larger) {
     return false;
 }
 
-<<<<<<< HEAD
 static SkData* load_resource(
     skiatest::Reporter* r, const char* test, const char* filename)
 {
@@ -68,18 +49,6 @@ static SkData* load_resource(
             test, filename);
     }
     return data; // May return nullptr.
-=======
-
-static SkData* load_resource(
-        skiatest::Reporter* r, const char* test, const char* filename) {
-    SkString path(GetResourcePath(filename));
-    SkData* data = SkData::NewFromFileName(path.c_str());
-    if (!data && r->verbose()) {
-        SkDebugf("\n%s: Resource '%s' can not be found.\n",
-                 test, filename);
-    }
-    return data;  // May return NULL.
->>>>>>> miniblink49
 }
 
 /**
@@ -87,7 +56,6 @@ static SkData* load_resource(
  *  directly embedded into the PDF (without re-encoding) when that
  *  makes sense.
  */
-<<<<<<< HEAD
 DEF_TEST(PDFJpegEmbedTest, r)
 {
     const char test[] = "PDFJpegEmbedTest";
@@ -99,34 +67,14 @@ DEF_TEST(PDFJpegEmbedTest, r)
     ////////////////////////////////////////////////////////////////////////////
     SkDynamicMemoryWStream pdf;
     sk_sp<SkDocument> document(SkDocument::MakePDF(&pdf));
-=======
-DEF_TEST(PDFJpegEmbedTest, r) {
-    const char test[] = "PDFJpegEmbedTest";
-    SkAutoTUnref<SkData> mandrillData(
-            load_resource(r, test, "mandrill_512_q075.jpg"));
-    SkAutoTUnref<SkData> cmykData(load_resource(r, test, "CMYK.jpg"));
-    if (!mandrillData || !cmykData) {
-        return;
-    }
-
-    SkDynamicMemoryWStream pdf;
-    SkAutoTUnref<SkDocument> document(SkDocument::CreatePDF(&pdf));
->>>>>>> miniblink49
     SkCanvas* canvas = document->beginPage(642, 1028);
 
     canvas->clear(SK_ColorLTGRAY);
 
-<<<<<<< HEAD
     SkBitmap bm1(bitmap_from_data(mandrillData.get()));
     canvas->drawBitmap(bm1, 65.0, 0.0, nullptr);
     SkBitmap bm2(bitmap_from_data(cmykData.get()));
     canvas->drawBitmap(bm2, 0.0, 512.0, nullptr);
-=======
-    SkBitmap bm1(bitmap_from_data(mandrillData));
-    canvas->drawBitmap(bm1, 65.0, 0.0, NULL);
-    SkBitmap bm2(bitmap_from_data(cmykData));
-    canvas->drawBitmap(bm2, 0.0, 512.0, NULL);
->>>>>>> miniblink49
 
     canvas->flush();
     document->endPage();
@@ -135,7 +83,6 @@ DEF_TEST(PDFJpegEmbedTest, r) {
     SkASSERT(pdfData);
     pdf.reset();
 
-<<<<<<< HEAD
     REPORTER_ASSERT(r, is_subset_of(mandrillData.get(), pdfData.get()));
 
     // This JPEG uses a nonstandard colorspace - it can not be
@@ -165,28 +112,16 @@ DEF_TEST(PDFJpegEmbedTest, r) {
     // This JPEG uses a nonstandard colorspace - it can not be
     // embedded into the PDF directly.
     REPORTER_ASSERT(r, !is_subset_of(cmykData.get(), pdfData.get()));
-=======
-    REPORTER_ASSERT(r, is_subset_of(mandrillData, pdfData));
-
-    // This JPEG uses a nonstandard colorspace - it can not be
-    // embedded into the PDF directly.
-    REPORTER_ASSERT(r, !is_subset_of(cmykData, pdfData));
->>>>>>> miniblink49
 }
 
 #include "SkJpegInfo.h"
 
-<<<<<<< HEAD
 DEF_TEST(JpegIdentification, r)
 {
-=======
-DEF_TEST(JpegIdentification, r) {
->>>>>>> miniblink49
     static struct {
         const char* path;
         bool isJfif;
         SkJFIFInfo::Type type;
-<<<<<<< HEAD
     } kTests[] = { { "CMYK.jpg", false, SkJFIFInfo::kGrayscale },
         { "color_wheel.jpg", true, SkJFIFInfo::kYCbCr },
         { "grayscale.jpg", true, SkJFIFInfo::kGrayscale },
@@ -195,16 +130,6 @@ DEF_TEST(JpegIdentification, r) {
     for (size_t i = 0; i < SK_ARRAY_COUNT(kTests); ++i) {
         SkAutoTUnref<SkData> data(
             load_resource(r, "JpegIdentification", kTests[i].path));
-=======
-    } kTests[] = {{"CMYK.jpg", false, SkJFIFInfo::kGrayscale},
-                  {"color_wheel.jpg", true, SkJFIFInfo::kYCbCr},
-                  {"grayscale.jpg", true, SkJFIFInfo::kGrayscale},
-                  {"mandrill_512_q075.jpg", true, SkJFIFInfo::kYCbCr},
-                  {"randPixels.jpg", true, SkJFIFInfo::kYCbCr}};
-    for (size_t i = 0; i < SK_ARRAY_COUNT(kTests); ++i) {
-        SkAutoTUnref<SkData> data(
-                load_resource(r, "JpegIdentification", kTests[i].path));
->>>>>>> miniblink49
         if (!data) {
             continue;
         }
@@ -215,24 +140,13 @@ DEF_TEST(JpegIdentification, r) {
             continue;
         }
         if (!isJfif) {
-<<<<<<< HEAD
             continue; // not applicable
-=======
-            continue;  // not applicable
->>>>>>> miniblink49
         }
         if (kTests[i].type != info.fType) {
             ERRORF(r, "%s failed jfif type test", kTests[i].path);
             continue;
         }
-<<<<<<< HEAD
         INFOF(r, "\nJpegIdentification: %s [%d x %d]\n", kTests[i].path,
             info.fSize.width(), info.fSize.height());
-=======
-        if (r->verbose()) {
-            SkDebugf("\nJpegIdentification: %s [%d x %d]\n", kTests[i].path,
-                     info.fWidth, info.fHeight);
-        }
->>>>>>> miniblink49
     }
 }

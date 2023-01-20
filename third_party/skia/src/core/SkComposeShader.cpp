@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -9,16 +5,11 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #include "SkComposeShader.h"
 #include "SkColorFilter.h"
 #include "SkColorPriv.h"
 #include "SkColorShader.h"
 #include "SkReadBuffer.h"
-<<<<<<< HEAD
 #include "SkString.h"
 #include "SkWriteBuffer.h"
 #include "SkXfermode.h"
@@ -30,46 +21,17 @@ size_t SkComposeShader::onContextSize(const ContextRec& rec) const
     return sizeof(ComposeShaderContext)
         + fShaderA->contextSize(rec)
         + fShaderB->contextSize(rec);
-=======
-#include "SkWriteBuffer.h"
-#include "SkXfermode.h"
-#include "SkString.h"
-
-///////////////////////////////////////////////////////////////////////////////
-
-SkComposeShader::SkComposeShader(SkShader* sA, SkShader* sB, SkXfermode* mode) {
-    fShaderA = sA;  sA->ref();
-    fShaderB = sB;  sB->ref();
-    // mode may be null
-    fMode = mode;
-    SkSafeRef(mode);
-}
-
-SkComposeShader::~SkComposeShader() {
-    SkSafeUnref(fMode);
-    fShaderB->unref();
-    fShaderA->unref();
-}
-
-size_t SkComposeShader::contextSize() const {
-    return sizeof(ComposeShaderContext) + fShaderA->contextSize() + fShaderB->contextSize();
->>>>>>> miniblink49
 }
 
 class SkAutoAlphaRestore {
 public:
-<<<<<<< HEAD
     SkAutoAlphaRestore(SkPaint* paint, uint8_t newAlpha)
     {
-=======
-    SkAutoAlphaRestore(SkPaint* paint, uint8_t newAlpha) {
->>>>>>> miniblink49
         fAlpha = paint->getAlpha();
         fPaint = paint;
         paint->setAlpha(newAlpha);
     }
 
-<<<<<<< HEAD
     ~SkAutoAlphaRestore()
     {
         fPaint->setAlpha(fAlpha);
@@ -102,49 +64,15 @@ void SkComposeShader::flatten(SkWriteBuffer& buffer) const
 template <typename T>
 void safe_call_destructor(T* obj)
 {
-=======
-    ~SkAutoAlphaRestore() {
-        fPaint->setAlpha(fAlpha);
-    }
-private:
-    SkPaint*    fPaint;
-    uint8_t     fAlpha;
-};
-#define SkAutoAlphaRestore(...) SK_REQUIRE_LOCAL_VAR(SkAutoAlphaRestore)
-
-SkFlattenable* SkComposeShader::CreateProc(SkReadBuffer& buffer) {
-    SkAutoTUnref<SkShader> shaderA(buffer.readShader());
-    SkAutoTUnref<SkShader> shaderB(buffer.readShader());
-    SkAutoTUnref<SkXfermode> mode(buffer.readXfermode());
-    if (!shaderA.get() || !shaderB.get()) {
-        return NULL;
-    }
-    return SkNEW_ARGS(SkComposeShader, (shaderA, shaderB, mode));
-}
-
-void SkComposeShader::flatten(SkWriteBuffer& buffer) const {
-    buffer.writeFlattenable(fShaderA);
-    buffer.writeFlattenable(fShaderB);
-    buffer.writeFlattenable(fMode);
-}
-
-template <typename T> void safe_call_destructor(T* obj) {
->>>>>>> miniblink49
     if (obj) {
         obj->~T();
     }
 }
 
-<<<<<<< HEAD
 SkShader::Context* SkComposeShader::onCreateContext(const ContextRec& rec, void* storage) const
 {
     char* aStorage = (char*)storage + sizeof(ComposeShaderContext);
     char* bStorage = aStorage + fShaderA->contextSize(rec);
-=======
-SkShader::Context* SkComposeShader::onCreateContext(const ContextRec& rec, void* storage) const {
-    char* aStorage = (char*) storage + sizeof(ComposeShaderContext);
-    char* bStorage = aStorage + fShaderA->contextSize();
->>>>>>> miniblink49
 
     // we preconcat our localMatrix (if any) with the device matrix
     // before calling our sub-shaders
@@ -166,7 +94,6 @@ SkShader::Context* SkComposeShader::onCreateContext(const ContextRec& rec, void*
     if (!contextA || !contextB) {
         safe_call_destructor(contextA);
         safe_call_destructor(contextB);
-<<<<<<< HEAD
         return nullptr;
     }
 
@@ -184,45 +111,20 @@ SkComposeShader::ComposeShaderContext::ComposeShaderContext(
 
 SkComposeShader::ComposeShaderContext::~ComposeShaderContext()
 {
-=======
-        return NULL;
-    }
-
-    return SkNEW_PLACEMENT_ARGS(storage, ComposeShaderContext, (*this, rec, contextA, contextB));
-}
-
-SkComposeShader::ComposeShaderContext::ComposeShaderContext(
-        const SkComposeShader& shader, const ContextRec& rec,
-        SkShader::Context* contextA, SkShader::Context* contextB)
-    : INHERITED(shader, rec)
-    , fShaderContextA(contextA)
-    , fShaderContextB(contextB) {}
-
-SkComposeShader::ComposeShaderContext::~ComposeShaderContext() {
->>>>>>> miniblink49
     fShaderContextA->~Context();
     fShaderContextB->~Context();
 }
 
-<<<<<<< HEAD
 bool SkComposeShader::asACompose(ComposeRec* rec) const
 {
     if (rec) {
         rec->fShaderA = fShaderA.get();
         rec->fShaderB = fShaderB.get();
         rec->fMode = fMode.get();
-=======
-bool SkComposeShader::asACompose(ComposeRec* rec) const {
-    if (rec) {
-        rec->fShaderA = fShaderA;
-        rec->fShaderB = fShaderB;
-        rec->fMode = fMode;
->>>>>>> miniblink49
     }
     return true;
 }
 
-<<<<<<< HEAD
 // larger is better (fewer times we have to loop), but we shouldn't
 // take up too much stack-space (each element is 4 bytes)
 #define TMP_COLOR_COUNT 64
@@ -237,26 +139,6 @@ void SkComposeShader::ComposeShaderContext::shadeSpan(int x, int y, SkPMColor re
     SkPMColor tmp[TMP_COLOR_COUNT];
 
     if (nullptr == mode) { // implied SRC_OVER
-=======
-
-// larger is better (fewer times we have to loop), but we shouldn't
-// take up too much stack-space (each element is 4 bytes)
-#define TMP_COLOR_COUNT     64
-
-void SkComposeShader::ComposeShaderContext::shadeSpan(int x, int y, SkPMColor result[], int count) {
-    SkShader::Context* shaderContextA = fShaderContextA;
-    SkShader::Context* shaderContextB = fShaderContextB;
-    SkXfermode*        mode = static_cast<const SkComposeShader&>(fShader).fMode;
-    unsigned           scale = SkAlpha255To256(this->getPaintAlpha());
-
-#ifdef SK_BUILD_FOR_ANDROID
-    scale = 256;    // ugh -- maintain old bug/behavior for now
-#endif
-
-    SkPMColor   tmp[TMP_COLOR_COUNT];
-
-    if (NULL == mode) {   // implied SRC_OVER
->>>>>>> miniblink49
         // TODO: when we have a good test-case, should use SkBlitRow::Proc32
         // for these loops
         do {
@@ -275,11 +157,7 @@ void SkComposeShader::ComposeShaderContext::shadeSpan(int x, int y, SkPMColor re
             } else {
                 for (int i = 0; i < n; i++) {
                     result[i] = SkAlphaMulQ(SkPMSrcOver(tmp[i], result[i]),
-<<<<<<< HEAD
                         scale);
-=======
-                                            scale);
->>>>>>> miniblink49
                 }
             }
 
@@ -287,11 +165,7 @@ void SkComposeShader::ComposeShaderContext::shadeSpan(int x, int y, SkPMColor re
             x += n;
             count -= n;
         } while (count > 0);
-<<<<<<< HEAD
     } else { // use mode for the composition
-=======
-    } else {    // use mode for the composition
->>>>>>> miniblink49
         do {
             int n = count;
             if (n > TMP_COLOR_COUNT) {
@@ -300,11 +174,7 @@ void SkComposeShader::ComposeShaderContext::shadeSpan(int x, int y, SkPMColor re
 
             shaderContextA->shadeSpan(x, y, result, n);
             shaderContextB->shadeSpan(x, y, tmp, n);
-<<<<<<< HEAD
             mode->xfer32(result, tmp, n, nullptr);
-=======
-            mode->xfer32(result, tmp, n, NULL);
->>>>>>> miniblink49
 
             if (256 != scale) {
                 for (int i = 0; i < n; i++) {
@@ -319,7 +189,6 @@ void SkComposeShader::ComposeShaderContext::shadeSpan(int x, int y, SkPMColor re
     }
 }
 
-<<<<<<< HEAD
 #if SK_SUPPORT_GPU
 
 #include "effects/GrConstColorProcessor.h"
@@ -371,10 +240,6 @@ sk_sp<GrFragmentProcessor> SkComposeShader::asFragmentProcessor(
 #ifndef SK_IGNORE_TO_STRING
 void SkComposeShader::toString(SkString* str) const
 {
-=======
-#ifndef SK_IGNORE_TO_STRING
-void SkComposeShader::toString(SkString* str) const {
->>>>>>> miniblink49
     str->append("SkComposeShader: (");
 
     str->append("ShaderA: ");
@@ -391,7 +256,6 @@ void SkComposeShader::toString(SkString* str) const {
     str->append(")");
 }
 #endif
-<<<<<<< HEAD
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -409,5 +273,3 @@ sk_sp<SkShader> SkShader::MakeComposeShader(sk_sp<SkShader> dst, sk_sp<SkShader>
 {
     return MakeComposeShader(std::move(dst), std::move(src), SkXfermode::Make(mode));
 }
-=======
->>>>>>> miniblink49

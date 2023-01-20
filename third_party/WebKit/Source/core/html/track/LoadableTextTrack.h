@@ -28,7 +28,7 @@
 
 #include "core/html/track/TextTrack.h"
 #include "platform/heap/Handle.h"
-#include "wtf/PassRefPtr.h"
+#include "wtf/Assertions.h"
 
 namespace blink {
 
@@ -36,23 +36,20 @@ class HTMLTrackElement;
 
 class LoadableTextTrack final : public TextTrack {
 public:
-    static PassRefPtrWillBeRawPtr<LoadableTextTrack> create(HTMLTrackElement* track)
+    static LoadableTextTrack* create(HTMLTrackElement* track)
     {
-        return adoptRefWillBeNoop(new LoadableTextTrack(track));
+        return new LoadableTextTrack(track);
     }
     ~LoadableTextTrack() override;
 
     // TextTrack method.
     void setMode(const AtomicString&) override;
 
-    void addRegions(const WillBeHeapVector<RefPtrWillBeMember<VTTRegion>>&);
+    void addRegions(const HeapVector<Member<VTTRegion>>&);
     using TextTrack::addListOfCues;
 
-    size_t trackElementIndex();
+    size_t trackElementIndex() const;
     HTMLTrackElement* trackElement() { return m_trackElement; }
-#if !ENABLE(OILPAN)
-    void clearTrackElement();
-#endif
 
     bool isDefault() const override;
 
@@ -61,8 +58,14 @@ public:
 private:
     explicit LoadableTextTrack(HTMLTrackElement*);
 
-    RawPtrWillBeMember<HTMLTrackElement> m_trackElement;
+    Member<HTMLTrackElement> m_trackElement;
 };
+
+DEFINE_TYPE_CASTS(LoadableTextTrack,
+    TextTrack,
+    track,
+    track->trackType() == TextTrack::TrackElement,
+    track.trackType() == TextTrack::TrackElement);
 
 } // namespace blink
 

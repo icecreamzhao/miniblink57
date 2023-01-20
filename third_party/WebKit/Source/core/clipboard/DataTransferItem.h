@@ -35,31 +35,32 @@
 #include "core/CoreExport.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
-#include "wtf/RefCounted.h"
-#include "wtf/RefPtr.h"
 
 namespace blink {
 
 class Blob;
 class DataObjectItem;
 class DataTransfer;
+class ScriptState;
 class StringCallback;
-class ExecutionContext;
 
-class CORE_EXPORT DataTransferItem final : public GarbageCollected<DataTransferItem>, public ScriptWrappable {
+class CORE_EXPORT DataTransferItem final
+    : public GarbageCollected<DataTransferItem>,
+      public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
     WTF_MAKE_NONCOPYABLE(DataTransferItem);
+
 public:
     static DataTransferItem* create(DataTransfer*, DataObjectItem*);
 
     String kind() const;
     String type() const;
 
-    void getAsString(ExecutionContext*, StringCallback*) const;
+    void getAsString(ScriptState*, StringCallback*) const;
     Blob* getAsFile() const;
 
-    DataTransfer* dataTransfer() { return m_dataTransfer.get(); }
-    DataObjectItem* dataObjectItem() { return m_item.get(); }
+    DataTransfer* getDataTransfer() { return m_dataTransfer.get(); }
+    DataObjectItem* getDataObjectItem() { return m_item.get(); }
 
     DECLARE_TRACE();
 

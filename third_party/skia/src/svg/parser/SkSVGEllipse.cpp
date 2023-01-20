@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -9,16 +5,9 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "SkSVGEllipse.h"
 #include "SkParse.h"
 #include "SkSVGParser.h"
-=======
-
-#include "SkSVGEllipse.h"
-#include "SkSVGParser.h"
-#include "SkParse.h"
->>>>>>> miniblink49
 #include <stdio.h>
 
 const SkSVGAttribute SkSVGEllipse::gAttributes[] = {
@@ -30,12 +19,8 @@ const SkSVGAttribute SkSVGEllipse::gAttributes[] = {
 
 DEFINE_SVG_INFO(Ellipse)
 
-<<<<<<< HEAD
 void SkSVGEllipse::translate(SkSVGParser& parser, bool defState)
 {
-=======
-void SkSVGEllipse::translate(SkSVGParser& parser, bool defState) {
->>>>>>> miniblink49
     parser._startElement("oval");
     INHERITED::translate(parser, defState);
     SkScalar cx, cy, rx, ry;

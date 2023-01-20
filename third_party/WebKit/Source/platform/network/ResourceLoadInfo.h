@@ -23,10 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #ifndef ResourceLoadInfo_h
 #define ResourceLoadInfo_h
 
@@ -38,19 +34,11 @@ namespace blink {
 struct ResourceLoadInfo : RefCounted<ResourceLoadInfo> {
     ResourceLoadInfo()
         : httpStatusCode(0)
-<<<<<<< HEAD
     {
     }
 
     int httpStatusCode;
     String httpStatusText;
-=======
-        , encodedDataLength(-1) { }
-
-    int httpStatusCode;
-    String httpStatusText;
-    long long encodedDataLength;
->>>>>>> miniblink49
     HTTPHeaderMap requestHeaders;
     HTTPHeaderMap responseHeaders;
     String requestHeadersText;
@@ -58,10 +46,6 @@ struct ResourceLoadInfo : RefCounted<ResourceLoadInfo> {
     String npnNegotiatedProtocol;
 };
 
-<<<<<<< HEAD
 } // namespace blink
-=======
-}
->>>>>>> miniblink49
 
 #endif

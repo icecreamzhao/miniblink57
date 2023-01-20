@@ -20,35 +20,36 @@ namespace gin {
 // The field at kDebugIdIndex is treated specially by V8 and is reserved for
 // a V8 debugger implementation (not used by gin).
 enum ContextEmbedderDataFields {
-  kDebugIdIndex = v8::Context::kDebugIdIndex,
-  kPerContextDataStartIndex,
+    kDebugIdIndex = v8::Context::kDebugIdIndex,
+    kPerContextDataStartIndex,
 };
 
 class PerContextData;
 
 // ContextHolder is a generic class for holding a v8::Context.
 class GIN_EXPORT ContextHolder {
- public:
-  explicit ContextHolder(v8::Isolate* isolate);
-  ~ContextHolder();
+public:
+    explicit ContextHolder(v8::Isolate* isolate);
+    ~ContextHolder();
 
-  v8::Isolate* isolate() const { return isolate_; }
+    v8::Isolate* isolate() const { return isolate_; }
 
-  v8::Local<v8::Context> context() const {
-    return v8::Local<v8::Context>::New(isolate_, context_);
-  }
+    v8::Local<v8::Context> context() const
+    {
+        return v8::Local<v8::Context>::New(isolate_, context_);
+    }
 
-  void SetContext(v8::Local<v8::Context> context);
+    void SetContext(v8::Local<v8::Context> context);
 
- private:
-  v8::Isolate* isolate_;
-  v8::UniquePersistent<v8::Context> context_;
-  //scoped_ptr<PerContextData> data_;
-  PerContextData* data_;
+private:
+    v8::Isolate* isolate_;
+    v8::UniquePersistent<v8::Context> context_;
+    //scoped_ptr<PerContextData> data_;
+    PerContextData* data_;
 
-  DISALLOW_COPY_AND_ASSIGN(ContextHolder);
+    DISALLOW_COPY_AND_ASSIGN(ContextHolder);
 };
 
-}  // namespace gin
+} // namespace gin
 
-#endif  // GIN_PUBLIC_CONTEXT_HOLDER_H_
+#endif // GIN_PUBLIC_CONTEXT_HOLDER_H_

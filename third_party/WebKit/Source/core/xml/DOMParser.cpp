@@ -13,23 +13,24 @@
  *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ *  MA 02110-1301 USA
  */
 
-#include "config.h"
 #include "core/xml/DOMParser.h"
 
 #include "core/dom/DOMImplementation.h"
-#include "core/dom/ExceptionCode.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
-PassRefPtrWillBeRawPtr<Document> DOMParser::parseFromString(const String& str, const String& type)
+Document* DOMParser::parseFromString(const String& str, const String& type)
 {
-    RefPtrWillBeRawPtr<Document> doc = DOMImplementation::createDocument(type, DocumentInit(KURL(), nullptr, m_contextDocument), false);
+    Document* doc = DOMImplementation::createDocument(type, DocumentInit(KURL(), nullptr, m_contextDocument), false);
     doc->setContent(str);
-    return doc.release();
+    if (m_contextDocument)
+        doc->setSecurityOrigin(m_contextDocument->getSecurityOrigin());
+    return doc;
 }
 
 DOMParser::DOMParser(Document& document)

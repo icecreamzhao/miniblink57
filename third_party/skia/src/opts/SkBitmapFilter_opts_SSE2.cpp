@@ -5,24 +5,15 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "SkBitmapFilter_opts_SSE2.h"
 #include "SkBitmap.h"
-=======
-#include <emmintrin.h>
-#include "SkBitmap.h"
-#include "SkBitmapFilter_opts_SSE2.h"
->>>>>>> miniblink49
 #include "SkBitmapProcState.h"
 #include "SkColor.h"
 #include "SkColorPriv.h"
 #include "SkConvolver.h"
 #include "SkShader.h"
 #include "SkUnPreMultiply.h"
-<<<<<<< HEAD
 #include <emmintrin.h>
-=======
->>>>>>> miniblink49
 
 #if 0
 static inline void print128i(__m128i value) {
@@ -52,16 +43,10 @@ static inline void print128f(__m128 value) {
 // Convolves horizontally along a single row. The row data is given in
 // |src_data| and continues for the num_values() of the filter.
 void convolveHorizontally_SSE2(const unsigned char* src_data,
-<<<<<<< HEAD
     const SkConvolutionFilter1D& filter,
     unsigned char* out_row,
     bool /*has_alpha*/)
 {
-=======
-                               const SkConvolutionFilter1D& filter,
-                               unsigned char* out_row,
-                               bool /*has_alpha*/) {
->>>>>>> miniblink49
     int num_values = filter.numValues();
 
     int filter_offset, filter_length;
@@ -76,29 +61,16 @@ void convolveHorizontally_SSE2(const unsigned char* src_data,
 
     // Output one pixel each iteration, calculating all channels (RGBA) together.
     for (int out_x = 0; out_x < num_values; out_x++) {
-<<<<<<< HEAD
         const SkConvolutionFilter1D::ConvolutionFixed* filter_values = filter.FilterForValue(out_x, &filter_offset, &filter_length);
-=======
-        const SkConvolutionFilter1D::ConvolutionFixed* filter_values =
-            filter.FilterForValue(out_x, &filter_offset, &filter_length);
->>>>>>> miniblink49
 
         __m128i accum = _mm_setzero_si128();
 
         // Compute the first pixel in this row that the filter affects. It will
         // touch |filter_length| pixels (4 bytes each) after this.
-<<<<<<< HEAD
         const __m128i* row_to_filter = reinterpret_cast<const __m128i*>(&src_data[filter_offset << 2]);
 
         // We will load and accumulate with four coefficients per iteration.
         for (int filter_x = 0; filter_x < (filter_length >> 2); filter_x++) {
-=======
-        const __m128i* row_to_filter =
-            reinterpret_cast<const __m128i*>(&src_data[filter_offset << 2]);
-
-        // We will load and accumulate with four coefficients per iteration.
-        for (int filter_x = 0; filter_x < filter_length >> 2; filter_x++) {
->>>>>>> miniblink49
 
             // Load 4 coefficients => duplicate 1st and 2nd of them for all channels.
             __m128i coeff, coeff16;
@@ -151,11 +123,7 @@ void convolveHorizontally_SSE2(const unsigned char* src_data,
         // the filter coefficient that was loaded incorrectly to zero; Other than
         // that the algorithm is same with above, exceot that the 4th pixel will be
         // always absent.
-<<<<<<< HEAD
         int r = filter_length & 3;
-=======
-        int r = filter_length&3;
->>>>>>> miniblink49
         if (r) {
             // Note: filter_values must be padded to align_up(filter_offset, 8).
             __m128i coeff, coeff16;
@@ -204,7 +172,6 @@ void convolveHorizontally_SSE2(const unsigned char* src_data,
 // The algorithm is almost same as |ConvolveHorizontally_SSE2|. Please
 // refer to that function for detailed comments.
 void convolve4RowsHorizontally_SSE2(const unsigned char* src_data[4],
-<<<<<<< HEAD
     const SkConvolutionFilter1D& filter,
     unsigned char* out_row[4],
     size_t outRowBytes)
@@ -213,14 +180,6 @@ void convolve4RowsHorizontally_SSE2(const unsigned char* src_data[4],
 
         int num_values
         = filter.numValues();
-=======
-                                    const SkConvolutionFilter1D& filter,
-                                    unsigned char* out_row[4],
-                                    size_t outRowBytes) {
-    SkDEBUGCODE(const unsigned char* out_row_0_start = out_row[0];)
-
-    int num_values = filter.numValues();
->>>>>>> miniblink49
 
     int filter_offset, filter_length;
     __m128i zero = _mm_setzero_si128();
@@ -234,23 +193,14 @@ void convolve4RowsHorizontally_SSE2(const unsigned char* src_data[4],
 
     // Output one pixel each iteration, calculating all channels (RGBA) together.
     for (int out_x = 0; out_x < num_values; out_x++) {
-<<<<<<< HEAD
         const SkConvolutionFilter1D::ConvolutionFixed* filter_values = filter.FilterForValue(out_x, &filter_offset, &filter_length);
-=======
-        const SkConvolutionFilter1D::ConvolutionFixed* filter_values =
-            filter.FilterForValue(out_x, &filter_offset, &filter_length);
->>>>>>> miniblink49
 
         // four pixels in a column per iteration.
         __m128i accum0 = _mm_setzero_si128();
         __m128i accum1 = _mm_setzero_si128();
         __m128i accum2 = _mm_setzero_si128();
         __m128i accum3 = _mm_setzero_si128();
-<<<<<<< HEAD
         int start = (filter_offset << 2);
-=======
-        int start = (filter_offset<<2);
->>>>>>> miniblink49
         // We will load and accumulate with four coefficients per iteration.
         for (int filter_x = 0; filter_x < (filter_length >> 2); filter_x++) {
             __m128i coeff, coeff16lo, coeff16hi;
@@ -267,7 +217,6 @@ void convolve4RowsHorizontally_SSE2(const unsigned char* src_data[4],
 
             __m128i src8, src16, mul_hi, mul_lo, t;
 
-<<<<<<< HEAD
 #define ITERATION(src, accum)                                      \
     src8 = _mm_loadu_si128(reinterpret_cast<const __m128i*>(src)); \
     src16 = _mm_unpacklo_epi8(src8, zero);                         \
@@ -284,24 +233,6 @@ void convolve4RowsHorizontally_SSE2(const unsigned char* src_data[4],
     accum = _mm_add_epi32(accum, t);                               \
     t = _mm_unpackhi_epi16(mul_lo, mul_hi);                        \
     accum = _mm_add_epi32(accum, t)
-=======
-#define ITERATION(src, accum)                                                \
-            src8 = _mm_loadu_si128(reinterpret_cast<const __m128i*>(src));   \
-            src16 = _mm_unpacklo_epi8(src8, zero);                           \
-            mul_hi = _mm_mulhi_epi16(src16, coeff16lo);                      \
-            mul_lo = _mm_mullo_epi16(src16, coeff16lo);                      \
-            t = _mm_unpacklo_epi16(mul_lo, mul_hi);                          \
-            accum = _mm_add_epi32(accum, t);                                 \
-            t = _mm_unpackhi_epi16(mul_lo, mul_hi);                          \
-            accum = _mm_add_epi32(accum, t);                                 \
-            src16 = _mm_unpackhi_epi8(src8, zero);                           \
-            mul_hi = _mm_mulhi_epi16(src16, coeff16hi);                      \
-            mul_lo = _mm_mullo_epi16(src16, coeff16hi);                      \
-            t = _mm_unpacklo_epi16(mul_lo, mul_hi);                          \
-            accum = _mm_add_epi32(accum, t);                                 \
-            t = _mm_unpackhi_epi16(mul_lo, mul_hi);                          \
-            accum = _mm_add_epi32(accum, t)
->>>>>>> miniblink49
 
             ITERATION(src_data[0] + start, accum0);
             ITERATION(src_data[1] + start, accum1);
@@ -368,7 +299,6 @@ void convolve4RowsHorizontally_SSE2(const unsigned char* src_data[4],
 // being |pixel_width| wide.
 //
 // The output must have room for |pixel_width * 4| bytes.
-<<<<<<< HEAD
 template <bool has_alpha>
 void convolveVertically_SSE2(const SkConvolutionFilter1D::ConvolutionFixed* filter_values,
     int filter_length,
@@ -376,14 +306,6 @@ void convolveVertically_SSE2(const SkConvolutionFilter1D::ConvolutionFixed* filt
     int pixel_width,
     unsigned char* out_row)
 {
-=======
-template<bool has_alpha>
-void convolveVertically_SSE2(const SkConvolutionFilter1D::ConvolutionFixed* filter_values,
-                             int filter_length,
-                             unsigned char* const* source_data_rows,
-                             int pixel_width,
-                             unsigned char* out_row) {
->>>>>>> miniblink49
     int width = pixel_width & ~3;
 
     __m128i zero = _mm_setzero_si128();
@@ -459,19 +381,11 @@ void convolveVertically_SSE2(const SkConvolutionFilter1D::ConvolutionFixed* filt
             // [8] xx a3 b3 g3 xx a2 b2 g2 xx a1 b1 g1 xx a0 b0 g0
             __m128i a = _mm_srli_epi32(accum0, 8);
             // [8] xx xx xx max3 xx xx xx max2 xx xx xx max1 xx xx xx max0
-<<<<<<< HEAD
             __m128i b = _mm_max_epu8(a, accum0); // Max of r and g.
             // [8] xx xx a3 b3 xx xx a2 b2 xx xx a1 b1 xx xx a0 b0
             a = _mm_srli_epi32(accum0, 16);
             // [8] xx xx xx max3 xx xx xx max2 xx xx xx max1 xx xx xx max0
             b = _mm_max_epu8(a, b); // Max of r and g and b.
-=======
-            __m128i b = _mm_max_epu8(a, accum0);  // Max of r and g.
-            // [8] xx xx a3 b3 xx xx a2 b2 xx xx a1 b1 xx xx a0 b0
-            a = _mm_srli_epi32(accum0, 16);
-            // [8] xx xx xx max3 xx xx xx max2 xx xx xx max1 xx xx xx max0
-            b = _mm_max_epu8(a, b);  // Max of r and g and b.
->>>>>>> miniblink49
             // [8] max3 00 00 00 max2 00 00 00 max1 00 00 00 max0 00 00 00
             b = _mm_slli_epi32(b, 24);
 
@@ -499,11 +413,7 @@ void convolveVertically_SSE2(const SkConvolutionFilter1D::ConvolutionFixed* filt
             coeff16 = _mm_set1_epi16(filter_values[filter_y]);
             // [8] a3 b3 g3 r3 a2 b2 g2 r2 a1 b1 g1 r1 a0 b0 g0 r0
             src = reinterpret_cast<const __m128i*>(
-<<<<<<< HEAD
                 &source_data_rows[filter_y][width << 2]);
-=======
-                &source_data_rows[filter_y][width<<2]);
->>>>>>> miniblink49
             __m128i src8 = _mm_loadu_si128(src);
             // [16] a1 b1 g1 r1 a0 b0 g0 r0
             __m128i src16 = _mm_unpacklo_epi8(src8, zero);
@@ -537,19 +447,11 @@ void convolveVertically_SSE2(const SkConvolutionFilter1D::ConvolutionFixed* filt
             // [8] xx a3 b3 g3 xx a2 b2 g2 xx a1 b1 g1 xx a0 b0 g0
             __m128i a = _mm_srli_epi32(accum0, 8);
             // [8] xx xx xx max3 xx xx xx max2 xx xx xx max1 xx xx xx max0
-<<<<<<< HEAD
             __m128i b = _mm_max_epu8(a, accum0); // Max of r and g.
             // [8] xx xx a3 b3 xx xx a2 b2 xx xx a1 b1 xx xx a0 b0
             a = _mm_srli_epi32(accum0, 16);
             // [8] xx xx xx max3 xx xx xx max2 xx xx xx max1 xx xx xx max0
             b = _mm_max_epu8(a, b); // Max of r and g and b.
-=======
-            __m128i b = _mm_max_epu8(a, accum0);  // Max of r and g.
-            // [8] xx xx a3 b3 xx xx a2 b2 xx xx a1 b1 xx xx a0 b0
-            a = _mm_srli_epi32(accum0, 16);
-            // [8] xx xx xx max3 xx xx xx max2 xx xx xx max1 xx xx xx max0
-            b = _mm_max_epu8(a, b);  // Max of r and g and b.
->>>>>>> miniblink49
             // [8] max3 00 00 00 max2 00 00 00 max1 00 00 00 max0 00 00 00
             b = _mm_slli_epi32(b, 24);
             accum0 = _mm_max_epu8(b, accum0);
@@ -567,7 +469,6 @@ void convolveVertically_SSE2(const SkConvolutionFilter1D::ConvolutionFixed* filt
 }
 
 void convolveVertically_SSE2(const SkConvolutionFilter1D::ConvolutionFixed* filter_values,
-<<<<<<< HEAD
     int filter_length,
     unsigned char* const* source_data_rows,
     int pixel_width,
@@ -591,29 +492,6 @@ void convolveVertically_SSE2(const SkConvolutionFilter1D::ConvolutionFixed* filt
 
 void applySIMDPadding_SSE2(SkConvolutionFilter1D* filter)
 {
-=======
-                             int filter_length,
-                             unsigned char* const* source_data_rows,
-                             int pixel_width,
-                             unsigned char* out_row,
-                             bool has_alpha) {
-    if (has_alpha) {
-        convolveVertically_SSE2<true>(filter_values,
-                                      filter_length,
-                                      source_data_rows,
-                                      pixel_width,
-                                      out_row);
-    } else {
-        convolveVertically_SSE2<false>(filter_values,
-                                       filter_length,
-                                       source_data_rows,
-                                       pixel_width,
-                                       out_row);
-    }
-}
-
-void applySIMDPadding_SSE2(SkConvolutionFilter1D *filter) {
->>>>>>> miniblink49
     // Padding |paddingCount| of more dummy coefficients after the coefficients
     // of last filter to prevent SIMD instructions which load 8 or 16 bytes
     // together to access invalid memory areas. We are not trying to align the

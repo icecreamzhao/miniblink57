@@ -23,24 +23,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "wtf/text/TextCodecUTF16.h"
 
 #include "wtf/PtrUtil.h"
-=======
-#include "config.h"
-#include "wtf/text/TextCodecUTF16.h"
-
-#include "wtf/PassOwnPtr.h"
->>>>>>> miniblink49
 #include "wtf/text/CString.h"
 #include "wtf/text/CharacterNames.h"
 #include "wtf/text/StringBuffer.h"
 #include "wtf/text/WTFString.h"
-<<<<<<< HEAD
 #include <memory>
-=======
->>>>>>> miniblink49
 
 using namespace std;
 
@@ -61,7 +51,6 @@ void TextCodecUTF16::registerEncodingNames(EncodingNameRegistrar registrar)
     registrar("unicodeFFFE", "UTF-16BE");
 }
 
-<<<<<<< HEAD
 static std::unique_ptr<TextCodec> newStreamingTextDecoderUTF16LE(
     const TextEncoding&,
     const void*)
@@ -74,16 +63,6 @@ static std::unique_ptr<TextCodec> newStreamingTextDecoderUTF16BE(
     const void*)
 {
     return WTF::makeUnique<TextCodecUTF16>(false);
-=======
-static PassOwnPtr<TextCodec> newStreamingTextDecoderUTF16LE(const TextEncoding&, const void*)
-{
-    return adoptPtr(new TextCodecUTF16(true));
-}
-
-static PassOwnPtr<TextCodec> newStreamingTextDecoderUTF16BE(const TextEncoding&, const void*)
-{
-    return adoptPtr(new TextCodecUTF16(false));
->>>>>>> miniblink49
 }
 
 void TextCodecUTF16::registerCodecs(TextCodecRegistrar registrar)
@@ -92,7 +71,6 @@ void TextCodecUTF16::registerCodecs(TextCodecRegistrar registrar)
     registrar("UTF-16BE", newStreamingTextDecoderUTF16BE, 0);
 }
 
-<<<<<<< HEAD
 // String TextCodecUTF16::decode(const char* bytes,
 //                               size_t length,
 //                               FlushBehavior flush,
@@ -177,8 +155,6 @@ void TextCodecUTF16::registerCodecs(TextCodecRegistrar registrar)
 //   return String::adopt(buffer);
 // }
 
-=======
->>>>>>> miniblink49
 String TextCodecUTF16::decode(const char* bytes, size_t length, FlushBehavior flush, bool, bool& sawError)
 {
     // For compatibility reasons, ignore flush from fetch EOF.
@@ -244,13 +220,9 @@ String TextCodecUTF16::decode(const char* bytes, size_t length, FlushBehavior fl
     return String::adopt(buffer);
 }
 
-<<<<<<< HEAD
 CString TextCodecUTF16::encode(const UChar* characters,
     size_t length,
     UnencodableHandling)
-=======
-CString TextCodecUTF16::encode(const UChar* characters, size_t length, UnencodableHandling)
->>>>>>> miniblink49
 {
     // We need to be sure we can double the length without overflowing.
     // Since the passed-in length is the length of an actual existing
@@ -258,7 +230,6 @@ CString TextCodecUTF16::encode(const UChar* characters, size_t length, Unencodab
     // the buffer doesn't occupy the entire address space, we can
     // assert here that doubling the length does not overflow size_t
     // and there's no need for a runtime check.
-<<<<<<< HEAD
     DCHECK_LE(length, numeric_limits<size_t>::max() / 2);
 
     char* bytes;
@@ -267,15 +238,6 @@ CString TextCodecUTF16::encode(const UChar* characters, size_t length, Unencodab
     // FIXME: CString is not a reasonable data structure for encoded UTF-16, which
     // will have null characters inside it. Perhaps the result of encode should
     // not be a CString.
-=======
-    ASSERT(length <= numeric_limits<size_t>::max() / 2);
-
-    char* bytes;
-    CString result = CString::newUninitialized(length * 2, bytes);
-
-    // FIXME: CString is not a reasonable data structure for encoded UTF-16, which will have
-    // null characters inside it. Perhaps the result of encode should not be a CString.
->>>>>>> miniblink49
     if (m_littleEndian) {
         for (size_t i = 0; i < length; ++i) {
             UChar c = characters[i];
@@ -293,7 +255,6 @@ CString TextCodecUTF16::encode(const UChar* characters, size_t length, Unencodab
     return result;
 }
 
-<<<<<<< HEAD
 CString TextCodecUTF16::encode(const LChar* characters,
     size_t length,
     UnencodableHandling)
@@ -303,15 +264,6 @@ CString TextCodecUTF16::encode(const LChar* characters,
 
     char* bytes;
     CString result = CString::createUninitialized(length * 2, bytes);
-=======
-CString TextCodecUTF16::encode(const LChar* characters, size_t length, UnencodableHandling)
-{
-    // In the LChar case, we do actually need to perform this check in release.  :)
-    RELEASE_ASSERT(length <= numeric_limits<size_t>::max() / 2);
-
-    char* bytes;
-    CString result = CString::newUninitialized(length * 2, bytes);
->>>>>>> miniblink49
 
     if (m_littleEndian) {
         for (size_t i = 0; i < length; ++i) {

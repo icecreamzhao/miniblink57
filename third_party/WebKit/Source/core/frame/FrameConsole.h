@@ -29,44 +29,52 @@
 #ifndef FrameConsole_h
 #define FrameConsole_h
 
-#include "bindings/core/v8/ScriptState.h"
 #include "core/CoreExport.h"
-#include "core/frame/ConsoleTypes.h"
+#include "core/inspector/ConsoleTypes.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
-#include "wtf/PassOwnPtr.h"
+#include "wtf/text/WTFString.h"
 
 namespace blink {
 
 class ConsoleMessage;
-class ConsoleMessageStorage;
 class DocumentLoader;
+class LocalFrame;
 class ResourceError;
 class ResourceResponse;
-class ScriptCallStack;
-class WorkerGlobalScopeProxy;
+class SourceLocation;
 
-// FrameConsole takes per-frame console messages and routes them up through the FrameHost to the ChromeClient and Inspector.
-// It's meant as an abstraction around ChromeClient calls and the way that Blink core/ can add messages to the console.
-class CORE_EXPORT FrameConsole final : public NoBaseWillBeGarbageCollected<FrameConsole> {
-    DECLARE_EMPTY_DESTRUCTOR_WILL_BE_REMOVED(FrameConsole);
+// FrameConsole takes per-frame console messages and routes them up through the
+// FrameHost to the ChromeClient and Inspector.  It's meant as an abstraction
+// around ChromeClient calls and the way that Blink core/ can add messages to
+// the console.
+class CORE_EXPORT FrameConsole final
+    : public GarbageCollectedFinalized<FrameConsole> {
 public:
-    static PassOwnPtrWillBeRawPtr<FrameConsole> create(LocalFrame& frame)
+    static FrameConsole* create(LocalFrame& frame)
     {
-        return adoptPtrWillBeNoop(new FrameConsole(frame));
+        return new FrameConsole(frame);
     }
 
-    void addMessage(PassRefPtrWillBeRawPtr<ConsoleMessage>);
-    void adoptWorkerMessagesAfterTermination(WorkerGlobalScopeProxy*);
+    void addMessage(ConsoleMessage*);
+    void addMessageFromWorker(MessageLevel,
+        const String& message,
+        std::unique_ptr<SourceLocation>,
+        const String& workerId);
 
-    void reportResourceResponseReceived(DocumentLoader*, unsigned long requestIdentifier, const ResourceResponse&);
+    // Show the specified ConsoleMessage only if the frame haven't shown a message
+    // same as ConsoleMessage::messsage().
+    void addSingletonMessage(ConsoleMessage*);
 
-    static String formatStackTraceString(const String& originalMessage, PassRefPtrWillBeRawPtr<ScriptCallStack>);
+    bool addMessageToStorage(ConsoleMessage*);
+    void reportMessageToClient(MessageSource,
+        MessageLevel,
+        const String& message,
+        SourceLocation*);
 
-    static void mute();
-    static void unmute();
-
-    void clearMessages();
+    void reportResourceResponseReceived(DocumentLoader*,
+        unsigned long requestIdentifier,
+        const ResourceResponse&);
 
     void didFailLoading(unsigned long requestIdentifier, const ResourceError&);
 
@@ -75,15 +83,8 @@ public:
 private:
     explicit FrameConsole(LocalFrame&);
 
-    LocalFrame& frame() const
-    {
-        ASSERT(m_frame);
-        return *m_frame;
-    }
-
-    ConsoleMessageStorage* messageStorage();
-
-    RawPtrWillBeMember<LocalFrame> m_frame;
+    Member<LocalFrame> m_frame;
+    HashSet<String> m_singletonMessages;
 };
 
 } // namespace blink

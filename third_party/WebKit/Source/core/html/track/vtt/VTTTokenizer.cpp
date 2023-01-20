@@ -28,8 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-
 #include "core/html/track/vtt/VTTTokenizer.h"
 
 #include "core/xml/parser/MarkupTokenizerInlines.h"
@@ -38,20 +36,24 @@
 
 namespace blink {
 
-#define WEBVTT_BEGIN_STATE(stateName) case stateName: stateName:
-#define WEBVTT_ADVANCE_TO(stateName)                               \
-    do {                                                           \
-        state = stateName;                                         \
-        ASSERT(!m_input.isEmpty());                                \
-        m_inputStreamPreprocessor.advance(m_input);                \
-        cc = m_inputStreamPreprocessor.nextInputCharacter();       \
-        goto stateName;                                            \
+#define WEBVTT_BEGIN_STATE(stateName) \
+    case stateName:                   \
+    stateName:
+#define WEBVTT_ADVANCE_TO(stateName)                         \
+    do {                                                     \
+        state = stateName;                                   \
+        DCHECK(!m_input.isEmpty());                          \
+        m_inputStreamPreprocessor.advance(m_input);          \
+        cc = m_inputStreamPreprocessor.nextInputCharacter(); \
+        goto stateName;                                      \
     } while (false)
 
-template<unsigned charactersCount>
-ALWAYS_INLINE bool equalLiteral(const StringBuilder& s, const char (&characters)[charactersCount])
+template <unsigned charactersCount>
+ALWAYS_INLINE bool equalLiteral(const StringBuilder& s,
+    const char (&characters)[charactersCount])
 {
-    return WTF::equal(s, reinterpret_cast<const LChar*>(characters), charactersCount - 1);
+    return WTF::equal(s, reinterpret_cast<const LChar*>(characters),
+        charactersCount - 1);
 }
 
 static void addNewClass(StringBuilder& classes, const StringBuilder& newClass)
@@ -67,7 +69,9 @@ inline bool emitToken(VTTToken& resultToken, const VTTToken& token)
     return true;
 }
 
-inline bool advanceAndEmitToken(SegmentedString& source, VTTToken& resultToken, const VTTToken& token)
+inline bool advanceAndEmitToken(SegmentedString& source,
+    VTTToken& resultToken,
+    const VTTToken& token)
 {
     source.advanceAndUpdateLineNumber();
     return emitToken(resultToken, token);
@@ -78,7 +82,7 @@ VTTTokenizer::VTTTokenizer(const String& input)
     , m_inputStreamPreprocessor(this)
 {
     // Append a EOF marker and close the input "stream".
-    ASSERT(!m_input.isClosed());
+    DCHECK(!m_input.isClosed());
     m_input.append(SegmentedString(String(&kEndOfFileMarker, 1)));
     m_input.close();
 }
@@ -106,11 +110,13 @@ bool VTTTokenizer::nextToken(VTTToken& token)
         StartTagAnnotationState,
         EndTagState,
         TimestampTagState,
-    } state = DataState;
+    } state
+        = DataState;
 
     // 4.8.10.13.4 WebVTT cue text tokenizer
     switch (state) {
-        WEBVTT_BEGIN_STATE(DataState) {
+        WEBVTT_BEGIN_STATE(DataState)
+        {
             if (cc == '&') {
                 buffer.append(static_cast<LChar>(cc));
                 WEBVTT_ADVANCE_TO(EscapeState);
@@ -118,12 +124,14 @@ bool VTTTokenizer::nextToken(VTTToken& token)
                 if (result.isEmpty()) {
                     WEBVTT_ADVANCE_TO(TagState);
                 } else {
-                    // We don't want to advance input or perform a state transition - just return a (new) token.
-                    // (On the next call to nextToken we will see '<' again, but take the other branch in this if instead.)
+                    // We don't want to advance input or perform a state transition - just
+                    // return a (new) token.  (On the next call to nextToken we will see
+                    // '<' again, but take the other branch in this if instead.)
                     return emitToken(token, VTTToken::StringToken(result.toString()));
                 }
             } else if (cc == kEndOfFileMarker) {
-                return advanceAndEmitToken(m_input, token, VTTToken::StringToken(result.toString()));
+                return advanceAndEmitToken(m_input, token,
+                    VTTToken::StringToken(result.toString()));
             } else {
                 result.append(cc);
                 WEBVTT_ADVANCE_TO(DataState);
@@ -131,7 +139,8 @@ bool VTTTokenizer::nextToken(VTTToken& token)
         }
         END_STATE()
 
-        WEBVTT_BEGIN_STATE(EscapeState) {
+        WEBVTT_BEGIN_STATE(EscapeState)
+        {
             if (cc == ';') {
                 if (equalLiteral(buffer, "&amp")) {
                     result.append('&');
@@ -159,7 +168,8 @@ bool VTTTokenizer::nextToken(VTTToken& token)
                 return emitToken(token, VTTToken::StringToken(result.toString()));
             } else if (cc == kEndOfFileMarker) {
                 result.append(buffer);
-                return advanceAndEmitToken(m_input, token, VTTToken::StringToken(result.toString()));
+                return advanceAndEmitToken(m_input, token,
+                    VTTToken::StringToken(result.toString()));
             } else {
                 result.append(buffer);
                 buffer.clear();
@@ -174,12 +184,13 @@ bool VTTTokenizer::nextToken(VTTToken& token)
         }
         END_STATE()
 
-        WEBVTT_BEGIN_STATE(TagState) {
+        WEBVTT_BEGIN_STATE(TagState)
+        {
             if (isTokenizerWhitespace(cc)) {
-                ASSERT(result.isEmpty());
+                DCHECK(result.isEmpty());
                 WEBVTT_ADVANCE_TO(StartTagAnnotationState);
             } else if (cc == '.') {
-                ASSERT(result.isEmpty());
+                DCHECK(result.isEmpty());
                 WEBVTT_ADVANCE_TO(StartTagClassState);
             } else if (cc == '/') {
                 WEBVTT_ADVANCE_TO(EndTagState);
@@ -187,8 +198,9 @@ bool VTTTokenizer::nextToken(VTTToken& token)
                 result.append(cc);
                 WEBVTT_ADVANCE_TO(TimestampTagState);
             } else if (cc == '>' || cc == kEndOfFileMarker) {
-                ASSERT(result.isEmpty());
-                return advanceAndEmitToken(m_input, token, VTTToken::StartTag(result.toString()));
+                DCHECK(result.isEmpty());
+                return advanceAndEmitToken(m_input, token,
+                    VTTToken::StartTag(result.toString()));
             } else {
                 result.append(cc);
                 WEBVTT_ADVANCE_TO(StartTagState);
@@ -196,13 +208,15 @@ bool VTTTokenizer::nextToken(VTTToken& token)
         }
         END_STATE()
 
-        WEBVTT_BEGIN_STATE(StartTagState) {
+        WEBVTT_BEGIN_STATE(StartTagState)
+        {
             if (isTokenizerWhitespace(cc)) {
                 WEBVTT_ADVANCE_TO(StartTagAnnotationState);
             } else if (cc == '.') {
                 WEBVTT_ADVANCE_TO(StartTagClassState);
             } else if (cc == '>' || cc == kEndOfFileMarker) {
-                return advanceAndEmitToken(m_input, token, VTTToken::StartTag(result.toString()));
+                return advanceAndEmitToken(m_input, token,
+                    VTTToken::StartTag(result.toString()));
             } else {
                 result.append(cc);
                 WEBVTT_ADVANCE_TO(StartTagState);
@@ -210,7 +224,8 @@ bool VTTTokenizer::nextToken(VTTToken& token)
         }
         END_STATE()
 
-        WEBVTT_BEGIN_STATE(StartTagClassState) {
+        WEBVTT_BEGIN_STATE(StartTagClassState)
+        {
             if (isTokenizerWhitespace(cc)) {
                 addNewClass(classes, buffer);
                 buffer.clear();
@@ -222,7 +237,9 @@ bool VTTTokenizer::nextToken(VTTToken& token)
             } else if (cc == '>' || cc == kEndOfFileMarker) {
                 addNewClass(classes, buffer);
                 buffer.clear();
-                return advanceAndEmitToken(m_input, token, VTTToken::StartTag(result.toString(), classes.toAtomicString()));
+                return advanceAndEmitToken(
+                    m_input, token,
+                    VTTToken::StartTag(result.toString(), classes.toAtomicString()));
             } else {
                 buffer.append(cc);
                 WEBVTT_ADVANCE_TO(StartTagClassState);
@@ -230,36 +247,42 @@ bool VTTTokenizer::nextToken(VTTToken& token)
         }
         END_STATE()
 
-        WEBVTT_BEGIN_STATE(StartTagAnnotationState) {
+        WEBVTT_BEGIN_STATE(StartTagAnnotationState)
+        {
             if (cc == '>' || cc == kEndOfFileMarker) {
-                return advanceAndEmitToken(m_input, token, VTTToken::StartTag(result.toString(), classes.toAtomicString(), buffer.toAtomicString()));
+                return advanceAndEmitToken(
+                    m_input, token,
+                    VTTToken::StartTag(result.toString(), classes.toAtomicString(),
+                        buffer.toAtomicString()));
             }
             buffer.append(cc);
             WEBVTT_ADVANCE_TO(StartTagAnnotationState);
         }
         END_STATE()
 
-        WEBVTT_BEGIN_STATE(EndTagState) {
+        WEBVTT_BEGIN_STATE(EndTagState)
+        {
             if (cc == '>' || cc == kEndOfFileMarker)
-                return advanceAndEmitToken(m_input, token, VTTToken::EndTag(result.toString()));
+                return advanceAndEmitToken(m_input, token,
+                    VTTToken::EndTag(result.toString()));
             result.append(cc);
             WEBVTT_ADVANCE_TO(EndTagState);
         }
         END_STATE()
 
-        WEBVTT_BEGIN_STATE(TimestampTagState) {
+        WEBVTT_BEGIN_STATE(TimestampTagState)
+        {
             if (cc == '>' || cc == kEndOfFileMarker)
-                return advanceAndEmitToken(m_input, token, VTTToken::TimestampTag(result.toString()));
+                return advanceAndEmitToken(m_input, token,
+                    VTTToken::TimestampTag(result.toString()));
             result.append(cc);
             WEBVTT_ADVANCE_TO(TimestampTagState);
         }
         END_STATE()
-
     }
 
-    ASSERT_NOT_REACHED();
+    NOTREACHED();
     return false;
 }
 
-}
-
+} // namespace blink

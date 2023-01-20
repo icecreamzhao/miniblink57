@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -9,10 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #ifndef SkSVGGradient_DEFINED
 #define SkSVGGradient_DEFINED
 
@@ -24,19 +16,12 @@ public:
     virtual SkSVGElement* getGradient();
     virtual bool isDef();
     virtual bool isNotDef();
-<<<<<<< HEAD
     virtual void write(SkSVGParser&, SkString& color);
 
 protected:
     void translate(SkSVGParser&, bool defState);
     void translateGradientUnits(SkString& units);
 
-=======
-    virtual void write(SkSVGParser& , SkString& color);
-protected:
-    void translate(SkSVGParser& , bool defState);
-    void translateGradientUnits(SkString& units);
->>>>>>> miniblink49
 private:
     typedef SkSVGElement INHERITED;
 };

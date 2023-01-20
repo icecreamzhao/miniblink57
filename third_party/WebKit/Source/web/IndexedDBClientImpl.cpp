@@ -26,19 +26,11 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "web/IndexedDBClientImpl.h"
 
 #include "bindings/core/v8/WorkerOrWorkletScriptController.h"
 #include "core/dom/Document.h"
 #include "core/dom/ExecutionContext.h"
-=======
-#include "config.h"
-#include "web/IndexedDBClientImpl.h"
-
-#include "bindings/core/v8/WorkerScriptController.h"
-#include "core/dom/Document.h"
->>>>>>> miniblink49
 #include "core/workers/WorkerGlobalScope.h"
 #include "platform/weborigin/SecurityOrigin.h"
 #include "public/platform/WebSecurityOrigin.h"
@@ -49,7 +41,6 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 IndexedDBClient* IndexedDBClientImpl::create(LocalFrame& frame)
 {
     return new IndexedDBClientImpl(frame);
@@ -90,27 +81,6 @@ bool IndexedDBClientImpl::allowIndexedDB(ExecutionContext* context,
     WorkerGlobalScope& workerGlobalScope = *toWorkerGlobalScope(context);
     return WorkerContentSettingsClient::from(workerGlobalScope)
         ->allowIndexedDB(name);
-=======
-IndexedDBClient* IndexedDBClientImpl::create()
-{
-    return new IndexedDBClientImpl();
-}
-
-bool IndexedDBClientImpl::allowIndexedDB(ExecutionContext* context, const String& name)
-{
-    ASSERT_WITH_SECURITY_IMPLICATION(context->isDocument() || context->isWorkerGlobalScope());
-
-    if (context->isDocument()) {
-        WebSecurityOrigin origin(context->securityOrigin());
-        Document* document = toDocument(context);
-        WebLocalFrameImpl* webFrame = WebLocalFrameImpl::fromFrame(document->frame());
-        // FIXME: webFrame->contentSettingsClient() returns 0 in test_shell and content_shell http://crbug.com/137269
-        return !webFrame->contentSettingsClient() || webFrame->contentSettingsClient()->allowIndexedDB(name, origin);
-    }
-
-    WorkerGlobalScope& workerGlobalScope = *toWorkerGlobalScope(context);
-    return WorkerContentSettingsClient::from(workerGlobalScope)->allowIndexedDB(name);
->>>>>>> miniblink49
 }
 
 } // namespace blink

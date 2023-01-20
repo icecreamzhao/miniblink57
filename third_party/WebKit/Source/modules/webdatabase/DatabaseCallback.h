@@ -44,10 +44,6 @@ public:
     virtual bool handleEvent(Database*) = 0;
 };
 
-<<<<<<< HEAD
 } // namespace blink
-=======
-}
->>>>>>> miniblink49
 
 #endif // DatabaseCallback_h

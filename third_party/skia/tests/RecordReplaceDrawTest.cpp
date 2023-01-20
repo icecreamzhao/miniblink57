@@ -9,11 +9,7 @@
 
 #if SK_SUPPORT_GPU
 
-<<<<<<< HEAD
 #include "GrContext.h"
-=======
-#include "GrContextFactory.h"
->>>>>>> miniblink49
 #include "GrLayerCache.h"
 #include "GrRecordReplaceDraw.h"
 #include "RecordTestUtils.h"
@@ -28,7 +24,6 @@ static const int kHeight = 100;
 
 class JustOneDraw : public SkPicture::AbortCallback {
 public:
-<<<<<<< HEAD
     JustOneDraw()
         : fCalls(0)
     {
@@ -36,24 +31,14 @@ public:
 
     bool abort() override { return fCalls++ > 0; }
 
-=======
-    JustOneDraw() : fCalls(0) {}
-
-    bool abort() override { return fCalls++ > 0; }
->>>>>>> miniblink49
 private:
     int fCalls;
 };
 
 // Make sure the abort callback works
-<<<<<<< HEAD
 DEF_TEST(RecordReplaceDraw_Abort, r)
 {
     sk_sp<SkPicture> pic;
-=======
-DEF_TEST(RecordReplaceDraw_Abort, r) {
-    SkAutoTUnref<const SkPicture> pic;
->>>>>>> miniblink49
 
     {
         // Record two commands.
@@ -63,18 +48,13 @@ DEF_TEST(RecordReplaceDraw_Abort, r) {
         canvas->drawRect(SkRect::MakeWH(SkIntToScalar(kWidth), SkIntToScalar(kHeight)), SkPaint());
         canvas->clipRect(SkRect::MakeWH(SkIntToScalar(kWidth), SkIntToScalar(kHeight)));
 
-<<<<<<< HEAD
         pic = recorder.finishRecordingAsPicture();
-=======
-        pic.reset(recorder.endRecording());
->>>>>>> miniblink49
     }
 
     SkRecord rerecord;
     SkRecorder canvas(&rerecord, kWidth, kHeight);
 
     JustOneDraw callback;
-<<<<<<< HEAD
     GrRecordReplaceDraw(pic.get(), &canvas, nullptr, SkMatrix::I(), &callback);
 
     switch (rerecord.count()) {
@@ -88,33 +68,13 @@ DEF_TEST(RecordReplaceDraw_Abort, r) {
         break;
     default:
         REPORTER_ASSERT(r, false);
-=======
-    GrRecordReplaceDraw(pic, &canvas, NULL, SkMatrix::I(), &callback);
-
-    switch (rerecord.count()) {
-        case 3:
-            assert_type<SkRecords::Save>(r, rerecord, 0);
-            assert_type<SkRecords::DrawRect>(r, rerecord, 1);
-            assert_type<SkRecords::Restore>(r, rerecord, 2);
-            break;
-        case 1:
-            assert_type<SkRecords::DrawRect>(r, rerecord, 0);
-            break;
-        default:
-            REPORTER_ASSERT(r, false);
->>>>>>> miniblink49
     }
 }
 
 // Make sure GrRecordReplaceDraw balances unbalanced saves
-<<<<<<< HEAD
 DEF_TEST(RecordReplaceDraw_Unbalanced, r)
 {
     sk_sp<SkPicture> pic;
-=======
-DEF_TEST(RecordReplaceDraw_Unbalanced, r) {
-    SkAutoTUnref<const SkPicture> pic;
->>>>>>> miniblink49
 
     {
         SkPictureRecorder recorder;
@@ -123,28 +83,19 @@ DEF_TEST(RecordReplaceDraw_Unbalanced, r) {
         // We won't balance this, but GrRecordReplaceDraw will for us.
         canvas->save();
         canvas->scale(2, 2);
-<<<<<<< HEAD
         pic = recorder.finishRecordingAsPicture();
-=======
-        pic.reset(recorder.endRecording());
->>>>>>> miniblink49
     }
 
     SkRecord rerecord;
     SkRecorder canvas(&rerecord, kWidth, kHeight);
 
-<<<<<<< HEAD
     GrRecordReplaceDraw(pic.get(), &canvas, nullptr, SkMatrix::I(), nullptr /*callback*/);
-=======
-    GrRecordReplaceDraw(pic, &canvas, NULL, SkMatrix::I(), NULL/*callback*/);
->>>>>>> miniblink49
 
     // ensure rerecord is balanced (in this case by checking that the count is odd)
     REPORTER_ASSERT(r, (rerecord.count() & 1) == 1);
 }
 
 // Test out the layer replacement functionality with and w/o a BBH
-<<<<<<< HEAD
 void test_replacements(skiatest::Reporter* r, GrContext* context, bool doReplace)
 {
     sk_sp<SkPicture> pic;
@@ -206,81 +157,6 @@ DEF_GPUTEST_FOR_RENDERING_CONTEXTS(RecordReplaceDraw, r, ctxInfo)
 {
     test_replacements(r, ctxInfo.grContext(), true);
     test_replacements(r, ctxInfo.grContext(), false);
-=======
-void test_replacements(skiatest::Reporter* r, GrContext* context, bool useBBH) {
-    SkAutoTUnref<const SkPicture> pic;
-
-    {
-        SkRTreeFactory bbhFactory;
-        SkPictureRecorder recorder;
-        SkCanvas* canvas = recorder.beginRecording(SkIntToScalar(kWidth), SkIntToScalar(kHeight),
-                                                   useBBH ? &bbhFactory : NULL);
-
-        SkPaint paint;
-        canvas->saveLayer(NULL, &paint);
-        canvas->clear(SK_ColorRED);
-        canvas->restore();
-        canvas->drawRect(SkRect::MakeWH(SkIntToScalar(kWidth / 2), SkIntToScalar(kHeight / 2)),
-                         SkPaint());
-        pic.reset(recorder.endRecording());
-    }
-
-    unsigned key[1] = { 0 };
-
-    SkPaint paint;
-    GrLayerCache* layerCache = context->getLayerCache();
-    GrCachedLayer* layer = layerCache->findLayerOrCreate(pic->uniqueID(), 0, 2,
-                                                         SkIRect::MakeWH(kWidth, kHeight),
-                                                         SkIRect::MakeWH(kWidth, kHeight),
-                                                         SkMatrix::I(), key, 1, &paint);
-
-    GrSurfaceDesc desc;
-    desc.fConfig = kSkia8888_GrPixelConfig;
-    desc.fFlags = kRenderTarget_GrSurfaceFlag;
-    desc.fWidth = kWidth;
-    desc.fHeight = kHeight;
-    desc.fSampleCnt = 0;
-
-    SkAutoTUnref<GrTexture> texture(context->textureProvider()->createTexture(desc,
-        false, NULL, 0));
-    layer->setTexture(texture, SkIRect::MakeWH(kWidth, kHeight));
-
-    SkAutoTUnref<SkBBoxHierarchy> bbh;
-
-    SkRecord rerecord;
-    SkRecorder canvas(&rerecord, kWidth, kHeight);
-    GrRecordReplaceDraw(pic, &canvas, layerCache, SkMatrix::I(), NULL/*callback*/);
-
-    int recount = rerecord.count();
-    REPORTER_ASSERT(r, 2 == recount || 4 == recount);
-
-    int index = 0;
-    if (4 == recount) {
-        assert_type<SkRecords::Save>(r, rerecord, 0);
-        index += 1;
-    }
-    assert_type<SkRecords::DrawSprite>(r, rerecord, index + 0);
-    assert_type<SkRecords::DrawRect>(r, rerecord, index + 1);
-    if (4 == recount) {
-        assert_type<SkRecords::Restore>(r, rerecord, 3);
-    }
-}
-
-DEF_GPUTEST(RecordReplaceDraw, r, factory) { 
-    for (int type = 0; type < GrContextFactory::kLastGLContextType; ++type) {
-        GrContextFactory::GLContextType glType = static_cast<GrContextFactory::GLContextType>(type);
-        if (!GrContextFactory::IsRenderingGLContext(glType)) {
-            continue;
-        }
-        GrContext* context = factory->get(glType);
-        if (NULL == context) {
-            continue;
-        }
-
-        test_replacements(r, context, true);
-        test_replacements(r, context, false);
-    }
->>>>>>> miniblink49
 }
 
 #endif

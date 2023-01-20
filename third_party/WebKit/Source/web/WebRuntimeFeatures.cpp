@@ -28,18 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "public/web/WebRuntimeFeatures.h"
 
 #include "platform/RuntimeEnabledFeatures.h"
 #include "wtf/Assertions.h"
-=======
-#include "config.h"
-#include "public/web/WebRuntimeFeatures.h"
-
-#include "platform/RuntimeEnabledFeatures.h"
-#include "web/WebMediaPlayerClientImpl.h"
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -53,7 +45,6 @@ void WebRuntimeFeatures::enableWebBluetooth(bool enable)
     RuntimeEnabledFeatures::setWebBluetoothEnabled(enable);
 }
 
-<<<<<<< HEAD
 void WebRuntimeFeatures::enableWebAssemblySerialization(bool enable)
 {
     RuntimeEnabledFeatures::setWebAssemblySerializationEnabled(enable);
@@ -66,39 +57,15 @@ void WebRuntimeFeatures::enableWebUsb(bool enable)
 
 void WebRuntimeFeatures::enableFeatureFromString(const std::string& name,
     bool enable)
-=======
-void WebRuntimeFeatures::enableFeatureFromString(const WebString& name, bool enable)
->>>>>>> miniblink49
 {
     RuntimeEnabledFeatures::setFeatureEnabledFromString(name, enable);
 }
 
-<<<<<<< HEAD
-=======
-void WebRuntimeFeatures::enableBleedingEdgeFastPaths(bool enable)
-{
-    ASSERT(enable);
-    RuntimeEnabledFeatures::setBleedingEdgeFastPathsEnabled(enable);
-    RuntimeEnabledFeatures::setWebAnimationsAPIEnabled(enable);
-}
-
-void WebRuntimeFeatures::enableBlinkScheduler(bool enable)
-{
-    RuntimeEnabledFeatures::setBlinkSchedulerEnabled(enable);
-}
-
-void WebRuntimeFeatures::enableCompositorAnimationTimelines(bool enable)
-{
-    RuntimeEnabledFeatures::setCompositorAnimationTimelinesEnabled(enable);
-}
-
->>>>>>> miniblink49
 void WebRuntimeFeatures::enableTestOnlyFeatures(bool enable)
 {
     RuntimeEnabledFeatures::setTestFeaturesEnabled(enable);
 }
 
-<<<<<<< HEAD
 void WebRuntimeFeatures::enableAccelerated2dCanvas(bool enable)
 {
     RuntimeEnabledFeatures::setAccelerated2dCanvasEnabled(enable);
@@ -127,11 +94,6 @@ void WebRuntimeFeatures::enableColorCorrectRenderingDefaultMode(bool enable)
 void WebRuntimeFeatures::enableTrueColorRendering(bool enable)
 {
     RuntimeEnabledFeatures::setTrueColorRenderingEnabled(enable);
-=======
-void WebRuntimeFeatures::enableApplicationCache(bool enable)
-{
-    RuntimeEnabledFeatures::setApplicationCacheEnabled(enable);
->>>>>>> miniblink49
 }
 
 void WebRuntimeFeatures::enableCompositedSelectionUpdate(bool enable)
@@ -159,20 +121,16 @@ void WebRuntimeFeatures::forceDisplayList2dCanvas(bool enable)
     RuntimeEnabledFeatures::setForceDisplayList2dCanvasEnabled(enable);
 }
 
-<<<<<<< HEAD
 void WebRuntimeFeatures::forceDisable2dCanvasCopyOnWrite(bool enable)
 {
     RuntimeEnabledFeatures::setForceDisable2dCanvasCopyOnWriteEnabled(enable);
 }
 
-=======
->>>>>>> miniblink49
 void WebRuntimeFeatures::enableDisplayList2dCanvas(bool enable)
 {
     RuntimeEnabledFeatures::setDisplayList2dCanvasEnabled(enable);
 }
 
-<<<<<<< HEAD
 void WebRuntimeFeatures::enableCanvas2dDynamicRenderingModeSwitching(
     bool enable)
 {
@@ -183,26 +141,6 @@ void WebRuntimeFeatures::enableCanvas2dDynamicRenderingModeSwitching(
 void WebRuntimeFeatures::enableDocumentWriteEvaluator(bool enable)
 {
     RuntimeEnabledFeatures::setDocumentWriteEvaluatorEnabled(enable);
-=======
-void WebRuntimeFeatures::enableEncryptedMedia(bool enable)
-{
-    RuntimeEnabledFeatures::setEncryptedMediaEnabled(enable);
-}
-
-bool WebRuntimeFeatures::isEncryptedMediaEnabled()
-{
-    return RuntimeEnabledFeatures::encryptedMediaEnabled();
-}
-
-void WebRuntimeFeatures::enablePrefixedEncryptedMedia(bool enable)
-{
-    RuntimeEnabledFeatures::setPrefixedEncryptedMediaEnabled(enable);
-}
-
-bool WebRuntimeFeatures::isPrefixedEncryptedMediaEnabled()
-{
-    return RuntimeEnabledFeatures::prefixedEncryptedMediaEnabled();
->>>>>>> miniblink49
 }
 
 void WebRuntimeFeatures::enableExperimentalCanvasFeatures(bool enable)
@@ -210,33 +148,26 @@ void WebRuntimeFeatures::enableExperimentalCanvasFeatures(bool enable)
     RuntimeEnabledFeatures::setExperimentalCanvasFeaturesEnabled(enable);
 }
 
-<<<<<<< HEAD
 void WebRuntimeFeatures::enableFasterLocationReload(bool enable)
 {
     RuntimeEnabledFeatures::setFasterLocationReloadEnabled(enable);
 }
 
-=======
->>>>>>> miniblink49
 void WebRuntimeFeatures::enableFastMobileScrolling(bool enable)
 {
     RuntimeEnabledFeatures::setFastMobileScrollingEnabled(enable);
 }
 
-<<<<<<< HEAD
 void WebRuntimeFeatures::enableFeaturePolicy(bool enable)
 {
     RuntimeEnabledFeatures::setFeaturePolicyEnabled(enable);
 }
 
-=======
->>>>>>> miniblink49
 void WebRuntimeFeatures::enableFileSystem(bool enable)
 {
     RuntimeEnabledFeatures::setFileSystemEnabled(enable);
 }
 
-<<<<<<< HEAD
 void WebRuntimeFeatures::enableGamepadExtensions(bool enable)
 {
     RuntimeEnabledFeatures::setGamepadExtensionsEnabled(enable);
@@ -260,16 +191,6 @@ void WebRuntimeFeatures::enableInputMultipleFieldsUI(bool enable)
 void WebRuntimeFeatures::enableLazyParseCSS(bool enable)
 {
     RuntimeEnabledFeatures::setLazyParseCSSEnabled(enable);
-=======
-void WebRuntimeFeatures::enableImageColorProfiles(bool enable)
-{
-    RuntimeEnabledFeatures::setImageColorProfilesEnabled(enable);
-}
-
-void WebRuntimeFeatures::enableMediaPlayer(bool enable)
-{
-    RuntimeEnabledFeatures::setMediaEnabled(enable);
->>>>>>> miniblink49
 }
 
 void WebRuntimeFeatures::enableMediaCapture(bool enable)
@@ -277,7 +198,6 @@ void WebRuntimeFeatures::enableMediaCapture(bool enable)
     RuntimeEnabledFeatures::setMediaCaptureEnabled(enable);
 }
 
-<<<<<<< HEAD
 void WebRuntimeFeatures::enableMediaDocumentDownloadButton(bool enable)
 {
     RuntimeEnabledFeatures::setMediaDocumentDownloadButtonEnabled(enable);
@@ -286,11 +206,6 @@ void WebRuntimeFeatures::enableMediaDocumentDownloadButton(bool enable)
 void WebRuntimeFeatures::enableMediaSession(bool enable)
 {
     RuntimeEnabledFeatures::setMediaSessionEnabled(enable);
-=======
-void WebRuntimeFeatures::enableMediaSource(bool enable)
-{
-    RuntimeEnabledFeatures::setMediaSourceEnabled(enable);
->>>>>>> miniblink49
 }
 
 void WebRuntimeFeatures::enableNotificationConstructor(bool enable)
@@ -298,14 +213,11 @@ void WebRuntimeFeatures::enableNotificationConstructor(bool enable)
     RuntimeEnabledFeatures::setNotificationConstructorEnabled(enable);
 }
 
-<<<<<<< HEAD
 void WebRuntimeFeatures::enableNotificationContentImage(bool enable)
 {
     RuntimeEnabledFeatures::setNotificationContentImageEnabled(enable);
 }
 
-=======
->>>>>>> miniblink49
 void WebRuntimeFeatures::enableNotifications(bool enable)
 {
     RuntimeEnabledFeatures::setNotificationsEnabled(enable);
@@ -321,20 +233,16 @@ void WebRuntimeFeatures::enableNetworkInformation(bool enable)
     RuntimeEnabledFeatures::setNetworkInformationEnabled(enable);
 }
 
-<<<<<<< HEAD
 void WebRuntimeFeatures::enableOnDeviceChange(bool enable)
 {
     RuntimeEnabledFeatures::setOnDeviceChangeEnabled(enable);
 }
 
-=======
->>>>>>> miniblink49
 void WebRuntimeFeatures::enableOrientationEvent(bool enable)
 {
     RuntimeEnabledFeatures::setOrientationEventEnabled(enable);
 }
 
-<<<<<<< HEAD
 void WebRuntimeFeatures::enableOriginTrials(bool enable)
 {
     RuntimeEnabledFeatures::setOriginTrialsEnabled(enable);
@@ -345,14 +253,11 @@ bool WebRuntimeFeatures::isOriginTrialsEnabled()
     return RuntimeEnabledFeatures::originTrialsEnabled();
 }
 
-=======
->>>>>>> miniblink49
 void WebRuntimeFeatures::enablePagePopup(bool enable)
 {
     RuntimeEnabledFeatures::setPagePopupEnabled(enable);
 }
 
-<<<<<<< HEAD
 void WebRuntimeFeatures::enableMiddleClickAutoscroll(bool enable)
 {
     RuntimeEnabledFeatures::setMiddleClickAutoscrollEnabled(enable);
@@ -373,27 +278,14 @@ void WebRuntimeFeatures::enablePaymentRequest(bool enable)
     RuntimeEnabledFeatures::setPaymentRequestEnabled(enable);
 }
 
-=======
->>>>>>> miniblink49
 void WebRuntimeFeatures::enablePermissionsAPI(bool enable)
 {
     RuntimeEnabledFeatures::setPermissionsEnabled(enable);
 }
 
-<<<<<<< HEAD
 void WebRuntimeFeatures::enablePointerEvent(bool enable)
 {
     RuntimeEnabledFeatures::setPointerEventEnabled(enable);
-=======
-void WebRuntimeFeatures::enableRequestAutocomplete(bool enable)
-{
-    RuntimeEnabledFeatures::setRequestAutocompleteEnabled(enable);
-}
-
-void WebRuntimeFeatures::enableScreenOrientation(bool enable)
-{
-    RuntimeEnabledFeatures::setScreenOrientationEnabled(enable);
->>>>>>> miniblink49
 }
 
 void WebRuntimeFeatures::enableScriptedSpeech(bool enable)
@@ -401,7 +293,6 @@ void WebRuntimeFeatures::enableScriptedSpeech(bool enable)
     RuntimeEnabledFeatures::setScriptedSpeechEnabled(enable);
 }
 
-<<<<<<< HEAD
 void WebRuntimeFeatures::enableSlimmingPaintV2(bool enable)
 {
     RuntimeEnabledFeatures::setSlimmingPaintV2Enabled(enable);
@@ -420,26 +311,6 @@ void WebRuntimeFeatures::enableSpeculativeLaunchServiceWorker(bool enable)
 void WebRuntimeFeatures::enableTouchEventFeatureDetection(bool enable)
 {
     RuntimeEnabledFeatures::setTouchEventFeatureDetectionEnabled(enable);
-=======
-void WebRuntimeFeatures::enableSlimmingPaint(bool enable)
-{
-    RuntimeEnabledFeatures::setSlimmingPaintEnabled(enable);
-}
-
-void WebRuntimeFeatures::enableTouch(bool enable)
-{
-    RuntimeEnabledFeatures::setTouchEnabled(enable);
-}
-
-void WebRuntimeFeatures::enableTouchIconLoading(bool enable)
-{
-    RuntimeEnabledFeatures::setTouchIconLoadingEnabled(enable);
-}
-
-void WebRuntimeFeatures::enableWebAudio(bool enable)
-{
-    RuntimeEnabledFeatures::setWebAudioEnabled(enable);
->>>>>>> miniblink49
 }
 
 void WebRuntimeFeatures::enableWebGLDraftExtensions(bool enable)
@@ -462,7 +333,6 @@ void WebRuntimeFeatures::enableOverlayScrollbars(bool enable)
     RuntimeEnabledFeatures::setOverlayScrollbarsEnabled(enable);
 }
 
-<<<<<<< HEAD
 void WebRuntimeFeatures::forceOverlayFullscreenVideo(bool enable)
 {
     RuntimeEnabledFeatures::setForceOverlayFullscreenVideoEnabled(enable);
@@ -471,11 +341,6 @@ void WebRuntimeFeatures::forceOverlayFullscreenVideo(bool enable)
 void WebRuntimeFeatures::enableSharedArrayBuffer(bool enable)
 {
     RuntimeEnabledFeatures::setSharedArrayBufferEnabled(enable);
-=======
-void WebRuntimeFeatures::enableOverlayFullscreenVideo(bool enable)
-{
-    RuntimeEnabledFeatures::setOverlayFullscreenVideoEnabled(enable);
->>>>>>> miniblink49
 }
 
 void WebRuntimeFeatures::enableSharedWorker(bool enable)
@@ -493,32 +358,11 @@ void WebRuntimeFeatures::enableCredentialManagerAPI(bool enable)
     RuntimeEnabledFeatures::setCredentialManagerEnabled(enable);
 }
 
-<<<<<<< HEAD
-=======
-void WebRuntimeFeatures::enableTextBlobs(bool enable)
-{
-    RuntimeEnabledFeatures::setTextBlobEnabled(enable);
-}
-
-void WebRuntimeFeatures::enableCSSViewport(bool enable)
-{
-    RuntimeEnabledFeatures::setCSSViewportEnabled(enable);
-}
-
->>>>>>> miniblink49
 void WebRuntimeFeatures::enableV8IdleTasks(bool enable)
 {
     RuntimeEnabledFeatures::setV8IdleTasksEnabled(enable);
 }
 
-<<<<<<< HEAD
-=======
-void WebRuntimeFeatures::enableSVG1DOM(bool enable)
-{
-    RuntimeEnabledFeatures::setSVG1DOMEnabled(enable);
-}
-
->>>>>>> miniblink49
 void WebRuntimeFeatures::enableReducedReferrerGranularity(bool enable)
 {
     RuntimeEnabledFeatures::setReducedReferrerGranularityEnabled(enable);
@@ -529,30 +373,11 @@ void WebRuntimeFeatures::enablePushMessaging(bool enable)
     RuntimeEnabledFeatures::setPushMessagingEnabled(enable);
 }
 
-<<<<<<< HEAD
-=======
-void WebRuntimeFeatures::enablePushMessagingData(bool enable)
-{
-    RuntimeEnabledFeatures::setPushMessagingDataEnabled(enable);
-}
-
-void WebRuntimeFeatures::enableStaleWhileRevalidateCacheControl(bool enable)
-{
-    RuntimeEnabledFeatures::setStaleWhileRevalidateCacheControlEnabled(enable);
-}
-
-void WebRuntimeFeatures::enableUnsafeES3APIs(bool enable)
-{
-    RuntimeEnabledFeatures::setUnsafeES3APIsEnabled(enable);
-}
-
->>>>>>> miniblink49
 void WebRuntimeFeatures::enableWebVR(bool enable)
 {
     RuntimeEnabledFeatures::setWebVREnabled(enable);
 }
 
-<<<<<<< HEAD
 void WebRuntimeFeatures::enablePresentationAPI(bool enable)
 {
     RuntimeEnabledFeatures::setPresentationEnabled(enable);
@@ -640,6 +465,4 @@ void WebRuntimeFeatures::enableVideoFullscreenOrientationLock(bool enable)
     RuntimeEnabledFeatures::setVideoFullscreenOrientationLockEnabled(enable);
 }
 
-=======
->>>>>>> miniblink49
 } // namespace blink

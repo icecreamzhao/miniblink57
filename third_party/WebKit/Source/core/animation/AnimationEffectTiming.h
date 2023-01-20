@@ -5,46 +5,45 @@
 #ifndef AnimationEffectTiming_h
 #define AnimationEffectTiming_h
 
-#include "bindings/core/v8/ScriptWrappable.h"
 #include "core/CoreExport.h"
-#include "core/animation/AnimationEffect.h"
-#include "wtf/RefCounted.h"
+#include "core/animation/AnimationEffectReadOnly.h"
+#include "core/animation/AnimationEffectTimingReadOnly.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
+class ExceptionState;
 class UnrestrictedDoubleOrString;
 
-class CORE_EXPORT AnimationEffectTiming : public RefCountedWillBeGarbageCollectedFinalized<AnimationEffectTiming>, public ScriptWrappable {
+class CORE_EXPORT AnimationEffectTiming : public AnimationEffectTimingReadOnly {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<AnimationEffectTiming> create(AnimationEffect* parent);
-    double delay();
-    double endDelay();
-    String fill();
-    double iterationStart();
-    double iterations();
-    void duration(UnrestrictedDoubleOrString&);
-    double playbackRate();
-    String direction();
-    String easing();
+    static AnimationEffectTiming* create(AnimationEffectReadOnly* parent);
 
     void setDelay(double);
     void setEndDelay(double);
     void setFill(String);
-    void setIterationStart(double);
-    void setIterations(double);
-    void setDuration(const UnrestrictedDoubleOrString&);
+    void setIterationStart(double, ExceptionState&);
+    void setIterations(double, ExceptionState&);
+    void setDuration(const UnrestrictedDoubleOrString&, ExceptionState&);
     void setPlaybackRate(double);
     void setDirection(String);
-    void setEasing(String);
+    void setEasing(String, ExceptionState&);
 
-    DECLARE_TRACE();
+    bool isAnimationEffectTiming() const override { return true; }
+
+    DECLARE_VIRTUAL_TRACE();
 
 private:
-    RefPtrWillBeMember<AnimationEffect> m_parent;
-    explicit AnimationEffectTiming(AnimationEffect*);
+    explicit AnimationEffectTiming(AnimationEffectReadOnly*);
 };
+
+DEFINE_TYPE_CASTS(AnimationEffectTiming,
+    AnimationEffectTimingReadOnly,
+    timing,
+    timing->isAnimationEffectTiming(),
+    timing.isAnimationEffectTiming());
 
 } // namespace blink
 

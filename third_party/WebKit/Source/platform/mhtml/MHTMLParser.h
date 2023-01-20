@@ -33,10 +33,7 @@
 
 #include "platform/SharedBufferChunkReader.h"
 #include "platform/heap/Handle.h"
-<<<<<<< HEAD
 #include "platform/weborigin/KURL.h"
-=======
->>>>>>> miniblink49
 #include "wtf/RefPtr.h"
 #include "wtf/Vector.h"
 
@@ -47,16 +44,11 @@ class String;
 namespace blink {
 
 class ArchiveResource;
-<<<<<<< HEAD
-=======
-class MHTMLArchive;
->>>>>>> miniblink49
 class MIMEHeader;
 class SharedBuffer;
 
 class PLATFORM_EXPORT MHTMLParser final {
     STACK_ALLOCATED();
-<<<<<<< HEAD
 
 public:
     explicit MHTMLParser(PassRefPtr<const SharedBuffer>);
@@ -83,30 +75,5 @@ private:
 };
 
 } // namespace blink
-=======
-public:
-    explicit MHTMLParser(SharedBuffer*);
-
-    PassRefPtrWillBeRawPtr<MHTMLArchive> parseArchive();
-
-    size_t frameCount() const;
-    MHTMLArchive* frameAt(size_t) const;
-
-    size_t subResourceCount() const;
-    ArchiveResource* subResourceAt(size_t) const;
-
-private:
-    PassRefPtrWillBeRawPtr<MHTMLArchive> parseArchiveWithHeader(MIMEHeader*);
-    PassRefPtrWillBeRawPtr<ArchiveResource> parseNextPart(const MIMEHeader&, const String& endOfPartBoundary, const String& endOfDocumentBoundary, bool& endOfArchiveReached);
-
-    void addResourceToArchive(ArchiveResource*, MHTMLArchive*);
-
-    SharedBufferChunkReader m_lineReader;
-    WillBeHeapVector<RefPtrWillBeMember<ArchiveResource>> m_resources;
-    WillBeHeapVector<RefPtrWillBeMember<MHTMLArchive>> m_frames;
-};
-
-}
->>>>>>> miniblink49
 
 #endif

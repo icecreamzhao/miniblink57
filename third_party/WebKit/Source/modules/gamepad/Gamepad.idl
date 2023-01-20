@@ -23,7 +23,6 @@
  * DAMAGE.
  */
 
-<<<<<<< HEAD
 // https://w3c.github.io/gamepad/extensions.html#gamepadhand-enum
 enum GamepadHand {
   "left",
@@ -32,17 +31,11 @@ enum GamepadHand {
 
 // https://w3c.github.io/gamepad/#gamepad-interface
 interface Gamepad {
-=======
-[
-    GarbageCollected,
-] interface Gamepad {
->>>>>>> miniblink49
     readonly attribute DOMString id;
     readonly attribute unsigned long index;
     readonly attribute boolean connected;
     readonly attribute unsigned long long timestamp;
     readonly attribute DOMString mapping;
-<<<<<<< HEAD
     // https://github.com/w3c/gamepad/issues/28
     readonly attribute double[] axes;
     readonly attribute GamepadButton[] buttons;
@@ -52,8 +45,4 @@ interface Gamepad {
 
     // https://w3c.github.io/webvr/#interface-gamepad
     [OriginTrialEnabled=GamepadExtensions, MeasureAs=GamepadDisplayId] readonly attribute unsigned long displayId;
-=======
-    readonly attribute double[] axes;
-    readonly attribute GamepadButton[] buttons;
->>>>>>> miniblink49
 };

@@ -8,7 +8,6 @@
 #ifndef SK_COMMON_FLAGS_H
 #define SK_COMMON_FLAGS_H
 
-<<<<<<< HEAD
 #include "../private/SkTArray.h"
 #include "SkCommandLineFlags.h"
 #include "SkString.h"
@@ -19,40 +18,23 @@ DECLARE_bool(gpu);
 DECLARE_string(images);
 DECLARE_string(colorImages);
 DECLARE_bool(simpleCodec);
-=======
-#include "SkCommandLineFlags.h"
-
-DECLARE_string(config);
-DECLARE_bool(cpu);
-DECLARE_bool(dryRun);
-DECLARE_bool(gpu);
-DECLARE_string(gpuAPI);
-DECLARE_string(images);
->>>>>>> miniblink49
 DECLARE_string(match);
 DECLARE_bool(quiet);
 DECLARE_bool(resetGpuContext);
 DECLARE_bool(preAbandonGpuContext);
 DECLARE_bool(abandonGpuContext);
-<<<<<<< HEAD
 DECLARE_bool(releaseAndAbandonGpuContext);
-=======
->>>>>>> miniblink49
 DECLARE_string(skps);
 DECLARE_int32(threads);
 DECLARE_string(resourcePath);
 DECLARE_bool(verbose);
 DECLARE_bool(veryVerbose);
 DECLARE_string(writePath);
-<<<<<<< HEAD
 DECLARE_bool(pre_log);
-=======
->>>>>>> miniblink49
 
 DECLARE_string(key);
 DECLARE_string(properties);
 
-<<<<<<< HEAD
 /**
  *  Helper to assist in collecting image paths from |dir| specified through a command line flag.
  *
@@ -66,6 +48,4 @@ DECLARE_string(properties);
  */
 bool CollectImages(SkCommandLineFlags::StringArray dir, SkTArray<SkString>* output);
 
-=======
->>>>>>> miniblink49
 #endif

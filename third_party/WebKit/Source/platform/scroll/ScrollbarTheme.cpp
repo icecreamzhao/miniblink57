@@ -23,17 +23,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/scroll/ScrollbarTheme.h"
 
 #include "platform/PlatformMouseEvent.h"
 #include "platform/RuntimeEnabledFeatures.h"
 #include "platform/graphics/Color.h"
 #include "platform/graphics/GraphicsContext.h"
-<<<<<<< HEAD
 #include "platform/graphics/GraphicsContextStateSaver.h"
 #include "platform/graphics/paint/CompositingRecorder.h"
 #include "platform/graphics/paint/CullRect.h"
@@ -41,27 +36,15 @@
 #include "platform/graphics/paint/DrawingRecorder.h"
 #include "platform/graphics/paint/PaintController.h"
 #include "platform/scroll/Scrollbar.h"
-=======
-#include "platform/graphics/paint/DisplayItemList.h"
-#include "platform/graphics/paint/DrawingDisplayItem.h"
-#include "platform/graphics/paint/DrawingRecorder.h"
-#include "platform/scroll/ScrollbarThemeClient.h"
->>>>>>> miniblink49
 #include "platform/scroll/ScrollbarThemeMock.h"
 #include "platform/scroll/ScrollbarThemeOverlayMock.h"
 #include "public/platform/Platform.h"
 #include "public/platform/WebPoint.h"
 #include "public/platform/WebRect.h"
 #include "public/platform/WebScrollbarBehavior.h"
-<<<<<<< HEAD
 #include "wtf/Optional.h"
 
 #if !OS(MACOSX)
-=======
-
-#if !OS(MACOSX)
-#include "public/platform/WebRect.h"
->>>>>>> miniblink49
 #include "public/platform/WebThemeEngine.h"
 #endif
 
@@ -69,7 +52,6 @@ namespace blink {
 
 bool ScrollbarTheme::gMockScrollbarsEnabled = false;
 
-<<<<<<< HEAD
 static inline bool shouldPaintScrollbarPart(const IntRect& partRect,
     const CullRect& cullRect)
 {
@@ -81,16 +63,6 @@ bool ScrollbarTheme::paint(const Scrollbar& scrollbar,
     const CullRect& cullRect)
 {
     // Create the ScrollbarControlPartMask based on the cullRect
-=======
-static inline bool shouldPaintScrollbarPart(const IntRect& partRect, const IntRect& damageRect)
-{
-    return (RuntimeEnabledFeatures::slimmingPaintEnabled() && !partRect.isEmpty()) || damageRect.intersects(partRect);
-}
-
-bool ScrollbarTheme::paint(ScrollbarThemeClient* scrollbar, GraphicsContext* graphicsContext, const IntRect& damageRect)
-{
-    // Create the ScrollbarControlPartMask based on the damageRect
->>>>>>> miniblink49
     ScrollbarControlPartMask scrollMask = NoPart;
 
     IntRect backButtonStartPaintRect;
@@ -99,7 +71,6 @@ bool ScrollbarTheme::paint(ScrollbarThemeClient* scrollbar, GraphicsContext* gra
     IntRect forwardButtonEndPaintRect;
     if (hasButtons(scrollbar)) {
         backButtonStartPaintRect = backButtonRect(scrollbar, BackButtonStartPart, true);
-<<<<<<< HEAD
         if (shouldPaintScrollbarPart(backButtonStartPaintRect, cullRect))
             scrollMask |= BackButtonStartPart;
         backButtonEndPaintRect = backButtonRect(scrollbar, BackButtonEndPart, true);
@@ -110,18 +81,6 @@ bool ScrollbarTheme::paint(ScrollbarThemeClient* scrollbar, GraphicsContext* gra
             scrollMask |= ForwardButtonStartPart;
         forwardButtonEndPaintRect = forwardButtonRect(scrollbar, ForwardButtonEndPart, true);
         if (shouldPaintScrollbarPart(forwardButtonEndPaintRect, cullRect))
-=======
-        if (shouldPaintScrollbarPart(backButtonStartPaintRect, damageRect))
-            scrollMask |= BackButtonStartPart;
-        backButtonEndPaintRect = backButtonRect(scrollbar, BackButtonEndPart, true);
-        if (shouldPaintScrollbarPart(backButtonEndPaintRect, damageRect))
-            scrollMask |= BackButtonEndPart;
-        forwardButtonStartPaintRect = forwardButtonRect(scrollbar, ForwardButtonStartPart, true);
-        if (shouldPaintScrollbarPart(forwardButtonStartPaintRect, damageRect))
-            scrollMask |= ForwardButtonStartPart;
-        forwardButtonEndPaintRect = forwardButtonRect(scrollbar, ForwardButtonEndPart, true);
-        if (shouldPaintScrollbarPart(forwardButtonEndPaintRect, damageRect))
->>>>>>> miniblink49
             scrollMask |= ForwardButtonEndPart;
     }
 
@@ -129,29 +88,16 @@ bool ScrollbarTheme::paint(ScrollbarThemeClient* scrollbar, GraphicsContext* gra
     IntRect thumbRect;
     IntRect endTrackRect;
     IntRect trackPaintRect = trackRect(scrollbar, true);
-<<<<<<< HEAD
     scrollMask |= TrackBGPart;
-=======
-    if (RuntimeEnabledFeatures::slimmingPaintEnabled() || damageRect.intersects(trackPaintRect))
-        scrollMask |= TrackBGPart;
->>>>>>> miniblink49
     bool thumbPresent = hasThumb(scrollbar);
     if (thumbPresent) {
         IntRect track = trackRect(scrollbar);
         splitTrack(scrollbar, track, startTrackRect, thumbRect, endTrackRect);
-<<<<<<< HEAD
         if (shouldPaintScrollbarPart(thumbRect, cullRect))
             scrollMask |= ThumbPart;
         if (shouldPaintScrollbarPart(startTrackRect, cullRect))
             scrollMask |= BackTrackPart;
         if (shouldPaintScrollbarPart(endTrackRect, cullRect))
-=======
-        if (shouldPaintScrollbarPart(thumbRect, damageRect))
-            scrollMask |= ThumbPart;
-        if (shouldPaintScrollbarPart(startTrackRect, damageRect))
-            scrollMask |= BackTrackPart;
-        if (shouldPaintScrollbarPart(endTrackRect, damageRect))
->>>>>>> miniblink49
             scrollMask |= ForwardTrackPart;
     }
 
@@ -160,7 +106,6 @@ bool ScrollbarTheme::paint(ScrollbarThemeClient* scrollbar, GraphicsContext* gra
 
     // Paint the back and forward buttons.
     if (scrollMask & BackButtonStartPart)
-<<<<<<< HEAD
         paintButton(graphicsContext, scrollbar, backButtonStartPaintRect,
             BackButtonStartPart);
     if (scrollMask & BackButtonEndPart)
@@ -172,15 +117,6 @@ bool ScrollbarTheme::paint(ScrollbarThemeClient* scrollbar, GraphicsContext* gra
     if (scrollMask & ForwardButtonEndPart)
         paintButton(graphicsContext, scrollbar, forwardButtonEndPaintRect,
             ForwardButtonEndPart);
-=======
-        paintButton(graphicsContext, scrollbar, backButtonStartPaintRect, BackButtonStartPart);
-    if (scrollMask & BackButtonEndPart)
-        paintButton(graphicsContext, scrollbar, backButtonEndPaintRect, BackButtonEndPart);
-    if (scrollMask & ForwardButtonStartPart)
-        paintButton(graphicsContext, scrollbar, forwardButtonStartPaintRect, ForwardButtonStartPart);
-    if (scrollMask & ForwardButtonEndPart)
-        paintButton(graphicsContext, scrollbar, forwardButtonEndPaintRect, ForwardButtonEndPart);
->>>>>>> miniblink49
 
     if (scrollMask & TrackBGPart)
         paintTrackBackground(graphicsContext, scrollbar, trackPaintRect);
@@ -188,23 +124,16 @@ bool ScrollbarTheme::paint(ScrollbarThemeClient* scrollbar, GraphicsContext* gra
     if ((scrollMask & ForwardTrackPart) || (scrollMask & BackTrackPart)) {
         // Paint the track pieces above and below the thumb.
         if (scrollMask & BackTrackPart)
-<<<<<<< HEAD
             paintTrackPiece(graphicsContext, scrollbar, startTrackRect,
                 BackTrackPart);
         if (scrollMask & ForwardTrackPart)
             paintTrackPiece(graphicsContext, scrollbar, endTrackRect,
                 ForwardTrackPart);
-=======
-            paintTrackPiece(graphicsContext, scrollbar, startTrackRect, BackTrackPart);
-        if (scrollMask & ForwardTrackPart)
-            paintTrackPiece(graphicsContext, scrollbar, endTrackRect, ForwardTrackPart);
->>>>>>> miniblink49
 
         paintTickmarks(graphicsContext, scrollbar, trackPaintRect);
     }
 
     // Paint the thumb.
-<<<<<<< HEAD
     if (scrollMask & ThumbPart) {
         Optional<CompositingRecorder> compositingRecorder;
         float opacity = thumbOpacity(scrollbar);
@@ -218,15 +147,10 @@ bool ScrollbarTheme::paint(ScrollbarThemeClient* scrollbar, GraphicsContext* gra
 
         paintThumb(graphicsContext, scrollbar, thumbRect);
     }
-=======
-    if (scrollMask & ThumbPart)
-        paintThumb(graphicsContext, scrollbar, thumbRect);
->>>>>>> miniblink49
 
     return true;
 }
 
-<<<<<<< HEAD
 ScrollbarPart ScrollbarTheme::hitTest(const ScrollbarThemeClient& scrollbar,
     const IntPoint& positionInRootFrame)
 {
@@ -238,18 +162,6 @@ ScrollbarPart ScrollbarTheme::hitTest(const ScrollbarThemeClient& scrollbar,
     testPosition.move(scrollbar.x(), scrollbar.y());
 
     if (!scrollbar.frameRect().contains(testPosition))
-=======
-ScrollbarPart ScrollbarTheme::hitTest(ScrollbarThemeClient* scrollbar, const IntPoint& position)
-{
-    ScrollbarPart result = NoPart;
-    if (!scrollbar->enabled())
-        return result;
-
-    IntPoint testPosition = scrollbar->convertFromContainingWindow(position);
-    testPosition.move(scrollbar->x(), scrollbar->y());
-
-    if (!scrollbar->frameRect().contains(testPosition))
->>>>>>> miniblink49
         return NoPart;
 
     result = ScrollbarBGPart;
@@ -268,7 +180,6 @@ ScrollbarPart ScrollbarTheme::hitTest(ScrollbarThemeClient* scrollbar, const Int
             result = ForwardTrackPart;
         else
             result = TrackBGPart;
-<<<<<<< HEAD
     } else if (backButtonRect(scrollbar, BackButtonStartPart)
                    .contains(testPosition)) {
         result = BackButtonStartPart;
@@ -280,73 +191,19 @@ ScrollbarPart ScrollbarTheme::hitTest(ScrollbarThemeClient* scrollbar, const Int
         result = ForwardButtonStartPart;
     } else if (forwardButtonRect(scrollbar, ForwardButtonEndPart)
                    .contains(testPosition)) {
-=======
-    } else if (backButtonRect(scrollbar, BackButtonStartPart).contains(testPosition)) {
-        result = BackButtonStartPart;
-    } else if (backButtonRect(scrollbar, BackButtonEndPart).contains(testPosition)) {
-        result = BackButtonEndPart;
-    } else if (forwardButtonRect(scrollbar, ForwardButtonStartPart).contains(testPosition)) {
-        result = ForwardButtonStartPart;
-    } else if (forwardButtonRect(scrollbar, ForwardButtonEndPart).contains(testPosition)) {
->>>>>>> miniblink49
         result = ForwardButtonEndPart;
     }
     return result;
 }
 
-<<<<<<< HEAD
 void ScrollbarTheme::paintScrollCorner(
     GraphicsContext& context,
     const DisplayItemClient& displayItemClient,
     const IntRect& cornerRect)
-=======
-void ScrollbarTheme::invalidatePart(ScrollbarThemeClient* scrollbar, ScrollbarPart part)
-{
-    if (part == NoPart)
-        return;
-
-    IntRect result;
-    switch (part) {
-    case BackButtonStartPart:
-        result = backButtonRect(scrollbar, BackButtonStartPart, true);
-        break;
-    case BackButtonEndPart:
-        result = backButtonRect(scrollbar, BackButtonEndPart, true);
-        break;
-    case ForwardButtonStartPart:
-        result = forwardButtonRect(scrollbar, ForwardButtonStartPart, true);
-        break;
-    case ForwardButtonEndPart:
-        result = forwardButtonRect(scrollbar, ForwardButtonEndPart, true);
-        break;
-    case TrackBGPart:
-        result = trackRect(scrollbar, true);
-        break;
-    case ScrollbarBGPart:
-        result = scrollbar->frameRect();
-        break;
-    default: {
-        IntRect beforeThumbRect, thumbRect, afterThumbRect;
-        splitTrack(scrollbar, trackRect(scrollbar), beforeThumbRect, thumbRect, afterThumbRect);
-        if (part == BackTrackPart)
-            result = beforeThumbRect;
-        else if (part == ForwardTrackPart)
-            result = afterThumbRect;
-        else
-            result = thumbRect;
-    }
-    }
-    result.moveBy(-scrollbar->location());
-    scrollbar->invalidateRect(result);
-}
-
-void ScrollbarTheme::paintScrollCorner(GraphicsContext* context, const DisplayItemClientWrapper& displayItemClient, const IntRect& cornerRect)
->>>>>>> miniblink49
 {
     if (cornerRect.isEmpty())
         return;
 
-<<<<<<< HEAD
     if (DrawingRecorder::useCachedDrawingIfPossible(
             context, displayItemClient, DisplayItem::kScrollbarCorner))
         return;
@@ -447,45 +304,11 @@ int ScrollbarTheme::thumbPosition(const ScrollbarThemeClient& scrollbar,
         if (!size)
             return 0;
         float pos = std::max(0.0f, scrollPosition) * (trackLength(scrollbar) - thumbLength(scrollbar)) / size;
-=======
-    if (DrawingRecorder::useCachedDrawingIfPossible(*context, displayItemClient, DisplayItem::ScrollbarCorner))
-        return;
-
-    DrawingRecorder recorder(*context, displayItemClient, DisplayItem::ScrollbarCorner, cornerRect);
-#if OS(MACOSX)
-    context->fillRect(cornerRect, Color::white);
-#else
-    Platform::current()->themeEngine()->paint(context->canvas(), WebThemeEngine::PartScrollbarCorner, WebThemeEngine::StateNormal, WebRect(cornerRect), 0);
-#endif
-}
-
-bool ScrollbarTheme::shouldCenterOnThumb(ScrollbarThemeClient* scrollbar, const PlatformMouseEvent& evt)
-{
-    return Platform::current()->scrollbarBehavior()->shouldCenterOnThumb(static_cast<WebScrollbarBehavior::Button>(evt.button()), evt.shiftKey(), evt.altKey());
-}
-
-bool ScrollbarTheme::shouldSnapBackToDragOrigin(ScrollbarThemeClient* scrollbar, const PlatformMouseEvent& evt)
-{
-    IntPoint mousePosition = scrollbar->convertFromContainingWindow(evt.position());
-    mousePosition.move(scrollbar->x(), scrollbar->y());
-    return Platform::current()->scrollbarBehavior()->shouldSnapBackToDragOrigin(mousePosition, trackRect(scrollbar), scrollbar->orientation() == HorizontalScrollbar);
-}
-
-int ScrollbarTheme::thumbPosition(ScrollbarThemeClient* scrollbar)
-{
-    if (scrollbar->enabled()) {
-        float size = scrollbar->totalSize() - scrollbar->visibleSize();
-        // Avoid doing a floating point divide by zero and return 1 when usedTotalSize == visibleSize.
-        if (!size)
-            return 0;
-        float pos = std::max(0.0f, scrollbar->currentPos()) * (trackLength(scrollbar) - thumbLength(scrollbar)) / size;
->>>>>>> miniblink49
         return (pos < 1 && pos > 0) ? 1 : pos;
     }
     return 0;
 }
 
-<<<<<<< HEAD
 int ScrollbarTheme::thumbLength(const ScrollbarThemeClient& scrollbar)
 {
     if (!scrollbar.enabled())
@@ -496,24 +319,11 @@ int ScrollbarTheme::thumbLength(const ScrollbarThemeClient& scrollbar)
     float totalSize = scrollbar.totalSize();
     if (totalSize > 0.0f) {
         proportion = (scrollbar.visibleSize() - overhang) / totalSize;
-=======
-int ScrollbarTheme::thumbLength(ScrollbarThemeClient* scrollbar)
-{
-    if (!scrollbar->enabled())
-        return 0;
-
-    float overhang = fabsf(scrollbar->elasticOverscroll());
-    float proportion = 0.0f;
-    float totalSize = scrollbar->totalSize();
-    if (totalSize > 0.0f) {
-        proportion = (scrollbar->visibleSize() - overhang) / totalSize;
->>>>>>> miniblink49
     }
     int trackLen = trackLength(scrollbar);
     int length = round(proportion * trackLen);
     length = std::max(length, minimumThumbLength(scrollbar));
     if (length > trackLen)
-<<<<<<< HEAD
         length = 0; // Once the thumb is below the track length, it just goes away
             // (to make more room for the track).
     return length;
@@ -536,25 +346,6 @@ int ScrollbarTheme::trackLength(const ScrollbarThemeClient& scrollbar)
 }
 
 IntRect ScrollbarTheme::thumbRect(const ScrollbarThemeClient& scrollbar)
-=======
-        length = 0; // Once the thumb is below the track length, it just goes away (to make more room for the track).
-    return length;
-}
-
-int ScrollbarTheme::trackPosition(ScrollbarThemeClient* scrollbar)
-{
-    IntRect constrainedTrackRect = constrainTrackRectToTrackPieces(scrollbar, trackRect(scrollbar));
-    return (scrollbar->orientation() == HorizontalScrollbar) ? constrainedTrackRect.x() - scrollbar->x() : constrainedTrackRect.y() - scrollbar->y();
-}
-
-int ScrollbarTheme::trackLength(ScrollbarThemeClient* scrollbar)
-{
-    IntRect constrainedTrackRect = constrainTrackRectToTrackPieces(scrollbar, trackRect(scrollbar));
-    return (scrollbar->orientation() == HorizontalScrollbar) ? constrainedTrackRect.width() : constrainedTrackRect.height();
-}
-
-IntRect ScrollbarTheme::thumbRect(ScrollbarThemeClient* scrollbar)
->>>>>>> miniblink49
 {
     if (!hasThumb(scrollbar))
         return IntRect();
@@ -568,7 +359,6 @@ IntRect ScrollbarTheme::thumbRect(ScrollbarThemeClient* scrollbar)
     return thumbRect;
 }
 
-<<<<<<< HEAD
 int ScrollbarTheme::thumbThickness(const ScrollbarThemeClient& scrollbar)
 {
     IntRect track = trackRect(scrollbar);
@@ -609,54 +399,15 @@ void ScrollbarTheme::splitTrack(const ScrollbarThemeClient& scrollbar,
 }
 
 ScrollbarTheme& ScrollbarTheme::theme()
-=======
-int ScrollbarTheme::thumbThickness(ScrollbarThemeClient* scrollbar)
-{
-    IntRect track = trackRect(scrollbar);
-    return scrollbar->orientation() == HorizontalScrollbar ? track.height() : track.width();
-}
-
-int ScrollbarTheme::minimumThumbLength(ScrollbarThemeClient* scrollbar)
-{
-    return scrollbarThickness(scrollbar->controlSize());
-}
-
-void ScrollbarTheme::splitTrack(ScrollbarThemeClient* scrollbar, const IntRect& unconstrainedTrackRect, IntRect& beforeThumbRect, IntRect& thumbRect, IntRect& afterThumbRect)
-{
-    // This function won't even get called unless we're big enough to have some combination of these three rects where at least
-    // one of them is non-empty.
-    IntRect trackRect = constrainTrackRectToTrackPieces(scrollbar, unconstrainedTrackRect);
-    int thumbPos = thumbPosition(scrollbar);
-    if (scrollbar->orientation() == HorizontalScrollbar) {
-        thumbRect = IntRect(trackRect.x() + thumbPos, trackRect.y(), thumbLength(scrollbar), scrollbar->height());
-        beforeThumbRect = IntRect(trackRect.x(), trackRect.y(), thumbPos + thumbRect.width() / 2, trackRect.height());
-        afterThumbRect = IntRect(trackRect.x() + beforeThumbRect.width(), trackRect.y(), trackRect.maxX() - beforeThumbRect.maxX(), trackRect.height());
-    } else {
-        thumbRect = IntRect(trackRect.x(), trackRect.y() + thumbPos, scrollbar->width(), thumbLength(scrollbar));
-        beforeThumbRect = IntRect(trackRect.x(), trackRect.y(), trackRect.width(), thumbPos + thumbRect.height() / 2);
-        afterThumbRect = IntRect(trackRect.x(), trackRect.y() + beforeThumbRect.height(), trackRect.width(), trackRect.maxY() - beforeThumbRect.maxY());
-    }
-}
-
-ScrollbarTheme* ScrollbarTheme::theme()
->>>>>>> miniblink49
 {
     if (ScrollbarTheme::mockScrollbarsEnabled()) {
         if (RuntimeEnabledFeatures::overlayScrollbarsEnabled()) {
             DEFINE_STATIC_LOCAL(ScrollbarThemeOverlayMock, overlayMockTheme, ());
-<<<<<<< HEAD
             return overlayMockTheme;
         }
 
         DEFINE_STATIC_LOCAL(ScrollbarThemeMock, mockTheme, ());
         return mockTheme;
-=======
-            return &overlayMockTheme;
-        }
-
-        DEFINE_STATIC_LOCAL(ScrollbarThemeMock, mockTheme, ());
-        return &mockTheme;
->>>>>>> miniblink49
     }
     return nativeTheme();
 }
@@ -671,7 +422,6 @@ bool ScrollbarTheme::mockScrollbarsEnabled()
     return gMockScrollbarsEnabled;
 }
 
-<<<<<<< HEAD
 DisplayItem::Type ScrollbarTheme::buttonPartToDisplayItemType(
     ScrollbarPart part)
 {
@@ -701,35 +451,6 @@ DisplayItem::Type ScrollbarTheme::trackPiecePartToDisplayItemType(
     default:
         ASSERT_NOT_REACHED();
         return DisplayItem::kScrollbarBackTrack;
-=======
-DisplayItem::Type ScrollbarTheme::buttonPartToDisplayItemType(ScrollbarPart part)
-{
-    switch (part) {
-    case BackButtonStartPart:
-        return DisplayItem::ScrollbarBackButtonStart;
-    case BackButtonEndPart:
-        return DisplayItem::ScrollbarBackButtonEnd;
-    case ForwardButtonStartPart:
-        return DisplayItem::ScrollbarForwardButtonStart;
-    case ForwardButtonEndPart:
-        return DisplayItem::ScrollbarForwardButtonEnd;
-    default:
-        ASSERT_NOT_REACHED();
-        return DisplayItem::ScrollbarBackButtonStart;
-    }
-}
-
-DisplayItem::Type ScrollbarTheme::trackPiecePartToDisplayItemType(ScrollbarPart part)
-{
-    switch (part) {
-    case BackTrackPart:
-        return DisplayItem::ScrollbarBackTrack;
-    case ForwardTrackPart:
-        return DisplayItem::ScrollbarForwardTrack;
-    default:
-        ASSERT_NOT_REACHED();
-        return DisplayItem::ScrollbarBackTrack;
->>>>>>> miniblink49
     }
 }
 

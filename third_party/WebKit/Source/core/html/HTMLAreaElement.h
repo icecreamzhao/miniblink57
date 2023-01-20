@@ -26,24 +26,32 @@
 #include "core/CoreExport.h"
 #include "core/html/HTMLAnchorElement.h"
 #include "platform/geometry/LayoutRect.h"
+#include <memory>
 
 namespace blink {
 
-class HitTestResult;
 class HTMLImageElement;
 class Path;
 
 class CORE_EXPORT HTMLAreaElement final : public HTMLAnchorElement {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     DECLARE_NODE_FACTORY(HTMLAreaElement);
 
     bool isDefault() const { return m_shape == Default; }
 
-    bool pointInArea(LayoutPoint, const LayoutSize& containerSize);
-
-    LayoutRect computeRect(LayoutObject*) const;
-    Path computePath(LayoutObject*) const;
+    // |containerObject| in the following functions is an object (normally a
+    // LayoutImage) which references the containing image map of this area. There
+    // might be multiple objects referencing the same map. For these functions,
+    // the effective geometry of this map will be calculated based on the
+    // specified container object, e.g.  the rectangle of the default shape will
+    // be the border box rect of the container object, and effective zoom factor
+    // of the container object will be applied on non-default shape.
+    bool pointInArea(const LayoutPoint&,
+        const LayoutObject* containerObject) const;
+    LayoutRect computeAbsoluteRect(const LayoutObject* containerObject) const;
+    Path getPath(const LayoutObject* containerObject) const;
 
     // The parent map's image.
     HTMLImageElement* imageElement() const;
@@ -52,20 +60,21 @@ private:
     explicit HTMLAreaElement(Document&);
     ~HTMLAreaElement();
 
-    void parseAttribute(const QualifiedName&, const AtomicString&) override;
+    void parseAttribute(const AttributeModificationParams&) override;
     bool isKeyboardFocusable() const override;
     bool isMouseFocusable() const override;
     bool layoutObjectIsFocusable() const override;
-    void updateFocusAppearance(bool /*restorePreviousSelection*/) override;
-    void setFocus(bool) override;
+    void updateFocusAppearance(SelectionBehaviorOnFocus) override;
+    void setFocused(bool) override;
 
-    enum Shape { Default, Poly, Rect, Circle, Unknown };
-    Path getRegion(const LayoutSize&) const;
-    void invalidateCachedRegion();
+    enum Shape { Default,
+        Poly,
+        Rect,
+        Circle };
+    void invalidateCachedPath();
 
-    OwnPtr<Path> m_region;
-    Vector<Length> m_coords;
-    LayoutSize m_lastSize;
+    mutable std::unique_ptr<Path> m_path;
+    Vector<double> m_coords;
     Shape m_shape;
 };
 

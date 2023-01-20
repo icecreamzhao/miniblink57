@@ -6,23 +6,15 @@
  */
 
 #include "GrGLShaderStringBuilder.h"
-<<<<<<< HEAD
 #include "SkRTConf.h"
 #include "SkTraceEvent.h"
 #include "gl/GrGLGpu.h"
 #include "gl/GrGLSLPrettyPrint.h"
-=======
-#include "gl/GrGLGpu.h"
-#include "gl/GrGLSLPrettyPrint.h"
-#include "SkRTConf.h"
-#include "SkTraceEvent.h"
->>>>>>> miniblink49
 
 #define GL_CALL(X) GR_GL_CALL(gpu->glInterface(), X)
 #define GL_CALL_RET(R, X) GR_GL_CALL_RET(gpu->glInterface(), R, X)
 
 SK_CONF_DECLARE(bool, c_PrintShaders, "gpu.printShaders", false,
-<<<<<<< HEAD
     "Print the source code for all shaders generated.");
 
 GrGLuint GrGLCompileAndAttachShader(const GrGLContext& glCtx,
@@ -33,17 +25,6 @@ GrGLuint GrGLCompileAndAttachShader(const GrGLContext& glCtx,
     int count,
     GrGpu::Stats* stats)
 {
-=======
-                "Print the source code for all shaders generated.");
-
-GrGLuint GrGLCompileAndAttachShader(const GrGLContext& glCtx,
-                                    GrGLuint programId,
-                                    GrGLenum type,
-                                    const char** strings,
-                                    int* lengths,
-                                    int count,
-                                    GrGpu::Stats* stats) {
->>>>>>> miniblink49
     const GrGLInterface* gli = glCtx.interface();
 
     GrGLuint shaderId;
@@ -67,11 +48,7 @@ GrGLuint GrGLCompileAndAttachShader(const GrGLContext& glCtx,
     if (traceShader) {
         SkString shader = GrGLSLPrettyPrint::PrettyPrintGLSL(strings, lengths, count, false);
         TRACE_EVENT_INSTANT1(TRACE_DISABLED_BY_DEFAULT("skia.gpu"), "skia_gpu::GLShader",
-<<<<<<< HEAD
             TRACE_EVENT_SCOPE_THREAD, "shader", TRACE_STR_COPY(shader.c_str()));
-=======
-                             TRACE_EVENT_SCOPE_THREAD, "shader", TRACE_STR_COPY(shader.c_str()));
->>>>>>> miniblink49
     }
 
     stats->incShaderCompilations();
@@ -89,20 +66,12 @@ GrGLuint GrGLCompileAndAttachShader(const GrGLContext& glCtx,
         if (!compiled) {
             GrGLint infoLen = GR_GL_INIT_ZERO;
             GR_GL_CALL(gli, GetShaderiv(shaderId, GR_GL_INFO_LOG_LENGTH, &infoLen));
-<<<<<<< HEAD
             SkAutoMalloc log(sizeof(char) * (infoLen + 1)); // outside if for debugger
-=======
-            SkAutoMalloc log(sizeof(char)*(infoLen+1)); // outside if for debugger
->>>>>>> miniblink49
             if (infoLen > 0) {
                 // retrieve length even though we don't need it to workaround bug in Chromium cmd
                 // buffer param validation.
                 GrGLsizei length = GR_GL_INIT_ZERO;
-<<<<<<< HEAD
                 GR_GL_CALL(gli, GetShaderInfoLog(shaderId, infoLen + 1, &length, (char*)log.get()));
-=======
-                GR_GL_CALL(gli, GetShaderInfoLog(shaderId, infoLen+1, &length, (char*)log.get()));
->>>>>>> miniblink49
                 SkDebugf("%s", GrGLSLPrettyPrint::PrettyPrintGLSL(strings, lengths, count, true).c_str());
                 SkDebugf("\n%s", log.get());
             }

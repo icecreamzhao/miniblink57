@@ -33,8 +33,8 @@
 
 #if 1 // USE(ZLIB)
 
-#include "third_party/WebKit/Source/platform/Logging.h"
-#include "third_party/WebKit/Source/wtf/FastMalloc.h"
+//#include "third_party/WebKit/Source/platform/Logging.h"
+//#include "third_party/WebKit/Source/wtf/FastMalloc.h"
 #include "third_party/WebKit/Source/wtf/HashMap.h"
 #include "third_party/WebKit/Source/wtf/StdLibExtras.h"
 #include "third_party/WebKit/Source/wtf/StringExtras.h"

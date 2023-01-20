@@ -39,25 +39,24 @@ class StyleSheet;
 
 class StyleSheetCandidate {
     STACK_ALLOCATED();
+
 public:
-    enum Type {
-        HTMLLink,
+    enum Type { HTMLLink,
         HTMLStyle,
         SVGStyle,
-        Pi
-    };
+        Pi };
 
     StyleSheetCandidate(Node& node)
         : m_node(node)
         , m_type(typeOf(node))
-    { }
+    {
+    }
 
     bool isXSL() const;
     bool isImport() const;
     bool isAlternate() const;
     bool isEnabledViaScript() const;
     bool isEnabledAndLoading() const;
-    bool hasPreferrableName(const String& currentPreferrableName) const;
     bool canBeActivated(const String& currentPreferrableName) const;
     bool isCSSStyle() const;
 
@@ -72,11 +71,10 @@ private:
 
     static Type typeOf(Node&);
 
-    RawPtrWillBeMember<Node> m_node;
+    Member<Node> m_node;
     Type m_type;
 };
 
-}
+} // namespace blink
 
 #endif
-

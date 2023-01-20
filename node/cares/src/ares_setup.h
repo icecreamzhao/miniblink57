@@ -52,9 +52,9 @@
  */
 
 #ifdef NEED_THREAD_SAFE
-#  ifndef _THREAD_SAFE
-#    define _THREAD_SAFE
-#  endif
+#ifndef _THREAD_SAFE
+#define _THREAD_SAFE
+#endif
 #endif
 
 /*
@@ -64,9 +64,9 @@
  */
 
 #ifdef NEED_REENTRANT
-#  ifndef _REENTRANT
-#    define _REENTRANT
-#  endif
+#ifndef _REENTRANT
+#define _REENTRANT
+#endif
 #endif
 
 /* ================================================================ */
@@ -75,8 +75,8 @@
 /* ================================================================ */
 
 #if 1
-# define SIZEOF_SHORT 2
-#else  /* Disabled for the gyp-ified build. */
+#define SIZEOF_SHORT 2
+#else /* Disabled for the gyp-ified build. */
 /*
  * c-ares external interface definitions are also used internally,
  * and might also include required system header files to define them.
@@ -108,20 +108,20 @@
  */
 
 #ifdef HAVE_WINDOWS_H
-#  ifndef WIN32_LEAN_AND_MEAN
-#    define WIN32_LEAN_AND_MEAN
-#  endif
-#  include <windows.h>
-#  ifdef HAVE_WINSOCK2_H
-#    include <winsock2.h>
-#    ifdef HAVE_WS2TCPIP_H
-#       include <ws2tcpip.h>
-#    endif
-#  else
-#    ifdef HAVE_WINSOCK_H
-#      include <winsock.h>
-#    endif
-#  endif
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#include <windows.h>
+#ifdef HAVE_WINSOCK2_H
+#include <winsock2.h>
+#ifdef HAVE_WS2TCPIP_H
+#include <ws2tcpip.h>
+#endif
+#else
+#ifdef HAVE_WINSOCK_H
+#include <winsock.h>
+#endif
+#endif
 #endif
 
 /*
@@ -133,11 +133,11 @@
 #undef USE_WINSOCK
 
 #ifdef HAVE_WINSOCK2_H
-#  define USE_WINSOCK 2
+#define USE_WINSOCK 2
 #else
-#  ifdef HAVE_WINSOCK_H
-#    define USE_WINSOCK 1
-#  endif
+#ifdef HAVE_WINSOCK_H
+#define USE_WINSOCK 1
+#endif
 #endif
 
 /*
@@ -165,17 +165,17 @@
  */
 
 #ifndef GETHOSTNAME_TYPE_ARG2
-#  ifdef USE_WINSOCK
-#    define GETHOSTNAME_TYPE_ARG2 int
-#  else
-#    define GETHOSTNAME_TYPE_ARG2 size_t
-#  endif
+#ifdef USE_WINSOCK
+#define GETHOSTNAME_TYPE_ARG2 int
+#else
+#define GETHOSTNAME_TYPE_ARG2 size_t
+#endif
 #endif
 
 #ifdef __POCC__
-#  include <sys/types.h>
-#  include <unistd.h>
-#  define ESRCH 3
+#include <sys/types.h>
+#include <unistd.h>
+#define ESRCH 3
 #endif
 
 /*
@@ -183,7 +183,7 @@
  * but it appears to be empty with recent NDK r7b / r7c, so we undefine here.
  */
 #if (defined(ANDROID) || defined(__ANDROID__)) && defined(HAVE_ARPA_NAMESER_H)
-#  undef HAVE_ARPA_NAMESER_H
+#undef HAVE_ARPA_NAMESER_H
 #endif
 
 /*
@@ -205,7 +205,7 @@
 #if defined(HAVE_PF_INET6)
 #define AF_INET6 PF_INET6
 #else
-#define AF_INET6 AF_MAX+1
+#define AF_INET6 AF_MAX + 1
 #endif
 #endif
 

@@ -23,21 +23,23 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/loader/appcache/ApplicationCache.h"
 
 #include "bindings/core/v8/ExceptionState.h"
 #include "core/dom/Document.h"
 #include "core/dom/ExceptionCode.h"
 #include "core/events/EventListener.h"
+#include "core/frame/Deprecation.h"
+#include "core/frame/HostsUsingFeatures.h"
 #include "core/frame/LocalFrame.h"
+#include "core/frame/UseCounter.h"
 #include "core/loader/DocumentLoader.h"
 #include "core/loader/FrameLoader.h"
 
 namespace blink {
 
 ApplicationCache::ApplicationCache(LocalFrame* frame)
-    : DOMWindowProperty(frame)
+    : DOMWindowClient(frame)
 {
     ApplicationCacheHost* cacheHost = applicationCacheHost();
     if (cacheHost)
@@ -47,43 +49,43 @@ ApplicationCache::ApplicationCache(LocalFrame* frame)
 DEFINE_TRACE(ApplicationCache)
 {
     EventTargetWithInlineData::trace(visitor);
-    DOMWindowProperty::trace(visitor);
-}
-
-void ApplicationCache::willDestroyGlobalObjectInFrame()
-{
-    if (ApplicationCacheHost* cacheHost = applicationCacheHost())
-        cacheHost->setApplicationCache(0);
-    DOMWindowProperty::willDestroyGlobalObjectInFrame();
+    DOMWindowClient::trace(visitor);
 }
 
 ApplicationCacheHost* ApplicationCache::applicationCacheHost() const
 {
-    if (!m_frame || !m_frame->loader().documentLoader())
+    if (!frame() || !frame()->loader().documentLoader())
         return 0;
-    return m_frame->loader().documentLoader()->applicationCacheHost();
+    return frame()->loader().documentLoader()->applicationCacheHost();
 }
 
 unsigned short ApplicationCache::status() const
 {
+    recordAPIUseType();
     ApplicationCacheHost* cacheHost = applicationCacheHost();
     if (!cacheHost)
-        return ApplicationCacheHost::UNCACHED;
-    return cacheHost->status();
+        return ApplicationCacheHost::kUncached;
+    return cacheHost->getStatus();
 }
 
 void ApplicationCache::update(ExceptionState& exceptionState)
 {
+    recordAPIUseType();
     ApplicationCacheHost* cacheHost = applicationCacheHost();
-    if (!cacheHost || !cacheHost->update())
-        exceptionState.throwDOMException(InvalidStateError, "there is no application cache to update.");
+    if (!cacheHost || !cacheHost->update()) {
+        exceptionState.throwDOMException(
+            InvalidStateError, "there is no application cache to update.");
+    }
 }
 
 void ApplicationCache::swapCache(ExceptionState& exceptionState)
 {
+    recordAPIUseType();
     ApplicationCacheHost* cacheHost = applicationCacheHost();
-    if (!cacheHost || !cacheHost->swapCache())
-        exceptionState.throwDOMException(InvalidStateError, "there is no newer application cache to swap to.");
+    if (!cacheHost || !cacheHost->swapCache()) {
+        exceptionState.throwDOMException(
+            InvalidStateError, "there is no newer application cache to swap to.");
+    }
 }
 
 void ApplicationCache::abort()
@@ -98,35 +100,55 @@ const AtomicString& ApplicationCache::interfaceName() const
     return EventTargetNames::ApplicationCache;
 }
 
-ExecutionContext* ApplicationCache::executionContext() const
+ExecutionContext* ApplicationCache::getExecutionContext() const
 {
-    if (m_frame)
-        return m_frame->document();
-    return 0;
+    return frame() ? frame()->document() : nullptr;
 }
 
-const AtomicString& ApplicationCache::toEventType(ApplicationCacheHost::EventID id)
+const AtomicString& ApplicationCache::toEventType(
+    ApplicationCacheHost::EventID id)
 {
     switch (id) {
-    case ApplicationCacheHost::CHECKING_EVENT:
+    case ApplicationCacheHost::kCheckingEvent:
         return EventTypeNames::checking;
-    case ApplicationCacheHost::ERROR_EVENT:
+    case ApplicationCacheHost::kErrorEvent:
         return EventTypeNames::error;
-    case ApplicationCacheHost::NOUPDATE_EVENT:
+    case ApplicationCacheHost::kNoupdateEvent:
         return EventTypeNames::noupdate;
-    case ApplicationCacheHost::DOWNLOADING_EVENT:
+    case ApplicationCacheHost::kDownloadingEvent:
         return EventTypeNames::downloading;
-    case ApplicationCacheHost::PROGRESS_EVENT:
+    case ApplicationCacheHost::kProgressEvent:
         return EventTypeNames::progress;
-    case ApplicationCacheHost::UPDATEREADY_EVENT:
+    case ApplicationCacheHost::kUpdatereadyEvent:
         return EventTypeNames::updateready;
-    case ApplicationCacheHost::CACHED_EVENT:
+    case ApplicationCacheHost::kCachedEvent:
         return EventTypeNames::cached;
-    case ApplicationCacheHost::OBSOLETE_EVENT:
+    case ApplicationCacheHost::kObsoleteEvent:
         return EventTypeNames::obsolete;
     }
-    ASSERT_NOT_REACHED();
+    NOTREACHED();
     return EventTypeNames::error;
+}
+
+void ApplicationCache::recordAPIUseType() const
+{
+    if (!frame())
+        return;
+
+    Document* document = frame()->document();
+
+    if (!document)
+        return;
+
+    if (document->isSecureContext()) {
+        UseCounter::count(document, UseCounter::ApplicationCacheAPISecureOrigin);
+    } else {
+        Deprecation::countDeprecation(
+            document, UseCounter::ApplicationCacheAPIInsecureOrigin);
+        HostsUsingFeatures::countAnyWorld(
+            *document,
+            HostsUsingFeatures::Feature::ApplicationCacheAPIInsecureHost);
+    }
 }
 
 } // namespace blink

@@ -32,12 +32,8 @@
 #include "wtf/Compiler.h"
 
 /* CPU() - the target CPU architecture */
-<<<<<<< HEAD
 #define CPU(WTF_FEATURE) \
     (defined WTF_CPU_##WTF_FEATURE && WTF_CPU_##WTF_FEATURE)
-=======
-#define CPU(WTF_FEATURE) (defined WTF_CPU_##WTF_FEATURE  && WTF_CPU_##WTF_FEATURE)
->>>>>>> miniblink49
 
 /* ==== CPU() - the target CPU architecture ==== */
 
@@ -45,63 +41,32 @@
 /* This defines CPU(32BIT) or CPU(64BIT), as appropriate. */
 
 /* CPU(X86) - i386 / x86 32-bit */
-<<<<<<< HEAD
 #if defined(__i386__) || defined(i386) || defined(_M_IX86) || defined(_X86_) || defined(__THW_INTEL)
-=======
-#if   defined(__i386__) \
-    || defined(i386)     \
-    || defined(_M_IX86)  \
-    || defined(_X86_)    \
-    || defined(__THW_INTEL)
->>>>>>> miniblink49
 #define WTF_CPU_X86 1
 #endif
 
 /* CPU(X86_64) - AMD64 / Intel64 / x86_64 64-bit */
-<<<<<<< HEAD
 #if defined(__x86_64__) || defined(_M_X64)
-=======
-#if   defined(__x86_64__) \
-    || defined(_M_X64)
->>>>>>> miniblink49
 #define WTF_CPU_X86_64 1
 #define WTF_CPU_64BIT 1
 #endif
 
 /* CPU(ARM) - ARM, any version*/
-<<<<<<< HEAD
 #define WTF_ARM_ARCH_AT_LEAST(N) \
     (CPU(ARM) && defined(WTF_ARM_ARCH_VERSION) && WTF_ARM_ARCH_VERSION >= N)
 
 #if defined(arm) || defined(__arm__) || defined(ARM) || defined(_ARM_)
-=======
-#define WTF_ARM_ARCH_AT_LEAST(N) (CPU(ARM) && defined(WTF_ARM_ARCH_VERSION) && WTF_ARM_ARCH_VERSION >= N)
-
-#if   defined(arm) \
-    || defined(__arm__) \
-    || defined(ARM) \
-    || defined(_ARM_)
->>>>>>> miniblink49
 #define WTF_CPU_ARM 1
 
 #if defined(__ARMEB__)
 #define WTF_CPU_BIG_ENDIAN 1
 
-<<<<<<< HEAD
 #elif !defined(__ARM_EABI__) && !defined(__EABI__) && !defined(__VFP_FP__) && !defined(_WIN32_WCE) && !defined(ANDROID)
-=======
-#elif !defined(__ARM_EABI__) \
-    && !defined(__EABI__) \
-    && !defined(__VFP_FP__) \
-    && !defined(_WIN32_WCE) \
-    && !defined(ANDROID)
->>>>>>> miniblink49
 #define WTF_CPU_MIDDLE_ENDIAN 1
 
 #endif
 
 /* Set WTF_ARM_ARCH_VERSION */
-<<<<<<< HEAD
 #if defined(__ARM_ARCH_4__) || defined(__ARM_ARCH_4T__) || defined(__MARM_ARMV4__)
 #define WTF_ARM_ARCH_VERSION 4
 
@@ -115,35 +80,6 @@
 #define WTF_ARM_ARCH_VERSION 6
 
 #elif defined(__ARM_ARCH_7A__) || defined(__ARM_ARCH_7R__) || defined(__ARM_ARCH_7S__)
-=======
-#if   defined(__ARM_ARCH_4__) \
-    || defined(__ARM_ARCH_4T__) \
-    || defined(__MARM_ARMV4__)
-#define WTF_ARM_ARCH_VERSION 4
-
-#elif defined(__ARM_ARCH_5__) \
-    || defined(__ARM_ARCH_5T__) \
-    || defined(__MARM_ARMV5__)
-#define WTF_ARM_ARCH_VERSION 5
-
-#elif defined(__ARM_ARCH_5E__) \
-    || defined(__ARM_ARCH_5TE__) \
-    || defined(__ARM_ARCH_5TEJ__)
-#define WTF_ARM_ARCH_VERSION 5
-
-#elif defined(__ARM_ARCH_6__) \
-    || defined(__ARM_ARCH_6J__) \
-    || defined(__ARM_ARCH_6K__) \
-    || defined(__ARM_ARCH_6Z__) \
-    || defined(__ARM_ARCH_6ZK__) \
-    || defined(__ARM_ARCH_6T2__) \
-    || defined(__ARMV6__)
-#define WTF_ARM_ARCH_VERSION 6
-
-#elif defined(__ARM_ARCH_7A__) \
-    || defined(__ARM_ARCH_7R__) \
-    || defined(__ARM_ARCH_7S__)
->>>>>>> miniblink49
 #define WTF_ARM_ARCH_VERSION 7
 
 /* MSVC sets _M_ARM */
@@ -155,7 +91,6 @@
 #endif
 
 /* Set WTF_THUMB_ARCH_VERSION */
-<<<<<<< HEAD
 #if defined(__ARM_ARCH_4T__)
 #define WTF_THUMB_ARCH_VERSION 1
 
@@ -166,36 +101,12 @@
 #define WTF_THUMB_ARCH_VERSION 3
 
 #elif defined(__ARM_ARCH_6T2__) || defined(__ARM_ARCH_7__) || defined(__ARM_ARCH_7A__) || defined(__ARM_ARCH_7M__) || defined(__ARM_ARCH_7R__) || defined(__ARM_ARCH_7S__)
-=======
-#if   defined(__ARM_ARCH_4T__)
-#define WTF_THUMB_ARCH_VERSION 1
-
-#elif defined(__ARM_ARCH_5T__) \
-    || defined(__ARM_ARCH_5TE__) \
-    || defined(__ARM_ARCH_5TEJ__)
-#define WTF_THUMB_ARCH_VERSION 2
-
-#elif defined(__ARM_ARCH_6J__) \
-    || defined(__ARM_ARCH_6K__) \
-    || defined(__ARM_ARCH_6Z__) \
-    || defined(__ARM_ARCH_6ZK__) \
-    || defined(__ARM_ARCH_6M__)
-#define WTF_THUMB_ARCH_VERSION 3
-
-#elif defined(__ARM_ARCH_6T2__) \
-    || defined(__ARM_ARCH_7__) \
-    || defined(__ARM_ARCH_7A__) \
-    || defined(__ARM_ARCH_7M__) \
-    || defined(__ARM_ARCH_7R__) \
-    || defined(__ARM_ARCH_7S__)
->>>>>>> miniblink49
 #define WTF_THUMB_ARCH_VERSION 4
 
 #else
 #define WTF_THUMB_ARCH_VERSION 0
 #endif
 
-<<<<<<< HEAD
 /* CPU(ARM_THUMB2) - Thumb2 instruction set is available */
 #if !defined(WTF_CPU_ARM_THUMB2)
 #if defined(thumb2) || defined(__thumb2__) || ((defined(__thumb) || defined(__thumb__)) && WTF_THUMB_ARCH_VERSION == 4)
@@ -205,41 +116,17 @@
 #else
 #error "Unsupported ARM architecture"
 #endif
-=======
-
-/* CPU(ARM_THUMB2) - Thumb2 instruction set is available */
-#if !defined(WTF_CPU_ARM_THUMB2)
-#  if defined(thumb2) || defined(__thumb2__) \
-    || ((defined(__thumb) || defined(__thumb__)) && WTF_THUMB_ARCH_VERSION == 4)
-#    define WTF_CPU_ARM_THUMB2 1
-#  elif WTF_ARM_ARCH_AT_LEAST(4)
-#    define WTF_CPU_ARM_THUMB2 0
-#  else
-#    error "Unsupported ARM architecture"
-#  endif
->>>>>>> miniblink49
 #endif /* !defined(WTF_CPU_ARM_THUMB2) */
 
 #if defined(__ARM_NEON__) && !defined(WTF_CPU_ARM_NEON)
 #define WTF_CPU_ARM_NEON 1
 #endif
 
-<<<<<<< HEAD
 #if CPU(ARM_NEON) && (COMPILER(CLANG) || !COMPILER(GCC) || GCC_VERSION_AT_LEAST(4, 7, 0))
-=======
-#if CPU(ARM_NEON) && (!COMPILER(GCC) || GCC_VERSION_AT_LEAST(4, 7, 0))
->>>>>>> miniblink49
 // All NEON intrinsics usage can be disabled by this macro.
 #define HAVE_ARM_NEON_INTRINSICS 1
 #endif
 
-<<<<<<< HEAD
-=======
-#if defined(__ARM_ARCH_7S__)
-#define WTF_CPU_APPLE_ARMV7S 1
-#endif
-
->>>>>>> miniblink49
 #endif /* ARM */
 
 /* CPU(ARM64) - AArch64 64-bit */
@@ -248,7 +135,6 @@
 #define WTF_CPU_64BIT 1
 #endif
 
-<<<<<<< HEAD
 /* CPU(MIPS), CPU(MIPS64) */
 #if defined(__mips__) && (__mips == 64)
 #define WTF_CPU_MIPS64 1
@@ -260,11 +146,6 @@
 #if defined(__mips_msa) && defined(__mips_isa_rev) && (__mips_isa_rev >= 5)
 // All MSA intrinsics usage can be disabled by this macro.
 #define HAVE_MIPS_MSA_INTRINSICS 1
-=======
-/* This defines CPU(64BIT). */
-#if defined(__mips__) && (_MIPS_SIM == _ABI64)
-#define WTF_CPU_64BIT 1
->>>>>>> miniblink49
 #endif
 
 #if !defined(WTF_CPU_64BIT)

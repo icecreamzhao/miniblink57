@@ -17,17 +17,10 @@
  *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
-<<<<<<< HEAD
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *  MA  02110-1301 USA
  */
 
-=======
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- */
-
-#include "config.h"
->>>>>>> miniblink49
 #include "modules/geolocation/NavigatorGeolocation.h"
 
 #include "core/dom/Document.h"
@@ -37,17 +30,8 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 NavigatorGeolocation::NavigatorGeolocation(Navigator& navigator)
     : Supplement<Navigator>(navigator)
-=======
-NavigatorGeolocation::NavigatorGeolocation(LocalFrame* frame)
-    : DOMWindowProperty(frame)
-{
-}
-
-NavigatorGeolocation::~NavigatorGeolocation()
->>>>>>> miniblink49
 {
 }
 
@@ -58,16 +42,10 @@ const char* NavigatorGeolocation::supplementName()
 
 NavigatorGeolocation& NavigatorGeolocation::from(Navigator& navigator)
 {
-<<<<<<< HEAD
     NavigatorGeolocation* supplement = static_cast<NavigatorGeolocation*>(
         Supplement<Navigator>::from(navigator, supplementName()));
     if (!supplement) {
         supplement = new NavigatorGeolocation(navigator);
-=======
-    NavigatorGeolocation* supplement = static_cast<NavigatorGeolocation*>(HeapSupplement<Navigator>::from(navigator, supplementName()));
-    if (!supplement) {
-        supplement = new NavigatorGeolocation(navigator.frame());
->>>>>>> miniblink49
         provideTo(navigator, supplementName(), supplement);
     }
     return *supplement;
@@ -80,26 +58,15 @@ Geolocation* NavigatorGeolocation::geolocation(Navigator& navigator)
 
 Geolocation* NavigatorGeolocation::geolocation()
 {
-<<<<<<< HEAD
     if (!m_geolocation && supplementable()->frame())
         m_geolocation = Geolocation::create(supplementable()->frame()->document());
     return m_geolocation;
-=======
-    if (!m_geolocation && frame())
-        m_geolocation = Geolocation::create(frame()->document());
-    return m_geolocation.get();
->>>>>>> miniblink49
 }
 
 DEFINE_TRACE(NavigatorGeolocation)
 {
     visitor->trace(m_geolocation);
-<<<<<<< HEAD
     Supplement<Navigator>::trace(visitor);
-=======
-    HeapSupplement<Navigator>::trace(visitor);
-    DOMWindowProperty::trace(visitor);
->>>>>>> miniblink49
 }
 
 } // namespace blink

@@ -34,13 +34,10 @@
 #include "WebCommon.h"
 #include "WebPrivatePtr.h"
 
-<<<<<<< HEAD
 #if INSIDE_BLINK
 #include "wtf/PassRefPtr.h"
 #endif
 
-=======
->>>>>>> miniblink49
 namespace blink {
 
 class SharedBuffer;
@@ -55,14 +52,7 @@ public:
 
     WebData() { }
 
-<<<<<<< HEAD
     WebData(const char* data, size_t size) { assign(data, size); }
-=======
-    WebData(const char* data, size_t size)
-    {
-        assign(data, size);
-    }
->>>>>>> miniblink49
 
     template <int N>
     WebData(const char (&data)[N])
@@ -89,13 +79,8 @@ public:
     bool isNull() const { return m_private.isNull(); }
 
 #if INSIDE_BLINK
-<<<<<<< HEAD
     WebData(PassRefPtr<SharedBuffer>);
     WebData& operator=(PassRefPtr<SharedBuffer>);
-=======
-    WebData(const PassRefPtr<SharedBuffer>&);
-    WebData& operator=(const PassRefPtr<SharedBuffer>&);
->>>>>>> miniblink49
     operator PassRefPtr<SharedBuffer>() const;
 #else
     template <class C>

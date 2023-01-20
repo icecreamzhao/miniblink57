@@ -8,14 +8,8 @@
 #ifndef SkOTTableTypes_DEFINED
 #define SkOTTableTypes_DEFINED
 
-<<<<<<< HEAD
 #include "SkEndian.h"
 #include "SkTypes.h"
-=======
-#include "SkTemplates.h"
-#include "SkTypes.h"
-#include "SkEndian.h"
->>>>>>> miniblink49
 
 //All SK_OT_ prefixed types should be considered as big endian.
 typedef uint8_t SK_OT_BYTE;
@@ -40,19 +34,14 @@ typedef uint64_t SK_OT_LONGDATETIME;
 
 #define SK_OT_BYTE_BITFIELD SK_UINT8_BITFIELD
 
-<<<<<<< HEAD
 template <typename T>
 class SkOTTableTAG {
-=======
-template<typename T> class SkOTTableTAG {
->>>>>>> miniblink49
 public:
     /**
      * SkOTTableTAG<T>::value is the big endian value of an OpenType table tag.
      * It may be directly compared with raw big endian table data.
      */
     static const SK_OT_ULONG value = SkTEndian_SwapBE32(
-<<<<<<< HEAD
         SkSetFourByteTag(T::TAG0, T::TAG1, T::TAG2, T::TAG3));
 };
 
@@ -60,28 +49,14 @@ public:
 template <unsigned N>
 struct SkOTSetUSHORTBit {
     static_assert(N < 16, "NTooBig");
-=======
-        SkSetFourByteTag(T::TAG0, T::TAG1, T::TAG2, T::TAG3)
-    );
-};
-
-/** SkOTSetUSHORTBit<N>::value is an SK_OT_USHORT with the Nth BE bit set. */
-template <unsigned N> struct SkOTSetUSHORTBit {
-    SK_COMPILE_ASSERT(N < 16, NTooBig);
->>>>>>> miniblink49
     static const uint16_t bit = 1u << N;
     static const SK_OT_USHORT value = SkTEndian_SwapBE16(bit);
 };
 
 /** SkOTSetULONGBit<N>::value is an SK_OT_ULONG with the Nth BE bit set. */
-<<<<<<< HEAD
 template <unsigned N>
 struct SkOTSetULONGBit {
     static_assert(N < 32, "NTooBig");
-=======
-template <unsigned N> struct SkOTSetULONGBit {
-    SK_COMPILE_ASSERT(N < 32, NTooBig);
->>>>>>> miniblink49
     static const uint32_t bit = 1u << N;
     static const SK_OT_ULONG value = SkTEndian_SwapBE32(bit);
 };

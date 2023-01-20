@@ -36,7 +36,6 @@
 #include "public/platform/WebCanvas.h"
 #include "public/platform/WebScrollbar.h"
 #include "public/web/WebExternalPopupMenuClient.h"
-<<<<<<< HEAD
 #include "web/WebExport.h"
 #include "wtf/Compiler.h"
 #include <memory>
@@ -45,15 +44,6 @@ namespace blink {
 
 class HTMLSelectElement;
 class LocalFrame;
-=======
-
-namespace blink {
-
-class FloatQuad;
-class IntSize;
-class LocalFrame;
-class PopupMenuClient;
->>>>>>> miniblink49
 class WebExternalPopupMenu;
 class WebMouseEvent;
 class WebViewImpl;
@@ -61,45 +51,27 @@ struct WebPopupMenuInfo;
 
 // The ExternalPopupMenu connects the actual implementation of the popup menu
 // to the WebCore popup menu.
-<<<<<<< HEAD
 class WEB_EXPORT ExternalPopupMenu final : NON_EXPORTED_BASE(public PopupMenu),
                                            public WebExternalPopupMenuClient {
 public:
     ExternalPopupMenu(LocalFrame&, HTMLSelectElement&, WebViewImpl&);
-=======
-class ExternalPopupMenu final : public PopupMenu, public WebExternalPopupMenuClient {
-public:
-    ExternalPopupMenu(LocalFrame&, PopupMenuClient*, WebViewImpl&);
->>>>>>> miniblink49
     ~ExternalPopupMenu() override;
 
     // Fills |info| with the popup menu information contained in the
     // PopupMenuClient associated with this ExternalPopupMenu.
     // FIXME: public only for test access. Need to revert once gtest
     // helpers from chromium are available for blink.
-<<<<<<< HEAD
     static void getPopupMenuInfo(WebPopupMenuInfo&, HTMLSelectElement&);
     static int toPopupMenuItemIndex(int index, HTMLSelectElement&);
     static int toExternalPopupMenuItemIndex(int index, HTMLSelectElement&);
-=======
-    static void getPopupMenuInfo(WebPopupMenuInfo&, PopupMenuClient&);
-    static int toPopupMenuItemIndex(int index, PopupMenuClient&);
-    static int toExternalPopupMenuItemIndex(int index, PopupMenuClient&);
->>>>>>> miniblink49
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
     // PopupMenu methods:
-<<<<<<< HEAD
     void show() override;
     void hide() override;
     void updateFromElement(UpdateReason) override;
-=======
-    void show(const FloatQuad& controlPosition, const IntSize&, int index) override;
-    void hide() override;
-    void updateFromElement() override;
->>>>>>> miniblink49
     void disconnectClient() override;
 
     // WebExternalPopupClient methods:
@@ -108,7 +80,6 @@ private:
     void didAcceptIndices(const WebVector<int>& indices) override;
     void didCancel() override;
 
-<<<<<<< HEAD
     bool showInternal();
     void dispatchEvent(TimerBase*);
     void update();
@@ -121,17 +92,6 @@ private:
     // The actual implementor of the show menu.
     WebExternalPopupMenu* m_webExternalPopupMenu;
     bool m_needsUpdate = false;
-=======
-    void dispatchEvent(Timer<ExternalPopupMenu>*);
-
-    PopupMenuClient* m_popupMenuClient;
-    RefPtrWillBeMember<LocalFrame> m_localFrame;
-    WebViewImpl& m_webView;
-    OwnPtr<WebMouseEvent> m_syntheticEvent;
-    Timer<ExternalPopupMenu> m_dispatchEventTimer;
-    // The actual implementor of the show menu.
-    WebExternalPopupMenu* m_webExternalPopupMenu;
->>>>>>> miniblink49
 };
 
 } // namespace blink

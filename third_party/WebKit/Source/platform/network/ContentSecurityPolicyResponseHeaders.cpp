@@ -23,20 +23,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "platform/network/ContentSecurityPolicyResponseHeaders.h"
 
 #include "platform/HTTPNames.h"
-=======
-#include "config.h"
-#include "platform/network/ContentSecurityPolicyResponseHeaders.h"
-
->>>>>>> miniblink49
 #include "platform/network/ResourceResponse.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 ContentSecurityPolicyResponseHeaders::ContentSecurityPolicyResponseHeaders(
     const ResourceResponse& response)
     : m_contentSecurityPolicy(
@@ -45,12 +38,4 @@ ContentSecurityPolicyResponseHeaders::ContentSecurityPolicyResponseHeaders(
           HTTPNames::Content_Security_Policy_Report_Only))
 {
 }
-=======
-ContentSecurityPolicyResponseHeaders::ContentSecurityPolicyResponseHeaders(const ResourceResponse& response)
-    : m_contentSecurityPolicy(response.httpHeaderField("Content-Security-Policy"))
-    , m_contentSecurityPolicyReportOnly(response.httpHeaderField("Content-Security-Policy-Report-Only"))
-{
-}
-
->>>>>>> miniblink49
 }

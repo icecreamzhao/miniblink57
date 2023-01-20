@@ -6,16 +6,9 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #import "SkOptionsTableView.h"
 #import "SkSampleNSView.h"
 #import <Cocoa/Cocoa.h>
-=======
-
-#import <Cocoa/Cocoa.h>
-#import "SkSampleNSView.h"
-#import "SkOptionsTableView.h"
->>>>>>> miniblink49
 @interface HelloWorldDelegate : NSObject <NSApplicationDelegate> {
     NSWindow* fWindow;
     SkSampleNSView* fView;
@@ -28,10 +21,6 @@
 
 - (IBAction)toiPadSize:(id)sender;
 
-<<<<<<< HEAD
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication*)sender;
-=======
-- (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender;
->>>>>>> miniblink49
 
 @end

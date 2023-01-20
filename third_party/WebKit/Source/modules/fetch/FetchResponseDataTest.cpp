@@ -2,24 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "modules/fetch/FetchResponseData.h"
 
 #include "core/dom/DOMArrayBuffer.h"
 #include "modules/fetch/FetchHeaderList.h"
 #include "platform/blob/BlobData.h"
-<<<<<<< HEAD
 #include "public/platform/modules/serviceworker/WebServiceWorkerResponse.h"
 #include "testing/gtest/include/gtest/gtest.h"
 #include "wtf/Vector.h"
-=======
-#include "public/platform/WebServiceWorkerResponse.h"
-
-#include <gtest/gtest.h>
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -29,13 +19,9 @@ public:
     {
         FetchResponseData* internalResponse = FetchResponseData::create();
         internalResponse->setStatus(200);
-<<<<<<< HEAD
         Vector<KURL> urlList;
         urlList.push_back(KURL(ParsedURLString, "http://www.example.com"));
         internalResponse->setURLList(urlList);
-=======
-        internalResponse->setURL(KURL(ParsedURLString, "http://www.example.com"));
->>>>>>> miniblink49
         internalResponse->headerList()->append("set-cookie", "foo");
         internalResponse->headerList()->append("bar", "bar");
         internalResponse->headerList()->append("cache-control", "no-cache");
@@ -46,7 +32,6 @@ public:
     {
         EXPECT_STREQ("foo", webResponse.getHeader("set-cookie").utf8().c_str());
         EXPECT_STREQ("bar", webResponse.getHeader("bar").utf8().c_str());
-<<<<<<< HEAD
         EXPECT_STREQ("no-cache",
             webResponse.getHeader("cache-control").utf8().c_str());
     }
@@ -72,12 +57,6 @@ TEST_F(FetchResponseDataTest, HeaderList)
     EXPECT_EQ("no-cache", cacheControlValues[0]);
 }
 
-=======
-        EXPECT_STREQ("no-cache", webResponse.getHeader("cache-control").utf8().c_str());
-    }
-};
-
->>>>>>> miniblink49
 TEST_F(FetchResponseDataTest, ToWebServiceWorkerDefaultType)
 {
     WebServiceWorkerResponse webResponse;
@@ -88,7 +67,6 @@ TEST_F(FetchResponseDataTest, ToWebServiceWorkerDefaultType)
     CheckHeaders(webResponse);
 }
 
-<<<<<<< HEAD
 TEST_F(FetchResponseDataTest, BasicFilter)
 {
     FetchResponseData* internalResponse = createInternalResponse();
@@ -109,8 +87,6 @@ TEST_F(FetchResponseDataTest, BasicFilter)
     EXPECT_EQ("no-cache", cacheControlValues[0]);
 }
 
-=======
->>>>>>> miniblink49
 TEST_F(FetchResponseDataTest, ToWebServiceWorkerBasicType)
 {
     WebServiceWorkerResponse webResponse;
@@ -122,7 +98,6 @@ TEST_F(FetchResponseDataTest, ToWebServiceWorkerBasicType)
     CheckHeaders(webResponse);
 }
 
-<<<<<<< HEAD
 TEST_F(FetchResponseDataTest, CORSFilter)
 {
     FetchResponseData* internalResponse = createInternalResponse();
@@ -216,8 +191,6 @@ TEST_F(FetchResponseDataTest, CORSFilterWithExplicitHeaderSet)
     EXPECT_EQ("bar", barValues[0]);
 }
 
-=======
->>>>>>> miniblink49
 TEST_F(FetchResponseDataTest, ToWebServiceWorkerCORSType)
 {
     WebServiceWorkerResponse webResponse;
@@ -229,7 +202,6 @@ TEST_F(FetchResponseDataTest, ToWebServiceWorkerCORSType)
     CheckHeaders(webResponse);
 }
 
-<<<<<<< HEAD
 TEST_F(FetchResponseDataTest, OpaqueFilter)
 {
     FetchResponseData* internalResponse = createInternalResponse();
@@ -269,8 +241,6 @@ TEST_F(FetchResponseDataTest,
     EXPECT_FALSE(opaqueResponseData->headerList()->has("cache-control"));
 }
 
-=======
->>>>>>> miniblink49
 TEST_F(FetchResponseDataTest, ToWebServiceWorkerOpaqueType)
 {
     WebServiceWorkerResponse webResponse;
@@ -282,7 +252,6 @@ TEST_F(FetchResponseDataTest, ToWebServiceWorkerOpaqueType)
     CheckHeaders(webResponse);
 }
 
-<<<<<<< HEAD
 TEST_F(FetchResponseDataTest, ToWebServiceWorkerOpaqueRedirectType)
 {
     WebServiceWorkerResponse webResponse;
@@ -296,6 +265,3 @@ TEST_F(FetchResponseDataTest, ToWebServiceWorkerOpaqueRedirectType)
 }
 
 } // namespace blink
-=======
-} // namespace WebCore
->>>>>>> miniblink49

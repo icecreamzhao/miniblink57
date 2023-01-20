@@ -14,23 +14,15 @@ struct SkIPoint16;
 
 class GrRectanizer {
 public:
-<<<<<<< HEAD
     GrRectanizer(int width, int height)
         : fWidth(width)
         , fHeight(height)
     {
-=======
-    GrRectanizer(int width, int height) : fWidth(width), fHeight(height) {
->>>>>>> miniblink49
         SkASSERT(width >= 0);
         SkASSERT(height >= 0);
     }
 
-<<<<<<< HEAD
     virtual ~GrRectanizer() { }
-=======
-    virtual ~GrRectanizer() {}
->>>>>>> miniblink49
 
     virtual void reset() = 0;
 

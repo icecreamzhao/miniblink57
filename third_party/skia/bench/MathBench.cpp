@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /*
  * Copyright 2015 Google Inc.
  *
@@ -10,16 +9,11 @@
 #include "SkColorPriv.h"
 #include "SkFixed.h"
 #include "SkMathPriv.h"
-=======
-#include "Benchmark.h"
-#include "SkColorPriv.h"
->>>>>>> miniblink49
 #include "SkMatrix.h"
 #include "SkPaint.h"
 #include "SkRandom.h"
 #include "SkString.h"
 
-<<<<<<< HEAD
 static float sk_fsel(float pred, float result_ge, float result_lt)
 {
     return pred >= 0 ? result_ge : result_lt;
@@ -28,14 +22,6 @@ static float sk_fsel(float pred, float result_ge, float result_lt)
 static float fast_floor(float x)
 {
     //    float big = sk_fsel(x, 0x1.0p+23, -0x1.0p+23);
-=======
-static float sk_fsel(float pred, float result_ge, float result_lt) {
-    return pred >= 0 ? result_ge : result_lt;
-}
-
-static float fast_floor(float x) {
-//    float big = sk_fsel(x, 0x1.0p+23, -0x1.0p+23);
->>>>>>> miniblink49
     float big = sk_fsel(x, (float)(1 << 23), -(float)(1 << 23));
     return (x + big) - big;
 }
@@ -44,19 +30,12 @@ class MathBench : public Benchmark {
     enum {
         kBuffer = 100,
     };
-<<<<<<< HEAD
     SkString fName;
     float fSrc[kBuffer], fDst[kBuffer];
 
 public:
     MathBench(const char name[])
     {
-=======
-    SkString    fName;
-    float       fSrc[kBuffer], fDst[kBuffer];
-public:
-    MathBench(const char name[])  {
->>>>>>> miniblink49
         fName.printf("math_%s", name);
 
         SkRandom rand;
@@ -65,29 +44,19 @@ public:
         }
     }
 
-<<<<<<< HEAD
     bool isSuitableFor(Backend backend) override
     {
-=======
-    bool isSuitableFor(Backend backend) override {
->>>>>>> miniblink49
         return backend == kNonRendering_Backend;
     }
 
     virtual void performTest(float* SK_RESTRICT dst,
-<<<<<<< HEAD
         const float* SK_RESTRICT src,
         int count)
         = 0;
-=======
-                              const float* SK_RESTRICT src,
-                              int count) = 0;
->>>>>>> miniblink49
 
 protected:
     virtual int mulLoopCount() const { return 1; }
 
-<<<<<<< HEAD
     const char* onGetName() override
     {
         return fName.c_str();
@@ -95,13 +64,6 @@ protected:
 
     void onDraw(int loops, SkCanvas*) override
     {
-=======
-    virtual const char* onGetName() {
-        return fName.c_str();
-    }
-
-    virtual void onDraw(const int loops, SkCanvas*) {
->>>>>>> miniblink49
         int n = loops * this->mulLoopCount();
         for (int i = 0; i < n; i++) {
             this->performTest(fDst, fSrc, kBuffer);
@@ -114,7 +76,6 @@ private:
 
 class MathBenchU32 : public MathBench {
 public:
-<<<<<<< HEAD
     MathBenchU32(const char name[])
         : INHERITED(name)
     {
@@ -128,26 +89,11 @@ protected:
 
     void performTest(float* SK_RESTRICT dst, const float* SK_RESTRICT src, int count) override
     {
-=======
-    MathBenchU32(const char name[]) : INHERITED(name) {}
-
-protected:
-    virtual void performITest(uint32_t* SK_RESTRICT dst,
-                              const uint32_t* SK_RESTRICT src,
-                              int count) = 0;
-
-    virtual void performTest(float* SK_RESTRICT dst,
-                             const float* SK_RESTRICT src,
-                             int count) override {
->>>>>>> miniblink49
         uint32_t* d = SkTCast<uint32_t*>(dst);
         const uint32_t* s = SkTCast<const uint32_t*>(src);
         this->performITest(d, s, count);
     }
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 private:
     typedef MathBench INHERITED;
 };
@@ -156,7 +102,6 @@ private:
 
 class NoOpMathBench : public MathBench {
 public:
-<<<<<<< HEAD
     NoOpMathBench()
         : INHERITED("noOp")
     {
@@ -165,28 +110,17 @@ public:
 protected:
     void performTest(float* SK_RESTRICT dst, const float* SK_RESTRICT src, int count) override
     {
-=======
-    NoOpMathBench() : INHERITED("noOp") {}
-protected:
-    virtual void performTest(float* SK_RESTRICT dst,
-                              const float* SK_RESTRICT src,
-                              int count) {
->>>>>>> miniblink49
         for (int i = 0; i < count; ++i) {
             dst[i] = src[i] + 1;
         }
     }
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 private:
     typedef MathBench INHERITED;
 };
 
 class SkRSqrtMathBench : public MathBench {
 public:
-<<<<<<< HEAD
     SkRSqrtMathBench()
         : INHERITED("sk_float_rsqrt")
     {
@@ -195,26 +129,15 @@ public:
 protected:
     void performTest(float* SK_RESTRICT dst, const float* SK_RESTRICT src, int count) override
     {
-=======
-    SkRSqrtMathBench() : INHERITED("sk_float_rsqrt") {}
-protected:
-    virtual void performTest(float* SK_RESTRICT dst,
-                              const float* SK_RESTRICT src,
-                              int count) {
->>>>>>> miniblink49
         for (int i = 0; i < count; ++i) {
             dst[i] = sk_float_rsqrt(src[i]);
         }
     }
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 private:
     typedef MathBench INHERITED;
 };
 
-<<<<<<< HEAD
 class SlowISqrtMathBench : public MathBench {
 public:
     SlowISqrtMathBench()
@@ -225,29 +148,15 @@ public:
 protected:
     void performTest(float* SK_RESTRICT dst, const float* SK_RESTRICT src, int count) override
     {
-=======
-
-class SlowISqrtMathBench : public MathBench {
-public:
-    SlowISqrtMathBench() : INHERITED("slowIsqrt") {}
-protected:
-    virtual void performTest(float* SK_RESTRICT dst,
-                              const float* SK_RESTRICT src,
-                              int count) {
->>>>>>> miniblink49
         for (int i = 0; i < count; ++i) {
             dst[i] = 1.0f / sk_float_sqrt(src[i]);
         }
     }
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 private:
     typedef MathBench INHERITED;
 };
 
-<<<<<<< HEAD
 static inline float SkFastInvSqrt(float x)
 {
     float xhalf = 0.5f * x;
@@ -256,21 +165,11 @@ static inline float SkFastInvSqrt(float x)
     x = *SkTCast<float*>(&i);
     x = x * (1.5f - xhalf * x * x);
     //    x = x*(1.5f-xhalf*x*x); // this line takes err from 10^-3 to 10^-6
-=======
-static inline float SkFastInvSqrt(float x) {
-    float xhalf = 0.5f*x;
-    int i = *SkTCast<int*>(&x);
-    i = 0x5f3759df - (i>>1);
-    x = *SkTCast<float*>(&i);
-    x = x*(1.5f-xhalf*x*x);
-//    x = x*(1.5f-xhalf*x*x); // this line takes err from 10^-3 to 10^-6
->>>>>>> miniblink49
     return x;
 }
 
 class FastISqrtMathBench : public MathBench {
 public:
-<<<<<<< HEAD
     FastISqrtMathBench()
         : INHERITED("fastIsqrt")
     {
@@ -279,47 +178,28 @@ public:
 protected:
     void performTest(float* SK_RESTRICT dst, const float* SK_RESTRICT src, int count) override
     {
-=======
-    FastISqrtMathBench() : INHERITED("fastIsqrt") {}
-protected:
-    virtual void performTest(float* SK_RESTRICT dst,
-                              const float* SK_RESTRICT src,
-                              int count) {
->>>>>>> miniblink49
         for (int i = 0; i < count; ++i) {
             dst[i] = SkFastInvSqrt(src[i]);
         }
     }
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 private:
     typedef MathBench INHERITED;
 };
 
-<<<<<<< HEAD
 static inline uint32_t QMul64(uint32_t value, U8CPU alpha)
 {
-=======
-static inline uint32_t QMul64(uint32_t value, U8CPU alpha) {
->>>>>>> miniblink49
     SkASSERT((uint8_t)alpha == alpha);
     const uint32_t mask = 0xFF00FF;
 
     uint64_t tmp = value;
     tmp = (tmp & mask) | ((tmp & ~mask) << 24);
     tmp *= alpha;
-<<<<<<< HEAD
     return (uint32_t)(((tmp >> 8) & mask) | ((tmp >> 32) & ~mask));
-=======
-    return (uint32_t) (((tmp >> 8) & mask) | ((tmp >> 32) & ~mask));
->>>>>>> miniblink49
 }
 
 class QMul64Bench : public MathBenchU32 {
 public:
-<<<<<<< HEAD
     QMul64Bench()
         : INHERITED("qmul64")
     {
@@ -330,28 +210,17 @@ protected:
         const uint32_t* SK_RESTRICT src,
         int count) override
     {
-=======
-    QMul64Bench() : INHERITED("qmul64") {}
-protected:
-    virtual void performITest(uint32_t* SK_RESTRICT dst,
-                              const uint32_t* SK_RESTRICT src,
-                              int count) override {
->>>>>>> miniblink49
         for (int i = 0; i < count; ++i) {
             dst[i] = QMul64(src[i], (uint8_t)i);
         }
     }
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 private:
     typedef MathBenchU32 INHERITED;
 };
 
 class QMul32Bench : public MathBenchU32 {
 public:
-<<<<<<< HEAD
     QMul32Bench()
         : INHERITED("qmul32")
     {
@@ -362,40 +231,24 @@ protected:
         const uint32_t* SK_RESTRICT src,
         int count) override
     {
-=======
-    QMul32Bench() : INHERITED("qmul32") {}
-protected:
-    virtual void performITest(uint32_t* SK_RESTRICT dst,
-                              const uint32_t* SK_RESTRICT src,
-                              int count) override {
->>>>>>> miniblink49
         for (int i = 0; i < count; ++i) {
             dst[i] = SkAlphaMulQ(src[i], (uint8_t)i);
         }
     }
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 private:
     typedef MathBenchU32 INHERITED;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 
-<<<<<<< HEAD
 static bool isFinite_int(float x)
 {
     uint32_t bits = SkFloat2Bits(x); // need unsigned for our shifts
-=======
-static bool isFinite_int(float x) {
-    uint32_t bits = SkFloat2Bits(x);    // need unsigned for our shifts
->>>>>>> miniblink49
     int exponent = bits << 1 >> 24;
     return exponent != 0xFF;
 }
 
-<<<<<<< HEAD
 static bool isFinite_float(float x)
 {
     return SkToBool(sk_float_isfinite(x));
@@ -403,18 +256,10 @@ static bool isFinite_float(float x)
 
 static bool isFinite_mulzero(float x)
 {
-=======
-static bool isFinite_float(float x) {
-    return SkToBool(sk_float_isfinite(x));
-}
-
-static bool isFinite_mulzero(float x) {
->>>>>>> miniblink49
     float y = x * 0;
     return y == y;
 }
 
-<<<<<<< HEAD
 static bool isfinite_and_int(const float data[4])
 {
     return isFinite_int(data[0]) && isFinite_int(data[1]) && isFinite_int(data[2]) && isFinite_int(data[3]);
@@ -444,38 +289,12 @@ static bool isfinite_plus_float(const float data[4])
 
 static bool isfinite_plus_mulzero(const float data[4])
 {
-=======
-static bool isfinite_and_int(const float data[4]) {
-    return  isFinite_int(data[0]) && isFinite_int(data[1]) && isFinite_int(data[2]) && isFinite_int(data[3]);
-}
-
-static bool isfinite_and_float(const float data[4]) {
-    return  isFinite_float(data[0]) && isFinite_float(data[1]) && isFinite_float(data[2]) && isFinite_float(data[3]);
-}
-
-static bool isfinite_and_mulzero(const float data[4]) {
-    return  isFinite_mulzero(data[0]) && isFinite_mulzero(data[1]) && isFinite_mulzero(data[2]) && isFinite_mulzero(data[3]);
-}
-
-#define mulzeroadd(data)    (data[0]*0 + data[1]*0 + data[2]*0 + data[3]*0)
-
-static bool isfinite_plus_int(const float data[4]) {
-    return  isFinite_int(mulzeroadd(data));
-}
-
-static bool isfinite_plus_float(const float data[4]) {
-    return  !sk_float_isnan(mulzeroadd(data));
-}
-
-static bool isfinite_plus_mulzero(const float data[4]) {
->>>>>>> miniblink49
     float x = mulzeroadd(data);
     return x == x;
 }
 
 typedef bool (*IsFiniteProc)(const float[]);
 
-<<<<<<< HEAD
 #define MAKEREC(name) \
     {                 \
         name, #name   \
@@ -484,13 +303,6 @@ typedef bool (*IsFiniteProc)(const float[]);
 static const struct {
     IsFiniteProc fProc;
     const char* fName;
-=======
-#define MAKEREC(name)   { name, #name }
-
-static const struct {
-    IsFiniteProc    fProc;
-    const char*     fName;
->>>>>>> miniblink49
 } gRec[] = {
     MAKEREC(isfinite_and_int),
     MAKEREC(isfinite_and_float),
@@ -502,12 +314,8 @@ static const struct {
 
 #undef MAKEREC
 
-<<<<<<< HEAD
 static bool isFinite(const SkRect& r)
 {
-=======
-static bool isFinite(const SkRect& r) {
->>>>>>> miniblink49
     // x * 0 will be NaN iff x is infinity or NaN.
     // a + b will be NaN iff either a or b is NaN.
     float value = r.fLeft * 0 + r.fTop * 0 + r.fRight * 0 + r.fBottom * 0;
@@ -522,16 +330,10 @@ class IsFiniteBench : public Benchmark {
         N = 1000,
     };
     float fData[N];
-<<<<<<< HEAD
 
 public:
     IsFiniteBench(int index)
     {
-=======
-public:
-
-    IsFiniteBench(int index)  {
->>>>>>> miniblink49
         SkRandom rand;
 
         for (int i = 0; i < N; ++i) {
@@ -539,11 +341,7 @@ public:
         }
 
         if (index < 0) {
-<<<<<<< HEAD
             fProc = nullptr;
-=======
-            fProc = NULL;
->>>>>>> miniblink49
             fName = "isfinite_rect";
         } else {
             fProc = gRec[index].fProc;
@@ -551,22 +349,14 @@ public:
         }
     }
 
-<<<<<<< HEAD
     bool isSuitableFor(Backend backend) override
     {
-=======
-    bool isSuitableFor(Backend backend) override {
->>>>>>> miniblink49
         return backend == kNonRendering_Backend;
     }
 
 protected:
-<<<<<<< HEAD
     void onDraw(int loops, SkCanvas*) override
     {
-=======
-    virtual void onDraw(const int loops, SkCanvas*) {
->>>>>>> miniblink49
         IsFiniteProc proc = fProc;
         const float* data = fData;
         // do this so the compiler won't throw away the function call
@@ -596,23 +386,14 @@ protected:
         }
     }
 
-<<<<<<< HEAD
     const char* onGetName() override
     {
-=======
-    virtual const char* onGetName() {
->>>>>>> miniblink49
         return fName;
     }
 
 private:
-<<<<<<< HEAD
     IsFiniteProc fProc;
     const char* fName;
-=======
-    IsFiniteProc    fProc;
-    const char*     fName;
->>>>>>> miniblink49
 
     typedef Benchmark INHERITED;
 };
@@ -623,17 +404,11 @@ class FloorBench : public Benchmark {
     };
     float fData[ARRAY];
     bool fFast;
-<<<<<<< HEAD
 
 public:
     FloorBench(bool fast)
         : fFast(fast)
     {
-=======
-public:
-
-    FloorBench(bool fast) : fFast(fast) {
->>>>>>> miniblink49
         SkRandom rand;
 
         for (int i = 0; i < ARRAY; ++i) {
@@ -647,7 +422,6 @@ public:
         }
     }
 
-<<<<<<< HEAD
     bool isSuitableFor(Backend backend) override
     {
         return backend == kNonRendering_Backend;
@@ -658,16 +432,6 @@ public:
 protected:
     void onDraw(int loops, SkCanvas*) override
     {
-=======
-    bool isSuitableFor(Backend backend) override {
-        return backend == kNonRendering_Backend;
-    }
-
-    virtual void process(float) {}
-
-protected:
-    virtual void onDraw(const int loops, SkCanvas*) {
->>>>>>> miniblink49
         SkRandom rand;
         float accum = 0;
         const float* data = fData;
@@ -689,21 +453,13 @@ protected:
         }
     }
 
-<<<<<<< HEAD
     const char* onGetName() override
     {
-=======
-    virtual const char* onGetName() {
->>>>>>> miniblink49
         return fName;
     }
 
 private:
-<<<<<<< HEAD
     const char* fName;
-=======
-    const char*     fName;
->>>>>>> miniblink49
 
     typedef Benchmark INHERITED;
 };
@@ -716,13 +472,9 @@ class CLZBench : public Benchmark {
     bool fUsePortable;
 
 public:
-<<<<<<< HEAD
     CLZBench(bool usePortable)
         : fUsePortable(usePortable)
     {
-=======
-    CLZBench(bool usePortable) : fUsePortable(usePortable) {
->>>>>>> miniblink49
 
         SkRandom rand;
         for (int i = 0; i < ARRAY; ++i) {
@@ -736,28 +488,17 @@ public:
         }
     }
 
-<<<<<<< HEAD
     bool isSuitableFor(Backend backend) override
     {
-=======
-    bool isSuitableFor(Backend backend) override {
->>>>>>> miniblink49
         return backend == kNonRendering_Backend;
     }
 
     // just so the compiler doesn't remove our loops
-<<<<<<< HEAD
     virtual void process(int) { }
 
 protected:
     void onDraw(int loops, SkCanvas*) override
     {
-=======
-    virtual void process(int) {}
-
-protected:
-    virtual void onDraw(const int loops, SkCanvas*) {
->>>>>>> miniblink49
         int accum = 0;
 
         if (fUsePortable) {
@@ -777,12 +518,8 @@ protected:
         }
     }
 
-<<<<<<< HEAD
     const char* onGetName() override
     {
-=======
-    virtual const char* onGetName() {
->>>>>>> miniblink49
         return fName;
     }
 
@@ -796,21 +533,13 @@ private:
 
 class NormalizeBench : public Benchmark {
     enum {
-<<<<<<< HEAD
         ARRAY = 1000,
-=======
-        ARRAY =1000,
->>>>>>> miniblink49
     };
     SkVector fVec[ARRAY];
 
 public:
-<<<<<<< HEAD
     NormalizeBench()
     {
-=======
-    NormalizeBench() {
->>>>>>> miniblink49
         SkRandom rand;
         for (int i = 0; i < ARRAY; ++i) {
             fVec[i].set(rand.nextSScalar1(), rand.nextSScalar1());
@@ -819,28 +548,17 @@ public:
         fName = "point_normalize";
     }
 
-<<<<<<< HEAD
     bool isSuitableFor(Backend backend) override
     {
-=======
-    bool isSuitableFor(Backend backend) override {
->>>>>>> miniblink49
         return backend == kNonRendering_Backend;
     }
 
     // just so the compiler doesn't remove our loops
-<<<<<<< HEAD
     virtual void process(int) { }
 
 protected:
     void onDraw(int loops, SkCanvas*) override
     {
-=======
-    virtual void process(int) {}
-
-protected:
-    virtual void onDraw(const int loops, SkCanvas*) {
->>>>>>> miniblink49
         int accum = 0;
 
         for (int j = 0; j < loops; ++j) {
@@ -851,12 +569,8 @@ protected:
         }
     }
 
-<<<<<<< HEAD
     const char* onGetName() override
     {
-=======
-    virtual const char* onGetName() {
->>>>>>> miniblink49
         return fName;
     }
 
@@ -874,41 +588,24 @@ class FixedMathBench : public Benchmark {
     };
     float fData[N];
     SkFixed fResult[N];
-<<<<<<< HEAD
 
 public:
     FixedMathBench()
     {
-=======
-public:
-
-    FixedMathBench()  {
->>>>>>> miniblink49
         SkRandom rand;
         for (int i = 0; i < N; ++i) {
             fData[i] = rand.nextSScalar1();
         }
-<<<<<<< HEAD
     }
 
     bool isSuitableFor(Backend backend) override
     {
-=======
-
-    }
-
-    bool isSuitableFor(Backend backend) override {
->>>>>>> miniblink49
         return backend == kNonRendering_Backend;
     }
 
 protected:
-<<<<<<< HEAD
     void onDraw(int loops, SkCanvas*) override
     {
-=======
-    virtual void onDraw(const int loops, SkCanvas*) {
->>>>>>> miniblink49
         for (int j = 0; j < loops; ++j) {
             for (int i = 0; i < N - 4; ++i) {
                 fResult[i] = SkFloatToFixed(fData[i]);
@@ -921,12 +618,8 @@ protected:
         }
     }
 
-<<<<<<< HEAD
     const char* onGetName() override
     {
-=======
-    virtual const char* onGetName() {
->>>>>>> miniblink49
         return "float_to_fixed";
     }
 
@@ -939,7 +632,6 @@ private:
 template <typename T>
 class DivModBench : public Benchmark {
     SkString fName;
-<<<<<<< HEAD
 
 public:
     explicit DivModBench(const char* name)
@@ -949,19 +641,10 @@ public:
 
     bool isSuitableFor(Backend backend) override
     {
-=======
-public:
-    explicit DivModBench(const char* name) {
-        fName.printf("divmod_%s", name);
-    }
-
-    bool isSuitableFor(Backend backend) override {
->>>>>>> miniblink49
         return backend == kNonRendering_Backend;
     }
 
 protected:
-<<<<<<< HEAD
     const char* onGetName() override
     {
         return fName.c_str();
@@ -975,18 +658,6 @@ protected:
             if ((T)i == 0)
                 continue; // Small T will wrap around.
             SkTDivMod((T)(i + 1), (T)i, &div, &mod);
-=======
-    virtual const char* onGetName() {
-        return fName.c_str();
-    }
-
-    virtual void onDraw(const int loops, SkCanvas*) {
-        volatile T a = 0, b = 0;
-        T div = 0, mod = 0;
-        for (int i = 0; i < loops; i++) {
-            if ((T)i == 0) continue;  // Small T will wrap around.
-            SkTDivMod((T)(i+1), (T)i, &div, &mod);
->>>>>>> miniblink49
             a ^= div;
             b ^= mod;
         }
@@ -1004,7 +675,6 @@ DEF_BENCH(return new DivModBench<int64_t>("int64_t"))
 
 ///////////////////////////////////////////////////////////////////////////////
 
-<<<<<<< HEAD
 DEF_BENCH(return new NoOpMathBench();)
 DEF_BENCH(return new SkRSqrtMathBench();)
 DEF_BENCH(return new SlowISqrtMathBench();)
@@ -1056,29 +726,3 @@ struct FloatToIntBench : public Benchmark {
     }
 };
 DEF_BENCH(return new FloatToIntBench;)
-=======
-DEF_BENCH( return new NoOpMathBench(); )
-DEF_BENCH( return new SkRSqrtMathBench(); )
-DEF_BENCH( return new SlowISqrtMathBench(); )
-DEF_BENCH( return new FastISqrtMathBench(); )
-DEF_BENCH( return new QMul64Bench(); )
-DEF_BENCH( return new QMul32Bench(); )
-
-DEF_BENCH( return new IsFiniteBench(-1); )
-DEF_BENCH( return new IsFiniteBench(0); )
-DEF_BENCH( return new IsFiniteBench(1); )
-DEF_BENCH( return new IsFiniteBench(2); )
-DEF_BENCH( return new IsFiniteBench(3); )
-DEF_BENCH( return new IsFiniteBench(4); )
-DEF_BENCH( return new IsFiniteBench(5); )
-
-DEF_BENCH( return new FloorBench(false); )
-DEF_BENCH( return new FloorBench(true); )
-
-DEF_BENCH( return new CLZBench(false); )
-DEF_BENCH( return new CLZBench(true); )
-
-DEF_BENCH( return new NormalizeBench(); )
-
-DEF_BENCH( return new FixedMathBench(); )
->>>>>>> miniblink49

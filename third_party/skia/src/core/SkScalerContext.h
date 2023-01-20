@@ -20,7 +20,6 @@ class SkMaskFilter;
 class SkPathEffect;
 class SkRasterizer;
 
-<<<<<<< HEAD
 struct SkScalerContextEffects {
     SkScalerContextEffects()
         : fPathEffect(nullptr)
@@ -46,14 +45,11 @@ enum SkAxisAlignment {
     kY_SkAxisAlignment
 };
 
-=======
->>>>>>> miniblink49
 /*
  *  To allow this to be forward-declared, it must be its own typename, rather
  *  than a nested struct inside SkScalerContext (where it started).
  */
 struct SkScalerContextRec {
-<<<<<<< HEAD
     uint32_t fFontID;
     SkScalar fTextSize, fPreScaleX, fPreSkewX;
     SkScalar fPost2x2[2][2];
@@ -72,64 +68,31 @@ struct SkScalerContextRec {
     }
     void setDeviceGamma(SkScalar dg)
     {
-=======
-    uint32_t    fFontID;
-    SkScalar    fTextSize, fPreScaleX, fPreSkewX;
-    SkScalar    fPost2x2[2][2];
-    SkScalar    fFrameWidth, fMiterLimit;
-
-    //These describe the parameters to create (uniquely identify) the pre-blend.
-    uint32_t    fLumBits;
-    uint8_t     fDeviceGamma; //2.6, (0.0, 4.0) gamma, 0.0 for sRGB
-    uint8_t     fPaintGamma;  //2.6, (0.0, 4.0) gamma, 0.0 for sRGB
-    uint8_t     fContrast;    //0.8+1, [0.0, 1.0] artificial contrast
-    uint8_t     fReservedAlign;
-
-    SkScalar getDeviceGamma() const {
-        return SkIntToScalar(fDeviceGamma) / (1 << 6);
-    }
-    void setDeviceGamma(SkScalar dg) {
->>>>>>> miniblink49
         SkASSERT(0 <= dg && dg < SkIntToScalar(4));
         fDeviceGamma = SkScalarFloorToInt(dg * (1 << 6));
     }
 
-<<<<<<< HEAD
     SkScalar getPaintGamma() const
     {
         return SkIntToScalar(fPaintGamma) / (1 << 6);
     }
     void setPaintGamma(SkScalar pg)
     {
-=======
-    SkScalar getPaintGamma() const {
-        return SkIntToScalar(fPaintGamma) / (1 << 6);
-    }
-    void setPaintGamma(SkScalar pg) {
->>>>>>> miniblink49
         SkASSERT(0 <= pg && pg < SkIntToScalar(4));
         fPaintGamma = SkScalarFloorToInt(pg * (1 << 6));
     }
 
-<<<<<<< HEAD
     SkScalar getContrast() const
     {
         return SkIntToScalar(fContrast) / ((1 << 8) - 1);
     }
     void setContrast(SkScalar c)
     {
-=======
-    SkScalar getContrast() const {
-        return SkIntToScalar(fContrast) / ((1 << 8) - 1);
-    }
-    void setContrast(SkScalar c) {
->>>>>>> miniblink49
         SkASSERT(0 <= c && c <= SK_Scalar1);
         fContrast = SkScalarRoundToInt(c * ((1 << 8) - 1));
     }
 
     /**
-<<<<<<< HEAD
      *  Causes the luminance color to be ignored, and the paint and device
      *  gamma to be effectively 1.0
      */
@@ -154,27 +117,11 @@ struct SkScalerContextRec {
     uint8_t fStrokeJoin : 4;
     uint8_t fStrokeCap : 4;
     uint16_t fFlags;
-=======
-     *  Causes the luminance color and contrast to be ignored, and the
-     *  paint and device gamma to be effectively 1.0.
-     */
-    void ignorePreBlend() {
-        setLuminanceColor(SK_ColorTRANSPARENT);
-        setPaintGamma(SK_Scalar1);
-        setDeviceGamma(SK_Scalar1);
-        setContrast(0);
-    }
-
-    uint8_t     fMaskFormat;
-    uint8_t     fStrokeJoin;
-    uint16_t    fFlags;
->>>>>>> miniblink49
     // Warning: when adding members note that the size of this structure
     // must be a multiple of 4. SkDescriptor requires that its arguments be
     // multiples of four and this structure is put in an SkDescriptor in
     // SkPaint::MakeRec.
 
-<<<<<<< HEAD
     void getMatrixFrom2x2(SkMatrix*) const;
     void getLocalMatrix(SkMatrix*) const;
     void getSingleMatrix(SkMatrix*) const;
@@ -184,17 +131,6 @@ struct SkScalerContextRec {
         kFull_PreMatrixScale, // The underlying port can apply both x and y scale.
         kVertical_PreMatrixScale, // The underlying port can only apply a y scale.
         kVerticalInteger_PreMatrixScale // The underlying port can only apply an integer y scale.
-=======
-    void    getMatrixFrom2x2(SkMatrix*) const;
-    void    getLocalMatrix(SkMatrix*) const;
-    void    getSingleMatrix(SkMatrix*) const;
-
-    /** The kind of scale which will be applied by the underlying port (pre-matrix). */
-    enum PreMatrixScale {
-        kFull_PreMatrixScale,  // The underlying port can apply both x and y scale.
-        kVertical_PreMatrixScale,  // The underlying port can only apply a y scale.
-        kVerticalInteger_PreMatrixScale  // The underlying port can only apply an integer y scale.
->>>>>>> miniblink49
     };
     /**
      *  Compute useful matrices for use with sizing in underlying libraries.
@@ -219,11 +155,7 @@ struct SkScalerContextRec {
      *  The 'total' matrix is also (optionally) available. This is useful in cases where the
      *  underlying library will not be used, often when working directly with font data.
      *
-<<<<<<< HEAD
      *  The parameters 'scale' and 'remaining' are required, the other pointers may be nullptr.
-=======
-     *  The parameters 'scale' and 'remaining' are required, the other pointers may be NULL.
->>>>>>> miniblink49
      *
      *  @param preMatrixScale the kind of scale to extract from the total matrix.
      *  @param scale the scale extracted from the total matrix (both values positive).
@@ -233,22 +165,14 @@ struct SkScalerContextRec {
      *  @param total the total matrix.
      */
     void computeMatrices(PreMatrixScale preMatrixScale,
-<<<<<<< HEAD
         SkVector* scale, SkMatrix* remaining,
         SkMatrix* remainingWithoutRotation = nullptr,
         SkMatrix* remainingRotation = nullptr,
         SkMatrix* total = nullptr);
-=======
-                         SkVector* scale, SkMatrix* remaining,
-                         SkMatrix* remainingWithoutRotation = NULL,
-                         SkMatrix* remainingRotation = NULL,
-                         SkMatrix* total = NULL);
->>>>>>> miniblink49
 
     inline SkPaint::Hinting getHinting() const;
     inline void setHinting(SkPaint::Hinting);
 
-<<<<<<< HEAD
     SkMask::Format getFormat() const
     {
         return static_cast<SkMask::Format>(fMaskFormat);
@@ -261,17 +185,6 @@ struct SkScalerContextRec {
 
     void setLuminanceColor(SkColor c)
     {
-=======
-    SkMask::Format getFormat() const {
-        return static_cast<SkMask::Format>(fMaskFormat);
-    }
-
-    SkColor getLuminanceColor() const {
-        return fLumBits;
-    }
-
-    void setLuminanceColor(SkColor c) {
->>>>>>> miniblink49
         fLumBits = c;
     }
 };
@@ -288,7 +201,6 @@ public:
     typedef SkScalerContextRec Rec;
 
     enum Flags {
-<<<<<<< HEAD
         kFrameAndFill_Flag = 0x0001,
         kDevKernText_Flag = 0x0002,
         kEmbeddedBitmapText_Flag = 0x0004,
@@ -311,51 +223,18 @@ public:
         // Generate A8 from LCD source (for GDI and CoreGraphics).
         // only meaningful if fMaskFormat is kA8
         kGenA8FromLCD_Flag = 0x0800, // could be 0x200 (bit meaning dependent on fMaskFormat)
-=======
-        kFrameAndFill_Flag        = 0x0001,
-        kDevKernText_Flag         = 0x0002,
-        kEmbeddedBitmapText_Flag  = 0x0004,
-        kEmbolden_Flag            = 0x0008,
-        kSubpixelPositioning_Flag = 0x0010,
-        kForceAutohinting_Flag    = 0x0020,  // Use auto instead of bytcode hinting if hinting.
-        kVertical_Flag            = 0x0040,
-
-        // together, these two flags resulting in a two bit value which matches
-        // up with the SkPaint::Hinting enum.
-        kHinting_Shift            = 7, // to shift into the other flags above
-        kHintingBit1_Flag         = 0x0080,
-        kHintingBit2_Flag         = 0x0100,
-
-        // Pixel geometry information.
-        // only meaningful if fMaskFormat is kLCD16
-        kLCD_Vertical_Flag        = 0x0200,    // else Horizontal
-        kLCD_BGROrder_Flag        = 0x0400,    // else RGB order
-
-        // Generate A8 from LCD source (for GDI and CoreGraphics).
-        // only meaningful if fMaskFormat is kA8
-        kGenA8FromLCD_Flag        = 0x0800, // could be 0x200 (bit meaning dependent on fMaskFormat)
->>>>>>> miniblink49
     };
 
     // computed values
     enum {
-<<<<<<< HEAD
         kHinting_Mask = kHintingBit1_Flag | kHintingBit2_Flag,
     };
 
     SkScalerContext(SkTypeface*, const SkScalerContextEffects&, const SkDescriptor*);
-=======
-        kHinting_Mask   = kHintingBit1_Flag | kHintingBit2_Flag,
-    };
-
-
-    SkScalerContext(SkTypeface*, const SkDescriptor*);
->>>>>>> miniblink49
     virtual ~SkScalerContext();
 
     SkTypeface* getTypeface() const { return fTypeface.get(); }
 
-<<<<<<< HEAD
     SkMask::Format getMaskFormat() const
     {
         return (SkMask::Format)fRec.fMaskFormat;
@@ -368,17 +247,6 @@ public:
 
     bool isVertical() const
     {
-=======
-    SkMask::Format getMaskFormat() const {
-        return (SkMask::Format)fRec.fMaskFormat;
-    }
-
-    bool isSubpixel() const {
-        return SkToBool(fRec.fFlags & kSubpixelPositioning_Flag);
-    }
-
-    bool isVertical() const {
->>>>>>> miniblink49
         return SkToBool(fRec.fFlags & kVertical_Flag);
     }
 
@@ -387,19 +255,14 @@ public:
         fact correspond to a different font/context. In that case, we use the
         base-glyph-count to know how to translate back into local glyph space.
      */
-<<<<<<< HEAD
     uint16_t charToGlyphID(SkUnichar uni)
     {
-=======
-    uint16_t charToGlyphID(SkUnichar uni) {
->>>>>>> miniblink49
         return generateCharToGlyph(uni);
     }
 
     /** Map the glyphID to its glyph index, and then to its char code. Unmapped
         glyphs return zero.
     */
-<<<<<<< HEAD
     SkUnichar glyphIDToChar(uint16_t glyphID)
     {
         return (glyphID < getGlyphCount()) ? generateGlyphToChar(glyphID) : 0;
@@ -411,51 +274,26 @@ public:
     void getImage(const SkGlyph&);
     void getPath(const SkGlyph&, SkPath*);
     void getFontMetrics(SkPaint::FontMetrics*);
-=======
-    SkUnichar glyphIDToChar(uint16_t glyphID) {
-        return (glyphID < getGlyphCount()) ? generateGlyphToChar(glyphID) : 0;
-    }
-
-    unsigned    getGlyphCount() { return this->generateGlyphCount(); }
-    void        getAdvance(SkGlyph*);
-    void        getMetrics(SkGlyph*);
-    void        getImage(const SkGlyph&);
-    void        getPath(const SkGlyph&, SkPath*);
-    void        getFontMetrics(SkPaint::FontMetrics*);
->>>>>>> miniblink49
 
     /** Return the size in bytes of the associated gamma lookup table
      */
     static size_t GetGammaLUTSize(SkScalar contrast, SkScalar paintGamma, SkScalar deviceGamma,
-<<<<<<< HEAD
         int* width, int* height);
-=======
-                                  int* width, int* height);
->>>>>>> miniblink49
 
     /** Get the associated gamma lookup table. The 'data' pointer must point to pre-allocated
         memory, with size in bytes greater than or equal to the return value of getGammaLUTSize().
      */
-<<<<<<< HEAD
     static void GetGammaLUTData(SkScalar contrast, SkScalar paintGamma, SkScalar deviceGamma,
         void* data);
 
     static void MakeRec(const SkPaint&, const SkSurfaceProps* surfaceProps,
         const SkMatrix*, Rec* rec);
-=======
-    static void   GetGammaLUTData(SkScalar contrast, SkScalar paintGamma, SkScalar deviceGamma,
-                                  void* data);
-
-    static void MakeRec(const SkPaint&, const SkSurfaceProps* surfaceProps,
-                        const SkMatrix*, Rec* rec);
->>>>>>> miniblink49
     static inline void PostMakeRec(const SkPaint&, Rec*);
 
     static SkMaskGamma::PreBlend GetMaskPreBlend(const Rec& rec);
 
     const Rec& getRec() const { return fRec; }
 
-<<<<<<< HEAD
     SkScalerContextEffects getEffects() const
     {
         return { fPathEffect.get(), fMaskFilter.get(), fRasterizer.get() };
@@ -469,10 +307,6 @@ public:
 
 protected:
     Rec fRec;
-=======
-protected:
-    Rec         fRec;
->>>>>>> miniblink49
 
     /** Generates the contents of glyph.fAdvanceX and glyph.fAdvanceY.
      *  May call getMetrics if that would be just as fast.
@@ -524,7 +358,6 @@ protected:
     virtual SkUnichar generateGlyphToChar(uint16_t glyphId);
 
     void forceGenerateImageFromPath() { fGenerateImageFromPath = true; }
-<<<<<<< HEAD
     void forceOffGenerateImageFromPath() { fGenerateImageFromPath = false; }
 
 private:
@@ -537,36 +370,16 @@ private:
     sk_sp<SkPathEffect> fPathEffect;
     sk_sp<SkMaskFilter> fMaskFilter;
     sk_sp<SkRasterizer> fRasterizer;
-=======
-
-    void forceOffGenerateImageFromPath() { fGenerateImageFromPath = false; }
-
-private:
-    // never null
-    SkAutoTUnref<SkTypeface> fTypeface;
-
-    // optional object, which may be null
-    SkPathEffect*   fPathEffect;
-    SkMaskFilter*   fMaskFilter;
-    SkRasterizer*   fRasterizer;
->>>>>>> miniblink49
 
     // if this is set, we draw the image from a path, rather than
     // calling generateImage.
     bool fGenerateImageFromPath;
 
     void internalGetPath(const SkGlyph& glyph, SkPath* fillPath,
-<<<<<<< HEAD
         SkPath* devPath, SkMatrix* fillToDevMatrix);
 
     // returns the right context from our link-list for this char. If no match
     // is found it returns nullptr. If a match is found then the glyphID param is
-=======
-                         SkPath* devPath, SkMatrix* fillToDevMatrix);
-
-    // returns the right context from our link-list for this char. If no match
-    // is found it returns NULL. If a match is found then the glyphID param is
->>>>>>> miniblink49
     // set to the glyphID that maps to the provided char.
     SkScalerContext* getContextFromChar(SkUnichar uni, uint16_t* glyphID);
 
@@ -574,15 +387,11 @@ private:
 protected:
     // Visible to subclasses so that generateImage can apply the pre-blend directly.
     const SkMaskGamma::PreBlend fPreBlend;
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 private:
     // When there is a filter, previous steps must create a linear mask
     // and the pre-blend applied as a final step.
     const SkMaskGamma::PreBlend fPreBlendForFilter;
-<<<<<<< HEAD
 };
 
 #define kRec_SkDescriptorTag SkSetFourByteTag('s', 'r', 'e', 'c')
@@ -603,45 +412,4 @@ void SkScalerContextRec::setHinting(SkPaint::Hinting hinting)
     fFlags = (fFlags & ~SkScalerContext::kHinting_Mask) | (hinting << SkScalerContext::kHinting_Shift);
 }
 
-=======
-
-    friend class SkRandomScalerContext; // For debugging
-};
-
-#define kRec_SkDescriptorTag            SkSetFourByteTag('s', 'r', 'e', 'c')
-#define kPathEffect_SkDescriptorTag     SkSetFourByteTag('p', 't', 'h', 'e')
-#define kMaskFilter_SkDescriptorTag     SkSetFourByteTag('m', 's', 'k', 'f')
-#define kRasterizer_SkDescriptorTag     SkSetFourByteTag('r', 'a', 's', 't')
-
-///////////////////////////////////////////////////////////////////////////////
-
-enum SkAxisAlignment {
-    kNone_SkAxisAlignment,
-    kX_SkAxisAlignment,
-    kY_SkAxisAlignment
-};
-
-/**
- *  Return the axis (if any) that the baseline for horizontal text will land on
- *  after running through the specified matrix.
- *
- *  As an example, the identity matrix will return kX_SkAxisAlignment
- */
-SkAxisAlignment SkComputeAxisAlignmentForHText(const SkMatrix& matrix);
-
-///////////////////////////////////////////////////////////////////////////////
-
-SkPaint::Hinting SkScalerContextRec::getHinting() const {
-    unsigned hint = (fFlags & SkScalerContext::kHinting_Mask) >>
-                                            SkScalerContext::kHinting_Shift;
-    return static_cast<SkPaint::Hinting>(hint);
-}
-
-void SkScalerContextRec::setHinting(SkPaint::Hinting hinting) {
-    fFlags = (fFlags & ~SkScalerContext::kHinting_Mask) |
-                                (hinting << SkScalerContext::kHinting_Shift);
-}
-
-
->>>>>>> miniblink49
 #endif

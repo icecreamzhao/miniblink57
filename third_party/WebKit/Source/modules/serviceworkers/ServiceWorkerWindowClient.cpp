@@ -2,10 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "modules/serviceworkers/ServiceWorkerWindowClient.h"
 
 #include "bindings/core/v8/CallbackPromiseAdapter.h"
@@ -13,7 +9,6 @@
 #include "core/dom/DOMException.h"
 #include "core/dom/ExceptionCode.h"
 #include "core/page/PageVisibilityState.h"
-<<<<<<< HEAD
 #include "core/workers/WorkerGlobalScope.h"
 #include "core/workers/WorkerLocation.h"
 #include "modules/serviceworkers/ServiceWorkerError.h"
@@ -34,58 +29,28 @@ ServiceWorkerWindowClient* ServiceWorkerWindowClient::take(
 
 ServiceWorkerWindowClient* ServiceWorkerWindowClient::create(
     const WebServiceWorkerClientInfo& info)
-=======
-#include "modules/serviceworkers/ServiceWorkerError.h"
-#include "modules/serviceworkers/ServiceWorkerGlobalScopeClient.h"
-#include "public/platform/WebString.h"
-#include "wtf/RefPtr.h"
-
-namespace blink {
-
-ServiceWorkerWindowClient* ServiceWorkerWindowClient::take(ScriptPromiseResolver*, PassOwnPtr<ServiceWorkerWindowClient::WebType> webClient)
-{
-    return ServiceWorkerWindowClient::create(*webClient);
-}
-
-ServiceWorkerWindowClient* ServiceWorkerWindowClient::create(const WebServiceWorkerClientInfo& info)
->>>>>>> miniblink49
 {
     return new ServiceWorkerWindowClient(info);
 }
 
-<<<<<<< HEAD
 ServiceWorkerWindowClient::ServiceWorkerWindowClient(
     const WebServiceWorkerClientInfo& info)
-=======
-ServiceWorkerWindowClient::ServiceWorkerWindowClient(const WebServiceWorkerClientInfo& info)
->>>>>>> miniblink49
     : ServiceWorkerClient(info)
     , m_pageVisibilityState(info.pageVisibilityState)
     , m_isFocused(info.isFocused)
 {
 }
 
-<<<<<<< HEAD
 ServiceWorkerWindowClient::~ServiceWorkerWindowClient() { }
 
 String ServiceWorkerWindowClient::visibilityState() const
 {
     return pageVisibilityStateString(
         static_cast<PageVisibilityState>(m_pageVisibilityState));
-=======
-ServiceWorkerWindowClient::~ServiceWorkerWindowClient()
-{
-}
-
-String ServiceWorkerWindowClient::visibilityState() const
-{
-    return pageVisibilityStateString(static_cast<PageVisibilityState>(m_pageVisibilityState));
->>>>>>> miniblink49
 }
 
 ScriptPromise ServiceWorkerWindowClient::focus(ScriptState* scriptState)
 {
-<<<<<<< HEAD
     ScriptPromiseResolver* resolver = ScriptPromiseResolver::create(scriptState);
     ScriptPromise promise = resolver->promise();
 
@@ -126,18 +91,6 @@ ScriptPromise ServiceWorkerWindowClient::navigate(ScriptState* scriptState,
 
     ServiceWorkerGlobalScopeClient::from(context)->navigate(
         uuid(), parsedUrl, WTF::makeUnique<NavigateClientCallback>(resolver));
-=======
-    RefPtrWillBeRawPtr<ScriptPromiseResolver> resolver = ScriptPromiseResolver::create(scriptState);
-    ScriptPromise promise = resolver->promise();
-
-    if (!scriptState->executionContext()->isWindowInteractionAllowed()) {
-        resolver->reject(DOMException::create(InvalidAccessError, "Not allowed to focus a window."));
-        return promise;
-    }
-    scriptState->executionContext()->consumeWindowInteraction();
-
-    ServiceWorkerGlobalScopeClient::from(scriptState->executionContext())->focus(uuid(), new CallbackPromiseAdapter<ServiceWorkerWindowClient, ServiceWorkerError>(resolver));
->>>>>>> miniblink49
     return promise;
 }
 

@@ -33,7 +33,8 @@
 
 #include "core/CoreExport.h"
 #include "platform/geometry/IntRect.h"
-#include "wtf/RefCounted.h"
+#include "platform/heap/Handle.h"
+#include "wtf/Allocator.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
@@ -41,21 +42,20 @@ namespace blink {
 class AXObject;
 
 struct DateTimeSuggestion {
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
     double value;
     String localizedValue;
     String label;
 };
 
 struct DateTimeChooserParameters {
+    DISALLOW_NEW();
     AtomicString type;
-    IntRect anchorRectInRootFrame;
     IntRect anchorRectInScreen;
     // Locale name for which the chooser should be localized. This
     // might be an invalid name because it comes from HTML lang
     // attributes.
     AtomicString locale;
-    // FIXME: Remove. Deprecated in favor of doubleValue.
-    String currentValue;
     double doubleValue;
     Vector<DateTimeSuggestion> suggestions;
     double minimum;
@@ -67,13 +67,16 @@ struct DateTimeChooserParameters {
 };
 
 // For pickers like color pickers and date pickers.
-class CORE_EXPORT DateTimeChooser : public RefCounted<DateTimeChooser> {
+class CORE_EXPORT DateTimeChooser
+    : public GarbageCollectedFinalized<DateTimeChooser> {
 public:
     virtual ~DateTimeChooser();
 
     virtual void endChooser() = 0;
     // Returns a root AXObject in the DateTimeChooser if it's available.
     virtual AXObject* rootAXObject() = 0;
+
+    DEFINE_INLINE_VIRTUAL_TRACE() { }
 };
 
 } // namespace blink

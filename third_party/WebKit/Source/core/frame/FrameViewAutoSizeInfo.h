@@ -7,7 +7,7 @@
 
 #include "platform/geometry/IntSize.h"
 #include "platform/heap/Handle.h"
-#include "wtf/FastAllocBase.h"
+#include "wtf/Allocator.h"
 #include "wtf/Noncopyable.h"
 #include "wtf/RefPtr.h"
 
@@ -15,14 +15,14 @@ namespace blink {
 
 class FrameView;
 
-class FrameViewAutoSizeInfo final : public NoBaseWillBeGarbageCollected<FrameViewAutoSizeInfo> {
+class FrameViewAutoSizeInfo final
+    : public GarbageCollected<FrameViewAutoSizeInfo> {
     WTF_MAKE_NONCOPYABLE(FrameViewAutoSizeInfo);
-    WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(FrameViewAutoSizeInfo);
-    DECLARE_EMPTY_DESTRUCTOR_WILL_BE_REMOVED(FrameViewAutoSizeInfo);
+
 public:
-    static PassOwnPtrWillBeRawPtr<FrameViewAutoSizeInfo> create(FrameView* frameView)
+    static FrameViewAutoSizeInfo* create(FrameView* frameView)
     {
-        return adoptPtrWillBeNoop(new FrameViewAutoSizeInfo(frameView));
+        return new FrameViewAutoSizeInfo(frameView);
     }
 
     void configureAutoSizeMode(const IntSize& minSize, const IntSize& maxSize);
@@ -33,7 +33,7 @@ public:
 private:
     explicit FrameViewAutoSizeInfo(FrameView*);
 
-    RawPtrWillBeMember<FrameView> m_frameView;
+    Member<FrameView> m_frameView;
 
     // The lower bound on the size when autosizing.
     IntSize m_minAutoSize;

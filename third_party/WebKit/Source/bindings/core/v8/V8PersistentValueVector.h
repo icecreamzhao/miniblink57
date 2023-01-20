@@ -31,6 +31,7 @@
 #ifndef V8PersistentValueVector_h
 #define V8PersistentValueVector_h
 
+#include "wtf/Allocator.h"
 #include "wtf/Vector.h"
 #include <v8-util.h>
 #include <v8.h>
@@ -38,20 +39,16 @@
 namespace blink {
 
 class WTFVectorPersistentValueVectorTraits {
+    STATIC_ONLY(WTFVectorPersistentValueVectorTraits);
+
 public:
     typedef Vector<v8::PersistentContainerValue> Impl;
     static void Append(Impl* impl, v8::PersistentContainerValue value)
     {
-        impl->append(value);
+        impl->push_back(value);
     }
-    static bool IsEmpty(const Impl* impl)
-    {
-        return impl->isEmpty();
-    }
-    static size_t Size(const Impl* impl)
-    {
-        return impl->size();
-    }
+    static bool IsEmpty(const Impl* impl) { return impl->isEmpty(); }
+    static size_t Size(const Impl* impl) { return impl->size(); }
     static v8::PersistentContainerValue Get(const Impl* impl, size_t i)
     {
         return (i < impl->size()) ? impl->at(i) : v8::kPersistentContainerNotFound;
@@ -60,16 +57,22 @@ public:
     {
         impl->reserveCapacity(capacity);
     }
-    static void Clear(Impl* impl)
-    {
-        impl->clear();
-    }
+    static void Clear(Impl* impl) { impl->clear(); }
 };
 
-template<class ValueType>
-class V8PersistentValueVector : public v8::PersistentValueVector<ValueType, WTFVectorPersistentValueVectorTraits> {
+template <class ValueType>
+class V8PersistentValueVector
+    : public v8::PersistentValueVector<ValueType,
+          WTFVectorPersistentValueVectorTraits> {
+    DISALLOW_NEW();
+
 public:
-    explicit V8PersistentValueVector(v8::Isolate* isolate) : v8::PersistentValueVector<ValueType, WTFVectorPersistentValueVectorTraits>(isolate) { }
+    explicit V8PersistentValueVector(v8::Isolate* isolate)
+        : v8::PersistentValueVector<ValueType,
+            WTFVectorPersistentValueVectorTraits>(
+            isolate)
+    {
+    }
 };
 
 } // namespace blink

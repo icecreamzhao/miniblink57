@@ -41,7 +41,6 @@ struct WebPoint;
 
 class WebDevToolsAgent {
 public:
-<<<<<<< HEAD
     virtual ~WebDevToolsAgent() { }
 
     virtual void attach(const WebString& hostId, int sessionId) = 0;
@@ -49,17 +48,10 @@ public:
         int sessionId,
         const WebString& savedState)
         = 0;
-=======
-    virtual ~WebDevToolsAgent() {}
-
-    virtual void attach(const WebString& hostId) = 0;
-    virtual void reattach(const WebString& hostId, const WebString& savedState) = 0;
->>>>>>> miniblink49
     virtual void detach() = 0;
 
     virtual void continueProgram() = 0;
 
-<<<<<<< HEAD
     virtual void dispatchOnInspectorBackend(int sessionId,
         int callId,
         const WebString& method,
@@ -75,34 +67,18 @@ public:
     // Returns true if caching is disabled for network requests issued by dev
     // tools.
     virtual bool cacheDisabled() = 0;
-=======
-    virtual void dispatchOnInspectorBackend(const WebString& message) = 0;
-
-    virtual void inspectElementAt(const WebPoint&) = 0;
-
-    // Exposed for TestRunner.
-    virtual void evaluateInWebInspector(long callId, const WebString& script) = 0;
->>>>>>> miniblink49
 
     class MessageDescriptor {
     public:
         virtual ~MessageDescriptor() { }
         virtual WebDevToolsAgent* agent() = 0;
         virtual WebString message() = 0;
-<<<<<<< HEAD
         virtual WebString method() = 0;
     };
     // Asynchronously request debugger to pause immediately and run the command.
     BLINK_EXPORT static void interruptAndDispatch(int sessionId,
         MessageDescriptor*);
     BLINK_EXPORT static bool shouldInterruptForMethod(const WebString&);
-=======
-    };
-    // Asynchronously request debugger to pause immediately and run the command.
-    BLINK_EXPORT static void interruptAndDispatch(MessageDescriptor*);
-    BLINK_EXPORT static bool shouldInterruptForMessage(const WebString&);
-
->>>>>>> miniblink49
 };
 
 } // namespace blink

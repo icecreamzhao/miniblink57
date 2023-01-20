@@ -9,24 +9,17 @@
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "modules/ModulesExport.h"
 #include "platform/heap/Handle.h"
-<<<<<<< HEAD
 #include "wtf/Vector.h"
-=======
->>>>>>> miniblink49
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 class ArrayBufferOrArrayBufferViewOrUSVString;
-=======
->>>>>>> miniblink49
 class Blob;
 class DOMArrayBuffer;
 class ExceptionState;
 class ScriptState;
 
-<<<<<<< HEAD
 class MODULES_EXPORT PushMessageData final
     : public GarbageCollectedFinalized<PushMessageData>,
       public ScriptWrappable {
@@ -43,42 +36,13 @@ public:
     Blob* blob() const;
     ScriptValue json(ScriptState*, ExceptionState&) const;
     String text() const;
-=======
-class MODULES_EXPORT PushMessageData final : public GarbageCollectedFinalized<PushMessageData>, public ScriptWrappable {
-    DEFINE_WRAPPERTYPEINFO();
-
-public:
-    static PushMessageData* create()
-    {
-        return new PushMessageData();
-    }
-
-    static PushMessageData* create(const String& messageData)
-    {
-        return new PushMessageData(messageData);
-    }
-
-    virtual ~PushMessageData();
-
-    PassRefPtr<DOMArrayBuffer> arrayBuffer() const;
-    Blob* blob() const;
-    ScriptValue json(ScriptState*, ExceptionState&) const;
-    const String& text() const;
->>>>>>> miniblink49
 
     DECLARE_TRACE();
 
 private:
-<<<<<<< HEAD
     PushMessageData(const char* data, unsigned bytesSize);
 
     Vector<char> m_data;
-=======
-    PushMessageData();
-    explicit PushMessageData(const String& messageData);
-
-    String m_messageData;
->>>>>>> miniblink49
 };
 
 } // namespace blink

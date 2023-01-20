@@ -45,7 +45,6 @@ struct WebPluginAction {
     bool enable;
 
     WebPluginAction()
-<<<<<<< HEAD
         : type(Unknown)
         , enable(false)
     {
@@ -55,11 +54,6 @@ struct WebPluginAction {
         , enable(enable)
     {
     }
-=======
-        : type(Unknown), enable(false) { }
-    WebPluginAction(Type type, bool enable)
-        : type(type), enable(enable) { }
->>>>>>> miniblink49
 };
 
 } // namespace blink

@@ -12,7 +12,6 @@
 
 struct Curve {
     int ptCount;
-<<<<<<< HEAD
     SkDCubic curve; // largest can hold lines / quads/ cubics
 };
 
@@ -29,29 +28,12 @@ static const Curve testSet1[] = {
     { 1, { { { 6, 4 }, { 3, 4 } } } },
     { 4, { { { 3, 4 }, { 4, 6 }, { 4, 3 }, { 5, 1 } } } },
     { 1, { { { 5, 1 }, { 3, 4 } } } },
-=======
-    SkDCubic curve;  // largest can hold lines / quads/ cubics
-};
-
-static const Curve testSet0[] = {  // extracted from skpClip2
-    {4, {{{134,11414}, {131.990234,11414}, {130.32666,11415.4824}, {130.042755,11417.4131}}} },
-    {4, {{{130.042755,11417.4131}, {130.233124,11418.3193}, {131.037079,11419}, {132,11419}}} },
-    {4, {{{132,11419}, {130.895432,11419}, {130,11418.1045}, {130,11417}}} },
-};
-
-static const Curve testSet1[] = {  // extracted from cubicOp85i
-    {4, {{{3,4}, {1,5}, {4,3}, {6,4}}} },
-    {1, {{{6,4}, {3,4}}} },
-    {4, {{{3,4}, {4,6}, {4,3}, {5,1}}} },
-    {1, {{{5,1}, {3,4}}} },
->>>>>>> miniblink49
 };
 
 static const struct TestSet {
     const Curve* tests;
     int testCount;
 } testSets[] = {
-<<<<<<< HEAD
     { testSet0, (int)SK_ARRAY_COUNT(testSet0) },
     { testSet1, (int)SK_ARRAY_COUNT(testSet1) },
 };
@@ -60,15 +42,6 @@ static const int testSetsCount = (int)SK_ARRAY_COUNT(testSets);
 
 static void testSetTest(skiatest::Reporter* reporter, int index)
 {
-=======
-    { testSet0, (int) SK_ARRAY_COUNT(testSet0) },
-    { testSet1, (int) SK_ARRAY_COUNT(testSet1) },
-};
-
-static const int testSetsCount = (int) SK_ARRAY_COUNT(testSets);
-
-static void testSetTest(skiatest::Reporter* reporter, int index) {
->>>>>>> miniblink49
     const TestSet& testSet = testSets[index];
     int testCount = testSet.testCount;
     SkASSERT(testCount > 1);
@@ -79,13 +52,8 @@ static void testSetTest(skiatest::Reporter* reporter, int index) {
             const Curve& iTest = testSet.tests[inner];
             SkIntersections* i = combos.append();
             sk_bzero(i, sizeof(SkIntersections));
-<<<<<<< HEAD
             SkDLine oLine = { { oTest.curve[0], oTest.curve[1] } };
             SkDLine iLine = { { iTest.curve[0], iTest.curve[1] } };
-=======
-            SkDLine oLine = {{ oTest.curve[0], oTest.curve[1] }};
-            SkDLine iLine = {{ iTest.curve[0], iTest.curve[1] }};
->>>>>>> miniblink49
             if (oTest.ptCount == 1 && iTest.ptCount == 1) {
                 i->intersect(oLine, iLine);
             } else if (oTest.ptCount == 1 && iTest.ptCount == 4) {
@@ -97,33 +65,21 @@ static void testSetTest(skiatest::Reporter* reporter, int index) {
             } else {
                 SkASSERT(0);
             }
-<<<<<<< HEAD
             //            i->dump();
-=======
-//            i->dump();
->>>>>>> miniblink49
         }
     }
 }
 
-<<<<<<< HEAD
 DEF_TEST(PathOpsThreeWay, reporter)
 {
-=======
-DEF_TEST(PathOpsThreeWay, reporter) {
->>>>>>> miniblink49
     for (int index = 0; index < testSetsCount; ++index) {
         testSetTest(reporter, index);
         reporter->bumpTestCount();
     }
 }
 
-<<<<<<< HEAD
 DEF_TEST(PathOpsThreeWayOneOff, reporter)
 {
-=======
-DEF_TEST(PathOpsThreeWayOneOff, reporter) {
->>>>>>> miniblink49
     int index = 1;
     testSetTest(reporter, index);
 }

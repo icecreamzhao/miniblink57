@@ -26,22 +26,27 @@
 #define CollapsedBorderValue_h
 
 #include "core/style/BorderValue.h"
+#include "wtf/Allocator.h"
 
 namespace blink {
 
 class CollapsedBorderValue {
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
+
 public:
     CollapsedBorderValue()
         : m_color(0)
         , m_colorIsCurrentColor(true)
         , m_width(0)
-        , m_style(BNONE)
-        , m_precedence(BOFF)
+        , m_style(BorderStyleNone)
+        , m_precedence(BorderPrecedenceOff)
         , m_transparent(false)
     {
     }
 
-    CollapsedBorderValue(const BorderValue& border, const StyleColor& color, EBorderPrecedence precedence)
+    CollapsedBorderValue(const BorderValue& border,
+        const StyleColor& color,
+        EBorderPrecedence precedence)
         : m_color(color.resolve(Color()))
         , m_colorIsCurrentColor(color.isCurrentColor())
         , m_width(border.nonZero() ? border.width() : 0)
@@ -51,26 +56,40 @@ public:
     {
     }
 
-    unsigned width() const { return m_style > BHIDDEN ? m_width : 0; }
+    unsigned width() const { return m_style > BorderStyleHidden ? m_width : 0; }
     EBorderStyle style() const { return static_cast<EBorderStyle>(m_style); }
-    bool exists() const { return m_precedence != BOFF; }
-    StyleColor color() const { return m_colorIsCurrentColor ? StyleColor::currentColor() : StyleColor(m_color); }
+    bool exists() const { return m_precedence != BorderPrecedenceOff; }
+    StyleColor color() const
+    {
+        return m_colorIsCurrentColor ? StyleColor::currentColor()
+                                     : StyleColor(m_color);
+    }
     bool isTransparent() const { return m_transparent; }
-    EBorderPrecedence precedence() const { return static_cast<EBorderPrecedence>(m_precedence); }
+    EBorderPrecedence precedence() const
+    {
+        return static_cast<EBorderPrecedence>(m_precedence);
+    }
 
     bool isSameIgnoringColor(const CollapsedBorderValue& o) const
     {
         return width() == o.width() && style() == o.style() && precedence() == o.precedence();
     }
 
-    bool equals(const CollapsedBorderValue& o) const
+    bool visuallyEquals(const CollapsedBorderValue& o) const
     {
+        if (!isVisible() && !o.isVisible())
+            return true;
         return color() == o.color() && isTransparent() == o.isTransparent() && isSameIgnoringColor(o);
+    }
+
+    bool isVisible() const
+    {
+        return style() > BorderStyleHidden && !isTransparent() && exists();
     }
 
     bool shouldPaint(const CollapsedBorderValue& tableCurrentBorderValue) const
     {
-        return style() > BHIDDEN && !isTransparent() && exists() && isSameIgnoringColor(tableCurrentBorderValue);
+        return isVisible() && isSameIgnoringColor(tableCurrentBorderValue);
     }
 
 private:

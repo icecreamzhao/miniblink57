@@ -8,7 +8,6 @@
 #ifndef SkCodecPriv_DEFINED
 #define SkCodecPriv_DEFINED
 
-<<<<<<< HEAD
 #include "SkColorPriv.h"
 #include "SkColorTable.h"
 #include "SkImageInfo.h"
@@ -173,34 +172,10 @@ inline uint32_t get_color_table_fill_value(SkColorType colorType, const SkPMColo
         return 0;
     }
 }
-=======
-#include "SkColorTable.h"
-#include "SkImageInfo.h"
-#include "SkSwizzler.h"
-#include "SkTypes.h"
-#include "SkUtils.h"
-
-/*
- *
- * Helper routine for alpha result codes
- *
- */
-#define INIT_RESULT_ALPHA                       \
-    uint8_t zeroAlpha = 0;                      \
-    uint8_t maxAlpha = 0xFF;
-
-#define UPDATE_RESULT_ALPHA(alpha)              \
-    zeroAlpha |= (alpha);                       \
-    maxAlpha  &= (alpha);
-
-#define COMPUTE_RESULT_ALPHA                    \
-    SkSwizzler::GetResult(zeroAlpha, maxAlpha);
->>>>>>> miniblink49
 
 /*
  *
  * Copy the codec color table back to the client when kIndex8 color type is requested
-<<<<<<< HEAD
  */
 inline void copy_color_table(const SkImageInfo& dstInfo, SkColorTable* colorTable,
     SkPMColor* inputColorPtr, int* inputColorCount)
@@ -210,65 +185,30 @@ inline void copy_color_table(const SkImageInfo& dstInfo, SkColorTable* colorTabl
         SkASSERT(nullptr != inputColorCount);
         SkASSERT(nullptr != colorTable);
         memcpy(inputColorPtr, colorTable->readColors(), *inputColorCount * sizeof(SkPMColor));
-=======
- *
- */
-static inline void copy_color_table(const SkImageInfo& dstInfo, SkColorTable* colorTable,
-        SkPMColor* inputColorPtr, int* inputColorCount) {
-    if (kIndex_8_SkColorType == dstInfo.colorType()) {
-        SkASSERT(NULL != inputColorPtr);
-        SkASSERT(NULL != inputColorCount);
-        SkASSERT(NULL != colorTable);
-        sk_memcpy32(inputColorPtr, colorTable->readColors(), *inputColorCount);
->>>>>>> miniblink49
     }
 }
 
 /*
-<<<<<<< HEAD
  * Compute row bytes for an image using pixels per byte
  */
 inline size_t compute_row_bytes_ppb(int width, uint32_t pixelsPerByte)
 {
-=======
- *
- * Compute row bytes for an image using pixels per byte
- *
- */
-static inline size_t compute_row_bytes_ppb(int width, uint32_t pixelsPerByte) {
->>>>>>> miniblink49
     return (width + pixelsPerByte - 1) / pixelsPerByte;
 }
 
 /*
-<<<<<<< HEAD
  * Compute row bytes for an image using bytes per pixel
  */
 inline size_t compute_row_bytes_bpp(int width, uint32_t bytesPerPixel)
 {
-=======
- *
- * Compute row bytes for an image using bytes per pixel
- *
- */
-static inline size_t compute_row_bytes_bpp(int width, uint32_t bytesPerPixel) {
->>>>>>> miniblink49
     return width * bytesPerPixel;
 }
 
 /*
-<<<<<<< HEAD
  * Compute row bytes for an image
  */
 inline size_t compute_row_bytes(int width, uint32_t bitsPerPixel)
 {
-=======
- *
- * Compute row bytes for an image
- *
- */
-static inline size_t compute_row_bytes(int width, uint32_t bitsPerPixel) {
->>>>>>> miniblink49
     if (bitsPerPixel < 16) {
         SkASSERT(0 == 8 % bitsPerPixel);
         const uint32_t pixelsPerByte = 8 / bitsPerPixel;
@@ -281,38 +221,20 @@ static inline size_t compute_row_bytes(int width, uint32_t bitsPerPixel) {
 }
 
 /*
-<<<<<<< HEAD
  * Get a byte from a buffer
  * This method is unsafe, the caller is responsible for performing a check
  */
 inline uint8_t get_byte(uint8_t* buffer, uint32_t i)
 {
-=======
- *
- * Get a byte from a buffer
- * This method is unsafe, the caller is responsible for performing a check
- *
- */
-static inline uint8_t get_byte(uint8_t* buffer, uint32_t i) {
->>>>>>> miniblink49
     return buffer[i];
 }
 
 /*
-<<<<<<< HEAD
  * Get a short from a buffer
  * This method is unsafe, the caller is responsible for performing a check
  */
 inline uint16_t get_short(uint8_t* buffer, uint32_t i)
 {
-=======
- *
- * Get a short from a buffer
- * This method is unsafe, the caller is responsible for performing a check
- *
- */
-static inline uint16_t get_short(uint8_t* buffer, uint32_t i) {
->>>>>>> miniblink49
     uint16_t result;
     memcpy(&result, &(buffer[i]), 2);
 #ifdef SK_CPU_BENDIAN
@@ -323,20 +245,11 @@ static inline uint16_t get_short(uint8_t* buffer, uint32_t i) {
 }
 
 /*
-<<<<<<< HEAD
  * Get an int from a buffer
  * This method is unsafe, the caller is responsible for performing a check
  */
 inline uint32_t get_int(uint8_t* buffer, uint32_t i)
 {
-=======
- *
- * Get an int from a buffer
- * This method is unsafe, the caller is responsible for performing a check
- *
- */
-static inline uint32_t get_int(uint8_t* buffer, uint32_t i) {
->>>>>>> miniblink49
     uint32_t result;
     memcpy(&result, &(buffer[i]), 4);
 #ifdef SK_CPU_BENDIAN
@@ -346,7 +259,6 @@ static inline uint32_t get_int(uint8_t* buffer, uint32_t i) {
 #endif
 }
 
-<<<<<<< HEAD
 /*
  * @param data           Buffer to read bytes from
  * @param isLittleEndian Output parameter
@@ -424,12 +336,5 @@ inline PackColorProc choose_pack_color_proc(bool isPremul, SkColorType colorType
         }
     }
 }
-=======
-#ifdef SK_PRINT_CODEC_MESSAGES
-    #define SkCodecPrintf SkDebugf
-#else
-    #define SkCodecPrintf(...)
-#endif
->>>>>>> miniblink49
 
 #endif // SkCodecPriv_DEFINED

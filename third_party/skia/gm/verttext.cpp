@@ -5,7 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "SkCanvas.h"
 #include "SkTypeface.h"
 #include "gm.h"
@@ -13,16 +12,6 @@
 namespace skiagm {
 
 #define TEXT_SIZE 48
-=======
-
-#include "gm.h"
-#include "SkCanvas.h"
-#include "SkTypeface.h"
-
-namespace skiagm {
-
-#define TEXT_SIZE   48
->>>>>>> miniblink49
 static const char gText[] = "Hello";
 
 //Before shaping
@@ -38,7 +27,6 @@ static const size_t gLen = sizeof(gText) - sizeof(gText[0]);
 class VertTextGM : public GM {
 public:
     VertTextGM()
-<<<<<<< HEAD
     // : fFace(SkTypeface::CreateFromName("unifont", SkTypeface::kNormal))
     // : fFace(SkTypeface::CreateFromFile("MotoyaL04Mincho_3.ttf"))
 
@@ -53,22 +41,6 @@ public:
     // : fFace(SkTypeface::CreateFromName("STIXGeneral", SkTypeface::kNormal))
     // : fFace(SkTypeface::CreateFromName("Yuppy SC", SkTypeface::kNormal))
     // : fFace(SkTypeface::CreateFromName("Yuppy TC", SkTypeface::kNormal))
-=======
-        // : fFace(SkTypeface::CreateFromName("unifont", SkTypeface::kNormal))
-        // : fFace(SkTypeface::CreateFromFile("MotoyaL04Mincho_3.ttf"))
-
-        // Bitmap fonts on OS X.
-        // : fFace(SkTypeface::CreateFromName("GB18030 Bitmap", SkTypeface::kNormal))
-        // : fFace(SkTypeface::CreateFromName("Apple Color Emoji", SkTypeface::kNormal))
-
-        // OTF CFF fonts on OS X.
-        // : fFace(SkTypeface::CreateFromName("Hiragino Mincho ProN", SkTypeface::kNormal))
-        // : fFace(SkTypeface::CreateFromName("Hiragino Kaku Gothic Pro", SkTypeface::kNormal))
-        // : fFace(SkTypeface::CreateFromName("Hiragino Sans GB", SkTypeface::kNormal))
-        // : fFace(SkTypeface::CreateFromName("STIXGeneral", SkTypeface::kNormal))
-        // : fFace(SkTypeface::CreateFromName("Yuppy SC", SkTypeface::kNormal))
-        // : fFace(SkTypeface::CreateFromName("Yuppy TC", SkTypeface::kNormal))
->>>>>>> miniblink49
 
     {
     }
@@ -76,32 +48,22 @@ public:
     //SkAutoTUnref<SkTypeface> fFace;
 
 protected:
-<<<<<<< HEAD
     SkString onShortName() override
     {
-=======
-
-    SkString onShortName() override {
->>>>>>> miniblink49
         return SkString("verttext");
     }
 
     SkISize onISize() override { return SkISize::Make(640, 480); }
 
     static void drawBaseline(SkCanvas* canvas, const SkPaint& paint,
-<<<<<<< HEAD
         SkScalar x, SkScalar y)
     {
-=======
-                             SkScalar x, SkScalar y) {
->>>>>>> miniblink49
         SkScalar total = paint.measureText(gText, gLen);
 
         SkPaint p;
         p.setAntiAlias(true);
         p.setColor(0x80FF0000);
         canvas->drawLine(x, y,
-<<<<<<< HEAD
             paint.isVerticalText() ? x : x + total,
             paint.isVerticalText() ? y + total : y,
             p);
@@ -109,15 +71,6 @@ protected:
         p.setColor(0xFF0000FF);
         SkScalar adv[gLen];
         int numChars = paint.getTextWidths(gText, gLen, adv, nullptr);
-=======
-                         paint.isVerticalText() ? x : x + total,
-                         paint.isVerticalText() ? y + total : y,
-                         p);
-
-        p.setColor(0xFF0000FF);
-        SkScalar adv[gLen];
-        int numChars = paint.getTextWidths(gText, gLen, adv, NULL);
->>>>>>> miniblink49
         for (int i = 0; i < numChars; ++i) {
             canvas->drawCircle(x, y, SK_Scalar1 * 3 / 2, p);
             if (paint.isVerticalText()) {
@@ -129,12 +82,8 @@ protected:
         canvas->drawCircle(x, y, SK_Scalar1 * 3 / 2, p);
     }
 
-<<<<<<< HEAD
     void onDraw(SkCanvas* canvas) override
     {
-=======
-    void onDraw(SkCanvas* canvas) override {
->>>>>>> miniblink49
         SkScalar x = SkIntToScalar(100);
         SkScalar y = SkIntToScalar(50);
 

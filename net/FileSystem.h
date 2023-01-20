@@ -31,6 +31,7 @@
 #ifndef FileSystem_h
 #define FileSystem_h
 
+#include <cmath>
 #include <time.h>
 #include <wtf/Forward.h>
 #include <wtf/Vector.h>
@@ -58,6 +59,10 @@ typedef HINSTANCE HMODULE;
 // typedef struct _GFileIOStream GFileIOStream;
 // typedef struct _GModule GModule;
 // #endif
+
+namespace blink {
+class FileMetadata;
+}
 
 namespace net {
 
@@ -98,10 +103,10 @@ typedef unsigned PlatformModuleVersion;
 #endif
 
 // PlatformFileHandle
-#if 0 // USE(GLIB) && !PLATFORM(EFL) && !PLATFORM(WIN)
+#if USE(GLIB) //&& !PLATFORM(EFL) && !PLATFORM(WIN)
 typedef GFileIOStream* PlatformFileHandle;
 const PlatformFileHandle invalidPlatformFileHandle = 0;
-#elif 1 // OS(WINDOWS)
+#elif defined(OS_WIN)
 typedef HANDLE PlatformFileHandle;
 // FIXME: -1 is INVALID_HANDLE_VALUE, defined in <winbase.h>. Chromium tries to
 // avoid using Windows headers in headers.  We'd rather move this into the .cpp.
@@ -128,13 +133,11 @@ enum FileLockMode {
     LockNonBlocking = 4
 };
 
-#if 1 // OS(WINDOWS)
-static const char PlatformFilePathSeparator = '\\';
+#if defined(WIN32)
+static const char kPlatformFilePathSeparator = '\\';
 #else
-static const char PlatformFilePathSeparator = '/';
+static const char kPlatformFilePathSeparator = '/';
 #endif
-
-struct FileMetadata;
 
 bool fileExists(const String&);
 bool deleteFile(const String&);
@@ -146,7 +149,7 @@ bool getFileSize(const String&, long long& result);
 bool getFileSize(PlatformFileHandle, long long& result);
 bool getFileModificationTime(const String&, time_t& result);
 bool getFileCreationTime(const String&, time_t& result); // Not all platforms store file creation time.
-bool getFileMetadata(const String&, FileMetadata&);
+bool getFileMetadata(const String&, blink::FileMetadata&);
 String pathByAppendingComponent(const String& path, const String& component);
 bool makeAllDirectories(const String& path);
 String homeDirectoryPath();
@@ -165,7 +168,10 @@ std::vector<char> fileSystemRepresentation(const String&);
 inline bool isHandleValid(const PlatformFileHandle& handle) { return handle != invalidPlatformFileHandle; }
 
 inline double invalidFileTime() { return std::numeric_limits<double>::quiet_NaN(); }
-inline bool isValidFileTime(double time) { return std::isfinite(time); }
+inline bool isValidFileTime(double time) 
+{
+    return  time == time && time != std::numeric_limits<double>::infinity() && time != -std::numeric_limits<double>::infinity();
+}
 
 // Prefix is what the filename should be prefixed with, not the full path.
 String openTemporaryFile(const String& prefix, PlatformFileHandle&);

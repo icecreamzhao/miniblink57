@@ -131,7 +131,6 @@
  * @stable ICU 2.0
  */
 typedef enum {
-<<<<<<< HEAD
     /** No decomposition/composition. @stable ICU 2.0 */
     UNORM_NONE = 1,
     /** Canonical decomposition. @stable ICU 2.0 */
@@ -149,25 +148,6 @@ typedef enum {
 
     /** One more than the highest normalization mode constant. @stable ICU 2.0 */
     UNORM_MODE_COUNT
-=======
-  /** No decomposition/composition. @stable ICU 2.0 */
-  UNORM_NONE = 1, 
-  /** Canonical decomposition. @stable ICU 2.0 */
-  UNORM_NFD = 2,
-  /** Compatibility decomposition. @stable ICU 2.0 */
-  UNORM_NFKD = 3,
-  /** Canonical decomposition followed by canonical composition. @stable ICU 2.0 */
-  UNORM_NFC = 4,
-  /** Default normalization. @stable ICU 2.0 */
-  UNORM_DEFAULT = UNORM_NFC, 
-  /** Compatibility decomposition followed by canonical composition. @stable ICU 2.0 */
-  UNORM_NFKC =5,
-  /** "Fast C or D" form. @stable ICU 2.0 */
-  UNORM_FCD = 6,
-
-  /** One more than the highest normalization mode constant. @stable ICU 2.0 */
-  UNORM_MODE_COUNT
->>>>>>> miniblink49
 } UNormalizationMode;
 
 /**
@@ -184,11 +164,7 @@ enum {
      * At most one Unicode version can be selected at a time.
      * @stable ICU 2.6
      */
-<<<<<<< HEAD
     UNORM_UNICODE_3_2 = 0x20
-=======
-    UNORM_UNICODE_3_2=0x20
->>>>>>> miniblink49
 };
 
 /**
@@ -227,19 +203,11 @@ enum {
  *         the output was truncated, and the error code is set to U_BUFFER_OVERFLOW_ERROR.
  * @stable ICU 2.0
  */
-<<<<<<< HEAD
 U_STABLE int32_t U_EXPORT2
 unorm_normalize(const UChar* source, int32_t sourceLength,
     UNormalizationMode mode, int32_t options,
     UChar* result, int32_t resultLength,
     UErrorCode* status);
-=======
-U_STABLE int32_t U_EXPORT2 
-unorm_normalize(const UChar *source, int32_t sourceLength,
-                UNormalizationMode mode, int32_t options,
-                UChar *result, int32_t resultLength,
-                UErrorCode *status);
->>>>>>> miniblink49
 
 /**
  * Performing quick check on a string, to quickly determine if the string is 
@@ -262,15 +230,9 @@ unorm_normalize(const UChar *source, int32_t sourceLength,
  * @stable ICU 2.0
  */
 U_STABLE UNormalizationCheckResult U_EXPORT2
-<<<<<<< HEAD
 unorm_quickCheck(const UChar* source, int32_t sourcelength,
     UNormalizationMode mode,
     UErrorCode* status);
-=======
-unorm_quickCheck(const UChar *source, int32_t sourcelength,
-                 UNormalizationMode mode,
-                 UErrorCode *status);
->>>>>>> miniblink49
 
 /**
  * Performing quick check on a string; same as unorm_quickCheck but
@@ -289,15 +251,9 @@ unorm_quickCheck(const UChar *source, int32_t sourcelength,
  * @stable ICU 2.6
  */
 U_STABLE UNormalizationCheckResult U_EXPORT2
-<<<<<<< HEAD
 unorm_quickCheckWithOptions(const UChar* src, int32_t srcLength,
     UNormalizationMode mode, int32_t options,
     UErrorCode* pErrorCode);
-=======
-unorm_quickCheckWithOptions(const UChar *src, int32_t srcLength, 
-                            UNormalizationMode mode, int32_t options,
-                            UErrorCode *pErrorCode);
->>>>>>> miniblink49
 
 /**
  * Test if a string is in a given normalization form.
@@ -321,15 +277,9 @@ unorm_quickCheckWithOptions(const UChar *src, int32_t srcLength,
  * @stable ICU 2.2
  */
 U_STABLE UBool U_EXPORT2
-<<<<<<< HEAD
 unorm_isNormalized(const UChar* src, int32_t srcLength,
     UNormalizationMode mode,
     UErrorCode* pErrorCode);
-=======
-unorm_isNormalized(const UChar *src, int32_t srcLength,
-                   UNormalizationMode mode,
-                   UErrorCode *pErrorCode);
->>>>>>> miniblink49
 
 /**
  * Test if a string is in a given normalization form; same as unorm_isNormalized but
@@ -349,15 +299,9 @@ unorm_isNormalized(const UChar *src, int32_t srcLength,
  * @stable ICU 2.6
  */
 U_STABLE UBool U_EXPORT2
-<<<<<<< HEAD
 unorm_isNormalizedWithOptions(const UChar* src, int32_t srcLength,
     UNormalizationMode mode, int32_t options,
     UErrorCode* pErrorCode);
-=======
-unorm_isNormalizedWithOptions(const UChar *src, int32_t srcLength,
-                              UNormalizationMode mode, int32_t options,
-                              UErrorCode *pErrorCode);
->>>>>>> miniblink49
 
 /**
  * Iterative normalization forward.
@@ -433,19 +377,11 @@ unorm_isNormalizedWithOptions(const UChar *src, int32_t srcLength,
  * @stable ICU 2.1
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 unorm_next(UCharIterator* src,
     UChar* dest, int32_t destCapacity,
     UNormalizationMode mode, int32_t options,
     UBool doNormalize, UBool* pNeededToNormalize,
     UErrorCode* pErrorCode);
-=======
-unorm_next(UCharIterator *src,
-           UChar *dest, int32_t destCapacity,
-           UNormalizationMode mode, int32_t options,
-           UBool doNormalize, UBool *pNeededToNormalize,
-           UErrorCode *pErrorCode);
->>>>>>> miniblink49
 
 /**
  * Iterative normalization backward.
@@ -474,19 +410,11 @@ unorm_next(UCharIterator *src,
  * @stable ICU 2.1
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 unorm_previous(UCharIterator* src,
     UChar* dest, int32_t destCapacity,
     UNormalizationMode mode, int32_t options,
     UBool doNormalize, UBool* pNeededToNormalize,
     UErrorCode* pErrorCode);
-=======
-unorm_previous(UCharIterator *src,
-               UChar *dest, int32_t destCapacity,
-               UNormalizationMode mode, int32_t options,
-               UBool doNormalize, UBool *pNeededToNormalize,
-               UErrorCode *pErrorCode);
->>>>>>> miniblink49
 
 /**
  * Concatenate normalized strings, making sure that the result is normalized as well.
@@ -526,41 +454,25 @@ unorm_previous(UCharIterator *src,
  * @stable ICU 2.1
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 unorm_concatenate(const UChar* left, int32_t leftLength,
     const UChar* right, int32_t rightLength,
     UChar* dest, int32_t destCapacity,
     UNormalizationMode mode, int32_t options,
     UErrorCode* pErrorCode);
-=======
-unorm_concatenate(const UChar *left, int32_t leftLength,
-                  const UChar *right, int32_t rightLength,
-                  UChar *dest, int32_t destCapacity,
-                  UNormalizationMode mode, int32_t options,
-                  UErrorCode *pErrorCode);
->>>>>>> miniblink49
 
 /**
  * Option bit for unorm_compare:
  * Both input strings are assumed to fulfill FCD conditions.
  * @stable ICU 2.2
  */
-<<<<<<< HEAD
 #define UNORM_INPUT_IS_FCD 0x20000
-=======
-#define UNORM_INPUT_IS_FCD          0x20000
->>>>>>> miniblink49
 
 /**
  * Option bit for unorm_compare:
  * Perform case-insensitive comparison.
  * @stable ICU 2.2
  */
-<<<<<<< HEAD
 #define U_COMPARE_IGNORE_CASE 0x10000
-=======
-#define U_COMPARE_IGNORE_CASE       0x10000
->>>>>>> miniblink49
 
 #ifndef U_COMPARE_CODE_POINT_ORDER
 /* see also unistr.h and ustring.h */
@@ -569,11 +481,7 @@ unorm_concatenate(const UChar *left, int32_t leftLength,
  * Compare strings in code point order instead of code unit order.
  * @stable ICU 2.2
  */
-<<<<<<< HEAD
 #define U_COMPARE_CODE_POINT_ORDER 0x8000
-=======
-#define U_COMPARE_CODE_POINT_ORDER  0x8000
->>>>>>> miniblink49
 #endif
 
 /**
@@ -643,17 +551,10 @@ unorm_concatenate(const UChar *left, int32_t leftLength,
  * @stable ICU 2.2
  */
 U_STABLE int32_t U_EXPORT2
-<<<<<<< HEAD
 unorm_compare(const UChar* s1, int32_t length1,
     const UChar* s2, int32_t length2,
     uint32_t options,
     UErrorCode* pErrorCode);
-=======
-unorm_compare(const UChar *s1, int32_t length1,
-              const UChar *s2, int32_t length2,
-              uint32_t options,
-              UErrorCode *pErrorCode);
->>>>>>> miniblink49
 
 #endif /* #if !UCONFIG_NO_NORMALIZATION */
 

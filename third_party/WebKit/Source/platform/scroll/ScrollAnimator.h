@@ -1,9 +1,5 @@
 /*
-<<<<<<< HEAD
  * Copyright (c) 2011, Google Inc. All rights reserved.
-=======
- * Copyright (c) 2010, Google Inc. All rights reserved.
->>>>>>> miniblink49
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -35,7 +31,6 @@
 #ifndef ScrollAnimator_h
 #define ScrollAnimator_h
 
-<<<<<<< HEAD
 #include "platform/Timer.h"
 #include "platform/animation/CompositorAnimationDelegate.h"
 #include "platform/animation/CompositorAnimationPlayerClient.h"
@@ -107,87 +102,6 @@ private:
 
     ScrollOffset m_targetOffset;
     ScrollGranularity m_lastGranularity;
-=======
-#include "platform/PlatformExport.h"
-#include "platform/PlatformWheelEvent.h"
-#include "platform/geometry/FloatSize.h"
-#include "platform/scroll/ScrollTypes.h"
-#include "wtf/Forward.h"
-
-namespace blink {
-
-class FloatPoint;
-class ScrollableArea;
-class Scrollbar;
-
-class PLATFORM_EXPORT ScrollAnimator {
-public:
-    static PassOwnPtr<ScrollAnimator> create(ScrollableArea*);
-
-    virtual ~ScrollAnimator();
-
-    // Computes a scroll destination for the given parameters.  The returned
-    // ScrollResultOneDimensional will have didScroll set to false if already at
-    // the destination.  Otherwise, starts scrolling towards the destination and
-    // didScroll is true.  Scrolling may be immediate or animated. The base
-    // class implementation always scrolls immediately, never animates.
-    virtual ScrollResultOneDimensional userScroll(ScrollbarOrientation, ScrollGranularity, float step, float delta);
-
-    virtual void scrollToOffsetWithoutAnimation(const FloatPoint&);
-
-    ScrollableArea* scrollableArea() const { return m_scrollableArea; }
-
-    virtual void setIsActive() { }
-
-    virtual ScrollResult handleWheelEvent(const PlatformWheelEvent&);
-
-#if OS(MACOSX)
-    virtual void handleWheelEventPhase(PlatformWheelEventPhase) { }
-#endif
-
-    void setCurrentPosition(const FloatPoint&);
-    FloatPoint currentPosition() const;
-
-    virtual void cancelAnimations() { }
-    virtual void serviceScrollAnimations() { }
-    virtual bool hasRunningAnimation() const { return false; }
-
-    virtual void contentAreaWillPaint() const { }
-    virtual void mouseEnteredContentArea() const { }
-    virtual void mouseExitedContentArea() const { }
-    virtual void mouseMovedInContentArea() const { }
-    virtual void mouseEnteredScrollbar(Scrollbar*) const { }
-    virtual void mouseExitedScrollbar(Scrollbar*) const { }
-    virtual void willStartLiveResize() { }
-    virtual void updateAfterLayout() { }
-    virtual void contentsResized() const { }
-    virtual void willEndLiveResize() { }
-    virtual void contentAreaDidShow() const { }
-    virtual void contentAreaDidHide() const { }
-
-    virtual void finishCurrentScrollAnimations() { }
-
-    virtual void didAddVerticalScrollbar(Scrollbar*) { }
-    virtual void willRemoveVerticalScrollbar(Scrollbar*) { }
-    virtual void didAddHorizontalScrollbar(Scrollbar*) { }
-    virtual void willRemoveHorizontalScrollbar(Scrollbar*) { }
-
-    virtual bool shouldScrollbarParticipateInHitTesting(Scrollbar*) { return true; }
-
-    virtual void notifyContentAreaScrolled(const FloatSize&) { }
-
-protected:
-    explicit ScrollAnimator(ScrollableArea*);
-
-    virtual void notifyPositionChanged();
-
-    ScrollableArea* m_scrollableArea;
-    float m_currentPosX; // We avoid using a FloatPoint in order to reduce
-    float m_currentPosY; // subclass code complexity.
-
-private:
-    float clampScrollPosition(ScrollbarOrientation, float);
->>>>>>> miniblink49
 };
 
 } // namespace blink

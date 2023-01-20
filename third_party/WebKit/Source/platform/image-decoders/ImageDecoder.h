@@ -28,7 +28,6 @@
 #define ImageDecoder_h
 
 #include "SkColorPriv.h"
-<<<<<<< HEAD
 #include "SkColorSpaceXform.h"
 #include "platform/PlatformExport.h"
 #include "platform/SharedBuffer.h"
@@ -39,21 +38,10 @@
 #include "platform/image-decoders/SegmentReader.h"
 #include "public/platform/Platform.h"
 #include "wtf/Assertions.h"
-=======
-#include "platform/PlatformExport.h"
-#include "platform/SharedBuffer.h"
-#include "platform/graphics/ImageSource.h"
-#include "platform/image-decoders/ImageAnimation.h"
-#include "platform/image-decoders/ImageFrame.h"
-#include "public/platform/Platform.h"
-#include "wtf/Assertions.h"
-#include "wtf/PassOwnPtr.h"
->>>>>>> miniblink49
 #include "wtf/RefPtr.h"
 #include "wtf/Threading.h"
 #include "wtf/Vector.h"
 #include "wtf/text/WTFString.h"
-<<<<<<< HEAD
 #include <memory>
 
 namespace blink {
@@ -79,22 +67,6 @@ class PLATFORM_EXPORT ImagePlanes final {
 public:
     ImagePlanes();
     ImagePlanes(void* planes[3], const size_t rowBytes[3]);
-=======
-
-#if USE(QCMSLIB)
-#include "qcms.h"
-#endif
-
-typedef Vector<char> ColorProfile;
-
-namespace blink {
-
-// ImagePlanes can be used to decode color components into provided buffers instead of using an ImageFrame.
-class PLATFORM_EXPORT ImagePlanes {
-public:
-    ImagePlanes();
-    ImagePlanes(void* planes[3], size_t rowBytes[3]);
->>>>>>> miniblink49
 
     void* plane(int);
     size_t rowBytes(int) const;
@@ -108,7 +80,6 @@ private:
 // (e.g. JPEGImageDecoder). This base manages the ImageFrame cache.
 //
 class PLATFORM_EXPORT ImageDecoder {
-<<<<<<< HEAD
     WTF_MAKE_NONCOPYABLE(ImageDecoder);
     USING_FAST_MALLOC(ImageDecoder);
 
@@ -137,53 +108,22 @@ public:
         return create(SegmentReader::createFromSharedBuffer(std::move(data)),
             dataComplete, alphaoption, colorBehavior);
     }
-=======
-    WTF_MAKE_NONCOPYABLE(ImageDecoder); WTF_MAKE_FAST_ALLOCATED(ImageDecoder);
-public:
-    enum SizeType { ActualSize, SizeForMemoryAllocation };
-
-    static const size_t noDecodedImageByteLimit = Platform::noDecodedImageByteLimit;
-
-    ImageDecoder(ImageSource::AlphaOption alphaOption, ImageSource::GammaAndColorProfileOption gammaAndColorProfileOption, size_t maxDecodedBytes)
-        : m_premultiplyAlpha(alphaOption == ImageSource::AlphaPremultiplied)
-        , m_ignoreGammaAndColorProfile(gammaAndColorProfileOption == ImageSource::GammaAndColorProfileIgnored)
-        , m_maxDecodedBytes(maxDecodedBytes)
-        , m_sizeAvailable(false)
-        , m_isAllDataReceived(false)
-        , m_failed(false) { }
-
-    virtual ~ImageDecoder() { }
-
-    // Returns a caller-owned decoder of the appropriate type.  Returns 0 if
-    // we can't sniff a supported type from the provided data (possibly
-    // because there isn't enough data yet).
-    // Sets m_maxDecodedBytes to Platform::maxImageDecodedBytes().
-    static PassOwnPtr<ImageDecoder> create(const SharedBuffer& data, ImageSource::AlphaOption, ImageSource::GammaAndColorProfileOption);
-
-    // Returns a decoder with custom maxDecodedSize.
-    static PassOwnPtr<ImageDecoder> create(const SharedBuffer& data, ImageSource::AlphaOption, ImageSource::GammaAndColorProfileOption, size_t maxDecodedSize);
->>>>>>> miniblink49
 
     virtual String filenameExtension() const = 0;
 
     bool isAllDataReceived() const { return m_isAllDataReceived; }
 
-<<<<<<< HEAD
     // Returns true if the buffer holds enough data to instantiate a decoder.
     // This is useful for callers to determine whether a decoder instantiation
     // failure is due to insufficient or bad data.
     static bool hasSufficientDataToSniffImageType(const SharedBuffer&);
 
     void setData(PassRefPtr<SegmentReader> data, bool allDataReceived)
-=======
-    virtual void setData(SharedBuffer* data, bool allDataReceived)
->>>>>>> miniblink49
     {
         if (m_failed)
             return;
         m_data = data;
         m_isAllDataReceived = allDataReceived;
-<<<<<<< HEAD
         onSetData(m_data.get());
     }
 
@@ -195,10 +135,6 @@ public:
 
     virtual void onSetData(SegmentReader* data) { }
 
-=======
-    }
-
->>>>>>> miniblink49
     bool isSizeAvailable()
     {
         if (m_failed)
@@ -208,14 +144,7 @@ public:
         return isDecodedSizeAvailable();
     }
 
-<<<<<<< HEAD
     bool isDecodedSizeAvailable() const { return !m_failed && m_sizeAvailable; }
-=======
-    bool isDecodedSizeAvailable() const
-    {
-        return !m_failed && m_sizeAvailable;
-    }
->>>>>>> miniblink49
 
     virtual IntSize size() const { return m_size; }
 
@@ -223,7 +152,6 @@ public:
     // return the actual decoded size.
     virtual IntSize decodedSize() const { return size(); }
 
-<<<<<<< HEAD
     // Image decoders that support YUV decoding must override this to
     // provide the size of each component.
     virtual IntSize decodedYUVSize(int component) const
@@ -239,25 +167,13 @@ public:
         ASSERT(false);
         return 0;
     }
-=======
-    // Decoders which support YUV decoding can override this to
-    // give potentially different sizes per component.
-    virtual IntSize decodedYUVSize(int component, SizeType) const { return decodedSize(); }
->>>>>>> miniblink49
 
     // This will only differ from size() for ICO (where each frame is a
     // different icon) or other formats where different frames are different
     // sizes. This does NOT differ from size() for GIF or WebP, since
     // decoding GIF or WebP composites any smaller frames against previous
     // frames to create full-size frames.
-<<<<<<< HEAD
     virtual IntSize frameSizeAtIndex(size_t) const { return size(); }
-=======
-    virtual IntSize frameSizeAtIndex(size_t) const
-    {
-        return size();
-    }
->>>>>>> miniblink49
 
     // Returns whether the size is legal (i.e. not going to result in
     // overflow elsewhere).  If not, marks decoding as failed.
@@ -265,10 +181,7 @@ public:
     {
         if (sizeCalculationMayOverflow(width, height))
             return setFailed();
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
         m_size = IntSize(width, height);
         m_sizeAvailable = true;
         return true;
@@ -298,7 +211,6 @@ public:
     // Number of bytes in the decoded frame. Returns 0 if the decoder doesn't
     // have this frame cached (either because it hasn't been decoded, or because
     // it has been cleared).
-<<<<<<< HEAD
     virtual size_t frameBytesAtIndex(size_t) const;
 
     ImageOrientation orientation() const { return m_orientation; }
@@ -322,80 +234,6 @@ public:
 
     // Transformation from embedded color space to target color space.
     SkColorSpaceXform* colorTransform();
-=======
-    size_t frameBytesAtIndex(size_t) const;
-
-    ImageOrientation orientation() const { return m_orientation; }
-
-    static bool deferredImageDecodingEnabled();
-
-    void setIgnoreGammaAndColorProfile(bool flag) { m_ignoreGammaAndColorProfile = flag; }
-    bool ignoresGammaAndColorProfile() const { return m_ignoreGammaAndColorProfile; }
-
-    virtual bool hasColorProfile() const { return false; }
-
-#if USE(QCMSLIB)
-    enum { iccColorProfileHeaderLength = 128 };
-
-    static bool rgbColorProfile(const char* profileData, unsigned profileLength)
-    {
-        ASSERT_UNUSED(profileLength, profileLength >= iccColorProfileHeaderLength);
-
-        return !memcmp(&profileData[16], "RGB ", 4);
-    }
-
-    static bool inputDeviceColorProfile(const char* profileData, unsigned profileLength)
-    {
-        ASSERT_UNUSED(profileLength, profileLength >= iccColorProfileHeaderLength);
-
-        return !memcmp(&profileData[12], "mntr", 4) || !memcmp(&profileData[12], "scnr", 4);
-    }
-
-    class OutputDeviceProfile {
-    public:
-        OutputDeviceProfile()
-            : m_outputDeviceProfile(0)
-        {
-            ColorProfile profile = screenColorProfile();
-            if (!profile.isEmpty())
-                m_outputDeviceProfile = qcms_profile_from_memory(profile.data(), profile.size());
-
-            if (m_outputDeviceProfile && qcms_profile_is_bogus(m_outputDeviceProfile)) {
-                qcms_profile_release(m_outputDeviceProfile);
-                m_outputDeviceProfile = 0;
-            }
-
-            if (!m_outputDeviceProfile)
-                m_outputDeviceProfile = qcms_profile_sRGB();
-            if (m_outputDeviceProfile)
-                qcms_profile_precache_output_transform(m_outputDeviceProfile);
-        }
-
-        qcms_profile* profile() const { return m_outputDeviceProfile; }
-
-    private:
-        static ColorProfile screenColorProfile()
-        {
-            // FIXME: Add optional ICCv4 support and support for multiple monitors.
-            WebVector<char> profile;
-            Platform::current()->screenColorProfile(&profile);
-
-            ColorProfile colorProfile;
-            colorProfile.append(profile.data(), profile.size());
-            return colorProfile;
-        }
-
-        qcms_profile* m_outputDeviceProfile;
-    };
-
-    static qcms_profile* qcmsOutputDeviceProfile()
-    {
-        AtomicallyInitializedStaticReference(OutputDeviceProfile, outputDeviceProfile, new OutputDeviceProfile);
-
-        return outputDeviceProfile.profile();
-    }
-#endif
->>>>>>> miniblink49
 
     // Sets the "decode failure" flag.  For caller convenience (since so
     // many callers want to return false after calling this), returns false
@@ -409,7 +247,6 @@ public:
 
     bool failed() const { return m_failed; }
 
-<<<<<<< HEAD
     // Clears decoded pixel data from all frames except the provided frame. If
     // subsequent frames depend on this frame's required previous frame, then that
     // frame is also kept in cache to prevent re-decoding from the beginning.
@@ -425,12 +262,6 @@ public:
     //        ImageFrameGeneratorTest::clearMultiFrameDecode. The test needs to
     //        be modified since two frames may be kept in cache, instead of
     //        always just one, with this clearCacheExceptFrame implementation.
-=======
-    // Clears decoded pixel data from all frames except the provided frame.
-    // Callers may pass WTF::kNotFound to clear all frames.
-    // Note: If |m_frameBufferCache| contains only one frame, it won't be cleared.
-    // Returns the number of bytes of frame data actually cleared.
->>>>>>> miniblink49
     virtual size_t clearCacheExceptFrame(size_t);
 
     // If the image has a cursor hot-spot, stores it in the argument
@@ -450,7 +281,6 @@ public:
 
     virtual bool canDecodeToYUV() { return false; }
     virtual bool decodeToYUV() { return false; }
-<<<<<<< HEAD
     virtual void setImagePlanes(std::unique_ptr<ImagePlanes>) { }
 
 protected:
@@ -464,11 +294,6 @@ protected:
     {
     }
 
-=======
-    virtual void setImagePlanes(PassOwnPtr<ImagePlanes>) { }
-
-protected:
->>>>>>> miniblink49
     // Calculates the most recent frame whose image data may be needed in
     // order to decode frame |frameIndex|, based on frame disposal methods
     // and |frameRectIsOpaque|, where |frameRectIsOpaque| signifies whether
@@ -488,12 +313,9 @@ protected:
     // ImageFrame::m_requiredPreviousFrameIndex.
     size_t findRequiredPreviousFrame(size_t frameIndex, bool frameRectIsOpaque);
 
-<<<<<<< HEAD
     // This is called by clearCacheExceptFrame() if that method decides it wants
     // to preserve another frame, to avoid unnecessary redecoding.
     size_t clearCacheExceptTwoFrames(size_t, size_t);
-=======
->>>>>>> miniblink49
     virtual void clearFrameBuffer(size_t frameIndex);
 
     // Decodes the image sufficiently to determine the image size.
@@ -503,15 +325,12 @@ protected:
     // returns that number.
     virtual size_t decodeFrameCount() { return 1; }
 
-<<<<<<< HEAD
     // Called to initialize the frame buffer with the given index, based on the
     // provided and previous frame's characteristics. Returns true on success. On
     // failure, this will mark the image as failed. Before calling this method,
     // the caller must verify that the frame exists.
     bool initFrameBuffer(size_t);
 
-=======
->>>>>>> miniblink49
     // Performs any additional setup of the requested frame after it has been
     // initially created, e.g. setting a duration or disposal method.
     virtual void initializeNewFrame(size_t) { }
@@ -519,7 +338,6 @@ protected:
     // Decodes the requested frame.
     virtual void decode(size_t) = 0;
 
-<<<<<<< HEAD
     // This method is only required for animated images. It returns a vector with
     // all frame indices that need to be decoded in order to succesfully decode
     // the provided frame.  The indices are returned in reverse order, so the
@@ -549,12 +367,6 @@ protected:
     Vector<ImageFrame, 1> m_frameBufferCache;
     const bool m_premultiplyAlpha;
     const ColorBehavior m_colorBehavior;
-=======
-    RefPtr<SharedBuffer> m_data; // The encoded data.
-    Vector<ImageFrame, 1> m_frameBufferCache;
-    bool m_premultiplyAlpha;
-    bool m_ignoreGammaAndColorProfile;
->>>>>>> miniblink49
     ImageOrientation m_orientation;
 
     // The maximum amount of memory a decoded image should require. Ideally,
@@ -562,7 +374,6 @@ protected:
     // (and then return the downsampled size from decodedSize()). Ignoring
     // this limit can cause excessive memory use or even crashes on low-
     // memory devices.
-<<<<<<< HEAD
     const size_t m_maxDecodedBytes;
 
     // While decoding, we may learn that there are so many animation frames that
@@ -603,16 +414,10 @@ private:
 
     static SniffResult determineImageType(const char* data, size_t length);
 
-=======
-    size_t m_maxDecodedBytes;
-
-private:
->>>>>>> miniblink49
     // Some code paths compute the size of the image as "width * height * 4"
     // and return it as a (signed) int.  Avoid overflow.
     static bool sizeCalculationMayOverflow(unsigned width, unsigned height)
     {
-<<<<<<< HEAD
         unsigned long long total_size = static_cast<unsigned long long>(width) * static_cast<unsigned long long>(height);
         return total_size > ((1 << 29) - 1);
     }
@@ -636,17 +441,6 @@ private:
     sk_sp<SkColorSpace> m_embeddedColorSpace = nullptr;
     bool m_sourceToTargetColorTransformNeedsUpdate = false;
     std::unique_ptr<SkColorSpaceXform> m_sourceToTargetColorTransform;
-=======
-        unsigned long long total_size = static_cast<unsigned long long>(width)
-                                      * static_cast<unsigned long long>(height);
-        return total_size > ((1 << 29) - 1);
-    }
-
-    IntSize m_size;
-    bool m_sizeAvailable;
-    bool m_isAllDataReceived;
-    bool m_failed;
->>>>>>> miniblink49
 };
 
 } // namespace blink

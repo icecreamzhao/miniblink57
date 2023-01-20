@@ -7,13 +7,9 @@
 
 #include "WebPrivatePtr.h"
 
-<<<<<<< HEAD
 #if INSIDE_BLINK
 #include <memory>
 #endif
-=======
-namespace WTF { template <typename T> class PassOwnPtr; }
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -35,12 +31,8 @@ public:
     BLINK_PLATFORM_EXPORT void assign(const WebContentSettingCallbacks&);
 
 #if INSIDE_BLINK
-<<<<<<< HEAD
     BLINK_PLATFORM_EXPORT WebContentSettingCallbacks(
         std::unique_ptr<ContentSettingCallbacks>&&);
-=======
-    BLINK_PLATFORM_EXPORT WebContentSettingCallbacks(const WTF::PassOwnPtr<ContentSettingCallbacks>&);
->>>>>>> miniblink49
 #endif
 
     BLINK_PLATFORM_EXPORT void doAllow();

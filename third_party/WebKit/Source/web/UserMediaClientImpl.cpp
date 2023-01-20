@@ -28,18 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "web/UserMediaClientImpl.h"
 
 #include "public/web/WebFrameClient.h"
 #include "public/web/WebMediaDeviceChangeObserver.h"
-=======
-#include "config.h"
-#include "web/UserMediaClientImpl.h"
-
-#include "public/platform/WebMediaStreamTrackSourcesRequest.h"
-#include "public/web/WebFrameClient.h"
->>>>>>> miniblink49
 #include "public/web/WebMediaDevicesRequest.h"
 #include "public/web/WebUserMediaClient.h"
 #include "public/web/WebUserMediaRequest.h"
@@ -48,43 +40,27 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 UserMediaClientImpl::UserMediaClientImpl(WebUserMediaClient* client)
     : m_client(client)
-=======
-UserMediaClientImpl::UserMediaClientImpl(WebLocalFrameImpl* webFrame)
-    : m_client(webFrame->client() ? webFrame->client()->userMediaClient() : 0)
->>>>>>> miniblink49
 {
 }
 
 void UserMediaClientImpl::requestUserMedia(UserMediaRequest* request)
 {
-<<<<<<< HEAD
     //   if (m_client)
     //     m_client->requestUserMedia(request);
     DebugBreak();
-=======
-    if (m_client)
-        m_client->requestUserMedia(request);
->>>>>>> miniblink49
 }
 
 void UserMediaClientImpl::cancelUserMediaRequest(UserMediaRequest* request)
 {
-<<<<<<< HEAD
     //   if (m_client)
     //     m_client->cancelUserMediaRequest(WebUserMediaRequest(request));
     DebugBreak();
-=======
-    if (m_client)
-        m_client->cancelUserMediaRequest(WebUserMediaRequest(request));
->>>>>>> miniblink49
 }
 
 void UserMediaClientImpl::requestMediaDevices(MediaDevicesRequest* request)
 {
-<<<<<<< HEAD
     //   if (m_client)
     //     m_client->requestMediaDevices(request);
     DebugBreak();
@@ -96,22 +72,6 @@ void UserMediaClientImpl::setMediaDeviceChangeObserver(MediaDevices* observer)
     //     m_client->setMediaDeviceChangeObserver(
     //         WebMediaDeviceChangeObserver(observer));
     DebugBreak();
-=======
-    if (m_client)
-        m_client->requestMediaDevices(request);
-}
-
-void UserMediaClientImpl::cancelMediaDevicesRequest(MediaDevicesRequest* request)
-{
-    if (m_client)
-        m_client->cancelMediaDevicesRequest(WebMediaDevicesRequest(request));
-}
-
-void UserMediaClientImpl::requestSources(MediaStreamTrackSourcesRequest* request)
-{
-    if (m_client)
-        m_client->requestSources(request);
->>>>>>> miniblink49
 }
 
 } // namespace blink

@@ -26,7 +26,6 @@
 #ifndef UnitTestHelpers_h
 #define UnitTestHelpers_h
 
-<<<<<<< HEAD
 #include "wtf/PassRefPtr.h"
 #include "wtf/text/WTFString.h"
 
@@ -50,12 +49,6 @@ namespace testing {
     void exitRunLoop();
 
     void yieldCurrentThread();
-=======
-namespace blink {
-namespace testing {
-
-void runPendingTasks();
->>>>>>> miniblink49
 
 } // namespace testing
 } // namespace blink

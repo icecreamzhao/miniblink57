@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "public/platform/WebURLRequest.h"
 
 #include "testing/gtest/include/gtest/gtest.h"
@@ -52,28 +51,6 @@ namespace {
     };
 
 } // anonymous namespace
-=======
-#include "config.h"
-#include "public/platform/WebURLRequest.h"
-
-#include <gtest/gtest.h>
-
-namespace blink {
-
-class TestExtraData : public WebURLRequest::ExtraData {
-public:
-    explicit TestExtraData(bool* alive)
-        : m_alive(alive)
-    {
-        *alive = true;
-    }
-
-    ~TestExtraData() override { *m_alive = false; }
-
-private:
-    bool* m_alive;
-};
->>>>>>> miniblink49
 
 TEST(WebURLRequestTest, ExtraData)
 {
@@ -83,7 +60,6 @@ TEST(WebURLRequestTest, ExtraData)
         TestExtraData* extraData = new TestExtraData(&alive);
         EXPECT_TRUE(alive);
 
-<<<<<<< HEAD
         urlRequest.setExtraData(extraData);
         EXPECT_EQ(extraData, urlRequest.getExtraData());
         {
@@ -94,19 +70,6 @@ TEST(WebURLRequestTest, ExtraData)
         }
         EXPECT_TRUE(alive);
         EXPECT_EQ(extraData, urlRequest.getExtraData());
-=======
-        urlRequest.initialize();
-        urlRequest.setExtraData(extraData);
-        EXPECT_EQ(extraData, urlRequest.extraData());
-        {
-            WebURLRequest otherUrlRequest = urlRequest;
-            EXPECT_TRUE(alive);
-            EXPECT_EQ(extraData, otherUrlRequest.extraData());
-            EXPECT_EQ(extraData, urlRequest.extraData());
-        }
-        EXPECT_TRUE(alive);
-        EXPECT_EQ(extraData, urlRequest.extraData());
->>>>>>> miniblink49
     }
     EXPECT_FALSE(alive);
 }

@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (C) 2007 Rob Buis <buis@kde.org>
  * Copyright (C) 2007 Nikolas Zimmermann <zimmermann@kde.org>
  * Copyright (C) Research In Motion Limited 2010. All rights reserved.
@@ -19,22 +19,14 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/layout/svg/line/SVGInlineTextBox.h"
 
-#include "core/dom/DocumentMarkerController.h"
-#include "core/dom/RenderedDocumentMarker.h"
-#include "core/editing/Editor.h"
-#include "core/frame/LocalFrame.h"
 #include "core/layout/HitTestResult.h"
-#include "core/layout/LayoutInline.h"
-#include "core/layout/LayoutTheme.h"
 #include "core/layout/PointerEventsHitRules.h"
-#include "core/layout/line/InlineFlowBox.h"
+#include "core/layout/api/LineLayoutSVGInlineText.h"
 #include "core/layout/svg/LayoutSVGInlineText.h"
 #include "core/paint/SVGInlineTextBoxPainter.h"
-#include "platform/FloatConversion.h"
-#include "platform/fonts/FontCache.h"
+#include "wtf/MathExtras.h"
 
 namespace blink {
 
@@ -44,11 +36,13 @@ struct ExpectedSVGInlineTextBoxSize : public InlineTextBox {
     Vector<SVGTextFragment> vector;
 };
 
-static_assert(sizeof(SVGInlineTextBox) == sizeof(ExpectedSVGInlineTextBoxSize), "SVGInlineTextBox has an unexpected size");
+static_assert(sizeof(SVGInlineTextBox) == sizeof(ExpectedSVGInlineTextBoxSize),
+    "SVGInlineTextBox has an unexpected size");
 
-SVGInlineTextBox::SVGInlineTextBox(LayoutObject& object, int start, unsigned short length)
-    : InlineTextBox(object, start, length)
-    , m_logicalHeight(0)
+SVGInlineTextBox::SVGInlineTextBox(LineLayoutItem item,
+    int start,
+    unsigned short length)
+    : InlineTextBox(item, start, length)
     , m_startsNewTextChunk(false)
 {
 }
@@ -57,11 +51,11 @@ void SVGInlineTextBox::dirtyLineBoxes()
 {
     InlineTextBox::dirtyLineBoxes();
 
-    // Clear the now stale text fragments
+    // Clear the now stale text fragments.
     clearTextFragments();
 
-    // And clear any following text fragments as the text on which they
-    // depend may now no longer exist, or glyph positions may be wrong
+    // And clear any following text fragments as the text on which they depend may
+    // now no longer exist, or glyph positions may be wrong.
     InlineTextBox* nextBox = nextTextBox();
     if (nextBox)
         nextBox->dirtyLineBoxes();
@@ -69,58 +63,74 @@ void SVGInlineTextBox::dirtyLineBoxes()
 
 int SVGInlineTextBox::offsetForPosition(LayoutUnit, bool) const
 {
-    // SVG doesn't use the standard offset <-> position selection system, as it's not suitable for SVGs complex needs.
-    // vertical text selection, inline boxes spanning multiple lines (contrary to HTML, etc.)
+    // SVG doesn't use the standard offset <-> position selection system, as it's
+    // not suitable for SVGs complex needs. Vertical text selection, inline boxes
+    // spanning multiple lines (contrary to HTML, etc.)
     ASSERT_NOT_REACHED();
     return 0;
 }
 
-int SVGInlineTextBox::offsetForPositionInFragment(const SVGTextFragment& fragment, LayoutUnit position, bool includePartialGlyphs) const
+int SVGInlineTextBox::offsetForPositionInFragment(
+    const SVGTextFragment& fragment,
+    LayoutUnit position,
+    bool includePartialGlyphs) const
 {
-    LayoutSVGInlineText& textLayoutObject = toLayoutSVGInlineText(this->layoutObject());
+    LineLayoutSVGInlineText lineLayoutItem = LineLayoutSVGInlineText(this->getLineLayoutItem());
 
-    float scalingFactor = textLayoutObject.scalingFactor();
+    float scalingFactor = lineLayoutItem.scalingFactor();
     ASSERT(scalingFactor);
 
-    const ComputedStyle& style = textLayoutObject.styleRef();
+    const ComputedStyle& style = lineLayoutItem.styleRef();
 
     TextRun textRun = constructTextRun(style, fragment);
 
     // Eventually handle lengthAdjust="spacingAndGlyphs".
     // FIXME: Handle vertical text.
-    AffineTransform fragmentTransform;
-    fragment.buildFragmentTransform(fragmentTransform);
-    if (!fragmentTransform.isIdentity())
-        textRun.setHorizontalGlyphStretch(narrowPrecisionToFloat(fragmentTransform.xScale()));
+    if (fragment.isTransformed()) {
+        AffineTransform fragmentTransform = fragment.buildFragmentTransform();
+        textRun.setHorizontalGlyphStretch(
+            clampTo<float>(fragmentTransform.xScale()));
+    }
 
-    return fragment.characterOffset - start() + textLayoutObject.scaledFont().offsetForPosition(textRun, position * scalingFactor, includePartialGlyphs);
+    return fragment.characterOffset - start() + lineLayoutItem.scaledFont().offsetForPosition(textRun, position * scalingFactor, includePartialGlyphs);
 }
 
 LayoutUnit SVGInlineTextBox::positionForOffset(int) const
 {
     // SVG doesn't use the offset <-> position selection system.
     ASSERT_NOT_REACHED();
-    return 0;
+    return LayoutUnit();
 }
 
-FloatRect SVGInlineTextBox::selectionRectForTextFragment(const SVGTextFragment& fragment, int startPosition, int endPosition, const ComputedStyle& style)
+FloatRect SVGInlineTextBox::selectionRectForTextFragment(
+    const SVGTextFragment& fragment,
+    int startPosition,
+    int endPosition,
+    const ComputedStyle& style) const
 {
     ASSERT(startPosition < endPosition);
 
-    LayoutSVGInlineText& textLayoutObject = toLayoutSVGInlineText(this->layoutObject());
+    LineLayoutSVGInlineText lineLayoutItem = LineLayoutSVGInlineText(this->getLineLayoutItem());
 
-    float scalingFactor = textLayoutObject.scalingFactor();
+    float scalingFactor = lineLayoutItem.scalingFactor();
     ASSERT(scalingFactor);
 
-    const Font& scaledFont = textLayoutObject.scaledFont();
-    const FontMetrics& scaledFontMetrics = scaledFont.fontMetrics();
+    const Font& scaledFont = lineLayoutItem.scaledFont();
+    const SimpleFontData* fontData = scaledFont.primaryFont();
+    DCHECK(fontData);
+    if (!fontData)
+        return FloatRect();
+
+    const FontMetrics& scaledFontMetrics = fontData->getFontMetrics();
     FloatPoint textOrigin(fragment.x, fragment.y);
     if (scalingFactor != 1)
         textOrigin.scale(scalingFactor, scalingFactor);
 
     textOrigin.move(0, -scaledFontMetrics.floatAscent());
 
-    FloatRect selectionRect = scaledFont.selectionRectForText(constructTextRun(style, fragment), textOrigin, fragment.height * scalingFactor, startPosition, endPosition);
+    FloatRect selectionRect = scaledFont.selectionRectForText(
+        constructTextRun(style, fragment), textOrigin,
+        fragment.height * scalingFactor, startPosition, endPosition);
     if (scalingFactor == 1)
         return selectionRect;
 
@@ -128,7 +138,8 @@ FloatRect SVGInlineTextBox::selectionRectForTextFragment(const SVGTextFragment& 
     return selectionRect;
 }
 
-LayoutRect SVGInlineTextBox::localSelectionRect(int startPosition, int endPosition)
+LayoutRect SVGInlineTextBox::localSelectionRect(int startPosition,
+    int endPosition) const
 {
     int boxStart = start();
     startPosition = std::max(startPosition - boxStart, 0);
@@ -136,9 +147,8 @@ LayoutRect SVGInlineTextBox::localSelectionRect(int startPosition, int endPositi
     if (startPosition >= endPosition)
         return LayoutRect();
 
-    const ComputedStyle& style = layoutObject().styleRef();
+    const ComputedStyle& style = getLineLayoutItem().styleRef();
 
-    AffineTransform fragmentTransform;
     FloatRect selectionRect;
     int fragmentStartPosition = 0;
     int fragmentEndPosition = 0;
@@ -149,12 +159,14 @@ LayoutRect SVGInlineTextBox::localSelectionRect(int startPosition, int endPositi
 
         fragmentStartPosition = startPosition;
         fragmentEndPosition = endPosition;
-        if (!mapStartEndPositionsIntoFragmentCoordinates(fragment, fragmentStartPosition, fragmentEndPosition))
+        if (!mapStartEndPositionsIntoFragmentCoordinates(
+                fragment, fragmentStartPosition, fragmentEndPosition))
             continue;
 
-        FloatRect fragmentRect = selectionRectForTextFragment(fragment, fragmentStartPosition, fragmentEndPosition, style);
-        fragment.buildFragmentTransform(fragmentTransform);
-        fragmentRect = fragmentTransform.mapRect(fragmentRect);
+        FloatRect fragmentRect = selectionRectForTextFragment(
+            fragment, fragmentStartPosition, fragmentEndPosition, style);
+        if (fragment.isTransformed())
+            fragmentRect = fragment.buildFragmentTransform().mapRect(fragmentRect);
 
         selectionRect.unite(fragmentRect);
     }
@@ -162,44 +174,53 @@ LayoutRect SVGInlineTextBox::localSelectionRect(int startPosition, int endPositi
     return LayoutRect(enclosingIntRect(selectionRect));
 }
 
-void SVGInlineTextBox::paint(const PaintInfo& paintInfo, const LayoutPoint& paintOffset, LayoutUnit, LayoutUnit)
+void SVGInlineTextBox::paint(const PaintInfo& paintInfo,
+    const LayoutPoint& paintOffset,
+    LayoutUnit,
+    LayoutUnit) const
 {
     SVGInlineTextBoxPainter(*this).paint(paintInfo, paintOffset);
 }
 
-TextRun SVGInlineTextBox::constructTextRun(const ComputedStyle& style, const SVGTextFragment& fragment) const
+TextRun SVGInlineTextBox::constructTextRun(
+    const ComputedStyle& style,
+    const SVGTextFragment& fragment) const
 {
-    LayoutText* text = &layoutObject();
+    LineLayoutText text = getLineLayoutItem();
+    CHECK(!text.needsLayout());
 
-    // FIXME(crbug.com/264211): This should not be necessary but can occur if we
-    //                          layout during layout. Remove this when 264211 is fixed.
-    RELEASE_ASSERT(!text->needsLayout());
-
-    TextRun run(static_cast<const LChar*>(nullptr) // characters, will be set below if non-zero.
-        , 0 // length, will be set below if non-zero.
-        , 0 // xPos, only relevant with allowTabs=true
-        , 0 // padding, only relevant for justified text, not relevant for SVG
-        , TextRun::AllowTrailingExpansion
-        , direction()
-        , dirOverride() || style.rtlOrdering() == VisualOrder /* directionalOverride */);
+    TextRun run(
+        // characters, will be set below if non-zero.
+        static_cast<const LChar*>(nullptr),
+        0, // length, will be set below if non-zero.
+        0, // xPos, only relevant with allowTabs=true
+        0, // padding, only relevant for justified text, not relevant for SVG
+        TextRun::AllowTrailingExpansion, direction(),
+        dirOverride() || style.rtlOrdering() == EOrder::kVisual /* directionalOverride */);
 
     if (fragment.length) {
-        if (text->is8Bit())
-            run.setText(text->characters8() + fragment.characterOffset, fragment.length);
+        if (text.is8Bit())
+            run.setText(text.characters8() + fragment.characterOffset,
+                fragment.length);
         else
-            run.setText(text->characters16() + fragment.characterOffset, fragment.length);
+            run.setText(text.characters16() + fragment.characterOffset,
+                fragment.length);
     }
 
     // We handle letter & word spacing ourselves.
     run.disableSpacing();
 
-    // Propagate the maximum length of the characters buffer to the TextRun, even when we're only processing a substring.
-    run.setCharactersLength(text->textLength() - fragment.characterOffset);
+    // Propagate the maximum length of the characters buffer to the TextRun, even
+    // when we're only processing a substring.
+    run.setCharactersLength(text.textLength() - fragment.characterOffset);
     ASSERT(run.charactersLength() >= run.length());
     return run;
 }
 
-bool SVGInlineTextBox::mapStartEndPositionsIntoFragmentCoordinates(const SVGTextFragment& fragment, int& startPosition, int& endPosition) const
+bool SVGInlineTextBox::mapStartEndPositionsIntoFragmentCoordinates(
+    const SVGTextFragment& fragment,
+    int& startPosition,
+    int& endPosition) const
 {
     int fragmentOffsetInBox = static_cast<int>(fragment.characterOffset) - start();
 
@@ -214,61 +235,98 @@ bool SVGInlineTextBox::mapStartEndPositionsIntoFragmentCoordinates(const SVGText
     return startPosition < endPosition;
 }
 
-void SVGInlineTextBox::paintDocumentMarker(GraphicsContext*, const LayoutPoint&, DocumentMarker*, const ComputedStyle&, const Font&, bool)
+void SVGInlineTextBox::paintDocumentMarker(GraphicsContext&,
+    const LayoutPoint&,
+    const DocumentMarker&,
+    const ComputedStyle&,
+    const Font&,
+    bool) const
 {
-    // SVG does not have support for generic document markers (e.g., spellchecking, etc).
+    // SVG does not have support for generic document markers (e.g.,
+    // spellchecking, etc).
 }
 
-void SVGInlineTextBox::paintTextMatchMarker(GraphicsContext* context, const LayoutPoint& point, DocumentMarker* marker, const ComputedStyle& style, const Font& font)
+void SVGInlineTextBox::paintTextMatchMarkerForeground(
+    const PaintInfo& paintInfo,
+    const LayoutPoint& point,
+    const DocumentMarker& marker,
+    const ComputedStyle& style,
+    const Font& font) const
 {
-    SVGInlineTextBoxPainter(*this).paintTextMatchMarker(context, point, marker, style, font);
+    SVGInlineTextBoxPainter(*this).paintTextMatchMarkerForeground(
+        paintInfo, point, marker, style, font);
+}
+
+void SVGInlineTextBox::paintTextMatchMarkerBackground(
+    const PaintInfo& paintInfo,
+    const LayoutPoint& point,
+    const DocumentMarker& marker,
+    const ComputedStyle& style,
+    const Font& font) const
+{
+    SVGInlineTextBoxPainter(*this).paintTextMatchMarkerBackground(
+        paintInfo, point, marker, style, font);
 }
 
 LayoutRect SVGInlineTextBox::calculateBoundaries() const
 {
-    LayoutRect textRect;
+    LineLayoutSVGInlineText lineLayoutItem = LineLayoutSVGInlineText(this->getLineLayoutItem());
+    const SimpleFontData* fontData = lineLayoutItem.scaledFont().primaryFont();
+    DCHECK(fontData);
+    if (!fontData)
+        return LayoutRect();
 
-    LayoutSVGInlineText& textLayoutObject = toLayoutSVGInlineText(this->layoutObject());
-
-    float scalingFactor = textLayoutObject.scalingFactor();
+    float scalingFactor = lineLayoutItem.scalingFactor();
     ASSERT(scalingFactor);
+    LayoutUnit baseline(fontData->getFontMetrics().floatAscent() / scalingFactor);
 
-    LayoutUnit baseline = textLayoutObject.scaledFont().fontMetrics().floatAscent() / scalingFactor;
+    LayoutRect textBoundingRect;
+    for (const SVGTextFragment& fragment : m_textFragments)
+        textBoundingRect.unite(LayoutRect(fragment.overflowBoundingBox(baseline)));
 
-    AffineTransform fragmentTransform;
-    unsigned textFragmentsSize = m_textFragments.size();
-    for (unsigned i = 0; i < textFragmentsSize; ++i) {
-        const SVGTextFragment& fragment = m_textFragments.at(i);
-        FloatRect fragmentRect(fragment.x, fragment.y - baseline, fragment.width, fragment.height);
-        fragment.buildFragmentTransform(fragmentTransform);
-        fragmentRect = fragmentTransform.mapRect(fragmentRect);
-
-        textRect.unite(LayoutRect(fragmentRect));
-    }
-
-    return textRect;
+    return textBoundingRect;
 }
 
-bool SVGInlineTextBox::nodeAtPoint(HitTestResult& result, const HitTestLocation& locationInContainer, const LayoutPoint& accumulatedOffset, LayoutUnit, LayoutUnit)
+bool SVGInlineTextBox::nodeAtPoint(HitTestResult& result,
+    const HitTestLocation& locationInContainer,
+    const LayoutPoint& accumulatedOffset,
+    LayoutUnit,
+    LayoutUnit)
 {
     // FIXME: integrate with InlineTextBox::nodeAtPoint better.
     ASSERT(!isLineBreak());
 
-    PointerEventsHitRules hitRules(PointerEventsHitRules::SVG_TEXT_HITTESTING, result.hitTestRequest(), layoutObject().style()->pointerEvents());
-    bool isVisible = layoutObject().style()->visibility() == VISIBLE;
+    PointerEventsHitRules hitRules(PointerEventsHitRules::SVG_TEXT_HITTESTING,
+        result.hitTestRequest(),
+        getLineLayoutItem().style()->pointerEvents());
+    bool isVisible = getLineLayoutItem().style()->visibility() == EVisibility::kVisible;
     if (isVisible || !hitRules.requireVisible) {
-        if (hitRules.canHitBoundingBox
-            || (hitRules.canHitStroke && (layoutObject().style()->svgStyle().hasStroke() || !hitRules.requireStroke))
-            || (hitRules.canHitFill && (layoutObject().style()->svgStyle().hasFill() || !hitRules.requireFill))) {
-            LayoutPoint boxOrigin(x(), y());
-            boxOrigin.moveBy(accumulatedOffset);
-            LayoutRect rect(boxOrigin, size());
-            // FIXME: both calls to rawValue() below is temporary and should be removed once the transition
-            // to LayoutUnit-based types is complete (crbug.com/321237)
+        if (hitRules.canHitBoundingBox || (hitRules.canHitStroke && (getLineLayoutItem().style()->svgStyle().hasStroke() || !hitRules.requireStroke)) || (hitRules.canHitFill && (getLineLayoutItem().style()->svgStyle().hasFill() || !hitRules.requireFill))) {
+            LayoutRect rect(location(), size());
+            rect.moveBy(accumulatedOffset);
             if (locationInContainer.intersects(rect)) {
-                layoutObject().updateHitTestResult(result, locationInContainer.point() - toLayoutSize(accumulatedOffset));
-                if (!result.addNodeToListBasedTestResult(layoutObject().node(), locationInContainer, rect))
-                    return true;
+                LineLayoutSVGInlineText lineLayoutItem = LineLayoutSVGInlineText(this->getLineLayoutItem());
+                const SimpleFontData* fontData = lineLayoutItem.scaledFont().primaryFont();
+                DCHECK(fontData);
+                if (!fontData)
+                    return false;
+
+                DCHECK(lineLayoutItem.scalingFactor());
+                float baseline = fontData->getFontMetrics().floatAscent() / lineLayoutItem.scalingFactor();
+                FloatPoint floatLocation = FloatPoint(locationInContainer.point());
+                for (const SVGTextFragment& fragment : m_textFragments) {
+                    FloatQuad fragmentQuad = fragment.boundingQuad(baseline);
+                    if (fragmentQuad.containsPoint(floatLocation)) {
+                        lineLayoutItem.updateHitTestResult(
+                            result,
+                            locationInContainer.point() - toLayoutSize(accumulatedOffset));
+                        if (result.addNodeToListBasedTestResult(lineLayoutItem.node(),
+                                locationInContainer,
+                                rect)
+                            == StopHitTesting)
+                            return true;
+                    }
+                }
             }
         }
     }

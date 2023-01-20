@@ -5,6 +5,7 @@
 #include "net/cookies/CanonicalCookie.h"
 
 #include "third_party/WebKit/Source/wtf/text/WTFStringUtil.h"
+#include "third_party/WebKit/Source/wtf/CurrentTime.h"
 
 namespace net {
 

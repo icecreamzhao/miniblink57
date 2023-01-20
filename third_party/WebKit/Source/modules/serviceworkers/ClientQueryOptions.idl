@@ -2,11 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
 // https://w3c.github.io/ServiceWorker/#client-type-enum
-=======
-// https://slightlyoff.github.io/ServiceWorker/spec/service_worker/#client-type-enum
->>>>>>> miniblink49
 enum ClientType {
     "window",
     "worker",
@@ -14,11 +10,7 @@ enum ClientType {
     "all"
 };
 
-<<<<<<< HEAD
 // https://w3c.github.io/ServiceWorker/#serviceworker-client-query-options-dictionary
-=======
-// https://slightlyoff.github.io/ServiceWorker/spec/service_worker/#serviceworker-client-query-options-dictionary
->>>>>>> miniblink49
 dictionary ClientQueryOptions {
     boolean includeUncontrolled = false;
     ClientType type = "window";

@@ -29,6 +29,7 @@
 
 #include "core/CoreExport.h"
 #include "core/dom/DocumentOrderedMap.h"
+#include "core/html/forms/RadioButtonGroupScope.h"
 #include "core/layout/HitTestRequest.h"
 #include "platform/heap/Handle.h"
 #include "wtf/text/AtomicString.h"
@@ -39,26 +40,32 @@ class ContainerNode;
 class DOMSelection;
 class Document;
 class Element;
-class HTMLLabelElement;
 class HTMLMapElement;
 class HitTestResult;
 class IdTargetObserverRegistry;
 class ScopedStyleResolver;
 class Node;
 
-// A class which inherits both Node and TreeScope must call clearRareData() in its destructor
-// so that the Node destructor no longer does problematic NodeList cache manipulation in
-// the destructor.
-class CORE_EXPORT TreeScope : public WillBeGarbageCollectedMixin {
+// A class which inherits both Node and TreeScope must call clearRareData() in
+// its destructor so that the Node destructor no longer does problematic
+// NodeList cache manipulation in the destructor.
+class CORE_EXPORT TreeScope : public GarbageCollectedMixin {
 public:
     TreeScope* parentTreeScope() const { return m_parentTreeScope; }
 
     TreeScope* olderShadowRootOrParentTreeScope() const;
-    bool isInclusiveOlderSiblingShadowRootOrAncestorTreeScopeOf(const TreeScope&) const;
+    bool isInclusiveOlderSiblingShadowRootOrAncestorTreeScopeOf(
+        const TreeScope&) const;
 
     Element* adjustedFocusedElement() const;
+    // Finds a retargeted element to the given argument, when the retargeted
+    // element is in this TreeScope. Returns null otherwise.
+    // TODO(kochi): once this algorithm is named in the spec, rename the method
+    // name.
+    Element* adjustedElement(const Element&) const;
     Element* getElementById(const AtomicString&) const;
-    const WillBeHeapVector<RawPtrWillBeMember<Element>>& getAllElementsById(const AtomicString&) const;
+    const HeapVector<Member<Element>>& getAllElementsById(
+        const AtomicString&) const;
     bool hasElementWithId(const AtomicString& id) const;
     bool containsMultipleElementsWithId(const AtomicString& id) const;
     void addElementById(const AtomicString& elementId, Element*);
@@ -66,7 +73,7 @@ public:
 
     Document& document() const
     {
-        ASSERT(m_document);
+        DCHECK(m_document);
         return *m_document;
     }
 
@@ -78,21 +85,18 @@ public:
 
     Element* elementFromPoint(int x, int y) const;
     Element* hitTestPoint(int x, int y, const HitTestRequest&) const;
-    Vector<Element*> elementsFromPoint(int x, int y) const;
-
-    // For accessibility.
-    bool shouldCacheLabelsByForAttribute() const { return m_labelsByForAttribute; }
-    void addLabel(const AtomicString& forAttributeValue, HTMLLabelElement*);
-    void removeLabel(const AtomicString& forAttributeValue, HTMLLabelElement*);
-    HTMLLabelElement* labelElementForId(const AtomicString& forAttributeValue);
+    HeapVector<Member<Element>> elementsFromPoint(int x, int y) const;
+    HeapVector<Member<Element>> elementsFromHitTestResult(HitTestResult&) const;
 
     DOMSelection* getSelection() const;
 
+    Element* retarget(const Element& target) const;
+
     // Find first anchor with the given name.
-    // First searches for an element with the given ID, but if that fails, then looks
-    // for an anchor with the given name. ID matching is always case sensitive, but
-    // Anchor name matching is case sensitive in strict mode and not case sensitive in
-    // quirks mode for historical compatibility reasons.
+    // First searches for an element with the given ID, but if that fails, then
+    // looks for an anchor with the given name. ID matching is always case
+    // sensitive, but Anchor name matching is case sensitive in strict mode and
+    // not case sensitive in quirks mode for historical compatibility reasons.
     Element* findAnchor(const String& name);
 
     // Used by the basic DOM mutation methods (e.g., appendChild()).
@@ -100,33 +104,15 @@ public:
 
     ContainerNode& rootNode() const { return *m_rootNode; }
 
-    IdTargetObserverRegistry& idTargetObserverRegistry() const { return *m_idTargetObserverRegistry.get(); }
-
-#if !ENABLE(OILPAN)
-    // Nodes belonging to this scope hold guard references -
-    // these are enough to keep the scope from being destroyed, but
-    // not enough to keep it from removing its children. This allows a
-    // node that outlives its scope to still have a valid document
-    // pointer without introducing reference cycles.
-    void guardRef()
+    IdTargetObserverRegistry& idTargetObserverRegistry() const
     {
-        ASSERT(!deletionHasBegun());
-        ++m_guardRefCount;
+        return *m_idTargetObserverRegistry.get();
     }
 
-    void guardDeref()
+    RadioButtonGroupScope& radioButtonGroupScope()
     {
-        ASSERT(m_guardRefCount > 0);
-        ASSERT(!deletionHasBegun());
-        --m_guardRefCount;
-        if (!m_guardRefCount && !refCount() && !rootNodeHasTreeSharedParent()) {
-            beginDeletion();
-            delete this;
-        }
+        return m_radioButtonGroupScope;
     }
-#endif
-
-    void removedLastRefToScope();
 
     bool isInclusiveAncestorOf(const TreeScope&) const;
     unsigned short comparePosition(const TreeScope&) const;
@@ -138,7 +124,10 @@ public:
 
     DECLARE_VIRTUAL_TRACE();
 
-    ScopedStyleResolver* scopedStyleResolver() const { return m_scopedStyleResolver.get(); }
+    ScopedStyleResolver* scopedStyleResolver() const
+    {
+        return m_scopedStyleResolver.get();
+    }
     ScopedStyleResolver& ensureScopedStyleResolver();
     void clearScopedStyleResolver();
 
@@ -147,69 +136,46 @@ protected:
     TreeScope(Document&);
     virtual ~TreeScope();
 
-#if !ENABLE(OILPAN)
-    void destroyTreeScopeData();
-#endif
-
     void setDocument(Document& document) { m_document = &document; }
     void setParentTreeScope(TreeScope&);
-
-#if !ENABLE(OILPAN)
-    bool hasGuardRefCount() const { return m_guardRefCount; }
-#endif
-
     void setNeedsStyleRecalcForViewportUnits();
 
 private:
-#if !ENABLE(OILPAN)
-    virtual void dispose() { }
+    Member<ContainerNode> m_rootNode;
+    Member<Document> m_document;
+    Member<TreeScope> m_parentTreeScope;
 
-    int refCount() const;
+    Member<DocumentOrderedMap> m_elementsById;
+    Member<DocumentOrderedMap> m_imageMapsByName;
 
-#if ENABLE(SECURITY_ASSERT)
-    bool deletionHasBegun();
-    void beginDeletion();
-#else
-    bool deletionHasBegun() { return false; }
-    void beginDeletion() { }
-#endif
-#endif
+    Member<IdTargetObserverRegistry> m_idTargetObserverRegistry;
 
-    bool rootNodeHasTreeSharedParent() const;
+    Member<ScopedStyleResolver> m_scopedStyleResolver;
 
-    RawPtrWillBeMember<ContainerNode> m_rootNode;
-    RawPtrWillBeMember<Document> m_document;
-    RawPtrWillBeMember<TreeScope> m_parentTreeScope;
+    mutable Member<DOMSelection> m_selection;
 
-#if !ENABLE(OILPAN)
-    int m_guardRefCount;
-#endif
-
-    OwnPtrWillBeMember<DocumentOrderedMap> m_elementsById;
-    OwnPtrWillBeMember<DocumentOrderedMap> m_imageMapsByName;
-    OwnPtrWillBeMember<DocumentOrderedMap> m_labelsByForAttribute;
-
-    OwnPtrWillBeMember<IdTargetObserverRegistry> m_idTargetObserverRegistry;
-
-    OwnPtrWillBeMember<ScopedStyleResolver> m_scopedStyleResolver;
-
-    mutable RefPtrWillBeMember<DOMSelection> m_selection;
+    RadioButtonGroupScope m_radioButtonGroupScope;
 };
 
 inline bool TreeScope::hasElementWithId(const AtomicString& id) const
 {
-    ASSERT(!id.isNull());
+    DCHECK(!id.isNull());
     return m_elementsById && m_elementsById->contains(id);
 }
 
-inline bool TreeScope::containsMultipleElementsWithId(const AtomicString& id) const
+inline bool TreeScope::containsMultipleElementsWithId(
+    const AtomicString& id) const
 {
     return m_elementsById && m_elementsById->containsMultiple(id);
 }
 
 DEFINE_COMPARISON_OPERATORS_WITH_REFERENCES(TreeScope)
 
-HitTestResult hitTestInDocument(const Document*, int x, int y, const HitTestRequest& = HitTestRequest::ReadOnly | HitTestRequest::Active);
+HitTestResult hitTestInDocument(
+    const Document*,
+    int x,
+    int y,
+    const HitTestRequest& = HitTestRequest::ReadOnly | HitTestRequest::Active);
 
 } // namespace blink
 

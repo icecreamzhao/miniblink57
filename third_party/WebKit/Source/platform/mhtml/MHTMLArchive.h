@@ -32,30 +32,18 @@
 #define MHTMLArchive_h
 
 #include "platform/heap/Handle.h"
-<<<<<<< HEAD
 #include "wtf/HashMap.h"
 #include "wtf/Vector.h"
 #include "wtf/text/StringHash.h"
-=======
-#include "wtf/PassRefPtr.h"
-#include "wtf/RefCounted.h"
-#include "wtf/RefPtr.h"
-#include "wtf/Vector.h"
->>>>>>> miniblink49
 
 namespace blink {
 
 class ArchiveResource;
 class KURL;
-<<<<<<< HEAD
-=======
-class MHTMLParser;
->>>>>>> miniblink49
 class SharedBuffer;
 
 struct SerializedResource;
 
-<<<<<<< HEAD
 class PLATFORM_EXPORT MHTMLArchive final
     : public GarbageCollected<MHTMLArchive> {
 public:
@@ -65,47 +53,22 @@ public:
     // other browsers.
     enum EncodingPolicy { UseDefaultEncoding,
         UseBinaryEncoding };
-=======
-class PLATFORM_EXPORT MHTMLArchive final : public RefCountedWillBeGarbageCollectedFinalized<MHTMLArchive> {
-public:
-    static PassRefPtrWillBeRawPtr<MHTMLArchive> create();
-    static PassRefPtrWillBeRawPtr<MHTMLArchive> create(const KURL&, SharedBuffer*);
-    ~MHTMLArchive();
-
-    // Binary encoding results in smaller MHTML files but they might not work in other browsers.
-    enum EncodingPolicy {
-        UseDefaultEncoding,
-        UseBinaryEncoding
-    };
-
-    // Generates a random/unique boundary that can be used as a separator of
-    // MHTML parts.
-    static String generateMHTMLBoundary();
->>>>>>> miniblink49
 
     // Generates an MHTML header and appends it to |outputBuffer|.
     //
     // Same |boundary| needs to used for all generateMHTMLHeader and
     // generateMHTMLPart and generateMHTMLFooter calls that belong to the same
-<<<<<<< HEAD
     // MHTML document (see also rfc1341, section 7.2.1, "boundary" description).
     static void generateMHTMLHeader(const String& boundary,
         const String& title,
         const String& mimeType,
         Vector<char>& outputBuffer);
-=======
-    // MHTML document (see also generateMHTMLBoundary method).
-    static void generateMHTMLHeader(
-        const String& boundary, const String& title, const String& mimeType,
-        SharedBuffer& outputBuffer);
->>>>>>> miniblink49
 
     // Serializes SerializedResource as an MHTML part and appends it in
     // |outputBuffer|.
     //
     // Same |boundary| needs to used for all generateMHTMLHeader and
     // generateMHTMLPart and generateMHTMLFooter calls that belong to the same
-<<<<<<< HEAD
     // MHTML document (see also rfc1341, section 7.2.1, "boundary" description).
     //
     // If |contentID| is non-empty, then it will be used as a Content-ID header.
@@ -115,18 +78,11 @@ public:
         EncodingPolicy,
         const SerializedResource&,
         Vector<char>& outputBuffer);
-=======
-    // MHTML document (see also generateMHTMLBoundary method).
-    static void generateMHTMLPart(
-        const String& boundary, EncodingPolicy, const SerializedResource&,
-        SharedBuffer& outputBuffer);
->>>>>>> miniblink49
 
     // Generates an MHTML footer and appends it to |outputBuffer|.
     //
     // Same |boundary| needs to used for all generateMHTMLHeader and
     // generateMHTMLPart and generateMHTMLFooter calls that belong to the same
-<<<<<<< HEAD
     // MHTML document (see also rfc1341, section 7.2.1, "boundary" description).
     static void generateMHTMLFooter(const String& boundary,
         Vector<char>& outputBuffer);
@@ -135,29 +91,10 @@ public:
 
     ArchiveResource* mainResource() { return m_mainResource.get(); }
     ArchiveResource* subresourceForURL(const KURL&) const;
-=======
-    // MHTML document (see also generateMHTMLBoundary method).
-    static void generateMHTMLFooter(
-        const String& boundary,
-        SharedBuffer& outputBuffer);
-
-    // Generates and returns a full MHTML document.
-    static PassRefPtr<SharedBuffer> generateMHTMLData(
-        const Vector<SerializedResource>&, EncodingPolicy,
-        const String& title, const String& mimeType);
-
-    typedef WillBeHeapVector<RefPtrWillBeMember<ArchiveResource>> SubArchiveResources;
-    typedef WillBeHeapVector<RefPtrWillBeMember<MHTMLArchive>> SubFrameArchives;
-
-    ArchiveResource* mainResource() { return m_mainResource.get(); }
-    const SubArchiveResources& subresources() const { return m_subresources; }
-    const SubFrameArchives& subframeArchives() const { return m_subframeArchives; }
->>>>>>> miniblink49
 
     DECLARE_TRACE();
 
 private:
-<<<<<<< HEAD
     MHTMLArchive();
 
     void setMainResource(ArchiveResource*);
@@ -169,25 +106,5 @@ private:
 };
 
 } // namespace blink
-=======
-    friend class MHTMLParser;
-    MHTMLArchive();
-
-    void setMainResource(PassRefPtrWillBeRawPtr<ArchiveResource>);
-    void addSubresource(PassRefPtrWillBeRawPtr<ArchiveResource>);
-    void addSubframeArchive(PassRefPtrWillBeRawPtr<MHTMLArchive>);
-
-#if !ENABLE(OILPAN)
-    void clearAllSubframeArchives();
-    void clearAllSubframeArchivesImpl(SubFrameArchives* clearedArchives);
-#endif
-
-    RefPtrWillBeMember<ArchiveResource> m_mainResource;
-    SubArchiveResources m_subresources;
-    SubFrameArchives m_subframeArchives;
-};
-
-}
->>>>>>> miniblink49
 
 #endif

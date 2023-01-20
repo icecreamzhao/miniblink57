@@ -28,10 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "public/web/WebSelectElement.h"
 
 #include "core/HTMLNames.h"
@@ -44,11 +40,7 @@ namespace blink {
 
 WebVector<WebElement> WebSelectElement::listItems() const
 {
-<<<<<<< HEAD
     const HeapVector<Member<HTMLElement>>& sourceItems = constUnwrap<HTMLSelectElement>()->listItems();
-=======
-    const WillBeHeapVector<RawPtrWillBeMember<HTMLElement>>& sourceItems = constUnwrap<HTMLSelectElement>()->listItems();
->>>>>>> miniblink49
     WebVector<WebElement> items(sourceItems.size());
     for (size_t i = 0; i < sourceItems.size(); ++i)
         items[i] = WebElement(sourceItems[i].get());
@@ -56,33 +48,21 @@ WebVector<WebElement> WebSelectElement::listItems() const
     return items;
 }
 
-<<<<<<< HEAD
 WebSelectElement::WebSelectElement(HTMLSelectElement* element)
-=======
-WebSelectElement::WebSelectElement(const PassRefPtrWillBeRawPtr<HTMLSelectElement>& element)
->>>>>>> miniblink49
     : WebFormControlElement(element)
 {
 }
 
-<<<<<<< HEAD
 DEFINE_WEB_NODE_TYPE_CASTS(WebSelectElement,
     isHTMLSelectElement(constUnwrap<Node>()));
 
 WebSelectElement& WebSelectElement::operator=(HTMLSelectElement* element)
-=======
-WebSelectElement& WebSelectElement::operator=(const PassRefPtrWillBeRawPtr<HTMLSelectElement>& element)
->>>>>>> miniblink49
 {
     m_private = element;
     return *this;
 }
 
-<<<<<<< HEAD
 WebSelectElement::operator HTMLSelectElement*() const
-=======
-WebSelectElement::operator PassRefPtrWillBeRawPtr<HTMLSelectElement>() const
->>>>>>> miniblink49
 {
     return toHTMLSelectElement(m_private.get());
 }

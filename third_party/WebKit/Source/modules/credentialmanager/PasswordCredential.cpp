@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
 #include "modules/credentialmanager/PasswordCredential.h"
 
 #include "bindings/core/v8/Dictionary.h"
@@ -17,30 +16,17 @@
 #include "modules/credentialmanager/PasswordCredentialData.h"
 #include "platform/credentialmanager/PlatformPasswordCredential.h"
 #include "platform/weborigin/SecurityOrigin.h"
-=======
-#include "config.h"
-#include "modules/credentialmanager/PasswordCredential.h"
-
-#include "bindings/core/v8/ExceptionState.h"
-#include "core/html/DOMFormData.h"
-#include "platform/credentialmanager/PlatformPasswordCredential.h"
->>>>>>> miniblink49
 #include "public/platform/WebCredential.h"
 #include "public/platform/WebPasswordCredential.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 PasswordCredential* PasswordCredential::create(
     WebPasswordCredential* webPasswordCredential)
-=======
-PasswordCredential* PasswordCredential::create(WebPasswordCredential* webPasswordCredential)
->>>>>>> miniblink49
 {
     return new PasswordCredential(webPasswordCredential);
 }
 
-<<<<<<< HEAD
 PasswordCredential* PasswordCredential::create(
     const PasswordCredentialData& data,
     ExceptionState& exceptionState)
@@ -192,48 +178,18 @@ PassRefPtr<EncodedFormData> PasswordCredential::encodeFormData(
     RefPtr<EncodedFormData> encodedData = formData->encodeMultiPartFormData();
     contentType = AtomicString("multipart/form-data; boundary=") + encodedData->boundary().data();
     return encodedData.release();
-=======
-PasswordCredential* PasswordCredential::create(const String& id, const String& password, const String& name, const String& icon, ExceptionState& exceptionState)
-{
-    KURL iconURL = parseStringAsURL(icon, exceptionState);
-    if (exceptionState.hadException())
-        return nullptr;
-    return new PasswordCredential(id, password, name, iconURL);
-}
-
-PasswordCredential::PasswordCredential(WebPasswordCredential* webPasswordCredential)
-    : Credential(webPasswordCredential->platformCredential())
-{
-}
-
-PasswordCredential::PasswordCredential(const String& id, const String& password, const String& name, const KURL& icon)
-    : Credential(PlatformPasswordCredential::create(id, password, name, icon))
-    , m_formData(DOMFormData::create())
-{
-    m_formData->append("username", id);
-    m_formData->append("password", password);
->>>>>>> miniblink49
 }
 
 const String& PasswordCredential::password() const
 {
-<<<<<<< HEAD
     return static_cast<PlatformPasswordCredential*>(m_platformCredential.get())
         ->password();
-=======
-    return static_cast<PlatformPasswordCredential*>(m_platformCredential.get())->password();
->>>>>>> miniblink49
 }
 
 DEFINE_TRACE(PasswordCredential)
 {
-<<<<<<< HEAD
     SiteBoundCredential::trace(visitor);
     visitor->trace(m_additionalData);
-=======
-    visitor->trace(m_formData);
-    Credential::trace(visitor);
->>>>>>> miniblink49
 }
 
 } // namespace blink

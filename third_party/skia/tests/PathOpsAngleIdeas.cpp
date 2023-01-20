@@ -18,7 +18,6 @@ static bool gPathOpsAngleIdeasEnableBruteCheck = false;
 
 class PathOpsAngleTester {
 public:
-<<<<<<< HEAD
     static int ConvexHullOverlaps(SkOpAngle& lh, SkOpAngle& rh)
     {
         return lh.convexHullOverlaps(&rh);
@@ -26,13 +25,6 @@ public:
 
     static int EndsIntersect(SkOpAngle& lh, SkOpAngle& rh)
     {
-=======
-    static int ConvexHullOverlaps(SkOpAngle& lh, SkOpAngle& rh) {
-        return lh.convexHullOverlaps(&rh);
-    }
-
-    static int EndsIntersect(SkOpAngle& lh, SkOpAngle& rh) {
->>>>>>> miniblink49
         return lh.endsIntersect(&rh);
     }
 };
@@ -49,16 +41,10 @@ struct TRange {
 };
 
 static double testArc(skiatest::Reporter* reporter, const SkDQuad& quad, const SkDQuad& arcRef,
-<<<<<<< HEAD
     int octant)
 {
     SkDQuad arc = arcRef;
     SkDVector offset = { quad[0].fX, quad[0].fY };
-=======
-        int octant) {
-    SkDQuad arc = arcRef;
-    SkDVector offset = {quad[0].fX, quad[0].fY};
->>>>>>> miniblink49
     arc[0] += offset;
     arc[1] += offset;
     arc[2] += offset;
@@ -89,17 +75,12 @@ static double testArc(skiatest::Reporter* reporter, const SkDQuad& quad, const S
 }
 
 static void orderQuads(skiatest::Reporter* reporter, const SkDQuad& quad, double radius,
-<<<<<<< HEAD
     SkTArray<double, false>* tArray)
 {
-=======
-        SkTArray<double, false>* tArray) {
->>>>>>> miniblink49
     double r = radius;
     double s = r * SK_ScalarTanPIOver8;
     double m = r * SK_ScalarRoot2Over2;
     // construct circle from quads
-<<<<<<< HEAD
     const SkDQuad circle[8] = { { { { r, 0 }, { r, -s }, { m, -m } } },
         { { { m, -m }, { s, -r }, { 0, -r } } },
         { { { 0, -r }, { -s, -r }, { -m, -m } } },
@@ -108,16 +89,6 @@ static void orderQuads(skiatest::Reporter* reporter, const SkDQuad& quad, double
         { { { -m, m }, { -s, r }, { 0, r } } },
         { { { 0, r }, { s, r }, { m, m } } },
         { { { m, m }, { r, s }, { r, 0 } } } };
-=======
-    const SkDQuad circle[8] = {{{{ r,  0}, { r, -s}, { m, -m}}},
-                                {{{ m, -m}, { s, -r}, { 0, -r}}},
-                                {{{ 0, -r}, {-s, -r}, {-m, -m}}},
-                                {{{-m, -m}, {-r, -s}, {-r,  0}}},
-                                {{{-r,  0}, {-r,  s}, {-m,  m}}},
-                                {{{-m,  m}, {-s,  r}, { 0,  r}}},
-                                {{{ 0,  r}, { s,  r}, { m,  m}}},
-                                {{{ m,  m}, { r,  s}, { r,  0}}}};
->>>>>>> miniblink49
     for (int octant = 0; octant < 8; ++octant) {
         double t = testArc(reporter, quad, circle[octant], octant);
         if (t < 0) {
@@ -130,64 +101,39 @@ static void orderQuads(skiatest::Reporter* reporter, const SkDQuad& quad, double
             }
         }
         tArray->push_back(t);
-<<<<<<< HEAD
     next:;
     }
 }
 
 static double quadAngle(skiatest::Reporter* reporter, const SkDQuad& quad, double t)
 {
-=======
-next:   ;
-    }
-}
-
-static double quadAngle(skiatest::Reporter* reporter, const SkDQuad& quad, double t) {
->>>>>>> miniblink49
     const SkDVector& pt = quad.ptAtT(t) - quad[0];
     double angle = (atan2(pt.fY, pt.fX) + SK_ScalarPI) * 8 / (SK_ScalarPI * 2);
     REPORTER_ASSERT(reporter, angle >= 0 && angle <= 8);
     return angle;
 }
 
-<<<<<<< HEAD
 static bool angleDirection(double a1, double a2)
 {
-=======
-static bool angleDirection(double a1, double a2) {
->>>>>>> miniblink49
     double delta = a1 - a2;
     return (delta < 4 && delta > 0) || delta < -4;
 }
 
-<<<<<<< HEAD
 static void setQuadHullSweep(const SkDQuad& quad, SkDVector sweep[2])
 {
-=======
-static void setQuadHullSweep(const SkDQuad& quad, SkDVector sweep[2]) {
->>>>>>> miniblink49
     sweep[0] = quad[1] - quad[0];
     sweep[1] = quad[2] - quad[0];
 }
 
-<<<<<<< HEAD
 static double distEndRatio(double dist, const SkDQuad& quad)
 {
     SkDVector v[] = { quad[2] - quad[0], quad[1] - quad[0], quad[2] - quad[1] };
-=======
-static double distEndRatio(double dist, const SkDQuad& quad) {
-    SkDVector v[] = {quad[2] - quad[0], quad[1] - quad[0], quad[2] - quad[1]};
->>>>>>> miniblink49
     double longest = SkTMax(v[0].length(), SkTMax(v[1].length(), v[2].length()));
     return longest / dist;
 }
 
-<<<<<<< HEAD
 static bool checkParallel(skiatest::Reporter* reporter, const SkDQuad& quad1, const SkDQuad& quad2)
 {
-=======
-static bool checkParallel(skiatest::Reporter* reporter, const SkDQuad& quad1, const SkDQuad& quad2) {
->>>>>>> miniblink49
     SkDVector sweep[2], tweep[2];
     setQuadHullSweep(quad1, sweep);
     setQuadHullSweep(quad2, tweep);
@@ -208,11 +154,7 @@ static bool checkParallel(skiatest::Reporter* reporter, const SkDQuad& quad1, co
     double tDist = tweep[0].length() * m;
     bool useS = fabs(sDist) < fabs(tDist);
     double mFactor = fabs(useS ? distEndRatio(sDist, quad1) : distEndRatio(tDist, quad2));
-<<<<<<< HEAD
     if (mFactor < 5000) { // empirically found limit
-=======
-    if (mFactor < 5000) {  // empirically found limit
->>>>>>> miniblink49
         return s0xt0 < 0;
     }
     SkDVector m0 = quad1.ptAtT(0.5) - quad1[0];
@@ -226,12 +168,8 @@ static bool checkParallel(skiatest::Reporter* reporter, const SkDQuad& quad1, co
     1 if no overlap ccw
 */
 static int quadHullsOverlap(skiatest::Reporter* reporter, const SkDQuad& quad1,
-<<<<<<< HEAD
     const SkDQuad& quad2)
 {
-=======
-        const SkDQuad& quad2) {
->>>>>>> miniblink49
     SkDVector sweep[2], tweep[2];
     setQuadHullSweep(quad1, sweep);
     setQuadHullSweep(quad2, tweep);
@@ -246,11 +184,7 @@ static int quadHullsOverlap(skiatest::Reporter* reporter, const SkDQuad& quad1,
     if (tBetweenS) {
         return -1;
     }
-<<<<<<< HEAD
     if ((s0xt0 == 0 && s1xt1 == 0) || (s1xt0 == 0 && s0xt1 == 0)) { // s0 to s1 equals t0 to t1
-=======
-    if ((s0xt0 == 0 && s1xt1 == 0) || (s1xt0 == 0 && s0xt1 == 0)) {  // s0 to s1 equals t0 to t1
->>>>>>> miniblink49
         return -1;
     }
     bool sBetweenT = t0xt1 > 0 ? s0xt0 < 0 && s0xt1 > 0 : s0xt0 > 0 && s0xt1 < 0;
@@ -266,13 +200,8 @@ static int quadHullsOverlap(skiatest::Reporter* reporter, const SkDQuad& quad1,
         return 1;
     }
     // if the outside sweeps are greater than 180 degress:
-<<<<<<< HEAD
     // first assume the inital tangents are the ordering
     // if the midpoint direction matches the inital order, that is enough
-=======
-        // first assume the inital tangents are the ordering
-        // if the midpoint direction matches the inital order, that is enough
->>>>>>> miniblink49
     SkDVector m0 = quad1.ptAtT(0.5) - quad1[0];
     SkDVector m1 = quad2.ptAtT(0.5) - quad2[0];
     double m0xm1 = m0.crossCheck(m1);
@@ -286,12 +215,8 @@ static int quadHullsOverlap(skiatest::Reporter* reporter, const SkDQuad& quad1,
     return checkParallel(reporter, quad1, quad2);
 }
 
-<<<<<<< HEAD
 static double radianSweep(double start, double end)
 {
-=======
-static double radianSweep(double start, double end) {
->>>>>>> miniblink49
     double sweep = end - start;
     if (sweep > SK_ScalarPI) {
         sweep -= 2 * SK_ScalarPI;
@@ -301,7 +226,6 @@ static double radianSweep(double start, double end) {
     return sweep;
 }
 
-<<<<<<< HEAD
 static bool radianBetween(double start, double test, double end)
 {
     double startToEnd = radianSweep(start, end);
@@ -316,21 +240,6 @@ static bool orderTRange(skiatest::Reporter* reporter, const SkDQuad& quad1, cons
     SkTArray<double, false> t1Array, t2Array;
     orderQuads(reporter, quad1, r, &t1Array);
     orderQuads(reporter, quad2, r, &t2Array);
-=======
-static bool radianBetween(double start, double test, double end) {
-    double startToEnd = radianSweep(start, end);
-    double startToTest = radianSweep(start, test);
-    double testToEnd = radianSweep(test, end);
-    return (startToTest <= 0 && testToEnd <= 0 && startToTest >= startToEnd) ||
-        (startToTest >= 0 && testToEnd >= 0 && startToTest <= startToEnd);
-}
-
-static bool orderTRange(skiatest::Reporter* reporter, const SkDQuad& quad1, const SkDQuad& quad2,
-        double r, TRange* result) {
-    SkTArray<double, false> t1Array, t2Array;
-    orderQuads(reporter, quad1, r, &t1Array);
-    orderQuads(reporter,quad2, r, &t2Array);
->>>>>>> miniblink49
     if (!t1Array.count() || !t2Array.count()) {
         return false;
     }
@@ -338,13 +247,8 @@ static bool orderTRange(skiatest::Reporter* reporter, const SkDQuad& quad1, cons
     SkTQSort<double>(t2Array.begin(), t2Array.end() - 1);
     double t1 = result->tMin1 = t1Array[0];
     double t2 = result->tMin2 = t2Array[0];
-<<<<<<< HEAD
     double a1 = quadAngle(reporter, quad1, t1);
     double a2 = quadAngle(reporter, quad2, t2);
-=======
-    double a1 = quadAngle(reporter,quad1, t1);
-    double a2 = quadAngle(reporter,quad2, t2);
->>>>>>> miniblink49
     if (approximately_equal(a1, a2)) {
         return false;
     }
@@ -358,7 +262,6 @@ static bool orderTRange(skiatest::Reporter* reporter, const SkDQuad& quad1, cons
     return true;
 }
 
-<<<<<<< HEAD
 static bool equalPoints(const SkDPoint& pt1, const SkDPoint& pt2, double max)
 {
     return approximately_zero_when_compared_to(pt1.fX - pt2.fX, max)
@@ -367,14 +270,6 @@ static bool equalPoints(const SkDPoint& pt1, const SkDPoint& pt2, double max)
 
 static double maxDist(const SkDQuad& quad)
 {
-=======
-static bool equalPoints(const SkDPoint& pt1, const SkDPoint& pt2, double max) {
-    return approximately_zero_when_compared_to(pt1.fX - pt2.fX, max)
-            && approximately_zero_when_compared_to(pt1.fY - pt2.fY, max);
-}
-
-static double maxDist(const SkDQuad& quad) {
->>>>>>> miniblink49
     SkDRect bounds;
     bounds.setBounds(quad);
     SkDVector corner[4] = {
@@ -390,12 +285,8 @@ static double maxDist(const SkDQuad& quad) {
     return max;
 }
 
-<<<<<<< HEAD
 static double maxQuad(const SkDQuad& quad)
 {
-=======
-static double maxQuad(const SkDQuad& quad) {
->>>>>>> miniblink49
     double max = 0;
     for (int index = 0; index < 2; ++index) {
         max = SkTMax(max, fabs(quad[index].fX));
@@ -405,33 +296,20 @@ static double maxQuad(const SkDQuad& quad) {
 }
 
 static bool bruteMinT(skiatest::Reporter* reporter, const SkDQuad& quad1, const SkDQuad& quad2,
-<<<<<<< HEAD
     TRange* lowerRange, TRange* upperRange)
 {
-=======
-        TRange* lowerRange, TRange* upperRange) {
->>>>>>> miniblink49
     double maxRadius = SkTMin(maxDist(quad1), maxDist(quad2));
     double maxQuads = SkTMax(maxQuad(quad1), maxQuad(quad2));
     double r = maxRadius / 2;
     double rStep = r / 2;
-<<<<<<< HEAD
     SkDPoint best1 = { SK_ScalarInfinity, SK_ScalarInfinity };
     SkDPoint best2 = { SK_ScalarInfinity, SK_ScalarInfinity };
-=======
-    SkDPoint best1 = {SK_ScalarInfinity, SK_ScalarInfinity};
-    SkDPoint best2 = {SK_ScalarInfinity, SK_ScalarInfinity};
->>>>>>> miniblink49
     int bestCCW = -1;
     double bestR = maxRadius;
     upperRange->tMin = 0;
     lowerRange->tMin = 1;
     do {
-<<<<<<< HEAD
         do { // find upper bounds of single result
-=======
-        do {  // find upper bounds of single result
->>>>>>> miniblink49
             TRange tRange;
             bool stepUp = orderTRange(reporter, quad1, quad2, r, &tRange);
             if (stepUp) {
@@ -447,17 +325,10 @@ static bool bruteMinT(skiatest::Reporter* reporter, const SkDQuad& quad1, const 
                 best2 = pt2;
                 if (gPathOpsAngleIdeasVerbose) {
                     SkDebugf("u bestCCW=%d ccw=%d bestMin=%1.9g:%1.9g r=%1.9g tMin=%1.9g\n",
-<<<<<<< HEAD
                         bestCCW, tRange.ccw, lowerRange->tMin, upperRange->tMin, r,
                         tRange.tMin);
                 }
                 if (bestCCW >= 0 && bestCCW != (int)tRange.ccw) {
-=======
-                            bestCCW, tRange.ccw, lowerRange->tMin, upperRange->tMin, r,
-                            tRange.tMin);
-                }
-                if (bestCCW >= 0 && bestCCW != (int) tRange.ccw) {
->>>>>>> miniblink49
                     if (tRange.tMin < upperRange->tMin) {
                         upperRange->tMin = 0;
                     } else {
@@ -483,17 +354,12 @@ static bool bruteMinT(skiatest::Reporter* reporter, const SkDQuad& quad1, const 
         double lastHighR = bestR;
         r = bestR / 2;
         rStep = r / 2;
-<<<<<<< HEAD
         do { // find lower bounds of single result
-=======
-        do {  // find lower bounds of single result
->>>>>>> miniblink49
             TRange tRange;
             bool success = orderTRange(reporter, quad1, quad2, r, &tRange);
             if (success) {
                 if (gPathOpsAngleIdeasVerbose) {
                     SkDebugf("l bestCCW=%d ccw=%d bestMin=%1.9g:%1.9g r=%1.9g tMin=%1.9g\n",
-<<<<<<< HEAD
                         bestCCW, tRange.ccw, lowerRange->tMin, upperRange->tMin, r,
                         tRange.tMin);
                 }
@@ -502,16 +368,6 @@ static bool bruteMinT(skiatest::Reporter* reporter, const SkDQuad& quad1, const 
                     *upperRange = tRange;
                     bestR = lastHighR;
                     break; // need to establish a new upper bounds
-=======
-                            bestCCW, tRange.ccw, lowerRange->tMin, upperRange->tMin, r,
-                            tRange.tMin);
-                }
-                if (bestCCW != (int) tRange.ccw || upperRange->tMin < tRange.tMin) {
-                    bestCCW = tRange.ccw;
-                    *upperRange = tRange;
-                    bestR = lastHighR;
-                    break;  // need to establish a new upper bounds
->>>>>>> miniblink49
                 }
                 SkDPoint pt1 = quad1.ptAtT(tRange.t1);
                 SkDPoint pt2 = quad2.ptAtT(tRange.t2);
@@ -547,12 +403,8 @@ breakOut:
 }
 
 static void bruteForce(skiatest::Reporter* reporter, const SkDQuad& quad1, const SkDQuad& quad2,
-<<<<<<< HEAD
     bool ccw)
 {
-=======
-        bool ccw) {
->>>>>>> miniblink49
     if (!gPathOpsAngleIdeasEnableBruteCheck) {
         return;
     }
@@ -564,12 +416,8 @@ static void bruteForce(skiatest::Reporter* reporter, const SkDQuad& quad1, const
 }
 
 static bool bruteForceCheck(skiatest::Reporter* reporter, const SkDQuad& quad1,
-<<<<<<< HEAD
     const SkDQuad& quad2, bool ccw)
 {
-=======
-        const SkDQuad& quad2, bool ccw) {
->>>>>>> miniblink49
     TRange lowerRange, upperRange;
     bool result = bruteMinT(reporter, quad1, quad2, &lowerRange, &upperRange);
     REPORTER_ASSERT(reporter, result);
@@ -577,12 +425,8 @@ static bool bruteForceCheck(skiatest::Reporter* reporter, const SkDQuad& quad1,
 }
 
 static void makeSegment(SkOpContour* contour, const SkDQuad& quad, SkPoint shortQuad[3],
-<<<<<<< HEAD
     SkChunkAlloc* allocator)
 {
-=======
-        SkChunkAlloc* allocator) {
->>>>>>> miniblink49
     shortQuad[0] = quad[0].asSkPoint();
     shortQuad[1] = quad[1].asSkPoint();
     shortQuad[2] = quad[2].asSkPoint();
@@ -590,20 +434,12 @@ static void makeSegment(SkOpContour* contour, const SkDQuad& quad, SkPoint short
 }
 
 static void testQuadAngles(skiatest::Reporter* reporter, const SkDQuad& quad1, const SkDQuad& quad2,
-<<<<<<< HEAD
     int testNo, SkChunkAlloc* allocator)
 {
     SkPoint shortQuads[2][3];
 
     SkOpContourHead contour;
     SkOpGlobalState state(nullptr, &contour SkDEBUGPARAMS(false) SkDEBUGPARAMS(nullptr));
-=======
-        int testNo, SkChunkAlloc* allocator) {
-    SkPoint shortQuads[2][3];
-
-    SkOpContourHead contour;
-    SkOpGlobalState state(NULL, &contour);
->>>>>>> miniblink49
     contour.init(&state, false, false);
     makeSegment(&contour, quad1, shortQuads[0], allocator);
     makeSegment(&contour, quad1, shortQuads[1], allocator);
@@ -612,11 +448,7 @@ static void testQuadAngles(skiatest::Reporter* reporter, const SkDQuad& quad1, c
     SkOpSegment* seg2 = seg1->next();
     seg2->debugAddAngle(0, 1, allocator);
     int realOverlap = PathOpsAngleTester::ConvexHullOverlaps(*seg1->debugLastAngle(),
-<<<<<<< HEAD
         *seg2->debugLastAngle());
-=======
-            *seg2->debugLastAngle());
->>>>>>> miniblink49
     const SkDPoint& origin = quad1[0];
     REPORTER_ASSERT(reporter, origin == quad2[0]);
     double a1s = atan2(origin.fY - quad1[1].fY, quad1[1].fX - origin.fX);
@@ -636,11 +468,7 @@ static void testQuadAngles(skiatest::Reporter* reporter, const SkDQuad& quad1, c
     }
     REPORTER_ASSERT(reporter, realMatchesOverlap);
     if (oldSchoolOverlap != (overlap < 0)) {
-<<<<<<< HEAD
         overlap = quadHullsOverlap(reporter, quad1, quad2); // set a breakpoint and debug if assert fires
-=======
-        overlap = quadHullsOverlap(reporter, quad1, quad2);  // set a breakpoint and debug if assert fires
->>>>>>> miniblink49
         REPORTER_ASSERT(reporter, oldSchoolOverlap == (overlap < 0));
     }
     SkDVector v1s = quad1[1] - quad1[0];
@@ -662,13 +490,8 @@ static void testQuadAngles(skiatest::Reporter* reporter, const SkDQuad& quad1, c
         bruteForce(reporter, quad1, quad2, overlap > 0);
     }
     // continue end point rays and see if they intersect the opposite curve
-<<<<<<< HEAD
     SkDLine rays[] = { { { origin, quad2[2] } }, { { origin, quad1[2] } } };
     const SkDQuad* quads[] = { &quad1, &quad2 };
-=======
-    SkDLine rays[] = {{{origin, quad2[2]}}, {{origin, quad1[2]}}};
-    const SkDQuad* quads[] = {&quad1, &quad2};
->>>>>>> miniblink49
     SkDVector midSpokes[2];
     SkIntersections intersect[2];
     double minX, minY, maxX, maxY;
@@ -676,11 +499,7 @@ static void testQuadAngles(skiatest::Reporter* reporter, const SkDQuad& quad1, c
     maxX = maxY = -SK_ScalarInfinity;
     double maxWidth = 0;
     bool useIntersect = false;
-<<<<<<< HEAD
     double smallestTs[] = { 1, 1 };
-=======
-    double smallestTs[] = {1, 1};
->>>>>>> miniblink49
     for (unsigned index = 0; index < SK_ARRAY_COUNT(quads); ++index) {
         const SkDQuad& q = *quads[index];
         midSpokes[index] = q.ptAtT(0.5) - origin;
@@ -723,11 +542,7 @@ static void testQuadAngles(skiatest::Reporter* reporter, const SkDQuad& quad1, c
     }
     bool firstInside;
     if (useIntersect) {
-<<<<<<< HEAD
         int sIndex = (int)(smallestTs[1] < 1);
-=======
-        int sIndex = (int) (smallestTs[1] < 1);
->>>>>>> miniblink49
         REPORTER_ASSERT(reporter, smallestTs[sIndex ^ 1] == 1);
         double t = smallestTs[sIndex];
         const SkDQuad& q = *quads[sIndex];
@@ -739,38 +554,25 @@ static void testQuadAngles(skiatest::Reporter* reporter, const SkDQuad& quad1, c
         double midXray = mid.crossCheck(ray);
         if (gPathOpsAngleIdeasVerbose) {
             SkDebugf("rayDist>endDist:%d sIndex==0:%d vDir[sIndex]<0:%d midXray<0:%d\n",
-<<<<<<< HEAD
                 rayDist > endDist, sIndex == 0, vDir[sIndex] < 0, midXray < 0);
-=======
-                    rayDist > endDist, sIndex == 0, vDir[sIndex] < 0, midXray < 0);
->>>>>>> miniblink49
         }
         SkASSERT(SkScalarSignAsInt(SkDoubleToScalar(midXray))
             == SkScalarSignAsInt(SkDoubleToScalar(vDir[sIndex])));
         firstInside = (rayDist > endDist) ^ (sIndex == 0) ^ (vDir[sIndex] < 0);
     } else if (overlap >= 0) {
-<<<<<<< HEAD
         return; // answer has already been determined
-=======
-        return;  // answer has already been determined
->>>>>>> miniblink49
     } else {
         firstInside = checkParallel(reporter, quad1, quad2);
     }
     if (overlap < 0) {
         SkDEBUGCODE(int realEnds =)
-<<<<<<< HEAD
             PathOpsAngleTester::EndsIntersect(*seg1->debugLastAngle(),
-=======
-                PathOpsAngleTester::EndsIntersect(*seg1->debugLastAngle(),
->>>>>>> miniblink49
                 *seg2->debugLastAngle());
         SkASSERT(realEnds == (firstInside ? 1 : 0));
     }
     bruteForce(reporter, quad1, quad2, firstInside);
 }
 
-<<<<<<< HEAD
 DEF_TEST(PathOpsAngleOverlapHullsOne, reporter)
 {
     SkChunkAlloc allocator(4096);
@@ -780,35 +582,18 @@ DEF_TEST(PathOpsAngleOverlapHullsOne, reporter)
         { { { 939.4808349609375, 914.355224609375 }, { -182.85418701171875, 634.4552001953125 }, { -509.62615966796875, 576.1182861328125 } } }
     };
     for (int index = 0; index < (int)SK_ARRAY_COUNT(quads); index += 2) {
-=======
-DEF_TEST(PathOpsAngleOverlapHullsOne, reporter) {
-    SkChunkAlloc allocator(4096);
-//    gPathOpsAngleIdeasVerbose = true;
-    const SkDQuad quads[] = {
-{{{939.4808349609375, 914.355224609375}, {-357.7921142578125, 590.842529296875}, {736.8936767578125, -350.717529296875}}},
-{{{939.4808349609375, 914.355224609375}, {-182.85418701171875, 634.4552001953125}, {-509.62615966796875, 576.1182861328125}}}
-    };
-    for (int index = 0; index < (int) SK_ARRAY_COUNT(quads); index += 2) {
->>>>>>> miniblink49
         testQuadAngles(reporter, quads[index], quads[index + 1], 0, &allocator);
     }
 }
 
-<<<<<<< HEAD
 DEF_TEST(PathOpsAngleOverlapHulls, reporter)
 {
     SkChunkAlloc allocator(4096);
     if (!gPathOpsAngleIdeasVerbose) { // takes a while to run -- so exclude it by default
-=======
-DEF_TEST(PathOpsAngleOverlapHulls, reporter) {
-    SkChunkAlloc allocator(4096);
-    if (!gPathOpsAngleIdeasVerbose) {  // takes a while to run -- so exclude it by default
->>>>>>> miniblink49
         return;
     }
     SkRandom ran;
     for (int index = 0; index < 100000; ++index) {
-<<<<<<< HEAD
         if (index % 1000 == 999)
             SkDebugf(".");
         SkDPoint origin = { ran.nextRangeF(-1000, 1000), ran.nextRangeF(-1000, 1000) };
@@ -819,17 +604,6 @@ DEF_TEST(PathOpsAngleOverlapHulls, reporter) {
         }
         SkDQuad quad2 = { { origin, { ran.nextRangeF(-1000, 1000), ran.nextRangeF(-1000, 1000) },
             { ran.nextRangeF(-1000, 1000), ran.nextRangeF(-1000, 1000) } } };
-=======
-        if (index % 1000 == 999) SkDebugf(".");
-        SkDPoint origin = {ran.nextRangeF(-1000, 1000), ran.nextRangeF(-1000, 1000)};
-        SkDQuad quad1 = {{origin, {ran.nextRangeF(-1000, 1000), ran.nextRangeF(-1000, 1000)},
-            {ran.nextRangeF(-1000, 1000), ran.nextRangeF(-1000, 1000)}}};
-        if (quad1[0] == quad1[2]) {
-            continue;
-        }
-        SkDQuad quad2 = {{origin, {ran.nextRangeF(-1000, 1000), ran.nextRangeF(-1000, 1000)},
-            {ran.nextRangeF(-1000, 1000), ran.nextRangeF(-1000, 1000)}}};
->>>>>>> miniblink49
         if (quad2[0] == quad2[2]) {
             continue;
         }
@@ -843,14 +617,9 @@ DEF_TEST(PathOpsAngleOverlapHulls, reporter) {
     }
 }
 
-<<<<<<< HEAD
 DEF_TEST(PathOpsAngleBruteT, reporter)
 {
     if (!gPathOpsAngleIdeasVerbose) { // takes a while to run -- so exclude it by default
-=======
-DEF_TEST(PathOpsAngleBruteT, reporter) {
-    if (!gPathOpsAngleIdeasVerbose) {  // takes a while to run -- so exclude it by default
->>>>>>> miniblink49
         return;
     }
     SkRandom ran;
@@ -858,7 +627,6 @@ DEF_TEST(PathOpsAngleBruteT, reporter) {
     SkDQuad small[2];
     SkDEBUGCODE(int smallIndex);
     for (int index = 0; index < 100000; ++index) {
-<<<<<<< HEAD
         SkDPoint origin = { ran.nextRangeF(-1000, 1000), ran.nextRangeF(-1000, 1000) };
         SkDQuad quad1 = { { origin, { ran.nextRangeF(-1000, 1000), ran.nextRangeF(-1000, 1000) },
             { ran.nextRangeF(-1000, 1000), ran.nextRangeF(-1000, 1000) } } };
@@ -867,16 +635,6 @@ DEF_TEST(PathOpsAngleBruteT, reporter) {
         }
         SkDQuad quad2 = { { origin, { ran.nextRangeF(-1000, 1000), ran.nextRangeF(-1000, 1000) },
             { ran.nextRangeF(-1000, 1000), ran.nextRangeF(-1000, 1000) } } };
-=======
-        SkDPoint origin = {ran.nextRangeF(-1000, 1000), ran.nextRangeF(-1000, 1000)};
-        SkDQuad quad1 = {{origin, {ran.nextRangeF(-1000, 1000), ran.nextRangeF(-1000, 1000)},
-            {ran.nextRangeF(-1000, 1000), ran.nextRangeF(-1000, 1000)}}};
-        if (quad1[0] == quad1[2]) {
-            continue;
-        }
-        SkDQuad quad2 = {{origin, {ran.nextRangeF(-1000, 1000), ran.nextRangeF(-1000, 1000)},
-            {ran.nextRangeF(-1000, 1000), ran.nextRangeF(-1000, 1000)}}};
->>>>>>> miniblink49
         if (quad2[0] == quad2[2]) {
             continue;
         }
@@ -902,7 +660,6 @@ DEF_TEST(PathOpsAngleBruteT, reporter) {
 #endif
 }
 
-<<<<<<< HEAD
 DEF_TEST(PathOpsAngleBruteTOne, reporter)
 {
     //    gPathOpsAngleIdeasVerbose = true;
@@ -913,17 +670,6 @@ DEF_TEST(PathOpsAngleBruteTOne, reporter)
         { { { 563.8267822265625, -107.4566650390625 }, { 708.049072265625, -100.77789306640625 }, { -48.88226318359375, 967.9022216796875 } } },
         { { { 598.857421875, 846.345458984375 }, { -644.095703125, -316.12921142578125 }, { -97.64599609375, 20.6158447265625 } } },
         { { { 598.857421875, 846.345458984375 }, { 715.7142333984375, 955.3599853515625 }, { -919.9478759765625, 691.611328125 } } },
-=======
-DEF_TEST(PathOpsAngleBruteTOne, reporter) {
-//    gPathOpsAngleIdeasVerbose = true;
-    const SkDQuad quads[] = {
-{{{-770.8492431640625, 948.2369384765625}, {-853.37066650390625, 972.0301513671875}, {-200.62042236328125, -26.7174072265625}}},
-{{{-770.8492431640625, 948.2369384765625}, {513.602783203125, 578.8681640625}, {960.641357421875, -813.69757080078125}}},
-{{{563.8267822265625, -107.4566650390625}, {-44.67724609375, -136.57452392578125}, {492.3856201171875, -268.79644775390625}}},
-{{{563.8267822265625, -107.4566650390625}, {708.049072265625, -100.77789306640625}, {-48.88226318359375, 967.9022216796875}}},
-{{{598.857421875, 846.345458984375}, {-644.095703125, -316.12921142578125}, {-97.64599609375, 20.6158447265625}}},
-{{{598.857421875, 846.345458984375}, {715.7142333984375, 955.3599853515625}, {-919.9478759765625, 691.611328125}}},
->>>>>>> miniblink49
     };
     TRange lowerRange, upperRange;
     bruteMinT(reporter, quads[0], quads[1], &lowerRange, &upperRange);
@@ -948,7 +694,6 @@ the largest length to determine how stable the curve is vis-a-vis the initial ta
 
 static const SkDQuad extremeTests[][2] = {
     {
-<<<<<<< HEAD
         { { { -708.0077926931004, -154.61669472244046 },
             { -707.9234268635319, -154.30459999551294 },
             { 505.58447265625, -504.9130859375 } } },
@@ -1000,60 +745,6 @@ static const SkDQuad extremeTests[][2] = {
 
 static double endCtrlRatio(const SkDQuad quad)
 {
-=======
-        {{{-708.0077926931004,-154.61669472244046},
-            {-707.9234268635319,-154.30459999551294},
-            {505.58447265625,-504.9130859375}}},
-        {{{-708.0077926931004,-154.61669472244046},
-            {-711.127526325141,-163.9446090624656},
-            {-32.39227294921875,-906.3277587890625}}},
-    }, {
-        {{{-708.0077926931004,-154.61669472244046},
-            {-708.2875337527566,-154.36676458635623},
-            {505.58447265625,-504.9130859375}}},
-        {{{-708.0077926931004,-154.61669472244046},
-            {-708.4111557216864,-154.5366642875255},
-            {-32.39227294921875,-906.3277587890625}}},
-    }, {
-        {{{-609.0230951752058,-267.5435593490574},
-            {-594.1120809906336,-136.08492475411555},
-            {505.58447265625,-504.9130859375}}},
-        {{{-609.0230951752058,-267.5435593490574},
-            {-693.7467719138988,-341.3259237831895},
-            {-32.39227294921875,-906.3277587890625}}}
-    }, {
-        {{{-708.0077926931004,-154.61669472244046},
-            {-707.9994640658723,-154.58588461064852},
-            {505.58447265625,-504.9130859375}}},
-        {{{-708.0077926931004,-154.61669472244046},
-            {-708.0239418990758,-154.6403553507124},
-            {-32.39227294921875,-906.3277587890625}}}
-    }, {
-        {{{-708.0077926931004,-154.61669472244046},
-            {-707.9993222215099,-154.55999389855003},
-            {68.88981098017803,296.9273945411635}}},
-        {{{-708.0077926931004,-154.61669472244046},
-            {-708.0509091919608,-154.64675214697067},
-            {-777.4871194247767,-995.1470120113145}}}
-    }, {
-        {{{-708.0077926931004,-154.61669472244046},
-            {-708.0060491116379,-154.60889321524968},
-            {229.97088707895057,-430.0569357467175}}},
-        {{{-708.0077926931004,-154.61669472244046},
-            {-708.013911296257,-154.6219143988058},
-            {138.13162892614037,-573.3689311737394}}}
-    }, {
-        {{{-543.2570545751013,-237.29243831075053},
-            {-452.4119186056987,-143.47223056267802},
-            {229.97088707895057,-430.0569357467175}}},
-        {{{-543.2570545751013,-237.29243831075053},
-            {-660.5330371214436,-362.0016148388},
-            {138.13162892614037,-573.3689311737394}}},
-    },
-};
-
-static double endCtrlRatio(const SkDQuad quad) {
->>>>>>> miniblink49
     SkDVector longEdge = quad[2] - quad[0];
     double longLen = longEdge.length();
     SkDVector shortEdge = quad[1] - quad[0];
@@ -1061,7 +752,6 @@ static double endCtrlRatio(const SkDQuad quad) {
     return longLen / shortLen;
 }
 
-<<<<<<< HEAD
 static void computeMV(const SkDQuad& quad, const SkDVector& v, double m, SkDVector mV[2])
 {
     SkDPoint mPta = { quad[1].fX - m * v.fY, quad[1].fY + m * v.fX };
@@ -1073,17 +763,6 @@ static void computeMV(const SkDQuad& quad, const SkDVector& v, double m, SkDVect
 static double mDistance(skiatest::Reporter* reporter, bool agrees, const SkDQuad& q1,
     const SkDQuad& q2)
 {
-=======
-static void computeMV(const SkDQuad& quad, const SkDVector& v, double m, SkDVector mV[2]) {
-        SkDPoint mPta = {quad[1].fX - m * v.fY, quad[1].fY + m * v.fX};
-        SkDPoint mPtb = {quad[1].fX + m * v.fY, quad[1].fY - m * v.fX};
-        mV[0] = mPta - quad[0];
-        mV[1] = mPtb - quad[0];
-}
-
-static double mDistance(skiatest::Reporter* reporter, bool agrees, const SkDQuad& q1,
-        const SkDQuad& q2) {
->>>>>>> miniblink49
     if (1 && agrees) {
         return SK_ScalarMax;
     }
@@ -1110,18 +789,11 @@ static double mDistance(skiatest::Reporter* reporter, bool agrees, const SkDQuad
     double dist2 = v2.length() * m;
     if (gPathOpsAngleIdeasVerbose) {
         SkDebugf("%c r1=%1.9g r2=%1.9g m=%1.9g dist1=%1.9g dist2=%1.9g "
-<<<<<<< HEAD
                  " dir%c 1a=%1.9g 1b=%1.9g 2a=%1.9g 2b=%1.9g\n",
             agrees ? 'T' : 'F',
             endCtrlRatio(q1), endCtrlRatio(q2), m, dist1, dist2, dir > 0 ? '+' : '-',
             mV1[0].crossCheck(v2), mV1[1].crossCheck(v2),
             mV2[0].crossCheck(v1), mV2[1].crossCheck(v1));
-=======
-                " dir%c 1a=%1.9g 1b=%1.9g 2a=%1.9g 2b=%1.9g\n", agrees ? 'T' : 'F',
-                endCtrlRatio(q1), endCtrlRatio(q2), m, dist1, dist2, dir > 0 ? '+' : '-',
-                mV1[0].crossCheck(v2), mV1[1].crossCheck(v2),
-                mV2[0].crossCheck(v1), mV2[1].crossCheck(v1));
->>>>>>> miniblink49
     }
     if (1) {
         bool use1 = fabs(dist1) < fabs(dist2);
@@ -1135,12 +807,8 @@ static double mDistance(skiatest::Reporter* reporter, bool agrees, const SkDQuad
 }
 
 static void midPointAgrees(skiatest::Reporter* reporter, const SkDQuad& q1, const SkDQuad& q2,
-<<<<<<< HEAD
     bool ccw)
 {
-=======
-        bool ccw) {
->>>>>>> miniblink49
     SkDPoint mid1 = q1.ptAtT(0.5);
     SkDVector m1 = mid1 - q1[0];
     SkDPoint mid2 = q2.ptAtT(0.5);
@@ -1148,7 +816,6 @@ static void midPointAgrees(skiatest::Reporter* reporter, const SkDQuad& q1, cons
     REPORTER_ASSERT(reporter, ccw ? m1.crossCheck(m2) < 0 : m1.crossCheck(m2) > 0);
 }
 
-<<<<<<< HEAD
 DEF_TEST(PathOpsAngleExtreme, reporter)
 {
     if (!gPathOpsAngleIdeasVerbose) { // takes a while to run -- so exclude it by default
@@ -1156,14 +823,6 @@ DEF_TEST(PathOpsAngleExtreme, reporter)
     }
     double maxR = SK_ScalarMax;
     for (int index = 0; index < (int)SK_ARRAY_COUNT(extremeTests); ++index) {
-=======
-DEF_TEST(PathOpsAngleExtreme, reporter) {
-    if (!gPathOpsAngleIdeasVerbose) {  // takes a while to run -- so exclude it by default
-        return;
-    }
-    double maxR = SK_ScalarMax;
-    for (int index = 0; index < (int) SK_ARRAY_COUNT(extremeTests); ++index) {
->>>>>>> miniblink49
         const SkDQuad& quad1 = extremeTests[index][0];
         const SkDQuad& quad2 = extremeTests[index][1];
         if (gPathOpsAngleIdeasVerbose) {

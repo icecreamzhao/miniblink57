@@ -21,11 +21,8 @@
 #ifndef SVGViewElement_h
 #define SVGViewElement_h
 
-#include "core/SVGNames.h"
-#include "core/svg/SVGAnimatedBoolean.h"
 #include "core/svg/SVGElement.h"
 #include "core/svg/SVGFitToViewBox.h"
-#include "core/svg/SVGStaticStringList.h"
 #include "core/svg/SVGZoomAndPan.h"
 #include "platform/heap/Handle.h"
 
@@ -35,27 +32,18 @@ class SVGViewElement final : public SVGElement,
                              public SVGFitToViewBox,
                              public SVGZoomAndPan {
     DEFINE_WRAPPERTYPEINFO();
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(SVGViewElement);
+    USING_GARBAGE_COLLECTED_MIXIN(SVGViewElement);
+
 public:
     DECLARE_NODE_FACTORY(SVGViewElement);
-
-#if !ENABLE(OILPAN)
-    using SVGElement::ref;
-    using SVGElement::deref;
-#endif
-
-    SVGStringListTearOff* viewTarget() { return m_viewTarget->tearOff(); }
-
     DECLARE_VIRTUAL_TRACE();
 
 private:
     explicit SVGViewElement(Document&);
 
-    void parseAttribute(const QualifiedName&, const AtomicString&) override;
+    void parseAttribute(const AttributeModificationParams&) override;
 
     bool layoutObjectIsNeeded(const ComputedStyle&) override { return false; }
-
-    RefPtrWillBeMember<SVGStaticStringList> m_viewTarget;
 };
 
 } // namespace blink

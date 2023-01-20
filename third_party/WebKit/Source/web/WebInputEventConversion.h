@@ -31,7 +31,6 @@
 #ifndef WebInputEventConversion_h
 #define WebInputEventConversion_h
 
-<<<<<<< HEAD
 #include "platform/PlatformMouseEvent.h"
 #include "platform/PlatformTouchEvent.h"
 #include "platform/scroll/ScrollTypes.h"
@@ -51,95 +50,38 @@ class WebGestureEvent;
 class WebMouseEvent;
 class WebKeyboardEvent;
 class WebTouchEvent;
-=======
-#include "platform/PlatformGestureEvent.h"
-#include "platform/PlatformKeyboardEvent.h"
-#include "platform/PlatformMouseEvent.h"
-#include "platform/PlatformTouchEvent.h"
-#include "platform/PlatformWheelEvent.h"
-#include "public/web/WebInputEvent.h"
-
-namespace blink {
-
-class GestureEvent;
-class KeyboardEvent;
-class MouseEvent;
-class LayoutObject;
-class TouchEvent;
-class WebMouseEvent;
-class WebMouseWheelEvent;
-class WebKeyboardEvent;
-class WebTouchEvent;
-class WebGestureEvent;
-class WheelEvent;
->>>>>>> miniblink49
 class Widget;
 
 // These classes are used to convert from WebInputEvent subclasses to
 // corresponding WebCore events.
 
-<<<<<<< HEAD
 class WEB_EXPORT PlatformMouseEventBuilder
     : NON_EXPORTED_BASE(public PlatformMouseEvent) {
-=======
-class PlatformMouseEventBuilder : public PlatformMouseEvent {
->>>>>>> miniblink49
 public:
     PlatformMouseEventBuilder(Widget*, const WebMouseEvent&);
 };
 
-<<<<<<< HEAD
 // Converts a WebTouchPoint to a PlatformTouchPoint.
 class WEB_EXPORT PlatformTouchPointBuilder
     : NON_EXPORTED_BASE(public PlatformTouchPoint) {
-=======
-class PlatformWheelEventBuilder : public PlatformWheelEvent {
-public:
-    PlatformWheelEventBuilder(Widget*, const WebMouseWheelEvent&);
-};
-
-class PlatformGestureEventBuilder : public PlatformGestureEvent {
-public:
-    PlatformGestureEventBuilder(Widget*, const WebGestureEvent&);
-};
-
-class PlatformKeyboardEventBuilder : public PlatformKeyboardEvent {
-public:
-    PlatformKeyboardEventBuilder(const WebKeyboardEvent&);
-    void setKeyType(Type);
-    bool isCharacterKey() const;
-};
-
-// Converts a WebTouchPoint to a PlatformTouchPoint.
-class PlatformTouchPointBuilder : public PlatformTouchPoint {
->>>>>>> miniblink49
 public:
     PlatformTouchPointBuilder(Widget*, const WebTouchPoint&);
 };
 
 // Converts a WebTouchEvent to a PlatformTouchEvent.
-<<<<<<< HEAD
 class WEB_EXPORT PlatformTouchEventBuilder
     : NON_EXPORTED_BASE(public PlatformTouchEvent) {
-=======
-class PlatformTouchEventBuilder : public PlatformTouchEvent {
->>>>>>> miniblink49
 public:
     PlatformTouchEventBuilder(Widget*, const WebTouchEvent&);
 };
 
-<<<<<<< HEAD
 class WEB_EXPORT WebMouseEventBuilder
     : NON_EXPORTED_BASE(public WebMouseEvent) {
-=======
-class WebMouseEventBuilder : public WebMouseEvent {
->>>>>>> miniblink49
 public:
     // Converts a MouseEvent to a corresponding WebMouseEvent.
     // NOTE: This is only implemented for mousemove, mouseover, mouseout,
     // mousedown and mouseup. If the event mapping fails, the event type will
     // be set to Undefined.
-<<<<<<< HEAD
     WebMouseEventBuilder(const Widget*, const LayoutItem, const MouseEvent&);
     WebMouseEventBuilder(const Widget*, const LayoutItem, const TouchEvent&);
 };
@@ -150,25 +92,6 @@ public:
 // to Undefined.
 class WEB_EXPORT WebKeyboardEventBuilder
     : NON_EXPORTED_BASE(public WebKeyboardEvent) {
-=======
-    WebMouseEventBuilder(const Widget*, const LayoutObject*, const MouseEvent&);
-    WebMouseEventBuilder(const Widget*, const LayoutObject*, const TouchEvent&);
-};
-
-// Converts a WheelEvent to a corresponding WebMouseWheelEvent.
-// If the event mapping fails, the event type will be set to Undefined.
-class WebMouseWheelEventBuilder : public WebMouseWheelEvent {
-public:
-    WebMouseWheelEventBuilder(const Widget*, const LayoutObject*, const WheelEvent&);
-};
-
-// Converts a KeyboardEvent or PlatformKeyboardEvent to a
-// corresponding WebKeyboardEvent.
-// NOTE: For KeyboardEvent, this is only implemented for keydown,
-// keyup, and keypress. If the event mapping fails, the event type will be set
-// to Undefined.
-class WebKeyboardEventBuilder : public WebKeyboardEvent {
->>>>>>> miniblink49
 public:
     WebKeyboardEventBuilder(const KeyboardEvent&);
 };
@@ -176,7 +99,6 @@ public:
 // Converts a TouchEvent to a corresponding WebTouchEvent.
 // NOTE: WebTouchEvents have a cap on the number of WebTouchPoints. Any points
 // exceeding that cap will be dropped.
-<<<<<<< HEAD
 class WEB_EXPORT WebTouchEventBuilder
     : NON_EXPORTED_BASE(public WebTouchEvent) {
 public:
@@ -196,21 +118,6 @@ createPlatformMouseEventVector(Widget*,
 Vector<PlatformTouchEvent> WEB_EXPORT
 createPlatformTouchEventVector(Widget*,
     const std::vector<const WebInputEvent*>&);
-=======
-class WebTouchEventBuilder : public WebTouchEvent {
-public:
-    WebTouchEventBuilder(const LayoutObject*, const TouchEvent&);
-};
-
-// Converts GestureEvent to a corresponding WebGestureEvent.
-// NOTE: If event mapping fails, the type will be set to Undefined.
-class WebGestureEventBuilder : public WebGestureEvent {
-public:
-    WebGestureEventBuilder(const LayoutObject*, const GestureEvent&);
-};
-
-unsigned toPlatformMouseEventModifiers(int webModifiers);
->>>>>>> miniblink49
 
 } // namespace blink
 

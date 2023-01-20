@@ -42,12 +42,9 @@
  */
 #define XSLTCALL
 
-<<<<<<< HEAD
 
 #define LIBXSLT_STATIC 
 
-=======
->>>>>>> miniblink49
 /** DOC_DISABLE */
 
 /* Windows platform with MS compiler */

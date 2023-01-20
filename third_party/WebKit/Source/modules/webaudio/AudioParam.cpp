@@ -23,7 +23,6 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "modules/webaudio/AudioParam.h"
 
 #include "core/dom/ExceptionCode.h"
@@ -31,15 +30,6 @@
 #include "modules/webaudio/AudioNode.h"
 #include "modules/webaudio/AudioNodeOutput.h"
 #include "platform/Histogram.h"
-=======
-#include "config.h"
-#if ENABLE(WEB_AUDIO)
-#include "modules/webaudio/AudioParam.h"
-
-#include "modules/webaudio/AudioNode.h"
-#include "modules/webaudio/AudioNodeOutput.h"
-#include "platform/FloatConversion.h"
->>>>>>> miniblink49
 #include "platform/audio/AudioUtilities.h"
 #include "wtf/MathExtras.h"
 
@@ -48,7 +38,6 @@ namespace blink {
 const double AudioParamHandler::DefaultSmoothingConstant = 0.05;
 const double AudioParamHandler::SnapThreshold = 0.001;
 
-<<<<<<< HEAD
 AudioParamHandler::AudioParamHandler(BaseAudioContext& context,
     AudioParamType paramType,
     double defaultValue,
@@ -156,20 +145,11 @@ String AudioParamHandler::getParamName() const
 
     NOTREACHED();
     return "UnknownNode.unknownAudioParam";
-=======
-AudioContext* AudioParamHandler::context() const
-{
-    // TODO(tkent): We can remove this dangerous function by removing
-    // AudioContext dependency from AudioParamTimeline.
-    ASSERT_WITH_SECURITY_IMPLICATION(deferredTaskHandler().isAudioThread());
-    return &m_context;
->>>>>>> miniblink49
 }
 
 float AudioParamHandler::value()
 {
     // Update value for timeline.
-<<<<<<< HEAD
     float v = intrinsicValue();
     if (deferredTaskHandler().isAudioThread()) {
         bool hasValue;
@@ -188,41 +168,21 @@ void AudioParamHandler::setIntrinsicValue(float newValue)
 {
     newValue = clampTo(newValue, m_minValue, m_maxValue);
     noBarrierStore(&m_intrinsicValue, newValue);
-=======
-    if (deferredTaskHandler().isAudioThread()) {
-        bool hasValue;
-        float timelineValue = m_timeline.valueForContextTime(context(), narrowPrecisionToFloat(m_value), hasValue);
-
-        if (hasValue)
-            m_value = timelineValue;
-    }
-
-    return narrowPrecisionToFloat(m_value);
->>>>>>> miniblink49
 }
 
 void AudioParamHandler::setValue(float value)
 {
-<<<<<<< HEAD
     setIntrinsicValue(value);
     updateHistograms(value);
-=======
-    m_value = value;
->>>>>>> miniblink49
 }
 
 float AudioParamHandler::smoothedValue()
 {
-<<<<<<< HEAD
     return m_timeline.smoothedValue();
-=======
-    return narrowPrecisionToFloat(m_smoothedValue);
->>>>>>> miniblink49
 }
 
 bool AudioParamHandler::smooth()
 {
-<<<<<<< HEAD
     // If values have been explicitly scheduled on the timeline, then use the
     // exact value.  Smoothing effectively is performed by the timeline.
     bool useTimelineValue = false;
@@ -233,81 +193,45 @@ bool AudioParamHandler::smooth()
     if (smoothedValue == value) {
         // Smoothed value has already approached and snapped to value.
         setIntrinsicValue(value);
-=======
-    // If values have been explicitly scheduled on the timeline, then use the exact value.
-    // Smoothing effectively is performed by the timeline.
-    bool useTimelineValue = false;
-    if (context())
-        m_value = m_timeline.valueForContextTime(context(), narrowPrecisionToFloat(m_value), useTimelineValue);
-
-    if (m_smoothedValue == m_value) {
-        // Smoothed value has already approached and snapped to value.
->>>>>>> miniblink49
         return true;
     }
 
     if (useTimelineValue) {
-<<<<<<< HEAD
         m_timeline.setSmoothedValue(value);
     } else {
         // Dezipper - exponential approach.
         smoothedValue += (value - smoothedValue) * DefaultSmoothingConstant;
-=======
-        m_smoothedValue = m_value;
-    } else {
-        // Dezipper - exponential approach.
-        m_smoothedValue += (m_value - m_smoothedValue) * DefaultSmoothingConstant;
->>>>>>> miniblink49
 
         // If we get close enough then snap to actual value.
         // FIXME: the threshold needs to be adjustable depending on range - but
         // this is OK general purpose value.
-<<<<<<< HEAD
         if (fabs(smoothedValue - value) < SnapThreshold)
             smoothedValue = value;
         m_timeline.setSmoothedValue(smoothedValue);
     }
 
     setIntrinsicValue(value);
-=======
-        if (fabs(m_smoothedValue - m_value) < SnapThreshold)
-            m_smoothedValue = m_value;
-    }
-
->>>>>>> miniblink49
     return false;
 }
 
 float AudioParamHandler::finalValue()
 {
-<<<<<<< HEAD
     float value = intrinsicValue();
-=======
-    float value = m_value;
->>>>>>> miniblink49
     calculateFinalValues(&value, 1, false);
     return value;
 }
 
-<<<<<<< HEAD
 void AudioParamHandler::calculateSampleAccurateValues(float* values,
     unsigned numberOfValues)
 {
     bool isSafe = deferredTaskHandler().isAudioThread() && values && numberOfValues;
     DCHECK(isSafe);
-=======
-void AudioParamHandler::calculateSampleAccurateValues(float* values, unsigned numberOfValues)
-{
-    bool isSafe = deferredTaskHandler().isAudioThread() && values && numberOfValues;
-    ASSERT(isSafe);
->>>>>>> miniblink49
     if (!isSafe)
         return;
 
     calculateFinalValues(values, numberOfValues, true);
 }
 
-<<<<<<< HEAD
 void AudioParamHandler::calculateFinalValues(float* values,
     unsigned numberOfValues,
     bool sampleAccurate)
@@ -319,16 +243,6 @@ void AudioParamHandler::calculateFinalValues(float* values,
 
     // The calculated result will be the "intrinsic" value summed with all
     // audio-rate connections.
-=======
-void AudioParamHandler::calculateFinalValues(float* values, unsigned numberOfValues, bool sampleAccurate)
-{
-    bool isGood = deferredTaskHandler().isAudioThread() && values && numberOfValues;
-    ASSERT(isGood);
-    if (!isGood)
-        return;
-
-    // The calculated result will be the "intrinsic" value summed with all audio-rate connections.
->>>>>>> miniblink49
 
     if (sampleAccurate) {
         // Calculate sample-accurate (a-rate) intrinsic values.
@@ -336,7 +250,6 @@ void AudioParamHandler::calculateFinalValues(float* values, unsigned numberOfVal
     } else {
         // Calculate control-rate (k-rate) intrinsic value.
         bool hasValue;
-<<<<<<< HEAD
         float value = intrinsicValue();
         float timelineValue = m_timeline.valueForContextTime(
             destinationHandler(), value, hasValue, minValue(), maxValue());
@@ -351,41 +264,21 @@ void AudioParamHandler::calculateFinalValues(float* values, unsigned numberOfVal
     // Now sum all of the audio-rate connections together (unity-gain summing
     // junction).  Note that connections would normally be mono, but we mix down
     // to mono if necessary.
-=======
-        float timelineValue = m_timeline.valueForContextTime(context(), narrowPrecisionToFloat(m_value), hasValue);
-
-        if (hasValue)
-            m_value = timelineValue;
-
-        values[0] = narrowPrecisionToFloat(m_value);
-    }
-
-    // Now sum all of the audio-rate connections together (unity-gain summing junction).
-    // Note that connections would normally be mono, but we mix down to mono if necessary.
->>>>>>> miniblink49
     RefPtr<AudioBus> summingBus = AudioBus::create(1, numberOfValues, false);
     summingBus->setChannelMemory(0, values, numberOfValues);
 
     for (unsigned i = 0; i < numberOfRenderingConnections(); ++i) {
         AudioNodeOutput* output = renderingOutput(i);
-<<<<<<< HEAD
         DCHECK(output);
 
         // Render audio from this output.
         AudioBus* connectionBus = output->pull(0, AudioUtilities::kRenderQuantumFrames);
-=======
-        ASSERT(output);
-
-        // Render audio from this output.
-        AudioBus* connectionBus = output->pull(0, AudioHandler::ProcessingSizeInFrames);
->>>>>>> miniblink49
 
         // Sum, with unity-gain.
         summingBus->sumFrom(*connectionBus);
     }
 }
 
-<<<<<<< HEAD
 void AudioParamHandler::calculateTimelineValues(float* values,
     unsigned numberOfValues)
 {
@@ -401,19 +294,6 @@ void AudioParamHandler::calculateTimelineValues(float* values,
     setIntrinsicValue(m_timeline.valuesForFrameRange(
         startFrame, endFrame, intrinsicValue(), values, numberOfValues,
         sampleRate, sampleRate, minValue(), maxValue()));
-=======
-void AudioParamHandler::calculateTimelineValues(float* values, unsigned numberOfValues)
-{
-    // Calculate values for this render quantum.  Normally numberOfValues will
-    // equal to AudioHandler::ProcessingSizeInFrames (the render quantum size).
-    double sampleRate = context()->sampleRate();
-    double startTime = context()->currentTime();
-    double endTime = startTime + numberOfValues / sampleRate;
-
-    // Note we're running control rate at the sample-rate.
-    // Pass in the current value as default value.
-    m_value = m_timeline.valuesForTimeRange(startTime, endTime, narrowPrecisionToFloat(m_value), values, numberOfValues, sampleRate, sampleRate);
->>>>>>> miniblink49
 }
 
 void AudioParamHandler::connect(AudioNodeOutput& output)
@@ -439,7 +319,6 @@ void AudioParamHandler::disconnect(AudioNodeOutput& output)
     }
 }
 
-<<<<<<< HEAD
 int AudioParamHandler::computeQHistogramValue(float newValue) const
 {
     // For the Q value, assume a useful range is [0, 25] and that 0.25 dB
@@ -484,17 +363,10 @@ AudioParam::AudioParam(BaseAudioContext& context,
         defaultValue,
         minValue,
         maxValue))
-=======
-// ----------------------------------------------------------------
-
-AudioParam::AudioParam(AudioContext& context, double defaultValue)
-    : m_handler(AudioParamHandler::create(context, defaultValue))
->>>>>>> miniblink49
     , m_context(context)
 {
 }
 
-<<<<<<< HEAD
 AudioParam* AudioParam::create(BaseAudioContext& context,
     AudioParamType paramType,
     double defaultValue)
@@ -514,11 +386,6 @@ AudioParam* AudioParam::create(BaseAudioContext& context,
 {
     DCHECK_LE(minValue, maxValue);
     return new AudioParam(context, paramType, defaultValue, minValue, maxValue);
-=======
-AudioParam* AudioParam::create(AudioContext& context, double defaultValue)
-{
-    return new AudioParam(context, defaultValue);
->>>>>>> miniblink49
 }
 
 DEFINE_TRACE(AudioParam)
@@ -531,7 +398,6 @@ float AudioParam::value() const
     return handler().value();
 }
 
-<<<<<<< HEAD
 void AudioParam::warnIfOutsideRange(const String& paramMethod, float value)
 {
     if (value < minValue() || value > maxValue()) {
@@ -544,10 +410,6 @@ void AudioParam::warnIfOutsideRange(const String& paramMethod, float value)
 void AudioParam::setValue(float value)
 {
     warnIfOutsideRange("value", value);
-=======
-void AudioParam::setValue(float value)
-{
->>>>>>> miniblink49
     handler().setValue(value);
 }
 
@@ -556,7 +418,6 @@ float AudioParam::defaultValue() const
     return handler().defaultValue();
 }
 
-<<<<<<< HEAD
 float AudioParam::minValue() const
 {
     return handler().minValue();
@@ -690,38 +551,3 @@ AudioParam* AudioParam::cancelAndHoldAtTime(double startTime,
 }
 
 } // namespace blink
-=======
-void AudioParam::setValueAtTime(float value, double time, ExceptionState& exceptionState)
-{
-    handler().timeline().setValueAtTime(value, time, exceptionState);
-}
-
-void AudioParam::linearRampToValueAtTime(float value, double time, ExceptionState& exceptionState)
-{
-    handler().timeline().linearRampToValueAtTime(value, time, exceptionState);
-}
-
-void AudioParam::exponentialRampToValueAtTime(float value, double time, ExceptionState& exceptionState)
-{
-    handler().timeline().exponentialRampToValueAtTime(value, time, exceptionState);
-}
-
-void AudioParam::setTargetAtTime(float target, double time, double timeConstant, ExceptionState& exceptionState)
-{
-    handler().timeline().setTargetAtTime(target, time, timeConstant, exceptionState);
-}
-
-void AudioParam::setValueCurveAtTime(DOMFloat32Array* curve, double time, double duration, ExceptionState& exceptionState)
-{
-    handler().timeline().setValueCurveAtTime(curve, time, duration, exceptionState);
-}
-
-void AudioParam::cancelScheduledValues(double startTime, ExceptionState& exceptionState)
-{
-    handler().timeline().cancelScheduledValues(startTime, exceptionState);
-}
-
-} // namespace blink
-
-#endif // ENABLE(WEB_AUDIO)
->>>>>>> miniblink49

@@ -2,8 +2,7 @@
  * Copyright (C) 2006, 2007, 2008, 2009, 2010 Apple Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
+ * modify it under the terms of the GNU Library General Publicw
  * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
@@ -18,7 +17,6 @@
  *
  */
 
-#include "config.h"
 #include "core/layout/LayoutSlider.h"
 
 #include "core/InputTypeNames.h"
@@ -29,7 +27,7 @@
 #include "core/layout/LayoutSliderThumb.h"
 #include "wtf/MathExtras.h"
 
-using namespace::std;
+using namespace ::std;
 
 namespace blink {
 
@@ -42,27 +40,32 @@ LayoutSlider::LayoutSlider(HTMLInputElement* element)
     ASSERT(element->type() == InputTypeNames::range);
 }
 
-LayoutSlider::~LayoutSlider()
-{
-}
+LayoutSlider::~LayoutSlider() { }
 
-int LayoutSlider::baselinePosition(FontBaseline, bool /*firstLine*/, LineDirectionMode, LinePositionMode linePositionMode) const
+int LayoutSlider::baselinePosition(FontBaseline,
+    bool /*firstLine*/,
+    LineDirectionMode,
+    LinePositionMode linePositionMode) const
 {
     ASSERT(linePositionMode == PositionOnContainingLine);
     // FIXME: Patch this function for writing-mode.
-    return size().height() + marginTop();
+    return (size().height() + marginTop()).toInt();
 }
 
-void LayoutSlider::computeIntrinsicLogicalWidths(LayoutUnit& minLogicalWidth, LayoutUnit& maxLogicalWidth) const
+void LayoutSlider::computeIntrinsicLogicalWidths(
+    LayoutUnit& minLogicalWidth,
+    LayoutUnit& maxLogicalWidth) const
 {
-    maxLogicalWidth = defaultTrackLength * style()->effectiveZoom();
-    if (!style()->width().hasPercent())
+    maxLogicalWidth = LayoutUnit(defaultTrackLength * style()->effectiveZoom());
+    if (!style()->width().isPercentOrCalc())
         minLogicalWidth = maxLogicalWidth;
 }
 
 inline SliderThumbElement* LayoutSlider::sliderThumbElement() const
 {
-    return toSliderThumbElement(toElement(node())->userAgentShadowRoot()->getElementById(ShadowElementNames::sliderThumb()));
+    return toSliderThumbElement(
+        toElement(node())->userAgentShadowRoot()->getElementById(
+            ShadowElementNames::sliderThumb()));
 }
 
 void LayoutSlider::layout()
@@ -78,7 +81,7 @@ void LayoutSlider::layout()
 
 bool LayoutSlider::inDragMode() const
 {
-    return sliderThumbElement()->active();
+    return sliderThumbElement()->isActive();
 }
 
 } // namespace blink

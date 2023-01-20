@@ -10,11 +10,8 @@
 
 #include "SkTypeface.h"
 
-<<<<<<< HEAD
 #if defined(SK_BUILD_FOR_MAC) || defined(SK_BUILD_FOR_IOS)
 
-=======
->>>>>>> miniblink49
 #include <CoreFoundation/CoreFoundation.h>
 
 #ifdef SK_BUILD_FOR_MAC
@@ -48,9 +45,5 @@ SK_API extern SkTypeface* SkCreateTypefaceFromCTFont(CTFontRef, CFTypeRef = NULL
  */
 SK_API extern CTFontRef SkTypeface_GetCTFontRef(const SkTypeface* face);
 
-<<<<<<< HEAD
 #endif // defined(SK_BUILD_FOR_MAC) || defined(SK_BUILD_FOR_IOS)
 #endif // SkTypeface_mac_DEFINED
-=======
-#endif
->>>>>>> miniblink49

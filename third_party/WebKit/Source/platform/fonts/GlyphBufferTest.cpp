@@ -2,28 +2,17 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
 #include "platform/fonts/GlyphBuffer.h"
 
 #include "platform/fonts/SimpleFontData.h"
 #include "testing/gtest/include/gtest/gtest.h"
 #include "wtf/PassRefPtr.h"
 #include "wtf/RefPtr.h"
-=======
-#include "config.h"
-#include "platform/fonts/GlyphBuffer.h"
-
-#include "platform/fonts/SimpleFontData.h"
-#include "wtf/PassRefPtr.h"
-#include "wtf/RefPtr.h"
-#include <gtest/gtest.h>
->>>>>>> miniblink49
 
 namespace blink {
 
 namespace {
 
-<<<<<<< HEAD
     // Minimal TestSimpleFontData implementation.
     // Font has no glyphs, but that's okay.
     class TestSimpleFontData : public SimpleFontData {
@@ -44,25 +33,6 @@ namespace {
             return false;
         }
     };
-=======
-// Minimal TestSimpleFontData implementation.
-// Font has no glyphs, but that's okay.
-class TestSimpleFontData : public SimpleFontData {
-public:
-    static PassRefPtr<TestSimpleFontData> create()
-    {
-        return adoptRef(new TestSimpleFontData);
-    }
-
-private:
-    TestSimpleFontData() : SimpleFontData(nullptr, 10, false, false) { }
-
-    bool fillGlyphPage(GlyphPage* pageToFill, unsigned offset, unsigned length, UChar* buffer, unsigned bufferLength) const override
-    {
-        return false;
-    }
-};
->>>>>>> miniblink49
 
 } // anonymous namespace
 

@@ -19,7 +19,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/dom/Comment.h"
 
 #include "core/dom/Document.h"
@@ -31,9 +30,9 @@ inline Comment::Comment(Document& document, const String& text)
 {
 }
 
-PassRefPtrWillBeRawPtr<Comment> Comment::create(Document& document, const String& text)
+Comment* Comment::create(Document& document, const String& text)
 {
-    return adoptRefWillBeNoop(new Comment(document, text));
+    return new Comment(document, text);
 }
 
 String Comment::nodeName() const
@@ -41,12 +40,12 @@ String Comment::nodeName() const
     return "#comment";
 }
 
-Node::NodeType Comment::nodeType() const
+Node::NodeType Comment::getNodeType() const
 {
-    return COMMENT_NODE;
+    return kCommentNode;
 }
 
-PassRefPtrWillBeRawPtr<Node> Comment::cloneNode(bool /*deep*/)
+Node* Comment::cloneNode(bool /*deep*/)
 {
     return create(document(), data());
 }

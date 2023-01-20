@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -32,30 +28,16 @@ void SkView::Artist::onInflate(const SkDOM&, const SkDOM::Node*)
 SkView::Artist* SkView::getArtist() const
 {
     Artist_SkTagList* rec = (Artist_SkTagList*)this->findTagList(kViewArtist_SkTagList);
-<<<<<<< HEAD
     SkASSERT(rec == nullptr || rec->fArtist != nullptr);
 
     return rec ? rec->fArtist : nullptr;
-=======
-    SkASSERT(rec == NULL || rec->fArtist != NULL);
-
-    return rec ? rec->fArtist : NULL;
->>>>>>> miniblink49
 }
 
 SkView::Artist* SkView::setArtist(Artist* obj)
 {
-<<<<<<< HEAD
     if (obj == nullptr) {
         this->removeTagList(kViewArtist_SkTagList);
     } else // add/replace
-=======
-    if (obj == NULL)
-    {
-        this->removeTagList(kViewArtist_SkTagList);
-    }
-    else    // add/replace
->>>>>>> miniblink49
     {
         Artist_SkTagList* rec = (Artist_SkTagList*)this->findTagList(kViewArtist_SkTagList);
 
@@ -90,30 +72,16 @@ void SkView::Layout::onInflate(const SkDOM&, const SkDOM::Node*)
 SkView::Layout* SkView::getLayout() const
 {
     Layout_SkTagList* rec = (Layout_SkTagList*)this->findTagList(kViewLayout_SkTagList);
-<<<<<<< HEAD
     SkASSERT(rec == nullptr || rec->fLayout != nullptr);
 
     return rec ? rec->fLayout : nullptr;
-=======
-    SkASSERT(rec == NULL || rec->fLayout != NULL);
-
-    return rec ? rec->fLayout : NULL;
->>>>>>> miniblink49
 }
 
 SkView::Layout* SkView::setLayout(Layout* obj, bool invokeLayoutNow)
 {
-<<<<<<< HEAD
     if (obj == nullptr) {
         this->removeTagList(kViewLayout_SkTagList);
     } else // add/replace
-=======
-    if (obj == NULL)
-    {
-        this->removeTagList(kViewLayout_SkTagList);
-    }
-    else    // add/replace
->>>>>>> miniblink49
     {
         Layout_SkTagList* rec = (Layout_SkTagList*)this->findTagList(kViewLayout_SkTagList);
 

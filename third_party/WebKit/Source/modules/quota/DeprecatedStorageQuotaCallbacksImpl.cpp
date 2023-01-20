@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "modules/quota/DeprecatedStorageQuotaCallbacksImpl.h"
 
 #include "modules/quota/DOMError.h"
@@ -38,41 +37,20 @@ namespace blink {
 DeprecatedStorageQuotaCallbacksImpl::DeprecatedStorageQuotaCallbacksImpl(
     StorageUsageCallback* usageCallback,
     StorageErrorCallback* errorCallback)
-=======
-#include "config.h"
-#include "modules/quota/DeprecatedStorageQuotaCallbacksImpl.h"
-
-#include "core/dom/DOMError.h"
-#include "core/dom/ExceptionCode.h"
-
-namespace blink {
-
-DeprecatedStorageQuotaCallbacksImpl::DeprecatedStorageQuotaCallbacksImpl(StorageUsageCallback* usageCallback, StorageErrorCallback* errorCallback)
->>>>>>> miniblink49
     : m_usageCallback(usageCallback)
     , m_errorCallback(errorCallback)
 {
 }
 
-<<<<<<< HEAD
 DeprecatedStorageQuotaCallbacksImpl::DeprecatedStorageQuotaCallbacksImpl(
     StorageQuotaCallback* quotaCallback,
     StorageErrorCallback* errorCallback)
-=======
-DeprecatedStorageQuotaCallbacksImpl::DeprecatedStorageQuotaCallbacksImpl(StorageQuotaCallback* quotaCallback, StorageErrorCallback* errorCallback)
->>>>>>> miniblink49
     : m_quotaCallback(quotaCallback)
     , m_errorCallback(errorCallback)
 {
 }
 
-<<<<<<< HEAD
 DeprecatedStorageQuotaCallbacksImpl::~DeprecatedStorageQuotaCallbacksImpl() { }
-=======
-DeprecatedStorageQuotaCallbacksImpl::~DeprecatedStorageQuotaCallbacksImpl()
-{
-}
->>>>>>> miniblink49
 
 DEFINE_TRACE(DeprecatedStorageQuotaCallbacksImpl)
 {
@@ -82,25 +60,17 @@ DEFINE_TRACE(DeprecatedStorageQuotaCallbacksImpl)
     StorageQuotaCallbacks::trace(visitor);
 }
 
-<<<<<<< HEAD
 void DeprecatedStorageQuotaCallbacksImpl::didQueryStorageUsageAndQuota(
     unsigned long long usageInBytes,
     unsigned long long quotaInBytes)
-=======
-void DeprecatedStorageQuotaCallbacksImpl::didQueryStorageUsageAndQuota(unsigned long long usageInBytes, unsigned long long quotaInBytes)
->>>>>>> miniblink49
 {
     if (m_usageCallback)
         m_usageCallback->handleEvent(usageInBytes, quotaInBytes);
 }
 
-<<<<<<< HEAD
 void DeprecatedStorageQuotaCallbacksImpl::didGrantStorageQuota(
     unsigned long long usageInBytes,
     unsigned long long grantedQuotaInBytes)
-=======
-void DeprecatedStorageQuotaCallbacksImpl::didGrantStorageQuota(unsigned long long usageInBytes, unsigned long long grantedQuotaInBytes)
->>>>>>> miniblink49
 {
     if (m_quotaCallback)
         m_quotaCallback->handleEvent(grantedQuotaInBytes);
@@ -109,12 +79,8 @@ void DeprecatedStorageQuotaCallbacksImpl::didGrantStorageQuota(unsigned long lon
 void DeprecatedStorageQuotaCallbacksImpl::didFail(WebStorageQuotaError error)
 {
     if (m_errorCallback)
-<<<<<<< HEAD
         m_errorCallback->handleEvent(
             DOMError::create(static_cast<ExceptionCode>(error)));
-=======
-        m_errorCallback->handleEvent(DOMError::create(static_cast<ExceptionCode>(error)));
->>>>>>> miniblink49
 }
 
 } // namespace blink

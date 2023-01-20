@@ -28,16 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
-
->>>>>>> miniblink49
 #include "public/platform/WebMediaConstraints.h"
 
 #include "wtf/PassRefPtr.h"
 #include "wtf/RefCounted.h"
-<<<<<<< HEAD
 #include "wtf/text/StringBuilder.h"
 #include "wtf/text/WTFString.h"
 #include <math.h>
@@ -100,31 +94,10 @@ private:
 
     WebMediaTrackConstraintSet m_basic;
     WebVector<WebMediaTrackConstraintSet> m_advanced;
-=======
-
-namespace blink {
-
-class WebMediaConstraintsPrivate final : public RefCounted<WebMediaConstraintsPrivate> {
-public:
-    static PassRefPtr<WebMediaConstraintsPrivate> create();
-    static PassRefPtr<WebMediaConstraintsPrivate> create(const WebVector<WebMediaConstraint>& optional, const WebVector<WebMediaConstraint>& mandatory);
-
-    void getOptionalConstraints(WebVector<WebMediaConstraint>&);
-    void getMandatoryConstraints(WebVector<WebMediaConstraint>&);
-    bool getMandatoryConstraintValue(const WebString& name, WebString& value);
-    bool getOptionalConstraintValue(const WebString& name, WebString& value);
-
-private:
-    WebMediaConstraintsPrivate(const WebVector<WebMediaConstraint>& optional, const WebVector<WebMediaConstraint>& mandatory);
-
-    WebVector<WebMediaConstraint> m_optional;
-    WebVector<WebMediaConstraint> m_mandatory;
->>>>>>> miniblink49
 };
 
 PassRefPtr<WebMediaConstraintsPrivate> WebMediaConstraintsPrivate::create()
 {
-<<<<<<< HEAD
     WebMediaTrackConstraintSet basic;
     WebVector<WebMediaTrackConstraintSet> advanced;
     return adoptRef(new WebMediaConstraintsPrivate(basic, advanced));
@@ -312,46 +285,12 @@ bool StringConstraint::matches(WebString value) const
     }
     for (const auto& choice : m_exact) {
         if (value == choice) {
-=======
-    WebVector<WebMediaConstraint> optional;
-    WebVector<WebMediaConstraint> mandatory;
-    return adoptRef(new WebMediaConstraintsPrivate(optional, mandatory));
-}
-
-PassRefPtr<WebMediaConstraintsPrivate> WebMediaConstraintsPrivate::create(const WebVector<WebMediaConstraint>& optional, const WebVector<WebMediaConstraint>& mandatory)
-{
-    return adoptRef(new WebMediaConstraintsPrivate(optional, mandatory));
-}
-
-WebMediaConstraintsPrivate::WebMediaConstraintsPrivate(const WebVector<WebMediaConstraint>& optional, const WebVector<WebMediaConstraint>& mandatory)
-    : m_optional(optional)
-    , m_mandatory(mandatory)
-{
-}
-
-void WebMediaConstraintsPrivate::getOptionalConstraints(WebVector<WebMediaConstraint>& constraints)
-{
-    constraints = m_optional;
-}
-
-void WebMediaConstraintsPrivate::getMandatoryConstraints(WebVector<WebMediaConstraint>& constraints)
-{
-    constraints = m_mandatory;
-}
-
-bool WebMediaConstraintsPrivate::getMandatoryConstraintValue(const WebString& name, WebString& value)
-{
-    for (size_t i = 0; i < m_mandatory.size(); ++i) {
-        if (m_mandatory[i].m_name == name) {
-            value = m_mandatory[i].m_value;
->>>>>>> miniblink49
             return true;
         }
     }
     return false;
 }
 
-<<<<<<< HEAD
 bool StringConstraint::isEmpty() const
 {
     return m_exact.isEmpty() && m_ideal.isEmpty();
@@ -581,20 +520,11 @@ bool WebMediaTrackConstraintSet::hasMandatoryOutsideSet(
                 foundName = constraint->name();
                 return true;
             }
-=======
-bool WebMediaConstraintsPrivate::getOptionalConstraintValue(const WebString& name, WebString& value)
-{
-    for (size_t i = 0; i < m_optional.size(); ++i) {
-        if (m_optional[i].m_name == name) {
-            value = m_optional[i].m_value;
-            return true;
->>>>>>> miniblink49
         }
     }
     return false;
 }
 
-<<<<<<< HEAD
 bool WebMediaTrackConstraintSet::hasMandatory() const
 {
     std::string dummyString;
@@ -618,8 +548,6 @@ WebString WebMediaTrackConstraintSet::toString() const
     return builder.toString();
 }
 
-=======
->>>>>>> miniblink49
 // WebMediaConstraints
 
 void WebMediaConstraints::assign(const WebMediaConstraints& other)
@@ -632,34 +560,9 @@ void WebMediaConstraints::reset()
     m_private.reset();
 }
 
-<<<<<<< HEAD
 bool WebMediaConstraints::isEmpty() const
 {
     return m_private.isNull() || m_private->isEmpty();
-=======
-void WebMediaConstraints::getMandatoryConstraints(WebVector<WebMediaConstraint>& constraints) const
-{
-    ASSERT(!isNull());
-    m_private->getMandatoryConstraints(constraints);
-}
-
-void WebMediaConstraints::getOptionalConstraints(WebVector<WebMediaConstraint>& constraints) const
-{
-    ASSERT(!isNull());
-    m_private->getOptionalConstraints(constraints);
-}
-
-bool WebMediaConstraints::getMandatoryConstraintValue(const WebString& name, WebString& value) const
-{
-    ASSERT(!isNull());
-    return m_private->getMandatoryConstraintValue(name, value);
-}
-
-bool WebMediaConstraints::getOptionalConstraintValue(const WebString& name, WebString& value) const
-{
-    ASSERT(!isNull());
-    return m_private->getOptionalConstraintValue(name, value);
->>>>>>> miniblink49
 }
 
 void WebMediaConstraints::initialize()
@@ -668,7 +571,6 @@ void WebMediaConstraints::initialize()
     m_private = WebMediaConstraintsPrivate::create();
 }
 
-<<<<<<< HEAD
 void WebMediaConstraints::initialize(
     const WebMediaTrackConstraintSet& basic,
     const WebVector<WebMediaTrackConstraintSet>& advanced)
@@ -698,13 +600,3 @@ const WebString WebMediaConstraints::toString() const
 }
 
 } // namespace blink
-=======
-void WebMediaConstraints::initialize(const WebVector<WebMediaConstraint>& optional, const WebVector<WebMediaConstraint>& mandatory)
-{
-    ASSERT(isNull());
-    m_private = WebMediaConstraintsPrivate::create(optional, mandatory);
-}
-
-} // namespace blink
-
->>>>>>> miniblink49

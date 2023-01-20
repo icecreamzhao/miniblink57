@@ -26,7 +26,6 @@
 #ifndef DecodingImageGenerator_h
 #define DecodingImageGenerator_h
 
-<<<<<<< HEAD
 #include "platform/PlatformExport.h"
 #include "platform/image-decoders/SegmentReader.h"
 #include "third_party/skia/include/core/SkImageGenerator.h"
@@ -35,14 +34,6 @@
 #include "wtf/Noncopyable.h"
 #include "wtf/PassRefPtr.h"
 #include "wtf/RefPtr.h"
-=======
-#include "SkImageGenerator.h"
-#include "SkImageInfo.h"
-
-#include "platform/PlatformExport.h"
-#include "wtf/RefPtr.h"
-#include "wtf/CheckedArithmetic.h"
->>>>>>> miniblink49
 
 class SkData;
 
@@ -50,7 +41,6 @@ namespace blink {
 
 class ImageFrameGenerator;
 
-<<<<<<< HEAD
 // Implements SkImageGenerator, used by SkPixelRef to populate a discardable
 // memory with a decoded image frame. ImageFrameGenerator does the actual
 // decoding.
@@ -93,33 +83,6 @@ private:
     const bool m_allDataReceived;
     const size_t m_frameIndex;
     bool m_canYUVDecode;
-=======
-// Implements SkImageGenerator and used by SkPixelRef to populate a discardable
-// memory with decoded pixels.
-//
-// This class does not own an ImageDecode. It does not own encoded data. It serves
-// as and adapter to ImageFrameGenerator which actually performs decoding.
-class PLATFORM_EXPORT DecodingImageGenerator final : public SkImageGenerator {
-public:
-    static SkImageGenerator* create(SkData*);
-
-    DecodingImageGenerator(PassRefPtr<ImageFrameGenerator>, const SkImageInfo&, size_t index);
-    ~DecodingImageGenerator() override;
-
-    void setGenerationId(size_t id) { m_generationId = id; }
-
-protected:
-    SkData* onRefEncodedData() override;
-#ifdef SK_LEGACY_IMAGE_GENERATOR_ENUMS_AND_OPTIONS
-	Result onGetPixels(const SkImageInfo&, void* pixels, size_t rowBytes, const Options&, SkPMColor ctable[], int* ctableCount) override;
-#endif
-    bool onGetYUV8Planes(SkISize sizes[3], void* planes[3], size_t rowBytes[3], SkYUVColorSpace*) override;
-
-private:
-    RefPtr<ImageFrameGenerator> m_frameGenerator;
-    size_t m_frameIndex;
-    size_t m_generationId;
->>>>>>> miniblink49
 };
 
 } // namespace blink

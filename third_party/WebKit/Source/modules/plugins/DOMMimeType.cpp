@@ -13,17 +13,10 @@
  *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
-<<<<<<< HEAD
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *  MA 02110-1301 USA
  */
 
-=======
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- */
-
-#include "config.h"
->>>>>>> miniblink49
 #include "modules/plugins/DOMMimeType.h"
 
 #include "core/frame/LocalFrame.h"
@@ -34,21 +27,15 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 DOMMimeType::DOMMimeType(PassRefPtr<PluginData> pluginData,
     LocalFrame* frame,
     unsigned index)
     : ContextClient(frame)
-=======
-DOMMimeType::DOMMimeType(PassRefPtr<PluginData> pluginData, LocalFrame* frame, unsigned index)
-    : LocalFrameLifecycleObserver(frame)
->>>>>>> miniblink49
     , m_pluginData(pluginData)
     , m_index(index)
 {
 }
 
-<<<<<<< HEAD
 DOMMimeType::~DOMMimeType() { }
 
 DEFINE_TRACE(DOMMimeType)
@@ -57,18 +44,6 @@ DEFINE_TRACE(DOMMimeType)
 }
 
 const String& DOMMimeType::type() const
-=======
-DOMMimeType::~DOMMimeType()
-{
-}
-
-DEFINE_TRACE(DOMMimeType)
-{
-    LocalFrameLifecycleObserver::trace(visitor);
-}
-
-const String &DOMMimeType::type() const
->>>>>>> miniblink49
 {
     return mimeClassInfo().type;
 }
@@ -86,11 +61,7 @@ String DOMMimeType::suffixes() const
     return builder.toString();
 }
 
-<<<<<<< HEAD
 const String& DOMMimeType::description() const
-=======
-const String &DOMMimeType::description() const
->>>>>>> miniblink49
 {
     return mimeClassInfo().desc;
 }
@@ -103,12 +74,8 @@ DOMPlugin* DOMMimeType::enabledPlugin() const
     if (!frame() || !frame()->loader().allowPlugins(NotAboutToInstantiatePlugin))
         return nullptr;
 
-<<<<<<< HEAD
     return DOMPlugin::create(m_pluginData.get(), frame(),
         m_pluginData->mimePluginIndices()[m_index]);
-=======
-    return DOMPlugin::create(m_pluginData.get(), frame(), m_pluginData->mimePluginIndices()[m_index]);
->>>>>>> miniblink49
 }
 
 } // namespace blink

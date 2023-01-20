@@ -37,19 +37,12 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 class WebDocumentSubresourceFilter;
 class WebURL;
 class WebURLRequest;
 class WebURLResponse;
 template <typename T>
 class WebVector;
-=======
-class WebURL;
-class WebURLRequest;
-class WebURLResponse;
-template <typename T> class WebVector;
->>>>>>> miniblink49
 
 class WebDataSource {
 public:
@@ -65,11 +58,7 @@ public:
     // include additional request headers added by WebKit that were not
     // present in the original request.  This request may also correspond
     // to a location specified by a redirect that was followed.
-<<<<<<< HEAD
     virtual const WebURLRequest& getRequest() const = 0;
-=======
-    virtual const WebURLRequest& request() const = 0;
->>>>>>> miniblink49
 
     // Returns the response associated with this datasource.
     virtual const WebURLResponse& response() const = 0;
@@ -106,11 +95,7 @@ public:
     // data pointer will be deleted when the datasource is destroyed.
     // Setting the extra data pointer will cause any existing non-null
     // extra data pointer to be deleted.
-<<<<<<< HEAD
     virtual ExtraData* getExtraData() const = 0;
-=======
-    virtual ExtraData* extraData() const = 0;
->>>>>>> miniblink49
     virtual void setExtraData(ExtraData*) = 0;
 
     // Sets the navigation start time for this datasource. Ordinarily,
@@ -121,7 +106,6 @@ public:
     // the user may have already recorded the original value.
     virtual void setNavigationStartTime(double) = 0;
 
-<<<<<<< HEAD
     // Sets timing and attributes of the navigation.
     // Ordinarily, they are determined in WebCore, but when the navigation is
     // handled by the client, they can be passed here.
@@ -137,8 +121,6 @@ public:
     // datasource is destroyed or when a new filter is set.
     virtual void setSubresourceFilter(WebDocumentSubresourceFilter*) = 0;
 
-=======
->>>>>>> miniblink49
 protected:
     ~WebDataSource() { }
 };

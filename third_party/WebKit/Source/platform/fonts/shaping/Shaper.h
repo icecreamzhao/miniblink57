@@ -32,23 +32,15 @@
 #define Shaper_h
 
 #include "platform/PlatformExport.h"
-<<<<<<< HEAD
 #include "platform/geometry/FloatPoint.h"
 #include "wtf/Allocator.h"
 #include "wtf/HashSet.h"
 #include "wtf/Noncopyable.h"
-=======
-#include "platform/fonts/Font.h"
-#include "wtf/HashSet.h"
->>>>>>> miniblink49
 
 namespace blink {
 
 class FloatRect;
-<<<<<<< HEAD
 class Font;
-=======
->>>>>>> miniblink49
 class GlyphBuffer;
 class SimpleFontData;
 class TextRun;
@@ -56,12 +48,9 @@ class TextRun;
 struct GlyphData;
 
 class PLATFORM_EXPORT Shaper {
-<<<<<<< HEAD
     DISALLOW_NEW();
     WTF_MAKE_NONCOPYABLE(Shaper);
 
-=======
->>>>>>> miniblink49
 protected:
     Shaper(const Font*, const TextRun&, const GlyphData* emphasisData = nullptr,
         HashSet<const SimpleFontData*>* fallbackFonts = nullptr, FloatRect* = nullptr);
@@ -76,10 +65,7 @@ protected:
     HashSet<const SimpleFontData*>* m_fallbackFonts;
     FloatRect* m_glyphBoundingBox;
 
-<<<<<<< HEAD
     // TODO(kojii): These are no longer used in HarfBuzzShaper.
-=======
->>>>>>> miniblink49
     float m_expansion; // Pixels to be distributed over the line at word breaks.
     float m_expansionPerOpportunity; // Pixels to be added to each expansion opportunity.
     bool m_isAfterExpansion;
@@ -91,19 +77,6 @@ private:
     FloatPoint m_emphasisGlyphCenter;
 };
 
-<<<<<<< HEAD
-=======
-inline void Shaper::trackNonPrimaryFallbackFont(const SimpleFontData* fontData)
-{
-    ASSERT(m_fallbackFonts);
-
-    if (fontData == m_font->primaryFont())
-        return;
-
-    m_fallbackFonts->add(fontData);
-}
-
->>>>>>> miniblink49
 } // namespace blink
 
 #endif // Shaper_h

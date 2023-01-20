@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
 // https://wicg.github.io/BackgroundSync/spec/#sync-manager-interface
 
 [
@@ -11,22 +10,4 @@
 ] interface SyncManager {
     [MeasureAs=BackgroundSyncRegister,CallWith=ScriptState,ImplementedAs=registerFunction] Promise<void> register(DOMString tag);
     [CallWith=ScriptState] Promise<sequence<DOMString>> getTags();
-=======
-enum SyncPermissionState {
-  "default",
-  "denied",
-  "granted"
-};
-
-[
-    Exposed=(Window,ServiceWorker),
-    GarbageCollected,
-    RuntimeEnabled=BackgroundSync,
-    TypeChecking=Interface,
-] interface SyncManager {
-    [CallWith=ScriptState,ImplementedAs=registerFunction] Promise<SyncRegistration> register([RuntimeEnabled=BackgroundSyncV2] optional SyncRegistrationOptions options);
-    [RuntimeEnabled=BackgroundSyncV2, CallWith=ScriptState] Promise<SyncRegistration> getRegistration(DOMString tag);
-    [RuntimeEnabled=BackgroundSyncV2, CallWith=ScriptState] Promise<sequence<SyncRegistration>> getRegistrations();
-    [RuntimeEnabled=BackgroundSyncV2, CallWith=ScriptState] Promise<SyncPermissionState> permissionState();
->>>>>>> miniblink49
 };

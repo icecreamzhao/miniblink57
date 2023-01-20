@@ -4,13 +4,7 @@
 
 // https://w3c.github.io/encrypted-media/#idl-def-MediaKeySystemMediaCapability
 
-<<<<<<< HEAD
 dictionary MediaKeySystemMediaCapability {
-=======
-[
-    RuntimeEnabled=EncryptedMedia
-] dictionary MediaKeySystemMediaCapability {
->>>>>>> miniblink49
     DOMString contentType = "";
     DOMString robustness = "";
 };

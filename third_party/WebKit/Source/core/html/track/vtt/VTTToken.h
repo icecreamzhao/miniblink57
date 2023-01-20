@@ -31,9 +31,13 @@
 #ifndef VTTToken_h
 #define VTTToken_h
 
+#include "wtf/Allocator.h"
+
 namespace blink {
 
 class VTTTokenTypes {
+    STATIC_ONLY(VTTTokenTypes);
+
 public:
     enum Type {
         Uninitialized,
@@ -45,16 +49,23 @@ public:
 };
 
 class VTTToken {
+    STACK_ALLOCATED();
+
 public:
     typedef VTTTokenTypes Type;
 
-    VTTToken() : m_type(Type::Uninitialized) { }
+    VTTToken()
+        : m_type(Type::Uninitialized)
+    {
+    }
 
     static VTTToken StringToken(const String& characterData)
     {
         return VTTToken(Type::Character, characterData);
     }
-    static VTTToken StartTag(const String& tagName, const AtomicString& classes = emptyAtom, const AtomicString& annotation = emptyAtom)
+    static VTTToken StartTag(const String& tagName,
+        const AtomicString& classes = emptyAtom,
+        const AtomicString& annotation = emptyAtom)
     {
         VTTToken token(Type::StartTag, tagName);
         token.m_classes = classes;
@@ -79,7 +90,9 @@ public:
 private:
     VTTToken(Type::Type type, const String& data)
         : m_type(type)
-        , m_data(data) { }
+        , m_data(data)
+    {
+    }
 
     Type::Type m_type;
     String m_data;
@@ -87,6 +100,6 @@ private:
     AtomicString m_classes;
 };
 
-}
+} // namespace blink
 
 #endif

@@ -6,18 +6,10 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #include "SkDrawShader.h"
 #include "SkDrawBitmap.h"
 #include "SkDrawMatrix.h"
 #include "SkDrawPaint.h"
-<<<<<<< HEAD
-=======
-#include "SkTemplates.h"
->>>>>>> miniblink49
 
 #if SK_USE_CONDENSED_INFO == 0
 
@@ -30,7 +22,6 @@ const SkMemberInfo SkDrawShader::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkDrawShader);
 
-<<<<<<< HEAD
 SkDrawShader::SkDrawShader()
     : matrix(nullptr)
     , tileMode(SkShader::kClamp_TileMode)
@@ -40,28 +31,15 @@ SkDrawShader::SkDrawShader()
 bool SkDrawShader::add()
 {
     if (fPaint->shader != (SkDrawShader*)-1)
-=======
-SkDrawShader::SkDrawShader() : matrix(NULL),
-    tileMode(SkShader::kClamp_TileMode) {
-}
-
-bool SkDrawShader::add() {
-    if (fPaint->shader != (SkDrawShader*) -1)
->>>>>>> miniblink49
         return true;
     fPaint->shader = this;
     fPaint->fOwnsShader = true;
     return false;
 }
 
-<<<<<<< HEAD
 SkMatrix* SkDrawShader::getMatrix()
 {
     return matrix ? &matrix->getMatrix() : nullptr;
-=======
-SkMatrix* SkDrawShader::getMatrix() {
-    return matrix ? &matrix->getMatrix() : NULL;
->>>>>>> miniblink49
 }
 
 #if SK_USE_CONDENSED_INFO == 0
@@ -76,7 +54,6 @@ const SkMemberInfo SkDrawBitmapShader::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkDrawBitmapShader);
 
-<<<<<<< HEAD
 SkDrawBitmapShader::SkDrawBitmapShader()
     : filterBitmap(-1)
     , image(nullptr)
@@ -86,28 +63,16 @@ SkDrawBitmapShader::SkDrawBitmapShader()
 bool SkDrawBitmapShader::add()
 {
     if (fPaint->shader != (SkDrawShader*)-1)
-=======
-SkDrawBitmapShader::SkDrawBitmapShader() : filterBitmap(-1), image(NULL) {}
-
-bool SkDrawBitmapShader::add() {
-    if (fPaint->shader != (SkDrawShader*) -1)
->>>>>>> miniblink49
         return true;
     fPaint->shader = this;
     fPaint->fOwnsShader = true;
     return false;
 }
 
-<<<<<<< HEAD
 SkShader* SkDrawBitmapShader::getShader()
 {
     if (image == nullptr)
         return nullptr;
-=======
-SkShader* SkDrawBitmapShader::getShader() {
-    if (image == NULL)
-        return NULL;
->>>>>>> miniblink49
 
     // note: bitmap shader now supports independent tile modes for X and Y
     // we pass the same to both, but later we should extend this flexibility
@@ -115,19 +80,9 @@ SkShader* SkDrawBitmapShader::getShader() {
     //
     // oops, bitmapshader no longer takes filterBitmap, but deduces it at
     // draw-time from the paint
-<<<<<<< HEAD
     return SkShader::MakeBitmapShader(image->fBitmap,
         (SkShader::TileMode)tileMode,
         (SkShader::TileMode)tileMode,
         getMatrix())
         .release();
-=======
-    SkShader* shader  = SkShader::CreateBitmapShader(image->fBitmap,
-                                                    (SkShader::TileMode) tileMode,
-                                                    (SkShader::TileMode) tileMode,
-                                                    getMatrix());
-    SkAutoTDelete<SkShader> autoDel(shader);
-    (void)autoDel.detach();
-    return shader;
->>>>>>> miniblink49
 }

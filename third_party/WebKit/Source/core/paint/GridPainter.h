@@ -5,21 +5,27 @@
 #ifndef GridPainter_h
 #define GridPainter_h
 
+#include "wtf/Allocator.h"
+
 namespace blink {
 
 struct PaintInfo;
 class LayoutPoint;
-class LayoutBox;
 class LayoutGrid;
 
 class GridPainter {
+    STACK_ALLOCATED();
+
 public:
-    GridPainter(LayoutGrid& layoutGrid) : m_layoutGrid(layoutGrid) { }
+    GridPainter(const LayoutGrid& layoutGrid)
+        : m_layoutGrid(layoutGrid)
+    {
+    }
 
     void paintChildren(const PaintInfo&, const LayoutPoint&);
 
 private:
-    LayoutGrid& m_layoutGrid;
+    const LayoutGrid& m_layoutGrid;
 };
 
 } // namespace blink

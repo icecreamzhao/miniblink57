@@ -1,46 +1,125 @@
-{% from "macros.tmpl" import license %}
-{{ license() }}
+{ % from "macros.tmpl" import license % } {
+    {
+        license()
+    }
+}
 
-#ifndef {{namespace}}Names_h
-#define {{namespace}}Names_h
+#ifndef{ { namespace } } Names_h
+#define{ { namespace } } Names_h
 
-{% if export == 'CORE_EXPORT' %}
+{
+    % if export == 'CORE_EXPORT' %
+}
 #include "core/CoreExport.h"
-{% endif %}
+{
+    % endif %
+}
 #include "core/dom/QualifiedName.h"
-#include "wtf/PassOwnPtr.h"
+#include <memory>
 
 namespace blink {
 
-class {{namespace}}QualifiedName : public QualifiedName { };
+class {
+    {namespace}
+} QualifiedName : public QualifiedName {};
 
-namespace {{namespace}}Names {
+namespace {
+    {namespace}
+}
+Names
+{
 
-{% set symbol_export = '%s ' % export if export else '' %}
-// Namespace
-{{symbol_export}}extern const WTF::AtomicString& {{namespace_prefix}}NamespaceURI;
+    {
+        % set symbol_export = '%s ' % export if export else '' %
+    }
+    // Namespace
+    {
+        {
+            symbol_export
+        }
+    }
+    extern const WTF::AtomicString&
+    {
+        {
+            namespace_prefix
+        }
+    }
+    NamespaceURI;
 
-// Tags
-{% for tag in tags|sort %}
-{{symbol_export}}extern const blink::{{namespace}}QualifiedName& {{tag|symbol}}Tag;
-{% endfor %}
+    // Tags
+    {% for tag in tags|sort %
+    }
+    {
+        {
+            symbol_export
+        }
+    }
+    extern const blink::
+    {
+        {namespace}
+    }
+    QualifiedName&
+    {
+        {
+            tag | symbol
+        }
+    }
+    Tag;
+    { % endfor % }
 
-// Attributes
-{% for attr in attrs|sort %}
-{{symbol_export}}extern const blink::QualifiedName& {{attr|symbol}}Attr;
-{% endfor %}
+    // Attributes
+    {% for attr in attrs|sort %
+    }
+    {
+        {
+            symbol_export
+        }
+    }
+    extern const blink::QualifiedName&
+    {
+        {
+            attr | symbol
+        }
+    }
+    Attr;
+    { % endfor % }
 
-{% if tags %}
-const unsigned {{namespace}}TagsCount = {{tags|count}};
-{{symbol_export}}PassOwnPtr<const {{namespace}}QualifiedName*[]> get{{namespace}}Tags();
-{% endif %}
+    {
+        % if tags %
+    }
+    const unsigned
+    {
+        {namespace}
+    }
+    TagsCount = { { tags | count } };
+    {
+        {
+            symbol_export
+        }
+    }
+    std::unique_ptr < const
+    {
+        {namespace}
+    }
+    QualifiedName* [] > get {{namespace} } Tags();
+    {
+        % endif %
+    }
 
-const unsigned {{namespace}}AttrsCount = {{attrs|count}};
-{% if namespace != 'HTML' %}
-PassOwnPtr<const QualifiedName*[]> get{{namespace}}Attrs();
-{% endif %}
+    const unsigned
+    {
+        {namespace}
+    }
+    AttrsCount = { { attrs | count } };
+    {
+        % if namespace != 'HTML' %
+    }
+    std::unique_ptr<const QualifiedName* []> get {{namespace} } Attrs();
+    {
+        % endif %
+    }
 
-void init();
+    void init();
 
 } // {{namespace}}Names
 } // namespace blink

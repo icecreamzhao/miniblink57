@@ -24,14 +24,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "platform/image-decoders/ImageFrame.h"
 
 #include "platform/RuntimeEnabledFeatures.h"
 #include "platform/graphics/skia/SkiaUtils.h"
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/image-decoders/ImageDecoder.h"
 
 namespace blink {
@@ -63,17 +59,10 @@ ImageFrame& ImageFrame::operator=(const ImageFrame& other)
     m_pixelsChanged = other.m_pixelsChanged;
     setMemoryAllocator(other.allocator());
     setOriginalFrameRect(other.originalFrameRect());
-<<<<<<< HEAD
     setStatus(other.getStatus());
     setDuration(other.duration());
     setDisposalMethod(other.getDisposalMethod());
     setAlphaBlendSource(other.getAlphaBlendSource());
-=======
-    setStatus(other.status());
-    setDuration(other.duration());
-    setDisposalMethod(other.disposalMethod());
-    setAlphaBlendSource(other.alphaBlendSource());
->>>>>>> miniblink49
     setPremultiplyAlpha(other.premultiplyAlpha());
     // Be sure that this is called after we've called setStatus(), since we
     // look at our status to know what to do with the alpha value.
@@ -100,19 +89,12 @@ void ImageFrame::zeroFillPixelData()
 
 bool ImageFrame::copyBitmapData(const ImageFrame& other)
 {
-<<<<<<< HEAD
     DCHECK_NE(this, &other);
-=======
-    if (this == &other)
-        return true;
-
->>>>>>> miniblink49
     m_hasAlpha = other.m_hasAlpha;
     m_bitmap.reset();
     return other.m_bitmap.copyTo(&m_bitmap, other.m_bitmap.colorType());
 }
 
-<<<<<<< HEAD
 bool ImageFrame::takeBitmapDataIfWritable(ImageFrame* other)
 {
     DCHECK(other);
@@ -140,14 +122,6 @@ bool ImageFrame::setSizeAndColorSpace(int newWidth,
         newWidth, newHeight,
         m_premultiplyAlpha ? kPremul_SkAlphaType : kUnpremul_SkAlphaType,
         std::move(colorSpace)));
-=======
-bool ImageFrame::setSize(int newWidth, int newHeight)
-{
-    // setSize() should only be called once, it leaks memory otherwise.
-    ASSERT(!width() && !height());
-
-    m_bitmap.setInfo(SkImageInfo::MakeN32Premul(newWidth, newHeight));
->>>>>>> miniblink49
     if (!m_bitmap.tryAllocPixels(m_allocator, 0))
         return false;
 
@@ -155,20 +129,11 @@ bool ImageFrame::setSize(int newWidth, int newHeight)
     return true;
 }
 
-<<<<<<< HEAD
-=======
-const SkBitmap& ImageFrame::bitmap() const
-{
-    return m_bitmap;
-}
-
->>>>>>> miniblink49
 bool ImageFrame::hasAlpha() const
 {
     return m_hasAlpha;
 }
 
-<<<<<<< HEAD
 sk_sp<SkImage> ImageFrame::finalizePixelsAndGetImage()
 {
     DCHECK_EQ(FrameComplete, m_status);
@@ -176,29 +141,17 @@ sk_sp<SkImage> ImageFrame::finalizePixelsAndGetImage()
     return SkImage::MakeFromBitmap(m_bitmap);
 }
 
-=======
->>>>>>> miniblink49
 void ImageFrame::setHasAlpha(bool alpha)
 {
     m_hasAlpha = alpha;
 
-<<<<<<< HEAD
     m_bitmap.setAlphaType(computeAlphaType());
-=======
-    // If the frame is not fully loaded, there will be transparent pixels,
-    // so we can't tell skia we're opaque, even for image types that logically
-    // always are (e.g. jpeg).
-    if (m_status != FrameComplete)
-        alpha = true;
-    m_bitmap.setAlphaType(alpha ? kPremul_SkAlphaType : kOpaque_SkAlphaType);
->>>>>>> miniblink49
 }
 
 void ImageFrame::setStatus(Status status)
 {
     m_status = status;
     if (m_status == FrameComplete) {
-<<<<<<< HEAD
         m_bitmap.setAlphaType(computeAlphaType());
         // Send pending pixels changed notifications now, because we can't do
         // this after the bitmap has been marked immutable.  We don't set the
@@ -207,13 +160,6 @@ void ImageFrame::setStatus(Status status)
         // until someone calls finalizePixelsAndGetImage() to actually get the
         // SkImage.
         notifyBitmapIfPixelsChanged();
-=======
-        m_bitmap.setAlphaType(m_hasAlpha ? kPremul_SkAlphaType : kOpaque_SkAlphaType);
-        // Send pending pixels changed notifications now, because we can't do this after
-        // the bitmap has been marked immutable.
-        notifyBitmapIfPixelsChanged();
-        m_bitmap.setImmutable(); // Tell the bitmap it's done.
->>>>>>> miniblink49
     }
 }
 
@@ -226,7 +172,6 @@ void ImageFrame::zeroFillFrameRect(const IntRect& rect)
     setHasAlpha(true);
 }
 
-<<<<<<< HEAD
 static uint8_t blendChannel(uint8_t src,
     uint8_t srcA,
     uint8_t dst,
@@ -285,6 +230,4 @@ SkAlphaType ImageFrame::computeAlphaType() const
     return m_premultiplyAlpha ? kPremul_SkAlphaType : kUnpremul_SkAlphaType;
 }
 
-=======
->>>>>>> miniblink49
 } // namespace blink

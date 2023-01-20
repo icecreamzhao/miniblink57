@@ -24,10 +24,6 @@
  */
 
 [
-<<<<<<< HEAD
-=======
-    GarbageCollected,
->>>>>>> miniblink49
     NoInterfaceObject
 ] interface PositionError {
     readonly attribute unsigned short code;
@@ -37,7 +33,3 @@
     const unsigned short POSITION_UNAVAILABLE = 2;
     const unsigned short TIMEOUT = 3;
 };
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49

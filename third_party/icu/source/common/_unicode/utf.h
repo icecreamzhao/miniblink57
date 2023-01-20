@@ -123,13 +123,7 @@
  * @stable ICU 2.4
  */
 #define U_IS_UNICODE_NONCHAR(c) \
-<<<<<<< HEAD
     ((c) >= 0xfdd0 && ((uint32_t)(c) <= 0xfdef || ((c)&0xfffe) == 0xfffe) && (uint32_t)(c) <= 0x10ffff)
-=======
-    ((c)>=0xfdd0 && \
-     ((uint32_t)(c)<=0xfdef || ((c)&0xfffe)==0xfffe) && \
-     (uint32_t)(c)<=0x10ffff)
->>>>>>> miniblink49
 
 /**
  * Is c a Unicode code point value (0..U+10ffff)
@@ -149,14 +143,7 @@
  * @stable ICU 2.4
  */
 #define U_IS_UNICODE_CHAR(c) \
-<<<<<<< HEAD
     ((uint32_t)(c) < 0xd800 || ((uint32_t)(c) > 0xdfff && (uint32_t)(c) <= 0x10ffff && !U_IS_UNICODE_NONCHAR(c)))
-=======
-    ((uint32_t)(c)<0xd800 || \
-        ((uint32_t)(c)>0xdfff && \
-         (uint32_t)(c)<=0x10ffff && \
-         !U_IS_UNICODE_NONCHAR(c)))
->>>>>>> miniblink49
 
 /**
  * Is this code point a BMP code point (U+0000..U+ffff)?
@@ -164,11 +151,7 @@
  * @return TRUE or FALSE
  * @stable ICU 2.8
  */
-<<<<<<< HEAD
 #define U_IS_BMP(c) ((uint32_t)(c) <= 0xffff)
-=======
-#define U_IS_BMP(c) ((uint32_t)(c)<=0xffff)
->>>>>>> miniblink49
 
 /**
  * Is this code point a supplementary code point (U+10000..U+10ffff)?
@@ -176,24 +159,15 @@
  * @return TRUE or FALSE
  * @stable ICU 2.8
  */
-<<<<<<< HEAD
 #define U_IS_SUPPLEMENTARY(c) ((uint32_t)((c)-0x10000) <= 0xfffff)
 
-=======
-#define U_IS_SUPPLEMENTARY(c) ((uint32_t)((c)-0x10000)<=0xfffff)
- 
->>>>>>> miniblink49
 /**
  * Is this code point a lead surrogate (U+d800..U+dbff)?
  * @param c 32-bit code point
  * @return TRUE or FALSE
  * @stable ICU 2.4
  */
-<<<<<<< HEAD
 #define U_IS_LEAD(c) (((c)&0xfffffc00) == 0xd800)
-=======
-#define U_IS_LEAD(c) (((c)&0xfffffc00)==0xd800)
->>>>>>> miniblink49
 
 /**
  * Is this code point a trail surrogate (U+dc00..U+dfff)?
@@ -201,11 +175,7 @@
  * @return TRUE or FALSE
  * @stable ICU 2.4
  */
-<<<<<<< HEAD
 #define U_IS_TRAIL(c) (((c)&0xfffffc00) == 0xdc00)
-=======
-#define U_IS_TRAIL(c) (((c)&0xfffffc00)==0xdc00)
->>>>>>> miniblink49
 
 /**
  * Is this code point a surrogate (U+d800..U+dfff)?
@@ -213,11 +183,7 @@
  * @return TRUE or FALSE
  * @stable ICU 2.4
  */
-<<<<<<< HEAD
 #define U_IS_SURROGATE(c) (((c)&0xfffff800) == 0xd800)
-=======
-#define U_IS_SURROGATE(c) (((c)&0xfffff800)==0xd800)
->>>>>>> miniblink49
 
 /**
  * Assuming c is a surrogate code point (U_IS_SURROGATE(c)),
@@ -226,11 +192,7 @@
  * @return TRUE or FALSE
  * @stable ICU 2.4
  */
-<<<<<<< HEAD
 #define U_IS_SURROGATE_LEAD(c) (((c)&0x400) == 0)
-=======
-#define U_IS_SURROGATE_LEAD(c) (((c)&0x400)==0)
->>>>>>> miniblink49
 
 /**
  * Assuming c is a surrogate code point (U_IS_SURROGATE(c)),
@@ -239,33 +201,18 @@
  * @return TRUE or FALSE
  * @stable ICU 4.2
  */
-<<<<<<< HEAD
 #define U_IS_SURROGATE_TRAIL(c) (((c)&0x400) != 0)
-=======
-#define U_IS_SURROGATE_TRAIL(c) (((c)&0x400)!=0)
->>>>>>> miniblink49
 
 /* include the utfXX.h ------------------------------------------------------ */
 
 #if !U_NO_DEFAULT_INCLUDE_UTF_HEADERS
 
-<<<<<<< HEAD
 #include "unicode/utf16.h"
 #include "unicode/utf8.h"
-=======
-#include "unicode/utf8.h"
-#include "unicode/utf16.h"
->>>>>>> miniblink49
 
 /* utf_old.h contains deprecated, pre-ICU 2.4 definitions */
 #include "unicode/utf_old.h"
 
-<<<<<<< HEAD
 #endif /* !U_NO_DEFAULT_INCLUDE_UTF_HEADERS */
 
 #endif /* __UTF_H__ */
-=======
-#endif  /* !U_NO_DEFAULT_INCLUDE_UTF_HEADERS */
-
-#endif  /* __UTF_H__ */
->>>>>>> miniblink49

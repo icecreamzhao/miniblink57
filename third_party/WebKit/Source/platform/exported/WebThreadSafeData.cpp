@@ -28,10 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "public/platform/WebThreadSafeData.h"
 
 #include "platform/blob/BlobData.h"
@@ -68,11 +64,7 @@ const char* WebThreadSafeData::data() const
     return m_private->data();
 }
 
-<<<<<<< HEAD
 WebThreadSafeData::WebThreadSafeData(PassRefPtr<RawData> data)
-=======
-WebThreadSafeData::WebThreadSafeData(const PassRefPtr<RawData>& data)
->>>>>>> miniblink49
     : m_private(data)
 {
 }
@@ -82,22 +74,14 @@ WebThreadSafeData::WebThreadSafeData(const WebThreadSafeData& other)
     m_private = other.m_private;
 }
 
-<<<<<<< HEAD
 WebThreadSafeData& WebThreadSafeData::operator=(
     const WebThreadSafeData& other)
-=======
-WebThreadSafeData& WebThreadSafeData::operator=(const WebThreadSafeData& other)
->>>>>>> miniblink49
 {
     m_private = other.m_private;
     return *this;
 }
 
-<<<<<<< HEAD
 WebThreadSafeData& WebThreadSafeData::operator=(PassRefPtr<RawData> data)
-=======
-WebThreadSafeData& WebThreadSafeData::operator=(const PassRefPtr<RawData>& data)
->>>>>>> miniblink49
 {
     m_private = data;
     return *this;

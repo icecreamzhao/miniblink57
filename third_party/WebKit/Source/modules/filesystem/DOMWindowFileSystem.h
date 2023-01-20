@@ -27,10 +27,7 @@
 #define DOMWindowFileSystem_h
 
 #include "platform/heap/Handle.h"
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
-=======
->>>>>>> miniblink49
 #include "wtf/text/WTFString.h"
 
 namespace blink {
@@ -41,7 +38,6 @@ class ErrorCallback;
 class FileSystemCallback;
 
 class DOMWindowFileSystem {
-<<<<<<< HEAD
     STATIC_ONLY(DOMWindowFileSystem);
 
 public:
@@ -61,22 +57,6 @@ public:
         kTemporary,
         kPersistent,
     };
-=======
-public:
-    static void webkitRequestFileSystem(DOMWindow&, int type, long long size, FileSystemCallback*, ErrorCallback*);
-    static void webkitResolveLocalFileSystemURL(DOMWindow&, const String&, EntryCallback*, ErrorCallback*);
-
-    // They are placed here and in all capital letters so they can be checked against the constants in the
-    // IDL at compile time.
-    enum {
-        TEMPORARY,
-        PERSISTENT,
-    };
-
-private:
-    DOMWindowFileSystem();
-    ~DOMWindowFileSystem();
->>>>>>> miniblink49
 };
 
 } // namespace blink

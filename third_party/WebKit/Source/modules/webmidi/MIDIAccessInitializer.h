@@ -7,7 +7,6 @@
 
 #include "bindings/core/v8/ScriptPromise.h"
 #include "bindings/core/v8/ScriptPromiseResolver.h"
-<<<<<<< HEAD
 #include "media/midi/midi_service.mojom-blink.h"
 #include "modules/ModulesExport.h"
 #include "modules/webmidi/MIDIAccessor.h"
@@ -28,29 +27,11 @@ class MODULES_EXPORT MIDIAccessInitializer : public ScriptPromiseResolver,
 public:
     struct PortDescriptor {
         DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
-=======
-#include "modules/ModulesExport.h"
-#include "modules/webmidi/MIDIAccessor.h"
-#include "modules/webmidi/MIDIAccessorClient.h"
-#include "modules/webmidi/MIDIPort.h"
-#include "wtf/OwnPtr.h"
-#include "wtf/Vector.h"
-
-namespace blink {
-
-class MIDIOptions;
-class ScriptState;
-
-class MODULES_EXPORT MIDIAccessInitializer : public ScriptPromiseResolver, public MIDIAccessorClient {
-public:
-    struct PortDescriptor {
->>>>>>> miniblink49
         String id;
         String manufacturer;
         String name;
         MIDIPort::TypeCode type;
         String version;
-<<<<<<< HEAD
         midi::mojom::PortState state;
 
         PortDescriptor(const String& id,
@@ -59,17 +40,11 @@ public:
             MIDIPort::TypeCode type,
             const String& version,
             midi::mojom::PortState state)
-=======
-        MIDIAccessor::MIDIPortState state;
-
-        PortDescriptor(const String& id, const String& manufacturer, const String& name, MIDIPort::TypeCode type, const String& version, MIDIAccessor::MIDIPortState state)
->>>>>>> miniblink49
             : id(id)
             , manufacturer(manufacturer)
             , name(name)
             , type(type)
             , version(version)
-<<<<<<< HEAD
             , state(state)
         {
         }
@@ -79,31 +54,18 @@ public:
         const MIDIOptions& options)
     {
         MIDIAccessInitializer* resolver = new MIDIAccessInitializer(scriptState, options);
-=======
-            , state(state) { }
-    };
-
-    static ScriptPromise start(ScriptState* scriptState, const MIDIOptions& options)
-    {
-        RefPtrWillBeRawPtr<MIDIAccessInitializer> resolver = adoptRefWillBeNoop(new MIDIAccessInitializer(scriptState, options));
->>>>>>> miniblink49
         resolver->keepAliveWhilePending();
         resolver->suspendIfNeeded();
         return resolver->start();
     }
 
-<<<<<<< HEAD
     ~MIDIAccessInitializer() override = default;
-=======
-    ~MIDIAccessInitializer() override;
->>>>>>> miniblink49
 
     // Eager finalization to allow dispose() operation access
     // other (non eager) heap objects.
     EAGERLY_FINALIZE();
 
     // MIDIAccessorClient
-<<<<<<< HEAD
     void didAddInputPort(const String& id,
         const String& manufacturer,
         const String& name,
@@ -123,22 +85,10 @@ public:
         const unsigned char* data,
         size_t length,
         double timeStamp) override { }
-=======
-    void didAddInputPort(const String& id, const String& manufacturer, const String& name, const String& version, MIDIAccessor::MIDIPortState) override;
-    void didAddOutputPort(const String& id, const String& manufacturer, const String& name, const String& version, MIDIAccessor::MIDIPortState) override;
-    void didSetInputPortState(unsigned portIndex, MIDIAccessor::MIDIPortState) override;
-    void didSetOutputPortState(unsigned portIndex, MIDIAccessor::MIDIPortState) override;
-    void didStartSession(bool success, const String& error, const String& message) override;
-    void didReceiveMIDIData(unsigned portIndex, const unsigned char* data, size_t length, double timeStamp) override { }
-
-    void resolveSysexPermission(bool allowed);
-    SecurityOrigin* securityOrigin() const;
->>>>>>> miniblink49
 
 private:
     MIDIAccessInitializer(ScriptState*, const MIDIOptions&);
 
-<<<<<<< HEAD
     ExecutionContext* getExecutionContext() const;
     ScriptPromise start();
 
@@ -152,19 +102,6 @@ private:
     MIDIOptions m_options;
 
     mojom::blink::PermissionServicePtr m_permissionService;
-=======
-    ExecutionContext* executionContext() const;
-    ScriptPromise start();
-    void dispose();
-
-    void contextDestroyed() override;
-
-    OwnPtr<MIDIAccessor> m_accessor;
-    Vector<PortDescriptor> m_portDescriptors;
-    bool m_requestSysex;
-    bool m_hasBeenDisposed;
-    bool m_sysexPermissionResolved;
->>>>>>> miniblink49
 };
 
 } // namespace blink

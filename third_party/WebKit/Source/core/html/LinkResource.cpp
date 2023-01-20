@@ -28,13 +28,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/html/LinkResource.h"
 
 #include "core/HTMLNames.h"
 #include "core/dom/Document.h"
 #include "core/html/HTMLLinkElement.h"
 #include "core/html/imports/HTMLImportsController.h"
+#include "platform/weborigin/SecurityPolicy.h"
 
 namespace blink {
 
@@ -45,9 +45,7 @@ LinkResource::LinkResource(HTMLLinkElement* owner)
 {
 }
 
-LinkResource::~LinkResource()
-{
-}
+LinkResource::~LinkResource() { }
 
 bool LinkResource::shouldLoadResource() const
 {
@@ -73,13 +71,23 @@ LinkRequestBuilder::LinkRequestBuilder(HTMLLinkElement* owner)
 {
     m_charset = m_owner->getAttribute(charsetAttr);
     if (m_charset.isEmpty() && m_owner->document().frame())
-        m_charset = m_owner->document().charset();
+        m_charset = m_owner->document().characterSet();
 }
 
-FetchRequest LinkRequestBuilder::build(bool blocking) const
+FetchRequest LinkRequestBuilder::build(bool lowPriority) const
 {
-    ResourceLoadPriority priority = blocking ? ResourceLoadPriorityUnresolved : ResourceLoadPriorityVeryLow;
-    return FetchRequest(ResourceRequest(m_owner->document().completeURL(m_url)), m_owner->localName(), m_charset, priority);
+    ResourceRequest resourceRequest(m_owner->document().completeURL(m_url));
+    ReferrerPolicy referrerPolicy = m_owner->referrerPolicy();
+    if (referrerPolicy != ReferrerPolicyDefault) {
+        resourceRequest.setHTTPReferrer(SecurityPolicy::generateReferrer(
+            referrerPolicy, m_url, m_owner->document().outgoingReferrer()));
+    }
+    FetchRequest request(resourceRequest, m_owner->localName(), m_charset);
+    if (lowPriority)
+        request.setDefer(FetchRequest::LazyLoad);
+    request.setContentSecurityPolicyNonce(
+        m_owner->fastGetAttribute(HTMLNames::nonceAttr));
+    return request;
 }
 
 } // namespace blink

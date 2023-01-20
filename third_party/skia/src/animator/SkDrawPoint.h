@@ -6,10 +6,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #ifndef SkDrawPoint_DEFINED
 #define SkDrawPoint_DEFINED
 
@@ -20,10 +16,7 @@
 struct Sk_Point {
     DECLARE_NO_VIRTUALS_MEMBER_INFO(_Point);
     Sk_Point();
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 private:
     SkPoint fPoint;
 };
@@ -31,12 +24,8 @@ private:
 class SkDrawPoint : public SkDisplayable {
     DECLARE_MEMBER_INFO(DrawPoint);
     SkDrawPoint();
-<<<<<<< HEAD
     void getBounds(SkRect*) override;
 
-=======
-    void getBounds(SkRect* ) override;
->>>>>>> miniblink49
 private:
     SkPoint fPoint;
     typedef SkDisplayable INHERITED;

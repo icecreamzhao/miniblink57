@@ -30,12 +30,8 @@
 #define AudioParamTimeline_h
 
 #include "core/dom/DOMTypedArray.h"
-<<<<<<< HEAD
 #include "modules/webaudio/AudioDestinationNode.h"
 #include "modules/webaudio/BaseAudioContext.h"
-=======
-#include "modules/webaudio/AudioContext.h"
->>>>>>> miniblink49
 #include "wtf/Forward.h"
 #include "wtf/Threading.h"
 #include "wtf/Vector.h"
@@ -43,7 +39,6 @@
 namespace blink {
 
 class AudioParamTimeline {
-<<<<<<< HEAD
     DISALLOW_NEW();
 
 public:
@@ -101,32 +96,6 @@ public:
 
     float smoothedValue() { return m_smoothedValue; }
     void setSmoothedValue(float v) { m_smoothedValue = v; }
-=======
-public:
-    AudioParamTimeline()
-    {
-    }
-
-    void setValueAtTime(float value, double time, ExceptionState&);
-    void linearRampToValueAtTime(float value, double time, ExceptionState&);
-    void exponentialRampToValueAtTime(float value, double time, ExceptionState&);
-    void setTargetAtTime(float target, double time, double timeConstant, ExceptionState&);
-    void setValueCurveAtTime(DOMFloat32Array* curve, double time, double duration, ExceptionState&);
-    void cancelScheduledValues(double startTime, ExceptionState&);
-
-    // hasValue is set to true if a valid timeline value is returned.
-    // otherwise defaultValue is returned.
-    float valueForContextTime(AudioContext*, float defaultValue, bool& hasValue);
-
-    // Given the time range, calculates parameter values into the values buffer
-    // and returns the last parameter value calculated for "values" or the defaultValue if none were calculated.
-    // controlRate is the rate (number per second) at which parameter values will be calculated.
-    // It should equal sampleRate for sample-accurate parameter changes, and otherwise will usually match
-    // the render quantum size such that the parameter value changes once per render quantum.
-    float valuesForTimeRange(double startTime, double endTime, float defaultValue, float* values, unsigned numberOfValues, double sampleRate, double controlRate);
-
-    bool hasValues() { return m_events.size(); }
->>>>>>> miniblink49
 
 private:
     class ParamEvent {
@@ -137,7 +106,6 @@ private:
             ExponentialRampToValue,
             SetTarget,
             SetValueCurve,
-<<<<<<< HEAD
             // For cancelValuesAndHold
             CancelValues,
             LastType
@@ -337,43 +305,6 @@ private:
 
     // Smoothing (de-zippering)
     float m_smoothedValue;
-=======
-            LastType
-        };
-
-        ParamEvent(Type type, float value, double time, double timeConstant, double duration, PassRefPtr<DOMFloat32Array> curve)
-            : m_type(type)
-            , m_value(value)
-            , m_time(time)
-            , m_timeConstant(timeConstant)
-            , m_duration(duration)
-            , m_curve(curve)
-        {
-        }
-
-        unsigned type() const { return m_type; }
-        float value() const { return m_value; }
-        double time() const { return m_time; }
-        double timeConstant() const { return m_timeConstant; }
-        double duration() const { return m_duration; }
-        DOMFloat32Array* curve() { return m_curve.get(); }
-
-    private:
-        unsigned m_type;
-        float m_value;
-        double m_time;
-        double m_timeConstant;
-        double m_duration;
-        RefPtr<DOMFloat32Array> m_curve;
-    };
-
-    void insertEvent(const ParamEvent&);
-    float valuesForTimeRangeImpl(double startTime, double endTime, float defaultValue, float* values, unsigned numberOfValues, double sampleRate, double controlRate);
-
-    Vector<ParamEvent> m_events;
-
-    Mutex m_eventsLock;
->>>>>>> miniblink49
 };
 
 } // namespace blink

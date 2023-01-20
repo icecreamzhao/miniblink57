@@ -31,20 +31,10 @@
 
 #include "platform/PlatformExport.h"
 #include "platform/audio/AudioArray.h"
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include <complex>
 #include <sys/types.h>
 
-=======
-#include <complex>
-#include <sys/types.h>
-
-#if USE(WEBAUDIO_IPP)
-#include <ipps.h>
-#endif // USE(WEBAUDIO_IPP)
-
->>>>>>> miniblink49
 namespace blink {
 
 // A basic biquad (two-zero / two-pole digital filter)
@@ -53,18 +43,14 @@ namespace blink {
 //    lowpass, highpass, shelving, parameteric, notch, allpass, ...
 
 class PLATFORM_EXPORT Biquad final {
-<<<<<<< HEAD
     DISALLOW_NEW();
 
-=======
->>>>>>> miniblink49
 public:
     Biquad();
     ~Biquad();
 
     void process(const float* sourceP, float* destP, size_t framesToProcess);
 
-<<<<<<< HEAD
     bool hasSampleAccurateValues() const { return m_hasSampleAccurateValues; }
     void setHasSampleAccurateValues(bool isSampleAccurate)
     {
@@ -81,26 +67,6 @@ public:
     void setPeakingParams(int, double frequency, double Q, double dbGain);
     void setAllpassParams(int, double frequency, double Q);
     void setNotchParams(int, double frequency, double Q);
-=======
-    // frequency is 0 - 1 normalized, resonance and dbGain are in decibels.
-    // Q is a unitless quality factor.
-    void setLowpassParams(double frequency, double resonance);
-    void setHighpassParams(double frequency, double resonance);
-    void setBandpassParams(double frequency, double Q);
-    void setLowShelfParams(double frequency, double dbGain);
-    void setHighShelfParams(double frequency, double dbGain);
-    void setPeakingParams(double frequency, double Q, double dbGain);
-    void setAllpassParams(double frequency, double Q);
-    void setNotchParams(double frequency, double Q);
-
-    // Set the biquad coefficients given a single zero (other zero will be conjugate)
-    // and a single pole (other pole will be conjugate)
-    void setZeroPolePairs(const std::complex<double>& zero, const std::complex<double>& pole);
-
-    // Set the biquad coefficients given a single pole (other pole will be conjugate)
-    // (The zeroes will be the inverse of the poles)
-    void setAllpassPole(const std::complex<double>&);
->>>>>>> miniblink49
 
     // Resets filter state
     void reset();
@@ -109,7 +75,6 @@ public:
     // phase response are returned in magResponse and phaseResponse.
     // The phase response is in radians.
     void getFrequencyResponse(int nFrequencies,
-<<<<<<< HEAD
         const float* frequency,
         float* magResponse,
         float* phaseResponse);
@@ -126,18 +91,10 @@ private:
     // If true, the filter coefficients are (possibly) time-varying due to a
     // timeline automation on at least one filter parameter.
     bool m_hasSampleAccurateValues;
-=======
-                              const float* frequency,
-                              float* magResponse,
-                              float* phaseResponse);
-private:
-    void setNormalizedCoefficients(double b0, double b1, double b2, double a0, double a1, double a2);
->>>>>>> miniblink49
 
     // Filter coefficients. The filter is defined as
     //
     // y[n] + m_a1*y[n-1] + m_a2*y[n-2] = m_b0*x[n] + m_b1*x[n-1] + m_b2*x[n-2].
-<<<<<<< HEAD
     AudioDoubleArray m_b0;
     AudioDoubleArray m_b1;
     AudioDoubleArray m_b2;
@@ -150,39 +107,16 @@ private:
         double* destP,
         double* coefficientsP,
         size_t framesToProcess);
-=======
-    double m_b0;
-    double m_b1;
-    double m_b2;
-    double m_a1;
-    double m_a2;
-
-#if OS(MACOSX)
-    void processFast(const float* sourceP, float* destP, size_t framesToProcess);
-    void processSliceFast(double* sourceP, double* destP, double* coefficientsP, size_t framesToProcess);
->>>>>>> miniblink49
 
     AudioDoubleArray m_inputBuffer;
     AudioDoubleArray m_outputBuffer;
 
-<<<<<<< HEAD
 #endif
-=======
-#elif USE(WEBAUDIO_IPP)
-    IppsIIRState64f_32f* m_biquadState;
-    Ipp8u* m_ippInternalBuffer;
-
-#else
->>>>>>> miniblink49
     // Filter memory
     double m_x1; // input delayed by 1 sample
     double m_x2; // input delayed by 2 samples
     double m_y1; // output delayed by 1 sample
     double m_y2; // output delayed by 2 samples
-<<<<<<< HEAD
-=======
-#endif
->>>>>>> miniblink49
 };
 
 } // namespace blink

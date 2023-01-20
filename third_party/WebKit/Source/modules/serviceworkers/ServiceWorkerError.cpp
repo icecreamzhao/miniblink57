@@ -28,16 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "modules/serviceworkers/ServiceWorkerError.h"
 
 #include "bindings/core/v8/ScriptPromiseResolver.h"
 #include "bindings/core/v8/ToV8.h"
-=======
-#include "config.h"
-#include "ServiceWorkerError.h"
-
->>>>>>> miniblink49
 #include "core/dom/DOMException.h"
 #include "core/dom/ExceptionCode.h"
 
@@ -45,7 +39,6 @@ using blink::WebServiceWorkerError;
 
 namespace blink {
 
-<<<<<<< HEAD
 namespace {
 
     struct ExceptionParams {
@@ -157,43 +150,6 @@ v8::Local<v8::Value> ServiceWorkerErrorForUpdate::take(
         return ToV8(ServiceWorkerError::take(resolver, webError),
             scriptState->context()->Global(), scriptState->isolate());
     }
-=======
-static DOMException* createException(ExceptionCode code, const String& defaultMessage, const String& message)
-{
-    return DOMException::create(code, message.isEmpty() ? defaultMessage : message);
-}
-
-// static
-DOMException* ServiceWorkerError::take(ScriptPromiseResolver*, PassOwnPtr<WebType> webError)
-{
-    switch (webError->errorType) {
-    case WebServiceWorkerError::ErrorTypeAbort:
-        return createException(AbortError, "The Service Worker operation was aborted.", webError->message);
-    case WebServiceWorkerError::ErrorTypeActivate:
-        // Not currently returned as a promise rejection.
-        // FIXME: Introduce new ActivateError type to ExceptionCodes?
-        return createException(AbortError, "The Service Worker activation failed.", webError->message);
-    case WebServiceWorkerError::ErrorTypeDisabled:
-        return createException(NotSupportedError, "Service Worker support is disabled.", webError->message);
-    case WebServiceWorkerError::ErrorTypeInstall:
-        // FIXME: Introduce new InstallError type to ExceptionCodes?
-        return createException(AbortError, "The Service Worker installation failed.", webError->message);
-    case WebServiceWorkerError::ErrorTypeNetwork:
-        return createException(NetworkError, "The Service Worker failed by network.", webError->message);
-    case WebServiceWorkerError::ErrorTypeNotFound:
-        return createException(NotFoundError, "The specified Service Worker resource was not found.", webError->message);
-    case WebServiceWorkerError::ErrorTypeSecurity:
-        return createException(SecurityError, "The Service Worker security policy prevented an action.", webError->message);
-    case WebServiceWorkerError::ErrorTypeState:
-        return createException(InvalidStateError, "The Service Worker state was not valid.", webError->message);
-    case WebServiceWorkerError::ErrorTypeTimeout:
-        return createException(AbortError, "The Service Worker operation timed out.", webError->message);
-    case WebServiceWorkerError::ErrorTypeUnknown:
-        return createException(UnknownError, "An unknown error occurred within Service Worker.", webError->message);
-    }
-    ASSERT_NOT_REACHED();
-    return DOMException::create(UnknownError);
->>>>>>> miniblink49
 }
 
 } // namespace blink

@@ -23,23 +23,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "wtf/text/StringStatics.h"
 
 #include "wtf/DynamicAnnotations.h"
 #include "wtf/StaticConstructors.h"
 #include "wtf/text/AtomicString.h"
 #include "wtf/text/StringImpl.h"
-=======
-#include "config.h"
-#include "StringStatics.h"
-
-#include "AtomicString.h"
-#include "StringImpl.h"
-#include "wtf/DynamicAnnotations.h"
-#include "wtf/MainThread.h"
-#include "wtf/StaticConstructors.h"
->>>>>>> miniblink49
 
 namespace WTF {
 
@@ -47,12 +36,8 @@ StringImpl* StringImpl::empty()
 {
     DEFINE_STATIC_LOCAL(StringImpl, emptyString, (ConstructEmptyString));
     WTF_ANNOTATE_BENIGN_RACE(&emptyString,
-<<<<<<< HEAD
         "Benign race on the reference counter of a static "
         "string created by StringImpl::empty");
-=======
-        "Benign race on the reference counter of a static string created by StringImpl::empty");
->>>>>>> miniblink49
     return &emptyString;
 }
 
@@ -60,7 +45,6 @@ StringImpl* StringImpl::empty16Bit()
 {
     DEFINE_STATIC_LOCAL(StringImpl, emptyString, (ConstructEmptyString16Bit));
     WTF_ANNOTATE_BENIGN_RACE(&emptyString,
-<<<<<<< HEAD
         "Benign race on the reference counter of a static "
         "string created by StringImpl::empty16Bit");
     return &emptyString;
@@ -74,27 +58,11 @@ WTF_EXPORT DEFINE_GLOBAL(AtomicString, xmlnsAtom);
 WTF_EXPORT DEFINE_GLOBAL(AtomicString, xlinkAtom);
 WTF_EXPORT DEFINE_GLOBAL(AtomicString, httpAtom);
 WTF_EXPORT DEFINE_GLOBAL(AtomicString, httpsAtom);
-=======
-        "Benign race on the reference counter of a static string created by StringImpl::empty16Bit");
-    return &emptyString;
-}
-
-WTF_EXPORT DEFINE_GLOBAL(AtomicString, nullAtom)
-WTF_EXPORT DEFINE_GLOBAL(AtomicString, emptyAtom)
-WTF_EXPORT DEFINE_GLOBAL(AtomicString, starAtom)
-WTF_EXPORT DEFINE_GLOBAL(AtomicString, xmlAtom)
-WTF_EXPORT DEFINE_GLOBAL(AtomicString, xmlnsAtom)
-WTF_EXPORT DEFINE_GLOBAL(AtomicString, xlinkAtom)
->>>>>>> miniblink49
 
 // This is not an AtomicString because it is unlikely to be used as an
 // event/element/attribute name, so it shouldn't pollute the AtomicString hash
 // table.
-<<<<<<< HEAD
 WTF_EXPORT DEFINE_GLOBAL(String, xmlnsWithColon);
-=======
-WTF_EXPORT DEFINE_GLOBAL(String, xmlnsWithColon)
->>>>>>> miniblink49
 
 NEVER_INLINE unsigned StringImpl::hashSlowCase() const
 {
@@ -107,17 +75,12 @@ NEVER_INLINE unsigned StringImpl::hashSlowCase() const
 
 void AtomicString::init()
 {
-<<<<<<< HEAD
     DCHECK(isMainThread());
-=======
-    ASSERT(isMainThread());
->>>>>>> miniblink49
 
     new (NotNull, (void*)&nullAtom) AtomicString;
     new (NotNull, (void*)&emptyAtom) AtomicString("");
 }
 
-<<<<<<< HEAD
 template <unsigned charactersCount>
 PassRefPtr<StringImpl> addStaticASCIILiteral(
     const char (&characters)[charactersCount])
@@ -143,18 +106,3 @@ void StringStatics::init()
 }
 
 } // namespace WTF
-=======
-void StringStatics::init()
-{
-    ASSERT(isMainThread());
-
-    // FIXME: These should be allocated at compile time.
-    new (NotNull, (void*)&starAtom) AtomicString("*", AtomicString::ConstructFromLiteral);
-    new (NotNull, (void*)&xmlAtom) AtomicString("xml", AtomicString::ConstructFromLiteral);
-    new (NotNull, (void*)&xmlnsAtom) AtomicString("xmlns", AtomicString::ConstructFromLiteral);
-    new (NotNull, (void*)&xlinkAtom) AtomicString("xlink", AtomicString::ConstructFromLiteral);
-    new (NotNull, (void*)&xmlnsWithColon) String("xmlns:");
-}
-
-}
->>>>>>> miniblink49

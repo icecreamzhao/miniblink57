@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
- * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009 Apple Inc. All rights reserved.
+ * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009 Apple Inc.
+ *               All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,36 +19,71 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/layout/LayoutView.h"
 
 #include "core/dom/Document.h"
 #include "core/dom/Element.h"
 #include "core/editing/FrameSelection.h"
+#include "core/frame/FrameView.h"
 #include "core/frame/LocalFrame.h"
 #include "core/frame/Settings.h"
-#include "core/html/HTMLFrameOwnerElement.h"
 #include "core/html/HTMLIFrameElement.h"
-#include "core/inspector/InspectorTraceEvents.h"
 #include "core/layout/HitTestResult.h"
-#include "core/layout/LayoutFlowThread.h"
 #include "core/layout/LayoutGeometryMap.h"
 #include "core/layout/LayoutPart.h"
-#include "core/layout/LayoutQuote.h"
-#include "core/layout/LayoutScrollbarPart.h"
-#include "core/layout/compositing/DeprecatedPaintLayerCompositor.h"
+#include "core/layout/ViewFragmentationContext.h"
+#include "core/layout/api/LayoutAPIShim.h"
+#include "core/layout/api/LayoutPartItem.h"
+#include "core/layout/api/LayoutViewItem.h"
+#include "core/layout/compositing/PaintLayerCompositor.h"
 #include "core/page/Page.h"
-#include "core/paint/DeprecatedPaintLayer.h"
+#include "core/paint/PaintLayer.h"
 #include "core/paint/ViewPainter.h"
 #include "core/svg/SVGDocumentExtensions.h"
-#include "platform/TraceEvent.h"
-#include "platform/TracedValue.h"
+#include "platform/Histogram.h"
 #include "platform/geometry/FloatQuad.h"
 #include "platform/geometry/TransformState.h"
-#include "platform/graphics/paint/DisplayItemList.h"
-//#include <inttypes.h>
+#include "platform/graphics/paint/PaintController.h"
+#include "platform/instrumentation/tracing/TraceEvent.h"
+#include "platform/instrumentation/tracing/TracedValue.h"
+#include "public/platform/Platform.h"
+#include "wtf/PtrUtil.h"
+#include <inttypes.h>
 
 namespace blink {
+
+namespace {
+
+    class HitTestLatencyRecorder {
+    public:
+        HitTestLatencyRecorder(bool allowsChildFrameContent)
+            : m_start(WTF::monotonicallyIncreasingTime())
+            , m_allowsChildFrameContent(allowsChildFrameContent)
+        {
+        }
+
+        ~HitTestLatencyRecorder()
+        {
+            int duration = static_cast<int>(
+                (WTF::monotonicallyIncreasingTime() - m_start) * 1000000);
+
+            if (m_allowsChildFrameContent) {
+                DEFINE_STATIC_LOCAL(CustomCountHistogram, recursiveLatencyHistogram,
+                    ("Event.Latency.HitTestRecursive", 0, 10000000, 100));
+                recursiveLatencyHistogram.count(duration);
+            } else {
+                DEFINE_STATIC_LOCAL(CustomCountHistogram, latencyHistogram,
+                    ("Event.Latency.HitTest", 0, 10000000, 100));
+                latencyHistogram.count(duration);
+            }
+        }
+
+    private:
+        double m_start;
+        bool m_allowsChildFrameContent;
+    };
+
+} // namespace
 
 LayoutView::LayoutView(Document* document)
     : LayoutBlockFlow(document)
@@ -56,38 +92,39 @@ LayoutView::LayoutView(Document* document)
     , m_selectionEnd(nullptr)
     , m_selectionStartPos(-1)
     , m_selectionEndPos(-1)
-    , m_pageLogicalHeight(0)
-    , m_pageLogicalHeightChanged(false)
     , m_layoutState(nullptr)
     , m_layoutQuoteHead(nullptr)
     , m_layoutCounterCount(0)
     , m_hitTestCount(0)
     , m_hitTestCacheHits(0)
     , m_hitTestCache(HitTestCache::create())
-    , m_pendingSelection(PendingSelection::create())
 {
     // init LayoutObject attributes
     setInline(false);
 
-    m_minPreferredLogicalWidth = 0;
-    m_maxPreferredLogicalWidth = 0;
+    m_minPreferredLogicalWidth = LayoutUnit();
+    m_maxPreferredLogicalWidth = LayoutUnit();
 
     setPreferredLogicalWidthsDirty(MarkOnlyThis);
 
     setPositionState(AbsolutePosition); // to 0,0 :)
 }
 
-LayoutView::~LayoutView()
-{
-}
+LayoutView::~LayoutView() { }
 
 bool LayoutView::hitTest(HitTestResult& result)
 {
-    // We have to recursively update layout/style here because otherwise, when the hit test recurses
-    // into a child document, it could trigger a layout on the parent document, which can destroy DeprecatedPaintLayer
-    // that are higher up in the call stack, leading to crashes.
+    // We have to recursively update layout/style here because otherwise, when the
+    // hit test recurses into a child document, it could trigger a layout on the
+    // parent document, which can destroy PaintLayer that are higher up in the
+    // call stack, leading to crashes.
     // Note that Document::updateLayout calls its parent's updateLayout.
+    // Note that if an iframe has its render pipeline throttled, it will not
+    // update layout here, and it will also not propagate the hit test into the
+    // iframe's inner document.
     frameView()->updateLifecycleToCompositingCleanPlusScrolling();
+    HitTestLatencyRecorder hitTestLatencyRecorder(
+        result.hitTestRequest().allowsChildFrameContent());
     return hitTestNoLifecycleUpdate(result);
 }
 
@@ -102,40 +139,57 @@ bool LayoutView::hitTestNoLifecycleUpdate(HitTestResult& result)
 
     uint64_t domTreeVersion = document().domTreeVersion();
     HitTestResult cacheResult = result;
-    bool cacheHit = m_hitTestCache->lookupCachedResult(cacheResult, domTreeVersion);
-    bool hitLayer = layer()->hitTest(result);
-
-    // FrameView scrollbars are not the same as Layer scrollbars tested by Layer::hitTestOverflowControls,
-    // so we need to test FrameView scrollbars separately here. Note that it's important we do this after
-    // the hit test above, because that may overwrite the entire HitTestResult when it finds a hit.
-    IntPoint framePoint = frameView()->contentsToFrame(result.hitTestLocation().roundedPoint());
-    if (Scrollbar* frameScrollbar = frameView()->scrollbarAtFramePoint(framePoint))
-        result.setScrollbar(frameScrollbar);
-
-    if (cacheHit) {
+    bool hitLayer = false;
+    if (m_hitTestCache->lookupCachedResult(cacheResult, domTreeVersion)) {
         m_hitTestCacheHits++;
-        m_hitTestCache->verifyCachedResult(result, cacheResult);
+        hitLayer = true;
+        result = cacheResult;
+    } else {
+        hitLayer = layer()->hitTest(result);
+
+        // FrameView scrollbars are not the same as Layer scrollbars tested by
+        // Layer::hitTestOverflowControls, so we need to test FrameView scrollbars
+        // separately here. Note that it's important we do this after the hit test
+        // above, because that may overwrite the entire HitTestResult when it finds
+        // a hit.
+        IntPoint framePoint = frameView()->contentsToFrame(result.hitTestLocation().roundedPoint());
+        if (Scrollbar* frameScrollbar = frameView()->scrollbarAtFramePoint(framePoint))
+            result.setScrollbar(frameScrollbar);
+
+        if (hitLayer)
+            m_hitTestCache->addCachedResult(result, domTreeVersion);
     }
 
-    if (hitLayer)
-        m_hitTestCache->addCachedResult(result, domTreeVersion);
-
-    TRACE_EVENT_END1("blink,devtools.timeline", "HitTest", "endData", InspectorHitTestEvent::endData(result.hitTestRequest(), result.hitTestLocation(), result));
+    TRACE_EVENT_END1(
+        "blink,devtools.timeline", "HitTest", "endData",
+        InspectorHitTestEvent::endData(result.hitTestRequest(),
+            result.hitTestLocation(), result));
     return hitLayer;
 }
 
-void LayoutView::computeLogicalHeight(LayoutUnit logicalHeight, LayoutUnit, LogicalExtentComputedValues& computedValues) const
+void LayoutView::clearHitTestCache()
 {
-    computedValues.m_extent = (!shouldUsePrintingLayout() && m_frameView) ? LayoutUnit(viewLogicalHeightForBoxSizing()) : logicalHeight;
+    m_hitTestCache->clear();
+    LayoutPartItem frameLayoutItem = frame()->ownerLayoutItem();
+    if (!frameLayoutItem.isNull())
+        frameLayoutItem.view().clearHitTestCache();
+}
+
+void LayoutView::computeLogicalHeight(
+    LayoutUnit logicalHeight,
+    LayoutUnit,
+    LogicalExtentComputedValues& computedValues) const
+{
+    computedValues.m_extent = LayoutUnit(viewLogicalHeightForBoxSizing());
 }
 
 void LayoutView::updateLogicalWidth()
 {
-    if (!shouldUsePrintingLayout() && m_frameView)
-        setLogicalWidth(viewLogicalWidthForBoxSizing());
+    setLogicalWidth(LayoutUnit(viewLogicalWidthForBoxSizing()));
 }
 
-bool LayoutView::isChildAllowed(LayoutObject* child, const ComputedStyle&) const
+bool LayoutView::isChildAllowed(LayoutObject* child,
+    const ComputedStyle&) const
 {
     return child->isBox();
 }
@@ -146,107 +200,99 @@ void LayoutView::layoutContent()
 
     LayoutBlockFlow::layout();
 
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
     checkLayoutState();
 #endif
 }
 
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
 void LayoutView::checkLayoutState()
 {
     ASSERT(!m_layoutState->next());
 }
 #endif
 
-bool LayoutView::shouldDoFullPaintInvalidationForNextLayout() const
+void LayoutView::setShouldDoFullPaintInvalidationOnResizeIfNeeded(
+    bool widthChanged,
+    bool heightChanged)
 {
-    // It's hard to predict here which of full paint invalidation or per-descendant paint invalidation costs less.
-    // For vertical writing mode or width change it's more likely that per-descendant paint invalidation
-    // eventually turns out to be full paint invalidation but with the cost to handle more layout states
-    // and discrete paint invalidation rects, so marking full paint invalidation here is more likely to cost less.
-    // Otherwise, per-descendant paint invalidation is more likely to avoid unnecessary full paint invalidation.
-
-    if (shouldUsePrintingLayout())
-        return true;
-
-    if (!style()->isHorizontalWritingMode())
-        return true;
-
-    // The width/height checks below assume horizontal writing mode.
-    ASSERT(style()->isHorizontalWritingMode());
-
-    if (size().width() != viewLogicalWidthForBoxSizing())
-        return true;
-
-    if (size().height() != viewLogicalHeightForBoxSizing()) {
-        // When background-attachment is 'fixed', we treat the viewport (instead of the 'root'
-        // i.e. html or body) as the background positioning area, and we should full paint invalidation
-        // viewport resize if the background image is not composited and needs full paint invalidation on
-        // background positioning area resize.
-        if (!m_compositor || !m_compositor->needsFixedRootBackgroundLayer(layer())) {
-            if (style()->hasFixedBackgroundImage()
-                && mustInvalidateFillLayersPaintOnHeightChange(style()->backgroundLayers()))
-                return true;
-        }
+    // When background-attachment is 'fixed', we treat the viewport (instead of
+    // the 'root' i.e. html or body) as the background positioning area, and we
+    // should fully invalidate on viewport resize if the background image is not
+    // composited and needs full paint invalidation on background positioning area
+    // resize.
+    if (style()->hasFixedBackgroundImage() && (!m_compositor || !m_compositor->needsFixedRootBackgroundLayer(layer()))) {
+        if ((widthChanged && mustInvalidateFillLayersPaintOnWidthChange(style()->backgroundLayers())) || (heightChanged && mustInvalidateFillLayersPaintOnHeightChange(style()->backgroundLayers())))
+            setShouldDoFullPaintInvalidation(PaintInvalidationBoundsChange);
     }
-
-    return false;
 }
 
 void LayoutView::layout()
 {
     if (!document().paginated())
-        setPageLogicalHeight(0);
+        setPageLogicalHeight(LayoutUnit());
 
-    if (shouldUsePrintingLayout())
+    IncludeScrollbarsInRect includeScrollbars = RuntimeEnabledFeatures::rootLayerScrollingEnabled() ? IncludeScrollbars
+                                                                                                    : ExcludeScrollbars;
+    setShouldDoFullPaintInvalidationOnResizeIfNeeded(
+        offsetWidth() != layoutSize(includeScrollbars).width(),
+        offsetHeight() != layoutSize(includeScrollbars).height());
+
+    if (pageLogicalHeight() && shouldUsePrintingLayout()) {
         m_minPreferredLogicalWidth = m_maxPreferredLogicalWidth = logicalWidth();
+        if (!m_fragmentationContext) {
+            m_fragmentationContext = WTF::wrapUnique(new ViewFragmentationContext(*this));
+            m_paginationStateChanged = true;
+        }
+    } else if (m_fragmentationContext) {
+        m_fragmentationContext.reset();
+        m_paginationStateChanged = true;
+    }
 
     SubtreeLayoutScope layoutScope(*this);
 
     LayoutRect oldLayoutOverflowRect = layoutOverflowRect();
 
-    // Use calcWidth/Height to get the new width/height, since this will take the full page zoom factor into account.
-    bool relayoutChildren = !shouldUsePrintingLayout() && (!m_frameView
-        || logicalWidth() != viewLogicalWidthForBoxSizing()
-        || logicalHeight() != viewLogicalHeightForBoxSizing());
+    // Use calcWidth/Height to get the new width/height, since this will take the
+    // full page zoom factor into account.
+    bool relayoutChildren = !shouldUsePrintingLayout() && (!m_frameView || logicalWidth() != viewLogicalWidthForBoxSizing() || logicalHeight() != viewLogicalHeightForBoxSizing());
     if (relayoutChildren) {
         layoutScope.setChildNeedsLayout(this);
-        for (LayoutObject* child = firstChild(); child; child = child->nextSibling()) {
+        for (LayoutObject* child = firstChild(); child;
+             child = child->nextSibling()) {
             if (child->isSVGRoot())
                 continue;
 
-            if ((child->isBox() && toLayoutBox(child)->hasRelativeLogicalHeight())
-                || child->style()->logicalHeight().hasPercent()
-                || child->style()->logicalMinHeight().hasPercent()
-                || child->style()->logicalMaxHeight().hasPercent())
+            if ((child->isBox() && toLayoutBox(child)->hasRelativeLogicalHeight()) || child->style()->logicalHeight().isPercentOrCalc() || child->style()->logicalMinHeight().isPercentOrCalc() || child->style()->logicalMaxHeight().isPercentOrCalc())
                 layoutScope.setChildNeedsLayout(child);
         }
 
         if (document().svgExtensions())
-            document().accessSVGExtensions().invalidateSVGRootsWithRelativeLengthDescendents(&layoutScope);
+            document()
+                .accessSVGExtensions()
+                .invalidateSVGRootsWithRelativeLengthDescendents(&layoutScope);
     }
 
     ASSERT(!m_layoutState);
     if (!needsLayout())
         return;
 
-    LayoutState rootLayoutState(pageLogicalHeight(), pageLogicalHeightChanged(), *this);
-
-    m_pageLogicalHeightChanged = false;
+    LayoutState rootLayoutState(*this);
 
     layoutContent();
 
-    if (RuntimeEnabledFeatures::slimmingPaintEnabled() && layoutOverflowRect() != oldLayoutOverflowRect) {
-        // The document element paints the viewport background, so we need to invalidate it when
-        // layout overflow changes.
-        // FIXME: Improve viewport background styling/invalidation/painting. crbug.com/475115
+    if (layoutOverflowRect() != oldLayoutOverflowRect) {
+        // The document element paints the viewport background, so we need to
+        // invalidate it when layout overflow changes.
+        // FIXME: Improve viewport background styling/invalidation/painting.
+        // crbug.com/475115
         if (Element* documentElement = document().documentElement()) {
             if (LayoutObject* rootObject = documentElement->layoutObject())
                 rootObject->setShouldDoFullPaintInvalidation();
         }
     }
 
-#if ENABLE(ASSERT)
+#if DCHECK_IS_ON()
     checkLayoutState();
 #endif
     clearNeedsLayout();
@@ -256,7 +302,7 @@ LayoutRect LayoutView::visualOverflowRect() const
 {
     // In root layer scrolling mode, the LayoutView performs overflow clipping
     // like a regular scrollable div.
-    if (document().settings() && document().settings()->rootLayerScrolls())
+    if (RuntimeEnabledFeatures::rootLayerScrollingEnabled())
         return LayoutBlockFlow::visualOverflowRect();
 
     // Ditto when not in compositing mode.
@@ -266,56 +312,68 @@ LayoutRect LayoutView::visualOverflowRect() const
     // In normal compositing mode, LayoutView doesn't actually apply clipping
     // on its descendants. Instead their visual overflow is propagated to
     // compositor()->m_rootContentLayer for accelerated scrolling.
-    return LayoutRect(unscaledDocumentRect());
+    return layoutOverflowRect();
 }
 
-void LayoutView::mapLocalToContainer(const LayoutBoxModelObject* paintInvalidationContainer, TransformState& transformState, MapCoordinatesFlags mode, bool* wasFixed, const PaintInvalidationState* paintInvalidationState) const
+LayoutRect LayoutView::localVisualRect() const
 {
-    ASSERT_UNUSED(wasFixed, !wasFixed || *wasFixed == static_cast<bool>(mode & IsFixed));
+    // TODO(wangxianzhu): This is only required without rootLayerScrolls (though
+    // it is also correct but unnecessary with rootLayerScrolls) because of the
+    // special LayoutView overflow model.
+    LayoutRect rect = visualOverflowRect();
+    rect.unite(LayoutRect(rect.location(), viewRect().size()));
+    return rect;
+}
 
-    if (!paintInvalidationContainer && mode & UseTransforms && shouldUseTransformFromContainer(0)) {
+void LayoutView::mapLocalToAncestor(const LayoutBoxModelObject* ancestor,
+    TransformState& transformState,
+    MapCoordinatesFlags mode) const
+{
+    if (!ancestor && mode & UseTransforms && shouldUseTransformFromContainer(0)) {
         TransformationMatrix t;
         getTransformFromContainer(0, LayoutSize(), t);
         transformState.applyTransform(t);
     }
 
     if ((mode & IsFixed) && m_frameView) {
-        transformState.move(toIntSize(m_frameView->scrollPosition()));
-        if (hasOverflowClip())
-            transformState.move(scrolledContentOffset());
+        transformState.move(offsetForFixedPosition());
         // IsFixed flag is only applicable within this LayoutView.
         mode &= ~IsFixed;
     }
 
-    if (paintInvalidationContainer == this)
+    if (ancestor == this)
         return;
 
     if (mode & TraverseDocumentBoundaries) {
-        if (LayoutObject* parentDocLayoutObject = frame()->ownerLayoutObject()) {
-            transformState.move(-frame()->view()->scrollOffset());
-            if (parentDocLayoutObject->isBox())
-                transformState.move(toLayoutBox(parentDocLayoutObject)->contentBoxOffset());
-            parentDocLayoutObject->mapLocalToContainer(paintInvalidationContainer, transformState, mode, wasFixed, paintInvalidationState);
-            return;
+        LayoutPartItem parentDocLayoutItem = frame()->ownerLayoutItem();
+        if (!parentDocLayoutItem.isNull()) {
+            if (!(mode & InputIsInFrameCoordinates)) {
+                transformState.move(LayoutSize(-frame()->view()->getScrollOffset()));
+            } else {
+                // The flag applies to immediate LayoutView only.
+                mode &= ~InputIsInFrameCoordinates;
+            }
+
+            transformState.move(parentDocLayoutItem.contentBoxOffset());
+
+            parentDocLayoutItem.mapLocalToAncestor(ancestor, transformState, mode);
+        } else {
+            frameView()->applyTransformForTopFrameSpace(transformState);
         }
     }
 }
 
-const LayoutObject* LayoutView::pushMappingToContainer(const LayoutBoxModelObject* ancestorToStopAt, LayoutGeometryMap& geometryMap) const
+const LayoutObject* LayoutView::pushMappingToContainer(
+    const LayoutBoxModelObject* ancestorToStopAt,
+    LayoutGeometryMap& geometryMap) const
 {
-    LayoutSize offsetForFixedPosition;
     LayoutSize offset;
     LayoutObject* container = nullptr;
 
-    if (m_frameView) {
-        offsetForFixedPosition = LayoutSize(toIntSize(m_frameView->scrollPosition()));
-        if (hasOverflowClip())
-            offsetForFixedPosition = LayoutSize(scrolledContentOffset());
-    }
-
-    if (geometryMap.mapCoordinatesFlags() & TraverseDocumentBoundaries) {
-        if (LayoutPart* parentDocLayoutObject = frame()->ownerLayoutObject()) {
-            offset = -LayoutSize(m_frameView->scrollOffset());
+    if (geometryMap.getMapCoordinatesFlags() & TraverseDocumentBoundaries) {
+        if (LayoutPart* parentDocLayoutObject = toLayoutPart(
+                LayoutAPIShim::layoutObjectFrom(frame()->ownerLayoutItem()))) {
+            offset = -LayoutSize(m_frameView->getScrollOffset());
             offset += parentDocLayoutObject->contentBoxOffset();
             container = parentDocLayoutObject;
         }
@@ -323,185 +381,191 @@ const LayoutObject* LayoutView::pushMappingToContainer(const LayoutBoxModelObjec
 
     // If a container was specified, and was not 0 or the LayoutView, then we
     // should have found it by now unless we're traversing to a parent document.
-    ASSERT_ARG(ancestorToStopAt, !ancestorToStopAt || ancestorToStopAt == this || container);
+    DCHECK(!ancestorToStopAt || ancestorToStopAt == this || container);
 
     if ((!ancestorToStopAt || container) && shouldUseTransformFromContainer(container)) {
         TransformationMatrix t;
         getTransformFromContainer(container, LayoutSize(), t);
-        geometryMap.push(this, t, false, false, false, true, offsetForFixedPosition);
+        geometryMap.push(this, t, ContainsFixedPosition, offsetForFixedPosition());
     } else {
-        geometryMap.push(this, offset, false, false, false, false, offsetForFixedPosition);
+        geometryMap.push(this, offset, 0, offsetForFixedPosition());
     }
 
     return container;
 }
 
-void LayoutView::mapAbsoluteToLocalPoint(MapCoordinatesFlags mode, TransformState& transformState) const
+void LayoutView::mapAncestorToLocal(const LayoutBoxModelObject* ancestor,
+    TransformState& transformState,
+    MapCoordinatesFlags mode) const
 {
-    if (mode & IsFixed && m_frameView)
-        transformState.move(toIntSize(m_frameView->scrollPosition()));
+    if (this != ancestor && (mode & TraverseDocumentBoundaries)) {
+        if (LayoutPart* parentDocLayoutObject = toLayoutPart(
+                LayoutAPIShim::layoutObjectFrom(frame()->ownerLayoutItem()))) {
+            // A LayoutView is a containing block for fixed-position elements, so
+            // don't carry this state across frames.
+            parentDocLayoutObject->mapAncestorToLocal(ancestor, transformState,
+                mode & ~IsFixed);
 
-    if (mode & UseTransforms && shouldUseTransformFromContainer(0)) {
-        TransformationMatrix t;
-        getTransformFromContainer(0, LayoutSize(), t);
-        transformState.applyTransform(t);
+            transformState.move(parentDocLayoutObject->contentBoxOffset());
+            transformState.move(LayoutSize(-frame()->view()->getScrollOffset()));
+        }
+    } else {
+        DCHECK(this == ancestor || !ancestor);
     }
+
+    if (mode & IsFixed)
+        transformState.move(offsetForFixedPosition());
 }
 
-void LayoutView::computeSelfHitTestRects(Vector<LayoutRect>& rects, const LayoutPoint&) const
+void LayoutView::computeSelfHitTestRects(Vector<LayoutRect>& rects,
+    const LayoutPoint&) const
 {
-    // Record the entire size of the contents of the frame. Note that we don't just
-    // use the viewport size (containing block) here because we want to ensure this includes
-    // all children (so we can avoid walking them explicitly).
-    rects.append(LayoutRect(LayoutPoint::zero(), LayoutSize(frameView()->contentsSize())));
+    // Record the entire size of the contents of the frame. Note that we don't
+    // just use the viewport size (containing block) here because we want to
+    // ensure this includes all children (so we can avoid walking them
+    // explicitly).
+    rects.push_back(
+        LayoutRect(LayoutPoint::zero(), LayoutSize(frameView()->contentsSize())));
 }
 
-void LayoutView::paint(const PaintInfo& paintInfo, const LayoutPoint& paintOffset)
+void LayoutView::paint(const PaintInfo& paintInfo,
+    const LayoutPoint& paintOffset) const
 {
     ViewPainter(*this).paint(paintInfo, paintOffset);
 }
 
-void LayoutView::paintBoxDecorationBackground(const PaintInfo& paintInfo, const LayoutPoint&)
+void LayoutView::paintBoxDecorationBackground(const PaintInfo& paintInfo,
+    const LayoutPoint&) const
 {
     ViewPainter(*this).paintBoxDecorationBackground(paintInfo);
 }
 
-void LayoutView::invalidateTreeIfNeeded(PaintInvalidationState& paintInvalidationState)
-{
-    ASSERT(!needsLayout());
-
-    // We specifically need to issue paint invalidations for the viewRect since other layoutObjects
-    // short-circuit on full-paint invalidation.
-    LayoutRect dirtyRect = viewRect();
-    if (doingFullPaintInvalidation() && !dirtyRect.isEmpty()) {
-        const LayoutBoxModelObject& paintInvalidationContainer = paintInvalidationState.paintInvalidationContainer();
-        DeprecatedPaintLayer::mapRectToPaintInvalidationBacking(this, &paintInvalidationContainer, dirtyRect, &paintInvalidationState);
-        invalidatePaintUsingContainer(paintInvalidationContainer, dirtyRect, PaintInvalidationFull);
-        if (RuntimeEnabledFeatures::slimmingPaintEnabled())
-            invalidateDisplayItemClients(paintInvalidationContainer);
-    }
-    LayoutBlock::invalidateTreeIfNeeded(paintInvalidationState);
-}
-
-static void setShouldDoFullPaintInvalidationForViewAndAllDescendantsInternal(LayoutObject* object)
+static void setShouldDoFullPaintInvalidationForViewAndAllDescendantsInternal(
+    LayoutObject* object)
 {
     object->setShouldDoFullPaintInvalidation();
-    for (LayoutObject* child = object->slowFirstChild(); child; child = child->nextSibling()) {
+    for (LayoutObject* child = object->slowFirstChild(); child;
+         child = child->nextSibling()) {
         setShouldDoFullPaintInvalidationForViewAndAllDescendantsInternal(child);
     }
 }
 
 void LayoutView::setShouldDoFullPaintInvalidationForViewAndAllDescendants()
 {
-    setShouldDoFullPaintInvalidationForViewAndAllDescendantsInternal(this);
-}
-
-void LayoutView::invalidatePaintForRectangle(const LayoutRect& paintInvalidationRect, PaintInvalidationReason invalidationReason) const
-{
-    ASSERT(!paintInvalidationRect.isEmpty());
-
-    if (document().printing() || !m_frameView)
-        return;
-
-    ASSERT(layer()->compositingState() == PaintsIntoOwnBacking || !frame()->ownerLayoutObject());
-
-    if (layer()->compositingState() == PaintsIntoOwnBacking) {
-        setBackingNeedsPaintInvalidationInRect(paintInvalidationRect, invalidationReason);
-    } else {
-        m_frameView->contentRectangleForPaintInvalidation(pixelSnappedIntRect(paintInvalidationRect));
-    }
+    if (RuntimeEnabledFeatures::slimmingPaintV2Enabled())
+        setShouldDoFullPaintInvalidationIncludingNonCompositingDescendants();
+    else
+        setShouldDoFullPaintInvalidationForViewAndAllDescendantsInternal(this);
 }
 
 void LayoutView::invalidatePaintForViewAndCompositedLayers()
 {
-    setShouldDoFullPaintInvalidation();
+    setShouldDoFullPaintInvalidationIncludingNonCompositingDescendants();
 
-    // The only way we know how to hit these ASSERTS below this point is via the Chromium OS login screen.
+    // The only way we know how to hit these ASSERTS below this point is via the
+    // Chromium OS login screen.
     DisableCompositingQueryAsserts disabler;
 
     if (compositor()->inCompositingMode())
         compositor()->fullyInvalidatePaint();
 }
 
-void LayoutView::mapRectToPaintInvalidationBacking(const LayoutBoxModelObject* paintInvalidationContainer, LayoutRect& rect, const PaintInvalidationState* invalidationState) const
+bool LayoutView::mapToVisualRectInAncestorSpace(
+    const LayoutBoxModelObject* ancestor,
+    LayoutRect& rect,
+    VisualRectFlags visualRectFlags) const
 {
-    mapRectToPaintInvalidationBacking(paintInvalidationContainer, rect, IsNotFixedPosition, invalidationState);
+    return mapToVisualRectInAncestorSpace(ancestor, rect, 0, visualRectFlags);
 }
 
-void LayoutView::mapRectToPaintInvalidationBacking(const LayoutBoxModelObject* paintInvalidationContainer, LayoutRect& rect, ViewportConstrainedPosition viewportConstraint, const PaintInvalidationState* state) const
+bool LayoutView::mapToVisualRectInAncestorSpace(
+    const LayoutBoxModelObject* ancestor,
+    LayoutRect& rect,
+    MapCoordinatesFlags mode,
+    VisualRectFlags visualRectFlags) const
 {
-    if (document().printing())
-        return;
-
-    if (style()->isFlippedBlocksWritingMode()) {
-        // We have to flip by hand since the view's logical height has not been determined.  We
-        // can use the viewport width and height.
-        if (style()->isHorizontalWritingMode())
-            rect.setY(viewHeight() - rect.maxY());
-        else
-            rect.setX(viewWidth() - rect.maxX());
-    }
-
-    adjustViewportConstrainedOffset(rect, viewportConstraint);
+    if (mode & IsFixed)
+        rect.move(offsetForFixedPosition(true));
 
     // Apply our transform if we have one (because of full page zooming).
-    if (!paintInvalidationContainer && layer() && layer()->transform())
+    if (layer() && layer()->transform())
         rect = layer()->transform()->mapRect(rect);
 
-    ASSERT(paintInvalidationContainer);
-    if (paintInvalidationContainer == this)
-        return;
+    if (ancestor == this)
+        return true;
 
-    Element* owner = document().ownerElement();
+    Element* owner = document().localOwner();
     if (!owner)
-        return;
+        return frameView()->mapToVisualRectInTopFrameSpace(rect);
 
     if (LayoutBox* obj = owner->layoutBox()) {
-        // Intersect the viewport with the paint invalidation rect.
-        LayoutRect viewRectangle = viewRect();
-        rect.intersect(viewRectangle);
+        if (!(mode & InputIsInFrameCoordinates)) {
+            // Intersect the viewport with the visual rect.
+            LayoutRect viewRectangle = viewRect();
+            if (visualRectFlags & EdgeInclusive) {
+                if (!rect.inclusiveIntersect(viewRectangle))
+                    return false;
+            } else {
+                rect.intersect(viewRectangle);
+            }
 
-        // Adjust for scroll offset of the view.
-        rect.moveBy(-viewRectangle.location());
+            // Adjust for scroll offset of the view.
+            rect.moveBy(-viewRectangle.location());
+        }
+        // Frames are painted at rounded-int position. Since we cannot efficiently
+        // compute the subpixel offset of painting at this point in a a bottom-up
+        // walk, round to the enclosing int rect, which will enclose the actual
+        // visible rect.
+        rect = LayoutRect(enclosingIntRect(rect));
 
         // Adjust for frame border.
         rect.move(obj->contentBoxOffset());
-        obj->mapRectToPaintInvalidationBacking(paintInvalidationContainer, rect, 0);
+        return obj->mapToVisualRectInAncestorSpace(ancestor, rect, visualRectFlags);
     }
+
+    // This can happen, e.g., if the iframe element has display:none.
+    rect = LayoutRect();
+    return false;
 }
 
-void LayoutView::adjustViewportConstrainedOffset(LayoutRect& rect, ViewportConstrainedPosition viewportConstraint) const
+LayoutSize LayoutView::offsetForFixedPosition(bool includePendingScroll) const
 {
-    if (viewportConstraint != IsFixedPosition)
-        return;
-
+    FloatSize adjustment;
     if (m_frameView) {
-        rect.move(toIntSize(m_frameView->scrollPosition()));
-        if (hasOverflowClip())
-            rect.move(scrolledContentOffset());
+        adjustment += m_frameView->getScrollOffset();
 
-        // FIXME: Paint invalidation should happen after scroll updates, so there should be no pending scroll delta.
-        // However, we still have paint invalidation during layout, so we can't ASSERT for now. crbug.com/434950.
+        // FIXME: Paint invalidation should happen after scroll updates, so there
+        // should be no pending scroll delta.
+        // However, we still have paint invalidation during layout, so we can't
+        // ASSERT for now. crbug.com/434950.
         // ASSERT(m_frameView->pendingScrollDelta().isZero());
         // If we have a pending scroll, invalidate the previous scroll position.
-        if (!m_frameView->pendingScrollDelta().isZero())
-            rect.move(-LayoutSize(m_frameView->pendingScrollDelta()));
+        if (includePendingScroll && !m_frameView->pendingScrollDelta().isZero())
+            adjustment -= m_frameView->pendingScrollDelta();
     }
+
+    if (hasOverflowClip())
+        adjustment += FloatSize(scrolledContentOffset());
+
+    return roundedLayoutSize(adjustment);
 }
 
-void LayoutView::absoluteRects(Vector<IntRect>& rects, const LayoutPoint& accumulatedOffset) const
+void LayoutView::absoluteRects(Vector<IntRect>& rects,
+    const LayoutPoint& accumulatedOffset) const
 {
-    rects.append(pixelSnappedIntRect(accumulatedOffset, LayoutSize(layer()->size())));
+    rects.push_back(
+        pixelSnappedIntRect(accumulatedOffset, LayoutSize(layer()->size())));
 }
 
-void LayoutView::absoluteQuads(Vector<FloatQuad>& quads, bool* wasFixed) const
+void LayoutView::absoluteQuads(Vector<FloatQuad>& quads,
+    MapCoordinatesFlags mode) const
 {
-    if (wasFixed)
-        *wasFixed = false;
-    quads.append(FloatRect(FloatPoint(), layer()->size()));
+    quads.push_back(localToAbsoluteQuad(
+        FloatRect(FloatPoint(), FloatSize(layer()->size())), mode));
 }
 
-static LayoutObject* layoutObjectAfterPosition(LayoutObject* object, unsigned offset)
+static LayoutObject* layoutObjectAfterPosition(LayoutObject* object,
+    unsigned offset)
 {
     if (!object)
         return nullptr;
@@ -533,8 +597,9 @@ IntRect LayoutView::selectionBounds()
     LayoutObject* os = m_selectionStart;
     LayoutObject* stop = layoutObjectAfterPosition(m_selectionEnd, m_selectionEndPos);
     while (os && os != stop) {
-        if ((os->canBeSelectionLeaf() || os == m_selectionStart || os == m_selectionEnd) && os->selectionState() != SelectionNone) {
-            // Blocks are responsible for painting line gaps and margin gaps. They must be examined as well.
+        if ((os->canBeSelectionLeaf() || os == m_selectionStart || os == m_selectionEnd) && os->getSelectionState() != SelectionNone) {
+            // Blocks are responsible for painting line gaps and margin gaps. They
+            // must be examined as well.
             selRect.unite(selectionRectForLayoutObject(os));
             const LayoutBlock* cb = os->containingBlock();
             while (cb && !cb->isLayoutView()) {
@@ -557,26 +622,25 @@ void LayoutView::invalidatePaintForSelection()
     HashSet<LayoutBlock*> processedBlocks;
 
     LayoutObject* end = layoutObjectAfterPosition(m_selectionEnd, m_selectionEndPos);
-    for (LayoutObject* o = m_selectionStart; o && o != end; o = o->nextInPreOrder()) {
+    for (LayoutObject* o = m_selectionStart; o && o != end;
+         o = o->nextInPreOrder()) {
         if (!o->canBeSelectionLeaf() && o != m_selectionStart && o != m_selectionEnd)
             continue;
-        if (o->selectionState() == SelectionNone)
+        if (o->getSelectionState() == SelectionNone)
             continue;
 
         o->setShouldInvalidateSelection();
-
-        // Blocks are responsible for painting line gaps and margin gaps. They must be examined as well.
-        for (LayoutBlock* block = o->containingBlock(); block && !block->isLayoutView(); block = block->containingBlock()) {
-            if (!processedBlocks.add(block).isNewEntry)
-                break;
-            block->setShouldInvalidateSelection();
-        }
     }
 }
 
-// When exploring the LayoutTree looking for the nodes involved in the Selection, sometimes it's
-// required to change the traversing direction because the "start" position is below the "end" one.
-static inline LayoutObject* getNextOrPrevLayoutObjectBasedOnDirection(const LayoutObject* o, const LayoutObject* stop, bool& continueExploring, bool& exploringBackwards)
+// When exploring the LayoutTree looking for the nodes involved in the
+// Selection, sometimes it's required to change the traversing direction because
+// the "start" position is below the "end" one.
+static inline LayoutObject* getNextOrPrevLayoutObjectBasedOnDirection(
+    const LayoutObject* o,
+    const LayoutObject* stop,
+    bool& continueExploring,
+    bool& exploringBackwards)
 {
     LayoutObject* next;
     if (exploringBackwards) {
@@ -595,42 +659,51 @@ static inline LayoutObject* getNextOrPrevLayoutObjectBasedOnDirection(const Layo
     return next;
 }
 
-void LayoutView::setSelection(LayoutObject* start, int startPos, LayoutObject* end, int endPos, SelectionPaintInvalidationMode blockPaintInvalidationMode)
+void LayoutView::setSelection(
+    LayoutObject* start,
+    int startPos,
+    LayoutObject* end,
+    int endPos,
+    SelectionPaintInvalidationMode blockPaintInvalidationMode)
 {
-    // This code makes no assumptions as to if the layout tree is up to date or not
-    // and will not try to update it. Currently clearSelection calls this
+    // This code makes no assumptions as to if the layout tree is up to date or
+    // not and will not try to update it. Currently clearSelection calls this
     // (intentionally) without updating the layout tree as it doesn't care.
     // Other callers may want to force recalc style before calling this.
 
     // Make sure both our start and end objects are defined.
-    // Check www.msnbc.com and try clicking around to find the case where this happened.
+    // Check www.msnbc.com and try clicking around to find the case where this
+    // happened.
     if ((start && !end) || (end && !start))
         return;
 
     // Just return if the selection hasn't changed.
-    if (m_selectionStart == start && m_selectionStartPos == startPos
-        && m_selectionEnd == end && m_selectionEndPos == endPos)
+    if (m_selectionStart == start && m_selectionStartPos == startPos && m_selectionEnd == end && m_selectionEndPos == endPos)
         return;
 
-    // Record the old selected objects.  These will be used later
-    // when we compare against the new selected objects.
+    // Record the old selected objects. These will be used later when we compare
+    // against the new selected objects.
     int oldStartPos = m_selectionStartPos;
     int oldEndPos = m_selectionEndPos;
 
     // Objects each have a single selection rect to examine.
     typedef HashMap<LayoutObject*, SelectionState> SelectedObjectMap;
     SelectedObjectMap oldSelectedObjects;
-    // FIXME: |newSelectedObjects| doesn't really need to store the SelectionState, it's just more convenient
-    // to have it use the same data structure as |oldSelectedObjects|.
+    // FIXME: |newSelectedObjects| doesn't really need to store the
+    // SelectionState, it's just more convenient to have it use the same data
+    // structure as |oldSelectedObjects|.
     SelectedObjectMap newSelectedObjects;
 
-    // Blocks contain selected objects and fill gaps between them, either on the left, right, or in between lines and blocks.
-    // In order to get the paint invalidation rect right, we have to examine left, middle, and right rects individually, since otherwise
-    // the union of those rects might remain the same even when changes have occurred.
+    // Blocks contain selected objects and fill gaps between them, either on the
+    // left, right, or in between lines and blocks.
+    // In order to get the visual rect right, we have to examine left, middle, and
+    // right rects individually, since otherwise the union of those rects might
+    // remain the same even when changes have occurred.
     typedef HashMap<LayoutBlock*, SelectionState> SelectedBlockMap;
     SelectedBlockMap oldSelectedBlocks;
-    // FIXME: |newSelectedBlocks| doesn't really need to store the SelectionState, it's just more convenient
-    // to have it use the same data structure as |oldSelectedBlocks|.
+    // FIXME: |newSelectedBlocks| doesn't really need to store the SelectionState,
+    // it's just more convenient to have it use the same data structure as
+    // |oldSelectedBlocks|.
     SelectedBlockMap newSelectedBlocks;
 
     LayoutObject* os = m_selectionStart;
@@ -638,13 +711,14 @@ void LayoutView::setSelection(LayoutObject* start, int startPos, LayoutObject* e
     bool exploringBackwards = false;
     bool continueExploring = os && (os != stop);
     while (continueExploring) {
-        if ((os->canBeSelectionLeaf() || os == m_selectionStart || os == m_selectionEnd) && os->selectionState() != SelectionNone) {
-            // Blocks are responsible for painting line gaps and margin gaps.  They must be examined as well.
-            oldSelectedObjects.set(os, os->selectionState());
+        if ((os->canBeSelectionLeaf() || os == m_selectionStart || os == m_selectionEnd) && os->getSelectionState() != SelectionNone) {
+            // Blocks are responsible for painting line gaps and margin gaps.  They
+            // must be examined as well.
+            oldSelectedObjects.set(os, os->getSelectionState());
             if (blockPaintInvalidationMode == PaintInvalidationNewXOROld) {
                 LayoutBlock* cb = os->containingBlock();
                 while (cb && !cb->isLayoutView()) {
-                    SelectedBlockMap::AddResult result = oldSelectedBlocks.add(cb, cb->selectionState());
+                    SelectedBlockMap::AddResult result = oldSelectedBlocks.add(cb, cb->getSelectionState());
                     if (!result.isNewEntry)
                         break;
                     cb = cb->containingBlock();
@@ -652,12 +726,14 @@ void LayoutView::setSelection(LayoutObject* start, int startPos, LayoutObject* e
             }
         }
 
-        os = getNextOrPrevLayoutObjectBasedOnDirection(os, stop, continueExploring, exploringBackwards);
+        os = getNextOrPrevLayoutObjectBasedOnDirection(os, stop, continueExploring,
+            exploringBackwards);
     }
 
     // Now clear the selection.
     SelectedObjectMap::iterator oldObjectsEnd = oldSelectedObjects.end();
-    for (SelectedObjectMap::iterator i = oldSelectedObjects.begin(); i != oldObjectsEnd; ++i)
+    for (SelectedObjectMap::iterator i = oldSelectedObjects.begin();
+         i != oldObjectsEnd; ++i)
         i->key->setSelectionStateIfNeeded(SelectionNone);
 
     // set selection start and end
@@ -666,7 +742,8 @@ void LayoutView::setSelection(LayoutObject* start, int startPos, LayoutObject* e
     m_selectionEnd = end;
     m_selectionEndPos = endPos;
 
-    // Update the selection status of all objects between m_selectionStart and m_selectionEnd
+    // Update the selection status of all objects between m_selectionStart and
+    // m_selectionEnd
     if (start && start == end) {
         start->setSelectionStateIfNeeded(SelectionBoth);
     } else {
@@ -685,54 +762,55 @@ void LayoutView::setSelection(LayoutObject* start, int startPos, LayoutObject* e
         o = o->nextInPreOrder();
     }
 
-    layer()->clearBlockSelectionGapsBounds();
-
-    // Now that the selection state has been updated for the new objects, walk them again and
-    // put them in the new objects list.
+    // Now that the selection state has been updated for the new objects, walk
+    // them again and put them in the new objects list.
     o = start;
     exploringBackwards = false;
     continueExploring = o && (o != stop);
     while (continueExploring) {
-        if ((o->canBeSelectionLeaf() || o == start || o == end) && o->selectionState() != SelectionNone) {
-            newSelectedObjects.set(o, o->selectionState());
+        if ((o->canBeSelectionLeaf() || o == start || o == end) && o->getSelectionState() != SelectionNone) {
+            newSelectedObjects.set(o, o->getSelectionState());
             LayoutBlock* cb = o->containingBlock();
             while (cb && !cb->isLayoutView()) {
-                SelectedBlockMap::AddResult result = newSelectedBlocks.add(cb, cb->selectionState());
+                SelectedBlockMap::AddResult result = newSelectedBlocks.add(cb, cb->getSelectionState());
                 if (!result.isNewEntry)
                     break;
                 cb = cb->containingBlock();
             }
         }
 
-        o = getNextOrPrevLayoutObjectBasedOnDirection(o, stop, continueExploring, exploringBackwards);
+        o = getNextOrPrevLayoutObjectBasedOnDirection(o, stop, continueExploring,
+            exploringBackwards);
     }
 
     if (!m_frameView)
         return;
 
     // Have any of the old selected objects changed compared to the new selection?
-    for (SelectedObjectMap::iterator i = oldSelectedObjects.begin(); i != oldObjectsEnd; ++i) {
+    for (SelectedObjectMap::iterator i = oldSelectedObjects.begin();
+         i != oldObjectsEnd; ++i) {
         LayoutObject* obj = i->key;
-        SelectionState newSelectionState = obj->selectionState();
+        SelectionState newSelectionState = obj->getSelectionState();
         SelectionState oldSelectionState = i->value;
-        if (newSelectionState != oldSelectionState
-            || (m_selectionStart == obj && oldStartPos != m_selectionStartPos)
-            || (m_selectionEnd == obj && oldEndPos != m_selectionEndPos)) {
+        if (newSelectionState != oldSelectionState || (m_selectionStart == obj && oldStartPos != m_selectionStartPos) || (m_selectionEnd == obj && oldEndPos != m_selectionEndPos)) {
             obj->setShouldInvalidateSelection();
             newSelectedObjects.remove(obj);
         }
     }
 
-    // Any new objects that remain were not found in the old objects dict, and so they need to be updated.
+    // Any new objects that remain were not found in the old objects dict, and so
+    // they need to be updated.
     SelectedObjectMap::iterator newObjectsEnd = newSelectedObjects.end();
-    for (SelectedObjectMap::iterator i = newSelectedObjects.begin(); i != newObjectsEnd; ++i)
+    for (SelectedObjectMap::iterator i = newSelectedObjects.begin();
+         i != newObjectsEnd; ++i)
         i->key->setShouldInvalidateSelection();
 
     // Have any of the old blocks changed?
     SelectedBlockMap::iterator oldBlocksEnd = oldSelectedBlocks.end();
-    for (SelectedBlockMap::iterator i = oldSelectedBlocks.begin(); i != oldBlocksEnd; ++i) {
+    for (SelectedBlockMap::iterator i = oldSelectedBlocks.begin();
+         i != oldBlocksEnd; ++i) {
         LayoutBlock* block = i->key;
-        SelectionState newSelectionState = block->selectionState();
+        SelectionState newSelectionState = block->getSelectionState();
         SelectionState oldSelectionState = i->value;
         if (newSelectionState != oldSelectionState) {
             block->setShouldInvalidateSelection();
@@ -740,86 +818,33 @@ void LayoutView::setSelection(LayoutObject* start, int startPos, LayoutObject* e
         }
     }
 
-    // Any new blocks that remain were not found in the old blocks dict, and so they need to be updated.
+    // Any new blocks that remain were not found in the old blocks dict, and so
+    // they need to be updated.
     SelectedBlockMap::iterator newBlocksEnd = newSelectedBlocks.end();
-    for (SelectedBlockMap::iterator i = newSelectedBlocks.begin(); i != newBlocksEnd; ++i)
+    for (SelectedBlockMap::iterator i = newSelectedBlocks.begin();
+         i != newBlocksEnd; ++i)
         i->key->setShouldInvalidateSelection();
 }
 
 void LayoutView::clearSelection()
 {
     // For querying Layer::compositingState()
-    // This is correct, since destroying layout objects needs to cause eager paint invalidations.
+    // This is correct, since destroying layout objects needs to cause eager paint
+    // invalidations.
     DisableCompositingQueryAsserts disabler;
 
-    layer()->invalidatePaintForBlockSelectionGaps();
     setSelection(0, -1, 0, -1, PaintInvalidationNewMinusOld);
 }
 
-void LayoutView::setSelection(const FrameSelection& selection)
+bool LayoutView::hasPendingSelection() const
 {
-    // No need to create a pending clearSelection() to be executed in PendingSelection::commit()
-    // if there's no selection, since it's no-op. This is a frequent code path worth to optimize.
-    if (selection.isNone() && !m_selectionStart && !m_selectionEnd && !hasPendingSelection())
-        return;
-    m_pendingSelection->setSelection(selection);
-}
-
-template <typename Strategy>
-void LayoutView::commitPendingSelectionAlgorithm()
-{
-    using PositionType = typename Strategy::PositionType;
-
-    if (!hasPendingSelection())
-        return;
-    ASSERT(!needsLayout());
-
-    // Skip if pending VisibilePositions became invalid before we reach here.
-    if (!m_pendingSelection->isInDocument(document())) {
-        m_pendingSelection->clear();
-        return;
-    }
-
-    // Construct a new VisibleSolution, since m_selection is not necessarily valid, and the following steps
-    // assume a valid selection. See <https://bugs.webkit.org/show_bug.cgi?id=69563> and <rdar://problem/10232866>.
-    VisibleSelection selection = m_pendingSelection->calcVisibleSelection();
-    m_pendingSelection->clear();
-
-    if (!selection.isRange()) {
-        clearSelection();
-        return;
-    }
-
-    // Use the rightmost candidate for the start of the selection, and the leftmost candidate for the end of the selection.
-    // Example: foo <a>bar</a>.  Imagine that a line wrap occurs after 'foo', and that 'bar' is selected.   If we pass [foo, 3]
-    // as the start of the selection, the selection painting code will think that content on the line containing 'foo' is selected
-    // and will fill the gap before 'bar'.
-    PositionType startPos = Strategy::selectionStart(selection);
-    PositionType candidate = startPos.downstream();
-    if (candidate.isCandidate())
-        startPos = candidate;
-    PositionType endPos = Strategy::selectionEnd(selection);
-    candidate = endPos.upstream();
-    if (candidate.isCandidate())
-        endPos = candidate;
-
-    // We can get into a state where the selection endpoints map to the same VisiblePosition when a selection is deleted
-    // because we don't yet notify the FrameSelection of text removal.
-    if (startPos.isNull() || endPos.isNull() || Strategy::selectionVisibleStart(selection) == Strategy::selectionVisibleEnd(selection))
-        return;
-    LayoutObject* startLayoutObject = startPos.anchorNode()->layoutObject();
-    LayoutObject* endLayoutObject = endPos.anchorNode()->layoutObject();
-    if (!startLayoutObject || !endLayoutObject)
-        return;
-    ASSERT(startLayoutObject->view() == this && endLayoutObject->view() == this);
-    setSelection(startLayoutObject, startPos.deprecatedEditingOffset(), endLayoutObject, endPos.deprecatedEditingOffset());
+    return m_frameView->frame().selection().isAppearanceDirty();
 }
 
 void LayoutView::commitPendingSelection()
 {
-    if (RuntimeEnabledFeatures::selectionForComposedTreeEnabled())
-        return commitPendingSelectionAlgorithm<VisibleSelection::InComposedTree>();
-    commitPendingSelectionAlgorithm<VisibleSelection::InDOMTree>();
+    TRACE_EVENT0("blink", "LayoutView::commitPendingSelection");
+    m_frameView->frame().selection().commitAppearanceIfNeeded(*this);
 }
 
 LayoutObject* LayoutView::selectionStart()
@@ -857,10 +882,26 @@ LayoutRect LayoutView::viewRect() const
     return LayoutRect();
 }
 
-IntRect LayoutView::unscaledDocumentRect() const
+LayoutRect LayoutView::overflowClipRect(
+    const LayoutPoint& location,
+    OverlayScrollbarClipBehavior overlayScrollbarClipBehavior) const
+{
+    LayoutRect rect = viewRect();
+    if (rect.isEmpty())
+        return LayoutBox::overflowClipRect(location, overlayScrollbarClipBehavior);
+
+    rect.setLocation(location);
+    if (hasOverflowClip())
+        excludeScrollbars(rect, overlayScrollbarClipBehavior);
+
+    return rect;
+}
+
+IntRect LayoutView::documentRect() const
 {
     LayoutRect overflowRect(layoutOverflowRect());
     flipForWritingMode(overflowRect);
+    // TODO(crbug.com/650768): The pixel snapping looks incorrect.
     return pixelSnappedIntRect(overflowRect);
 }
 
@@ -869,22 +910,13 @@ bool LayoutView::rootBackgroundIsEntirelyFixed() const
     return style()->hasEntirelyFixedBackground();
 }
 
-LayoutRect LayoutView::backgroundRect(LayoutBox* backgroundLayoutObject) const
+IntSize LayoutView::layoutSize(
+    IncludeScrollbarsInRect scrollbarInclusion) const
 {
-    return LayoutRect(unscaledDocumentRect());
-}
+    if (shouldUsePrintingLayout())
+        return IntSize(size().width().toInt(), pageLogicalHeight().toInt());
 
-IntRect LayoutView::documentRect() const
-{
-    FloatRect overflowRect(unscaledDocumentRect());
-    if (hasTransformRelatedProperty())
-        overflowRect = layer()->currentTransform().mapRect(overflowRect);
-    return IntRect(overflowRect);
-}
-
-IntSize LayoutView::layoutSize(IncludeScrollbarsInRect scrollbarInclusion) const
-{
-    if (!m_frameView || shouldUsePrintingLayout())
+    if (!m_frameView)
         return IntSize();
 
     IntSize result = m_frameView->layoutSize(IncludeScrollbars);
@@ -893,31 +925,39 @@ IntSize LayoutView::layoutSize(IncludeScrollbarsInRect scrollbarInclusion) const
     return result;
 }
 
-int LayoutView::viewLogicalWidth(IncludeScrollbarsInRect scrollbarInclusion) const
+int LayoutView::viewLogicalWidth(
+    IncludeScrollbarsInRect scrollbarInclusion) const
 {
-    return style()->isHorizontalWritingMode() ? viewWidth(scrollbarInclusion) : viewHeight(scrollbarInclusion);
+    return style()->isHorizontalWritingMode() ? viewWidth(scrollbarInclusion)
+                                              : viewHeight(scrollbarInclusion);
 }
 
-int LayoutView::viewLogicalHeight(IncludeScrollbarsInRect scrollbarInclusion) const
+int LayoutView::viewLogicalHeight(
+    IncludeScrollbarsInRect scrollbarInclusion) const
 {
-    return style()->isHorizontalWritingMode() ? viewHeight(scrollbarInclusion) : viewWidth(scrollbarInclusion);
+    return style()->isHorizontalWritingMode() ? viewHeight(scrollbarInclusion)
+                                              : viewWidth(scrollbarInclusion);
 }
 
 int LayoutView::viewLogicalWidthForBoxSizing() const
 {
-    return viewLogicalWidth(document().settings() && document().settings()->rootLayerScrolls() ? IncludeScrollbars : ExcludeScrollbars);
+    return viewLogicalWidth(RuntimeEnabledFeatures::rootLayerScrollingEnabled()
+            ? IncludeScrollbars
+            : ExcludeScrollbars);
 }
 
 int LayoutView::viewLogicalHeightForBoxSizing() const
 {
-    return viewLogicalHeight(document().settings() && document().settings()->rootLayerScrolls() ? IncludeScrollbars : ExcludeScrollbars);
+    return viewLogicalHeight(RuntimeEnabledFeatures::rootLayerScrollingEnabled()
+            ? IncludeScrollbars
+            : ExcludeScrollbars);
 }
 
 LayoutUnit LayoutView::viewLogicalHeightForPercentages() const
 {
     if (shouldUsePrintingLayout())
         return pageLogicalHeight();
-    return viewLogicalHeight();
+    return LayoutUnit(viewLogicalHeight());
 }
 
 float LayoutView::zoomFactor() const
@@ -925,7 +965,8 @@ float LayoutView::zoomFactor() const
     return m_frameView->frame().pageZoomFactor();
 }
 
-void LayoutView::updateHitTestResult(HitTestResult& result, const LayoutPoint& point)
+void LayoutView::updateHitTestResult(HitTestResult& result,
+    const LayoutPoint& point)
 {
     if (result.innerNode())
         return;
@@ -943,10 +984,10 @@ bool LayoutView::usesCompositing() const
     return m_compositor && m_compositor->staleInCompositingMode();
 }
 
-DeprecatedPaintLayerCompositor* LayoutView::compositor()
+PaintLayerCompositor* LayoutView::compositor()
 {
     if (!m_compositor)
-        m_compositor = adoptPtr(new DeprecatedPaintLayerCompositor(*this));
+        m_compositor = WTF::wrapUnique(new PaintLayerCompositor(*this));
 
     return m_compositor.get();
 }
@@ -955,6 +996,13 @@ void LayoutView::setIsInWindow(bool isInWindow)
 {
     if (m_compositor)
         m_compositor->setIsInWindow(isInWindow);
+#if CHECK_DISPLAY_ITEM_CLIENT_ALIVENESS
+    // We don't invalidate layers during Document::detachLayoutTree(), so must
+    // clear the should-keep-alive DisplayItemClients which may be deleted before
+    // the layers being subsequence owners.
+    if (!isInWindow && layer())
+        layer()->endShouldKeepAliveAllClientsRecursive();
+#endif
 }
 
 IntervalArena* LayoutView::intervalArena()
@@ -973,22 +1021,71 @@ bool LayoutView::backgroundIsKnownToBeOpaqueInRect(const LayoutRect&) const
     return m_frameView->hasOpaqueBackground();
 }
 
-double LayoutView::layoutViewportWidth() const
+FloatSize LayoutView::viewportSizeForViewportUnits() const
 {
-    float scale = m_frameView ? m_frameView->frame().pageZoomFactor() : 1;
-    return viewWidth(IncludeScrollbars) / scale;
-}
-
-double LayoutView::layoutViewportHeight() const
-{
-    float scale = m_frameView ? m_frameView->frame().pageZoomFactor() : 1;
-    return viewHeight(IncludeScrollbars) / scale;
+    return frameView() ? frameView()->viewportSizeForViewportUnits()
+                       : FloatSize();
 }
 
 void LayoutView::willBeDestroyed()
 {
+    // TODO(wangxianzhu): This is a workaround of crbug.com/570706.
+    // Should find and fix the root cause.
+    if (PaintLayer* layer = this->layer())
+        layer->setNeedsRepaint();
     LayoutBlockFlow::willBeDestroyed();
-    m_compositor.clear();
+    m_compositor.reset();
+}
+
+void LayoutView::updateFromStyle()
+{
+    LayoutBlockFlow::updateFromStyle();
+
+    // LayoutView of the main frame is responsible for painting base background.
+    if (document().isInMainFrame())
+        setHasBoxDecorationBackground(true);
+}
+
+bool LayoutView::allowsOverflowClip() const
+{
+    return RuntimeEnabledFeatures::rootLayerScrollingEnabled();
+}
+
+ScrollResult LayoutView::scroll(ScrollGranularity granularity,
+    const FloatSize& delta)
+{
+    // TODO(bokan): We shouldn't need this specialization but we currently do
+    // because of the Windows pan scrolling path. That should go through a more
+    // normalized ScrollManager-like scrolling path and we should get rid of
+    // of this override. All frame scrolling should be handled by
+    // ViewportScrollCallback.
+
+    if (!frameView())
+        return ScrollResult(false, false, delta.width(), delta.height());
+
+    return frameView()->getScrollableArea()->userScroll(granularity, delta);
+}
+
+LayoutRect LayoutView::debugRect() const
+{
+    LayoutRect rect;
+    LayoutBlock* block = containingBlock();
+    if (block)
+        block->adjustChildDebugRect(rect);
+
+    rect.setWidth(LayoutUnit(viewWidth(IncludeScrollbars)));
+    rect.setHeight(LayoutUnit(viewHeight(IncludeScrollbars)));
+
+    return rect;
+}
+
+bool LayoutView::paintedOutputOfObjectHasNoEffectRegardlessOfSize() const
+{
+    // Frame scroll corner is painted using LayoutView as the display item client.
+    if (!RuntimeEnabledFeatures::rootLayerScrollingEnabled() && (frameView()->horizontalScrollbar() || frameView()->verticalScrollbar()))
+        return false;
+
+    return LayoutBlockFlow::paintedOutputOfObjectHasNoEffectRegardlessOfSize();
 }
 
 } // namespace blink

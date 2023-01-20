@@ -5,7 +5,7 @@
 # If you would like to add a new extended attribute or value, please:
 #     (1) add the extended attribute or value to this file
 #     (2) add an explanation to the Blink IDL extended attributes document:
-#         http://www.chromium.org/blink/webidl/blink-idl-extended-attributes
+#         IDLExtendedAttributes.md (in this directory)
 #     (3) add appropriate test cases to run-bindings-tests
 #
 # The syntax of this file is as follows:
@@ -16,9 +16,7 @@
 #     - "Attr=X|Y|Z" means that Attr takes a required value, and the valid
 #       values are X, Y, and Z, and combinations thereof;
 #       e.g. [Attr=X], [Attr=Y], [Attr=X|Z].
-#       The separator must be | or &, so [Attr=X&Z] is also valid; the
-#       separator makes a difference for Conditional, but otherwise is simply
-#       a style convention.
+#       The separator must be | or &, so [Attr=X&Z] is also valid.
 #     - "Attr=|X|Y|Z" means that Attr takes an optional value, whose valid
 #       values (if present) are X, Y, and Z, and combinations thereof; e.g.
 #       [Attr], [Attr=X], [Attr=Y], [Attr=X|Z], [Attr=X|Y|Z], [Attr=X&Z].
@@ -33,16 +31,18 @@
 #       arbitrary, but that "X" is standard, e.g. [Attr=X], [Attr=Foo].
 #
 
-ActiveDOMObject
+ActiveScriptWrappable
+CEReactions
+CachedAccessor
 CachedAttribute=*
-CallWith=ExecutionContext|ScriptState|ScriptArguments|ActiveWindow|FirstWindow|ThisValue
-CheckSecurity=Frame|Node|Window
+CallWith=ExecutionContext|ScriptState|ScriptArguments|CurrentWindow|EnteredWindow|ThisValue
+CheckSecurity=Receiver|ReturnValue
 Clamp
-Conditional=*
 Constructor
 # FIXME: remove [ConstructorCallWith=Document], as can instead use
 # [ConstructorCallWith=ExecutionContext] + toDocument(executionContext)
 ConstructorCallWith=ExecutionContext|ScriptState|Document
+CrossOrigin=|Getter|Setter
 Custom=|Getter|Setter|LegacyCallAsFunction|VisitDOMWrapper|PropertyGetter|PropertyEnumerator|PropertyQuery|CallPrologue|CallEpilogue
 CustomConstructor
 CustomElementCallbacks
@@ -50,17 +50,16 @@ Default=Undefined
 DependentLifetime
 DeprecateAs=*
 DoNotCheckConstants
-DoNotCheckSecurity=|Setter
-DoNotCheckSignature
-DoNotExposeJSAccessors
+DoNotTestNewObject
 EnforceRange
-ExposeJSAccessors
+ExperimentalCallbackFunction
 Exposed=*
-GarbageCollected
+FeaturePolicy=*
+FlexibleArrayBufferView
 Global=|*
-Immutable
+HTMLConstructor
+ImmutablePrototype
 ImplementedAs=*
-ImplementedInPrivateScript
 Iterable
 LegacyInterfaceTypeChecking
 LegacyTreatAsPartialInterface
@@ -71,10 +70,9 @@ NewObject
 Measure
 MeasureAs=*
 NamedConstructor=*
-NoImplHeader
 NoInterfaceObject
 NotEnumerable
-OnlyExposedToPrivateScript
+OriginTrialEnabled=*
 OverrideBuiltins
 PartialInterfaceImplementedAs=*
 PermissiveDictionaryConversion
@@ -90,17 +88,16 @@ ReflectMissing=*
 ReflectOnly=*
 Replaceable
 # Valid values for [RuntimeEnabled] are the Runtime Enabled Features, listed in
-# Source/core/page/RuntimeEnabledFeatures.in
+# Source/platform/RuntimeEnabledFeatures.in
 RuntimeEnabled=*
 SameObject
+SaveSameObject
+SecureContext
 SetWrapperReferenceFrom=*
 SetWrapperReferenceTo=*
-SetterCallWith=ExecutionContext|ScriptArguments|ActiveWindow|FirstWindow
+SetterCallWith=ExecutionContext|ScriptArguments|CurrentWindow|EnteredWindow
 TreatNullAs=NullString|EmptyString
-TreatReturnedNullStringAs=Null|Undefined
-TreatUndefinedAs=NullString
-TypeChecking=Interface
 URL
 Unforgeable
-Unscopeable
-WillBeGarbageCollected
+Unscopable
+WebModuleAPI

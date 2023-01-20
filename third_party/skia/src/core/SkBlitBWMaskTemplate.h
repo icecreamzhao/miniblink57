@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -9,20 +5,12 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #include "SkBitmap.h"
 #include "SkMask.h"
 
 #ifndef ClearLow3Bits_DEFINED
 #define ClearLow3Bits_DEFINED
-<<<<<<< HEAD
 #define ClearLow3Bits(x) ((unsigned)(x) >> 3 << 3)
-=======
-    #define ClearLow3Bits(x)    ((unsigned)(x) >> 3 << 3)
->>>>>>> miniblink49
 #endif
 
 /*
@@ -34,12 +22,8 @@
 */
 
 static void SK_BLITBWMASK_NAME(const SkPixmap& dst, const SkMask& srcMask,
-<<<<<<< HEAD
     const SkIRect& clip SK_BLITBWMASK_ARGS)
 {
-=======
-                               const SkIRect& clip SK_BLITBWMASK_ARGS) {
->>>>>>> miniblink49
     SkASSERT(clip.fRight <= srcMask.fBounds.fRight);
 
     int cx = clip.fLeft;
@@ -56,12 +40,7 @@ static void SK_BLITBWMASK_NAME(const SkPixmap& dst, const SkMask& srcMask,
     const uint8_t* bits = srcMask.getAddr1(cx, cy);
     SK_BLITBWMASK_DEVTYPE* device = dst.SK_BLITBWMASK_GETADDR(cx, cy);
 
-<<<<<<< HEAD
     if (cx == maskLeft && clip.fRight == srcMask.fBounds.fRight) {
-=======
-    if (cx == maskLeft && clip.fRight == srcMask.fBounds.fRight)
-    {
->>>>>>> miniblink49
         do {
             SK_BLITBWMASK_DEVTYPE* dst = device;
             unsigned rb = mask_rowBytes;
@@ -72,13 +51,7 @@ static void SK_BLITBWMASK_NAME(const SkPixmap& dst, const SkMask& srcMask,
             } while (--rb != 0);
             device = (SK_BLITBWMASK_DEVTYPE*)((char*)device + bitmap_rowBytes);
         } while (--height != 0);
-<<<<<<< HEAD
     } else {
-=======
-    }
-    else
-    {
->>>>>>> miniblink49
         int left_edge = cx - maskLeft;
         SkASSERT(left_edge >= 0);
         int rite_edge = clip.fRight - maskLeft;
@@ -86,20 +59,11 @@ static void SK_BLITBWMASK_NAME(const SkPixmap& dst, const SkMask& srcMask,
 
         int left_mask = 0xFF >> (left_edge & 7);
         int rite_mask = 0xFF << (8 - (rite_edge & 7));
-<<<<<<< HEAD
         rite_mask &= 0xFF; // only want low-8 bits of mask
         int full_runs = (rite_edge >> 3) - ((left_edge + 7) >> 3);
 
         // check for empty right mask, so we don't read off the end (or go slower than we need to)
         if (rite_mask == 0) {
-=======
-        rite_mask &= 0xFF;  // only want low-8 bits of mask
-        int full_runs = (rite_edge >> 3) - ((left_edge + 7) >> 3);
-
-        // check for empty right mask, so we don't read off the end (or go slower than we need to)
-        if (rite_mask == 0)
-        {
->>>>>>> miniblink49
             SkASSERT(full_runs >= 0);
             full_runs -= 1;
             rite_mask = 0xFF;
@@ -111,12 +75,7 @@ static void SK_BLITBWMASK_NAME(const SkPixmap& dst, const SkMask& srcMask,
         // and not trigger an assert from the getAddr## function
         device -= left_edge & 7;
 
-<<<<<<< HEAD
         if (full_runs < 0) {
-=======
-        if (full_runs < 0)
-        {
->>>>>>> miniblink49
             left_mask &= rite_mask;
             SkASSERT(left_mask != 0);
             do {
@@ -125,33 +84,18 @@ static void SK_BLITBWMASK_NAME(const SkPixmap& dst, const SkMask& srcMask,
                 bits += mask_rowBytes;
                 device = (SK_BLITBWMASK_DEVTYPE*)((char*)device + bitmap_rowBytes);
             } while (--height != 0);
-<<<<<<< HEAD
         } else {
-=======
-        }
-        else
-        {
->>>>>>> miniblink49
             do {
                 int runs = full_runs;
                 SK_BLITBWMASK_DEVTYPE* dst = device;
                 const uint8_t* b = bits;
-<<<<<<< HEAD
                 U8CPU mask;
-=======
-                U8CPU   mask;
->>>>>>> miniblink49
 
                 mask = *b++ & left_mask;
                 SK_BLITBWMASK_BLIT8(mask, dst);
                 dst += 8;
 
-<<<<<<< HEAD
                 while (--runs >= 0) {
-=======
-                while (--runs >= 0)
-                {
->>>>>>> miniblink49
                     mask = *b++;
                     SK_BLITBWMASK_BLIT8(mask, dst);
                     dst += 8;

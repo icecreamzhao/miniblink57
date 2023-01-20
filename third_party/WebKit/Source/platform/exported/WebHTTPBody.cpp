@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "public/platform/WebHTTPBody.h"
 
 #include "platform/FileMetadata.h"
@@ -37,26 +36,11 @@
 namespace blink {
 
 class WebHTTPBodyPrivate : public EncodedFormData {
-=======
-#include "config.h"
-#include "public/platform/WebHTTPBody.h"
-
-#include "platform/FileMetadata.h"
-#include "platform/network/FormData.h"
-
-namespace blink {
-
-class WebHTTPBodyPrivate : public FormData {
->>>>>>> miniblink49
 };
 
 void WebHTTPBody::initialize()
 {
-<<<<<<< HEAD
     assign(static_cast<WebHTTPBodyPrivate*>(EncodedFormData::create().leakRef()));
-=======
-    assign(static_cast<WebHTTPBodyPrivate*>(FormData::create().leakRef()));
->>>>>>> miniblink49
 }
 
 void WebHTTPBody::reset()
@@ -139,27 +123,19 @@ void WebHTTPBody::appendFile(const WebString& filePath)
     m_private->appendFile(filePath);
 }
 
-<<<<<<< HEAD
 void WebHTTPBody::appendFileRange(const WebString& filePath,
     long long fileStart,
     long long fileLength,
     double modificationTime)
-=======
-void WebHTTPBody::appendFileRange(const WebString& filePath, long long fileStart, long long fileLength, double modificationTime)
->>>>>>> miniblink49
 {
     ensureMutable();
     m_private->appendFileRange(filePath, fileStart, fileLength, modificationTime);
 }
 
-<<<<<<< HEAD
 void WebHTTPBody::appendFileSystemURLRange(const WebURL& url,
     long long start,
     long long length,
     double modificationTime)
-=======
-void WebHTTPBody::appendFileSystemURLRange(const WebURL& url, long long start, long long length, double modificationTime)
->>>>>>> miniblink49
 {
     // Currently we only support filesystem URL.
     ASSERT(KURL(url).protocolIs("filesystem"));
@@ -195,30 +171,18 @@ void WebHTTPBody::setContainsPasswordData(bool containsPasswordData)
     m_private->setContainsPasswordData(containsPasswordData);
 }
 
-<<<<<<< HEAD
 WebHTTPBody::WebHTTPBody(PassRefPtr<EncodedFormData> data)
-=======
-WebHTTPBody::WebHTTPBody(const PassRefPtr<FormData>& data)
->>>>>>> miniblink49
     : m_private(static_cast<WebHTTPBodyPrivate*>(data.leakRef()))
 {
 }
 
-<<<<<<< HEAD
 WebHTTPBody& WebHTTPBody::operator=(PassRefPtr<EncodedFormData> data)
-=======
-WebHTTPBody& WebHTTPBody::operator=(const PassRefPtr<FormData>& data)
->>>>>>> miniblink49
 {
     assign(static_cast<WebHTTPBodyPrivate*>(data.leakRef()));
     return *this;
 }
 
-<<<<<<< HEAD
 WebHTTPBody::operator PassRefPtr<EncodedFormData>() const
-=======
-WebHTTPBody::operator PassRefPtr<FormData>() const
->>>>>>> miniblink49
 {
     return m_private;
 }

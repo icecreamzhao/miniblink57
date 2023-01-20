@@ -2,22 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
 // https://w3c.github.io/push-api/#pushmessagedata-interface
 
 [
     Exposed=ServiceWorker,
-=======
-// http://w3c.github.io/push-api/#pushmessagedata-interface
-
-typedef object JSON;
-
-[
-    Constructor(USVString message),
-    Exposed=ServiceWorker,
-    GarbageCollected,
-    RuntimeEnabled=PushMessagingData,
->>>>>>> miniblink49
 ] interface PushMessageData {
     ArrayBuffer arrayBuffer();
     Blob blob();

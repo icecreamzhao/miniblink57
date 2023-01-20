@@ -23,18 +23,10 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "wtf/text/StringImpl.h"
 
 #include "testing/gtest/include/gtest/gtest.h"
 #include "wtf/text/WTFString.h"
-=======
-#include "config.h"
-#include "wtf/text/StringImpl.h"
-
-#include "wtf/text/WTFString.h"
-#include <gtest/gtest.h>
->>>>>>> miniblink49
 
 namespace WTF {
 
@@ -48,7 +40,6 @@ TEST(StringImplTest, Latin1CaseFoldTable)
 {
     LChar symbol = 0xff;
     while (symbol--) {
-<<<<<<< HEAD
         EXPECT_EQ(Unicode::foldCase(symbol),
             StringImpl::latin1CaseFoldTable[symbol]);
     }
@@ -112,10 +103,4 @@ TEST(StringImplTest, LowerASCII)
         StringImpl::create(testWithNonASCIIComparison, 2)->lowerASCII().get()));
 }
 
-=======
-        EXPECT_EQ(Unicode::foldCase(symbol), StringImpl::latin1CaseFoldTable[symbol]);
-    }
-}
-
->>>>>>> miniblink49
 } // namespace WTF

@@ -28,10 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "public/web/WebPerformance.h"
 
 #include "core/timing/Performance.h"
@@ -56,7 +52,6 @@ void WebPerformance::assign(const WebPerformance& other)
 WebNavigationType WebPerformance::navigationType() const
 {
     switch (m_private->navigation()->type()) {
-<<<<<<< HEAD
     case PerformanceNavigation::kTypeNavigate:
         return WebNavigationTypeOther;
     case PerformanceNavigation::kTypeReload:
@@ -67,18 +62,6 @@ WebNavigationType WebPerformance::navigationType() const
         return WebNavigationTypeOther;
     }
     NOTREACHED();
-=======
-    case PerformanceNavigation::TYPE_NAVIGATE:
-        return WebNavigationTypeOther;
-    case PerformanceNavigation::TYPE_RELOAD:
-        return WebNavigationTypeReload;
-    case PerformanceNavigation::TYPE_BACK_FORWARD:
-        return WebNavigationTypeBackForward;
-    case PerformanceNavigation::TYPE_RESERVED:
-        return WebNavigationTypeOther;
-    }
-    ASSERT_NOT_REACHED();
->>>>>>> miniblink49
     return WebNavigationTypeOther;
 }
 
@@ -159,12 +142,8 @@ double WebPerformance::domInteractive() const
 
 double WebPerformance::domContentLoadedEventStart() const
 {
-<<<<<<< HEAD
     return millisecondsToSeconds(
         m_private->timing()->domContentLoadedEventStart());
-=======
-    return millisecondsToSeconds(m_private->timing()->domContentLoadedEventStart());
->>>>>>> miniblink49
 }
 
 double WebPerformance::domContentLoadedEventEnd() const
@@ -192,7 +171,6 @@ double WebPerformance::firstLayout() const
     return millisecondsToSeconds(m_private->timing()->firstLayout());
 }
 
-<<<<<<< HEAD
 double WebPerformance::firstPaint() const
 {
     return millisecondsToSeconds(m_private->timing()->firstPaint());
@@ -268,18 +246,11 @@ double WebPerformance::updateStyleDurationBeforeFCP() const
 }
 
 WebPerformance::WebPerformance(Performance* performance)
-=======
-WebPerformance::WebPerformance(const PassRefPtrWillBeRawPtr<Performance>& performance)
->>>>>>> miniblink49
     : m_private(performance)
 {
 }
 
-<<<<<<< HEAD
 WebPerformance& WebPerformance::operator=(Performance* performance)
-=======
-WebPerformance& WebPerformance::operator=(const PassRefPtrWillBeRawPtr<Performance>& performance)
->>>>>>> miniblink49
 {
     m_private = performance;
     return *this;

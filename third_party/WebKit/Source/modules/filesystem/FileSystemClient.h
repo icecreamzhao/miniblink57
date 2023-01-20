@@ -33,15 +33,10 @@
 
 #include "modules/ModulesExport.h"
 #include "platform/FileSystemType.h"
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/Forward.h"
 #include "wtf/Noncopyable.h"
 #include <memory>
-=======
-#include "wtf/Forward.h"
-#include "wtf/Noncopyable.h"
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -51,19 +46,14 @@ class ContentSettingCallbacks;
 class WorkerClients;
 
 class FileSystemClient {
-<<<<<<< HEAD
     USING_FAST_MALLOC(FileSystemClient);
     WTF_MAKE_NONCOPYABLE(FileSystemClient);
 
-=======
-    WTF_MAKE_NONCOPYABLE(FileSystemClient);
->>>>>>> miniblink49
 public:
     FileSystemClient() { }
     virtual ~FileSystemClient() { }
 
     virtual bool requestFileSystemAccessSync(ExecutionContext*) = 0;
-<<<<<<< HEAD
     virtual void requestFileSystemAccessAsync(
         ExecutionContext*,
         std::unique_ptr<ContentSettingCallbacks>)
@@ -76,14 +66,6 @@ MODULES_EXPORT void provideLocalFileSystemTo(LocalFrame&,
 MODULES_EXPORT void provideLocalFileSystemToWorker(
     WorkerClients*,
     std::unique_ptr<FileSystemClient>);
-=======
-    virtual void requestFileSystemAccessAsync(ExecutionContext*, PassOwnPtr<ContentSettingCallbacks>) = 0;
-};
-
-MODULES_EXPORT void provideLocalFileSystemTo(LocalFrame&, PassOwnPtr<FileSystemClient>);
-
-MODULES_EXPORT void provideLocalFileSystemToWorker(WorkerClients*, PassOwnPtr<FileSystemClient>);
->>>>>>> miniblink49
 
 } // namespace blink
 

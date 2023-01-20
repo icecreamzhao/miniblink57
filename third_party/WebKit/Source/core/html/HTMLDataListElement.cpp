@@ -29,7 +29,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/html/HTMLDataListElement.h"
 
 #include "core/HTMLNames.h"
@@ -45,13 +44,13 @@ inline HTMLDataListElement::HTMLDataListElement(Document& document)
 {
 }
 
-PassRefPtrWillBeRawPtr<HTMLDataListElement> HTMLDataListElement::create(Document& document)
+HTMLDataListElement* HTMLDataListElement::create(Document& document)
 {
     UseCounter::count(document, UseCounter::DataListElement);
-    return adoptRefWillBeNoop(new HTMLDataListElement(document));
+    return new HTMLDataListElement(document);
 }
 
-PassRefPtrWillBeRawPtr<HTMLDataListOptionsCollection> HTMLDataListElement::options()
+HTMLDataListOptionsCollection* HTMLDataListElement::options()
 {
     return ensureCachedCollection<HTMLDataListOptionsCollection>(DataListOptions);
 }

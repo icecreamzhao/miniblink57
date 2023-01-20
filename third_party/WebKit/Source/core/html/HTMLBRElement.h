@@ -31,6 +31,7 @@ namespace blink {
 
 class CORE_EXPORT HTMLBRElement final : public HTMLElement {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     DECLARE_NODE_FACTORY(HTMLBRElement);
 
@@ -40,7 +41,9 @@ private:
     explicit HTMLBRElement(Document&);
 
     bool isPresentationAttribute(const QualifiedName&) const override;
-    void collectStyleForPresentationAttribute(const QualifiedName&, const AtomicString&, MutableStylePropertySet*) override;
+    void collectStyleForPresentationAttribute(const QualifiedName&,
+        const AtomicString&,
+        MutableStylePropertySet*) override;
 
     LayoutObject* createLayoutObject(const ComputedStyle&) override;
 };

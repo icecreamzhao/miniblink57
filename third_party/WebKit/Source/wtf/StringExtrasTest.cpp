@@ -23,25 +23,15 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "wtf/StringExtras.h"
 
 #include "testing/gtest/include/gtest/gtest.h"
 #include "wtf/text/CString.h"
 #include "wtf/text/WTFString.h"
-=======
-#include "config.h"
-#include "wtf/StringExtras.h"
-
-#include "wtf/text/CString.h"
-#include "wtf/text/WTFString.h"
-#include <gtest/gtest.h>
->>>>>>> miniblink49
 #include <limits>
 
 namespace WTF {
 
-<<<<<<< HEAD
 template <typename IntegerType>
 struct PrintfFormatTrait {
     static const char format[];
@@ -69,27 +59,12 @@ template <>
 struct PrintfFormatTrait<long long> {
     static const char format[];
 };
-=======
-template<typename IntegerType> struct PrintfFormatTrait { static const char format[]; };
-
-template<> struct PrintfFormatTrait<short> { static const char format[]; };
-const char PrintfFormatTrait<short>::format[] = "%hd";
-
-template<> struct PrintfFormatTrait<int> { static const char format[]; };
-const char PrintfFormatTrait<int>::format[] = "%d";
-
-template<> struct PrintfFormatTrait<long> { static const char format[]; };
-const char PrintfFormatTrait<long>::format[] = "%ld";
-
-template<> struct PrintfFormatTrait<long long> { static const char format[]; };
->>>>>>> miniblink49
 #if OS(WIN)
 const char PrintfFormatTrait<long long>::format[] = "%I64i";
 #else
 const char PrintfFormatTrait<long long>::format[] = "%lli";
 #endif // OS(WIN)
 
-<<<<<<< HEAD
 template <>
 struct PrintfFormatTrait<unsigned short> {
     static const char format[];
@@ -112,32 +87,14 @@ template <>
 struct PrintfFormatTrait<unsigned long long> {
     static const char format[];
 };
-=======
-template<> struct PrintfFormatTrait<unsigned short> { static const char format[]; };
-const char PrintfFormatTrait<unsigned short>::format[] = "%hu";
-
-template<> struct PrintfFormatTrait<unsigned> { static const char format[]; };
-const char PrintfFormatTrait<unsigned>::format[] = "%u";
-
-template<> struct PrintfFormatTrait<unsigned long> { static const char format[]; };
-const char PrintfFormatTrait<unsigned long>::format[] = "%lu";
-
-template<> struct PrintfFormatTrait<unsigned long long> { static const char format[]; };
->>>>>>> miniblink49
 #if OS(WIN)
 const char PrintfFormatTrait<unsigned long long>::format[] = "%I64u";
 #else
 const char PrintfFormatTrait<unsigned long long>::format[] = "%llu";
 #endif // OS(WIN)
 
-<<<<<<< HEAD
 // FIXME: use snprintf from StringExtras.h
 template <typename IntegerType>
-=======
-
-// FIXME: use snprintf from StringExtras.h
-template<typename IntegerType>
->>>>>>> miniblink49
 void testBoundaries()
 {
     const unsigned bufferSize = 256;
@@ -146,30 +103,18 @@ void testBoundaries()
 
     const IntegerType min = std::numeric_limits<IntegerType>::min();
     CString minStringData = String::number(min).latin1();
-<<<<<<< HEAD
     snprintf(buffer.data(), bufferSize, PrintfFormatTrait<IntegerType>::format,
         min);
-=======
-    snprintf(buffer.data(), bufferSize, PrintfFormatTrait<IntegerType>::format, min);
->>>>>>> miniblink49
     EXPECT_STREQ(buffer.data(), minStringData.data());
 
     const IntegerType max = std::numeric_limits<IntegerType>::max();
     CString maxStringData = String::number(max).latin1();
-<<<<<<< HEAD
     snprintf(buffer.data(), bufferSize, PrintfFormatTrait<IntegerType>::format,
         max);
     EXPECT_STREQ(buffer.data(), maxStringData.data());
 }
 
 template <typename IntegerType>
-=======
-    snprintf(buffer.data(), bufferSize, PrintfFormatTrait<IntegerType>::format, max);
-    EXPECT_STREQ(buffer.data(), maxStringData.data());
-}
-
-template<typename IntegerType>
->>>>>>> miniblink49
 void testNumbers()
 {
     const unsigned bufferSize = 256;
@@ -179,12 +124,8 @@ void testNumbers()
     for (int i = -100; i < 100; ++i) {
         const IntegerType number = static_cast<IntegerType>(i);
         CString numberStringData = String::number(number).latin1();
-<<<<<<< HEAD
         snprintf(buffer.data(), bufferSize, PrintfFormatTrait<IntegerType>::format,
             number);
-=======
-        snprintf(buffer.data(), bufferSize, PrintfFormatTrait<IntegerType>::format, number);
->>>>>>> miniblink49
         EXPECT_STREQ(buffer.data(), numberStringData.data());
     }
 }

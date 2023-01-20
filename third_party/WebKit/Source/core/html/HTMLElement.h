@@ -29,9 +29,11 @@
 namespace blink {
 
 class DocumentFragment;
+class ExceptionState;
+class FormAssociated;
 class HTMLFormElement;
 class HTMLMenuElement;
-class ExceptionState;
+class KeyboardEvent;
 
 enum TranslateAttributeMode {
     TranslateAttributeYes,
@@ -41,13 +43,17 @@ enum TranslateAttributeMode {
 
 class CORE_EXPORT HTMLElement : public Element {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     DECLARE_ELEMENT_FACTORY_WITH_TAGNAME(HTMLElement);
 
-    bool hasTagName(const HTMLQualifiedName& name) const { return hasLocalName(name.localName()); }
+    bool hasTagName(const HTMLQualifiedName& name) const
+    {
+        return hasLocalName(name.localName());
+    }
 
     String title() const final;
-    short tabIndex() const override;
+    int tabIndex() const override;
 
     void setInnerText(const String&, ExceptionState&);
     void setOuterText(const String&, ExceptionState&);
@@ -56,6 +62,10 @@ public:
 
     String contentEditable() const;
     void setContentEditable(const String&, ExceptionState&);
+    // For HTMLElement.prototype.isContentEditable. This matches to neither
+    // blink::isContentEditable() nor blink::isContentRichlyEditable().  Do not
+    // use this function in Blink.
+    bool isContentEditableForBinding() const;
 
     virtual bool draggable() const;
     void setDraggable(bool);
@@ -90,7 +100,8 @@ public:
     virtual bool isInteractiveContent() const;
     void defaultEventHandler(Event*) override;
 
-    static const AtomicString& eventNameForAttributeName(const QualifiedName& attrName);
+    static const AtomicString& eventNameForAttributeName(
+        const QualifiedName& attrName);
 
     bool matchesReadOnlyPseudoClass() const override;
     bool matchesReadWritePseudoClass() const override;
@@ -103,38 +114,63 @@ public:
 
     virtual String altText() const { return String(); }
 
+    int offsetLeftForBinding();
+    int offsetTopForBinding();
+    int offsetWidthForBinding();
+    int offsetHeightForBinding();
+
+    Element* unclosedOffsetParent();
+
+    virtual FormAssociated* toFormAssociatedOrNull() { return nullptr; };
+
 protected:
     HTMLElement(const QualifiedName& tagName, Document&, ConstructionType);
 
-    void addHTMLLengthToStyle(MutableStylePropertySet*, CSSPropertyID, const String& value);
-    void addHTMLColorToStyle(MutableStylePropertySet*, CSSPropertyID, const String& color);
+    enum AllowPercentage { DontAllowPercentageValues,
+        AllowPercentageValues };
+    void addHTMLLengthToStyle(MutableStylePropertySet*,
+        CSSPropertyID,
+        const String& value,
+        AllowPercentage = AllowPercentageValues);
+    void addHTMLColorToStyle(MutableStylePropertySet*,
+        CSSPropertyID,
+        const String& color);
 
-    void applyAlignmentAttributeToStyle(const AtomicString&, MutableStylePropertySet*);
-    void applyBorderAttributeToStyle(const AtomicString&, MutableStylePropertySet*);
+    void applyAlignmentAttributeToStyle(const AtomicString&,
+        MutableStylePropertySet*);
+    void applyBorderAttributeToStyle(const AtomicString&,
+        MutableStylePropertySet*);
 
-    void parseAttribute(const QualifiedName&, const AtomicString&) override;
+    void attributeChanged(const AttributeModificationParams&) override;
+    void parseAttribute(const AttributeModificationParams&) override;
+    static bool parseColorWithLegacyRules(const String& attributeValue,
+        Color& parsedColor);
     bool isPresentationAttribute(const QualifiedName&) const override;
-    void collectStyleForPresentationAttribute(const QualifiedName&, const AtomicString&, MutableStylePropertySet*) override;
+    void collectStyleForPresentationAttribute(const QualifiedName&,
+        const AtomicString&,
+        MutableStylePropertySet*) override;
     unsigned parseBorderWidthAttribute(const AtomicString&) const;
 
     void childrenChanged(const ChildrenChange&) override;
     void calculateAndAdjustDirectionality();
 
 private:
+    String debugNodeName() const final;
     String nodeName() const final;
 
     bool isHTMLElement() const = delete; // This will catch anyone doing an unnecessary check.
     bool isStyledElement() const = delete; // This will catch anyone doing an unnecessary check.
 
-    void mapLanguageAttributeToLocale(const AtomicString&, MutableStylePropertySet*);
+    void mapLanguageAttributeToLocale(const AtomicString&,
+        MutableStylePropertySet*);
 
-    PassRefPtrWillBeRawPtr<DocumentFragment> textToFragment(const String&, ExceptionState&);
+    DocumentFragment* textToFragment(const String&, ExceptionState&);
 
     bool selfOrAncestorHasDirAutoAttribute() const;
     void dirAttributeChanged(const AtomicString&);
     void adjustDirectionalityIfNeededAfterChildAttributeChanged(Element* child);
     void adjustDirectionalityIfNeededAfterChildrenChanged(const ChildrenChange&);
-    TextDirection directionality(Node** strongDirectionalityTextNode= 0) const;
+    TextDirection directionality(Node** strongDirectionalityTextNode = 0) const;
 
     TranslateAttributeMode translateAttributeMode() const;
 
@@ -143,13 +179,20 @@ private:
 
 DEFINE_ELEMENT_TYPE_CASTS(HTMLElement, isHTMLElement());
 
-template <typename T> bool isElementOfType(const HTMLElement&);
-template <> inline bool isElementOfType<const HTMLElement>(const HTMLElement&) { return true; }
+template <typename T>
+bool isElementOfType(const HTMLElement&);
+template <>
+inline bool isElementOfType<const HTMLElement>(const HTMLElement&)
+{
+    return true;
+}
 
-inline HTMLElement::HTMLElement(const QualifiedName& tagName, Document& document, ConstructionType type = CreateHTMLElement)
+inline HTMLElement::HTMLElement(const QualifiedName& tagName,
+    Document& document,
+    ConstructionType type = CreateHTMLElement)
     : Element(tagName, &document, type)
 {
-    ASSERT(!tagName.localName().isNull());
+    DCHECK(!tagName.localName().isNull());
 }
 
 inline bool Node::hasTagName(const HTMLQualifiedName& name) const
@@ -157,27 +200,52 @@ inline bool Node::hasTagName(const HTMLQualifiedName& name) const
     return isHTMLElement() && toHTMLElement(*this).hasTagName(name);
 }
 
-// Functor used to match HTMLElements with a specific HTML tag when using the ElementTraversal API.
+// Functor used to match HTMLElements with a specific HTML tag when using the
+// ElementTraversal API.
 class HasHTMLTagName {
+    STACK_ALLOCATED();
+
 public:
-    explicit HasHTMLTagName(const HTMLQualifiedName& tagName): m_tagName(tagName) { }
-    bool operator() (const HTMLElement& element) const { return element.hasTagName(m_tagName); }
+    explicit HasHTMLTagName(const HTMLQualifiedName& tagName)
+        : m_tagName(tagName)
+    {
+    }
+    bool operator()(const HTMLElement& element) const
+    {
+        return element.hasTagName(m_tagName);
+    }
+
 private:
     const HTMLQualifiedName& m_tagName;
 };
 
-// This requires isHTML*Element(const Element&) and isHTML*Element(const HTMLElement&).
-// When the input element is an HTMLElement, we don't need to check the namespace URI, just the local name.
-#define DEFINE_HTMLELEMENT_TYPE_CASTS_WITH_FUNCTION(thisType) \
-    inline bool is##thisType(const thisType* element); \
-    inline bool is##thisType(const thisType& element); \
-    inline bool is##thisType(const HTMLElement* element) { return element && is##thisType(*element); } \
-    inline bool is##thisType(const Node& node) { return node.isHTMLElement() ? is##thisType(toHTMLElement(node)) : false; } \
-    inline bool is##thisType(const Node* node) { return node && is##thisType(*node); } \
-    inline bool is##thisType(const Element* element) { return element && is##thisType(*element); } \
-    template<typename T> inline bool is##thisType(const PassRefPtr<T>& node) { return is##thisType(node.get()); } \
-    template<typename T> inline bool is##thisType(const RefPtr<T>& node) { return is##thisType(node.get()); } \
-    template <> inline bool isElementOfType<const thisType>(const HTMLElement& element) { return is##thisType(element); } \
+// This requires isHTML*Element(const Element&) and isHTML*Element(const
+// HTMLElement&).  When the input element is an HTMLElement, we don't need to
+// check the namespace URI, just the local name.
+#define DEFINE_HTMLELEMENT_TYPE_CASTS_WITH_FUNCTION(thisType)                    \
+    inline bool is##thisType(const thisType* element);                           \
+    inline bool is##thisType(const thisType& element);                           \
+    inline bool is##thisType(const HTMLElement* element)                         \
+    {                                                                            \
+        return element && is##thisType(*element);                                \
+    }                                                                            \
+    inline bool is##thisType(const Node& node)                                   \
+    {                                                                            \
+        return node.isHTMLElement() ? is##thisType(toHTMLElement(node)) : false; \
+    }                                                                            \
+    inline bool is##thisType(const Node* node)                                   \
+    {                                                                            \
+        return node && is##thisType(*node);                                      \
+    }                                                                            \
+    inline bool is##thisType(const Element* element)                             \
+    {                                                                            \
+        return element && is##thisType(*element);                                \
+    }                                                                            \
+    template <>                                                                  \
+    inline bool isElementOfType<const thisType>(const HTMLElement& element)      \
+    {                                                                            \
+        return is##thisType(element);                                            \
+    }                                                                            \
     DEFINE_ELEMENT_TYPE_CASTS_WITH_FUNCTION(thisType)
 
 } // namespace blink

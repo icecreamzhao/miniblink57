@@ -64,14 +64,6 @@ namespace vTune {
 
 v8::JitCodeEventHandler GetVtuneCodeEventHandler();
 
-<<<<<<< HEAD
 } // namespace vTune
 
 #endif // V8_VTUNE_H_
-=======
-}  // namespace vTune
-
-
-#endif  // V8_VTUNE_H_
-
->>>>>>> miniblink49

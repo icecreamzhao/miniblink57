@@ -5,7 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "SkFontStream.h"
 #include "SkEndian.h"
 #include "SkStream.h"
@@ -44,44 +43,6 @@ static bool read(SkStream* stream, void* buffer, size_t amount)
 
 static bool skip(SkStream* stream, size_t amount)
 {
-=======
-#include "SkEndian.h"
-#include "SkFontStream.h"
-#include "SkStream.h"
-
-struct SkSFNTHeader {
-    uint32_t    fVersion;
-    uint16_t    fNumTables;
-    uint16_t    fSearchRange;
-    uint16_t    fEntrySelector;
-    uint16_t    fRangeShift;
-};
-
-struct SkTTCFHeader {
-    uint32_t    fTag;
-    uint32_t    fVersion;
-    uint32_t    fNumOffsets;
-    uint32_t    fOffset0;   // the first of N (fNumOffsets)
-};
-
-union SkSharedTTHeader {
-    SkSFNTHeader    fSingle;
-    SkTTCFHeader    fCollection;
-};
-
-struct SkSFNTDirEntry {
-    uint32_t    fTag;
-    uint32_t    fChecksum;
-    uint32_t    fOffset;
-    uint32_t    fLength;
-};
-
-static bool read(SkStream* stream, void* buffer, size_t amount) {
-    return stream->read(buffer, amount) == amount;
-}
-
-static bool skip(SkStream* stream, size_t amount) {
->>>>>>> miniblink49
     return stream->skip(amount) == amount;
 }
 
@@ -92,12 +53,8 @@ static bool skip(SkStream* stream, size_t amount) {
 
     On an error, return 0 for number of tables, and ignore offsetToDir
  */
-<<<<<<< HEAD
 static int count_tables(SkStream* stream, int ttcIndex, size_t* offsetToDir)
 {
-=======
-static int count_tables(SkStream* stream, int ttcIndex, size_t* offsetToDir) {
->>>>>>> miniblink49
     SkASSERT(ttcIndex >= 0);
 
     SkAutoSMalloc<1024> storage(sizeof(SkSharedTTHeader));
@@ -147,15 +104,11 @@ static int count_tables(SkStream* stream, int ttcIndex, size_t* offsetToDir) {
 ///////////////////////////////////////////////////////////////////////////////
 
 struct SfntHeader {
-<<<<<<< HEAD
     SfntHeader()
         : fCount(0)
         , fDir(nullptr)
     {
     }
-=======
-    SfntHeader() : fCount(0), fDir(NULL) {}
->>>>>>> miniblink49
     ~SfntHeader() { sk_free(fDir); }
 
     /** If it returns true, then fCount and fDir are properly initialized.
@@ -164,12 +117,8 @@ struct SfntHeader {
 
         fDir will be automatically freed when this object is destroyed
      */
-<<<<<<< HEAD
     bool init(SkStream* stream, int ttcIndex)
     {
-=======
-    bool init(SkStream* stream, int ttcIndex) {
->>>>>>> miniblink49
         stream->rewind();
 
         size_t offsetToDir;
@@ -188,22 +137,14 @@ struct SfntHeader {
         return read(stream, fDir, size);
     }
 
-<<<<<<< HEAD
     int fCount;
-=======
-    int             fCount;
->>>>>>> miniblink49
     SkSFNTDirEntry* fDir;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 
-<<<<<<< HEAD
 int SkFontStream::CountTTCEntries(SkStream* stream)
 {
-=======
-int SkFontStream::CountTTCEntries(SkStream* stream) {
->>>>>>> miniblink49
     stream->rewind();
 
     SkSharedTTHeader shared;
@@ -216,23 +157,14 @@ int SkFontStream::CountTTCEntries(SkStream* stream) {
     if (SkSetFourByteTag('t', 't', 'c', 'f') == tag) {
         return SkEndian_SwapBE32(shared.fCollection.fNumOffsets);
     } else {
-<<<<<<< HEAD
         return 1; // normal 'sfnt' has 1 dir entry
-=======
-        return 1;   // normal 'sfnt' has 1 dir entry
->>>>>>> miniblink49
     }
 }
 
 int SkFontStream::GetTableTags(SkStream* stream, int ttcIndex,
-<<<<<<< HEAD
     SkFontTableTag tags[])
 {
     SfntHeader header;
-=======
-                               SkFontTableTag tags[]) {
-    SfntHeader  header;
->>>>>>> miniblink49
     if (!header.init(stream, ttcIndex)) {
         return 0;
     }
@@ -246,16 +178,10 @@ int SkFontStream::GetTableTags(SkStream* stream, int ttcIndex,
 }
 
 size_t SkFontStream::GetTableData(SkStream* stream, int ttcIndex,
-<<<<<<< HEAD
     SkFontTableTag tag,
     size_t offset, size_t length, void* data)
 {
     SfntHeader header;
-=======
-                                  SkFontTableTag tag,
-                                  size_t offset, size_t length, void* data) {
-    SfntHeader  header;
->>>>>>> miniblink49
     if (!header.init(stream, ttcIndex)) {
         return 0;
     }

@@ -25,9 +25,9 @@
 #ifndef StyleMultiColData_h
 #define StyleMultiColData_h
 
+#include "core/CoreExport.h"
 #include "core/style/BorderValue.h"
 #include "core/style/ComputedStyleConstants.h"
-#include "platform/Length.h"
 #include "wtf/PassRefPtr.h"
 #include "wtf/RefCounted.h"
 
@@ -35,20 +35,23 @@ namespace blink {
 
 // CSS3 Multi Column Layout
 
-class StyleMultiColData : public RefCounted<StyleMultiColData> {
+class CORE_EXPORT StyleMultiColData : public RefCounted<StyleMultiColData> {
 public:
-    static PassRefPtr<StyleMultiColData> create() { return adoptRef(new StyleMultiColData); }
-    PassRefPtr<StyleMultiColData> copy() const { return adoptRef(new StyleMultiColData(*this)); }
+    static PassRefPtr<StyleMultiColData> create()
+    {
+        return adoptRef(new StyleMultiColData);
+    }
+    PassRefPtr<StyleMultiColData> copy() const
+    {
+        return adoptRef(new StyleMultiColData(*this));
+    }
 
     bool operator==(const StyleMultiColData&) const;
-    bool operator!=(const StyleMultiColData &o) const
-    {
-        return !(*this == o);
-    }
+    bool operator!=(const StyleMultiColData& o) const { return !(*this == o); }
 
     unsigned short ruleWidth() const
     {
-        if (m_rule.style() == BNONE || m_rule.style() == BHIDDEN)
+        if (m_rule.style() == BorderStyleNone || m_rule.style() == BorderStyleHidden)
             return 0;
         return m_rule.width();
     }
@@ -64,9 +67,6 @@ public:
     unsigned m_normalGap : 1;
     unsigned m_fill : 1; // ColumnFill
     unsigned m_columnSpan : 1;
-    unsigned m_breakBefore : 2; // EPageBreak
-    unsigned m_breakAfter : 2; // EPageBreak
-    unsigned m_breakInside : 2; // EPageBreak
 
 private:
     StyleMultiColData();

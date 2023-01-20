@@ -14,7 +14,6 @@
 namespace v8 {
 namespace internal {
 
-<<<<<<< HEAD
     RUNTIME_FUNCTION(Runtime_DateCurrentTime)
     {
         HandleScope scope(isolate);
@@ -24,13 +23,3 @@ namespace internal {
 
 } // namespace internal
 } // namespace v8
-=======
-RUNTIME_FUNCTION(Runtime_DateCurrentTime) {
-  HandleScope scope(isolate);
-  DCHECK_EQ(0, args.length());
-  return *isolate->factory()->NewNumber(JSDate::CurrentTimeValue(isolate));
-}
-
-}  // namespace internal
-}  // namespace v8
->>>>>>> miniblink49

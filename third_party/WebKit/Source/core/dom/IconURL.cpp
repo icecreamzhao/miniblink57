@@ -28,17 +28,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/dom/IconURL.h"
 
 namespace blink {
 
 IconURL IconURL::defaultFavicon(const KURL& documentURL)
 {
-    ASSERT(documentURL.protocolIsInHTTPFamily());
+    DCHECK(documentURL.protocolIsInHTTPFamily());
     KURL url;
     bool couldSetProtocol = url.setProtocol(documentURL.protocol());
-    ASSERT_UNUSED(couldSetProtocol, couldSetProtocol);
+    DCHECK(couldSetProtocol);
     url.setHost(documentURL.host());
     if (documentURL.hasPort())
         url.setPort(documentURL.port());
@@ -51,12 +50,7 @@ IconURL IconURL::defaultFavicon(const KURL& documentURL)
 
 bool operator==(const IconURL& lhs, const IconURL& rhs)
 {
-    return lhs.m_iconType == rhs.m_iconType
-        && lhs.m_isDefaultIcon == rhs.m_isDefaultIcon
-        && lhs.m_iconURL == rhs.m_iconURL
-        && lhs.m_sizes == rhs.m_sizes
-        && lhs.m_mimeType == rhs.m_mimeType;
+    return lhs.m_iconType == rhs.m_iconType && lhs.m_isDefaultIcon == rhs.m_isDefaultIcon && lhs.m_iconURL == rhs.m_iconURL && lhs.m_sizes == rhs.m_sizes && lhs.m_mimeType == rhs.m_mimeType;
 }
 
-}
-
+} // namespace blink

@@ -14,29 +14,18 @@
 #include "Path2D.h"
 #include "SkCanvas.h"
 
-<<<<<<< HEAD
 // Extracts a C string from a V8 Utf8Value.
 // TODO(jcgregrio) Currently dup'd in two files, fix.
 static const char* to_cstring(const v8::String::Utf8Value& value)
 {
-=======
-
-// Extracts a C string from a V8 Utf8Value.
-// TODO(jcgregrio) Currently dup'd in two files, fix.
-static const char* to_cstring(const v8::String::Utf8Value& value) {
->>>>>>> miniblink49
     return *value ? *value : "<string conversion failed>";
 }
 
 v8::Persistent<v8::ObjectTemplate> JsContext::gContextTemplate;
 
 // Wraps 'this' in a Javascript object.
-<<<<<<< HEAD
 v8::Handle<v8::Object> JsContext::wrap()
 {
-=======
-v8::Handle<v8::Object> JsContext::wrap() {
->>>>>>> miniblink49
     // Handle scope for temporary handles.
     v8::EscapableHandleScope handleScope(fGlobal->getIsolate());
 
@@ -52,12 +41,7 @@ v8::Handle<v8::Object> JsContext::wrap() {
 
         gContextTemplate.Reset(fGlobal->getIsolate(), localTemplate);
     }
-<<<<<<< HEAD
     v8::Handle<v8::ObjectTemplate> templ = v8::Local<v8::ObjectTemplate>::New(fGlobal->getIsolate(), gContextTemplate);
-=======
-    v8::Handle<v8::ObjectTemplate> templ =
-            v8::Local<v8::ObjectTemplate>::New(fGlobal->getIsolate(), gContextTemplate);
->>>>>>> miniblink49
 
     // Create an empty JsContext wrapper.
     v8::Local<v8::Object> result = templ->NewInstance();
@@ -76,12 +60,8 @@ v8::Handle<v8::Object> JsContext::wrap() {
     return handleScope.Escape(result);
 }
 
-<<<<<<< HEAD
 void JsContext::onDraw(SkCanvas* canvas)
 {
-=======
-void JsContext::onDraw(SkCanvas* canvas) {
->>>>>>> miniblink49
     // Record canvas and window in this.
     fCanvas = canvas;
 
@@ -104,12 +84,7 @@ void JsContext::onDraw(SkCanvas* canvas) {
     // and one argument, this JsContext.
     const int argc = 1;
     v8::Handle<v8::Value> argv[argc] = { contextObj };
-<<<<<<< HEAD
     v8::Local<v8::Function> onDraw = v8::Local<v8::Function>::New(fGlobal->getIsolate(), fOnDraw);
-=======
-    v8::Local<v8::Function> onDraw =
-            v8::Local<v8::Function>::New(fGlobal->getIsolate(), fOnDraw);
->>>>>>> miniblink49
     v8::Handle<v8::Value> result = onDraw->Call(context->Global(), argc, argv);
 
     // Handle any exceptions or output.
@@ -130,12 +105,8 @@ void JsContext::onDraw(SkCanvas* canvas) {
 }
 
 // Fetch the onDraw function from the global context.
-<<<<<<< HEAD
 bool JsContext::initialize()
 {
-=======
-bool JsContext::initialize() {
->>>>>>> miniblink49
 
     // Create a stack-allocated handle scope.
     v8::HandleScope handleScope(fGlobal->getIsolate());

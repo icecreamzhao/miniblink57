@@ -32,7 +32,6 @@
 #ifndef WTF_LeakAnnotations_h
 #define WTF_LeakAnnotations_h
 
-<<<<<<< HEAD
 // This file defines macros for working with LeakSanitizer, allowing memory
 // and allocations to be registered as exempted from LSan consideration.
 
@@ -41,29 +40,10 @@
 #include "wtf/AddressSanitizer.h"
 #include "wtf/TypeTraits.h"
 #endif
-=======
-// This file defines macros which can be used to annotate intentional memory
-// leaks. Support for annotations is implemented in HeapChecker and
-// LeakSanitizer. Annotated objects will be treated as a source of live
-// pointers, i.e. any heap objects reachable by following pointers from an
-// annotated object will not be reported as leaks.
-//
-// WTF_ANNOTATE_SCOPED_MEMORY_LEAK: all allocations made in the current scope
-// will be annotated as leaks.
-// WTF_ANNOTATE_LEAKING_OBJECT_PTR(X): the heap object referenced by pointer X
-// will be annotated as a leak.
-//
-// Note that HeapChecker will report a fatal error if an object which has been
-// annotated with ANNOTATE_LEAKING_OBJECT_PTR is later deleted (but
-// LeakSanitizer won't).
-
-#include "wtf/Noncopyable.h"
->>>>>>> miniblink49
 
 namespace WTF {
 
 #if USE(LEAK_SANITIZER)
-<<<<<<< HEAD
 class LeakSanitizerDisabler {
     WTF_MAKE_NONCOPYABLE(LeakSanitizerDisabler);
 
@@ -156,40 +136,6 @@ public:
 #define WTF_INTERNAL_LEAK_SANITIZER_DISABLED_SCOPE
 #define LEAK_SANITIZER_IGNORE_OBJECT(X) ((void)0)
 #define LEAK_SANITIZER_REGISTER_STATIC_LOCAL(Type, Object) Object
-=======
-extern "C" {
-void __lsan_disable();
-void __lsan_enable();
-void __lsan_ignore_object(const void *p);
-} // extern "C"
-
-class LeakSanitizerDisabler {
-    WTF_MAKE_NONCOPYABLE(LeakSanitizerDisabler);
-public:
-    LeakSanitizerDisabler()
-    {
-        __lsan_disable();
-    }
-
-    ~LeakSanitizerDisabler()
-    {
-        __lsan_enable();
-    }
-};
-
-#define WTF_ANNOTATE_SCOPED_MEMORY_LEAK \
-        WTF::LeakSanitizerDisabler leakSanitizerDisabler; static_cast<void>(0)
-
-#define WTF_ANNOTATE_LEAKING_OBJECT_PTR(X) \
-    WTF::__lsan_ignore_object(X)
-
-#else // USE(LEAK_SANITIZER)
-
-// If Leak Sanitizer is not being used, the annotations should be no-ops.
-#define WTF_ANNOTATE_SCOPED_MEMORY_LEAK
-#define WTF_ANNOTATE_LEAKING_OBJECT_PTR(X)
-
->>>>>>> miniblink49
 #endif // USE(LEAK_SANITIZER)
 
 } // namespace WTF

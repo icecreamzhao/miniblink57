@@ -43,7 +43,6 @@
 namespace v8 {
 namespace base {
 
-<<<<<<< HEAD
     std::vector<OS::SharedLibraryAddress> OS::GetSharedLibraryAddresses()
     {
         std::vector<SharedLibraryAddress> result;
@@ -102,37 +101,3 @@ namespace base {
 
 } // namespace base
 } // namespace v8
-=======
-std::vector<OS::SharedLibraryAddress> OS::GetSharedLibraryAddresses() {
-  std::vector<SharedLibraryAddress> result;
-  unsigned int images_count = _dyld_image_count();
-  for (unsigned int i = 0; i < images_count; ++i) {
-    const mach_header* header = _dyld_get_image_header(i);
-    if (header == nullptr) continue;
-#if V8_HOST_ARCH_X64
-    uint64_t size;
-    char* code_ptr = getsectdatafromheader_64(
-        reinterpret_cast<const mach_header_64*>(header), SEG_TEXT, SECT_TEXT,
-        &size);
-#else
-    unsigned int size;
-    char* code_ptr = getsectdatafromheader(header, SEG_TEXT, SECT_TEXT, &size);
-#endif
-    if (code_ptr == nullptr) continue;
-    const intptr_t slide = _dyld_get_image_vmaddr_slide(i);
-    const uintptr_t start = reinterpret_cast<uintptr_t>(code_ptr) + slide;
-    result.push_back(SharedLibraryAddress(_dyld_get_image_name(i), start,
-                                          start + size, slide));
-  }
-  return result;
-}
-
-void OS::SignalCodeMovingGC() {}
-
-TimezoneCache* OS::CreateTimezoneCache() {
-  return new PosixDefaultTimezoneCache();
-}
-
-}  // namespace base
-}  // namespace v8
->>>>>>> miniblink49

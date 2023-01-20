@@ -43,11 +43,7 @@
 
 namespace WTF {
 class CString;
-<<<<<<< HEAD
 class CStringImpl;
-=======
-class CStringBuffer;
->>>>>>> miniblink49
 }
 
 namespace blink {
@@ -65,14 +61,7 @@ public:
 
     WebCString() { }
 
-<<<<<<< HEAD
     WebCString(const char* data, size_t len) { assign(data, len); }
-=======
-    WebCString(const char* data, size_t len)
-    {
-        assign(data, len);
-    }
->>>>>>> miniblink49
 
     WebCString(const WebCString& s) { assign(s); }
 
@@ -130,13 +119,8 @@ public:
 #endif
 
 private:
-<<<<<<< HEAD
     BLINK_COMMON_EXPORT void assign(WTF::CStringImpl*);
     WebPrivatePtr<WTF::CStringImpl> m_private;
-=======
-    BLINK_COMMON_EXPORT void assign(WTF::CStringBuffer*);
-    WebPrivatePtr<WTF::CStringBuffer> m_private;
->>>>>>> miniblink49
 };
 
 inline bool operator<(const WebCString& a, const WebCString& b)

@@ -5,7 +5,6 @@
 #ifndef MediaDevices_h
 #define MediaDevices_h
 
-<<<<<<< HEAD
 #include "bindings/core/v8/ActiveScriptWrappable.h"
 #include "bindings/core/v8/ScriptPromise.h"
 #include "core/dom/SuspendableObject.h"
@@ -77,30 +76,6 @@ private:
     bool m_stopped;
     Member<AsyncMethodRunner<MediaDevices>> m_dispatchScheduledEventRunner;
     HeapVector<Member<Event>> m_scheduledEvents;
-=======
-#include "bindings/core/v8/ScriptPromise.h"
-#include "bindings/core/v8/ScriptWrappable.h"
-
-namespace blink {
-
-class Dictionary;
-class ScriptState;
-
-class MediaDevices final : public GarbageCollected<MediaDevices>, public ScriptWrappable {
-    DEFINE_WRAPPERTYPEINFO();
-public:
-    static MediaDevices* create()
-    {
-        return new MediaDevices();
-    }
-
-    ScriptPromise enumerateDevices(ScriptState*);
-    ScriptPromise getUserMedia(ScriptState*, const Dictionary&, ExceptionState&);
-    DEFINE_INLINE_TRACE() { }
-
-private:
-    MediaDevices() { }
->>>>>>> miniblink49
 };
 
 } // namespace blink

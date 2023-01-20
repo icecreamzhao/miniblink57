@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /* libpng 1.6.22rc01 STANDARD API DEFINITION */
 
 /* pnglibconf.h - library build configuration */
@@ -6,15 +5,6 @@
 /* Libpng version 1.6.22rc01 - May 14, 2016 */
 
 /* Copyright (c) 1998-2015 Glenn Randers-Pehrson */
-=======
-/* libpng 1.6.16 STANDARD API DEFINITION */
-
-/* pnglibconf.h - library build configuration */
-
-/* Libpng version 1.6.16 - December 22, 2014 */
-
-/* Copyright (c) 1998-2014 Glenn Randers-Pehrson */
->>>>>>> miniblink49
 
 /* This code is released under the libpng license. */
 /* For conditions of distribution and use, see the disclaimer */
@@ -107,19 +97,10 @@
 #define PNG_READ_tIME_SUPPORTED
 #define PNG_READ_tRNS_SUPPORTED
 #define PNG_READ_zTXt_SUPPORTED
-<<<<<<< HEAD
-=======
-/*#undef PNG_SAFE_LIMITS_SUPPORTED*/
->>>>>>> miniblink49
 #define PNG_SAVE_INT_32_SUPPORTED
 #define PNG_SAVE_UNKNOWN_CHUNKS_SUPPORTED
 #define PNG_SEQUENTIAL_READ_SUPPORTED
 #define PNG_SETJMP_SUPPORTED
-<<<<<<< HEAD
-=======
-#define PNG_SET_CHUNK_CACHE_LIMIT_SUPPORTED
-#define PNG_SET_CHUNK_MALLOC_LIMIT_SUPPORTED
->>>>>>> miniblink49
 #define PNG_SET_OPTION_SUPPORTED
 #define PNG_SET_UNKNOWN_CHUNKS_SUPPORTED
 #define PNG_SET_USER_LIMITS_SUPPORTED
@@ -128,10 +109,7 @@
 #define PNG_SIMPLIFIED_READ_SUPPORTED
 #define PNG_SIMPLIFIED_WRITE_AFIRST_SUPPORTED
 #define PNG_SIMPLIFIED_WRITE_BGR_SUPPORTED
-<<<<<<< HEAD
 #define PNG_SIMPLIFIED_WRITE_STDIO_SUPPORTED
-=======
->>>>>>> miniblink49
 #define PNG_SIMPLIFIED_WRITE_SUPPORTED
 #define PNG_STDIO_SUPPORTED
 #define PNG_STORE_UNKNOWN_CHUNKS_SUPPORTED
@@ -149,10 +127,7 @@
 #define PNG_WRITE_BGR_SUPPORTED
 #define PNG_WRITE_CHECK_FOR_INVALID_INDEX_SUPPORTED
 #define PNG_WRITE_COMPRESSED_TEXT_SUPPORTED
-<<<<<<< HEAD
 #define PNG_WRITE_CUSTOMIZE_COMPRESSION_SUPPORTED
-=======
->>>>>>> miniblink49
 #define PNG_WRITE_CUSTOMIZE_ZTXT_COMPRESSION_SUPPORTED
 #define PNG_WRITE_FILLER_SUPPORTED
 #define PNG_WRITE_FILTER_SUPPORTED
@@ -211,35 +186,24 @@
 /* end of options */
 /* settings */
 #define PNG_API_RULE 0
-<<<<<<< HEAD
-=======
-#define PNG_COST_SHIFT 3
->>>>>>> miniblink49
 #define PNG_DEFAULT_READ_MACROS 1
 #define PNG_GAMMA_THRESHOLD_FIXED 5000
 #define PNG_IDAT_READ_SIZE PNG_ZBUF_SIZE
 #define PNG_INFLATE_BUF_SIZE 1024
-<<<<<<< HEAD
 #define PNG_LINKAGE_API extern
 #define PNG_LINKAGE_CALLBACK extern
 #define PNG_LINKAGE_DATA extern
 #define PNG_LINKAGE_FUNCTION extern
-=======
->>>>>>> miniblink49
 #define PNG_MAX_GAMMA_8 11
 #define PNG_QUANTIZE_BLUE_BITS 5
 #define PNG_QUANTIZE_GREEN_BITS 5
 #define PNG_QUANTIZE_RED_BITS 5
 #define PNG_TEXT_Z_DEFAULT_COMPRESSION (-1)
 #define PNG_TEXT_Z_DEFAULT_STRATEGY 0
-<<<<<<< HEAD
 #define PNG_USER_CHUNK_CACHE_MAX 1000
 #define PNG_USER_CHUNK_MALLOC_MAX 8000000
 #define PNG_USER_HEIGHT_MAX 1000000
 #define PNG_USER_WIDTH_MAX 1000000
-=======
-#define PNG_WEIGHT_SHIFT 8
->>>>>>> miniblink49
 #define PNG_ZBUF_SIZE 8192
 #define PNG_ZLIB_VERNUM 0 /* unknown */
 #define PNG_Z_DEFAULT_COMPRESSION (-1)
@@ -249,17 +213,9 @@
 #define PNG_sRGB_PROFILE_CHECKS 2
 /* end of settings */
 
-<<<<<<< HEAD
 /* Skia-specific settings */
 #define PNG_PREFIX
 #include "pngprefix.h"
 /* end of Skia-specific settings */
-=======
-/* custom settings */
-#define PNG_ARM_NEON_API_SUPPORTED
-#define PNG_ARM_NEON_CHECK_SUPPORTED
-#define PNG_PREFIX skia_
-/* end of custom settings */
->>>>>>> miniblink49
 
 #endif /* PNGLCONF_H */

@@ -35,7 +35,6 @@ inline WebSandboxFlags operator&(WebSandboxFlags a, WebSandboxFlags b)
     return static_cast<WebSandboxFlags>(static_cast<int>(a) & static_cast<int>(b));
 }
 
-<<<<<<< HEAD
 inline WebSandboxFlags operator|(WebSandboxFlags a, WebSandboxFlags b)
 {
     return static_cast<WebSandboxFlags>(static_cast<int>(a) | static_cast<int>(b));
@@ -46,8 +45,6 @@ inline WebSandboxFlags& operator|=(WebSandboxFlags& a, WebSandboxFlags b)
     return a = a | b;
 }
 
-=======
->>>>>>> miniblink49
 inline WebSandboxFlags operator~(WebSandboxFlags flags)
 {
     return static_cast<WebSandboxFlags>(~static_cast<int>(flags));

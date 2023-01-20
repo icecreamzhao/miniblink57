@@ -34,8 +34,6 @@
     NoInterfaceObject, // Always used on target of 'implements'
 ] interface GlobalEventHandlers {
     attribute EventHandler onabort;
-    [RuntimeEnabled=RequestAutocomplete] attribute EventHandler onautocomplete;
-    [RuntimeEnabled=RequestAutocomplete] attribute EventHandler onautocompleteerror;
     attribute EventHandler onblur;
     attribute EventHandler oncancel;
     attribute EventHandler oncanplay;
@@ -80,14 +78,6 @@
     attribute EventHandler onpause;
     attribute EventHandler onplay;
     attribute EventHandler onplaying;
-    [RuntimeEnabled=PointerEvent] attribute EventHandler onpointercancel;
-    [RuntimeEnabled=PointerEvent] attribute EventHandler onpointerdown;
-    [RuntimeEnabled=PointerEvent] attribute EventHandler onpointerenter;
-    [RuntimeEnabled=PointerEvent] attribute EventHandler onpointerleave;
-    [RuntimeEnabled=PointerEvent] attribute EventHandler onpointermove;
-    [RuntimeEnabled=PointerEvent] attribute EventHandler onpointerout;
-    [RuntimeEnabled=PointerEvent] attribute EventHandler onpointerover;
-    [RuntimeEnabled=PointerEvent] attribute EventHandler onpointerup;
     attribute EventHandler onprogress;
     attribute EventHandler onratechange;
     attribute EventHandler onreset;
@@ -105,4 +95,28 @@
     attribute EventHandler ontoggle;
     attribute EventHandler onvolumechange;
     attribute EventHandler onwaiting;
+
+    // auxclick
+    // https://wicg.github.io/auxclick/
+    [RuntimeEnabled=Auxclick] attribute EventHandler onauxclick;
+
+    // Pointer Events
+    // https://w3c.github.io/pointerevents/#extensions-to-the-globaleventhandlers-interface
+    [RuntimeEnabled=PointerEvent] attribute EventHandler ongotpointercapture;
+    [RuntimeEnabled=PointerEvent] attribute EventHandler onlostpointercapture;
+    [RuntimeEnabled=PointerEvent] attribute EventHandler onpointerdown;
+    [RuntimeEnabled=PointerEvent] attribute EventHandler onpointermove;
+    [RuntimeEnabled=PointerEvent] attribute EventHandler onpointerup;
+    [RuntimeEnabled=PointerEvent] attribute EventHandler onpointercancel;
+    [RuntimeEnabled=PointerEvent] attribute EventHandler onpointerover;
+    [RuntimeEnabled=PointerEvent] attribute EventHandler onpointerout;
+    [RuntimeEnabled=PointerEvent] attribute EventHandler onpointerenter;
+    [RuntimeEnabled=PointerEvent] attribute EventHandler onpointerleave;
+
+    // Touch Events
+    // https://w3c.github.io/touch-events/#extensions-to-the-globaleventhandlers-interface
+    [RuntimeEnabled=TouchEventFeatureDetection] attribute EventHandler ontouchcancel;
+    [RuntimeEnabled=TouchEventFeatureDetection] attribute EventHandler ontouchend;
+    [RuntimeEnabled=TouchEventFeatureDetection] attribute EventHandler ontouchmove;
+    [RuntimeEnabled=TouchEventFeatureDetection] attribute EventHandler ontouchstart;
 };

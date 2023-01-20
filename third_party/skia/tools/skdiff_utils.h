@@ -9,39 +9,23 @@
 #define skdiff_utils_DEFINED
 
 #include "skdiff.h"
-<<<<<<< HEAD
-=======
-#include "SkImageDecoder.h"
->>>>>>> miniblink49
 
 class SkBitmap;
 class SkData;
 class SkString;
 
-<<<<<<< HEAD
 /** Returns true if the two buffers passed in are both non-nullptr,
-=======
-/** Returns true if the two buffers passed in are both non-NULL,
->>>>>>> miniblink49
  *  have the same length, and contain exactly the same byte values.
  */
 bool are_buffers_equal(SkData* skdata1, SkData* skdata2);
 
 /** Reads the file at the given path and returns its complete contents as an
-<<<<<<< HEAD
  *  SkData object (or returns nullptr on error).
-=======
- *  SkData object (or returns NULL on error).
->>>>>>> miniblink49
  */
 SkData* read_file(const char* file_path);
 
 /** Decodes the fileBits into the resource.fBitmap. Returns false on failure. */
-<<<<<<< HEAD
 bool get_bitmap(SkData* fileBits, DiffResource& resource, bool sizeOnly);
-=======
-bool get_bitmap(SkData* fileBits, DiffResource& resource, SkImageDecoder::Mode mode);
->>>>>>> miniblink49
 
 /** Writes the bitmap as a PNG to the path specified. */
 bool write_bitmap(const SkString& path, const SkBitmap& bitmap);
@@ -60,16 +44,9 @@ SkString filename_to_white_filename(const SkString& filename);
  *  If !outputDir.isEmpty(), writes out difference and white images.
  */
 void create_and_write_diff_image(DiffRecord* drp,
-<<<<<<< HEAD
     DiffMetricProc dmp,
     const int colorThreshold,
     const SkString& outputDir,
     const SkString& filename);
-=======
-                                 DiffMetricProc dmp,
-                                 const int colorThreshold,
-                                 const SkString& outputDir,
-                                 const SkString& filename);
->>>>>>> miniblink49
 
 #endif

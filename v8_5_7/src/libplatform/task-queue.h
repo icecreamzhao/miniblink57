@@ -11,11 +11,7 @@
 #include "src/base/macros.h"
 #include "src/base/platform/mutex.h"
 #include "src/base/platform/semaphore.h"
-<<<<<<< HEAD
 //#include "testing/gtest/include/gtest/gtest_prod.h"
-=======
-#include "testing/gtest/include/gtest/gtest_prod.h"
->>>>>>> miniblink49
 
 namespace v8 {
 
@@ -39,11 +35,7 @@ class V8_PLATFORM_EXPORT TaskQueue {
   void Terminate();
 
  private:
-<<<<<<< HEAD
   //FRIEND_TEST(WorkerThreadTest, PostSingleTask);
-=======
-  FRIEND_TEST(WorkerThreadTest, PostSingleTask);
->>>>>>> miniblink49
 
   void BlockUntilQueueEmptyForTesting();
 

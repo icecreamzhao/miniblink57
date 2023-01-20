@@ -25,15 +25,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "platform/transforms/TransformationMatrix.h"
 #if HAVE(MIPS_MSA_INTRINSICS)
 #include "platform/cpu/mips/CommonMacrosMSA.h"
 #endif
-=======
-#include "config.h"
-#include "platform/transforms/TransformationMatrix.h"
->>>>>>> miniblink49
 
 #include "platform/geometry/FloatBox.h"
 #include "platform/geometry/FloatQuad.h"
@@ -41,7 +36,6 @@
 #include "platform/geometry/IntRect.h"
 #include "platform/geometry/LayoutRect.h"
 #include "platform/transforms/AffineTransform.h"
-<<<<<<< HEAD
 #include "platform/transforms/Rotation.h"
 
 #include "wtf/Assertions.h"
@@ -50,11 +44,6 @@
 
 #include <cmath>
 #include <cstdlib>
-=======
-
-#include "wtf/Assertions.h"
-#include "wtf/MathExtras.h"
->>>>>>> miniblink49
 
 #if CPU(X86_64)
 #include <emmintrin.h>
@@ -65,7 +54,6 @@ namespace blink {
 //
 // Supporting Math Functions
 //
-<<<<<<< HEAD
 // This is a set of function from various places (attributed inline) to do
 // things like inversion and decomposition of a 4x4 matrix. They are used
 // throughout the code
@@ -89,26 +77,6 @@ namespace blink {
 // This class uses a 2 dimensional array internally to store the elements of the
 // matrix.  The first index into the array refers to the column that the element
 // lies in; the second index refers to the row.
-=======
-// This is a set of function from various places (attributed inline) to do things like
-// inversion and decomposition of a 4x4 matrix. They are used throughout the code
-//
-
-//
-// Adapted from Matrix Inversion by Richard Carling, Graphics Gems <http://tog.acm.org/GraphicsGems/index.html>.
-
-// EULA: The Graphics Gems code is copyright-protected. In other words, you cannot claim the text of the code
-// as your own and resell it. Using the code is permitted in any program, product, or library, non-commercial
-// or commercial. Giving credit is not required, though is a nice gesture. The code comes as-is, and if there
-// are any flaws or problems with any Gems code, nobody involved with Gems - authors, editors, publishers, or
-// webmasters - are to be held responsible. Basically, don't be a jerk, and remember that anything free comes
-// with no guarantee.
-
-// A clarification about the storage of matrix elements
-//
-// This class uses a 2 dimensional array internally to store the elements of the matrix.  The first index into
-// the array refers to the column that the element lies in; the second index refers to the row.
->>>>>>> miniblink49
 //
 // In other words, this is the layout of the matrix:
 //
@@ -120,11 +88,7 @@ namespace blink {
 typedef double Vector4[4];
 typedef double Vector3[3];
 
-<<<<<<< HEAD
 const double SmallNumber = 1.e-8;
-=======
-const double SMALL_NUMBER = 1.e-8;
->>>>>>> miniblink49
 
 // inverse(original_matrix, inverse_matrix)
 //
@@ -152,7 +116,6 @@ static double determinant2x2(double a, double b, double c, double d)
 //      | a2,  b2,  c2 |
 //      | a3,  b3,  c3 |
 
-<<<<<<< HEAD
 static double determinant3x3(double a1,
     double a2,
     double a3,
@@ -164,13 +127,6 @@ static double determinant3x3(double a1,
     double c3)
 {
     return a1 * determinant2x2(b2, b3, c2, c3) - b1 * determinant2x2(a2, a3, c2, c3) + c1 * determinant2x2(a2, a3, b2, b3);
-=======
-static double determinant3x3(double a1, double a2, double a3, double b1, double b2, double b3, double c1, double c2, double c3)
-{
-    return a1 * determinant2x2(b2, b3, c2, c3)
-         - b1 * determinant2x2(a2, a3, c2, c3)
-         + c1 * determinant2x2(a2, a3, b2, b3);
->>>>>>> miniblink49
 }
 
 //  double = determinant4x4(matrix)
@@ -202,19 +158,10 @@ static double determinant4x4(const TransformationMatrix::Matrix4& m)
     double c4 = m[3][2];
     double d4 = m[3][3];
 
-<<<<<<< HEAD
     return a1 * determinant3x3(b2, b3, b4, c2, c3, c4, d2, d3, d4) - b1 * determinant3x3(a2, a3, a4, c2, c3, c4, d2, d3, d4) + c1 * determinant3x3(a2, a3, a4, b2, b3, b4, d2, d3, d4) - d1 * determinant3x3(a2, a3, a4, b2, b3, b4, c2, c3, c4);
 }
 
 #if !CPU(ARM64)
-=======
-    return a1 * determinant3x3(b2, b3, b4, c2, c3, c4, d2, d3, d4)
-         - b1 * determinant3x3(a2, a3, a4, c2, c3, c4, d2, d3, d4)
-         + c1 * determinant3x3(a2, a3, a4, b2, b3, b4, d2, d3, d4)
-         - d1 * determinant3x3(a2, a3, a4, b2, b3, b4, c2, c3, c4);
-}
-
->>>>>>> miniblink49
 // adjoint( original_matrix, inverse_matrix )
 //
 //   calculate the adjoint of a 4x4 matrix
@@ -231,12 +178,8 @@ static double determinant4x4(const TransformationMatrix::Matrix4& m)
 //  The matrix B = (b  ) is the adjoint of A
 //                   ij
 
-<<<<<<< HEAD
 static inline void adjoint(const TransformationMatrix::Matrix4& matrix,
     TransformationMatrix::Matrix4& result)
-=======
-static inline void adjoint(const TransformationMatrix::Matrix4& matrix, TransformationMatrix::Matrix4& result)
->>>>>>> miniblink49
 {
     // Assign to individual variable names to aid
     // selecting correct values
@@ -261,7 +204,6 @@ static inline void adjoint(const TransformationMatrix::Matrix4& matrix, Transfor
     double d4 = matrix[3][3];
 
     // Row column labeling reversed since we transpose rows & columns
-<<<<<<< HEAD
     result[0][0] = determinant3x3(b2, b3, b4, c2, c3, c4, d2, d3, d4);
     result[1][0] = -determinant3x3(a2, a3, a4, c2, c3, c4, d2, d3, d4);
     result[2][0] = determinant3x3(a2, a3, a4, b2, b3, b4, d2, d3, d4);
@@ -287,42 +229,13 @@ static inline void adjoint(const TransformationMatrix::Matrix4& matrix, Transfor
 // Returns false if the matrix is not invertible
 static bool inverse(const TransformationMatrix::Matrix4& matrix,
     TransformationMatrix::Matrix4& result)
-=======
-    result[0][0]  =   determinant3x3(b2, b3, b4, c2, c3, c4, d2, d3, d4);
-    result[1][0]  = - determinant3x3(a2, a3, a4, c2, c3, c4, d2, d3, d4);
-    result[2][0]  =   determinant3x3(a2, a3, a4, b2, b3, b4, d2, d3, d4);
-    result[3][0]  = - determinant3x3(a2, a3, a4, b2, b3, b4, c2, c3, c4);
-
-    result[0][1]  = - determinant3x3(b1, b3, b4, c1, c3, c4, d1, d3, d4);
-    result[1][1]  =   determinant3x3(a1, a3, a4, c1, c3, c4, d1, d3, d4);
-    result[2][1]  = - determinant3x3(a1, a3, a4, b1, b3, b4, d1, d3, d4);
-    result[3][1]  =   determinant3x3(a1, a3, a4, b1, b3, b4, c1, c3, c4);
-
-    result[0][2]  =   determinant3x3(b1, b2, b4, c1, c2, c4, d1, d2, d4);
-    result[1][2]  = - determinant3x3(a1, a2, a4, c1, c2, c4, d1, d2, d4);
-    result[2][2]  =   determinant3x3(a1, a2, a4, b1, b2, b4, d1, d2, d4);
-    result[3][2]  = - determinant3x3(a1, a2, a4, b1, b2, b4, c1, c2, c4);
-
-    result[0][3]  = - determinant3x3(b1, b2, b3, c1, c2, c3, d1, d2, d3);
-    result[1][3]  =   determinant3x3(a1, a2, a3, c1, c2, c3, d1, d2, d3);
-    result[2][3]  = - determinant3x3(a1, a2, a3, b1, b2, b3, d1, d2, d3);
-    result[3][3]  =   determinant3x3(a1, a2, a3, b1, b2, b3, c1, c2, c3);
-}
-
-// Returns false if the matrix is not invertible
-static bool inverse(const TransformationMatrix::Matrix4& matrix, TransformationMatrix::Matrix4& result)
->>>>>>> miniblink49
 {
     // Calculate the 4x4 determinant
     // If the determinant is zero,
     // then the inverse matrix is not unique.
     double det = determinant4x4(matrix);
 
-<<<<<<< HEAD
     if (fabs(det) < SmallNumber)
-=======
-    if (fabs(det) < SMALL_NUMBER)
->>>>>>> miniblink49
         return false;
 
 #if CPU(ARM64)
@@ -434,7 +347,6 @@ static bool inverse(const TransformationMatrix::Matrix4& matrix, TransformationM
         "fmul v26.2d, v26.2d, v30.d[0] \n\t"
         "fmul v27.2d, v27.2d, v30.d[0] \n\t"
         "st1 {v24.2d - v27.2d}, [%[pr]] \n\t"
-<<<<<<< HEAD
         : [mat] "+r"(mat), [pr] "+r"(pr)
         : [rdet] "r"(rdet)
         : "memory", "v0", "v1", "v2", "v3", "v4", "v5", "v6", "v7", "v16", "v17",
@@ -581,30 +493,16 @@ static bool inverse(const TransformationMatrix::Matrix4& matrix, TransformationM
     result[3][1] = tmp2[0];
     result[3][2] = -tmp1[0];
     result[3][3] = tmp3[0];
-=======
-        : [mat]"+r"(mat), [pr]"+r"(pr)
-        : [rdet]"r"(rdet)
-        : "memory", "v0", "v1", "v2", "v3", "v4", "v5", "v6", "v7", "v16", "v17", "v18",
-            "v19", "v20", "v21", "v22", "v23", "24", "25", "v26", "v27", "v28", "v29", "v30"
-    );
->>>>>>> miniblink49
 #else
     // Calculate the adjoint matrix
     adjoint(matrix, result);
 
-<<<<<<< HEAD
     double rdet = 1 / det;
 
     // Scale the adjoint matrix to get the inverse
     for (int i = 0; i < 4; i++)
         for (int j = 0; j < 4; j++)
             result[i][j] = result[i][j] * rdet;
-=======
-    // Scale the adjoint matrix to get the inverse
-    for (int i = 0; i < 4; i++)
-        for (int j = 0; j < 4; j++)
-            result[i][j] = result[i][j] / det;
->>>>>>> miniblink49
 #endif
     return true;
 }
@@ -615,12 +513,8 @@ static bool inverse(const TransformationMatrix::Matrix4& matrix, TransformationM
 // From Graphics Gems: unmatrix.c
 
 // Transpose rotation portion of matrix a, return b
-<<<<<<< HEAD
 static void transposeMatrix4(const TransformationMatrix::Matrix4& a,
     TransformationMatrix::Matrix4& b)
-=======
-static void transposeMatrix4(const TransformationMatrix::Matrix4& a, TransformationMatrix::Matrix4& b)
->>>>>>> miniblink49
 {
     for (int i = 0; i < 4; i++)
         for (int j = 0; j < 4; j++)
@@ -628,7 +522,6 @@ static void transposeMatrix4(const TransformationMatrix::Matrix4& a, Transformat
 }
 
 // Multiply a homogeneous point by a matrix and return the transformed point
-<<<<<<< HEAD
 static void v4MulPointByMatrix(const Vector4 p,
     const TransformationMatrix::Matrix4& m,
     Vector4 result)
@@ -637,18 +530,6 @@ static void v4MulPointByMatrix(const Vector4 p,
     result[1] = (p[0] * m[0][1]) + (p[1] * m[1][1]) + (p[2] * m[2][1]) + (p[3] * m[3][1]);
     result[2] = (p[0] * m[0][2]) + (p[1] * m[1][2]) + (p[2] * m[2][2]) + (p[3] * m[3][2]);
     result[3] = (p[0] * m[0][3]) + (p[1] * m[1][3]) + (p[2] * m[2][3]) + (p[3] * m[3][3]);
-=======
-static void v4MulPointByMatrix(const Vector4 p, const TransformationMatrix::Matrix4& m, Vector4 result)
-{
-    result[0] = (p[0] * m[0][0]) + (p[1] * m[1][0]) +
-                (p[2] * m[2][0]) + (p[3] * m[3][0]);
-    result[1] = (p[0] * m[0][1]) + (p[1] * m[1][1]) +
-                (p[2] * m[2][1]) + (p[3] * m[3][1]);
-    result[2] = (p[0] * m[0][2]) + (p[1] * m[1][2]) +
-                (p[2] * m[2][2]) + (p[3] * m[3][2]);
-    result[3] = (p[0] * m[0][3]) + (p[1] * m[1][3]) +
-                (p[2] * m[2][3]) + (p[3] * m[3][3]);
->>>>>>> miniblink49
 }
 
 static double v3Length(Vector3 a)
@@ -674,15 +555,11 @@ static double v3Dot(const Vector3 a, const Vector3 b)
 
 // Make a linear combination of two vectors and return the result.
 // result = (a * ascl) + (b * bscl)
-<<<<<<< HEAD
 static void v3Combine(const Vector3 a,
     const Vector3 b,
     Vector3 result,
     double ascl,
     double bscl)
-=======
-static void v3Combine(const Vector3 a, const Vector3 b, Vector3 result, double ascl, double bscl)
->>>>>>> miniblink49
 {
     result[0] = (ascl * a[0]) + (bscl * b[0]);
     result[1] = (ascl * a[1]) + (bscl * b[1]);
@@ -697,12 +574,8 @@ static void v3Cross(const Vector3 a, const Vector3 b, Vector3 result)
     result[2] = (a[0] * b[1]) - (a[1] * b[0]);
 }
 
-<<<<<<< HEAD
 static bool decompose(const TransformationMatrix::Matrix4& mat,
     TransformationMatrix::DecomposedType& result)
-=======
-static bool decompose(const TransformationMatrix::Matrix4& mat, TransformationMatrix::DecomposedType& result)
->>>>>>> miniblink49
 {
     TransformationMatrix::Matrix4 localMatrix;
     memcpy(localMatrix, mat, sizeof(TransformationMatrix::Matrix4));
@@ -739,7 +612,6 @@ static bool decompose(const TransformationMatrix::Matrix4& mat, TransformationMa
         // Solve the equation by inverting perspectiveMatrix and multiplying
         // rightHandSide by the inverse.  (This is the easiest way, not
         // necessarily the best.)
-<<<<<<< HEAD
         TransformationMatrix::Matrix4 inversePerspectiveMatrix,
             transposedInversePerspectiveMatrix;
         if (!inverse(perspectiveMatrix, inversePerspectiveMatrix))
@@ -750,15 +622,6 @@ static bool decompose(const TransformationMatrix::Matrix4& mat, TransformationMa
         Vector4 perspectivePoint;
         v4MulPointByMatrix(rightHandSide, transposedInversePerspectiveMatrix,
             perspectivePoint);
-=======
-        TransformationMatrix::Matrix4 inversePerspectiveMatrix, transposedInversePerspectiveMatrix;
-        if (!inverse(perspectiveMatrix, inversePerspectiveMatrix))
-            return false;
-        transposeMatrix4(inversePerspectiveMatrix, transposedInversePerspectiveMatrix);
-
-        Vector4 perspectivePoint;
-        v4MulPointByMatrix(rightHandSide, transposedInversePerspectiveMatrix, perspectivePoint);
->>>>>>> miniblink49
 
         result.perspectiveX = perspectivePoint[0];
         result.perspectiveY = perspectivePoint[1];
@@ -822,10 +685,6 @@ static bool decompose(const TransformationMatrix::Matrix4& mat, TransformationMa
     // is -1, then negate the matrix and the scaling factors.
     v3Cross(row[1], row[2], pdum3);
     if (v3Dot(row[0], pdum3) < 0) {
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
         result.scaleX *= -1;
         result.scaleY *= -1;
         result.scaleZ *= -1;
@@ -901,7 +760,6 @@ static void slerp(double qa[4], const double qb[4], double t)
     double cx, cy, cz, cw;
     double product;
 
-<<<<<<< HEAD
     ax = qa[0];
     ay = qa[1];
     az = qa[2];
@@ -914,15 +772,6 @@ static void slerp(double qa[4], const double qb[4], double t)
     product = ax * bx + ay * by + az * bz + aw * bw;
 
     product = clampTo(product, -1.0, 1.0);
-=======
-    ax = qa[0]; ay = qa[1]; az = qa[2]; aw = qa[3];
-    bx = qb[0]; by = qb[1]; bz = qb[2]; bw = qb[3];
-
-    product = ax * bx + ay * by + az * bz + aw * bw;
-
-    // Clamp product to -1.0 <= product <= 1.0.
-    product = std::min(std::max(product, -1.0), 1.0);
->>>>>>> miniblink49
 
     const double epsilon = 1e-5;
     if (std::abs(product - 1.0) < epsilon) {
@@ -942,24 +791,17 @@ static void slerp(double qa[4], const double qb[4], double t)
     cz = az * scale1 + bz * scale2;
     cw = aw * scale1 + bw * scale2;
 
-<<<<<<< HEAD
     qa[0] = cx;
     qa[1] = cy;
     qa[2] = cz;
     qa[3] = cw;
-=======
-    qa[0] = cx; qa[1] = cy; qa[2] = cz; qa[3] = cw;
->>>>>>> miniblink49
 }
 
 // End of Supporting Math Functions
 
 TransformationMatrix::TransformationMatrix(const AffineTransform& t)
 {
-<<<<<<< HEAD
     checkAlignment();
-=======
->>>>>>> miniblink49
     setMatrix(t.a(), t.b(), t.c(), t.d(), t.e(), t.f());
 }
 
@@ -968,12 +810,8 @@ TransformationMatrix& TransformationMatrix::scale(double s)
     return scaleNonUniform(s, s);
 }
 
-<<<<<<< HEAD
 FloatPoint TransformationMatrix::projectPoint(const FloatPoint& p,
     bool* clamped) const
-=======
-FloatPoint TransformationMatrix::projectPoint(const FloatPoint& p, bool* clamped) const
->>>>>>> miniblink49
 {
     // This is basically raytracing. We have a point in the destination
     // plane with z=0, and we cast a ray parallel to the z-axis from that
@@ -991,13 +829,8 @@ FloatPoint TransformationMatrix::projectPoint(const FloatPoint& p, bool* clamped
         *clamped = false;
 
     if (m33() == 0) {
-<<<<<<< HEAD
         // In this case, the projection plane is parallel to the ray we are trying
         // to trace, and there is no well-defined value for the projection.
-=======
-        // In this case, the projection plane is parallel to the ray we are trying to
-        // trace, and there is no well-defined value for the projection.
->>>>>>> miniblink49
         return FloatPoint();
     }
 
@@ -1011,13 +844,8 @@ FloatPoint TransformationMatrix::projectPoint(const FloatPoint& p, bool* clamped
 
     double w = x * m14() + y * m24() + z * m34() + m44();
     if (w <= 0) {
-<<<<<<< HEAD
         // Using int max causes overflow when other code uses the projected point.
         // To represent infinity yet reduce the risk of overflow, we use a large but
-=======
-        // Using int max causes overflow when other code uses the projected point. To
-        // represent infinity yet reduce the risk of overflow, we use a large but
->>>>>>> miniblink49
         // not-too-large number here when clamping.
         const int largeNumber = 100000000 / kFixedPointDenominator;
         outX = copysign(largeNumber, outX);
@@ -1032,12 +860,8 @@ FloatPoint TransformationMatrix::projectPoint(const FloatPoint& p, bool* clamped
     return FloatPoint(static_cast<float>(outX), static_cast<float>(outY));
 }
 
-<<<<<<< HEAD
 FloatQuad TransformationMatrix::projectQuad(const FloatQuad& q,
     bool* clamped) const
-=======
-FloatQuad TransformationMatrix::projectQuad(const FloatQuad& q, bool* clamped) const
->>>>>>> miniblink49
 {
     FloatQuad projectedQuad;
 
@@ -1054,12 +878,8 @@ FloatQuad TransformationMatrix::projectQuad(const FloatQuad& q, bool* clamped) c
     if (clamped)
         *clamped = clamped1 || clamped2 || clamped3 || clamped4;
 
-<<<<<<< HEAD
     // If all points on the quad had w < 0, then the entire quad would not be
     // visible to the projected surface.
-=======
-    // If all points on the quad had w < 0, then the entire quad would not be visible to the projected surface.
->>>>>>> miniblink49
     bool everythingWasClipped = clamped1 && clamped2 && clamped3 && clamped4;
     if (everythingWasClipped)
         return FloatQuad();
@@ -1069,7 +889,6 @@ FloatQuad TransformationMatrix::projectQuad(const FloatQuad& q, bool* clamped) c
 
 static float clampEdgeValue(float f)
 {
-<<<<<<< HEAD
     ASSERT(!std_isnan(f));
     return clampTo(f, (-LayoutUnit::max() / 2).toFloat(),
         (LayoutUnit::max() / 2).toFloat());
@@ -1077,13 +896,6 @@ static float clampEdgeValue(float f)
 
 LayoutRect TransformationMatrix::clampedBoundsOfProjectedQuad(
     const FloatQuad& q) const
-=======
-    ASSERT(!std::isnan(f));
-    return std::min<float>(std::max<float>(f, (-LayoutUnit::max() / 2).toFloat()), (LayoutUnit::max() / 2).toFloat());
-}
-
-LayoutRect TransformationMatrix::clampedBoundsOfProjectedQuad(const FloatQuad& q) const
->>>>>>> miniblink49
 {
     FloatRect mappedQuadBounds = projectQuad(q).boundingBox();
 
@@ -1091,32 +903,20 @@ LayoutRect TransformationMatrix::clampedBoundsOfProjectedQuad(const FloatQuad& q
     float top = clampEdgeValue(floorf(mappedQuadBounds.y()));
 
     float right;
-<<<<<<< HEAD
     if (std_isinf(mappedQuadBounds.x()) && std_isinf(mappedQuadBounds.width()))
-=======
-    if (std::isinf(mappedQuadBounds.x()) && std::isinf(mappedQuadBounds.width()))
->>>>>>> miniblink49
         right = (LayoutUnit::max() / 2).toFloat();
     else
         right = clampEdgeValue(ceilf(mappedQuadBounds.maxX()));
 
     float bottom;
-<<<<<<< HEAD
     if (std_isinf(mappedQuadBounds.y()) && std_isinf(mappedQuadBounds.height()))
-=======
-    if (std::isinf(mappedQuadBounds.y()) && std::isinf(mappedQuadBounds.height()))
->>>>>>> miniblink49
         bottom = (LayoutUnit::max() / 2).toFloat();
     else
         bottom = clampEdgeValue(ceilf(mappedQuadBounds.maxY()));
 
-<<<<<<< HEAD
     return LayoutRect(LayoutUnit::clamp(left), LayoutUnit::clamp(top),
         LayoutUnit::clamp(right - left),
         LayoutUnit::clamp(bottom - top));
-=======
-    return LayoutRect(LayoutUnit::clamp(left), LayoutUnit::clamp(top),  LayoutUnit::clamp(right - left), LayoutUnit::clamp(bottom - top));
->>>>>>> miniblink49
 }
 
 void TransformationMatrix::transformBox(FloatBox& box) const
@@ -1144,12 +944,8 @@ void TransformationMatrix::transformBox(FloatBox& box) const
 FloatPoint TransformationMatrix::mapPoint(const FloatPoint& p) const
 {
     if (isIdentityOrTranslation())
-<<<<<<< HEAD
         return FloatPoint(p.x() + static_cast<float>(m_matrix[3][0]),
             p.y() + static_cast<float>(m_matrix[3][1]));
-=======
-        return FloatPoint(p.x() + static_cast<float>(m_matrix[3][0]), p.y() + static_cast<float>(m_matrix[3][1]));
->>>>>>> miniblink49
 
     return internalMapPoint(p);
 }
@@ -1158,22 +954,13 @@ FloatPoint3D TransformationMatrix::mapPoint(const FloatPoint3D& p) const
 {
     if (isIdentityOrTranslation())
         return FloatPoint3D(p.x() + static_cast<float>(m_matrix[3][0]),
-<<<<<<< HEAD
             p.y() + static_cast<float>(m_matrix[3][1]),
             p.z() + static_cast<float>(m_matrix[3][2]));
-=======
-                            p.y() + static_cast<float>(m_matrix[3][1]),
-                            p.z() + static_cast<float>(m_matrix[3][2]));
->>>>>>> miniblink49
 
     return internalMapPoint(p);
 }
 
-<<<<<<< HEAD
 IntRect TransformationMatrix::mapRect(const IntRect& rect) const
-=======
-IntRect TransformationMatrix::mapRect(const IntRect &rect) const
->>>>>>> miniblink49
 {
     return enclosingIntRect(mapRect(FloatRect(rect)));
 }
@@ -1187,12 +974,8 @@ FloatRect TransformationMatrix::mapRect(const FloatRect& r) const
 {
     if (isIdentityOrTranslation()) {
         FloatRect mappedRect(r);
-<<<<<<< HEAD
         mappedRect.move(static_cast<float>(m_matrix[3][0]),
             static_cast<float>(m_matrix[3][1]));
-=======
-        mappedRect.move(static_cast<float>(m_matrix[3][0]), static_cast<float>(m_matrix[3][1]));
->>>>>>> miniblink49
         return mappedRect;
     }
 
@@ -1212,12 +995,8 @@ FloatQuad TransformationMatrix::mapQuad(const FloatQuad& q) const
 {
     if (isIdentityOrTranslation()) {
         FloatQuad mappedQuad(q);
-<<<<<<< HEAD
         mappedQuad.move(static_cast<float>(m_matrix[3][0]),
             static_cast<float>(m_matrix[3][1]));
-=======
-        mappedQuad.move(static_cast<float>(m_matrix[3][0]), static_cast<float>(m_matrix[3][1]));
->>>>>>> miniblink49
         return mappedQuad;
     }
 
@@ -1229,12 +1008,8 @@ FloatQuad TransformationMatrix::mapQuad(const FloatQuad& q) const
     return result;
 }
 
-<<<<<<< HEAD
 TransformationMatrix& TransformationMatrix::scaleNonUniform(double sx,
     double sy)
-=======
-TransformationMatrix& TransformationMatrix::scaleNonUniform(double sx, double sy)
->>>>>>> miniblink49
 {
     m_matrix[0][0] *= sx;
     m_matrix[0][1] *= sx;
@@ -1248,13 +1023,9 @@ TransformationMatrix& TransformationMatrix::scaleNonUniform(double sx, double sy
     return *this;
 }
 
-<<<<<<< HEAD
 TransformationMatrix& TransformationMatrix::scale3d(double sx,
     double sy,
     double sz)
-=======
-TransformationMatrix& TransformationMatrix::scale3d(double sx, double sy, double sz)
->>>>>>> miniblink49
 {
     scaleNonUniform(sx, sy);
 
@@ -1265,7 +1036,6 @@ TransformationMatrix& TransformationMatrix::scale3d(double sx, double sy, double
     return *this;
 }
 
-<<<<<<< HEAD
 TransformationMatrix& TransformationMatrix::rotate3d(const Rotation& rotation)
 {
     return rotate3d(rotation.axis.x(), rotation.axis.y(), rotation.axis.z(),
@@ -1276,19 +1046,12 @@ TransformationMatrix& TransformationMatrix::rotate3d(double x,
     double y,
     double z,
     double angle)
-=======
-TransformationMatrix& TransformationMatrix::rotate3d(double x, double y, double z, double angle)
->>>>>>> miniblink49
 {
     // Normalize the axis of rotation
     double length = std::sqrt(x * x + y * y + z * z);
     if (length == 0) {
-<<<<<<< HEAD
         // A direction vector that cannot be normalized, such as [0, 0, 0], will
         // cause the rotation to not be applied.
-=======
-        // A direction vector that cannot be normalized, such as [0, 0, 0], will cause the rotation to not be applied.
->>>>>>> miniblink49
         return *this;
     } else if (length != 1) {
         x /= length;
@@ -1350,12 +1113,8 @@ TransformationMatrix& TransformationMatrix::rotate3d(double x, double y, double 
         // Formula is adapted from Wikipedia article on Rotation matrix,
         // http://en.wikipedia.org/wiki/Rotation_matrix#Rotation_matrix_from_axis_and_angle
         //
-<<<<<<< HEAD
         // An alternate resource with the same matrix:
         // http://www.fastgraph.com/makegames/3drotation/
-=======
-        // An alternate resource with the same matrix: http://www.fastgraph.com/makegames/3drotation/
->>>>>>> miniblink49
         //
         double oneMinusCosTheta = 1 - cosTheta;
         mat.m_matrix[0][0] = cosTheta + x * x * oneMinusCosTheta;
@@ -1375,13 +1134,9 @@ TransformationMatrix& TransformationMatrix::rotate3d(double x, double y, double 
     return *this;
 }
 
-<<<<<<< HEAD
 TransformationMatrix& TransformationMatrix::rotate3d(double rx,
     double ry,
     double rz)
-=======
-TransformationMatrix& TransformationMatrix::rotate3d(double rx, double ry, double rz)
->>>>>>> miniblink49
 {
     // Angles are in degrees. Switch to radians.
     rx = deg2rad(rx);
@@ -1457,13 +1212,9 @@ TransformationMatrix& TransformationMatrix::translate(double tx, double ty)
     return *this;
 }
 
-<<<<<<< HEAD
 TransformationMatrix& TransformationMatrix::translate3d(double tx,
     double ty,
     double tz)
-=======
-TransformationMatrix& TransformationMatrix::translate3d(double tx, double ty, double tz)
->>>>>>> miniblink49
 {
     m_matrix[3][0] += tx * m_matrix[0][0] + ty * m_matrix[1][0] + tz * m_matrix[2][0];
     m_matrix[3][1] += tx * m_matrix[0][1] + ty * m_matrix[1][1] + tz * m_matrix[2][1];
@@ -1472,7 +1223,6 @@ TransformationMatrix& TransformationMatrix::translate3d(double tx, double ty, do
     return *this;
 }
 
-<<<<<<< HEAD
 TransformationMatrix& TransformationMatrix::translateRight(double tx,
     double ty)
 {
@@ -1488,28 +1238,11 @@ TransformationMatrix& TransformationMatrix::translateRight(double tx,
         m_matrix[1][1] += m_matrix[1][3] * ty;
         m_matrix[2][1] += m_matrix[2][3] * ty;
         m_matrix[3][1] += m_matrix[3][3] * ty;
-=======
-TransformationMatrix& TransformationMatrix::translateRight(double tx, double ty)
-{
-    if (tx != 0) {
-        m_matrix[0][0] +=  m_matrix[0][3] * tx;
-        m_matrix[1][0] +=  m_matrix[1][3] * tx;
-        m_matrix[2][0] +=  m_matrix[2][3] * tx;
-        m_matrix[3][0] +=  m_matrix[3][3] * tx;
-    }
-
-    if (ty != 0) {
-        m_matrix[0][1] +=  m_matrix[0][3] * ty;
-        m_matrix[1][1] +=  m_matrix[1][3] * ty;
-        m_matrix[2][1] +=  m_matrix[2][3] * ty;
-        m_matrix[3][1] +=  m_matrix[3][3] * ty;
->>>>>>> miniblink49
     }
 
     return *this;
 }
 
-<<<<<<< HEAD
 TransformationMatrix& TransformationMatrix::translateRight3d(double tx,
     double ty,
     double tz)
@@ -1520,16 +1253,6 @@ TransformationMatrix& TransformationMatrix::translateRight3d(double tx,
         m_matrix[1][2] += m_matrix[1][3] * tz;
         m_matrix[2][2] += m_matrix[2][3] * tz;
         m_matrix[3][2] += m_matrix[3][3] * tz;
-=======
-TransformationMatrix& TransformationMatrix::translateRight3d(double tx, double ty, double tz)
-{
-    translateRight(tx, ty);
-    if (tz != 0) {
-        m_matrix[0][2] +=  m_matrix[0][3] * tz;
-        m_matrix[1][2] +=  m_matrix[1][3] * tz;
-        m_matrix[2][2] +=  m_matrix[2][3] * tz;
-        m_matrix[3][2] +=  m_matrix[3][3] * tz;
->>>>>>> miniblink49
     }
 
     return *this;
@@ -1553,17 +1276,12 @@ TransformationMatrix& TransformationMatrix::applyPerspective(double p)
 {
     TransformationMatrix mat;
     if (p != 0)
-<<<<<<< HEAD
         mat.m_matrix[2][3] = -1 / p;
-=======
-        mat.m_matrix[2][3] = -1/p;
->>>>>>> miniblink49
 
     multiply(mat);
     return *this;
 }
 
-<<<<<<< HEAD
 TransformationMatrix& TransformationMatrix::applyTransformOrigin(double x,
     double y,
     double z)
@@ -1595,10 +1313,6 @@ TransformationMatrix& TransformationMatrix::zoom(double zoomFactor)
 // bots, see crbug.com/477892 and crbug.com/584508.
 TransformationMatrix& TransformationMatrix::multiply(
     const TransformationMatrix& mat)
-=======
-// this = mat * this.
-TransformationMatrix& TransformationMatrix::multiply(const TransformationMatrix& mat)
->>>>>>> miniblink49
 {
 #if CPU(ARM64)
     double* rightMatrix = &(m_matrix[0][0]);
@@ -1655,7 +1369,6 @@ TransformationMatrix& TransformationMatrix::multiply(const TransformationMatrix&
 
         "st1 {v0.2d - v3.2d}, [x9], 64 \t\n"
         "st1 {v4.2d - v7.2d}, [x9]     \t\n"
-<<<<<<< HEAD
         : [leftMatrix] "+r"(leftMatrix), [rightMatrix] "+r"(rightMatrix)
         :
         : "memory", "x9", "v16", "v17", "v18", "v19", "v20", "v21", "v22", "v23",
@@ -1752,118 +1465,6 @@ TransformationMatrix& TransformationMatrix::multiply(const TransformationMatrix&
 #elif defined(TRANSFORMATION_MATRIX_USE_X86_64_SSE2)
     // x86_64 has 16 XMM registers which is enough to do the multiplication fully
     // in registers.
-=======
-        : [leftMatrix]"+r"(leftMatrix), [rightMatrix]"+r"(rightMatrix)
-        :
-        : "memory", "x9", "v16", "v17", "v18", "v19", "v20", "v21", "v22",
-            "v23", "v24", "v25", "v26", "v27", "v28", "v29", "v30", "v31",
-            "v0", "v1", "v2", "v3", "v4", "v5", "v6", "v7"
-    );
-#elif CPU(APPLE_ARMV7S)
-    double* leftMatrix = &(m_matrix[0][0]);
-    const double* rightMatrix = &(mat.m_matrix[0][0]);
-    asm volatile (// First row of leftMatrix.
-        "mov        r3, %[leftMatrix]\n\t"
-        "vld1.64    { d16-d19 }, [%[leftMatrix], :128]!\n\t"
-        "vld1.64    { d0-d3}, [%[rightMatrix], :128]!\n\t"
-        "vmul.f64   d4, d0, d16\n\t"
-        "vld1.64    { d20-d23 }, [%[leftMatrix], :128]!\n\t"
-        "vmla.f64   d4, d1, d20\n\t"
-        "vld1.64    { d24-d27 }, [%[leftMatrix], :128]!\n\t"
-        "vmla.f64   d4, d2, d24\n\t"
-        "vld1.64    { d28-d31 }, [%[leftMatrix], :128]!\n\t"
-        "vmla.f64   d4, d3, d28\n\t"
-
-        "vmul.f64   d5, d0, d17\n\t"
-        "vmla.f64   d5, d1, d21\n\t"
-        "vmla.f64   d5, d2, d25\n\t"
-        "vmla.f64   d5, d3, d29\n\t"
-
-        "vmul.f64   d6, d0, d18\n\t"
-        "vmla.f64   d6, d1, d22\n\t"
-        "vmla.f64   d6, d2, d26\n\t"
-        "vmla.f64   d6, d3, d30\n\t"
-
-        "vmul.f64   d7, d0, d19\n\t"
-        "vmla.f64   d7, d1, d23\n\t"
-        "vmla.f64   d7, d2, d27\n\t"
-        "vmla.f64   d7, d3, d31\n\t"
-        "vld1.64    { d0-d3}, [%[rightMatrix], :128]!\n\t"
-        "vst1.64    { d4-d7 }, [r3, :128]!\n\t"
-
-        // Second row of leftMatrix.
-        "vmul.f64   d4, d0, d16\n\t"
-        "vmla.f64   d4, d1, d20\n\t"
-        "vmla.f64   d4, d2, d24\n\t"
-        "vmla.f64   d4, d3, d28\n\t"
-
-        "vmul.f64   d5, d0, d17\n\t"
-        "vmla.f64   d5, d1, d21\n\t"
-        "vmla.f64   d5, d2, d25\n\t"
-        "vmla.f64   d5, d3, d29\n\t"
-
-        "vmul.f64   d6, d0, d18\n\t"
-        "vmla.f64   d6, d1, d22\n\t"
-        "vmla.f64   d6, d2, d26\n\t"
-        "vmla.f64   d6, d3, d30\n\t"
-
-        "vmul.f64   d7, d0, d19\n\t"
-        "vmla.f64   d7, d1, d23\n\t"
-        "vmla.f64   d7, d2, d27\n\t"
-        "vmla.f64   d7, d3, d31\n\t"
-        "vld1.64    { d0-d3}, [%[rightMatrix], :128]!\n\t"
-        "vst1.64    { d4-d7 }, [r3, :128]!\n\t"
-
-        // Third row of leftMatrix.
-        "vmul.f64   d4, d0, d16\n\t"
-        "vmla.f64   d4, d1, d20\n\t"
-        "vmla.f64   d4, d2, d24\n\t"
-        "vmla.f64   d4, d3, d28\n\t"
-
-        "vmul.f64   d5, d0, d17\n\t"
-        "vmla.f64   d5, d1, d21\n\t"
-        "vmla.f64   d5, d2, d25\n\t"
-        "vmla.f64   d5, d3, d29\n\t"
-
-        "vmul.f64   d6, d0, d18\n\t"
-        "vmla.f64   d6, d1, d22\n\t"
-        "vmla.f64   d6, d2, d26\n\t"
-        "vmla.f64   d6, d3, d30\n\t"
-
-        "vmul.f64   d7, d0, d19\n\t"
-        "vmla.f64   d7, d1, d23\n\t"
-        "vmla.f64   d7, d2, d27\n\t"
-        "vmla.f64   d7, d3, d31\n\t"
-        "vld1.64    { d0-d3}, [%[rightMatrix], :128]\n\t"
-        "vst1.64    { d4-d7 }, [r3, :128]!\n\t"
-
-        // Fourth and last row of leftMatrix.
-        "vmul.f64   d4, d0, d16\n\t"
-        "vmla.f64   d4, d1, d20\n\t"
-        "vmla.f64   d4, d2, d24\n\t"
-        "vmla.f64   d4, d3, d28\n\t"
-
-        "vmul.f64   d5, d0, d17\n\t"
-        "vmla.f64   d5, d1, d21\n\t"
-        "vmla.f64   d5, d2, d25\n\t"
-        "vmla.f64   d5, d3, d29\n\t"
-
-        "vmul.f64   d6, d0, d18\n\t"
-        "vmla.f64   d6, d1, d22\n\t"
-        "vmla.f64   d6, d2, d26\n\t"
-        "vmla.f64   d6, d3, d30\n\t"
-
-        "vmul.f64   d7, d0, d19\n\t"
-        "vmla.f64   d7, d1, d23\n\t"
-        "vmla.f64   d7, d2, d27\n\t"
-        "vmla.f64   d7, d3, d31\n\t"
-        "vst1.64    { d4-d7 }, [r3, :128]\n\t"
-        : [leftMatrix]"+r"(leftMatrix), [rightMatrix]"+r"(rightMatrix)
-        :
-        : "memory", "r3", "d0", "d1", "d2", "d3", "d4", "d5", "d6", "d7", "d16", "d17", "d18", "d19", "d20", "d21", "d22", "d23", "d24", "d25", "d26", "d27", "d28", "d29", "d30", "d31");
-#elif defined(TRANSFORMATION_MATRIX_USE_X86_64_SSE2)
-    // x86_64 has 16 XMM registers which is enough to do the multiplication fully in registers.
->>>>>>> miniblink49
     __m128d matrixBlockA = _mm_load_pd(&(m_matrix[0][0]));
     __m128d matrixBlockC = _mm_load_pd(&(m_matrix[1][0]));
     __m128d matrixBlockE = _mm_load_pd(&(m_matrix[2][0]));
@@ -1988,7 +1589,6 @@ TransformationMatrix& TransformationMatrix::multiply(const TransformationMatrix&
 #else
     Matrix4 tmp;
 
-<<<<<<< HEAD
     tmp[0][0] = (mat.m_matrix[0][0] * m_matrix[0][0] + mat.m_matrix[0][1] * m_matrix[1][0] + mat.m_matrix[0][2] * m_matrix[2][0] + mat.m_matrix[0][3] * m_matrix[3][0]);
     tmp[0][1] = (mat.m_matrix[0][0] * m_matrix[0][1] + mat.m_matrix[0][1] * m_matrix[1][1] + mat.m_matrix[0][2] * m_matrix[2][1] + mat.m_matrix[0][3] * m_matrix[3][1]);
     tmp[0][2] = (mat.m_matrix[0][0] * m_matrix[0][2] + mat.m_matrix[0][1] * m_matrix[1][2] + mat.m_matrix[0][2] * m_matrix[2][2] + mat.m_matrix[0][3] * m_matrix[3][2]);
@@ -2008,57 +1608,16 @@ TransformationMatrix& TransformationMatrix::multiply(const TransformationMatrix&
     tmp[3][1] = (mat.m_matrix[3][0] * m_matrix[0][1] + mat.m_matrix[3][1] * m_matrix[1][1] + mat.m_matrix[3][2] * m_matrix[2][1] + mat.m_matrix[3][3] * m_matrix[3][1]);
     tmp[3][2] = (mat.m_matrix[3][0] * m_matrix[0][2] + mat.m_matrix[3][1] * m_matrix[1][2] + mat.m_matrix[3][2] * m_matrix[2][2] + mat.m_matrix[3][3] * m_matrix[3][2]);
     tmp[3][3] = (mat.m_matrix[3][0] * m_matrix[0][3] + mat.m_matrix[3][1] * m_matrix[1][3] + mat.m_matrix[3][2] * m_matrix[2][3] + mat.m_matrix[3][3] * m_matrix[3][3]);
-=======
-    tmp[0][0] = (mat.m_matrix[0][0] * m_matrix[0][0] + mat.m_matrix[0][1] * m_matrix[1][0]
-               + mat.m_matrix[0][2] * m_matrix[2][0] + mat.m_matrix[0][3] * m_matrix[3][0]);
-    tmp[0][1] = (mat.m_matrix[0][0] * m_matrix[0][1] + mat.m_matrix[0][1] * m_matrix[1][1]
-               + mat.m_matrix[0][2] * m_matrix[2][1] + mat.m_matrix[0][3] * m_matrix[3][1]);
-    tmp[0][2] = (mat.m_matrix[0][0] * m_matrix[0][2] + mat.m_matrix[0][1] * m_matrix[1][2]
-               + mat.m_matrix[0][2] * m_matrix[2][2] + mat.m_matrix[0][3] * m_matrix[3][2]);
-    tmp[0][3] = (mat.m_matrix[0][0] * m_matrix[0][3] + mat.m_matrix[0][1] * m_matrix[1][3]
-               + mat.m_matrix[0][2] * m_matrix[2][3] + mat.m_matrix[0][3] * m_matrix[3][3]);
-
-    tmp[1][0] = (mat.m_matrix[1][0] * m_matrix[0][0] + mat.m_matrix[1][1] * m_matrix[1][0]
-               + mat.m_matrix[1][2] * m_matrix[2][0] + mat.m_matrix[1][3] * m_matrix[3][0]);
-    tmp[1][1] = (mat.m_matrix[1][0] * m_matrix[0][1] + mat.m_matrix[1][1] * m_matrix[1][1]
-               + mat.m_matrix[1][2] * m_matrix[2][1] + mat.m_matrix[1][3] * m_matrix[3][1]);
-    tmp[1][2] = (mat.m_matrix[1][0] * m_matrix[0][2] + mat.m_matrix[1][1] * m_matrix[1][2]
-               + mat.m_matrix[1][2] * m_matrix[2][2] + mat.m_matrix[1][3] * m_matrix[3][2]);
-    tmp[1][3] = (mat.m_matrix[1][0] * m_matrix[0][3] + mat.m_matrix[1][1] * m_matrix[1][3]
-               + mat.m_matrix[1][2] * m_matrix[2][3] + mat.m_matrix[1][3] * m_matrix[3][3]);
-
-    tmp[2][0] = (mat.m_matrix[2][0] * m_matrix[0][0] + mat.m_matrix[2][1] * m_matrix[1][0]
-               + mat.m_matrix[2][2] * m_matrix[2][0] + mat.m_matrix[2][3] * m_matrix[3][0]);
-    tmp[2][1] = (mat.m_matrix[2][0] * m_matrix[0][1] + mat.m_matrix[2][1] * m_matrix[1][1]
-               + mat.m_matrix[2][2] * m_matrix[2][1] + mat.m_matrix[2][3] * m_matrix[3][1]);
-    tmp[2][2] = (mat.m_matrix[2][0] * m_matrix[0][2] + mat.m_matrix[2][1] * m_matrix[1][2]
-               + mat.m_matrix[2][2] * m_matrix[2][2] + mat.m_matrix[2][3] * m_matrix[3][2]);
-    tmp[2][3] = (mat.m_matrix[2][0] * m_matrix[0][3] + mat.m_matrix[2][1] * m_matrix[1][3]
-               + mat.m_matrix[2][2] * m_matrix[2][3] + mat.m_matrix[2][3] * m_matrix[3][3]);
-
-    tmp[3][0] = (mat.m_matrix[3][0] * m_matrix[0][0] + mat.m_matrix[3][1] * m_matrix[1][0]
-               + mat.m_matrix[3][2] * m_matrix[2][0] + mat.m_matrix[3][3] * m_matrix[3][0]);
-    tmp[3][1] = (mat.m_matrix[3][0] * m_matrix[0][1] + mat.m_matrix[3][1] * m_matrix[1][1]
-               + mat.m_matrix[3][2] * m_matrix[2][1] + mat.m_matrix[3][3] * m_matrix[3][1]);
-    tmp[3][2] = (mat.m_matrix[3][0] * m_matrix[0][2] + mat.m_matrix[3][1] * m_matrix[1][2]
-               + mat.m_matrix[3][2] * m_matrix[2][2] + mat.m_matrix[3][3] * m_matrix[3][2]);
-    tmp[3][3] = (mat.m_matrix[3][0] * m_matrix[0][3] + mat.m_matrix[3][1] * m_matrix[1][3]
-               + mat.m_matrix[3][2] * m_matrix[2][3] + mat.m_matrix[3][3] * m_matrix[3][3]);
->>>>>>> miniblink49
 
     setMatrix(tmp);
 #endif
     return *this;
 }
 
-<<<<<<< HEAD
 void TransformationMatrix::multVecMatrix(double x,
     double y,
     double& resultX,
     double& resultY) const
-=======
-void TransformationMatrix::multVecMatrix(double x, double y, double& resultX, double& resultY) const
->>>>>>> miniblink49
 {
     resultX = m_matrix[3][0] + x * m_matrix[0][0] + y * m_matrix[1][0];
     resultY = m_matrix[3][1] + x * m_matrix[0][1] + y * m_matrix[1][1];
@@ -2069,16 +1628,12 @@ void TransformationMatrix::multVecMatrix(double x, double y, double& resultX, do
     }
 }
 
-<<<<<<< HEAD
 void TransformationMatrix::multVecMatrix(double x,
     double y,
     double z,
     double& resultX,
     double& resultY,
     double& resultZ) const
-=======
-void TransformationMatrix::multVecMatrix(double x, double y, double z, double& resultX, double& resultY, double& resultZ) const
->>>>>>> miniblink49
 {
     resultX = m_matrix[3][0] + x * m_matrix[0][0] + y * m_matrix[1][0] + z * m_matrix[2][0];
     resultY = m_matrix[3][1] + x * m_matrix[0][1] + y * m_matrix[1][1] + z * m_matrix[2][1];
@@ -2098,11 +1653,7 @@ bool TransformationMatrix::isInvertible() const
 
     double det = blink::determinant4x4(m_matrix);
 
-<<<<<<< HEAD
     if (fabs(det) < SmallNumber)
-=======
-    if (fabs(det) < SMALL_NUMBER)
->>>>>>> miniblink49
         return false;
 
     return true;
@@ -2116,16 +1667,9 @@ TransformationMatrix TransformationMatrix::inverse() const
             return TransformationMatrix();
 
         // translation
-<<<<<<< HEAD
         return TransformationMatrix(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
             -m_matrix[3][0], -m_matrix[3][1],
             -m_matrix[3][2], 1);
-=======
-        return TransformationMatrix(1, 0, 0, 0,
-                                    0, 1, 0, 0,
-                                    0, 0, 1, 0,
-                                    -m_matrix[3][0], -m_matrix[3][1], -m_matrix[3][2], 1);
->>>>>>> miniblink49
     }
 
     TransformationMatrix invMat;
@@ -2156,7 +1700,6 @@ void TransformationMatrix::makeAffine()
 AffineTransform TransformationMatrix::toAffineTransform() const
 {
     return AffineTransform(m_matrix[0][0], m_matrix[0][1], m_matrix[1][0],
-<<<<<<< HEAD
         m_matrix[1][1], m_matrix[3][0], m_matrix[3][1]);
 }
 
@@ -2169,9 +1712,6 @@ void TransformationMatrix::flattenTo2d()
     m_matrix[2][2] = 1;
     m_matrix[3][2] = 0;
     m_matrix[2][3] = 0;
-=======
-                           m_matrix[1][1], m_matrix[3][0], m_matrix[3][1]);
->>>>>>> miniblink49
 }
 
 static inline void blendFloat(double& from, double to, double progress)
@@ -2180,12 +1720,8 @@ static inline void blendFloat(double& from, double to, double progress)
         from = from + (to - from) * progress;
 }
 
-<<<<<<< HEAD
 void TransformationMatrix::blend(const TransformationMatrix& from,
     double progress)
-=======
-void TransformationMatrix::blend(const TransformationMatrix& from, double progress)
->>>>>>> miniblink49
 {
     if (from.isIdentity() && isIdentity())
         return;
@@ -2260,17 +1796,10 @@ void TransformationMatrix::recompose(const DecomposedType& decomp)
     double zw = decomp.quaternionZ * decomp.quaternionW;
 
     // Construct a composite rotation matrix from the quaternion values
-<<<<<<< HEAD
     TransformationMatrix rotationMatrix(
         1 - 2 * (yy + zz), 2 * (xy - zw), 2 * (xz + yw), 0, 2 * (xy + zw),
         1 - 2 * (xx + zz), 2 * (yz - xw), 0, 2 * (xz - yw), 2 * (yz + xw),
         1 - 2 * (xx + yy), 0, 0, 0, 0, 1);
-=======
-    TransformationMatrix rotationMatrix(1 - 2 * (yy + zz), 2 * (xy - zw), 2 * (xz + yw), 0,
-                           2 * (xy + zw), 1 - 2 * (xx + zz), 2 * (yz - xw), 0,
-                           2 * (xz - yw), 2 * (yz + xw), 1 - 2 * (xx + yy), 0,
-                           0, 0, 0, 1);
->>>>>>> miniblink49
 
     multiply(rotationMatrix);
 
@@ -2339,12 +1868,8 @@ void TransformationMatrix::toColumnMajorFloatArray(FloatMatrix4& result) const
     result[15] = m44();
 }
 
-<<<<<<< HEAD
 SkMatrix44 TransformationMatrix::toSkMatrix44(
     const TransformationMatrix& matrix)
-=======
-SkMatrix44 TransformationMatrix::toSkMatrix44(const TransformationMatrix& matrix)
->>>>>>> miniblink49
 {
     SkMatrix44 ret(SkMatrix44::kUninitialized_Constructor);
     ret.setDouble(0, 0, matrix.m11());
@@ -2366,7 +1891,6 @@ SkMatrix44 TransformationMatrix::toSkMatrix44(const TransformationMatrix& matrix
     return ret;
 }
 
-<<<<<<< HEAD
 String TransformationMatrix::toString(bool asMatrix) const
 {
     if (asMatrix) {
@@ -2403,6 +1927,3 @@ String TransformationMatrix::toString(bool asMatrix) const
 }
 
 } // namespace blink
-=======
-}
->>>>>>> miniblink49

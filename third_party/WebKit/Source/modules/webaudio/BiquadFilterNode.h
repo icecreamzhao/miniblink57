@@ -10,7 +10,6 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
-<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -22,18 +21,6 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
-=======
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
->>>>>>> miniblink49
  */
 
 #ifndef BiquadFilterNode_h
@@ -45,7 +32,6 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 class BaseAudioContext;
 class AudioParam;
 class BiquadFilterOptions;
@@ -56,14 +42,6 @@ class BiquadFilterNode final : public AudioNode {
 public:
     // These must be defined as in the .idl file and must match those in the
     // BiquadProcessor class.
-=======
-class AudioParam;
-
-class BiquadFilterNode final : public AudioNode {
-    DEFINE_WRAPPERTYPEINFO();
-public:
-    // These must be defined as in the .idl file and must match those in the BiquadProcessor class.
->>>>>>> miniblink49
     enum {
         LOWPASS = 0,
         HIGHPASS = 1,
@@ -75,18 +53,11 @@ public:
         ALLPASS = 7
     };
 
-<<<<<<< HEAD
     static BiquadFilterNode* create(BaseAudioContext&, ExceptionState&);
     static BiquadFilterNode* create(BaseAudioContext*,
         const BiquadFilterOptions&,
         ExceptionState&);
 
-=======
-    static BiquadFilterNode* create(AudioContext& context, float sampleRate)
-    {
-        return new BiquadFilterNode(context, sampleRate);
-    }
->>>>>>> miniblink49
     DECLARE_VIRTUAL_TRACE();
 
     String type() const;
@@ -99,7 +70,6 @@ public:
 
     // Get the magnitude and phase response of the filter at the given
     // set of frequencies (in Hz). The phase response is in radians.
-<<<<<<< HEAD
     void getFrequencyResponse(const DOMFloat32Array* frequencyHz,
         DOMFloat32Array* magResponse,
         DOMFloat32Array* phaseResponse);
@@ -108,14 +78,6 @@ private:
     BiquadFilterNode(BaseAudioContext&);
 
     BiquadProcessor* getBiquadProcessor() const;
-=======
-    void getFrequencyResponse(const DOMFloat32Array* frequencyHz, DOMFloat32Array* magResponse, DOMFloat32Array* phaseResponse);
-
-private:
-    BiquadFilterNode(AudioContext&, float sampleRate);
-
-    BiquadProcessor* biquadProcessor() const;
->>>>>>> miniblink49
     bool setType(unsigned); // Returns true on success.
 
     Member<AudioParam> m_frequency;

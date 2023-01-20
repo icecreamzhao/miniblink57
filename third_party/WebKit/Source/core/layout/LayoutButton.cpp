@@ -18,7 +18,6 @@
  *
  */
 
-#include "config.h"
 #include "core/layout/LayoutButton.h"
 
 namespace blink {
@@ -31,9 +30,7 @@ LayoutButton::LayoutButton(Element* element)
 {
 }
 
-LayoutButton::~LayoutButton()
-{
-}
+LayoutButton::~LayoutButton() { }
 
 void LayoutButton::addChild(LayoutObject* newChild, LayoutObject* beforeChild)
 {
@@ -63,7 +60,8 @@ void LayoutButton::removeChild(LayoutObject* oldChild)
     }
 }
 
-void LayoutButton::updateAnonymousChildStyle(const LayoutObject& child, ComputedStyle& childStyle) const
+void LayoutButton::updateAnonymousChildStyle(const LayoutObject& child,
+    ComputedStyle& childStyle) const
 {
     ASSERT(!m_inner || &child == m_inner);
 
@@ -77,11 +75,14 @@ void LayoutButton::updateAnonymousChildStyle(const LayoutObject& child, Computed
     childStyle.setFlexDirection(style()->flexDirection());
     childStyle.setJustifyContent(style()->justifyContent());
     childStyle.setFlexWrap(style()->flexWrap());
+    // TODO (lajava): An anonymous box must not be used to resolve children's auto
+    // values.
     childStyle.setAlignItems(style()->alignItems());
     childStyle.setAlignContent(style()->alignContent());
 }
 
-LayoutRect LayoutButton::controlClipRect(const LayoutPoint& additionalOffset) const
+LayoutRect LayoutButton::controlClipRect(
+    const LayoutPoint& additionalOffset) const
 {
     // Clip to the padding box to at least give content the extra padding space.
     LayoutRect rect(additionalOffset, size());
@@ -89,7 +90,10 @@ LayoutRect LayoutButton::controlClipRect(const LayoutPoint& additionalOffset) co
     return rect;
 }
 
-int LayoutButton::baselinePosition(FontBaseline baseline, bool firstLine, LineDirectionMode direction, LinePositionMode linePositionMode) const
+int LayoutButton::baselinePosition(FontBaseline baseline,
+    bool firstLine,
+    LineDirectionMode direction,
+    LinePositionMode linePositionMode) const
 {
     ASSERT(linePositionMode == PositionOnContainingLine);
     // We want to call the LayoutBlock version of firstLineBoxBaseline to
@@ -100,13 +104,15 @@ int LayoutButton::baselinePosition(FontBaseline baseline, bool firstLine, LineDi
         // even when we have the anonymous LayoutBlock child, we calculate the
         // baseline for the empty case manually here.
         if (direction == HorizontalLine) {
-            return marginTop() + size().height() - borderBottom() - paddingBottom() - horizontalScrollbarHeight();
+            return (marginTop() + size().height() - borderBottom() - paddingBottom() - horizontalScrollbarHeight())
+                .toInt();
         }
-        return marginRight() + size().width() - borderLeft() - paddingLeft() - verticalScrollbarWidth();
+        return (marginRight() + size().width() - borderLeft() - paddingLeft() - verticalScrollbarWidth())
+            .toInt();
     }
-    return LayoutFlexibleBox::baselinePosition(baseline, firstLine, direction, linePositionMode);
+    return LayoutFlexibleBox::baselinePosition(baseline, firstLine, direction,
+        linePositionMode);
 }
-
 
 // For compatibility with IE/FF we only clip overflow on input elements.
 bool LayoutButton::hasControlClip() const

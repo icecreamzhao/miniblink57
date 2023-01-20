@@ -26,48 +26,34 @@
 #ifndef SuffixTree_h
 #define SuffixTree_h
 
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/Noncopyable.h"
-=======
->>>>>>> miniblink49
 #include "wtf/Vector.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
 class UnicodeCodebook {
-<<<<<<< HEAD
     STATIC_ONLY(UnicodeCodebook);
 
-=======
->>>>>>> miniblink49
 public:
     static int codeWord(UChar c) { return c; }
     enum { codeSize = 1 << 8 * sizeof(UChar) };
 };
 
 class ASCIICodebook {
-<<<<<<< HEAD
     STATIC_ONLY(ASCIICodebook);
 
-=======
->>>>>>> miniblink49
 public:
     static int codeWord(UChar c) { return c & (codeSize - 1); }
     enum { codeSize = 1 << (8 * sizeof(char) - 1) };
 };
 
-<<<<<<< HEAD
 template <typename Codebook>
 class SuffixTree {
     USING_FAST_MALLOC(SuffixTree);
     WTF_MAKE_NONCOPYABLE(SuffixTree);
 
-=======
-template<typename Codebook>
-class SuffixTree {
->>>>>>> miniblink49
 public:
     SuffixTree(const String& text, unsigned depth)
         : m_depth(depth)
@@ -90,12 +76,9 @@ public:
 
 private:
     class Node {
-<<<<<<< HEAD
         USING_FAST_MALLOC(Node);
         WTF_MAKE_NONCOPYABLE(Node);
 
-=======
->>>>>>> miniblink49
     public:
         Node(bool isLeaf = false)
         {

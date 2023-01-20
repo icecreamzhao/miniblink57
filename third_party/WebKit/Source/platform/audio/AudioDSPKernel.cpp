@@ -28,20 +28,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/audio/AudioDSPKernel.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 AudioDSPKernel::~AudioDSPKernel() { }
-=======
-AudioDSPKernel::~AudioDSPKernel()
-{
-}
->>>>>>> miniblink49
 
 } // namespace blink

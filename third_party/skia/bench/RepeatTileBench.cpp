@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -17,12 +13,8 @@
 #include "SkString.h"
 #include "sk_tool_utils.h"
 
-<<<<<<< HEAD
 static void draw_into_bitmap(const SkBitmap& bm)
 {
-=======
-static void draw_into_bitmap(const SkBitmap& bm) {
->>>>>>> miniblink49
     const int w = bm.width();
     const int h = bm.height();
 
@@ -30,13 +22,8 @@ static void draw_into_bitmap(const SkBitmap& bm) {
     SkPaint p;
     p.setAntiAlias(true);
     p.setColor(SK_ColorRED);
-<<<<<<< HEAD
     canvas.drawCircle(SkIntToScalar(w) / 2, SkIntToScalar(h) / 2,
         SkIntToScalar(SkMin32(w, h)) * 3 / 8, p);
-=======
-    canvas.drawCircle(SkIntToScalar(w)/2, SkIntToScalar(h)/2,
-                      SkIntToScalar(SkMin32(w, h))*3/8, p);
->>>>>>> miniblink49
 
     SkRect r;
     r.set(0, 0, SkIntToScalar(w), SkIntToScalar(h));
@@ -46,7 +33,6 @@ static void draw_into_bitmap(const SkBitmap& bm) {
     canvas.drawRect(r, p);
 }
 
-<<<<<<< HEAD
 static int conv_6_to_byte(int x)
 {
     return x * 0xFF / 5;
@@ -59,17 +45,6 @@ static int conv_byte_to_6(int x)
 
 static uint8_t compute_666_index(SkPMColor c)
 {
-=======
-static int conv_6_to_byte(int x) {
-    return x * 0xFF / 5;
-}
-
-static int conv_byte_to_6(int x) {
-    return x * 5 / 255;
-}
-
-static uint8_t compute_666_index(SkPMColor c) {
->>>>>>> miniblink49
     int r = SkGetPackedR32(c);
     int g = SkGetPackedG32(c);
     int b = SkGetPackedB32(c);
@@ -77,12 +52,8 @@ static uint8_t compute_666_index(SkPMColor c) {
     return conv_byte_to_6(r) * 36 + conv_byte_to_6(g) * 6 + conv_byte_to_6(b);
 }
 
-<<<<<<< HEAD
 static void convert_to_index666(const SkBitmap& src, SkBitmap* dst)
 {
-=======
-static void convert_to_index666(const SkBitmap& src, SkBitmap* dst) {
->>>>>>> miniblink49
     SkPMColor storage[216];
     SkPMColor* colors = storage;
     // rrr ggg bbb
@@ -98,13 +69,8 @@ static void convert_to_index666(const SkBitmap& src, SkBitmap* dst) {
     }
     SkColorTable* ctable = new SkColorTable(storage, 216);
     dst->allocPixels(SkImageInfo::Make(src.width(), src.height(),
-<<<<<<< HEAD
                          kIndex_8_SkColorType, kOpaque_SkAlphaType),
         nullptr, ctable);
-=======
-                                       kIndex_8_SkColorType, kOpaque_SkAlphaType),
-                     NULL, ctable);
->>>>>>> miniblink49
     ctable->unref();
 
     SkAutoLockPixels alps(src);
@@ -120,7 +86,6 @@ static void convert_to_index666(const SkBitmap& src, SkBitmap* dst) {
 }
 
 class RepeatTileBench : public Benchmark {
-<<<<<<< HEAD
     const SkColorType fColorType;
     const SkAlphaType fAlphaType;
     SkPaint fPaint;
@@ -131,16 +96,6 @@ public:
     RepeatTileBench(SkColorType ct, SkAlphaType at = kPremul_SkAlphaType)
         : fColorType(ct)
         , fAlphaType(at)
-=======
-    const SkColorType   fColorType;
-    const SkAlphaType   fAlphaType;
-    SkPaint             fPaint;
-    SkString            fName;
-    SkBitmap            fBitmap;
-public:
-    RepeatTileBench(SkColorType ct, SkAlphaType at = kPremul_SkAlphaType)
-        : fColorType(ct), fAlphaType(at)
->>>>>>> miniblink49
     {
         const int w = 50;
         const int h = 50;
@@ -151,7 +106,6 @@ public:
             fBitmap.setInfo(SkImageInfo::Make(w, h, ct, at));
         }
         fName.printf("repeatTile_%s_%c",
-<<<<<<< HEAD
             sk_tool_utils::colortype_name(ct), kOpaque_SkAlphaType == at ? 'X' : 'A');
     }
 
@@ -163,17 +117,6 @@ protected:
 
     void onDelayedSetup() override
     {
-=======
-                     sk_tool_utils::colortype_name(ct), kOpaque_SkAlphaType == at ? 'X' : 'A');
-    }
-
-protected:
-    const char* onGetName() override {
-        return fName.c_str();
-    }
-
-    void onPreDraw() override {
->>>>>>> miniblink49
         fBitmap.allocPixels();
         fBitmap.eraseColor(kOpaque_SkAlphaType == fAlphaType ? SK_ColorWHITE : 0);
 
@@ -185,7 +128,6 @@ protected:
             fBitmap = tmp;
         }
 
-<<<<<<< HEAD
         fPaint.setShader(SkShader::MakeBitmapShader(fBitmap,
             SkShader::kRepeat_TileMode,
             SkShader::kRepeat_TileMode));
@@ -193,16 +135,6 @@ protected:
 
     void onDraw(int loops, SkCanvas* canvas) override
     {
-=======
-        SkShader* s = SkShader::CreateBitmapShader(fBitmap,
-                                                   SkShader::kRepeat_TileMode,
-                                                   SkShader::kRepeat_TileMode);
-        fPaint.setShader(s)->unref();
-    }
-
-
-    void onDraw(const int loops, SkCanvas* canvas) override {
->>>>>>> miniblink49
         SkPaint paint(fPaint);
         this->setupPaint(&paint);
 

@@ -22,11 +22,7 @@ public:
 
 protected:
     void willSave() override;
-<<<<<<< HEAD
     SaveLayerStrategy getSaveLayerStrategy(const SaveLayerRec&) override;
-=======
-    SaveLayerStrategy willSaveLayer(const SkRect*, const SkPaint*, SaveFlags) override;
->>>>>>> miniblink49
     void willRestore() override;
 
     void didConcat(const SkMatrix&) override;
@@ -34,7 +30,6 @@ protected:
 
     void onDrawDRRect(const SkRRect&, const SkRRect&, const SkPaint&) override;
     virtual void onDrawText(const void* text, size_t byteLength, SkScalar x, SkScalar y,
-<<<<<<< HEAD
         const SkPaint&) override;
     virtual void onDrawPosText(const void* text, size_t byteLength, const SkPoint pos[],
         const SkPaint&) override;
@@ -44,17 +39,6 @@ protected:
         const SkMatrix* matrix, const SkPaint&) override;
     virtual void onDrawTextBlob(const SkTextBlob* blob, SkScalar x, SkScalar y,
         const SkPaint& paint) override;
-=======
-                            const SkPaint&) override;
-    virtual void onDrawPosText(const void* text, size_t byteLength, const SkPoint pos[],
-                               const SkPaint&) override;
-    virtual void onDrawPosTextH(const void* text, size_t byteLength, const SkScalar xpos[],
-                                SkScalar constY, const SkPaint&) override;
-    virtual void onDrawTextOnPath(const void* text, size_t byteLength, const SkPath& path,
-                                  const SkMatrix* matrix, const SkPaint&) override;
-    virtual void onDrawTextBlob(const SkTextBlob* blob, SkScalar x, SkScalar y,
-                                const SkPaint& paint) override;
->>>>>>> miniblink49
 
     void onDrawPaint(const SkPaint&) override;
     void onDrawPoints(PointMode, size_t count, const SkPoint pts[], const SkPaint&) override;
@@ -64,7 +48,6 @@ protected:
     void onDrawPath(const SkPath&, const SkPaint&) override;
     void onDrawBitmap(const SkBitmap&, SkScalar left, SkScalar top, const SkPaint*) override;
     void onDrawBitmapRect(const SkBitmap&, const SkRect* src, const SkRect& dst, const SkPaint*,
-<<<<<<< HEAD
         SrcRectConstraint) override;
     void onDrawImage(const SkImage*, SkScalar left, SkScalar top, const SkPaint*) override;
     void onDrawImageRect(const SkImage*, const SkRect* src, const SkRect& dst,
@@ -76,20 +59,6 @@ protected:
         const SkColor colors[], SkXfermode* xmode,
         const uint16_t indices[], int indexCount,
         const SkPaint&) override;
-=======
-                          DrawBitmapRectFlags flags) override;
-    void onDrawImage(const SkImage*, SkScalar left, SkScalar top, const SkPaint*) override;
-    void onDrawImageRect(const SkImage*, const SkRect* src, const SkRect& dst,
-                         const SkPaint*) override;
-    void onDrawBitmapNine(const SkBitmap&, const SkIRect& center, const SkRect& dst,
-                          const SkPaint*) override;
-    void onDrawSprite(const SkBitmap&, int left, int top, const SkPaint*) override;
-    void onDrawVertices(VertexMode vmode, int vertexCount,
-                        const SkPoint vertices[], const SkPoint texs[],
-                        const SkColor colors[], SkXfermode* xmode,
-                        const uint16_t indices[], int indexCount,
-                        const SkPaint&) override;
->>>>>>> miniblink49
 
     void onClipRect(const SkRect&, SkRegion::Op, ClipEdgeStyle) override;
     void onClipRRect(const SkRRect&, SkRegion::Op, ClipEdgeStyle) override;
@@ -99,13 +68,8 @@ protected:
     void onDrawPicture(const SkPicture*, const SkMatrix*, const SkPaint*) override;
 
 private:
-<<<<<<< HEAD
     lua_State* fL;
     SkString fFunc;
-=======
-    lua_State*  fL;
-    SkString    fFunc;
->>>>>>> miniblink49
 
     void sendverb(const char verb[]);
 

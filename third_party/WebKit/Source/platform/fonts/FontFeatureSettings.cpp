@@ -23,10 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/fonts/FontFeatureSettings.h"
 
 namespace blink {
@@ -37,11 +33,7 @@ FontFeature::FontFeature(const AtomicString& tag, int value)
 {
 }
 
-<<<<<<< HEAD
 bool FontFeature::operator==(const FontFeature& other) const
-=======
-bool FontFeature::operator==(const FontFeature& other)
->>>>>>> miniblink49
 {
     return m_tag == other.m_tag && m_value == other.m_value;
 }
@@ -50,12 +42,9 @@ FontFeatureSettings::FontFeatureSettings()
 {
 }
 
-<<<<<<< HEAD
 bool FontFeatureSettings::operator==(const FontFeatureSettings& other) const
 {
     return m_list == other.m_list;
 }
 
-=======
->>>>>>> miniblink49
 } // namespace blink

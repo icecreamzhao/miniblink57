@@ -26,13 +26,6 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
-
-#if ENABLE(WEB_AUDIO)
-
->>>>>>> miniblink49
 #include "platform/audio/AudioFIFO.h"
 
 namespace blink {
@@ -61,40 +54,22 @@ void AudioFIFO::consume(AudioBus* destination, size_t framesToConsume)
 
     size_t numberOfChannels = m_fifoAudioBus->numberOfChannels();
 
-<<<<<<< HEAD
     for (size_t channelIndex = 0; channelIndex < numberOfChannels;
          ++channelIndex) {
         float* destinationData = destination->channel(channelIndex)->mutableData();
         const float* sourceData = m_fifoAudioBus->channel(channelIndex)->data();
 
         bool isCopyGood = ((m_readIndex < m_fifoLength) && (m_readIndex + part1Length) <= m_fifoLength && (part1Length <= destination->length()) && (part1Length + part2Length) <= destination->length());
-=======
-    for (size_t channelIndex = 0; channelIndex < numberOfChannels; ++channelIndex) {
-        float* destinationData = destination->channel(channelIndex)->mutableData();
-        const float* sourceData = m_fifoAudioBus->channel(channelIndex)->data();
-
-        bool isCopyGood = ((m_readIndex < m_fifoLength)
-                           && (m_readIndex + part1Length) <= m_fifoLength
-                           && (part1Length <= destination->length())
-                           && (part1Length + part2Length) <= destination->length());
->>>>>>> miniblink49
         ASSERT(isCopyGood);
         if (!isCopyGood)
             return;
 
-<<<<<<< HEAD
         memcpy(destinationData, sourceData + m_readIndex,
             part1Length * sizeof(*sourceData));
         // Handle wrap around of the FIFO, if needed.
         if (part2Length)
             memcpy(destinationData + part1Length, sourceData,
                 part2Length * sizeof(*sourceData));
-=======
-        memcpy(destinationData, sourceData + m_readIndex, part1Length * sizeof(*sourceData));
-        // Handle wrap around of the FIFO, if needed.
-        if (part2Length)
-            memcpy(destinationData + part1Length, sourceData, part2Length * sizeof(*sourceData));
->>>>>>> miniblink49
     }
     m_readIndex = updateIndex(m_readIndex, framesToConsume);
     ASSERT(m_framesInFifo >= framesToConsume);
@@ -116,28 +91,16 @@ void AudioFIFO::push(const AudioBus* sourceBus)
 
     size_t numberOfChannels = m_fifoAudioBus->numberOfChannels();
 
-<<<<<<< HEAD
     for (size_t channelIndex = 0; channelIndex < numberOfChannels;
          ++channelIndex) {
         float* destination = m_fifoAudioBus->channel(channelIndex)->mutableData();
         const float* source = sourceBus->channel(channelIndex)->data();
 
         bool isCopyGood = ((m_writeIndex < m_fifoLength) && (m_writeIndex + part1Length) <= m_fifoLength && part2Length < m_fifoLength && part1Length + part2Length <= sourceLength);
-=======
-    for (size_t channelIndex = 0; channelIndex < numberOfChannels; ++channelIndex) {
-        float* destination = m_fifoAudioBus->channel(channelIndex)->mutableData();
-        const float* source = sourceBus->channel(channelIndex)->data();
-
-        bool isCopyGood = ((m_writeIndex < m_fifoLength)
-                           && (m_writeIndex + part1Length) <= m_fifoLength
-                           && part2Length < m_fifoLength
-                           && part1Length + part2Length <= sourceLength);
->>>>>>> miniblink49
         ASSERT(isCopyGood);
         if (!isCopyGood)
             return;
 
-<<<<<<< HEAD
         memcpy(destination + m_writeIndex, source,
             part1Length * sizeof(*destination));
 
@@ -145,13 +108,6 @@ void AudioFIFO::push(const AudioBus* sourceBus)
         if (part2Length)
             memcpy(destination, source + part1Length,
                 part2Length * sizeof(*destination));
-=======
-        memcpy(destination + m_writeIndex, source, part1Length * sizeof(*destination));
-
-        // Handle wrap around of the FIFO, if needed.
-        if (part2Length)
-            memcpy(destination, source + part1Length, part2Length * sizeof(*destination));
->>>>>>> miniblink49
     }
 
     m_framesInFifo += sourceLength;
@@ -159,18 +115,12 @@ void AudioFIFO::push(const AudioBus* sourceBus)
     m_writeIndex = updateIndex(m_writeIndex, sourceLength);
 }
 
-<<<<<<< HEAD
 void AudioFIFO::findWrapLengths(size_t index,
     size_t size,
     size_t& part1Length,
     size_t& part2Length)
 {
     SECURITY_DCHECK(index < m_fifoLength && size <= m_fifoLength);
-=======
-void AudioFIFO::findWrapLengths(size_t index, size_t size, size_t& part1Length, size_t& part2Length)
-{
-    ASSERT_WITH_SECURITY_IMPLICATION(index < m_fifoLength && size <= m_fifoLength);
->>>>>>> miniblink49
     if (index < m_fifoLength && size <= m_fifoLength) {
         if (index + size > m_fifoLength) {
             // Need to wrap. Figure out the length of each piece.
@@ -182,20 +132,11 @@ void AudioFIFO::findWrapLengths(size_t index, size_t size, size_t& part1Length, 
             part2Length = 0;
         }
     } else {
-<<<<<<< HEAD
         // Invalid values for index or size. Set the part lengths to zero so nothing
         // is copied.
-=======
-        // Invalid values for index or size. Set the part lengths to zero so nothing is copied.
->>>>>>> miniblink49
         part1Length = 0;
         part2Length = 0;
     }
 }
 
 } // namespace blink
-<<<<<<< HEAD
-=======
-
-#endif // ENABLE(WEB_AUDIO)
->>>>>>> miniblink49

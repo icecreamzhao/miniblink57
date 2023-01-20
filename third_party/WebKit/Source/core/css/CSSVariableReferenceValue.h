@@ -13,20 +13,21 @@ namespace blink {
 
 class CSSVariableReferenceValue : public CSSValue {
 public:
-    static PassRefPtrWillBeRawPtr<CSSVariableReferenceValue> create(PassRefPtr<CSSVariableData> data)
+    static CSSVariableReferenceValue* create(PassRefPtr<CSSVariableData> data)
     {
-        return adoptRefWillBeNoop(new CSSVariableReferenceValue(data));
+        return new CSSVariableReferenceValue(std::move(data));
     }
 
-    CSSVariableData* variableDataValue() const
-    {
-        return m_data.get();
-    }
+    CSSVariableData* variableDataValue() const { return m_data.get(); }
 
-    bool equals(const CSSVariableReferenceValue& other) const { return m_data == other.m_data; }
+    bool equals(const CSSVariableReferenceValue& other) const
+    {
+        return m_data == other.m_data;
+    }
     String customCSSText() const;
 
     DECLARE_TRACE_AFTER_DISPATCH();
+
 private:
     CSSVariableReferenceValue(PassRefPtr<CSSVariableData> data)
         : CSSValue(VariableReferenceClass)
@@ -37,7 +38,8 @@ private:
     RefPtr<CSSVariableData> m_data;
 };
 
-DEFINE_CSS_VALUE_TYPE_CASTS(CSSVariableReferenceValue, isVariableReferenceValue());
+DEFINE_CSS_VALUE_TYPE_CASTS(CSSVariableReferenceValue,
+    isVariableReferenceValue());
 
 } // namespace blink
 

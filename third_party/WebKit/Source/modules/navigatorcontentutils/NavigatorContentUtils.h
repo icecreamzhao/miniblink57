@@ -27,24 +27,16 @@
 #ifndef NavigatorContentUtils_h
 #define NavigatorContentUtils_h
 
-<<<<<<< HEAD
 #include "core/frame/Navigator.h"
-=======
->>>>>>> miniblink49
 #include "modules/ModulesExport.h"
 #include "modules/navigatorcontentutils/NavigatorContentUtilsClient.h"
 #include "platform/Supplementable.h"
 #include "platform/heap/Handle.h"
-<<<<<<< HEAD
-=======
-#include "wtf/OwnPtr.h"
->>>>>>> miniblink49
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
 class ExceptionState;
-<<<<<<< HEAD
 class Navigator;
 
 class MODULES_EXPORT NavigatorContentUtils final
@@ -92,37 +84,6 @@ private:
     NavigatorContentUtilsClient* client() { return m_client.get(); }
 
     Member<NavigatorContentUtilsClient> m_client;
-=======
-class LocalFrame;
-class Navigator;
-
-class MODULES_EXPORT NavigatorContentUtils final : public NoBaseWillBeGarbageCollectedFinalized<NavigatorContentUtils>, public WillBeHeapSupplement<LocalFrame> {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(NavigatorContentUtils);
-public:
-    virtual ~NavigatorContentUtils();
-
-    static NavigatorContentUtils* from(LocalFrame&);
-    static const char* supplementName();
-
-    static void registerProtocolHandler(Navigator&, const String& scheme, const String& url, const String& title, ExceptionState&);
-    static String isProtocolHandlerRegistered(Navigator&, const String& scheme, const String& url, ExceptionState&);
-    static void unregisterProtocolHandler(Navigator&, const String& scheme, const String& url, ExceptionState&);
-
-    static PassOwnPtrWillBeRawPtr<NavigatorContentUtils> create(PassOwnPtr<NavigatorContentUtilsClient>);
-
-    DEFINE_INLINE_VIRTUAL_TRACE() { WillBeHeapSupplement<LocalFrame>::trace(visitor); }
-
-    void setClientForTest(PassOwnPtr<NavigatorContentUtilsClient> client) { m_client = client; }
-
-private:
-    explicit NavigatorContentUtils(PassOwnPtr<NavigatorContentUtilsClient> client)
-        : m_client(client)
-    { }
-
-    NavigatorContentUtilsClient* client() { return m_client.get(); }
-
-    OwnPtr<NavigatorContentUtilsClient> m_client;
->>>>>>> miniblink49
 };
 
 } // namespace blink

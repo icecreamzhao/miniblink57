@@ -39,28 +39,14 @@ namespace blink {
 class WebCache {
 public:
     struct UsageStats {
-<<<<<<< HEAD
         size_t capacity;
         size_t size;
-=======
-        // Capacities.
-        size_t minDeadCapacity;
-        size_t maxDeadCapacity;
-        size_t capacity;
-        // Utilization.
-        size_t liveSize;
-        size_t deadSize;
->>>>>>> miniblink49
     };
 
     // A struct mirroring blink::MemoryCache::TypeStatistic.
     struct ResourceTypeStat {
         size_t count;
         size_t size;
-<<<<<<< HEAD
-=======
-        size_t liveSize;
->>>>>>> miniblink49
         size_t decodedSize;
     };
 
@@ -75,13 +61,7 @@ public:
     };
 
     // Sets the capacities of the resource cache, evicting objects as necessary.
-<<<<<<< HEAD
     BLINK_EXPORT static void setCapacity(size_t);
-=======
-    BLINK_EXPORT static void setCapacities(size_t minDeadCapacity,
-                                            size_t maxDeadCapacity,
-                                            size_t capacity);
->>>>>>> miniblink49
 
     // Clears the cache (as much as possible; some resources may not be
     // cleared if they are actively referenced). Note that this method
@@ -94,22 +74,10 @@ public:
     // Get usage stats about the resource cache.
     BLINK_EXPORT static void getResourceTypeStats(ResourceTypeStats*);
 
-<<<<<<< HEAD
 private:
     WebCache(); // Not intended to be instanced.
 };
 
 } // namespace blink
-=======
-    // Prunes all resources (as much as possible; some resources may not be
-    // cleared if they are actively referenced). And releases cache memory.
-    BLINK_EXPORT static void pruneAll();
-
-private:
-    WebCache();  // Not intended to be instanced.
-};
-
-}  // namespace blink
->>>>>>> miniblink49
 
 #endif

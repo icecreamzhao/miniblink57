@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -9,7 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "SkRandom.h"
 #include "gm.h"
 
@@ -18,25 +13,12 @@ namespace skiagm {
 #define W 400
 #define H 400
 #define N 100
-=======
-
-
-#include "gm.h"
-#include "SkRandom.h"
-
-namespace skiagm {
-
-#define W   400
-#define H   400
-#define N   100
->>>>>>> miniblink49
 
 static const SkScalar SW = SkIntToScalar(W);
 static const SkScalar SH = SkIntToScalar(H);
 
 class StrokeRectsGM : public GM {
 public:
-<<<<<<< HEAD
     StrokeRectsGM() { }
 
 protected:
@@ -52,21 +34,6 @@ protected:
 
     static void rnd_rect(SkRect* r, SkRandom& rand)
     {
-=======
-    StrokeRectsGM() {}
-
-protected:
-
-    SkString onShortName() override {
-        return SkString("strokerects");
-    }
-
-    SkISize onISize() override {
-        return SkISize::Make(W*2, H*2);
-    }
-
-    static void rnd_rect(SkRect* r, SkRandom& rand) {
->>>>>>> miniblink49
         SkScalar x = rand.nextUScalar1() * W;
         SkScalar y = rand.nextUScalar1() * H;
         SkScalar w = rand.nextUScalar1() * (W >> 2);
@@ -75,18 +42,11 @@ protected:
         SkScalar woffset = rand.nextSScalar1();
 
         r->set(x, y, x + w, y + h);
-<<<<<<< HEAD
         r->offset(-w / 2 + woffset, -h / 2 + hoffset);
     }
 
     void onDraw(SkCanvas* canvas) override
     {
-=======
-        r->offset(-w/2 + woffset, -h/2 + hoffset);
-    }
-
-    void onDraw(SkCanvas* canvas) override {
->>>>>>> miniblink49
         SkPaint paint;
         paint.setStyle(SkPaint::kStroke_Style);
 
@@ -98,13 +58,7 @@ protected:
                 SkAutoCanvasRestore acr(canvas, true);
                 canvas->translate(SW * x, SH * y);
                 canvas->clipRect(SkRect::MakeLTRB(
-<<<<<<< HEAD
                     SkIntToScalar(2), SkIntToScalar(2), SW - SkIntToScalar(2), SH - SkIntToScalar(2)));
-=======
-                        SkIntToScalar(2), SkIntToScalar(2)
-                        , SW - SkIntToScalar(2), SH - SkIntToScalar(2)
-                ));
->>>>>>> miniblink49
 
                 SkRandom rand;
                 for (int i = 0; i < N; i++) {

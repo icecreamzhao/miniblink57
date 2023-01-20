@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "platform/graphics/gpu/AcceleratedImageBufferSurface.h"
 
 #include "platform/graphics/gpu/SharedGpuContext.h"
@@ -36,23 +35,10 @@
 #include "skia/ext/texture_handle.h"
 #include "third_party/skia/include/gpu/GrContext.h"
 #include "wtf/PtrUtil.h"
-=======
-#include "config.h"
-#include "platform/graphics/gpu/AcceleratedImageBufferSurface.h"
-
-#include "public/platform/Platform.h"
-#include "public/platform/WebGraphicsContext3DProvider.h"
-#include "third_party/skia/include/core/SkCanvas.h"
-#include "third_party/skia/include/core/SkDevice.h"
-#include "third_party/skia/include/gpu/GrRenderTarget.h"
-#include "third_party/skia/include/gpu/GrTexture.h"
-#include "wtf/PassOwnPtr.h"
->>>>>>> miniblink49
 #include "wtf/RefPtr.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 AcceleratedImageBufferSurface::AcceleratedImageBufferSurface(
     const IntSize& size,
     OpacityMode opacityMode,
@@ -101,38 +87,6 @@ GLuint AcceleratedImageBufferSurface::getBackingTextureHandleForOverwrite()
         m_surface->getTextureHandle(
             SkSurface::kDiscardWrite_TextureHandleAccess))
         ->fID;
-=======
-AcceleratedImageBufferSurface::AcceleratedImageBufferSurface(const IntSize& size, OpacityMode opacityMode)
-    : ImageBufferSurface(size, opacityMode)
-{
-    m_contextProvider = adoptPtr(Platform::current()->createSharedOffscreenGraphicsContext3DProvider());
-    if (!m_contextProvider)
-        return;
-    GrContext* grContext = m_contextProvider->grContext();
-    if (!grContext)
-        return;
-
-    SkAlphaType alphaType = (Opaque == opacityMode) ? kOpaque_SkAlphaType : kPremul_SkAlphaType;
-    SkImageInfo info = SkImageInfo::MakeN32(size.width(), size.height(), alphaType);
-    SkSurfaceProps disableLCDProps(0, kUnknown_SkPixelGeometry);
-    m_surface = adoptPtr(SkSurface::NewRenderTarget(grContext, SkSurface::kYes_Budgeted, info, 0 /* sampleCount */,
-        Opaque == opacityMode ? nullptr : &disableLCDProps));
-    if (!m_surface.get())
-        return;
-    clear();
-}
-
-PassRefPtr<SkImage> AcceleratedImageBufferSurface::newImageSnapshot() const
-{
-    return adoptRef(m_surface->newImageSnapshot());
-}
-
-Platform3DObject AcceleratedImageBufferSurface::getBackingTextureHandleForOverwrite()
-{
-    if (!m_surface)
-        return 0;
-    return m_surface->getTextureHandle(SkSurface::kDiscardWrite_TextureHandleAccess);
->>>>>>> miniblink49
 }
 
 } // namespace blink

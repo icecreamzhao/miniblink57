@@ -5,7 +5,6 @@
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-<<<<<<< HEAD
 #import "SkNSWindow.h"
 #import <Cocoa/Cocoa.h>
 @interface FileReaderAppDelegate : NSObject <NSApplicationDelegate> {
@@ -13,13 +12,4 @@
 }
 
 @property (assign) IBOutlet SkNSWindow* window;
-=======
-#import <Cocoa/Cocoa.h>
-#import "SkNSWindow.h"
-@interface FileReaderAppDelegate : NSObject <NSApplicationDelegate> {
-    SkNSWindow *window;
-}
-
-@property (assign) IBOutlet SkNSWindow *window;
->>>>>>> miniblink49
 @end

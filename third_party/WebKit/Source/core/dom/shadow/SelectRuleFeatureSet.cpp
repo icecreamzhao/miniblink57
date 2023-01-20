@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/dom/shadow/SelectRuleFeatureSet.h"
 
 #include "core/css/CSSSelector.h"
@@ -38,21 +37,24 @@
 
 namespace blink {
 
-void SelectRuleFeatureSet::collectFeaturesFromSelector(const CSSSelector& selector)
+void SelectRuleFeatureSet::collectFeaturesFromSelectorList(
+    const CSSSelectorList& list)
 {
-    for (const CSSSelector* current = &selector; current; current = current->tagHistory()) {
-        if (invalidationSetForSelector(*current))
-            continue;
+    for (const CSSSelector* selector = list.first(); selector;
+         selector = CSSSelectorList::next(*selector)) {
+        for (const CSSSelector* component = selector; component;
+             component = component->tagHistory()) {
+            if (invalidationSetForSimpleSelector(*component, InvalidateDescendants))
+                continue;
 
-        if (!current->selectorList())
-            continue;
-
-        for (const CSSSelector* selector = current->selectorList()->first(); selector; selector = CSSSelectorList::next(*selector))
-            collectFeaturesFromSelector(*selector);
+            if (component->selectorList())
+                collectFeaturesFromSelectorList(*component->selectorList());
+        }
     }
 }
 
-bool SelectRuleFeatureSet::checkSelectorsForClassChange(const SpaceSplitString& changedClasses) const
+bool SelectRuleFeatureSet::checkSelectorsForClassChange(
+    const SpaceSplitString& changedClasses) const
 {
     unsigned changedSize = changedClasses.size();
     for (unsigned i = 0; i < changedSize; ++i) {
@@ -62,12 +64,15 @@ bool SelectRuleFeatureSet::checkSelectorsForClassChange(const SpaceSplitString& 
     return false;
 }
 
-bool SelectRuleFeatureSet::checkSelectorsForClassChange(const SpaceSplitString& oldClasses, const SpaceSplitString& newClasses) const
+bool SelectRuleFeatureSet::checkSelectorsForClassChange(
+    const SpaceSplitString& oldClasses,
+    const SpaceSplitString& newClasses) const
 {
     if (!oldClasses.size())
         return checkSelectorsForClassChange(newClasses);
 
-    // Class vectors tend to be very short. This is faster than using a hash table.
+    // Class vectors tend to be very short. This is faster than using a hash
+    // table.
     BitVector remainingClassBits;
     remainingClassBits.ensureSize(oldClasses.size());
 
@@ -100,5 +105,4 @@ bool SelectRuleFeatureSet::checkSelectorsForClassChange(const SpaceSplitString& 
     return false;
 }
 
-}
-
+} // namespace blink

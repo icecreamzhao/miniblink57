@@ -1,20 +1,8 @@
 include_rules = [
-<<<<<<< HEAD
-=======
-    "+bindings",
-    "+core",
-    "+heap",
->>>>>>> miniblink49
     "-modules",
     "+modules/EventModules.h",
     "+modules/EventTargetModules.h",
     "+modules/ModulesExport.h",
     "+modules/websockets",
-<<<<<<< HEAD
     "+mojo/public/cpp/bindings",
-=======
-    "+platform",
-    "+public/platform",
-    "-web",
->>>>>>> miniblink49
 ]

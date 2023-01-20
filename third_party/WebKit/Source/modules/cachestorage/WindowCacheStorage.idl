@@ -2,18 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
 // https://w3c.github.io/ServiceWorker/#self-caches
-=======
-// https://slightlyoff.github.io/ServiceWorker/spec/service_worker/#self-caches
->>>>>>> miniblink49
 [
     RuntimeEnabled=GlobalCacheStorage,
     ImplementedAs=GlobalCacheStorage,
 ] partial interface Window {
-<<<<<<< HEAD
     [MeasureAs=GlobalCacheStorage, RuntimeEnabled=GlobalCacheStorage, RaisesException] readonly attribute CacheStorage caches;
-=======
-    [Unforgeable, MeasureAs=GlobalCacheStorage, RuntimeEnabled=GlobalCacheStorage, RaisesException] readonly attribute CacheStorage caches;
->>>>>>> miniblink49
 };

@@ -21,20 +21,13 @@
 #define PlatformTouchPoint_h
 
 #include "platform/geometry/FloatPoint.h"
-<<<<<<< HEAD
 #include "public/platform/WebPointerProperties.h"
-=======
->>>>>>> miniblink49
 
 namespace blink {
 
 class PlatformTouchPoint {
 public:
-<<<<<<< HEAD
     enum TouchState {
-=======
-    enum State {
->>>>>>> miniblink49
         TouchReleased,
         TouchPressed,
         TouchMoved,
@@ -45,7 +38,6 @@ public:
 
     // This is necessary for us to be able to build synthetic events.
     PlatformTouchPoint()
-<<<<<<< HEAD
         : m_rotationAngle(0)
     {
     }
@@ -56,21 +48,10 @@ public:
     }
     int id() const { return pointerProperties().id; }
     TouchState state() const { return m_state; }
-=======
-        : m_id(0)
-        , m_rotationAngle(0)
-        , m_force(0)
-    {
-    }
-
-    int id() const { return m_id; }
-    State state() const { return m_state; }
->>>>>>> miniblink49
     FloatPoint screenPos() const { return m_screenPos; }
     FloatPoint pos() const { return m_pos; }
     FloatSize radius() const { return m_radius; }
     float rotationAngle() const { return m_rotationAngle; }
-<<<<<<< HEAD
     float force() const
     {
         ASSERT(!std_isnan(pointerProperties().force));
@@ -81,26 +62,12 @@ protected:
     WebPointerProperties m_pointerProperties;
 
     TouchState m_state;
-=======
-    float force() const { return m_force; }
-
-protected:
-    int m_id;
-    State m_state;
->>>>>>> miniblink49
     FloatPoint m_screenPos;
     FloatPoint m_pos;
     FloatSize m_radius;
     float m_rotationAngle;
-<<<<<<< HEAD
 };
 
 } // namespace blink
-=======
-    float m_force;
-};
-
-}
->>>>>>> miniblink49
 
 #endif // PlatformTouchPoint_h

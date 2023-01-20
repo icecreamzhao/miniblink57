@@ -29,15 +29,11 @@
 #define FloatSize_h
 
 #include "platform/geometry/IntPoint.h"
-<<<<<<< HEAD
 #include "third_party/skia/include/core/SkSize.h"
 #include "wtf/Allocator.h"
 #include "wtf/Forward.h"
 #include "wtf/MathExtras.h"
 #include <iosfwd>
-=======
-#include "wtf/MathExtras.h"
->>>>>>> miniblink49
 
 #if OS(MACOSX)
 typedef struct CGSize CGSize;
@@ -53,7 +49,6 @@ class IntSize;
 class LayoutSize;
 
 class PLATFORM_EXPORT FloatSize {
-<<<<<<< HEAD
     DISALLOW_NEW();
 
 public:
@@ -77,12 +72,6 @@ public:
         , m_height(size.height())
     {
     }
-=======
-public:
-    FloatSize() : m_width(0), m_height(0) { }
-    FloatSize(float width, float height) : m_width(width), m_height(height) { }
-    FloatSize(const IntSize& size) : m_width(size.width()), m_height(size.height()) { }
->>>>>>> miniblink49
     explicit FloatSize(const LayoutSize&);
 
     static FloatSize narrowPrecision(double width, double height);
@@ -137,21 +126,9 @@ public:
         return m_width * m_width + m_height * m_height;
     }
 
-<<<<<<< HEAD
     FloatSize transposedSize() const { return FloatSize(m_height, m_width); }
 
     FloatSize scaledBy(float scale) const { return scaledBy(scale, scale); }
-=======
-    FloatSize transposedSize() const
-    {
-        return FloatSize(m_height, m_width);
-    }
-
-    FloatSize scaledBy(float scale) const
-    {
-        return scaledBy(scale, scale);
-    }
->>>>>>> miniblink49
 
     FloatSize scaledBy(float scaleX, float scaleY) const
     {
@@ -159,24 +136,16 @@ public:
     }
 
 #if OS(MACOSX)
-<<<<<<< HEAD
     explicit FloatSize(
         const CGSize&); // don't do this implicitly since it's lossy
     operator CGSize() const;
 #if defined(__OBJC__) && !defined(NSGEOMETRY_TYPES_SAME_AS_CGGEOMETRY_TYPES)
     explicit FloatSize(
         const NSSize&); // don't do this implicitly since it's lossy
-=======
-    explicit FloatSize(const CGSize&); // don't do this implicitly since it's lossy
-    operator CGSize() const;
-#if defined(__OBJC__) && !defined(NSGEOMETRY_TYPES_SAME_AS_CGGEOMETRY_TYPES)
-    explicit FloatSize(const NSSize &); // don't do this implicitly since it's lossy
->>>>>>> miniblink49
     operator NSSize() const;
 #endif
 #endif
 
-<<<<<<< HEAD
     operator SkSize() const
     {
         return SkSize::Make(m_width, m_height);
@@ -184,8 +153,6 @@ public:
 
     String toString() const;
 
-=======
->>>>>>> miniblink49
 private:
     float m_width, m_height;
 };
@@ -241,37 +208,24 @@ inline bool operator!=(const FloatSize& a, const FloatSize& b)
 
 inline IntSize roundedIntSize(const FloatSize& p)
 {
-<<<<<<< HEAD
     return IntSize(clampTo<int>(roundf(p.width())),
         clampTo<int>(roundf(p.height())));
-=======
-    return IntSize(clampTo<int>(roundf(p.width())), clampTo<int>(roundf(p.height())));
->>>>>>> miniblink49
 }
 
 inline IntSize flooredIntSize(const FloatSize& p)
 {
-<<<<<<< HEAD
     return IntSize(clampTo<int>(floorf(p.width())),
         clampTo<int>(floorf(p.height())));
-=======
-    return IntSize(clampTo<int>(floorf(p.width())), clampTo<int>(floorf(p.height())));
->>>>>>> miniblink49
 }
 
 inline IntSize expandedIntSize(const FloatSize& p)
 {
-<<<<<<< HEAD
     return IntSize(clampTo<int>(ceilf(p.width())),
         clampTo<int>(ceilf(p.height())));
-=======
-    return IntSize(clampTo<int>(ceilf(p.width())), clampTo<int>(ceilf(p.height())));
->>>>>>> miniblink49
 }
 
 inline IntPoint flooredIntPoint(const FloatSize& p)
 {
-<<<<<<< HEAD
     return IntPoint(clampTo<int>(floorf(p.width())),
         clampTo<int>(floorf(p.height())));
 }
@@ -280,11 +234,6 @@ inline IntPoint flooredIntPoint(const FloatSize& p)
 // See platform/testing/GeometryPrinters.h.
 void PrintTo(const FloatSize&, std::ostream*);
 
-=======
-    return IntPoint(clampTo<int>(floorf(p.width())), clampTo<int>(floorf(p.height())));
-}
-
->>>>>>> miniblink49
 } // namespace blink
 
 #endif // FloatSize_h

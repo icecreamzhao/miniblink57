@@ -32,16 +32,22 @@
 
 namespace blink {
 
-class StyleSurroundData : public RefCounted<StyleSurroundData> {
+// TODO(sashab): Move this into a private class on ComputedStyle, and remove
+// all methods on it, merging them into copy/creation methods on ComputedStyle
+// instead. Keep the allocation logic, only allocating a new object if needed.
+class CORE_EXPORT StyleSurroundData : public RefCounted<StyleSurroundData> {
 public:
-    static PassRefPtr<StyleSurroundData> create() { return adoptRef(new StyleSurroundData); }
-    PassRefPtr<StyleSurroundData> copy() const { return adoptRef(new StyleSurroundData(*this)); }
+    static PassRefPtr<StyleSurroundData> create()
+    {
+        return adoptRef(new StyleSurroundData);
+    }
+    PassRefPtr<StyleSurroundData> copy() const
+    {
+        return adoptRef(new StyleSurroundData(*this));
+    }
 
     bool operator==(const StyleSurroundData&) const;
-    bool operator!=(const StyleSurroundData& o) const
-    {
-        return !(*this == o);
-    }
+    bool operator!=(const StyleSurroundData& o) const { return !(*this == o); }
 
     LengthBox offset;
     LengthBox margin;

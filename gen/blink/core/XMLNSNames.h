@@ -6,27 +6,27 @@
 #define XMLNSNames_h
 
 #include "core/dom/QualifiedName.h"
-#include "wtf/PassOwnPtr.h"
+#include <memory>
 
 namespace blink {
 
-class XMLNSQualifiedName : public QualifiedName { };
+class XMLNSQualifiedName : public QualifiedName {
+};
 
 namespace XMLNSNames {
 
-// Namespace
-extern const WTF::AtomicString& xmlnsNamespaceURI;
+    // Namespace
+    extern const WTF::AtomicString& xmlnsNamespaceURI;
 
-// Tags
+    // Tags
 
-// Attributes
-extern const blink::QualifiedName& xmlnsAttr;
+    // Attributes
+    extern const blink::QualifiedName& xmlnsAttr;
 
+    const unsigned XMLNSAttrsCount = 1;
+    std::unique_ptr<const QualifiedName*[]> getXMLNSAttrs();
 
-const unsigned XMLNSAttrsCount = 1;
-PassOwnPtr<const QualifiedName*[]> getXMLNSAttrs();
-
-void init();
+    void init();
 
 } // XMLNSNames
 } // namespace blink

@@ -23,22 +23,24 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "bindings/modules/v8/V8BindingForModules.h"
 
+#include "bindings/core/v8/ToV8.h"
 #include "bindings/core/v8/V8Binding.h"
 #include "bindings/core/v8/V8BindingForTesting.h"
 #include "bindings/core/v8/V8PerIsolateData.h"
 #include "bindings/modules/v8/ToV8ForModules.h"
 #include "modules/indexeddb/IDBKey.h"
 #include "modules/indexeddb/IDBKeyPath.h"
-#include <gtest/gtest.h>
+#include "testing/gtest/include/gtest/gtest.h"
 
 using namespace blink;
 
 namespace {
 
-IDBKey* checkKeyFromValueAndKeyPathInternal(v8::Isolate* isolate, const ScriptValue& value, const String& keyPath)
+IDBKey* checkKeyFromValueAndKeyPathInternal(v8::Isolate* isolate,
+    const ScriptValue& value,
+    const String& keyPath)
 {
     IDBKeyPath idbKeyPath(keyPath);
     EXPECT_TRUE(idbKeyPath.isValid());
@@ -47,168 +49,205 @@ IDBKey* checkKeyFromValueAndKeyPathInternal(v8::Isolate* isolate, const ScriptVa
     return ScriptValue::to<IDBKey*>(isolate, value, exceptionState, idbKeyPath);
 }
 
-void checkKeyPathNullValue(v8::Isolate* isolate, const ScriptValue& value, const String& keyPath)
+void checkKeyPathNullValue(v8::Isolate* isolate,
+    const ScriptValue& value,
+    const String& keyPath)
 {
     ASSERT_FALSE(checkKeyFromValueAndKeyPathInternal(isolate, value, keyPath));
 }
 
-bool injectKey(ScriptState* scriptState, IDBKey* key, ScriptValue& value, const String& keyPath)
+bool injectKey(ScriptState* scriptState,
+    IDBKey* key,
+    ScriptValue& value,
+    const String& keyPath)
 {
     IDBKeyPath idbKeyPath(keyPath);
     EXPECT_TRUE(idbKeyPath.isValid());
     ScriptValue keyValue = ScriptValue::from(scriptState, key);
-    return injectV8KeyIntoV8Value(scriptState->isolate(), keyValue.v8Value(), value.v8Value(), idbKeyPath);
+    return injectV8KeyIntoV8Value(scriptState->isolate(), keyValue.v8Value(),
+        value.v8Value(), idbKeyPath);
 }
 
-void checkInjection(ScriptState* scriptState, IDBKey* key, ScriptValue& value, const String& keyPath)
+void checkInjection(ScriptState* scriptState,
+    IDBKey* key,
+    ScriptValue& value,
+    const String& keyPath)
 {
     bool result = injectKey(scriptState, key, value, keyPath);
     ASSERT_TRUE(result);
-    IDBKey* extractedKey = checkKeyFromValueAndKeyPathInternal(scriptState->isolate(), value, keyPath);
+    IDBKey* extractedKey = checkKeyFromValueAndKeyPathInternal(
+        scriptState->isolate(), value, keyPath);
     EXPECT_TRUE(key->isEqual(extractedKey));
 }
 
-void checkInjectionIgnored(ScriptState* scriptState, IDBKey* key, ScriptValue& value, const String& keyPath)
+void checkInjectionIgnored(ScriptState* scriptState,
+    IDBKey* key,
+    ScriptValue& value,
+    const String& keyPath)
 {
     bool result = injectKey(scriptState, key, value, keyPath);
     ASSERT_TRUE(result);
-    IDBKey* extractedKey = checkKeyFromValueAndKeyPathInternal(scriptState->isolate(), value, keyPath);
+    IDBKey* extractedKey = checkKeyFromValueAndKeyPathInternal(
+        scriptState->isolate(), value, keyPath);
     EXPECT_FALSE(key->isEqual(extractedKey));
 }
 
-void checkInjectionDisallowed(ScriptState* scriptState, ScriptValue& value, const String& keyPath)
+void checkInjectionDisallowed(ScriptState* scriptState,
+    ScriptValue& value,
+    const String& keyPath)
 {
     const IDBKeyPath idbKeyPath(keyPath);
     ASSERT_TRUE(idbKeyPath.isValid());
-    EXPECT_FALSE(canInjectIDBKeyIntoScriptValue(scriptState->isolate(), value, idbKeyPath));
+    EXPECT_FALSE(canInjectIDBKeyIntoScriptValue(scriptState->isolate(), value,
+        idbKeyPath));
 }
 
-void checkKeyPathStringValue(v8::Isolate* isolate, const ScriptValue& value, const String& keyPath, const String& expected)
+void checkKeyPathStringValue(v8::Isolate* isolate,
+    const ScriptValue& value,
+    const String& keyPath,
+    const String& expected)
 {
     IDBKey* idbKey = checkKeyFromValueAndKeyPathInternal(isolate, value, keyPath);
     ASSERT_TRUE(idbKey);
-    ASSERT_EQ(IDBKey::StringType, idbKey->type());
+    ASSERT_EQ(IDBKey::StringType, idbKey->getType());
     ASSERT_TRUE(expected == idbKey->string());
 }
 
-void checkKeyPathNumberValue(v8::Isolate* isolate, const ScriptValue& value, const String& keyPath, int expected)
+void checkKeyPathNumberValue(v8::Isolate* isolate,
+    const ScriptValue& value,
+    const String& keyPath,
+    int expected)
 {
     IDBKey* idbKey = checkKeyFromValueAndKeyPathInternal(isolate, value, keyPath);
     ASSERT_TRUE(idbKey);
-    ASSERT_EQ(IDBKey::NumberType, idbKey->type());
+    ASSERT_EQ(IDBKey::NumberType, idbKey->getType());
     ASSERT_TRUE(expected == idbKey->number());
 }
 
-class IDBKeyFromValueAndKeyPathTest : public testing::Test {
-public:
-    IDBKeyFromValueAndKeyPathTest()
-        : m_scope(v8::Isolate::GetCurrent())
-    {
-    }
-
-    ScriptState* scriptState() const { return m_scope.scriptState(); }
-
-private:
-    V8TestingScope m_scope;
-};
-
-TEST_F(IDBKeyFromValueAndKeyPathTest, TopLevelPropertyStringValue)
+TEST(IDBKeyFromValueAndKeyPathTest, TopLevelPropertyStringValue)
 {
-    v8::Isolate* isolate = scriptState()->isolate();
+    V8TestingScope scope;
+    v8::Isolate* isolate = scope.isolate();
 
     // object = { foo: "zoo" }
     v8::Local<v8::Object> object = v8::Object::New(isolate);
-    ASSERT_TRUE(v8CallBoolean(object->Set(scriptState()->context(), v8AtomicString(isolate, "foo"), v8AtomicString(isolate, "zoo"))));
+    ASSERT_TRUE(
+        v8CallBoolean(object->Set(scope.context(), v8AtomicString(isolate, "foo"),
+            v8AtomicString(isolate, "zoo"))));
 
-    ScriptValue scriptValue(scriptState(), object);
+    ScriptValue scriptValue(scope.getScriptState(), object);
 
     checkKeyPathStringValue(isolate, scriptValue, "foo", "zoo");
     checkKeyPathNullValue(isolate, scriptValue, "bar");
 }
 
-TEST_F(IDBKeyFromValueAndKeyPathTest, TopLevelPropertyNumberValue)
+TEST(IDBKeyFromValueAndKeyPathTest, TopLevelPropertyNumberValue)
 {
-    v8::Isolate* isolate = scriptState()->isolate();
+    V8TestingScope scope;
+    v8::Isolate* isolate = scope.isolate();
 
     // object = { foo: 456 }
     v8::Local<v8::Object> object = v8::Object::New(isolate);
-    ASSERT_TRUE(v8CallBoolean(object->Set(scriptState()->context(), v8AtomicString(isolate, "foo"), v8::Number::New(isolate, 456))));
+    ASSERT_TRUE(
+        v8CallBoolean(object->Set(scope.context(), v8AtomicString(isolate, "foo"),
+            v8::Number::New(isolate, 456))));
 
-    ScriptValue scriptValue(scriptState(), object);
+    ScriptValue scriptValue(scope.getScriptState(), object);
 
     checkKeyPathNumberValue(isolate, scriptValue, "foo", 456);
     checkKeyPathNullValue(isolate, scriptValue, "bar");
 }
 
-TEST_F(IDBKeyFromValueAndKeyPathTest, SubProperty)
+TEST(IDBKeyFromValueAndKeyPathTest, SubProperty)
 {
-    v8::Isolate* isolate = scriptState()->isolate();
+    V8TestingScope scope;
+    v8::Isolate* isolate = scope.isolate();
 
     // object = { foo: { bar: "zee" } }
     v8::Local<v8::Object> object = v8::Object::New(isolate);
     v8::Local<v8::Object> subProperty = v8::Object::New(isolate);
-    ASSERT_TRUE(v8CallBoolean(subProperty->Set(scriptState()->context(), v8AtomicString(isolate, "bar"), v8AtomicString(isolate, "zee"))));
-    ASSERT_TRUE(v8CallBoolean(object->Set(scriptState()->context(), v8AtomicString(isolate, "foo"), subProperty)));
+    ASSERT_TRUE(v8CallBoolean(subProperty->Set(scope.context(),
+        v8AtomicString(isolate, "bar"),
+        v8AtomicString(isolate, "zee"))));
+    ASSERT_TRUE(v8CallBoolean(object->Set(
+        scope.context(), v8AtomicString(isolate, "foo"), subProperty)));
 
-    ScriptValue scriptValue(scriptState(), object);
+    ScriptValue scriptValue(scope.getScriptState(), object);
 
     checkKeyPathStringValue(isolate, scriptValue, "foo.bar", "zee");
     checkKeyPathNullValue(isolate, scriptValue, "bar");
 }
 
-class InjectIDBKeyTest : public IDBKeyFromValueAndKeyPathTest {
-};
-
-TEST_F(InjectIDBKeyTest, ImplicitValues)
+TEST(InjectIDBKeyTest, ImplicitValues)
 {
-    v8::Isolate* isolate = scriptState()->isolate();
+    V8TestingScope scope;
+    v8::Isolate* isolate = scope.isolate();
     {
         v8::Local<v8::String> string = v8String(isolate, "string");
-        ScriptValue value = ScriptValue(scriptState(), string);
-        checkInjectionIgnored(scriptState(), IDBKey::createNumber(123), value, "length");
+        ScriptValue value = ScriptValue(scope.getScriptState(), string);
+        checkInjectionIgnored(scope.getScriptState(), IDBKey::createNumber(123),
+            value, "length");
     }
     {
         v8::Local<v8::Array> array = v8::Array::New(isolate);
-        ScriptValue value = ScriptValue(scriptState(), array);
-        checkInjectionIgnored(scriptState(), IDBKey::createNumber(456), value, "length");
+        ScriptValue value = ScriptValue(scope.getScriptState(), array);
+        checkInjectionIgnored(scope.getScriptState(), IDBKey::createNumber(456),
+            value, "length");
     }
 }
 
-TEST_F(InjectIDBKeyTest, TopLevelPropertyStringValue)
+TEST(InjectIDBKeyTest, TopLevelPropertyStringValue)
 {
-    v8::Isolate* isolate = scriptState()->isolate();
+    V8TestingScope scope;
+    v8::Isolate* isolate = scope.isolate();
 
     // object = { foo: "zoo" }
     v8::Local<v8::Object> object = v8::Object::New(isolate);
-    ASSERT_TRUE(v8CallBoolean(object->Set(scriptState()->context(), v8AtomicString(isolate, "foo"), v8AtomicString(isolate, "zoo"))));
+    ASSERT_TRUE(
+        v8CallBoolean(object->Set(scope.context(), v8AtomicString(isolate, "foo"),
+            v8AtomicString(isolate, "zoo"))));
 
-    ScriptValue scriptObject(scriptState(), object);
-    checkInjection(scriptState(), IDBKey::createString("myNewKey"), scriptObject, "bar");
-    checkInjection(scriptState(), IDBKey::createNumber(1234), scriptObject, "bar");
+    ScriptValue scriptObject(scope.getScriptState(), object);
+    checkInjection(scope.getScriptState(), IDBKey::createString("myNewKey"),
+        scriptObject, "bar");
+    checkInjection(scope.getScriptState(), IDBKey::createNumber(1234),
+        scriptObject, "bar");
 
-    checkInjectionDisallowed(scriptState(), scriptObject, "foo.bar");
+    checkInjectionDisallowed(scope.getScriptState(), scriptObject, "foo.bar");
 }
 
-TEST_F(InjectIDBKeyTest, SubProperty)
+TEST(InjectIDBKeyTest, SubProperty)
 {
-    v8::Isolate* isolate = scriptState()->isolate();
+    V8TestingScope scope;
+    v8::Isolate* isolate = scope.isolate();
 
     // object = { foo: { bar: "zee" } }
     v8::Local<v8::Object> object = v8::Object::New(isolate);
     v8::Local<v8::Object> subProperty = v8::Object::New(isolate);
-    ASSERT_TRUE(v8CallBoolean(subProperty->Set(scriptState()->context(), v8AtomicString(isolate, "bar"), v8AtomicString(isolate, "zee"))));
-    ASSERT_TRUE(v8CallBoolean(object->Set(scriptState()->context(), v8AtomicString(isolate, "foo"), subProperty)));
+    ASSERT_TRUE(v8CallBoolean(subProperty->Set(scope.context(),
+        v8AtomicString(isolate, "bar"),
+        v8AtomicString(isolate, "zee"))));
+    ASSERT_TRUE(v8CallBoolean(object->Set(
+        scope.context(), v8AtomicString(isolate, "foo"), subProperty)));
 
-    ScriptValue scriptObject(scriptState(), object);
-    checkInjection(scriptState(), IDBKey::createString("myNewKey"), scriptObject, "foo.baz");
-    checkInjection(scriptState(), IDBKey::createNumber(789), scriptObject, "foo.baz");
-    checkInjection(scriptState(), IDBKey::createDate(4567), scriptObject, "foo.baz");
-    checkInjection(scriptState(), IDBKey::createDate(4567), scriptObject, "bar");
-    checkInjection(scriptState(), IDBKey::createArray(IDBKey::KeyArray()), scriptObject, "foo.baz");
-    checkInjection(scriptState(), IDBKey::createArray(IDBKey::KeyArray()), scriptObject, "bar");
+    ScriptValue scriptObject(scope.getScriptState(), object);
+    checkInjection(scope.getScriptState(), IDBKey::createString("myNewKey"),
+        scriptObject, "foo.baz");
+    checkInjection(scope.getScriptState(), IDBKey::createNumber(789),
+        scriptObject, "foo.baz");
+    checkInjection(scope.getScriptState(), IDBKey::createDate(4567), scriptObject,
+        "foo.baz");
+    checkInjection(scope.getScriptState(), IDBKey::createDate(4567), scriptObject,
+        "bar");
+    checkInjection(scope.getScriptState(),
+        IDBKey::createArray(IDBKey::KeyArray()), scriptObject,
+        "foo.baz");
+    checkInjection(scope.getScriptState(),
+        IDBKey::createArray(IDBKey::KeyArray()), scriptObject, "bar");
 
-    checkInjectionDisallowed(scriptState(), scriptObject, "foo.bar.baz");
-    checkInjection(scriptState(), IDBKey::createString("zoo"), scriptObject, "foo.xyz.foo");
+    checkInjectionDisallowed(scope.getScriptState(), scriptObject, "foo.bar.baz");
+    checkInjection(scope.getScriptState(), IDBKey::createString("zoo"),
+        scriptObject, "foo.xyz.foo");
 }
 
 } // namespace

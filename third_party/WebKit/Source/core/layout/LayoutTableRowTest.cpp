@@ -23,61 +23,110 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/layout/LayoutTableRow.h"
 
-#include "core/testing/DummyPageHolder.h"
-#include <gtest/gtest.h>
+#include "core/layout/LayoutTestHelper.h"
 
 namespace blink {
 
 namespace {
 
-class LayoutTableRowDeathTest : public testing::Test {
-protected:
-    virtual void SetUp()
+    class LayoutTableRowDeathTest : public RenderingTest {
+    protected:
+        virtual void SetUp()
+        {
+            RenderingTest::SetUp();
+            m_row = LayoutTableRow::createAnonymous(&document());
+        }
+
+        virtual void TearDown() { m_row->destroy(); }
+
+        LayoutTableRow* m_row;
+    };
+
+    TEST_F(LayoutTableRowDeathTest, CanSetRow)
     {
-        m_pageHolder = DummyPageHolder::create(IntSize(800, 600));
-        m_row = LayoutTableRow::createAnonymous(&m_pageHolder->document());
+        static const unsigned rowIndex = 10;
+        m_row->setRowIndex(rowIndex);
+        EXPECT_EQ(rowIndex, m_row->rowIndex());
     }
 
-    virtual void TearDown()
+    TEST_F(LayoutTableRowDeathTest, CanSetRowToMaxRowIndex)
     {
-        m_row->destroy();
+        m_row->setRowIndex(maxRowIndex);
+        EXPECT_EQ(maxRowIndex, m_row->rowIndex());
     }
-
-    OwnPtr<DummyPageHolder> m_pageHolder;
-    LayoutTableRow* m_row;
-};
-
-TEST_F(LayoutTableRowDeathTest, CanSetRow)
-{
-    static const unsigned rowIndex = 10;
-    m_row->setRowIndex(rowIndex);
-    EXPECT_EQ(rowIndex, m_row->rowIndex());
-}
-
-TEST_F(LayoutTableRowDeathTest, CanSetRowToMaxRowIndex)
-{
-    m_row->setRowIndex(maxRowIndex);
-    EXPECT_EQ(maxRowIndex, m_row->rowIndex());
-}
 
 // FIXME: Re-enable these tests once ASSERT_DEATH is supported for Android.
 // See: https://bugs.webkit.org/show_bug.cgi?id=74089
-#if !OS(ANDROID)
+// TODO(dgrogan): These tests started flaking on Mac try bots around 2016-07-28.
+// https://crbug.com/632816
+#if !OS(ANDROID) && !OS(MACOSX)
 
-TEST_F(LayoutTableRowDeathTest, CrashIfRowOverflowOnSetting)
-{
-    ASSERT_DEATH(m_row->setRowIndex(maxRowIndex + 1), "");
-}
+    TEST_F(LayoutTableRowDeathTest, CrashIfRowOverflowOnSetting)
+    {
+        ASSERT_DEATH(m_row->setRowIndex(maxRowIndex + 1), "");
+    }
 
-TEST_F(LayoutTableRowDeathTest, CrashIfSettingUnsetRowIndex)
-{
-    ASSERT_DEATH(m_row->setRowIndex(unsetRowIndex), "");
-}
+    TEST_F(LayoutTableRowDeathTest, CrashIfSettingUnsetRowIndex)
+    {
+        ASSERT_DEATH(m_row->setRowIndex(unsetRowIndex), "");
+    }
 
 #endif
+
+    using LayoutTableRowTest = RenderingTest;
+
+    TEST_F(LayoutTableRowTest,
+        BackgroundIsKnownToBeOpaqueWithLayerAndCollapsedBorder)
+    {
+        setBodyInnerHTML(
+            "<table style='border-collapse: collapse'>"
+            "<tr style='will-change: transform; background-color: "
+            "blue'><td>Cell</td></tr>"
+            "</table>");
+
+        LayoutTableRow* row = toLayoutTableRow(document()
+                                                   .body()
+                                                   ->firstChild()
+                                                   ->firstChild()
+                                                   ->firstChild()
+                                                   ->layoutObject());
+        EXPECT_FALSE(row->backgroundIsKnownToBeOpaqueInRect(LayoutRect(0, 0, 1, 1)));
+    }
+
+    TEST_F(LayoutTableRowTest, BackgroundIsKnownToBeOpaqueWithBorderSpacing)
+    {
+        setBodyInnerHTML(
+            "<table style='border-spacing: 10px'>"
+            "<tr style='background-color: blue'><td>Cell</td></tr>"
+            "</table>");
+
+        LayoutTableRow* row = toLayoutTableRow(document()
+                                                   .body()
+                                                   ->firstChild()
+                                                   ->firstChild()
+                                                   ->firstChild()
+                                                   ->layoutObject());
+        EXPECT_FALSE(row->backgroundIsKnownToBeOpaqueInRect(LayoutRect(0, 0, 1, 1)));
+    }
+
+    TEST_F(LayoutTableRowTest, BackgroundIsKnownToBeOpaqueWithEmptyCell)
+    {
+        setBodyInnerHTML(
+            "<table style='border-spacing: 10px'>"
+            "<tr style='background-color: blue'><td>Cell</td></tr>"
+            "<tr style='background-color: blue'><td>Cell</td><td>Cell</td></tr>"
+            "</table>");
+
+        LayoutTableRow* row = toLayoutTableRow(document()
+                                                   .body()
+                                                   ->firstChild()
+                                                   ->firstChild()
+                                                   ->firstChild()
+                                                   ->layoutObject());
+        EXPECT_FALSE(row->backgroundIsKnownToBeOpaqueInRect(LayoutRect(0, 0, 1, 1)));
+    }
 
 } // anonymous namespace
 

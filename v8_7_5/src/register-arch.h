@@ -28,8 +28,4 @@
 #error Unknown architecture.
 #endif
 
-<<<<<<< HEAD
 #endif // V8_REGISTER_ARCH_H_
-=======
-#endif  // V8_REGISTER_ARCH_H_
->>>>>>> miniblink49

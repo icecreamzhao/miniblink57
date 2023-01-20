@@ -19,11 +19,7 @@ class SkBBHFactory;
 
 class SkDrawableList : SkNoncopyable {
 public:
-<<<<<<< HEAD
     SkDrawableList() { }
-=======
-    SkDrawableList() {}
->>>>>>> miniblink49
     ~SkDrawableList();
 
     int count() const { return fArray.count(); }
@@ -43,40 +39,24 @@ private:
 class SkRecorder : public SkCanvas {
 public:
     // Does not take ownership of the SkRecord.
-<<<<<<< HEAD
     SkRecorder(SkRecord*, int width, int height, SkMiniRecorder* = nullptr); // legacy version
     SkRecorder(SkRecord*, const SkRect& bounds, SkMiniRecorder* = nullptr);
 
     enum DrawPictureMode { Record_DrawPictureMode,
         Playback_DrawPictureMode };
-=======
-    SkRecorder(SkRecord*, int width, int height, SkMiniRecorder* = nullptr);   // legacy version
-    SkRecorder(SkRecord*, const SkRect& bounds, SkMiniRecorder* = nullptr);
-
-    enum DrawPictureMode { Record_DrawPictureMode, Playback_DrawPictureMode };
->>>>>>> miniblink49
     void reset(SkRecord*, const SkRect& bounds, DrawPictureMode, SkMiniRecorder* = nullptr);
 
     size_t approxBytesUsedBySubPictures() const { return fApproxBytesUsedBySubPictures; }
 
     SkDrawableList* getDrawableList() const { return fDrawableList.get(); }
-<<<<<<< HEAD
     SkDrawableList* detachDrawableList() { return fDrawableList.release(); }
-=======
-    SkDrawableList* detachDrawableList() { return fDrawableList.detach(); }
->>>>>>> miniblink49
 
     // Make SkRecorder forget entirely about its SkRecord*; all calls to SkRecorder will fail.
     void forgetRecord();
 
     void willSave() override;
-<<<<<<< HEAD
     SaveLayerStrategy getSaveLayerStrategy(const SaveLayerRec&) override;
     void willRestore() override { }
-=======
-    SaveLayerStrategy willSaveLayer(const SkRect*, const SkPaint*, SkCanvas::SaveFlags) override;
-    void willRestore() override {}
->>>>>>> miniblink49
     void didRestore() override;
 
     void didConcat(const SkMatrix&) override;
@@ -85,7 +65,6 @@ public:
     void onDrawDRRect(const SkRRect&, const SkRRect&, const SkPaint&) override;
     void onDrawDrawable(SkDrawable*, const SkMatrix*) override;
     void onDrawText(const void* text,
-<<<<<<< HEAD
         size_t byteLength,
         SkScalar x,
         SkScalar y,
@@ -111,33 +90,6 @@ public:
     void onDrawPatch(const SkPoint cubics[12], const SkColor colors[4],
         const SkPoint texCoords[4], SkXfermode* xmode,
         const SkPaint& paint) override;
-=======
-                    size_t byteLength,
-                    SkScalar x,
-                    SkScalar y,
-                    const SkPaint& paint) override;
-    void onDrawPosText(const void* text,
-                       size_t byteLength,
-                       const SkPoint pos[],
-                       const SkPaint& paint) override;
-    void onDrawPosTextH(const void* text,
-                        size_t byteLength,
-                        const SkScalar xpos[],
-                        SkScalar constY,
-                        const SkPaint& paint) override;
-    void onDrawTextOnPath(const void* text,
-                          size_t byteLength,
-                          const SkPath& path,
-                          const SkMatrix* matrix,
-                          const SkPaint& paint) override;
-    void onDrawTextBlob(const SkTextBlob* blob,
-                        SkScalar x,
-                        SkScalar y,
-                        const SkPaint& paint) override;
-    void onDrawPatch(const SkPoint cubics[12], const SkColor colors[4],
-                     const SkPoint texCoords[4], SkXfermode* xmode,
-                     const SkPaint& paint) override;
->>>>>>> miniblink49
 
     void onDrawPaint(const SkPaint&) override;
     void onDrawPoints(PointMode, size_t count, const SkPoint pts[], const SkPaint&) override;
@@ -147,7 +99,6 @@ public:
     void onDrawPath(const SkPath&, const SkPaint&) override;
     void onDrawBitmap(const SkBitmap&, SkScalar left, SkScalar top, const SkPaint*) override;
     void onDrawBitmapRect(const SkBitmap&, const SkRect* src, const SkRect& dst, const SkPaint*,
-<<<<<<< HEAD
         SrcRectConstraint) override;
     void onDrawImage(const SkImage*, SkScalar left, SkScalar top, const SkPaint*) override;
     void onDrawImageRect(const SkImage*, const SkRect* src, const SkRect& dst,
@@ -163,24 +114,6 @@ public:
         const SkPaint&) override;
     void onDrawAtlas(const SkImage*, const SkRSXform[], const SkRect[], const SkColor[],
         int count, SkXfermode::Mode, const SkRect* cull, const SkPaint*) override;
-=======
-                          DrawBitmapRectFlags flags) override;
-    void onDrawImage(const SkImage*, SkScalar left, SkScalar top, const SkPaint*) override;
-    void onDrawImageRect(const SkImage*, const SkRect* src, const SkRect& dst,
-                         const SkPaint*) override;
-    void onDrawImageNine(const SkImage*, const SkIRect& center, const SkRect& dst,
-                         const SkPaint*) override;
-    void onDrawBitmapNine(const SkBitmap&, const SkIRect& center, const SkRect& dst,
-                          const SkPaint*) override;
-    void onDrawSprite(const SkBitmap&, int left, int top, const SkPaint*) override;
-    void onDrawVertices(VertexMode vmode, int vertexCount,
-                        const SkPoint vertices[], const SkPoint texs[],
-                        const SkColor colors[], SkXfermode* xmode,
-                        const uint16_t indices[], int indexCount,
-                        const SkPaint&) override;
-    void onDrawAtlas(const SkImage*, const SkRSXform[], const SkRect[], const SkColor[],
-                     int count, SkXfermode::Mode, const SkRect* cull, const SkPaint*) override;
->>>>>>> miniblink49
 
     void onClipRect(const SkRect& rect, SkRegion::Op op, ClipEdgeStyle edgeStyle) override;
     void onClipRRect(const SkRRect& rrect, SkRegion::Op op, ClipEdgeStyle edgeStyle) override;
@@ -188,14 +121,9 @@ public:
     void onClipRegion(const SkRegion& deviceRgn, SkRegion::Op op) override;
 
     void onDrawPicture(const SkPicture*, const SkMatrix*, const SkPaint*) override;
-<<<<<<< HEAD
     void onDrawAnnotation(const SkRect&, const char[], SkData*) override;
 
     sk_sp<SkSurface> onNewSurface(const SkImageInfo&, const SkSurfaceProps&) override;
-=======
-
-    SkSurface* onNewSurface(const SkImageInfo&, const SkSurfaceProps&) override { return NULL; }
->>>>>>> miniblink49
 
     void flushMiniRecorder();
 
@@ -206,12 +134,8 @@ private:
     template <typename T>
     T* copy(const T[], size_t count);
 
-<<<<<<< HEAD
     SkIRect devBounds() const
     {
-=======
-    SkIRect devBounds() const {
->>>>>>> miniblink49
         SkIRect devBounds;
         this->getClipDeviceBounds(&devBounds);
         return devBounds;
@@ -225,8 +149,4 @@ private:
     SkMiniRecorder* fMiniRecorder;
 };
 
-<<<<<<< HEAD
 #endif //SkRecorder_DEFINED
-=======
-#endif//SkRecorder_DEFINED
->>>>>>> miniblink49

@@ -25,14 +25,10 @@ public:
     virtual SkDisplayable* getParent() const;
     virtual bool setParent(SkDisplayable* parent);
 #ifdef SK_DEBUG
-<<<<<<< HEAD
     virtual bool isPaintPart() const
     {
         return true;
     }
-=======
-    virtual bool isPaintPart() const { return true; }
->>>>>>> miniblink49
 #endif
 protected:
     SkDrawPaint* fPaint;
@@ -41,10 +37,7 @@ protected:
 class SkDrawMaskFilter : public SkPaintPart {
     DECLARE_EMPTY_MEMBER_INFO(MaskFilter);
     virtual SkMaskFilter* getMaskFilter();
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 protected:
     bool add() override;
 };
@@ -52,10 +45,7 @@ protected:
 class SkDrawPathEffect : public SkPaintPart {
     DECLARE_EMPTY_MEMBER_INFO(PathEffect);
     virtual SkPathEffect* getPathEffect();
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 protected:
     bool add() override;
 };
@@ -64,21 +54,14 @@ class SkDrawShader : public SkPaintPart {
     DECLARE_DRAW_MEMBER_INFO(Shader);
     SkDrawShader();
     virtual SkShader* getShader();
-<<<<<<< HEAD
 
 protected:
     bool add() override;
     SkMatrix* getMatrix(); // returns nullptr if matrix is nullptr
-=======
-protected:
-    bool add() override;
-    SkMatrix* getMatrix(); // returns NULL if matrix is NULL
->>>>>>> miniblink49
     SkDrawMatrix* matrix;
     int /*SkShader::TileMode*/ tileMode;
 };
 
-<<<<<<< HEAD
 class SkDrawTypeface : public SkPaintPart {
     DECLARE_DRAW_MEMBER_INFO(Typeface);
     SkDrawTypeface();
@@ -90,16 +73,6 @@ class SkDrawTypeface : public SkPaintPart {
         return SkTypeface::MakeFromName(fontName.c_str(), style);
     }
 
-=======
-class SkDrawTypeface  : public SkPaintPart {
-    DECLARE_DRAW_MEMBER_INFO(Typeface);
-    SkDrawTypeface();
-#ifdef SK_DUMP_ENABLED
-    void dump(SkAnimateMaker *) override;
-#endif
-    SkTypeface* getTypeface() {
-        return SkTypeface::CreateFromName(fontName.c_str(), style); }
->>>>>>> miniblink49
 protected:
     bool add() override;
     SkString fontName;

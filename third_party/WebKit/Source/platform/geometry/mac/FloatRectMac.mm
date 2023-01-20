@@ -24,17 +24,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/geometry/FloatRect.h"
 
 namespace blink {
 
 #ifndef NSGEOMETRY_TYPES_SAME_AS_CGGEOMETRY_TYPES
 
-<<<<<<< HEAD
 FloatRect::FloatRect(const NSRect& r) : m_location(r.origin), m_size(r.size) {}
 
 FloatRect::operator NSRect() const {
@@ -42,17 +37,4 @@ FloatRect::operator NSRect() const {
 }
 
 #endif
-=======
-FloatRect::FloatRect(const NSRect& r) : m_location(r.origin), m_size(r.size)
-{
-}
-
-FloatRect::operator NSRect() const
-{
-    return NSMakeRect(x(), y(), width(), height());
-}
-
-#endif
-
->>>>>>> miniblink49
 }

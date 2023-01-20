@@ -28,10 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "public/web/WebTextCheckingResult.h"
 
 #include "platform/text/TextCheckerClient.h"
@@ -51,11 +47,7 @@ WebTextCheckingResult::operator TextCheckingResult() const
         detail.location = 0;
         detail.length = length;
         detail.userDescription = replacement;
-<<<<<<< HEAD
         result.details.push_back(detail);
-=======
-        result.details.append(detail);
->>>>>>> miniblink49
     }
 
     return result;

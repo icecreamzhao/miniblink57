@@ -30,10 +30,14 @@ namespace blink {
 
 class DocumentType final : public Node {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<DocumentType> create(Document* document, const String& name, const String& publicId, const String& systemId)
+    static DocumentType* create(Document* document,
+        const String& name,
+        const String& publicId,
+        const String& systemId)
     {
-        return adoptRefWillBeNoop(new DocumentType(document, name, publicId, systemId));
+        return new DocumentType(document, name, publicId, systemId);
     }
 
     const String& name() const { return m_name; }
@@ -41,12 +45,14 @@ public:
     const String& systemId() const { return m_systemId; }
 
 private:
-    DocumentType(Document*, const String& name, const String& publicId, const String& systemId);
+    DocumentType(Document*,
+        const String& name,
+        const String& publicId,
+        const String& systemId);
 
-    KURL baseURI() const override;
     String nodeName() const override;
-    NodeType nodeType() const override;
-    PassRefPtrWillBeRawPtr<Node> cloneNode(bool deep) override;
+    NodeType getNodeType() const override;
+    Node* cloneNode(bool deep) override;
 
     InsertionNotificationRequest insertedInto(ContainerNode*) override;
     void removedFrom(ContainerNode*) override;

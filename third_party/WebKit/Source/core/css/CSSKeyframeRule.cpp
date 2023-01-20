@@ -23,7 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/css/CSSKeyframeRule.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -34,25 +33,25 @@
 
 namespace blink {
 
-CSSKeyframeRule::CSSKeyframeRule(StyleRuleKeyframe* keyframe, CSSKeyframesRule* parent)
-    : CSSRule(0)
+CSSKeyframeRule::CSSKeyframeRule(StyleRuleKeyframe* keyframe,
+    CSSKeyframesRule* parent)
+    : CSSRule(nullptr)
     , m_keyframe(keyframe)
 {
     setParentRule(parent);
 }
 
-CSSKeyframeRule::~CSSKeyframeRule()
-{
-#if !ENABLE(OILPAN)
-    if (m_propertiesCSSOMWrapper)
-        m_propertiesCSSOMWrapper->clearParentRule();
-#endif
-}
+CSSKeyframeRule::~CSSKeyframeRule() { }
 
-void CSSKeyframeRule::setKeyText(const String& keyText, ExceptionState& exceptionState)
+void CSSKeyframeRule::setKeyText(const String& keyText,
+    ExceptionState& exceptionState)
 {
+    CSSStyleSheet::RuleMutationScope(this);
+
     if (!m_keyframe->setKeyText(keyText))
-        exceptionState.throwDOMException(SyntaxError, "The key '" + keyText + "' is invalid and cannot be parsed");
+        exceptionState.throwDOMException(
+            SyntaxError,
+            "The key '" + keyText + "' is invalid and cannot be parsed");
 
     toCSSKeyframesRule(parentRule())->styleChanged();
 }
@@ -60,7 +59,8 @@ void CSSKeyframeRule::setKeyText(const String& keyText, ExceptionState& exceptio
 CSSStyleDeclaration* CSSKeyframeRule::style() const
 {
     if (!m_propertiesCSSOMWrapper)
-        m_propertiesCSSOMWrapper = KeyframeStyleRuleCSSStyleDeclaration::create(m_keyframe->mutableProperties(), const_cast<CSSKeyframeRule*>(this));
+        m_propertiesCSSOMWrapper = KeyframeStyleRuleCSSStyleDeclaration::create(
+            m_keyframe->mutableProperties(), const_cast<CSSKeyframeRule*>(this));
     return m_propertiesCSSOMWrapper.get();
 }
 

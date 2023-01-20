@@ -26,32 +26,39 @@
 
 namespace blink {
 
-// LayoutTextCombine uses different coordinate systems for layout and inlineTextBox,
-// because it is treated as 1em-box character in vertical flow for the layout,
-// while its inline box is in horizontal flow.
+// LayoutTextCombine uses different coordinate systems for layout and
+// inlineTextBox, because it is treated as 1em-box character in vertical flow
+// for the layout, while its inline box is in horizontal flow.
 class LayoutTextCombine final : public LayoutText {
 public:
     LayoutTextCombine(Node*, PassRefPtr<StringImpl>);
 
     void updateFont();
     bool isCombined() const { return m_isCombined; }
-    float combinedTextWidth(const Font& font) const { return font.fontDescription().computedSize(); }
+    float combinedTextWidth(const Font& font) const
+    {
+        return font.getFontDescription().computedSize();
+    }
     const Font& originalFont() const { return parent()->style()->font(); }
-    void transformToInlineCoordinates(GraphicsContext&, const LayoutRect& boxRect) const;
-    void transformLayoutRect(LayoutRect& boxRect) const;
+    void transformToInlineCoordinates(GraphicsContext&,
+        const LayoutRect& boxRect,
+        bool clip = false) const;
     LayoutUnit inlineWidthForLayout() const;
 
-    virtual const char* name() const override { return "LayoutTextCombine"; }
+    const char* name() const override { return "LayoutTextCombine"; }
 
 private:
-    virtual bool isCombineText() const override { return true; }
-    virtual float width(unsigned from, unsigned length, const Font&, LayoutUnit xPosition, TextDirection, HashSet<const SimpleFontData*>* fallbackFonts = nullptr, FloatRect* glyphBounds = nullptr) const override;
-    virtual void styleDidChange(StyleDifference, const ComputedStyle* oldStyle) override;
-    virtual void setTextInternal(PassRefPtr<StringImpl>) override;
+    bool isCombineText() const override { return true; }
+    float width(unsigned from,
+        unsigned length,
+        const Font&,
+        LayoutUnit xPosition,
+        TextDirection,
+        HashSet<const SimpleFontData*>* fallbackFonts = nullptr,
+        FloatRect* glyphBounds = nullptr) const override;
+    void styleDidChange(StyleDifference, const ComputedStyle* oldStyle) override;
+    void setTextInternal(PassRefPtr<StringImpl>) override;
     void updateIsCombined();
-
-    float offsetX(const LayoutRect& boxRect) const;
-    float offsetXNoScale(const LayoutRect& boxRect) const;
 
     float m_combinedTextWidth;
     float m_scaleX;
@@ -66,19 +73,6 @@ inline LayoutUnit LayoutTextCombine::inlineWidthForLayout() const
     ASSERT(!m_needsFontUpdate);
     return LayoutUnit::fromFloatCeil(m_combinedTextWidth);
 }
-
-inline float LayoutTextCombine::offsetX(const LayoutRect& boxRect) const
-{
-    ASSERT(!m_needsFontUpdate);
-    return (boxRect.height() - m_combinedTextWidth / m_scaleX) / 2;
-}
-
-inline float LayoutTextCombine::offsetXNoScale(const LayoutRect& boxRect) const
-{
-    ASSERT(!m_needsFontUpdate);
-    return (boxRect.height() - m_combinedTextWidth) / 2;
-}
-
 
 } // namespace blink
 

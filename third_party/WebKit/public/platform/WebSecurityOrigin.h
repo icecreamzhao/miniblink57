@@ -32,35 +32,24 @@
 #define WebSecurityOrigin_h
 
 #include "public/platform/WebCommon.h"
-<<<<<<< HEAD
 #include "public/platform/WebString.h"
 
 #if INSIDE_BLINK
 #include "wtf/PassRefPtr.h"
 #else
 #include "url/origin.h"
-=======
-
-#if INSIDE_BLINK
-#include "wtf/PassRefPtr.h"
->>>>>>> miniblink49
 #endif
 
 namespace blink {
 
 class SecurityOrigin;
 class WebSecurityOriginPrivate;
-<<<<<<< HEAD
-=======
-class WebString;
->>>>>>> miniblink49
 class WebURL;
 
 class WebSecurityOrigin {
 public:
     ~WebSecurityOrigin() { reset(); }
 
-<<<<<<< HEAD
     WebSecurityOrigin()
         : m_private(0)
     {
@@ -70,26 +59,16 @@ public:
     {
         assign(s);
     }
-=======
-    WebSecurityOrigin() : m_private(0) { }
-    WebSecurityOrigin(const WebSecurityOrigin& s) : m_private(0) { assign(s); }
->>>>>>> miniblink49
     WebSecurityOrigin& operator=(const WebSecurityOrigin& s)
     {
         assign(s);
         return *this;
     }
 
-<<<<<<< HEAD
     BLINK_PLATFORM_EXPORT static WebSecurityOrigin createFromString(
         const WebString&);
     BLINK_PLATFORM_EXPORT static WebSecurityOrigin create(const WebURL&);
     BLINK_PLATFORM_EXPORT static WebSecurityOrigin createUnique();
-=======
-    BLINK_PLATFORM_EXPORT static WebSecurityOrigin createFromDatabaseIdentifier(const WebString& databaseIdentifier);
-    BLINK_PLATFORM_EXPORT static WebSecurityOrigin createFromString(const WebString&);
-    BLINK_PLATFORM_EXPORT static WebSecurityOrigin create(const WebURL&);
->>>>>>> miniblink49
 
     BLINK_PLATFORM_EXPORT void reset();
     BLINK_PLATFORM_EXPORT void assign(const WebSecurityOrigin&);
@@ -100,7 +79,6 @@ public:
     BLINK_PLATFORM_EXPORT WebString host() const;
     BLINK_PLATFORM_EXPORT unsigned short port() const;
 
-<<<<<<< HEAD
     // |port()| will return 0 if the port is the default for an origin. This
     // method instead returns the effective port, even if it is the default port
     // (e.g. "http" => 80).
@@ -108,8 +86,6 @@ public:
 
     BLINK_PLATFORM_EXPORT WebString suborigin() const;
 
-=======
->>>>>>> miniblink49
     // A unique WebSecurityOrigin is the least privileged WebSecurityOrigin.
     BLINK_PLATFORM_EXPORT bool isUnique() const;
 
@@ -128,24 +104,13 @@ public:
     // machine or over the network from a
     // cryptographically-authenticated origin, as described in
     // https://w3c.github.io/webappsec/specs/powerfulfeatures/#is-origin-trustworthy.
-<<<<<<< HEAD
     BLINK_PLATFORM_EXPORT bool isPotentiallyTrustworthy() const;
-=======
-    BLINK_PLATFORM_EXPORT bool isPotentiallyTrustworthy(WebString& errorMessage) const;
->>>>>>> miniblink49
 
     // Returns a string representation of the WebSecurityOrigin.  The empty
     // WebSecurityOrigin is represented by "null".  The representation of a
     // non-empty WebSecurityOrigin resembles a standard URL.
     BLINK_PLATFORM_EXPORT WebString toString() const;
 
-<<<<<<< HEAD
-=======
-    // Returns a string representation of this WebSecurityOrigin that can
-    // be used as a file.  Should be used in storage APIs only.
-    BLINK_PLATFORM_EXPORT WebString databaseIdentifier() const;
-
->>>>>>> miniblink49
     // Returns true if this WebSecurityOrigin can access usernames and
     // passwords stored in password manager.
     BLINK_PLATFORM_EXPORT bool canAccessPasswordManager() const;
@@ -154,7 +119,6 @@ public:
     BLINK_PLATFORM_EXPORT void grantLoadLocalResources() const;
 
 #if INSIDE_BLINK
-<<<<<<< HEAD
     BLINK_PLATFORM_EXPORT WebSecurityOrigin(WTF::PassRefPtr<SecurityOrigin>);
     BLINK_PLATFORM_EXPORT WebSecurityOrigin& operator=(
         WTF::PassRefPtr<SecurityOrigin>);
@@ -197,15 +161,6 @@ private:
         int port,
         const WebString& suborigin);
 
-=======
-    BLINK_PLATFORM_EXPORT WebSecurityOrigin(const WTF::PassRefPtr<SecurityOrigin>&);
-    BLINK_PLATFORM_EXPORT WebSecurityOrigin& operator=(const WTF::PassRefPtr<SecurityOrigin>&);
-    BLINK_PLATFORM_EXPORT operator WTF::PassRefPtr<SecurityOrigin>() const;
-    BLINK_PLATFORM_EXPORT SecurityOrigin* get() const;
-#endif
-
-private:
->>>>>>> miniblink49
     void assign(WebSecurityOriginPrivate*);
     WebSecurityOriginPrivate* m_private;
 };

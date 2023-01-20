@@ -10,7 +10,6 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
-<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -42,39 +41,6 @@
 // a good value.  But, the Reverb object is multi-threaded, so we want this as
 // high as possible without losing too much accuracy.  Very large FFTs will have
 // worse phase errors. Given these constraints 32768 is a good compromise.
-=======
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-
-#include "config.h"
-#if ENABLE(WEB_AUDIO)
-#include "modules/webaudio/ConvolverNode.h"
-
-#include "bindings/core/v8/ExceptionState.h"
-#include "core/dom/ExceptionCode.h"
-#include "modules/webaudio/AudioBuffer.h"
-#include "modules/webaudio/AudioContext.h"
-#include "modules/webaudio/AudioNodeInput.h"
-#include "modules/webaudio/AudioNodeOutput.h"
-#include "platform/audio/Reverb.h"
-#include "wtf/MainThread.h"
-
-// Note about empirical tuning:
-// The maximum FFT size affects reverb performance and accuracy.
-// If the reverb is single-threaded and processes entirely in the real-time audio thread,
-// it's important not to make this too high.  In this case 8192 is a good value.
-// But, the Reverb object is multi-threaded, so we want this as high as possible without losing too much accuracy.
-// Very large FFTs will have worse phase errors. Given these constraints 32768 is a good compromise.
->>>>>>> miniblink49
 const size_t MaxFFTSize = 32768;
 
 namespace blink {
@@ -88,23 +54,14 @@ ConvolverHandler::ConvolverHandler(AudioNode& node, float sampleRate)
 
     // Node-specific default mixing rules.
     m_channelCount = 2;
-<<<<<<< HEAD
     setInternalChannelCountMode(ClampedMax);
     setInternalChannelInterpretation(AudioBus::Speakers);
-=======
-    m_channelCountMode = ClampedMax;
-    m_channelInterpretation = AudioBus::Speakers;
->>>>>>> miniblink49
 
     initialize();
 }
 
-<<<<<<< HEAD
 PassRefPtr<ConvolverHandler> ConvolverHandler::create(AudioNode& node,
     float sampleRate)
-=======
-PassRefPtr<ConvolverHandler> ConvolverHandler::create(AudioNode& node, float sampleRate)
->>>>>>> miniblink49
 {
     return adoptRef(new ConvolverHandler(node, sampleRate));
 }
@@ -117,11 +74,7 @@ ConvolverHandler::~ConvolverHandler()
 void ConvolverHandler::process(size_t framesToProcess)
 {
     AudioBus* outputBus = output(0).bus();
-<<<<<<< HEAD
     DCHECK(outputBus);
-=======
-    ASSERT(outputBus);
->>>>>>> miniblink49
 
     // Synchronize with possible dynamic changes to the impulse response.
     MutexTryLocker tryLocker(m_processLock);
@@ -130,39 +83,24 @@ void ConvolverHandler::process(size_t framesToProcess)
             outputBus->zero();
         } else {
             // Process using the convolution engine.
-<<<<<<< HEAD
             // Note that we can handle the case where nothing is connected to the
             // input, in which case we'll just feed silence into the convolver.
             // FIXME:  If we wanted to get fancy we could try to factor in the 'tail
             // time' and stop processing once the tail dies down if
-=======
-            // Note that we can handle the case where nothing is connected to the input, in which case we'll just feed silence into the convolver.
-            // FIXME:  If we wanted to get fancy we could try to factor in the 'tail time' and stop processing once the tail dies down if
->>>>>>> miniblink49
             // we keep getting fed silence.
             m_reverb->process(input(0).bus(), outputBus, framesToProcess);
         }
     } else {
-<<<<<<< HEAD
         // Too bad - the tryLock() failed.  We must be in the middle of setting a
         // new impulse response.
-=======
-        // Too bad - the tryLock() failed.  We must be in the middle of setting a new impulse response.
->>>>>>> miniblink49
         outputBus->zero();
     }
 }
 
-<<<<<<< HEAD
 void ConvolverHandler::setBuffer(AudioBuffer* buffer,
     ExceptionState& exceptionState)
 {
     DCHECK(isMainThread());
-=======
-void ConvolverHandler::setBuffer(AudioBuffer* buffer, ExceptionState& exceptionState)
-{
-    ASSERT(isMainThread());
->>>>>>> miniblink49
 
     if (!buffer)
         return;
@@ -170,20 +108,13 @@ void ConvolverHandler::setBuffer(AudioBuffer* buffer, ExceptionState& exceptionS
     if (buffer->sampleRate() != context()->sampleRate()) {
         exceptionState.throwDOMException(
             NotSupportedError,
-<<<<<<< HEAD
             "The buffer sample rate of " + String::number(buffer->sampleRate()) + " does not match the context rate of " + String::number(context()->sampleRate()) + " Hz.");
-=======
-            "The buffer sample rate of " + String::number(buffer->sampleRate())
-            + " does not match the context rate of " + String::number(context()->sampleRate())
-            + " Hz.");
->>>>>>> miniblink49
         return;
     }
 
     unsigned numberOfChannels = buffer->numberOfChannels();
     size_t bufferLength = buffer->length();
 
-<<<<<<< HEAD
     // The current implementation supports only 1-, 2-, or 4-channel impulse
     // responses, with the 4-channel response being interpreted as true-stereo
     // (see Reverb class).
@@ -202,51 +133,25 @@ void ConvolverHandler::setBuffer(AudioBuffer* buffer, ExceptionState& exceptionS
     for (unsigned i = 0; i < numberOfChannels; ++i)
         bufferBus->setChannelMemory(i, buffer->getChannelData(i)->data(),
             bufferLength);
-=======
-    // The current implementation supports up to four channel impulse responses, which are interpreted as true-stereo (see Reverb class).
-    bool isBufferGood = numberOfChannels > 0 && numberOfChannels <= 4 && bufferLength;
-    ASSERT(isBufferGood);
-    if (!isBufferGood)
-        return;
-
-    // Wrap the AudioBuffer by an AudioBus. It's an efficient pointer set and not a memcpy().
-    // This memory is simply used in the Reverb constructor and no reference to it is kept for later use in that class.
-    RefPtr<AudioBus> bufferBus = AudioBus::create(numberOfChannels, bufferLength, false);
-    for (unsigned i = 0; i < numberOfChannels; ++i)
-        bufferBus->setChannelMemory(i, buffer->getChannelData(i)->data(), bufferLength);
->>>>>>> miniblink49
 
     bufferBus->setSampleRate(buffer->sampleRate());
 
     // Create the reverb with the given impulse response.
-<<<<<<< HEAD
     std::unique_ptr<Reverb> reverb = WTF::wrapUnique(new Reverb(
         bufferBus.get(), AudioUtilities::kRenderQuantumFrames, MaxFFTSize, 2,
         context() && context()->hasRealtimeConstraint(), m_normalize));
-=======
-    bool useBackgroundThreads = !context()->isOfflineContext();
-    OwnPtr<Reverb> reverb = adoptPtr(new Reverb(bufferBus.get(), ProcessingSizeInFrames, MaxFFTSize, 2, useBackgroundThreads, m_normalize));
->>>>>>> miniblink49
 
     {
         // Synchronize with process().
         MutexLocker locker(m_processLock);
-<<<<<<< HEAD
         m_reverb = std::move(reverb);
-=======
-        m_reverb = reverb.release();
->>>>>>> miniblink49
         m_buffer = buffer;
     }
 }
 
 AudioBuffer* ConvolverHandler::buffer()
 {
-<<<<<<< HEAD
     DCHECK(isMainThread());
-=======
-    ASSERT(isMainThread());
->>>>>>> miniblink49
     return m_buffer.get();
 }
 
@@ -254,17 +159,11 @@ double ConvolverHandler::tailTime() const
 {
     MutexTryLocker tryLocker(m_processLock);
     if (tryLocker.locked())
-<<<<<<< HEAD
         return m_reverb
             ? m_reverb->impulseResponseLength() / static_cast<double>(sampleRate())
             : 0;
     // Since we don't want to block the Audio Device thread, we return a large
     // value instead of trying to acquire the lock.
-=======
-        return m_reverb ? m_reverb->impulseResponseLength() / static_cast<double>(sampleRate()) : 0;
-    // Since we don't want to block the Audio Device thread, we return a large value
-    // instead of trying to acquire the lock.
->>>>>>> miniblink49
     return std::numeric_limits<double>::infinity();
 }
 
@@ -272,23 +171,16 @@ double ConvolverHandler::latencyTime() const
 {
     MutexTryLocker tryLocker(m_processLock);
     if (tryLocker.locked())
-<<<<<<< HEAD
         return m_reverb
             ? m_reverb->latencyFrames() / static_cast<double>(sampleRate())
             : 0;
     // Since we don't want to block the Audio Device thread, we return a large
     // value instead of trying to acquire the lock.
-=======
-        return m_reverb ? m_reverb->latencyFrames() / static_cast<double>(sampleRate()) : 0;
-    // Since we don't want to block the Audio Device thread, we return a large value
-    // instead of trying to acquire the lock.
->>>>>>> miniblink49
     return std::numeric_limits<double>::infinity();
 }
 
 // ----------------------------------------------------------------
 
-<<<<<<< HEAD
 ConvolverNode::ConvolverNode(BaseAudioContext& context)
     : AudioNode(context)
 {
@@ -325,17 +217,6 @@ ConvolverNode* ConvolverNode::create(BaseAudioContext* context,
     if (options.hasBuffer())
         node->setBuffer(options.buffer(), exceptionState);
     return node;
-=======
-ConvolverNode::ConvolverNode(AudioContext& context, float sampleRate)
-    : AudioNode(context)
-{
-    setHandler(ConvolverHandler::create(*this, sampleRate));
-}
-
-ConvolverNode* ConvolverNode::create(AudioContext& context, float sampleRate)
-{
-    return new ConvolverNode(context, sampleRate);
->>>>>>> miniblink49
 }
 
 ConvolverHandler& ConvolverNode::convolverHandler() const
@@ -348,12 +229,8 @@ AudioBuffer* ConvolverNode::buffer() const
     return convolverHandler().buffer();
 }
 
-<<<<<<< HEAD
 void ConvolverNode::setBuffer(AudioBuffer* newBuffer,
     ExceptionState& exceptionState)
-=======
-void ConvolverNode::setBuffer(AudioBuffer* newBuffer, ExceptionState& exceptionState)
->>>>>>> miniblink49
 {
     convolverHandler().setBuffer(newBuffer, exceptionState);
 }
@@ -369,8 +246,3 @@ void ConvolverNode::setNormalize(bool normalize)
 }
 
 } // namespace blink
-<<<<<<< HEAD
-=======
-
-#endif // ENABLE(WEB_AUDIO)
->>>>>>> miniblink49

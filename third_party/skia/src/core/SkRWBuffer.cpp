@@ -6,17 +6,13 @@
  */
 
 #include "SkRWBuffer.h"
-<<<<<<< HEAD
 #include "SkAtomics.h"
-=======
->>>>>>> miniblink49
 #include "SkStream.h"
 
 // Force small chunks to be a page's worth
 static const size_t kMinAllocSize = 4096;
 
 struct SkBufferBlock {
-<<<<<<< HEAD
     SkBufferBlock* fNext; // updated by the writer
     size_t fUsed; // updated by the writer
     const size_t fCapacity;
@@ -45,28 +41,6 @@ struct SkBufferBlock {
     //
     size_t append(const void* src, size_t length)
     {
-=======
-    SkBufferBlock*  fNext;
-    size_t          fUsed;
-    size_t          fCapacity;
-    
-    const void* startData() const { return this + 1; };
-    
-    size_t avail() const { return fCapacity - fUsed; }
-    void* availData() { return (char*)this->startData() + fUsed; }
-    
-    static SkBufferBlock* Alloc(size_t length) {
-        size_t capacity = LengthToCapacity(length);
-        SkBufferBlock* block = (SkBufferBlock*)sk_malloc_throw(sizeof(SkBufferBlock) + capacity);
-        block->fNext = NULL;
-        block->fUsed = 0;
-        block->fCapacity = capacity;
-        return block;
-    }
-
-    // Return number of bytes actually appended
-    size_t append(const void* src, size_t length) {
->>>>>>> miniblink49
         this->validate();
         size_t amount = SkTMin(this->avail(), length);
         memcpy(this->availData(), src, amount);
@@ -75,14 +49,10 @@ struct SkBufferBlock {
         return amount;
     }
 
-<<<<<<< HEAD
     // Do not call in the reader thread, since the writer may be updating fUsed.
     // (The assertion is still true, but TSAN still may complain about its raciness.)
     void validate() const
     {
-=======
-    void validate() const {
->>>>>>> miniblink49
 #ifdef SK_DEBUG
         SkASSERT(fCapacity > 0);
         SkASSERT(fUsed <= fCapacity);
@@ -90,12 +60,8 @@ struct SkBufferBlock {
     }
 
 private:
-<<<<<<< HEAD
     static size_t LengthToCapacity(size_t length)
     {
-=======
-    static size_t LengthToCapacity(size_t length) {
->>>>>>> miniblink49
         const size_t minSize = kMinAllocSize - sizeof(SkBufferBlock);
         return SkTMax(length, minSize);
     }
@@ -103,7 +69,6 @@ private:
 
 struct SkBufferHead {
     mutable int32_t fRefCnt;
-<<<<<<< HEAD
     SkBufferBlock fBlock;
 
     SkBufferHead(size_t capacity)
@@ -114,16 +79,10 @@ struct SkBufferHead {
 
     static size_t LengthToCapacity(size_t length)
     {
-=======
-    SkBufferBlock   fBlock;
-
-    static size_t LengthToCapacity(size_t length) {
->>>>>>> miniblink49
         const size_t minSize = kMinAllocSize - sizeof(SkBufferHead);
         return SkTMax(length, minSize);
     }
 
-<<<<<<< HEAD
     static SkBufferHead* Alloc(size_t length)
     {
         size_t capacity = LengthToCapacity(length);
@@ -140,25 +99,6 @@ struct SkBufferHead {
 
     void unref() const
     {
-=======
-    static SkBufferHead* Alloc(size_t length) {
-        size_t capacity = LengthToCapacity(length);
-        size_t size = sizeof(SkBufferHead) + capacity;
-        SkBufferHead* head = (SkBufferHead*)sk_malloc_throw(size);
-        head->fRefCnt = 1;
-        head->fBlock.fNext = NULL;
-        head->fBlock.fUsed = 0;
-        head->fBlock.fCapacity = capacity;
-        return head;
-    }
-    
-    void ref() const {
-        SkASSERT(fRefCnt > 0);
-        sk_atomic_inc(&fRefCnt);
-    }
-    
-    void unref() const {
->>>>>>> miniblink49
         SkASSERT(fRefCnt > 0);
         // A release here acts in place of all releases we "should" have been doing in ref().
         if (1 == sk_atomic_fetch_add(&fRefCnt, -1, sk_memory_order_acq_rel)) {
@@ -172,14 +112,9 @@ struct SkBufferHead {
             }
         }
     }
-<<<<<<< HEAD
 
     void validate(size_t minUsed, const SkBufferBlock* tail = nullptr) const
     {
-=======
-    
-    void validate(size_t minUsed, SkBufferBlock* tail = NULL) const {
->>>>>>> miniblink49
 #ifdef SK_DEBUG
         SkASSERT(fRefCnt > 0);
         size_t totalUsed = 0;
@@ -199,7 +134,6 @@ struct SkBufferHead {
     }
 };
 
-<<<<<<< HEAD
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // The reader can only access block.fCapacity (which never changes), and cannot access
 // block.fUsed, which may be updated by the writer.
@@ -222,26 +156,10 @@ SkROBuffer::SkROBuffer(const SkBufferHead* head, size_t available, const SkBuffe
 SkROBuffer::~SkROBuffer()
 {
     if (fHead) {
-=======
-SkROBuffer::SkROBuffer(const SkBufferHead* head, size_t used) : fHead(head), fUsed(used) {
-    if (head) {
-        fHead->ref();
-        SkASSERT(used > 0);
-        head->validate(used);
-    } else {
-        SkASSERT(0 == used);
-    }
-}
-
-SkROBuffer::~SkROBuffer() {
-    if (fHead) {
-        fHead->validate(fUsed);
->>>>>>> miniblink49
         fHead->unref();
     }
 }
 
-<<<<<<< HEAD
 SkROBuffer::Iter::Iter(const SkROBuffer* buffer)
 {
     this->reset(buffer);
@@ -255,23 +173,10 @@ void SkROBuffer::Iter::reset(const SkROBuffer* buffer)
         fRemaining = buffer->fAvailable;
     } else {
         fBlock = nullptr;
-=======
-SkROBuffer::Iter::Iter(const SkROBuffer* buffer) {
-    this->reset(buffer);
-}
-
-void SkROBuffer::Iter::reset(const SkROBuffer* buffer) {
-    if (buffer) {
-        fBlock = &buffer->fHead->fBlock;
-        fRemaining = buffer->fUsed;
-    } else {
-        fBlock = NULL;
->>>>>>> miniblink49
         fRemaining = 0;
     }
 }
 
-<<<<<<< HEAD
 const void* SkROBuffer::Iter::data() const
 {
     return fRemaining ? fBlock->startData() : nullptr;
@@ -296,25 +201,10 @@ bool SkROBuffer::Iter::next()
         } else {
             fBlock = fBlock->fNext;
         }
-=======
-const void* SkROBuffer::Iter::data() const {
-    return fRemaining ? fBlock->startData() : NULL;
-}
-
-size_t SkROBuffer::Iter::size() const {
-    return SkTMin(fBlock->fUsed, fRemaining);
-}
-
-bool SkROBuffer::Iter::next() {
-    if (fRemaining) {
-        fRemaining -= this->size();
-        fBlock = fBlock->fNext;
->>>>>>> miniblink49
     }
     return fRemaining != 0;
 }
 
-<<<<<<< HEAD
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 SkRWBuffer::SkRWBuffer(size_t initialCapacity)
@@ -338,16 +228,6 @@ SkRWBuffer::~SkRWBuffer()
 //
 void SkRWBuffer::append(const void* src, size_t length)
 {
-=======
-SkRWBuffer::SkRWBuffer(size_t initialCapacity) : fHead(NULL), fTail(NULL), fTotalUsed(0) {}
-
-SkRWBuffer::~SkRWBuffer() {
-    this->validate();
-    fHead->unref();
-}
-
-void SkRWBuffer::append(const void* src, size_t length) {
->>>>>>> miniblink49
     this->validate();
     if (0 == length) {
         return;
@@ -355,11 +235,7 @@ void SkRWBuffer::append(const void* src, size_t length) {
 
     fTotalUsed += length;
 
-<<<<<<< HEAD
     if (nullptr == fHead) {
-=======
-    if (NULL == fHead) {
->>>>>>> miniblink49
         fHead = SkBufferHead::Alloc(length);
         fTail = &fHead->fBlock;
     }
@@ -379,7 +255,6 @@ void SkRWBuffer::append(const void* src, size_t length) {
     this->validate();
 }
 
-<<<<<<< HEAD
 #ifdef SK_DEBUG
 void SkRWBuffer::validate() const
 {
@@ -387,60 +262,21 @@ void SkRWBuffer::validate() const
         fHead->validate(fTotalUsed, fTail);
     } else {
         SkASSERT(nullptr == fTail);
-=======
-void* SkRWBuffer::append(size_t length) {
-    this->validate();
-    if (0 == length) {
-        return NULL;
-    }
-
-    fTotalUsed += length;
-    
-    if (NULL == fHead) {
-        fHead = SkBufferHead::Alloc(length);
-        fTail = &fHead->fBlock;
-    } else if (fTail->avail() < length) {
-        SkBufferBlock* block = SkBufferBlock::Alloc(length);
-        fTail->fNext = block;
-        fTail = block;
-    }
-
-    fTail->fUsed += length;
-    this->validate();
-    return (char*)fTail->availData() - length;
-}
-
-#ifdef SK_DEBUG
-void SkRWBuffer::validate() const {
-    if (fHead) {
-        fHead->validate(fTotalUsed, fTail);
-    } else {
-        SkASSERT(NULL == fTail);
->>>>>>> miniblink49
         SkASSERT(0 == fTotalUsed);
     }
 }
 #endif
 
-<<<<<<< HEAD
 SkROBuffer* SkRWBuffer::newRBufferSnapshot() const
 {
     return new SkROBuffer(fHead, fTotalUsed, fTail);
-=======
-SkROBuffer* SkRWBuffer::newRBufferSnapshot() const {
-    return SkNEW_ARGS(SkROBuffer, (fHead, fTotalUsed));
->>>>>>> miniblink49
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 class SkROBufferStreamAsset : public SkStreamAsset {
-<<<<<<< HEAD
     void validate() const
     {
-=======
-    void validate() const {
->>>>>>> miniblink49
 #ifdef SK_DEBUG
         SkASSERT(fGlobalOffset <= fBuffer->size());
         SkASSERT(fLocalOffset <= fIter.size());
@@ -451,7 +287,6 @@ class SkROBufferStreamAsset : public SkStreamAsset {
 #ifdef SK_DEBUG
     class AutoValidate {
         SkROBufferStreamAsset* fStream;
-<<<<<<< HEAD
 
     public:
         AutoValidate(SkROBufferStreamAsset* stream)
@@ -471,19 +306,6 @@ public:
         : fBuffer(SkRef(buffer))
         , fIter(buffer)
     {
-=======
-    public:
-        AutoValidate(SkROBufferStreamAsset* stream) : fStream(stream) { stream->validate(); }
-        ~AutoValidate() { fStream->validate(); }
-    };
-    #define AUTO_VALIDATE   AutoValidate av(this);
-#else
-    #define AUTO_VALIDATE
-#endif
-
-public:
-    SkROBufferStreamAsset(const SkROBuffer* buffer) : fBuffer(SkRef(buffer)), fIter(buffer) {
->>>>>>> miniblink49
         fGlobalOffset = fLocalOffset = 0;
     }
 
@@ -491,24 +313,16 @@ public:
 
     size_t getLength() const override { return fBuffer->size(); }
 
-<<<<<<< HEAD
     bool rewind() override
     {
-=======
-    bool rewind() override {
->>>>>>> miniblink49
         AUTO_VALIDATE
         fIter.reset(fBuffer);
         fGlobalOffset = fLocalOffset = 0;
         return true;
     }
 
-<<<<<<< HEAD
     size_t read(void* dst, size_t request) override
     {
-=======
-    size_t read(void* dst, size_t request) override {
->>>>>>> miniblink49
         AUTO_VALIDATE
         size_t bytesRead = 0;
         for (;;) {
@@ -529,11 +343,7 @@ public:
             SkASSERT(fLocalOffset == size);
             fLocalOffset = 0;
             if (!fIter.next()) {
-<<<<<<< HEAD
                 break; // ran out of data
-=======
-                break;   // ran out of data
->>>>>>> miniblink49
             }
         }
         fGlobalOffset += bytesRead;
@@ -541,7 +351,6 @@ public:
         return bytesRead;
     }
 
-<<<<<<< HEAD
     bool isAtEnd() const override
     {
         return fBuffer->size() == fGlobalOffset;
@@ -556,21 +365,6 @@ public:
 
     bool seek(size_t position) override
     {
-=======
-    bool isAtEnd() const override {
-        return fBuffer->size() == fGlobalOffset;
-    }
-    
-    SkStreamAsset* duplicate() const override {
-        return SkNEW_ARGS(SkROBufferStreamAsset, (fBuffer));
-    }
-    
-    size_t getPosition() const {
-        return fGlobalOffset;
-    }
-    
-    bool seek(size_t position) {
->>>>>>> miniblink49
         AUTO_VALIDATE
         if (position < fGlobalOffset) {
             this->rewind();
@@ -578,14 +372,9 @@ public:
         (void)this->skip(position - fGlobalOffset);
         return true;
     }
-<<<<<<< HEAD
 
     bool move(long offset) override
     {
-=======
-    
-    bool move(long offset) {
->>>>>>> miniblink49
         AUTO_VALIDATE
         offset += fGlobalOffset;
         if (offset <= 0) {
@@ -595,19 +384,13 @@ public:
         }
         return true;
     }
-<<<<<<< HEAD
 
     SkStreamAsset* fork() const override
     {
-=======
-    
-    SkStreamAsset* fork() const override {
->>>>>>> miniblink49
         SkStreamAsset* clone = this->duplicate();
         clone->seek(this->getPosition());
         return clone;
     }
-<<<<<<< HEAD
 
 private:
     const SkROBuffer* fBuffer;
@@ -620,18 +403,4 @@ SkStreamAsset* SkRWBuffer::newStreamSnapshot() const
 {
     SkAutoTUnref<SkROBuffer> buffer(this->newRBufferSnapshot());
     return new SkROBufferStreamAsset(buffer);
-=======
-    
-
-private:
-    const SkROBuffer*   fBuffer;
-    SkROBuffer::Iter    fIter;
-    size_t              fLocalOffset;
-    size_t              fGlobalOffset;
-};
-
-SkStreamAsset* SkRWBuffer::newStreamSnapshot() const {
-    SkAutoTUnref<SkROBuffer> buffer(this->newRBufferSnapshot());
-    return SkNEW_ARGS(SkROBufferStreamAsset, (buffer));
->>>>>>> miniblink49
 }

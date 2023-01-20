@@ -1,5 +1,4 @@
 include_rules = [
-<<<<<<< HEAD
     "+base",
     "+mojo/public/cpp/bindings",
     "+web/tests",
@@ -10,7 +9,3 @@ specific_include_rules = {
         "+content/test/blink_test_environment.h",
     ],
 }
-=======
-    "+web/tests",
-]
->>>>>>> miniblink49

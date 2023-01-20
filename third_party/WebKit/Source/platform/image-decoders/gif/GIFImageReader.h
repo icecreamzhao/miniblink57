@@ -38,7 +38,6 @@
 #ifndef GIFImageReader_h
 #define GIFImageReader_h
 
-<<<<<<< HEAD
 // Define ourselves as the clientPtr.  Mozilla just hacked their C++ callback
 // class into this old C decoder, so we will too.
 #include "platform/image-decoders/FastSharedBufferReader.h"
@@ -52,22 +51,6 @@
 #define MAX_DICTIONARY_ENTRIES 4096 // 2^MAX_DICTIONARY_ENTRY_BITS
 #define MAX_COLORS 256
 #define BYTES_PER_COLORMAP_ENTRY 3
-=======
-// Define ourselves as the clientPtr.  Mozilla just hacked their C++ callback class into this old C decoder,
-// so we will too.
-#include "platform/SharedBuffer.h"
-#include "platform/image-decoders/FastSharedBufferReader.h"
-#include "platform/image-decoders/gif/GIFImageDecoder.h"
-#include "wtf/Noncopyable.h"
-#include "wtf/OwnPtr.h"
-#include "wtf/PassOwnPtr.h"
-#include "wtf/Vector.h"
-
-#define MAX_DICTIONARY_ENTRY_BITS 12
-#define MAX_DICTIONARY_ENTRIES    4096 // 2^MAX_DICTIONARY_ENTRY_BITS
-#define MAX_COLORS                256
-#define BYTES_PER_COLORMAP_ENTRY  3
->>>>>>> miniblink49
 
 const int cLoopCountNotSeen = -2;
 
@@ -98,7 +81,6 @@ enum GIFState {
 struct GIFFrameContext;
 
 // LZW decoder state machine.
-<<<<<<< HEAD
 class GIFLZWContext final {
     USING_FAST_MALLOC(GIFLZWContext);
     WTF_MAKE_NONCOPYABLE(GIFLZWContext);
@@ -106,12 +88,6 @@ class GIFLZWContext final {
 public:
     GIFLZWContext(blink::GIFImageDecoder* client,
         const GIFFrameContext* frameContext)
-=======
-class GIFLZWContext {
-    WTF_MAKE_FAST_ALLOCATED(GIFLZWContext);
-public:
-    GIFLZWContext(blink::GIFImageDecoder* client, const GIFFrameContext* frameContext)
->>>>>>> miniblink49
         : codesize(0)
         , codemask(0)
         , clearCode(0)
@@ -126,12 +102,8 @@ public:
         , rowIter(0)
         , m_client(client)
         , m_frameContext(frameContext)
-<<<<<<< HEAD
     {
     }
-=======
-    { }
->>>>>>> miniblink49
 
     bool prepareToDecode();
     bool outputRow(GIFRow::const_iterator rowBegin);
@@ -165,12 +137,8 @@ private:
 
 // Data structure for one LZW block.
 struct GIFLZWBlock {
-<<<<<<< HEAD
     DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
-=======
-    WTF_MAKE_FAST_ALLOCATED(GIFLZWBlock);
->>>>>>> miniblink49
 public:
     GIFLZWBlock(size_t position, size_t size)
         : blockPosition(position)
@@ -182,14 +150,9 @@ public:
     size_t blockSize;
 };
 
-<<<<<<< HEAD
 class GIFColorMap final {
     DISALLOW_NEW();
 
-=======
-class GIFColorMap {
-    WTF_MAKE_FAST_ALLOCATED(GIFColorMap);
->>>>>>> miniblink49
 public:
     typedef Vector<blink::ImageFrame::PixelData> Table;
 
@@ -211,11 +174,7 @@ public:
 
     // Build RGBA table using the data stream.
     void buildTable(blink::FastSharedBufferReader*);
-<<<<<<< HEAD
     const Table& getTable() const { return m_table; }
-=======
-    const Table& table() const { return m_table; }
->>>>>>> miniblink49
 
 private:
     bool m_isDefined;
@@ -226,13 +185,9 @@ private:
 
 // LocalFrame output state machine.
 struct GIFFrameContext {
-<<<<<<< HEAD
     USING_FAST_MALLOC(GIFFrameContext);
     WTF_MAKE_NONCOPYABLE(GIFFrameContext);
 
-=======
-    WTF_MAKE_FAST_ALLOCATED(GIFFrameContext); WTF_MAKE_NONCOPYABLE(GIFFrameContext);
->>>>>>> miniblink49
 public:
     GIFFrameContext(int id)
         : m_frameId(id)
@@ -253,7 +208,6 @@ public:
     {
     }
 
-<<<<<<< HEAD
     ~GIFFrameContext() { }
 
     void addLzwBlock(size_t position, size_t size)
@@ -264,18 +218,6 @@ public:
     bool decode(blink::FastSharedBufferReader*,
         blink::GIFImageDecoder* client,
         bool* frameDecoded);
-=======
-    ~GIFFrameContext()
-    {
-    }
-
-    void addLzwBlock(size_t position, size_t size)
-    {
-        m_lzwBlocks.append(GIFLZWBlock(position, size));
-    }
-
-    bool decode(blink::FastSharedBufferReader*, blink::GIFImageDecoder* client, bool* frameDecoded);
->>>>>>> miniblink49
 
     int frameId() const { return m_frameId; }
     void setRect(unsigned x, unsigned y, unsigned width, unsigned height)
@@ -285,21 +227,16 @@ public:
         m_width = width;
         m_height = height;
     }
-<<<<<<< HEAD
     blink::IntRect frameRect() const
     {
         return blink::IntRect(m_xOffset, m_yOffset, m_width, m_height);
     }
-=======
-    blink::IntRect frameRect() const { return blink::IntRect(m_xOffset, m_yOffset, m_width, m_height); }
->>>>>>> miniblink49
     unsigned xOffset() const { return m_xOffset; }
     unsigned yOffset() const { return m_yOffset; }
     unsigned width() const { return m_width; }
     unsigned height() const { return m_height; }
     size_t transparentPixel() const { return m_transparentPixel; }
     void setTransparentPixel(size_t pixel) { m_transparentPixel = pixel; }
-<<<<<<< HEAD
     blink::ImageFrame::DisposalMethod getDisposalMethod() const
     {
         return m_disposalMethod;
@@ -308,10 +245,6 @@ public:
     {
         m_disposalMethod = disposalMethod;
     }
-=======
-    blink::ImageFrame::DisposalMethod disposalMethod() const { return m_disposalMethod; }
-    void setDisposalMethod(blink::ImageFrame::DisposalMethod disposalMethod) { m_disposalMethod = disposalMethod; }
->>>>>>> miniblink49
     unsigned delayTime() const { return m_delayTime; }
     void setDelayTime(unsigned delay) { m_delayTime = delay; }
     bool isComplete() const { return m_isComplete; }
@@ -326,7 +259,6 @@ public:
         m_isDataSizeDefined = true;
     }
     bool progressiveDisplay() const { return m_progressiveDisplay; }
-<<<<<<< HEAD
     void setProgressiveDisplay(bool progressiveDisplay)
     {
         m_progressiveDisplay = progressiveDisplay;
@@ -335,13 +267,6 @@ public:
     void setInterlaced(bool interlaced) { m_interlaced = interlaced; }
 
     void clearDecodeState() { m_lzwContext.reset(); }
-=======
-    void setProgressiveDisplay(bool progressiveDisplay) { m_progressiveDisplay = progressiveDisplay; }
-    bool interlaced() const { return m_interlaced; }
-    void setInterlaced(bool interlaced) { m_interlaced = interlaced; }
-
-    void clearDecodeState() { m_lzwContext.clear(); }
->>>>>>> miniblink49
     const GIFColorMap& localColorMap() const { return m_localColorMap; }
     GIFColorMap& localColorMap() { return m_localColorMap; }
 
@@ -351,30 +276,19 @@ private:
     unsigned m_yOffset; // With respect to "screen" origin.
     unsigned m_width;
     unsigned m_height;
-<<<<<<< HEAD
     size_t m_transparentPixel; // Index of transparent pixel. Value is kNotFound
         // if there is no transparent pixel.
     blink::ImageFrame::DisposalMethod
         m_disposalMethod; // Restore to background, leave in place, etc.
-=======
-    size_t m_transparentPixel; // Index of transparent pixel. Value is kNotFound if there is no transparent pixel.
-    blink::ImageFrame::DisposalMethod m_disposalMethod; // Restore to background, leave in place, etc.
->>>>>>> miniblink49
     int m_dataSize;
 
     bool m_progressiveDisplay; // If true, do Haeberli interlace hack.
     bool m_interlaced; // True, if scanlines arrive interlaced order.
 
-<<<<<<< HEAD
     unsigned m_delayTime; // Display time, in milliseconds, for this image in a
         // multi-image GIF.
 
     std::unique_ptr<GIFLZWContext> m_lzwContext;
-=======
-    unsigned m_delayTime; // Display time, in milliseconds, for this image in a multi-image GIF.
-
-    OwnPtr<GIFLZWContext> m_lzwContext;
->>>>>>> miniblink49
     Vector<GIFLZWBlock> m_lzwBlocks; // LZW blocks for this frame.
     GIFColorMap m_localColorMap;
 
@@ -384,26 +298,17 @@ private:
     bool m_isDataSizeDefined;
 };
 
-<<<<<<< HEAD
 class PLATFORM_EXPORT GIFImageReader final {
     USING_FAST_MALLOC(GIFImageReader);
     WTF_MAKE_NONCOPYABLE(GIFImageReader);
 
-=======
-class PLATFORM_EXPORT GIFImageReader {
-    WTF_MAKE_FAST_ALLOCATED(GIFImageReader); WTF_MAKE_NONCOPYABLE(GIFImageReader);
->>>>>>> miniblink49
 public:
     GIFImageReader(blink::GIFImageDecoder* client = 0)
         : m_client(client)
         , m_state(GIFType)
-<<<<<<< HEAD
         ,
         // Number of bytes for GIF type, either "GIF87a" or "GIF89a".
         m_bytesToConsume(6)
-=======
-        , m_bytesToConsume(6) // Number of bytes for GIF type, either "GIF87a" or "GIF89a".
->>>>>>> miniblink49
         , m_bytesRead(0)
         , m_version(0)
         , m_screenWidth(0)
@@ -414,17 +319,9 @@ public:
     {
     }
 
-<<<<<<< HEAD
     ~GIFImageReader() { }
 
     void setData(PassRefPtr<blink::SegmentReader> data) { m_data = data; }
-=======
-    ~GIFImageReader()
-    {
-    }
-
-    void setData(PassRefPtr<blink::SharedBuffer> data) { m_data = data; }
->>>>>>> miniblink49
     bool parse(blink::GIFImageDecoder::GIFParseQuery);
     bool decode(size_t frameIndex);
 
@@ -433,7 +330,6 @@ public:
         if (m_frames.isEmpty())
             return 0;
 
-<<<<<<< HEAD
         // This avoids counting an empty frame when the file is truncated right
         // after GIFControlExtension but before GIFImageHeader.
         // FIXME: This extra complexity is not necessary and we should just report
@@ -444,19 +340,6 @@ public:
     int loopCount() const { return m_loopCount; }
 
     const GIFColorMap& globalColorMap() const { return m_globalColorMap; }
-=======
-        // This avoids counting an empty frame when the file is truncated right after
-        // GIFControlExtension but before GIFImageHeader.
-        // FIXME: This extra complexity is not necessary and we should just report m_frames.size().
-        return m_frames.last()->isHeaderDefined() ? m_frames.size() : m_frames.size() - 1;
-    }
-    int loopCount() const { return m_loopCount; }
-
-    const GIFColorMap& globalColorMap() const
-    {
-        return m_globalColorMap;
-    }
->>>>>>> miniblink49
 
     const GIFFrameContext* frameContext(size_t index) const
     {
@@ -468,13 +351,9 @@ public:
     void clearDecodeState(size_t index) { m_frames[index]->clearDecodeState(); }
 
 private:
-<<<<<<< HEAD
     bool parseData(size_t dataPosition,
         size_t len,
         blink::GIFImageDecoder::GIFParseQuery);
-=======
-    bool parseData(size_t dataPosition, size_t len, blink::GIFImageDecoder::GIFParseQuery);
->>>>>>> miniblink49
     void setRemainingBytes(size_t);
 
     void addFrameIfNecessary();
@@ -487,12 +366,8 @@ private:
 
     // Parsing state machine.
     GIFState m_state; // Current decoder master state.
-<<<<<<< HEAD
     size_t m_bytesToConsume; // Number of bytes to consume for next stage of
         // parsing.
-=======
-    size_t m_bytesToConsume; // Number of bytes to consume for next stage of parsing.
->>>>>>> miniblink49
     size_t m_bytesRead; // Number of bytes processed.
 
     // Global (multi-image) state.
@@ -501,20 +376,12 @@ private:
     unsigned m_screenHeight;
     bool m_sentSizeToClient;
     GIFColorMap m_globalColorMap;
-<<<<<<< HEAD
     int m_loopCount; // Netscape specific extension block to control the number
         // of animation loops a GIF renders.
 
     Vector<std::unique_ptr<GIFFrameContext>> m_frames;
 
     RefPtr<blink::SegmentReader> m_data;
-=======
-    int m_loopCount; // Netscape specific extension block to control the number of animation loops a GIF renders.
-
-    Vector<OwnPtr<GIFFrameContext>> m_frames;
-
-    RefPtr<blink::SharedBuffer> m_data;
->>>>>>> miniblink49
     bool m_parseCompleted;
 };
 

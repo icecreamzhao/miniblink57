@@ -8,23 +8,15 @@
 #ifndef SkDrawDash_DEFINED
 #define SkDrawDash_DEFINED
 
-<<<<<<< HEAD
 #include "SkIntArray.h"
 #include "SkPaintPart.h"
-=======
-#include "SkPaintPart.h"
-#include "SkIntArray.h"
->>>>>>> miniblink49
 
 class SkDash : public SkDrawPathEffect {
     DECLARE_MEMBER_INFO(Dash);
     SkDash();
     virtual ~SkDash();
     SkPathEffect* getPathEffect() override;
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 private:
     SkTDScalarArray intervals;
     SkScalar phase;

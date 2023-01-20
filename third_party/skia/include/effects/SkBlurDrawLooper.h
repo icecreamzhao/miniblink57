@@ -5,20 +5,11 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #ifndef SkBlurDrawLooper_DEFINED
 #define SkBlurDrawLooper_DEFINED
 
 #include "SkColor.h"
 #include "SkDrawLooper.h"
-=======
-
-#ifndef SkBlurDrawLooper_DEFINED
-#define SkBlurDrawLooper_DEFINED
-
-#include "SkDrawLooper.h"
-#include "SkColor.h"
->>>>>>> miniblink49
 
 class SkMaskFilter;
 class SkColorFilter;
@@ -36,7 +27,6 @@ public:
             The blur layer's dx/dy/radius aren't affected by the canvas
             transform.
         */
-<<<<<<< HEAD
         kIgnoreTransform_BlurFlag = 0x01,
         kOverrideColor_BlurFlag = 0x02,
         kHighQuality_BlurFlag = 0x04,
@@ -56,21 +46,6 @@ public:
         return Make(color, sigma, dx, dy, flags).release();
     }
 #endif
-=======
-        kIgnoreTransform_BlurFlag   = 0x01,
-        kOverrideColor_BlurFlag     = 0x02,
-        kHighQuality_BlurFlag       = 0x04,
-        /** mask for all blur flags */
-        kAll_BlurFlag               = 0x07
-    };
-
-    static SkBlurDrawLooper* Create(SkColor color, SkScalar sigma, SkScalar dx, SkScalar dy,
-                                    uint32_t flags = kNone_BlurFlag) {
-        return SkNEW_ARGS(SkBlurDrawLooper, (color, sigma, dx, dy, flags));
-    }
-
-    virtual ~SkBlurDrawLooper();
->>>>>>> miniblink49
 
     SkDrawLooper::Context* createContext(SkCanvas*, void* storage) const override;
 
@@ -81,30 +56,18 @@ public:
 
 protected:
     SkBlurDrawLooper(SkColor color, SkScalar sigma, SkScalar dx, SkScalar dy,
-<<<<<<< HEAD
         uint32_t flags);
-=======
-                     uint32_t flags);
->>>>>>> miniblink49
 
     void flatten(SkWriteBuffer&) const override;
 
     bool asABlurShadow(BlurShadowRec*) const override;
 
 private:
-<<<<<<< HEAD
     sk_sp<SkMaskFilter> fBlur;
     sk_sp<SkColorFilter> fColorFilter;
     SkScalar fDx, fDy, fSigma;
     SkColor fBlurColor;
     uint32_t fBlurFlags;
-=======
-    SkMaskFilter*   fBlur;
-    SkColorFilter*  fColorFilter;
-    SkScalar        fDx, fDy, fSigma;
-    SkColor         fBlurColor;
-    uint32_t        fBlurFlags;
->>>>>>> miniblink49
 
     enum State {
         kBeforeEdge,

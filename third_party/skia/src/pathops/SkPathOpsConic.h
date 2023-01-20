@@ -19,7 +19,6 @@ struct SkDConic {
     SkDQuad fPts;
     SkScalar fWeight;
 
-<<<<<<< HEAD
     bool collapsed() const
     {
         return fPts.collapsed();
@@ -45,28 +44,6 @@ struct SkDConic {
 
     const SkDConic& set(const SkPoint pts[kPointCount], SkScalar weight)
     {
-=======
-    bool collapsed() const {
-        return fPts.collapsed();
-    }
-
-    bool controlsInside() const {
-        return fPts.controlsInside();
-    }
-
-    void debugInit() {
-        fPts.debugInit();
-    }
-
-    SkDConic flip() const {
-        SkDConic result = {{{fPts[2], fPts[1], fPts[0]}}, fWeight};
-        return result;
-    }
-
-    static bool IsCubic() { return false; }
-
-    const SkDConic& set(const SkPoint pts[kPointCount], SkScalar weight) {
->>>>>>> miniblink49
         fPts.set(pts);
         fWeight = weight;
         return *this;
@@ -75,7 +52,6 @@ struct SkDConic {
     const SkDPoint& operator[](int n) const { return fPts[n]; }
     SkDPoint& operator[](int n) { return fPts[n]; }
 
-<<<<<<< HEAD
     static int AddValidTs(double s[], int realRoots, double* t)
     {
         return SkDQuad::AddValidTs(s, realRoots, t);
@@ -83,20 +59,12 @@ struct SkDConic {
 
     void align(int endIndex, SkDPoint* dstPt) const
     {
-=======
-    static int AddValidTs(double s[], int realRoots, double* t) {
-        return SkDQuad::AddValidTs(s, realRoots, t);
-    }
-
-    void align(int endIndex, SkDPoint* dstPt) const {
->>>>>>> miniblink49
         fPts.align(endIndex, dstPt);
     }
 
     SkDVector dxdyAtT(double t) const;
     static int FindExtrema(const double src[], SkScalar weight, double tValue[1]);
 
-<<<<<<< HEAD
     bool hullIntersects(const SkDQuad& quad, bool* isLinear) const
     {
         return fPts.hullIntersects(quad, isLinear);
@@ -104,19 +72,11 @@ struct SkDConic {
 
     bool hullIntersects(const SkDConic& conic, bool* isLinear) const
     {
-=======
-    bool hullIntersects(const SkDQuad& quad, bool* isLinear) const {
-        return fPts.hullIntersects(quad, isLinear);
-    }
-
-    bool hullIntersects(const SkDConic& conic, bool* isLinear) const {
->>>>>>> miniblink49
         return fPts.hullIntersects(conic.fPts, isLinear);
     }
 
     bool hullIntersects(const SkDCubic& cubic, bool* isLinear) const;
 
-<<<<<<< HEAD
     bool isLinear(int startIndex, int endIndex) const
     {
         return fPts.isLinear(startIndex, endIndex);
@@ -134,27 +94,11 @@ struct SkDConic {
 
     void otherPts(int oddMan, const SkDPoint* endPt[2]) const
     {
-=======
-    bool isLinear(int startIndex, int endIndex) const {
-        return fPts.isLinear(startIndex, endIndex);
-    }
-
-    bool monotonicInX() const {
-        return fPts.monotonicInX();
-    }
-
-    bool monotonicInY() const {
-        return fPts.monotonicInY();
-    }
-
-    void otherPts(int oddMan, const SkDPoint* endPt[2]) const {
->>>>>>> miniblink49
         fPts.otherPts(oddMan, endPt);
     }
 
     SkDPoint ptAtT(double t) const;
 
-<<<<<<< HEAD
     static int RootsReal(double A, double B, double C, double t[2])
     {
         return SkDQuad::RootsReal(A, B, C, t);
@@ -162,44 +106,25 @@ struct SkDConic {
 
     static int RootsValidT(const double A, const double B, const double C, double s[2])
     {
-=======
-    static int RootsReal(double A, double B, double C, double t[2]) {
-        return SkDQuad::RootsReal(A, B, C, t);
-    }
-
-    static int RootsValidT(const double A, const double B, const double C, double s[2]) {
->>>>>>> miniblink49
         return SkDQuad::RootsValidT(A, B, C, s);
     }
 
     SkDConic subDivide(double t1, double t2) const;
 
-<<<<<<< HEAD
     static SkDConic SubDivide(const SkPoint a[kPointCount], SkScalar weight, double t1, double t2)
     {
-=======
-    static SkDConic SubDivide(const SkPoint a[kPointCount], SkScalar weight, double t1, double t2) {
->>>>>>> miniblink49
         SkDConic conic;
         conic.set(a, weight);
         return conic.subDivide(t1, t2);
     }
 
     SkDPoint subDivide(const SkDPoint& a, const SkDPoint& c, double t1, double t2,
-<<<<<<< HEAD
         SkScalar* weight) const;
 
     static SkDPoint SubDivide(const SkPoint pts[kPointCount], SkScalar weight,
         const SkDPoint& a, const SkDPoint& c,
         double t1, double t2, SkScalar* newWeight)
     {
-=======
-            SkScalar* weight) const;
-
-    static SkDPoint SubDivide(const SkPoint pts[kPointCount], SkScalar weight,
-                              const SkDPoint& a, const SkDPoint& c,
-                              double t1, double t2, SkScalar* newWeight) {
->>>>>>> miniblink49
         SkDConic conic;
         conic.set(pts, weight);
         return conic.subDivide(a, c, t1, t2, newWeight);
@@ -211,8 +136,4 @@ struct SkDConic {
     void dumpInner() const;
 };
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #endif

@@ -28,18 +28,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "public/web/WebLabelElement.h"
 
 #include "core/HTMLNames.h"
 #include "core/html/HTMLLabelElement.h"
-<<<<<<< HEAD
 #include "core/html/LabelableElement.h"
-=======
->>>>>>> miniblink49
 #include "public/platform/WebString.h"
 #include "wtf/PassRefPtr.h"
 
@@ -50,33 +43,21 @@ WebElement WebLabelElement::correspondingControl()
     return WebElement(unwrap<HTMLLabelElement>()->control());
 }
 
-<<<<<<< HEAD
 WebLabelElement::WebLabelElement(HTMLLabelElement* elem)
-=======
-WebLabelElement::WebLabelElement(const PassRefPtrWillBeRawPtr<HTMLLabelElement>& elem)
->>>>>>> miniblink49
     : WebElement(elem)
 {
 }
 
-<<<<<<< HEAD
 DEFINE_WEB_NODE_TYPE_CASTS(WebLabelElement,
     isHTMLLabelElement(constUnwrap<Node>()));
 
 WebLabelElement& WebLabelElement::operator=(HTMLLabelElement* elem)
-=======
-WebLabelElement& WebLabelElement::operator=(const PassRefPtrWillBeRawPtr<HTMLLabelElement>& elem)
->>>>>>> miniblink49
 {
     m_private = elem;
     return *this;
 }
 
-<<<<<<< HEAD
 WebLabelElement::operator HTMLLabelElement*() const
-=======
-WebLabelElement::operator PassRefPtrWillBeRawPtr<HTMLLabelElement>() const
->>>>>>> miniblink49
 {
     return toHTMLLabelElement(m_private.get());
 }

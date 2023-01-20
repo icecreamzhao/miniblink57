@@ -28,51 +28,32 @@
 #define HTTPHeaderMap_h
 
 #include "platform/PlatformExport.h"
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/HashMap.h"
-=======
-#include "wtf/HashMap.h"
-#include "wtf/PassOwnPtr.h"
->>>>>>> miniblink49
 #include "wtf/Vector.h"
 #include "wtf/text/AtomicString.h"
 #include "wtf/text/AtomicStringHash.h"
 #include "wtf/text/StringHash.h"
-<<<<<<< HEAD
 #include <memory>
-=======
->>>>>>> miniblink49
 #include <utility>
 
 namespace blink {
 
 typedef Vector<std::pair<String, String>> CrossThreadHTTPHeaderMapData;
 
-<<<<<<< HEAD
 // FIXME: Not every header fits into a map. Notably, multiple Set-Cookie header
 // fields are needed to set multiple cookies.
 class PLATFORM_EXPORT HTTPHeaderMap final {
     DISALLOW_NEW();
 
-=======
-// FIXME: Not every header fits into a map. Notably, multiple Set-Cookie header fields are needed to set multiple cookies.
-class PLATFORM_EXPORT HTTPHeaderMap {
->>>>>>> miniblink49
 public:
     HTTPHeaderMap();
     ~HTTPHeaderMap();
 
     // Gets a copy of the data suitable for passing to another thread.
-<<<<<<< HEAD
     std::unique_ptr<CrossThreadHTTPHeaderMapData> copyData() const;
 
     void adopt(std::unique_ptr<CrossThreadHTTPHeaderMapData>);
-=======
-    PassOwnPtr<CrossThreadHTTPHeaderMapData> copyData() const;
-
-    void adopt(PassOwnPtr<CrossThreadHTTPHeaderMapData>);
->>>>>>> miniblink49
 
     typedef HashMap<AtomicString, AtomicString, CaseFoldingHash> MapType;
     typedef MapType::AddResult AddResult;
@@ -81,7 +62,6 @@ public:
     size_t size() const { return m_headers.size(); }
     const_iterator begin() const { return m_headers.begin(); }
     const_iterator end() const { return m_headers.end(); }
-<<<<<<< HEAD
     const_iterator find(const AtomicString& k) const { return m_headers.find(k); }
     void clear() { m_headers.clear(); }
     bool contains(const AtomicString& k) const { return m_headers.contains(k); }
@@ -106,21 +86,6 @@ public:
     {
         return m_headers == rhs.m_headers;
     }
-=======
-    const_iterator find(const AtomicString &k) const { return m_headers.find(k); }
-    void clear() { m_headers.clear(); }
-    const AtomicString& get(const AtomicString& k) const { return m_headers.get(k); }
-    AddResult set(const AtomicString& k, const AtomicString& v) { return m_headers.set(k, v); }
-    AddResult add(const AtomicString& k, const AtomicString& v) { return m_headers.add(k, v); }
-    void remove(const AtomicString& k) { m_headers.remove(k); }
-    bool operator!=(const HTTPHeaderMap& rhs) const { return m_headers != rhs.m_headers; }
-    bool operator==(const HTTPHeaderMap& rhs) const { return m_headers == rhs.m_headers; }
-
-    // Alternate accessors that are faster than converting the char* to AtomicString first.
-    bool contains(const char*) const;
-    const AtomicString& get(const char*) const;
-    AddResult add(const char* name, const AtomicString& value);
->>>>>>> miniblink49
 
 private:
     HashMap<AtomicString, AtomicString, CaseFoldingHash> m_headers;

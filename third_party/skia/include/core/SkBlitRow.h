@@ -15,19 +15,11 @@ class SkBlitRow {
 public:
     enum Flags16 {
         //! If set, the alpha parameter will be != 255
-<<<<<<< HEAD
         kGlobalAlpha_Flag = 0x01,
         //! If set, the src colors may have alpha != 255
         kSrcPixelAlpha_Flag = 0x02,
         //! If set, the resulting 16bit colors should be dithered
         kDither_Flag = 0x04
-=======
-        kGlobalAlpha_Flag   = 0x01,
-        //! If set, the src colors may have alpha != 255
-        kSrcPixelAlpha_Flag = 0x02,
-        //! If set, the resulting 16bit colors should be dithered
-        kDither_Flag        = 0x04
->>>>>>> miniblink49
     };
 
     /** Function pointer that reads a scanline of src SkPMColors, and writes
@@ -41,11 +33,7 @@ public:
         @param y THe y coordinate of the scanline
      */
     typedef void (*Proc16)(uint16_t dst[], const SkPMColor src[], int count,
-<<<<<<< HEAD
         U8CPU alpha, int x, int y);
-=======
-                           U8CPU alpha, int x, int y);
->>>>>>> miniblink49
 
     static Proc16 Factory16(unsigned flags);
 
@@ -62,13 +50,8 @@ public:
     ///////////// D32 version
 
     enum Flags32 {
-<<<<<<< HEAD
         kGlobalAlpha_Flag32 = 1 << 0,
         kSrcPixelAlpha_Flag32 = 1 << 1
-=======
-        kGlobalAlpha_Flag32     = 1 << 0,
-        kSrcPixelAlpha_Flag32   = 1 << 1
->>>>>>> miniblink49
     };
 
     /** Function pointer that blends 32bit colors onto a 32bit destination.
@@ -99,12 +82,6 @@ public:
     static ColorProc16 PlatformColorFactory565(unsigned flags);
 
 private:
-<<<<<<< HEAD
-=======
-    typedef void (*Color32Proc)(SkPMColor[], const SkPMColor[], int, SkPMColor);
-    static Color32Proc PlatformColor32Proc();
-
->>>>>>> miniblink49
     enum {
         kFlags16_Mask = 7,
         kFlags32_Mask = 3

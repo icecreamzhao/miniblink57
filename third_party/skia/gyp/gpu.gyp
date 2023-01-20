@@ -14,11 +14,7 @@
         'sources/': [ ['exclude', '_mac.(h|cpp|m|mm)$'],
         ],
       }],
-<<<<<<< HEAD
       ['skia_os != "linux"', {
-=======
-      ['skia_os != "linux" and skia_os != "chromeos"', {
->>>>>>> miniblink49
         'sources/': [ ['exclude', '_glx.(h|cpp)$'],
         ],
       }],
@@ -98,10 +94,7 @@
       ],
       'include_dirs': [
         '../include/gpu',
-<<<<<<< HEAD
         '../include/private',
-=======
->>>>>>> miniblink49
         '../src/core',
         '../src/gpu',
         '../src/image/',
@@ -109,28 +102,17 @@
       'sources': [
         '<@(skgpu_sources)',
         '<@(skgpu_native_gl_sources)',
-<<<<<<< HEAD
         '<@(skgpu_vk_sources)',
-=======
-        '<@(skgpu_angle_gl_sources)',
-        '<@(skgpu_mesa_gl_sources)',
-        '<@(skgpu_debug_gl_sources)',
-        '<@(skgpu_null_gl_sources)',
->>>>>>> miniblink49
         'gpu.gypi', # Makes the gypi appear in IDEs (but does not modify the build).
       ],
       'conditions': [
         [ 'skia_gpu_extra_dependency_path', {
           'dependencies' : [
               '<(skia_gpu_extra_dependency_path):*',
-<<<<<<< HEAD
           ],
           'export_dependent_settings': [
             '<(skia_gpu_extra_dependency_path):*',
           ],
-=======
-          ]
->>>>>>> miniblink49
         }],
         [ 'skia_chrome_utils', {
           'sources': [
@@ -141,21 +123,13 @@
             'GR_CHROME_UTILS=1',
           ],
         }],
-<<<<<<< HEAD
         [ 'skia_os == "linux"', {
-=======
-        [ 'skia_os == "linux" or skia_os == "chromeos"', {
->>>>>>> miniblink49
           'sources!': [
             '../src/gpu/gl/GrGLDefaultInterface_none.cpp',
             '../src/gpu/gl/GrGLCreateNativeInterface_none.cpp',
           ],
         }],
-<<<<<<< HEAD
         [ 'skia_os == "linux" and skia_egl == 1', {
-=======
-        [ '(skia_os == "linux" or skia_os == "chromeos") and skia_egl == 1', {
->>>>>>> miniblink49
           'link_settings': {
             'libraries': [
               '-lEGL',
@@ -163,11 +137,7 @@
             ],
           },
         }],
-<<<<<<< HEAD
         [ 'skia_os == "linux" and skia_egl == 0', {
-=======
-        [ '(skia_os == "linux" or skia_os == "chromeos") and skia_egl == 0', {
->>>>>>> miniblink49
           'link_settings': {
             'libraries': [
               '-lGL',
@@ -176,26 +146,6 @@
             ],
           },
         }],
-<<<<<<< HEAD
-=======
-        [ 'skia_egl == 1', {
-          'defines': [
-            'SK_EGL=1',
-          ],
-        }],
-        [ 'skia_egl == 0', {
-          'defines': [
-            'SK_EGL=0',
-          ],
-        }],
-        [ 'skia_mesa and skia_os == "linux"', {
-          'link_settings': {
-            'libraries': [
-              '-lOSMesa',
-            ],
-          },
-        }],
->>>>>>> miniblink49
         [ 'skia_os == "mac"', {
           'link_settings': {
             'libraries': [
@@ -207,46 +157,12 @@
             '../src/gpu/gl/GrGLCreateNativeInterface_none.cpp',
           ],
         }],
-<<<<<<< HEAD
-=======
-        [ 'not skia_mesa', {
-          'sources!': [
-            '../src/gpu/gl/mesa/SkMesaGLContext.cpp',
-            '../src/gpu/gl/mesa/GrGLCreateMesaInterface.cpp',
-          ],
-        }],
-        [ 'skia_mesa and skia_os == "mac"', {
-          'link_settings': {
-            'libraries': [
-              '/opt/X11/lib/libOSMesa.dylib',
-            ],
-          },
-          'include_dirs': [
-             '/opt/X11/include/',
-          ],
-        }],
->>>>>>> miniblink49
         [ 'skia_os in ["win", "ios"]', {
           'sources!': [
             '../src/gpu/gl/GrGLDefaultInterface_none.cpp',
             '../src/gpu/gl/GrGLCreateNativeInterface_none.cpp',
           ],
         }],
-<<<<<<< HEAD
-=======
-        [ 'skia_angle', {
-          'dependencies': [
-            'angle.gyp:*',
-          ],
-          'export_dependent_settings': [
-            'angle.gyp:*',
-          ],
-        }, { # not skia_angle
-          'sources!': [
-            '<@(skgpu_angle_gl_sources)',
-          ],
-        }],
->>>>>>> miniblink49
         [ 'skia_os == "android"', {
           'sources!': [
             '../src/gpu/gl/GrGLDefaultInterface_none.cpp',
@@ -262,7 +178,6 @@
             ],
           },
         }],
-<<<<<<< HEAD
         [ 'skia_vulkan', {
           'conditions': [
             [ 'skia_os == "win"', {
@@ -328,8 +243,6 @@
             '<@(skgpu_vk_sources)',
           ],
         }],
-=======
->>>>>>> miniblink49
       ],
     },
   ],

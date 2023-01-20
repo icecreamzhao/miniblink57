@@ -4,11 +4,7 @@
 
 #ifndef V8_INTL_SUPPORT
 #error Internationalization is expected to be enabled.
-<<<<<<< HEAD
 #endif // V8_INTL_SUPPORT
-=======
-#endif  // V8_INTL_SUPPORT
->>>>>>> miniblink49
 
 #ifndef V8_OBJECTS_JS_LOCALE_INL_H_
 #define V8_OBJECTS_JS_LOCALE_INL_H_
@@ -23,7 +19,6 @@
 namespace v8 {
 namespace internal {
 
-<<<<<<< HEAD
     OBJECT_CONSTRUCTORS_IMPL(JSLocale, JSObject)
 
     ACCESSORS(JSLocale, icu_locale, Managed<icu::Locale>, kICULocaleOffset)
@@ -36,17 +31,3 @@ namespace internal {
 #include "src/objects/object-macros-undef.h"
 
 #endif // V8_OBJECTS_JS_LOCALE_INL_H_
-=======
-OBJECT_CONSTRUCTORS_IMPL(JSLocale, JSObject)
-
-ACCESSORS(JSLocale, icu_locale, Managed<icu::Locale>, kICULocaleOffset)
-
-CAST_ACCESSOR(JSLocale)
-
-}  // namespace internal
-}  // namespace v8
-
-#include "src/objects/object-macros-undef.h"
-
-#endif  // V8_OBJECTS_JS_LOCALE_INL_H_
->>>>>>> miniblink49

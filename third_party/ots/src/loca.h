@@ -12,18 +12,9 @@
 namespace ots {
 
 struct OpenTypeLOCA {
-<<<<<<< HEAD
     std::vector<uint32_t> offsets;
 };
 
 } // namespace ots
 
 #endif // OTS_LOCA_H_
-=======
-  std::vector<uint32_t> offsets;
-};
-
-}  // namespace ots
-
-#endif  // OTS_LOCA_H_
->>>>>>> miniblink49

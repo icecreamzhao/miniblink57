@@ -1,60 +1,35 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-<<<<<<< HEAD
 #include "SkCanvas.h"
 #include "SkPaint.h"
 #include "SkPath.h"
 #include "SkRandom.h"
 #include "gm.h"
-=======
-#include "gm.h"
-#include "SkCanvas.h"
-#include "SkPaint.h"
-#include "SkRandom.h"
->>>>>>> miniblink49
 
 namespace skiagm {
 
 class EmptyPathGM : public GM {
 public:
-<<<<<<< HEAD
     EmptyPathGM() { }
 
 protected:
     SkString onShortName()
     {
-=======
-    EmptyPathGM() {}
-
-protected:
-    SkString onShortName() {
->>>>>>> miniblink49
         return SkString("emptypath");
     }
 
     SkISize onISize() { return SkISize::Make(600, 280); }
 
     void drawEmpty(SkCanvas* canvas,
-<<<<<<< HEAD
         SkColor color,
         const SkRect& clip,
         SkPaint::Style style,
         SkPath::FillType fill)
     {
-=======
-                    SkColor color,
-                    const SkRect& clip,
-                    SkPaint::Style style,
-                    SkPath::FillType fill) {
->>>>>>> miniblink49
         SkPath path;
         path.setFillType(fill);
         SkPaint paint;
@@ -66,7 +41,6 @@ protected:
         canvas->restore();
     }
 
-<<<<<<< HEAD
     virtual void onDraw(SkCanvas* canvas)
     {
         struct FillAndName {
@@ -87,56 +61,22 @@ protected:
             { SkPaint::kFill_Style, "Fill" },
             { SkPaint::kStroke_Style, "Stroke" },
             { SkPaint::kStrokeAndFill_Style, "Stroke And Fill" },
-=======
-    virtual void onDraw(SkCanvas* canvas) {
-        struct FillAndName {
-            SkPath::FillType fFill;
-            const char*      fName;
-        };
-        static const FillAndName gFills[] = {
-            {SkPath::kWinding_FillType, "Winding"},
-            {SkPath::kEvenOdd_FillType, "Even / Odd"},
-            {SkPath::kInverseWinding_FillType, "Inverse Winding"},
-            {SkPath::kInverseEvenOdd_FillType, "Inverse Even / Odd"},
-        };
-        struct StyleAndName {
-            SkPaint::Style fStyle;
-            const char*    fName;
-        };
-        static const StyleAndName gStyles[] = {
-            {SkPaint::kFill_Style, "Fill"},
-            {SkPaint::kStroke_Style, "Stroke"},
-            {SkPaint::kStrokeAndFill_Style, "Stroke And Fill"},
->>>>>>> miniblink49
         };
 
         SkPaint titlePaint;
         titlePaint.setColor(SK_ColorBLACK);
         titlePaint.setAntiAlias(true);
-<<<<<<< HEAD
         sk_tool_utils::set_portable_typeface(&titlePaint);
-=======
-        sk_tool_utils::set_portable_typeface_always(&titlePaint);
->>>>>>> miniblink49
         titlePaint.setTextSize(15 * SK_Scalar1);
         const char title[] = "Empty Paths Drawn Into Rectangle Clips With "
                              "Indicated Style and Fill";
         canvas->drawText(title, strlen(title),
-<<<<<<< HEAD
             20 * SK_Scalar1,
             20 * SK_Scalar1,
             titlePaint);
 
         SkRandom rand;
         SkRect rect = SkRect::MakeWH(100 * SK_Scalar1, 30 * SK_Scalar1);
-=======
-                            20 * SK_Scalar1,
-                            20 * SK_Scalar1,
-                            titlePaint);
-
-        SkRandom rand;
-        SkRect rect = SkRect::MakeWH(100*SK_Scalar1, 30*SK_Scalar1);
->>>>>>> miniblink49
         int i = 0;
         canvas->save();
         canvas->translate(10 * SK_Scalar1, 0);
@@ -152,19 +92,11 @@ protected:
                 }
                 ++i;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
                 SkColor color = rand.nextU();
                 color = 0xff000000 | color; // force solid
                 color = sk_tool_utils::color_to_565(color);
                 this->drawEmpty(canvas, color, rect,
-<<<<<<< HEAD
                     gStyles[style].fStyle, gFills[fill].fFill);
-=======
-                                gStyles[style].fStyle, gFills[fill].fFill);
->>>>>>> miniblink49
 
                 SkPaint rectPaint;
                 rectPaint.setColor(SK_ColorBLACK);
@@ -176,7 +108,6 @@ protected:
                 SkPaint labelPaint;
                 labelPaint.setColor(color);
                 labelPaint.setAntiAlias(true);
-<<<<<<< HEAD
                 sk_tool_utils::set_portable_typeface(&labelPaint);
                 labelPaint.setTextSize(12 * SK_Scalar1);
                 canvas->drawText(gStyles[style].fName,
@@ -187,18 +118,6 @@ protected:
                     strlen(gFills[fill].fName),
                     0, rect.height() + 28 * SK_Scalar1,
                     labelPaint);
-=======
-                sk_tool_utils::set_portable_typeface_always(&labelPaint);
-                labelPaint.setTextSize(12 * SK_Scalar1);
-                canvas->drawText(gStyles[style].fName,
-                                 strlen(gStyles[style].fName),
-                                 0, rect.height() + 15 * SK_Scalar1,
-                                 labelPaint);
-                canvas->drawText(gFills[fill].fName,
-                                 strlen(gFills[fill].fName),
-                                 0, rect.height() + 28 * SK_Scalar1,
-                                 labelPaint);
->>>>>>> miniblink49
             }
         }
         canvas->restore();
@@ -208,7 +127,6 @@ protected:
 private:
     typedef GM INHERITED;
 };
-<<<<<<< HEAD
 DEF_GM(return new EmptyPathGM;)
 
 //////////////////////////////////////////////////////////////////////////////
@@ -298,12 +216,5 @@ private:
     typedef GM INHERITED;
 };
 DEF_GM(return new EmptyStrokeGM;)
-=======
-
-//////////////////////////////////////////////////////////////////////////////
-
-static GM* MyFactory(void*) { return new EmptyPathGM; }
-static GMRegistry reg(MyFactory);
->>>>>>> miniblink49
 
 }

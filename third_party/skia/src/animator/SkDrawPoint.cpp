@@ -6,10 +6,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #include "SkDrawPoint.h"
 #include "SkAnimateMaker.h"
 #include "SkCanvas.h"
@@ -37,7 +33,6 @@ const SkMemberInfo SkDrawPoint::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkDrawPoint);
 
-<<<<<<< HEAD
 SkDrawPoint::SkDrawPoint()
 {
     fPoint.set(0, 0);
@@ -45,13 +40,6 @@ SkDrawPoint::SkDrawPoint()
 
 void SkDrawPoint::getBounds(SkRect* rect)
 {
-=======
-SkDrawPoint::SkDrawPoint() {
-    fPoint.set(0, 0);
-}
-
-void SkDrawPoint::getBounds(SkRect* rect ) {
->>>>>>> miniblink49
     rect->fLeft = rect->fRight = fPoint.fX;
     rect->fTop = rect->fBottom = fPoint.fY;
 }

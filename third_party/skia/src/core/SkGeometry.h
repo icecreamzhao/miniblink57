@@ -11,7 +11,6 @@
 #include "SkMatrix.h"
 #include "SkNx.h"
 
-<<<<<<< HEAD
 static inline Sk2s from_point(const SkPoint& point)
 {
     return Sk2s::Load(&point);
@@ -27,21 +26,6 @@ static inline SkPoint to_point(const Sk2s& x)
 static Sk2s times_2(const Sk2s& value)
 {
     return value + value;
-=======
-static inline Sk2s from_point(const SkPoint& point) {
-    return Sk2s::Load(&point.fX);
-}
-
-static inline SkPoint to_point(const Sk2s& x) {
-    SkPoint point;
-    x.store(&point.fX);
-    return point;
-}
-
-static inline Sk2s sk2s_cubic_eval(const Sk2s& A, const Sk2s& B, const Sk2s& C, const Sk2s& D,
-                                   const Sk2s& t) {
-    return ((A * t + B) * t + C) * t + D;
->>>>>>> miniblink49
 }
 
 /** Given a quadratic equation Ax^2 + Bx + C = 0, return 0, 1, 2 roots for the
@@ -57,21 +41,7 @@ SkPoint SkEvalQuadTangentAt(const SkPoint src[3], SkScalar t);
 /** Set pt to the point on the src quadratic specified by t. t must be
     0 <= t <= 1.0
 */
-<<<<<<< HEAD
 void SkEvalQuadAt(const SkPoint src[3], SkScalar t, SkPoint* pt, SkVector* tangent = nullptr);
-=======
-void SkEvalQuadAt(const SkPoint src[3], SkScalar t, SkPoint* pt, SkVector* tangent = NULL);
-
-/**
- *  output is : eval(t) == coeff[0] * t^2 + coeff[1] * t + coeff[2]
- */
-void SkQuadToCoeff(const SkPoint pts[3], SkPoint coeff[3]);
-
-/**
- *  output is : eval(t) == coeff[0] * t^3 + coeff[1] * t^2 + coeff[2] * t + coeff[3]
- */
-void SkCubicToCoeff(const SkPoint pts[4], SkPoint coeff[4]);
->>>>>>> miniblink49
 
 /** Given a src quadratic bezier, chop it at the specified t value,
     where 0 < t < 1, and return the two new quadratics in dst:
@@ -130,11 +100,7 @@ SK_API void SkConvertQuadToCubic(const SkPoint src[3], SkPoint dst[4]);
     0 <= t <= 1.0
 */
 void SkEvalCubicAt(const SkPoint src[4], SkScalar t, SkPoint* locOrNull,
-<<<<<<< HEAD
     SkVector* tangentOrNull, SkVector* curvatureOrNull);
-=======
-                   SkVector* tangentOrNull, SkVector* curvatureOrNull);
->>>>>>> miniblink49
 
 /** Given a src cubic bezier, chop it at the specified t value,
     where 0 < t < 1, and return the two new cubics in dst:
@@ -147,11 +113,7 @@ void SkChopCubicAt(const SkPoint src[4], SkPoint dst[7], SkScalar t);
     dst[0..3],dst[3..6],...,dst[3*t_count..3*(t_count+1)]
 */
 void SkChopCubicAt(const SkPoint src[4], SkPoint dst[], const SkScalar t[],
-<<<<<<< HEAD
     int t_count);
-=======
-                   int t_count);
->>>>>>> miniblink49
 
 /** Given a src cubic bezier, chop it at the specified t == 1/2,
     The new cubics are returned in dst[0..3] and dst[3..6]
@@ -168,11 +130,7 @@ void SkChopCubicAtHalf(const SkPoint src[4], SkPoint dst[7]);
     2                   0 < tValues[0] < tValues[1] < 1
 */
 int SkFindCubicExtrema(SkScalar a, SkScalar b, SkScalar c, SkScalar d,
-<<<<<<< HEAD
     SkScalar tValues[2]);
-=======
-                       SkScalar tValues[2]);
->>>>>>> miniblink49
 
 /** Given 4 points on a cubic bezier, chop it into 1, 2, 3 beziers such that
     the resulting beziers are monotonic in Y. This is called by the scan converter.
@@ -198,11 +156,7 @@ int SkChopCubicAtInflections(const SkPoint src[4], SkPoint dst[10]);
 
 int SkFindCubicMaxCurvature(const SkPoint src[4], SkScalar tValues[3]);
 int SkChopCubicAtMaxCurvature(const SkPoint src[4], SkPoint dst[13],
-<<<<<<< HEAD
     SkScalar tValues[3] = nullptr);
-=======
-                              SkScalar tValues[3] = NULL);
->>>>>>> miniblink49
 
 bool SkChopMonoCubicAtX(SkPoint src[4], SkScalar y, SkPoint dst[7]);
 bool SkChopMonoCubicAtY(SkPoint src[4], SkScalar x, SkPoint dst[7]);
@@ -228,67 +182,32 @@ enum SkRotationDirection {
     kCCW_SkRotationDirection
 };
 
-<<<<<<< HEAD
 struct SkConic {
     SkConic() { }
     SkConic(const SkPoint& p0, const SkPoint& p1, const SkPoint& p2, SkScalar w)
     {
-=======
-/** Maximum number of points needed in the quadPoints[] parameter for
-    SkBuildQuadArc()
-*/
-#define kSkBuildQuadArcStorage  17
-
-/** Given 2 unit vectors and a rotation direction, fill out the specified
-    array of points with quadratic segments. Return is the number of points
-    written to, which will be { 0, 3, 5, 7, ... kSkBuildQuadArcStorage }
-
-    matrix, if not null, is appled to the points before they are returned.
-*/
-int SkBuildQuadArc(const SkVector& unitStart, const SkVector& unitStop,
-                   SkRotationDirection, const SkMatrix*, SkPoint quadPoints[]);
-
-struct SkConic {
-    SkConic() {}
-    SkConic(const SkPoint& p0, const SkPoint& p1, const SkPoint& p2, SkScalar w) {
->>>>>>> miniblink49
         fPts[0] = p0;
         fPts[1] = p1;
         fPts[2] = p2;
         fW = w;
     }
-<<<<<<< HEAD
     SkConic(const SkPoint pts[3], SkScalar w)
     {
-=======
-    SkConic(const SkPoint pts[3], SkScalar w) {
->>>>>>> miniblink49
         memcpy(fPts, pts, sizeof(fPts));
         fW = w;
     }
 
-<<<<<<< HEAD
     SkPoint fPts[3];
     SkScalar fW;
 
     void set(const SkPoint pts[3], SkScalar w)
     {
-=======
-    SkPoint  fPts[3];
-    SkScalar fW;
-
-    void set(const SkPoint pts[3], SkScalar w) {
->>>>>>> miniblink49
         memcpy(fPts, pts, 3 * sizeof(SkPoint));
         fW = w;
     }
 
-<<<<<<< HEAD
     void set(const SkPoint& p0, const SkPoint& p1, const SkPoint& p2, SkScalar w)
     {
-=======
-    void set(const SkPoint& p0, const SkPoint& p1, const SkPoint& p2, SkScalar w) {
->>>>>>> miniblink49
         fPts[0] = p0;
         fPts[1] = p1;
         fPts[2] = p2;
@@ -302,14 +221,9 @@ struct SkConic {
      *  tangent value's length is arbitrary, and only its direction should
      *  be used.
      */
-<<<<<<< HEAD
     void evalAt(SkScalar t, SkPoint* pos, SkVector* tangent = nullptr) const;
     void chopAt(SkScalar t, SkConic dst[2]) const;
     void chopAt(SkScalar t1, SkScalar t2, SkConic* dst) const;
-=======
-    void evalAt(SkScalar t, SkPoint* pos, SkVector* tangent = NULL) const;
-    void chopAt(SkScalar t, SkConic dst[2]) const;
->>>>>>> miniblink49
     void chop(SkConic dst[2]) const;
 
     SkPoint evalAt(SkScalar t) const;
@@ -345,11 +259,7 @@ struct SkConic {
      *
      *  @return  true if max curvature found inside 0..1 range, false otherwise
      */
-<<<<<<< HEAD
     //    bool findMaxCurvature(SkScalar* t) const;  // unimplemented
-=======
-//    bool findMaxCurvature(SkScalar* t) const;  // unimplemented
->>>>>>> miniblink49
 
     static SkScalar TransformW(const SkPoint[3], SkScalar w, const SkMatrix&);
 
@@ -357,7 +267,6 @@ struct SkConic {
         kMaxConicsForArc = 5
     };
     static int BuildUnitArc(const SkVector& start, const SkVector& stop, SkRotationDirection,
-<<<<<<< HEAD
         const SkMatrix*, SkConic conics[kMaxConicsForArc]);
 };
 
@@ -465,11 +374,6 @@ struct SkCubicCoeff {
 
 }
 
-=======
-                            const SkMatrix*, SkConic conics[kMaxConicsForArc]);
-};
-
->>>>>>> miniblink49
 #include "SkTemplates.h"
 
 /**
@@ -477,14 +381,10 @@ struct SkCubicCoeff {
  */
 class SkAutoConicToQuads {
 public:
-<<<<<<< HEAD
     SkAutoConicToQuads()
         : fQuadCount(0)
     {
     }
-=======
-    SkAutoConicToQuads() : fQuadCount(0) {}
->>>>>>> miniblink49
 
     /**
      *  Given a conic and a tolerance, return the array of points for the
@@ -498,12 +398,8 @@ public:
      *      quad[2] == pts[4..6]
      *      quad[3] == pts[6..8]
      */
-<<<<<<< HEAD
     const SkPoint* computeQuads(const SkConic& conic, SkScalar tol)
     {
-=======
-    const SkPoint* computeQuads(const SkConic& conic, SkScalar tol) {
->>>>>>> miniblink49
         int pow2 = conic.computeQuadPOW2(tol);
         fQuadCount = 1 << pow2;
         SkPoint* pts = fStorage.reset(1 + 2 * fQuadCount);
@@ -512,12 +408,8 @@ public:
     }
 
     const SkPoint* computeQuads(const SkPoint pts[3], SkScalar weight,
-<<<<<<< HEAD
         SkScalar tol)
     {
-=======
-                                SkScalar tol) {
->>>>>>> miniblink49
         SkConic conic;
         conic.set(pts, weight);
         return computeQuads(conic, tol);

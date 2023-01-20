@@ -24,10 +24,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/graphics/GraphicsTypes.h"
 
 #include "wtf/Assertions.h"
@@ -35,12 +31,7 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 static const char* const compositeOperatorNames[] = { "clear",
-=======
-static const char* const compositeOperatorNames[] = {
-    "clear",
->>>>>>> miniblink49
     "copy",
     "source-over",
     "source-in",
@@ -51,7 +42,6 @@ static const char* const compositeOperatorNames[] = {
     "destination-out",
     "destination-atop",
     "xor",
-<<<<<<< HEAD
     "lighter" };
 
 static const char* const blendOperatorNames[] = {
@@ -59,39 +49,13 @@ static const char* const blendOperatorNames[] = {
     "darken", "lighten", "color-dodge", "color-burn",
     "hard-light", "soft-light", "difference", "exclusion",
     "hue", "saturation", "color", "luminosity"
-=======
-    "lighter"
-};
-
-static const char* const blendOperatorNames[] = {
-    "normal",
-    "multiply",
-    "screen",
-    "overlay",
-    "darken",
-    "lighten",
-    "color-dodge",
-    "color-burn",
-    "hard-light",
-    "soft-light",
-    "difference",
-    "exclusion",
-    "hue",
-    "saturation",
-    "color",
-    "luminosity"
->>>>>>> miniblink49
 };
 const int numCompositeOperatorNames = WTF_ARRAY_LENGTH(compositeOperatorNames);
 const int numBlendOperatorNames = WTF_ARRAY_LENGTH(blendOperatorNames);
 
-<<<<<<< HEAD
 bool parseCompositeAndBlendOperator(const String& s,
     CompositeOperator& op,
     WebBlendMode& blendOp)
-=======
-bool parseCompositeAndBlendOperator(const String& s, CompositeOperator& op, WebBlendMode& blendOp)
->>>>>>> miniblink49
 {
     for (int i = 0; i < numCompositeOperatorNames; i++) {
         if (s == compositeOperatorNames[i]) {
@@ -209,12 +173,8 @@ String textBaselineName(TextBaseline baseline)
 {
     ASSERT(baseline >= 0);
     ASSERT(baseline < 6);
-<<<<<<< HEAD
     const char* const names[6] = { "alphabetic", "top", "middle",
         "bottom", "ideographic", "hanging" };
-=======
-    const char* const names[6] = { "alphabetic", "top", "middle", "bottom", "ideographic", "hanging" };
->>>>>>> miniblink49
     return names[baseline];
 }
 

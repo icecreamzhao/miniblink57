@@ -32,7 +32,6 @@ static const SkScalar sOne = SK_Scalar1;
 // These arrays define the gradient stop points
 // as x1, y1, x2, y2 per gradient to draw.
 static const SkPoint linearPts[][2] = {
-<<<<<<< HEAD
     { { sZero, sZero }, { sOne, sZero } },
     { { sZero, sZero }, { sZero, sOne } },
     { { sOne, sZero }, { sZero, sZero } },
@@ -54,36 +53,12 @@ static const SkPoint radialPts[][2] = {
     { { sOne, sOne }, { sZero, sZero } },
     { { sOne, sZero }, { sZero, sOne } },
     { { sZero, sOne }, { sOne, sZero } }
-=======
-    {{sZero, sZero}, {sOne,  sZero}},
-    {{sZero, sZero}, {sZero, sOne}},
-    {{sOne,  sZero}, {sZero, sZero}},
-    {{sZero, sOne},  {sZero, sZero}},
-
-    {{sZero, sZero}, {sOne,  sOne}},
-    {{sOne,  sOne},  {sZero, sZero}},
-    {{sOne,  sZero}, {sZero, sOne}},
-    {{sZero, sOne},  {sOne,  sZero}}
-};
-
-static const SkPoint radialPts[][2] = {
-    {{sZero, sHalf}, {sOne,  sHalf}},
-    {{sHalf, sZero}, {sHalf, sOne}},
-    {{sOne,  sHalf}, {sZero, sHalf}},
-    {{sHalf, sOne},  {sHalf, sZero}},
-
-    {{sZero, sZero}, {sOne,  sOne}},
-    {{sOne,  sOne},  {sZero, sZero}},
-    {{sOne,  sZero}, {sZero, sOne}},
-    {{sZero, sOne},  {sOne,  sZero}}
->>>>>>> miniblink49
 };
 
 // These define the pixels allocated to each gradient image.
 static const SkScalar TESTGRID_X = SkIntToScalar(200);
 static const SkScalar TESTGRID_Y = SkIntToScalar(200);
 
-<<<<<<< HEAD
 static const int IMAGES_X = 4; // number of images per row
 
 static sk_sp<SkShader> make_linear_gradient(const SkPoint pts[2], const SkMatrix& localMatrix)
@@ -106,39 +81,13 @@ static void draw_gradients(SkCanvas* canvas,
     sk_sp<SkShader> (*makeShader)(const SkPoint[2], const SkMatrix&),
     const SkPoint ptsArray[][2], int numImages)
 {
-=======
-static const int IMAGES_X = 4;             // number of images per row
-
-static SkShader* make_linear_gradient(const SkPoint pts[2], const SkMatrix& localMatrix) {
-    return SkGradientShader::CreateLinear(pts, gColors, NULL, SK_ARRAY_COUNT(gColors),
-                                          SkShader::kClamp_TileMode, 0, &localMatrix);
-}
-
-static SkShader* make_radial_gradient(const SkPoint pts[2], const SkMatrix& localMatrix) {
-    SkPoint center;
-    center.set(SkScalarAve(pts[0].fX, pts[1].fX),
-               SkScalarAve(pts[0].fY, pts[1].fY));
-    float radius = (center - pts[0]).length();
-    return SkGradientShader::CreateRadial(center, radius, gColors, NULL, SK_ARRAY_COUNT(gColors),
-                                          SkShader::kClamp_TileMode, 0, &localMatrix);
-}
-
-static void draw_gradients(SkCanvas* canvas,
-                           SkShader* (*makeShader)(const SkPoint[2], const SkMatrix&),
-                           const SkPoint ptsArray[][2], int numImages) {
->>>>>>> miniblink49
     // Use some nice prime numbers for the rectangle and matrix with
     // different scaling along the x and y axes (which is the bug this
     // test addresses, where incorrect order of operations mixed up the axes)
     SkRect rectGrad = {
-<<<<<<< HEAD
         SkIntToScalar(43), SkIntToScalar(61),
         SkIntToScalar(181), SkIntToScalar(167)
     };
-=======
-        SkIntToScalar(43),  SkIntToScalar(61),
-        SkIntToScalar(181), SkIntToScalar(167) };
->>>>>>> miniblink49
     SkMatrix shaderMat;
     shaderMat.setScale(rectGrad.width(), rectGrad.height());
     shaderMat.postTranslate(rectGrad.left(), rectGrad.top());
@@ -152,16 +101,8 @@ static void draw_gradients(SkCanvas* canvas,
             canvas->save();
         }
 
-<<<<<<< HEAD
         SkPaint paint;
         paint.setShader(makeShader(*ptsArray, shaderMat));
-=======
-        // Setup shader and draw.
-        SkAutoTUnref<SkShader> shader(makeShader(*ptsArray, shaderMat));
-
-        SkPaint paint;
-        paint.setShader(shader);
->>>>>>> miniblink49
         canvas->drawRect(rectGrad, paint);
 
         // Advance to next position.
@@ -171,7 +112,6 @@ static void draw_gradients(SkCanvas* canvas,
     canvas->restore();
 }
 
-<<<<<<< HEAD
 DEF_SIMPLE_GM_BG(gradient_matrix, canvas, 800, 800,
     sk_tool_utils::color_to_565(0xFFDDDDDD))
 {
@@ -182,39 +122,4 @@ DEF_SIMPLE_GM_BG(gradient_matrix, canvas, 800, 800,
 
     draw_gradients(canvas, &make_radial_gradient,
         radialPts, SK_ARRAY_COUNT(radialPts));
-=======
-namespace skiagm {
-
-class GradientMatrixGM : public GM {
-public:
-    GradientMatrixGM() {
-        this->setBGColor(sk_tool_utils::color_to_565(0xFFDDDDDD));
-    }
-
-protected:
-
-    SkString onShortName() override {
-        return SkString("gradient_matrix");
-    }
-
-    SkISize onISize() override {
-        return SkISize::Make(800, 800);
-    }
-
-    void onDraw(SkCanvas* canvas) override {
-        draw_gradients(canvas, &make_linear_gradient,
-                      linearPts, SK_ARRAY_COUNT(linearPts));
-
-        canvas->translate(0, TESTGRID_Y);
-
-        draw_gradients(canvas, &make_radial_gradient,
-                      radialPts, SK_ARRAY_COUNT(radialPts));
-    }
-
-private:
-    typedef GM INHERITED;
-};
-
-DEF_GM( return new GradientMatrixGM; )
->>>>>>> miniblink49
 }

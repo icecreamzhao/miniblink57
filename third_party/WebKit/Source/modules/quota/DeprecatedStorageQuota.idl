@@ -24,10 +24,6 @@
  */
 
 [
-<<<<<<< HEAD
-=======
-    GarbageCollected,
->>>>>>> miniblink49
     NoInterfaceObject
 ] interface DeprecatedStorageQuota {
     [CallWith=ExecutionContext] void queryUsageAndQuota(StorageUsageCallback usageCallback, optional StorageErrorCallback errorCallback);

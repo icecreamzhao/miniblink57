@@ -10,34 +10,39 @@
 namespace gin {
 namespace {
 
-base::FilePath BasePath() {
-  base::FilePath path;
-  PathService::Get(base::DIR_SOURCE_ROOT, &path);
-  return path.AppendASCII("gin");
-}
+    base::FilePath BasePath()
+    {
+        base::FilePath path;
+        PathService::Get(base::DIR_SOURCE_ROOT, &path);
+        return path.AppendASCII("gin");
+    }
 
-void RunTest(const base::FilePath& path) {
-  FileRunnerDelegate delegate;
-  RunTestFromFile(path, &delegate);
-}
+    void RunTest(const base::FilePath& path)
+    {
+        FileRunnerDelegate delegate;
+        RunTestFromFile(path, &delegate);
+    }
 
-TEST(JSTest, File) {
-  RunTest(BasePath()
-          .AppendASCII("test")
-          .AppendASCII("file_unittests.js"));
-}
+    TEST(JSTest, File)
+    {
+        RunTest(BasePath()
+                    .AppendASCII("test")
+                    .AppendASCII("file_unittests.js"));
+    }
 
-TEST(JSTest, GTest) {
-  RunTest(BasePath()
-          .AppendASCII("test")
-          .AppendASCII("gtest_unittests.js"));
-}
+    TEST(JSTest, GTest)
+    {
+        RunTest(BasePath()
+                    .AppendASCII("test")
+                    .AppendASCII("gtest_unittests.js"));
+    }
 
-TEST(JSTest, ModuleRegistry) {
-  RunTest(BasePath()
-          .AppendASCII("modules")
-          .AppendASCII("module_registry_unittests.js"));
-}
+    TEST(JSTest, ModuleRegistry)
+    {
+        RunTest(BasePath()
+                    .AppendASCII("modules")
+                    .AppendASCII("module_registry_unittests.js"));
+    }
 
-}  // namespace
-}  // gin
+} // namespace
+} // gin

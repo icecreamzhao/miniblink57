@@ -91,11 +91,8 @@ int ZEXPORT uncompress (dest, destLen, source, sourceLen)
 {
     return uncompress2(dest, destLen, source, &sourceLen);
 }
-<<<<<<< HEAD
 
 int uncompress_xp(Bytef* dest, uLongf* destLen, const Bytef* source, uLong sourceLen)
 {
     return uncompress2(dest, destLen, source, &sourceLen);
 }
-=======
->>>>>>> miniblink49

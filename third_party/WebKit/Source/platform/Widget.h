@@ -34,7 +34,6 @@
 #include "platform/heap/Handle.h"
 #include "public/platform/WebFocusType.h"
 #include "wtf/Forward.h"
-<<<<<<< HEAD
 
 namespace blink {
 
@@ -44,26 +43,11 @@ class GraphicsContext;
 
 // The Widget class serves as a base class for FrameView, Scrollbar, and
 // PluginView.
-=======
-#include "wtf/RefCounted.h"
-
-namespace blink {
-
-class Event;
-class GraphicsContext;
-class HostWindow;
-
-// The Widget class serves as a base class for FrameView, Scrollbar, and PluginView.
->>>>>>> miniblink49
 //
 // Widgets are connected in a hierarchy, with the restriction that plugins and
 // scrollbars are always leaves of the tree. Only FrameView can have children
 // (and therefore the Widget class has no concept of children).
-<<<<<<< HEAD
 class PLATFORM_EXPORT Widget : public GarbageCollectedFinalized<Widget> {
-=======
-class PLATFORM_EXPORT Widget : public RefCountedWillBeGarbageCollectedFinalized<Widget> {
->>>>>>> miniblink49
 public:
     Widget();
     virtual ~Widget();
@@ -75,7 +59,6 @@ public:
     IntSize size() const { return frameRect().size(); }
     IntPoint location() const { return frameRect().location(); }
 
-<<<<<<< HEAD
     virtual void setFrameRect(const IntRect& frameRect)
     {
         m_frameRect = frameRect;
@@ -106,28 +89,6 @@ public:
     {
         return m_selfVisible && m_parentVisible;
     } // Whether or not we are actually visible.
-=======
-    virtual void setFrameRect(const IntRect& frame) { m_frame = frame; }
-    const IntRect& frameRect() const { return m_frame; }
-    IntRect boundsRect() const { return IntRect(0, 0, width(),  height()); }
-
-    void resize(int w, int h) { setFrameRect(IntRect(x(), y(), w, h)); }
-    void resize(const IntSize& s) { setFrameRect(IntRect(location(), s)); }
-    void move(int x, int y) { setFrameRect(IntRect(x, y, width(), height())); }
-    void move(const IntPoint& p) { setFrameRect(IntRect(p, size())); }
-
-    virtual void paint(GraphicsContext*, const IntRect&) { }
-    void invalidate() { invalidateRect(boundsRect()); }
-    virtual void invalidateRect(const IntRect&) = 0;
-
-    virtual void setFocus(bool, WebFocusType) { }
-
-    virtual void show() { }
-    virtual void hide() { }
-    bool isSelfVisible() const { return m_selfVisible; } // Whether or not we have been explicitly marked as visible or not.
-    bool isParentVisible() const { return m_parentVisible; } // Whether or not our parent is visible.
-    bool isVisible() const { return m_selfVisible && m_parentVisible; } // Whether or not we are actually visible.
->>>>>>> miniblink49
     virtual void setParentVisible(bool visible) { m_parentVisible = visible; }
     void setSelfVisible(bool v) { m_selfVisible = v; }
 
@@ -135,22 +96,14 @@ public:
     virtual bool isRemoteFrameView() const { return false; }
     virtual bool isPluginView() const { return false; }
     virtual bool isPluginContainer() const { return false; }
-<<<<<<< HEAD
     virtual bool isScrollbar() const { return false; }
 
-=======
-    virtual bool pluginShouldPersist() const { return false; }
-    virtual bool isScrollbar() const { return false; }
-
-    virtual HostWindow* hostWindow() const { ASSERT_NOT_REACHED(); return 0; }
->>>>>>> miniblink49
     virtual void setParent(Widget*);
     Widget* parent() const { return m_parent; }
     Widget* root() const;
 
     virtual void handleEvent(Event*) { }
 
-<<<<<<< HEAD
     IntRect convertToRootFrame(const IntRect&) const;
     IntRect convertFromRootFrame(const IntRect&) const;
 
@@ -166,29 +119,6 @@ public:
     virtual IntRect convertFromContainingWidget(const IntRect&) const;
     virtual IntPoint convertToContainingWidget(const IntPoint&) const;
     virtual IntPoint convertFromContainingWidget(const IntPoint&) const;
-=======
-    // It is important for cross-platform code to realize that Mac has flipped coordinates. Therefore any code
-    // that tries to convert the location of a rect using the point-based convertFromContainingWindow will end
-    // up with an inaccurate rect. Always make sure to use the rect-based convertFromContainingWindow method
-    // when converting window rects.
-    IntRect convertToContainingWindow(const IntRect&) const;
-    IntRect convertFromContainingWindow(const IntRect&) const;
-
-    IntPoint convertToContainingWindow(const IntPoint&) const;
-    IntPoint convertFromContainingWindow(const IntPoint&) const;
-    FloatPoint convertFromContainingWindow(const FloatPoint&) const;
-
-    virtual void frameRectsChanged() { }
-
-    // Notifies this widget that other widgets on the page have been repositioned.
-    virtual void widgetPositionsUpdated() { }
-
-    // Virtual methods to convert points to/from the containing Widget
-    virtual IntRect convertToContainingView(const IntRect&) const;
-    virtual IntRect convertFromContainingView(const IntRect&) const;
-    virtual IntPoint convertToContainingView(const IntPoint&) const;
-    virtual IntPoint convertFromContainingView(const IntPoint&) const;
->>>>>>> miniblink49
 
     // Virtual methods to convert points to/from child widgets
     virtual IntPoint convertChildToSelf(const Widget*, const IntPoint&) const;
@@ -201,13 +131,8 @@ public:
     virtual void dispose() { }
 
 private:
-<<<<<<< HEAD
     Member<Widget> m_parent;
     IntRect m_frameRect;
-=======
-    RawPtrWillBeMember<Widget> m_parent;
-    IntRect m_frame;
->>>>>>> miniblink49
     bool m_selfVisible;
     bool m_parentVisible;
 };

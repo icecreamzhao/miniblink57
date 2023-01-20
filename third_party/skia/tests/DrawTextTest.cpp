@@ -11,7 +11,6 @@
 #include "SkPaint.h"
 #include "SkPoint.h"
 #include "SkRect.h"
-<<<<<<< HEAD
 #include "SkSurface.h"
 #include "SkTypes.h"
 #include "Test.h"
@@ -26,18 +25,6 @@ static void create(SkBitmap* bm, SkIRect bound)
 
 static void drawBG(SkCanvas* canvas)
 {
-=======
-#include "SkTypes.h"
-#include "Test.h"
-
-static const SkColor bgColor = SK_ColorWHITE;
-
-static void create(SkBitmap* bm, SkIRect bound) {
-    bm->allocN32Pixels(bound.width(), bound.height());
-}
-
-static void drawBG(SkCanvas* canvas) {
->>>>>>> miniblink49
     canvas->drawColor(bgColor);
 }
 
@@ -47,11 +34,7 @@ static void drawBG(SkCanvas* canvas) {
     ref is "bgColor".
  */
 static bool compare(const SkBitmap& ref, const SkIRect& iref,
-<<<<<<< HEAD
     const SkBitmap& test, const SkIRect& itest)
-=======
-                    const SkBitmap& test, const SkIRect& itest)
->>>>>>> miniblink49
 {
     const int xOff = itest.fLeft - iref.fLeft;
     const int yOff = itest.fTop - iref.fTop;
@@ -65,13 +48,7 @@ static bool compare(const SkBitmap& ref, const SkIRect& iref,
             int refX = x + xOff;
             int refY = y + yOff;
             SkColor refColor;
-<<<<<<< HEAD
             if (refX >= 0 && refX < ref.width() && refY >= 0 && refY < ref.height()) {
-=======
-            if (refX >= 0 && refX < ref.width() &&
-                refY >= 0 && refY < ref.height())
-            {
->>>>>>> miniblink49
                 refColor = ref.getColor(refX, refY);
             } else {
                 refColor = bgColor;
@@ -84,12 +61,8 @@ static bool compare(const SkBitmap& ref, const SkIRect& iref,
     return true;
 }
 
-<<<<<<< HEAD
 DEF_TEST(DrawText, reporter)
 {
-=======
-DEF_TEST(DrawText, reporter) {
->>>>>>> miniblink49
     SkPaint paint;
     paint.setColor(SK_ColorGRAY);
     paint.setTextSize(SkIntToScalar(20));
@@ -104,7 +77,6 @@ DEF_TEST(DrawText, reporter) {
     create(&drawPosTextBitmap, drawPosTextRect);
     SkCanvas drawPosTextCanvas(drawPosTextBitmap);
 
-<<<<<<< HEAD
     // Two test cases "A" for the normal path through the code, and " " to check the
     // early return path.
     const char* cases[] = { "A", " " };
@@ -137,41 +109,11 @@ DEF_TEST(DrawText, reporter) {
                             compare(drawTextBitmap, drawTextRect,
                                 drawPosTextBitmap, drawPosTextRect));
                     }
-=======
-    for (float offsetY = 0.0f; offsetY < 1.0f; offsetY += (1.0f / 16.0f)) {
-        for (float offsetX = 0.0f; offsetX < 1.0f; offsetX += (1.0f / 16.0f)) {
-            SkPoint point = SkPoint::Make(25.0f + offsetX,
-                                          25.0f + offsetY);
-
-            for (int align = 0; align < SkPaint::kAlignCount; ++align) {
-                paint.setTextAlign(static_cast<SkPaint::Align>(align));
-
-                for (unsigned int flags = 0; flags < (1 << 3); ++flags) {
-                    static const unsigned int antiAliasFlag = 1;
-                    static const unsigned int subpixelFlag = 1 << 1;
-                    static const unsigned int lcdFlag = 1 << 2;
-
-                    paint.setAntiAlias(SkToBool(flags & antiAliasFlag));
-                    paint.setSubpixelText(SkToBool(flags & subpixelFlag));
-                    paint.setLCDRenderText(SkToBool(flags & lcdFlag));
-
-                    // Test: drawText and drawPosText draw the same.
-                    drawBG(&drawTextCanvas);
-                    drawTextCanvas.drawText("A", 1, point.fX, point.fY, paint);
-
-                    drawBG(&drawPosTextCanvas);
-                    drawPosTextCanvas.drawPosText("A", 1, &point, paint);
-
-                    REPORTER_ASSERT(reporter,
-                        compare(drawTextBitmap, drawTextRect,
-                                drawPosTextBitmap, drawPosTextRect));
->>>>>>> miniblink49
                 }
             }
         }
     }
 }
-<<<<<<< HEAD
 
 // Test drawing text at some unusual coordinates.
 // We measure success by not crashing or asserting.
@@ -191,5 +133,3 @@ DEF_TEST(DrawText_weirdCoordinates, r)
         canvas->drawText("a", 1, 0.0f, -y, SkPaint());
     }
 }
-=======
->>>>>>> miniblink49

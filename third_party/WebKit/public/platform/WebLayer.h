@@ -29,26 +29,16 @@
 #include "WebBlendMode.h"
 #include "WebColor.h"
 #include "WebCommon.h"
-<<<<<<< HEAD
 #include "WebDoublePoint.h"
 #include "WebFloatPoint3D.h"
 #include "WebFloatSize.h"
 #include "WebPoint.h"
 #include "WebRect.h"
-=======
-#include "WebCompositorAnimation.h"
-#include "WebDoublePoint.h"
-#include "WebFloatPoint3D.h"
-#include "WebPoint.h"
-#include "WebRect.h"
-#include "WebScrollBlocksOn.h"
->>>>>>> miniblink49
 #include "WebSize.h"
 #include "WebString.h"
 #include "WebVector.h"
 
 class SkMatrix44;
-<<<<<<< HEAD
 
 namespace cc {
 class Layer;
@@ -63,28 +53,13 @@ class WebLayerScrollClient;
 struct WebFloatPoint;
 struct WebLayerPositionConstraint;
 struct WebLayerStickyPositionConstraint;
-=======
-class SkImageFilter;
-
-namespace blink {
-class WebCompositorAnimationDelegate;
-class WebFilterOperations;
-class WebLayerClient;
-class WebLayerScrollClient;
-struct WebFloatPoint;
-struct WebLayerPositionConstraint;
->>>>>>> miniblink49
 
 class WebLayer {
 public:
     virtual ~WebLayer() { }
 
-<<<<<<< HEAD
     // Returns a positive ID that will be unique across all WebLayers allocated in
     // this process.
-=======
-    // Returns a positive ID that will be unique across all WebLayers allocated in this process.
->>>>>>> miniblink49
     virtual int id() const = 0;
 
     // Sets a region of the layer as invalid, i.e. needs to update its content.
@@ -107,10 +82,6 @@ public:
     virtual bool masksToBounds() const = 0;
 
     virtual void setMaskLayer(WebLayer*) = 0;
-<<<<<<< HEAD
-=======
-    virtual void setReplicaLayer(WebLayer*) = 0;
->>>>>>> miniblink49
 
     virtual void setOpacity(float) = 0;
     virtual float opacity() const = 0;
@@ -137,13 +108,10 @@ public:
     virtual void setDrawsContent(bool) = 0;
     virtual bool drawsContent() const = 0;
 
-<<<<<<< HEAD
     // Set to true if the backside of this layer's contents should be visible
     // when composited. Defaults to false.
     virtual void setDoubleSided(bool) = 0;
 
-=======
->>>>>>> miniblink49
     // Sets whether the layer's transform should be flattened.
     virtual void setShouldFlattenTransform(bool) = 0;
 
@@ -165,7 +133,6 @@ public:
     virtual WebColor backgroundColor() const = 0;
 
     // Clear the filters in use by passing in a newly instantiated
-<<<<<<< HEAD
     // FilterOperations object.
     virtual void setFilters(const cc::FilterOperations&) = 0;
 
@@ -179,33 +146,6 @@ public:
 
     // Returns true if this layer has any active animations - useful for tests.
     virtual bool hasTickingAnimationForTesting() = 0;
-=======
-    // WebFilterOperations object.
-    virtual void setFilters(const WebFilterOperations&) = 0;
-
-    // An animation delegate is notified when animations are started and
-    // stopped. The WebLayer does not take ownership of the delegate, and it is
-    // the responsibility of the client to reset the layer's delegate before
-    // deleting the delegate.
-    virtual void setAnimationDelegate(WebCompositorAnimationDelegate*) = 0;
-
-
-    // Returns false if the animation cannot be added.
-    // Takes ownership of the WebCompositorAnimation object.
-    virtual bool addAnimation(WebCompositorAnimation*) = 0;
-
-    // Removes all animations with the given id.
-    virtual void removeAnimation(int animationId) = 0;
-
-    // Removes all animations with the given id targeting the given property.
-    virtual void removeAnimation(int animationId, WebCompositorAnimation::TargetProperty) = 0;
-
-    // Pauses all animations with the given id.
-    virtual void pauseAnimation(int animationId, double timeOffset) = 0;
-
-    // Returns true if this layer has any active animations - useful for tests.
-    virtual bool hasActiveAnimation() = 0;
->>>>>>> miniblink49
 
     // If a scroll parent is set, this layer will inherit its parent's scroll
     // delta and offset even though it will not be a descendant of the scroll
@@ -220,33 +160,15 @@ public:
     // Scrolling
     virtual void setScrollPositionDouble(WebDoublePoint) = 0;
     virtual WebDoublePoint scrollPositionDouble() const = 0;
-<<<<<<< HEAD
 
     // To set a WebLayer as scrollable we must specify the corresponding clip
     // layer.
-=======
-    // Blink tells cc the scroll offset through setScrollPositionDouble() using
-    // floating precision but it currently can only position cc layers at integer
-    // boundary. So Blink needs to also call setScrollCompensationAdjustment()
-    // to tell cc what's the part of the scroll offset that Blink doesn't handle
-    // but cc needs to take into consideration, e.g. compensating
-    // for fixed-position layer that's positioned in Blink using only integer scroll
-    // offset.
-    // We make this call explicit, instead of letting cc to infer the fractional part
-    // from the scroll offset, to be clear that this is Blink's limitation. Once
-    // Blink can fully handle fractional scroll offset, it can stop calling
-    // this function and cc side would just work.
-    virtual void setScrollCompensationAdjustment(WebDoublePoint) = 0;
-
-    // To set a WebLayer as scrollable we must specify the corresponding clip layer.
->>>>>>> miniblink49
     virtual void setScrollClipLayer(WebLayer*) = 0;
     virtual bool scrollable() const = 0;
     virtual void setUserScrollable(bool horizontal, bool vertical) = 0;
     virtual bool userScrollableHorizontal() const = 0;
     virtual bool userScrollableVertical() const = 0;
 
-<<<<<<< HEAD
     // Indicates that this layer will always scroll on the main thread for the
     // provided reason.
     virtual void addMainThreadScrollingReasons(uint32_t) = 0;
@@ -254,15 +176,6 @@ public:
         uint32_t mainThreadScrollingReasonsToClear)
         = 0;
     virtual uint32_t mainThreadScrollingReasons() = 0;
-=======
-    virtual void setHaveWheelEventHandlers(bool) = 0;
-    virtual bool haveWheelEventHandlers() const = 0;
-
-    virtual void setHaveScrollEventHandlers(bool) = 0;
-    virtual bool haveScrollEventHandlers() const = 0;
-
-    virtual void setShouldScrollOnMainThread(bool) = 0;
->>>>>>> miniblink49
     virtual bool shouldScrollOnMainThread() const = 0;
 
     virtual void setNonFastScrollableRegion(const WebVector<WebRect>&) = 0;
@@ -271,18 +184,6 @@ public:
     virtual void setTouchEventHandlerRegion(const WebVector<WebRect>&) = 0;
     virtual WebVector<WebRect> touchEventHandlerRegion() const = 0;
 
-<<<<<<< HEAD
-=======
-    // Setter and getter for Frame Timing rects.
-    // See http://w3c.github.io/frame-timing/ for definition of terms.
-    virtual void setFrameTimingRequests(const WebVector<std::pair<int64_t, WebRect>>&) = 0;
-    virtual WebVector<std::pair<int64_t, WebRect>> frameTimingRequests() const = 0;
-
-    // FIXME: Make pure once cc is updated.  crbug.com/347272
-    virtual void setScrollBlocksOn(WebScrollBlocksOn) { }
-    virtual WebScrollBlocksOn scrollBlocksOn() const { return WebScrollBlocksOnNone; }
-
->>>>>>> miniblink49
     virtual void setIsContainerForFixedPositionLayers(bool) = 0;
     virtual bool isContainerForFixedPositionLayers() const = 0;
 
@@ -291,7 +192,6 @@ public:
     virtual void setPositionConstraint(const WebLayerPositionConstraint&) = 0;
     virtual WebLayerPositionConstraint positionConstraint() const = 0;
 
-<<<<<<< HEAD
     // Sets the sticky position constraint. This will be used to adjust sticky
     // position objects during threaded scrolling.
     virtual void setStickyPositionConstraint(
@@ -299,8 +199,6 @@ public:
         = 0;
     virtual WebLayerStickyPositionConstraint stickyPositionConstraint() const = 0;
 
-=======
->>>>>>> miniblink49
     // The scroll client is notified when the scroll position of the WebLayer
     // changes. Only a single scroll client can be set for a WebLayer at a time.
     // The WebLayer does not take ownership of the scroll client, and it is the
@@ -308,7 +206,6 @@ public:
     // deleting the scroll client.
     virtual void setScrollClient(WebLayerScrollClient*) = 0;
 
-<<<<<<< HEAD
     // Sets the cc-side layer client.
     virtual void setLayerClient(cc::LayerClient*) = 0;
 
@@ -325,16 +222,6 @@ public:
     virtual void setHasWillChangeTransformHint(bool) = 0;
     virtual void setPreferredRasterBounds(const WebSize&) = 0;
     virtual void clearPreferredRasterBounds() = 0;
-=======
-    // Forces this layer to use a render surface. There is no benefit in doing
-    // so, but this is to facilitate benchmarks and tests.
-    virtual void setForceRenderSurface(bool) = 0;
-
-    // True if the layer is not part of a tree attached to a WebLayerTreeView.
-    virtual bool isOrphan() const = 0;
-
-    virtual void setWebLayerClient(WebLayerClient*) = 0;
->>>>>>> miniblink49
 };
 
 } // namespace blink

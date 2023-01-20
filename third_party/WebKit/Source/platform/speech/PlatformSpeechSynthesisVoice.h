@@ -27,17 +27,12 @@
 #define PlatformSpeechSynthesisVoice_h
 
 #include "platform/PlatformExport.h"
-<<<<<<< HEAD
 #include "wtf/PassRefPtr.h"
 #include "wtf/RefCounted.h"
-=======
-#include "platform/heap/Handle.h"
->>>>>>> miniblink49
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 class PLATFORM_EXPORT PlatformSpeechSynthesisVoice final
     : public RefCounted<PlatformSpeechSynthesisVoice> {
 public:
@@ -47,12 +42,6 @@ public:
         bool localService,
         bool isDefault);
     static PassRefPtr<PlatformSpeechSynthesisVoice> create();
-=======
-class PLATFORM_EXPORT PlatformSpeechSynthesisVoice final : public GarbageCollectedFinalized<PlatformSpeechSynthesisVoice> {
-public:
-    static PlatformSpeechSynthesisVoice* create(const String& voiceURI, const String& name, const String& lang, bool localService, bool isDefault);
-    static PlatformSpeechSynthesisVoice* create();
->>>>>>> miniblink49
 
     const String& voiceURI() const { return m_voiceURI; }
     void setVoiceURI(const String& voiceURI) { m_voiceURI = voiceURI; }
@@ -69,19 +58,12 @@ public:
     bool isDefault() const { return m_default; }
     void setIsDefault(bool isDefault) { m_default = isDefault; }
 
-<<<<<<< HEAD
 private:
     PlatformSpeechSynthesisVoice(const String& voiceURI,
         const String& name,
         const String& lang,
         bool localService,
         bool isDefault);
-=======
-    DEFINE_INLINE_TRACE() { }
-
-private:
-    PlatformSpeechSynthesisVoice(const String& voiceURI, const String& name, const String& lang, bool localService, bool isDefault);
->>>>>>> miniblink49
     PlatformSpeechSynthesisVoice();
 
     String m_voiceURI;

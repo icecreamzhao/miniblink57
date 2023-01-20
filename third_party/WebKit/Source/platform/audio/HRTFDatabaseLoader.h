@@ -34,7 +34,6 @@
 #include "wtf/HashMap.h"
 #include "wtf/RefCounted.h"
 #include "wtf/ThreadingPrimitives.h"
-<<<<<<< HEAD
 #include <memory>
 
 namespace blink {
@@ -53,27 +52,10 @@ public:
     // Must be called from the main thread.
     static PassRefPtr<HRTFDatabaseLoader> createAndLoadAsynchronouslyIfNecessary(
         float sampleRate);
-=======
-
-namespace blink {
-
-class TaskSynchronizer;
-
-// HRTFDatabaseLoader will asynchronously load the default HRTFDatabase in a new thread.
-
-class PLATFORM_EXPORT HRTFDatabaseLoader final : public RefCounted<HRTFDatabaseLoader> {
-public:
-    // Lazily creates a HRTFDatabaseLoader (if not already created) for the given sample-rate
-    // and starts loading asynchronously (when created the first time).
-    // Returns the HRTFDatabaseLoader.
-    // Must be called from the main thread.
-    static PassRefPtr<HRTFDatabaseLoader> createAndLoadAsynchronouslyIfNecessary(float sampleRate);
->>>>>>> miniblink49
 
     // Both constructor and destructor must be called from the main thread.
     ~HRTFDatabaseLoader();
 
-<<<<<<< HEAD
     // Returns true once the default database has been completely loaded.  This
     // must be called from the audio thread.
     bool isLoaded() { return database(); }
@@ -85,15 +67,6 @@ public:
     // Returns the database or nullptr if the database doesn't yet exist.  Must
     // be called from the audio thread.
     HRTFDatabase* database();
-=======
-    // Returns true once the default database has been completely loaded.
-    bool isLoaded();
-
-    // waitForLoaderThreadCompletion() may be called more than once and is thread-safe.
-    void waitForLoaderThreadCompletion();
-
-    HRTFDatabase* database() { return m_hrtfDatabase.get(); }
->>>>>>> miniblink49
 
     float databaseSampleRate() const { return m_databaseSampleRate; }
 
@@ -101,18 +74,13 @@ private:
     // Both constructor and destructor must be called from the main thread.
     explicit HRTFDatabaseLoader(float sampleRate);
 
-<<<<<<< HEAD
     // If it hasn't already been loaded, creates a new thread and initiates
     // asynchronous loading of the default database.
-=======
-    // If it hasn't already been loaded, creates a new thread and initiates asynchronous loading of the default database.
->>>>>>> miniblink49
     // This must be called from the main thread.
     void loadAsynchronously();
 
     // Called in asynchronous loading thread.
     void loadTask();
-<<<<<<< HEAD
     void cleanupTask(WaitableEvent*);
 
     // Holding a m_lock is required when accessing m_hrtfDatabase since we access
@@ -121,15 +89,6 @@ private:
     std::unique_ptr<HRTFDatabase> m_hrtfDatabase;
 
     std::unique_ptr<WebThread> m_thread;
-=======
-    void cleanupTask(TaskSynchronizer*);
-
-    // Holding a m_lock is required when accessing m_hrtfDatabase since we access it from multiple threads.
-    Mutex m_lock;
-    OwnPtr<HRTFDatabase> m_hrtfDatabase;
-
-    OwnPtr<WebThread> m_thread;
->>>>>>> miniblink49
 
     float m_databaseSampleRate;
 };

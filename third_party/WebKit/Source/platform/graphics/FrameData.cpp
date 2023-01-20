@@ -24,13 +24,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "platform/graphics/FrameData.h"
 #include "third_party/skia/include/core/SkImage.h"
-=======
-#include "config.h"
-#include "platform/graphics/FrameData.h"
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -49,27 +44,13 @@ FrameData::~FrameData()
     clear(true);
 }
 
-<<<<<<< HEAD
 void FrameData::clear(bool clearMetadata)
-=======
-bool FrameData::clear(bool clearMetadata)
->>>>>>> miniblink49
 {
     if (clearMetadata)
         m_haveMetadata = false;
 
     m_orientation = DefaultImageOrientation;
     m_frameBytes = 0;
-<<<<<<< HEAD
-=======
-
-    if (!m_frame.isNull()) {
-        m_frame.reset();
-
-        return true;
-    }
-    return false;
->>>>>>> miniblink49
 }
 
 } // namespace blink

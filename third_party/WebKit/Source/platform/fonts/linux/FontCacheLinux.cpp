@@ -22,7 +22,6 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "platform/fonts/FontCache.h"
 
 #include "platform/fonts/FontPlatformData.h"
@@ -31,21 +30,10 @@
 #include "public/platform/linux/WebFallbackFont.h"
 #include "public/platform/linux/WebSandboxSupport.h"
 #include "ui/gfx/font_fallback_linux.h"
-=======
-#include "config.h"
-
-#include "platform/fonts/FontCache.h"
-
-#include "public/platform/linux/WebFallbackFont.h"
-#include "public/platform/linux/WebFontInfo.h"
-#include "public/platform/linux/WebSandboxSupport.h"
-#include "public/platform/Platform.h"
->>>>>>> miniblink49
 #include "wtf/text/CString.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 FontCache::FontCache()
     : m_purgePreventCount(0)
 {
@@ -155,21 +143,4 @@ PassRefPtr<SimpleFontData> FontCache::fallbackFontForCharacter(
 
 #endif // !OS(ANDROID)
 
-=======
-void FontCache::getFontForCharacter(UChar32 c, const char* preferredLocale, FontCache::PlatformFallbackFont* fallbackFont)
-{
-    WebFallbackFont webFallbackFont;
-    if (Platform::current()->sandboxSupport())
-        Platform::current()->sandboxSupport()->getFallbackFontForCharacter(c, preferredLocale, &webFallbackFont);
-    else
-        WebFontInfo::fallbackFontForChar(c, preferredLocale, &webFallbackFont);
-    fallbackFont->name = String::fromUTF8(CString(webFallbackFont.name));
-    fallbackFont->filename = webFallbackFont.filename;
-    fallbackFont->fontconfigInterfaceId = webFallbackFont.fontconfigInterfaceId;
-    fallbackFont->ttcIndex = webFallbackFont.ttcIndex;
-    fallbackFont->isBold = webFallbackFont.isBold;
-    fallbackFont->isItalic = webFallbackFont.isItalic;
-}
-
->>>>>>> miniblink49
 } // namespace blink

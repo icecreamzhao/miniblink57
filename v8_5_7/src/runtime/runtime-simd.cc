@@ -126,11 +126,7 @@ inline T SubSaturate(T a, T b) {
 inline float Min(float a, float b) {
   if (a < b) return a;
   if (a > b) return b;
-<<<<<<< HEAD
   if (a == b) return std_signbit(a) ? a : b;
-=======
-  if (a == b) return std::signbit(a) ? a : b;
->>>>>>> miniblink49
   return std::numeric_limits<float>::quiet_NaN();
 }
 
@@ -138,35 +134,21 @@ inline float Min(float a, float b) {
 inline float Max(float a, float b) {
   if (a > b) return a;
   if (a < b) return b;
-<<<<<<< HEAD
   if (a == b) return std_signbit(b) ? a : b;
-=======
-  if (a == b) return std::signbit(b) ? a : b;
->>>>>>> miniblink49
   return std::numeric_limits<float>::quiet_NaN();
 }
 
 
 inline float MinNumber(float a, float b) {
-<<<<<<< HEAD
   if (std_isnan(a)) return b;
   if (std_isnan(b)) return a;
-=======
-  if (std::isnan(a)) return b;
-  if (std::isnan(b)) return a;
->>>>>>> miniblink49
   return Min(a, b);
 }
 
 
 inline float MaxNumber(float a, float b) {
-<<<<<<< HEAD
   if (std_isnan(a)) return b;
   if (std_isnan(b)) return a;
-=======
-  if (std::isnan(a)) return b;
-  if (std::isnan(b)) return a;
->>>>>>> miniblink49
   return Max(a, b);
 }
 

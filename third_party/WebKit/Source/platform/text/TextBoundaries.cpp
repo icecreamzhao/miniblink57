@@ -24,17 +24,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "platform/text/TextBoundaries.h"
 
 #include "platform/text/TextBreakIterator.h"
 #include "wtf/text/CharacterNames.h"
-=======
-#include "config.h"
-#include "platform/text/TextBoundaries.h"
-
-#include "platform/text/TextBreakIterator.h"
->>>>>>> miniblink49
 #include "wtf/text/StringImpl.h"
 
 using namespace WTF;
@@ -44,11 +37,7 @@ namespace blink {
 
 int endOfFirstWordBoundaryContext(const UChar* characters, int length)
 {
-<<<<<<< HEAD
     for (int i = 0; i < length;) {
-=======
-    for (int i = 0; i < length; ) {
->>>>>>> miniblink49
         int first = i;
         UChar32 ch;
         U16_NEXT(characters, i, length, ch);
@@ -60,11 +49,7 @@ int endOfFirstWordBoundaryContext(const UChar* characters, int length)
 
 int startOfLastWordBoundaryContext(const UChar* characters, int length)
 {
-<<<<<<< HEAD
     for (int i = length; i > 0;) {
-=======
-    for (int i = length; i > 0; ) {
->>>>>>> miniblink49
         int last = i;
         UChar32 ch;
         U16_PREV(characters, 0, i, ch);
@@ -74,14 +59,10 @@ int startOfLastWordBoundaryContext(const UChar* characters, int length)
     return 0;
 }
 
-<<<<<<< HEAD
 int findNextWordFromIndex(const UChar* chars,
     int len,
     int position,
     bool forward)
-=======
-int findNextWordFromIndex(const UChar* chars, int len, int position, bool forward)
->>>>>>> miniblink49
 {
     TextBreakIterator* it = wordBreakIterator(chars, len);
 
@@ -89,13 +70,8 @@ int findNextWordFromIndex(const UChar* chars, int len, int position, bool forwar
         position = it->following(position);
         while (position != TextBreakDone) {
             // We stop searching when the character preceeding the break
-<<<<<<< HEAD
             // is alphanumeric or underscore.
             if (position < len && (isAlphanumeric(chars[position - 1]) || chars[position - 1] == lowLineCharacter))
-=======
-            // is alphanumeric.
-            if (position < len && isAlphanumeric(chars[position - 1]))
->>>>>>> miniblink49
                 return position;
 
             position = it->following(position);
@@ -106,13 +82,8 @@ int findNextWordFromIndex(const UChar* chars, int len, int position, bool forwar
         position = it->preceding(position);
         while (position != TextBreakDone) {
             // We stop searching when the character following the break
-<<<<<<< HEAD
             // is alphanumeric or underscore.
             if (position > 0 && (isAlphanumeric(chars[position]) || chars[position] == lowLineCharacter))
-=======
-            // is alphanumeric.
-            if (position > 0 && isAlphanumeric(chars[position]))
->>>>>>> miniblink49
                 return position;
 
             position = it->preceding(position);
@@ -122,15 +93,11 @@ int findNextWordFromIndex(const UChar* chars, int len, int position, bool forwar
     }
 }
 
-<<<<<<< HEAD
 void findWordBoundary(const UChar* chars,
     int len,
     int position,
     int* start,
     int* end)
-=======
-void findWordBoundary(const UChar* chars, int len, int position, int* start, int* end)
->>>>>>> miniblink49
 {
     TextBreakIterator* it = wordBreakIterator(chars, len);
     *end = it->following(position);

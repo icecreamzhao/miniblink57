@@ -2,21 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
 #include "modules/encryptedmedia/MediaKeyStatusMap.h"
 
 #include "bindings/core/v8/ArrayBufferOrArrayBufferView.h"
-=======
-#include "config.h"
-#include "modules/encryptedmedia/MediaKeyStatusMap.h"
-
->>>>>>> miniblink49
 #include "core/dom/DOMArrayBuffer.h"
 #include "core/dom/DOMArrayPiece.h"
 #include "public/platform/WebData.h"
 #include "wtf/text/WTFString.h"
 
-<<<<<<< HEAD
 #include <algorithm>
 #include <limits>
 
@@ -25,12 +18,6 @@ namespace blink {
 // Represents the key ID and associated status.
 class MediaKeyStatusMap::MapEntry final
     : public GarbageCollectedFinalized<MediaKeyStatusMap::MapEntry> {
-=======
-namespace blink {
-
-// Represents the key ID and associated status.
-class MediaKeyStatusMap::MapEntry final : public GarbageCollectedFinalized<MediaKeyStatusMap::MapEntry> {
->>>>>>> miniblink49
 public:
     static MapEntry* create(WebData keyId, const String& status)
     {
@@ -39,7 +26,6 @@ public:
 
     virtual ~MapEntry() { }
 
-<<<<<<< HEAD
     DOMArrayBuffer* keyId() const { return m_keyId.get(); }
 
     const String& status() const { return m_status; }
@@ -72,21 +58,6 @@ public:
     }
 
     DEFINE_INLINE_VIRTUAL_TRACE() { visitor->trace(m_keyId); }
-=======
-    DOMArrayBuffer* keyId() const
-    {
-        return m_keyId.get();
-    }
-
-    const String& status() const
-    {
-        return m_status;
-    }
-
-    DEFINE_INLINE_VIRTUAL_TRACE()
-    {
-    }
->>>>>>> miniblink49
 
 private:
     MapEntry(WebData keyId, const String& status)
@@ -95,22 +66,14 @@ private:
     {
     }
 
-<<<<<<< HEAD
     const Member<DOMArrayBuffer> m_keyId;
-=======
-    RefPtr<DOMArrayBuffer> m_keyId;
->>>>>>> miniblink49
     const String m_status;
 };
 
 // Represents an Iterator that loops through the set of MapEntrys.
-<<<<<<< HEAD
 class MapIterationSource final
     : public PairIterable<ArrayBufferOrArrayBufferView,
           String>::IterationSource {
-=======
-class MapIterationSource final : public PairIterable<ArrayBufferOrArrayBufferView, String>::IterationSource {
->>>>>>> miniblink49
 public:
     MapIterationSource(MediaKeyStatusMap* map)
         : m_map(map)
@@ -118,14 +81,10 @@ public:
     {
     }
 
-<<<<<<< HEAD
     bool next(ScriptState* scriptState,
         ArrayBufferOrArrayBufferView& key,
         String& value,
         ExceptionState&) override
-=======
-    bool next(ScriptState* scriptState, ArrayBufferOrArrayBufferView& key, String& value, ExceptionState&) override
->>>>>>> miniblink49
     {
         // This simply advances an index and returns the next value if any,
         // so if the iterated object is mutated values may be skipped.
@@ -141,12 +100,8 @@ public:
     DEFINE_INLINE_VIRTUAL_TRACE()
     {
         visitor->trace(m_map);
-<<<<<<< HEAD
         PairIterable<ArrayBufferOrArrayBufferView, String>::IterationSource::trace(
             visitor);
-=======
-        PairIterable<ArrayBufferOrArrayBufferView, String>::IterationSource::trace(visitor);
->>>>>>> miniblink49
     }
 
 private:
@@ -163,25 +118,17 @@ void MediaKeyStatusMap::clear()
 
 void MediaKeyStatusMap::addEntry(WebData keyId, const String& status)
 {
-<<<<<<< HEAD
     // Insert new entry into sorted list.
     MapEntry* entry = MapEntry::create(keyId, status);
     size_t index = 0;
     while (index < m_entries.size() && MapEntry::compareLessThan(m_entries[index], entry))
         ++index;
     m_entries.insert(index, entry);
-=======
-    m_entries.append(MapEntry::create(keyId, status));
->>>>>>> miniblink49
 }
 
 const MediaKeyStatusMap::MapEntry& MediaKeyStatusMap::at(size_t index) const
 {
-<<<<<<< HEAD
     DCHECK_LT(index, m_entries.size());
-=======
-    BLINK_ASSERT(index < m_entries.size());
->>>>>>> miniblink49
     return *m_entries.at(index);
 }
 
@@ -193,7 +140,6 @@ size_t MediaKeyStatusMap::indexOf(const DOMArrayPiece& key) const
             return index;
     }
 
-<<<<<<< HEAD
     // Not found, so return an index outside the valid range. The caller
     // must ensure this value is not exposed outside this class.
     return std::numeric_limits<size_t>::max();
@@ -216,30 +162,10 @@ ScriptValue MediaKeyStatusMap::get(ScriptState* scriptState,
 
 PairIterable<ArrayBufferOrArrayBufferView, String>::IterationSource*
 MediaKeyStatusMap::startIteration(ScriptState*, ExceptionState&)
-=======
-    // Not found, so return an index outside the valid range.
-    return m_entries.size();
-}
-
-PairIterable<ArrayBufferOrArrayBufferView, String>::IterationSource* MediaKeyStatusMap::startIteration(ScriptState*, ExceptionState&)
->>>>>>> miniblink49
 {
     return new MapIterationSource(this);
 }
 
-<<<<<<< HEAD
-=======
-bool MediaKeyStatusMap::getMapEntry(ScriptState*, const ArrayBufferOrArrayBufferView& key, String& value, ExceptionState&)
-{
-    size_t index = indexOf(key);
-    if (index < m_entries.size()) {
-        value = at(index).status();
-        return true;
-    }
-    return false;
-}
-
->>>>>>> miniblink49
 DEFINE_TRACE(MediaKeyStatusMap)
 {
     visitor->trace(m_entries);

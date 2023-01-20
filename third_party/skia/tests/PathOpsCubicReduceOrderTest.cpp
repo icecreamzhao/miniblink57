@@ -58,12 +58,8 @@ static void find_tight_bounds(const SkDCubic& cubic, SkDRect& bounds) {
 }
 #endif
 
-<<<<<<< HEAD
 DEF_TEST(PathOpsReduceOrderCubic, reporter)
 {
-=======
-DEF_TEST(PathOpsReduceOrderCubic, reporter) {
->>>>>>> miniblink49
     size_t index;
     SkReduceOrder reducer;
     int order;
@@ -81,18 +77,13 @@ DEF_TEST(PathOpsReduceOrderCubic, reporter) {
         RunQuadraticModLines,
         RunComputedLines,
         RunNone
-<<<<<<< HEAD
     } run
         = RunAll;
-=======
-    } run = RunAll;
->>>>>>> miniblink49
     int firstTestIndex = 0;
 #if 0
     run = RunComputedLines;
     firstTestIndex = 18;
 #endif
-<<<<<<< HEAD
     int firstPointDegeneratesTest = run == RunAll ? 0 : run == RunPointDegenerates ? firstTestIndex : SK_MaxS32;
     int firstNotPointDegeneratesTest = run == RunAll ? 0 : run == RunNotPointDegenerates ? firstTestIndex : SK_MaxS32;
     int firstLinesTest = run == RunAll ? 0 : run == RunLines ? firstTestIndex : SK_MaxS32;
@@ -103,26 +94,6 @@ DEF_TEST(PathOpsReduceOrderCubic, reporter) {
     int firstQuadraticPointTest = run == RunAll ? 0 : run == RunQuadraticPoints ? firstTestIndex : SK_MaxS32;
     int firstQuadraticLineTest = run == RunAll ? 0 : run == RunQuadraticLines ? firstTestIndex : SK_MaxS32;
     int firstQuadraticModLineTest = run == RunAll ? 0 : run == RunQuadraticModLines ? firstTestIndex : SK_MaxS32;
-=======
-    int firstPointDegeneratesTest = run == RunAll ? 0 : run == RunPointDegenerates
-            ? firstTestIndex : SK_MaxS32;
-    int firstNotPointDegeneratesTest = run == RunAll ? 0 : run == RunNotPointDegenerates
-            ? firstTestIndex : SK_MaxS32;
-    int firstLinesTest = run == RunAll ? 0 : run == RunLines ? firstTestIndex : SK_MaxS32;
-    int firstNotLinesTest = run == RunAll ? 0 : run == RunNotLines ? firstTestIndex : SK_MaxS32;
-    int firstModEpsilonTest = run == RunAll ? 0 : run == RunModEpsilonLines
-            ? firstTestIndex : SK_MaxS32;
-    int firstLessEpsilonTest = run == RunAll ? 0 : run == RunLessEpsilonLines
-            ? firstTestIndex : SK_MaxS32;
-    int firstNegEpsilonTest = run == RunAll ? 0 : run == RunNegEpsilonLines
-            ? firstTestIndex : SK_MaxS32;
-    int firstQuadraticPointTest = run == RunAll ? 0 : run == RunQuadraticPoints
-            ? firstTestIndex : SK_MaxS32;
-    int firstQuadraticLineTest = run == RunAll ? 0 : run == RunQuadraticLines
-            ? firstTestIndex : SK_MaxS32;
-    int firstQuadraticModLineTest = run == RunAll ? 0 : run == RunQuadraticModLines
-            ? firstTestIndex : SK_MaxS32;
->>>>>>> miniblink49
 #if 0
     int firstComputedLinesTest = run == RunAll ? 0 : run == RunComputedLines
             ? firstTestIndex : SK_MaxS32;
@@ -162,11 +133,7 @@ DEF_TEST(PathOpsReduceOrderCubic, reporter) {
         if (order == 2) {
             SkDebugf("[%d] notLines order=%d\n", static_cast<int>(index), order);
             REPORTER_ASSERT(reporter, 0);
-<<<<<<< HEAD
         }
-=======
-       }
->>>>>>> miniblink49
     }
     for (index = firstModEpsilonTest; index < modEpsilonLines_count; ++index) {
         const SkDCubic& cubic = modEpsilonLines[index];

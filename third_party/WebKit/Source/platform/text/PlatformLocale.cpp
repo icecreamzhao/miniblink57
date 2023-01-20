@@ -28,30 +28,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/text/PlatformLocale.h"
 
 #include "platform/text/DateTimeFormat.h"
 #include "public/platform/Platform.h"
-<<<<<<< HEAD
 #include "wtf/text/StringBuilder.h"
 #include <memory>
-=======
-#include "wtf/MainThread.h"
-#include "wtf/text/StringBuilder.h"
->>>>>>> miniblink49
 
 namespace blink {
 
 class DateTimeStringBuilder : private DateTimeFormat::TokenHandler {
     WTF_MAKE_NONCOPYABLE(DateTimeStringBuilder);
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 public:
     // The argument objects must be alive until this object dies.
     DateTimeStringBuilder(Locale&, const DateComponents&);
@@ -72,12 +60,8 @@ private:
     const DateComponents& m_date;
 };
 
-<<<<<<< HEAD
 DateTimeStringBuilder::DateTimeStringBuilder(Locale& localizer,
     const DateComponents& date)
-=======
-DateTimeStringBuilder::DateTimeStringBuilder(Locale& localizer, const DateComponents& date)
->>>>>>> miniblink49
     : m_localizer(localizer)
     , m_date(date)
 {
@@ -89,12 +73,8 @@ bool DateTimeStringBuilder::build(const String& formatString)
     return DateTimeFormat::parse(formatString, *this);
 }
 
-<<<<<<< HEAD
 String DateTimeStringBuilder::zeroPadString(const String& string,
     size_t width)
-=======
-String DateTimeStringBuilder::zeroPadString(const String& string, size_t width)
->>>>>>> miniblink49
 {
     if (string.length() >= width)
         return string;
@@ -109,19 +89,12 @@ String DateTimeStringBuilder::zeroPadString(const String& string, size_t width)
 void DateTimeStringBuilder::appendNumber(int number, size_t width)
 {
     String zeroPaddedNumberString = zeroPadString(String::number(number), width);
-<<<<<<< HEAD
     m_builder.append(
         m_localizer.convertToLocalizedNumber(zeroPaddedNumberString));
 }
 
 void DateTimeStringBuilder::visitField(DateTimeFormat::FieldType fieldType,
     int numberOfPatternCharacters)
-=======
-    m_builder.append(m_localizer.convertToLocalizedNumber(zeroPaddedNumberString));
-}
-
-void DateTimeStringBuilder::visitField(DateTimeFormat::FieldType fieldType, int numberOfPatternCharacters)
->>>>>>> miniblink49
 {
     switch (fieldType) {
     case DateTimeFormat::FieldTypeYear:
@@ -140,12 +113,8 @@ void DateTimeStringBuilder::visitField(DateTimeFormat::FieldType fieldType, int 
         return;
     case DateTimeFormat::FieldTypeMonthStandAlone:
         if (numberOfPatternCharacters == 3) {
-<<<<<<< HEAD
             m_builder.append(
                 m_localizer.shortStandAloneMonthLabels()[m_date.month()]);
-=======
-            m_builder.append(m_localizer.shortStandAloneMonthLabels()[m_date.month()]);
->>>>>>> miniblink49
         } else if (numberOfPatternCharacters == 4) {
             m_builder.append(m_localizer.standAloneMonthLabels()[m_date.month()]);
         } else {
@@ -162,12 +131,8 @@ void DateTimeStringBuilder::visitField(DateTimeFormat::FieldType fieldType, int 
         appendNumber(m_date.week(), 2);
         return;
     case DateTimeFormat::FieldTypePeriod:
-<<<<<<< HEAD
         m_builder.append(
             m_localizer.timeAMPMLabels()[(m_date.hour() >= 12 ? 1 : 0)]);
-=======
-        m_builder.append(m_localizer.timeAMPMLabels()[(m_date.hour() >= 12 ? 1 : 0)]);
->>>>>>> miniblink49
         return;
     case DateTimeFormat::FieldTypeHour12: {
         int hour12 = m_date.hour() % 12;
@@ -197,15 +162,10 @@ void DateTimeStringBuilder::visitField(DateTimeFormat::FieldType fieldType, int 
             appendNumber(m_date.second(), numberOfPatternCharacters);
         } else {
             double second = m_date.second() + m_date.millisecond() / 1000.0;
-<<<<<<< HEAD
             String zeroPaddedSecondString = zeroPadString(
                 String::format("%.03f", second), numberOfPatternCharacters + 4);
             m_builder.append(
                 m_localizer.convertToLocalizedNumber(zeroPaddedSecondString));
-=======
-            String zeroPaddedSecondString = zeroPadString(String::format("%.03f", second), numberOfPatternCharacters + 4);
-            m_builder.append(m_localizer.convertToLocalizedNumber(zeroPaddedSecondString));
->>>>>>> miniblink49
         }
         return;
     default:
@@ -226,22 +186,12 @@ String DateTimeStringBuilder::toString()
 
 Locale& Locale::defaultLocale()
 {
-<<<<<<< HEAD
     static Locale* locale = Locale::create(defaultLanguage()).release();
-=======
-    static Locale* locale = Locale::create(defaultLanguage()).leakPtr();
->>>>>>> miniblink49
     ASSERT(isMainThread());
     return *locale;
 }
 
-<<<<<<< HEAD
 Locale::~Locale() { }
-=======
-Locale::~Locale()
-{
-}
->>>>>>> miniblink49
 
 String Locale::queryString(WebLocalizedString::Name name)
 {
@@ -249,18 +199,13 @@ String Locale::queryString(WebLocalizedString::Name name)
     return Platform::current()->queryLocalizedString(name);
 }
 
-<<<<<<< HEAD
 String Locale::queryString(WebLocalizedString::Name name,
     const String& parameter)
-=======
-String Locale::queryString(WebLocalizedString::Name name, const String& parameter)
->>>>>>> miniblink49
 {
     // FIXME: Returns a string locazlied for this locale.
     return Platform::current()->queryLocalizedString(name, parameter);
 }
 
-<<<<<<< HEAD
 String Locale::queryString(WebLocalizedString::Name name,
     const String& parameter1,
     const String& parameter2)
@@ -284,22 +229,6 @@ String Locale::validationMessageTooShortText(unsigned valueLength,
     return queryString(WebLocalizedString::ValidationTooShort,
         convertToLocalizedNumber(String::number(valueLength)),
         convertToLocalizedNumber(String::number(minLength)));
-=======
-String Locale::queryString(WebLocalizedString::Name name, const String& parameter1, const String& parameter2)
-{
-    // FIXME: Returns a string locazlied for this locale.
-    return Platform::current()->queryLocalizedString(name, parameter1, parameter2);
-}
-
-String Locale::validationMessageTooLongText(unsigned valueLength, int maxLength)
-{
-    return queryString(WebLocalizedString::ValidationTooLong, convertToLocalizedNumber(String::number(valueLength)), convertToLocalizedNumber(String::number(maxLength)));
-}
-
-String Locale::validationMessageTooShortText(unsigned valueLength, int minLength)
-{
-    return queryString(WebLocalizedString::ValidationTooShort, convertToLocalizedNumber(String::number(valueLength)), convertToLocalizedNumber(String::number(minLength)));
->>>>>>> miniblink49
 }
 
 String Locale::weekFormatInLDML()
@@ -313,18 +242,13 @@ String Locale::weekFormatInLDML()
     for (unsigned i = 0; i + 1 < length; ++i) {
         if (templ[i] == '$' && (templ[i + 1] == '1' || templ[i + 1] == '2')) {
             if (literalStart < i)
-<<<<<<< HEAD
                 DateTimeFormat::quoteAndappend(
                     templ.substring(literalStart, i - literalStart), builder);
-=======
-                DateTimeFormat::quoteAndAppendLiteral(templ.substring(literalStart, i - literalStart), builder);
->>>>>>> miniblink49
             builder.append(templ[++i] == '1' ? "yyyy" : "ww");
             literalStart = i + 1;
         }
     }
     if (literalStart < length)
-<<<<<<< HEAD
         DateTimeFormat::quoteAndappend(
             templ.substring(literalStart, length - literalStart), builder);
     return builder.toString();
@@ -335,13 +259,6 @@ void Locale::setLocaleData(const Vector<String, DecimalSymbolsSize>& symbols,
     const String& positiveSuffix,
     const String& negativePrefix,
     const String& negativeSuffix)
-=======
-        DateTimeFormat::quoteAndAppendLiteral(templ.substring(literalStart, length - literalStart), builder);
-    return builder.toString();
-}
-
-void Locale::setLocaleData(const Vector<String, DecimalSymbolsSize>& symbols, const String& positivePrefix, const String& positiveSuffix, const String& negativePrefix, const String& negativeSuffix)
->>>>>>> miniblink49
 {
     for (size_t i = 0; i < symbols.size(); ++i) {
         ASSERT(!symbols[i].isEmpty());
@@ -426,14 +343,10 @@ static bool matches(const String& text, unsigned position, const String& part)
     return true;
 }
 
-<<<<<<< HEAD
 bool Locale::detectSignAndGetDigitRange(const String& input,
     bool& isNegative,
     unsigned& startIndex,
     unsigned& endIndex)
-=======
-bool Locale::detectSignAndGetDigitRange(const String& input, bool& isNegative, unsigned& startIndex, unsigned& endIndex)
->>>>>>> miniblink49
 {
     startIndex = 0;
     endIndex = input.length();
@@ -463,17 +376,11 @@ bool Locale::detectSignAndGetDigitRange(const String& input, bool& isNegative, u
     return true;
 }
 
-<<<<<<< HEAD
 unsigned Locale::matchedDecimalSymbolIndex(const String& input,
     unsigned& position)
 {
     for (unsigned symbolIndex = 0; symbolIndex < DecimalSymbolsSize;
          ++symbolIndex) {
-=======
-unsigned Locale::matchedDecimalSymbolIndex(const String& input, unsigned& position)
-{
-    for (unsigned symbolIndex = 0; symbolIndex < DecimalSymbolsSize; ++symbolIndex) {
->>>>>>> miniblink49
         if (m_decimalSymbols[symbolIndex].length() && matches(input, position, m_decimalSymbols[symbolIndex])) {
             position += m_decimalSymbols[symbolIndex].length();
             return symbolIndex;
@@ -495,13 +402,10 @@ String Locale::convertFromLocalizedNumber(const String& localized)
     if (!detectSignAndGetDigitRange(input, isNegative, startIndex, endIndex))
         return input;
 
-<<<<<<< HEAD
     // Ignore leading '+', but will reject '+'-only string later.
     if (!isNegative && endIndex - startIndex >= 2 && input[startIndex] == '+')
         ++startIndex;
 
-=======
->>>>>>> miniblink49
     StringBuilder builder;
     builder.reserveCapacity(input.length());
     if (isNegative)
@@ -517,7 +421,6 @@ String Locale::convertFromLocalizedNumber(const String& localized)
         else
             builder.append(static_cast<UChar>('0' + symbolIndex));
     }
-<<<<<<< HEAD
     String converted = builder.toString();
     // Ignore trailing '.', but will reject '.'-only string later.
     if (converted.length() >= 2 && converted[converted.length() - 1] == '.')
@@ -527,12 +430,6 @@ String Locale::convertFromLocalizedNumber(const String& localized)
 
 String Locale::stripInvalidNumberCharacters(const String& input,
     const String& standardChars) const
-=======
-    return builder.toString();
-}
-
-String Locale::stripInvalidNumberCharacters(const String& input, const String& standardChars) const
->>>>>>> miniblink49
 {
     StringBuilder builder;
     builder.reserveCapacity(input.length());
@@ -546,16 +443,11 @@ String Locale::stripInvalidNumberCharacters(const String& input, const String& s
     return builder.toString();
 }
 
-<<<<<<< HEAD
-=======
-#if ENABLE(INPUT_MULTIPLE_FIELDS_UI)
->>>>>>> miniblink49
 String Locale::localizedDecimalSeparator()
 {
     initializeLocaleData();
     return m_decimalSymbols[DecimalSeparatorIndex];
 }
-<<<<<<< HEAD
 
 String Locale::formatDateTime(const DateComponents& date,
     FormatType formatType)
@@ -568,43 +460,22 @@ String Locale::formatDateTime(const DateComponents& date,
     case DateComponents::Time:
         builder.build(formatType == FormatTypeShort ? shortTimeFormat()
                                                     : timeFormat());
-=======
-#endif
-
-String Locale::formatDateTime(const DateComponents& date, FormatType formatType)
-{
-    if (date.type() == DateComponents::Invalid)
-        return String();
-
-    DateTimeStringBuilder builder(*this, date);
-    switch (date.type()) {
-    case DateComponents::Time:
-        builder.build(formatType == FormatTypeShort ? shortTimeFormat() : timeFormat());
->>>>>>> miniblink49
         break;
     case DateComponents::Date:
         builder.build(dateFormat());
         break;
     case DateComponents::Month:
-<<<<<<< HEAD
         builder.build(formatType == FormatTypeShort ? shortMonthFormat()
                                                     : monthFormat());
-=======
-        builder.build(formatType == FormatTypeShort ? shortMonthFormat() : monthFormat());
->>>>>>> miniblink49
         break;
     case DateComponents::Week:
         builder.build(weekFormatInLDML());
         break;
     case DateComponents::DateTime:
     case DateComponents::DateTimeLocal:
-<<<<<<< HEAD
         builder.build(formatType == FormatTypeShort
                 ? dateTimeFormatWithoutSeconds()
                 : dateTimeFormatWithSeconds());
-=======
-        builder.build(formatType == FormatTypeShort ? dateTimeFormatWithoutSeconds() : dateTimeFormatWithSeconds());
->>>>>>> miniblink49
         break;
     case DateComponents::Invalid:
         ASSERT_NOT_REACHED();

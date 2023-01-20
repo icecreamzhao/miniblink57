@@ -5,20 +5,11 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #ifndef GrSurface_DEFINED
 #define GrSurface_DEFINED
 
 #include "GrGpuResource.h"
 #include "GrTypes.h"
-=======
-
-#ifndef GrSurface_DEFINED
-#define GrSurface_DEFINED
-
-#include "GrTypes.h"
-#include "GrGpuResource.h"
->>>>>>> miniblink49
 #include "SkImageInfo.h"
 #include "SkRect.h"
 
@@ -42,16 +33,10 @@ public:
      * Helper that gets the width and height of the surface as a bounding rectangle.
      */
     void getBoundsRect(SkRect* rect) const { rect->setWH(SkIntToScalar(this->width()),
-<<<<<<< HEAD
         SkIntToScalar(this->height())); }
 
     GrSurfaceOrigin origin() const
     {
-=======
-                                                         SkIntToScalar(this->height())); }
-
-    GrSurfaceOrigin origin() const {
->>>>>>> miniblink49
         SkASSERT(kTopLeft_GrSurfaceOrigin == fDesc.fOrigin || kBottomLeft_GrSurfaceOrigin == fDesc.fOrigin);
         return fDesc.fOrigin;
     }
@@ -97,17 +82,10 @@ public:
      *              pixel config.
      */
     bool readPixels(int left, int top, int width, int height,
-<<<<<<< HEAD
         GrPixelConfig config,
         void* buffer,
         size_t rowBytes = 0,
         uint32_t pixelOpsFlags = 0);
-=======
-                    GrPixelConfig config,
-                    void* buffer,
-                    size_t rowBytes = 0,
-                    uint32_t pixelOpsFlags = 0);
->>>>>>> miniblink49
 
     /**
      * Copy the src pixels [buffer, rowbytes, pixelconfig] into the surface at the specified
@@ -122,7 +100,6 @@ public:
      *                      packed.
      * @param pixelOpsFlags See the GrContext::PixelOpsFlags enum.
      *
-<<<<<<< HEAD
      * @return true if the write succeeded, false if not. The write can fail because of an
      *              unsupported pixel config.
      */
@@ -131,26 +108,12 @@ public:
         const void* buffer,
         size_t rowBytes = 0,
         uint32_t pixelOpsFlags = 0);
-=======
-     * @return true if the read succeeded, false if not. The read can fail because of an unsupported
-     *              pixel config.
-     */
-    bool writePixels(int left, int top, int width, int height,
-                     GrPixelConfig config,
-                     const void* buffer,
-                     size_t rowBytes = 0,
-                     uint32_t pixelOpsFlags = 0);
->>>>>>> miniblink49
 
     /**
      * After this returns any pending writes to the surface will be issued to the backend 3D API.
      */
     void flushWrites();
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
     /**
      * After this returns any pending surface IO will be issued to the backend 3D API and
      * if the surface has MSAA it will be resolved.
@@ -164,21 +127,14 @@ public:
     typedef void* ReleaseCtx;
     typedef void (*ReleaseProc)(ReleaseCtx);
 
-<<<<<<< HEAD
     void setRelease(ReleaseProc proc, ReleaseCtx ctx)
     {
-=======
-    void setRelease(ReleaseProc proc, ReleaseCtx ctx) {
->>>>>>> miniblink49
         fReleaseProc = proc;
         fReleaseCtx = ctx;
     }
 
-<<<<<<< HEAD
     static size_t WorseCaseSize(const GrSurfaceDesc& desc);
 
-=======
->>>>>>> miniblink49
 protected:
     // Methods made available via GrSurfacePriv
     SkImageInfo info(SkAlphaType) const;
@@ -190,7 +146,6 @@ protected:
     // Provides access to methods that should be public within Skia code.
     friend class GrSurfacePriv;
 
-<<<<<<< HEAD
     GrSurface(GrGpu* gpu, const GrSurfaceDesc& desc)
         : INHERITED(gpu)
         , fDesc(desc)
@@ -201,16 +156,6 @@ protected:
 
     ~GrSurface() override
     {
-=======
-    GrSurface(GrGpu* gpu, LifeCycle lifeCycle, const GrSurfaceDesc& desc)
-        : INHERITED(gpu, lifeCycle)
-        , fDesc(desc)
-        , fReleaseProc(NULL)
-        , fReleaseCtx(NULL)
-    {}
-
-    ~GrSurface() override {
->>>>>>> miniblink49
         // check that invokeReleaseProc has been called (if needed)
         SkASSERT(NULL == fReleaseProc);
     }
@@ -221,12 +166,8 @@ protected:
     void onAbandon() override;
 
 private:
-<<<<<<< HEAD
     void invokeReleaseProc()
     {
-=======
-    void invokeReleaseProc() {
->>>>>>> miniblink49
         if (fReleaseProc) {
             fReleaseProc(fReleaseCtx);
             fReleaseProc = NULL;
@@ -234,11 +175,7 @@ private:
     }
 
     ReleaseProc fReleaseProc;
-<<<<<<< HEAD
     ReleaseCtx fReleaseCtx;
-=======
-    ReleaseCtx  fReleaseCtx;
->>>>>>> miniblink49
 
     typedef GrGpuResource INHERITED;
 };

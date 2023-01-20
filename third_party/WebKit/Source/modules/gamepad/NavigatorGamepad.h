@@ -26,14 +26,9 @@
 #ifndef NavigatorGamepad_h
 #define NavigatorGamepad_h
 
-<<<<<<< HEAD
 #include "core/dom/ContextLifecycleObserver.h"
 #include "core/frame/LocalDOMWindow.h"
 #include "core/frame/Navigator.h"
-=======
-#include "core/frame/DOMWindowLifecycleObserver.h"
-#include "core/frame/DOMWindowProperty.h"
->>>>>>> miniblink49
 #include "core/frame/PlatformEventController.h"
 #include "modules/ModulesExport.h"
 #include "platform/AsyncMethodRunner.h"
@@ -48,7 +43,6 @@ class Gamepad;
 class GamepadList;
 class Navigator;
 
-<<<<<<< HEAD
 class MODULES_EXPORT NavigatorGamepad final
     : public GarbageCollectedFinalized<NavigatorGamepad>,
       public Supplement<Navigator>,
@@ -57,10 +51,6 @@ class MODULES_EXPORT NavigatorGamepad final
       public LocalDOMWindow::EventListenerObserver {
     USING_GARBAGE_COLLECTED_MIXIN(NavigatorGamepad);
 
-=======
-class MODULES_EXPORT NavigatorGamepad final : public GarbageCollectedFinalized<NavigatorGamepad>, public HeapSupplement<Navigator>, public DOMWindowProperty, public PlatformEventController, public DOMWindowLifecycleObserver {
-    USING_GARBAGE_COLLECTED_MIXIN(NavigatorGamepad);
->>>>>>> miniblink49
 public:
     static NavigatorGamepad* from(Document&);
     static NavigatorGamepad& from(Navigator&);
@@ -71,13 +61,9 @@ public:
 
     DECLARE_VIRTUAL_TRACE();
 
-<<<<<<< HEAD
     void didConnectOrDisconnectGamepad(unsigned index,
         const WebGamepad&,
         bool connected);
-=======
-    void didConnectOrDisconnectGamepad(unsigned index, const WebGamepad&, bool connected);
->>>>>>> miniblink49
 
 private:
     explicit NavigatorGamepad(LocalFrame*);
@@ -88,40 +74,24 @@ private:
     void didRemoveGamepadEventListeners();
     bool startUpdatingIfAttached();
 
-<<<<<<< HEAD
     // ContextLifecycleObserver and PageVisibilityObserver
     void contextDestroyed(ExecutionContext*) override;
     void pageVisibilityChanged() override;
-=======
-    // DOMWindowProperty
-    void willDestroyGlobalObjectInFrame() override;
-    void willDetachGlobalObjectFromFrame() override;
->>>>>>> miniblink49
 
     // PlatformEventController
     void registerWithDispatcher() override;
     void unregisterWithDispatcher() override;
     bool hasLastData() override;
     void didUpdateData() override;
-<<<<<<< HEAD
 
     // LocalDOMWindow::EventListenerObserver
-=======
-    void pageVisibilityChanged() override;
-
-    // DOMWindowLifecycleObserver
->>>>>>> miniblink49
     void didAddEventListener(LocalDOMWindow*, const AtomicString&) override;
     void didRemoveEventListener(LocalDOMWindow*, const AtomicString&) override;
     void didRemoveAllEventListeners(LocalDOMWindow*) override;
 
     Member<GamepadList> m_gamepads;
     HeapDeque<Member<Gamepad>> m_pendingEvents;
-<<<<<<< HEAD
     Member<AsyncMethodRunner<NavigatorGamepad>> m_dispatchOneEventRunner;
-=======
-    AsyncMethodRunner<NavigatorGamepad> m_dispatchOneEventRunner;
->>>>>>> miniblink49
 };
 
 } // namespace blink

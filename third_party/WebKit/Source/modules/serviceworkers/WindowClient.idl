@@ -2,11 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
 // https://w3c.github.io/ServiceWorker/#context-frame-type-enum
-=======
-// https://slightlyoff.github.io/ServiceWorker/spec/service_worker/#context-frame-type-enum
->>>>>>> miniblink49
 enum ContextFrameType {
     "top-level",
     "nested",
@@ -14,25 +10,13 @@ enum ContextFrameType {
     "none"
 };
 
-<<<<<<< HEAD
 // https://w3c.github.io/ServiceWorker/#window-client-interface
 [
     Exposed=ServiceWorker,
-=======
-// https://slightlyoff.github.io/ServiceWorker/spec/service_worker/#window-client-interface
-[
-    Exposed=ServiceWorker,
-    RuntimeEnabled=ServiceWorkerClientAttributes,
-    GarbageCollected,
-    TypeChecking=Interface,
->>>>>>> miniblink49
     ImplementedAs=ServiceWorkerWindowClient,
 ] interface WindowClient : Client {
     readonly attribute VisibilityState visibilityState;
     readonly attribute boolean focused;
     [CallWith=ScriptState] Promise<WindowClient> focus();
-<<<<<<< HEAD
     [CallWith=ScriptState] Promise<WindowClient> navigate(USVString url);
-=======
->>>>>>> miniblink49
 };

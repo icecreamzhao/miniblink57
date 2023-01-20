@@ -25,15 +25,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/graphics/ImageSource.h"
 
 #include "platform/graphics/DeferredImageDecoder.h"
 #include "platform/image-decoders/ImageDecoder.h"
-<<<<<<< HEAD
 #include "third_party/skia/include/core/SkImage.h"
 
 namespace blink {
@@ -44,27 +39,12 @@ ImageSource::ImageSource()
 }
 
 ImageSource::~ImageSource() { }
-=======
-
-namespace blink {
-
-ImageSource::ImageSource(ImageSource::AlphaOption alphaOption, ImageSource::GammaAndColorProfileOption gammaAndColorProfileOption)
-    : m_alphaOption(alphaOption)
-    , m_gammaAndColorProfileOption(gammaAndColorProfileOption)
-{
-}
-
-ImageSource::~ImageSource()
-{
-}
->>>>>>> miniblink49
 
 size_t ImageSource::clearCacheExceptFrame(size_t clearExceptFrame)
 {
     return m_decoder ? m_decoder->clearCacheExceptFrame(clearExceptFrame) : 0;
 }
 
-<<<<<<< HEAD
 PassRefPtr<SharedBuffer> ImageSource::data()
 {
     return m_decoder ? m_decoder->data() : nullptr;
@@ -89,17 +69,6 @@ bool ImageSource::setData(PassRefPtr<SharedBuffer> passData,
 
     // Insufficient data is not a failure.
     return m_decoder || !ImageDecoder::hasSufficientDataToSniffImageType(*data);
-=======
-void ImageSource::setData(SharedBuffer& data, bool allDataReceived)
-{
-    // Create a decoder by sniffing the encoded data. If insufficient data bytes are available to
-    // determine the encoded image type, no decoder is created.
-    if (!m_decoder)
-        m_decoder = DeferredImageDecoder::create(data, m_alphaOption, m_gammaAndColorProfileOption);
-
-    if (m_decoder)
-        m_decoder->setData(data, allDataReceived);
->>>>>>> miniblink49
 }
 
 String ImageSource::filenameExtension() const
@@ -114,40 +83,25 @@ bool ImageSource::isSizeAvailable()
 
 bool ImageSource::hasColorProfile() const
 {
-<<<<<<< HEAD
     return m_decoder && m_decoder->hasEmbeddedColorSpace();
 }
 
 IntSize ImageSource::size(
     RespectImageOrientationEnum shouldRespectOrientation) const
-=======
-    return m_decoder && m_decoder->hasColorProfile();
-}
-
-IntSize ImageSource::size(RespectImageOrientationEnum shouldRespectOrientation) const
->>>>>>> miniblink49
 {
     return frameSizeAtIndex(0, shouldRespectOrientation);
 }
 
-<<<<<<< HEAD
 IntSize ImageSource::frameSizeAtIndex(
     size_t index,
     RespectImageOrientationEnum shouldRespectOrientation) const
-=======
-IntSize ImageSource::frameSizeAtIndex(size_t index, RespectImageOrientationEnum shouldRespectOrientation) const
->>>>>>> miniblink49
 {
     if (!m_decoder)
         return IntSize();
 
     IntSize size = m_decoder->frameSizeAtIndex(index);
     if ((shouldRespectOrientation == RespectImageOrientation) && m_decoder->orientationAtIndex(index).usesWidthAsHeight())
-<<<<<<< HEAD
         return size.transposedSize();
-=======
-        return IntSize(size.height(), size.width());
->>>>>>> miniblink49
 
     return size;
 }
@@ -167,7 +121,6 @@ size_t ImageSource::frameCount() const
     return m_decoder ? m_decoder->frameCount() : 0;
 }
 
-<<<<<<< HEAD
 sk_sp<SkImage> ImageSource::createFrameAtIndex(
     size_t index,
     const ColorBehavior& colorBehavior)
@@ -186,11 +139,6 @@ sk_sp<SkImage> ImageSource::createFrameAtIndex(
     }
 
     return m_decoder->createFrameAtIndex(index);
-=======
-bool ImageSource::createFrameAtIndex(size_t index, SkBitmap* bitmap)
-{
-    return m_decoder && m_decoder->createFrameAtIndex(index, bitmap);
->>>>>>> miniblink49
 }
 
 float ImageSource::frameDurationAtIndex(size_t index) const
@@ -198,17 +146,10 @@ float ImageSource::frameDurationAtIndex(size_t index) const
     if (!m_decoder)
         return 0;
 
-<<<<<<< HEAD
     // Many annoying ads specify a 0 duration to make an image flash as quickly as
     // possible. We follow Firefox's behavior and use a duration of 100 ms for any
     // frames that specify a duration of <= 10 ms. See <rdar://problem/7689300>
     // and <http://webkit.org/b/36082> for more information.
-=======
-    // Many annoying ads specify a 0 duration to make an image flash as quickly as possible.
-    // We follow Firefox's behavior and use a duration of 100 ms for any frames that specify
-    // a duration of <= 10 ms. See <rdar://problem/7689300> and <http://webkit.org/b/36082>
-    // for more information.
->>>>>>> miniblink49
     const float duration = m_decoder->frameDurationAtIndex(index) / 1000.0f;
     if (duration < 0.011f)
         return 0.100f;
@@ -217,12 +158,8 @@ float ImageSource::frameDurationAtIndex(size_t index) const
 
 ImageOrientation ImageSource::orientationAtIndex(size_t index) const
 {
-<<<<<<< HEAD
     return m_decoder ? m_decoder->orientationAtIndex(index)
                      : DefaultImageOrientation;
-=======
-    return m_decoder ? m_decoder->orientationAtIndex(index) : DefaultImageOrientation;
->>>>>>> miniblink49
 }
 
 bool ImageSource::frameHasAlphaAtIndex(size_t index) const

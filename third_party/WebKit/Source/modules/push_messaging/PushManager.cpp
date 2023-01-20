@@ -2,15 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
 #include "modules/push_messaging/PushManager.h"
 
-=======
-#include "config.h"
-#include "modules/push_messaging/PushManager.h"
-
-#include "bindings/core/v8/CallbackPromiseAdapter.h"
->>>>>>> miniblink49
 #include "bindings/core/v8/ScriptPromise.h"
 #include "bindings/core/v8/ScriptPromiseResolver.h"
 #include "bindings/core/v8/ScriptState.h"
@@ -24,53 +17,30 @@
 #include "modules/push_messaging/PushSubscription.h"
 #include "modules/push_messaging/PushSubscriptionCallbacks.h"
 #include "modules/push_messaging/PushSubscriptionOptions.h"
-<<<<<<< HEAD
 #include "modules/push_messaging/PushSubscriptionOptionsInit.h"
-=======
->>>>>>> miniblink49
 #include "modules/serviceworkers/ServiceWorkerRegistration.h"
 #include "public/platform/Platform.h"
 #include "public/platform/modules/push_messaging/WebPushClient.h"
 #include "public/platform/modules/push_messaging/WebPushProvider.h"
 #include "public/platform/modules/push_messaging/WebPushSubscriptionOptions.h"
-<<<<<<< HEAD
 #include "wtf/Assertions.h"
-=======
->>>>>>> miniblink49
 #include "wtf/RefPtr.h"
 
 namespace blink {
 namespace {
 
-<<<<<<< HEAD
     WebPushProvider* pushProvider()
     {
         WebPushProvider* webPushProvider = Platform::current()->pushProvider();
         DCHECK(webPushProvider);
         return webPushProvider;
     }
-=======
-WebPushProvider* pushProvider()
-{
-    WebPushProvider* webPushProvider = Platform::current()->pushProvider();
-    ASSERT(webPushProvider);
-    return webPushProvider;
-}
-
-WebPushSubscriptionOptions toWebPushSubscriptionOptions(const PushSubscriptionOptions& options)
-{
-    WebPushSubscriptionOptions webOptions;
-    webOptions.userVisibleOnly = options.userVisibleOnly();
-    return webOptions;
-}
->>>>>>> miniblink49
 
 } // namespace
 
 PushManager::PushManager(ServiceWorkerRegistration* registration)
     : m_registration(registration)
 {
-<<<<<<< HEAD
     DCHECK(registration);
 }
 
@@ -109,30 +79,6 @@ ScriptPromise PushManager::subscribe(ScriptState* scriptState,
         pushProvider()->subscribe(
             m_registration->webRegistration(), webOptions,
             WTF::makeUnique<PushSubscriptionCallbacks>(resolver, m_registration));
-=======
-    ASSERT(registration);
-}
-
-ScriptPromise PushManager::subscribe(ScriptState* scriptState, const PushSubscriptionOptions& options)
-{
-    if (!m_registration->active())
-        return ScriptPromise::rejectWithDOMException(scriptState, DOMException::create(AbortError, "Subscription failed - no active Service Worker"));
-
-    RefPtrWillBeRawPtr<ScriptPromiseResolver> resolver = ScriptPromiseResolver::create(scriptState);
-    ScriptPromise promise = resolver->promise();
-
-    // The document context is the only reasonable context from which to ask the user for permission
-    // to use the Push API. The embedder should persist the permission so that later calls in
-    // different contexts can succeed.
-    if (scriptState->executionContext()->isDocument()) {
-        Document* document = toDocument(scriptState->executionContext());
-        // FIXME: add test coverage for this condition - https://crbug.com/440431
-        if (!document->domWindow() || !document->frame())
-            return ScriptPromise::rejectWithDOMException(scriptState, DOMException::create(InvalidStateError, "Document is detached from window."));
-        PushController::clientFrom(document->frame()).subscribe(m_registration->webRegistration(), toWebPushSubscriptionOptions(options), new PushSubscriptionCallbacks(resolver, m_registration));
-    } else {
-        pushProvider()->subscribe(m_registration->webRegistration(), toWebPushSubscriptionOptions(options), new PushSubscriptionCallbacks(resolver, m_registration));
->>>>>>> miniblink49
     }
 
     return promise;
@@ -140,7 +86,6 @@ ScriptPromise PushManager::subscribe(ScriptState* scriptState, const PushSubscri
 
 ScriptPromise PushManager::getSubscription(ScriptState* scriptState)
 {
-<<<<<<< HEAD
     ScriptPromiseResolver* resolver = ScriptPromiseResolver::create(scriptState);
     ScriptPromise promise = resolver->promise();
 
@@ -171,28 +116,6 @@ ScriptPromise PushManager::permissionState(
         m_registration->webRegistration(),
         PushSubscriptionOptions::toWeb(options, exceptionState),
         WTF::makeUnique<PushPermissionStatusCallbacks>(resolver));
-=======
-    RefPtrWillBeRawPtr<ScriptPromiseResolver> resolver = ScriptPromiseResolver::create(scriptState);
-    ScriptPromise promise = resolver->promise();
-
-    pushProvider()->getSubscription(m_registration->webRegistration(), new PushSubscriptionCallbacks(resolver, m_registration));
-    return promise;
-}
-
-ScriptPromise PushManager::permissionState(ScriptState* scriptState, const PushSubscriptionOptions& options)
-{
-    if (scriptState->executionContext()->isDocument()) {
-        Document* document = toDocument(scriptState->executionContext());
-        // FIXME: add test coverage for this condition - https://crbug.com/440431
-        if (!document->domWindow() || !document->frame())
-            return ScriptPromise::rejectWithDOMException(scriptState, DOMException::create(InvalidStateError, "Document is detached from window."));
-    }
-
-    RefPtrWillBeRawPtr<ScriptPromiseResolver> resolver = ScriptPromiseResolver::create(scriptState);
-    ScriptPromise promise = resolver->promise();
-
-    pushProvider()->getPermissionStatus(m_registration->webRegistration(), toWebPushSubscriptionOptions(options), new PushPermissionStatusCallbacks(resolver));
->>>>>>> miniblink49
     return promise;
 }
 

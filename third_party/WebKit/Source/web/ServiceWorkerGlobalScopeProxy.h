@@ -33,7 +33,6 @@
 
 #include "core/workers/WorkerReportingProxy.h"
 #include "platform/heap/Handle.h"
-<<<<<<< HEAD
 #include "platform/heap/HeapAllocator.h"
 #include "platform/weborigin/KURL.h"
 #include "public/platform/WebString.h"
@@ -52,21 +51,6 @@ class WebServiceWorkerContextClient;
 struct WebServiceWorkerError;
 class WebServiceWorkerRequest;
 class WebURLResponse;
-=======
-#include "public/platform/WebString.h"
-#include "public/web/WebServiceWorkerContextProxy.h"
-#include "wtf/Forward.h"
-#include "wtf/OwnPtr.h"
-
-namespace blink {
-
-class ConsoleMessage;
-class Document;
-class ServiceWorkerGlobalScope;
-class WebEmbeddedWorkerImpl;
-class WebServiceWorkerContextClient;
-class WebServiceWorkerRequest;
->>>>>>> miniblink49
 
 // This class is created and destructed on the main thread, but live most
 // of its time as a resident of the worker thread.
@@ -81,7 +65,6 @@ class WebServiceWorkerRequest;
 // workerThreadTerminated() is called by its corresponding
 // WorkerGlobalScope.
 class ServiceWorkerGlobalScopeProxy final
-<<<<<<< HEAD
     : public GarbageCollectedFinalized<ServiceWorkerGlobalScopeProxy>,
       public WebServiceWorkerContextProxy,
       public WorkerReportingProxy {
@@ -197,50 +180,6 @@ private:
     WebServiceWorkerContextClient* m_client;
 
     CrossThreadPersistent<ServiceWorkerGlobalScope> m_workerGlobalScope;
-=======
-    : public WebServiceWorkerContextProxy
-    , public WorkerReportingProxy {
-    WTF_MAKE_NONCOPYABLE(ServiceWorkerGlobalScopeProxy);
-public:
-    static PassOwnPtr<ServiceWorkerGlobalScopeProxy> create(WebEmbeddedWorkerImpl&, Document&, WebServiceWorkerContextClient&);
-    ~ServiceWorkerGlobalScopeProxy() override;
-
-    // WebServiceWorkerContextProxy overrides:
-    void setRegistration(WebServiceWorkerRegistration*) override;
-    void dispatchActivateEvent(int) override;
-    void dispatchCrossOriginConnectEvent(int, const WebCrossOriginServiceWorkerClient&) override;
-    void dispatchCrossOriginMessageEvent(const WebCrossOriginServiceWorkerClient&, const WebString& message, const WebMessagePortChannelArray&) override;
-    void dispatchFetchEvent(int, const WebServiceWorkerRequest&) override;
-    void dispatchGeofencingEvent(int, WebGeofencingEventType, const WebString& regionID, const WebCircularGeofencingRegion&) override;
-    void dispatchInstallEvent(int) override;
-    void dispatchMessageEvent(const WebString& message, const WebMessagePortChannelArray&) override;
-    void dispatchNotificationClickEvent(int, int64_t notificationID, const WebNotificationData&) override;
-    void dispatchPushEvent(int, const WebString& data) override;
-    void dispatchServicePortConnectEvent(WebServicePortConnectEventCallbacks*, const WebURL& targetURL, const WebString& origin, WebServicePortID) override;
-    void dispatchSyncEvent(int) override;
-    void addStashedMessagePorts(const WebMessagePortChannelArray&, const WebVector<WebString>& webChannelNames) override;
-
-    // WorkerReportingProxy overrides:
-    void reportException(const String& errorMessage, int lineNumber, int columnNumber, const String& sourceURL, int exceptionId) override;
-    void reportConsoleMessage(PassRefPtrWillBeRawPtr<ConsoleMessage>) override;
-    void postMessageToPageInspector(const String&) override;
-    void postWorkerConsoleAgentEnabled() override { }
-    void didEvaluateWorkerScript(bool success) override;
-    void workerGlobalScopeStarted(WorkerGlobalScope*) override;
-    void workerGlobalScopeClosed() override;
-    void willDestroyWorkerGlobalScope() override;
-    void workerThreadTerminated() override;
-
-private:
-    ServiceWorkerGlobalScopeProxy(WebEmbeddedWorkerImpl&, Document&, WebServiceWorkerContextClient&);
-
-    WebEmbeddedWorkerImpl& m_embeddedWorker;
-    Document& m_document;
-
-    WebServiceWorkerContextClient& m_client;
-
-    ServiceWorkerGlobalScope* m_workerGlobalScope;
->>>>>>> miniblink49
 };
 
 } // namespace blink

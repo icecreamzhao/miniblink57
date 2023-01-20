@@ -17,7 +17,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-<<<<<<< HEAD
 // This partial interface is a merge of three different partial interfaces
 // related to storage.
 partial interface Navigator {
@@ -30,11 +29,4 @@ partial interface Navigator {
 
     // https://storage.spec.whatwg.org/#api
     [RuntimeEnabled=DurableStorage] readonly attribute StorageManager storage;
-=======
-partial interface Navigator {
-    [MeasureAs=PrefixedStorageQuota] readonly attribute DeprecatedStorageQuota webkitTemporaryStorage;
-    [MeasureAs=PrefixedStorageQuota] readonly attribute DeprecatedStorageQuota webkitPersistentStorage;
-
-    [RuntimeEnabled=QuotaPromise] readonly attribute StorageQuota storageQuota;
->>>>>>> miniblink49
 };

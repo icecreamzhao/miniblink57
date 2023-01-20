@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -9,7 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "SkColor.h"
 #include "SkColorPriv.h"
 #include "SkFixed.h"
@@ -23,49 +18,24 @@ SkPMColor SkPreMultiplyColor(SkColor c)
 {
     return SkPremultiplyARGBInline(SkColorGetA(c), SkColorGetR(c),
         SkColorGetG(c), SkColorGetB(c));
-=======
-
-#include "SkColor.h"
-#include "SkColorPriv.h"
-
-SkPMColor SkPreMultiplyARGB(U8CPU a, U8CPU r, U8CPU g, U8CPU b) {
-    return SkPremultiplyARGBInline(a, r, g, b);
-}
-
-SkPMColor SkPreMultiplyColor(SkColor c) {
-    return SkPremultiplyARGBInline(SkColorGetA(c), SkColorGetR(c),
-                                   SkColorGetG(c), SkColorGetB(c));
->>>>>>> miniblink49
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-<<<<<<< HEAD
 static inline SkScalar ByteToScalar(U8CPU x)
 {
-=======
-static inline SkScalar ByteToScalar(U8CPU x) {
->>>>>>> miniblink49
     SkASSERT(x <= 255);
     return SkIntToScalar(x) / 255;
 }
 
-<<<<<<< HEAD
 static inline SkScalar ByteDivToScalar(int numer, U8CPU denom)
 {
-=======
-static inline SkScalar ByteDivToScalar(int numer, U8CPU denom) {
->>>>>>> miniblink49
     // cast to keep the answer signed
     return SkIntToScalar(numer) / (int)denom;
 }
 
-<<<<<<< HEAD
 void SkRGBToHSV(U8CPU r, U8CPU g, U8CPU b, SkScalar hsv[3])
 {
-=======
-void SkRGBToHSV(U8CPU r, U8CPU g, U8CPU b, SkScalar hsv[3]) {
->>>>>>> miniblink49
     SkASSERT(hsv);
 
     unsigned min = SkMin32(r, SkMin32(g, b));
@@ -105,39 +75,17 @@ void SkRGBToHSV(U8CPU r, U8CPU g, U8CPU b, SkScalar hsv[3]) {
     hsv[2] = v;
 }
 
-<<<<<<< HEAD
 SkColor SkHSVToColor(U8CPU a, const SkScalar hsv[3])
 {
     SkASSERT(hsv);
 
     U8CPU s = SkUnitScalarClampToByte(hsv[1]);
     U8CPU v = SkUnitScalarClampToByte(hsv[2]);
-=======
-static inline U8CPU UnitScalarToByte(SkScalar x) {
-    if (x < 0) {
-        return 0;
-    }
-    if (x >= SK_Scalar1) {
-        return 255;
-    }
-    return SkScalarToFixed(x) >> 8;
-}
-
-SkColor SkHSVToColor(U8CPU a, const SkScalar hsv[3]) {
-    SkASSERT(hsv);
-
-    U8CPU s = UnitScalarToByte(hsv[1]);
-    U8CPU v = UnitScalarToByte(hsv[2]);
->>>>>>> miniblink49
 
     if (0 == s) { // shade of gray
         return SkColorSetARGB(a, v, v, v);
     }
-<<<<<<< HEAD
     SkFixed hx = (hsv[0] < 0 || hsv[0] >= SkIntToScalar(360)) ? 0 : SkScalarToFixed(hsv[0] / 60);
-=======
-    SkFixed hx = (hsv[0] < 0 || hsv[0] >= SkIntToScalar(360)) ? 0 : SkScalarToFixed(hsv[0]/60);
->>>>>>> miniblink49
     SkFixed f = hx & 0xFFFF;
 
     unsigned v_scale = SkAlpha255To256(v);
@@ -149,7 +97,6 @@ SkColor SkHSVToColor(U8CPU a, const SkScalar hsv[3]) {
 
     SkASSERT((unsigned)(hx >> 16) < 6);
     switch (hx >> 16) {
-<<<<<<< HEAD
     case 0:
         r = v;
         g = t;
@@ -273,14 +220,3 @@ SkPM4f SkColor4f::premul() const
 
     return SkPM4f::From4f(src);
 }
-=======
-        case 0: r = v; g = t; b = p; break;
-        case 1: r = q; g = v; b = p; break;
-        case 2: r = p; g = v; b = t; break;
-        case 3: r = p; g = q; b = v; break;
-        case 4: r = t;  g = p; b = v; break;
-        default: r = v; g = p; b = q; break;
-    }
-    return SkColorSetARGB(a, r, g, b);
-}
->>>>>>> miniblink49

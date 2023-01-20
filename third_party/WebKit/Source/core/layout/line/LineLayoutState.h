@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2000 Lars Knoll (knoll@kde.org)
- * Copyright (C) 2003, 2004, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc. All right reserved.
+ * Copyright (C) 2003, 2004, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc.
+ *               All right reserved.
  * Copyright (C) 2010 Google Inc. All rights reserved.
  * Copyright (C) 2014 Adobe Systems Incorporated. All rights reserved.
  *
@@ -26,62 +27,60 @@
 
 #include "core/layout/LayoutBlockFlow.h"
 #include "platform/geometry/LayoutRect.h"
+#include "wtf/Allocator.h"
 
 namespace blink {
 
-// Like LayoutState for layout(), LineLayoutState keeps track of global information
-// during an entire linebox tree layout pass (aka layoutInlineChildren).
+// Like LayoutState for layout(), LineLayoutState keeps track of global
+// information during an entire linebox tree layout pass (aka
+// layoutInlineChildren).
 class LineLayoutState {
+    STACK_ALLOCATED();
+
 public:
-    LineLayoutState(bool fullLayout, LayoutUnit& paintInvalidationLogicalTop, LayoutUnit& paintInvalidationLogicalBottom, LayoutFlowThread* flowThread)
+    LineLayoutState(bool fullLayout)
         : m_lastFloat(nullptr)
         , m_endLine(nullptr)
         , m_floatIndex(0)
-        , m_endLineLogicalTop(0)
         , m_endLineMatched(false)
-        , m_checkForFloatsFromLastLine(false)
         , m_hasInlineChild(false)
         , m_isFullLayout(fullLayout)
-        , m_paintInvalidationLogicalTop(paintInvalidationLogicalTop)
-        , m_paintInvalidationLogicalBottom(paintInvalidationLogicalBottom)
-        , m_adjustedLogicalLineTop(0)
-        , m_usesPaintInvalidationBounds(false)
-        , m_flowThread(flowThread)
-    { }
+        , m_needsPaginationStrutRecalculation(false)
+    {
+    }
 
     void markForFullLayout() { m_isFullLayout = true; }
     bool isFullLayout() const { return m_isFullLayout; }
 
-    bool usesPaintInvalidationBounds() const { return m_usesPaintInvalidationBounds; }
-
-    void setPaintInvalidationRange(LayoutUnit logicalHeight)
+    bool needsPaginationStrutRecalculation() const
     {
-        m_usesPaintInvalidationBounds = true;
-        m_paintInvalidationLogicalTop = m_paintInvalidationLogicalBottom = logicalHeight;
+        return m_needsPaginationStrutRecalculation || isFullLayout();
     }
-
-    void updatePaintInvalidationRangeFromBox(RootInlineBox* box, LayoutUnit paginationDelta = 0)
+    void setNeedsPaginationStrutRecalculation()
     {
-        m_usesPaintInvalidationBounds = true;
-        m_paintInvalidationLogicalTop = std::min(m_paintInvalidationLogicalTop, box->logicalTopVisualOverflow() + std::min<LayoutUnit>(paginationDelta, 0));
-        m_paintInvalidationLogicalBottom = std::max(m_paintInvalidationLogicalBottom, box->logicalBottomVisualOverflow() + std::max<LayoutUnit>(paginationDelta, 0));
+        m_needsPaginationStrutRecalculation = true;
     }
 
     bool endLineMatched() const { return m_endLineMatched; }
-    void setEndLineMatched(bool endLineMatched) { m_endLineMatched = endLineMatched; }
-
-    bool checkForFloatsFromLastLine() const { return m_checkForFloatsFromLastLine; }
-    void setCheckForFloatsFromLastLine(bool check) { m_checkForFloatsFromLastLine = check; }
+    void setEndLineMatched(bool endLineMatched)
+    {
+        m_endLineMatched = endLineMatched;
+    }
 
     bool hasInlineChild() const { return m_hasInlineChild; }
-    void setHasInlineChild(bool hasInlineChild) { m_hasInlineChild = hasInlineChild; }
-
+    void setHasInlineChild(bool hasInlineChild)
+    {
+        m_hasInlineChild = hasInlineChild;
+    }
 
     LineInfo& lineInfo() { return m_lineInfo; }
     const LineInfo& lineInfo() const { return m_lineInfo; }
 
     LayoutUnit endLineLogicalTop() const { return m_endLineLogicalTop; }
-    void setEndLineLogicalTop(LayoutUnit logicalTop) { m_endLineLogicalTop = logicalTop; }
+    void setEndLineLogicalTop(LayoutUnit logicalTop)
+    {
+        m_endLineLogicalTop = logicalTop;
+    }
 
     RootInlineBox* endLine() const { return m_endLine; }
     void setEndLine(RootInlineBox* line) { m_endLine = line; }
@@ -95,9 +94,10 @@ public:
     void setFloatIndex(unsigned floatIndex) { m_floatIndex = floatIndex; }
 
     LayoutUnit adjustedLogicalLineTop() const { return m_adjustedLogicalLineTop; }
-    void setAdjustedLogicalLineTop(LayoutUnit value) { m_adjustedLogicalLineTop = value; }
-
-    LayoutFlowThread* flowThread() const { return m_flowThread; }
+    void setAdjustedLogicalLineTop(LayoutUnit value)
+    {
+        m_adjustedLogicalLineTop = value;
+    }
 
 private:
     Vector<LayoutBlockFlow::FloatWithRect> m_floats;
@@ -107,24 +107,17 @@ private:
     unsigned m_floatIndex;
     LayoutUnit m_endLineLogicalTop;
     bool m_endLineMatched;
-    bool m_checkForFloatsFromLastLine;
-    // Used as a performance optimization to avoid doing a full paint invalidation when our floats
-    // change but we don't have any inline children.
+    // Used as a performance optimization to avoid doing a full paint invalidation
+    // when our floats change but we don't have any inline children.
     bool m_hasInlineChild;
 
     bool m_isFullLayout;
 
-    // FIXME: Should this be a range object instead of two ints?
-    LayoutUnit& m_paintInvalidationLogicalTop;
-    LayoutUnit& m_paintInvalidationLogicalBottom;
+    bool m_needsPaginationStrutRecalculation;
 
     LayoutUnit m_adjustedLogicalLineTop;
-
-    bool m_usesPaintInvalidationBounds;
-
-    LayoutFlowThread* m_flowThread;
 };
 
-}
+} // namespace blink
 
 #endif // LineLayoutState_h

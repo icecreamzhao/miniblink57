@@ -31,17 +31,13 @@
 #ifndef DrawingBuffer_h
 #define DrawingBuffer_h
 
-<<<<<<< HEAD
 #include "cc/layers/texture_layer_client.h"
 #include "gpu/command_buffer/common/mailbox.h"
 #include "gpu/command_buffer/common/sync_token.h"
-=======
->>>>>>> miniblink49
 #include "platform/PlatformExport.h"
 #include "platform/geometry/IntSize.h"
 #include "platform/graphics/GraphicsTypes3D.h"
 #include "platform/graphics/gpu/WebGLImageConversion.h"
-<<<<<<< HEAD
 #include "third_party/khronos/GLES2/gl2.h"
 #include "third_party/skia/include/core/SkBitmap.h"
 #include "wtf/Deque.h"
@@ -121,66 +117,6 @@ public:
         PreserveDrawingBuffer,
         WebGLVersion,
         ChromiumImageUsage);
-=======
-#include "public/platform/WebExternalTextureLayerClient.h"
-#include "public/platform/WebExternalTextureMailbox.h"
-#include "public/platform/WebGraphicsContext3D.h"
-#include "third_party/khronos/GLES2/gl2.h"
-#include "third_party/khronos/GLES2/gl2ext.h"
-#include "third_party/skia/include/core/SkBitmap.h"
-#include "wtf/Deque.h"
-#include "wtf/Noncopyable.h"
-#include "wtf/OwnPtr.h"
-#include "wtf/PassOwnPtr.h"
-
-namespace WTF {
-
-class ArrayBufferContents;
-
-} // namespace WTF
-
-namespace blink {
-
-class Extensions3DUtil;
-class ImageBuffer;
-class WebExternalBitmap;
-class WebExternalTextureLayer;
-class WebGraphicsContext3D;
-class WebLayer;
-
-// Manages a rendering target (framebuffer + attachment) for a canvas.  Can publish its rendering
-// results to a WebLayer for compositing.
-class PLATFORM_EXPORT DrawingBuffer : public RefCounted<DrawingBuffer>, public WebExternalTextureLayerClient  {
-    // If we used CHROMIUM_image as the backing storage for our buffers,
-    // we need to know the mapping from texture id to image.
-    struct TextureInfo {
-        Platform3DObject textureId;
-        WGC3Duint imageId;
-
-        TextureInfo()
-            : textureId(0)
-            , imageId(0)
-        {
-        }
-    };
-
-    struct MailboxInfo : public RefCounted<MailboxInfo> {
-        WebExternalTextureMailbox mailbox;
-        TextureInfo textureInfo;
-        IntSize size;
-        // This keeps the parent drawing buffer alive as long as the compositor is
-        // referring to one of the mailboxes DrawingBuffer produced. The parent drawing buffer is
-        // cleared when the compositor returns the mailbox. See mailboxReleased().
-        RefPtr<DrawingBuffer> m_parentDrawingBuffer;
-    };
-public:
-    enum PreserveDrawingBuffer {
-        Preserve,
-        Discard
-    };
-
-    static PassRefPtr<DrawingBuffer> create(PassOwnPtr<WebGraphicsContext3D>, const IntSize&, PreserveDrawingBuffer, WebGraphicsContext3D::Attributes requestedAttributes);
->>>>>>> miniblink49
     static void forceNextDrawingBufferCreationToFail();
 
     ~DrawingBuffer() override;
@@ -188,7 +124,6 @@ public:
     // Destruction will be completed after all mailboxes are released.
     void beginDestruction();
 
-<<<<<<< HEAD
     // Issues a glClear() on all framebuffers associated with this DrawingBuffer.
     void clearFramebuffers(GLbitfield clearMask);
 
@@ -231,70 +166,11 @@ public:
     // Returns false if the contents had previously been marked as changed and
     // have not yet been committed.
     bool markContentsChanged();
-=======
-    // Issues a glClear() on all framebuffers associated with this DrawingBuffer. The caller is responsible for
-    // making the context current and setting the clear values and masks. Modifies the framebuffer binding.
-    void clearFramebuffers(GLbitfield clearMask);
-
-    // Given the desired buffer size, provides the largest dimensions that will fit in the pixel budget.
-    static IntSize adjustSize(const IntSize& desiredSize, const IntSize& curSize, int maxTextureSize);
-    bool reset(const IntSize&);
-    void bind(GLenum target);
-    IntSize size() const { return m_size; }
-
-    // Copies the multisample color buffer to the normal color buffer and leaves m_fbo bound.
-    void commit();
-
-    // commit should copy the full multisample buffer, and not respect the
-    // current scissor bounds. Track the state of the scissor test so that it
-    // can be disabled during calls to commit.
-    void setScissorEnabled(bool scissorEnabled) { m_scissorEnabled = scissorEnabled; }
-
-    // The DrawingBuffer needs to track the texture bound to texture unit 0.
-    // The bound texture is tracked to avoid costly queries during rendering.
-    void setTexture2DBinding(Platform3DObject texture) { m_texture2DBinding = texture; }
-
-    // The DrawingBuffer needs to track the currently bound framebuffer so it
-    // restore the binding when needed.
-    void setFramebufferBinding(GLenum target, Platform3DObject fbo)
-    {
-        switch (target) {
-        case GL_FRAMEBUFFER:
-            m_drawFramebufferBinding = fbo;
-            m_readFramebufferBinding = fbo;
-            break;
-#ifdef MINIBLINK_NOT_IMPLEMENTED
-        case GL_DRAW_FRAMEBUFFER:
-            m_drawFramebufferBinding = fbo;
-            break;
-        case GL_READ_FRAMEBUFFER:
-            m_readFramebufferBinding = fbo;
-            break;
-#endif // MINIBLINK_NOT_IMPLEMENTED
-        default:
-			notImplemented();
-            ASSERT(0);
-        }
-    }
-
-    // Track the currently active texture unit. Texture unit 0 is used as host for a scratch
-    // texture.
-    void setActiveTextureUnit(GLint textureUnit) { m_activeTextureUnit = textureUnit; }
-
-    bool multisample() const;
-
-    Platform3DObject framebuffer() const;
-
-    bool discardFramebufferSupported() const { return m_discardFramebufferSupported; }
-
-    void markContentsChanged();
->>>>>>> miniblink49
     void setBufferClearNeeded(bool);
     bool bufferClearNeeded() const;
     void setIsHidden(bool);
     void setFilterQuality(SkFilterQuality);
 
-<<<<<<< HEAD
     // Whether the target for draw operations has format GL_RGBA, but is
     // emulating format GL_RGB. When the target's storage is first
     // allocated, its alpha channel must be cleared to 1. All future drawing
@@ -519,84 +395,10 @@ private:
         int height,
         ReadbackOrder,
         WebGLImageConversion::AlphaOp);
-=======
-    WebLayer* platformLayer();
-
-    WebGraphicsContext3D* context();
-
-    // Returns the actual context attributes for this drawing buffer which may differ from the
-    // requested context attributes due to implementation limits.
-    WebGraphicsContext3D::Attributes getActualAttributes() const { return m_actualAttributes; }
-
-    // WebExternalTextureLayerClient implementation.
-    bool prepareMailbox(WebExternalTextureMailbox*, WebExternalBitmap*) override;
-    void mailboxReleased(const WebExternalTextureMailbox&, bool lostResource = false) override;
-
-    // Destroys the TEXTURE_2D binding for the owned context
-    bool copyToPlatformTexture(WebGraphicsContext3D*, Platform3DObject texture, GLenum internalFormat,
-        GLenum destType, GLint level, bool premultiplyAlpha, bool flipY, SourceDrawingBuffer);
-
-    void setPackAlignment(GLint param);
-
-    void paintRenderingResultsToCanvas(ImageBuffer*);
-    bool paintRenderingResultsToImageData(int&, int&, SourceDrawingBuffer, WTF::ArrayBufferContents&);
-
-    int sampleCount() const { return m_sampleCount; }
-    bool explicitResolveOfMultisampleData() const { return m_multisampleMode == ExplicitResolve; }
-
-    // Bind to m_drawFramebufferBinding or m_readFramebufferBinding if it's not 0.
-    // Otherwise, bind to the default FBO.
-    void restoreFramebufferBindings();
-
-protected: // For unittests
-    DrawingBuffer(
-        PassOwnPtr<WebGraphicsContext3D>,
-        PassOwnPtr<Extensions3DUtil>,
-        bool multisampleExtensionSupported,
-        bool packedDepthStencilExtensionSupported,
-        bool discardFramebufferSupported,
-        PreserveDrawingBuffer,
-        WebGraphicsContext3D::Attributes requestedAttributes);
-
-    bool initialize(const IntSize&);
-
-private:
-    void mailboxReleasedWithoutRecycling(const WebExternalTextureMailbox&);
-
-    unsigned createColorTexture();
-    // Create the depth/stencil and multisample buffers, if needed.
-    void createSecondaryBuffers();
-    bool resizeFramebuffer(const IntSize&);
-    bool resizeMultisampleFramebuffer(const IntSize&);
-    void resizeDepthStencil(const IntSize&);
-
-    void clearPlatformLayer();
-
-    PassRefPtr<MailboxInfo> recycledMailbox();
-    PassRefPtr<MailboxInfo> createNewMailbox(const TextureInfo&);
-    void deleteMailbox(const WebExternalTextureMailbox&);
-    void freeRecycledMailboxes();
-
-    // Updates the current size of the buffer, ensuring that s_currentResourceUsePixels is updated.
-    void setSize(const IntSize& size);
-
-    void paintFramebufferToCanvas(int framebuffer, int width, int height, bool premultiplyAlpha, ImageBuffer*);
-
-    // This is the order of bytes to use when doing a readback.
-    enum ReadbackOrder {
-        ReadbackRGBA,
-        ReadbackSkia
-    };
-
-    // Helper function which does a readback from the currently-bound
-    // framebuffer into a buffer of a certain size with 4-byte pixels.
-    void readBackFramebuffer(unsigned char* pixels, int width, int height, ReadbackOrder, WebGLImageConversion::AlphaOp);
->>>>>>> miniblink49
 
     // Helper function to flip a bitmap vertically.
     void flipVertically(uint8_t* data, int width, int height);
 
-<<<<<<< HEAD
     // If RGB emulation is required, then the CHROMIUM image's alpha channel
     // must be immediately cleared after it is bound to a texture. Nothing
     // should be allowed to change the alpha channel after this.
@@ -706,81 +508,6 @@ private:
     // Mailboxes that were released by the compositor can be used again by this
     // DrawingBuffer.
     Deque<RefPtr<ColorBuffer>> m_recycledColorBufferQueue;
-=======
-    // Helper to texImage2D with pixel==0 case: pixels are initialized to 0.
-    // By default, alignment is 4, the OpenGL default setting.
-    void texImage2DResourceSafe(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, GLint alignment = 4);
-    // Allocate buffer storage to be sent to compositor using either texImage2D or CHROMIUM_image based on available support.
-    void allocateTextureMemory(TextureInfo*, const IntSize&);
-    void deleteChromiumImageForTexture(TextureInfo*);
-
-    PreserveDrawingBuffer m_preserveDrawingBuffer;
-    bool m_scissorEnabled;
-    Platform3DObject m_texture2DBinding;
-    Platform3DObject m_drawFramebufferBinding;
-    Platform3DObject m_readFramebufferBinding;
-    GLenum m_activeTextureUnit;
-
-    OwnPtr<WebGraphicsContext3D> m_context;
-    OwnPtr<Extensions3DUtil> m_extensionsUtil;
-    IntSize m_size;
-    WebGraphicsContext3D::Attributes m_requestedAttributes;
-    bool m_multisampleExtensionSupported;
-    bool m_packedDepthStencilExtensionSupported;
-    bool m_discardFramebufferSupported;
-    Platform3DObject m_fbo;
-    // DrawingBuffer's output is double-buffered. m_colorBuffer is the back buffer.
-    TextureInfo m_colorBuffer;
-    struct FrontBufferInfo {
-        TextureInfo texInfo;
-        WebExternalTextureMailbox mailbox;
-    };
-    FrontBufferInfo m_frontColorBuffer;
-
-    // This is used when we have OES_packed_depth_stencil.
-    Platform3DObject m_depthStencilBuffer;
-
-    // These are used when we don't.
-    Platform3DObject m_depthBuffer;
-    Platform3DObject m_stencilBuffer;
-
-    // For multisampling.
-    Platform3DObject m_multisampleFBO;
-    Platform3DObject m_multisampleColorBuffer;
-
-    // True if our contents have been modified since the last presentation of this buffer.
-    bool m_contentsChanged;
-
-    // True if commit() has been called since the last time markContentsChanged() had been called.
-    bool m_contentsChangeCommitted;
-    bool m_bufferClearNeeded;
-
-    enum MultisampleMode {
-        None,
-        ImplicitResolve,
-        ExplicitResolve,
-    };
-
-    MultisampleMode m_multisampleMode;
-
-    WebGraphicsContext3D::Attributes m_actualAttributes;
-    unsigned m_internalColorFormat;
-    unsigned m_colorFormat;
-    unsigned m_internalRenderbufferFormat;
-    int m_maxTextureSize;
-    int m_sampleCount;
-    int m_packAlignment;
-    bool m_destructionInProgress;
-    bool m_isHidden;
-    SkFilterQuality m_filterQuality;
-
-    OwnPtr<WebExternalTextureLayer> m_layer;
-
-    // All of the mailboxes that this DrawingBuffer has ever created.
-    Vector<RefPtr<MailboxInfo>> m_textureMailboxes;
-    // Mailboxes that were released by the compositor can be used again by this DrawingBuffer.
-    Deque<WebExternalTextureMailbox> m_recycledMailboxQueue;
->>>>>>> miniblink49
 
     // If the width and height of the Canvas's backing store don't
     // match those that we were given in the most recent call to
@@ -789,7 +516,6 @@ private:
     // used to resize the Canvas.
     SkBitmap m_resizingBitmap;
 
-<<<<<<< HEAD
     // In the case of OffscreenCanvas, we do not want to enable the
     // WebGLImageChromium flag, so we replace all the
     // RuntimeEnabledFeatures::webGLImageChromiumEnabled() call with
@@ -797,10 +523,6 @@ private:
     // DisallowChromiumImage in the case of OffscreenCanvas.
     ChromiumImageUsage m_chromiumImageUsage;
     bool shouldUseChromiumImage();
-=======
-    // Used to flip a bitmap vertically.
-    Vector<uint8_t> m_scanline;
->>>>>>> miniblink49
 };
 
 } // namespace blink

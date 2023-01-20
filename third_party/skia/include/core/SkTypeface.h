@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -9,7 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #ifndef SkTypeface_DEFINED
 #define SkTypeface_DEFINED
 
@@ -18,27 +13,13 @@
 #include "SkFontStyle.h"
 #include "SkRect.h"
 #include "SkString.h"
-=======
-
-#ifndef SkTypeface_DEFINED
-#define SkTypeface_DEFINED
-
-#include "SkFontStyle.h"
-#include "SkLazyPtr.h"
-#include "SkRect.h"
-#include "SkString.h"
-#include "SkWeakRefCnt.h"
->>>>>>> miniblink49
 
 class SkDescriptor;
 class SkFontData;
 class SkFontDescriptor;
 class SkScalerContext;
 struct SkScalerContextRec;
-<<<<<<< HEAD
 struct SkScalerContextEffects;
-=======
->>>>>>> miniblink49
 class SkStream;
 class SkStreamAsset;
 class SkAdvancedTypefaceMetrics;
@@ -63,11 +44,7 @@ public:
     */
     enum Style {
         kNormal = 0,
-<<<<<<< HEAD
         kBold = 0x01,
-=======
-        kBold   = 0x01,
->>>>>>> miniblink49
         kItalic = 0x02,
 
         // helpers
@@ -75,29 +52,18 @@ public:
     };
 
     /** Returns the typeface's intrinsic style attributes. */
-<<<<<<< HEAD
     SkFontStyle fontStyle() const
     {
-=======
-    SkFontStyle fontStyle() const {
->>>>>>> miniblink49
         return fStyle;
     }
 
     /** Returns the typeface's intrinsic style attributes.
      *  @deprecated use fontStyle() instead.
      */
-<<<<<<< HEAD
     Style style() const
     {
         return static_cast<Style>(
             (fStyle.weight() >= SkFontStyle::kSemiBold_Weight ? kBold : kNormal) | (fStyle.slant() != SkFontStyle::kUpright_Slant ? kItalic : kNormal));
-=======
-    Style style() const {
-        return static_cast<Style>(
-            (fStyle.weight() >= SkFontStyle::kSemiBold_Weight ? kBold : kNormal) |
-            (fStyle.slant()  != SkFontStyle::kUpright_Slant ? kItalic : kNormal));
->>>>>>> miniblink49
     }
 
     /** Returns true if style() has the kBold bit set. */
@@ -127,7 +93,6 @@ public:
      */
     static bool Equal(const SkTypeface* facea, const SkTypeface* faceb);
 
-<<<<<<< HEAD
     /** Returns the default typeface, which is never nullptr. */
     static sk_sp<SkTypeface> MakeDefault(Style style = SkTypeface::kNormal);
 #ifdef SK_SUPPORT_LEGACY_TYPEFACE_PTR
@@ -193,79 +158,18 @@ public:
         transferred, so the caller must not reference it again.
     */
     static sk_sp<SkTypeface> MakeFromFontData(SkFontData*);
-=======
-    /**
-     *  Returns a ref() to the default typeface. The caller must call unref()
-     *  when they are done referencing the object. Never returns NULL.
-     */
-    static SkTypeface* RefDefault(Style style = SkTypeface::kNormal);
-
-    /** Return a new reference to the typeface that most closely matches the
-        requested familyName and style. Pass null as the familyName to return
-        the default font for the requested style. Will never return null
-
-        @param familyName  May be NULL. The name of the font family.
-        @param style       The style (normal, bold, italic) of the typeface.
-        @return reference to the closest-matching typeface. Call must call
-                unref() when they are done.
-    */
-    static SkTypeface* CreateFromName(const char familyName[], Style style);
-
-    /** Return a new reference to the typeface that most closely matches the
-        requested typeface and specified Style. Use this call if you want to
-        pick a new style from the same family of the existing typeface.
-        If family is NULL, this selects from the default font's family.
-
-        @param family  May be NULL. The name of the existing type face.
-        @param s       The style (normal, bold, italic) of the type face.
-        @return reference to the closest-matching typeface. Call must call
-                unref() when they are done.
-    */
-    static SkTypeface* CreateFromTypeface(const SkTypeface* family, Style s);
-
-    /** Return a new typeface given a file. If the file does not exist, or is
-        not a valid font file, returns null.
-    */
-    static SkTypeface* CreateFromFile(const char path[], int index = 0);
-
-    /** Return a new typeface given a stream. If the stream is
-        not a valid font file, returns null. Ownership of the stream is
-        transferred, so the caller must not reference it again.
-    */
-    static SkTypeface* CreateFromStream(SkStreamAsset* stream, int index = 0);
-
-    /** Return a new typeface given font data and configuration. If the data
-        is not valid font data, returns null. Ownership of the font data is
-        transferred, so the caller must not reference it again.
-    */
-    static SkTypeface* CreateFromFontData(SkFontData*);
->>>>>>> miniblink49
 
     /** Write a unique signature to a stream, sufficient to reconstruct a
         typeface referencing the same font when Deserialize is called.
      */
     void serialize(SkWStream*) const;
 
-<<<<<<< HEAD
     /** Given the data previously written by serialize(), return a new instance
         of a typeface referring to the same font. If that font is not available,
         return nullptr.
         Does not affect ownership of SkStream.
      */
     static sk_sp<SkTypeface> MakeDeserialize(SkStream*);
-=======
-    /** Like serialize, but write the whole font (not just a signature) if possible.
-     */
-    void serializeForcingEmbedding(SkWStream*) const;
-
-    /** Given the data previously written by serialize(), return a new instance
-        to a typeface referring to the same font. If that font is not available,
-        return null. If an instance is returned, the caller is responsible for
-        calling unref() when they are done with it.
-        Does not affect ownership of SkStream.
-     */
-    static SkTypeface* Deserialize(SkStream*);
->>>>>>> miniblink49
 
     enum Encoding {
         kUTF8_Encoding,
@@ -290,11 +194,7 @@ public:
      *          glyphs parameter is NULL.
      */
     int charsToGlyphs(const void* chars, Encoding encoding, uint16_t glyphs[],
-<<<<<<< HEAD
         int glyphCount) const;
-=======
-                      int glyphCount) const;
->>>>>>> miniblink49
 
     /**
      *  Return the number of glyphs in the typeface.
@@ -339,11 +239,7 @@ public:
      *  then 0 is returned.
      */
     size_t getTableData(SkFontTableTag tag, size_t offset, size_t length,
-<<<<<<< HEAD
         void* data) const;
-=======
-                        void* data) const;
->>>>>>> miniblink49
 
     /**
      *  Return the units-per-em value for this typeface, or zero if there is an
@@ -372,11 +268,7 @@ public:
      *  written, but none of them should be interpreted as valid values).
      */
     bool getKerningPairAdjustments(const uint16_t glyphs[], int count,
-<<<<<<< HEAD
         int32_t adjustments[]) const;
-=======
-                                   int32_t adjustments[]) const;
->>>>>>> miniblink49
 
     struct LocalizedString {
         SkString fString;
@@ -386,11 +278,7 @@ public:
     public:
         virtual ~LocalizedStrings() { }
         virtual bool next(LocalizedString* localizedString) = 0;
-<<<<<<< HEAD
         void unref() { delete this; }
-=======
-        void unref() { SkDELETE(this); }
->>>>>>> miniblink49
     };
     /**
      *  Returns an iterator which will attempt to enumerate all of the
@@ -426,13 +314,8 @@ public:
      *  if allowFailure is true, this returns NULL, else it returns a
      *  dummy scalercontext that will not crash, but will draw nothing.
      */
-<<<<<<< HEAD
     SkScalerContext* createScalerContext(const SkScalerContextEffects&, const SkDescriptor*,
         bool allowFailure = false) const;
-=======
-    SkScalerContext* createScalerContext(const SkDescriptor*,
-                                         bool allowFailure = false) const;
->>>>>>> miniblink49
 
     /**
      *  Return a rectangle (scaled to 1-pt) that represents the union of the bounds of all
@@ -442,7 +325,6 @@ public:
     SkRect getBounds() const;
 
     // PRIVATE / EXPERIMENTAL -- do not call
-<<<<<<< HEAD
     void filterRec(SkScalerContextRec* rec) const
     {
         this->onFilterRec(rec);
@@ -450,32 +332,17 @@ public:
     // PRIVATE / EXPERIMENTAL -- do not call
     void getFontDescriptor(SkFontDescriptor* desc, bool* isLocal) const
     {
-=======
-    void filterRec(SkScalerContextRec* rec) const {
-        this->onFilterRec(rec);
-    }
-    // PRIVATE / EXPERIMENTAL -- do not call
-    void getFontDescriptor(SkFontDescriptor* desc, bool* isLocal) const {
->>>>>>> miniblink49
         this->onGetFontDescriptor(desc, isLocal);
     }
 
 protected:
     // The type of advance data wanted.
     enum PerGlyphInfo {
-<<<<<<< HEAD
         kNo_PerGlyphInfo = 0x0, // Don't populate any per glyph info.
         kHAdvance_PerGlyphInfo = 0x1, // Populate horizontal advance data.
         kVAdvance_PerGlyphInfo = 0x2, // Populate vertical advance data.
         kGlyphNames_PerGlyphInfo = 0x4, // Populate glyph names (Type 1 only).
         kToUnicode_PerGlyphInfo = 0x8 // Populate ToUnicode table, ignored
-=======
-        kNo_PerGlyphInfo         = 0x0, // Don't populate any per glyph info.
-        kHAdvance_PerGlyphInfo   = 0x1, // Populate horizontal advance data.
-        kVAdvance_PerGlyphInfo   = 0x2, // Populate vertical advance data.
-        kGlyphNames_PerGlyphInfo = 0x4, // Populate glyph names (Type 1 only).
-        kToUnicode_PerGlyphInfo  = 0x8  // Populate ToUnicode table, ignored
->>>>>>> miniblink49
         // for Type 1 fonts
     };
 
@@ -490,7 +357,6 @@ protected:
     friend class SkScalerContext;
     static SkTypeface* GetDefaultTypeface(Style style = SkTypeface::kNormal);
 
-<<<<<<< HEAD
     virtual SkScalerContext* onCreateScalerContext(const SkScalerContextEffects&,
         const SkDescriptor*) const = 0;
     virtual void onFilterRec(SkScalerContextRec*) const = 0;
@@ -498,14 +364,6 @@ protected:
         PerGlyphInfo,
         const uint32_t* glyphIDs,
         uint32_t glyphIDsCount) const = 0;
-=======
-    virtual SkScalerContext* onCreateScalerContext(const SkDescriptor*) const = 0;
-    virtual void onFilterRec(SkScalerContextRec*) const = 0;
-    virtual SkAdvancedTypefaceMetrics* onGetAdvancedTypefaceMetrics(
-                        PerGlyphInfo,
-                        const uint32_t* glyphIDs,
-                        uint32_t glyphIDsCount) const = 0;
->>>>>>> miniblink49
 
     virtual SkStreamAsset* onOpenStream(int* ttcIndex) const = 0;
     // TODO: make pure virtual.
@@ -514,20 +372,12 @@ protected:
     virtual void onGetFontDescriptor(SkFontDescriptor*, bool* isLocal) const = 0;
 
     virtual int onCharsToGlyphs(const void* chars, Encoding, uint16_t glyphs[],
-<<<<<<< HEAD
         int glyphCount) const = 0;
-=======
-                                int glyphCount) const = 0;
->>>>>>> miniblink49
     virtual int onCountGlyphs() const = 0;
 
     virtual int onGetUPEM() const = 0;
     virtual bool onGetKerningPairAdjustments(const uint16_t glyphs[], int count,
-<<<<<<< HEAD
         int32_t adjustments[]) const;
-=======
-                                             int32_t adjustments[]) const;
->>>>>>> miniblink49
 
     /** Returns the family name of the typeface as known by its font manager.
      *  This name may or may not be produced by the family name iterator.
@@ -539,28 +389,17 @@ protected:
 
     virtual int onGetTableTags(SkFontTableTag tags[]) const = 0;
     virtual size_t onGetTableData(SkFontTableTag, size_t offset,
-<<<<<<< HEAD
         size_t length, void* data) const = 0;
-=======
-                                  size_t length, void* data) const = 0;
->>>>>>> miniblink49
 
     virtual bool onComputeBounds(SkRect*) const;
 
 private:
     friend class SkGTypeface;
-<<<<<<< HEAD
     friend class SkRandomTypeface;
-=======
->>>>>>> miniblink49
     friend class SkPDFFont;
     friend class SkPDFCIDFont;
     friend class GrPathRendering;
     friend class GrGLPathRendering;
-<<<<<<< HEAD
-=======
-    friend class SkRandomTypeface; // For debugging
->>>>>>> miniblink49
 
     /** Retrieve detailed typeface metrics.  Used by the PDF backend.
      @param perGlyphInfo Indicate what glyph specific information (advances,
@@ -573,7 +412,6 @@ private:
      @return The returned object has already been referenced.
      */
     SkAdvancedTypefaceMetrics* getAdvancedTypefaceMetrics(
-<<<<<<< HEAD
         PerGlyphInfo,
         const uint32_t* glyphIDs = NULL,
         uint32_t glyphIDsCount = 0) const;
@@ -587,26 +425,6 @@ private:
 
     friend class SkPaint;
     friend class SkGlyphCache; // GetDefaultTypeface
-=======
-                          PerGlyphInfo,
-                          const uint32_t* glyphIDs = NULL,
-                          uint32_t glyphIDsCount = 0) const;
-
-private:
-    static SkTypeface* CreateDefault(int style);  // SkLazyPtr requires an int, not a Style.
-    static void        DeleteDefault(SkTypeface*);
-
-    struct BoundsComputer;
-//    friend struct BoundsComputer;
-
-    SkLazyPtr<SkRect>   fLazyBounds;
-    SkFontID            fUniqueID;
-    SkFontStyle         fStyle;
-    bool                fIsFixedPitch;
-
-    friend class SkPaint;
-    friend class SkGlyphCache;  // GetDefaultTypeface
->>>>>>> miniblink49
 
     typedef SkWeakRefCnt INHERITED;
 };

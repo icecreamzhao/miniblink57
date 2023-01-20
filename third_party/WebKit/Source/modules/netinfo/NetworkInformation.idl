@@ -2,26 +2,19 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
 // https://wicg.github.io/netinfo/#the-networkinformation-interface
 
-=======
->>>>>>> miniblink49
 enum ConnectionType {
     "cellular",
     "bluetooth",
     "ethernet",
     "wifi",
-<<<<<<< HEAD
     "wimax",
-=======
->>>>>>> miniblink49
     "other",
     "none",
     "unknown"
 };
 
-<<<<<<< HEAD
 typedef unrestricted double Megabit;
 
 [
@@ -35,15 +28,3 @@ typedef unrestricted double Megabit;
     [RuntimeEnabled=NetInfoDownlinkMax, MeasureAs=NetInfoOnChange] attribute EventHandler onchange;
     [MeasureAs=NetInfoOnTypeChange] attribute EventHandler ontypechange;
 };
-=======
-[
-    RuntimeEnabled=NetworkInformation,
-    Exposed=(Window,Worker),
-    GarbageCollected,
-    ActiveDOMObject
-] interface NetworkInformation : EventTarget {
-    readonly attribute ConnectionType type;
-    attribute EventHandler ontypechange;
-};
-
->>>>>>> miniblink49

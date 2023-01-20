@@ -11,7 +11,6 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 // This class listens to device light data and notifies all registered
 // controllers.
 class DeviceLightDispatcher final
@@ -20,11 +19,6 @@ class DeviceLightDispatcher final
       public WebDeviceLightListener {
     USING_GARBAGE_COLLECTED_MIXIN(DeviceLightDispatcher);
 
-=======
-// This class listens to device light data and notifies all registered controllers.
-class DeviceLightDispatcher final : public GarbageCollectedFinalized<DeviceLightDispatcher>, public PlatformEventDispatcher, public WebDeviceLightListener {
-    USING_GARBAGE_COLLECTED_MIXIN(DeviceLightDispatcher);
->>>>>>> miniblink49
 public:
     static DeviceLightDispatcher& instance();
     ~DeviceLightDispatcher() override;

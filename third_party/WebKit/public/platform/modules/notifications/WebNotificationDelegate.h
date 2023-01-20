@@ -8,13 +8,8 @@
 namespace blink {
 
 // A delegate through which the embedder can trigger events on a Document-bound
-<<<<<<< HEAD
 // Web Notifications object. Service Worker-bound Web Notifications will not
 // have a delegate, as their events will be fired on a Service Worker instead.
-=======
-// Web Notifications object. Service Worker-bound Web Notifications will not have
-// a delegate, as their events will be fired on a Service Worker instead.
->>>>>>> miniblink49
 class WebNotificationDelegate {
 public:
     virtual void dispatchClickEvent() = 0;

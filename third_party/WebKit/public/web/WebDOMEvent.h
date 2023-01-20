@@ -33,15 +33,6 @@
 
 #include "../platform/WebCommon.h"
 #include "../platform/WebPrivatePtr.h"
-<<<<<<< HEAD
-=======
-#include "../platform/WebString.h"
-#include "WebNode.h"
-
-#if BLINK_IMPLEMENTATION
-namespace WTF { template <typename T> class PassRefPtr; }
-#endif
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -49,15 +40,6 @@ class Event;
 
 class WebDOMEvent {
 public:
-<<<<<<< HEAD
-=======
-    enum PhaseType {
-        CapturingPhase     = 1,
-        AtTarget           = 2,
-        BubblingPhase      = 3
-    };
-
->>>>>>> miniblink49
     ~WebDOMEvent() { reset(); }
 
     WebDOMEvent() { }
@@ -73,7 +55,6 @@ public:
 
     bool isNull() const { return m_private.isNull(); }
 
-<<<<<<< HEAD
 #if BLINK_IMPLEMENTATION
     WebDOMEvent(Event*);
     operator Event*() const;
@@ -81,50 +62,14 @@ public:
 
     template <typename T>
     T to()
-=======
-    BLINK_EXPORT WebString type() const;
-    BLINK_EXPORT WebNode target() const;
-    BLINK_EXPORT WebNode currentTarget() const;
-
-    BLINK_EXPORT PhaseType eventPhase() const;
-    BLINK_EXPORT bool bubbles() const;
-    BLINK_EXPORT bool cancelable() const;
-
-    BLINK_EXPORT bool isUIEvent() const;
-    BLINK_EXPORT bool isMouseEvent() const;
-    BLINK_EXPORT bool isMutationEvent() const;
-    BLINK_EXPORT bool isKeyboardEvent() const;
-    BLINK_EXPORT bool isTextEvent() const;
-    BLINK_EXPORT bool isCompositionEvent() const;
-    BLINK_EXPORT bool isDragEvent() const;
-    BLINK_EXPORT bool isClipboardEvent() const;
-    BLINK_EXPORT bool isMessageEvent() const;
-    BLINK_EXPORT bool isWheelEvent() const;
-    BLINK_EXPORT bool isBeforeTextInsertedEvent() const;
-    BLINK_EXPORT bool isPageTransitionEvent() const;
-    BLINK_EXPORT bool isPopStateEvent() const;
-    BLINK_EXPORT bool isProgressEvent() const;
-    BLINK_EXPORT bool isXMLHttpRequestProgressEvent() const;
-
-#if BLINK_IMPLEMENTATION
-    WebDOMEvent(const PassRefPtrWillBeRawPtr<Event>&);
-    operator PassRefPtrWillBeRawPtr<Event>() const;
-#endif
-
-    template<typename T> T to()
->>>>>>> miniblink49
     {
         T res;
         res.WebDOMEvent::assign(*this);
         return res;
     }
 
-<<<<<<< HEAD
     template <typename T>
     const T toConst() const
-=======
-    template<typename T> const T toConst() const
->>>>>>> miniblink49
     {
         T res;
         res.WebDOMEvent::assign(*this);
@@ -133,26 +78,16 @@ public:
 
 protected:
 #if BLINK_IMPLEMENTATION
-<<<<<<< HEAD
     void assign(Event*);
 
     template <typename T>
     T* unwrap()
-=======
-    void assign(const PassRefPtrWillBeRawPtr<Event>&);
-
-    template<typename T> T* unwrap()
->>>>>>> miniblink49
     {
         return static_cast<T*>(m_private.get());
     }
 
-<<<<<<< HEAD
     template <typename T>
     const T* constUnwrap() const
-=======
-    template<typename T> const T* constUnwrap() const
->>>>>>> miniblink49
     {
         return static_cast<const T*>(m_private.get());
     }

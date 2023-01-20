@@ -32,18 +32,21 @@
 #include "core/html/parser/ParserSynchronizationPolicy.h"
 #include "core/loader/TextResourceDecoderBuilder.h"
 #include "platform/heap/Handle.h"
-#include "wtf/RefCounted.h"
-#include "wtf/text/WTFString.h"
+#include "wtf/Forward.h"
 
 namespace blink {
 
 class Document;
 class DocumentParser;
 
-class DocumentWriter : public RefCountedWillBeGarbageCollectedFinalized<DocumentWriter> {
+class DocumentWriter final : public GarbageCollectedFinalized<DocumentWriter> {
     WTF_MAKE_NONCOPYABLE(DocumentWriter);
+
 public:
-    static PassRefPtrWillBeRawPtr<DocumentWriter> create(Document*, ParserSynchronizationPolicy, const AtomicString& mimeType = emptyAtom, const AtomicString& encoding = emptyAtom);
+    static DocumentWriter* create(Document*,
+        ParserSynchronizationPolicy,
+        const AtomicString& mimeType,
+        const AtomicString& encoding);
 
     ~DocumentWriter();
     DECLARE_TRACE();
@@ -61,12 +64,15 @@ public:
     void setDocumentWasLoadedAsPartOfNavigation();
 
 private:
-    DocumentWriter(Document*, ParserSynchronizationPolicy, const AtomicString& mimeType, const AtomicString& encoding);
+    DocumentWriter(Document*,
+        ParserSynchronizationPolicy,
+        const AtomicString& mimeType,
+        const AtomicString& encoding);
 
-    RawPtrWillBeMember<Document> m_document;
+    Member<Document> m_document;
     TextResourceDecoderBuilder m_decoderBuilder;
 
-    RefPtrWillBeMember<DocumentParser> m_parser;
+    Member<DocumentParser> m_parser;
 };
 
 } // namespace blink

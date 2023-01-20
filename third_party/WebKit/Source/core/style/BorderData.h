@@ -29,13 +29,17 @@
 #include "core/style/NinePieceImage.h"
 #include "platform/LengthSize.h"
 #include "platform/geometry/IntRect.h"
+#include "wtf/Allocator.h"
 
 namespace blink {
 
 class BorderData {
-friend class ComputedStyle;
+    DISALLOW_NEW();
+    friend class ComputedStyle;
+
 public:
-    BorderData() : m_topLeft(Length(0, Fixed), Length(0, Fixed))
+    BorderData()
+        : m_topLeft(Length(0, Fixed), Length(0, Fixed))
         , m_topRight(Length(0, Fixed), Length(0, Fixed))
         , m_bottomLeft(Length(0, Fixed), Length(0, Fixed))
         , m_bottomRight(Length(0, Fixed), Length(0, Fixed))
@@ -44,14 +48,10 @@ public:
 
     bool hasBorder() const
     {
-        bool haveImage = m_image.hasImage();
-        return m_left.nonZero(!haveImage) || m_right.nonZero(!haveImage) || m_top.nonZero(!haveImage) || m_bottom.nonZero(!haveImage);
+        return m_left.nonZero() || m_right.nonZero() || m_top.nonZero() || m_bottom.nonZero();
     }
 
-    bool hasBorderFill() const
-    {
-        return m_image.hasImage() && m_image.fill();
-    }
+    bool hasBorderFill() const { return m_image.hasImage() && m_image.fill(); }
 
     bool hasBorderRadius() const
     {
@@ -68,54 +68,57 @@ public:
 
     int borderLeftWidth() const
     {
-        if (!m_image.hasImage() && (m_left.style() == BNONE || m_left.style() == BHIDDEN))
+        if (m_left.style() == BorderStyleNone || m_left.style() == BorderStyleHidden)
             return 0;
         return m_left.width();
     }
 
     int borderRightWidth() const
     {
-        if (!m_image.hasImage() && (m_right.style() == BNONE || m_right.style() == BHIDDEN))
+        if (m_right.style() == BorderStyleNone || m_right.style() == BorderStyleHidden)
             return 0;
         return m_right.width();
     }
 
     int borderTopWidth() const
     {
-        if (!m_image.hasImage() && (m_top.style() == BNONE || m_top.style() == BHIDDEN))
+        if (m_top.style() == BorderStyleNone || m_top.style() == BorderStyleHidden)
             return 0;
         return m_top.width();
     }
 
     int borderBottomWidth() const
     {
-        if (!m_image.hasImage() && (m_bottom.style() == BNONE || m_bottom.style() == BHIDDEN))
+        if (m_bottom.style() == BorderStyleNone || m_bottom.style() == BorderStyleHidden)
             return 0;
         return m_bottom.width();
     }
 
     bool operator==(const BorderData& o) const
     {
-        return m_left == o.m_left && m_right == o.m_right && m_top == o.m_top && m_bottom == o.m_bottom && m_image == o.m_image
-               && m_topLeft == o.m_topLeft && m_topRight == o.m_topRight && m_bottomLeft == o.m_bottomLeft && m_bottomRight == o.m_bottomRight;
+        return m_left == o.m_left && m_right == o.m_right && m_top == o.m_top && m_bottom == o.m_bottom && m_image == o.m_image && radiiEqual(o);
     }
 
     bool visuallyEqual(const BorderData& o) const
     {
-        return m_left.visuallyEqual(o.m_left)
-            && m_right.visuallyEqual(o.m_right)
-            && m_top.visuallyEqual(o.m_top)
-            && m_bottom.visuallyEqual(o.m_bottom)
-            && m_image == o.m_image
-            && m_topLeft == o.m_topLeft
-            && m_topRight == o.m_topRight
-            && m_bottomLeft == o.m_bottomLeft
-            && m_bottomRight == o.m_bottomRight;
+        return m_left.visuallyEqual(o.m_left) && m_right.visuallyEqual(o.m_right) && m_top.visuallyEqual(o.m_top) && m_bottom.visuallyEqual(o.m_bottom) && m_image == o.m_image && radiiEqual(o);
     }
 
-    bool operator!=(const BorderData& o) const
+    bool visualOverflowEqual(const BorderData& o) const
     {
-        return !(*this == o);
+        return m_image.outset() == o.m_image.outset();
+    }
+
+    bool operator!=(const BorderData& o) const { return !(*this == o); }
+
+    bool sizeEquals(const BorderData& o) const
+    {
+        return borderLeftWidth() == o.borderLeftWidth() && borderTopWidth() == o.borderTopWidth() && borderRightWidth() == o.borderRightWidth() && borderBottomWidth() == o.borderBottomWidth();
+    }
+
+    bool radiiEqual(const BorderData& o) const
+    {
+        return m_topLeft == o.m_topLeft && m_topRight == o.m_topRight && m_bottomLeft == o.m_bottomLeft && m_bottomRight == o.m_bottomRight;
     }
 
     const BorderValue& left() const { return m_left; }

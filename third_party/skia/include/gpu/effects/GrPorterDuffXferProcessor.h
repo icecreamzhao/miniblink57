@@ -16,7 +16,6 @@ class GrProcOptInfo;
 
 class GrPorterDuffXPFactory : public GrXPFactory {
 public:
-<<<<<<< HEAD
     static sk_sp<GrXPFactory> Make(SkXfermode::Mode mode);
 
     void getInvariantBlendedColor(const GrProcOptInfo& colorPOI,
@@ -50,20 +49,11 @@ public:
     }
 
     static bool SrcOverWillNeedDstTexture(const GrCaps&, const GrPipelineOptimizations&);
-=======
-    static GrXPFactory* Create(SkXfermode::Mode mode); 
-
-    bool supportsRGBCoverage(GrColor knownColor, uint32_t knownColorFlags) const override;
-
-    void getInvariantBlendedColor(const GrProcOptInfo& colorPOI,
-                                  GrXPFactory::InvariantBlendedColor*) const override;
->>>>>>> miniblink49
 
 private:
     GrPorterDuffXPFactory(SkXfermode::Mode);
 
     GrXferProcessor* onCreateXferProcessor(const GrCaps& caps,
-<<<<<<< HEAD
         const GrPipelineOptimizations& optimizations,
         bool hasMixedSamples,
         const DstTexture*) const override;
@@ -72,19 +62,6 @@ private:
 
     bool onIsEqual(const GrXPFactory& xpfBase) const override
     {
-=======
-                                           const GrProcOptInfo& colorPOI,
-                                           const GrProcOptInfo& coveragePOI,
-                                           bool hasMixedSamples,
-                                           const DstTexture*) const override;
-
-    bool willReadDstColor(const GrCaps& caps,
-                          const GrProcOptInfo& colorPOI,
-                          const GrProcOptInfo& coveragePOI,
-                          bool hasMixedSamples) const override;
-
-    bool onIsEqual(const GrXPFactory& xpfBase) const override {
->>>>>>> miniblink49
         const GrPorterDuffXPFactory& xpf = xpfBase.cast<GrPorterDuffXPFactory>();
         return fXfermode == xpf.fXfermode;
     }

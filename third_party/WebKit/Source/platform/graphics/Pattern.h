@@ -31,7 +31,6 @@
 
 #include "platform/PlatformExport.h"
 #include "platform/graphics/Image.h"
-<<<<<<< HEAD
 #include "third_party/skia/include/core/SkRefCnt.h"
 
 #include "wtf/Noncopyable.h"
@@ -41,21 +40,10 @@
 class SkMatrix;
 class SkPaint;
 class SkPicture;
-=======
-#include "platform/transforms/AffineTransform.h"
-
-#include "wtf/PassRefPtr.h"
-#include "wtf/RefCounted.h"
-#include "wtf/RefPtr.h"
-
-class SkPicture;
-class SkShader;
->>>>>>> miniblink49
 
 namespace blink {
 
 class PLATFORM_EXPORT Pattern : public RefCounted<Pattern> {
-<<<<<<< HEAD
     WTF_MAKE_NONCOPYABLE(Pattern);
 
 public:
@@ -84,52 +72,15 @@ public:
 protected:
     virtual sk_sp<SkShader> createShader(const SkMatrix&) = 0;
     virtual bool isLocalMatrixChanged(const SkMatrix&) const;
-=======
-public:
-    enum RepeatMode {
-        RepeatModeX    = 1 << 0,
-        RepeatModeY    = 1 << 1,
-
-        RepeatModeNone = 0,
-        RepeatModeXY   = RepeatModeX | RepeatModeY
-    };
-
-    static PassRefPtr<Pattern> createBitmapPattern(PassRefPtr<Image> tileImage,
-        RepeatMode = RepeatModeXY);
-    static PassRefPtr<Pattern> createPicturePattern(PassRefPtr<const SkPicture>,
-        RepeatMode = RepeatModeXY);
-    virtual ~Pattern();
-
-    SkShader* shader();
-
-    void setPatternSpaceTransform(const AffineTransform& patternSpaceTransformation);
-    const AffineTransform& patternSpaceTransform() const { return m_patternSpaceTransformation; }
-
-    bool isRepeatX() { return m_repeatMode & RepeatModeX; }
-    bool isRepeatY() { return m_repeatMode & RepeatModeY; }
-    bool isRepeatXY() { return m_repeatMode == RepeatModeXY; }
-
-protected:
-    virtual PassRefPtr<SkShader> createShader() = 0;
->>>>>>> miniblink49
 
     void adjustExternalMemoryAllocated(int64_t delta);
 
     RepeatMode m_repeatMode;
-<<<<<<< HEAD
 
     Pattern(RepeatMode, int64_t externalMemoryAllocated = 0);
     mutable sk_sp<SkShader> m_cachedShader;
 
 private:
-=======
-    AffineTransform m_patternSpaceTransformation;
-
-    Pattern(RepeatMode, int64_t externalMemoryAllocated = 0);
-
-private:
-    RefPtr<SkShader> m_pattern;
->>>>>>> miniblink49
     int64_t m_externalMemoryAllocated;
 };
 

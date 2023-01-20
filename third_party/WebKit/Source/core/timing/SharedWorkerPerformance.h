@@ -30,23 +30,27 @@
 #ifndef SharedWorkerPerformance_h
 #define SharedWorkerPerformance_h
 
+#include "core/workers/SharedWorker.h"
 #include "platform/Supplementable.h"
 #include "platform/heap/Handle.h"
 
 namespace blink {
 
-class ExecutionContext;
+class ScriptState;
 class SharedWorker;
 
-class SharedWorkerPerformance final : public NoBaseWillBeGarbageCollected<SharedWorkerPerformance>, public WillBeHeapSupplement<SharedWorker> {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(SharedWorkerPerformance);
+class SharedWorkerPerformance final
+    : public GarbageCollected<SharedWorkerPerformance>,
+      public Supplement<SharedWorker> {
+    USING_GARBAGE_COLLECTED_MIXIN(SharedWorkerPerformance);
+
 public:
     static SharedWorkerPerformance& from(SharedWorker&);
 
-    static double workerStart(ExecutionContext*, SharedWorker&);
+    static double workerStart(ScriptState*, SharedWorker&);
     double getWorkerStart(ExecutionContext*, SharedWorker&) const;
 
-    DEFINE_INLINE_VIRTUAL_TRACE() { WillBeHeapSupplement<SharedWorker>::trace(visitor); }
+    DEFINE_INLINE_VIRTUAL_TRACE() { Supplement<SharedWorker>::trace(visitor); }
 
 private:
     SharedWorkerPerformance();

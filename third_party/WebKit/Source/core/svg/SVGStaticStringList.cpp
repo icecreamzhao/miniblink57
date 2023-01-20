@@ -28,23 +28,22 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/svg/SVGStaticStringList.h"
 
 #include "core/svg/SVGElement.h"
+#include "core/svg/SVGStringListTearOff.h"
 
 namespace blink {
 
-SVGStaticStringList::SVGStaticStringList(SVGElement* contextElement, const QualifiedName& attributeName)
+SVGStaticStringList::SVGStaticStringList(SVGElement* contextElement,
+    const QualifiedName& attributeName)
     : SVGAnimatedPropertyBase(AnimatedUnknown, contextElement, attributeName)
     , m_value(SVGStringList::create())
 {
     ASSERT(contextElement);
 }
 
-SVGStaticStringList::~SVGStaticStringList()
-{
-}
+SVGStaticStringList::~SVGStaticStringList() { }
 
 DEFINE_TRACE(SVGStaticStringList)
 {
@@ -58,18 +57,24 @@ SVGPropertyBase* SVGStaticStringList::currentValueBase()
     return m_value.get();
 }
 
+const SVGPropertyBase& SVGStaticStringList::baseValueBase() const
+{
+    ASSERT_NOT_REACHED();
+    return *m_value;
+}
+
 bool SVGStaticStringList::isAnimating() const
 {
     return false;
 }
 
-PassRefPtrWillBeRawPtr<SVGPropertyBase> SVGStaticStringList::createAnimatedValue()
+SVGPropertyBase* SVGStaticStringList::createAnimatedValue()
 {
     ASSERT_NOT_REACHED();
     return nullptr;
 }
 
-void SVGStaticStringList::setAnimatedValue(PassRefPtrWillBeRawPtr<SVGPropertyBase>)
+void SVGStaticStringList::setAnimatedValue(SVGPropertyBase*)
 {
     ASSERT_NOT_REACHED();
 }
@@ -87,19 +92,15 @@ bool SVGStaticStringList::needsSynchronizeAttribute()
 SVGStringListTearOff* SVGStaticStringList::tearOff()
 {
     if (!m_tearOff)
-        m_tearOff = SVGStringListTearOff::create(m_value, contextElement(), PropertyIsNotAnimVal, attributeName());
+        m_tearOff = SVGStringListTearOff::create(
+            m_value, contextElement(), PropertyIsNotAnimVal, attributeName());
 
     return m_tearOff.get();
 }
 
-void SVGStaticStringList::setBaseValueAsString(const String& value, SVGParsingError& parseError)
+SVGParsingError SVGStaticStringList::setBaseValueAsString(const String& value)
 {
-    TrackExceptionState es;
-
-    m_value->setValueAsString(value, es);
-
-    if (es.hadException())
-        parseError = ParsingAttributeFailedError;
+    return m_value->setValueAsString(value);
 }
 
-}
+} // namespace blink

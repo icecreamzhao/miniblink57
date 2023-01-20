@@ -9,10 +9,7 @@
 #include "core/dom/ContextLifecycleObserver.h"
 #include "core/dom/ExceptionCode.h"
 #include "core/html/HTMLMediaElement.h"
-<<<<<<< HEAD
 #include "modules/ModulesExport.h"
-=======
->>>>>>> miniblink49
 #include "platform/Supplementable.h"
 #include "platform/heap/Handle.h"
 
@@ -21,7 +18,6 @@ namespace blink {
 class HTMLMediaElement;
 class ScriptState;
 
-<<<<<<< HEAD
 class MODULES_EXPORT HTMLMediaElementAudioOutputDevice final
     : public GarbageCollectedFinalized<HTMLMediaElementAudioOutputDevice>,
       public Supplement<HTMLMediaElement> {
@@ -33,14 +29,6 @@ public:
     static ScriptPromise setSinkId(ScriptState*,
         HTMLMediaElement&,
         const String& sinkId);
-=======
-class HTMLMediaElementAudioOutputDevice final : public NoBaseWillBeGarbageCollectedFinalized<HTMLMediaElementAudioOutputDevice>, public WillBeHeapSupplement<HTMLMediaElement> {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(HTMLMediaElementAudioOutputDevice);
-public:
-    DECLARE_VIRTUAL_TRACE();
-    static String sinkId(HTMLMediaElement&);
-    static ScriptPromise setSinkId(ScriptState*, HTMLMediaElement&, const String& sinkId);
->>>>>>> miniblink49
     static HTMLMediaElementAudioOutputDevice& from(HTMLMediaElement&);
     void setSinkId(const String&);
 

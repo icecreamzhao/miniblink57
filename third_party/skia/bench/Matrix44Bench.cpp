@@ -11,7 +11,6 @@
 #include "SkString.h"
 
 class Matrix44Bench : public Benchmark {
-<<<<<<< HEAD
     SkString fName;
 
 public:
@@ -22,15 +21,6 @@ public:
 
     bool isSuitableFor(Backend backend) override
     {
-=======
-    SkString    fName;
-public:
-    Matrix44Bench(const char name[]) {
-        fName.printf("matrix44_%s", name);
-    }
-
-    bool isSuitableFor(Backend backend) override {
->>>>>>> miniblink49
         return backend == kNonRendering_Backend;
     }
 
@@ -39,7 +29,6 @@ public:
 protected:
     virtual int mulLoopCount() const { return 1; }
 
-<<<<<<< HEAD
     const char* onGetName() override
     {
         return fName.c_str();
@@ -47,13 +36,6 @@ protected:
 
     void onDraw(int loops, SkCanvas*) override
     {
-=======
-    virtual const char* onGetName() {
-        return fName.c_str();
-    }
-
-    virtual void onDraw(const int loops, SkCanvas*) {
->>>>>>> miniblink49
         for (int i = 0; i < loops; i++) {
             this->performTest();
         }
@@ -74,7 +56,6 @@ public:
         fM1.set(0, 0, 0);
         fM2.set(3, 3, 0);
     }
-<<<<<<< HEAD
 
 protected:
     void performTest() override
@@ -86,16 +67,6 @@ protected:
         }
     }
 
-=======
-protected:
-    virtual void performTest() {
-        for (int i = 0; i < 10; ++i) {
-            (void) (fM0 == fM1);
-            (void) (fM1 == fM2);
-            (void) (fM2 == fM0);
-        }
-    }
->>>>>>> miniblink49
 private:
     SkMatrix44 fM0, fM1, fM2;
     typedef Matrix44Bench INHERITED;
@@ -107,7 +78,6 @@ public:
         : INHERITED("setidentity")
         , mat(SkMatrix44::kIdentity_Constructor)
     {
-<<<<<<< HEAD
         double rowMajor[16] = { 1, 2, 3, 4,
             5, 6, 7, 8,
             9, 10, 11, 12,
@@ -118,25 +88,11 @@ public:
 protected:
     void performTest() override
     {
-=======
-        double rowMajor[16] =
-                { 1, 2, 3, 4,
-                  5, 6, 7, 8,
-                  9, 10, 11, 12,
-                  13, 14, 15, 16};
-        mat.setRowMajord(rowMajor);
-    }
-protected:
-    virtual void performTest() {
->>>>>>> miniblink49
         for (int i = 0; i < 10; ++i) {
             mat.setIdentity();
         }
     }
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 private:
     SkMatrix44 mat;
     typedef Matrix44Bench INHERITED;
@@ -150,30 +106,19 @@ public:
     {
         fX = fY = fZ = SkDoubleToMScalar(1.5);
     }
-<<<<<<< HEAD
 
 protected:
     void performTest() override
     {
-=======
-protected:
-    virtual void performTest() {
->>>>>>> miniblink49
         fM0.reset();
         for (int i = 0; i < 10; ++i) {
             fM0.preScale(fX, fY, fZ);
         }
     }
-<<<<<<< HEAD
 
 private:
     SkMatrix44 fM0;
     SkMScalar fX, fY, fZ;
-=======
-private:
-    SkMatrix44 fM0;
-    SkMScalar  fX, fY, fZ;
->>>>>>> miniblink49
     typedef Matrix44Bench INHERITED;
 };
 
@@ -201,23 +146,15 @@ public:
         fM0.setDouble(3, 2, -15.1);
         fM0.setDouble(3, 3, 16.1);
     }
-<<<<<<< HEAD
 
 protected:
     void performTest() override
     {
-=======
-protected:
-    virtual void performTest() {
->>>>>>> miniblink49
         for (int i = 0; i < 10; ++i) {
             fM0.invert(&fM1);
         }
     }
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 private:
     SkMatrix44 fM0, fM1;
     typedef Matrix44Bench INHERITED;
@@ -244,23 +181,15 @@ public:
         fM0.setDouble(2, 3, -12.1);
         // bottom row (perspective component) remains (0, 0, 0, 1).
     }
-<<<<<<< HEAD
 
 protected:
     void performTest() override
     {
-=======
-protected:
-    virtual void performTest() {
->>>>>>> miniblink49
         for (int i = 0; i < 10; ++i) {
             fM0.invert(&fM1);
         }
     }
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 private:
     SkMatrix44 fM0, fM1;
     typedef Matrix44Bench INHERITED;
@@ -282,23 +211,15 @@ public:
         fM0.setDouble(2, 2, 11.1);
         fM0.setDouble(2, 3, -12.1);
     }
-<<<<<<< HEAD
 
 protected:
     void performTest() override
     {
-=======
-protected:
-    virtual void performTest() {
->>>>>>> miniblink49
         for (int i = 0; i < 10; ++i) {
             fM0.invert(&fM1);
         }
     }
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 private:
     SkMatrix44 fM0, fM1;
     typedef Matrix44Bench INHERITED;
@@ -315,23 +236,15 @@ public:
         fM0.setDouble(1, 3, 8.1);
         fM0.setDouble(2, 3, -12.1);
     }
-<<<<<<< HEAD
 
 protected:
     void performTest() override
     {
-=======
-protected:
-    virtual void performTest() {
->>>>>>> miniblink49
         for (int i = 0; i < 10; ++i) {
             fM0.invert(&fM1);
         }
     }
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 private:
     SkMatrix44 fM0, fM1;
     typedef Matrix44Bench INHERITED;
@@ -345,30 +258,19 @@ public:
     {
         fX = fY = fZ = SkDoubleToMScalar(1.5);
     }
-<<<<<<< HEAD
 
 protected:
     void performTest() override
     {
-=======
-protected:
-    virtual void performTest() {
->>>>>>> miniblink49
         fM0.reset();
         for (int i = 0; i < 10; ++i) {
             fM0.postScale(fX, fY, fZ);
         }
     }
-<<<<<<< HEAD
 
 private:
     SkMatrix44 fM0;
     SkMScalar fX, fY, fZ;
-=======
-private:
-    SkMatrix44 fM0;
-    SkMScalar  fX, fY, fZ;
->>>>>>> miniblink49
     typedef Matrix44Bench INHERITED;
 };
 
@@ -380,7 +282,6 @@ public:
         , fM0(SkMatrix44::kUninitialized_Constructor)
         , fM1(SkMatrix44::kUninitialized_Constructor)
         , fM2(SkMatrix44::kUninitialized_Constructor)
-<<<<<<< HEAD
     {
         if (fastPath) {
             const SkMScalar v = SkDoubleToMScalar(1.5);
@@ -401,33 +302,11 @@ protected:
     void performTest() override
     {
         fM0.reset(); // just to normalize this test with prescale/postscale
-=======
-{
-        if (fastPath) {
-            const SkMScalar v = SkDoubleToMScalar(1.5);
-            fM1.setScale(v,v,v);
-            fM2.setTranslate(v,v,v);
-        } else {
-            SkRandom rand;
-            for (int x = 0; x < 4; x++) {
-            for (int y = 0; y < 4; y++) {
-                fM1.setFloat(x,y, rand.nextF());
-                fM2.setFloat(x,y, rand.nextF());
-            }}
-        }
-    }
-protected:
-    virtual void performTest() {
-        fM0.reset();    // just to normalize this test with prescale/postscale
->>>>>>> miniblink49
         for (int i = 0; i < 10000; ++i) {
             fM0.setConcat(fM1, fM2);
         }
     }
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 private:
     SkMatrix44 fM0, fM1, fM2;
     typedef Matrix44Bench INHERITED;
@@ -438,18 +317,13 @@ public:
     GetTypeMatrix44Bench()
         : INHERITED("gettype")
         , fMatrix(SkMatrix44::kIdentity_Constructor)
-<<<<<<< HEAD
     {
     }
 
-=======
-    {}
->>>>>>> miniblink49
 protected:
     // Putting random generation of the matrix inside performTest()
     // would help us avoid anomalous runs, but takes up 25% or
     // more of the function time.
-<<<<<<< HEAD
     void performTest() override
     {
         for (int i = 0; i < 20; ++i) {
@@ -458,20 +332,11 @@ protected:
         }
     }
 
-=======
-    virtual void performTest() {
-        for (int i = 0; i < 20; ++i) {
-            fMatrix.set(1, 2, 1);   // to invalidate the type-cache
-            fMatrix.getType();
-        }
-    }
->>>>>>> miniblink49
 private:
     SkMatrix44 fMatrix;
     typedef Matrix44Bench INHERITED;
 };
 
-<<<<<<< HEAD
 DEF_BENCH(return new SetIdentityMatrix44Bench();)
 DEF_BENCH(return new EqualsMatrix44Bench();)
 DEF_BENCH(return new PreScaleMatrix44Bench();)
@@ -483,16 +348,3 @@ DEF_BENCH(return new InvertTranslateMatrix44Bench();)
 DEF_BENCH(return new SetConcatMatrix44Bench(true);)
 DEF_BENCH(return new SetConcatMatrix44Bench(false);)
 DEF_BENCH(return new GetTypeMatrix44Bench();)
-=======
-DEF_BENCH( return new SetIdentityMatrix44Bench(); )
-DEF_BENCH( return new EqualsMatrix44Bench(); )
-DEF_BENCH( return new PreScaleMatrix44Bench(); )
-DEF_BENCH( return new PostScaleMatrix44Bench(); )
-DEF_BENCH( return new InvertMatrix44Bench(); )
-DEF_BENCH( return new InvertAffineMatrix44Bench(); )
-DEF_BENCH( return new InvertScaleTranslateMatrix44Bench(); )
-DEF_BENCH( return new InvertTranslateMatrix44Bench(); )
-DEF_BENCH( return new SetConcatMatrix44Bench(true); )
-DEF_BENCH( return new SetConcatMatrix44Bench(false); )
-DEF_BENCH( return new GetTypeMatrix44Bench(); )
->>>>>>> miniblink49

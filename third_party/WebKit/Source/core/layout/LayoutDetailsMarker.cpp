@@ -18,7 +18,6 @@
  *
  */
 
-#include "config.h"
 #include "core/layout/LayoutDetailsMarker.h"
 
 #include "core/HTMLNames.h"
@@ -35,37 +34,36 @@ LayoutDetailsMarker::LayoutDetailsMarker(Element* element)
 {
 }
 
-LayoutDetailsMarker::Orientation LayoutDetailsMarker::orientation() const
+LayoutDetailsMarker::Orientation LayoutDetailsMarker::getOrientation() const
 {
-    switch (style()->writingMode()) {
-    case TopToBottomWritingMode:
+    switch (style()->getWritingMode()) {
+    case WritingMode::kHorizontalTb:
         if (style()->isLeftToRightDirection())
             return isOpen() ? Down : Right;
         return isOpen() ? Down : Left;
-    case RightToLeftWritingMode:
+    case WritingMode::kVerticalRl:
         if (style()->isLeftToRightDirection())
             return isOpen() ? Left : Down;
         return isOpen() ? Left : Up;
-    case LeftToRightWritingMode:
+    case WritingMode::kVerticalLr:
         if (style()->isLeftToRightDirection())
             return isOpen() ? Right : Down;
         return isOpen() ? Right : Up;
-    case BottomToTopWritingMode:
-        if (style()->isLeftToRightDirection())
-            return isOpen() ? Up : Right;
-        return isOpen() ? Up : Left;
     }
+    ASSERT_NOT_REACHED();
     return Right;
 }
 
-void LayoutDetailsMarker::paint(const PaintInfo& paintInfo, const LayoutPoint& paintOffset)
+void LayoutDetailsMarker::paint(const PaintInfo& paintInfo,
+    const LayoutPoint& paintOffset) const
 {
     DetailsMarkerPainter(*this).paint(paintInfo, paintOffset);
 }
 
 bool LayoutDetailsMarker::isOpen() const
 {
-    for (LayoutObject* layoutObject = parent(); layoutObject; layoutObject = layoutObject->parent()) {
+    for (LayoutObject* layoutObject = parent(); layoutObject;
+         layoutObject = layoutObject->parent()) {
         if (!layoutObject->node())
             continue;
         if (isHTMLDetailsElement(*layoutObject->node()))
@@ -77,4 +75,4 @@ bool LayoutDetailsMarker::isOpen() const
     return false;
 }
 
-}
+} // namespace blink

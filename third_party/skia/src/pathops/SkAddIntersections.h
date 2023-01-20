@@ -13,10 +13,6 @@
 class SkOpCoincidence;
 
 bool AddIntersectTs(SkOpContour* test, SkOpContour* next, SkOpCoincidence* coincidence,
-<<<<<<< HEAD
     SkChunkAlloc* allocator);
-=======
-        SkChunkAlloc* allocator);
->>>>>>> miniblink49
 
 #endif

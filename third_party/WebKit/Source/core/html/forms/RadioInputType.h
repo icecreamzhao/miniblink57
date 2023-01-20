@@ -31,16 +31,22 @@
 #ifndef RadioInputType_h
 #define RadioInputType_h
 
+#include "core/CoreExport.h"
 #include "core/html/forms/BaseCheckableInputType.h"
 
 namespace blink {
 
 class RadioInputType final : public BaseCheckableInputType {
 public:
-    static PassRefPtrWillBeRawPtr<InputType> create(HTMLInputElement&);
+    static InputType* create(HTMLInputElement&);
+    CORE_EXPORT static HTMLInputElement* nextRadioButtonInGroup(HTMLInputElement*,
+        bool forward);
 
 private:
-    RadioInputType(HTMLInputElement& element) : BaseCheckableInputType(element) { }
+    RadioInputType(HTMLInputElement& element)
+        : BaseCheckableInputType(element)
+    {
+    }
     const AtomicString& formControlType() const override;
     bool valueMissing(const String&) const override;
     String valueMissingText() const override;
@@ -49,11 +55,12 @@ private:
     void handleKeyupEvent(KeyboardEvent*) override;
     bool isKeyboardFocusable() const override;
     bool shouldSendChangeEventAfterCheckedChanged() override;
-    PassOwnPtrWillBeRawPtr<ClickHandlingState> willDispatchClick() override;
+    ClickHandlingState* willDispatchClick() override;
     void didDispatchClick(Event*, const ClickHandlingState&) override;
     bool shouldAppearIndeterminate() const override;
 
-    HTMLInputElement* findNextFocusableRadioButtonInGroup(HTMLInputElement*, bool);
+    HTMLInputElement* findNextFocusableRadioButtonInGroup(HTMLInputElement*,
+        bool);
 };
 
 } // namespace blink

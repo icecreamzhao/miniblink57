@@ -31,35 +31,38 @@
 #ifndef SVGStringListTearOff_h
 #define SVGStringListTearOff_h
 
-#include "core/dom/ExceptionCode.h"
+#include "bindings/core/v8/ScriptWrappable.h"
 #include "core/svg/SVGStringList.h"
 #include "core/svg/properties/SVGPropertyTearOff.h"
 
 namespace blink {
 
-class SVGStringListTearOff : public SVGPropertyTearOff<SVGStringList>, public ScriptWrappable {
+class SVGStringListTearOff : public SVGPropertyTearOff<SVGStringList>,
+                             public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<SVGStringListTearOff> create(PassRefPtrWillBeRawPtr<SVGStringList> target, SVGElement* contextElement, PropertyIsAnimValType propertyIsAnimVal, const QualifiedName& attributeName = QualifiedName::null())
+    static SVGStringListTearOff* create(
+        SVGStringList* target,
+        SVGElement* contextElement,
+        PropertyIsAnimValType propertyIsAnimVal,
+        const QualifiedName& attributeName = QualifiedName::null())
     {
-        return adoptRefWillBeNoop(new SVGStringListTearOff(target, contextElement, propertyIsAnimVal, attributeName));
+        return new SVGStringListTearOff(target, contextElement, propertyIsAnimVal,
+            attributeName);
     }
 
     // SVGStringList DOM interface:
 
     // WebIDL requires "unsigned long" type instead of size_t.
-    unsigned long length()
-    {
-        return target()->length();
-    }
+    unsigned long length() { return target()->length(); }
 
     void clear(ExceptionState& exceptionState)
     {
         if (isImmutable()) {
-            exceptionState.throwDOMException(NoModificationAllowedError, "The object is read-only.");
+            throwReadOnly(exceptionState);
             return;
         }
-
         target()->clear();
         commitChange();
     }
@@ -67,13 +70,11 @@ public:
     String initialize(const String& item, ExceptionState& exceptionState)
     {
         if (isImmutable()) {
-            exceptionState.throwDOMException(NoModificationAllowedError, "The object is read-only.");
+            throwReadOnly(exceptionState);
             return String();
         }
-
         target()->initialize(item);
         commitChange();
-
         return item;
     }
 
@@ -82,33 +83,35 @@ public:
         return target()->getItem(index, exceptionState);
     }
 
-    String insertItemBefore(const String& item, unsigned long index, ExceptionState& exceptionState)
+    String insertItemBefore(const String& item,
+        unsigned long index,
+        ExceptionState& exceptionState)
     {
         if (isImmutable()) {
-            exceptionState.throwDOMException(NoModificationAllowedError, "The object is read-only.");
+            throwReadOnly(exceptionState);
             return String();
         }
-
         target()->insertItemBefore(item, index);
         commitChange();
-
         return item;
     }
 
-    String replaceItem(const String& item, unsigned long index, ExceptionState& exceptionState)
+    String replaceItem(const String& item,
+        unsigned long index,
+        ExceptionState& exceptionState)
     {
         if (isImmutable()) {
-            exceptionState.throwDOMException(NoModificationAllowedError, "The object is read-only.");
+            throwReadOnly(exceptionState);
             return String();
         }
-
         target()->replaceItem(item, index, exceptionState);
         commitChange();
-
         return item;
     }
 
-    bool anonymousIndexedSetter(unsigned index, const String& item, ExceptionState& exceptionState)
+    bool anonymousIndexedSetter(unsigned index,
+        const String& item,
+        ExceptionState& exceptionState)
     {
         replaceItem(item, index, exceptionState);
         return true;
@@ -117,31 +120,32 @@ public:
     String removeItem(unsigned long index, ExceptionState& exceptionState)
     {
         if (isImmutable()) {
-            exceptionState.throwDOMException(NoModificationAllowedError, "The object is read-only.");
+            throwReadOnly(exceptionState);
             return String();
         }
-
         String removedItem = target()->removeItem(index, exceptionState);
         commitChange();
-
         return removedItem;
     }
 
     String appendItem(const String& item, ExceptionState& exceptionState)
     {
         if (isImmutable()) {
-            exceptionState.throwDOMException(NoModificationAllowedError, "The object is read-only.");
+            throwReadOnly(exceptionState);
             return String();
         }
-
         target()->appendItem(item);
         commitChange();
-
         return item;
     }
 
+    DECLARE_VIRTUAL_TRACE_WRAPPERS();
+
 protected:
-    SVGStringListTearOff(PassRefPtrWillBeRawPtr<SVGStringList>, SVGElement*, PropertyIsAnimValType, const QualifiedName&);
+    SVGStringListTearOff(SVGStringList*,
+        SVGElement*,
+        PropertyIsAnimValType,
+        const QualifiedName&);
 };
 
 } // namespace blink

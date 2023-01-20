@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
 #include "public/platform/WebDataConsumerHandle.h"
 
 #include "platform/heap/Handle.h"
@@ -10,12 +9,6 @@
 #include <algorithm>
 #include <memory>
 #include <string.h>
-=======
-#include "config.h"
-#include "public/platform/WebDataConsumerHandle.h"
-
-#include "platform/heap/Handle.h"
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -29,7 +22,6 @@ WebDataConsumerHandle::~WebDataConsumerHandle()
     ASSERT(ThreadState::current());
 }
 
-<<<<<<< HEAD
 WebDataConsumerHandle::Result WebDataConsumerHandle::Reader::read(
     void* data,
     size_t size,
@@ -48,13 +40,3 @@ WebDataConsumerHandle::Result WebDataConsumerHandle::Reader::read(
 }
 
 } // namespace blink
-=======
-PassOwnPtr<WebDataConsumerHandle::Reader> WebDataConsumerHandle::obtainReader(WebDataConsumerHandle::Client* client)
-{
-    ASSERT(ThreadState::current());
-    return adoptPtr(obtainReaderInternal(client));
-}
-
-} // namespace blink
-
->>>>>>> miniblink49

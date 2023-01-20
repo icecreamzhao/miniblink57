@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -15,7 +11,6 @@
 #include "SkString.h"
 
 class ScalarBench : public Benchmark {
-<<<<<<< HEAD
     SkString fName;
 
 public:
@@ -26,15 +21,6 @@ public:
 
     bool isSuitableFor(Backend backend) override
     {
-=======
-    SkString    fName;
-public:
-    ScalarBench(const char name[])  {
-        fName.printf("scalar_%s", name);
-    }
-
-    bool isSuitableFor(Backend backend) override {
->>>>>>> miniblink49
         return backend == kNonRendering_Backend;
     }
 
@@ -43,7 +29,6 @@ public:
 protected:
     virtual int mulLoopCount() const { return 1; }
 
-<<<<<<< HEAD
     const char* onGetName() override
     {
         return fName.c_str();
@@ -51,13 +36,6 @@ protected:
 
     void onDraw(int loops, SkCanvas* canvas) override
     {
-=======
-    const char* onGetName() override {
-        return fName.c_str();
-    }
-
-    void onDraw(const int loops, SkCanvas* canvas) override {
->>>>>>> miniblink49
         for (int i = 0; i < loops; i++) {
             this->performTest();
         }
@@ -70,13 +48,9 @@ private:
 // having unknown values in our arrays can throw off the timing a lot, perhaps
 // handling NaN values is a lot slower. Anyway, this guy is just meant to put
 // reasonable values in our arrays.
-<<<<<<< HEAD
 template <typename T>
 void init9(T array[9])
 {
-=======
-template <typename T> void init9(T array[9]) {
->>>>>>> miniblink49
     SkRandom rand;
     for (int i = 0; i < 9; i++) {
         array[i] = rand.nextSScalar1();
@@ -85,7 +59,6 @@ template <typename T> void init9(T array[9]) {
 
 class FloatComparisonBench : public ScalarBench {
 public:
-<<<<<<< HEAD
     FloatComparisonBench()
         : INHERITED("compare_float")
     {
@@ -96,23 +69,12 @@ protected:
     virtual int mulLoopCount() const { return 4; }
     virtual void performTest()
     {
-=======
-    FloatComparisonBench() : INHERITED("compare_float") {
-        init9(fArray);
-    }
-protected:
-    virtual int mulLoopCount() const { return 4; }
-    virtual void performTest() {
->>>>>>> miniblink49
         // xoring into a volatile prevents the compiler from optimizing these checks away.
         volatile bool junk = false;
         junk ^= (fArray[6] != 0.0f || fArray[7] != 0.0f || fArray[8] != 1.0f);
         junk ^= (fArray[2] != 0.0f || fArray[5] != 0.0f);
     }
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 private:
     float fArray[9];
     typedef ScalarBench INHERITED;
@@ -121,7 +83,6 @@ private:
 class ForcedIntComparisonBench : public ScalarBench {
 public:
     ForcedIntComparisonBench()
-<<<<<<< HEAD
         : INHERITED("compare_forced_int")
     {
         init9(fArray);
@@ -137,22 +98,6 @@ protected:
         junk ^= (SkScalarAs2sCompliment(fArray[2]) | SkScalarAs2sCompliment(fArray[5]));
     }
 
-=======
-    : INHERITED("compare_forced_int") {
-        init9(fArray);
-    }
-protected:
-    virtual int mulLoopCount() const { return 4; }
-    virtual void performTest() {
-        // xoring into a volatile prevents the compiler from optimizing these checks away.
-        volatile int32_t junk = 0;
-        junk ^= (SkScalarAs2sCompliment(fArray[6]) |
-                 SkScalarAs2sCompliment(fArray[7]) |
-                (SkScalarAs2sCompliment(fArray[8]) - kPersp1Int));
-        junk ^= (SkScalarAs2sCompliment(fArray[2]) |
-                 SkScalarAs2sCompliment(fArray[5]));
-    }
->>>>>>> miniblink49
 private:
     static const int32_t kPersp1Int = 0x3f800000;
     SkScalar fArray[9];
@@ -161,29 +106,19 @@ private:
 
 class IsFiniteScalarBench : public ScalarBench {
 public:
-<<<<<<< HEAD
     IsFiniteScalarBench()
         : INHERITED("isfinite")
     {
-=======
-    IsFiniteScalarBench() : INHERITED("isfinite") {
->>>>>>> miniblink49
         SkRandom rand;
         for (size_t i = 0; i < ARRAY_N; ++i) {
             fArray[i] = rand.nextSScalar1();
         }
     }
-<<<<<<< HEAD
 
 protected:
     int mulLoopCount() const override { return 1; }
     void performTest() override
     {
-=======
-protected:
-    int mulLoopCount() const override { return 1; }
-    void performTest() override {
->>>>>>> miniblink49
         int sum = 0;
         for (size_t i = 0; i < ARRAY_N; ++i) {
             // We pass -fArray[i], so the compiler can't cheat and treat the
@@ -194,12 +129,8 @@ protected:
         this->doSomething(fArray, sum);
     }
 
-<<<<<<< HEAD
     virtual void doSomething(SkScalar array[], int sum) { }
 
-=======
-    virtual void doSomething(SkScalar array[], int sum) {}
->>>>>>> miniblink49
 private:
     enum {
         ARRAY_N = 64
@@ -218,12 +149,8 @@ class RectBoundsBench : public Benchmark {
     SkPoint fPts[PTS];
 
 public:
-<<<<<<< HEAD
     RectBoundsBench()
     {
-=======
-    RectBoundsBench() {
->>>>>>> miniblink49
         SkRandom rand;
         for (int i = 0; i < PTS; ++i) {
             fPts[i].fX = rand.nextSScalar1();
@@ -231,17 +158,12 @@ public:
         }
     }
 
-<<<<<<< HEAD
     bool isSuitableFor(Backend backend) override
     {
-=======
-    bool isSuitableFor(Backend backend) override {
->>>>>>> miniblink49
         return backend == kNonRendering_Backend;
     }
 
 protected:
-<<<<<<< HEAD
     const char* onGetName() override
     {
         return "rect_bounds";
@@ -249,13 +171,6 @@ protected:
 
     void onDraw(int loops, SkCanvas* canvas) override
     {
-=======
-    const char* onGetName() override {
-        return "rect_bounds";
-    }
-
-    void onDraw(const int loops, SkCanvas* canvas) override {
->>>>>>> miniblink49
         SkRect r;
         for (int i = 0; i < loops; ++i) {
             for (int i = 0; i < 1000; ++i) {
@@ -270,14 +185,7 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 
-<<<<<<< HEAD
 DEF_BENCH(return new FloatComparisonBench();)
 DEF_BENCH(return new ForcedIntComparisonBench();)
 DEF_BENCH(return new RectBoundsBench();)
 DEF_BENCH(return new IsFiniteScalarBench();)
-=======
-DEF_BENCH( return new FloatComparisonBench(); )
-DEF_BENCH( return new ForcedIntComparisonBench(); )
-DEF_BENCH( return new RectBoundsBench(); )
-DEF_BENCH( return new IsFiniteScalarBench(); )
->>>>>>> miniblink49

@@ -10,7 +10,6 @@
 namespace v8 {
 namespace internal {
 
-<<<<<<< HEAD
     namespace wasm {
         class StreamingDecoder;
     }
@@ -26,20 +25,3 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_WASM_WASM_JS_H_
-=======
-namespace wasm {
-class StreamingDecoder;
-}
-
-// Exposes a WebAssembly API to JavaScript through the V8 API.
-class WasmJs {
- public:
-  V8_EXPORT_PRIVATE static void Install(Isolate* isolate,
-                                        bool exposed_on_global_object);
-};
-
-}  // namespace internal
-}  // namespace v8
-
-#endif  // V8_WASM_WASM_JS_H_
->>>>>>> miniblink49

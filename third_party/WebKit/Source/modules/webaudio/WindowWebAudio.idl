@@ -5,7 +5,6 @@
 [
     ImplementedAs=DOMWindowWebAudio,
 ] partial interface Window {
-<<<<<<< HEAD
     // The individual constructible AudioNodes.
     [MeasureAs=WebAudioAnalyserNode] attribute AnalyserNodeConstructor AnalyserNode;
     [MeasureAs=WebAudioAudioBuffer] attribute AudioBufferConstructor AudioBuffer;
@@ -25,10 +24,4 @@
     [MeasureAs=WebAudioPeriodicWave] attribute PeriodicWaveConstructor PeriodicWave;
     [MeasureAs=WebAudioStereoPannerNode] attribute StereoPannerNodeConstructor StereoPannerNode;
     [MeasureAs=WebAudioWaveShaperNode] attribute WaveShaperNodeConstructor WaveShaperNode;
-=======
-    [MeasureAs=AudioContext, Conditional=WEB_AUDIO, RuntimeEnabled=WebAudio] attribute AudioContextConstructor AudioContext;
-    [MeasureAs=OfflineAudioContext, Conditional=WEB_AUDIO, RuntimeEnabled=WebAudio] attribute OfflineAudioContextConstructor OfflineAudioContext;
-    [DeprecateAs=PrefixedAudioContext, Conditional=WEB_AUDIO, RuntimeEnabled=WebAudio] attribute AudioContextConstructor webkitAudioContext;
-    [DeprecateAs=PrefixedOfflineAudioContext, Conditional=WEB_AUDIO, RuntimeEnabled=WebAudio] attribute OfflineAudioContextConstructor webkitOfflineAudioContext;
->>>>>>> miniblink49
 };

@@ -6,20 +6,28 @@
 #define Transform3DRecorder_h
 
 #include "platform/graphics/paint/DisplayItem.h"
+#include "wtf/Allocator.h"
 
 namespace blink {
 
+class FloatPoint3D;
 class GraphicsContext;
 class TransformationMatrix;
 
 class Transform3DRecorder {
+    STACK_ALLOCATED();
+
 public:
-    Transform3DRecorder(GraphicsContext&, const DisplayItemClientWrapper&, DisplayItem::Type, const TransformationMatrix&);
+    Transform3DRecorder(GraphicsContext&,
+        const DisplayItemClient&,
+        DisplayItem::Type,
+        const TransformationMatrix&,
+        const FloatPoint3D& transformOrigin);
     ~Transform3DRecorder();
 
 private:
     GraphicsContext& m_context;
-    DisplayItemClientWrapper m_client;
+    const DisplayItemClient& m_client;
     DisplayItem::Type m_type;
     bool m_skipRecordingForIdentityTransform;
 };

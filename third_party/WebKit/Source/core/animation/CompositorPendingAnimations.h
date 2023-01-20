@@ -33,6 +33,7 @@
 
 #include "core/CoreExport.h"
 #include "core/animation/Animation.h"
+#include "core/dom/TaskRunnerHelper.h"
 #include "platform/Timer.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Vector.h"
@@ -44,29 +45,32 @@ namespace blink {
 // For CSS Animations, used to synchronize the start of main-thread animations
 // with compositor animations when both classes of CSS Animations are triggered
 // by the same recalc
-class CORE_EXPORT CompositorPendingAnimations final {
-    DISALLOW_ALLOCATION();
+class CORE_EXPORT CompositorPendingAnimations final
+    : public GarbageCollectedFinalized<CompositorPendingAnimations> {
 public:
-
-    CompositorPendingAnimations()
-        : m_timer(this, &CompositorPendingAnimations::timerFired)
+    explicit CompositorPendingAnimations(Document& document)
+        : m_timer(TaskRunnerHelper::get(TaskType::UnspecedTimer, &document),
+            this,
+            &CompositorPendingAnimations::timerFired)
         , m_compositorGroup(1)
-    { }
+    {
+    }
 
     void add(Animation*);
     // Returns whether we are waiting for an animation to start and should
     // service again on the next frame.
     bool update(bool startOnCompositor = true);
-    void notifyCompositorAnimationStarted(double monotonicAnimationStartTime, int compositorGroup = 0);
+    void notifyCompositorAnimationStarted(double monotonicAnimationStartTime,
+        int compositorGroup = 0);
 
     DECLARE_TRACE();
 
 private:
-    void timerFired(Timer<CompositorPendingAnimations>*) { update(false); }
+    void timerFired(TimerBase*) { update(false); }
 
-    WillBeHeapVector<RefPtrWillBeMember<Animation>> m_pending;
-    WillBeHeapVector<RefPtrWillBeMember<Animation>> m_waitingForCompositorAnimationStart;
-    Timer<CompositorPendingAnimations> m_timer;
+    HeapVector<Member<Animation>> m_pending;
+    HeapVector<Member<Animation>> m_waitingForCompositorAnimationStart;
+    TaskRunnerTimer<CompositorPendingAnimations> m_timer;
     int m_compositorGroup;
 };
 

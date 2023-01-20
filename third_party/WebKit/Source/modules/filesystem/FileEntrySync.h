@@ -43,15 +43,10 @@ class FileWriterSync;
 
 class FileEntrySync final : public EntrySync {
     DEFINE_WRAPPERTYPEINFO();
-<<<<<<< HEAD
 
 public:
     static FileEntrySync* create(DOMFileSystemBase* fileSystem,
         const String& fullPath)
-=======
-public:
-    static FileEntrySync* create(DOMFileSystemBase* fileSystem, const String& fullPath)
->>>>>>> miniblink49
     {
         return new FileEntrySync(fileSystem, fullPath);
     }
@@ -67,15 +62,11 @@ private:
     FileEntrySync(DOMFileSystemBase*, const String& fullPath);
 };
 
-<<<<<<< HEAD
 DEFINE_TYPE_CASTS(FileEntrySync,
     EntrySync,
     entry,
     entry->isFile(),
     entry.isFile());
-=======
-DEFINE_TYPE_CASTS(FileEntrySync, EntrySync, entry, entry->isFile(), entry.isFile());
->>>>>>> miniblink49
 
 } // namespace blink
 

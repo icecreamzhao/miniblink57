@@ -20,6 +20,7 @@
 #ifndef SVGLengthContext_h
 #define SVGLengthContext_h
 
+#include "core/css/CSSPrimitiveValue.h"
 #include "core/svg/SVGUnitTypes.h"
 #include "platform/Length.h"
 #include "platform/geometry/FloatRect.h"
@@ -31,51 +32,60 @@ class SVGElement;
 class SVGLength;
 class UnzoomedLength;
 
-enum SVGLengthType {
-    LengthTypeUnknown = 0,
-    LengthTypeNumber,
-    LengthTypePercentage,
-    LengthTypeEMS,
-    LengthTypeEXS,
-    LengthTypePX,
-    LengthTypeCM,
-    LengthTypeMM,
-    LengthTypeIN,
-    LengthTypePT,
-    LengthTypePC,
-    LengthTypeREMS,
-    LengthTypeCHS
-};
-
-enum class SVGLengthMode {
-    Width,
+enum class SVGLengthMode { Width,
     Height,
-    Other
-};
+    Other };
 
 class SVGLengthContext {
     STACK_ALLOCATED();
+
 public:
     explicit SVGLengthContext(const SVGElement*);
 
-    template<typename T>
-    static FloatRect resolveRectangle(const T* context, SVGUnitTypes::SVGUnitType type, const FloatRect& viewport)
+    template <typename T>
+    static FloatRect resolveRectangle(const T* context,
+        SVGUnitTypes::SVGUnitType type,
+        const FloatRect& viewport)
     {
-        return resolveRectangle(context, type, viewport, *context->x()->currentValue(), *context->y()->currentValue(), *context->width()->currentValue(), *context->height()->currentValue());
+        return resolveRectangle(
+            context, type, viewport, *context->x()->currentValue(),
+            *context->y()->currentValue(), *context->width()->currentValue(),
+            *context->height()->currentValue());
     }
 
-    static FloatRect resolveRectangle(const SVGElement*, SVGUnitTypes::SVGUnitType, const FloatRect& viewport, const SVGLength& x, const SVGLength& y, const SVGLength& width, const SVGLength& height);
-    static FloatPoint resolvePoint(const SVGElement*, SVGUnitTypes::SVGUnitType, const SVGLength& x, const SVGLength& y);
-    static float resolveLength(const SVGElement*, SVGUnitTypes::SVGUnitType, const SVGLength&);
+    static FloatRect resolveRectangle(const SVGElement*,
+        SVGUnitTypes::SVGUnitType,
+        const FloatRect& viewport,
+        const SVGLength& x,
+        const SVGLength& y,
+        const SVGLength& width,
+        const SVGLength& height);
+    static FloatPoint resolvePoint(const SVGElement*,
+        SVGUnitTypes::SVGUnitType,
+        const SVGLength& x,
+        const SVGLength& y);
+    static float resolveLength(const SVGElement*,
+        SVGUnitTypes::SVGUnitType,
+        const SVGLength&);
 
-    float convertValueToUserUnits(float, SVGLengthMode, SVGLengthType fromUnit) const;
-    float convertValueFromUserUnits(float, SVGLengthMode, SVGLengthType toUnit) const;
+    float convertValueToUserUnits(float,
+        SVGLengthMode,
+        CSSPrimitiveValue::UnitType fromUnit) const;
+    float convertValueFromUserUnits(float,
+        SVGLengthMode,
+        CSSPrimitiveValue::UnitType toUnit) const;
 
-    float valueForLength(const UnzoomedLength&, SVGLengthMode = SVGLengthMode::Other) const;
-    float valueForLength(const Length&, const ComputedStyle&, SVGLengthMode = SVGLengthMode::Other) const;
-    static float valueForLength(const Length&, const ComputedStyle&, float dimension);
+    float valueForLength(const UnzoomedLength&,
+        SVGLengthMode = SVGLengthMode::Other) const;
+    float valueForLength(const Length&,
+        const ComputedStyle&,
+        SVGLengthMode = SVGLengthMode::Other) const;
+    static float valueForLength(const Length&,
+        const ComputedStyle&,
+        float dimension);
 
     bool determineViewport(FloatSize&) const;
+    float resolveValue(const CSSPrimitiveValue&, SVGLengthMode) const;
 
 private:
     float valueForLength(const Length&, float zoom, SVGLengthMode) const;
@@ -87,7 +97,7 @@ private:
     float convertValueFromUserUnitsToCHS(float value) const;
     float convertValueFromCHSToUserUnits(float value) const;
 
-    RawPtrWillBeMember<const SVGElement> m_context;
+    Member<const SVGElement> m_context;
 };
 
 } // namespace blink

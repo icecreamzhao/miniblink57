@@ -28,11 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
-
->>>>>>> miniblink49
 #include "public/web/WebUserMediaRequest.h"
 
 #include "core/dom/Document.h"
@@ -54,7 +49,6 @@ WebUserMediaRequest::WebUserMediaRequest(UserMediaRequest* request)
 {
 }
 
-<<<<<<< HEAD
 WebUserMediaRequest WebUserMediaRequest::createForTesting(
     const WebMediaConstraints& audio,
     const WebMediaConstraints& video)
@@ -63,8 +57,6 @@ WebUserMediaRequest WebUserMediaRequest::createForTesting(
     return WebUserMediaRequest(request);
 }
 
-=======
->>>>>>> miniblink49
 void WebUserMediaRequest::reset()
 {
     m_private.reset();
@@ -72,37 +64,24 @@ void WebUserMediaRequest::reset()
 
 bool WebUserMediaRequest::audio() const
 {
-<<<<<<< HEAD
     DCHECK(!isNull());
-=======
-    ASSERT(!isNull());
->>>>>>> miniblink49
     return m_private->audio();
 }
 
 bool WebUserMediaRequest::video() const
 {
-<<<<<<< HEAD
     DCHECK(!isNull());
-=======
-    ASSERT(!isNull());
->>>>>>> miniblink49
     return m_private->video();
 }
 
 WebMediaConstraints WebUserMediaRequest::audioConstraints() const
 {
-<<<<<<< HEAD
     DCHECK(!isNull());
-=======
-    ASSERT(!isNull());
->>>>>>> miniblink49
     return m_private->audioConstraints();
 }
 
 WebMediaConstraints WebUserMediaRequest::videoConstraints() const
 {
-<<<<<<< HEAD
     DCHECK(!isNull());
     return m_private->videoConstraints();
 }
@@ -114,21 +93,10 @@ WebSecurityOrigin WebUserMediaRequest::getSecurityOrigin() const
         return WebSecurityOrigin::createFromString("test://test");
     return WebSecurityOrigin(
         m_private->getExecutionContext()->getSecurityOrigin());
-=======
-    ASSERT(!isNull());
-    return m_private->videoConstraints();
-}
-
-WebSecurityOrigin WebUserMediaRequest::securityOrigin() const
-{
-    ASSERT(!isNull() && m_private->executionContext());
-    return WebSecurityOrigin(m_private->executionContext()->securityOrigin());
->>>>>>> miniblink49
 }
 
 WebDocument WebUserMediaRequest::ownerDocument() const
 {
-<<<<<<< HEAD
     DCHECK(!isNull());
     return WebDocument(m_private->ownerDocument());
 }
@@ -138,21 +106,11 @@ void WebUserMediaRequest::requestSucceeded(
 {
     DCHECK(!isNull());
     DCHECK(!streamDescriptor.isNull());
-=======
-    ASSERT(!isNull());
-    return WebDocument(m_private->ownerDocument());
-}
-
-void WebUserMediaRequest::requestSucceeded(const WebMediaStream& streamDescriptor)
-{
-    ASSERT(!isNull() && !streamDescriptor.isNull());
->>>>>>> miniblink49
     m_private->succeed(streamDescriptor);
 }
 
 void WebUserMediaRequest::requestDenied(const WebString& description)
 {
-<<<<<<< HEAD
     DCHECK(!isNull());
     m_private->failPermissionDenied(description);
 }
@@ -171,21 +129,6 @@ void WebUserMediaRequest::requestFailedUASpecific(
     const WebString& description)
 {
     DCHECK(!isNull());
-=======
-    ASSERT(!isNull());
-    m_private->failPermissionDenied(description);
-}
-
-void WebUserMediaRequest::requestFailedConstraint(const WebString& constraintName, const WebString& description)
-{
-    ASSERT(!isNull());
-    m_private->failConstraint(constraintName, description);
-}
-
-void WebUserMediaRequest::requestFailedUASpecific(const WebString& name, const WebString& constraintName, const WebString& description)
-{
-    ASSERT(!isNull());
->>>>>>> miniblink49
     m_private->failUASpecific(name, constraintName, description);
 }
 

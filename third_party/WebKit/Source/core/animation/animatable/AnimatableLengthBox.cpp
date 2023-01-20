@@ -28,37 +28,34 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/animation/animatable/AnimatableLengthBox.h"
 
 namespace blink {
 
-PassRefPtrWillBeRawPtr<AnimatableValue> AnimatableLengthBox::interpolateTo(const AnimatableValue* value, double fraction) const
+PassRefPtr<AnimatableValue> AnimatableLengthBox::interpolateTo(
+    const AnimatableValue* value,
+    double fraction) const
 {
     const AnimatableLengthBox* lengthBox = toAnimatableLengthBox(value);
     return AnimatableLengthBox::create(
         AnimatableValue::interpolate(this->left(), lengthBox->left(), fraction),
         AnimatableValue::interpolate(this->right(), lengthBox->right(), fraction),
         AnimatableValue::interpolate(this->top(), lengthBox->top(), fraction),
-        AnimatableValue::interpolate(this->bottom(), lengthBox->bottom(), fraction));
+        AnimatableValue::interpolate(this->bottom(), lengthBox->bottom(),
+            fraction));
+}
+
+bool AnimatableLengthBox::usesDefaultInterpolationWith(
+    const AnimatableValue* other) const
+{
+    const AnimatableLengthBox& otherBox = toAnimatableLengthBox(*other);
+    return usesDefaultInterpolation(left(), otherBox.left()) || usesDefaultInterpolation(right(), otherBox.right()) || usesDefaultInterpolation(top(), otherBox.top()) || usesDefaultInterpolation(bottom(), otherBox.bottom());
 }
 
 bool AnimatableLengthBox::equalTo(const AnimatableValue* value) const
 {
     const AnimatableLengthBox* lengthBox = toAnimatableLengthBox(value);
-    return left()->equals(lengthBox->left())
-        && right()->equals(lengthBox->right())
-        && top()->equals(lengthBox->top())
-        && bottom()->equals(lengthBox->bottom());
+    return left()->equals(lengthBox->left()) && right()->equals(lengthBox->right()) && top()->equals(lengthBox->top()) && bottom()->equals(lengthBox->bottom());
 }
 
-DEFINE_TRACE(AnimatableLengthBox)
-{
-    visitor->trace(m_left);
-    visitor->trace(m_right);
-    visitor->trace(m_top);
-    visitor->trace(m_bottom);
-    AnimatableValue::trace(visitor);
-}
-
-}
+} // namespace blink

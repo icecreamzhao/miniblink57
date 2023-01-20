@@ -8,7 +8,6 @@
 
 namespace v8 {
 namespace internal {
-<<<<<<< HEAD
     namespace compiler {
 
         CheckpointElimination::CheckpointElimination(Editor* editor)
@@ -58,49 +57,3 @@ namespace internal {
     } // namespace compiler
 } // namespace internal
 } // namespace v8
-=======
-namespace compiler {
-
-CheckpointElimination::CheckpointElimination(Editor* editor)
-    : AdvancedReducer(editor) {}
-
-namespace {
-
-// The given checkpoint is redundant if it is effect-wise dominated by another
-// checkpoint and there is no observable write in between. For now we consider
-// a linear effect chain only instead of true effect-wise dominance.
-bool IsRedundantCheckpoint(Node* node) {
-  Node* effect = NodeProperties::GetEffectInput(node);
-  while (effect->op()->HasProperty(Operator::kNoWrite) &&
-         effect->op()->EffectInputCount() == 1) {
-    if (effect->opcode() == IrOpcode::kCheckpoint) return true;
-    effect = NodeProperties::GetEffectInput(effect);
-  }
-  return false;
-}
-
-}  // namespace
-
-Reduction CheckpointElimination::ReduceCheckpoint(Node* node) {
-  DCHECK_EQ(IrOpcode::kCheckpoint, node->opcode());
-  if (IsRedundantCheckpoint(node)) {
-    return Replace(NodeProperties::GetEffectInput(node));
-  }
-  return NoChange();
-}
-
-Reduction CheckpointElimination::Reduce(Node* node) {
-  DisallowHeapAccess no_heap_access;
-  switch (node->opcode()) {
-    case IrOpcode::kCheckpoint:
-      return ReduceCheckpoint(node);
-    default:
-      break;
-  }
-  return NoChange();
-}
-
-}  // namespace compiler
-}  // namespace internal
-}  // namespace v8
->>>>>>> miniblink49

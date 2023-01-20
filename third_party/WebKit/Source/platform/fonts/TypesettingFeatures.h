@@ -31,10 +31,7 @@ namespace blink {
 enum TypesettingFeature {
     Kerning = 1 << 0,
     Ligatures = 1 << 1,
-<<<<<<< HEAD
     Caps = 1 << 2
-=======
->>>>>>> miniblink49
 };
 
 typedef unsigned TypesettingFeatures;

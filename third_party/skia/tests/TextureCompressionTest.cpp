@@ -5,25 +5,18 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "SkAutoPixmapStorage.h"
-=======
->>>>>>> miniblink49
 #include "SkBitmap.h"
 #include "SkData.h"
 #include "SkEndian.h"
 #include "SkImageInfo.h"
-<<<<<<< HEAD
 #include "SkTemplates.h"
-=======
->>>>>>> miniblink49
 #include "SkTextureCompressor.h"
 #include "Test.h"
 
 // TODO: Create separate tests for RGB and RGBA data once
 // ASTC and ETC1 decompression is implemented.
 
-<<<<<<< HEAD
 static bool decompresses_a8(SkTextureCompressor::Format fmt)
 {
     switch (fmt) {
@@ -46,40 +39,14 @@ static bool compresses_a8(SkTextureCompressor::Format fmt)
 
     default:
         return false;
-=======
-static bool decompresses_a8(SkTextureCompressor::Format fmt) {
-    switch (fmt) {
-        case SkTextureCompressor::kLATC_Format:
-        case SkTextureCompressor::kR11_EAC_Format:
-            return true;
-
-        default:
-            return false;
-    }
-}
-
-static bool compresses_a8(SkTextureCompressor::Format fmt) {
-    switch (fmt) {
-        case SkTextureCompressor::kLATC_Format:
-        case SkTextureCompressor::kR11_EAC_Format:
-        case SkTextureCompressor::kASTC_12x12_Format:
-            return true;
-
-        default:
-            return false;
->>>>>>> miniblink49
     }
 }
 
 /**
  * Make sure that we properly fail when we don't have multiple of four image dimensions.
  */
-<<<<<<< HEAD
 DEF_TEST(CompressAlphaFailDimensions, reporter)
 {
-=======
-DEF_TEST(CompressAlphaFailDimensions, reporter) {
->>>>>>> miniblink49
     static const int kWidth = 17;
     static const int kHeight = 17;
 
@@ -94,22 +61,14 @@ DEF_TEST(CompressAlphaFailDimensions, reporter) {
     SkAutoPixmapStorage pixmap;
     pixmap.alloc(SkImageInfo::MakeA8(kWidth, kHeight));
     // leaving the pixels uninitialized, as they don't affect the test...
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> miniblink49
     for (int i = 0; i < SkTextureCompressor::kFormatCnt; ++i) {
         const SkTextureCompressor::Format fmt = static_cast<SkTextureCompressor::Format>(i);
         if (!compresses_a8(fmt)) {
             continue;
         }
         SkAutoDataUnref data(SkTextureCompressor::CompressBitmapToFormat(pixmap, fmt));
-<<<<<<< HEAD
         REPORTER_ASSERT(reporter, nullptr == data);
-=======
-        REPORTER_ASSERT(reporter, NULL == data);
->>>>>>> miniblink49
     }
 }
 
@@ -117,12 +76,8 @@ DEF_TEST(CompressAlphaFailDimensions, reporter) {
  * Make sure that we properly fail when we don't have the correct bitmap type.
  * compressed textures can (currently) only be created from A8 bitmaps.
  */
-<<<<<<< HEAD
 DEF_TEST(CompressAlphaFailColorType, reporter)
 {
-=======
-DEF_TEST(CompressAlphaFailColorType, reporter) {
->>>>>>> miniblink49
     static const int kWidth = 12;
     static const int kHeight = 12;
 
@@ -143,11 +98,7 @@ DEF_TEST(CompressAlphaFailColorType, reporter) {
             continue;
         }
         SkAutoDataUnref data(SkTextureCompressor::CompressBitmapToFormat(pixmap, fmt));
-<<<<<<< HEAD
         REPORTER_ASSERT(reporter, nullptr == data);
-=======
-        REPORTER_ASSERT(reporter, NULL == data);
->>>>>>> miniblink49
     }
 }
 
@@ -155,14 +106,9 @@ DEF_TEST(CompressAlphaFailColorType, reporter) {
  * Make sure that if you compress a texture with alternating black/white pixels, and
  * then decompress it, you get what you started with.
  */
-<<<<<<< HEAD
 DEF_TEST(CompressCheckerboard, reporter)
 {
     static const int kWidth = 48; // We need the number to be divisible by both
-=======
-DEF_TEST(CompressCheckerboard, reporter) {
-    static const int kWidth = 48;  // We need the number to be divisible by both
->>>>>>> miniblink49
     static const int kHeight = 48; // 12 (ASTC) and 16 (ARM NEON R11 EAC).
 
     // ASTC is at most 12x12, and any dimension divisible by 12 is also divisible
@@ -181,11 +127,7 @@ DEF_TEST(CompressCheckerboard, reporter) {
     {
         uint8_t* pixels = reinterpret_cast<uint8_t*>(pixmap.writable_addr());
         REPORTER_ASSERT(reporter, pixels);
-<<<<<<< HEAD
         if (nullptr == pixels) {
-=======
-        if (NULL == pixels) {
->>>>>>> miniblink49
             return;
         }
 
@@ -201,17 +143,10 @@ DEF_TEST(CompressCheckerboard, reporter) {
         }
     }
 
-<<<<<<< HEAD
     SkAutoTMalloc<uint8_t> decompMemory(kWidth * kHeight);
     uint8_t* decompBuffer = decompMemory.get();
     REPORTER_ASSERT(reporter, decompBuffer);
     if (nullptr == decompBuffer) {
-=======
-    SkAutoMalloc decompMemory(kWidth*kHeight);
-    uint8_t* decompBuffer = reinterpret_cast<uint8_t*>(decompMemory.get());
-    REPORTER_ASSERT(reporter, decompBuffer);
-    if (NULL == decompBuffer) {
->>>>>>> miniblink49
         return;
     }
 
@@ -226,7 +161,6 @@ DEF_TEST(CompressCheckerboard, reporter) {
 
         SkAutoDataUnref data(SkTextureCompressor::CompressBitmapToFormat(pixmap, fmt));
         REPORTER_ASSERT(reporter, data);
-<<<<<<< HEAD
         if (nullptr == data) {
             continue;
         }
@@ -235,36 +169,17 @@ DEF_TEST(CompressCheckerboard, reporter) {
             decompBuffer, kWidth,
             data->bytes(),
             kWidth, kHeight, fmt);
-=======
-        if (NULL == data) {
-            continue;
-        }
-
-        bool decompResult =
-            SkTextureCompressor::DecompressBufferFromFormat(
-                decompBuffer, kWidth,
-                data->bytes(),
-                kWidth, kHeight, fmt);
->>>>>>> miniblink49
         REPORTER_ASSERT(reporter, decompResult);
 
         const uint8_t* pixels = reinterpret_cast<const uint8_t*>(pixmap.addr());
         REPORTER_ASSERT(reporter, pixels);
-<<<<<<< HEAD
         if (nullptr == pixels) {
-=======
-        if (NULL == pixels) {
->>>>>>> miniblink49
             continue;
         }
 
         for (int y = 0; y < kHeight; ++y) {
             for (int x = 0; x < kWidth; ++x) {
-<<<<<<< HEAD
                 bool ok = pixels[y * pixmap.rowBytes() + x] == decompBuffer[y * kWidth + x];
-=======
-                bool ok = pixels[y*pixmap.rowBytes() + x] == decompBuffer[y*kWidth + x];
->>>>>>> miniblink49
                 REPORTER_ASSERT(reporter, ok);
             }
         }
@@ -274,12 +189,8 @@ DEF_TEST(CompressCheckerboard, reporter) {
 /**
  * Make sure that if we pass in a solid color bitmap that we get the appropriate results
  */
-<<<<<<< HEAD
 DEF_TEST(CompressLATC, reporter)
 {
-=======
-DEF_TEST(CompressLATC, reporter) {
->>>>>>> miniblink49
 
     const SkTextureCompressor::Format kLATCFormat = SkTextureCompressor::kLATC_Format;
     static const int kLATCEncodedBlockSize = 8;
@@ -295,34 +206,20 @@ DEF_TEST(CompressLATC, reporter) {
 
     REPORTER_ASSERT(reporter, kWidth % latcDimX == 0);
     REPORTER_ASSERT(reporter, kHeight % latcDimY == 0);
-<<<<<<< HEAD
     const size_t kSizeToBe = SkTextureCompressor::GetCompressedDataSize(kLATCFormat, kWidth, kHeight);
     REPORTER_ASSERT(reporter, kSizeToBe == ((kWidth * kHeight * kLATCEncodedBlockSize) / 16));
-=======
-    const size_t kSizeToBe =
-        SkTextureCompressor::GetCompressedDataSize(kLATCFormat, kWidth, kHeight);
-    REPORTER_ASSERT(reporter, kSizeToBe == ((kWidth*kHeight*kLATCEncodedBlockSize)/16));
->>>>>>> miniblink49
     REPORTER_ASSERT(reporter, (kSizeToBe % kLATCEncodedBlockSize) == 0);
 
     for (int lum = 0; lum < 256; ++lum) {
         uint8_t* pixels = reinterpret_cast<uint8_t*>(pixmap.writable_addr());
-<<<<<<< HEAD
         for (int i = 0; i < kWidth * kHeight; ++i) {
-=======
-        for (int i = 0; i < kWidth*kHeight; ++i) {
->>>>>>> miniblink49
             pixels[i] = lum;
         }
 
         SkAutoDataUnref latcData(
             SkTextureCompressor::CompressBitmapToFormat(pixmap, kLATCFormat));
         REPORTER_ASSERT(reporter, latcData);
-<<<<<<< HEAD
         if (nullptr == latcData) {
-=======
-        if (NULL == latcData) {
->>>>>>> miniblink49
             continue;
         }
 
@@ -343,11 +240,7 @@ DEF_TEST(CompressLATC, reporter) {
         // 4. Approximate division by three twice
         uint32_t quant = static_cast<uint32_t>(lum);
         quant >>= 1; // 1
-<<<<<<< HEAD
         quant += 9; // 2
-=======
-        quant += 9;  // 2
->>>>>>> miniblink49
         quant >>= 1; // 3
 
         uint32_t a, b, c, ar, br, cr;
@@ -372,24 +265,11 @@ DEF_TEST(CompressLATC, reporter) {
 
         const uint64_t kIndex = kIndexEncodingMap[quant];
 
-<<<<<<< HEAD
         const uint64_t kConstColorEncoding = SkEndian_SwapLE64(
             255 | (kIndex << 16) | (kIndex << 19) | (kIndex << 22) | (kIndex << 25) | (kIndex << 28) | (kIndex << 31) | (kIndex << 34) | (kIndex << 37) | (kIndex << 40) | (kIndex << 43) | (kIndex << 46) | (kIndex << 49) | (kIndex << 52) | (kIndex << 55) | (kIndex << 58) | (kIndex << 61));
 
         const uint64_t* blockPtr = reinterpret_cast<const uint64_t*>(latcData->data());
         for (size_t i = 0; i < (kSizeToBe / 8); ++i) {
-=======
-        const uint64_t kConstColorEncoding =
-            SkEndian_SwapLE64(
-                255 |
-                (kIndex << 16) | (kIndex << 19) | (kIndex << 22) | (kIndex << 25) |
-                (kIndex << 28) | (kIndex << 31) | (kIndex << 34) | (kIndex << 37) |
-                (kIndex << 40) | (kIndex << 43) | (kIndex << 46) | (kIndex << 49) |
-                (kIndex << 52) | (kIndex << 55) | (kIndex << 58) | (kIndex << 61));
-
-        const uint64_t* blockPtr = reinterpret_cast<const uint64_t*>(latcData->data());
-        for (size_t i = 0; i < (kSizeToBe/8); ++i) {
->>>>>>> miniblink49
             REPORTER_ASSERT(reporter, blockPtr[i] == kConstColorEncoding);
         }
     }

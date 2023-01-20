@@ -28,19 +28,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "public/platform/WebCryptoKeyAlgorithm.h"
 
 #include "wtf/PtrUtil.h"
 #include "wtf/ThreadSafeRefCounted.h"
 #include <memory>
-=======
-#include "config.h"
-#include "public/platform/WebCryptoKeyAlgorithm.h"
-
-#include "wtf/OwnPtr.h"
-#include "wtf/ThreadSafeRefCounted.h"
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -50,7 +42,6 @@ WebCryptoAlgorithm createHash(WebCryptoAlgorithmId hash)
     return WebCryptoAlgorithm::adoptParamsAndCreate(hash, 0);
 }
 
-<<<<<<< HEAD
 class WebCryptoKeyAlgorithmPrivate
     : public ThreadSafeRefCounted<WebCryptoKeyAlgorithmPrivate> {
 public:
@@ -59,18 +50,10 @@ public:
         std::unique_ptr<WebCryptoKeyAlgorithmParams> params)
         : id(id)
         , params(std::move(params))
-=======
-class WebCryptoKeyAlgorithmPrivate : public ThreadSafeRefCounted<WebCryptoKeyAlgorithmPrivate> {
-public:
-    WebCryptoKeyAlgorithmPrivate(WebCryptoAlgorithmId id, PassOwnPtr<WebCryptoKeyAlgorithmParams> params)
-        : id(id)
-        , params(params)
->>>>>>> miniblink49
     {
     }
 
     WebCryptoAlgorithmId id;
-<<<<<<< HEAD
     std::unique_ptr<WebCryptoKeyAlgorithmParams> params;
 };
 
@@ -92,28 +75,11 @@ WebCryptoKeyAlgorithm WebCryptoKeyAlgorithm::adoptParamsAndCreate(
 WebCryptoKeyAlgorithm WebCryptoKeyAlgorithm::createAes(
     WebCryptoAlgorithmId id,
     unsigned short keyLengthBits)
-=======
-    OwnPtr<WebCryptoKeyAlgorithmParams> params;
-};
-
-WebCryptoKeyAlgorithm::WebCryptoKeyAlgorithm(WebCryptoAlgorithmId id, PassOwnPtr<WebCryptoKeyAlgorithmParams> params)
-    : m_private(adoptRef(new WebCryptoKeyAlgorithmPrivate(id, params)))
-{
-}
-
-WebCryptoKeyAlgorithm WebCryptoKeyAlgorithm::adoptParamsAndCreate(WebCryptoAlgorithmId id, WebCryptoKeyAlgorithmParams* params)
-{
-    return WebCryptoKeyAlgorithm(id, adoptPtr(params));
-}
-
-WebCryptoKeyAlgorithm WebCryptoKeyAlgorithm::createAes(WebCryptoAlgorithmId id, unsigned short keyLengthBits)
->>>>>>> miniblink49
 {
     // FIXME: Verify that id is an AES algorithm.
     // FIXME: Move this somewhere more general.
     if (keyLengthBits != 128 && keyLengthBits != 192 && keyLengthBits != 256)
         return WebCryptoKeyAlgorithm();
-<<<<<<< HEAD
     return WebCryptoKeyAlgorithm(
         id, WTF::makeUnique<WebCryptoAesKeyAlgorithmParams>(keyLengthBits));
 }
@@ -136,24 +102,10 @@ WebCryptoKeyAlgorithm WebCryptoKeyAlgorithm::createRsaHashed(
     const unsigned char* publicExponent,
     unsigned publicExponentSize,
     WebCryptoAlgorithmId hash)
-=======
-    return WebCryptoKeyAlgorithm(id, adoptPtr(new WebCryptoAesKeyAlgorithmParams(keyLengthBits)));
-}
-
-WebCryptoKeyAlgorithm WebCryptoKeyAlgorithm::createHmac(WebCryptoAlgorithmId hash, unsigned keyLengthBits)
-{
-    if (!WebCryptoAlgorithm::isHash(hash))
-        return WebCryptoKeyAlgorithm();
-    return WebCryptoKeyAlgorithm(WebCryptoAlgorithmIdHmac, adoptPtr(new WebCryptoHmacKeyAlgorithmParams(createHash(hash), keyLengthBits)));
-}
-
-WebCryptoKeyAlgorithm WebCryptoKeyAlgorithm::createRsaHashed(WebCryptoAlgorithmId id, unsigned modulusLengthBits, const unsigned char* publicExponent, unsigned publicExponentSize, WebCryptoAlgorithmId hash)
->>>>>>> miniblink49
 {
     // FIXME: Verify that id is an RSA algorithm which expects a hash
     if (!WebCryptoAlgorithm::isHash(hash))
         return WebCryptoKeyAlgorithm();
-<<<<<<< HEAD
     return WebCryptoKeyAlgorithm(
         id, WTF::wrapUnique(new WebCryptoRsaHashedKeyAlgorithmParams(modulusLengthBits, publicExponent, publicExponentSize, createHash(hash))));
 }
@@ -168,17 +120,6 @@ WebCryptoKeyAlgorithm WebCryptoKeyAlgorithm::createEc(
 
 WebCryptoKeyAlgorithm WebCryptoKeyAlgorithm::createWithoutParams(
     WebCryptoAlgorithmId id)
-=======
-    return WebCryptoKeyAlgorithm(id, adoptPtr(new WebCryptoRsaHashedKeyAlgorithmParams(modulusLengthBits, publicExponent, publicExponentSize, createHash(hash))));
-}
-
-WebCryptoKeyAlgorithm WebCryptoKeyAlgorithm::createEc(WebCryptoAlgorithmId id, WebCryptoNamedCurve namedCurve)
-{
-    return WebCryptoKeyAlgorithm(id, adoptPtr(new WebCryptoEcKeyAlgorithmParams(namedCurve)));
-}
-
-WebCryptoKeyAlgorithm WebCryptoKeyAlgorithm::createWithoutParams(WebCryptoAlgorithmId id)
->>>>>>> miniblink49
 {
     if (!WebCryptoAlgorithm::isKdf(id))
         return WebCryptoKeyAlgorithm();
@@ -208,12 +149,8 @@ WebCryptoAesKeyAlgorithmParams* WebCryptoKeyAlgorithm::aesParams() const
 {
     ASSERT(!isNull());
     if (paramsType() == WebCryptoKeyAlgorithmParamsTypeAes)
-<<<<<<< HEAD
         return static_cast<WebCryptoAesKeyAlgorithmParams*>(
             m_private->params.get());
-=======
-        return static_cast<WebCryptoAesKeyAlgorithmParams*>(m_private->params.get());
->>>>>>> miniblink49
     return 0;
 }
 
@@ -221,7 +158,6 @@ WebCryptoHmacKeyAlgorithmParams* WebCryptoKeyAlgorithm::hmacParams() const
 {
     ASSERT(!isNull());
     if (paramsType() == WebCryptoKeyAlgorithmParamsTypeHmac)
-<<<<<<< HEAD
         return static_cast<WebCryptoHmacKeyAlgorithmParams*>(
             m_private->params.get());
     return 0;
@@ -234,17 +170,6 @@ WebCryptoRsaHashedKeyAlgorithmParams* WebCryptoKeyAlgorithm::rsaHashedParams()
     if (paramsType() == WebCryptoKeyAlgorithmParamsTypeRsaHashed)
         return static_cast<WebCryptoRsaHashedKeyAlgorithmParams*>(
             m_private->params.get());
-=======
-        return static_cast<WebCryptoHmacKeyAlgorithmParams*>(m_private->params.get());
-    return 0;
-}
-
-WebCryptoRsaHashedKeyAlgorithmParams* WebCryptoKeyAlgorithm::rsaHashedParams() const
-{
-    ASSERT(!isNull());
-    if (paramsType() == WebCryptoKeyAlgorithmParamsTypeRsaHashed)
-        return static_cast<WebCryptoRsaHashedKeyAlgorithmParams*>(m_private->params.get());
->>>>>>> miniblink49
     return 0;
 }
 
@@ -256,12 +181,8 @@ WebCryptoEcKeyAlgorithmParams* WebCryptoKeyAlgorithm::ecParams() const
     return 0;
 }
 
-<<<<<<< HEAD
 void WebCryptoKeyAlgorithm::writeToDictionary(
     WebCryptoKeyAlgorithmDictionary* dict) const
-=======
-void WebCryptoKeyAlgorithm::writeToDictionary(WebCryptoKeyAlgorithmDictionary* dict) const
->>>>>>> miniblink49
 {
     ASSERT(!isNull());
     dict->setString("name", WebCryptoAlgorithm::lookupAlgorithmInfo(id())->name);

@@ -23,36 +23,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "public/web/WebSpeechRecognitionResult.h"
 
 #include "modules/speech/SpeechRecognitionAlternative.h"
 #include "modules/speech/SpeechRecognitionResult.h"
 #include "platform/heap/Handle.h"
-<<<<<<< HEAD
-=======
-#include "wtf/PassRefPtr.h"
-#include "wtf/RawPtr.h"
-#include "wtf/RefPtr.h"
->>>>>>> miniblink49
 #include "wtf/Vector.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 void WebSpeechRecognitionResult::assign(
     const WebSpeechRecognitionResult& other)
-=======
-void WebSpeechRecognitionResult::assign(const WebSpeechRecognitionResult& other)
->>>>>>> miniblink49
 {
     m_private = other.m_private;
 }
 
-<<<<<<< HEAD
 void WebSpeechRecognitionResult::assign(const WebVector<WebString>& transcripts,
     const WebVector<float>& confidences,
     bool final)
@@ -61,13 +46,6 @@ void WebSpeechRecognitionResult::assign(const WebVector<WebString>& transcripts,
 
     HeapVector<Member<SpeechRecognitionAlternative>> alternatives(
         transcripts.size());
-=======
-void WebSpeechRecognitionResult::assign(const WebVector<WebString>& transcripts, const WebVector<float>& confidences, bool final)
-{
-    ASSERT(transcripts.size() == confidences.size());
-
-    HeapVector<Member<SpeechRecognitionAlternative>> alternatives(transcripts.size());
->>>>>>> miniblink49
     for (size_t i = 0; i < transcripts.size(); ++i)
         alternatives[i] = SpeechRecognitionAlternative::create(transcripts[i], confidences[i]);
 

@@ -16,8 +16,4 @@
 
 using std::lrint;
 
-<<<<<<< HEAD
 #endif // V8_BASE_QNX_MATH_H_
-=======
-#endif  // V8_BASE_QNX_MATH_H_
->>>>>>> miniblink49

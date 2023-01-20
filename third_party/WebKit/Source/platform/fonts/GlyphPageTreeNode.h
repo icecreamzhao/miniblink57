@@ -30,22 +30,12 @@
 #define GlyphPageTreeNode_h
 
 #include "platform/fonts/GlyphPage.h"
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/HashMap.h"
 #include "wtf/PassRefPtr.h"
 #include "wtf/text/Unicode.h"
 #include <memory>
 #include <string.h>
-=======
-#include "wtf/HashMap.h"
-#include "wtf/OwnPtr.h"
-#include "wtf/PassRefPtr.h"
-#include "wtf/RefCounted.h"
-#include "wtf/text/Unicode.h"
-#include <string.h>
-
->>>>>>> miniblink49
 #include <unicode/uscript.h>
 
 namespace blink {
@@ -79,13 +69,9 @@ class GlyphPageTreeNode;
 class SystemFallbackGlyphPageTreeNode;
 
 class PLATFORM_EXPORT GlyphPageTreeNodeBase {
-<<<<<<< HEAD
     USING_FAST_MALLOC(GlyphPageTreeNodeBase);
     WTF_MAKE_NONCOPYABLE(GlyphPageTreeNodeBase);
 
-=======
-    WTF_MAKE_FAST_ALLOCATED(GlyphPageTreeNodeBase); WTF_MAKE_NONCOPYABLE(GlyphPageTreeNodeBase);
->>>>>>> miniblink49
 public:
     GlyphPageTreeNode* parent() const { return m_parent; }
 
@@ -133,14 +119,10 @@ public:
     size_t pageCount() const;
 
 private:
-<<<<<<< HEAD
     GlyphPageTreeNode(GlyphPageTreeNode* parent = nullptr)
         : GlyphPageTreeNodeBase(parent, false)
     {
     }
-=======
-    GlyphPageTreeNode(GlyphPageTreeNode* parent = nullptr) : GlyphPageTreeNodeBase(parent, false) { }
->>>>>>> miniblink49
 
     static GlyphPageTreeNode* getRoot(unsigned pageNumber);
 
@@ -156,15 +138,9 @@ private:
     static GlyphPageTreeNode* pageZeroRoot;
 
     RefPtr<GlyphPage> m_page;
-<<<<<<< HEAD
     typedef HashMap<const FontData*, std::unique_ptr<GlyphPageTreeNode>> GlyphPageTreeNodeMap;
     GlyphPageTreeNodeMap m_children;
     std::unique_ptr<SystemFallbackGlyphPageTreeNode> m_systemFallbackChild;
-=======
-    typedef HashMap<const FontData*, OwnPtr<GlyphPageTreeNode>> GlyphPageTreeNodeMap;
-    GlyphPageTreeNodeMap m_children;
-    OwnPtr<SystemFallbackGlyphPageTreeNode> m_systemFallbackChild;
->>>>>>> miniblink49
 };
 
 class PLATFORM_EXPORT SystemFallbackGlyphPageTreeNode : public GlyphPageTreeNodeBase {
@@ -174,23 +150,16 @@ public:
 private:
     friend class GlyphPageTreeNode;
 
-<<<<<<< HEAD
     SystemFallbackGlyphPageTreeNode(GlyphPageTreeNode* parent)
         : GlyphPageTreeNodeBase(parent, true)
     {
     }
-=======
-    SystemFallbackGlyphPageTreeNode(GlyphPageTreeNode* parent) : GlyphPageTreeNodeBase(parent, true) { }
->>>>>>> miniblink49
 
     void pruneFontData(const SimpleFontData*);
     PassRefPtr<GlyphPage> initializePage();
 
     struct UScriptCodeHashTraits : WTF::GenericHashTraits<UScriptCode> {
-<<<<<<< HEAD
         STATIC_ONLY(UScriptCodeHashTraits);
-=======
->>>>>>> miniblink49
         static UScriptCode emptyValue() { return USCRIPT_CODE_LIMIT; }
         static void constructDeletedValue(UScriptCode& slot, bool) { slot = USCRIPT_INVALID_CODE; }
         static bool isDeletedValue(UScriptCode value) { return value == USCRIPT_INVALID_CODE; }

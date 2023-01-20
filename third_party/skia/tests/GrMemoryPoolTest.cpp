@@ -19,29 +19,18 @@
 class A {
 public:
     A() {};
-<<<<<<< HEAD
     virtual void setValues(int v)
     {
         fChar = static_cast<char>(v);
     }
     virtual bool checkValues(int v)
     {
-=======
-    virtual void setValues(int v) {
-        fChar = static_cast<char>(v);
-    }
-    virtual bool checkValues(int v) {
->>>>>>> miniblink49
         return fChar == static_cast<char>(v);
     }
     virtual ~A() {};
 
-<<<<<<< HEAD
     void* operator new(size_t size)
     {
-=======
-    void* operator new(size_t size) {
->>>>>>> miniblink49
         if (!gPool.get()) {
             return ::operator new(size);
         } else {
@@ -49,12 +38,8 @@ public:
         }
     }
 
-<<<<<<< HEAD
     void operator delete(void* p)
     {
-=======
-    void operator delete(void* p) {
->>>>>>> miniblink49
         if (!gPool.get()) {
             ::operator delete(p);
         } else {
@@ -64,24 +49,15 @@ public:
 
     static A* Create(SkRandom* r);
 
-<<<<<<< HEAD
     static void SetAllocator(size_t preallocSize, size_t minAllocSize)
     {
-=======
-    static void SetAllocator(size_t preallocSize, size_t minAllocSize) {
->>>>>>> miniblink49
         GrMemoryPool* pool = new GrMemoryPool(preallocSize, minAllocSize);
         gPool.reset(pool);
     }
 
-<<<<<<< HEAD
     static void ResetAllocator()
     {
         gPool.reset(nullptr);
-=======
-    static void ResetAllocator() {
-        gPool.reset(NULL);
->>>>>>> miniblink49
     }
 
 private:
@@ -94,7 +70,6 @@ SkAutoTDelete<GrMemoryPool> A::gPool;
 class B : public A {
 public:
     B() {};
-<<<<<<< HEAD
     virtual void setValues(int v)
     {
         fDouble = static_cast<double>(v);
@@ -103,15 +78,6 @@ public:
     virtual bool checkValues(int v)
     {
         return fDouble == static_cast<double>(v) && this->INHERITED::checkValues(v);
-=======
-    virtual void setValues(int v) {
-        fDouble = static_cast<double>(v);
-        this->INHERITED::setValues(v);
-    }
-    virtual bool checkValues(int v) {
-        return fDouble == static_cast<double>(v) &&
-               this->INHERITED::checkValues(v);
->>>>>>> miniblink49
     }
     virtual ~B() {};
 
@@ -124,7 +90,6 @@ private:
 class C : public A {
 public:
     C() {};
-<<<<<<< HEAD
     virtual void setValues(int v)
     {
         fInt64 = static_cast<int64_t>(v);
@@ -133,15 +98,6 @@ public:
     virtual bool checkValues(int v)
     {
         return fInt64 == static_cast<int64_t>(v) && this->INHERITED::checkValues(v);
-=======
-    virtual void setValues(int v) {
-        fInt64 = static_cast<int64_t>(v);
-        this->INHERITED::setValues(v);
-    }
-    virtual bool checkValues(int v) {
-        return fInt64 == static_cast<int64_t>(v) &&
-               this->INHERITED::checkValues(v);
->>>>>>> miniblink49
     }
     virtual ~C() {};
 
@@ -154,7 +110,6 @@ private:
 // D derives from C and owns a dynamically created B
 class D : public C {
 public:
-<<<<<<< HEAD
     D()
     {
         fB = new B();
@@ -177,52 +132,22 @@ public:
 private:
     void* fVoidStar;
     B* fB;
-=======
-    D() {
-        fB = new B();
-    }
-    virtual void setValues(int v) {
-        fVoidStar = reinterpret_cast<void*>(v);
-        this->INHERITED::setValues(v);
-        fB->setValues(v);
-    }
-    virtual bool checkValues(int v) {
-        return fVoidStar == reinterpret_cast<void*>(v) &&
-               fB->checkValues(v) &&
-               this->INHERITED::checkValues(v);
-    }
-    virtual ~D() {
-        delete fB;
-    }
-private:
-    void*   fVoidStar;
-    B*      fB;
->>>>>>> miniblink49
 
     typedef C INHERITED;
 };
 
 class E : public A {
 public:
-<<<<<<< HEAD
     E() { }
     virtual void setValues(int v)
     {
-=======
-    E() {}
-    virtual void setValues(int v) {
->>>>>>> miniblink49
         for (size_t i = 0; i < SK_ARRAY_COUNT(fIntArray); ++i) {
             fIntArray[i] = v;
         }
         this->INHERITED::setValues(v);
     }
-<<<<<<< HEAD
     virtual bool checkValues(int v)
     {
-=======
-    virtual bool checkValues(int v) {
->>>>>>> miniblink49
         bool ok = true;
         for (size_t i = 0; ok && i < SK_ARRAY_COUNT(fIntArray); ++i) {
             if (fIntArray[i] != v) {
@@ -231,21 +156,14 @@ public:
         }
         return ok && this->INHERITED::checkValues(v);
     }
-<<<<<<< HEAD
     virtual ~E() { }
 
 private:
     int fIntArray[20];
-=======
-    virtual ~E() {}
-private:
-    int   fIntArray[20];
->>>>>>> miniblink49
 
     typedef A INHERITED;
 };
 
-<<<<<<< HEAD
 A* A::Create(SkRandom* r)
 {
     switch (r->nextRangeU(0, 4)) {
@@ -262,23 +180,6 @@ A* A::Create(SkRandom* r)
     default:
         // suppress warning
         return nullptr;
-=======
-A* A::Create(SkRandom* r) {
-    switch (r->nextRangeU(0, 4)) {
-        case 0:
-            return new A;
-        case 1:
-            return new B;
-        case 2:
-            return new C;
-        case 3:
-            return new D;
-        case 4:
-            return new E;
-        default:
-            // suppress warning
-            return NULL;
->>>>>>> miniblink49
     }
 }
 
@@ -287,7 +188,6 @@ struct Rec {
     int fValue;
 };
 
-<<<<<<< HEAD
 DEF_TEST(GrMemoryPool, reporter)
 {
     // prealloc and min alloc sizes for the pool
@@ -301,20 +201,6 @@ DEF_TEST(GrMemoryPool, reporter)
     };
     // different percentages of creation vs deletion
     static const float gCreateFraction[] = { 1.f, .95f, 0.75f, .5f };
-=======
-DEF_TEST(GrMemoryPool, reporter) {
-    // prealloc and min alloc sizes for the pool
-    static const size_t gSizes[][2] = {
-        {0, 0},
-        {10 * sizeof(A), 20 * sizeof(A)},
-        {100 * sizeof(A), 100 * sizeof(A)},
-        {500 * sizeof(A), 500 * sizeof(A)},
-        {10000 * sizeof(A), 0},
-        {1, 100 * sizeof(A)},
-    };
-    // different percentages of creation vs deletion
-    static const float gCreateFraction[] = {1.f, .95f, 0.75f, .5f};
->>>>>>> miniblink49
     // number of create/destroys per test
     static const int kNumIters = 20000;
     // check that all the values stored in A objects are correct after this
@@ -328,12 +214,7 @@ DEF_TEST(GrMemoryPool, reporter) {
             SkTDArray<Rec> instanceRecs;
             for (int i = 0; i < kNumIters; ++i) {
                 float createOrDestroy = r.nextUScalar1();
-<<<<<<< HEAD
                 if (createOrDestroy < gCreateFraction[c] || 0 == instanceRecs.count()) {
-=======
-                if (createOrDestroy < gCreateFraction[c] ||
-                    0 == instanceRecs.count()) {
->>>>>>> miniblink49
                     Rec* rec = instanceRecs.append();
                     rec->fInstance = A::Create(&r);
                     rec->fValue = static_cast<int>(r.nextU());

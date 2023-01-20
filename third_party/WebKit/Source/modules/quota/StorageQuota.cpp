@@ -28,23 +28,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "modules/quota/StorageQuota.h"
 
 #include "bindings/core/v8/ScriptPromise.h"
 #include "bindings/core/v8/ScriptPromiseResolver.h"
-<<<<<<< HEAD
 #include "core/dom/ExceptionCode.h"
 #include "core/dom/ExecutionContext.h"
 #include "modules/quota/DOMError.h"
-=======
-#include "core/dom/DOMError.h"
-#include "core/dom/ExceptionCode.h"
-#include "core/dom/ExecutionContext.h"
->>>>>>> miniblink49
 #include "modules/quota/StorageQuotaCallbacksImpl.h"
 #include "modules/quota/StorageQuotaClient.h"
 #include "platform/weborigin/KURL.h"
@@ -57,7 +47,6 @@ namespace blink {
 
 namespace {
 
-<<<<<<< HEAD
     struct StorageTypeMapping {
         WebStorageQuotaType type;
         const char* const name;
@@ -81,59 +70,21 @@ namespace {
 } // namespace
 
 StorageQuota::StorageQuota() { }
-=======
-struct StorageTypeMapping {
-    WebStorageQuotaType type;
-    const char* const name;
-};
-
-const StorageTypeMapping storageTypeMappings[] = {
-    { WebStorageQuotaTypeTemporary, "temporary" },
-    { WebStorageQuotaTypePersistent, "persistent" },
-};
-
-WebStorageQuotaType stringToStorageQuotaType(const String& type)
-{
-    for (size_t i = 0; i < WTF_ARRAY_LENGTH(storageTypeMappings); ++i) {
-        if (storageTypeMappings[i].name == type)
-            return storageTypeMappings[i].type;
-    }
-    ASSERT_NOT_REACHED();
-    return WebStorageQuotaTypeTemporary;
-}
-
-} // namespace
-
-StorageQuota::StorageQuota()
-{
-}
->>>>>>> miniblink49
 
 Vector<String> StorageQuota::supportedTypes() const
 {
     Vector<String> types;
     for (size_t i = 0; i < WTF_ARRAY_LENGTH(storageTypeMappings); ++i)
-<<<<<<< HEAD
         types.push_back(storageTypeMappings[i].name);
-=======
-        types.append(storageTypeMappings[i].name);
->>>>>>> miniblink49
     return types;
 }
 
 ScriptPromise StorageQuota::queryInfo(ScriptState* scriptState, String type)
 {
-<<<<<<< HEAD
     ScriptPromiseResolver* resolver = ScriptPromiseResolver::create(scriptState);
     ScriptPromise promise = resolver->promise();
 
     SecurityOrigin* securityOrigin = scriptState->getExecutionContext()->getSecurityOrigin();
-=======
-    RefPtrWillBeRawPtr<ScriptPromiseResolver> resolver = ScriptPromiseResolver::create(scriptState);
-    ScriptPromise promise = resolver->promise();
-
-    SecurityOrigin* securityOrigin = scriptState->executionContext()->securityOrigin();
->>>>>>> miniblink49
     if (securityOrigin->isUnique()) {
         resolver->reject(DOMError::create(NotSupportedError));
         return promise;
@@ -141,7 +92,6 @@ ScriptPromise StorageQuota::queryInfo(ScriptState* scriptState, String type)
 
     KURL storagePartition = KURL(KURL(), securityOrigin->toString());
     StorageQuotaCallbacks* callbacks = StorageQuotaCallbacksImpl::create(resolver);
-<<<<<<< HEAD
     Platform::current()->queryStorageUsageAndQuota(
         storagePartition, stringToStorageQuotaType(type), callbacks);
     return promise;
@@ -154,17 +104,6 @@ ScriptPromise StorageQuota::requestPersistentQuota(
     StorageQuotaClient* client = StorageQuotaClient::from(scriptState->getExecutionContext());
     if (!client) {
         ScriptPromiseResolver* resolver = ScriptPromiseResolver::create(scriptState);
-=======
-    Platform::current()->queryStorageUsageAndQuota(storagePartition, stringToStorageQuotaType(type), callbacks);
-    return promise;
-}
-
-ScriptPromise StorageQuota::requestPersistentQuota(ScriptState* scriptState, unsigned long long newQuota)
-{
-    StorageQuotaClient* client = StorageQuotaClient::from(scriptState->executionContext());
-    if (!client) {
-        RefPtrWillBeRawPtr<ScriptPromiseResolver> resolver = ScriptPromiseResolver::create(scriptState);
->>>>>>> miniblink49
         ScriptPromise promise = resolver->promise();
         resolver->reject(DOMError::create(NotSupportedError));
         return promise;

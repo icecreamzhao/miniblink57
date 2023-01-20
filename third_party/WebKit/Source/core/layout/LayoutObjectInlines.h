@@ -17,12 +17,13 @@ namespace blink {
 
 inline const ComputedStyle* LayoutObject::firstLineStyle() const
 {
-    return document().styleEngine().usesFirstLineRules() ? cachedFirstLineStyle() : style();
+    return document().styleEngine().usesFirstLineRules() ? cachedFirstLineStyle()
+                                                         : style();
 }
 
 inline const ComputedStyle& LayoutObject::firstLineStyleRef() const
 {
-    const ComputedStyle* style =  firstLineStyle();
+    const ComputedStyle* style = firstLineStyle();
     ASSERT(style);
     return *style;
 }
@@ -39,6 +40,6 @@ inline const ComputedStyle& LayoutObject::styleRef(bool firstLine) const
     return *style;
 }
 
-}
+} // namespace blink
 
 #endif

@@ -42,7 +42,6 @@ namespace blink {
 PLATFORM_EXPORT UScriptCode localeToScriptCodeForFontSelection(const String&);
 PLATFORM_EXPORT UScriptCode scriptNameToCode(const String&);
 
-<<<<<<< HEAD
 PLATFORM_EXPORT UScriptCode scriptCodeForHanFromSubtags(const String&,
     char delimiter = '-');
 
@@ -56,8 +55,6 @@ inline bool isUnambiguousHanScript(UScriptCode script)
 PLATFORM_EXPORT UScriptCode scriptCodeForHanFromLocale(const String&, char delimiter = '-');
 PLATFORM_EXPORT UScriptCode scriptCodeForHanFromLocale(UScriptCode, const String&, char delimiter = '-');
 
-=======
->>>>>>> miniblink49
 }
 
 #endif

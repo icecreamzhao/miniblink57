@@ -28,10 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "public/web/WebSerializedScriptValue.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -41,7 +37,6 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 WebSerializedScriptValue WebSerializedScriptValue::fromString(
     const WebString& s)
 {
@@ -54,17 +49,6 @@ WebSerializedScriptValue WebSerializedScriptValue::serialize(
     DummyExceptionStateForTesting exceptionState;
     WebSerializedScriptValue serializedValue = SerializedScriptValue::serialize(
         v8::Isolate::GetCurrent(), value, nullptr, nullptr, exceptionState);
-=======
-WebSerializedScriptValue WebSerializedScriptValue::fromString(const WebString& s)
-{
-    return SerializedScriptValueFactory::instance().createFromWire(s);
-}
-
-WebSerializedScriptValue WebSerializedScriptValue::serialize(v8::Local<v8::Value> value)
-{
-    TrackExceptionState exceptionState;
-    WebSerializedScriptValue serializedValue = SerializedScriptValueFactory::instance().create(v8::Isolate::GetCurrent(), value, 0, 0, exceptionState);
->>>>>>> miniblink49
     if (exceptionState.hadException())
         return createInvalid();
     return serializedValue;
@@ -72,11 +56,7 @@ WebSerializedScriptValue WebSerializedScriptValue::serialize(v8::Local<v8::Value
 
 WebSerializedScriptValue WebSerializedScriptValue::createInvalid()
 {
-<<<<<<< HEAD
     return SerializedScriptValue::create();
-=======
-    return SerializedScriptValueFactory::instance().create();
->>>>>>> miniblink49
 }
 
 void WebSerializedScriptValue::reset()
@@ -99,22 +79,14 @@ v8::Local<v8::Value> WebSerializedScriptValue::deserialize()
     return m_private->deserialize();
 }
 
-<<<<<<< HEAD
 WebSerializedScriptValue::WebSerializedScriptValue(
     PassRefPtr<SerializedScriptValue> value)
-=======
-WebSerializedScriptValue::WebSerializedScriptValue(const PassRefPtr<SerializedScriptValue>& value)
->>>>>>> miniblink49
     : m_private(value)
 {
 }
 
-<<<<<<< HEAD
 WebSerializedScriptValue& WebSerializedScriptValue::operator=(
     PassRefPtr<SerializedScriptValue> value)
-=======
-WebSerializedScriptValue& WebSerializedScriptValue::operator=(const PassRefPtr<SerializedScriptValue>& value)
->>>>>>> miniblink49
 {
     m_private = value;
     return *this;

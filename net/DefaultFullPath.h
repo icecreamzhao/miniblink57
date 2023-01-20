@@ -6,8 +6,9 @@
 
 namespace net {
 
-String getDefaultLocalStorageFullPath();
-void setDefaultLocalStorageFullPath(const String& path);
+std::string getDefaultLocalStorageFullPath();
+void setDefaultLocalStorageFullPath(const std::string& path);
+std::string getDefaultCookiesFullpath();
 
 }
 

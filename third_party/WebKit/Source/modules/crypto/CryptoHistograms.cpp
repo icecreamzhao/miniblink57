@@ -2,10 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "modules/crypto/CryptoHistograms.h"
 
 #include "core/frame/UseCounter.h"
@@ -57,24 +53,16 @@ static UseCounter::Feature algorithmIdToFeature(WebCryptoAlgorithmId id)
     return static_cast<UseCounter::Feature>(0);
 }
 
-<<<<<<< HEAD
 static void histogramAlgorithmId(ExecutionContext* context,
     WebCryptoAlgorithmId algorithmId)
-=======
-static void histogramAlgorithmId(ExecutionContext* context, WebCryptoAlgorithmId algorithmId)
->>>>>>> miniblink49
 {
     UseCounter::Feature feature = algorithmIdToFeature(algorithmId);
     if (feature)
         UseCounter::count(context, feature);
 }
 
-<<<<<<< HEAD
 void histogramAlgorithm(ExecutionContext* context,
     const WebCryptoAlgorithm& algorithm)
-=======
-void histogramAlgorithm(ExecutionContext* context, const WebCryptoAlgorithm& algorithm)
->>>>>>> miniblink49
 {
     histogramAlgorithmId(context, algorithm.id());
 
@@ -139,13 +127,9 @@ void histogramKey(ExecutionContext* context, const WebCryptoKey& key)
     }
 }
 
-<<<<<<< HEAD
 void histogramAlgorithmAndKey(ExecutionContext* context,
     const WebCryptoAlgorithm& algorithm,
     const WebCryptoKey& key)
-=======
-void histogramAlgorithmAndKey(ExecutionContext* context, const WebCryptoAlgorithm& algorithm, const WebCryptoKey& key)
->>>>>>> miniblink49
 {
     // Note that the algorithm ID for |algorithm| and |key| will usually be the
     // same. This is OK because UseCounter only increments things once per the

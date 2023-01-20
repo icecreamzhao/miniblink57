@@ -23,19 +23,11 @@
  * SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
-#if !ENABLE(INPUT_MULTIPLE_FIELDS_UI)
->>>>>>> miniblink49
 #include "web/ExternalDateTimeChooser.h"
 
 #include "core/InputTypeNames.h"
 #include "core/html/forms/DateTimeChooserClient.h"
-<<<<<<< HEAD
 #include "platform/RuntimeEnabledFeatures.h"
-=======
->>>>>>> miniblink49
 #include "public/web/WebDateTimeChooserCompletion.h"
 #include "public/web/WebDateTimeChooserParams.h"
 #include "public/web/WebViewClient.h"
@@ -52,15 +44,6 @@ public:
     }
 
 private:
-<<<<<<< HEAD
-=======
-    void didChooseValue(const WebString& value) override
-    {
-        m_chooser->didChooseValue(value);
-        delete this;
-    }
-
->>>>>>> miniblink49
     void didChooseValue(double value) override
     {
         m_chooser->didChooseValue(value);
@@ -73,7 +56,6 @@ private:
         delete this;
     }
 
-<<<<<<< HEAD
     Persistent<ExternalDateTimeChooser> m_chooser;
 };
 
@@ -83,19 +65,11 @@ DEFINE_TRACE(ExternalDateTimeChooser)
 {
     visitor->trace(m_client);
     DateTimeChooser::trace(visitor);
-=======
-    RefPtr<ExternalDateTimeChooser> m_chooser;
-};
-
-ExternalDateTimeChooser::~ExternalDateTimeChooser()
-{
->>>>>>> miniblink49
 }
 
 ExternalDateTimeChooser::ExternalDateTimeChooser(DateTimeChooserClient* client)
     : m_client(client)
 {
-<<<<<<< HEAD
     DCHECK(!RuntimeEnabledFeatures::inputMultipleFieldsUIEnabled());
     DCHECK(client);
 }
@@ -113,21 +87,6 @@ ExternalDateTimeChooser* ExternalDateTimeChooser::create(
     return chooser;
 }
 
-=======
-    ASSERT(client);
-}
-
-PassRefPtr<ExternalDateTimeChooser> ExternalDateTimeChooser::create(ChromeClientImpl* chromeClient, WebViewClient* webViewClient, DateTimeChooserClient* client, const DateTimeChooserParameters& parameters)
-{
-    ASSERT(chromeClient);
-    RefPtr<ExternalDateTimeChooser> chooser = adoptRef(new ExternalDateTimeChooser(client));
-    if (!chooser->openDateTimeChooser(chromeClient, webViewClient, parameters))
-        chooser.clear();
-    return chooser.release();
-}
-
-
->>>>>>> miniblink49
 static WebDateTimeInputType toWebDateTimeInputType(const AtomicString& source)
 {
     if (source == InputTypeNames::date)
@@ -145,14 +104,10 @@ static WebDateTimeInputType toWebDateTimeInputType(const AtomicString& source)
     return WebDateTimeInputTypeNone;
 }
 
-<<<<<<< HEAD
 bool ExternalDateTimeChooser::openDateTimeChooser(
     ChromeClientImpl* chromeClient,
     WebViewClient* webViewClient,
     const DateTimeChooserParameters& parameters)
-=======
-bool ExternalDateTimeChooser::openDateTimeChooser(ChromeClientImpl* chromeClient, WebViewClient* webViewClient, const DateTimeChooserParameters& parameters)
->>>>>>> miniblink49
 {
     if (!webViewClient)
         return false;
@@ -160,10 +115,6 @@ bool ExternalDateTimeChooser::openDateTimeChooser(ChromeClientImpl* chromeClient
     WebDateTimeChooserParams webParams;
     webParams.type = toWebDateTimeInputType(parameters.type);
     webParams.anchorRectInScreen = parameters.anchorRectInScreen;
-<<<<<<< HEAD
-=======
-    webParams.currentValue = parameters.currentValue;
->>>>>>> miniblink49
     webParams.doubleValue = parameters.doubleValue;
     webParams.suggestions = parameters.suggestions;
     webParams.minimum = parameters.minimum;
@@ -214,26 +165,13 @@ void ExternalDateTimeChooser::didCancelChooser()
 void ExternalDateTimeChooser::endChooser()
 {
     DateTimeChooserClient* client = m_client;
-<<<<<<< HEAD
     m_client = nullptr;
-=======
-    m_client = 0;
->>>>>>> miniblink49
     client->didEndChooser();
 }
 
 AXObject* ExternalDateTimeChooser::rootAXObject()
 {
-<<<<<<< HEAD
     return nullptr;
 }
 
 } // namespace blink
-=======
-    return 0;
-}
-
-} // namespace blink
-
-#endif
->>>>>>> miniblink49

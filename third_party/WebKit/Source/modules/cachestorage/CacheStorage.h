@@ -11,25 +11,17 @@
 #include "modules/cachestorage/Cache.h"
 #include "modules/cachestorage/CacheQueryOptions.h"
 #include "modules/fetch/GlobalFetch.h"
-<<<<<<< HEAD
 #include "public/platform/modules/serviceworker/WebServiceWorkerCacheStorage.h"
 #include "wtf/Forward.h"
 #include "wtf/HashMap.h"
 #include "wtf/Noncopyable.h"
 #include <memory>
-=======
-#include "public/platform/WebServiceWorkerCacheStorage.h"
-#include "wtf/Forward.h"
-#include "wtf/HashMap.h"
-#include "wtf/Noncopyable.h"
->>>>>>> miniblink49
 
 namespace blink {
 
 class Cache;
 class WebServiceWorkerCacheStorage;
 
-<<<<<<< HEAD
 class CacheStorage final : public GarbageCollectedFinalized<CacheStorage>,
                            public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
@@ -51,21 +43,6 @@ public:
         const RequestInfo&,
         const CacheQueryOptions&,
         ExceptionState&);
-=======
-class CacheStorage final : public GarbageCollectedFinalized<CacheStorage>, public ScriptWrappable {
-    DEFINE_WRAPPERTYPEINFO();
-    WTF_MAKE_NONCOPYABLE(CacheStorage);
-public:
-    static CacheStorage* create(WeakPtr<GlobalFetch::ScopedFetcher>, WebServiceWorkerCacheStorage*);
-    ~CacheStorage();
-    void dispose();
-
-    ScriptPromise open(ScriptState*, const String& cacheName);
-    ScriptPromise has(ScriptState*, const String& cacheName);
-    ScriptPromise deleteFunction(ScriptState*, const String& cacheName);
-    ScriptPromise keys(ScriptState*);
-    ScriptPromise match(ScriptState*, const RequestInfo&, const CacheQueryOptions&, ExceptionState&);
->>>>>>> miniblink49
 
     DECLARE_TRACE();
 
@@ -79,7 +56,6 @@ private:
     friend class WithCacheCallbacks;
     friend class DeleteCallbacks;
 
-<<<<<<< HEAD
     CacheStorage(GlobalFetch::ScopedFetcher*,
         std::unique_ptr<WebServiceWorkerCacheStorage>);
     ScriptPromise matchImpl(ScriptState*,
@@ -88,14 +64,6 @@ private:
 
     Member<GlobalFetch::ScopedFetcher> m_scopedFetcher;
     std::unique_ptr<WebServiceWorkerCacheStorage> m_webCacheStorage;
-=======
-    CacheStorage(WeakPtr<GlobalFetch::ScopedFetcher>, PassOwnPtr<WebServiceWorkerCacheStorage>);
-    ScriptPromise matchImpl(ScriptState*, const Request*, const CacheQueryOptions&);
-
-    WeakPtr<GlobalFetch::ScopedFetcher> m_scopedFetcher;
-    OwnPtr<WebServiceWorkerCacheStorage> m_webCacheStorage;
-    HeapHashMap<String, Member<Cache>> m_nameToCacheMap;
->>>>>>> miniblink49
 };
 
 } // namespace blink

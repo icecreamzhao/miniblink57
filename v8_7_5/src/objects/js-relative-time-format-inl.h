@@ -4,11 +4,7 @@
 
 #ifndef V8_INTL_SUPPORT
 #error Internationalization is expected to be enabled.
-<<<<<<< HEAD
 #endif // V8_INTL_SUPPORT
-=======
-#endif  // V8_INTL_SUPPORT
->>>>>>> miniblink49
 
 #ifndef V8_OBJECTS_JS_RELATIVE_TIME_FORMAT_INL_H_
 #define V8_OBJECTS_JS_RELATIVE_TIME_FORMAT_INL_H_
@@ -22,7 +18,6 @@
 namespace v8 {
 namespace internal {
 
-<<<<<<< HEAD
     OBJECT_CONSTRUCTORS_IMPL(JSRelativeTimeFormat, JSObject)
 
     // Base relative time format accessors.
@@ -65,43 +60,3 @@ namespace internal {
 #include "src/objects/object-macros-undef.h"
 
 #endif // V8_OBJECTS_JS_RELATIVE_TIME_FORMAT_INL_H_
-=======
-OBJECT_CONSTRUCTORS_IMPL(JSRelativeTimeFormat, JSObject)
-
-// Base relative time format accessors.
-ACCESSORS(JSRelativeTimeFormat, locale, String, kLocaleOffset)
-ACCESSORS(JSRelativeTimeFormat, icu_formatter,
-          Managed<icu::RelativeDateTimeFormatter>, kICUFormatterOffset)
-SMI_ACCESSORS(JSRelativeTimeFormat, flags, kFlagsOffset)
-
-inline void JSRelativeTimeFormat::set_style(Style style) {
-  DCHECK_GT(Style::COUNT, style);
-  int hints = flags();
-  hints = StyleBits::update(hints, style);
-  set_flags(hints);
-}
-
-inline JSRelativeTimeFormat::Style JSRelativeTimeFormat::style() const {
-  return StyleBits::decode(flags());
-}
-
-inline void JSRelativeTimeFormat::set_numeric(Numeric numeric) {
-  DCHECK_GT(Numeric::COUNT, numeric);
-  int hints = flags();
-  hints = NumericBits::update(hints, numeric);
-  set_flags(hints);
-}
-
-inline JSRelativeTimeFormat::Numeric JSRelativeTimeFormat::numeric() const {
-  return NumericBits::decode(flags());
-}
-
-CAST_ACCESSOR(JSRelativeTimeFormat)
-
-}  // namespace internal
-}  // namespace v8
-
-#include "src/objects/object-macros-undef.h"
-
-#endif  // V8_OBJECTS_JS_RELATIVE_TIME_FORMAT_INL_H_
->>>>>>> miniblink49

@@ -10,7 +10,6 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
-<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -24,27 +23,10 @@
  * DAMAGE.
  */
 
-=======
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-
-#include "config.h"
-#if ENABLE(WEB_AUDIO)
->>>>>>> miniblink49
 #include "modules/webaudio/OfflineAudioCompletionEvent.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 OfflineAudioCompletionEvent* OfflineAudioCompletionEvent::create()
 {
     return new OfflineAudioCompletionEvent;
@@ -67,29 +49,11 @@ OfflineAudioCompletionEvent::OfflineAudioCompletionEvent() { }
 
 OfflineAudioCompletionEvent::OfflineAudioCompletionEvent(
     AudioBuffer* renderedBuffer)
-=======
-PassRefPtrWillBeRawPtr<OfflineAudioCompletionEvent> OfflineAudioCompletionEvent::create()
-{
-    return adoptRefWillBeNoop(new OfflineAudioCompletionEvent);
-}
-
-PassRefPtrWillBeRawPtr<OfflineAudioCompletionEvent> OfflineAudioCompletionEvent::create(AudioBuffer* renderedBuffer)
-{
-    return adoptRefWillBeNoop(new OfflineAudioCompletionEvent(renderedBuffer));
-}
-
-OfflineAudioCompletionEvent::OfflineAudioCompletionEvent()
-{
-}
-
-OfflineAudioCompletionEvent::OfflineAudioCompletionEvent(AudioBuffer* renderedBuffer)
->>>>>>> miniblink49
     : Event(EventTypeNames::complete, true, false)
     , m_renderedBuffer(renderedBuffer)
 {
 }
 
-<<<<<<< HEAD
 OfflineAudioCompletionEvent::OfflineAudioCompletionEvent(
     const AtomicString& eventType,
     const OfflineAudioCompletionEventInit& eventInit)
@@ -100,12 +64,6 @@ OfflineAudioCompletionEvent::OfflineAudioCompletionEvent(
 
 OfflineAudioCompletionEvent::~OfflineAudioCompletionEvent() { }
 
-=======
-OfflineAudioCompletionEvent::~OfflineAudioCompletionEvent()
-{
-}
-
->>>>>>> miniblink49
 const AtomicString& OfflineAudioCompletionEvent::interfaceName() const
 {
     return EventNames::OfflineAudioCompletionEvent;
@@ -118,8 +76,3 @@ DEFINE_TRACE(OfflineAudioCompletionEvent)
 }
 
 } // namespace blink
-<<<<<<< HEAD
-=======
-
-#endif // ENABLE(WEB_AUDIO)
->>>>>>> miniblink49

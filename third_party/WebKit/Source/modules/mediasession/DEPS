@@ -1,7 +1,6 @@
 include_rules = [
     "+bindings",
     "-modules",
-<<<<<<< HEAD
     "+modules/EventTargetModules.h",
     "+modules/ModulesExport.h",
     "+modules/mediasession",
@@ -9,10 +8,3 @@ include_rules = [
     "+platform",
     "+url/url_constants.h",
 ]
-=======
-    "+modules/ModulesExport.h",
-    "+modules/mediasession",
-    "+platform",
-]
-
->>>>>>> miniblink49

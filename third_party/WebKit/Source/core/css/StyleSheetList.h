@@ -21,12 +21,11 @@
 #ifndef StyleSheetList_h
 #define StyleSheetList_h
 
-#include "bindings/core/v8/ScriptWrappable.h"
+#include "bindings/core/v8/TraceWrapperMember.h"
 #include "core/css/CSSStyleSheet.h"
 #include "core/dom/TreeScope.h"
+#include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
-#include "wtf/PassRefPtr.h"
-#include "wtf/RefCounted.h"
 #include "wtf/Vector.h"
 
 namespace blink {
@@ -34,22 +33,26 @@ namespace blink {
 class HTMLStyleElement;
 class StyleSheet;
 
-class StyleSheetList final : public RefCountedWillBeGarbageCollected<StyleSheetList>, public ScriptWrappable {
-    DECLARE_EMPTY_DESTRUCTOR_WILL_BE_REMOVED(StyleSheetList);
+class CORE_EXPORT StyleSheetList final
+    : public GarbageCollected<StyleSheetList>,
+      public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<StyleSheetList> create(TreeScope* treeScope) { return adoptRefWillBeNoop(new StyleSheetList(treeScope)); }
+    static StyleSheetList* create(TreeScope* treeScope)
+    {
+        return new StyleSheetList(treeScope);
+    }
 
     unsigned length();
     StyleSheet* item(unsigned index);
 
     HTMLStyleElement* getNamedItem(const AtomicString&) const;
 
-    Document* document() { return m_treeScope ? &m_treeScope->document() : 0; }
-
-#if !ENABLE(OILPAN)
-    void detachFromDocument();
-#endif
+    Document* document() const
+    {
+        return m_treeScope ? &m_treeScope->document() : nullptr;
+    }
 
     CSSStyleSheet* anonymousNamedGetter(const AtomicString&);
 
@@ -57,12 +60,9 @@ public:
 
 private:
     explicit StyleSheetList(TreeScope*);
-    const WillBeHeapVector<RefPtrWillBeMember<StyleSheet>>& styleSheets();
+    const HeapVector<TraceWrapperMember<StyleSheet>>& styleSheets() const;
 
-    RawPtrWillBeMember<TreeScope> m_treeScope;
-#if !ENABLE(OILPAN)
-    Vector<RefPtr<StyleSheet>> m_detachedStyleSheets;
-#endif
+    Member<TreeScope> m_treeScope;
 };
 
 } // namespace blink

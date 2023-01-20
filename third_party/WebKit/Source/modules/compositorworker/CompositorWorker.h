@@ -6,10 +6,7 @@
 #define CompositorWorker_h
 
 #include "core/workers/InProcessWorkerBase.h"
-<<<<<<< HEAD
 #include "modules/ModulesExport.h"
-=======
->>>>>>> miniblink49
 #include "wtf/PassRefPtr.h"
 #include "wtf/text/AtomicString.h"
 
@@ -17,7 +14,6 @@ namespace blink {
 
 class ExceptionState;
 class ExecutionContext;
-<<<<<<< HEAD
 class InProcessWorkerMessagingProxy;
 
 class MODULES_EXPORT CompositorWorker final : public InProcessWorkerBase {
@@ -33,18 +29,6 @@ public:
     const AtomicString& interfaceName() const override;
     InProcessWorkerMessagingProxy* createInProcessWorkerMessagingProxy(
         ExecutionContext*) override;
-=======
-class WorkerGlobalScopeProxy;
-
-class CompositorWorker final : public InProcessWorkerBase {
-    DEFINE_WRAPPERTYPEINFO();
-public:
-    static PassRefPtrWillBeRawPtr<CompositorWorker> create(ExecutionContext*, const String& url, ExceptionState&);
-    ~CompositorWorker() override;
-
-    const AtomicString& interfaceName() const override;
-    WorkerGlobalScopeProxy* createWorkerGlobalScopeProxy(ExecutionContext*) override;
->>>>>>> miniblink49
 
 private:
     explicit CompositorWorker(ExecutionContext*);

@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -9,7 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "SkDashPathEffect.h"
 #include "SkParsePath.h"
 #include "SkPath.h"
@@ -19,26 +14,12 @@
 #define W 400
 #define H 400
 #define N 50
-=======
-
-
-#include "gm.h"
-#include "SkRandom.h"
-
-#define W   400
-#define H   400
-#define N   50
->>>>>>> miniblink49
 
 static const SkScalar SW = SkIntToScalar(W);
 static const SkScalar SH = SkIntToScalar(H);
 
-<<<<<<< HEAD
 static void rnd_rect(SkRect* r, SkPaint* paint, SkRandom& rand)
 {
-=======
-static void rnd_rect(SkRect* r, SkPaint* paint, SkRandom& rand) {
->>>>>>> miniblink49
     SkScalar x = rand.nextUScalar1() * W;
     SkScalar y = rand.nextUScalar1() * H;
     SkScalar w = rand.nextUScalar1() * (W >> 2);
@@ -47,17 +28,12 @@ static void rnd_rect(SkRect* r, SkPaint* paint, SkRandom& rand) {
     SkScalar woffset = rand.nextSScalar1();
 
     r->set(x, y, x + w, y + h);
-<<<<<<< HEAD
     r->offset(-w / 2 + woffset, -h / 2 + hoffset);
-=======
-    r->offset(-w/2 + woffset, -h/2 + hoffset);
->>>>>>> miniblink49
 
     paint->setColor(rand.nextU());
     paint->setAlpha(0xFF);
 }
 
-<<<<<<< HEAD
 class StrokesGM : public skiagm::GM {
 public:
     StrokesGM() { }
@@ -78,40 +54,13 @@ protected:
         SkPaint paint;
         paint.setStyle(SkPaint::kStroke_Style);
         paint.setStrokeWidth(SkIntToScalar(9) / 2);
-=======
-
-class StrokesGM : public skiagm::GM {
-public:
-    StrokesGM() {}
-
-protected:
-
-    SkString onShortName() override {
-        return SkString("strokes_round");
-    }
-
-    SkISize onISize() override {
-        return SkISize::Make(W, H*2);
-    }
-
-    void onDraw(SkCanvas* canvas) override {
-        SkPaint paint;
-        paint.setStyle(SkPaint::kStroke_Style);
-        paint.setStrokeWidth(SkIntToScalar(9)/2);
->>>>>>> miniblink49
 
         for (int y = 0; y < 2; y++) {
             paint.setAntiAlias(!!y);
             SkAutoCanvasRestore acr(canvas, true);
             canvas->translate(0, SH * y);
             canvas->clipRect(SkRect::MakeLTRB(
-<<<<<<< HEAD
                 SkIntToScalar(2), SkIntToScalar(2), SW - SkIntToScalar(2), SH - SkIntToScalar(2)));
-=======
-                                              SkIntToScalar(2), SkIntToScalar(2)
-                                              , SW - SkIntToScalar(2), SH - SkIntToScalar(2)
-                                              ));
->>>>>>> miniblink49
 
             SkRandom rand;
             for (int i = 0; i < N; i++) {
@@ -119,11 +68,7 @@ protected:
                 rnd_rect(&r, &paint, rand);
                 canvas->drawOval(r, paint);
                 rnd_rect(&r, &paint, rand);
-<<<<<<< HEAD
                 canvas->drawRoundRect(r, r.width() / 4, r.height() / 4, paint);
-=======
-                canvas->drawRoundRect(r, r.width()/4, r.height()/4, paint);
->>>>>>> miniblink49
                 rnd_rect(&r, &paint, rand);
             }
         }
@@ -133,7 +78,6 @@ private:
     typedef skiagm::GM INHERITED;
 };
 
-<<<<<<< HEAD
 /* See
    https://code.google.com/p/chromium/issues/detail?id=422974          and
    http://jsfiddle.net/1xnku3sg/2/
@@ -343,12 +287,6 @@ class Strokes2GM : public skiagm::GM {
 protected:
     void onOnceBeforeDraw() override
     {
-=======
-class Strokes2GM : public skiagm::GM {
-    SkPath fPath;
-protected:
-    void onOnceBeforeDraw() override {
->>>>>>> miniblink49
         SkRandom rand;
         fPath.moveTo(0, 0);
         for (int i = 0; i < 13; i++) {
@@ -358,7 +296,6 @@ protected:
         }
     }
 
-<<<<<<< HEAD
     SkString onShortName() override
     {
         return SkString("strokes_poly");
@@ -371,45 +308,24 @@ protected:
 
     static void rotate(SkScalar angle, SkScalar px, SkScalar py, SkCanvas* canvas)
     {
-=======
-
-    SkString onShortName() override {
-        return SkString("strokes_poly");
-    }
-
-    SkISize onISize() override {
-        return SkISize::Make(W, H*2);
-    }
-
-    static void rotate(SkScalar angle, SkScalar px, SkScalar py, SkCanvas* canvas) {
->>>>>>> miniblink49
         SkMatrix matrix;
         matrix.setRotate(angle, px, py);
         canvas->concat(matrix);
     }
 
-<<<<<<< HEAD
     void onDraw(SkCanvas* canvas) override
     {
-=======
-    void onDraw(SkCanvas* canvas) override {
->>>>>>> miniblink49
         canvas->drawColor(SK_ColorWHITE);
 
         SkPaint paint;
         paint.setStyle(SkPaint::kStroke_Style);
-<<<<<<< HEAD
         paint.setStrokeWidth(SkIntToScalar(9) / 2);
-=======
-        paint.setStrokeWidth(SkIntToScalar(9)/2);
->>>>>>> miniblink49
 
         for (int y = 0; y < 2; y++) {
             paint.setAntiAlias(!!y);
             SkAutoCanvasRestore acr(canvas, true);
             canvas->translate(0, SH * y);
             canvas->clipRect(SkRect::MakeLTRB(SkIntToScalar(2),
-<<<<<<< HEAD
                 SkIntToScalar(2),
                 SW - SkIntToScalar(2),
                 SH - SkIntToScalar(2)));
@@ -419,17 +335,6 @@ protected:
                 SkRect r;
                 rnd_rect(&r, &paint, rand);
                 rotate(SkIntToScalar(15), SW / 2, SH / 2, canvas);
-=======
-                                              SkIntToScalar(2),
-                                              SW - SkIntToScalar(2),
-                                              SH - SkIntToScalar(2)));
-
-            SkRandom rand;
-            for (int i = 0; i < N/2; i++) {
-                SkRect r;
-                rnd_rect(&r, &paint, rand);
-                rotate(SkIntToScalar(15), SW/2, SH/2, canvas);
->>>>>>> miniblink49
                 canvas->drawPath(fPath, paint);
             }
         }
@@ -441,70 +346,44 @@ private:
 
 //////////////////////////////////////////////////////////////////////////////
 
-<<<<<<< HEAD
 static SkRect inset(const SkRect& r)
 {
     SkRect rr(r);
     rr.inset(r.width() / 10, r.height() / 10);
-=======
-static SkRect inset(const SkRect& r) {
-    SkRect rr(r);
-    rr.inset(r.width()/10, r.height()/10);
->>>>>>> miniblink49
     return rr;
 }
 
 class Strokes3GM : public skiagm::GM {
-<<<<<<< HEAD
     static void make0(SkPath* path, const SkRect& bounds, SkString* title)
     {
-=======
-    static void make0(SkPath* path, const SkRect& bounds, SkString* title) {
->>>>>>> miniblink49
         path->addRect(bounds, SkPath::kCW_Direction);
         path->addRect(inset(bounds), SkPath::kCW_Direction);
         title->set("CW CW");
     }
 
-<<<<<<< HEAD
     static void make1(SkPath* path, const SkRect& bounds, SkString* title)
     {
-=======
-    static void make1(SkPath* path, const SkRect& bounds, SkString* title) {
->>>>>>> miniblink49
         path->addRect(bounds, SkPath::kCW_Direction);
         path->addRect(inset(bounds), SkPath::kCCW_Direction);
         title->set("CW CCW");
     }
 
-<<<<<<< HEAD
     static void make2(SkPath* path, const SkRect& bounds, SkString* title)
     {
-=======
-    static void make2(SkPath* path, const SkRect& bounds, SkString* title) {
->>>>>>> miniblink49
         path->addOval(bounds, SkPath::kCW_Direction);
         path->addOval(inset(bounds), SkPath::kCW_Direction);
         title->set("CW CW");
     }
 
-<<<<<<< HEAD
     static void make3(SkPath* path, const SkRect& bounds, SkString* title)
     {
-=======
-    static void make3(SkPath* path, const SkRect& bounds, SkString* title) {
->>>>>>> miniblink49
         path->addOval(bounds, SkPath::kCW_Direction);
         path->addOval(inset(bounds), SkPath::kCCW_Direction);
         title->set("CW CCW");
     }
 
-<<<<<<< HEAD
     static void make4(SkPath* path, const SkRect& bounds, SkString* title)
     {
-=======
-    static void make4(SkPath* path, const SkRect& bounds, SkString* title) {
->>>>>>> miniblink49
         path->addRect(bounds, SkPath::kCW_Direction);
         SkRect r = bounds;
         r.inset(bounds.width() / 10, -bounds.height() / 10);
@@ -512,12 +391,8 @@ class Strokes3GM : public skiagm::GM {
         title->set("CW CW");
     }
 
-<<<<<<< HEAD
     static void make5(SkPath* path, const SkRect& bounds, SkString* title)
     {
-=======
-    static void make5(SkPath* path, const SkRect& bounds, SkString* title) {
->>>>>>> miniblink49
         path->addRect(bounds, SkPath::kCW_Direction);
         SkRect r = bounds;
         r.inset(bounds.width() / 10, -bounds.height() / 10);
@@ -526,7 +401,6 @@ class Strokes3GM : public skiagm::GM {
     }
 
 public:
-<<<<<<< HEAD
     Strokes3GM() { }
 
 protected:
@@ -542,32 +416,13 @@ protected:
 
     void onDraw(SkCanvas* canvas) override
     {
-=======
-    Strokes3GM() {}
-
-protected:
-
-    SkString onShortName() override {
-        return SkString("strokes3");
-    }
-
-    SkISize onISize() override {
-        return SkISize::Make(1500, 1500);
-    }
-
-    void onDraw(SkCanvas* canvas) override {
->>>>>>> miniblink49
         SkPaint origPaint;
         origPaint.setAntiAlias(true);
         origPaint.setStyle(SkPaint::kStroke_Style);
         SkPaint fillPaint(origPaint);
         fillPaint.setColor(SK_ColorRED);
         SkPaint strokePaint(origPaint);
-<<<<<<< HEAD
         strokePaint.setColor(sk_tool_utils::color_to_565(0xFF4444FF));
-=======
-        strokePaint.setColor(0xFF4444FF);
->>>>>>> miniblink49
 
         void (*procs[])(SkPath*, const SkRect&, SkString*) = {
             make0, make1, make2, make3, make4, make5
@@ -576,11 +431,7 @@ protected:
         canvas->translate(SkIntToScalar(20), SkIntToScalar(80));
 
         SkRect bounds = SkRect::MakeWH(SkIntToScalar(50), SkIntToScalar(50));
-<<<<<<< HEAD
         SkScalar dx = bounds.width() * 4 / 3;
-=======
-        SkScalar dx = bounds.width() * 4/3;
->>>>>>> miniblink49
         SkScalar dy = bounds.height() * 5;
 
         for (size_t i = 0; i < SK_ARRAY_COUNT(procs); ++i) {
@@ -609,7 +460,6 @@ private:
 
 class Strokes4GM : public skiagm::GM {
 public:
-<<<<<<< HEAD
     Strokes4GM() { }
 
 protected:
@@ -629,25 +479,6 @@ protected:
         paint.setStyle(SkPaint::kStroke_Style);
         paint.setStrokeWidth(0.055f);
 
-=======
-    Strokes4GM() {}
-
-protected:
-
-    SkString onShortName() override {
-        return SkString("strokes_zoomed");
-    }
-
-    SkISize onISize() override {
-        return SkISize::Make(W, H*2);
-    }
-
-    void onDraw(SkCanvas* canvas) override {
-        SkPaint paint;
-        paint.setStyle(SkPaint::kStroke_Style);
-        paint.setStrokeWidth(0.055f);
-    
->>>>>>> miniblink49
         canvas->scale(1000, 1000);
         canvas->drawCircle(0, 2, 1.97f, paint);
     }
@@ -656,7 +487,6 @@ private:
     typedef skiagm::GM INHERITED;
 };
 
-<<<<<<< HEAD
 // Test stroking for curves that produce degenerate tangents when t is 0 or 1 (see bug 4191)
 class Strokes5GM : public skiagm::GM {
 public:
@@ -723,17 +553,3 @@ DEF_GM(return new Strokes5GM;)
 
 DEF_GM(return new ZeroLenStrokesGM;)
 DEF_GM(return new TeenyStrokesGM;)
-=======
-
-//////////////////////////////////////////////////////////////////////////////
-
-static skiagm::GM* F0(void*) { return new StrokesGM; }
-static skiagm::GM* F1(void*) { return new Strokes2GM; }
-static skiagm::GM* F2(void*) { return new Strokes3GM; }
-static skiagm::GM* F3(void*) { return new Strokes4GM; }
-
-static skiagm::GMRegistry R0(F0);
-static skiagm::GMRegistry R1(F1);
-static skiagm::GMRegistry R2(F2);
-static skiagm::GMRegistry R3(F3);
->>>>>>> miniblink49

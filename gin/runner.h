@@ -16,51 +16,55 @@ namespace gin {
 
 // Runner is responsible for running code in a v8::Context.
 class GIN_EXPORT Runner {
- public:
-  Runner();
-  virtual ~Runner();
+public:
+    Runner();
+    virtual ~Runner();
 
-  // Before running script in this context, you'll need to enter the runner's
-  // context by creating an instance of Runner::Scope on the stack.
-  virtual void Run(const std::string& source,
-                   const std::string& resource_name) = 0;
-  virtual v8::Local<v8::Value> Call(v8::Local<v8::Function> function,
-                                     v8::Local<v8::Value> receiver,
-                                     int argc,
-                                     v8::Local<v8::Value> argv[]) = 0;
-  virtual ContextHolder* GetContextHolder() = 0;
+    // Before running script in this context, you'll need to enter the runner's
+    // context by creating an instance of Runner::Scope on the stack.
+    virtual void Run(const std::string& source,
+        const std::string& resource_name)
+        = 0;
+    virtual v8::Local<v8::Value> Call(v8::Local<v8::Function> function,
+        v8::Local<v8::Value> receiver,
+        int argc,
+        v8::Local<v8::Value> argv[])
+        = 0;
+    virtual ContextHolder* GetContextHolder() = 0;
 
-  v8::Local<v8::Object> global() {
-    return GetContextHolder()->context()->Global();
-  }
+    v8::Local<v8::Object> global()
+    {
+        return GetContextHolder()->context()->Global();
+    }
 
-  // Useful for running script in this context asynchronously. Rather than
-  // holding a raw pointer to the runner, consider holding a WeakPtr.
-  base::WeakPtr<Runner> GetWeakPtr() {
-    return weak_factory_.GetWeakPtr();
-  }
+    // Useful for running script in this context asynchronously. Rather than
+    // holding a raw pointer to the runner, consider holding a WeakPtr.
+    base::WeakPtr<Runner> GetWeakPtr()
+    {
+        return weak_factory_.GetWeakPtr();
+    }
 
-  class GIN_EXPORT Scope {
-   public:
-    explicit Scope(Runner* runner);
-    ~Scope();
+    class GIN_EXPORT Scope {
+    public:
+        explicit Scope(Runner* runner);
+        ~Scope();
 
-   private:
-    v8::Isolate::Scope isolate_scope_;
-    v8::HandleScope handle_scope_;
-    v8::Context::Scope scope_;
+    private:
+        v8::Isolate::Scope isolate_scope_;
+        v8::HandleScope handle_scope_;
+        v8::Context::Scope scope_;
 
-    DISALLOW_COPY_AND_ASSIGN(Scope);
-  };
+        DISALLOW_COPY_AND_ASSIGN(Scope);
+    };
 
- private:
-  friend class Scope;
+private:
+    friend class Scope;
 
-  base::WeakPtrFactory<Runner> weak_factory_;
+    base::WeakPtrFactory<Runner> weak_factory_;
 
-  DISALLOW_COPY_AND_ASSIGN(Runner);
+    DISALLOW_COPY_AND_ASSIGN(Runner);
 };
 
-}  // namespace gin
+} // namespace gin
 
-#endif  // GIN_RUNNER_H_
+#endif // GIN_RUNNER_H_

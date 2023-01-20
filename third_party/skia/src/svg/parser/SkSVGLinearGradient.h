@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -9,10 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #ifndef SkSVGLinearGradient_DEFINED
 #define SkSVGLinearGradient_DEFINED
 
@@ -20,10 +12,7 @@
 
 class SkSVGLinearGradient : public SkSVGGradient {
     DECLARE_SVG_INFO(LinearGradient);
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 private:
     SkString f_gradientTransform;
     SkString f_gradientUnits;

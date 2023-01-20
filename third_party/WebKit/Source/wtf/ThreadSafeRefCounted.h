@@ -30,15 +30,9 @@
 #ifndef ThreadSafeRefCounted_h
 #define ThreadSafeRefCounted_h
 
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/Atomics.h"
 #include "wtf/DynamicAnnotations.h"
-=======
-#include "wtf/Atomics.h"
-#include "wtf/DynamicAnnotations.h"
-#include "wtf/FastAllocBase.h"
->>>>>>> miniblink49
 #include "wtf/Noncopyable.h"
 #include "wtf/WTFExport.h"
 
@@ -46,40 +40,19 @@ namespace WTF {
 
 class WTF_EXPORT ThreadSafeRefCountedBase {
     WTF_MAKE_NONCOPYABLE(ThreadSafeRefCountedBase);
-<<<<<<< HEAD
     USING_FAST_MALLOC(ThreadSafeRefCountedBase);
 
-=======
-    WTF_MAKE_FAST_ALLOCATED(ThreadSafeRefCountedBase);
->>>>>>> miniblink49
 public:
     ThreadSafeRefCountedBase(int initialRefCount = 1)
         : m_refCount(initialRefCount)
     {
     }
 
-<<<<<<< HEAD
     void ref() { atomicIncrement(&m_refCount); }
 
     bool hasOneRef() { return refCount() == 1; }
 
     int refCount() const { return static_cast<int const volatile&>(m_refCount); }
-=======
-    void ref()
-    {
-        atomicIncrement(&m_refCount);
-    }
-
-    bool hasOneRef()
-    {
-        return refCount() == 1;
-    }
-
-    int refCount() const
-    {
-        return static_cast<int const volatile &>(m_refCount);
-    }
->>>>>>> miniblink49
 
 protected:
     // Returns whether the pointer should be freed or not.
@@ -97,12 +70,8 @@ private:
     int m_refCount;
 };
 
-<<<<<<< HEAD
 template <class T>
 class ThreadSafeRefCounted : public ThreadSafeRefCountedBase {
-=======
-template<class T> class ThreadSafeRefCounted : public ThreadSafeRefCountedBase {
->>>>>>> miniblink49
 public:
     void deref()
     {
@@ -111,13 +80,7 @@ public:
     }
 
 protected:
-<<<<<<< HEAD
     ThreadSafeRefCounted() { }
-=======
-    ThreadSafeRefCounted()
-    {
-    }
->>>>>>> miniblink49
 };
 
 } // namespace WTF

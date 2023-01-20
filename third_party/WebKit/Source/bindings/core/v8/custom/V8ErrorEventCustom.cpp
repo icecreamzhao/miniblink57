@@ -28,42 +28,33 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "bindings/core/v8/V8ErrorEvent.h"
 
-#include "bindings/core/v8/DOMWrapperWorld.h"
-#include "bindings/core/v8/Dictionary.h"
-#include "bindings/core/v8/SerializedScriptValue.h"
 #include "bindings/core/v8/V8Binding.h"
-#include "bindings/core/v8/V8DOMWrapper.h"
-#include "bindings/core/v8/V8Event.h"
-#include "bindings/core/v8/V8HiddenValue.h"
-#include "core/dom/ContextFeatures.h"
-#include "platform/RuntimeEnabledFeatures.h"
+#include "bindings/core/v8/V8PrivateProperty.h"
 
 namespace blink {
 
-static void setHiddenValueAndReturnValue(const v8::FunctionCallbackInfo<v8::Value>& info, v8::Local<v8::Value> error)
-{
-    V8HiddenValue::setHiddenValue(info.GetIsolate(), info.Holder(), V8HiddenValue::error(info.GetIsolate()), error);
-    v8SetReturnValue(info, error);
-}
-
-void V8ErrorEvent::errorAttributeGetterCustom(const v8::FunctionCallbackInfo<v8::Value>& info)
+void V8ErrorEvent::errorAttributeGetterCustom(
+    const v8::FunctionCallbackInfo<v8::Value>& info)
 {
     v8::Isolate* isolate = info.GetIsolate();
-    v8::Local<v8::Value> cachedError = V8HiddenValue::getHiddenValue(isolate, info.Holder(), V8HiddenValue::error(isolate));
-    if (!cachedError.IsEmpty()) {
+    v8::Local<v8::Context> context = isolate->GetCurrentContext();
+
+    auto privateError = V8PrivateProperty::getErrorEventError(isolate);
+    v8::Local<v8::Value> cachedError = privateError.getOrUndefined(context, info.Holder());
+    if (!cachedError->IsUndefined()) {
         v8SetReturnValue(info, cachedError);
         return;
     }
 
     ErrorEvent* event = V8ErrorEvent::toImpl(info.Holder());
-    ScriptValue error = event->error(ScriptState::current(isolate));
-    if (!error.isEmpty())
-        setHiddenValueAndReturnValue(info, error.v8Value());
-    else
-        setHiddenValueAndReturnValue(info, v8::Null(isolate));
+    ScriptState* scriptState = ScriptState::from(context);
+    ScriptValue error = event->error(scriptState);
+    v8::Local<v8::Value> errorValue = error.isEmpty() ? v8::Local<v8::Value>(v8::Null(isolate))
+                                                      : error.v8Value();
+    privateError.set(context, info.Holder(), errorValue);
+    v8SetReturnValue(info, errorValue);
 }
 
 } // namespace blink

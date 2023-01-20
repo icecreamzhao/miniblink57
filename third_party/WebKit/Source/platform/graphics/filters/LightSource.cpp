@@ -27,21 +27,10 @@
  *
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
-
->>>>>>> miniblink49
 #include "platform/graphics/filters/LightSource.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 LightSource::~LightSource() { }
-=======
-LightSource::~LightSource()
-{
-}
->>>>>>> miniblink49
 
 } // namespace blink

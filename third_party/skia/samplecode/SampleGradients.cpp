@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -9,7 +5,6 @@
  * found in the LICENSE file.
  */
 #include "SampleCode.h"
-<<<<<<< HEAD
 #include "SkCanvas.h"
 #include "SkGradientShader.h"
 #include "SkView.h"
@@ -30,44 +25,16 @@ static void test_alphagradients(SkCanvas* canvas)
     p2.setStyle(SkPaint::kStroke_Style);
 
     p.setShader(setgrad(r, 0xFF00FF00, 0x0000FF00));
-=======
-#include "SkView.h"
-#include "SkCanvas.h"
-#include "SkGradientShader.h"
-
-static SkShader* setgrad(const SkRect& r, SkColor c0, SkColor c1) {
-    SkColor colors[] = { c0, c1 };
-    SkPoint pts[] = { { r.fLeft, r.fTop }, { r.fRight, r.fTop } };
-    return SkGradientShader::CreateLinear(pts, colors, NULL, 2, SkShader::kClamp_TileMode);
-}
-
-static void test_alphagradients(SkCanvas* canvas) {
-    SkRect r;
-    r.set(SkIntToScalar(10), SkIntToScalar(10),
-          SkIntToScalar(410), SkIntToScalar(30));
-    SkPaint p, p2;
-    p2.setStyle(SkPaint::kStroke_Style);
-
-    p.setShader(setgrad(r, 0xFF00FF00, 0x0000FF00))->unref();
->>>>>>> miniblink49
     canvas->drawRect(r, p);
     canvas->drawRect(r, p2);
 
     r.offset(0, r.height() + SkIntToScalar(4));
-<<<<<<< HEAD
     p.setShader(setgrad(r, 0xFF00FF00, 0x00000000));
-=======
-    p.setShader(setgrad(r, 0xFF00FF00, 0x00000000))->unref();
->>>>>>> miniblink49
     canvas->drawRect(r, p);
     canvas->drawRect(r, p2);
 
     r.offset(0, r.height() + SkIntToScalar(4));
-<<<<<<< HEAD
     p.setShader(setgrad(r, 0xFF00FF00, 0x00FF0000));
-=======
-    p.setShader(setgrad(r, 0xFF00FF00, 0x00FF0000))->unref();
->>>>>>> miniblink49
     canvas->drawRect(r, p);
     canvas->drawRect(r, p2);
 }
@@ -75,13 +42,8 @@ static void test_alphagradients(SkCanvas* canvas) {
 ///////////////////////////////////////////////////////////////////////////////
 
 struct GradData {
-<<<<<<< HEAD
     int fCount;
     const SkColor* fColors;
-=======
-    int             fCount;
-    const SkColor*  fColors;
->>>>>>> miniblink49
     const SkScalar* fPos;
 };
 
@@ -89,7 +51,6 @@ static const SkColor gColors[] = {
     SK_ColorRED, SK_ColorGREEN, SK_ColorBLUE, SK_ColorWHITE, SK_ColorBLACK
 };
 static const SkScalar gPos0[] = { 0, SK_Scalar1 };
-<<<<<<< HEAD
 static const SkScalar gPos1[] = { SK_Scalar1 / 4, SK_Scalar1 * 3 / 4 };
 static const SkScalar gPos2[] = {
     0, SK_Scalar1 / 8, SK_Scalar1 / 2, SK_Scalar1 * 7 / 8, SK_Scalar1
@@ -151,64 +112,6 @@ static sk_sp<SkShader> Make2ConicalConcentric(const SkPoint pts[2], const GradDa
 }
 
 typedef sk_sp<SkShader> (*GradMaker)(const SkPoint pts[2], const GradData& data, SkShader::TileMode tm);
-=======
-static const SkScalar gPos1[] = { SK_Scalar1/4, SK_Scalar1*3/4 };
-static const SkScalar gPos2[] = {
-    0, SK_Scalar1/8, SK_Scalar1/2, SK_Scalar1*7/8, SK_Scalar1
-};
-
-static const GradData gGradData[] = {
-    { 2, gColors, NULL },
-    { 2, gColors, gPos0 },
-    { 2, gColors, gPos1 },
-    { 5, gColors, NULL },
-    { 5, gColors, gPos2 }
-};
-
-static SkShader* MakeLinear(const SkPoint pts[2], const GradData& data, SkShader::TileMode tm) {
-    return SkGradientShader::CreateLinear(pts, data.fColors, data.fPos, data.fCount, tm);
-}
-
-static SkShader* MakeRadial(const SkPoint pts[2], const GradData& data, SkShader::TileMode tm) {
-    SkPoint center;
-    center.set(SkScalarAve(pts[0].fX, pts[1].fX),
-               SkScalarAve(pts[0].fY, pts[1].fY));
-    return SkGradientShader::CreateRadial(center, center.fX, data.fColors,
-                                          data.fPos, data.fCount, tm);
-}
-
-static SkShader* MakeSweep(const SkPoint pts[2], const GradData& data, SkShader::TileMode tm) {
-    SkPoint center;
-    center.set(SkScalarAve(pts[0].fX, pts[1].fX),
-               SkScalarAve(pts[0].fY, pts[1].fY));
-    return SkGradientShader::CreateSweep(center.fX, center.fY, data.fColors, data.fPos, data.fCount);
-}
-
-static SkShader* Make2Conical(const SkPoint pts[2], const GradData& data, SkShader::TileMode tm) {
-    SkPoint center0, center1;
-    center0.set(SkScalarAve(pts[0].fX, pts[1].fX),
-                SkScalarAve(pts[0].fY, pts[1].fY));
-    center1.set(SkScalarInterp(pts[0].fX, pts[1].fX, SkIntToScalar(3)/5),
-                SkScalarInterp(pts[0].fY, pts[1].fY, SkIntToScalar(1)/4));
-    return SkGradientShader::CreateTwoPointConical(
-                            center1, (pts[1].fX - pts[0].fX) / 7,
-                            center0, (pts[1].fX - pts[0].fX) / 2,
-                            data.fColors, data.fPos, data.fCount, tm);
-}
-
-static SkShader* Make2ConicalConcentric(const SkPoint pts[2], const GradData& data,
-                                       SkShader::TileMode tm) {
-    SkPoint center;
-    center.set(SkScalarAve(pts[0].fX, pts[1].fX),
-               SkScalarAve(pts[0].fY, pts[1].fY));
-    return SkGradientShader::CreateTwoPointConical(
-                            center, (pts[1].fX - pts[0].fX) / 7,
-                            center, (pts[1].fX - pts[0].fX) / 2,
-                            data.fColors, data.fPos, data.fCount, tm);
-}
-
-typedef SkShader* (*GradMaker)(const SkPoint pts[2], const GradData& data, SkShader::TileMode tm);
->>>>>>> miniblink49
 
 static const GradMaker gGradMakers[] = {
     MakeLinear, MakeRadial, MakeSweep, Make2Conical, Make2ConicalConcentric
@@ -218,23 +121,14 @@ static const GradMaker gGradMakers[] = {
 
 class GradientsView : public SampleView {
 public:
-<<<<<<< HEAD
     GradientsView()
     {
-=======
-    GradientsView() {
->>>>>>> miniblink49
         this->setBGColor(0xFFDDDDDD);
     }
 
 protected:
-<<<<<<< HEAD
     bool onQuery(SkEvent* evt) override
     {
-=======
-    // overrides from SkEventSink
-    virtual bool onQuery(SkEvent* evt) {
->>>>>>> miniblink49
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "Gradients");
             return true;
@@ -242,12 +136,8 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-<<<<<<< HEAD
     void onDrawContent(SkCanvas* canvas) override
     {
-=======
-    virtual void onDrawContent(SkCanvas* canvas) {
->>>>>>> miniblink49
         SkPoint pts[2] = {
             { 0, 0 },
             { SkIntToScalar(100), SkIntToScalar(100) }
@@ -264,13 +154,7 @@ protected:
             for (size_t i = 0; i < SK_ARRAY_COUNT(gGradData); i++) {
                 canvas->save();
                 for (size_t j = 0; j < SK_ARRAY_COUNT(gGradMakers); j++) {
-<<<<<<< HEAD
                     paint.setShader(gGradMakers[j](pts, gGradData[i], (SkShader::TileMode)tm));
-=======
-                    SkShader* shader;
-                    shader = gGradMakers[j](pts, gGradData[i], (SkShader::TileMode)tm);
-                    paint.setShader(shader)->unref();
->>>>>>> miniblink49
                     canvas->drawRect(r, paint);
                     canvas->translate(0, SkIntToScalar(120));
                 }
@@ -278,11 +162,7 @@ protected:
                 canvas->translate(SkIntToScalar(120), 0);
             }
             canvas->restore();
-<<<<<<< HEAD
             canvas->translate(SK_ARRAY_COUNT(gGradData) * SkIntToScalar(120), 0);
-=======
-            canvas->translate(SK_ARRAY_COUNT(gGradData)*SkIntToScalar(120), 0);
->>>>>>> miniblink49
         }
         canvas->restore();
 
@@ -290,11 +170,7 @@ protected:
         if (false) { // avoid bit rot, suppress warning
             test_alphagradients(canvas);
         }
-<<<<<<< HEAD
         this->inval(nullptr);
-=======
-        this->inval(NULL);
->>>>>>> miniblink49
     }
 
 private:

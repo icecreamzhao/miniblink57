@@ -23,28 +23,31 @@
 
 #include "core/css/CSSFontFaceSource.h"
 #include "platform/fonts/CustomFontData.h"
+#include "platform/heap/Handle.h"
 
 namespace blink {
 
 class CSSCustomFontData final : public CustomFontData {
 public:
-    enum FallbackVisibility { InvisibleFallback, VisibleFallback };
+    enum FallbackVisibility { InvisibleFallback,
+        VisibleFallback };
 
-    static PassRefPtr<CSSCustomFontData> create(RemoteFontFaceSource* source, FallbackVisibility visibility)
+    static PassRefPtr<CSSCustomFontData> create(RemoteFontFaceSource* source,
+        FallbackVisibility visibility)
     {
         return adoptRef(new CSSCustomFontData(source, visibility));
     }
 
-    virtual ~CSSCustomFontData() { }
+    ~CSSCustomFontData() override { }
 
-    virtual bool shouldSkipDrawing() const override
+    bool shouldSkipDrawing() const override
     {
         if (m_fontFaceSource)
             m_fontFaceSource->paintRequested();
         return m_fallbackVisibility == InvisibleFallback && m_isLoading;
     }
 
-    virtual void beginLoadIfNeeded() const override
+    void beginLoadIfNeeded() const override
     {
         if (!m_isLoading && m_fontFaceSource) {
             m_isLoading = true;
@@ -52,9 +55,9 @@ public:
         }
     }
 
-    virtual bool isLoading() const override { return m_isLoading; }
-    virtual bool isLoadingFallback() const override { return true; }
-    virtual void clearFontFaceSource() override { m_fontFaceSource = 0; }
+    bool isLoading() const override { return m_isLoading; }
+    bool isLoadingFallback() const override { return true; }
+    void clearFontFaceSource() override { m_fontFaceSource = 0; }
 
 private:
     CSSCustomFontData(RemoteFontFaceSource* source, FallbackVisibility visibility)
@@ -66,11 +69,13 @@ private:
             m_isLoading = source->isLoading();
     }
 
-    RemoteFontFaceSource* m_fontFaceSource;
+    // TODO(Oilpan): consider moving (Custom)FontFace hierarchy to the heap,
+    // thereby making this reference a Member<>.
+    WeakPersistent<RemoteFontFaceSource> m_fontFaceSource;
     FallbackVisibility m_fallbackVisibility;
     mutable bool m_isLoading;
 };
 
-}
+} // namespace blink
 
 #endif // CSSCustomFontData_h

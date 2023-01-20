@@ -29,6 +29,7 @@
 #include "core/CoreExport.h"
 #include "core/css/CSSValue.h"
 #include "platform/geometry/IntSizeHash.h"
+#include "platform/heap/SelfKeepAlive.h"
 #include "wtf/HashCountedSet.h"
 #include "wtf/RefPtr.h"
 
@@ -37,8 +38,10 @@ namespace blink {
 class Document;
 class Image;
 class LayoutObject;
+class FloatSize;
 
 struct SizeAndCount {
+    DISALLOW_NEW();
     SizeAndCount(IntSize newSize = IntSize(), int newCount = 0)
         : size(newSize)
         , count(newCount)
@@ -49,44 +52,50 @@ struct SizeAndCount {
     int count;
 };
 
-typedef HashMap<const LayoutObject*, SizeAndCount> LayoutObjectSizeCountMap;
+using LayoutObjectSizeCountMap = HashMap<const LayoutObject*, SizeAndCount>;
 
 class CORE_EXPORT CSSImageGeneratorValue : public CSSValue {
 public:
     ~CSSImageGeneratorValue();
 
-    void addClient(LayoutObject*, const IntSize&);
-    void removeClient(LayoutObject*);
-    PassRefPtr<Image> image(LayoutObject*, const IntSize&);
+    void addClient(const LayoutObject*, const IntSize&);
+    void removeClient(const LayoutObject*);
+    PassRefPtr<Image> image(const LayoutObject&, const IntSize&, float zoom);
 
     bool isFixedSize() const;
-    IntSize fixedSize(const LayoutObject*);
+    IntSize fixedSize(const LayoutObject&, const FloatSize& defaultObjectSize);
 
     bool isPending() const;
-    bool knownToBeOpaque(const LayoutObject*) const;
+    bool knownToBeOpaque(const LayoutObject&) const;
 
-    void loadSubimages(Document*);
+    void loadSubimages(const Document&);
 
-    DEFINE_INLINE_TRACE_AFTER_DISPATCH() { CSSValue::traceAfterDispatch(visitor); }
+    CSSImageGeneratorValue* valueWithURLsMadeAbsolute();
+
+    DEFINE_INLINE_TRACE_AFTER_DISPATCH()
+    {
+        CSSValue::traceAfterDispatch(visitor);
+    }
 
 protected:
     explicit CSSImageGeneratorValue(ClassType);
 
-    Image* getImage(LayoutObject*, const IntSize&);
+    Image* getImage(const LayoutObject*, const IntSize&);
     void putImage(const IntSize&, PassRefPtr<Image>);
     const LayoutObjectSizeCountMap& clients() const { return m_clients; }
 
-    HashCountedSet<IntSize> m_sizes; // A count of how many times a given image size is in use.
-    LayoutObjectSizeCountMap m_clients; // A map from LayoutObjects (with entry count) to image sizes.
-    HashMap<IntSize, RefPtr<Image>> m_images; // A cache of Image objects by image size.
+    HashCountedSet<IntSize>
+        m_sizes; // A count of how many times a given image size is in use.
+    LayoutObjectSizeCountMap
+        m_clients; // A map from LayoutObjects (with entry count) to image sizes.
+    HashMap<IntSize, RefPtr<Image>>
+        m_images; // A cache of Image objects by image size.
 
-#if ENABLE(OILPAN)
-    // FIXME: Oilpan: when/if we can make the layoutObject point directly to the CSSImageGenerator value using
-    // a member we don't need to have this hack where we keep a persistent to the instance as long as
-    // there are clients in the LayoutObjectSizeCountMap.
-    GC_PLUGIN_IGNORE("366546")
-    OwnPtr<Persistent<CSSImageGeneratorValue>> m_keepAlive;
-#endif
+    // TODO(Oilpan): when/if we can make the layoutObject point directly to the
+    // CSSImageGenerator value using a member we don't need to have this hack
+    // where we keep a persistent to the instance as long as there are clients in
+    // the LayoutObjectSizeCountMap.
+    SelfKeepAlive<CSSImageGeneratorValue> m_keepAlive;
 };
 
 DEFINE_CSS_VALUE_TYPE_CASTS(CSSImageGeneratorValue, isImageGeneratorValue());

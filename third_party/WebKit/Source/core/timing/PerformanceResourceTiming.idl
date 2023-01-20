@@ -30,11 +30,11 @@
 
 // https://w3c.github.io/resource-timing/#performanceresourcetiming
 
-// TODO(philipj): This interface should be [Exposed=(Window,Worker)].
+// TODO(foolip): This interface should be [Exposed=(Window,Worker)].
 interface PerformanceResourceTiming : PerformanceEntry {
     readonly attribute DOMString initiatorType;
-    // TODO(philipj): readonly attribute DOMString nextHopProtocol;
-    [RuntimeEnabled=ServiceWorkerPerformanceTimeline] readonly attribute DOMHighResTimeStamp workerStart;
+    // TODO(foolip): readonly attribute DOMString nextHopProtocol;
+    readonly attribute DOMHighResTimeStamp workerStart;
     readonly attribute DOMHighResTimeStamp redirectStart;
     readonly attribute DOMHighResTimeStamp redirectEnd;
     readonly attribute DOMHighResTimeStamp fetchStart;
@@ -46,10 +46,9 @@ interface PerformanceResourceTiming : PerformanceEntry {
     readonly attribute DOMHighResTimeStamp requestStart;
     readonly attribute DOMHighResTimeStamp responseStart;
     readonly attribute DOMHighResTimeStamp responseEnd;
-    // TODO(philipj): The spec has tranferSize/encodedBodySize/decodedBodySize
-    // and a serializer:
-    // readonly attribute unsigned short transferSize;
-    // readonly attribute unsigned short encodedBodySize;
-    // readonly attribute unsigned short decodedBodySize;
+    [MeasureAs=PerformanceResourceTimingSizes] readonly attribute unsigned long long transferSize;
+    [MeasureAs=PerformanceResourceTimingSizes] readonly attribute unsigned long long encodedBodySize;
+    [MeasureAs=PerformanceResourceTimingSizes] readonly attribute unsigned long long decodedBodySize;
+    // TODO(foolip): The spec has a serializer:
     // serializer = {inherit, attribute};
 };

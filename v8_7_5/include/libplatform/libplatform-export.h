@@ -13,15 +13,9 @@
 #define V8_PLATFORM_EXPORT __declspec(dllimport)
 #else
 #define V8_PLATFORM_EXPORT
-<<<<<<< HEAD
 #endif // BUILDING_V8_PLATFORM_SHARED
 
 #else // defined(_WIN32)
-=======
-#endif  // BUILDING_V8_PLATFORM_SHARED
-
-#else  // defined(_WIN32)
->>>>>>> miniblink49
 
 // Setup for Linux shared library export.
 #ifdef BUILDING_V8_PLATFORM_SHARED
@@ -30,12 +24,6 @@
 #define V8_PLATFORM_EXPORT
 #endif
 
-<<<<<<< HEAD
 #endif // defined(_WIN32)
 
 #endif // V8_LIBPLATFORM_LIBPLATFORM_EXPORT_H_
-=======
-#endif  // defined(_WIN32)
-
-#endif  // V8_LIBPLATFORM_LIBPLATFORM_EXPORT_H_
->>>>>>> miniblink49

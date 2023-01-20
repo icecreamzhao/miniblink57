@@ -12,7 +12,6 @@
 
 #include "SkFont.h"
 #include "SkPaint.h"
-<<<<<<< HEAD
 
 #include <initializer_list>
 #include <limits>
@@ -22,11 +21,6 @@ static void test_font(skiatest::Reporter* reporter)
 {
     uint32_t flags = 0;
     sk_sp<SkFont> font(SkFont::Make(nullptr, 24, SkFont::kA8_MaskType, flags));
-=======
-static void test_font(skiatest::Reporter* reporter) {
-    uint32_t flags = 0;
-    SkAutoTUnref<SkFont> font(SkFont::Create(NULL, 24, SkFont::kA8_MaskType, flags));
->>>>>>> miniblink49
 
     REPORTER_ASSERT(reporter, font->getTypeface());
     REPORTER_ASSERT(reporter, 24 == font->getSize());
@@ -46,7 +40,6 @@ static void test_font(skiatest::Reporter* reporter) {
     REPORTER_ASSERT(reporter, glyphs[0] != glyphs[1]); // 'h' != 'e'
     REPORTER_ASSERT(reporter, glyphs[2] == glyphs[3]); // 'l' == 'l'
 
-<<<<<<< HEAD
     sk_sp<SkFont> newFont(font->makeWithSize(36));
     REPORTER_ASSERT(reporter, newFont.get());
     REPORTER_ASSERT(reporter, font->getTypeface() == newFont->getTypeface());
@@ -56,17 +49,6 @@ static void test_font(skiatest::Reporter* reporter) {
     SkPaint paint;
     paint.setTextSize(18);
     font = SkFont::Testing_CreateFromPaint(paint);
-=======
-    SkAutoTUnref<SkFont> newFont(font->cloneWithSize(36));
-    REPORTER_ASSERT(reporter, newFont.get());
-    REPORTER_ASSERT(reporter, font->getTypeface() == newFont->getTypeface());
-    REPORTER_ASSERT(reporter, 36 == newFont->getSize());   // double check we haven't changed
-    REPORTER_ASSERT(reporter, 24 == font->getSize());   // double check we haven't changed
-
-    SkPaint paint;
-    paint.setTextSize(18);
-    font.reset(SkFont::Testing_CreateFromPaint(paint));
->>>>>>> miniblink49
     REPORTER_ASSERT(reporter, font.get());
     REPORTER_ASSERT(reporter, font->getSize() == paint.getTextSize());
     REPORTER_ASSERT(reporter, SkFont::kBW_MaskType == font->getMaskType());
@@ -77,18 +59,13 @@ static void test_font(skiatest::Reporter* reporter) {
  *  (e.g. sans -> Arial) then we want to at least get the same typeface back
  *  if we request the alias name multiple times.
  */
-<<<<<<< HEAD
 static void test_alias_names(skiatest::Reporter* reporter)
 {
-=======
-static void test_alias_names(skiatest::Reporter* reporter) {
->>>>>>> miniblink49
     const char* inNames[] = {
         "sans", "sans-serif", "serif", "monospace", "times", "helvetica"
     };
 
     for (size_t i = 0; i < SK_ARRAY_COUNT(inNames); ++i) {
-<<<<<<< HEAD
         sk_sp<SkTypeface> first(SkTypeface::MakeFromName(inNames[i], SkFontStyle()));
         if (nullptr == first.get()) {
             continue;
@@ -96,37 +73,18 @@ static void test_alias_names(skiatest::Reporter* reporter) {
         for (int j = 0; j < 10; ++j) {
             sk_sp<SkTypeface> face(SkTypeface::MakeFromName(inNames[i], SkFontStyle()));
 #if 0
-=======
-        SkAutoTUnref<SkTypeface> first(SkTypeface::CreateFromName(inNames[i],
-                                                          SkTypeface::kNormal));
-        if (NULL == first.get()) {
-            continue;
-        }
-        for (int j = 0; j < 10; ++j) {
-            SkAutoTUnref<SkTypeface> face(SkTypeface::CreateFromName(inNames[i],
-                                                         SkTypeface::kNormal));
-    #if 0
->>>>>>> miniblink49
             SkString name;
             face->getFamilyName(&name);
             printf("request %s, received %s, first id %x received %x\n",
                    inNames[i], name.c_str(), first->uniqueID(), face->uniqueID());
-<<<<<<< HEAD
 #endif
-=======
-    #endif
->>>>>>> miniblink49
             REPORTER_ASSERT(reporter, first->uniqueID() == face->uniqueID());
         }
     }
 }
 
-<<<<<<< HEAD
 static void test_fontiter(skiatest::Reporter* reporter, bool verbose)
 {
-=======
-static void test_fontiter(skiatest::Reporter* reporter, bool verbose) {
->>>>>>> miniblink49
     SkAutoTUnref<SkFontMgr> fm(SkFontMgr::RefDefault());
     int count = fm->countFamilies();
 
@@ -146,7 +104,6 @@ static void test_fontiter(skiatest::Reporter* reporter, bool verbose) {
             SkString sname;
             SkFontStyle fs;
             set->getStyle(j, &fs, &sname);
-<<<<<<< HEAD
             //            REPORTER_ASSERT(reporter, sname.size() > 0);
 
             SkAutoTUnref<SkTypeface> face(set->createTypeface(j));
@@ -773,16 +730,6 @@ static void test_matchStyleCSS3(skiatest::Reporter* reporter)
                 REPORTER_ASSERT(reporter, typeface->fontStyle() == testCase.expectedResult);
             } else {
                 REPORTER_ASSERT(reporter, invalidFontStyle == testCase.expectedResult);
-=======
-//            REPORTER_ASSERT(reporter, sname.size() > 0);
-
-            SkAutoTUnref<SkTypeface> face(set->createTypeface(j));
-//            REPORTER_ASSERT(reporter, face.get());
-
-            if (verbose) {
-                SkDebugf("\t[%d] %s [%3d %d %d]\n", j, sname.c_str(),
-                         fs.weight(), fs.width(), fs.isItalic());
->>>>>>> miniblink49
             }
         }
     }
@@ -790,13 +737,9 @@ static void test_matchStyleCSS3(skiatest::Reporter* reporter)
 
 DEFINE_bool(verboseFontMgr, false, "run verbose fontmgr tests.");
 
-<<<<<<< HEAD
 DEF_TEST(FontMgr, reporter)
 {
     test_matchStyleCSS3(reporter);
-=======
-DEF_TEST(FontMgr, reporter) {
->>>>>>> miniblink49
     test_fontiter(reporter, FLAGS_verboseFontMgr);
     test_alias_names(reporter);
     test_font(reporter);

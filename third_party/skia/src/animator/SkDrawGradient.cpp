@@ -6,10 +6,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #include "SkDrawGradient.h"
 #include "SkAnimateMaker.h"
 #include "SkAnimatorScript.h"
@@ -27,47 +23,29 @@ const SkMemberInfo SkDrawGradient::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkDrawGradient);
 
-<<<<<<< HEAD
 SkDrawGradient::SkDrawGradient()
 {
 }
 
 SkDrawGradient::~SkDrawGradient()
 {
-=======
-SkDrawGradient::SkDrawGradient() {
-}
-
-SkDrawGradient::~SkDrawGradient() {
->>>>>>> miniblink49
     for (int index = 0; index < fDrawColors.count(); index++)
         delete fDrawColors[index];
 }
 
-<<<<<<< HEAD
 bool SkDrawGradient::addChild(SkAnimateMaker&, SkDisplayable* child)
 {
     SkASSERT(child);
     if (child->isColor()) {
         SkDrawColor* color = (SkDrawColor*)child;
-=======
-bool SkDrawGradient::addChild(SkAnimateMaker& , SkDisplayable* child) {
-    SkASSERT(child);
-    if (child->isColor()) {
-        SkDrawColor* color = (SkDrawColor*) child;
->>>>>>> miniblink49
         *fDrawColors.append() = color;
         return true;
     }
     return false;
 }
 
-<<<<<<< HEAD
 int SkDrawGradient::addPrelude()
 {
-=======
-int SkDrawGradient::addPrelude() {
->>>>>>> miniblink49
     int count = fDrawColors.count();
     fColors.setCount(count);
     for (int index = 0; index < count; index++)
@@ -76,12 +54,8 @@ int SkDrawGradient::addPrelude() {
 }
 
 #ifdef SK_DUMP_ENABLED
-<<<<<<< HEAD
 void SkDrawGradient::dumpRest(SkAnimateMaker* maker)
 {
-=======
-void SkDrawGradient::dumpRest(SkAnimateMaker* maker) {
->>>>>>> miniblink49
     dumpAttrs(maker);
     //can a gradient have no colors?
     bool closedYet = false;
@@ -99,12 +73,8 @@ void SkDrawGradient::dumpRest(SkAnimateMaker* maker) {
 }
 #endif
 
-<<<<<<< HEAD
 void SkDrawGradient::onEndElement(SkAnimateMaker& maker)
 {
-=======
-void SkDrawGradient::onEndElement(SkAnimateMaker& maker) {
->>>>>>> miniblink49
     if (offsets.count() != 0) {
         if (offsets.count() != fDrawColors.count()) {
             maker.setErrorCode(SkDisplayXMLParserError::kGradientOffsetsDontMatchColors);
@@ -114,20 +84,12 @@ void SkDrawGradient::onEndElement(SkAnimateMaker& maker) {
             maker.setErrorCode(SkDisplayXMLParserError::kGradientOffsetsMustStartWithZero);
             return;
         }
-<<<<<<< HEAD
         if (offsets[offsets.count() - 1] != SK_Scalar1) {
-=======
-        if (offsets[offsets.count()-1] != SK_Scalar1) {
->>>>>>> miniblink49
             maker.setErrorCode(SkDisplayXMLParserError::kGradientOffsetsMustEndWithOne);
             return;
         }
         for (int i = 1; i < offsets.count(); i++) {
-<<<<<<< HEAD
             if (offsets[i] <= offsets[i - 1]) {
-=======
-            if (offsets[i] <= offsets[i-1]) {
->>>>>>> miniblink49
                 maker.setErrorCode(SkDisplayXMLParserError::kGradientOffsetsMustIncrease);
                 return;
             }
@@ -151,12 +113,8 @@ const SkMemberInfo SkDrawLinearGradient::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkDrawLinearGradient);
 
-<<<<<<< HEAD
 SkDrawLinearGradient::SkDrawLinearGradient()
 {
-=======
-SkDrawLinearGradient::SkDrawLinearGradient() {
->>>>>>> miniblink49
 }
 
 void SkDrawLinearGradient::onEndElement(SkAnimateMaker& maker)
@@ -167,7 +125,6 @@ void SkDrawLinearGradient::onEndElement(SkAnimateMaker& maker)
 }
 
 #ifdef SK_DUMP_ENABLED
-<<<<<<< HEAD
 void SkDrawLinearGradient::dump(SkAnimateMaker* maker)
 {
     dumpBase(maker);
@@ -186,26 +143,6 @@ SkShader* SkDrawLinearGradient::getShader()
         .release();
 }
 
-=======
-void SkDrawLinearGradient::dump(SkAnimateMaker* maker) {
-    dumpBase(maker);
-    dumpRest(maker);
-    }
-#endif
-
-SkShader* SkDrawLinearGradient::getShader() {
-    if (addPrelude() == 0 || points.count() != 4)
-        return NULL;
-    SkShader* shader = SkGradientShader::CreateLinear((SkPoint*)points.begin(),
-        fColors.begin(), offsets.begin(), fColors.count(), (SkShader::TileMode) tileMode,
-        0, getMatrix());
-    SkAutoTDelete<SkShader> autoDel(shader);
-    (void)autoDel.detach();
-    return shader;
-}
-
-
->>>>>>> miniblink49
 #if SK_USE_CONDENSED_INFO == 0
 
 const SkMemberInfo SkDrawRadialGradient::fInfo[] = {
@@ -218,29 +155,20 @@ const SkMemberInfo SkDrawRadialGradient::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkDrawRadialGradient);
 
-<<<<<<< HEAD
 SkDrawRadialGradient::SkDrawRadialGradient()
     : radius(0)
 {
-=======
-SkDrawRadialGradient::SkDrawRadialGradient() : radius(0) {
->>>>>>> miniblink49
     center.set(0, 0);
 }
 
 #ifdef SK_DUMP_ENABLED
-<<<<<<< HEAD
 void SkDrawRadialGradient::dump(SkAnimateMaker* maker)
 {
-=======
-void SkDrawRadialGradient::dump(SkAnimateMaker* maker) {
->>>>>>> miniblink49
     dumpBase(maker);
     dumpRest(maker);
 }
 #endif
 
-<<<<<<< HEAD
 SkShader* SkDrawRadialGradient::getShader()
 {
     if (addPrelude() == 0) {
@@ -250,15 +178,4 @@ SkShader* SkDrawRadialGradient::getShader()
         radius, fColors.begin(), offsets.begin(), fColors.count(), (SkShader::TileMode)tileMode,
         0, getMatrix())
         .release();
-=======
-SkShader* SkDrawRadialGradient::getShader() {
-    if (addPrelude() == 0)
-        return NULL;
-    SkShader* shader = SkGradientShader::CreateRadial(center,
-        radius, fColors.begin(), offsets.begin(), fColors.count(), (SkShader::TileMode) tileMode,
-        0, getMatrix());
-    SkAutoTDelete<SkShader> autoDel(shader);
-    (void)autoDel.detach();
-    return shader;
->>>>>>> miniblink49
 }

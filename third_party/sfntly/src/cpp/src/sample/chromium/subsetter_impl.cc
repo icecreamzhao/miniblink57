@@ -106,13 +106,8 @@ bool caseCompare(const std::string& a, const std::string& b) {
     }
     return true;
 }
-<<<<<<< HEAD
 
 std::string fromUTF8(const std::string& utf8) {
-=======
-
-std::string fromUTF8(const std::string& utf8) {
->>>>>>> miniblink49
 //     std::wstring utf16;
 //     size_t n = ::MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), utf8.size(), nullptr, 0);
 //     if (0 == n)
@@ -125,7 +120,6 @@ std::string fromUTF8(const std::string& utf8) {
     return utf8;
 }
 
-<<<<<<< HEAD
 std::string fromWideToUtf8(const wchar_t* utf16)
 {
 #if defined(WIN32) 
@@ -142,19 +136,6 @@ std::string fromWideToUtf8(const wchar_t* utf16)
     * (int*)1 = 1;
     printf("subsetter_impl.cc,fromWideToUtf8 is empty\n");
 #endif
-=======
-std::string fromWideToUtf8(const wchar_t* utf16)
-{
-    std::string utf8;
-    size_t n = ::WideCharToMultiByte(CP_UTF8, 0, utf16, wcslen(utf16), NULL, 0, NULL, NULL);
-    if (0 == n)
-        return "";
-    std::vector<char> buf(n + 1);
-    ::WideCharToMultiByte(CP_UTF8, 0, utf16, -1, &buf[0], n, NULL, NULL);
-    utf8.resize(n);
-    utf8.assign(&buf[0], n);
-    return utf8;
->>>>>>> miniblink49
 }
 
 // The bitmap tables must be greater than 16KB to trigger bitmap subsetter.

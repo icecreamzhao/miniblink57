@@ -13,11 +13,7 @@
 
 class SK_API GrReducedClip {
 public:
-<<<<<<< HEAD
     typedef SkTLList<SkClipStack::Element, 16> ElementList;
-=======
-    typedef SkTLList<SkClipStack::Element> ElementList;
->>>>>>> miniblink49
 
     enum InitialState {
         kAllIn_InitialState,
@@ -31,17 +27,10 @@ public:
      * the list of elements is returned in resultGenID. The initial state of the
      * query rectangle before the first clip element is applied is returned via
      * initialState. Optionally, the caller can request a tighter bounds on the
-<<<<<<< HEAD
      * clip be returned via tighterBounds. If not nullptr, tighterBounds will
      * always be contained by queryBounds after return. If tighterBounds is
      * specified then it is assumed that the caller will implicitly clip against
      * it. If the caller specifies non-nullptr for requiresAA then it will indicate
-=======
-     * clip be returned via tighterBounds. If not NULL, tighterBounds will
-     * always be contained by queryBounds after return. If tighterBounds is
-     * specified then it is assumed that the caller will implicitly clip against
-     * it. If the caller specifies non-NULL for requiresAA then it will indicate
->>>>>>> miniblink49
      * whether anti-aliasing is required to process any of the elements in the
      * result.
      *
@@ -49,21 +38,12 @@ public:
      * determined to be stable.
      */
     static void ReduceClipStack(const SkClipStack& stack,
-<<<<<<< HEAD
         const SkIRect& queryBounds,
         ElementList* result,
         int32_t* resultGenID,
         InitialState* initialState,
         SkIRect* tighterBounds = nullptr,
         bool* requiresAA = nullptr);
-=======
-                                const SkIRect& queryBounds,
-                                ElementList* result,
-                                int32_t* resultGenID,
-                                InitialState* initialState,
-                                SkIRect* tighterBounds = NULL,
-                                bool* requiresAA = NULL);
->>>>>>> miniblink49
 };
 
 #endif

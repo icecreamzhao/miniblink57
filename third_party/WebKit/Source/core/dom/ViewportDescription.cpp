@@ -3,8 +3,10 @@
  *           (C) 1999 Antti Koivisto (koivisto@kde.org)
  *           (C) 2001 Dirk Mueller (mueller@kde.org)
  *           (C) 2006 Alexey Proskuryakov (ap@webkit.org)
- * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2011 Apple Inc. All rights reserved.
- * Copyright (C) 2008 Torch Mobile Inc. All rights reserved. (http://www.torchmobile.com/)
+ * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2011 Apple Inc. All rights
+ * reserved.
+ * Copyright (C) 2008 Torch Mobile Inc. All rights reserved.
+ * (http://www.torchmobile.com/)
  * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies)
  * Copyright (C) 2012-2013 Intel Corporation. All rights reserved.
  *
@@ -25,7 +27,6 @@
  *
  */
 
-#include "config.h"
 #include "core/dom/ViewportDescription.h"
 
 #include "core/dom/Document.h"
@@ -33,22 +34,16 @@
 #include "core/frame/FrameView.h"
 #include "core/frame/LocalFrame.h"
 #include "core/frame/Settings.h"
+#include "core/frame/VisualViewport.h"
+#include "platform/Histogram.h"
 #include "platform/weborigin/KURL.h"
-#include "public/platform/Platform.h"
 
 namespace blink {
 
-static const float& blinkMax(const float& left, const float& right)
-{
-    return ((right > left) ? right : left);
-}
-
-static const float& blinkMin(const float& left, const float& right)
-{
-    return ((right < left) ? right : left);
-}
-
-static const float& compareIgnoringAuto(const float& value1, const float& value2, const float& (*compare) (const float&, const float&))
+static const float& compareIgnoringAuto(const float& value1,
+    const float& value2,
+    const float& (*compare)(const float&,
+        const float&))
 {
     if (value1 == ViewportDescription::ValueAuto)
         return value2;
@@ -59,7 +54,10 @@ static const float& compareIgnoringAuto(const float& value1, const float& value2
     return compare(value1, value2);
 }
 
-float ViewportDescription::resolveViewportLength(const Length& length, const FloatSize& initialViewportSize, Direction direction)
+float ViewportDescription::resolveViewportLength(
+    const Length& length,
+    const FloatSize& initialViewportSize,
+    Direction direction)
 {
     if (length.isAuto())
         return ViewportDescription::ValueAuto;
@@ -82,11 +80,13 @@ float ViewportDescription::resolveViewportLength(const Length& length, const Flo
     if (length.type() == DeviceHeight)
         return initialViewportSize.height();
 
-    ASSERT_NOT_REACHED();
+    NOTREACHED();
     return ViewportDescription::ValueAuto;
 }
 
-PageScaleConstraints ViewportDescription::resolve(const FloatSize& initialViewportSize, Length legacyFallbackWidth) const
+PageScaleConstraints ViewportDescription::resolve(
+    const FloatSize& initialViewportSize,
+    Length legacyFallbackWidth) const
 {
     float resultWidth = ValueAuto;
 
@@ -94,9 +94,9 @@ PageScaleConstraints ViewportDescription::resolve(const FloatSize& initialViewpo
     Length copyMinWidth = minWidth;
     // In case the width (used for min- and max-width) is undefined.
     if (isLegacyViewportType() && maxWidth.isAuto()) {
-        // The width viewport META property is translated into 'width' descriptors, setting
-        // the 'min' value to 'extend-to-zoom' and the 'max' value to the intended length.
-        // In case the UA-defines a min-width, use that as length.
+        // The width viewport META property is translated into 'width' descriptors,
+        // setting the 'min' value to 'extend-to-zoom' and the 'max' value to the
+        // intended length.  In case the UA-defines a min-width, use that as length.
         if (zoom == ViewportDescription::ValueAuto) {
             copyMinWidth = Length(ExtendToZoom);
             copyMaxWidth = legacyFallbackWidth;
@@ -118,17 +118,19 @@ PageScaleConstraints ViewportDescription::resolve(const FloatSize& initialViewpo
     float resultMaxZoom = maxZoom;
     bool resultUserZoom = userZoom;
 
-    // 1. Resolve min-zoom and max-zoom values.
+    // Resolve min-zoom and max-zoom values.
     if (resultMinZoom != ViewportDescription::ValueAuto && resultMaxZoom != ViewportDescription::ValueAuto)
         resultMaxZoom = std::max(resultMinZoom, resultMaxZoom);
 
-    // 2. Constrain zoom value to the [min-zoom, max-zoom] range.
+    // Constrain zoom value to the [min-zoom, max-zoom] range.
     if (resultZoom != ViewportDescription::ValueAuto)
-        resultZoom = compareIgnoringAuto(resultMinZoom, compareIgnoringAuto(resultMaxZoom, resultZoom, blinkMin), blinkMax);
+        resultZoom = compareIgnoringAuto(
+            resultMinZoom, compareIgnoringAuto(resultMaxZoom, resultZoom, std::min),
+            std::max);
 
-    float extendZoom = compareIgnoringAuto(resultZoom, resultMaxZoom, blinkMin);
+    float extendZoom = compareIgnoringAuto(resultZoom, resultMaxZoom, std::min);
 
-    // 3. Resolve non-"auto" lengths to pixel lengths.
+    // Resolve non-"auto" lengths to pixel lengths.
     if (extendZoom == ViewportDescription::ValueAuto) {
         if (resultMaxWidth == ViewportDescription::ValueExtendToZoom)
             resultMaxWidth = ViewportDescription::ValueAuto;
@@ -152,21 +154,29 @@ PageScaleConstraints ViewportDescription::resolve(const FloatSize& initialViewpo
             resultMaxHeight = extendHeight;
 
         if (resultMinWidth == ViewportDescription::ValueExtendToZoom)
-            resultMinWidth = compareIgnoringAuto(extendWidth, resultMaxWidth, blinkMax);
+            resultMinWidth = compareIgnoringAuto(extendWidth, resultMaxWidth, std::max);
 
         if (resultMinHeight == ViewportDescription::ValueExtendToZoom)
-            resultMinHeight = compareIgnoringAuto(extendHeight, resultMaxHeight, blinkMax);
+            resultMinHeight = compareIgnoringAuto(extendHeight, resultMaxHeight, std::max);
     }
 
-    // 4. Resolve initial width from min/max descriptors.
+    // Resolve initial width from min/max descriptors.
     if (resultMinWidth != ViewportDescription::ValueAuto || resultMaxWidth != ViewportDescription::ValueAuto)
-        resultWidth = compareIgnoringAuto(resultMinWidth, compareIgnoringAuto(resultMaxWidth, initialViewportSize.width(), blinkMin), blinkMax);
+        resultWidth = compareIgnoringAuto(
+            resultMinWidth,
+            compareIgnoringAuto(resultMaxWidth, initialViewportSize.width(),
+                std::min),
+            std::max);
 
-    // 5. Resolve initial height from min/max descriptors.
+    // Resolve initial height from min/max descriptors.
     if (resultMinHeight != ViewportDescription::ValueAuto || resultMaxHeight != ViewportDescription::ValueAuto)
-        resultHeight = compareIgnoringAuto(resultMinHeight, compareIgnoringAuto(resultMaxHeight, initialViewportSize.height(), blinkMin), blinkMax);
+        resultHeight = compareIgnoringAuto(
+            resultMinHeight,
+            compareIgnoringAuto(resultMaxHeight, initialViewportSize.height(),
+                std::min),
+            std::max);
 
-    // 6-7. Resolve width value.
+    // Resolve width value.
     if (resultWidth == ViewportDescription::ValueAuto) {
         if (resultHeight == ViewportDescription::ValueAuto || !initialViewportSize.height())
             resultWidth = initialViewportSize.width();
@@ -174,7 +184,7 @@ PageScaleConstraints ViewportDescription::resolve(const FloatSize& initialViewpo
             resultWidth = resultHeight * (initialViewportSize.width() / initialViewportSize.height());
     }
 
-    // 8. Resolve height value.
+    // Resolve height value.
     if (resultHeight == ViewportDescription::ValueAuto) {
         if (!initialViewportSize.width())
             resultHeight = initialViewportSize.height();
@@ -188,8 +198,14 @@ PageScaleConstraints ViewportDescription::resolve(const FloatSize& initialViewpo
             resultZoom = initialViewportSize.width() / resultWidth;
         if (resultHeight != ViewportDescription::ValueAuto && resultHeight > 0) {
             // if 'auto', the initial-scale will be negative here and thus ignored.
-            resultZoom = std::max<float>(resultZoom, initialViewportSize.height() / resultHeight);
+            resultZoom = std::max<float>(resultZoom,
+                initialViewportSize.height() / resultHeight);
         }
+
+        // Reconstrain zoom value to the [min-zoom, max-zoom] range.
+        resultZoom = compareIgnoringAuto(
+            resultMinZoom, compareIgnoringAuto(resultMaxZoom, resultZoom, std::min),
+            std::max);
     }
 
     // If user-scalable = no, lock the min/max scale to the computed initial
@@ -210,7 +226,8 @@ PageScaleConstraints ViewportDescription::resolve(const FloatSize& initialViewpo
     return result;
 }
 
-void ViewportDescription::reportMobilePageStats(const LocalFrame* mainFrame) const
+void ViewportDescription::reportMobilePageStats(
+    const LocalFrame* mainFrame) const
 {
 #if OS(ANDROID)
     enum ViewportUMAType {
@@ -227,51 +244,53 @@ void ViewportDescription::reportMobilePageStats(const LocalFrame* mainFrame) con
     if (!mainFrame || !mainFrame->host() || !mainFrame->view() || !mainFrame->document())
         return;
 
-    // Avoid chrome:// pages like the new-tab page (on Android new tab is non-http).
+    // Avoid chrome:// pages like the new-tab page (on Android new tab is
+    // non-http).
     if (!mainFrame->document()->url().protocolIsInHTTPFamily())
         return;
 
+    DEFINE_STATIC_LOCAL(EnumerationHistogram, metaTagTypeHistogram,
+        ("Viewport.MetaTagType", TypeCount));
     if (!isSpecifiedByAuthor()) {
-        if (mainFrame->document()->isMobileDocument())
-            Platform::current()->histogramEnumeration("Viewport.MetaTagType", XhtmlMobileProfile, TypeCount);
-        else
-            Platform::current()->histogramEnumeration("Viewport.MetaTagType", NoViewportTag, TypeCount);
-
+        metaTagTypeHistogram.count(mainFrame->document()->isMobileDocument()
+                ? XhtmlMobileProfile
+                : NoViewportTag);
         return;
     }
 
     if (isMetaViewportType()) {
         if (maxWidth.type() == blink::Fixed) {
-            Platform::current()->histogramEnumeration("Viewport.MetaTagType", ConstantWidth, TypeCount);
+            metaTagTypeHistogram.count(ConstantWidth);
 
             if (mainFrame->view()) {
-                // To get an idea of how "far" the viewport is from the device's ideal width, we
-                // report the zoom level that we'd need to be at for the entire page to be visible.
+                // To get an idea of how "far" the viewport is from the device's ideal
+                // width, we report the zoom level that we'd need to be at for the
+                // entire page to be visible.
                 int viewportWidth = maxWidth.intValue();
-                int windowWidth = mainFrame->host()->pinchViewport().size().width();
+                int windowWidth = mainFrame->host()->visualViewport().size().width();
                 int overviewZoomPercent = 100 * windowWidth / static_cast<float>(viewportWidth);
-                Platform::current()->histogramSparse("Viewport.OverviewZoom", overviewZoomPercent);
+                DEFINE_STATIC_LOCAL(SparseHistogram, overviewZoomHistogram,
+                    ("Viewport.OverviewZoom"));
+                overviewZoomHistogram.sample(overviewZoomPercent);
             }
 
         } else if (maxWidth.type() == blink::DeviceWidth || maxWidth.type() == blink::ExtendToZoom) {
-            Platform::current()->histogramEnumeration("Viewport.MetaTagType", DeviceWidth, TypeCount);
+            metaTagTypeHistogram.count(DeviceWidth);
         } else {
             // Overflow bucket for cases we may be unaware of.
-            Platform::current()->histogramEnumeration("Viewport.MetaTagType", MetaWidthOther, TypeCount);
+            metaTagTypeHistogram.count(MetaWidthOther);
         }
     } else if (type == ViewportDescription::HandheldFriendlyMeta) {
-        Platform::current()->histogramEnumeration("Viewport.MetaTagType", MetaHandheldFriendly, TypeCount);
+        metaTagTypeHistogram.count(MetaHandheldFriendly);
     } else if (type == ViewportDescription::MobileOptimizedMeta) {
-        Platform::current()->histogramEnumeration("Viewport.MetaTagType", MobileOptimizedMeta, TypeCount);
+        metaTagTypeHistogram.count(MetaMobileOptimized);
     }
 #endif
 }
 
 bool ViewportDescription::matchesHeuristicsForGpuRasterization() const
 {
-    return maxWidth == Length(DeviceWidth)
-        && minZoom == 1.0
-        && minZoomIsExplicit;
+    return isSpecifiedByAuthor();
 }
 
 } // namespace blink

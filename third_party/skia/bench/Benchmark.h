@@ -27,10 +27,6 @@
  *  DEF_BENCH(return new MyBenchmark(...))
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 class SkCanvas;
 class SkPaint;
 
@@ -62,7 +58,6 @@ public:
 
     // Call to determine whether the benchmark is intended for
     // the rendering mode.
-<<<<<<< HEAD
     virtual bool isSuitableFor(Backend backend)
     {
         return backend != kNonRendering_Backend;
@@ -70,31 +65,19 @@ public:
 
     virtual int calculateLoops(int defaultLoops) const
     {
-=======
-    virtual bool isSuitableFor(Backend backend) {
-        return backend != kNonRendering_Backend;
-    }
-
-    virtual int calculateLoops(int defaultLoops) const {
->>>>>>> miniblink49
         return defaultLoops;
     }
 
     // Call before draw, allows the benchmark to do setup work outside of the
     // timer. When a benchmark is repeatedly drawn, this should be called once
     // before the initial draw.
-<<<<<<< HEAD
     void delayedSetup();
-=======
-    void preDraw();
->>>>>>> miniblink49
 
     // Called once before and after a series of draw calls to a single canvas.
     // The setup/break down in these calls is not timed.
     void perCanvasPreDraw(SkCanvas*);
     void perCanvasPostDraw(SkCanvas*);
 
-<<<<<<< HEAD
     // Called just before and after each call to draw().  Not timed.
     void preDraw(SkCanvas*);
     void postDraw(SkCanvas*);
@@ -109,16 +92,6 @@ public:
 
     void setDither(SkTriState::State state)
     {
-=======
-    // Bench framework can tune loops to be large enough for stable timing.
-    void draw(const int loops, SkCanvas*);
-
-    void setForceAlpha(int alpha) {
-        fForceAlpha = alpha;
-    }
-
-    void setDither(SkTriState::State state) {
->>>>>>> miniblink49
         fDither = state;
     }
 
@@ -131,12 +104,8 @@ public:
      *      flags |= orMask;
      *      paint.setFlags(flags);
      */
-<<<<<<< HEAD
     void setPaintMasks(uint32_t orMask, uint32_t clearMask)
     {
-=======
-    void setPaintMasks(uint32_t orMask, uint32_t clearMask) {
->>>>>>> miniblink49
         fOrMask = orMask;
         fClearMask = clearMask;
     }
@@ -146,7 +115,6 @@ public:
      */
     virtual bool isVisual() { return false; }
 
-<<<<<<< HEAD
     /*
      * VisualBench frequently resets the canvas.  As a result we need to bulk call all of the hooks
      */
@@ -164,14 +132,11 @@ public:
 
     virtual void getGpuStats(SkCanvas*, SkTArray<SkString>* keys, SkTArray<double>* values) { }
 
-=======
->>>>>>> miniblink49
 protected:
     virtual void setupPaint(SkPaint* paint);
 
     virtual const char* onGetName() = 0;
     virtual const char* onGetUniqueName() { return this->onGetName(); }
-<<<<<<< HEAD
     virtual void onDelayedSetup() { }
     virtual void onPerCanvasPreDraw(SkCanvas*) { }
     virtual void onPerCanvasPostDraw(SkCanvas*) { }
@@ -180,35 +145,17 @@ protected:
     // Each bench should do its main work in a loop like this:
     //   for (int i = 0; i < loops; i++) { <work here> }
     virtual void onDraw(int loops, SkCanvas*) = 0;
-=======
-    virtual void onPreDraw() {}
-    virtual void onPerCanvasPreDraw(SkCanvas*) {}
-    virtual void onPerCanvasPostDraw(SkCanvas*) {}
-    // Each bench should do its main work in a loop like this:
-    //   for (int i = 0; i < loops; i++) { <work here> }
-    virtual void onDraw(const int loops, SkCanvas*) = 0;
->>>>>>> miniblink49
 
     virtual SkIPoint onGetSize();
 
 private:
-<<<<<<< HEAD
     int fForceAlpha;
     SkTriState::State fDither;
     uint32_t fOrMask, fClearMask;
-=======
-    int     fForceAlpha;
-    SkTriState::State  fDither;
-    uint32_t    fOrMask, fClearMask;
->>>>>>> miniblink49
 
     typedef SkRefCnt INHERITED;
 };
 
-<<<<<<< HEAD
 typedef SkTRegistry<Benchmark* (*)(void*)> BenchRegistry;
-=======
-typedef SkTRegistry<Benchmark*(*)(void*)> BenchRegistry;
->>>>>>> miniblink49
 
 #endif

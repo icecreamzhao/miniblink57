@@ -24,23 +24,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/geometry/FloatSize.h"
 
 #include <ApplicationServices/ApplicationServices.h>
 
 namespace blink {
 
-<<<<<<< HEAD
 FloatSize::FloatSize(const CGSize& s)
     : m_width(s.width)
     , m_height(s.height)
-=======
-FloatSize::FloatSize(const CGSize& s) : m_width(s.width), m_height(s.height)
->>>>>>> miniblink49
 {
 }
 
@@ -49,8 +41,4 @@ FloatSize::operator CGSize() const
     return CGSizeMake(m_width, m_height);
 }
 
-<<<<<<< HEAD
 } // namespace blink
-=======
-}
->>>>>>> miniblink49

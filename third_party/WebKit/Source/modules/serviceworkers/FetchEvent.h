@@ -5,44 +5,33 @@
 #ifndef FetchEvent_h
 #define FetchEvent_h
 
-<<<<<<< HEAD
 #include "bindings/core/v8/ScriptPromise.h"
 #include "bindings/core/v8/ScriptPromiseProperty.h"
-=======
->>>>>>> miniblink49
 #include "modules/EventModules.h"
 #include "modules/ModulesExport.h"
 #include "modules/fetch/Request.h"
 #include "modules/serviceworkers/ExtendableEvent.h"
 #include "modules/serviceworkers/FetchEventInit.h"
 #include "modules/serviceworkers/RespondWithObserver.h"
-<<<<<<< HEAD
 #include "modules/serviceworkers/WaitUntilObserver.h"
-=======
->>>>>>> miniblink49
 #include "platform/heap/Handle.h"
 
 namespace blink {
 
 class ExceptionState;
 class Request;
-<<<<<<< HEAD
 class Response;
 class RespondWithObserver;
 class ScriptState;
 class WebDataConsumerHandle;
 struct WebServiceWorkerError;
 class WebURLResponse;
-=======
-class RespondWithObserver;
->>>>>>> miniblink49
 
 // A fetch event is dispatched by the client to a service worker's script
 // context. RespondWithObserver can be used to notify the client about the
 // service worker's response.
 class MODULES_EXPORT FetchEvent final : public ExtendableEvent {
     DEFINE_WRAPPERTYPEINFO();
-<<<<<<< HEAD
 
 public:
     using PreloadResponseProperty = ScriptPromiseProperty<Member<FetchEvent>,
@@ -70,24 +59,12 @@ public:
         std::unique_ptr<WebDataConsumerHandle>);
     void onNavigationPreloadError(ScriptState*,
         std::unique_ptr<WebServiceWorkerError>);
-=======
-public:
-    static PassRefPtrWillBeRawPtr<FetchEvent> create();
-    static PassRefPtrWillBeRawPtr<FetchEvent> create(const AtomicString& type, const FetchEventInit&);
-    static PassRefPtrWillBeRawPtr<FetchEvent> create(const AtomicString& type, const FetchEventInit&, RespondWithObserver*);
-
-    Request* request() const;
-    bool isReload() const;
-
-    void respondWith(ScriptState*, const ScriptValue&, ExceptionState&);
->>>>>>> miniblink49
 
     const AtomicString& interfaceName() const override;
 
     DECLARE_VIRTUAL_TRACE();
 
 protected:
-<<<<<<< HEAD
     FetchEvent(ScriptState*,
         const AtomicString& type,
         const FetchEventInit&,
@@ -100,14 +77,6 @@ private:
     Member<Request> m_request;
     Member<PreloadResponseProperty> m_preloadResponseProperty;
     String m_clientId;
-=======
-    FetchEvent();
-    FetchEvent(const AtomicString& type, const FetchEventInit&, RespondWithObserver*);
-
-private:
-    PersistentWillBeMember<RespondWithObserver> m_observer;
-    PersistentWillBeMember<Request> m_request;
->>>>>>> miniblink49
     bool m_isReload;
 };
 

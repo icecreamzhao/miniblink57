@@ -23,23 +23,27 @@
 #ifndef HTMLEmbedElement_h
 #define HTMLEmbedElement_h
 
+#include "core/CoreExport.h"
 #include "core/html/HTMLPlugInElement.h"
 
 namespace blink {
 
-class HTMLEmbedElement final : public HTMLPlugInElement {
+class CORE_EXPORT HTMLEmbedElement final : public HTMLPlugInElement {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<HTMLEmbedElement> create(Document&, bool createdByParser = false);
+    static HTMLEmbedElement* create(Document&, bool createdByParser = false);
 
     bool isExposed() const;
 
 private:
     HTMLEmbedElement(Document&, bool createdByParser);
 
-    void parseAttribute(const QualifiedName&, const AtomicString&) override;
+    void parseAttribute(const AttributeModificationParams&) override;
     bool isPresentationAttribute(const QualifiedName&) const override;
-    void collectStyleForPresentationAttribute(const QualifiedName&, const AtomicString&, MutableStylePropertySet*) override;
+    void collectStyleForPresentationAttribute(const QualifiedName&,
+        const AtomicString&,
+        MutableStylePropertySet*) override;
 
     bool layoutObjectIsNeeded(const ComputedStyle&) override;
 
@@ -50,7 +54,8 @@ private:
 
     void updateWidgetInternal() override;
 
-    void parametersForPlugin(Vector<String>& paramNames, Vector<String>& paramValues);
+    void parametersForPlugin(Vector<String>& paramNames,
+        Vector<String>& paramValues);
 
     bool shouldRegisterAsNamedItem() const override { return true; }
     bool isInteractiveContent() const override;

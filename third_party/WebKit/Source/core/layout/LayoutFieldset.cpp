@@ -21,7 +21,6 @@
  *
  */
 
-#include "config.h"
 #include "core/layout/LayoutFieldset.h"
 
 #include "core/CSSPropertyNames.h"
@@ -44,10 +43,10 @@ void LayoutFieldset::computePreferredLogicalWidths()
 {
     LayoutBlockFlow::computePreferredLogicalWidths();
     if (LayoutBox* legend = findInFlowLegend()) {
-        int legendMinWidth = legend->minPreferredLogicalWidth();
+        int legendMinWidth = legend->minPreferredLogicalWidth().toInt();
 
         Length legendMarginLeft = legend->style()->marginLeft();
-        Length legendMarginRight = legend->style()->marginLeft();
+        Length legendMarginRight = legend->style()->marginRight();
 
         if (legendMarginLeft.isFixed())
             legendMinWidth += legendMarginLeft.value();
@@ -55,27 +54,30 @@ void LayoutFieldset::computePreferredLogicalWidths()
         if (legendMarginRight.isFixed())
             legendMinWidth += legendMarginRight.value();
 
-        m_minPreferredLogicalWidth = max(m_minPreferredLogicalWidth, legendMinWidth + borderAndPaddingWidth());
+        m_minPreferredLogicalWidth = max(m_minPreferredLogicalWidth,
+            legendMinWidth + borderAndPaddingWidth());
     }
 }
 
-LayoutObject* LayoutFieldset::layoutSpecialExcludedChild(bool relayoutChildren, SubtreeLayoutScope&)
+LayoutObject* LayoutFieldset::layoutSpecialExcludedChild(bool relayoutChildren,
+    SubtreeLayoutScope&)
 {
     LayoutBox* legend = findInFlowLegend();
     if (legend) {
         LayoutRect oldLegendFrameRect = legend->frameRect();
 
         if (relayoutChildren)
-            legend->setNeedsLayoutAndFullPaintInvalidation(LayoutInvalidationReason::FieldsetChanged);
+            legend->setNeedsLayoutAndFullPaintInvalidation(
+                LayoutInvalidationReason::FieldsetChanged);
         legend->layoutIfNeeded();
 
         LayoutUnit logicalLeft;
         if (style()->isLeftToRightDirection()) {
             switch (legend->style()->textAlign()) {
-            case CENTER:
+            case ETextAlign::kCenter:
                 logicalLeft = (logicalWidth() - logicalWidthForChild(*legend)) / 2;
                 break;
-            case RIGHT:
+            case ETextAlign::kRight:
                 logicalLeft = logicalWidth() - borderEnd() - paddingEnd() - logicalWidthForChild(*legend);
                 break;
             default:
@@ -84,12 +86,12 @@ LayoutObject* LayoutFieldset::layoutSpecialExcludedChild(bool relayoutChildren, 
             }
         } else {
             switch (legend->style()->textAlign()) {
-            case LEFT:
+            case ETextAlign::kLeft:
                 logicalLeft = borderStart() + paddingStart();
                 break;
-            case CENTER: {
-                // Make sure that the extra pixel goes to the end side in RTL (since it went to the end side
-                // in LTR).
+            case ETextAlign::kCenter: {
+                // Make sure that the extra pixel goes to the end side in RTL (since
+                // it went to the end side in LTR).
                 LayoutUnit centeredWidth = logicalWidth() - logicalWidthForChild(*legend);
                 logicalLeft = centeredWidth - centeredWidth / 2;
                 break;
@@ -102,7 +104,7 @@ LayoutObject* LayoutFieldset::layoutSpecialExcludedChild(bool relayoutChildren, 
 
         setLogicalLeftForChild(*legend, logicalLeft);
 
-        LayoutUnit fieldsetBorderBefore = borderBefore();
+        LayoutUnit fieldsetBorderBefore = LayoutUnit(borderBefore());
         LayoutUnit legendLogicalHeight = logicalHeightForChild(*legend);
 
         LayoutUnit legendLogicalTop;
@@ -110,11 +112,13 @@ LayoutObject* LayoutFieldset::layoutSpecialExcludedChild(bool relayoutChildren, 
         // FIXME: We need to account for the legend's margin before too.
         if (fieldsetBorderBefore > legendLogicalHeight) {
             // The <legend> is smaller than the associated fieldset before border
-            // so the latter determines positioning of the <legend>. The sizing depends
+            // so the latter determines positioning of the <legend>. The sizing
+            // depends
             // on the legend's margins as we want to still follow the author's cues.
             // Firefox completely ignores the margins in this case which seems wrong.
             legendLogicalTop = (fieldsetBorderBefore - legendLogicalHeight) / 2;
-            collapsedLegendExtent = max<LayoutUnit>(fieldsetBorderBefore, legendLogicalTop + legendLogicalHeight + marginAfterForChild(*legend));
+            collapsedLegendExtent = max<LayoutUnit>(
+                fieldsetBorderBefore, legendLogicalTop + legendLogicalHeight + marginAfterForChild(*legend));
         } else {
             collapsedLegendExtent = legendLogicalHeight + marginAfterForChild(*legend);
         }
@@ -123,7 +127,8 @@ LayoutObject* LayoutFieldset::layoutSpecialExcludedChild(bool relayoutChildren, 
         setLogicalHeight(paddingBefore() + collapsedLegendExtent);
 
         if (legend->frameRect() != oldLegendFrameRect) {
-            // We need to invalidate the fieldset border if the legend's frame changed.
+            // We need to invalidate the fieldset border if the legend's frame
+            // changed.
             setShouldDoFullPaintInvalidation();
         }
     }
@@ -132,7 +137,8 @@ LayoutObject* LayoutFieldset::layoutSpecialExcludedChild(bool relayoutChildren, 
 
 LayoutBox* LayoutFieldset::findInFlowLegend() const
 {
-    for (LayoutObject* legend = firstChild(); legend; legend = legend->nextSibling()) {
+    for (LayoutObject* legend = firstChild(); legend;
+         legend = legend->nextSibling()) {
         if (legend->isFloatingOrOutOfFlowPositioned())
             continue;
 
@@ -142,12 +148,15 @@ LayoutBox* LayoutFieldset::findInFlowLegend() const
     return nullptr;
 }
 
-void LayoutFieldset::paintBoxDecorationBackground(const PaintInfo& paintInfo, const LayoutPoint& paintOffset)
+void LayoutFieldset::paintBoxDecorationBackground(
+    const PaintInfo& paintInfo,
+    const LayoutPoint& paintOffset) const
 {
     FieldsetPainter(*this).paintBoxDecorationBackground(paintInfo, paintOffset);
 }
 
-void LayoutFieldset::paintMask(const PaintInfo& paintInfo, const LayoutPoint& paintOffset)
+void LayoutFieldset::paintMask(const PaintInfo& paintInfo,
+    const LayoutPoint& paintOffset) const
 {
     FieldsetPainter(*this).paintMask(paintInfo, paintOffset);
 }

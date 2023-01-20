@@ -16,19 +16,11 @@
 class SkTLS {
 public:
     typedef void* (*CreateProc)();
-<<<<<<< HEAD
     typedef void (*DeleteProc)(void*);
 
     /**
      *  If Get() has previously been called with this CreateProc, then this
      *  returns its cached data, otherwise it returns nullptr. The CreateProc is
-=======
-    typedef void  (*DeleteProc)(void*);
-
-    /**
-     *  If Get() has previously been called with this CreateProc, then this
-     *  returns its cached data, otherwise it returns NULL. The CreateProc is
->>>>>>> miniblink49
      *  never invoked in Find, it is only used as a key for searching the
      *  cache.
      */
@@ -60,13 +52,8 @@ private:
      *  Implemented by the platform, to return the value of our (one) slot per-thread
      *
      *  If forceCreateTheSlot is true, then we must have created the "slot" for
-<<<<<<< HEAD
      *  our TLS, even though we know that the return value will be nullptr in that
      *  case (i.e. no-slot and first-time-slot both return nullptr). This ensures
-=======
-     *  our TLS, even though we know that the return value will be NULL in that
-     *  case (i.e. no-slot and first-time-slot both return NULL). This ensures
->>>>>>> miniblink49
      *  that after calling GetSpecific, we know that we can legally call
      *  SetSpecific.
      *
@@ -81,11 +68,7 @@ private:
      *  The implementation can rely on GetSpecific(true) having been previously
      *  called before SetSpecific is called.
      */
-<<<<<<< HEAD
     static void PlatformSetSpecific(void*);
-=======
-    static void  PlatformSetSpecific(void*);
->>>>>>> miniblink49
 
 public:
     /**

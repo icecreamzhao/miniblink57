@@ -1,14 +1,4 @@
-<<<<<<< HEAD
 //Copyright (c) Microsoft Corp. All rights reserved
-=======
-/**************************************************************************
-*                                                                         *
-* wingdi.h -- GDI procedure declarations, constant definitions and macros *
-*                                                                         *
-* Copyright (c) Microsoft Corp. All rights reserved.                      *
-*                                                                         *
-**************************************************************************/
->>>>>>> miniblink49
 
 #ifndef _WINGDI_
 #define _WINGDI_

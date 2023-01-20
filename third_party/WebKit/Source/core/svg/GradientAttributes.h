@@ -21,13 +21,15 @@
 #define GradientAttributes_h
 
 #include "core/svg/SVGUnitTypes.h"
+#include "wtf/Allocator.h"
 
 namespace blink {
 
 struct GradientAttributes {
+    DISALLOW_NEW();
     GradientAttributes()
         : m_spreadMethod(SVGSpreadMethodPad)
-        , m_gradientUnits(SVGUnitTypes::SVG_UNIT_TYPE_OBJECTBOUNDINGBOX)
+        , m_gradientUnits(SVGUnitTypes::kSvgUnitTypeObjectboundingbox)
         , m_spreadMethodSet(false)
         , m_gradientUnitsSet(false)
         , m_gradientTransformSet(false)
@@ -35,8 +37,14 @@ struct GradientAttributes {
     {
     }
 
-    SVGSpreadMethodType spreadMethod() const { return static_cast<SVGSpreadMethodType>(m_spreadMethod); }
-    SVGUnitTypes::SVGUnitType gradientUnits() const { return static_cast<SVGUnitTypes::SVGUnitType>(m_gradientUnits); }
+    SVGSpreadMethodType spreadMethod() const
+    {
+        return static_cast<SVGSpreadMethodType>(m_spreadMethod);
+    }
+    SVGUnitTypes::SVGUnitType gradientUnits() const
+    {
+        return static_cast<SVGUnitTypes::SVGUnitType>(m_gradientUnits);
+    }
     AffineTransform gradientTransform() const { return m_gradientTransform; }
     const Vector<Gradient::ColorStop>& stops() const { return m_stops; }
 
@@ -85,12 +93,14 @@ private:
 };
 
 struct SameSizeAsGradientAttributes {
+    DISALLOW_NEW();
     AffineTransform a;
     Vector<Gradient::ColorStop> b;
     unsigned c : 8;
 };
 
-static_assert(sizeof(GradientAttributes) == sizeof(SameSizeAsGradientAttributes), "GradientAttributes should stay small");
+static_assert(sizeof(GradientAttributes) == sizeof(SameSizeAsGradientAttributes),
+    "GradientAttributes should stay small");
 
 } // namespace blink
 

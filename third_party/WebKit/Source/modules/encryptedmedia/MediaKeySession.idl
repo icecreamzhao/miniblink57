@@ -24,26 +24,16 @@
  */
 
 [
-<<<<<<< HEAD
     ActiveScriptWrappable,
     DependentLifetime,
-=======
-    ActiveDOMObject,
-    RuntimeEnabled=EncryptedMedia,
-    GarbageCollected,
-    TypeChecking=Interface
->>>>>>> miniblink49
 ] interface MediaKeySession : EventTarget {
     // session properties
     readonly attribute DOMString sessionId;
     readonly attribute unrestricted double expiration;
     [CallWith=ScriptState] readonly attribute Promise closed;
     readonly attribute MediaKeyStatusMap keyStatuses;
-<<<<<<< HEAD
     attribute EventHandler onkeystatuseschange;
     attribute EventHandler onmessage;
-=======
->>>>>>> miniblink49
 
     // session initialization
     [CallWith=ScriptState] Promise<void> generateRequest(DOMString initDataType, BufferSource initData);

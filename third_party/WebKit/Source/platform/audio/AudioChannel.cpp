@@ -26,23 +26,10 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "platform/audio/AudioChannel.h"
 #include "platform/audio/VectorMath.h"
 #include <algorithm>
 #include <math.h>
-=======
-#include "config.h"
-
-#if ENABLE(WEB_AUDIO)
-
-#include "platform/audio/AudioChannel.h"
-
-#include <math.h>
-#include <algorithm>
-#include "platform/audio/VectorMath.h"
-#include "wtf/OwnPtr.h"
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -77,13 +64,9 @@ void AudioChannel::copyFrom(const AudioChannel* sourceChannel)
     memcpy(mutableData(), sourceChannel->data(), sizeof(float) * length());
 }
 
-<<<<<<< HEAD
 void AudioChannel::copyFromRange(const AudioChannel* sourceChannel,
     unsigned startFrame,
     unsigned endFrame)
-=======
-void AudioChannel::copyFromRange(const AudioChannel* sourceChannel, unsigned startFrame, unsigned endFrame)
->>>>>>> miniblink49
 {
     // Check that range is safe for reading from sourceChannel.
     bool isRangeSafe = sourceChannel && startFrame < endFrame && endFrame <= sourceChannel->length();
@@ -142,8 +125,3 @@ float AudioChannel::maxAbsValue() const
 }
 
 } // namespace blink
-<<<<<<< HEAD
-=======
-
-#endif // ENABLE(WEB_AUDIO)
->>>>>>> miniblink49

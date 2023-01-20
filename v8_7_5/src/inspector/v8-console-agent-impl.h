@@ -17,7 +17,6 @@ class V8InspectorSessionImpl;
 using protocol::Response;
 
 class V8ConsoleAgentImpl : public protocol::Console::Backend {
-<<<<<<< HEAD
 public:
     V8ConsoleAgentImpl(V8InspectorSessionImpl*, protocol::FrontendChannel*,
         protocol::DictionaryValue* state);
@@ -47,34 +46,3 @@ private:
 } // namespace v8_inspector
 
 #endif // V8_INSPECTOR_V8_CONSOLE_AGENT_IMPL_H_
-=======
- public:
-  V8ConsoleAgentImpl(V8InspectorSessionImpl*, protocol::FrontendChannel*,
-                     protocol::DictionaryValue* state);
-  ~V8ConsoleAgentImpl() override;
-
-  Response enable() override;
-  Response disable() override;
-  Response clearMessages() override;
-
-  void restore();
-  void messageAdded(V8ConsoleMessage*);
-  void reset();
-  bool enabled();
-
- private:
-  void reportAllMessages();
-  bool reportMessage(V8ConsoleMessage*, bool generatePreview);
-
-  V8InspectorSessionImpl* m_session;
-  protocol::DictionaryValue* m_state;
-  protocol::Console::Frontend m_frontend;
-  bool m_enabled;
-
-  DISALLOW_COPY_AND_ASSIGN(V8ConsoleAgentImpl);
-};
-
-}  // namespace v8_inspector
-
-#endif  // V8_INSPECTOR_V8_CONSOLE_AGENT_IMPL_H_
->>>>>>> miniblink49

@@ -105,11 +105,7 @@
  * Definition of timeval struct for platforms that don't have it.
  */
 
-<<<<<<< HEAD
 #if !defined(HAVE_STRUCT_TIMEVAL) && !defined(__clang__)
-=======
-#ifndef HAVE_STRUCT_TIMEVAL
->>>>>>> miniblink49
 struct timeval {
  long tv_sec;
  long tv_usec;

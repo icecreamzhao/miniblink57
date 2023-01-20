@@ -1,20 +1,7 @@
 include_rules = [
-<<<<<<< HEAD
     "+gin/public",
     "-modules",
     "+modules/ModulesExport.h",
     "+modules/fetch",
     "+modules/credentialmanager",
-=======
-    "+bindings",
-    "+core",
-    "+gin/public",
-    "+heap",
-    "-modules",
-    "+modules/ModulesExport.h",
-    "+modules/fetch",
-    "+platform",
-    "+public/platform",
-    "-web",
->>>>>>> miniblink49
 ]

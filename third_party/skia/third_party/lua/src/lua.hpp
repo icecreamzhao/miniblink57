@@ -3,13 +3,7 @@
 // <<extern "C">> not supplied automatically because Lua also compiles as C++
 
 extern "C" {
-<<<<<<< HEAD
 #include "lauxlib.h"
 #include "lua.h"
 #include "lualib.h"
-=======
-#include "lua.h"
-#include "lualib.h"
-#include "lauxlib.h"
->>>>>>> miniblink49
 }

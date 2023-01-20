@@ -31,22 +31,25 @@
 #ifndef StyleResolverStats_h
 #define StyleResolverStats_h
 
-#include "platform/TraceEvent.h"
-#include "platform/TracedValue.h"
-#include "wtf/PassOwnPtr.h"
+#include "platform/instrumentation/tracing/TraceEvent.h"
+#include "platform/instrumentation/tracing/TracedValue.h"
+#include "wtf/PtrUtil.h"
+#include <memory>
 
 namespace blink {
 
 class StyleResolverStats {
+    USING_FAST_MALLOC(StyleResolverStats);
+
 public:
-    static PassOwnPtr<StyleResolverStats> create()
+    static std::unique_ptr<StyleResolverStats> create()
     {
-        return adoptPtr(new StyleResolverStats);
+        return WTF::wrapUnique(new StyleResolverStats);
     }
 
     void reset();
     bool allCountersEnabled() const;
-    PassRefPtr<TracedValue> toTracedValue() const;
+    std::unique_ptr<TracedValue> toTracedValue() const;
 
     unsigned sharedStyleLookups;
     unsigned sharedStyleCandidates;
@@ -62,15 +65,20 @@ public:
     unsigned rulesFastRejected;
     unsigned rulesRejected;
     unsigned rulesMatched;
+    unsigned stylesChanged;
+    unsigned stylesUnchanged;
+    unsigned stylesAnimated;
+    unsigned elementsStyled;
+    unsigned pseudoElementsStyled;
+    unsigned baseStylesUsed;
+    unsigned independentInheritedStylesPropagated;
 
 private:
-    StyleResolverStats()
-    {
-        reset();
-    }
+    StyleResolverStats() { reset(); }
 };
 
-#define INCREMENT_STYLE_STATS_COUNTER(resolver, counter, n) ((resolver).stats() && ((resolver).stats()-> counter += n));
+#define INCREMENT_STYLE_STATS_COUNTER(styleEngine, counter, n) \
+    ((styleEngine).stats() && ((styleEngine).stats()->counter += n));
 
 } // namespace blink
 

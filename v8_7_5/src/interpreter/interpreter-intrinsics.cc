@@ -8,7 +8,6 @@
 
 namespace v8 {
 namespace internal {
-<<<<<<< HEAD
     namespace interpreter {
 
         // static
@@ -57,50 +56,3 @@ namespace internal {
     } // namespace interpreter
 } // namespace internal
 } // namespace v8
-=======
-namespace interpreter {
-
-// static
-bool IntrinsicsHelper::IsSupported(Runtime::FunctionId function_id) {
-  switch (function_id) {
-#define SUPPORTED(name, lower_case, count) case Runtime::kInline##name:
-    INTRINSICS_LIST(SUPPORTED)
-    return true;
-#undef SUPPORTED
-    default:
-      return false;
-  }
-}
-
-// static
-IntrinsicsHelper::IntrinsicId IntrinsicsHelper::FromRuntimeId(
-    Runtime::FunctionId function_id) {
-  switch (function_id) {
-#define TO_RUNTIME_ID(name, lower_case, count) \
-  case Runtime::kInline##name:                 \
-    return IntrinsicId::k##name;
-    INTRINSICS_LIST(TO_RUNTIME_ID)
-#undef TO_RUNTIME_ID
-    default:
-      UNREACHABLE();
-  }
-}
-
-// static
-Runtime::FunctionId IntrinsicsHelper::ToRuntimeId(
-    IntrinsicsHelper::IntrinsicId intrinsic_id) {
-  switch (intrinsic_id) {
-#define TO_INTRINSIC_ID(name, lower_case, count) \
-  case IntrinsicId::k##name:                     \
-    return Runtime::kInline##name;
-    INTRINSICS_LIST(TO_INTRINSIC_ID)
-#undef TO_INTRINSIC_ID
-    default:
-      UNREACHABLE();
-  }
-}
-
-}  // namespace interpreter
-}  // namespace internal
-}  // namespace v8
->>>>>>> miniblink49

@@ -31,39 +31,41 @@
 #ifndef SVGStringList_h
 #define SVGStringList_h
 
-#include "bindings/core/v8/ScriptWrappable.h"
+#include "core/svg/SVGParsingError.h"
 #include "core/svg/SVGString.h"
 #include "core/svg/properties/SVGPropertyHelper.h"
 
 namespace blink {
 
+class ExceptionState;
 class SVGStringListTearOff;
 
 // Implementation of SVGStringList spec:
 // http://www.w3.org/TR/SVG/single-page.html#types-InterfaceSVGStringList
 // See SVGStringListTearOff for actual Javascript interface.
-// Unlike other SVG*List implementations, SVGStringList is NOT tied to SVGString.
+// Unlike other SVG*List implementations, SVGStringList is NOT tied to
+// SVGString.
 // SVGStringList operates directly on DOMString.
 //
 // In short:
 //   SVGStringList has_a Vector<String>.
-//   SVGStringList items are exposed to Javascript as DOMString (not SVGString) as in the spec.
-//   SVGString is used only for boxing values for non-list string property SVGAnimatedString,
+//   SVGStringList items are exposed to Javascript as DOMString (not SVGString)
+//   as in the spec.
+//   SVGString is used only for boxing values for non-list string property
+//   SVGAnimatedString,
 //   and not used for SVGStringList.
 class SVGStringList final : public SVGPropertyHelper<SVGStringList> {
 public:
     typedef SVGStringListTearOff TearOffType;
 
-    static PassRefPtrWillBeRawPtr<SVGStringList> create()
-    {
-        return adoptRefWillBeNoop(new SVGStringList());
-    }
+    static SVGStringList* create() { return new SVGStringList(); }
 
     ~SVGStringList() override;
 
     const Vector<String>& values() const { return m_values; }
 
-    // SVGStringList DOM Spec implementation. These are only to be called from SVGStringListTearOff:
+    // SVGStringList DOM Spec implementation. These are only to be called from
+    // SVGStringListTearOff:
     unsigned long length() { return m_values.size(); }
     void clear() { m_values.clear(); }
     void initialize(const String&);
@@ -74,12 +76,18 @@ public:
     void replaceItem(const String&, size_t, ExceptionState&);
 
     // SVGPropertyBase:
-    void setValueAsString(const String&, ExceptionState&);
+    SVGParsingError setValueAsString(const String&);
     String valueAsString() const override;
 
-    void add(PassRefPtrWillBeRawPtr<SVGPropertyBase>, SVGElement*) override;
-    void calculateAnimatedValue(SVGAnimationElement*, float percentage, unsigned repeatCount, PassRefPtrWillBeRawPtr<SVGPropertyBase> fromValue, PassRefPtrWillBeRawPtr<SVGPropertyBase> toValue, PassRefPtrWillBeRawPtr<SVGPropertyBase> toAtEndOfDurationValue, SVGElement*) override;
-    float calculateDistance(PassRefPtrWillBeRawPtr<SVGPropertyBase> to, SVGElement*) override;
+    void add(SVGPropertyBase*, SVGElement*) override;
+    void calculateAnimatedValue(SVGAnimationElement*,
+        float percentage,
+        unsigned repeatCount,
+        SVGPropertyBase* fromValue,
+        SVGPropertyBase* toValue,
+        SVGPropertyBase* toAtEndOfDurationValue,
+        SVGElement*) override;
+    float calculateDistance(SVGPropertyBase* to, SVGElement*) override;
 
     static AnimatedPropertyType classType() { return AnimatedStringList; }
 

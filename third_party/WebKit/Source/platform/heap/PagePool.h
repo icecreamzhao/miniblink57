@@ -6,10 +6,7 @@
 #define PagePool_h
 
 #include "platform/heap/ThreadState.h"
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
-=======
->>>>>>> miniblink49
 #include "wtf/ThreadingPrimitives.h"
 
 namespace blink {
@@ -17,7 +14,6 @@ namespace blink {
 class BasePage;
 class PageMemory;
 
-<<<<<<< HEAD
 template <typename DataType>
 class PagePool {
     USING_FAST_MALLOC(PagePool);
@@ -26,54 +22,31 @@ protected:
     PagePool()
     {
         for (int i = 0; i < BlinkGC::NumberOfArenas; ++i)
-=======
-template<typename DataType>
-class PagePool {
-protected:
-    PagePool()
-    {
-        for (int i = 0; i < ThreadState::NumberOfHeaps; ++i)
->>>>>>> miniblink49
             m_pool[i] = nullptr;
     }
 
     class PoolEntry {
-<<<<<<< HEAD
         USING_FAST_MALLOC(PoolEntry);
 
-=======
->>>>>>> miniblink49
     public:
         PoolEntry(DataType* data, PoolEntry* next)
             : data(data)
             , next(next)
-<<<<<<< HEAD
         {
         }
-=======
-        { }
->>>>>>> miniblink49
 
         DataType* data;
         PoolEntry* next;
     };
 
-<<<<<<< HEAD
     PoolEntry* m_pool[BlinkGC::NumberOfArenas];
-=======
-    PoolEntry* m_pool[ThreadState::NumberOfHeaps];
->>>>>>> miniblink49
 };
 
 // Once pages have been used for one type of thread heap they will never be
 // reused for another type of thread heap.  Instead of unmapping, we add the
 // pages to a pool of pages to be reused later by a thread heap of the same
 // type. This is done as a security feature to avoid type confusion.  The
-<<<<<<< HEAD
 // heaps are type segregated by having separate thread arenas for different
-=======
-// heaps are type segregated by having separate thread heaps for different
->>>>>>> miniblink49
 // types of objects.  Holding on to pages ensures that the same virtual address
 // space cannot be used for objects of another type than the type contained
 // in this page to begin with.
@@ -84,11 +57,7 @@ public:
     PageMemory* takeFreePage(int);
 
 private:
-<<<<<<< HEAD
     Mutex m_mutex[BlinkGC::NumberOfArenas];
-=======
-    Mutex m_mutex[ThreadState::NumberOfHeaps];
->>>>>>> miniblink49
 };
 
 class OrphanedPagePool : public PagePool<BasePage> {
@@ -100,11 +69,7 @@ public:
     ~OrphanedPagePool();
     void addOrphanedPage(int, BasePage*);
     void decommitOrphanedPages();
-<<<<<<< HEAD
 #if DCHECK_IS_ON()
-=======
-#if ENABLE(ASSERT)
->>>>>>> miniblink49
     bool contains(void*);
 #endif
 
@@ -114,10 +79,7 @@ public:
     // causing ASan errors. asanDisabledMemset must not be used for
     // non-orphaned pages.
     static void asanDisabledMemset(Address, char, size_t);
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 private:
     void clearMemory(PageMemory*);
 };

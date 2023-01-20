@@ -14,21 +14,15 @@ class ExecutionContext;
 class MediaKeysClient;
 class WebEncryptedMediaClient;
 
-<<<<<<< HEAD
 class MODULES_EXPORT MediaKeysController final
     : public GarbageCollected<MediaKeysController>,
       public Supplement<Page> {
     USING_GARBAGE_COLLECTED_MIXIN(MediaKeysController);
 
-=======
-class MODULES_EXPORT MediaKeysController final : public NoBaseWillBeGarbageCollected<MediaKeysController>, public WillBeHeapSupplement<Page> {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(MediaKeysController);
->>>>>>> miniblink49
 public:
     WebEncryptedMediaClient* encryptedMediaClient(ExecutionContext*);
 
     static void provideMediaKeysTo(Page&, MediaKeysClient*);
-<<<<<<< HEAD
     static MediaKeysController* from(Page* page)
     {
         return static_cast<MediaKeysController*>(
@@ -36,11 +30,6 @@ public:
     }
 
     DEFINE_INLINE_VIRTUAL_TRACE() { Supplement<Page>::trace(visitor); }
-=======
-    static MediaKeysController* from(Page* page) { return static_cast<MediaKeysController*>(WillBeHeapSupplement<Page>::from(page, supplementName())); }
-
-    DEFINE_INLINE_VIRTUAL_TRACE() { WillBeHeapSupplement<Page>::trace(visitor); }
->>>>>>> miniblink49
 
 private:
     explicit MediaKeysController(MediaKeysClient*);
@@ -55,7 +44,3 @@ private:
 } // namespace blink
 
 #endif // MediaKeysController_h
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49

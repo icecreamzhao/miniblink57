@@ -23,31 +23,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "modules/mediastream/MediaDeviceInfo.h"
 
 #include "bindings/core/v8/ScriptState.h"
 #include "bindings/core/v8/ScriptValue.h"
 #include "bindings/core/v8/V8ObjectBuilder.h"
-=======
-#include "config.h"
-#include "modules/mediastream/MediaDeviceInfo.h"
-
->>>>>>> miniblink49
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 MediaDeviceInfo* MediaDeviceInfo::create(
     const WebMediaDeviceInfo& webMediaDeviceInfo)
 {
     DCHECK(!webMediaDeviceInfo.isNull());
-=======
-MediaDeviceInfo* MediaDeviceInfo::create(const WebMediaDeviceInfo& webMediaDeviceInfo)
-{
-    ASSERT(!webMediaDeviceInfo.isNull());
->>>>>>> miniblink49
     return new MediaDeviceInfo(webMediaDeviceInfo);
 }
 
@@ -72,11 +60,7 @@ String MediaDeviceInfo::kind() const
         return "videoinput";
     }
 
-<<<<<<< HEAD
     NOTREACHED();
-=======
-    ASSERT_NOT_REACHED();
->>>>>>> miniblink49
     return String();
 }
 
@@ -90,7 +74,6 @@ String MediaDeviceInfo::groupId() const
     return m_webMediaDeviceInfo.groupId();
 }
 
-<<<<<<< HEAD
 ScriptValue MediaDeviceInfo::toJSONForBinding(ScriptState* scriptState)
 {
     V8ObjectBuilder result(scriptState);
@@ -101,6 +84,4 @@ ScriptValue MediaDeviceInfo::toJSONForBinding(ScriptState* scriptState)
     return result.scriptValue();
 }
 
-=======
->>>>>>> miniblink49
 } // namespace blink

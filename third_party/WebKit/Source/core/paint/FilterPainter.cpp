@@ -2,78 +2,85 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "core/paint/FilterPainter.h"
 
-#include "core/paint/DeprecatedPaintLayer.h"
 #include "core/paint/FilterEffectBuilder.h"
 #include "core/paint/LayerClipRecorder.h"
+#include "core/paint/PaintLayer.h"
 #include "platform/RuntimeEnabledFeatures.h"
+#include "platform/graphics/CompositorFilterOperations.h"
 #include "platform/graphics/GraphicsContext.h"
 #include "platform/graphics/GraphicsLayer.h"
 #include "platform/graphics/filters/FilterEffect.h"
 #include "platform/graphics/filters/SkiaImageFilterBuilder.h"
-#include "platform/graphics/paint/DisplayItemList.h"
 #include "platform/graphics/paint/FilterDisplayItem.h"
-#include "public/platform/Platform.h"
-#include "public/platform/WebCompositorSupport.h"
-#include "public/platform/WebFilterOperations.h"
+#include "platform/graphics/paint/PaintController.h"
+#include "wtf/PtrUtil.h"
+#include <memory>
 
 namespace blink {
 
-FilterPainter::FilterPainter(DeprecatedPaintLayer& layer, GraphicsContext* context, const LayoutPoint& offsetFromRoot, const ClipRect& clipRect, DeprecatedPaintLayerPaintingInfo& paintingInfo, PaintLayerFlags paintFlags,
-    LayoutRect& rootRelativeBounds, bool& rootRelativeBoundsComputed)
+FilterPainter::FilterPainter(PaintLayer& layer,
+    GraphicsContext& context,
+    const LayoutPoint& offsetFromRoot,
+    const ClipRect& clipRect,
+    PaintLayerPaintingInfo& paintingInfo,
+    PaintLayerFlags paintFlags)
     : m_filterInProgress(false)
     , m_context(context)
     , m_layoutObject(layer.layoutObject())
 {
-    if (!layer.filterEffectBuilder() || !layer.paintsWithFilters())
+    if (!layer.paintsWithFilters())
         return;
 
-    ASSERT(layer.filterInfo());
+    FilterEffect* lastEffect = layer.lastFilterEffect();
+    if (!lastEffect)
+        return;
 
-    SkiaImageFilterBuilder builder;
-    RefPtrWillBeRawPtr<FilterEffect> lastEffect = layer.filterEffectBuilder()->lastEffect();
-    lastEffect->determineFilterPrimitiveSubregion(MapRectForward);
-    RefPtr<SkImageFilter> imageFilter = builder.build(lastEffect.get(), ColorSpaceDeviceRGB);
+    sk_sp<SkImageFilter> imageFilter = SkiaImageFilterBuilder::build(lastEffect, ColorSpaceDeviceRGB);
     if (!imageFilter)
         return;
 
-    if (!rootRelativeBoundsComputed) {
-        rootRelativeBounds = layer.physicalBoundingBoxIncludingReflectionAndStackingChildren(paintingInfo.rootLayer, offsetFromRoot);
-        rootRelativeBoundsComputed = true;
-    }
-
     // We'll handle clipping to the dirty rect before filter rasterization.
-    // Filter processing will automatically expand the clip rect and the offscreen to accommodate any filter outsets.
-    // FIXME: It is incorrect to just clip to the damageRect here once multiple fragments are involved.
+    // Filter processing will automatically expand the clip rect and the offscreen
+    // to accommodate any filter outsets.
+    // FIXME: It is incorrect to just clip to the damageRect here once multiple
+    // fragments are involved.
 
     // Subsequent code should not clip to the dirty rect, since we've already
     // done it above, and doing it later will defeat the outsets.
     paintingInfo.clipToDirtyRect = false;
 
+    DCHECK(m_layoutObject);
+
     if (clipRect.rect() != paintingInfo.paintDirtyRect || clipRect.hasRadius()) {
-        m_clipRecorder = adoptPtr(new LayerClipRecorder(*context, *layer.layoutObject(), DisplayItem::ClipLayerFilter, clipRect, &paintingInfo, LayoutPoint(), paintFlags));
+        m_clipRecorder = WTF::wrapUnique(new LayerClipRecorder(
+            context, *layer.layoutObject(), DisplayItem::kClipLayerFilter, clipRect,
+            paintingInfo.rootLayer, LayoutPoint(), paintFlags));
     }
 
-    ASSERT(m_layoutObject);
-    if (RuntimeEnabledFeatures::slimmingPaintEnabled()) {
-        ASSERT(context->displayItemList());
-        if (!context->displayItemList()->displayItemConstructionIsDisabled()) {
-            FilterOperations filterOperations(layer.computeFilterOperations(m_layoutObject->styleRef()));
-            OwnPtr<WebFilterOperations> webFilterOperations = adoptPtr(Platform::current()->compositorSupport()->createFilterOperations());
-            builder.buildFilterOperations(filterOperations, webFilterOperations.get());
-            // FIXME: It's possible to have empty WebFilterOperations here even
-            // though the SkImageFilter produced above is non-null, since the
-            // layer's FilterEffectBuilder can have a stale representation of
-            // the layer's filter. See crbug.com/502026.
-            if (webFilterOperations->isEmpty())
-                return;
-            context->displayItemList()->createAndAppend<BeginFilterDisplayItem>(*m_layoutObject, imageFilter, rootRelativeBounds, webFilterOperations.release());
+    if (!context.getPaintController().displayItemConstructionIsDisabled()) {
+        CompositorFilterOperations compositorFilterOperations = layer.createCompositorFilterOperationsForFilter(
+            m_layoutObject->styleRef());
+        // FIXME: It's possible to have empty CompositorFilterOperations here even
+        // though the SkImageFilter produced above is non-null, since the
+        // layer's FilterEffectBuilder can have a stale representation of
+        // the layer's filter. See crbug.com/502026.
+        if (compositorFilterOperations.isEmpty())
+            return;
+        LayoutRect visualBounds(
+            layer.physicalBoundingBoxIncludingStackingChildren(offsetFromRoot));
+        if (layer.enclosingPaginationLayer()) {
+            // Filters are set up before pagination, so we need to make the bounding
+            // box visual on our own.
+            visualBounds.moveBy(-offsetFromRoot);
+            layer.convertFromFlowThreadToVisualBoundingBoxInAncestor(
+                paintingInfo.rootLayer, visualBounds);
         }
-    } else {
-        BeginFilterDisplayItem filterDisplayItem(*m_layoutObject, imageFilter, rootRelativeBounds);
-        filterDisplayItem.replay(*context);
+        FloatPoint origin(offsetFromRoot);
+        context.getPaintController().createAndAppend<BeginFilterDisplayItem>(
+            *m_layoutObject, std::move(imageFilter), FloatRect(visualBounds),
+            origin, std::move(compositorFilterOperations));
     }
 
     m_filterInProgress = true;
@@ -84,18 +91,7 @@ FilterPainter::~FilterPainter()
     if (!m_filterInProgress)
         return;
 
-    if (RuntimeEnabledFeatures::slimmingPaintEnabled()) {
-        ASSERT(m_context->displayItemList());
-        if (!m_context->displayItemList()->displayItemConstructionIsDisabled()) {
-            if (m_context->displayItemList()->lastDisplayItemIsNoopBegin())
-                m_context->displayItemList()->removeLastDisplayItem();
-            else
-                m_context->displayItemList()->createAndAppend<EndFilterDisplayItem>(*m_layoutObject);
-        }
-    } else {
-        EndFilterDisplayItem endFilterDisplayItem(*m_layoutObject);
-        endFilterDisplayItem.replay(*m_context);
-    }
+    m_context.getPaintController().endItem<EndFilterDisplayItem>(*m_layoutObject);
 }
 
 } // namespace blink

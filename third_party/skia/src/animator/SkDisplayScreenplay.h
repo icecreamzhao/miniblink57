@@ -6,10 +6,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #ifndef SkDisplayScreenplay_DEFINED
 #define SkDisplayScreenplay_DEFINED
 

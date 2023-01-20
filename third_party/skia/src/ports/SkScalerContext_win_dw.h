@@ -14,23 +14,16 @@
 #include "SkTypes.h"
 
 #include <dwrite.h>
-<<<<<<< HEAD
 #if SK_HAS_DWRITE_2_H
 #include <dwrite_2.h>
 #endif
-=======
->>>>>>> miniblink49
 
 class SkGlyph;
 class SkDescriptor;
 
 class SkScalerContext_DW : public SkScalerContext {
 public:
-<<<<<<< HEAD
     SkScalerContext_DW(DWriteFontTypeface*, const SkScalerContextEffects&, const SkDescriptor*);
-=======
-    SkScalerContext_DW(DWriteFontTypeface*, const SkDescriptor* desc);
->>>>>>> miniblink49
     virtual ~SkScalerContext_DW();
 
 protected:
@@ -44,7 +37,6 @@ protected:
 
 private:
     const void* drawDWMask(const SkGlyph& glyph,
-<<<<<<< HEAD
         DWRITE_RENDERING_MODE renderingMode,
         DWRITE_TEXTURE_TYPE textureType);
 
@@ -60,15 +52,6 @@ private:
 
     void generateColorGlyphImage(const SkGlyph& glyph);
 #endif
-=======
-                           DWRITE_RENDERING_MODE renderingMode,
-                           DWRITE_TEXTURE_TYPE textureType);
-
-    HRESULT getBoundingBox(SkGlyph* glyph,
-                           DWRITE_RENDERING_MODE renderingMode,
-                           DWRITE_TEXTURE_TYPE textureType,
-                           RECT* bbox);
->>>>>>> miniblink49
 
     SkTDArray<uint8_t> fBits;
     /** The total matrix without the text height scale. */
@@ -92,13 +75,10 @@ private:
     DWRITE_RENDERING_MODE fRenderingMode;
     DWRITE_TEXTURE_TYPE fTextureType;
     DWRITE_MEASURING_MODE fMeasuringMode;
-<<<<<<< HEAD
 #if SK_HAS_DWRITE_2_H
     SkTScopedComPtr<IDWriteFactory2> fFactory2;
     bool fIsColorFont;
 #endif
-=======
->>>>>>> miniblink49
 };
 
 #endif

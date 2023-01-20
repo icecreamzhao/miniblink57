@@ -5,18 +5,9 @@
 #ifndef V8_V8_INSPECTOR_PROTOCOL_H_
 #define V8_V8_INSPECTOR_PROTOCOL_H_
 
-<<<<<<< HEAD
 #include "inspector/Debugger.h" // NOLINT(build/include)
 #include "inspector/Runtime.h" // NOLINT(build/include)
 #include "inspector/Schema.h" // NOLINT(build/include)
 #include "v8-inspector.h" // NOLINT(build/include)
 
 #endif // V8_V8_INSPECTOR_PROTOCOL_H_
-=======
-#include "inspector/Debugger.h"  // NOLINT(build/include)
-#include "inspector/Runtime.h"   // NOLINT(build/include)
-#include "inspector/Schema.h"    // NOLINT(build/include)
-#include "v8-inspector.h"        // NOLINT(build/include)
-
-#endif  // V8_V8_INSPECTOR_PROTOCOL_H_
->>>>>>> miniblink49

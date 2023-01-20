@@ -23,17 +23,12 @@
 #ifndef FEComposite_h
 #define FEComposite_h
 
-<<<<<<< HEAD
 #include "SkBlendMode.h"
-=======
-#include "SkXfermode.h"
->>>>>>> miniblink49
 #include "platform/graphics/filters/FilterEffect.h"
 
 namespace blink {
 
 enum CompositeOperationType {
-<<<<<<< HEAD
     FECOMPOSITE_OPERATOR_UNKNOWN = 0,
     FECOMPOSITE_OPERATOR_OVER = 1,
     FECOMPOSITE_OPERATOR_IN = 2,
@@ -52,21 +47,6 @@ public:
         float,
         float,
         float);
-=======
-    FECOMPOSITE_OPERATOR_UNKNOWN    = 0,
-    FECOMPOSITE_OPERATOR_OVER       = 1,
-    FECOMPOSITE_OPERATOR_IN         = 2,
-    FECOMPOSITE_OPERATOR_OUT        = 3,
-    FECOMPOSITE_OPERATOR_ATOP       = 4,
-    FECOMPOSITE_OPERATOR_XOR        = 5,
-    FECOMPOSITE_OPERATOR_ARITHMETIC = 6,
-    FECOMPOSITE_OPERATOR_LIGHTER    = 7
-};
-
-class PLATFORM_EXPORT FEComposite : public FilterEffect {
-public:
-    static PassRefPtrWillBeRawPtr<FEComposite> create(Filter*, const CompositeOperationType&, float, float, float, float);
->>>>>>> miniblink49
 
     CompositeOperationType operation() const;
     bool setOperation(CompositeOperationType);
@@ -83,7 +63,6 @@ public:
     float k4() const;
     bool setK4(float);
 
-<<<<<<< HEAD
     TextStream& externalRepresentation(TextStream&, int indention) const override;
 
 protected:
@@ -108,22 +87,6 @@ private:
     sk_sp<SkImageFilter> createImageFilterWithoutValidation() override;
     sk_sp<SkImageFilter> createImageFilterInternal(
         bool requiresPMColorValidation);
-=======
-    FloatRect determineAbsolutePaintRect(const FloatRect& requestedRect) override;
-
-    TextStream& externalRepresentation(TextStream&, int indention) const override;
-
-    PassRefPtr<SkImageFilter> createImageFilter(SkiaImageFilterBuilder*) override;
-    PassRefPtr<SkImageFilter> createImageFilterWithoutValidation(SkiaImageFilterBuilder*) override;
-
-protected:
-    bool mayProduceInvalidPreMultipliedPixels() override { return m_type == FECOMPOSITE_OPERATOR_ARITHMETIC; }
-
-private:
-    FEComposite(Filter*, const CompositeOperationType&, float, float, float, float);
-
-    PassRefPtr<SkImageFilter> createImageFilterInternal(SkiaImageFilterBuilder*, bool requiresPMColorValidation);
->>>>>>> miniblink49
 
     CompositeOperationType m_type;
     float m_k1;

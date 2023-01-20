@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -9,20 +5,12 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #ifndef SkColor_DEFINED
 #define SkColor_DEFINED
 
 #include "SkBlendMode.h"
 #include "SkScalar.h"
 #include "SkTypes.h"
-=======
-
-#ifndef SkColor_DEFINED
-#define SkColor_DEFINED
-
-#include "SkScalar.h"
->>>>>>> miniblink49
 
 /** \file SkColor.h
 
@@ -49,16 +37,8 @@ static inline SkColor SkColorSetARGBInline(U8CPU a, U8CPU r, U8CPU g, U8CPU b)
 }
 
 #define SkColorSetARGBMacro(a, r, g, b) \
-<<<<<<< HEAD
     static_cast<SkColor>(               \
         (static_cast<U8CPU>(a) << 24) | (static_cast<U8CPU>(r) << 16) | (static_cast<U8CPU>(g) << 8) | (static_cast<U8CPU>(b) << 0))
-=======
-    static_cast<SkColor>( \
-        (static_cast<U8CPU>(a) << 24) | \
-        (static_cast<U8CPU>(r) << 16) | \
-        (static_cast<U8CPU>(g) << 8) | \
-        (static_cast<U8CPU>(b) << 0))
->>>>>>> miniblink49
 
 /** gcc will generate static initializers for code of this form:
  * static const SkColor kMyColor = SkColorSetARGB(0xFF, 0x01, 0x02, 0x03)
@@ -73,7 +53,6 @@ static inline SkColor SkColorSetARGBInline(U8CPU a, U8CPU r, U8CPU g, U8CPU b)
 /** Return a SkColor value from 8 bit component values, with an implied value
     of 0xFF for alpha (fully opaque)
 */
-<<<<<<< HEAD
 #define SkColorSetRGB(r, g, b) SkColorSetARGB(0xFF, r, g, b)
 
 /** return the alpha byte from a SkColor value */
@@ -87,26 +66,11 @@ static inline SkColor SkColorSetARGBInline(U8CPU a, U8CPU r, U8CPU g, U8CPU b)
 
 static inline SkColor SkColorSetA(SkColor c, U8CPU a)
 {
-=======
-#define SkColorSetRGB(r, g, b)  SkColorSetARGB(0xFF, r, g, b)
-
-/** return the alpha byte from a SkColor value */
-#define SkColorGetA(color)      (((color) >> 24) & 0xFF)
-/** return the red byte from a SkColor value */
-#define SkColorGetR(color)      (((color) >> 16) & 0xFF)
-/** return the green byte from a SkColor value */
-#define SkColorGetG(color)      (((color) >>  8) & 0xFF)
-/** return the blue byte from a SkColor value */
-#define SkColorGetB(color)      (((color) >>  0) & 0xFF)
-
-static inline SkColor SkColorSetA(SkColor c, U8CPU a) {
->>>>>>> miniblink49
     return (c & 0x00FFFFFF) | (a << 24);
 }
 
 // common colors
 
-<<<<<<< HEAD
 #define SK_AlphaTRANSPARENT 0x00 //!< transparent SkAlpha value
 #define SK_AlphaOPAQUE 0xFF //!< opaque SkAlpha value
 
@@ -124,25 +88,6 @@ static inline SkColor SkColorSetA(SkColor c, U8CPU a) {
 #define SK_ColorYELLOW 0xFFFFFF00 //!< yellow SkColor value
 #define SK_ColorCYAN 0xFF00FFFF //!< cyan SkColor value
 #define SK_ColorMAGENTA 0xFFFF00FF //!< magenta SkColor value
-=======
-#define SK_AlphaTRANSPARENT 0x00        //!< transparent SkAlpha value
-#define SK_AlphaOPAQUE      0xFF        //!< opaque SkAlpha value
-
-#define SK_ColorTRANSPARENT 0x00000000  //!< transparent SkColor value
-
-#define SK_ColorBLACK       0xFF000000  //!< black SkColor value
-#define SK_ColorDKGRAY      0xFF444444  //!< dark gray SkColor value
-#define SK_ColorGRAY        0xFF888888  //!< gray SkColor value
-#define SK_ColorLTGRAY      0xFFCCCCCC  //!< light gray SkColor value
-#define SK_ColorWHITE       0xFFFFFFFF  //!< white SkColor value
-
-#define SK_ColorRED         0xFFFF0000  //!< red SkColor value
-#define SK_ColorGREEN       0xFF00FF00  //!< green SkColor value
-#define SK_ColorBLUE        0xFF0000FF  //!< blue SkColor value
-#define SK_ColorYELLOW      0xFFFFFF00  //!< yellow SkColor value
-#define SK_ColorCYAN        0xFF00FFFF  //!< cyan SkColor value
-#define SK_ColorMAGENTA     0xFFFF00FF  //!< magenta SkColor value
->>>>>>> miniblink49
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -214,7 +159,6 @@ SK_API SkPMColor SkPreMultiplyColor(SkColor c);
 */
 typedef SkPMColor (*SkXfermodeProc)(SkPMColor src, SkPMColor dst);
 
-<<<<<<< HEAD
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 struct SkPM4f;
@@ -252,11 +196,5 @@ struct SkColor4f {
 
     SkPM4f premul() const;
 };
-=======
-/** Define a function pointer type for combining a premultiplied src color
-    and a 16bit device color.
-*/
-typedef uint16_t (*SkXfermodeProc16)(SkPMColor src, uint16_t dst);
->>>>>>> miniblink49
 
 #endif

@@ -5,66 +5,68 @@
 #ifndef NullExecutionContext_h
 #define NullExecutionContext_h
 
+#include "bindings/core/v8/SourceLocation.h"
 #include "core/dom/ExecutionContext.h"
 #include "core/dom/SecurityContext.h"
 #include "core/events/EventQueue.h"
 #include "core/inspector/ConsoleMessage.h"
-#include "core/inspector/ScriptCallStack.h"
 #include "platform/heap/Handle.h"
 #include "platform/weborigin/KURL.h"
-#include "wtf/RefCounted.h"
+#include <memory>
 
 namespace blink {
 
-class NullExecutionContext final : public RefCountedWillBeGarbageCollectedFinalized<NullExecutionContext>, public SecurityContext, public ExecutionContext {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(NullExecutionContext);
+class NullExecutionContext final
+    : public GarbageCollectedFinalized<NullExecutionContext>,
+      public SecurityContext,
+      public ExecutionContext {
+    USING_GARBAGE_COLLECTED_MIXIN(NullExecutionContext);
+
 public:
     NullExecutionContext();
 
-    virtual void disableEval(const String&) override { }
-    virtual String userAgent(const KURL&) const override { return String(); }
+    void disableEval(const String&) override { }
+    String userAgent() const override { return String(); }
 
-    virtual void postTask(const WebTraceLocation&, PassOwnPtr<ExecutionContextTask>) override;
+    void postTask(
+        TaskType,
+        const WebTraceLocation&,
+        std::unique_ptr<ExecutionContextTask>,
+        const String& taskNameForInstrumentation = emptyString()) override;
 
-    virtual EventTarget* errorEventTarget() override { return nullptr; }
-    virtual EventQueue* eventQueue() const override { return m_queue.get(); }
+    EventTarget* errorEventTarget() override { return nullptr; }
+    EventQueue* getEventQueue() const override { return m_queue.get(); }
 
-    virtual bool tasksNeedSuspension() override { return m_tasksNeedSuspension; }
+    bool tasksNeedSuspension() override { return m_tasksNeedSuspension; }
     void setTasksNeedSuspension(bool flag) { m_tasksNeedSuspension = flag; }
 
-    virtual void reportBlockedScriptExecutionToInspector(const String& directiveText) override { }
-    virtual void didUpdateSecurityOrigin() override { }
-    virtual SecurityContext& securityContext() override { return *this; }
-    virtual DOMTimerCoordinator* timers() override { return nullptr; }
+    void didUpdateSecurityOrigin() override { }
+    SecurityContext& securityContext() override { return *this; }
+    DOMTimerCoordinator* timers() override { return nullptr; }
 
-    double timerAlignmentInterval() const;
+    void addConsoleMessage(ConsoleMessage*) override { }
+    void exceptionThrown(ErrorEvent*) override { }
 
-    virtual void addConsoleMessage(PassRefPtrWillBeRawPtr<ConsoleMessage>) override { }
-    virtual void logExceptionToConsole(const String& errorMessage, int scriptId, const String& sourceURL, int lineNumber, int columnNumber, PassRefPtrWillBeRawPtr<ScriptCallStack>) override { }
-
-    bool isPrivilegedContext(String& errorMessage, const PrivilegeContextCheck = StandardPrivilegeCheck) const override;
+    void setIsSecureContext(bool);
+    bool isSecureContext(
+        String& errorMessage,
+        const SecureContextCheck = StandardSecureContextCheck) const override;
 
     DEFINE_INLINE_TRACE()
     {
         visitor->trace(m_queue);
+        SecurityContext::trace(visitor);
         ExecutionContext::trace(visitor);
     }
 
-#if !ENABLE(OILPAN)
-    using RefCounted<NullExecutionContext>::ref;
-    using RefCounted<NullExecutionContext>::deref;
-
-    virtual void refExecutionContext() override { ref(); }
-    virtual void derefExecutionContext() override { deref(); }
-#endif
-
 protected:
-    virtual const KURL& virtualURL() const override { return m_dummyURL; }
-    virtual KURL virtualCompleteURL(const String&) const override { return m_dummyURL; }
+    const KURL& virtualURL() const override { return m_dummyURL; }
+    KURL virtualCompleteURL(const String&) const override { return m_dummyURL; }
 
 private:
     bool m_tasksNeedSuspension;
-    OwnPtrWillBeMember<EventQueue> m_queue;
+    bool m_isSecureContext;
+    Member<EventQueue> m_queue;
 
     KURL m_dummyURL;
 };

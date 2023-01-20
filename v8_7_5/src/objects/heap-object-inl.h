@@ -17,7 +17,6 @@
 namespace v8 {
 namespace internal {
 
-<<<<<<< HEAD
     OBJECT_CONSTRUCTORS_IMPL(HeapObject, Object)
     CAST_ACCESSOR(HeapObject)
 
@@ -53,37 +52,3 @@ namespace internal {
 #include "src/objects/object-macros-undef.h"
 
 #endif // V8_OBJECTS_HEAP_OBJECT_INL_H_
-=======
-OBJECT_CONSTRUCTORS_IMPL(HeapObject, Object)
-CAST_ACCESSOR(HeapObject)
-
-HeapObject::HeapObject(Address ptr, AllowInlineSmiStorage allow_smi)
-    : Object(ptr) {
-  SLOW_DCHECK(
-      (allow_smi == AllowInlineSmiStorage::kAllowBeingASmi && IsSmi()) ||
-      IsHeapObject());
-}
-
-// static
-HeapObject HeapObject::FromAddress(Address address) {
-  DCHECK_TAG_ALIGNED(address);
-  return HeapObject(address + kHeapObjectTag);
-}
-
-// static
-Heap* NeverReadOnlySpaceObject::GetHeap(const HeapObject object) {
-  return GetHeapFromWritableObject(object);
-}
-
-// static
-Isolate* NeverReadOnlySpaceObject::GetIsolate(const HeapObject object) {
-  return Isolate::FromHeap(GetHeap(object));
-}
-
-}  // namespace internal
-}  // namespace v8
-
-#include "src/objects/object-macros-undef.h"
-
-#endif  // V8_OBJECTS_HEAP_OBJECT_INL_H_
->>>>>>> miniblink49

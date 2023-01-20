@@ -7,11 +7,18 @@
 
 #include "core/style/ComputedStyleConstants.h"
 #include "platform/graphics/Color.h"
+#include "wtf/Allocator.h"
 
 namespace blink {
 
 struct BorderEdge {
-    BorderEdge(int edgeWidth, const Color& edgeColor, EBorderStyle edgeStyle, bool edgeIsPresent = true);
+    STACK_ALLOCATED();
+
+public:
+    BorderEdge(int edgeWidth,
+        const Color& edgeColor,
+        EBorderStyle edgeStyle,
+        bool edgeIsPresent = true);
     BorderEdge();
 
     bool hasVisibleColorAndStyle() const;
@@ -23,12 +30,10 @@ struct BorderEdge {
 
     bool sharesColorWith(const BorderEdge& other) const;
 
-    EBorderStyle borderStyle() const  { return static_cast<EBorderStyle>(style); }
+    EBorderStyle borderStyle() const { return static_cast<EBorderStyle>(style); }
 
-    enum DoubleBorderStripe {
-        DoubleBorderStripeOuter,
-        DoubleBorderStripeInner
-    };
+    enum DoubleBorderStripe { DoubleBorderStripeOuter,
+        DoubleBorderStripeInner };
 
     int getDoubleBorderStripeWidth(DoubleBorderStripe) const;
 
@@ -37,7 +42,7 @@ struct BorderEdge {
     bool isPresent;
 
 private:
-    unsigned style: 4; // EBorderStyle
+    unsigned style : 4; // EBorderStyle
 };
 
 } // namespace blink

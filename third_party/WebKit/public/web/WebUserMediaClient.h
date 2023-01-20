@@ -34,13 +34,8 @@
 namespace blink {
 
 class WebMediaDevicesRequest;
-<<<<<<< HEAD
 class WebUserMediaRequest;
 class WebMediaDeviceChangeObserver;
-=======
-class WebMediaStreamTrackSourcesRequest;
-class WebUserMediaRequest;
->>>>>>> miniblink49
 
 class WebUserMediaClient {
 public:
@@ -49,14 +44,9 @@ public:
     virtual void requestUserMedia(const WebUserMediaRequest&) = 0;
     virtual void cancelUserMediaRequest(const WebUserMediaRequest&) = 0;
     virtual void requestMediaDevices(const WebMediaDevicesRequest&) = 0;
-<<<<<<< HEAD
     virtual void setMediaDeviceChangeObserver(
         const WebMediaDeviceChangeObserver&)
         = 0;
-=======
-    virtual void cancelMediaDevicesRequest(const WebMediaDevicesRequest&) = 0;
-    virtual void requestSources(const WebMediaStreamTrackSourcesRequest&) = 0;
->>>>>>> miniblink49
 };
 
 } // namespace blink

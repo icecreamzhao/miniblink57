@@ -20,8 +20,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/layout/svg/LayoutSVGResourceGradient.h"
+
+#include "wtf/PtrUtil.h"
+#include <memory>
 
 namespace blink {
 
@@ -31,28 +33,36 @@ LayoutSVGResourceGradient::LayoutSVGResourceGradient(SVGGradientElement* node)
 {
 }
 
-void LayoutSVGResourceGradient::removeAllClientsFromCache(bool markForInvalidation)
+void LayoutSVGResourceGradient::removeAllClientsFromCache(
+    bool markForInvalidation)
 {
     m_gradientMap.clear();
     m_shouldCollectGradientAttributes = true;
-    markAllClientsForInvalidation(markForInvalidation ? PaintInvalidation : ParentOnlyInvalidation);
+    markAllClientsForInvalidation(markForInvalidation ? PaintInvalidation
+                                                      : ParentOnlyInvalidation);
 }
 
-void LayoutSVGResourceGradient::removeClientFromCache(LayoutObject* client, bool markForInvalidation)
+void LayoutSVGResourceGradient::removeClientFromCache(
+    LayoutObject* client,
+    bool markForInvalidation)
 {
     ASSERT(client);
     m_gradientMap.remove(client);
-    markClientForInvalidation(client, markForInvalidation ? PaintInvalidation : ParentOnlyInvalidation);
+    markClientForInvalidation(
+        client, markForInvalidation ? PaintInvalidation : ParentOnlyInvalidation);
 }
 
-SVGPaintServer LayoutSVGResourceGradient::preparePaintServer(const LayoutObject& object)
+SVGPaintServer LayoutSVGResourceGradient::preparePaintServer(
+    const LayoutObject& object)
 {
     clearInvalidationMask();
 
-    // Be sure to synchronize all SVG properties on the gradientElement _before_ processing any further.
-    // Otherwhise the call to collectGradientAttributes() in createTileImage(), may cause the SVG DOM property
-    // synchronization to kick in, which causes removeAllClientsFromCache() to be called, which in turn deletes our
-    // GradientData object! Leaving out the line below will cause svg/dynamic-updates/SVG*GradientElement-svgdom* to crash.
+    // Be sure to synchronize all SVG properties on the gradientElement _before_
+    // processing any further. Otherwhise the call to collectGradientAttributes()
+    // in createTileImage(), may cause the SVG DOM property synchronization to
+    // kick in, which causes removeAllClientsFromCache() to be called, which in
+    // turn deletes our GradientData object! Leaving out the line below will cause
+    // svg/dynamic-updates/SVG*GradientElement-svgdom* to crash.
     SVGGradientElement* gradientElement = toSVGGradientElement(element());
     if (!gradientElement)
         return SVGPaintServer::invalid();
@@ -65,41 +75,43 @@ SVGPaintServer LayoutSVGResourceGradient::preparePaintServer(const LayoutObject&
         m_shouldCollectGradientAttributes = false;
     }
 
-    // Spec: When the geometry of the applicable element has no width or height and objectBoundingBox is specified,
-    // then the given effect (e.g. a gradient or a filter) will be ignored.
+    // Spec: When the geometry of the applicable element has no width or height
+    // and objectBoundingBox is specified, then the given effect (e.g. a gradient
+    // or a filter) will be ignored.
     FloatRect objectBoundingBox = object.objectBoundingBox();
-    if (gradientUnits() == SVGUnitTypes::SVG_UNIT_TYPE_OBJECTBOUNDINGBOX && objectBoundingBox.isEmpty())
+    if (gradientUnits() == SVGUnitTypes::kSvgUnitTypeObjectboundingbox && objectBoundingBox.isEmpty())
         return SVGPaintServer::invalid();
 
-    OwnPtr<GradientData>& gradientData = m_gradientMap.add(&object, nullptr).storedValue->value;
+    std::unique_ptr<GradientData>& gradientData = m_gradientMap.add(&object, nullptr).storedValue->value;
     if (!gradientData)
-        gradientData = adoptPtr(new GradientData);
+        gradientData = WTF::wrapUnique(new GradientData);
 
     // Create gradient object
     if (!gradientData->gradient) {
-        buildGradient(gradientData.get());
+        gradientData->gradient = buildGradient();
 
-        // We want the text bounding box applied to the gradient space transform now, so the gradient shader can use it.
-        if (gradientUnits() == SVGUnitTypes::SVG_UNIT_TYPE_OBJECTBOUNDINGBOX && !objectBoundingBox.isEmpty()) {
-            gradientData->userspaceTransform.translate(objectBoundingBox.x(), objectBoundingBox.y());
-            gradientData->userspaceTransform.scaleNonUniform(objectBoundingBox.width(), objectBoundingBox.height());
+        // We want the text bounding box applied to the gradient space transform
+        // now, so the gradient shader can use it.
+        if (gradientUnits() == SVGUnitTypes::kSvgUnitTypeObjectboundingbox && !objectBoundingBox.isEmpty()) {
+            gradientData->userspaceTransform.translate(objectBoundingBox.x(),
+                objectBoundingBox.y());
+            gradientData->userspaceTransform.scaleNonUniform(
+                objectBoundingBox.width(), objectBoundingBox.height());
         }
 
-        AffineTransform gradientTransform;
-        calculateGradientTransform(gradientTransform);
-
+        AffineTransform gradientTransform = calculateGradientTransform();
         gradientData->userspaceTransform *= gradientTransform;
     }
 
     if (!gradientData->gradient)
         return SVGPaintServer::invalid();
 
-    gradientData->gradient->setGradientSpaceTransform(gradientData->userspaceTransform);
-
-    return SVGPaintServer(gradientData->gradient);
+    return SVGPaintServer(gradientData->gradient,
+        gradientData->userspaceTransform);
 }
 
-bool LayoutSVGResourceGradient::isChildAllowed(LayoutObject* child, const ComputedStyle&) const
+bool LayoutSVGResourceGradient::isChildAllowed(LayoutObject* child,
+    const ComputedStyle&) const
 {
     if (child->isSVGGradientStop())
         return true;
@@ -110,15 +122,16 @@ bool LayoutSVGResourceGradient::isChildAllowed(LayoutObject* child, const Comput
     return toLayoutSVGResourceContainer(child)->isSVGPaintServer();
 }
 
-void LayoutSVGResourceGradient::addStops(GradientData* gradientData, const Vector<Gradient::ColorStop>& stops) const
+void LayoutSVGResourceGradient::addStops(
+    Gradient& gradient,
+    const Vector<Gradient::ColorStop>& stops) const
 {
-    ASSERT(gradientData->gradient);
-
     for (const auto& stop : stops)
-        gradientData->gradient->addColorStop(stop);
+        gradient.addColorStop(stop);
 }
 
-GradientSpreadMethod LayoutSVGResourceGradient::platformSpreadMethodFromSVGType(SVGSpreadMethodType method) const
+GradientSpreadMethod LayoutSVGResourceGradient::platformSpreadMethodFromSVGType(
+    SVGSpreadMethodType method)
 {
     switch (method) {
     case SVGSpreadMethodUnknown:
@@ -134,4 +147,4 @@ GradientSpreadMethod LayoutSVGResourceGradient::platformSpreadMethodFromSVGType(
     return SpreadMethodPad;
 }
 
-}
+} // namespace blink

@@ -11,7 +11,6 @@
 
 class CountingClass {
 public:
-<<<<<<< HEAD
     CountingClass()
     {
         kCount++;
@@ -19,13 +18,6 @@ public:
 
     ~CountingClass()
     {
-=======
-    CountingClass() {
-        kCount++;
-    }
-
-    ~CountingClass() {
->>>>>>> miniblink49
         kCount--;
     }
 
@@ -37,24 +29,15 @@ private:
 
 int CountingClass::kCount;
 
-<<<<<<< HEAD
 template <uint32_t kMaxObjects, size_t kBytes>
 void test_allocator(skiatest::Reporter* reporter)
 {
-=======
-template<uint32_t kMaxObjects, size_t kBytes> void test_allocator(skiatest::Reporter* reporter) {
->>>>>>> miniblink49
     {
         SkSmallAllocator<kMaxObjects, kBytes> alloc;
         for (uint32_t i = 0; i < kMaxObjects; ++i) {
             CountingClass* c = alloc.template createT<CountingClass>();
-<<<<<<< HEAD
             REPORTER_ASSERT(reporter, c != nullptr);
             REPORTER_ASSERT(reporter, CountingClass::GetCount() == static_cast<int>(i + 1));
-=======
-            REPORTER_ASSERT(reporter, c != NULL);
-            REPORTER_ASSERT(reporter, CountingClass::GetCount() == static_cast<int>(i+1));
->>>>>>> miniblink49
         }
     }
     REPORTER_ASSERT(reporter, CountingClass::GetCount() == 0);
@@ -62,12 +45,8 @@ template<uint32_t kMaxObjects, size_t kBytes> void test_allocator(skiatest::Repo
 
 // Tests that ensure that the destructor is called, whether the objects
 // were created in fStorage or on the heap.
-<<<<<<< HEAD
 DEF_TEST(SmallAllocator_destructor, reporter)
 {
-=======
-DEF_TEST(SmallAllocator_destructor, reporter) {
->>>>>>> miniblink49
     // Four times as many bytes as objects will never require any heap
     // allocations (since SkAlign4(sizeof(CountingClass)) == 4 and the allocator
     // will stop once it reaches kMaxObjects).
@@ -89,14 +68,9 @@ class Dummy {
 class DummyContainer {
 public:
     explicit DummyContainer(Dummy* d)
-<<<<<<< HEAD
         : fDummy(d)
     {
     }
-=======
-        :fDummy(d)
-    {}
->>>>>>> miniblink49
 
     Dummy* getDummy() const { return fDummy; }
 
@@ -106,19 +80,11 @@ private:
 
 // Test that using a createT with a constructor taking a pointer as a
 // parameter works as expected.
-<<<<<<< HEAD
 DEF_TEST(SmallAllocator_pointer, reporter)
 {
     SkSmallAllocator<1, 8> alloc;
     Dummy d;
     DummyContainer* container = alloc.createT<DummyContainer>(&d);
     REPORTER_ASSERT(reporter, container != nullptr);
-=======
-DEF_TEST(SmallAllocator_pointer, reporter) {
-    SkSmallAllocator<1, 8> alloc;
-    Dummy d;
-    DummyContainer* container = alloc.createT<DummyContainer>(&d);
-    REPORTER_ASSERT(reporter, container != NULL);
->>>>>>> miniblink49
     REPORTER_ASSERT(reporter, container->getDummy() == &d);
 }

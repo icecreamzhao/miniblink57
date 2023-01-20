@@ -45,25 +45,30 @@ namespace blink {
 // EventInit pattern for Event construction.
 class CORE_EXPORT ResourceProgressEvent final : public ProgressEvent {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<ResourceProgressEvent> create()
+    static ResourceProgressEvent* create(const AtomicString& type,
+        bool lengthComputable,
+        unsigned long long loaded,
+        unsigned long long total,
+        const String& url)
     {
-        return adoptRefWillBeNoop(new ResourceProgressEvent);
-    }
-    static PassRefPtrWillBeRawPtr<ResourceProgressEvent> create(const AtomicString& type, bool lengthComputable, unsigned long long loaded, unsigned long long total, const String& url)
-    {
-        return adoptRefWillBeNoop(new ResourceProgressEvent(type, lengthComputable, loaded, total, url));
+        return new ResourceProgressEvent(type, lengthComputable, loaded, total,
+            url);
     }
 
     const String& url() const;
 
-    virtual const AtomicString& interfaceName() const override;
+    const AtomicString& interfaceName() const override;
 
     DECLARE_VIRTUAL_TRACE();
 
 protected:
-    ResourceProgressEvent();
-    ResourceProgressEvent(const AtomicString& type, bool lengthComputable, unsigned long long loaded, unsigned long long total, const String& url);
+    ResourceProgressEvent(const AtomicString& type,
+        bool lengthComputable,
+        unsigned long long loaded,
+        unsigned long long total,
+        const String& url);
 
 private:
     String m_url;

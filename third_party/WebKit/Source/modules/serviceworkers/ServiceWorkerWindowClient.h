@@ -10,18 +10,13 @@
 #include "modules/serviceworkers/ServiceWorkerClient.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
-<<<<<<< HEAD
 #include <memory>
-=======
-#include "wtf/PassOwnPtr.h"
->>>>>>> miniblink49
 
 namespace blink {
 
 class ScriptPromiseResolver;
 class ScriptState;
 
-<<<<<<< HEAD
 class MODULES_EXPORT ServiceWorkerWindowClient final
     : public ServiceWorkerClient {
     DEFINE_WRAPPERTYPEINFO();
@@ -33,15 +28,6 @@ public:
     static ServiceWorkerWindowClient* take(
         ScriptPromiseResolver*,
         std::unique_ptr<WebServiceWorkerClientInfo>);
-=======
-class MODULES_EXPORT ServiceWorkerWindowClient final : public ServiceWorkerClient {
-    DEFINE_WRAPPERTYPEINFO();
-public:
-    // To be used by CallbackPromiseAdapter.
-    typedef WebServiceWorkerClientInfo WebType;
-
-    static ServiceWorkerWindowClient* take(ScriptPromiseResolver*, PassOwnPtr<WebType>);
->>>>>>> miniblink49
 
     static ServiceWorkerWindowClient* create(const WebServiceWorkerClientInfo&);
     ~ServiceWorkerWindowClient() override;
@@ -50,10 +36,7 @@ public:
     String visibilityState() const;
     bool focused() const { return m_isFocused; }
     ScriptPromise focus(ScriptState*);
-<<<<<<< HEAD
     ScriptPromise navigate(ScriptState*, const String& url);
-=======
->>>>>>> miniblink49
 
     DECLARE_VIRTUAL_TRACE();
 

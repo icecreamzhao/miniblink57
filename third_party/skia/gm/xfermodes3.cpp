@@ -1,14 +1,9 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2013 Google Inc.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-<<<<<<< HEAD
 
 #include "SkBitmap.h"
 #include "SkColorPriv.h"
@@ -19,17 +14,6 @@
 
 #if SK_SUPPORT_GPU
 #include "GrContext.h"
-=======
-#include "gm.h"
-#include "SkBitmap.h"
-#include "SkGradientShader.h"
-#include "SkXfermode.h"
-#include "SkColorPriv.h"
-
-#if SK_SUPPORT_GPU
-#include "GrContext.h"
-#include "SkGpuDevice.h"
->>>>>>> miniblink49
 #endif
 
 namespace skiagm {
@@ -40,7 +24,6 @@ namespace skiagm {
  */
 class Xfermodes3GM : public GM {
 public:
-<<<<<<< HEAD
     Xfermodes3GM() { }
 
 protected:
@@ -63,26 +46,6 @@ protected:
 
     void onDraw(SkCanvas* canvas) override
     {
-=======
-    Xfermodes3GM() {}
-
-protected:
-    SkString onShortName() override {
-        return SkString("xfermodes3");
-    }
-
-    SkISize onISize() override {
-        return SkISize::Make(630, 1215);
-    }
-
-    void onDrawBackground(SkCanvas* canvas) override {
-        SkPaint bgPaint;
-        bgPaint.setColor(0xFF70D0E0);
-        canvas->drawPaint(bgPaint);
-    }
-
-    void onDraw(SkCanvas* canvas) override {
->>>>>>> miniblink49
         canvas->translate(SkIntToScalar(10), SkIntToScalar(20));
 
         SkPaint labelP;
@@ -100,7 +63,6 @@ protected:
             0x80,
         };
 
-<<<<<<< HEAD
         auto tempSurface(this->possiblyCreateTempSurface(canvas, kSize, kSize));
 
         int test = 0;
@@ -111,31 +73,15 @@ protected:
         } kStrokes[] = {
             { SkPaint::kFill_Style, 0 },
             { SkPaint::kStroke_Style, SkIntToScalar(kSize) / 2 },
-=======
-        SkAutoTUnref<SkCanvas> tempCanvas(this->possiblyCreateTempCanvas(canvas, kSize, kSize));
-
-        int test = 0;
-        int x = 0, y = 0;
-        static const struct { SkPaint::Style fStyle; SkScalar fWidth; } kStrokes[] = {
-            {SkPaint::kFill_Style, 0},
-            {SkPaint::kStroke_Style, SkIntToScalar(kSize) / 2},
->>>>>>> miniblink49
         };
         for (size_t s = 0; s < SK_ARRAY_COUNT(kStrokes); ++s) {
             for (size_t m = 0; m <= SkXfermode::kLastMode; ++m) {
                 SkXfermode::Mode mode = static_cast<SkXfermode::Mode>(m);
                 canvas->drawText(SkXfermode::ModeName(mode),
-<<<<<<< HEAD
                     strlen(SkXfermode::ModeName(mode)),
                     SkIntToScalar(x),
                     SkIntToScalar(y + kSize + 3) + labelP.getTextSize(),
                     labelP);
-=======
-                                 strlen(SkXfermode::ModeName(mode)),
-                                 SkIntToScalar(x),
-                                 SkIntToScalar(y + kSize + 3) + labelP.getTextSize(),
-                                 labelP);
->>>>>>> miniblink49
                 for (size_t c = 0; c < SK_ARRAY_COUNT(kSolidColors); ++c) {
                     SkPaint modePaint;
                     modePaint.setXfermodeMode(mode);
@@ -143,11 +89,7 @@ protected:
                     modePaint.setStyle(kStrokes[s].fStyle);
                     modePaint.setStrokeWidth(kStrokes[s].fWidth);
 
-<<<<<<< HEAD
                     this->drawMode(canvas, x, y, kSize, kSize, modePaint, tempSurface.get());
-=======
-                    this->drawMode(canvas, x, y, kSize, kSize, modePaint, tempCanvas.get());
->>>>>>> miniblink49
 
                     ++test;
                     x += kSize + 10;
@@ -164,11 +106,7 @@ protected:
                     modePaint.setStyle(kStrokes[s].fStyle);
                     modePaint.setStrokeWidth(kStrokes[s].fWidth);
 
-<<<<<<< HEAD
                     this->drawMode(canvas, x, y, kSize, kSize, modePaint, tempSurface.get());
-=======
-                    this->drawMode(canvas, x, y, kSize, kSize, modePaint, tempCanvas.get());
->>>>>>> miniblink49
 
                     ++test;
                     x += kSize + 10;
@@ -190,18 +128,12 @@ private:
      * So when running on a GPU canvas we explicitly create a temporary canvas using a texture with
      * dimensions exactly matching the layer size.
      */
-<<<<<<< HEAD
     sk_sp<SkSurface> possiblyCreateTempSurface(SkCanvas* baseCanvas, int w, int h)
     {
-=======
-    SkCanvas* possiblyCreateTempCanvas(SkCanvas* baseCanvas, int w, int h) {
-        SkCanvas* tempCanvas = NULL;
->>>>>>> miniblink49
 #if SK_SUPPORT_GPU
         GrContext* context = baseCanvas->getGrContext();
         SkImageInfo baseInfo = baseCanvas->imageInfo();
         SkImageInfo info = SkImageInfo::Make(w, h, baseInfo.colorType(), baseInfo.alphaType(),
-<<<<<<< HEAD
             sk_ref_sp(baseInfo.colorSpace()));
         SkSurfaceProps canvasProps(SkSurfaceProps::kLegacyFontHost_InitType);
         baseCanvas->getProps(&canvasProps);
@@ -216,41 +148,16 @@ private:
         const SkPaint& modePaint, SkSurface* surface)
     {
         canvas->save();
-=======
-                                             baseInfo.profileType());
-        SkAutoTUnref<SkSurface> surface(SkSurface::NewRenderTarget(context, SkSurface::kNo_Budgeted,
-                                        info, 0, NULL));
-        if (surface) {
-            tempCanvas = SkRef(surface->getCanvas());
-        }
-#endif
-        return tempCanvas;
-    }
-
-    void drawMode(SkCanvas* canvas,
-                  int x, int y, int w, int h,
-                  const SkPaint& modePaint, SkCanvas* layerCanvas) {
-        canvas->save();
-
->>>>>>> miniblink49
         canvas->translate(SkIntToScalar(x), SkIntToScalar(y));
 
         SkRect r = SkRect::MakeWH(SkIntToScalar(w), SkIntToScalar(h));
 
         SkCanvas* modeCanvas;
-<<<<<<< HEAD
         if (nullptr == surface) {
             canvas->saveLayer(&r, nullptr);
             modeCanvas = canvas;
         } else {
             modeCanvas = surface->getCanvas();
-=======
-        if (NULL == layerCanvas) {
-            canvas->saveLayer(&r, NULL);
-            modeCanvas = canvas;
-        } else {
-            modeCanvas = layerCanvas;
->>>>>>> miniblink49
         }
 
         SkPaint bgPaint;
@@ -258,25 +165,12 @@ private:
         bgPaint.setShader(fBGShader);
         modeCanvas->drawRect(r, bgPaint);
         modeCanvas->drawRect(r, modePaint);
-<<<<<<< HEAD
         modeCanvas = nullptr;
 
         if (nullptr == surface) {
             canvas->restore();
         } else {
             surface->draw(canvas, 0, 0, nullptr);
-=======
-        modeCanvas = NULL;
-
-        if (NULL == layerCanvas) {
-            canvas->restore();
-        } else {
-            SkAutoROCanvasPixels ropixels(layerCanvas);
-            SkBitmap bitmap;
-            if (ropixels.asROBitmap(&bitmap)) {
-                canvas->drawBitmap(bitmap, 0, 0);
-            }
->>>>>>> miniblink49
         }
 
         r.inset(-SK_ScalarHalf, -SK_ScalarHalf);
@@ -287,7 +181,6 @@ private:
         canvas->restore();
     }
 
-<<<<<<< HEAD
     void onOnceBeforeDraw() override
     {
         static const uint32_t kCheckData[] = {
@@ -295,14 +188,6 @@ private:
             SkPackARGB32(0xFF, 0xD6, 0xD3, 0xD6),
             SkPackARGB32(0xFF, 0xD6, 0xD3, 0xD6),
             SkPackARGB32(0xFF, 0x42, 0x41, 0x42)
-=======
-    void onOnceBeforeDraw() override {
-        static const uint32_t kCheckData[] = {
-            SkPackARGB32(0xFF, 0x40, 0x40, 0x40),
-            SkPackARGB32(0xFF, 0xD0, 0xD0, 0xD0),
-            SkPackARGB32(0xFF, 0xD0, 0xD0, 0xD0),
-            SkPackARGB32(0xFF, 0x40, 0x40, 0x40)
->>>>>>> miniblink49
         };
         SkBitmap bg;
         bg.allocN32Pixels(2, 2, true);
@@ -311,7 +196,6 @@ private:
 
         SkMatrix lm;
         lm.setScale(SkIntToScalar(kCheckSize), SkIntToScalar(kCheckSize));
-<<<<<<< HEAD
         fBGShader = SkShader::MakeBitmapShader(bg, SkShader::kRepeat_TileMode,
             SkShader::kRepeat_TileMode, &lm);
 
@@ -323,23 +207,6 @@ private:
         bmpPaint.setShader(SkGradientShader::MakeRadial(kCenter, 3 * SkIntToScalar(kSize) / 4,
             kColors, nullptr, SK_ARRAY_COUNT(kColors),
             SkShader::kRepeat_TileMode));
-=======
-        fBGShader.reset(SkShader::CreateBitmapShader(bg,
-                                                     SkShader::kRepeat_TileMode,
-                                                     SkShader::kRepeat_TileMode,
-                                                     &lm));
-
-        SkPaint bmpPaint;
-        static const SkPoint kCenter = { SkIntToScalar(kSize) / 2, SkIntToScalar(kSize) / 2 };
-        static const SkColor kColors[] = { SK_ColorTRANSPARENT, 0x80800000,
-                                          0xF020F060, SK_ColorWHITE };
-        bmpPaint.setShader(SkGradientShader::CreateRadial(kCenter,
-                                                          3 * SkIntToScalar(kSize) / 4,
-                                                          kColors,
-                                                          NULL,
-                                                          SK_ARRAY_COUNT(kColors),
-                                                          SkShader::kRepeat_TileMode))->unref();
->>>>>>> miniblink49
 
         SkBitmap bmp;
         bmp.allocN32Pixels(kSize, kSize);
@@ -347,20 +214,11 @@ private:
 
         bmpCanvas.clear(SK_ColorTRANSPARENT);
         SkRect rect = { SkIntToScalar(kSize) / 8, SkIntToScalar(kSize) / 8,
-<<<<<<< HEAD
             7 * SkIntToScalar(kSize) / 8, 7 * SkIntToScalar(kSize) / 8 };
         bmpCanvas.drawRect(rect, bmpPaint);
 
         fBmpShader = SkShader::MakeBitmapShader(bmp, SkShader::kClamp_TileMode,
             SkShader::kClamp_TileMode);
-=======
-                        7 * SkIntToScalar(kSize) / 8, 7 * SkIntToScalar(kSize) / 8};
-        bmpCanvas.drawRect(rect, bmpPaint);
-
-        fBmpShader.reset(SkShader::CreateBitmapShader(bmp,
-                                                      SkShader::kClamp_TileMode,
-                                                      SkShader::kClamp_TileMode));
->>>>>>> miniblink49
     }
 
     enum {
@@ -369,13 +227,8 @@ private:
         kTestsPerRow = 15,
     };
 
-<<<<<<< HEAD
     sk_sp<SkShader> fBGShader;
     sk_sp<SkShader> fBmpShader;
-=======
-    SkAutoTUnref<SkShader> fBGShader;
-    SkAutoTUnref<SkShader> fBmpShader;
->>>>>>> miniblink49
 
     typedef GM INHERITED;
 };

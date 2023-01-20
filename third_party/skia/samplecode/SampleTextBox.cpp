@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -9,7 +5,6 @@
  * found in the LICENSE file.
  */
 #include "SampleCode.h"
-<<<<<<< HEAD
 #include "SkBlurMaskFilter.h"
 #include "SkCanvas.h"
 #include "SkColorFilter.h"
@@ -19,20 +14,10 @@
 #include "SkGraphics.h"
 #include "SkKey.h"
 #include "SkOSFile.h"
-=======
-#include "SkView.h"
-#include "SkBlurMaskFilter.h"
-#include "SkCanvas.h"
-#include "SkColorShader.h"
-#include "SkGradientShader.h"
-#include "SkGraphics.h"
-#include "SkImageDecoder.h"
->>>>>>> miniblink49
 #include "SkPath.h"
 #include "SkRandom.h"
 #include "SkRegion.h"
 #include "SkShader.h"
-<<<<<<< HEAD
 #include "SkStream.h"
 #include "SkTextBox.h"
 #include "SkTime.h"
@@ -40,18 +25,6 @@
 #include "SkUtils.h"
 #include "SkView.h"
 #include "SkXfermode.h"
-=======
-#include "SkUtils.h"
-#include "SkXfermode.h"
-#include "SkColorPriv.h"
-#include "SkColorFilter.h"
-#include "SkTime.h"
-#include "SkTypeface.h"
-#include "SkTextBox.h"
-#include "SkOSFile.h"
-#include "SkStream.h"
-#include "SkKey.h"
->>>>>>> miniblink49
 
 extern void skia_set_text_gamma(float blackGamma, float whiteGamma);
 
@@ -59,7 +32,6 @@ extern void skia_set_text_gamma(float blackGamma, float whiteGamma);
 extern SkTypeface* SkCreateTypefaceFromLOGFONT(const LOGFONT&);
 #endif
 
-<<<<<<< HEAD
 static const char gText[] = "When in the Course of human events it becomes necessary for one people "
                             "to dissolve the political bands which have connected them with another "
                             "and to assume among the powers of the earth, the separate and equal "
@@ -71,19 +43,6 @@ class TextBoxView : public SampleView {
 public:
     TextBoxView()
     {
-=======
-static const char gText[] =
-    "When in the Course of human events it becomes necessary for one people "
-    "to dissolve the political bands which have connected them with another "
-    "and to assume among the powers of the earth, the separate and equal "
-    "station to which the Laws of Nature and of Nature's God entitle them, "
-    "a decent respect to the opinions of mankind requires that they should "
-    "declare the causes which impel them to the separation.";
-
-class TextBoxView : public SampleView {
-public:
-    TextBoxView() {
->>>>>>> miniblink49
 #if defined(SK_BUILD_FOR_WIN) && defined(SK_FONTHOST_WIN_GDI)
         LOGFONT lf;
         sk_bzero(&lf, sizeof(lf));
@@ -100,12 +59,8 @@ public:
 
 protected:
     // overrides from SkEventSink
-<<<<<<< HEAD
     virtual bool onQuery(SkEvent* evt)
     {
-=======
-    virtual bool onQuery(SkEvent* evt)  {
->>>>>>> miniblink49
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "TextBox");
             return true;
@@ -113,12 +68,8 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-<<<<<<< HEAD
     void drawTest(SkCanvas* canvas, SkScalar w, SkScalar h, SkColor fg, SkColor bg)
     {
-=======
-    void drawTest(SkCanvas* canvas, SkScalar w, SkScalar h, SkColor fg, SkColor bg) {
->>>>>>> miniblink49
         SkAutoCanvasRestore acr(canvas, true);
 
         canvas->clipRect(SkRect::MakeWH(w, h));
@@ -127,13 +78,8 @@ protected:
         SkTextBox tbox;
         tbox.setMode(SkTextBox::kLineBreak_Mode);
         tbox.setBox(margin, margin,
-<<<<<<< HEAD
             w - margin, h - margin);
         tbox.setSpacing(SkIntToScalar(3) / 3, 0);
-=======
-                    w - margin, h - margin);
-        tbox.setSpacing(SkIntToScalar(3)/3, 0);
->>>>>>> miniblink49
 
         SkPaint paint;
         paint.setAntiAlias(true);
@@ -148,26 +94,16 @@ protected:
         }
     }
 
-<<<<<<< HEAD
     virtual void onDrawContent(SkCanvas* canvas)
     {
-=======
-    virtual void onDrawContent(SkCanvas* canvas) {
->>>>>>> miniblink49
         SkScalar width = this->width() / 3;
         drawTest(canvas, width, this->height(), SK_ColorBLACK, SK_ColorWHITE);
         canvas->translate(width, 0);
         drawTest(canvas, width, this->height(), SK_ColorWHITE, SK_ColorBLACK);
         canvas->translate(width, 0);
-<<<<<<< HEAD
         drawTest(canvas, width, this->height() / 2, SK_ColorGRAY, SK_ColorWHITE);
         canvas->translate(0, this->height() / 2);
         drawTest(canvas, width, this->height() / 2, SK_ColorGRAY, SK_ColorBLACK);
-=======
-        drawTest(canvas, width, this->height()/2, SK_ColorGRAY, SK_ColorWHITE);
-        canvas->translate(0, this->height()/2);
-        drawTest(canvas, width, this->height()/2, SK_ColorGRAY, SK_ColorBLACK);
->>>>>>> miniblink49
     }
 
 private:

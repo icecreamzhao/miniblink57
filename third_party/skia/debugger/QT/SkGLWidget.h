@@ -6,16 +6,11 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #ifndef SKGLWIDGET_H_
 #define SKGLWIDGET_H_
 
 #if SK_SUPPORT_GPU
 
-<<<<<<< HEAD
 #include "GrContext.h"
 #include "GrRenderTarget.h"
 #include "SkDebugCanvas.h"
@@ -27,41 +22,19 @@
 
 class SkGLWidget : public QGLWidget {
     Q_OBJECT
-=======
-#include <QtOpenGL/QGLWidget>
-#include "SkDebugCanvas.h"
-#include "SkDebugger.h"
-#include "SkDevice.h"
-#include "SkGpuDevice.h"
-#include "GrContext.h"
-#include "gl/GrGLInterface.h"
-#include "gl/GrGLUtil.h"
-#include "GrRenderTarget.h"
-
-class SkGLWidget : public QGLWidget {
-Q_OBJECT
->>>>>>> miniblink49
 
 public:
     SkGLWidget(SkDebugger* debugger);
 
     ~SkGLWidget();
 
-<<<<<<< HEAD
     void updateImage()
     {
-=======
-    void updateImage() {
->>>>>>> miniblink49
         this->updateGL();
     }
     void setSampleCount(int sampleCount);
 
-<<<<<<< HEAD
 Q_SIGNALS:
-=======
-signals:
->>>>>>> miniblink49
     void drawComplete();
 
 protected:
@@ -69,10 +42,6 @@ protected:
     void resizeGL(int w, int h);
     void paintGL();
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 private:
     void createRenderTarget();
     SkAutoTUnref<const GrGLInterface> fCurIntf;

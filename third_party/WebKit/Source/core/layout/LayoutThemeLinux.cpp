@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "core/layout/LayoutThemeLinux.h"
 
 #include "platform/PlatformResourceLoader.h"
@@ -14,7 +13,7 @@ PassRefPtr<LayoutTheme> LayoutThemeLinux::create()
     return adoptRef(new LayoutThemeLinux());
 }
 
-LayoutTheme& LayoutTheme::theme()
+LayoutTheme& LayoutTheme::nativeTheme()
 {
     DEFINE_STATIC_REF(LayoutTheme, layoutTheme, (LayoutThemeLinux::create()));
     return *layoutTheme;
@@ -22,8 +21,7 @@ LayoutTheme& LayoutTheme::theme()
 
 String LayoutThemeLinux::extraDefaultStyleSheet()
 {
-    return LayoutThemeDefault::extraDefaultStyleSheet() +
-        loadResourceAsASCIIString("themeChromiumLinux.css");
+    return LayoutThemeDefault::extraDefaultStyleSheet() + loadResourceAsASCIIString("themeChromiumLinux.css");
 }
 
 } // namespace blink

@@ -29,10 +29,7 @@
  *
  */
 
-#include "config.h"
 #include "core/html/LinkRelAttribute.h"
-
-#include "platform/RuntimeEnabledFeatures.h"
 
 namespace blink {
 
@@ -43,13 +40,12 @@ LinkRelAttribute::LinkRelAttribute(const String& rel)
     , m_isDNSPrefetch(false)
     , m_isPreconnect(false)
     , m_isLinkPrefetch(false)
-    , m_isLinkSubresource(false)
     , m_isLinkPreload(false)
     , m_isLinkPrerender(false)
     , m_isLinkNext(false)
     , m_isImport(false)
     , m_isManifest(false)
-    , m_isDefaultPresentation(false)
+    , m_isServiceWorker(false)
 {
     if (rel.isEmpty())
         return;
@@ -67,39 +63,36 @@ LinkRelAttribute::LinkRelAttribute(const String& rel)
         } else if (equalIgnoringCase(linkType, "alternate")) {
             m_isAlternate = true;
         } else if (equalIgnoringCase(linkType, "icon")) {
-            // This also allows "shortcut icon" since we just ignore the non-standard "shortcut" token.
-            // FIXME: This doesn't really follow the spec that requires "shortcut icon" to be the
-            // entire string http://www.whatwg.org/specs/web-apps/current-work/multipage/links.html#rel-icon
+            // This also allows "shortcut icon" since we just ignore the non-standard
+            // "shortcut" token.
+            // FIXME: This doesn't really follow the spec that requires "shortcut
+            // icon" to be the entire string
+            // http://www.whatwg.org/specs/web-apps/current-work/multipage/links.html#rel-icon
             m_iconType = Favicon;
         } else if (equalIgnoringCase(linkType, "prefetch")) {
             m_isLinkPrefetch = true;
         } else if (equalIgnoringCase(linkType, "dns-prefetch")) {
             m_isDNSPrefetch = true;
         } else if (equalIgnoringCase(linkType, "preconnect")) {
-            if (RuntimeEnabledFeatures::linkPreconnectEnabled())
-                m_isPreconnect = true;
-        } else if (equalIgnoringCase(linkType, "subresource")) {
-            m_isLinkSubresource = true;
+            m_isPreconnect = true;
         } else if (equalIgnoringCase(linkType, "preload")) {
-            if (RuntimeEnabledFeatures::linkPreloadEnabled())
-                m_isLinkPreload = true;
+            m_isLinkPreload = true;
         } else if (equalIgnoringCase(linkType, "prerender")) {
             m_isLinkPrerender = true;
         } else if (equalIgnoringCase(linkType, "next")) {
             m_isLinkNext = true;
         } else if (equalIgnoringCase(linkType, "apple-touch-icon")) {
-            if (RuntimeEnabledFeatures::touchIconLoadingEnabled())
-                m_iconType = TouchIcon;
+            m_iconType = TouchIcon;
         } else if (equalIgnoringCase(linkType, "apple-touch-icon-precomposed")) {
-            if (RuntimeEnabledFeatures::touchIconLoadingEnabled())
-                m_iconType = TouchPrecomposedIcon;
+            m_iconType = TouchPrecomposedIcon;
         } else if (equalIgnoringCase(linkType, "manifest")) {
             m_isManifest = true;
-        } else if (equalIgnoringCase(linkType, "default-presentation")) {
-            if (RuntimeEnabledFeatures::presentationEnabled())
-                m_isDefaultPresentation = true;
+        } else if (equalIgnoringCase(linkType, "serviceworker")) {
+            m_isServiceWorker = true;
         }
+        // Adding or removing a value here requires you to update
+        // RelList::supportedTokens()
     }
 }
 
-}
+} // namespace blink

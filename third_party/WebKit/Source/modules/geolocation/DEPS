@@ -1,19 +1,12 @@
 include_rules = [
     "+bindings",
     "+core",
-<<<<<<< HEAD
     "+device/geolocation/public/interfaces",
-=======
-    "+heap",
->>>>>>> miniblink49
     "-modules",
     "+modules/EventModules.h",
     "+modules/ModulesExport.h",
     "+modules/geolocation",
-<<<<<<< HEAD
     "+modules/permissions",
-=======
->>>>>>> miniblink49
     "+platform",
     "+public/platform",
     "-web",

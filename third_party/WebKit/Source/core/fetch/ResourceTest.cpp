@@ -2,102 +2,97 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "core/fetch/Resource.h"
 
-#include "core/fetch/ResourcePtr.h"
+#include "core/fetch/MemoryCache.h"
+#include "core/fetch/RawResource.h"
+#include "platform/SharedBuffer.h"
 #include "platform/network/ResourceRequest.h"
 #include "platform/network/ResourceResponse.h"
+#include "platform/testing/TestingPlatformSupport.h"
 #include "platform/testing/URLTestHelpers.h"
 #include "public/platform/Platform.h"
+#include "testing/gtest/include/gtest/gtest.h"
 #include "wtf/Vector.h"
-#include <gtest/gtest.h>
 
 namespace blink {
 
 namespace {
 
-class MockPlatform final : public Platform {
-public:
-    MockPlatform() : m_oldPlatform(Platform::current()) { }
-    ~MockPlatform() override { }
+    class MockPlatform final : public TestingPlatformSupport {
+    public:
+        MockPlatform() { }
+        ~MockPlatform() override { }
 
-    // From blink::Platform:
-    void cacheMetadata(const WebURL& url, int64, const char*, size_t) override
+        // From blink::Platform:
+        void cacheMetadata(const WebURL& url, int64_t, const char*, size_t) override
+        {
+            m_cachedURLs.push_back(url);
+        }
+
+        const Vector<WebURL>& cachedURLs() const { return m_cachedURLs; }
+
+    private:
+        Vector<WebURL> m_cachedURLs;
+    };
+
+    ResourceResponse createTestResourceResponse()
     {
-        m_cachedURLs.append(url);
+        ResourceResponse response;
+        response.setURL(URLTestHelpers::toKURL("https://example.com/"));
+        response.setHTTPStatusCode(200);
+        return response;
     }
-    void cryptographicallyRandomValues(unsigned char* buffer, size_t length) override
+
+    void createTestResourceAndSetCachedMetadata(const ResourceResponse& response)
     {
-        ASSERT_NOT_REACHED();
+        const char testData[] = "test data";
+        Resource* resource = RawResource::create(ResourceRequest(response.url()), Resource::Raw);
+        resource->setResponse(response);
+        resource->cacheHandler()->setCachedMetadata(
+            100, testData, sizeof(testData), CachedMetadataHandler::SendToPlatform);
+        return;
     }
-
-    const Vector<WebURL>& cachedURLs() const
-    {
-        return m_cachedURLs;
-    }
-
-    WebThread* currentThread() override
-    {
-        return m_oldPlatform->currentThread();
-    }
-
-private:
-    Platform* m_oldPlatform; // Not owned.
-    Vector<WebURL> m_cachedURLs;
-};
-
-class AutoInstallMockPlatform {
-public:
-    AutoInstallMockPlatform()
-    {
-        m_oldPlatform = Platform::current();
-        Platform::initialize(&m_mockPlatform);
-    }
-    ~AutoInstallMockPlatform()
-    {
-        Platform::initialize(m_oldPlatform);
-    }
-    MockPlatform* platform() { return &m_mockPlatform; }
-private:
-    MockPlatform m_mockPlatform;
-    Platform* m_oldPlatform;
-};
-
-PassOwnPtr<ResourceResponse> createTestResourceResponse()
-{
-    OwnPtr<ResourceResponse> response = adoptPtr(new ResourceResponse);
-    response->setURL(URLTestHelpers::toKURL("https://example.com/"));
-    response->setHTTPStatusCode(200);
-    return response.release();
-}
-
-void createTestResourceAndSetCachedMetadata(const ResourceResponse* response)
-{
-    const char testData[] = "test data";
-    ResourcePtr<Resource> resource = new Resource(ResourceRequest(response->url()), Resource::Raw);
-    resource->setResponse(*response);
-    resource->cacheHandler()->setCachedMetadata(100, testData, sizeof(testData), CachedMetadataHandler::SendToPlatform);
-    return;
-}
 
 } // anonymous namespace
 
 TEST(ResourceTest, SetCachedMetadata_SendsMetadataToPlatform)
 {
-    AutoInstallMockPlatform mock;
-    OwnPtr<ResourceResponse> response(createTestResourceResponse());
-    createTestResourceAndSetCachedMetadata(response.get());
-    EXPECT_EQ(1u, mock.platform()->cachedURLs().size());
+    ScopedTestingPlatformSupport<MockPlatform> mock;
+    ResourceResponse response(createTestResourceResponse());
+    createTestResourceAndSetCachedMetadata(response);
+    EXPECT_EQ(1u, mock->cachedURLs().size());
 }
 
-TEST(ResourceTest, SetCachedMetadata_DoesNotSendMetadataToPlatformWhenFetchedViaServiceWorker)
+TEST(
+    ResourceTest,
+    SetCachedMetadata_DoesNotSendMetadataToPlatformWhenFetchedViaServiceWorker)
 {
-    AutoInstallMockPlatform mock;
-    OwnPtr<ResourceResponse> response(createTestResourceResponse());
-    response->setWasFetchedViaServiceWorker(true);
-    createTestResourceAndSetCachedMetadata(response.get());
-    EXPECT_EQ(0u, mock.platform()->cachedURLs().size());
+    ScopedTestingPlatformSupport<MockPlatform> mock;
+    ResourceResponse response(createTestResourceResponse());
+    response.setWasFetchedViaServiceWorker(true);
+    createTestResourceAndSetCachedMetadata(response);
+    EXPECT_EQ(0u, mock->cachedURLs().size());
+}
+
+TEST(ResourceTest, RevalidateWithFragment)
+{
+    KURL url(ParsedURLString, "http://127.0.0.1:8000/foo.html");
+    ResourceResponse response;
+    response.setURL(url);
+    response.setHTTPStatusCode(200);
+    Resource* resource = RawResource::create(url, Resource::Raw);
+    resource->responseReceived(response, nullptr);
+    resource->finish();
+
+    // Revalidating with a url that differs by only the fragment
+    // shouldn't trigger a securiy check.
+    url.setFragmentIdentifier("bar");
+    resource->setRevalidatingRequest(ResourceRequest(url));
+    ResourceResponse revalidatingResponse;
+    revalidatingResponse.setURL(url);
+    revalidatingResponse.setHTTPStatusCode(304);
+    resource->responseReceived(revalidatingResponse, nullptr);
 }
 
 } // namespace blink

@@ -6,10 +6,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #ifndef SkHitClear_DEFINED
 #define SkHitClear_DEFINED
 
@@ -19,14 +15,9 @@
 
 class SkHitClear : public SkDisplayable {
     DECLARE_MEMBER_INFO(HitClear);
-<<<<<<< HEAD
     bool enable(SkAnimateMaker&) override;
     bool hasEnable() const override;
 
-=======
-    bool enable(SkAnimateMaker& ) override;
-    bool hasEnable() const override;
->>>>>>> miniblink49
 private:
     SkTDDisplayableArray targets;
 };

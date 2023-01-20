@@ -34,7 +34,7 @@
 #include "core/MediaFeatureNames.h"
 #include "core/css/CSSPrimitiveValue.h"
 #include "core/css/CSSValue.h"
-#include "wtf/PassOwnPtr.h"
+#include "wtf/Allocator.h"
 #include "wtf/RefPtr.h"
 
 namespace blink {
@@ -42,6 +42,7 @@ namespace blink {
 class CSSParserToken;
 
 struct MediaQueryExpValue {
+    DISALLOW_NEW();
     CSSValueID id;
     double value;
     CSSPrimitiveValue::UnitType unit;
@@ -55,7 +56,7 @@ struct MediaQueryExpValue {
     MediaQueryExpValue()
         : id(CSSValueInvalid)
         , value(0)
-        , unit(CSSPrimitiveValue::CSS_UNKNOWN)
+        , unit(CSSPrimitiveValue::UnitType::Unknown)
         , numerator(0)
         , denominator(1)
         , isID(false)
@@ -78,10 +79,11 @@ struct MediaQueryExpValue {
     }
 };
 
-class CORE_EXPORT MediaQueryExp  : public NoBaseWillBeGarbageCollectedFinalized<MediaQueryExp> {
-    WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(MediaQueryExp);
+class CORE_EXPORT MediaQueryExp
+    : public GarbageCollectedFinalized<MediaQueryExp> {
 public:
-    static PassOwnPtrWillBeRawPtr<MediaQueryExp> createIfValid(const String& mediaFeature, const Vector<CSSParserToken, 4>&);
+    static MediaQueryExp* createIfValid(const String& mediaFeature,
+        const Vector<CSSParserToken, 4>&);
     ~MediaQueryExp();
 
     const String& mediaFeature() const { return m_mediaFeature; }
@@ -92,9 +94,11 @@ public:
 
     bool isViewportDependent() const;
 
+    bool isDeviceDependent() const;
+
     String serialize() const;
 
-    PassOwnPtrWillBeRawPtr<MediaQueryExp> copy() const { return adoptPtrWillBeNoop(new MediaQueryExp(*this)); }
+    MediaQueryExp* copy() const { return new MediaQueryExp(*this); }
 
     MediaQueryExp(const MediaQueryExp& other);
 
@@ -107,6 +111,6 @@ private:
     MediaQueryExpValue m_expValue;
 };
 
-} // namespace
+} // namespace blink
 
 #endif

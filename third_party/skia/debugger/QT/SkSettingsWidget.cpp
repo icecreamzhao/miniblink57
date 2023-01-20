@@ -6,21 +6,13 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #include "SkSettingsWidget.h"
 #include <iostream>
 #include <math.h>
 
 // TODO(chudy): See if the layout can't be attached to the frame post construction.
-<<<<<<< HEAD
 SkSettingsWidget::SkSettingsWidget()
     : QFrame()
-=======
-SkSettingsWidget::SkSettingsWidget() : QFrame()
->>>>>>> miniblink49
 {
     this->setLayout(&fVerticalLayout);
     this->setFrameStyle(QFrame::Panel);
@@ -29,7 +21,6 @@ SkSettingsWidget::SkSettingsWidget() : QFrame()
 
     // Visualizations toggles.
     fVisualizationsGroup.setTitle("Visualizations");
-<<<<<<< HEAD
 
     fVisibilityFilterCheckBox.setText("Visibility Filter");
     fVisualizationsLayout.addWidget(&fVisibilityFilterCheckBox);
@@ -50,38 +41,16 @@ SkSettingsWidget::SkSettingsWidget() : QFrame()
     connect(&fMegaVizCheckBox, SIGNAL(toggled(bool)), this, SIGNAL(visualizationsChanged()));
     connect(&fPathOpsCheckBox, SIGNAL(toggled(bool)), this, SIGNAL(visualizationsChanged()));
     connect(&fOverdrawVizCheckBox, SIGNAL(toggled(bool)), this, SIGNAL(visualizationsChanged()));
-=======
-    fVisibilityFilterCheckBox.setText("Visibility Filter");
-    fVisualizationsLayout.addWidget(&fVisibilityFilterCheckBox);
-    fMegaVizCheckBox.setText("Mega Viz");
-    fVisualizationsLayout.addWidget(&fMegaVizCheckBox);
-    fPathOpsCheckBox.setText("PathOps ");
-    fVisualizationsLayout.addWidget(&fPathOpsCheckBox);
-    fVisualizationsGroup.setLayout(&fVisualizationsLayout);
-    connect(&fVisibilityFilterCheckBox, SIGNAL(toggled(bool)), this,
-            SIGNAL(visualizationsChanged()));
-    connect(&fMegaVizCheckBox, SIGNAL(toggled(bool)), this, SIGNAL(visualizationsChanged()));
-    connect(&fPathOpsCheckBox, SIGNAL(toggled(bool)), this, SIGNAL(visualizationsChanged()));
->>>>>>> miniblink49
 
     fVerticalLayout.addRow(&fVisualizationsGroup);
 
     // Raster toggles.
     fRasterGroup.setTitle("Raster");
     fRasterGroup.setCheckable(true);
-<<<<<<< HEAD
-=======
-    fOverdrawVizCheckBox.setText("Overdraw Viz");
-    fRasterLayout.addWidget(&fOverdrawVizCheckBox);
->>>>>>> miniblink49
     fRasterGroup.setLayout(&fRasterLayout);
     fVerticalLayout.addRow(&fRasterGroup);
 
     connect(&fRasterGroup, SIGNAL(toggled(bool)), this, SIGNAL(rasterSettingsChanged()));
-<<<<<<< HEAD
-=======
-    connect(&fOverdrawVizCheckBox, SIGNAL(toggled(bool)), this, SIGNAL(rasterSettingsChanged()));
->>>>>>> miniblink49
 
 #if SK_SUPPORT_GPU
     fGLGroup.setTitle("OpenGL");
@@ -90,7 +59,6 @@ SkSettingsWidget::SkSettingsWidget() : QFrame()
     fGLMSAACombo.addItem("Off", QVariant(0));
     fGLMSAACombo.addItem("4", QVariant(4));
     fGLMSAACombo.addItem("16", QVariant(16));
-<<<<<<< HEAD
     fGLLayout.addRow("MSAA", &fGLMSAACombo);
     fGLGroup.setLayout(&fGLLayout);
 
@@ -98,15 +66,6 @@ SkSettingsWidget::SkSettingsWidget() : QFrame()
         SIGNAL(glSettingsChanged()));
     connect(&fGLMSAACombo, SIGNAL(activated(int)), this,
         SIGNAL(glSettingsChanged()));
-=======
-    fGLLayout.addRow("MSAA",  &fGLMSAACombo);
-    fGLGroup.setLayout(&fGLLayout);
-
-    connect(&fGLGroup, SIGNAL(toggled(bool)), this,
-            SIGNAL(glSettingsChanged()));
-    connect(&fGLMSAACombo, SIGNAL(activated(int)), this,
-            SIGNAL(glSettingsChanged()));
->>>>>>> miniblink49
 
     fVerticalLayout.addRow(&fGLGroup);
 #endif
@@ -121,7 +80,3 @@ SkSettingsWidget::SkSettingsWidget() : QFrame()
     fVerticalLayout.addRow("Filtering", &fFilterCombo);
     this->setDisabled(true);
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49

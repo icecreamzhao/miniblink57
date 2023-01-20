@@ -9,15 +9,10 @@
       'type': 'shared_library',
       'dependencies': [
         'codec.gyp:codec',
-<<<<<<< HEAD
         'codec_android.gyp:codec_android',
         'core.gyp:core',
         'effects.gyp:effects',
         'gpu.gyp:skgpu',
-=======
-        'core.gyp:core',
-        'effects.gyp:effects',
->>>>>>> miniblink49
         'images.gyp:images',
         'opts.gyp:opts',
         'pdf.gyp:pdf',

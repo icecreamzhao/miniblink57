@@ -22,7 +22,6 @@
 #define SVGEllipseElement_h
 
 #include "core/SVGNames.h"
-#include "core/svg/SVGAnimatedBoolean.h"
 #include "core/svg/SVGAnimatedLength.h"
 #include "core/svg/SVGGeometryElement.h"
 #include "platform/heap/Handle.h"
@@ -31,6 +30,7 @@ namespace blink {
 
 class SVGEllipseElement final : public SVGGeometryElement {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     DECLARE_NODE_FACTORY(SVGEllipseElement);
 
@@ -46,9 +46,9 @@ public:
 private:
     explicit SVGEllipseElement(Document&);
 
-    bool isPresentationAttribute(const QualifiedName&) const override;
-    bool isPresentationAttributeWithSVGDOM(const QualifiedName&) const override;
-    void collectStyleForPresentationAttribute(const QualifiedName&, const AtomicString&, MutableStylePropertySet*) override;
+    void collectStyleForPresentationAttribute(const QualifiedName&,
+        const AtomicString&,
+        MutableStylePropertySet*) override;
 
     void svgAttributeChanged(const QualifiedName&) override;
 
@@ -56,10 +56,10 @@ private:
 
     LayoutObject* createLayoutObject(const ComputedStyle&) override;
 
-    RefPtrWillBeMember<SVGAnimatedLength> m_cx;
-    RefPtrWillBeMember<SVGAnimatedLength> m_cy;
-    RefPtrWillBeMember<SVGAnimatedLength> m_rx;
-    RefPtrWillBeMember<SVGAnimatedLength> m_ry;
+    Member<SVGAnimatedLength> m_cx;
+    Member<SVGAnimatedLength> m_cy;
+    Member<SVGAnimatedLength> m_rx;
+    Member<SVGAnimatedLength> m_ry;
 };
 
 } // namespace blink

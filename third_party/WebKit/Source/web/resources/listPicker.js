@@ -83,7 +83,6 @@ ListPicker.prototype._handleWindowMessage = function(event) {
         this._config.baseStyle = window.updateData.baseStyle;
         this._config.children = window.updateData.children;
         this._update();
-<<<<<<< HEAD
         if (this._config.anchorRectInScreen.x !== window.updateData.anchorRectInScreen.x ||
             this._config.anchorRectInScreen.y !== window.updateData.anchorRectInScreen.y ||
             this._config.anchorRectInScreen.width !== window.updateData.anchorRectInScreen.width ||
@@ -91,13 +90,10 @@ ListPicker.prototype._handleWindowMessage = function(event) {
             this._config.anchorRectInScreen = window.updateData.anchorRectInScreen;
             this._fixWindowSize();
         }
-=======
->>>>>>> miniblink49
     }
     delete window.updateData;
 };
 
-<<<<<<< HEAD
 // This should be matched to the border width of the internal listbox
 // SELECT. See listPicker.css and html.css.
 ListPicker.ListboxSelectBorder = 1;
@@ -117,9 +113,6 @@ ListPicker.prototype._handleWindowMouseMove = function (event) {
                 return;
         }
     }
-=======
-ListPicker.prototype._handleWindowMouseMove = function (event) {
->>>>>>> miniblink49
     this.lastMousePositionX = event.clientX;
     this.lastMousePositionY = event.clientY;
     this._highlightOption(event.target);
@@ -175,13 +168,8 @@ ListPicker.prototype._handleWindowTouchEnd = function(event) {
     var touch = this._getTouchForId(event.changedTouches, this._trackingTouchId);
     if (!touch)
         return;
-<<<<<<< HEAD
     var target = document.elementFromPoint(touch.clientX, touch.clientY)
     if (target.tagName === "OPTION" && !target.disabled)
-=======
-    var target = document.elementFromPoint(touch.clientX, touch.clientY);
-    if (target.tagName === "OPTION")
->>>>>>> miniblink49
         window.pagePopupController.setValueAndClosePopup(0, this._selectElement.value);
     this._exitTouchSelectMode();
 };
@@ -195,17 +183,11 @@ ListPicker.prototype._getTouchForId = function (touchList, id) {
 };
 
 ListPicker.prototype._highlightOption = function(target) {
-<<<<<<< HEAD
     if (target.tagName !== "OPTION" || target.selected || target.disabled)
         return;
     var savedScrollTop = this._selectElement.scrollTop;
     // TODO(tkent): Updating HTMLOptionElement::selected is not efficient. We
     // should optimize it, or use an alternative way.
-=======
-    if (target.tagName !== "OPTION" || target.selected)
-        return;
-    var savedScrollTop = this._selectElement.scrollTop;
->>>>>>> miniblink49
     target.selected = true;
     this._selectElement.scrollTop = savedScrollTop;
 };
@@ -216,7 +198,6 @@ ListPicker.prototype._handleChange = function(event) {
 };
 
 ListPicker.prototype._handleKeyDown = function(event) {
-<<<<<<< HEAD
     var key = event.key;
     if (key === "Escape") {
         window.pagePopupController.closePopup();
@@ -225,16 +206,6 @@ ListPicker.prototype._handleKeyDown = function(event) {
         window.pagePopupController.setValueAndClosePopup(0, this._selectElement.value);
         event.preventDefault();
     } else if (event.altKey && (key === "ArrowDown" || key === "ArrowUp")) {
-=======
-    var key = event.keyIdentifier;
-    if (key === "U+001B") { // ESC
-        window.pagePopupController.closePopup();
-        event.preventDefault();
-    } else if (key === "U+0009" /* TAB */ || key === "Enter") {
-        window.pagePopupController.setValueAndClosePopup(0, this._selectElement.value);
-        event.preventDefault();
-    } else if (event.altKey && (key === "Down" || key === "Up")) {
->>>>>>> miniblink49
         // We need to add a delay here because, if we do it immediately the key
         // press event will be handled by HTMLSelectElement and this popup will
         // be reopened.
@@ -247,7 +218,6 @@ ListPicker.prototype._handleKeyDown = function(event) {
 
 ListPicker.prototype._fixWindowSize = function() {
     this._selectElement.style.height = "";
-<<<<<<< HEAD
     var scale = this._config.scaleFactor;
     var maxHeight = this._selectElement.offsetHeight;
     var noScrollHeight = (this._calculateScrollHeight() + ListPicker.ListboxSelectBorder * 2);
@@ -258,21 +228,11 @@ ListPicker.prototype._fixWindowSize = function() {
     // If we already have a vertical scrollbar, subtract it out, it will get re-added below.
     if (this._selectElement.scrollHeight > this._selectElement.clientHeight)
       desiredWindowWidth -= scrollbarWidth;
-=======
-    var maxHeight = this._selectElement.offsetHeight;
-    // heightOutsideOfContent should be matched to border widths of the listbox
-    // SELECT. See listPicker.css and html.css.
-    var heightOutsideOfContent = 2;
-    var noScrollHeight = Math.round(this._calculateScrollHeight() + heightOutsideOfContent);
-    var desiredWindowHeight = noScrollHeight;
-    var desiredWindowWidth = this._selectElement.offsetWidth;
->>>>>>> miniblink49
     var expectingScrollbar = false;
     if (desiredWindowHeight > maxHeight) {
         desiredWindowHeight = maxHeight;
         // Setting overflow to auto does not increase width for the scrollbar
         // so we need to do it manually.
-<<<<<<< HEAD
         desiredWindowWidth += scrollbarWidth;
         expectingScrollbar = true;
     }
@@ -287,31 +247,13 @@ ListPicker.prototype._fixWindowSize = function() {
     this._selectElement.style.width = (windowRect.width * scale) + "px";
     this._selectElement.style.height = (windowRect.height * scale) + "px";
     this._element.style.height = (windowRect.height * scale) + "px";
-=======
-        desiredWindowWidth += getScrollbarWidth();
-        expectingScrollbar = true;
-    }
-    desiredWindowWidth = Math.max(this._config.anchorRectInScreen.width, desiredWindowWidth);
-    var windowRect = adjustWindowRect(desiredWindowWidth, desiredWindowHeight, this._selectElement.offsetWidth, 0);
-    // If the available screen space is smaller than maxHeight, we will get an unexpected scrollbar.
-    if (!expectingScrollbar && windowRect.height < noScrollHeight) {
-        desiredWindowWidth = windowRect.width + getScrollbarWidth();
-        windowRect = adjustWindowRect(desiredWindowWidth, windowRect.height, windowRect.width, windowRect.height);
-    }
-    this._selectElement.style.width = windowRect.width + "px";
-    this._selectElement.style.height = windowRect.height + "px";
-    this._element.style.height = windowRect.height + "px";
->>>>>>> miniblink49
     setWindowRect(windowRect);
 };
 
 ListPicker.prototype._calculateScrollHeight = function() {
     // Element.scrollHeight returns an integer value but this calculate the
     // actual fractional value.
-<<<<<<< HEAD
     // TODO(tkent): This can be too large? crbug.com/579863
-=======
->>>>>>> miniblink49
     var top = Infinity;
     var bottom = -Infinity;
     for (var i = 0; i < this._selectElement.children.length; i++) {
@@ -479,11 +421,7 @@ ListPicker.prototype._configureItem = function(element, config, inGroup) {
             element.title = config.title;
         else
             element.removeAttribute("title");
-<<<<<<< HEAD
         element.disabled = !!config.disabled
-=======
-        element.disabled = !!config.disabled;
->>>>>>> miniblink49
         if (config.ariaLabel)
             element.setAttribute("aria-label", config.ariaLabel);
         else

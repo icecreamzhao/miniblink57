@@ -5,7 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #ifndef GrGLCaps_DEFINED
 #define GrGLCaps_DEFINED
 
@@ -22,21 +21,6 @@
 class GrGLContextInfo;
 class GrGLSLCaps;
 class GrGLRenderTarget;
-=======
-
-#ifndef GrGLCaps_DEFINED
-#define GrGLCaps_DEFINED
-
-#include "GrCaps.h"
-#include "glsl/GrGLSL.h"
-#include "GrGLStencilAttachment.h"
-#include "SkChecksum.h"
-#include "SkTHash.h"
-#include "SkTArray.h"
-
-class GrGLContextInfo;
-class GrGLSLCaps;
->>>>>>> miniblink49
 
 /**
  * Stores some capabilities of a GL context. Most are determined by the GL
@@ -45,11 +29,6 @@ class GrGLSLCaps;
  */
 class GrGLCaps : public GrCaps {
 public:
-<<<<<<< HEAD
-=======
-    
-
->>>>>>> miniblink49
     typedef GrGLStencilAttachment::Format StencilFormat;
 
     /**
@@ -97,7 +76,6 @@ public:
         kLast_MSFBOType = kMixedSamples_MSFBOType
     };
 
-<<<<<<< HEAD
     enum BlitFramebufferSupport {
         kNone_BlitFramebufferSupport,
         /**
@@ -112,32 +90,19 @@ public:
         kNone_InvalidateFBType,
         kDiscard_InvalidateFBType, //<! glDiscardFramebuffer()
         kInvalidate_InvalidateFBType, //<! glInvalidateFramebuffer()
-=======
-    enum InvalidateFBType {
-        kNone_InvalidateFBType,
-        kDiscard_InvalidateFBType,       //<! glDiscardFramebuffer()
-        kInvalidate_InvalidateFBType,     //<! glInvalidateFramebuffer()
->>>>>>> miniblink49
 
         kLast_InvalidateFBType = kInvalidate_InvalidateFBType
     };
 
     enum MapBufferType {
         kNone_MapBufferType,
-<<<<<<< HEAD
         kMapBuffer_MapBufferType, // glMapBuffer()
         kMapBufferRange_MapBufferType, // glMapBufferRange()
         kChromium_MapBufferType, // GL_CHROMIUM_map_sub
-=======
-        kMapBuffer_MapBufferType,         // glMapBuffer()
-        kMapBufferRange_MapBufferType,    // glMapBufferRange()
-        kChromium_MapBufferType,          // GL_CHROMIUM_map_sub
->>>>>>> miniblink49
 
         kLast_MapBufferType = kChromium_MapBufferType,
     };
 
-<<<<<<< HEAD
     enum TransferBufferType {
         kNone_TransferBufferType,
         kPBO_TransferBufferType, // ARB_pixel_buffer_object
@@ -146,14 +111,11 @@ public:
         kLast_TransferBufferType = kChromium_TransferBufferType,
     };
 
-=======
->>>>>>> miniblink49
     /**
      * Initializes the GrGLCaps to the set of features supported in the current
      * OpenGL context accessible via ctxInfo.
      */
     GrGLCaps(const GrContextOptions& contextOptions, const GrGLContextInfo& ctxInfo,
-<<<<<<< HEAD
         const GrGLInterface* glInterface);
 
     bool isConfigTexturable(GrPixelConfig config) const override
@@ -245,67 +207,32 @@ public:
             fConfigTable[config].fStencilFormatIndex = index;
         }
     }
-=======
-             const GrGLInterface* glInterface);
->>>>>>> miniblink49
 
     /**
      * Call to note that a color config has been verified as a valid color
      * attachment. This may save future calls to glCheckFramebufferStatus
      * using isConfigVerifiedColorAttachment().
      */
-<<<<<<< HEAD
     void markConfigAsValidColorAttachment(GrPixelConfig config)
     {
         fConfigTable[config].fFlags |= ConfigInfo::kVerifiedColorAttachment_Flag;
-=======
-    void markConfigAsValidColorAttachment(GrPixelConfig config) {
-        fVerifiedColorConfigs.markVerified(config);
->>>>>>> miniblink49
     }
 
     /**
      * Call to check whether a config has been verified as a valid color
      * attachment.
      */
-<<<<<<< HEAD
     bool isConfigVerifiedColorAttachment(GrPixelConfig config) const
     {
         return SkToBool(fConfigTable[config].fFlags & ConfigInfo::kVerifiedColorAttachment_Flag);
     }
 
     /**
-=======
-    bool isConfigVerifiedColorAttachment(GrPixelConfig config) const {
-        return fVerifiedColorConfigs.isVerified(config);
-    }
-
-    /**
-     * Call to note that a color config / stencil format pair passed
-     * FBO status check. We may skip calling glCheckFramebufferStatus for
-     * this combination in the future using
-     * isColorConfigAndStencilFormatVerified().
-     */
-    void markColorConfigAndStencilFormatAsVerified(
-                    GrPixelConfig config,
-                    const GrGLStencilAttachment::Format& format);
-
-    /**
-     * Call to check whether color config / stencil format pair has already
-     * passed FBO status check.
-     */
-    bool isColorConfigAndStencilFormatVerified(
-                    GrPixelConfig config,
-                    const GrGLStencilAttachment::Format& format) const;
-
-    /**
->>>>>>> miniblink49
      * Reports the type of MSAA FBO support.
      */
     MSFBOType msFBOType() const { return fMSFBOType; }
 
     /**
-<<<<<<< HEAD
      * Does the preferred MSAA FBO extension have MSAA renderbuffers?
      */
     bool usesMSAARenderBuffers() const
@@ -325,24 +252,6 @@ public:
     bool usesImplicitMSAAResolve() const
     {
         return kES_IMG_MsToTexture_MSFBOType == fMSFBOType || kES_EXT_MsToTexture_MSFBOType == fMSFBOType;
-=======
-     * Does the supported MSAA FBO extension have MSAA renderbuffers?
-     */
-    bool usesMSAARenderBuffers() const {
-        return kNone_MSFBOType != fMSFBOType &&
-               kES_IMG_MsToTexture_MSFBOType != fMSFBOType &&
-               kES_EXT_MsToTexture_MSFBOType != fMSFBOType &&
-               kMixedSamples_MSFBOType != fMSFBOType;
-    }
-
-    /**
-     * Is the MSAA FBO extension one where the texture is multisampled when bound to an FBO and
-     * then implicitly resolved when read.
-     */
-    bool usesImplicitMSAAResolve() const {
-        return kES_IMG_MsToTexture_MSFBOType == fMSFBOType ||
-               kES_EXT_MsToTexture_MSFBOType == fMSFBOType;
->>>>>>> miniblink49
     }
 
     InvalidateFBType invalidateFBType() const { return fInvalidateFBType; }
@@ -350,50 +259,18 @@ public:
     /// What type of buffer mapping is supported?
     MapBufferType mapBufferType() const { return fMapBufferType; }
 
-<<<<<<< HEAD
     /// What type of transfer buffer is supported?
     TransferBufferType transferBufferType() const { return fTransferBufferType; }
-=======
-    /**
-     * Gets an array of legal stencil formats. These formats are not guaranteed
-     * to be supported by the driver but are legal GLenum names given the GL
-     * version and extensions supported.
-     */
-    const SkTArray<StencilFormat, true>& stencilFormats() const {
-        return fStencilFormats;
-    }
->>>>>>> miniblink49
 
     /// The maximum number of fragment uniform vectors (GLES has min. 16).
     int maxFragmentUniformVectors() const { return fMaxFragmentUniformVectors; }
 
-<<<<<<< HEAD
     /**
      * Depending on the ES extensions present the BGRA external format may
      * correspond to either a BGRA or RGBA internalFormat. On desktop GL it is
      * RGBA.
      */
     bool bgraIsInternalFormat() const;
-=======
-    /// maximum number of attribute values per vertex
-    int maxVertexAttributes() const { return fMaxVertexAttributes; }
-
-    /// maximum number of texture units accessible in the fragment shader.
-    int maxFragmentTextureUnits() const { return fMaxFragmentTextureUnits; }
-
-    /// ES requires an extension to support RGBA8 in RenderBufferStorage
-    bool rgba8RenderbufferSupport() const { return fRGBA8RenderbufferSupport; }
-
-    /**
-     * Depending on the ES extensions present the BGRA external format may
-     * correspond either a BGRA or RGBA internalFormat. On desktop GL it is
-     * RGBA.
-     */
-    bool bgraIsInternalFormat() const { return fBGRAIsInternalFormat; }
-
-    /// GL_ARB_texture_swizzle support
-    bool textureSwizzleSupport() const { return fTextureSwizzleSupport; }
->>>>>>> miniblink49
 
     /// Is there support for GL_UNPACK_ROW_LENGTH
     bool unpackRowLengthSupport() const { return fUnpackRowLengthSupport; }
@@ -410,33 +287,15 @@ public:
     /// Is there support for texture parameter GL_TEXTURE_USAGE
     bool textureUsageSupport() const { return fTextureUsageSupport; }
 
-<<<<<<< HEAD
-=======
-    /// Is there support for glTexStorage
-    bool texStorageSupport() const { return fTexStorageSupport; }
-
->>>>>>> miniblink49
     /// Is there support for GL_RED and GL_R8
     bool textureRedSupport() const { return fTextureRedSupport; }
 
     /// Is GL_ARB_IMAGING supported
     bool imagingSupport() const { return fImagingSupport; }
 
-<<<<<<< HEAD
     /// Is there support for Vertex Array Objects?
     bool vertexArrayObjectSupport() const { return fVertexArrayObjectSupport; }
 
-=======
-    /// Is GL_ARB_fragment_coord_conventions supported?
-    bool fragCoordConventionsSupport() const { return fFragCoordsConventionSupport; }
-
-    /// Is there support for Vertex Array Objects?
-    bool vertexArrayObjectSupport() const { return fVertexArrayObjectSupport; }
-
-    /// Is there support for glDraw*Instanced and glVertexAttribDivisor?
-    bool instancedDrawingSupport() const { return fInstancedDrawingSupport; }
-
->>>>>>> miniblink49
     /// Is there support for GL_EXT_direct_state_access?
     bool directStateAccessSupport() const { return fDirectStateAccessSupport; }
 
@@ -446,7 +305,6 @@ public:
     /// Is there support for ES2 compatability?
     bool ES2CompatibilitySupport() const { return fES2CompatibilitySupport; }
 
-<<<<<<< HEAD
     /// Is there support for glDraw*Indirect? Note that the baseInstance fields of indirect draw
     /// commands cannot be used unless we have base instance support.
     bool drawIndirectSupport() const { return fDrawIndirectSupport; }
@@ -486,37 +344,11 @@ public:
 
     bool doManualMipmapping() const { return fDoManualMipmapping; }
 
-=======
-    /// Can we call glDisable(GL_MULTISAMPLE)?
-    bool multisampleDisableSupport() const {
-        return fMultisampleDisableSupport;
-    }
-
-    /// Use indices or vertices in CPU arrays rather than VBOs for dynamic content.
-    bool useNonVBOVertexAndIndexDynamicData() const {
-        return fUseNonVBOVertexAndIndexDynamicData;
-    }
-
-    /// Does ReadPixels support the provided format/type combo?
-    bool readPixelsSupported(const GrGLInterface* intf,
-                             GrGLenum format,
-                             GrGLenum type,
-                             GrGLenum currFboFormat) const;
-
-    bool isCoreProfile() const { return fIsCoreProfile; }
-
-
-    bool fullClearIsFree() const { return fFullClearIsFree; }
-
-    bool bindFragDataLocationSupport() const { return fBindFragDataLocationSupport; }
-
->>>>>>> miniblink49
     /**
      * Returns a string containing the caps info.
      */
     SkString dump() const override;
 
-<<<<<<< HEAD
     bool rgba8888PixelsOpsAreSlow() const { return fRGBA8888PixelsOpsAreSlow; }
     bool partialFBOReadIsSlow() const { return fPartialFBOReadIsSlow; }
     bool rgbaToBgraReadbackConversionsAreSlow() const
@@ -543,69 +375,11 @@ private:
     bool hasPathRenderingSupport(const GrGLContextInfo&, const GrGLInterface*);
 
     void onApplyOptionsOverrides(const GrContextOptions& options) override;
-=======
-    /**
-     * LATC can appear under one of three possible names. In order to know
-     * which GL internal format to use, we need to keep track of which name
-     * we found LATC under. The default is LATC.
-     */
-    enum LATCAlias {
-        kLATC_LATCAlias,
-        kRGTC_LATCAlias,
-        k3DC_LATCAlias
-    };
-
-    LATCAlias latcAlias() const { return fLATCAlias; }
-
-    GrGLSLCaps* glslCaps() const { return reinterpret_cast<GrGLSLCaps*>(fShaderCaps.get()); }
-
-private:
-    void init(const GrContextOptions&, const GrGLContextInfo&, const GrGLInterface*);
-    bool hasPathRenderingSupport(const GrGLContextInfo&, const GrGLInterface*);
-
-    /**
-     * Maintains a bit per GrPixelConfig. It is used to avoid redundantly
-     * performing glCheckFrameBufferStatus for the same config.
-     */
-    struct VerifiedColorConfigs {
-        VerifiedColorConfigs() {
-            this->reset();
-        }
-
-        void reset() {
-            for (int i = 0; i < kNumUints; ++i) {
-                fVerifiedColorConfigs[i] = 0;
-            }
-        }
-
-        static const int kNumUints = (kGrPixelConfigCnt  + 31) / 32;
-        uint32_t fVerifiedColorConfigs[kNumUints];
-
-        void markVerified(GrPixelConfig config) {
-#if !GR_GL_CHECK_FBO_STATUS_ONCE_PER_FORMAT
-                return;
-#endif
-            int u32Idx = config / 32;
-            int bitIdx = config % 32;
-            fVerifiedColorConfigs[u32Idx] |= 1 << bitIdx;
-        }
-
-        bool isVerified(GrPixelConfig config) const {
-#if !GR_GL_CHECK_FBO_STATUS_ONCE_PER_FORMAT
-            return false;
-#endif
-            int u32Idx = config / 32;
-            int bitIdx = config % 32;
-            return SkToBool(fVerifiedColorConfigs[u32Idx] & (1 << bitIdx));
-        }
-    };
->>>>>>> miniblink49
 
     void initFSAASupport(const GrGLContextInfo&, const GrGLInterface*);
     void initBlendEqationSupport(const GrGLContextInfo&);
     void initStencilFormats(const GrGLContextInfo&);
     // This must be called after initFSAASupport().
-<<<<<<< HEAD
     void initConfigTable(const GrGLContextInfo&, const GrGLInterface* gli, GrGLSLCaps* glslCaps);
 
     void initShaderPrecisionTable(const GrGLContextInfo& ctxInfo,
@@ -623,45 +397,11 @@ private:
     MapBufferType fMapBufferType;
     TransferBufferType fTransferBufferType;
 
-=======
-    void initConfigRenderableTable(const GrGLContextInfo&);
-    void initConfigTexturableTable(const GrGLContextInfo&, const GrGLInterface*);
-
-    bool doReadPixelsSupported(const GrGLInterface* intf, GrGLenum format, GrGLenum type) const;
-
-    void initShaderPrecisionTable(const GrGLContextInfo& ctxInfo,
-                                  const GrGLInterface* intf,
-                                  GrGLSLCaps* glslCaps);
-
-    // tracks configs that have been verified to pass the FBO completeness when
-    // used as a color attachment
-    VerifiedColorConfigs fVerifiedColorConfigs;
-
-    SkTArray<StencilFormat, true> fStencilFormats;
-    // tracks configs that have been verified to pass the FBO completeness when
-    // used as a color attachment when a particular stencil format is used
-    // as a stencil attachment.
-    SkTArray<VerifiedColorConfigs, true> fStencilVerifiedColorConfigs;
-
-    int fMaxFragmentUniformVectors;
-    int fMaxVertexAttributes;
-    int fMaxFragmentTextureUnits;
-
-    MSFBOType           fMSFBOType;
-    InvalidateFBType    fInvalidateFBType;
-    MapBufferType       fMapBufferType;
-    LATCAlias           fLATCAlias;
-
-    bool fRGBA8RenderbufferSupport : 1;
-    bool fBGRAIsInternalFormat : 1;
-    bool fTextureSwizzleSupport : 1;
->>>>>>> miniblink49
     bool fUnpackRowLengthSupport : 1;
     bool fUnpackFlipYSupport : 1;
     bool fPackRowLengthSupport : 1;
     bool fPackFlipYSupport : 1;
     bool fTextureUsageSupport : 1;
-<<<<<<< HEAD
     bool fTextureRedSupport : 1;
     bool fImagingSupport : 1;
     bool fVertexArrayObjectSupport : 1;
@@ -765,36 +505,6 @@ private:
     };
 
     ConfigInfo fConfigTable[kGrPixelConfigCnt];
-=======
-    bool fTexStorageSupport : 1;
-    bool fTextureRedSupport : 1;
-    bool fImagingSupport  : 1;
-    bool fTwoFormatLimit : 1;
-    bool fFragCoordsConventionSupport : 1;
-    bool fVertexArrayObjectSupport : 1;
-    bool fInstancedDrawingSupport : 1;
-    bool fDirectStateAccessSupport : 1;
-    bool fDebugSupport : 1;
-    bool fES2CompatibilitySupport : 1;
-    bool fMultisampleDisableSupport : 1;
-    bool fUseNonVBOVertexAndIndexDynamicData : 1;
-    bool fIsCoreProfile : 1;
-    bool fFullClearIsFree : 1;
-    bool fBindFragDataLocationSupport : 1;
-
-    struct ReadPixelsSupportedFormat {
-        GrGLenum fFormat;
-        GrGLenum fType;
-        GrGLenum fFboFormat;
-
-        bool operator==(const ReadPixelsSupportedFormat& rhs) const {
-            return fFormat    == rhs.fFormat
-                && fType      == rhs.fType
-                && fFboFormat == rhs.fFboFormat;
-        }
-    };
-    mutable SkTHashMap<ReadPixelsSupportedFormat, bool> fReadPixelsSupportedCache;
->>>>>>> miniblink49
 
     typedef GrCaps INHERITED;
 };

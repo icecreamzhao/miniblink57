@@ -6,7 +6,6 @@
  */
 
 #include "SkCodec.h"
-<<<<<<< HEAD
 #include "SkBmpCodec.h"
 #include "SkCodecPriv.h"
 #include "SkColorSpace.h"
@@ -24,29 +23,10 @@
 
 struct DecoderProc {
     bool (*IsFormat)(const void*, size_t);
-=======
-#include "SkData.h"
-#include "SkCodec_libbmp.h"
-#include "SkCodec_libgif.h"
-#include "SkCodec_libico.h"
-#include "SkCodec_libpng.h"
-#include "SkCodec_wbmp.h"
-#include "SkCodecPriv.h"
-#ifndef SK_BUILD_FOR_ANDROID_FRAMEWORK
-#include "SkJpegCodec.h"
-#endif
-#include "SkScanlineDecoder.h"
-#include "SkStream.h"
-#include "SkWebpCodec.h"
-
-struct DecoderProc {
-    bool (*IsFormat)(SkStream*);
->>>>>>> miniblink49
     SkCodec* (*NewFromStream)(SkStream*);
 };
 
 static const DecoderProc gDecoderProcs[] = {
-<<<<<<< HEAD
 #ifdef SK_HAS_JPEG_LIBRARY
     { SkJpegCodec::IsJpeg, SkJpegCodec::NewFromStream },
 #endif
@@ -59,20 +39,10 @@ static const DecoderProc gDecoderProcs[] = {
 #ifdef SK_HAS_PNG_LIBRARY
     { SkIcoCodec::IsIco, SkIcoCodec::NewFromStream },
 #endif
-=======
-    { SkPngCodec::IsPng, SkPngCodec::NewFromStream },
-#ifndef SK_BUILD_FOR_ANDROID_FRAMEWORK
-    { SkJpegCodec::IsJpeg, SkJpegCodec::NewFromStream },
-#endif
-    { SkWebpCodec::IsWebp, SkWebpCodec::NewFromStream },
-    { SkGifCodec::IsGif, SkGifCodec::NewFromStream },
-    { SkIcoCodec::IsIco, SkIcoCodec::NewFromStream },
->>>>>>> miniblink49
     { SkBmpCodec::IsBmp, SkBmpCodec::NewFromStream },
     { SkWbmpCodec::IsWbmp, SkWbmpCodec::NewFromStream }
 };
 
-<<<<<<< HEAD
 size_t SkCodec::MinBufferedBytesNeeded()
 {
     return WEBP_VP8_HEADER_SIZE;
@@ -171,65 +141,11 @@ bool SkCodec::rewindIfNeeded()
         return true;
     }
 
-=======
-SkCodec* SkCodec::NewFromStream(SkStream* stream) {
-    if (!stream) {
-        return NULL;
-    }
-
-    SkAutoTDelete<SkStream> streamDeleter(stream);
-    
-    SkAutoTDelete<SkCodec> codec(NULL);
-    for (uint32_t i = 0; i < SK_ARRAY_COUNT(gDecoderProcs); i++) {
-        DecoderProc proc = gDecoderProcs[i];
-        const bool correctFormat = proc.IsFormat(stream);
-        if (!stream->rewind()) {
-            return NULL;
-        }
-        if (correctFormat) {
-            codec.reset(proc.NewFromStream(streamDeleter.detach()));
-            break;
-        }
-    }
-
-    // Set the max size at 128 megapixels (512 MB for kN32).
-    // This is about 4x smaller than a test image that takes a few minutes for
-    // dm to decode and draw.
-    const int32_t maxSize = 1 << 27;
-    if (codec && codec->getInfo().width() * codec->getInfo().height() > maxSize) {
-        SkCodecPrintf("Error: Image size too large, cannot decode.\n");
-        return NULL;
-    } else {
-        return codec.detach();
-    }
-}
-
-SkCodec* SkCodec::NewFromData(SkData* data) {
-    if (!data) {
-        return NULL;
-    }
-    return NewFromStream(SkNEW_ARGS(SkMemoryStream, (data)));
-}
-
-SkCodec::SkCodec(const SkImageInfo& info, SkStream* stream)
-    : fInfo(info)
-    , fStream(stream)
-    , fNeedsRewind(false)
-    , fScanlineDecoder(NULL)
-{}
-
-SkCodec::~SkCodec() {
-    SkDELETE(fScanlineDecoder);
-}
-
-SkCodec::RewindState SkCodec::rewindIfNeeded() {
->>>>>>> miniblink49
     // Store the value of fNeedsRewind so we can update it. Next read will
     // require a rewind.
     const bool needsRewind = fNeedsRewind;
     fNeedsRewind = true;
     if (!needsRewind) {
-<<<<<<< HEAD
         return true;
     }
 
@@ -250,20 +166,6 @@ SkCodec::Result SkCodec::getPixels(const SkImageInfo& info, void* pixels, size_t
         return kInvalidConversion;
     }
     if (nullptr == pixels) {
-=======
-        return kNoRewindNecessary_RewindState;
-    }
-    return fStream->rewind() ? kRewound_RewindState
-                             : kCouldNotRewind_RewindState;
-}
-
-SkCodec::Result SkCodec::getPixels(const SkImageInfo& info, void* pixels, size_t rowBytes,
-                                   const Options* options, SkPMColor ctable[], int* ctableCount) {
-    if (kUnknown_SkColorType == info.colorType()) {
-        return kInvalidConversion;
-    }
-    if (NULL == pixels) {
->>>>>>> miniblink49
         return kInvalidParameters;
     }
     if (rowBytes < info.minRowBytes()) {
@@ -271,33 +173,23 @@ SkCodec::Result SkCodec::getPixels(const SkImageInfo& info, void* pixels, size_t
     }
 
     if (kIndex_8_SkColorType == info.colorType()) {
-<<<<<<< HEAD
         if (nullptr == ctable || nullptr == ctableCount) {
-=======
-        if (NULL == ctable || NULL == ctableCount) {
->>>>>>> miniblink49
             return kInvalidParameters;
         }
     } else {
         if (ctableCount) {
             *ctableCount = 0;
         }
-<<<<<<< HEAD
         ctableCount = nullptr;
         ctable = nullptr;
     }
 
     if (!this->rewindIfNeeded()) {
         return kCouldNotRewind;
-=======
-        ctableCount = NULL;
-        ctable = NULL;
->>>>>>> miniblink49
     }
 
     // Default options.
     Options optsStorage;
-<<<<<<< HEAD
     if (nullptr == options) {
         options = &optsStorage;
     } else if (options->fSubset) {
@@ -320,17 +212,10 @@ SkCodec::Result SkCodec::getPixels(const SkImageInfo& info, void* pixels, size_t
     int rowsDecoded = 0;
     const Result result = this->onGetPixels(info, pixels, rowBytes, *options, ctable, ctableCount,
         &rowsDecoded);
-=======
-    if (NULL == options) {
-        options = &optsStorage;
-    }
-    const Result result = this->onGetPixels(info, pixels, rowBytes, *options, ctable, ctableCount);
->>>>>>> miniblink49
 
     if ((kIncompleteInput == result || kSuccess == result) && ctableCount) {
         SkASSERT(*ctableCount >= 0 && *ctableCount <= 256);
     }
-<<<<<<< HEAD
 
     // A return value of kIncompleteInput indicates a truncated image stream.
     // In this case, we will fill any uninitialized memory with a default value.
@@ -518,37 +403,4 @@ void SkCodec::fillIncompleteImage(const SkImageInfo& info, void* dst, size_t row
         break;
     }
     }
-=======
-    return result;
-}
-
-SkCodec::Result SkCodec::getPixels(const SkImageInfo& info, void* pixels, size_t rowBytes) {
-    SkASSERT(kIndex_8_SkColorType != info.colorType());
-    if (kIndex_8_SkColorType == info.colorType()) {
-        return kInvalidConversion;
-    }
-    return this->getPixels(info, pixels, rowBytes, NULL, NULL, NULL);
-}
-
-SkScanlineDecoder* SkCodec::getScanlineDecoder(const SkImageInfo& dstInfo, const Options* options,
-        SkPMColor ctable[], int* ctableCount) {
-
-    // Set options.
-    Options optsStorage;
-    if (NULL == options) {
-        options = &optsStorage;
-    }
-
-    SkDELETE(fScanlineDecoder);
-    fScanlineDecoder = this->onGetScanlineDecoder(dstInfo, *options, ctable, ctableCount);
-    return fScanlineDecoder;
-}
-
-SkScanlineDecoder* SkCodec::getScanlineDecoder(const SkImageInfo& dstInfo) {
-    SkASSERT(kIndex_8_SkColorType != dstInfo.colorType());
-    if (kIndex_8_SkColorType == dstInfo.colorType()) {
-        return NULL;
-    }
-    return this->getScanlineDecoder(dstInfo, NULL, NULL, NULL);
->>>>>>> miniblink49
 }

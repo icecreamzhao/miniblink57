@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2008 The Android Open Source Project
  *
@@ -9,20 +5,11 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #ifndef SkPtrSet_DEFINED
 #define SkPtrSet_DEFINED
 
 #include "SkFlattenable.h"
 #include "SkRefCnt.h"
-=======
-
-#ifndef SkPtrSet_DEFINED
-#define SkPtrSet_DEFINED
-
-#include "SkRefCnt.h"
-#include "SkFlattenable.h"
->>>>>>> miniblink49
 #include "SkTDArray.h"
 
 /**
@@ -33,17 +20,9 @@
  */
 class SkPtrSet : public SkRefCnt {
 public:
-<<<<<<< HEAD
     /**
      *  Search for the specified ptr in the set. If it is found, return its
      *  32bit ID [1..N], or if not found, return 0. Always returns 0 for nullptr.
-=======
-    
-
-    /**
-     *  Search for the specified ptr in the set. If it is found, return its
-     *  32bit ID [1..N], or if not found, return 0. Always returns 0 for NULL.
->>>>>>> miniblink49
      */
     uint32_t find(void*) const;
 
@@ -51,11 +30,7 @@ public:
      *  Add the specified ptr to the set, returning a unique 32bit ID for it
      *  [1...N]. Duplicate ptrs will return the same ID.
      *
-<<<<<<< HEAD
      *  If the ptr is nullptr, it is not added, and 0 is returned.
-=======
-     *  If the ptr is NULL, it is not added, and 0 is returned.
->>>>>>> miniblink49
      */
     uint32_t add(void*);
 
@@ -86,30 +61,20 @@ public:
     public:
         Iter(const SkPtrSet& set)
             : fSet(set)
-<<<<<<< HEAD
             , fIndex(0)
         {
         }
-=======
-            , fIndex(0) {}
->>>>>>> miniblink49
 
         /**
          * Return the next ptr in the set or null if the end was reached.
          */
-<<<<<<< HEAD
         void* next()
         {
             return fIndex < fSet.fList.count() ? fSet.fList[fIndex++].fPtr : nullptr;
-=======
-        void* next() {
-            return fIndex < fSet.fList.count() ? fSet.fList[fIndex++].fPtr : NULL;
->>>>>>> miniblink49
         }
 
     private:
         const SkPtrSet& fSet;
-<<<<<<< HEAD
         int fIndex;
     };
 
@@ -121,30 +86,13 @@ private:
     struct Pair {
         void* fPtr; // never nullptr
         uint32_t fIndex; // 1...N
-=======
-        int             fIndex;
-    };
-
-protected:
-    virtual void incPtr(void*) {}
-    virtual void decPtr(void*) {}
-
-private:
-    struct Pair {
-        void*       fPtr;   // never NULL
-        uint32_t    fIndex; // 1...N
->>>>>>> miniblink49
     };
 
     // we store the ptrs in sorted-order (using Cmp) so that we can efficiently
     // detect duplicates when add() is called. Hence we need to store the
     // ptr and its ID/fIndex explicitly, since the ptr's position in the array
     // is not related to its "index".
-<<<<<<< HEAD
     SkTDArray<Pair> fList;
-=======
-    SkTDArray<Pair>  fList;
->>>>>>> miniblink49
 
     static bool Less(const Pair& a, const Pair& b);
 
@@ -155,7 +103,6 @@ private:
  *  Templated wrapper for SkPtrSet, just meant to automate typecasting
  *  parameters to and from void* (which the base class expects).
  */
-<<<<<<< HEAD
 template <typename T>
 class SkTPtrSet : public SkPtrSet {
 public:
@@ -170,18 +117,6 @@ public:
 
     void copyToArray(T* array) const
     {
-=======
-template <typename T> class SkTPtrSet : public SkPtrSet {
-public:
-    uint32_t find(T ptr) {
-        return this->INHERITED::find((void*)ptr);
-    }
-    uint32_t add(T ptr) {
-        return this->INHERITED::add((void*)ptr);
-    }
-
-    void copyToArray(T* array) const {
->>>>>>> miniblink49
         this->INHERITED::copyToArray((void**)array);
     }
 
@@ -204,12 +139,8 @@ protected:
     virtual void decPtr(void*);
 };
 
-<<<<<<< HEAD
 class SkFactorySet : public SkTPtrSet<SkFlattenable::Factory> {
 };
-=======
-class SkFactorySet : public SkTPtrSet<SkFlattenable::Factory> {};
->>>>>>> miniblink49
 
 /**
  * Similar to SkFactorySet, but only allows Factorys that have registered names.
@@ -217,11 +148,6 @@ class SkFactorySet : public SkTPtrSet<SkFlattenable::Factory> {};
  */
 class SkNamedFactorySet : public SkRefCnt {
 public:
-<<<<<<< HEAD
-=======
-    
-
->>>>>>> miniblink49
     SkNamedFactorySet();
 
     /**
@@ -237,16 +163,10 @@ public:
      * function.
      */
     const char* getNextAddedFactoryName();
-<<<<<<< HEAD
 
 private:
     int fNextAddedFactory;
     SkFactorySet fFactorySet;
-=======
-private:
-    int                    fNextAddedFactory;
-    SkFactorySet           fFactorySet;
->>>>>>> miniblink49
     SkTDArray<const char*> fNames;
 
     typedef SkRefCnt INHERITED;

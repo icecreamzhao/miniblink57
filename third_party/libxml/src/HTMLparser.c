@@ -1186,11 +1186,7 @@ static int htmlStartCloseIndexinitialized = 0;
  * This is not reentrant. Call xmlInitParser() once before processing in
  * case of use in multithreaded programs.
  */
-<<<<<<< HEAD
 void XMLCALL
-=======
-void
->>>>>>> miniblink49
 htmlInitAutoClose(void) {
     int indx, i = 0;
 
@@ -1214,11 +1210,7 @@ htmlInitAutoClose(void) {
  *
  * Returns the related htmlElemDescPtr or NULL if not found.
  */
-<<<<<<< HEAD
 const htmlElemDesc * XMLCALL
-=======
-const htmlElemDesc *
->>>>>>> miniblink49
 htmlTagLookup(const xmlChar *tag) {
     unsigned int i;
 
@@ -1401,11 +1393,7 @@ htmlAutoClose(htmlParserCtxtPtr ctxt, const xmlChar * newtag)
  *
  * Returns 1 if autoclose, 0 otherwise
  */
-<<<<<<< HEAD
 int XMLCALL
-=======
-int
->>>>>>> miniblink49
 htmlAutoCloseTag(htmlDocPtr doc, const xmlChar *name, htmlNodePtr elem) {
     htmlNodePtr child;
 
@@ -1431,11 +1419,7 @@ htmlAutoCloseTag(htmlDocPtr doc, const xmlChar *name, htmlNodePtr elem) {
  *
  * Returns 1 if autoclosed, 0 otherwise
  */
-<<<<<<< HEAD
 int XMLCALL
-=======
-int
->>>>>>> miniblink49
 htmlIsAutoClosed(htmlDocPtr doc, htmlNodePtr elem) {
     htmlNodePtr child;
 
@@ -1564,11 +1548,7 @@ htmlCheckParagraph(htmlParserCtxtPtr ctxt) {
  *
  * Returns 1 is the attribute is a script 0 otherwise
  */
-<<<<<<< HEAD
 int XMLCALL
-=======
-int
->>>>>>> miniblink49
 htmlIsScriptAttribute(const xmlChar *name) {
     unsigned int i;
 
@@ -1909,11 +1889,7 @@ static const htmlEntityDesc  html40EntitiesTable[] = {
  *
  * Returns the associated htmlEntityDescPtr if found, NULL otherwise.
  */
-<<<<<<< HEAD
 const htmlEntityDesc * XMLCALL
-=======
-const htmlEntityDesc *
->>>>>>> miniblink49
 htmlEntityLookup(const xmlChar *name) {
     unsigned int i;
 
@@ -1936,11 +1912,7 @@ htmlEntityLookup(const xmlChar *name) {
  *
  * Returns the associated htmlEntityDescPtr if found, NULL otherwise.
  */
-<<<<<<< HEAD
 const htmlEntityDesc * XMLCALL
-=======
-const htmlEntityDesc *
->>>>>>> miniblink49
 htmlEntityValueLookup(unsigned int value) {
     unsigned int i;
 
@@ -1970,11 +1942,7 @@ htmlEntityValueLookup(unsigned int value) {
  *     as the return value is positive, else unpredictable.
  * The value of @outlen after return is the number of octets consumed.
  */
-<<<<<<< HEAD
 int XMLCALL
-=======
-int
->>>>>>> miniblink49
 UTF8ToHtml(unsigned char* out, int *outlen,
               const unsigned char* in, int *inlen) {
     const unsigned char* processed = in;
@@ -2078,11 +2046,7 @@ UTF8ToHtml(unsigned char* out, int *outlen,
  *     as the return value is positive, else unpredictable.
  * The value of @outlen after return is the number of octets consumed.
  */
-<<<<<<< HEAD
 int XMLCALL
-=======
-int
->>>>>>> miniblink49
 htmlEncodeEntities(unsigned char* out, int *outlen,
 		   const unsigned char* in, int *inlen, int quoteChar) {
     const unsigned char* processed = in;
@@ -2301,11 +2265,7 @@ static int areBlanks(htmlParserCtxtPtr ctxt, const xmlChar *str, int len) {
  *
  * Returns a new document, do not initialize the DTD if not provided
  */
-<<<<<<< HEAD
 htmlDocPtr XMLCALL
-=======
-htmlDocPtr
->>>>>>> miniblink49
 htmlNewDocNoDtD(const xmlChar *URI, const xmlChar *ExternalID) {
     xmlDocPtr cur;
 
@@ -2669,11 +2629,7 @@ htmlParseHTMLAttribute(htmlParserCtxtPtr ctxt, const xmlChar stop) {
  * Returns the associated htmlEntityDescPtr if found, or NULL otherwise,
  *         if non-NULL *str will have to be freed by the caller.
  */
-<<<<<<< HEAD
 const htmlEntityDesc * XMLCALL
-=======
-const htmlEntityDesc *
->>>>>>> miniblink49
 htmlParseEntityRef(htmlParserCtxtPtr ctxt, const xmlChar **str) {
     const xmlChar *name;
     const htmlEntityDesc * ent = NULL;
@@ -3297,11 +3253,7 @@ htmlParseComment(htmlParserCtxtPtr ctxt) {
  *
  * Returns the value parsed (as an int)
  */
-<<<<<<< HEAD
 int XMLCALL
-=======
-int
->>>>>>> miniblink49
 htmlParseCharRef(htmlParserCtxtPtr ctxt) {
     int val = 0;
 
@@ -4183,11 +4135,7 @@ htmlParseContent(htmlParserCtxtPtr ctxt) {
  * [41] Attribute ::= Name Eq AttValue
  */
 
-<<<<<<< HEAD
 void XMLCALL
-=======
-void
->>>>>>> miniblink49
 htmlParseElement(htmlParserCtxtPtr ctxt) {
     const xmlChar *name;
     xmlChar *currentNode = NULL;
@@ -4614,11 +4562,7 @@ __htmlParseContent(void *ctxt) {
  *                as a result of the parsing.
  */
 
-<<<<<<< HEAD
 int XMLCALL
-=======
-int
->>>>>>> miniblink49
 htmlParseDocument(htmlParserCtxtPtr ctxt) {
     xmlChar start[4];
     xmlCharEncoding enc;
@@ -4864,11 +4808,7 @@ htmlInitParserCtxt(htmlParserCtxtPtr ctxt)
  * document in ctxt->myDoc is not freed.
  */
 
-<<<<<<< HEAD
 void XMLCALL
-=======
-void
->>>>>>> miniblink49
 htmlFreeParserCtxt(htmlParserCtxtPtr ctxt)
 {
     xmlFreeParserCtxt(ctxt);
@@ -4882,11 +4822,7 @@ htmlFreeParserCtxt(htmlParserCtxtPtr ctxt)
  * Returns the htmlParserCtxtPtr or NULL in case of allocation error
  */
 
-<<<<<<< HEAD
 htmlParserCtxtPtr XMLCALL
-=======
-htmlParserCtxtPtr
->>>>>>> miniblink49
 htmlNewParserCtxt(void)
 {
     xmlParserCtxtPtr ctxt;
@@ -4913,11 +4849,7 @@ htmlNewParserCtxt(void)
  *
  * Returns the new parser context or NULL
  */
-<<<<<<< HEAD
 htmlParserCtxtPtr XMLCALL
-=======
-htmlParserCtxtPtr
->>>>>>> miniblink49
 htmlCreateMemoryParserCtxt(const char *buffer, int size) {
     xmlParserCtxtPtr ctxt;
     xmlParserInputPtr input;
@@ -5962,11 +5894,7 @@ done:
  *
  * Returns zero if no error, the xmlParserErrors otherwise.
  */
-<<<<<<< HEAD
 int XMLCALL
-=======
-int
->>>>>>> miniblink49
 htmlParseChunk(htmlParserCtxtPtr ctxt, const char *chunk, int size,
               int terminate) {
     if ((ctxt == NULL) || (ctxt->input == NULL)) {
@@ -6052,11 +5980,7 @@ htmlParseChunk(htmlParserCtxtPtr ctxt, const char *chunk, int size,
  *
  * Returns the new parser context or NULL
  */
-<<<<<<< HEAD
 htmlParserCtxtPtr XMLCALL
-=======
-htmlParserCtxtPtr
->>>>>>> miniblink49
 htmlCreatePushParserCtxt(htmlSAXHandlerPtr sax, void *user_data,
                          const char *chunk, int size, const char *filename,
 			 xmlCharEncoding enc) {
@@ -6151,11 +6075,7 @@ htmlCreatePushParserCtxt(htmlSAXHandlerPtr sax, void *user_data,
  *     not well formed.
  */
 
-<<<<<<< HEAD
 htmlDocPtr XMLCALL
-=======
-htmlDocPtr
->>>>>>> miniblink49
 htmlSAXParseDoc(xmlChar *cur, const char *encoding, htmlSAXHandlerPtr sax, void *userData) {
     htmlDocPtr ret;
     htmlParserCtxtPtr ctxt;
@@ -6194,11 +6114,7 @@ htmlSAXParseDoc(xmlChar *cur, const char *encoding, htmlSAXHandlerPtr sax, void 
  * Returns the resulting document tree
  */
 
-<<<<<<< HEAD
 htmlDocPtr XMLCALL
-=======
-htmlDocPtr
->>>>>>> miniblink49
 htmlParseDoc(xmlChar *cur, const char *encoding) {
     return(htmlSAXParseDoc(cur, encoding, NULL, NULL));
 }
@@ -6215,11 +6131,7 @@ htmlParseDoc(xmlChar *cur, const char *encoding) {
  *
  * Returns the new parser context or NULL
  */
-<<<<<<< HEAD
 htmlParserCtxtPtr XMLCALL
-=======
-htmlParserCtxtPtr
->>>>>>> miniblink49
 htmlCreateFileParserCtxt(const char *filename, const char *encoding)
 {
     htmlParserCtxtPtr ctxt;
@@ -6285,11 +6197,7 @@ htmlCreateFileParserCtxt(const char *filename, const char *encoding)
  *     not well formed.
  */
 
-<<<<<<< HEAD
 htmlDocPtr XMLCALL
-=======
-htmlDocPtr
->>>>>>> miniblink49
 htmlSAXParseFile(const char *filename, const char *encoding, htmlSAXHandlerPtr sax,
                  void *userData) {
     htmlDocPtr ret;
@@ -6329,11 +6237,7 @@ htmlSAXParseFile(const char *filename, const char *encoding, htmlSAXHandlerPtr s
  * Returns the resulting document tree
  */
 
-<<<<<<< HEAD
 htmlDocPtr XMLCALL
-=======
-htmlDocPtr
->>>>>>> miniblink49
 htmlParseFile(const char *filename, const char *encoding) {
     return(htmlSAXParseFile(filename, encoding, NULL, NULL));
 }
@@ -6347,11 +6251,7 @@ htmlParseFile(const char *filename, const char *encoding) {
  * Returns the last value for 0 for no handling, 1 for auto insertion.
  */
 
-<<<<<<< HEAD
 int XMLCALL
-=======
-int
->>>>>>> miniblink49
 htmlHandleOmittedElem(int val) {
     int old = htmlOmittedDefaultValue;
 
@@ -6369,11 +6269,7 @@ htmlHandleOmittedElem(int val) {
  *
  * Returns 1 if allowed; 0 otherwise.
  */
-<<<<<<< HEAD
 int XMLCALL
-=======
-int
->>>>>>> miniblink49
 htmlElementAllowedHere(const htmlElemDesc* parent, const xmlChar* elt) {
   const char** p ;
 
@@ -6396,11 +6292,7 @@ htmlElementAllowedHere(const htmlElemDesc* parent, const xmlChar* elt) {
  *
  * Returns one of HTML_VALID, HTML_DEPRECATED, HTML_INVALID
  */
-<<<<<<< HEAD
 htmlStatus XMLCALL
-=======
-htmlStatus
->>>>>>> miniblink49
 htmlElementStatusHere(const htmlElemDesc* parent, const htmlElemDesc* elt) {
   if ( ! parent || ! elt )
     return HTML_INVALID ;
@@ -6420,11 +6312,7 @@ htmlElementStatusHere(const htmlElemDesc* parent, const htmlElemDesc* elt) {
  *
  * Returns one of HTML_REQUIRED, HTML_VALID, HTML_DEPRECATED, HTML_INVALID
  */
-<<<<<<< HEAD
 htmlStatus XMLCALL
-=======
-htmlStatus
->>>>>>> miniblink49
 htmlAttrAllowed(const htmlElemDesc* elt, const xmlChar* attr, int legacy) {
   const char** p ;
 
@@ -6462,11 +6350,7 @@ htmlAttrAllowed(const htmlElemDesc* elt, const xmlChar* attr, int legacy) {
  *	for Attribute nodes, a return from htmlAttrAllowed
  *	for other nodes, HTML_NA (no checks performed)
  */
-<<<<<<< HEAD
 htmlStatus XMLCALL
-=======
-htmlStatus
->>>>>>> miniblink49
 htmlNodeStatus(const htmlNodePtr node, int legacy) {
   if ( ! node )
     return HTML_INVALID ;
@@ -6510,11 +6394,7 @@ htmlNodeStatus(const htmlNodePtr node, int legacy) {
  *
  * Reset a parser context
  */
-<<<<<<< HEAD
 void XMLCALL
-=======
-void
->>>>>>> miniblink49
 htmlCtxtReset(htmlParserCtxtPtr ctxt)
 {
     xmlParserInputPtr input;
@@ -6605,11 +6485,7 @@ htmlCtxtReset(htmlParserCtxtPtr ctxt)
  * Returns 0 in case of success, the set of unknown or unimplemented options
  *         in case of error.
  */
-<<<<<<< HEAD
 int XMLCALL
-=======
-int
->>>>>>> miniblink49
 htmlCtxtUseOptions(htmlParserCtxtPtr ctxt, int options)
 {
     if (ctxt == NULL)
@@ -6716,11 +6592,7 @@ htmlDoRead(htmlParserCtxtPtr ctxt, const char *URL, const char *encoding,
  *
  * Returns the resulting document tree
  */
-<<<<<<< HEAD
 htmlDocPtr XMLCALL
-=======
-htmlDocPtr
->>>>>>> miniblink49
 htmlReadDoc(const xmlChar * cur, const char *URL, const char *encoding, int options)
 {
     htmlParserCtxtPtr ctxt;
@@ -6745,11 +6617,7 @@ htmlReadDoc(const xmlChar * cur, const char *URL, const char *encoding, int opti
  *
  * Returns the resulting document tree
  */
-<<<<<<< HEAD
 htmlDocPtr XMLCALL
-=======
-htmlDocPtr
->>>>>>> miniblink49
 htmlReadFile(const char *filename, const char *encoding, int options)
 {
     htmlParserCtxtPtr ctxt;
@@ -6773,11 +6641,7 @@ htmlReadFile(const char *filename, const char *encoding, int options)
  *
  * Returns the resulting document tree
  */
-<<<<<<< HEAD
 htmlDocPtr XMLCALL
-=======
-htmlDocPtr
->>>>>>> miniblink49
 htmlReadMemory(const char *buffer, int size, const char *URL, const char *encoding, int options)
 {
     htmlParserCtxtPtr ctxt;
@@ -6803,11 +6667,7 @@ htmlReadMemory(const char *buffer, int size, const char *URL, const char *encodi
  *
  * Returns the resulting document tree
  */
-<<<<<<< HEAD
 htmlDocPtr XMLCALL
-=======
-htmlDocPtr
->>>>>>> miniblink49
 htmlReadFd(int fd, const char *URL, const char *encoding, int options)
 {
     htmlParserCtxtPtr ctxt;
@@ -6849,11 +6709,7 @@ htmlReadFd(int fd, const char *URL, const char *encoding, int options)
  *
  * Returns the resulting document tree
  */
-<<<<<<< HEAD
 htmlDocPtr XMLCALL
-=======
-htmlDocPtr
->>>>>>> miniblink49
 htmlReadIO(xmlInputReadCallback ioread, xmlInputCloseCallback ioclose,
           void *ioctx, const char *URL, const char *encoding, int options)
 {
@@ -6897,11 +6753,7 @@ htmlReadIO(xmlInputReadCallback ioread, xmlInputCloseCallback ioclose,
  *
  * Returns the resulting document tree
  */
-<<<<<<< HEAD
 htmlDocPtr XMLCALL
-=======
-htmlDocPtr
->>>>>>> miniblink49
 htmlCtxtReadDoc(htmlParserCtxtPtr ctxt, const xmlChar * cur,
                const char *URL, const char *encoding, int options)
 {
@@ -6934,11 +6786,7 @@ htmlCtxtReadDoc(htmlParserCtxtPtr ctxt, const xmlChar * cur,
  *
  * Returns the resulting document tree
  */
-<<<<<<< HEAD
 htmlDocPtr XMLCALL
-=======
-htmlDocPtr
->>>>>>> miniblink49
 htmlCtxtReadFile(htmlParserCtxtPtr ctxt, const char *filename,
                 const char *encoding, int options)
 {
@@ -6973,11 +6821,7 @@ htmlCtxtReadFile(htmlParserCtxtPtr ctxt, const char *filename,
  *
  * Returns the resulting document tree
  */
-<<<<<<< HEAD
 htmlDocPtr XMLCALL
-=======
-htmlDocPtr
->>>>>>> miniblink49
 htmlCtxtReadMemory(htmlParserCtxtPtr ctxt, const char *buffer, int size,
                   const char *URL, const char *encoding, int options)
 {
@@ -7019,11 +6863,7 @@ htmlCtxtReadMemory(htmlParserCtxtPtr ctxt, const char *buffer, int size,
  *
  * Returns the resulting document tree
  */
-<<<<<<< HEAD
 htmlDocPtr XMLCALL
-=======
-htmlDocPtr
->>>>>>> miniblink49
 htmlCtxtReadFd(htmlParserCtxtPtr ctxt, int fd,
               const char *URL, const char *encoding, int options)
 {
@@ -7065,11 +6905,7 @@ htmlCtxtReadFd(htmlParserCtxtPtr ctxt, int fd,
  *
  * Returns the resulting document tree
  */
-<<<<<<< HEAD
 htmlDocPtr XMLCALL
-=======
-htmlDocPtr
->>>>>>> miniblink49
 htmlCtxtReadIO(htmlParserCtxtPtr ctxt, xmlInputReadCallback ioread,
               xmlInputCloseCallback ioclose, void *ioctx,
 	      const char *URL,

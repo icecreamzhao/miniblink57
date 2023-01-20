@@ -41,10 +41,7 @@ CWD := $(shell pwd)
 # world.
 VALID_TARGETS := \
                  nanobench \
-<<<<<<< HEAD
                  visualbench \
-=======
->>>>>>> miniblink49
                  debugger \
                  dm \
                  everything \
@@ -52,10 +49,6 @@ VALID_TARGETS := \
                  lua_pictures \
                  most \
                  pathops_unittest \
-<<<<<<< HEAD
-=======
-                 pdfviewer \
->>>>>>> miniblink49
                  SampleApp \
                  SampleApp_APK \
                  skhello \

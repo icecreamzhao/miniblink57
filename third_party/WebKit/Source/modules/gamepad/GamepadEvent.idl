@@ -2,18 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
 // https://w3c.github.io/gamepad/#gamepadevent-interface
-=======
-// https://dvcs.w3.org/hg/gamepad/raw-file/default/gamepad.html#gamepadevent-interface
->>>>>>> miniblink49
 
 [
     Constructor(DOMString type, optional GamepadEventInit eventInitDict),
 ] interface GamepadEvent : Event {
-<<<<<<< HEAD
     [ImplementedAs=getGamepad] readonly attribute Gamepad gamepad;
-=======
-    readonly attribute Gamepad gamepad;
->>>>>>> miniblink49
 };

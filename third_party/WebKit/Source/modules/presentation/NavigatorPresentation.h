@@ -5,10 +5,7 @@
 #ifndef NavigatorPresentation_h
 #define NavigatorPresentation_h
 
-<<<<<<< HEAD
 #include "core/frame/Navigator.h"
-=======
->>>>>>> miniblink49
 #include "platform/Supplementable.h"
 #include "platform/heap/Handle.h"
 
@@ -17,16 +14,11 @@ namespace blink {
 class Navigator;
 class Presentation;
 
-<<<<<<< HEAD
 class NavigatorPresentation final
     : public GarbageCollected<NavigatorPresentation>,
       public Supplement<Navigator> {
     USING_GARBAGE_COLLECTED_MIXIN(NavigatorPresentation);
 
-=======
-class NavigatorPresentation final : public GarbageCollectedFinalized<NavigatorPresentation>, public HeapSupplement<Navigator> {
-    USING_GARBAGE_COLLECTED_MIXIN(NavigatorPresentation);
->>>>>>> miniblink49
 public:
     static NavigatorPresentation& from(Navigator&);
     static Presentation* presentation(Navigator&);

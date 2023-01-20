@@ -45,10 +45,6 @@ public:
     virtual void handleEvent(const EntryHeapVector&) = 0;
 };
 
-<<<<<<< HEAD
 } // namespace blink
-=======
-} // namespace
->>>>>>> miniblink49
 
 #endif // EntriesCallback_h

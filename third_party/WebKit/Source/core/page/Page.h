@@ -1,6 +1,8 @@
 /*
- * Copyright (C) 2006, 2007, 2008, 2009, 2010, 2013 Apple Inc. All rights reserved.
- * Copyright (C) 2008 Torch Mobile Inc. All rights reserved. (http://www.torchmobile.com/)
+ * Copyright (C) 2006, 2007, 2008, 2009, 2010, 2013 Apple Inc. All rights
+ * reserved.
+ * Copyright (C) 2008 Torch Mobile Inc. All rights reserved.
+ * (http://www.torchmobile.com/)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,14 +25,15 @@
 
 #include "core/CoreExport.h"
 #include "core/dom/ViewportDescription.h"
+#include "core/frame/Deprecation.h"
+#include "core/frame/HostsUsingFeatures.h"
 #include "core/frame/LocalFrame.h"
-#include "core/frame/OriginsUsingFeatures.h"
 #include "core/frame/SettingsDelegate.h"
 #include "core/frame/UseCounter.h"
 #include "core/page/Page.h"
 #include "core/page/PageAnimator.h"
-#include "core/page/PageLifecycleNotifier.h"
-#include "core/page/PageLifecycleObserver.h"
+#include "core/page/PageVisibilityNotifier.h"
+#include "core/page/PageVisibilityObserver.h"
 #include "core/page/PageVisibilityState.h"
 #include "platform/Supplementable.h"
 #include "platform/geometry/LayoutRect.h"
@@ -50,7 +53,6 @@ class ContextMenuClient;
 class ContextMenuController;
 class Document;
 class DragCaretController;
-class DragClient;
 class DragController;
 class EditorClient;
 class FocusController;
@@ -58,47 +60,80 @@ class Frame;
 class FrameHost;
 class PluginData;
 class PointerLockController;
+class ScopedPageSuspender;
 class ScrollingCoordinator;
 class Settings;
 class SpellCheckerClient;
-class UndoStack;
 class ValidationMessageClient;
+class WebLayerTreeView;
+#if ENABLE_WML
+class WMLPageState;
+#endif
 
 typedef uint64_t LinkHash;
 
 float deviceScaleFactor(LocalFrame*);
 
-class CORE_EXPORT Page final : public NoBaseWillBeGarbageCollectedFinalized<Page>, public WillBeHeapSupplementable<Page>, public PageLifecycleNotifier, public SettingsDelegate {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(Page);
+class CORE_EXPORT Page final : public GarbageCollectedFinalized<Page>,
+                               public Supplementable<Page>,
+                               public PageVisibilityNotifier,
+                               public SettingsDelegate {
+    USING_GARBAGE_COLLECTED_MIXIN(Page);
     WTF_MAKE_NONCOPYABLE(Page);
     friend class Settings;
-public:
-    static void platformColorsChanged();
 
-    // It is up to the platform to ensure that non-null clients are provided where required.
-    struct CORE_EXPORT PageClients {
-        WTF_MAKE_NONCOPYABLE(PageClients); WTF_MAKE_FAST_ALLOCATED(PageClients);
+public:
+    // It is up to the platform to ensure that non-null clients are provided where
+    // required.
+    struct CORE_EXPORT PageClients final {
+        STACK_ALLOCATED();
+        WTF_MAKE_NONCOPYABLE(PageClients);
+
     public:
         PageClients();
         ~PageClients();
 
-        ChromeClient* chromeClient;
+        Member<ChromeClient> chromeClient;
         ContextMenuClient* contextMenuClient;
         EditorClient* editorClient;
-        DragClient* dragClient;
         SpellCheckerClient* spellCheckerClient;
     };
 
-    explicit Page(PageClients&);
-    virtual ~Page();
+    static Page* create(PageClients& pageClients)
+    {
+        return new Page(pageClients);
+    }
 
-    void makeOrdinary();
+    // An "ordinary" page is a fully-featured page owned by a web view.
+    static Page* createOrdinary(PageClients&);
 
-    // This method returns all pages, incl. private ones associated with
-    // inspector overlay, popups, SVGImage, etc.
-    static HashSet<Page*>& allPages();
-    // This method returns all ordinary pages.
-    static HashSet<Page*>& ordinaryPages();
+    ~Page() override;
+
+    void closeSoon();
+    bool isClosing() const { return m_isClosing; }
+
+#ifdef TENCENT_FITSCREEN
+    int getDefaultMaxWidth()
+    {
+        return m_defaultMaxWidth;
+    }
+    void setDefaultMaxWidth(int width) { m_defaultMaxWidth = width; }
+#endif
+
+#if ENABLE_WML
+    WMLPageState* wmlPageState();
+#endif
+
+    using PageSet = PersistentHeapHashSet<WeakMember<Page>>;
+
+    // Return the current set of full-fledged, ordinary pages.
+    // Each created and owned by a WebView.
+    //
+    // This set does not include Pages created for other, internal purposes
+    // (SVGImages, inspector overlays, page popups etc.)
+    static PageSet& ordinaryPages();
+
+    static void platformColorsChanged();
 
     FrameHost& frameHost() const { return *m_frameHost; }
 
@@ -108,11 +143,13 @@ public:
     ViewportDescription viewportDescription() const;
 
     static void refreshPlugins();
-    PluginData* pluginData() const;
+    PluginData* pluginData(SecurityOrigin* mainFrameOrigin) const;
 
     EditorClient& editorClient() const { return *m_editorClient; }
-    SpellCheckerClient& spellCheckerClient() const { return *m_spellCheckerClient; }
-    UndoStack& undoStack() const { return *m_undoStack; }
+    SpellCheckerClient& spellCheckerClient() const
+    {
+        return *m_spellCheckerClient;
+    }
 
     void setMainFrame(Frame*);
     Frame* mainFrame() const { return m_mainFrame; }
@@ -121,7 +158,10 @@ public:
     // depends on this will generally have to be rewritten to propagate any
     // necessary state through all renderer processes for that page and/or
     // coordinate/rely on the browser process to help dispatch/coordinate work.
-    LocalFrame* deprecatedLocalMainFrame() const { return toLocalFrame(m_mainFrame); }
+    LocalFrame* deprecatedLocalMainFrame() const
+    {
+        return toLocalFrame(m_mainFrame);
+    }
 
     void documentDetached(Document*);
 
@@ -130,67 +170,81 @@ public:
 
     PageAnimator& animator() { return *m_animator; }
     ChromeClient& chromeClient() const { return *m_chromeClient; }
-    AutoscrollController& autoscrollController() const { return *m_autoscrollController; }
-    DragCaretController& dragCaretController() const { return *m_dragCaretController; }
+    AutoscrollController& autoscrollController() const
+    {
+        return *m_autoscrollController;
+    }
+    DragCaretController& dragCaretController() const
+    {
+        return *m_dragCaretController;
+    }
     DragController& dragController() const { return *m_dragController; }
     FocusController& focusController() const { return *m_focusController; }
-    ContextMenuController& contextMenuController() const { return *m_contextMenuController; }
-    PointerLockController& pointerLockController() const { return *m_pointerLockController; }
-    ValidationMessageClient& validationMessageClient() const { return *m_validationMessageClient; }
-    void setValidationMessageClient(PassOwnPtrWillBeRawPtr<ValidationMessageClient>);
+    ContextMenuController& contextMenuController() const
+    {
+        return *m_contextMenuController;
+    }
+    PointerLockController& pointerLockController() const
+    {
+        return *m_pointerLockController;
+    }
+    ValidationMessageClient& validationMessageClient() const
+    {
+        return *m_validationMessageClient;
+    }
+    void setValidationMessageClient(ValidationMessageClient*);
 
     ScrollingCoordinator* scrollingCoordinator();
 
-    String mainThreadScrollingReasonsAsText();
     ClientRectList* nonFastScrollableRects(const LocalFrame*);
 
     Settings& settings() const { return *m_settings; }
 
     UseCounter& useCounter() { return m_useCounter; }
-    OriginsUsingFeatures& originsUsingFeatures() { return m_originsUsingFeatures; }
+    Deprecation& deprecation() { return m_deprecation; }
+    HostsUsingFeatures& hostsUsingFeatures() { return m_hostsUsingFeatures; }
 
-    void setTabKeyCyclesThroughElements(bool b) { m_tabKeyCyclesThroughElements = b; }
-    bool tabKeyCyclesThroughElements() const { return m_tabKeyCyclesThroughElements; }
+    void setTabKeyCyclesThroughElements(bool b)
+    {
+        m_tabKeyCyclesThroughElements = b;
+    }
+    bool tabKeyCyclesThroughElements() const
+    {
+        return m_tabKeyCyclesThroughElements;
+    }
 
-    void unmarkAllTextMatches();
+    // Suspension is used to implement the "Optionally, pause while waiting for
+    // the user to acknowledge the message" step of simple dialog processing:
+    // https://html.spec.whatwg.org/multipage/webappapis.html#simple-dialogs
+    //
+    // Per https://html.spec.whatwg.org/multipage/webappapis.html#pause, no loads
+    // are allowed to start/continue in this state, and all background processing
+    // is also suspended.
+    bool suspended() const { return m_suspended; }
 
-    // DefersLoading is used to delay loads during modal dialogs.
-    // Modal dialogs are supposed to freeze all background processes
-    // in the page, including prevent additional loads from staring/continuing.
-    void setDefersLoading(bool);
-    bool defersLoading() const { return m_defersLoading; }
-
-    void setPageScaleFactor(float scale, const IntPoint& origin);
+    void setPageScaleFactor(float);
     float pageScaleFactor() const;
 
     float deviceScaleFactor() const { return m_deviceScaleFactor; }
     void setDeviceScaleFactor(float);
-    void setDeviceColorProfile(const Vector<char>&);
-    void resetDeviceColorProfile();
 
-    static void allVisitedStateChanged();
+    static void allVisitedStateChanged(bool invalidateVisitedLinkHashes);
     static void visitedStateChanged(LinkHash visitedHash);
 
-    PageVisibilityState visibilityState() const;
     void setVisibilityState(PageVisibilityState, bool);
+    PageVisibilityState visibilityState() const;
+    bool isPageVisible() const;
 
     bool isCursorVisible() const;
     void setIsCursorVisible(bool isVisible) { m_isCursorVisible = isVisible; }
 
-#if ENABLE(ASSERT)
-    void setIsPainting(bool painting) { m_isPainting = painting; }
+#if DCHECK_IS_ON()
+    void setIsPainting(bool painting)
+    {
+        m_isPainting = painting;
+    }
     bool isPainting() const { return m_isPainting; }
 #endif
-
-    double timerAlignmentInterval() const;
-
-    class CORE_EXPORT MultisamplingChangedObserver : public WillBeGarbageCollectedMixin {
-    public:
-        virtual void multisamplingChanged(bool) = 0;
-    };
-
-    void addMultisamplingChangedObserver(MultisamplingChangedObserver*);
-    void removeMultisamplingChangedObserver(MultisamplingChangedObserver*);
 
     void didCommitLoad(LocalFrame*);
 
@@ -199,28 +253,34 @@ public:
     static void networkStateChanged(bool online);
 
     DECLARE_TRACE();
+
+    void layerTreeViewInitialized(WebLayerTreeView&, FrameView*);
+    void willCloseLayerTreeView(WebLayerTreeView&, FrameView*);
+
     void willBeDestroyed();
 
 private:
+    friend class ScopedPageSuspender;
+
+    explicit Page(PageClients&);
+
     void initGroup();
 
-    void setTimerAlignmentInterval(double);
-
-    void setNeedsLayoutInAllFrames();
-
     // SettingsDelegate overrides.
-    virtual void settingsChanged(SettingsDelegate::ChangeType) override;
+    void settingsChanged(SettingsDelegate::ChangeType) override;
 
-    RefPtrWillBeMember<PageAnimator> m_animator;
-    const OwnPtr<AutoscrollController> m_autoscrollController;
-    ChromeClient* m_chromeClient;
-    const OwnPtrWillBeMember<DragCaretController> m_dragCaretController;
-    const OwnPtrWillBeMember<DragController> m_dragController;
-    const OwnPtrWillBeMember<FocusController> m_focusController;
-    const OwnPtrWillBeMember<ContextMenuController> m_contextMenuController;
-    const OwnPtrWillBeMember<PointerLockController> m_pointerLockController;
-    OwnPtrWillBeMember<ScrollingCoordinator> m_scrollingCoordinator;
-    const OwnPtrWillBeMember<UndoStack> m_undoStack;
+    // ScopedPageSuspender helpers.
+    void setSuspended(bool);
+
+    Member<PageAnimator> m_animator;
+    const Member<AutoscrollController> m_autoscrollController;
+    Member<ChromeClient> m_chromeClient;
+    const Member<DragCaretController> m_dragCaretController;
+    const Member<DragController> m_dragController;
+    const Member<FocusController> m_focusController;
+    const Member<ContextMenuController> m_contextMenuController;
+    const Member<PointerLockController> m_pointerLockController;
+    Member<ScrollingCoordinator> m_scrollingCoordinator;
 
     // Typically, the main frame and Page should both be owned by the embedder,
     // which must call Page::willBeDestroyed() prior to destroying Page. This
@@ -234,42 +294,53 @@ private:
     // other, thus keeping each other alive. The call to willBeDestroyed()
     // breaks this cycle, so the frame is still properly destroyed once no
     // longer needed.
-    RawPtrWillBeMember<Frame> m_mainFrame;
+    Member<Frame> m_mainFrame;
 
     mutable RefPtr<PluginData> m_pluginData;
 
     EditorClient* const m_editorClient;
     SpellCheckerClient* const m_spellCheckerClient;
-    OwnPtrWillBeMember<ValidationMessageClient> m_validationMessageClient;
+    Member<ValidationMessageClient> m_validationMessageClient;
 
     UseCounter m_useCounter;
-    OriginsUsingFeatures m_originsUsingFeatures;
+    Deprecation m_deprecation;
+    HostsUsingFeatures m_hostsUsingFeatures;
 
     bool m_openedByDOM;
+    // Set to true when window.close() has been called and the Page will be
+    // destroyed. The browsing contexts in this page should no longer be
+    // discoverable via JS.
+    // TODO(dcheng): Try to remove |DOMWindow::m_windowIsClosing| in favor of
+    // this. However, this depends on resolving https://crbug.com/674641
+    bool m_isClosing;
 
     bool m_tabKeyCyclesThroughElements;
-    bool m_defersLoading;
+    bool m_suspended;
 
     float m_deviceScaleFactor;
-
-    double m_timerAlignmentInterval;
 
     PageVisibilityState m_visibilityState;
 
     bool m_isCursorVisible;
 
-#if ENABLE(ASSERT)
-    bool m_isPainting;
+#if DCHECK_IS_ON()
+    bool m_isPainting = false;
 #endif
 
-    WillBeHeapHashSet<RawPtrWillBeWeakMember<MultisamplingChangedObserver>> m_multisamplingChangedObservers;
+#ifdef TENCENT_FITSCREEN
+    int m_defaultMaxWidth = 360;
+#endif
 
-    // A pointer to all the interfaces provided to in-process Frames for this Page.
+    // A pointer to all the interfaces provided to in-process Frames for this
+    // Page.
     // FIXME: Most of the members of Page should move onto FrameHost.
-    OwnPtrWillBeMember<FrameHost> m_frameHost;
+    Member<FrameHost> m_frameHost;
+#if ENABLE_WML
+    std::unique_ptr<WMLPageState> m_wmlPageState;
+#endif
 };
 
-extern template class CORE_EXTERN_TEMPLATE_EXPORT WillBeHeapSupplement<Page>;
+extern template class CORE_EXTERN_TEMPLATE_EXPORT Supplement<Page>;
 
 } // namespace blink
 

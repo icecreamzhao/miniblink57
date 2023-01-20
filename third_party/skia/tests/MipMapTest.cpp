@@ -10,7 +10,6 @@
 #include "SkRandom.h"
 #include "Test.h"
 
-<<<<<<< HEAD
 static void make_bitmap(SkBitmap* bm, int width, int height)
 {
     bm->allocN32Pixels(width, height);
@@ -19,23 +18,10 @@ static void make_bitmap(SkBitmap* bm, int width, int height)
 
 DEF_TEST(MipMap, reporter)
 {
-=======
-static void make_bitmap(SkBitmap* bm, SkRandom& rand) {
-    // for now, Build needs a min size of 2, otherwise it will return NULL.
-    // should fix that to support 1 X N, where N > 1 to return non-null.
-    int w = 2 + rand.nextU() % 1000;
-    int h = 2 + rand.nextU() % 1000;
-    bm->allocN32Pixels(w, h);
-    bm->eraseColor(SK_ColorWHITE);
-}
-
-DEF_TEST(MipMap, reporter) {
->>>>>>> miniblink49
     SkBitmap bm;
     SkRandom rand;
 
     for (int i = 0; i < 500; ++i) {
-<<<<<<< HEAD
         int width = 1 + rand.nextU() % 1000;
         int height = 1 + rand.nextU() % 1000;
         make_bitmap(&bm, width, height);
@@ -44,13 +30,6 @@ DEF_TEST(MipMap, reporter) {
         REPORTER_ASSERT(reporter, mm->countLevels() == SkMipMap::ComputeLevelCount(width, height));
         REPORTER_ASSERT(reporter, !mm->extractLevel(SkSize::Make(SK_Scalar1, SK_Scalar1), nullptr));
         REPORTER_ASSERT(reporter, !mm->extractLevel(SkSize::Make(SK_Scalar1 * 2, SK_Scalar1 * 2), nullptr));
-=======
-        make_bitmap(&bm, rand);
-        SkAutoTUnref<SkMipMap> mm(SkMipMap::Build(bm, NULL));
-
-        REPORTER_ASSERT(reporter, !mm->extractLevel(SK_Scalar1, NULL));
-        REPORTER_ASSERT(reporter, !mm->extractLevel(SK_Scalar1 * 2, NULL));
->>>>>>> miniblink49
 
         SkMipMap::Level prevLevel;
         sk_bzero(&prevLevel, sizeof(prevLevel));
@@ -60,7 +39,6 @@ DEF_TEST(MipMap, reporter) {
             scale = scale * 2 / 3;
 
             SkMipMap::Level level;
-<<<<<<< HEAD
             if (mm->extractLevel(SkSize::Make(scale, scale), &level)) {
                 REPORTER_ASSERT(reporter, level.fPixmap.addr());
                 REPORTER_ASSERT(reporter, level.fPixmap.width() > 0);
@@ -70,24 +48,12 @@ DEF_TEST(MipMap, reporter) {
                 if (prevLevel.fPixmap.addr()) {
                     REPORTER_ASSERT(reporter, level.fPixmap.width() <= prevLevel.fPixmap.width());
                     REPORTER_ASSERT(reporter, level.fPixmap.height() <= prevLevel.fPixmap.height());
-=======
-            if (mm->extractLevel(scale, &level)) {
-                REPORTER_ASSERT(reporter, level.fPixels);
-                REPORTER_ASSERT(reporter, level.fWidth > 0);
-                REPORTER_ASSERT(reporter, level.fHeight > 0);
-                REPORTER_ASSERT(reporter, level.fRowBytes >= level.fWidth * 4);
-
-                if (prevLevel.fPixels) {
-                    REPORTER_ASSERT(reporter, level.fWidth <= prevLevel.fWidth);
-                    REPORTER_ASSERT(reporter, level.fHeight <= prevLevel.fHeight);
->>>>>>> miniblink49
                 }
                 prevLevel = level;
             }
         }
     }
 }
-<<<<<<< HEAD
 
 static void test_mipmap_generation(int width, int height, int expectedMipLevelCount,
     skiatest::Reporter* reporter)
@@ -240,5 +206,3 @@ DEF_TEST(MipMap_ComputeLevelSize, reporter)
         REPORTER_ASSERT(reporter, currentTest.fExpectedMipMapLevelSize == levelSize);
     }
 }
-=======
->>>>>>> miniblink49

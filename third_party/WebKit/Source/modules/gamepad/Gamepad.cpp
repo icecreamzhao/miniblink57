@@ -23,10 +23,6 @@
  * DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "modules/gamepad/Gamepad.h"
 
 namespace blink {
@@ -34,20 +30,11 @@ namespace blink {
 Gamepad::Gamepad()
     : m_index(0)
     , m_timestamp(0)
-<<<<<<< HEAD
     , m_displayId(0)
 {
 }
 
 Gamepad::~Gamepad() { }
-=======
-{
-}
-
-Gamepad::~Gamepad()
-{
-}
->>>>>>> miniblink49
 
 void Gamepad::setAxes(unsigned count, const double* data)
 {
@@ -66,7 +53,6 @@ void Gamepad::setButtons(unsigned count, const WebGamepadButton* data)
     for (unsigned i = 0; i < count; ++i) {
         m_buttons[i]->setValue(data[i].value);
         m_buttons[i]->setPressed(data[i].pressed);
-<<<<<<< HEAD
         m_buttons[i]->setTouched(data[i].touched || data[i].pressed || (data[i].value > 0.0f));
     }
 }
@@ -99,18 +85,13 @@ void Gamepad::setHand(const WebGamepadHand& hand)
         break;
     default:
         NOTREACHED();
-=======
->>>>>>> miniblink49
     }
 }
 
 DEFINE_TRACE(Gamepad)
 {
     visitor->trace(m_buttons);
-<<<<<<< HEAD
     visitor->trace(m_pose);
-=======
->>>>>>> miniblink49
 }
 
 } // namespace blink

@@ -23,16 +23,8 @@
 #define SVGParserUtilities_h
 
 #include "core/html/parser/HTMLParserIdioms.h"
-#include "core/svg/SVGTransform.h"
-#include "platform/text/ParserUtilities.h"
-#include "wtf/HashSet.h"
-
-typedef pair<unsigned, unsigned> UnicodeRange;
-typedef Vector<UnicodeRange> UnicodeRanges;
 
 namespace blink {
-
-class FloatPoint;
 
 enum WhitespaceMode {
     DisallowWhitespace = 0,
@@ -41,10 +33,15 @@ enum WhitespaceMode {
     AllowLeadingAndTrailingWhitespace = AllowLeadingWhitespace | AllowTrailingWhitespace
 };
 
-bool parseNumber(const LChar*& ptr, const LChar* end, float& number, WhitespaceMode = AllowLeadingAndTrailingWhitespace);
-bool parseNumber(const UChar*& ptr, const UChar* end, float& number, WhitespaceMode = AllowLeadingAndTrailingWhitespace);
+bool parseNumber(const LChar*& ptr,
+    const LChar* end,
+    float& number,
+    WhitespaceMode = AllowLeadingAndTrailingWhitespace);
+bool parseNumber(const UChar*& ptr,
+    const UChar* end,
+    float& number,
+    WhitespaceMode = AllowLeadingAndTrailingWhitespace);
 bool parseNumberOptionalNumber(const String& s, float& h, float& v);
-bool parseNumberOrPercentage(const String& s, float& number);
 bool parseArcFlag(const LChar*& ptr, const LChar* end, bool& flag);
 bool parseArcFlag(const UChar*& ptr, const UChar* end, bool& flag);
 
@@ -57,7 +54,9 @@ inline bool skipOptionalSVGSpaces(const CharType*& ptr, const CharType* end)
 }
 
 template <typename CharType>
-inline bool skipOptionalSVGSpacesOrDelimiter(const CharType*& ptr, const CharType* end, char delimiter = ',')
+inline bool skipOptionalSVGSpacesOrDelimiter(const CharType*& ptr,
+    const CharType* end,
+    char delimiter = ',')
 {
     if (ptr < end && !isHTMLSpace<CharType>(*ptr) && *ptr != delimiter)
         return false;
@@ -69,10 +68,6 @@ inline bool skipOptionalSVGSpacesOrDelimiter(const CharType*& ptr, const CharTyp
     }
     return ptr < end;
 }
-
-template<typename CharType>
-bool parseAndSkipTransformType(const CharType*& ptr, const CharType* end, SVGTransformType&);
-SVGTransformType parseTransformType(const String&);
 
 } // namespace blink
 

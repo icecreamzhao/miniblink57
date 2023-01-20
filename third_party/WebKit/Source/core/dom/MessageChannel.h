@@ -29,16 +29,16 @@
 
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "platform/heap/Handle.h"
-#include "wtf/RefPtr.h"
 
 namespace blink {
 
 class MessagePort;
 class ExecutionContext;
 
-class MessageChannel final : public GarbageCollectedFinalized<MessageChannel>, public ScriptWrappable {
-    DECLARE_EMPTY_DESTRUCTOR_WILL_BE_REMOVED(MessageChannel);
+class MessageChannel final : public GarbageCollected<MessageChannel>,
+                             public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     static MessageChannel* create(ExecutionContext* context)
     {
@@ -49,8 +49,6 @@ public:
     MessagePort* port2() const { return m_port2; }
 
     DECLARE_TRACE();
-
-    ~MessageChannel();
 
 private:
     explicit MessageChannel(ExecutionContext*);

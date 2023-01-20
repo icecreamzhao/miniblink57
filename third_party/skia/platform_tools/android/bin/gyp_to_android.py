@@ -195,12 +195,9 @@ def main(target_dir=None, require_sk_user_config=False, gyp_source_dir=None):
     makefile_writer.write_android_mk(target_dir=target_dir,
         common=common, deviations_from_common=deviations_from_common)
 
-<<<<<<< HEAD
     makefile_writer.write_static_deps_mk(target_dir=target_dir,
         common=common, deviations_from_common=deviations_from_common)
 
-=======
->>>>>>> miniblink49
   finally:
     shutil.rmtree(tmp_folder)
 

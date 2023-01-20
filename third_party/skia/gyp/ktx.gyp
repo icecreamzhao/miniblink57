@@ -13,10 +13,7 @@
     'include_dirs' : [
       '../third_party/ktx',
       '../include/gpu',
-<<<<<<< HEAD
       '../include/private',
-=======
->>>>>>> miniblink49
       '../src/core',
       '../src/gpu',
       '../src/utils',

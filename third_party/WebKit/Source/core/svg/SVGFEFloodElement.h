@@ -22,20 +22,21 @@
 #define SVGFEFloodElement_h
 
 #include "core/svg/SVGFilterPrimitiveStandardAttributes.h"
-#include "platform/graphics/filters/FEFlood.h"
 
 namespace blink {
 
 class SVGFEFloodElement final : public SVGFilterPrimitiveStandardAttributes {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     DECLARE_NODE_FACTORY(SVGFEFloodElement);
 
 private:
     explicit SVGFEFloodElement(Document&);
 
-    bool setFilterEffectAttribute(FilterEffect*, const QualifiedName& attrName) override;
-    PassRefPtrWillBeRawPtr<FilterEffect> build(SVGFilterBuilder*, Filter*) override;
+    bool setFilterEffectAttribute(FilterEffect*,
+        const QualifiedName& attrName) override;
+    FilterEffect* build(SVGFilterBuilder*, Filter*) override;
 };
 
 } // namespace blink

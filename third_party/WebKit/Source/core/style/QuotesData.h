@@ -32,9 +32,15 @@ namespace blink {
 class QuotesData : public RefCounted<QuotesData> {
 public:
     static PassRefPtr<QuotesData> create() { return adoptRef(new QuotesData()); }
-    static PassRefPtr<QuotesData> create(UChar open1, UChar close1, UChar open2, UChar close2);
+    static PassRefPtr<QuotesData> create(UChar open1,
+        UChar close1,
+        UChar open2,
+        UChar close2);
 
-    bool operator==(const QuotesData& o) const { return m_quotePairs == o.m_quotePairs; }
+    bool operator==(const QuotesData& o) const
+    {
+        return m_quotePairs == o.m_quotePairs;
+    }
     bool operator!=(const QuotesData& o) const { return !(*this == o); }
 
     void addPair(const std::pair<String, String> quotePair);

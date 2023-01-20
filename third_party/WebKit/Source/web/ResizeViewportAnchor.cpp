@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
 #include "web/ResizeViewportAnchor.h"
 
 #include "core/frame/FrameHost.h"
@@ -11,20 +10,10 @@
 #include "core/frame/VisualViewport.h"
 #include "core/page/Page.h"
 #include "platform/geometry/DoubleRect.h"
-=======
-#include "config.h"
-#include "web/ResizeViewportAnchor.h"
-
-#include "core/frame/FrameView.h"
-#include "core/frame/PinchViewport.h"
-#include "platform/geometry/DoubleRect.h"
-#include "platform/geometry/DoubleSize.h"
->>>>>>> miniblink49
 #include "platform/geometry/FloatSize.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 void ResizeViewportAnchor::resizeFrameView(IntSize size)
 {
     FrameView* frameView = rootFrameView();
@@ -68,17 +57,6 @@ FrameView* ResizeViewportAnchor::rootFrameView()
             return toLocalFrame(frame)->view();
     }
     return nullptr;
-=======
-ResizeViewportAnchor::ResizeViewportAnchor(FrameView& rootFrameView, PinchViewport& pinchViewport)
-    : ViewportAnchor(rootFrameView, pinchViewport)
-    , m_pinchViewportInDocument(rootFrameView.scrollableArea()->visibleContentRectDouble().location())
-{
-}
-
-ResizeViewportAnchor::~ResizeViewportAnchor()
-{
-    m_rootFrameView->scrollableArea()->setScrollPosition(m_pinchViewportInDocument, ProgrammaticScroll);
->>>>>>> miniblink49
 }
 
 } // namespace blink

@@ -31,7 +31,6 @@
 #ifndef WebSerializedScriptValue_h
 #define WebSerializedScriptValue_h
 
-<<<<<<< HEAD
 #include "public/platform/WebCommon.h"
 #include "public/platform/WebPrivatePtr.h"
 
@@ -39,14 +38,6 @@ namespace v8 {
 class Value;
 template <class T>
 class Local;
-=======
-#include "../platform/WebCommon.h"
-#include "../platform/WebPrivatePtr.h"
-
-namespace v8 {
-class Value;
-template <class T> class Local;
->>>>>>> miniblink49
 }
 
 namespace blink {
@@ -86,13 +77,8 @@ public:
     BLINK_EXPORT v8::Local<v8::Value> deserialize();
 
 #if BLINK_IMPLEMENTATION
-<<<<<<< HEAD
     WebSerializedScriptValue(WTF::PassRefPtr<SerializedScriptValue>);
     WebSerializedScriptValue& operator=(WTF::PassRefPtr<SerializedScriptValue>);
-=======
-    WebSerializedScriptValue(const WTF::PassRefPtr<SerializedScriptValue>&);
-    WebSerializedScriptValue& operator=(const WTF::PassRefPtr<SerializedScriptValue>&);
->>>>>>> miniblink49
     operator WTF::PassRefPtr<SerializedScriptValue>() const;
 #endif
 

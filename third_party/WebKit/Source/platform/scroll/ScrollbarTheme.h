@@ -30,7 +30,6 @@
 #include "platform/geometry/IntRect.h"
 #include "platform/graphics/paint/DisplayItem.h"
 #include "platform/scroll/ScrollTypes.h"
-<<<<<<< HEAD
 #include "platform/scroll/Scrollbar.h"
 #include "public/platform/WebScrollbarButtonsPlacement.h"
 
@@ -44,22 +43,10 @@ class PLATFORM_EXPORT ScrollbarTheme {
     WTF_MAKE_NONCOPYABLE(ScrollbarTheme);
     USING_FAST_MALLOC(ScrollbarTheme);
 
-=======
-
-namespace blink {
-
-class GraphicsContext;
-class PlatformMouseEvent;
-class ScrollbarThemeClient;
-
-class PLATFORM_EXPORT ScrollbarTheme {
-    WTF_MAKE_NONCOPYABLE(ScrollbarTheme); WTF_MAKE_FAST_ALLOCATED(ScrollbarTheme);
->>>>>>> miniblink49
 public:
     ScrollbarTheme() { }
     virtual ~ScrollbarTheme() { }
 
-<<<<<<< HEAD
     // If true, then scrollbars with this theme will be painted every time
     // Scrollbar::setNeedsPaintInvalidation is called. If false, then only parts
     // which are explicitly invalidated will be repainted.
@@ -193,86 +180,10 @@ public:
     {
         return std::numeric_limits<int>::max();
     }
-=======
-    virtual void updateEnabledState(ScrollbarThemeClient*) { }
-
-    virtual bool paint(ScrollbarThemeClient*, GraphicsContext*, const IntRect& damageRect);
-
-    virtual ScrollbarPart hitTest(ScrollbarThemeClient*, const IntPoint&);
-
-    virtual int scrollbarThickness(ScrollbarControlSize = RegularScrollbar) { return 0; }
-    virtual int scrollbarMargin() const { return 0; }
-
-    virtual ScrollbarButtonsPlacement buttonsPlacement() const { return ScrollbarButtonsSingle; }
-
-    virtual bool supportsControlTints() const { return false; }
-    virtual bool usesOverlayScrollbars() const { return false; }
-    virtual void updateScrollbarOverlayStyle(ScrollbarThemeClient*) { }
-
-    virtual bool invalidateOnMouseEnterExit() { return false; }
-
-    void invalidateParts(ScrollbarThemeClient* scrollbar, ScrollbarControlPartMask mask)
-    {
-        if (mask & BackButtonStartPart)
-            invalidatePart(scrollbar, BackButtonStartPart);
-        if (mask & ForwardButtonStartPart)
-            invalidatePart(scrollbar, ForwardButtonStartPart);
-        if (mask & BackTrackPart)
-            invalidatePart(scrollbar, BackTrackPart);
-        if (mask & ThumbPart)
-            invalidatePart(scrollbar, ThumbPart);
-        if (mask & ForwardTrackPart)
-            invalidatePart(scrollbar, ForwardTrackPart);
-        if (mask & BackButtonEndPart)
-            invalidatePart(scrollbar, BackButtonEndPart);
-        if (mask & ForwardButtonEndPart)
-            invalidatePart(scrollbar, ForwardButtonEndPart);
-    }
-
-    virtual void invalidatePart(ScrollbarThemeClient*, ScrollbarPart);
-
-    virtual void paintScrollCorner(GraphicsContext*, const DisplayItemClientWrapper&, const IntRect& cornerRect);
-    virtual void paintTickmarks(GraphicsContext*, ScrollbarThemeClient*, const IntRect&) { }
-
-    virtual bool shouldCenterOnThumb(ScrollbarThemeClient*, const PlatformMouseEvent&);
-    virtual bool shouldSnapBackToDragOrigin(ScrollbarThemeClient*, const PlatformMouseEvent&);
-    virtual bool shouldDragDocumentInsteadOfThumb(ScrollbarThemeClient*, const PlatformMouseEvent&) { return false; }
-
-    // The position of the thumb relative to the track.
-    virtual int thumbPosition(ScrollbarThemeClient*);
-    // The length of the thumb along the axis of the scrollbar.
-    virtual int thumbLength(ScrollbarThemeClient*);
-    // The position of the track relative to the scrollbar.
-    virtual int trackPosition(ScrollbarThemeClient*);
-    // The length of the track along the axis of the scrollbar.
-    virtual int trackLength(ScrollbarThemeClient*);
-
-    virtual bool hasButtons(ScrollbarThemeClient*) = 0;
-    virtual bool hasThumb(ScrollbarThemeClient*) = 0;
-
-    virtual IntRect backButtonRect(ScrollbarThemeClient*, ScrollbarPart, bool painting = false) = 0;
-    virtual IntRect forwardButtonRect(ScrollbarThemeClient*, ScrollbarPart, bool painting = false) = 0;
-    virtual IntRect trackRect(ScrollbarThemeClient*, bool painting = false) = 0;
-    virtual IntRect thumbRect(ScrollbarThemeClient*);
-    virtual int thumbThickness(ScrollbarThemeClient*);
-
-    virtual int minimumThumbLength(ScrollbarThemeClient*);
-
-    virtual void splitTrack(ScrollbarThemeClient*, const IntRect& track, IntRect& startTrack, IntRect& thumb, IntRect& endTrack);
-
-    virtual void paintScrollbarBackground(GraphicsContext*, ScrollbarThemeClient*) { }
-    virtual void paintTrackBackground(GraphicsContext*, ScrollbarThemeClient*, const IntRect&) { }
-    virtual void paintTrackPiece(GraphicsContext*, ScrollbarThemeClient*, const IntRect&, ScrollbarPart) { }
-    virtual void paintButton(GraphicsContext*, ScrollbarThemeClient*, const IntRect&, ScrollbarPart) { }
-    virtual void paintThumb(GraphicsContext*, ScrollbarThemeClient*, const IntRect&) { }
-
-    virtual int maxOverlapBetweenPages() { return std::numeric_limits<int>::max(); }
->>>>>>> miniblink49
 
     virtual double initialAutoscrollTimerDelay() { return 0.25; }
     virtual double autoscrollTimerDelay() { return 0.05; }
 
-<<<<<<< HEAD
     virtual IntRect constrainTrackRectToTrackPieces(const ScrollbarThemeClient&,
         const IntRect& rect)
     {
@@ -285,41 +196,20 @@ public:
     virtual bool isMockTheme() const { return false; }
 
     static ScrollbarTheme& theme();
-=======
-    virtual IntRect constrainTrackRectToTrackPieces(ScrollbarThemeClient*, const IntRect& rect) { return rect; }
-
-    virtual void registerScrollbar(ScrollbarThemeClient*) { }
-    virtual void unregisterScrollbar(ScrollbarThemeClient*) { }
-
-    virtual bool isMockTheme() const { return false; }
-
-    static ScrollbarTheme* theme();
->>>>>>> miniblink49
 
     static void setMockScrollbarsEnabled(bool flag);
     static bool mockScrollbarsEnabled();
 
 protected:
-<<<<<<< HEAD
     virtual int tickmarkBorderWidth() { return 0; }
-=======
->>>>>>> miniblink49
     static DisplayItem::Type buttonPartToDisplayItemType(ScrollbarPart);
     static DisplayItem::Type trackPiecePartToDisplayItemType(ScrollbarPart);
 
 private:
-<<<<<<< HEAD
     static ScrollbarTheme&
     nativeTheme(); // Must be implemented to return the correct theme subclass.
     static bool gMockScrollbarsEnabled;
 };
 
 } // namespace blink
-=======
-    static ScrollbarTheme* nativeTheme(); // Must be implemented to return the correct theme subclass.
-    static bool gMockScrollbarsEnabled;
-};
-
-}
->>>>>>> miniblink49
 #endif

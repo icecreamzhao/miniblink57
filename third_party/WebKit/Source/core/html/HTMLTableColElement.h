@@ -32,6 +32,7 @@ namespace blink {
 
 class HTMLTableColElement final : public HTMLTablePartElement {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     DECLARE_ELEMENT_FACTORY_WITH_TAGNAME(HTMLTableColElement);
 
@@ -43,9 +44,11 @@ public:
 private:
     HTMLTableColElement(const QualifiedName& tagName, Document&);
 
-    void parseAttribute(const QualifiedName&, const AtomicString&) override;
+    void parseAttribute(const AttributeModificationParams&) override;
     bool isPresentationAttribute(const QualifiedName&) const override;
-    void collectStyleForPresentationAttribute(const QualifiedName&, const AtomicString&, MutableStylePropertySet*) override;
+    void collectStyleForPresentationAttribute(const QualifiedName&,
+        const AtomicString&,
+        MutableStylePropertySet*) override;
     const StylePropertySet* additionalPresentationAttributeStyle() override;
 
     unsigned m_span;

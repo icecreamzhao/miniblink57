@@ -25,10 +25,6 @@
  *
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "modules/webdatabase/DatabaseContext.h"
 
 #include "core/dom/Document.h"
@@ -54,13 +50,8 @@ namespace blink {
 //
 // At Birth:
 // ========
-<<<<<<< HEAD
 // We create a DatabaseContext only when there is a need i.e. the script tries
 // to open a Database via DatabaseManager::openDatabase().
-=======
-// We create a DatabaseContext only when there is a need i.e. the script tries to
-// open a Database via DatabaseManager::openDatabase().
->>>>>>> miniblink49
 //
 // The DatabaseContext constructor will register itself to DatabaseManager. This
 // lets DatabaseContext keep itself alive until it is unregisterd in
@@ -76,24 +67,17 @@ namespace blink {
 // ===========
 // During shutdown, the DatabaseContext needs to:
 // 1. "outlive" the ExecutionContext.
-<<<<<<< HEAD
 //    - This is needed because the DatabaseContext needs to remove itself from
 //    the
 //      ExecutionContext's ContextLifecycleObserver list and
 //      ContextLifecycleObserver
 //      list. This removal needs to be executed on the script's thread. Hence,
 //      we
-=======
-//    - This is needed because the DatabaseContext needs to remove itself from the
-//      ExecutionContext's ActiveDOMObject list and ContextLifecycleObserver
-//      list. This removal needs to be executed on the script's thread. Hence, we
->>>>>>> miniblink49
 //      rely on the ExecutionContext's shutdown process to call
 //      stop() and contextDestroyed() to give us a chance to clean these up from
 //      the script thread.
 //
 // 2. "outlive" the Databases.
-<<<<<<< HEAD
 //    - This is because they may make use of the DatabaseContext to execute a
 //      close task and shutdown in an orderly manner. When the Databases are
 //      destructed, they will release the DatabaseContext reference from the
@@ -102,15 +86,6 @@ namespace blink {
 // During shutdown, the ExecutionContext is shutting down on the script thread
 // while the Databases are shutting down on the DatabaseThread. Hence, there can
 // be a race condition as to whether the ExecutionContext or the Databases
-=======
-//    - This is because they may make use of the DatabaseContext to execute a close
-//      task and shutdown in an orderly manner. When the Databases are destructed,
-//      they will release the DatabaseContext reference from the DatabaseThread.
-//
-// During shutdown, the ExecutionContext is shutting down on the script thread
-// while the Databases are shutting down on the DatabaseThread. Hence, there can be
-// a race condition as to whether the ExecutionContext or the Databases
->>>>>>> miniblink49
 // destruct first.
 //
 // The Members in the Databases and DatabaseManager will ensure that the
@@ -125,20 +100,11 @@ DatabaseContext* DatabaseContext::create(ExecutionContext* context)
 }
 
 DatabaseContext::DatabaseContext(ExecutionContext* context)
-<<<<<<< HEAD
     : ContextLifecycleObserver(context)
     , m_hasOpenDatabases(false)
     , m_hasRequestedTermination(false)
 {
     DCHECK(isMainThread());
-=======
-    : ActiveDOMObject(context)
-    , m_hasOpenDatabases(false)
-    , m_hasRequestedTermination(false)
-{
-    // ActiveDOMObject expects this to be called to set internal flags.
-    suspendIfNeeded();
->>>>>>> miniblink49
 
     // For debug accounting only. We must do this before we register the
     // instance. The assertions assume this.
@@ -155,11 +121,7 @@ DatabaseContext::~DatabaseContext()
 DEFINE_TRACE(DatabaseContext)
 {
     visitor->trace(m_databaseThread);
-<<<<<<< HEAD
     ContextLifecycleObserver::trace(visitor);
-=======
-    ActiveDOMObject::trace(visitor);
->>>>>>> miniblink49
 }
 
 // This is called if the associated ExecutionContext is destructing while
@@ -167,26 +129,10 @@ DEFINE_TRACE(DatabaseContext)
 // To do this, we stop the database and let everything shutdown naturally
 // because the database closing process may still make use of this context.
 // It is not safe to just delete the context here.
-<<<<<<< HEAD
 void DatabaseContext::contextDestroyed(ExecutionContext*)
 {
     stopDatabases();
     DatabaseManager::manager().unregisterDatabaseContext(this);
-=======
-void DatabaseContext::contextDestroyed()
-{
-    stopDatabases();
-    DatabaseManager::manager().unregisterDatabaseContext(this);
-    ActiveDOMObject::contextDestroyed();
-}
-
-// stop() is from stopActiveDOMObjects() which indicates that the owner
-// LocalFrame is shutting down. Initiate the orderly shutdown by stopping the
-// associated databases.
-void DatabaseContext::stop()
-{
-    stopDatabases();
->>>>>>> miniblink49
 }
 
 DatabaseContext* DatabaseContext::backend()
@@ -203,14 +149,9 @@ DatabaseThread* DatabaseContext::databaseThread()
         // after we've requested termination.
         ASSERT(!m_hasRequestedTermination);
 
-<<<<<<< HEAD
         // Create the database thread on first request - but not if at least one
         // database was already opened, because in that case we already had a
         // database thread and terminated it and should not create another.
-=======
-        // Create the database thread on first request - but not if at least one database was already opened,
-        // because in that case we already had a database thread and terminated it and should not create another.
->>>>>>> miniblink49
         m_databaseThread = DatabaseThread::create();
         m_databaseThread->start();
     }
@@ -244,30 +185,17 @@ void DatabaseContext::stopDatabases()
 
 bool DatabaseContext::allowDatabaseAccess() const
 {
-<<<<<<< HEAD
     return toDocument(getExecutionContext())->isActive();
 }
 
 SecurityOrigin* DatabaseContext::getSecurityOrigin() const
 {
     return getExecutionContext()->getSecurityOrigin();
-=======
-    return toDocument(executionContext())->isActive();
-}
-
-SecurityOrigin* DatabaseContext::securityOrigin() const
-{
-    return executionContext()->securityOrigin();
->>>>>>> miniblink49
 }
 
 bool DatabaseContext::isContextThread() const
 {
-<<<<<<< HEAD
     return getExecutionContext()->isContextThread();
-=======
-    return executionContext()->isContextThread();
->>>>>>> miniblink49
 }
 
 } // namespace blink

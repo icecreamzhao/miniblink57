@@ -10,7 +10,6 @@
 #include "SkTypeface.h"
 #include "Test.h"
 
-<<<<<<< HEAD
 static bool is_use_nonlinear_metrics(const SkPaint& paint)
 {
     return !paint.isSubpixelText() && !paint.isLinearText();
@@ -29,22 +28,6 @@ static bool is_enable_bytecode_hints(const SkPaint& paint)
 static void test_cachedfont(skiatest::Reporter* reporter, const SkPaint& paint)
 {
     sk_sp<SkFont> font(SkFont::Testing_CreateFromPaint(paint));
-=======
-static bool is_use_nonlinear_metrics(const SkPaint& paint) {
-    return !paint.isSubpixelText() && !paint.isLinearText();
-}
-
-static bool is_enable_auto_hints(const SkPaint& paint) {
-    return paint.isAutohinted();
-}
-
-static bool is_enable_bytecode_hints(const SkPaint& paint) {
-    return paint.getHinting() >= SkPaint::kFull_Hinting;
-}
-
-static void test_cachedfont(skiatest::Reporter* reporter, const SkPaint& paint) {
-    SkAutoTUnref<SkFont> font(SkFont::Testing_CreateFromPaint(paint));
->>>>>>> miniblink49
 
     // Currently SkFont resolves null into the default, so only test if paint's is not null
     if (paint.getTypeface()) {
@@ -62,7 +45,6 @@ static void test_cachedfont(skiatest::Reporter* reporter, const SkPaint& paint) 
     REPORTER_ASSERT(reporter, font->isEnableByteCodeHints() == is_enable_bytecode_hints(paint));
 }
 
-<<<<<<< HEAD
 static void test_cachedfont(skiatest::Reporter* reporter)
 {
     static const char* const faces[] = {
@@ -101,55 +83,15 @@ static void test_cachedfont(skiatest::Reporter* reporter)
         // these two exercise obliquing (skew)
         { SK_Scalar1, -SK_Scalar1 / 4 },
         { SK_Scalar1 / 2, -SK_Scalar1 / 4 },
-=======
-static void test_cachedfont(skiatest::Reporter* reporter) {
-    static const char* const faces[] = {
-        NULL,   // default font
-        "Arial", "Times", "Times New Roman", "Helvetica", "Courier",
-        "Courier New", "Verdana", "monospace",
-    };
-
-    static const struct {
-        SkPaint::Hinting    hinting;
-        unsigned            flags;
-    } settings[] = {
-        { SkPaint::kNo_Hinting,     0                               },
-        { SkPaint::kNo_Hinting,     SkPaint::kLinearText_Flag       },
-        { SkPaint::kNo_Hinting,     SkPaint::kSubpixelText_Flag     },
-        { SkPaint::kSlight_Hinting, 0                               },
-        { SkPaint::kSlight_Hinting, SkPaint::kLinearText_Flag       },
-        { SkPaint::kSlight_Hinting, SkPaint::kSubpixelText_Flag     },
-        { SkPaint::kNormal_Hinting, 0                               },
-        { SkPaint::kNormal_Hinting, SkPaint::kLinearText_Flag       },
-        { SkPaint::kNormal_Hinting, SkPaint::kSubpixelText_Flag     },
-    };
-
-    static const struct {
-        SkScalar    fScaleX;
-        SkScalar    fSkewX;
-    } gScaleRec[] = {
-        { SK_Scalar1, 0 },
-        { SK_Scalar1/2, 0 },
-        // these two exercise obliquing (skew)
-        { SK_Scalar1, -SK_Scalar1/4 },
-        { SK_Scalar1/2, -SK_Scalar1/4 },
->>>>>>> miniblink49
     };
 
     SkPaint paint;
     char txt[] = "long.text.with.lots.of.dots.";
 
     for (size_t i = 0; i < SK_ARRAY_COUNT(faces); i++) {
-<<<<<<< HEAD
         paint.setTypeface(SkTypeface::MakeFromName(faces[i], SkFontStyle()));
 
         for (size_t j = 0; j < SK_ARRAY_COUNT(settings); j++) {
-=======
-        SkAutoTUnref<SkTypeface> face(SkTypeface::CreateFromName(faces[i], SkTypeface::kNormal));
-        paint.setTypeface(face);
-
-        for (size_t j = 0; j  < SK_ARRAY_COUNT(settings); j++) {
->>>>>>> miniblink49
             paint.setHinting(settings[j].hinting);
             paint.setLinearText((settings[j].flags & SkPaint::kLinearText_Flag) != 0);
             paint.setSubpixelText((settings[j].flags & SkPaint::kSubpixelText_Flag) != 0);
@@ -171,30 +113,18 @@ static void test_cachedfont(skiatest::Reporter* reporter) {
 
                 REPORTER_ASSERT(reporter, width1 == width2);
 
-<<<<<<< HEAD
                 sk_sp<SkFont> font(SkFont::Testing_CreateFromPaint(paint));
                 SkScalar font_width1 = font->measureText(txt, strlen(txt), kUTF8_SkTextEncoding);
                 // measureText not yet implemented...
                 REPORTER_ASSERT(reporter, font_width1 == -1);
                 //                REPORTER_ASSERT(reporter, width1 == font_width1);
-=======
-                SkAutoTUnref<SkFont> font(SkFont::Testing_CreateFromPaint(paint));
-                SkScalar font_width1 = font->measureText(txt, strlen(txt), kUTF8_SkTextEncoding);
-                // measureText not yet implemented...
-                REPORTER_ASSERT(reporter, font_width1 == -1);
-//                REPORTER_ASSERT(reporter, width1 == font_width1);
->>>>>>> miniblink49
             }
         }
     }
 }
 
-<<<<<<< HEAD
 DEF_TEST(FontObj, reporter)
 {
-=======
-DEF_TEST(FontObj, reporter) {
->>>>>>> miniblink49
     test_cachedfont(reporter);
 }
 

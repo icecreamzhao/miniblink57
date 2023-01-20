@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -9,10 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #include "SkTagList.h"
 
 SkTagList::~SkTagList()
@@ -23,12 +15,7 @@ SkTagList* SkTagList::Find(SkTagList* rec, U8CPU tag)
 {
     SkASSERT(tag < kSkTagListCount);
 
-<<<<<<< HEAD
     while (rec != nullptr) {
-=======
-    while (rec != NULL)
-    {
->>>>>>> miniblink49
         if (rec->fTag == tag)
             break;
         rec = rec->fNext;
@@ -41,23 +28,12 @@ void SkTagList::DeleteTag(SkTagList** head, U8CPU tag)
     SkASSERT(tag < kSkTagListCount);
 
     SkTagList* rec = *head;
-<<<<<<< HEAD
     SkTagList* prev = nullptr;
 
     while (rec != nullptr) {
         SkTagList* next = rec->fNext;
 
         if (rec->fTag == tag) {
-=======
-    SkTagList* prev = NULL;
-
-    while (rec != NULL)
-    {
-        SkTagList* next = rec->fNext;
-
-        if (rec->fTag == tag)
-        {
->>>>>>> miniblink49
             if (prev)
                 prev->fNext = next;
             else
@@ -72,12 +48,7 @@ void SkTagList::DeleteTag(SkTagList** head, U8CPU tag)
 
 void SkTagList::DeleteAll(SkTagList* rec)
 {
-<<<<<<< HEAD
     while (rec) {
-=======
-    while (rec)
-    {
->>>>>>> miniblink49
         SkTagList* next = rec->fNext;
         delete rec;
         rec = next;

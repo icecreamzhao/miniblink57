@@ -2,10 +2,12 @@
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
  *           (C) 2004-2005 Allan Sandfeld Jensen (kde@carewolf.com)
  * Copyright (C) 2006, 2007 Nicholas Shanks (webkit@nickshanks.com)
- * Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc. All rights reserved.
+ * Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc. All rights
+ * reserved.
  * Copyright (C) 2007 Alexey Proskuryakov <ap@webkit.org>
  * Copyright (C) 2007, 2008 Eric Seidel <eric@webkit.org>
- * Copyright (C) 2008, 2009 Torch Mobile Inc. All rights reserved. (http://www.torchmobile.com/)
+ * Copyright (C) 2008, 2009 Torch Mobile Inc. All rights reserved.
+ * (http://www.torchmobile.com/)
  * Copyright (c) 2011, Code Aurora Forum. All rights reserved.
  * Copyright (C) Research In Motion Limited 2011. All rights reserved.
  * Copyright (C) 2012 Google Inc. All rights reserved.
@@ -38,22 +40,21 @@ namespace blink {
 
 class Document;
 
-class VisitedLinkState : public NoBaseWillBeGarbageCollectedFinalized<VisitedLinkState> {
-    WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(VisitedLinkState);
+class VisitedLinkState : public GarbageCollectedFinalized<VisitedLinkState> {
 public:
-    static PassOwnPtrWillBeRawPtr<VisitedLinkState> create(const Document& document)
+    static VisitedLinkState* create(const Document& document)
     {
-        return adoptPtrWillBeNoop(new VisitedLinkState(document));
+        return new VisitedLinkState(document);
     }
 
-    void invalidateStyleForAllLinks();
+    void invalidateStyleForAllLinks(bool invalidateVisitedLinkHashes);
     void invalidateStyleForLink(LinkHash);
 
     EInsideLink determineLinkState(const Element& element)
     {
         if (element.isLink())
             return determineLinkStateSlowCase(element);
-        return NotInsideLink;
+        return EInsideLink::kNotInsideLink;
     }
 
     DECLARE_TRACE();
@@ -64,11 +65,10 @@ private:
 
     EInsideLink determineLinkStateSlowCase(const Element&);
 
-    RawPtrWillBeMember<const Document> m_document;
+    Member<const Document> m_document;
     HashSet<LinkHash, LinkHashHash> m_linksCheckedForVisitedState;
 };
 
-}
+} // namespace blink
 
 #endif
-

@@ -30,10 +30,6 @@
 
 [
     NoInterfaceObject,
-<<<<<<< HEAD
-=======
-    GarbageCollected,
->>>>>>> miniblink49
 ] interface DirectoryReader {
     void readEntries(EntriesCallback successCallback, optional ErrorCallback errorCallback);
 };

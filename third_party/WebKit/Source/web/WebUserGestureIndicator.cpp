@@ -28,18 +28,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "public/web/WebUserGestureIndicator.h"
 
 #include "platform/UserGestureIndicator.h"
 #include "public/web/WebUserGestureToken.h"
-<<<<<<< HEAD
 #include "web/WebLocalFrameImpl.h"
-=======
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -48,7 +41,6 @@ bool WebUserGestureIndicator::isProcessingUserGesture()
     return UserGestureIndicator::processingUserGesture();
 }
 
-<<<<<<< HEAD
 bool WebUserGestureIndicator::isProcessingUserGestureThreadSafe()
 {
     return UserGestureIndicator::processingUserGestureThreadSafe();
@@ -66,20 +58,11 @@ bool WebUserGestureIndicator::processedUserGestureSinceLoad(
     WebLocalFrame* frame)
 {
     return toWebLocalFrameImpl(frame)->frame()->hasReceivedUserGesture();
-=======
-bool WebUserGestureIndicator::consumeUserGesture()
-{
-    return UserGestureIndicator::consumeUserGesture();
->>>>>>> miniblink49
 }
 
 WebUserGestureToken WebUserGestureIndicator::currentUserGestureToken()
 {
-<<<<<<< HEAD
     return WebUserGestureToken(UserGestureIndicator::currentTokenThreadSafe());
-=======
-    return WebUserGestureToken(UserGestureIndicator::currentToken());
->>>>>>> miniblink49
 }
 
 } // namespace blink

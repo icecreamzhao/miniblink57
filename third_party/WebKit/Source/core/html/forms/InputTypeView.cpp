@@ -2,7 +2,8 @@
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
  *           (C) 1999 Antti Koivisto (koivisto@kde.org)
  *           (C) 2001 Dirk Mueller (mueller@kde.org)
- * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc. All rights reserved.
+ * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Apple Inc. All
+ * rights reserved.
  *           (C) 2006 Alexey Proskuryakov (ap@nypop.com)
  * Copyright (C) 2007 Samuel Weinig (sam@webkit.org)
  * Copyright (C) 2009, 2010, 2011, 2012 Google Inc. All rights reserved.
@@ -25,24 +26,18 @@
  *
  */
 
-#include "config.h"
 #include "core/html/forms/InputTypeView.h"
 
 #include "core/dom/shadow/ShadowRoot.h"
+#include "core/events/KeyboardEvent.h"
 #include "core/html/HTMLFormElement.h"
 #include "core/html/HTMLInputElement.h"
+#include "core/html/forms/FormController.h"
 #include "core/layout/LayoutObject.h"
 
 namespace blink {
 
-PassRefPtrWillBeRawPtr<InputTypeView> InputTypeView::create(HTMLInputElement& input)
-{
-    return adoptRefWillBeNoop(new InputTypeView(input));
-}
-
-InputTypeView::~InputTypeView()
-{
-}
+InputTypeView::~InputTypeView() { }
 
 DEFINE_TRACE(InputTypeView)
 {
@@ -55,56 +50,60 @@ bool InputTypeView::sizeShouldIncludeDecoration(int, int& preferredSize) const
     return false;
 }
 
-void InputTypeView::handleClickEvent(MouseEvent*)
+void InputTypeView::handleClickEvent(MouseEvent*) { }
+
+void InputTypeView::handleMouseDownEvent(MouseEvent*) { }
+
+void InputTypeView::handleKeydownEvent(KeyboardEvent*) { }
+
+void InputTypeView::handleKeypressEvent(KeyboardEvent*) { }
+
+void InputTypeView::handleKeyupEvent(KeyboardEvent*) { }
+
+void InputTypeView::handleBeforeTextInsertedEvent(BeforeTextInsertedEvent*) { }
+
+void InputTypeView::handleDOMActivateEvent(Event*) { }
+
+void InputTypeView::forwardEvent(Event*) { }
+
+void InputTypeView::dispatchSimulatedClickIfActive(KeyboardEvent* event) const
 {
+    if (element().isActive())
+        element().dispatchSimulatedClick(event);
+    event->setDefaultHandled();
 }
 
-void InputTypeView::handleMouseDownEvent(MouseEvent*)
+void InputTypeView::accessKeyAction(bool)
 {
-}
-
-void InputTypeView::handleKeydownEvent(KeyboardEvent*)
-{
-}
-
-void InputTypeView::handleKeypressEvent(KeyboardEvent*)
-{
-}
-
-void InputTypeView::handleKeyupEvent(KeyboardEvent*)
-{
-}
-
-void InputTypeView::handleBeforeTextInsertedEvent(BeforeTextInsertedEvent*)
-{
-}
-
-void InputTypeView::handleTouchEvent(TouchEvent*)
-{
-}
-
-void InputTypeView::forwardEvent(Event*)
-{
+    element().focus(
+        FocusParams(SelectionBehaviorOnFocus::Reset, WebFocusTypeNone, nullptr));
 }
 
 bool InputTypeView::shouldSubmitImplicitly(Event* event)
 {
-    return false;
+    return event->isKeyboardEvent() && event->type() == EventTypeNames::keypress && toKeyboardEvent(event)->charCode() == '\r';
 }
 
-PassRefPtrWillBeRawPtr<HTMLFormElement> InputTypeView::formForSubmission() const
+HTMLFormElement* InputTypeView::formForSubmission() const
 {
     return element().form();
 }
 
-LayoutObject* InputTypeView::createLayoutObject(const ComputedStyle& style) const
+LayoutObject* InputTypeView::createLayoutObject(
+    const ComputedStyle& style) const
 {
     return LayoutObject::createObject(&element(), style);
 }
 
-PassRefPtr<ComputedStyle> InputTypeView::customStyleForLayoutObject(PassRefPtr<ComputedStyle> originalStyle)
+PassRefPtr<ComputedStyle> InputTypeView::customStyleForLayoutObject(
+    PassRefPtr<ComputedStyle> originalStyle)
 {
     return originalStyle;
+}
+
+TextDirection InputTypeView::computedTextDirection()
+{
+    return element().ensureComputedStyle()->direction();
 }
 
 void InputTypeView::blur()
@@ -114,32 +113,20 @@ void InputTypeView::blur()
 
 bool InputTypeView::hasCustomFocusLogic() const
 {
-    return false;
+    return true;
 }
 
-void InputTypeView::handleFocusEvent(Element*, WebFocusType)
-{
-}
+void InputTypeView::handleFocusEvent(Element*, WebFocusType) { }
 
-void InputTypeView::handleBlurEvent()
-{
-}
+void InputTypeView::handleBlurEvent() { }
 
-void InputTypeView::handleFocusInEvent(Element*, WebFocusType)
-{
-}
+void InputTypeView::handleFocusInEvent(Element*, WebFocusType) { }
 
-void InputTypeView::startResourceLoading()
-{
-}
+void InputTypeView::startResourceLoading() { }
 
-void InputTypeView::closePopupView()
-{
-}
+void InputTypeView::closePopupView() { }
 
-void InputTypeView::createShadowSubtree()
-{
-}
+void InputTypeView::createShadowSubtree() { }
 
 void InputTypeView::destroyShadowSubtree()
 {
@@ -147,89 +134,75 @@ void InputTypeView::destroyShadowSubtree()
         root->removeChildren();
 }
 
-void InputTypeView::altAttributeChanged()
-{
-}
+void InputTypeView::altAttributeChanged() { }
 
-void InputTypeView::srcAttributeChanged()
-{
-}
+void InputTypeView::srcAttributeChanged() { }
 
-void InputTypeView::minOrMaxAttributeChanged()
-{
-}
+void InputTypeView::minOrMaxAttributeChanged() { }
 
-void InputTypeView::stepAttributeChanged()
-{
-}
+void InputTypeView::stepAttributeChanged() { }
 
-PassOwnPtrWillBeRawPtr<ClickHandlingState> InputTypeView::willDispatchClick()
+ClickHandlingState* InputTypeView::willDispatchClick()
 {
     return nullptr;
 }
 
-void InputTypeView::didDispatchClick(Event*, const ClickHandlingState&)
-{
-}
+void InputTypeView::didDispatchClick(Event*, const ClickHandlingState&) { }
 
-void InputTypeView::updateView()
-{
-}
+void InputTypeView::updateView() { }
 
-void InputTypeView::attributeChanged()
-{
-}
+void InputTypeView::attributeChanged() { }
 
-void InputTypeView::multipleAttributeChanged()
-{
-}
+void InputTypeView::multipleAttributeChanged() { }
 
-void InputTypeView::disabledAttributeChanged()
-{
-}
+void InputTypeView::disabledAttributeChanged() { }
 
-void InputTypeView::readonlyAttributeChanged()
-{
-}
+void InputTypeView::readonlyAttributeChanged() { }
 
-void InputTypeView::requiredAttributeChanged()
-{
-}
+void InputTypeView::requiredAttributeChanged() { }
 
-void InputTypeView::valueAttributeChanged()
-{
-}
+void InputTypeView::valueAttributeChanged() { }
+
+void InputTypeView::didSetValue(const String&, bool) { }
 
 void InputTypeView::subtreeHasChanged()
 {
-    ASSERT_NOT_REACHED();
+    NOTREACHED();
 }
 
-bool InputTypeView::hasTouchEventHandler() const
-{
-    return false;
-}
+void InputTypeView::listAttributeTargetChanged() { }
 
-void InputTypeView::listAttributeTargetChanged()
-{
-}
+void InputTypeView::updateClearButtonVisibility() { }
 
-void InputTypeView::updateClearButtonVisibility()
-{
-}
-
-void InputTypeView::updatePlaceholderText()
-{
-}
+void InputTypeView::updatePlaceholderText() { }
 
 AXObject* InputTypeView::popupRootAXObject()
 {
     return nullptr;
 }
 
+FormControlState InputTypeView::saveFormControlState() const
+{
+    String currentValue = element().value();
+    if (currentValue == element().defaultValue())
+        return FormControlState();
+    return FormControlState(currentValue);
+}
+
+void InputTypeView::restoreFormControlState(const FormControlState& state)
+{
+    element().setValue(state[0]);
+}
+
+bool InputTypeView::hasBadInput() const
+{
+    return false;
+}
+
 DEFINE_TRACE(ClickHandlingState)
 {
     visitor->trace(checkedRadioButton);
+    EventDispatchHandlingState::trace(visitor);
 }
 
 } // namespace blink

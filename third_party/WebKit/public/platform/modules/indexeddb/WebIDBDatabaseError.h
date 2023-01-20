@@ -38,32 +38,20 @@ class WebIDBDatabaseError {
 public:
     explicit WebIDBDatabaseError(unsigned short code)
         : m_code(code)
-<<<<<<< HEAD
     {
     }
-=======
-    { }
->>>>>>> miniblink49
 
     WebIDBDatabaseError(unsigned short code, const WebString& message)
         : m_code(code)
         , m_message(message)
-<<<<<<< HEAD
     {
     }
-=======
-    { }
->>>>>>> miniblink49
 
     WebIDBDatabaseError(const WebIDBDatabaseError& error)
         : m_code(error.m_code)
         , m_message(error.m_message)
-<<<<<<< HEAD
     {
     }
-=======
-    { }
->>>>>>> miniblink49
 
     ~WebIDBDatabaseError() { }
 

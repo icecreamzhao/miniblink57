@@ -17,25 +17,15 @@ struct lineCubic {
 };
 
 static lineCubic failLineCubicTests[] = {
-<<<<<<< HEAD
     { { { { 37.5273438, -1.44140625 }, { 37.8736992, -1.69921875 }, { 38.1640625, -2.140625 },
           { 38.3984375, -2.765625 } } },
         { { { 40.625, -5.7890625 }, { 37.7109375, 1.3515625 } } } },
-=======
-    {{{{37.5273438,-1.44140625}, {37.8736992,-1.69921875}, {38.1640625,-2.140625},
-            {38.3984375,-2.765625}}},
-            {{{40.625,-5.7890625}, {37.7109375,1.3515625}}}},
->>>>>>> miniblink49
 };
 
 static const size_t failLineCubicTests_count = SK_ARRAY_COUNT(failLineCubicTests);
 
-<<<<<<< HEAD
 static void testFail(skiatest::Reporter* reporter, int iIndex)
 {
-=======
-static void testFail(skiatest::Reporter* reporter, int iIndex) {
->>>>>>> miniblink49
     const SkDCubic& cubic = failLineCubicTests[iIndex].cubic;
     SkASSERT(ValidCubic(cubic));
     const SkDLine& line = failLineCubicTests[iIndex].line;
@@ -60,7 +50,6 @@ static void testFail(skiatest::Reporter* reporter, int iIndex) {
 }
 
 static lineCubic lineCubicTests[] = {
-<<<<<<< HEAD
     { { { { 0, 6 }, { 1.0851458311080933, 4.3722810745239258 }, { 1.5815209150314331, 3.038947582244873 }, { 1.9683018922805786, 1.9999997615814209 } } },
         { { { 3, 2 }, { 1, 2 } } } },
 
@@ -93,44 +82,10 @@ static lineCubic lineCubicTests[] = {
 
     { { { { 0, 4 }, { 3, 4 }, { 6, 2 }, { 5, 2 } } },
         { { { 4, 3 }, { 2, 6 } } } },
-=======
-    {{{{0, 6}, {1.0851458311080933, 4.3722810745239258}, {1.5815209150314331, 3.038947582244873}, {1.9683018922805786, 1.9999997615814209}}},
-     {{{3,2}, {1,2}}}},
-
-    {{{{0.468027353,4}, {1.06734705,1.33333337}, {1.36700678,0}, {3,0}}},
-    {{{2,1}, {0,1}}}},
-
-    {{{{-634.60540771484375, -481.262939453125}, {266.2696533203125, -752.70867919921875},
-            {-751.8370361328125, -317.37921142578125}, {-969.7427978515625, 824.7255859375}}},
-            {{{-287.9506133720805678, -557.1376476615772617},
-            {-285.9506133720805678, -557.1376476615772617}}}},
-
-    {{{{36.7184372,0.888650894}, {36.7184372,0.888650894}, {35.1233864,0.554015458},
-            {34.5114098,-0.115255356}}}, {{{35.4531212,0}, {31.9375,0}}}},
-
-    {{{{421, 378}, {421, 380.209137f}, {418.761414f, 382}, {416, 382}}},
-            {{{320, 378}, {421, 378.000031f}}}},
-
-    {{{{416, 383}, {418.761414f, 383}, {421, 380.761414f}, {421, 378}}},
-            {{{320, 378}, {421, 378.000031f}}}},
-
-    {{{{154,715}, {151.238571,715}, {149,712.761414}, {149,710}}},
-            {{{149,675}, {149,710.001465}}}},
-
-    {{{{0,1}, {1,6}, {4,1}, {4,3}}},
-            {{{6,1}, {1,4}}}},
-
-    {{{{0,1}, {2,6}, {4,1}, {5,4}}},
-            {{{6,2}, {1,4}}}},
-
-    {{{{0,4}, {3,4}, {6,2}, {5,2}}},
-            {{{4,3}, {2,6}}}},
->>>>>>> miniblink49
 #if 0
     {{{{258, 122}, {260.761414, 122}, { 263, 124.238579}, {263, 127}}},
             {{{259.82843, 125.17157}, {261.535522, 123.46447}}}},
 #endif
-<<<<<<< HEAD
     { { { { 1006.6951293945312, 291 }, { 1023.263671875, 291 }, { 1033.8402099609375, 304.43145751953125 },
           { 1030.318359375, 321 } } },
         { { { 979.30487060546875, 561 }, { 1036.695068359375, 291 } } } },
@@ -139,26 +94,12 @@ static lineCubic lineCubicTests[] = {
         { { { 286.69512939453125, 291 }, { 229.30485534667969, 561 } } } },
     { { { { 1, 2 }, { 2, 6 }, { 2, 0 }, { 1, 0 } } }, { { { 1, 0 }, { 1, 2 } } } },
     { { { { 0, 0 }, { 0, 1 }, { 0, 1 }, { 1, 1 } } }, { { { 0, 1 }, { 1, 0 } } } },
-=======
-    {{{{1006.6951293945312,291}, {1023.263671875,291}, {1033.8402099609375,304.43145751953125},
-            {1030.318359375,321}}},
-            {{{979.30487060546875,561}, {1036.695068359375,291}}}},
-    {{{{259.30487060546875,561}, {242.73631286621094,561}, {232.15980529785156,547.56854248046875},
-            {235.68154907226562,531}}},
-            {{{286.69512939453125,291}, {229.30485534667969,561}}}},
-    {{{{1, 2}, {2, 6}, {2, 0}, {1, 0}}}, {{{1, 0}, {1, 2}}}},
-    {{{{0, 0}, {0, 1}, {0, 1}, {1, 1}}}, {{{0, 1}, {1, 0}}}},
->>>>>>> miniblink49
 };
 
 static const size_t lineCubicTests_count = SK_ARRAY_COUNT(lineCubicTests);
 
-<<<<<<< HEAD
 static int doIntersect(SkIntersections& intersections, const SkDCubic& cubic, const SkDLine& line)
 {
-=======
-static int doIntersect(SkIntersections& intersections, const SkDCubic& cubic, const SkDLine& line) {
->>>>>>> miniblink49
     int result;
     bool flipped = false;
     if (line[0].fX == line[1].fX) {
@@ -184,12 +125,8 @@ static int doIntersect(SkIntersections& intersections, const SkDCubic& cubic, co
     return result;
 }
 
-<<<<<<< HEAD
 static void testOne(skiatest::Reporter* reporter, int iIndex)
 {
-=======
-static void testOne(skiatest::Reporter* reporter, int iIndex) {
->>>>>>> miniblink49
     const SkDCubic& cubic = lineCubicTests[iIndex].cubic;
     SkASSERT(ValidCubic(cubic));
     const SkDLine& line = lineCubicTests[iIndex].line;
@@ -224,11 +161,6 @@ static void testOne(skiatest::Reporter* reporter, int iIndex) {
         double cubicT = i[0][0];
         SkDPoint prev = cubic.ptAtT(cubicT * 2 - 1);
         SkDPoint sect = cubic.ptAtT(cubicT);
-<<<<<<< HEAD
-=======
-        double left[3] = { line.isLeft(prev), line.isLeft(sect), line.isLeft(cubic[3]) };
-        SkDebugf("cubic=(%1.9g, %1.9g, %1.9g)\n", left[0], left[1], left[2]);
->>>>>>> miniblink49
         SkDebugf("{{%1.9g,%1.9g}, {%1.9g,%1.9g}},\n", prev.fX, prev.fY, sect.fX, sect.fY);
         SkDebugf("{{%1.9g,%1.9g}, {%1.9g,%1.9g}},\n", sect.fX, sect.fY, cubic[3].fX, cubic[3].fY);
         SkDPoint prevL = line.ptAtT(i[1][0] - 0.0000007);
@@ -236,21 +168,13 @@ static void testOne(skiatest::Reporter* reporter, int iIndex) {
         SkDPoint nextL = line.ptAtT(i[1][0] + 0.0000007);
         SkDebugf("{{%1.9g,%1.9g}, {%1.9g,%1.9g}},\n", i.pt(0).fX, i.pt(0).fY, nextL.fX, nextL.fY);
         SkDebugf("prevD=%1.9g dist=%1.9g nextD=%1.9g\n", prev.distance(nextL),
-<<<<<<< HEAD
             sect.distance(i.pt(0)), cubic[3].distance(prevL));
-=======
-                sect.distance(i.pt(0)), cubic[3].distance(prevL));
->>>>>>> miniblink49
 #endif
     }
 }
 
-<<<<<<< HEAD
 DEF_TEST(PathOpsFailCubicLineIntersection, reporter)
 {
-=======
-DEF_TEST(PathOpsFailCubicLineIntersection, reporter) {
->>>>>>> miniblink49
     for (size_t index = 0; index < failLineCubicTests_count; ++index) {
         int iIndex = static_cast<int>(index);
         testFail(reporter, iIndex);
@@ -258,12 +182,8 @@ DEF_TEST(PathOpsFailCubicLineIntersection, reporter) {
     }
 }
 
-<<<<<<< HEAD
 DEF_TEST(PathOpsCubicLineIntersection, reporter)
 {
-=======
-DEF_TEST(PathOpsCubicLineIntersection, reporter) {
->>>>>>> miniblink49
     for (size_t index = 0; index < lineCubicTests_count; ++index) {
         int iIndex = static_cast<int>(index);
         testOne(reporter, iIndex);
@@ -271,12 +191,8 @@ DEF_TEST(PathOpsCubicLineIntersection, reporter) {
     }
 }
 
-<<<<<<< HEAD
 DEF_TEST(PathOpsCubicLineIntersectionOneOff, reporter)
 {
-=======
-DEF_TEST(PathOpsCubicLineIntersectionOneOff, reporter) {
->>>>>>> miniblink49
     int iIndex = 0;
     testOne(reporter, iIndex);
     const SkDCubic& cubic = lineCubicTests[iIndex].cubic;

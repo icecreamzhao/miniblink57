@@ -5,32 +5,20 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "SkBitmap.h"
 #include "SkCanvas.h"
 #include "SkClipStack.h"
-=======
-#include "gm.h"
-#include "SkBitmap.h"
-#include "SkCanvas.h"
-#include "SkClipStack.h"
-#include "SkDevice.h"
->>>>>>> miniblink49
 #include "SkPath.h"
 #include "SkPathOps.h"
 #include "SkPicture.h"
 #include "SkPictureRecorder.h"
 #include "SkRect.h"
-<<<<<<< HEAD
 #include "gm.h"
-=======
->>>>>>> miniblink49
 
 namespace skiagm {
 
 class PathOpsSkpClipGM : public GM {
 public:
-<<<<<<< HEAD
     PathOpsSkpClipGM()
     {
     }
@@ -50,23 +38,6 @@ protected:
     {
         SkPictureRecorder recorder;
         SkCanvas* rec = recorder.beginRecording(1200, 900, nullptr, 0);
-=======
-    PathOpsSkpClipGM() {
-    }
-
-protected:
-    SkString onShortName() override {
-        return SkString("pathopsskpclip");
-    }
-
-    SkISize onISize() override {
-        return SkISize::Make(1200, 900);
-    }
-
-    void onDraw(SkCanvas* canvas) override {
-        SkPictureRecorder recorder;
-        SkCanvas* rec = recorder.beginRecording(1200, 900, NULL, 0);
->>>>>>> miniblink49
         SkPath p;
         SkRect r = {
             SkIntToScalar(100),
@@ -79,11 +50,7 @@ protected:
         rec->translate(SkIntToScalar(250), SkIntToScalar(250));
         rec->clipPath(p, SkRegion::kIntersect_Op, true);
         rec->drawColor(0xffff0000);
-<<<<<<< HEAD
         sk_sp<SkPicture> pict(recorder.finishRecordingAsPicture());
-=======
-        SkAutoTUnref<SkPicture> pict(recorder.endRecording());
->>>>>>> miniblink49
 
         canvas->setAllowSimplifyClip(true);
         canvas->save();

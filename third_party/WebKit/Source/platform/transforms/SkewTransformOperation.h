@@ -26,7 +26,6 @@
 #define SkewTransformOperation_h
 
 #include "platform/transforms/TransformOperation.h"
-<<<<<<< HEAD
 #include "wtf/PassRefPtr.h"
 
 namespace blink {
@@ -36,14 +35,6 @@ public:
     static PassRefPtr<SkewTransformOperation> create(double angleX,
         double angleY,
         OperationType type)
-=======
-
-namespace blink {
-
-class PLATFORM_EXPORT SkewTransformOperation : public TransformOperation {
-public:
-    static PassRefPtr<SkewTransformOperation> create(double angleX, double angleY, OperationType type)
->>>>>>> miniblink49
     {
         return adoptRef(new SkewTransformOperation(angleX, angleY, type));
     }
@@ -52,10 +43,7 @@ public:
     double angleY() const { return m_angleY; }
 
     virtual bool canBlendWith(const TransformOperation& other) const;
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 private:
     OperationType type() const override { return m_type; }
 
@@ -72,14 +60,10 @@ private:
         transform.skew(m_angleX, m_angleY);
     }
 
-<<<<<<< HEAD
     PassRefPtr<TransformOperation> blend(const TransformOperation* from,
         double progress,
         bool blendToIdentity = false) override;
     PassRefPtr<TransformOperation> zoom(double factor) final { return this; }
-=======
-    PassRefPtr<TransformOperation> blend(const TransformOperation* from, double progress, bool blendToIdentity = false) override;
->>>>>>> miniblink49
 
     SkewTransformOperation(double angleX, double angleY, OperationType type)
         : m_angleX(angleX)

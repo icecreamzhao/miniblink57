@@ -5,7 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "SkCanvas.h"
 #include "SkGradientShader.h"
 #include "SkTypeface.h"
@@ -34,36 +33,6 @@ static sk_sp<SkShader> make_chrome_solid()
     SkColor colors[] = { SK_ColorGREEN, SK_ColorGREEN };
     SkPoint pts[] = { { 0, 0 }, { 1, 0 } };
     return SkGradientShader::MakeLinear(pts, colors, nullptr, 2, SkShader::kClamp_TileMode);
-=======
-#include "gm.h"
-#include "SkCanvas.h"
-#include "SkGradientShader.h"
-#include "SkTypeface.h"
-
-// test shader w/ transparency
-static SkShader* make_grad(SkScalar width) {
-    SkColor colors[] = { SK_ColorRED, 0x0000FF00, SK_ColorBLUE };
-    SkPoint pts[] = { { 0, 0 }, { width, 0 } };
-    return SkGradientShader::CreateLinear(pts, colors, NULL,
-                                          SK_ARRAY_COUNT(colors),
-                                          SkShader::kMirror_TileMode);
-}
-
-// test opaque shader
-static SkShader* make_grad2(SkScalar width) {
-    SkColor colors[] = { SK_ColorRED, SK_ColorGREEN, SK_ColorBLUE };
-    SkPoint pts[] = { { 0, 0 }, { width, 0 } };
-    return SkGradientShader::CreateLinear(pts, colors, NULL,
-                                          SK_ARRAY_COUNT(colors),
-                                          SkShader::kMirror_TileMode);
-}
-
-static SkShader* make_chrome_solid() {
-    SkColor colors[] = { SK_ColorGREEN, SK_ColorGREEN };
-    SkPoint pts[] = { { 0, 0 }, { 1, 0 } };
-    return SkGradientShader::CreateLinear(pts, colors, NULL, 2,
-                                          SkShader::kClamp_TileMode);
->>>>>>> miniblink49
 }
 
 namespace skiagm {
@@ -72,20 +41,12 @@ namespace skiagm {
 class ChromeGradTextGM1 : public GM {
 public:
     ChromeGradTextGM1() { }
-<<<<<<< HEAD
 
 protected:
     virtual SkString onShortName() { return SkString("chrome_gradtext1"); }
     virtual SkISize onISize() { return SkISize::Make(500, 480); }
     virtual void onDraw(SkCanvas* canvas)
     {
-=======
-protected:
-
-    virtual SkString onShortName() { return SkString("chrome_gradtext1"); }
-    virtual SkISize onISize() { return SkISize::Make(500, 480); }
-    virtual void onDraw(SkCanvas* canvas) {
->>>>>>> miniblink49
         SkPaint paint;
         sk_tool_utils::set_portable_typeface(&paint);
         SkRect r = SkRect::MakeWH(SkIntToScalar(100), SkIntToScalar(100));
@@ -96,24 +57,16 @@ protected:
         canvas->drawRect(r, paint);
 
         // Minimal repro doesn't require AA, LCD, or a nondefault typeface
-<<<<<<< HEAD
         paint.setShader(make_chrome_solid());
-=======
-        paint.setShader(make_chrome_solid())->unref();
->>>>>>> miniblink49
         paint.setTextSize(SkIntToScalar(500));
 
         canvas->drawText("I", 1, 0, 100, paint);
     }
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 private:
     typedef GM INHERITED;
 };
 
-<<<<<<< HEAD
 // Replicate chrome layout test - switching between solid & gradient text
 class ChromeGradTextGM2 : public GM {
 public:
@@ -124,18 +77,6 @@ protected:
     virtual SkISize onISize() { return SkISize::Make(500, 480); }
     virtual void onDraw(SkCanvas* canvas)
     {
-=======
-
-// Replicate chrome layout test - switching between solid & gadient text
-class ChromeGradTextGM2 : public GM {
-public:
-    ChromeGradTextGM2() { }
-protected:
-
-    virtual SkString onShortName() { return SkString("chrome_gradtext2"); }
-    virtual SkISize onISize() { return SkISize::Make(500, 480); }
-    virtual void onDraw(SkCanvas* canvas) {
->>>>>>> miniblink49
         SkPaint paint;
         sk_tool_utils::set_portable_typeface(&paint);
 
@@ -145,26 +86,18 @@ protected:
         canvas->drawText("Normal Stroke Text", 18, 0, 100, paint);
 
         // Minimal repro doesn't require AA, LCD, or a nondefault typeface
-<<<<<<< HEAD
         paint.setShader(make_chrome_solid());
-=======
-        paint.setShader(make_chrome_solid())->unref();
->>>>>>> miniblink49
 
         paint.setStyle(SkPaint::kFill_Style);
         canvas->drawText("Gradient Fill Text", 18, 0, 150, paint);
         paint.setStyle(SkPaint::kStroke_Style);
         canvas->drawText("Gradient Stroke Text", 20, 0, 200, paint);
     }
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 private:
     typedef GM INHERITED;
 };
 
-<<<<<<< HEAD
 class GradTextGM : public GM {
 public:
     GradTextGM() { }
@@ -172,44 +105,25 @@ public:
 protected:
     SkString onShortName() override
     {
-=======
-
-
-class GradTextGM : public GM {
-public:
-    GradTextGM () {}
-
-protected:
-    SkString onShortName() override {
->>>>>>> miniblink49
         return SkString("gradtext");
     }
 
     SkISize onISize() override { return SkISize::Make(500, 480); }
 
-<<<<<<< HEAD
     static void draw_text(SkCanvas* canvas, const SkPaint& paint)
     {
-=======
-    static void draw_text(SkCanvas* canvas, const SkPaint& paint) {
->>>>>>> miniblink49
         const char* text = "When in the course of human events";
         size_t len = strlen(text);
         canvas->drawText(text, len, 0, 0, paint);
     }
 
-<<<<<<< HEAD
     static void draw_text3(SkCanvas* canvas, const SkPaint& paint)
     {
-=======
-    static void draw_text3(SkCanvas* canvas, const SkPaint& paint) {
->>>>>>> miniblink49
         SkPaint p(paint);
 
         p.setAntiAlias(false);
         draw_text(canvas, p);
         p.setAntiAlias(true);
-<<<<<<< HEAD
         canvas->translate(0, paint.getTextSize() * 4 / 3);
         draw_text(canvas, p);
         p.setLCDRenderText(true);
@@ -219,46 +133,24 @@ protected:
 
     void onDraw(SkCanvas* canvas) override
     {
-=======
-        canvas->translate(0, paint.getTextSize() * 4/3);
-        draw_text(canvas, p);
-        p.setLCDRenderText(true);
-        canvas->translate(0, paint.getTextSize() * 4/3);
-        draw_text(canvas, p);
-    }
-
-    void onDraw(SkCanvas* canvas) override {
->>>>>>> miniblink49
         SkPaint paint;
         sk_tool_utils::set_portable_typeface(&paint);
         paint.setTextSize(SkIntToScalar(26));
 
         const SkISize& size = this->getISize();
         SkRect r = SkRect::MakeWH(SkIntToScalar(size.width()),
-<<<<<<< HEAD
             SkIntToScalar(size.height()) / 2);
-=======
-                                  SkIntToScalar(size.height()) / 2);
->>>>>>> miniblink49
         canvas->drawRect(r, paint);
 
         canvas->translate(SkIntToScalar(20), paint.getTextSize());
 
         for (int i = 0; i < 2; ++i) {
-<<<<<<< HEAD
             paint.setShader(make_grad(SkIntToScalar(80)));
-=======
-            paint.setShader(make_grad(SkIntToScalar(80)))->unref();
->>>>>>> miniblink49
             draw_text3(canvas, paint);
 
             canvas->translate(0, paint.getTextSize() * 2);
 
-<<<<<<< HEAD
             paint.setShader(make_grad2(SkIntToScalar(80)));
-=======
-            paint.setShader(make_grad2(SkIntToScalar(80)))->unref();
->>>>>>> miniblink49
             draw_text3(canvas, paint);
 
             canvas->translate(0, paint.getTextSize() * 2);

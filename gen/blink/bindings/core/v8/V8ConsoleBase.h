@@ -13,38 +13,38 @@
 #include "bindings/core/v8/V8DOMWrapper.h"
 #include "bindings/core/v8/WrapperTypeInfo.h"
 #include "core/CoreExport.h"
-#include "core/frame/ConsoleBase.h"
+//#include "core/frame/ConsoleBase.h"
 #include "platform/heap/Handle.h"
 
 namespace blink {
 
 class V8ConsoleBase {
 public:
-    CORE_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
-    static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
+    //     CORE_EXPORT static bool hasInstance(v8::Local<v8::Value>, v8::Isolate*);
+    //     static v8::Local<v8::Object> findInstanceInPrototypeChain(v8::Local<v8::Value>, v8::Isolate*);
     CORE_EXPORT static v8::Local<v8::FunctionTemplate> domTemplate(v8::Isolate*);
-    static ConsoleBase* toImpl(v8::Local<v8::Object> object)
-    {
-        return toScriptWrappable(object)->toImpl<ConsoleBase>();
-    }
-    CORE_EXPORT static ConsoleBase* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
-    CORE_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
-    static void refObject(ScriptWrappable*);
-    static void derefObject(ScriptWrappable*);
-    template<typename VisitorDispatcher>
-    static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable)
-    {
-        visitor->trace(scriptWrappable->toImpl<ConsoleBase>());
-    }
-    static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
-    static void installConditionallyEnabledProperties(v8::Local<v8::Object>, v8::Isolate*) { }
-    static void preparePrototypeObject(v8::Isolate*, v8::Local<v8::Object> prototypeObject, v8::Local<v8::FunctionTemplate> interfaceTemplate) { }
+    //     static ConsoleBase* toImpl(v8::Local<v8::Object> object)
+    //     {
+    //         return toScriptWrappable(object)->toImpl<ConsoleBase>();
+    //     }
+    //     CORE_EXPORT static ConsoleBase* toImplWithTypeCheck(v8::Isolate*, v8::Local<v8::Value>);
+    //     CORE_EXPORT static const WrapperTypeInfo wrapperTypeInfo;
+    //     static void refObject(ScriptWrappable*);
+    //     static void derefObject(ScriptWrappable*);
+    //     template<typename VisitorDispatcher>
+    //     static void trace(VisitorDispatcher visitor, ScriptWrappable* scriptWrappable)
+    //     {
+    //         visitor->trace(scriptWrappable->toImpl<ConsoleBase>());
+    //     }
+    //     static const int internalFieldCount = v8DefaultWrapperInternalFieldCount + 0;
+    //     static void installConditionallyEnabledProperties(v8::Local<v8::Object>, v8::Isolate*) { }
+    //     static void preparePrototypeObject(v8::Isolate*, v8::Local<v8::Object> prototypeObject, v8::Local<v8::FunctionTemplate> interfaceTemplate) { }
 };
 
-template <>
-struct V8TypeOf<ConsoleBase> {
-    typedef V8ConsoleBase Type;
-};
+// template <>
+// struct V8TypeOf<ConsoleBase> {
+//     typedef V8ConsoleBase Type;
+// };
 
 } // namespace blink
 

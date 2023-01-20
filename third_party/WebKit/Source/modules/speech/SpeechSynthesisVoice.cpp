@@ -23,15 +23,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "modules/speech/SpeechSynthesisVoice.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 SpeechSynthesisVoice* SpeechSynthesisVoice::create(
     PassRefPtr<PlatformSpeechSynthesisVoice> voice)
 {
@@ -40,25 +35,10 @@ SpeechSynthesisVoice* SpeechSynthesisVoice::create(
 
 SpeechSynthesisVoice::SpeechSynthesisVoice(
     PassRefPtr<PlatformSpeechSynthesisVoice> voice)
-=======
-SpeechSynthesisVoice* SpeechSynthesisVoice::create(PlatformSpeechSynthesisVoice* voice)
-{
-    return new SpeechSynthesisVoice(voice);
-}
-
-SpeechSynthesisVoice::SpeechSynthesisVoice(PlatformSpeechSynthesisVoice* voice)
->>>>>>> miniblink49
     : m_platformVoice(voice)
 {
 }
 
-<<<<<<< HEAD
 SpeechSynthesisVoice::~SpeechSynthesisVoice() { }
-=======
-DEFINE_TRACE(SpeechSynthesisVoice)
-{
-    visitor->trace(m_platformVoice);
-}
->>>>>>> miniblink49
 
 } // namespace blink

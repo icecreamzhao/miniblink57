@@ -62,20 +62,16 @@ struct WebURLError {
     // ignored (e.g. through shouldOverrideUrlLoading).
     bool wasIgnoredByHandler;
 
-<<<<<<< HEAD
     // A flag showing whether this error is a disk cache miss by requesting to
     // load only from disk cache.
     bool isCacheMiss;
 
-=======
->>>>>>> miniblink49
     // The url that failed to load.
     WebURL unreachableURL;
 
     // A description for the error.
     WebString localizedDescription;
 
-<<<<<<< HEAD
     WebURLError()
         : reason(0)
         , staleCopyInCache(false)
@@ -84,10 +80,6 @@ struct WebURLError {
         , isCacheMiss(false)
     {
     }
-=======
-    WebURLError() : reason(0), staleCopyInCache(false), isCancellation(false),
-        wasIgnoredByHandler(false) { }
->>>>>>> miniblink49
 
 #if INSIDE_BLINK
     BLINK_PLATFORM_EXPORT WebURLError(const ResourceError&);

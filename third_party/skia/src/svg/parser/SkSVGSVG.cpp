@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -9,44 +5,29 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #include "SkSVGSVG.h"
 #include "SkParse.h"
 #include "SkRect.h"
 #include "SkSVGParser.h"
 
 const SkSVGAttribute SkSVGSVG::gAttributes[] = {
-<<<<<<< HEAD
     SVG_LITERAL_ATTRIBUTE(enable - background, f_enable_background),
-=======
-    SVG_LITERAL_ATTRIBUTE(enable-background, f_enable_background),
->>>>>>> miniblink49
     SVG_ATTRIBUTE(height),
     SVG_ATTRIBUTE(overflow),
     SVG_ATTRIBUTE(width),
     SVG_ATTRIBUTE(version),
     SVG_ATTRIBUTE(viewBox),
     SVG_ATTRIBUTE(x),
-<<<<<<< HEAD
     SVG_LITERAL_ATTRIBUTE(xml
                           : space, f_xml_space),
     SVG_ATTRIBUTE(xmlns),
     SVG_LITERAL_ATTRIBUTE(xmlns
                           : xlink, f_xml_xlink),
-=======
-    SVG_LITERAL_ATTRIBUTE(xml:space, f_xml_space),
-    SVG_ATTRIBUTE(xmlns),
-    SVG_LITERAL_ATTRIBUTE(xmlns:xlink, f_xml_xlink),
->>>>>>> miniblink49
     SVG_ATTRIBUTE(y),
 };
 
 DEFINE_SVG_INFO(SVG)
 
-<<<<<<< HEAD
 bool SkSVGSVG::isFlushable()
 {
     return false;
@@ -54,14 +35,6 @@ bool SkSVGSVG::isFlushable()
 
 void SkSVGSVG::translate(SkSVGParser& parser, bool defState)
 {
-=======
-
-bool SkSVGSVG::isFlushable() {
-    return false;
-}
-
-void SkSVGSVG::translate(SkSVGParser& parser, bool defState) {
->>>>>>> miniblink49
     SkScalar height, width;
     SkScalar viewBox[4];
     const char* hSuffix = SkParse::FindScalar(f_height.c_str(), &height);
@@ -72,16 +45,9 @@ void SkSVGSVG::translate(SkSVGParser& parser, bool defState) {
         width = SkScalarMulDiv(width, SK_Scalar1 * 72, SK_Scalar1 * 96);
     SkParse::FindScalars(f_viewBox.c_str(), viewBox, 4);
     SkRect box = SkRect::MakeLTRB(viewBox[0] / width, viewBox[1] / height,
-<<<<<<< HEAD
         viewBox[2] / width, viewBox[3] / height);
     if (box.fLeft == 0 && box.fTop == 0 && box.fRight == SK_Scalar1 && box.fBottom == SK_Scalar1)
         return;
-=======
-                                  viewBox[2] / width, viewBox[3] / height);
-    if (box.fLeft == 0 && box.fTop == 0 &&
-        box.fRight == SK_Scalar1 && box.fBottom == SK_Scalar1)
-            return;
->>>>>>> miniblink49
     parser._startElement("matrix");
     if (box.fLeft != 0) {
         SkString x;

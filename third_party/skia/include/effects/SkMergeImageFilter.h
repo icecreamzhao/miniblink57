@@ -14,7 +14,6 @@
 
 class SK_API SkMergeImageFilter : public SkImageFilter {
 public:
-<<<<<<< HEAD
     ~SkMergeImageFilter() override;
 
     static sk_sp<SkImageFilter> Make(sk_sp<SkImageFilter> first, sk_sp<SkImageFilter> second,
@@ -37,27 +36,11 @@ public:
         sk_sp<SkImageFilter> result = Make(filters, count, xModes, cropRect);
         free(xModes);
         return std::move(result);
-=======
-    virtual ~SkMergeImageFilter();
-
-    static SkMergeImageFilter* Create(SkImageFilter* first, SkImageFilter* second,
-                                      SkXfermode::Mode mode = SkXfermode::kSrcOver_Mode,
-                                      const CropRect* cropRect = NULL) {
-        SkImageFilter* inputs[2] = { first, second };
-        SkXfermode::Mode modes[2] = { mode, mode };
-        return SkNEW_ARGS(SkMergeImageFilter, (inputs, 2, modes, cropRect));
-    }
-    static SkMergeImageFilter* Create(SkImageFilter* filters[], int count,
-                                      const SkXfermode::Mode modes[] = NULL,
-                                      const CropRect* cropRect = NULL) {
-        return SkNEW_ARGS(SkMergeImageFilter, (filters, count, modes, cropRect));
->>>>>>> miniblink49
     }
 
     SK_TO_STRING_OVERRIDE()
     SK_DECLARE_PUBLIC_FLATTENABLE_DESERIALIZATION_PROCS(SkMergeImageFilter)
 
-<<<<<<< HEAD
 #ifdef SK_SUPPORT_LEGACY_IMAGEFILTER_PTR
     static SkImageFilter* Create(SkImageFilter* first, SkImageFilter* second,
         SkXfermode::Mode mode = SkXfermode::kSrcOver_Mode,
@@ -99,26 +82,6 @@ private:
 
     void initAllocModes();
     void initModes(const SkXfermode::Mode[]);
-=======
-protected:
-    SkMergeImageFilter(SkImageFilter* filters[], int count,
-                       const SkXfermode::Mode modes[],
-                       const CropRect* cropRect);
-    void flatten(SkWriteBuffer&) const override;
-
-    virtual bool onFilterImage(Proxy*, const SkBitmap& src, const Context&,
-                               SkBitmap* result, SkIPoint* loc) const override;
-
-private:
-    uint8_t*            fModes; // SkXfermode::Mode
-
-    // private storage, to avoid dynamically allocating storage for our copy
-    // of the modes (unless the count is so large we can't fit).
-    intptr_t    fStorage[16];
-
-    void initAllocModes();
-    void initModes(const SkXfermode::Mode []);
->>>>>>> miniblink49
 
     typedef SkImageFilter INHERITED;
 };

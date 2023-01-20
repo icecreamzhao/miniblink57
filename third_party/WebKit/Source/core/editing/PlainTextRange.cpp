@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2012 Apple Inc. All rights reserved.
+ * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2012 Apple Inc. All
+ * rights reserved.
  * Copyright (C) 2005 Alexey Proskuryakov.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -24,7 +25,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/editing/PlainTextRange.h"
 
 #include "core/dom/ContainerNode.h"
@@ -32,6 +32,7 @@
 #include "core/dom/Range.h"
 #include "core/editing/EphemeralRange.h"
 #include "core/editing/VisiblePosition.h"
+#include "core/editing/VisibleUnits.h"
 #include "core/editing/iterators/TextIterator.h"
 
 namespace blink {
@@ -46,33 +47,33 @@ PlainTextRange::PlainTextRange(int location)
     : m_start(location)
     , m_end(location)
 {
-    ASSERT(location >= 0);
+    DCHECK_GE(location, 0);
 }
 
 PlainTextRange::PlainTextRange(int start, int end)
     : m_start(start)
     , m_end(end)
 {
-    ASSERT(start >= 0);
-    ASSERT(end >= 0);
-    ASSERT(start <= end);
+    DCHECK_GE(start, 0);
+    DCHECK_GE(end, 0);
+    DCHECK_LE(start, end);
 }
 
-PassRefPtrWillBeRawPtr<Range> PlainTextRange::createRange(const ContainerNode& scope) const
+EphemeralRange PlainTextRange::createRange(const ContainerNode& scope) const
 {
     return createRangeFor(scope, ForGeneric);
 }
 
-PassRefPtrWillBeRawPtr<Range> PlainTextRange::createRangeForSelection(const ContainerNode& scope) const
+EphemeralRange PlainTextRange::createRangeForSelection(
+    const ContainerNode& scope) const
 {
     return createRangeFor(scope, ForSelection);
 }
 
-PassRefPtrWillBeRawPtr<Range> PlainTextRange::createRangeFor(const ContainerNode& scope, GetRangeFor getRangeFor) const
+EphemeralRange PlainTextRange::createRangeFor(const ContainerNode& scope,
+    GetRangeFor getRangeFor) const
 {
-    ASSERT(isNotNull());
-
-    RefPtrWillBeRawPtr<Range> resultRange = scope.document().createRange();
+    DCHECK(isNotNull());
 
     size_t docTextPosition = 0;
     bool startRangeFound = false;
@@ -84,14 +85,16 @@ PassRefPtrWillBeRawPtr<Range> PlainTextRange::createRangeFor(const ContainerNode
     if (getRangeFor == ForSelection)
         behaviorFlags |= TextIteratorEmitsCharactersBetweenAllVisiblePositions;
     auto range = EphemeralRange::rangeOfContents(scope);
+
     TextIterator it(range.startPosition(), range.endPosition(), behaviorFlags);
 
-    // FIXME: the atEnd() check shouldn't be necessary, workaround for <http://bugs.webkit.org/show_bug.cgi?id=6289>.
-    if (!start() && !length() && it.atEnd()) {
-        resultRange->setStart(it.currentContainer(), 0, ASSERT_NO_EXCEPTION);
-        resultRange->setEnd(it.currentContainer(), 0, ASSERT_NO_EXCEPTION);
-        return resultRange.release();
-    }
+    // FIXME: the atEnd() check shouldn't be necessary, workaround for
+    // <http://bugs.webkit.org/show_bug.cgi?id=6289>.
+    if (!start() && !length() && it.atEnd())
+        return EphemeralRange(Position(it.currentContainer(), 0));
+
+    Position resultStart = Position(&scope.document(), 0);
+    Position resultEnd = resultStart;
 
     for (; !it.atEnd(); it.advance()) {
         int len = it.length();
@@ -102,46 +105,49 @@ PassRefPtrWillBeRawPtr<Range> PlainTextRange::createRangeFor(const ContainerNode
         bool foundStart = start() >= docTextPosition && start() <= docTextPosition + len;
         bool foundEnd = end() >= docTextPosition && end() <= docTextPosition + len;
 
-        // Fix textRunRange->endPosition(), but only if foundStart || foundEnd, because it is only
-        // in those cases that textRunRange is used.
+        // Fix textRunRange->endPosition(), but only if foundStart || foundEnd,
+        // because it is only in those cases that textRunRange is used.
         if (foundEnd) {
             // FIXME: This is a workaround for the fact that the end of a run
             // is often at the wrong position for emitted '\n's or if the
             // layoutObject of the current node is a replaced element.
-            if (len == 1 && (it.text().characterAt(0) == '\n' || it.isInsideReplacedElement())) {
+            if (len == 1 && (it.characterAt(0) == '\n' || it.isInsideAtomicInlineElement())) {
                 it.advance();
                 if (!it.atEnd()) {
                     textRunEndPosition = it.startPositionInCurrentContainer();
                 } else {
-                    Position runEnd = VisiblePosition(textRunStartPosition).next().deepEquivalent();
+                    Position runEnd = nextPositionOf(createVisiblePosition(textRunStartPosition))
+                                          .deepEquivalent();
                     if (runEnd.isNotNull())
-                        textRunEndPosition = createLegacyEditingPosition(runEnd.containerNode(), runEnd.computeOffsetInContainerNode());
+                        textRunEndPosition = runEnd;
                 }
             }
         }
 
         if (foundStart) {
             startRangeFound = true;
-            if (textRunStartPosition.containerNode()->isTextNode()) {
+            if (textRunStartPosition.computeContainerNode()->isTextNode()) {
                 int offset = start() - docTextPosition;
-                resultRange->setStart(textRunStartPosition.containerNode(), offset + textRunStartPosition.offsetInContainerNode(), IGNORE_EXCEPTION);
+                resultStart = Position(textRunStartPosition.computeContainerNode(),
+                    offset + textRunStartPosition.offsetInContainerNode());
             } else {
                 if (start() == docTextPosition)
-                    resultRange->setStart(textRunStartPosition.containerNode(), textRunStartPosition.offsetInContainerNode(), IGNORE_EXCEPTION);
+                    resultStart = textRunStartPosition;
                 else
-                    resultRange->setStart(textRunEndPosition.containerNode(), textRunEndPosition.offsetInContainerNode(), IGNORE_EXCEPTION);
+                    resultStart = textRunEndPosition;
             }
         }
 
         if (foundEnd) {
-            if (textRunStartPosition.containerNode()->isTextNode()) {
+            if (textRunStartPosition.computeContainerNode()->isTextNode()) {
                 int offset = end() - docTextPosition;
-                resultRange->setEnd(textRunStartPosition.containerNode(), offset + textRunStartPosition.offsetInContainerNode(), IGNORE_EXCEPTION);
+                resultEnd = Position(textRunStartPosition.computeContainerNode(),
+                    offset + textRunStartPosition.offsetInContainerNode());
             } else {
                 if (end() == docTextPosition)
-                    resultRange->setEnd(textRunStartPosition.containerNode(), textRunStartPosition.offsetInContainerNode(), IGNORE_EXCEPTION);
+                    resultEnd = textRunStartPosition;
                 else
-                    resultRange->setEnd(textRunEndPosition.containerNode(), textRunEndPosition.offsetInContainerNode(), IGNORE_EXCEPTION);
+                    resultEnd = textRunEndPosition;
             }
             docTextPosition += len;
             break;
@@ -150,18 +156,20 @@ PassRefPtrWillBeRawPtr<Range> PlainTextRange::createRangeFor(const ContainerNode
     }
 
     if (!startRangeFound)
-        return nullptr;
+        return EphemeralRange();
 
     if (length() && end() > docTextPosition) { // end() is out of bounds
-        resultRange->setEnd(textRunEndPosition.containerNode(), textRunEndPosition.offsetInContainerNode(), IGNORE_EXCEPTION);
+        resultEnd = textRunEndPosition;
     }
 
-    return resultRange.release();
+    return EphemeralRange(resultStart.toOffsetInAnchor(),
+        resultEnd.toOffsetInAnchor());
 }
 
-PlainTextRange PlainTextRange::create(const ContainerNode& scope, const Range& range)
+PlainTextRange PlainTextRange::create(const ContainerNode& scope,
+    const EphemeralRange& range)
 {
-    if (!range.startContainer())
+    if (range.isNull())
         return PlainTextRange();
 
     // The critical assumption is that this only gets called with ranges that
@@ -169,20 +177,28 @@ PlainTextRange PlainTextRange::create(const ContainerNode& scope, const Range& r
     // because of text fields and textareas. The DOM for those is not
     // directly in the document DOM, so ensure that the range does not cross a
     // boundary of one of those.
-    if (range.startContainer() != &scope && !range.startContainer()->isDescendantOf(&scope))
+    Node* startContainer = range.startPosition().computeContainerNode();
+    if (startContainer != &scope && !startContainer->isDescendantOf(&scope))
         return PlainTextRange();
-    if (range.endContainer() != scope && !range.endContainer()->isDescendantOf(&scope))
+    Node* endContainer = range.endPosition().computeContainerNode();
+    if (endContainer != scope && !endContainer->isDescendantOf(&scope))
         return PlainTextRange();
 
-    RefPtrWillBeRawPtr<Range> testRange = Range::create(scope.document(), const_cast<ContainerNode*>(&scope), 0, range.startContainer(), range.startOffset());
-    ASSERT(testRange->startContainer() == &scope);
-    size_t start = TextIterator::rangeLength(testRange->startPosition(), testRange->endPosition());
+    DocumentLifecycle::DisallowTransitionScope disallowTransition(
+        scope.document().lifecycle());
 
-    testRange->setEnd(range.endContainer(), range.endOffset(), IGNORE_EXCEPTION);
-    ASSERT(testRange->startContainer() == &scope);
-    size_t end = TextIterator::rangeLength(testRange->startPosition(), testRange->endPosition());
+    size_t start = TextIterator::rangeLength(
+        Position(&const_cast<ContainerNode&>(scope), 0), range.startPosition());
+    size_t end = TextIterator::rangeLength(
+        Position(&const_cast<ContainerNode&>(scope), 0), range.endPosition());
 
     return PlainTextRange(start, end);
 }
 
+PlainTextRange PlainTextRange::create(const ContainerNode& scope,
+    const Range& range)
+{
+    return create(scope, EphemeralRange(&range));
 }
+
+} // namespace blink

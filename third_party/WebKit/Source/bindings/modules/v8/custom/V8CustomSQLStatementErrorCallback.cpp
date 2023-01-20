@@ -28,8 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
-
 #include "bindings/core/v8/ScriptController.h"
 #include "bindings/core/v8/V8Binding.h"
 #include "bindings/modules/v8/V8SQLError.h"
@@ -40,47 +38,43 @@
 
 namespace blink {
 
-bool V8SQLStatementErrorCallback::handleEvent(SQLTransaction* transaction, SQLError* error)
+bool V8SQLStatementErrorCallback::handleEvent(SQLTransaction* transaction,
+    SQLError* error)
 {
-    if (!canInvokeCallback())
-        return true;
-
     v8::Isolate* isolate = m_scriptState->isolate();
+    ExecutionContext* executionContext = m_scriptState->getExecutionContext();
+    if (!executionContext || executionContext->isContextSuspended() || executionContext->isContextDestroyed())
+        return true;
     if (!m_scriptState->contextIsValid())
         return true;
-
     ScriptState::Scope scope(m_scriptState.get());
 
-    v8::Local<v8::Value> transactionHandle = toV8(transaction, m_scriptState->context()->Global(), isolate);
-    v8::Local<v8::Value> errorHandle = toV8(error, m_scriptState->context()->Global(), isolate);
-    if (transactionHandle.IsEmpty() || errorHandle.IsEmpty()) {
-        if (!isScriptControllerTerminating())
-            CRASH();
-        return true;
-    }
-
+    v8::Local<v8::Value> transactionHandle = ToV8(transaction, m_scriptState->context()->Global(), isolate);
+    v8::Local<v8::Value> errorHandle = ToV8(error, m_scriptState->context()->Global(), isolate);
     ASSERT(transactionHandle->IsObject());
 
-    v8::Local<v8::Value> argv[] = {
-        transactionHandle,
-        errorHandle
-    };
+    v8::Local<v8::Value> argv[] = { transactionHandle, errorHandle };
 
-    v8::TryCatch exceptionCatcher;
+    v8::TryCatch exceptionCatcher(isolate);
     exceptionCatcher.SetVerbose(true);
 
     v8::Local<v8::Value> result;
-    // FIXME: This comment doesn't make much sense given what the code is actually doing.
+    // FIXME: This comment doesn't make much sense given what the code is actually
+    // doing.
     //
     // Step 6: If the error callback returns false, then move on to the next
     // statement, if any, or onto the next overall step otherwise. Otherwise,
     // the error callback did not return false, or there was no error callback.
     // Jump to the last step in the overall steps.
-    if (!ScriptController::callFunction(executionContext(), m_callback.newLocal(isolate), m_scriptState->context()->Global(), WTF_ARRAY_LENGTH(argv), argv, isolate).ToLocal(&result))
+    if (!V8ScriptRunner::callFunction(m_callback.newLocal(isolate),
+            m_scriptState->getExecutionContext(),
+            m_scriptState->context()->Global(),
+            WTF_ARRAY_LENGTH(argv), argv, isolate)
+             .ToLocal(&result))
         return true;
-
     bool value;
-    V8_CALL(value, result, BooleanValue(isolate->GetCurrentContext()), return true);
+    if (!result->BooleanValue(isolate->GetCurrentContext()).To(&value))
+        return true;
     return value;
 }
 

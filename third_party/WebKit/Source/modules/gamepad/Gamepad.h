@@ -28,10 +28,7 @@
 
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "modules/gamepad/GamepadButton.h"
-<<<<<<< HEAD
 #include "modules/gamepad/GamepadPose.h"
-=======
->>>>>>> miniblink49
 #include "platform/heap/Handle.h"
 #include "public/platform/WebGamepad.h"
 #include "wtf/Vector.h"
@@ -39,22 +36,12 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 class Gamepad final : public GarbageCollectedFinalized<Gamepad>,
                       public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
 
 public:
     static Gamepad* create() { return new Gamepad; }
-=======
-class Gamepad final : public GarbageCollectedFinalized<Gamepad>, public ScriptWrappable {
-    DEFINE_WRAPPERTYPEINFO();
-public:
-    static Gamepad* create()
-    {
-        return new Gamepad;
-    }
->>>>>>> miniblink49
     ~Gamepad();
 
     typedef Vector<double> DoubleVector;
@@ -80,7 +67,6 @@ public:
     const GamepadButtonVector& buttons() const { return m_buttons; }
     void setButtons(unsigned count, const WebGamepadButton* data);
 
-<<<<<<< HEAD
     GamepadPose* pose() const { return m_pose; }
     void setPose(const WebGamepadPose&);
 
@@ -90,8 +76,6 @@ public:
     unsigned displayId() const { return m_displayId; }
     void setDisplayId(unsigned val) { m_displayId = val; }
 
-=======
->>>>>>> miniblink49
     DECLARE_TRACE();
 
 private:
@@ -104,12 +88,9 @@ private:
     String m_mapping;
     DoubleVector m_axes;
     GamepadButtonVector m_buttons;
-<<<<<<< HEAD
     Member<GamepadPose> m_pose;
     String m_hand;
     unsigned m_displayId;
-=======
->>>>>>> miniblink49
 };
 
 } // namespace blink

@@ -7,13 +7,10 @@
 #include "src/code-factory.h"
 #include "src/code-stub-assembler.h"
 
-<<<<<<< HEAD
 namespace wke {
 extern bool g_enableSkipJsError;
 }
 
-=======
->>>>>>> miniblink49
 namespace v8 {
 namespace internal {
 
@@ -472,7 +469,6 @@ void Builtins::Generate_ToObject(compiler::CodeAssemblerState* state) {
   assembler.StoreObjectField(js_value, JSValue::kValueOffset, object);
   assembler.Return(js_value);
 
-<<<<<<< HEAD
   if (!wke::g_enableSkipJsError) {
     assembler.Bind(&if_noconstructor);
     assembler.TailCallRuntime(
@@ -480,13 +476,6 @@ void Builtins::Generate_ToObject(compiler::CodeAssemblerState* state) {
       assembler.HeapConstant(
           assembler.factory()->NewStringFromAsciiChecked("ToObject", TENURED)));
   }
-=======
-  assembler.Bind(&if_noconstructor);
-  assembler.TailCallRuntime(
-      Runtime::kThrowUndefinedOrNullToObject, context,
-      assembler.HeapConstant(
-          assembler.factory()->NewStringFromAsciiChecked("ToObject", TENURED)));
->>>>>>> miniblink49
 
   assembler.Bind(&if_jsreceiver);
   assembler.Return(object);

@@ -10,7 +10,6 @@
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
  *
-<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -21,67 +20,36 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-=======
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
->>>>>>> miniblink49
  */
 
 #ifndef WebSurroundingText_h
 #define WebSurroundingText_h
 
-<<<<<<< HEAD
 #include "../platform/WebString.h"
 #include "WebNode.h"
 #include "WebRange.h"
 #include <memory>
-=======
-#include "../platform/WebPrivateOwnPtr.h"
-#include "../platform/WebString.h"
-#include "WebNode.h"
-#include "WebRange.h"
->>>>>>> miniblink49
 
 namespace blink {
 
 class SurroundingText;
 class WebNode;
 class WebRange;
-<<<<<<< HEAD
 class WebLocalFrame;
-=======
->>>>>>> miniblink49
 struct WebPoint;
 
 // WebSurroundingText is a Blink API that gives access to the SurroundingText
 // API. It allows caller to know the text surrounding a point or a range.
 class WebSurroundingText {
 public:
-<<<<<<< HEAD
     BLINK_EXPORT WebSurroundingText();
     BLINK_EXPORT ~WebSurroundingText();
 
     BLINK_EXPORT bool isNull() const;
-=======
-    WebSurroundingText() { }
-    ~WebSurroundingText() { reset(); }
-
-    BLINK_EXPORT bool isNull() const;
-    BLINK_EXPORT void reset();
->>>>>>> miniblink49
 
     // Initializes the object to get the surrounding text centered in the
     // position relative to a provided node.
     // The maximum length of the contents retrieved is defined by maxLength.
-<<<<<<< HEAD
     BLINK_EXPORT void initialize(const WebNode&,
         const WebPoint&,
         size_t maxLength);
@@ -90,14 +58,6 @@ public:
     // It does not include the text inside the range.
     BLINK_EXPORT void initializeFromCurrentSelection(WebLocalFrame*,
         size_t maxLength);
-=======
-    BLINK_EXPORT void initialize(const WebNode&, const WebPoint&, size_t maxLength);
-
-    // Initializes the object to get the text surrounding a given range.
-    // The maximum length of the contents retrieved is defined by maxLength.
-    // It does not include the text inside the range.
-    BLINK_EXPORT void initialize(const WebRange&, size_t maxLength);
->>>>>>> miniblink49
 
     // Surrounding text content retrieved.
     BLINK_EXPORT WebString textContent() const;
@@ -115,17 +75,8 @@ public:
     // End offset of the initial text in the text content.
     BLINK_EXPORT size_t endOffsetInTextContent() const;
 
-<<<<<<< HEAD
 protected:
     std::unique_ptr<SurroundingText> m_private;
-=======
-    // Convert start/end positions in the content text string into a WebKit text
-    // range.
-    BLINK_EXPORT WebRange rangeFromContentOffsets(size_t startOffsetInContent, size_t endOffsetInContent);
-
-protected:
-    WebPrivateOwnPtr<SurroundingText> m_private;
->>>>>>> miniblink49
 };
 
 } // namespace blink

@@ -32,37 +32,20 @@
 #ifndef WebPluginContainerImpl_h
 #define WebPluginContainerImpl_h
 
-<<<<<<< HEAD
 #include "core/dom/ContextLifecycleObserver.h"
 #include "core/plugins/PluginView.h"
 #include "platform/Widget.h"
 #include "public/web/WebPluginContainer.h"
 #include "web/WebExport.h"
 #include "wtf/Compiler.h"
-=======
-#include "core/frame/LocalFrameLifecycleObserver.h"
-#include "core/plugins/PluginView.h"
-#include "platform/Widget.h"
-#include "public/web/WebPluginContainer.h"
-
-#include "wtf/OwnPtr.h"
->>>>>>> miniblink49
 #include "wtf/PassRefPtr.h"
 #include "wtf/Vector.h"
 #include "wtf/text/WTFString.h"
 
-<<<<<<< HEAD
 namespace blink {
 
 class GestureEvent;
 class HTMLFrameOwnerElement;
-=======
-struct NPObject;
-
-namespace blink {
-
-class GestureEvent;
->>>>>>> miniblink49
 class HTMLPlugInElement;
 class IntRect;
 class KeyboardEvent;
@@ -71,16 +54,11 @@ class ResourceError;
 class ResourceResponse;
 class TouchEvent;
 class WebPlugin;
-<<<<<<< HEAD
-=======
-class WebPluginLoadObserver;
->>>>>>> miniblink49
 class WheelEvent;
 class Widget;
 struct WebPrintParams;
 struct WebPrintPresetOptions;
 
-<<<<<<< HEAD
 class WEB_EXPORT WebPluginContainerImpl final
     : public PluginView,
       NON_EXPORTED_BASE(public WebPluginContainer),
@@ -93,51 +71,28 @@ public:
         WebPlugin* webPlugin)
     {
         return new WebPluginContainerImpl(element, webPlugin);
-=======
-class WebPluginContainerImpl final : public PluginView, public WebPluginContainer, public LocalFrameLifecycleObserver {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(WebPluginContainerImpl);
-public:
-    static PassRefPtrWillBeRawPtr<WebPluginContainerImpl> create(HTMLPlugInElement* element, WebPlugin* webPlugin)
-    {
-        return adoptRefWillBeNoop(new WebPluginContainerImpl(element, webPlugin));
->>>>>>> miniblink49
     }
 
     // PluginView methods
     WebLayer* platformLayer() const override;
     v8::Local<v8::Object> scriptableObject(v8::Isolate*) override;
-<<<<<<< HEAD
-=======
-    bool getFormValue(String&) override;
->>>>>>> miniblink49
     bool supportsKeyboardFocus() const override;
     bool supportsInputMethod() const override;
     bool canProcessDrag() const override;
     bool wantsWheelEvents() override;
-<<<<<<< HEAD
     void updateAllLifecyclePhases() override;
-=======
-    void layoutIfNeeded() override;
->>>>>>> miniblink49
     void invalidatePaintIfNeeded() override { issuePaintInvalidations(); }
 
     // Widget methods
     void setFrameRect(const IntRect&) override;
-<<<<<<< HEAD
     void paint(GraphicsContext&, const CullRect&) const override;
     void invalidateRect(const IntRect&) override;
     void setFocused(bool, WebFocusType) override;
-=======
-    void paint(GraphicsContext*, const IntRect&) override;
-    void invalidateRect(const IntRect&) override;
-    void setFocus(bool, WebFocusType) override;
->>>>>>> miniblink49
     void show() override;
     void hide() override;
     void handleEvent(Event*) override;
     void frameRectsChanged() override;
     void setParentVisible(bool) override;
-<<<<<<< HEAD
     void widgetGeometryMayHaveChanged() override;
     bool isPluginContainer() const override { return true; }
     void eventListenersRemoved() override;
@@ -161,40 +116,14 @@ public:
     void clearScriptObjects() override;
     NPObject* scriptableObjectForElement() override;
     void loadFrameRequest(const WebURLRequest&, const WebString& target) override;
-=======
-    void setParent(Widget*) override;
-    void widgetPositionsUpdated() override;
-    bool isPluginContainer() const override { return true; }
-    void eventListenersRemoved() override;
-    bool pluginShouldPersist() const override;
-
-    // WebPluginContainer methods
-    WebElement element() override;
-    void invalidate() override;
-    void invalidateRect(const WebRect&) override;
-    void scrollRect(const WebRect&) override;
-    void setNeedsLayout() override;
-    void reportGeometry() override;
-    void allowScriptObjects() override;
-    void clearScriptObjects() override;
-    NPObject* scriptableObjectForElement() override;
-    v8::Local<v8::Object> v8ObjectForElement() override;
-    WebString executeScriptURL(const WebURL&, bool popupsAllowed) override;
-    void loadFrameRequest(const WebURLRequest&, const WebString& target, bool notifyNeeded, void* notifyData) override;
-    void zoomLevelChanged(double zoomLevel) override;
->>>>>>> miniblink49
     bool isRectTopmost(const WebRect&) override;
     void requestTouchEventType(TouchEventRequestType) override;
     void setWantsWheelEvents(bool) override;
     WebPoint rootFrameToLocalPoint(const WebPoint&) override;
     WebPoint localToRootFramePoint(const WebPoint&) override;
 
-<<<<<<< HEAD
     // Non-Oilpan, this cannot be null. With Oilpan, it will be
     // null when in a disposed state, pending finalization during the next GC.
-=======
-    // This cannot be null.
->>>>>>> miniblink49
     WebPlugin* plugin() override { return m_webPlugin; }
     void setPlugin(WebPlugin*) override;
 
@@ -202,15 +131,11 @@ public:
     float pageScaleFactor() override;
     float pageZoomFactor() override;
 
-<<<<<<< HEAD
     void setWebLayer(WebLayer*) override;
 
     void requestFullscreen() override;
     bool isFullscreenElement() const override;
     void cancelFullscreen() override;
-=======
-    virtual void setWebLayer(WebLayer*);
->>>>>>> miniblink49
 
     // Printing interface. The plugin can support custom printing
     // (which means it controls the layout, number of pages etc).
@@ -220,7 +145,6 @@ public:
     // If the plugin content should not be scaled to the printable area of
     // the page, then this method should return true.
     bool isPrintScalingDisabled() const;
-<<<<<<< HEAD
     // Returns true on success and sets the out parameter to the print preset
     // options for the document.
     bool getPrintPresetOptionsFromDocument(WebPrintPresetOptions*) const;
@@ -230,14 +154,6 @@ public:
     // Prints the page specified by pageNumber (0-based index) into the supplied
     // canvas.
     void printPage(int pageNumber, GraphicsContext&, const IntRect& paintRect);
-=======
-    // Returns true on success and sets the out parameter to the print preset options for the document.
-    bool getPrintPresetOptionsFromDocument(WebPrintPresetOptions*) const;
-    // Sets up printing at the specified WebPrintParams. Returns the number of pages to be printed at these settings.
-    int printBegin(const WebPrintParams&) const;
-    // Prints the page specified by pageNumber (0-based index) into the supplied canvas.
-    void printPage(int pageNumber, GraphicsContext*, const IntRect& paintRect);
->>>>>>> miniblink49
     // Ends the print operation.
     void printEnd();
 
@@ -250,22 +166,13 @@ public:
 
     // Resource load events for the plugin's source data:
     void didReceiveResponse(const ResourceResponse&) override;
-<<<<<<< HEAD
     void didReceiveData(const char* data, int dataLength) override;
     void didFinishLoading();
     void didFailLoading(const ResourceError&);
-=======
-    void didReceiveData(const char *data, int dataLength) override;
-    void didFinishLoading() override;
-    void didFailLoading(const ResourceError&) override;
-
-    void willDestroyPluginLoadObserver(WebPluginLoadObserver*);
->>>>>>> miniblink49
 
     DECLARE_VIRTUAL_TRACE();
     void dispose() override;
 
-<<<<<<< HEAD
 private:
     // Sets |windowRect| to the content rect of the plugin in screen space.
     // Sets |clippedAbsoluteRect| to the visible rect for the plugin, clipped to
@@ -278,14 +185,6 @@ private:
         IntRect& clippedLocalRect,
         IntRect& unclippedIntLocalRect) const;
 
-=======
-#if ENABLE(OILPAN)
-    LocalFrame* pluginFrame() const override { return frame(); }
-    void shouldDisposePlugin() override;
-#endif
-
-private:
->>>>>>> miniblink49
     WebPluginContainerImpl(HTMLPlugInElement*, WebPlugin*);
     ~WebPluginContainerImpl() override;
 
@@ -302,7 +201,6 @@ private:
 
     void issuePaintInvalidations();
 
-<<<<<<< HEAD
     void calculateGeometry(IntRect& windowRect,
         IntRect& clipRect,
         IntRect& unobscuredRect,
@@ -314,20 +212,6 @@ private:
 
     Member<HTMLPlugInElement> m_element;
     WebPlugin* m_webPlugin;
-=======
-    void calculateGeometry(
-        IntRect& windowRect,
-        IntRect& clipRect,
-        IntRect& unobscuredRect,
-        Vector<IntRect>& cutOutRects);
-    void windowCutOutRects(
-        const IntRect& frameRect,
-        Vector<IntRect>& cutOutRects);
-
-    RawPtrWillBeMember<HTMLPlugInElement> m_element;
-    WebPlugin* m_webPlugin;
-    Vector<WebPluginLoadObserver*> m_pluginLoadObservers;
->>>>>>> miniblink49
 
     WebLayer* m_webLayer;
 
@@ -336,7 +220,6 @@ private:
     TouchEventRequestType m_touchEventRequestType;
     bool m_wantsWheelEvents;
 
-<<<<<<< HEAD
     bool m_isDisposed;
 };
 
@@ -352,20 +235,6 @@ DEFINE_TYPE_CASTS(WebPluginContainerImpl,
     container,
     true,
     true);
-=======
-    bool m_inDispose;
-#if ENABLE(OILPAN)
-    // Oilpan: if true, the plugin container must dispose
-    // of its plugin when being finalized.
-    bool m_shouldDisposePlugin;
-#endif
-};
-
-DEFINE_TYPE_CASTS(WebPluginContainerImpl, Widget, widget, widget->isPluginContainer(), widget.isPluginContainer());
-// Unlike Widget, we need not worry about object type for container.
-// WebPluginContainerImpl is the only subclass of WebPluginContainer.
-DEFINE_TYPE_CASTS(WebPluginContainerImpl, WebPluginContainer, container, true, true);
->>>>>>> miniblink49
 
 } // namespace blink
 

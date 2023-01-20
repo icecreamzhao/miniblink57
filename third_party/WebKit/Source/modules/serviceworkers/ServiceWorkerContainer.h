@@ -41,22 +41,14 @@
 #include "modules/serviceworkers/ServiceWorker.h"
 #include "modules/serviceworkers/ServiceWorkerRegistration.h"
 #include "platform/heap/Handle.h"
-<<<<<<< HEAD
 #include "public/platform/modules/serviceworker/WebServiceWorkerProvider.h"
 #include "public/platform/modules/serviceworker/WebServiceWorkerProviderClient.h"
 #include "wtf/Forward.h"
 #include <memory>
-=======
-#include "public/platform/WebServiceWorkerProviderClient.h"
-#include "wtf/Forward.h"
-#include "wtf/PassRefPtr.h"
-#include "wtf/RefPtr.h"
->>>>>>> miniblink49
 
 namespace blink {
 
 class ExecutionContext;
-<<<<<<< HEAD
 class NavigatorServiceWorker;
 class WebServiceWorker;
 class WebServiceWorkerProvider;
@@ -106,48 +98,12 @@ public:
     {
         return ContextLifecycleObserver::getExecutionContext();
     }
-=======
-class WebServiceWorker;
-class WebServiceWorkerProvider;
-class WebServiceWorkerRegistration;
-
-class MODULES_EXPORT ServiceWorkerContainer final
-    : public RefCountedGarbageCollectedEventTargetWithInlineData<ServiceWorkerContainer>
-    , public ContextLifecycleObserver
-    , public WebServiceWorkerProviderClient {
-    DEFINE_WRAPPERTYPEINFO();
-    REFCOUNTED_GARBAGE_COLLECTED_EVENT_TARGET(ServiceWorkerContainer);
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(ServiceWorkerContainer);
-public:
-    static ServiceWorkerContainer* create(ExecutionContext*);
-    ~ServiceWorkerContainer();
-
-    void willBeDetachedFromFrame();
-
-    DECLARE_VIRTUAL_TRACE();
-
-    PassRefPtrWillBeRawPtr<ServiceWorker> controller() { return m_controller.get(); }
-    ScriptPromise ready(ScriptState*);
-    WebServiceWorkerProvider* provider() { return m_provider; }
-
-    ScriptPromise registerServiceWorker(ScriptState*, const String& pattern, const RegistrationOptions&);
-    ScriptPromise getRegistration(ScriptState*, const String& documentURL);
-    ScriptPromise getRegistrations(ScriptState*);
-
-    // WebServiceWorkerProviderClient overrides.
-    void setController(WebServiceWorker*, bool shouldNotifyControllerChange) override;
-    void dispatchMessageEvent(WebServiceWorker*, const WebString& message, const WebMessagePortChannelArray&) override;
-
-    // EventTarget overrides.
-    ExecutionContext* executionContext() const override { return ContextLifecycleObserver::executionContext(); }
->>>>>>> miniblink49
     const AtomicString& interfaceName() const override;
 
     DEFINE_ATTRIBUTE_EVENT_LISTENER(controllerchange);
     DEFINE_ATTRIBUTE_EVENT_LISTENER(message);
 
 private:
-<<<<<<< HEAD
     ServiceWorkerContainer(ExecutionContext*, NavigatorServiceWorker*);
 
     class GetRegistrationForReadyCallback;
@@ -161,17 +117,6 @@ private:
     Member<ServiceWorker> m_controller;
     Member<ReadyProperty> m_ready;
     Member<NavigatorServiceWorker> m_navigator;
-=======
-    explicit ServiceWorkerContainer(ExecutionContext*);
-
-    class GetRegistrationForReadyCallback;
-    typedef ScriptPromiseProperty<Member<ServiceWorkerContainer>, Member<ServiceWorkerRegistration>, Member<ServiceWorkerRegistration>> ReadyProperty;
-    ReadyProperty* createReadyProperty();
-
-    WebServiceWorkerProvider* m_provider;
-    RefPtrWillBeMember<ServiceWorker> m_controller;
-    Member<ReadyProperty> m_ready;
->>>>>>> miniblink49
 };
 
 } // namespace blink

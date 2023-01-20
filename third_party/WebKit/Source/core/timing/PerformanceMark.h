@@ -32,26 +32,24 @@
 
 namespace blink {
 
-class PerformanceMark final : public PerformanceEntry {
+class CORE_EXPORT PerformanceMark final : public PerformanceEntry {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     static PerformanceMark* create(const String& name, double startTime)
     {
         return new PerformanceMark(name, startTime);
     }
 
-    virtual bool isMark() override { return true; }
-
-    DEFINE_INLINE_VIRTUAL_TRACE()
-    {
-        PerformanceEntry::trace(visitor);
-    }
+    DEFINE_INLINE_VIRTUAL_TRACE() { PerformanceEntry::trace(visitor); }
 
 private:
     PerformanceMark(const String& name, double startTime)
-        : PerformanceEntry(name, "mark", startTime, startTime) { }
+        : PerformanceEntry(name, "mark", startTime, startTime)
+    {
+    }
 
-    virtual ~PerformanceMark() { }
+    ~PerformanceMark() override { }
 };
 
 } // namespace blink

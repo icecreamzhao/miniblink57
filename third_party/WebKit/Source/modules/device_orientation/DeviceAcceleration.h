@@ -32,7 +32,6 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 class DeviceAcceleration final : public GarbageCollected<DeviceAcceleration>,
                                  public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
@@ -40,12 +39,6 @@ class DeviceAcceleration final : public GarbageCollected<DeviceAcceleration>,
 public:
     static DeviceAcceleration* create(
         DeviceMotionData::Acceleration* acceleration)
-=======
-class DeviceAcceleration final : public GarbageCollected<DeviceAcceleration>, public ScriptWrappable {
-    DEFINE_WRAPPERTYPEINFO();
-public:
-    static DeviceAcceleration* create(DeviceMotionData::Acceleration* acceleration)
->>>>>>> miniblink49
     {
         return new DeviceAcceleration(acceleration);
     }

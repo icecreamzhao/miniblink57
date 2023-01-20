@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -9,10 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #ifndef SkSVGImage_DEFINED
 #define SkSVGImage_DEFINED
 
@@ -21,10 +13,7 @@
 class SkSVGImage : public SkSVGElement {
 public:
     DECLARE_SVG_INFO(Image);
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 private:
     void translateImage(SkSVGParser& parser);
     SkString f_height;

@@ -32,17 +32,13 @@
 #define ReplayingCanvas_h
 
 #include "platform/graphics/InterceptingCanvas.h"
-<<<<<<< HEAD
 #include "third_party/skia/include/core/SkPaint.h"
-=======
->>>>>>> miniblink49
 #include "third_party/skia/include/core/SkPicture.h"
 
 namespace blink {
 
 class ReplayingCanvas;
 
-<<<<<<< HEAD
 template <>
 class CanvasInterceptor<ReplayingCanvas>
     : protected InterceptingCanvasBase::CanvasInterceptorBase<ReplayingCanvas> {
@@ -56,29 +52,15 @@ public:
 
 class ReplayingCanvas : public InterceptingCanvas<ReplayingCanvas>,
                         public SkPicture::AbortCallback {
-=======
-template<> class CanvasInterceptor<ReplayingCanvas> : protected InterceptingCanvasBase::CanvasInterceptorBase<ReplayingCanvas> {
-public:
-    CanvasInterceptor(InterceptingCanvasBase* canvas) : InterceptingCanvasBase::CanvasInterceptorBase<ReplayingCanvas>(canvas) { }
-    ~CanvasInterceptor();
-};
-
-class ReplayingCanvas : public InterceptingCanvas<ReplayingCanvas>, public SkPicture::AbortCallback {
->>>>>>> miniblink49
 public:
     ReplayingCanvas(SkBitmap, unsigned fromStep, unsigned toStep);
 
     bool abort() override;
-<<<<<<< HEAD
     SkCanvas::SaveLayerStrategy getSaveLayerStrategy(
         const SaveLayerRec&) override;
     void onDrawPicture(const SkPicture*,
         const SkMatrix*,
         const SkPaint*) override;
-=======
-    SkCanvas::SaveLayerStrategy willSaveLayer(const SkRect* bounds, const SkPaint*, SaveFlags) override;
-    void onDrawPicture(const SkPicture*, const SkMatrix*, const SkPaint*) override;
->>>>>>> miniblink49
 
 private:
     friend class CanvasInterceptor<ReplayingCanvas>;

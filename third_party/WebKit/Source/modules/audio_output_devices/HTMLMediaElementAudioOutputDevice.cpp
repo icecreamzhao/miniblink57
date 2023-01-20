@@ -2,15 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "modules/audio_output_devices/HTMLMediaElementAudioOutputDevice.h"
 
 #include "bindings/core/v8/ScriptPromiseResolver.h"
 #include "bindings/core/v8/ScriptState.h"
-<<<<<<< HEAD
 #include "core/dom/DOMException.h"
 #include "core/dom/ExecutionContext.h"
 #include "modules/audio_output_devices/AudioOutputDeviceClient.h"
@@ -104,14 +99,6 @@ namespace {
 
 } // namespace
 
-=======
-#include "core/dom/ExecutionContext.h"
-#include "modules/audio_output_devices/SetSinkIdCallbacks.h"
-#include "platform/Logging.h"
-
-namespace blink {
-
->>>>>>> miniblink49
 HTMLMediaElementAudioOutputDevice::HTMLMediaElementAudioOutputDevice()
     : m_sinkId("")
 {
@@ -128,7 +115,6 @@ void HTMLMediaElementAudioOutputDevice::setSinkId(const String& sinkId)
     m_sinkId = sinkId;
 }
 
-<<<<<<< HEAD
 ScriptPromise HTMLMediaElementAudioOutputDevice::setSinkId(
     ScriptState* scriptState,
     HTMLMediaElement& element,
@@ -142,17 +128,6 @@ ScriptPromise HTMLMediaElementAudioOutputDevice::setSinkId(
         resolver->startAsync();
 
     return promise;
-=======
-ScriptPromise HTMLMediaElementAudioOutputDevice::setSinkId(ScriptState* scriptState, HTMLMediaElement& element, const String& sinkId)
-{
-    WebMediaPlayer* webMediaPlayer = element.webMediaPlayer();
-    if (!webMediaPlayer)
-        return ScriptPromise::rejectWithDOMException(scriptState, DOMException::create(AbortError, "No media player available"));
-
-    RefPtrWillBeRawPtr<ScriptPromiseResolver> resolver = ScriptPromiseResolver::create(scriptState);
-    webMediaPlayer->setSinkId(sinkId, new SetSinkIdCallbacks(resolver, element, sinkId));
-    return resolver->promise();
->>>>>>> miniblink49
 }
 
 const char* HTMLMediaElementAudioOutputDevice::supplementName()
@@ -160,7 +135,6 @@ const char* HTMLMediaElementAudioOutputDevice::supplementName()
     return "HTMLMediaElementAudioOutputDevice";
 }
 
-<<<<<<< HEAD
 HTMLMediaElementAudioOutputDevice& HTMLMediaElementAudioOutputDevice::from(
     HTMLMediaElement& element)
 {
@@ -169,25 +143,13 @@ HTMLMediaElementAudioOutputDevice& HTMLMediaElementAudioOutputDevice::from(
     if (!supplement) {
         supplement = new HTMLMediaElementAudioOutputDevice();
         provideTo(element, supplementName(), supplement);
-=======
-HTMLMediaElementAudioOutputDevice& HTMLMediaElementAudioOutputDevice::from(HTMLMediaElement& element)
-{
-    HTMLMediaElementAudioOutputDevice* supplement = static_cast<HTMLMediaElementAudioOutputDevice*>(WillBeHeapSupplement<HTMLMediaElement>::from(element, supplementName()));
-    if (!supplement) {
-        supplement = new HTMLMediaElementAudioOutputDevice();
-        provideTo(element, supplementName(), adoptPtrWillBeNoop(supplement));
->>>>>>> miniblink49
     }
     return *supplement;
 }
 
 DEFINE_TRACE(HTMLMediaElementAudioOutputDevice)
 {
-<<<<<<< HEAD
     Supplement<HTMLMediaElement>::trace(visitor);
-=======
-    WillBeHeapSupplement<HTMLMediaElement>::trace(visitor);
->>>>>>> miniblink49
 }
 
 } // namespace blink

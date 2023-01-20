@@ -1,20 +1,13 @@
 #!/bin/bash
 #
-<<<<<<< HEAD
 # Wait for the device to be connected.
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 SKIP_TOOLCHAIN_SETUP="true"
-=======
-# Wait for the device to be both attached and booted.
-
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
->>>>>>> miniblink49
 source $SCRIPT_DIR/android_setup.sh
 source $SCRIPT_DIR/utils/setup_adb.sh
 
 set -e
-<<<<<<< HEAD
 
 # Wait for the device to be connected and fully booted.
 while [ "$($ADB $DEVICE_SERIAL shell getprop sys.boot_completed | tr -d '\r')" != "1" ]; do
@@ -23,12 +16,3 @@ while [ "$($ADB $DEVICE_SERIAL shell getprop sys.boot_completed | tr -d '\r')" !
 done
 
 echo "Connected!"
-=======
-set -x
-
-$ADB $DEVICE_SERIAL wait-for-device
-
-while [ "$($ADB $DEVICE_SERIAL shell getprop sys.boot_completed | tr -d '\r')" != "1" ]; do
-  sleep 5
-done
->>>>>>> miniblink49

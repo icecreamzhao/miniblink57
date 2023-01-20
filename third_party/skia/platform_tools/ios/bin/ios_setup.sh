@@ -18,27 +18,14 @@ IOS_DOCS_DIR="Documents"
 # Temporary location to assemble the app into an .ipa package.
 IOS_PCKG_DIR="/tmp/ios_pckg"
 
-<<<<<<< HEAD
-=======
-# Bundle id of the app that runs the tests.
-TEST_RUNNER_BUNDLE_ID="com.google.iOSShell"
-
->>>>>>> miniblink49
 # Directory with the Skia source.
 SKIA_SRC_DIR=$(cd "${SCRIPT_DIR}/../../.."; pwd)
 
 # Provisioning profile - this needs to be set up on the local machine.
-<<<<<<< HEAD
 PROVISIONING_PROFILE=""
 
 # Code Signing identity - this needs to be set up on the local machine.
 CODE_SIGN_IDENTITY="iPhone Developer"
-=======
-PROVISIONING_PROFILE="9e88090d-abed-4e89-b106-3eff3512d31f"
-
-# Code Signing identity - this needs to be set up on the local machine.
-CODE_SIGN_IDENTITY="iPhone Developer: Google Development (3F4Y5873JF)"
->>>>>>> miniblink49
 
 IOS_BUNDLE_ID="com.google.iOSShell"
 
@@ -54,7 +41,6 @@ if [[ -z "$SKIA_OUT" ]]; then
   SKIA_OUT="$SKIA_SRC_DIR/out"
 fi 
 
-<<<<<<< HEAD
 # Location of XCode build products.
 if [[ -z "$XCODEBUILD" ]]; then
   XCODEBUILD="${SKIA_SRC_DIR}/xcodebuild"
@@ -69,13 +55,10 @@ IOS_OUT=${XCODEBUILD}/${BUILDTYPE}-iphoneos
 # Location of the compiled iOS app.
 IOS_APP_PATH=${IOS_OUT}/${IOS_APP}
 
-=======
->>>>>>> miniblink49
 ios_uninstall_app() {
   ideviceinstaller -U "$IOS_BUNDLE_ID"
 }
 
-<<<<<<< HEAD
 ios_package_app() {
   rm -rf $IOS_PCKG_DIR
   mkdir -p $IOS_PCKG_DIR/Payload  # this directory must be named 'Payload'
@@ -88,17 +71,6 @@ ios_package_app() {
 
 ios_install_app() {
   ideviceinstaller -i ${IOS_APP_PATH}
-=======
-ios_install_app() {
-  rm -rf $IOS_PCKG_DIR
-  mkdir -p $IOS_PCKG_DIR/Payload  # this directory must be named 'Payload'
-  cp -rf "${SKIA_SRC_DIR}/xcodebuild/${BUILDTYPE}-iphoneos/iOSShell.app" "${IOS_PCKG_DIR}/Payload/"
-  local RET_DIR=`pwd`
-  cd $IOS_PCKG_DIR
-  zip -r iOSShell.ipa Payload
-  ideviceinstaller -i ./iOSShell.ipa
-  cd $RET_DIR
->>>>>>> miniblink49
 }
 
 ios_rm() {
@@ -136,11 +108,7 @@ ios_mount() {
   if [[ ! -d "$IOS_MOUNT_POINT" ]]; then
     mkdir -p $IOS_MOUNT_POINT
   fi
-<<<<<<< HEAD
   ifuse --container $IOS_BUNDLE_ID $IOS_MOUNT_POINT
-=======
-  ifuse --container $TEST_RUNNER_BUNDLE_ID $IOS_MOUNT_POINT
->>>>>>> miniblink49
   sleep 1
   >&2 echo "Successfully mounted device."
 }

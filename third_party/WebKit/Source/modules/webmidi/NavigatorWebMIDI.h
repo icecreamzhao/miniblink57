@@ -32,11 +32,7 @@
 #define NavigatorWebMIDI_h
 
 #include "bindings/core/v8/ScriptPromise.h"
-<<<<<<< HEAD
 #include "core/frame/Navigator.h"
-=======
-#include "core/frame/DOMWindowProperty.h"
->>>>>>> miniblink49
 #include "modules/webmidi/MIDIOptions.h"
 #include "platform/Supplementable.h"
 #include "platform/heap/Handle.h"
@@ -45,7 +41,6 @@ namespace blink {
 
 class Navigator;
 
-<<<<<<< HEAD
 class NavigatorWebMIDI final : public GarbageCollected<NavigatorWebMIDI>,
                                public Supplement<Navigator> {
     USING_GARBAGE_COLLECTED_MIXIN(NavigatorWebMIDI);
@@ -55,25 +50,12 @@ public:
     static ScriptPromise requestMIDIAccess(ScriptState*,
         Navigator&,
         const MIDIOptions&);
-=======
-class NavigatorWebMIDI final : public GarbageCollectedFinalized<NavigatorWebMIDI>, public HeapSupplement<Navigator>, public DOMWindowProperty {
-    USING_GARBAGE_COLLECTED_MIXIN(NavigatorWebMIDI);
-public:
-    static NavigatorWebMIDI& from(Navigator&);
-    virtual ~NavigatorWebMIDI();
-
-    static ScriptPromise requestMIDIAccess(ScriptState*, Navigator&, const MIDIOptions&);
->>>>>>> miniblink49
     ScriptPromise requestMIDIAccess(ScriptState*, const MIDIOptions&);
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
-<<<<<<< HEAD
     explicit NavigatorWebMIDI(Navigator&);
-=======
-    explicit NavigatorWebMIDI(LocalFrame*);
->>>>>>> miniblink49
     static const char* supplementName();
 };
 

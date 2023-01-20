@@ -24,42 +24,26 @@ enum SkPixelGeometry {
 };
 
 // Returns true iff geo is a known geometry and is RGB.
-<<<<<<< HEAD
 static inline bool SkPixelGeometryIsRGB(SkPixelGeometry geo)
 {
-=======
-static inline bool SkPixelGeometryIsRGB(SkPixelGeometry geo) {
->>>>>>> miniblink49
     return kRGB_H_SkPixelGeometry == geo || kRGB_V_SkPixelGeometry == geo;
 }
 
 // Returns true iff geo is a known geometry and is BGR.
-<<<<<<< HEAD
 static inline bool SkPixelGeometryIsBGR(SkPixelGeometry geo)
 {
-=======
-static inline bool SkPixelGeometryIsBGR(SkPixelGeometry geo) {
->>>>>>> miniblink49
     return kBGR_H_SkPixelGeometry == geo || kBGR_V_SkPixelGeometry == geo;
 }
 
 // Returns true iff geo is a known geometry and is horizontal.
-<<<<<<< HEAD
 static inline bool SkPixelGeometryIsH(SkPixelGeometry geo)
 {
-=======
-static inline bool SkPixelGeometryIsH(SkPixelGeometry geo) {
->>>>>>> miniblink49
     return kRGB_H_SkPixelGeometry == geo || kBGR_H_SkPixelGeometry == geo;
 }
 
 // Returns true iff geo is a known geometry and is vertical.
-<<<<<<< HEAD
 static inline bool SkPixelGeometryIsV(SkPixelGeometry geo)
 {
-=======
-static inline bool SkPixelGeometryIsV(SkPixelGeometry geo) {
->>>>>>> miniblink49
     return kRGB_V_SkPixelGeometry == geo || kBGR_V_SkPixelGeometry == geo;
 }
 
@@ -71,7 +55,6 @@ static inline bool SkPixelGeometryIsV(SkPixelGeometry geo) {
 class SK_API SkSurfaceProps {
 public:
     enum Flags {
-<<<<<<< HEAD
         kDisallowAntiAlias_Flag = 1 << 0,
         kDisallowDither_Flag = 1 << 1,
         kUseDeviceIndependentFonts_Flag = 1 << 2,
@@ -90,12 +73,6 @@ public:
     /** Deprecated alias used by Chromium. Will be removed. */
     static const Flags kUseDistanceFieldFonts_Flag = kUseDeviceIndependentFonts_Flag;
 
-=======
-        kDisallowAntiAlias_Flag     = 1 << 0,
-        kDisallowDither_Flag        = 1 << 1,
-        kUseDistanceFieldFonts_Flag = 1 << 2,
-    };
->>>>>>> miniblink49
     SkSurfaceProps(uint32_t flags, SkPixelGeometry);
 
     enum InitType {
@@ -110,24 +87,16 @@ public:
 
     bool isDisallowAA() const { return SkToBool(fFlags & kDisallowAntiAlias_Flag); }
     bool isDisallowDither() const { return SkToBool(fFlags & kDisallowDither_Flag); }
-<<<<<<< HEAD
     bool isUseDeviceIndependentFonts() const
     {
         return SkToBool(fFlags & kUseDeviceIndependentFonts_Flag);
     }
     bool isGammaCorrect() const { return SkToBool(fFlags & kGammaCorrect_Flag); }
-=======
-    bool isUseDistanceFieldFonts() const { return SkToBool(fFlags & kUseDistanceFieldFonts_Flag); }
->>>>>>> miniblink49
 
 private:
     SkSurfaceProps();
 
-<<<<<<< HEAD
     uint32_t fFlags;
-=======
-    uint32_t        fFlags;
->>>>>>> miniblink49
     SkPixelGeometry fPixelGeometry;
 };
 

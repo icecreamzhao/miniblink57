@@ -36,30 +36,32 @@ namespace blink {
 // Link relation bitmask values.
 // FIXME: Uncomment as the various link relations are implemented.
 enum {
-//     RelationAlternate   = 0x00000001,
-//     RelationArchives    = 0x00000002,
-//     RelationAuthor      = 0x00000004,
-//     RelationBoomark     = 0x00000008,
-//     RelationExternal    = 0x00000010,
-//     RelationFirst       = 0x00000020,
-//     RelationHelp        = 0x00000040,
-//     RelationIndex       = 0x00000080,
-//     RelationLast        = 0x00000100,
-//     RelationLicense     = 0x00000200,
-//     RelationNext        = 0x00000400,
-//     RelationNoFolow    = 0x00000800,
-    RelationNoReferrer     = 0x00001000,
-//     RelationPrev        = 0x00002000,
-//     RelationSearch      = 0x00004000,
-//     RelationSidebar     = 0x00008000,
-//     RelationTag         = 0x00010000,
-//     RelationUp          = 0x00020000,
+    //     RelationAlternate   = 0x00000001,
+    //     RelationArchives    = 0x00000002,
+    //     RelationAuthor      = 0x00000004,
+    //     RelationBoomark     = 0x00000008,
+    //     RelationExternal    = 0x00000010,
+    //     RelationFirst       = 0x00000020,
+    //     RelationHelp        = 0x00000040,
+    //     RelationIndex       = 0x00000080,
+    //     RelationLast        = 0x00000100,
+    //     RelationLicense     = 0x00000200,
+    //     RelationNext        = 0x00000400,
+    //     RelationNoFolow    = 0x00000800,
+    RelationNoReferrer = 0x00001000,
+    //     RelationPrev        = 0x00002000,
+    //     RelationSearch      = 0x00004000,
+    //     RelationSidebar     = 0x00008000,
+    //     RelationTag         = 0x00010000,
+    //     RelationUp          = 0x00020000,
+    RelationNoOpener = 0x00040000,
 };
 
 class CORE_EXPORT HTMLAnchorElement : public HTMLElement, public DOMURLUtils {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<HTMLAnchorElement> create(Document&);
+    static HTMLAnchorElement* create(Document&);
 
     ~HTMLAnchorElement() override;
 
@@ -86,17 +88,26 @@ public:
 
     void sendPings(const KURL& destinationURL) const;
 
+    DECLARE_VIRTUAL_TRACE();
+
 protected:
     HTMLAnchorElement(const QualifiedName&, Document&);
 
-    void attributeWillChange(const QualifiedName&, const AtomicString& oldValue, const AtomicString& newValue) override;
-    void parseAttribute(const QualifiedName&, const AtomicString&) override;
+    void parseAttribute(const AttributeModificationParams&) override;
     bool supportsFocus() const override;
+    bool matchesEnabledPseudoClass() const override;
 
 private:
+    class NavigationHintSender;
+
+    void attributeChanged(const AttributeModificationParams&) override;
     bool shouldHaveFocusAppearance() const final;
-    void dispatchFocusEvent(Element* oldFocusedElement, WebFocusType) override;
-    void dispatchBlurEvent(Element* newFocusedElement, WebFocusType) override;
+    void dispatchFocusEvent(Element* oldFocusedElement,
+        WebFocusType,
+        InputDeviceCapabilities* sourceCapabilities) override;
+    void dispatchBlurEvent(Element* newFocusedElement,
+        WebFocusType,
+        InputDeviceCapabilities* sourceCapabilities) override;
     bool isMouseFocusable() const override;
     bool isKeyboardFocusable() const override;
     void defaultEventHandler(Event*) final;
@@ -105,21 +116,24 @@ private:
     bool isURLAttribute(const Attribute&) const final;
     bool hasLegalLinkAttribute(const QualifiedName&) const final;
     bool canStartSelection() const final;
-    short tabIndex() const final;
+    int tabIndex() const final;
     bool draggable() const final;
     bool isInteractiveContent() const final;
     InsertionNotificationRequest insertedInto(ContainerNode*) override;
     void handleClick(Event*);
+    NavigationHintSender* ensureNavigationHintSender();
 
     uint32_t m_linkRelations;
     mutable LinkHash m_cachedVisitedLinkHash;
     bool m_wasFocusedByMouse;
+    Member<NavigationHintSender> m_navigationHintSender;
 };
 
 inline LinkHash HTMLAnchorElement::visitedLinkHash() const
 {
     if (!m_cachedVisitedLinkHash)
-        m_cachedVisitedLinkHash = blink::visitedLinkHash(document().baseURL(), fastGetAttribute(HTMLNames::hrefAttr));
+        m_cachedVisitedLinkHash = blink::visitedLinkHash(
+            document().baseURL(), fastGetAttribute(HTMLNames::hrefAttr));
     return m_cachedVisitedLinkHash;
 }
 

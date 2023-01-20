@@ -8,12 +8,7 @@
 #ifndef SkPicture_DEFINED
 #define SkPicture_DEFINED
 
-<<<<<<< HEAD
 #include "SkRect.h"
-=======
-#include "SkImageDecoder.h"
-#include "SkLazyPtr.h"
->>>>>>> miniblink49
 #include "SkRefCnt.h"
 #include "SkTypes.h"
 
@@ -21,7 +16,6 @@ class GrContext;
 class SkBigPicture;
 class SkBitmap;
 class SkCanvas;
-<<<<<<< HEAD
 class SkPath;
 class SkPictureData;
 class SkPixelSerializer;
@@ -31,12 +25,6 @@ class SkStream;
 class SkTypefacePlayback;
 class SkWStream;
 class SkWriteBuffer;
-=======
-class SkPictureData;
-class SkPixelSerializer;
-class SkStream;
-class SkWStream;
->>>>>>> miniblink49
 struct SkPictInfo;
 
 /** \class SkPicture
@@ -69,7 +57,6 @@ public:
      *  @return A new SkPicture representing the serialized data, or NULL if the stream is
      *          invalid.
      */
-<<<<<<< HEAD
     static sk_sp<SkPicture> MakeFromStream(SkStream*, InstallPixelRefProc proc);
 
     /**
@@ -83,10 +70,6 @@ public:
      *          invalid.
      */
     static sk_sp<SkPicture> MakeFromStream(SkStream*);
-=======
-    static SkPicture* CreateFromStream(SkStream*,
-                                       InstallPixelRefProc proc = &SkImageDecoder::DecodeMemory);
->>>>>>> miniblink49
 
     /**
      *  Recreate a picture that was serialized into a buffer. If the creation requires bitmap
@@ -96,11 +79,7 @@ public:
      *  @return A new SkPicture representing the serialized data, or NULL if the buffer is
      *          invalid.
      */
-<<<<<<< HEAD
     static sk_sp<SkPicture> MakeFromBuffer(SkReadBuffer&);
-=======
-    static SkPicture* CreateFromBuffer(SkReadBuffer&);
->>>>>>> miniblink49
 
     /**
     *  Subclasses of this can be passed to playback(). During the playback
@@ -114,13 +93,8 @@ public:
     */
     class SK_API AbortCallback {
     public:
-<<<<<<< HEAD
         AbortCallback() { }
         virtual ~AbortCallback() { }
-=======
-        AbortCallback() {}
-        virtual ~AbortCallback() {}
->>>>>>> miniblink49
         virtual bool abort() = 0;
     };
 
@@ -143,13 +117,7 @@ public:
 
     /**
      *  Serialize to a stream. If non NULL, serializer will be used to serialize
-<<<<<<< HEAD
      *  bitmaps and images in the picture.
-=======
-     *  any bitmaps in the picture.
-     *
-     *  TODO: Use serializer to serialize SkImages as well.
->>>>>>> miniblink49
      */
     void serialize(SkWStream*, SkPixelSerializer* = NULL) const;
 
@@ -171,13 +139,6 @@ public:
      */
     virtual int approximateOpCount() const = 0;
 
-<<<<<<< HEAD
-=======
-    /** Return true if this picture contains text.
-     */
-    virtual bool hasText() const = 0;
-
->>>>>>> miniblink49
     /** Returns the approximate byte size of this picture, not including large ref'd objects. */
     virtual size_t approximateBytesUsed() const = 0;
 
@@ -192,7 +153,6 @@ public:
     static bool InternalOnly_StreamIsSKP(SkStream*, SkPictInfo*);
     static bool InternalOnly_BufferIsSKP(SkReadBuffer*, SkPictInfo*);
 
-<<<<<<< HEAD
 #ifdef SK_SUPPORT_LEGACY_PICTURE_GPUVETO
     /** Return true if the picture is suitable for rendering on the GPU.  */
     bool suitableForGpuRasterization(GrContext*, const char** whyNot = NULL) const;
@@ -202,13 +162,6 @@ public:
     struct DeletionMessage {
         int32_t fUniqueID;
     }; // TODO: -> uint32_t?
-=======
-    /** Return true if the picture is suitable for rendering on the GPU.  */
-    bool suitableForGpuRasterization(GrContext*, const char** whyNot = NULL) const;
-
-    // Sent via SkMessageBus from destructor.
-    struct DeletionMessage { int32_t fUniqueID; };  // TODO: -> uint32_t?
->>>>>>> miniblink49
 
     // Returns NULL if this is not an SkBigPicture.
     virtual const SkBigPicture* asSkBigPicture() const { return NULL; }
@@ -217,7 +170,6 @@ public:
     static void SetPictureIOSecurityPrecautionsEnabled_Dangerous(bool set);
     static bool PictureIOSecurityPrecautionsEnabled();
 
-<<<<<<< HEAD
 #ifdef SK_SUPPORT_LEGACY_PICTURE_PTR
     static SkPicture* CreateFromStream(SkStream* stream, InstallPixelRefProc proc)
     {
@@ -233,14 +185,11 @@ public:
     }
 #endif
 
-=======
->>>>>>> miniblink49
 private:
     // Subclass whitelist.
     SkPicture();
     friend class SkBigPicture;
     friend class SkEmptyPicture;
-<<<<<<< HEAD
     template <typename>
     friend class SkMiniPicture;
 
@@ -250,11 +199,6 @@ private:
 
     virtual int numSlowPaths() const = 0;
     friend class SkPictureGpuAnalyzer;
-=======
-    template <typename> friend class SkMiniPicture;
-
-    virtual int numSlowPaths() const = 0;
->>>>>>> miniblink49
     friend struct SkPathCounter;
 
     // V35: Store SkRect (rather then width & height) in header
@@ -266,7 +210,6 @@ private:
     // V41: Added serialization of SkBitmapSource's filterQuality parameter
     // V42: Added a bool to SkPictureShader serialization to indicate did-we-serialize-a-picture?
     // V43: Added DRAW_IMAGE and DRAW_IMAGE_RECT opt codes to serialized data
-<<<<<<< HEAD
     // V44: Move annotations from paint to drawAnnotation
     // V45: Add invNormRotation to SkLightingShader.
 
@@ -287,21 +230,6 @@ private:
     static sk_sp<SkPicture> Forwardport(const SkPictInfo&,
         const SkPictureData*,
         const SkReadBuffer* buffer);
-=======
-
-    // Only SKPs within the min/current picture version range (inclusive) can be read.
-    static const uint32_t     MIN_PICTURE_VERSION = 35;     // Produced by Chrome M39.
-    static const uint32_t CURRENT_PICTURE_VERSION = 43;
-
-    static_assert(MIN_PICTURE_VERSION <= 41,
-                  "Remove kFontFileName and related code from SkFontDescriptor.cpp.");
-
-    static_assert(MIN_PICTURE_VERSION <= 42,
-                  "Remove COMMENT API handlers from SkPicturePlayback.cpp");
-
-    static bool IsValidPictInfo(const SkPictInfo& info);
-    static SkPicture* Forwardport(const SkPictInfo&, const SkPictureData*);
->>>>>>> miniblink49
 
     SkPictInfo createHeader() const;
     SkPictureData* backport() const;

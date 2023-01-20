@@ -1,16 +1,8 @@
-<<<<<<< HEAD
 #import "SkEvent.h"
 #import "SkOSMenu.h"
 #import "SkOptionListController.h"
 #import "SkUIView.h"
 #import <UIKit/UIKit.h>
-=======
-#import <UIKit/UIKit.h>
-#import "SkOptionListController.h"
-#import "SkOSMenu.h"
-#import "SkEvent.h"
-#import "SkUIView.h"
->>>>>>> miniblink49
 @interface SkOptionItem : NSObject {
     UITableViewCell* fCell;
     const SkOSMenu::Item* fItem;
@@ -20,11 +12,7 @@
 
 @end
 
-<<<<<<< HEAD
 @interface SkOptionListItem : SkOptionItem {
-=======
-@interface SkOptionListItem : SkOptionItem{
->>>>>>> miniblink49
     SkOptionListController* fOptions;
 }
 @property (nonatomic, retain) SkOptionListController* fOptions;

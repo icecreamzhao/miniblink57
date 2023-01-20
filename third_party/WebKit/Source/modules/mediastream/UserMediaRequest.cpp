@@ -29,11 +29,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
-
->>>>>>> miniblink49
 #include "modules/mediastream/UserMediaRequest.h"
 
 #include "bindings/core/v8/Dictionary.h"
@@ -42,36 +37,26 @@
 #include "core/dom/Document.h"
 #include "core/dom/ExceptionCode.h"
 #include "core/dom/SpaceSplitString.h"
-<<<<<<< HEAD
 #include "core/frame/Deprecation.h"
 #include "core/frame/HostsUsingFeatures.h"
 #include "modules/mediastream/MediaConstraintsImpl.h"
 #include "modules/mediastream/MediaStream.h"
 #include "modules/mediastream/MediaStreamConstraints.h"
 #include "modules/mediastream/MediaTrackConstraints.h"
-=======
-#include "modules/mediastream/MediaConstraintsImpl.h"
-#include "modules/mediastream/MediaStream.h"
->>>>>>> miniblink49
 #include "modules/mediastream/UserMediaController.h"
 #include "platform/mediastream/MediaStreamCenter.h"
 #include "platform/mediastream/MediaStreamDescriptor.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 static WebMediaConstraints parseOptions(
     ExecutionContext* context,
     const BooleanOrMediaTrackConstraints& options,
     MediaErrorState& errorState)
-=======
-static WebMediaConstraints parseOptions(const Dictionary& options, const String& mediaType, ExceptionState& exceptionState)
->>>>>>> miniblink49
 {
     WebMediaConstraints constraints;
 
     Dictionary constraintsDictionary;
-<<<<<<< HEAD
     if (options.isNull()) {
         // Do nothing.
     } else if (options.isMediaTrackConstraints()) {
@@ -82,22 +67,11 @@ static WebMediaConstraints parseOptions(const Dictionary& options, const String&
         if (options.getAsBoolean()) {
             constraints = MediaConstraintsImpl::create();
         }
-=======
-    bool ok = options.get(mediaType, constraintsDictionary);
-    if (ok && !constraintsDictionary.isUndefinedOrNull())
-        constraints = MediaConstraintsImpl::create(constraintsDictionary, exceptionState);
-    else {
-        bool mediaRequested = false;
-        DictionaryHelper::get(options, mediaType, mediaRequested);
-        if (mediaRequested)
-            constraints = MediaConstraintsImpl::create();
->>>>>>> miniblink49
     }
 
     return constraints;
 }
 
-<<<<<<< HEAD
 UserMediaRequest* UserMediaRequest::create(
     ExecutionContext* context,
     UserMediaController* controller,
@@ -138,27 +112,6 @@ UserMediaRequest::UserMediaRequest(
     WebMediaConstraints video,
     NavigatorUserMediaSuccessCallback* successCallback,
     NavigatorUserMediaErrorCallback* errorCallback)
-=======
-UserMediaRequest* UserMediaRequest::create(ExecutionContext* context, UserMediaController* controller, const Dictionary& options, NavigatorUserMediaSuccessCallback* successCallback, NavigatorUserMediaErrorCallback* errorCallback, ExceptionState& exceptionState)
-{
-    WebMediaConstraints audio = parseOptions(options, "audio", exceptionState);
-    if (exceptionState.hadException())
-        return nullptr;
-
-    WebMediaConstraints video = parseOptions(options, "video", exceptionState);
-    if (exceptionState.hadException())
-        return nullptr;
-
-    if (audio.isNull() && video.isNull()) {
-        exceptionState.throwDOMException(SyntaxError, "At least one of audio and video must be requested");
-        return nullptr;
-    }
-
-    return new UserMediaRequest(context, controller, audio, video, successCallback, errorCallback);
-}
-
-UserMediaRequest::UserMediaRequest(ExecutionContext* context, UserMediaController* controller, WebMediaConstraints audio, WebMediaConstraints video, NavigatorUserMediaSuccessCallback* successCallback, NavigatorUserMediaErrorCallback* errorCallback)
->>>>>>> miniblink49
     : ContextLifecycleObserver(context)
     , m_audio(audio)
     , m_video(video)
@@ -168,13 +121,7 @@ UserMediaRequest::UserMediaRequest(ExecutionContext* context, UserMediaControlle
 {
 }
 
-<<<<<<< HEAD
 UserMediaRequest::~UserMediaRequest() { }
-=======
-UserMediaRequest::~UserMediaRequest()
-{
-}
->>>>>>> miniblink49
 
 bool UserMediaRequest::audio() const
 {
@@ -196,7 +143,6 @@ WebMediaConstraints UserMediaRequest::videoConstraints() const
     return m_video;
 }
 
-<<<<<<< HEAD
 bool UserMediaRequest::isSecureContextUse(String& errorMessage)
 {
     Document* document = ownerDocument();
@@ -224,11 +170,6 @@ bool UserMediaRequest::isSecureContextUse(String& errorMessage)
 Document* UserMediaRequest::ownerDocument()
 {
     if (ExecutionContext* context = getExecutionContext()) {
-=======
-Document* UserMediaRequest::ownerDocument()
-{
-    if (ExecutionContext* context = executionContext()) {
->>>>>>> miniblink49
         return toDocument(context);
     }
 
@@ -241,7 +182,6 @@ void UserMediaRequest::start()
         m_controller->requestUserMedia(this);
 }
 
-<<<<<<< HEAD
 void UserMediaRequest::succeed(MediaStreamDescriptor* streamDescriptor)
 {
     if (!getExecutionContext())
@@ -264,31 +204,10 @@ void UserMediaRequest::succeed(MediaStreamDescriptor* streamDescriptor)
     }
 
     m_successCallback->handleEvent(stream);
-=======
-void UserMediaRequest::succeed(PassRefPtr<MediaStreamDescriptor> streamDescriptor)
-{
-    if (!executionContext())
-        return;
-
-    RefPtrWillBeRawPtr<MediaStream> stream = MediaStream::create(executionContext(), streamDescriptor);
-
-    MediaStreamTrackVector audioTracks = stream->getAudioTracks();
-    for (MediaStreamTrackVector::iterator iter = audioTracks.begin(); iter != audioTracks.end(); ++iter) {
-        (*iter)->component()->source()->setConstraints(m_audio);
-    }
-
-    MediaStreamTrackVector videoTracks = stream->getVideoTracks();
-    for (MediaStreamTrackVector::iterator iter = videoTracks.begin(); iter != videoTracks.end(); ++iter) {
-        (*iter)->component()->source()->setConstraints(m_video);
-    }
-
-    m_successCallback->handleEvent(stream.get());
->>>>>>> miniblink49
 }
 
 void UserMediaRequest::failPermissionDenied(const String& message)
 {
-<<<<<<< HEAD
     if (!getExecutionContext())
         return;
     m_errorCallback->handleEvent(NavigatorUserMediaError::create(
@@ -318,40 +237,11 @@ void UserMediaRequest::failUASpecific(const String& name,
 }
 
 void UserMediaRequest::contextDestroyed(ExecutionContext*)
-=======
-    if (!executionContext())
-        return;
-    m_errorCallback->handleEvent(NavigatorUserMediaError::create(NavigatorUserMediaError::NamePermissionDenied, message, String()));
-}
-
-void UserMediaRequest::failConstraint(const String& constraintName, const String& message)
-{
-    ASSERT(!constraintName.isEmpty());
-    if (!executionContext())
-        return;
-    m_errorCallback->handleEvent(NavigatorUserMediaError::create(NavigatorUserMediaError::NameConstraintNotSatisfied, message, constraintName));
-}
-
-void UserMediaRequest::failUASpecific(const String& name, const String& message, const String& constraintName)
-{
-    ASSERT(!name.isEmpty());
-    if (!executionContext())
-        return;
-    m_errorCallback->handleEvent(NavigatorUserMediaError::create(name, message, constraintName));
-}
-
-void UserMediaRequest::contextDestroyed()
->>>>>>> miniblink49
 {
     if (m_controller) {
         m_controller->cancelUserMediaRequest(this);
         m_controller = nullptr;
     }
-<<<<<<< HEAD
-=======
-
-    ContextLifecycleObserver::contextDestroyed();
->>>>>>> miniblink49
 }
 
 DEFINE_TRACE(UserMediaRequest)

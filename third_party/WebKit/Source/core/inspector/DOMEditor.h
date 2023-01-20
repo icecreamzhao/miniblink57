@@ -31,6 +31,7 @@
 #ifndef DOMEditor_h
 #define DOMEditor_h
 
+#include "core/inspector/protocol/Forward.h"
 #include "platform/heap/Handle.h"
 #include "wtf/text/WTFString.h"
 
@@ -42,32 +43,40 @@ class ExceptionState;
 class InspectorHistory;
 class Node;
 class Text;
+using protocol::Response;
 
-typedef String ErrorString;
-
-class DOMEditor final : public NoBaseWillBeGarbageCollected<DOMEditor> {
+class DOMEditor final : public GarbageCollected<DOMEditor> {
     WTF_MAKE_NONCOPYABLE(DOMEditor);
-    WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(DOMEditor);
+
 public:
     explicit DOMEditor(InspectorHistory*);
 
     DECLARE_TRACE();
 
-    bool insertBefore(ContainerNode* parentNode, PassRefPtrWillBeRawPtr<Node>, Node* anchorNode, ExceptionState&);
+    bool insertBefore(ContainerNode* parentNode,
+        Node*,
+        Node* anchorNode,
+        ExceptionState&);
     bool removeChild(ContainerNode* parentNode, Node*, ExceptionState&);
-    bool setAttribute(Element*, const String& name, const String& value, ExceptionState&);
+    bool setAttribute(Element*,
+        const String& name,
+        const String& value,
+        ExceptionState&);
     bool removeAttribute(Element*, const String& name, ExceptionState&);
     bool setOuterHTML(Node*, const String& html, Node** newNode, ExceptionState&);
     bool replaceWholeText(Text*, const String& text, ExceptionState&);
-    bool replaceChild(ContainerNode* parentNode, PassRefPtrWillBeRawPtr<Node> newNode, Node* oldNode, ExceptionState&);
+    bool replaceChild(ContainerNode* parentNode,
+        Node* newNode,
+        Node* oldNode,
+        ExceptionState&);
     bool setNodeValue(Node* parentNode, const String& value, ExceptionState&);
 
-    bool insertBefore(ContainerNode* parentNode, PassRefPtrWillBeRawPtr<Node>, Node* anchorNode, ErrorString*);
-    bool removeChild(ContainerNode* parentNode, Node*, ErrorString*);
-    bool setAttribute(Element*, const String& name, const String& value, ErrorString*);
-    bool removeAttribute(Element*, const String& name, ErrorString*);
-    bool setOuterHTML(Node*, const String& html, Node** newNode, ErrorString*);
-    bool replaceWholeText(Text*, const String& text, ErrorString*);
+    Response insertBefore(ContainerNode* parentNode, Node*, Node* anchorNode);
+    Response removeChild(ContainerNode* parentNode, Node*);
+    Response setAttribute(Element*, const String& name, const String& value);
+    Response removeAttribute(Element*, const String& name);
+    Response setOuterHTML(Node*, const String& html, Node** newNode);
+    Response replaceWholeText(Text*, const String& text);
 
 private:
     class DOMAction;
@@ -80,9 +89,8 @@ private:
     class ReplaceChildNodeAction;
     class SetNodeValueAction;
 
-    RawPtrWillBeMember<InspectorHistory> m_history;
+    Member<InspectorHistory> m_history;
 };
-
 
 } // namespace blink
 

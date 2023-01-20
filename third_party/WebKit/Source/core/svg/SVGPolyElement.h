@@ -22,7 +22,6 @@
 #define SVGPolyElement_h
 
 #include "core/SVGNames.h"
-#include "core/svg/SVGAnimatedBoolean.h"
 #include "core/svg/SVGAnimatedPointList.h"
 #include "core/svg/SVGGeometryElement.h"
 #include "platform/heap/Handle.h"
@@ -33,8 +32,8 @@ class SVGPolyElement : public SVGGeometryElement {
 public:
     SVGAnimatedPointList* points() const { return m_points.get(); }
 
-    PassRefPtrWillBeRawPtr<SVGPointListTearOff> pointsFromJavascript() { return m_points->baseVal(); }
-    PassRefPtrWillBeRawPtr<SVGPointListTearOff> animatedPoints() { return m_points->animVal(); }
+    SVGPointListTearOff* pointsFromJavascript() { return m_points->baseVal(); }
+    SVGPointListTearOff* animatedPoints() { return m_points->animVal(); }
 
     DECLARE_VIRTUAL_TRACE();
 
@@ -47,8 +46,7 @@ private:
     void svgAttributeChanged(const QualifiedName&) final;
 
 private:
-    RefPtrWillBeMember<SVGAnimatedPointList> m_points;
-
+    Member<SVGAnimatedPointList> m_points;
 };
 
 inline bool isSVGPolyElement(const SVGElement& element)

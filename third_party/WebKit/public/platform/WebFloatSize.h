@@ -77,14 +77,7 @@ struct WebFloatSize {
         return *this;
     }
 
-<<<<<<< HEAD
     operator FloatSize() const { return FloatSize(width, height); }
-=======
-    operator FloatSize() const
-    {
-        return FloatSize(width, height);
-    }
->>>>>>> miniblink49
 #else
     WebFloatSize(const gfx::SizeF& s)
         : width(s.width())
@@ -117,14 +110,7 @@ struct WebFloatSize {
         return gfx::SizeF(std::max(0.f, width), std::max(0.f, height));
     }
 
-<<<<<<< HEAD
     operator gfx::Vector2dF() const { return gfx::Vector2dF(width, height); }
-=======
-    operator gfx::Vector2dF() const
-    {
-        return gfx::Vector2dF(width, height);
-    }
->>>>>>> miniblink49
 #endif
 };
 

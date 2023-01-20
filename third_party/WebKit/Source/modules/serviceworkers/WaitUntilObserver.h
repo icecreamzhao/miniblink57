@@ -5,32 +5,20 @@
 #ifndef WaitUntilObserver_h
 #define WaitUntilObserver_h
 
-<<<<<<< HEAD
-=======
-#include "core/dom/ContextLifecycleObserver.h"
->>>>>>> miniblink49
 #include "modules/ModulesExport.h"
 #include "modules/serviceworkers/ServiceWorkerGlobalScopeClient.h"
 #include "platform/Timer.h"
 #include "wtf/Forward.h"
-<<<<<<< HEAD
-=======
-#include "wtf/RefCounted.h"
->>>>>>> miniblink49
 
 namespace blink {
 
 class ExceptionState;
 class ExecutionContext;
-<<<<<<< HEAD
 class ScriptPromise;
-=======
->>>>>>> miniblink49
 class ScriptState;
 class ScriptValue;
 
 // Created for each ExtendableEvent instance.
-<<<<<<< HEAD
 class MODULES_EXPORT WaitUntilObserver final
     : public GarbageCollectedFinalized<WaitUntilObserver> {
 public:
@@ -42,15 +30,6 @@ public:
         NotificationClick,
         NotificationClose,
         PaymentRequest,
-=======
-class MODULES_EXPORT WaitUntilObserver final : public GarbageCollectedFinalized<WaitUntilObserver>, public ContextLifecycleObserver {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(WaitUntilObserver);
-public:
-    enum EventType {
-        Activate,
-        Install,
-        NotificationClick,
->>>>>>> miniblink49
         Push,
         Sync
     };
@@ -63,7 +42,6 @@ public:
 
     // Observes the promise and delays calling the continuation until
     // the given promise is resolved or rejected.
-<<<<<<< HEAD
     void waitUntil(ScriptState*, ScriptPromise, ExceptionState&);
 
     // These methods can be called when the lifecycle of ExtendableEvent
@@ -73,9 +51,6 @@ public:
     // is being destroyed.
     void incrementPendingActivity();
     void decrementPendingActivity();
-=======
-    void waitUntil(ScriptState*, const ScriptValue&, ExceptionState&);
->>>>>>> miniblink49
 
     DECLARE_VIRTUAL_TRACE();
 
@@ -87,7 +62,6 @@ private:
 
     void reportError(const ScriptValue&);
 
-<<<<<<< HEAD
     void consumeWindowInteraction(TimerBase*);
 
     Member<ExecutionContext> m_executionContext;
@@ -98,19 +72,6 @@ private:
     bool m_eventDispatched = false;
     double m_eventDispatchTime = 0;
     TaskRunnerTimer<WaitUntilObserver> m_consumeWindowInteractionTimer;
-=======
-    void incrementPendingActivity();
-    void decrementPendingActivity();
-
-    void consumeWindowInteraction(Timer<WaitUntilObserver>*);
-
-    EventType m_type;
-    int m_eventID;
-    int m_pendingActivity;
-    bool m_hasError;
-    bool m_eventDispatched;
-    Timer<WaitUntilObserver> m_consumeWindowInteractionTimer;
->>>>>>> miniblink49
 };
 
 } // namespace blink

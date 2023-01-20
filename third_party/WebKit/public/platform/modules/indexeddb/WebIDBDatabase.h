@@ -32,19 +32,12 @@
 #include "public/platform/modules/indexeddb/WebIDBMetadata.h"
 #include "public/platform/modules/indexeddb/WebIDBTypes.h"
 
-<<<<<<< HEAD
 #include <bitset>
 
-=======
->>>>>>> miniblink49
 namespace blink {
 
 class WebData;
 class WebIDBCallbacks;
-<<<<<<< HEAD
-=======
-class WebIDBDatabaseCallbacks;
->>>>>>> miniblink49
 class WebIDBKey;
 class WebIDBKeyPath;
 class WebIDBKeyRange;
@@ -53,7 +46,6 @@ class WebIDBDatabase {
 public:
     virtual ~WebIDBDatabase() { }
 
-<<<<<<< HEAD
     virtual void createObjectStore(long long transactionId,
         long long objectStoreId,
         const WebString& name,
@@ -94,25 +86,11 @@ public:
         long long indexId,
         const WebString& newName)
         = 0;
-=======
-    virtual void createObjectStore(long long transactionId, long long objectStoreId, const WebString& name, const WebIDBKeyPath&, bool autoIncrement) { BLINK_ASSERT_NOT_REACHED(); }
-    virtual void deleteObjectStore(long long transactionId, long long objectStoreId) { BLINK_ASSERT_NOT_REACHED(); }
-    virtual void createTransaction(long long id, WebIDBDatabaseCallbacks*, const WebVector<long long>& scope, WebIDBTransactionMode) { BLINK_ASSERT_NOT_REACHED(); }
-    virtual void close() { BLINK_ASSERT_NOT_REACHED(); }
-    virtual void versionChangeIgnored() { BLINK_ASSERT_NOT_REACHED(); }
-
-    virtual void abort(long long transactionId) { BLINK_ASSERT_NOT_REACHED(); }
-    virtual void commit(long long transactionId) { BLINK_ASSERT_NOT_REACHED(); }
-
-    virtual void createIndex(long long transactionId, long long objectStoreId, long long indexId, const WebString& name, const WebIDBKeyPath&, bool unique, bool multiEntry) { BLINK_ASSERT_NOT_REACHED(); }
-    virtual void deleteIndex(long long transactionId, long long objectStoreId, long long indexId) { BLINK_ASSERT_NOT_REACHED(); }
->>>>>>> miniblink49
 
     static const long long minimumIndexId = 30;
 
     typedef WebVector<WebIDBKey> WebIndexKeys;
 
-<<<<<<< HEAD
     virtual void addObserver(
         long long transactionId,
         int32_t observerId,
@@ -184,18 +162,6 @@ public:
         WebIDBCallbacks*)
         = 0;
     virtual void ackReceivedBlobs(const WebVector<WebString>& uuids) = 0;
-=======
-    virtual void get(long long transactionId, long long objectStoreId, long long indexId, const WebIDBKeyRange&, bool keyOnly, WebIDBCallbacks*) { BLINK_ASSERT_NOT_REACHED(); }
-    virtual void getAll(long long transactionId, long long objectStoreId, long long indexId, const WebIDBKeyRange&, long long maxCount, bool keyOnly, WebIDBCallbacks*) { BLINK_ASSERT_NOT_REACHED(); }
-    virtual void put(long long transactionId, long long objectStoreId, const WebData& value, const WebVector<WebBlobInfo>&, const WebIDBKey&, WebIDBPutMode, WebIDBCallbacks*, const WebVector<long long>& indexIds, const WebVector<WebIndexKeys>&) { BLINK_ASSERT_NOT_REACHED(); }
-    virtual void setIndexKeys(long long transactionId, long long objectStoreId, const WebIDBKey&, const WebVector<long long>& indexIds, const WebVector<WebIndexKeys>&) { BLINK_ASSERT_NOT_REACHED(); }
-    virtual void setIndexesReady(long long transactionId, long long objectStoreId, const WebVector<long long>& indexIds) { BLINK_ASSERT_NOT_REACHED(); }
-    virtual void openCursor(long long transactionId, long long objectStoreId, long long indexId, const WebIDBKeyRange&, WebIDBCursorDirection, bool keyOnly, WebIDBTaskType, WebIDBCallbacks*) { BLINK_ASSERT_NOT_REACHED(); }
-    virtual void count(long long transactionId, long long objectStoreId, long long indexId, const WebIDBKeyRange&, WebIDBCallbacks*) { BLINK_ASSERT_NOT_REACHED(); }
-    virtual void deleteRange(long long transactionId, long long objectStoreId, const WebIDBKeyRange&, WebIDBCallbacks*) { BLINK_ASSERT_NOT_REACHED(); }
-    virtual void clear(long long transactionId, long long objectStoreId, WebIDBCallbacks*) { BLINK_ASSERT_NOT_REACHED(); }
-    virtual void ackReceivedBlobs(const WebVector<WebString>& uuids) { BLINK_ASSERT_NOT_REACHED(); }
->>>>>>> miniblink49
 
 protected:
     WebIDBDatabase() { }

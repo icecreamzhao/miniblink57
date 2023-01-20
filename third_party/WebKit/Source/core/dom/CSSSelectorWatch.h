@@ -37,14 +37,16 @@
 #include "platform/Timer.h"
 #include "wtf/HashCountedSet.h"
 #include "wtf/HashSet.h"
-#include "wtf/RefPtr.h"
 #include "wtf/Vector.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
 
-class CORE_EXPORT CSSSelectorWatch final : public NoBaseWillBeGarbageCollectedFinalized<CSSSelectorWatch>, public WillBeHeapSupplement<Document> {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(CSSSelectorWatch);
+class CORE_EXPORT CSSSelectorWatch final
+    : public GarbageCollectedFinalized<CSSSelectorWatch>,
+      public Supplement<Document> {
+    USING_GARBAGE_COLLECTED_MIXIN(CSSSelectorWatch);
+
 public:
     virtual ~CSSSelectorWatch() { }
 
@@ -52,20 +54,21 @@ public:
     static CSSSelectorWatch* fromIfExists(Document&);
 
     void watchCSSSelectors(const Vector<String>& selectors);
-    const WillBeHeapVector<RefPtrWillBeMember<StyleRule>>& watchedCallbackSelectors() const { return m_watchedCallbackSelectors; }
+    const HeapVector<Member<StyleRule>>& watchedCallbackSelectors() const
+    {
+        return m_watchedCallbackSelectors;
+    }
 
-    void updateSelectorMatches(const Vector<String>& removedSelectors, const Vector<String>& addedSelectors);
+    void updateSelectorMatches(const Vector<String>& removedSelectors,
+        const Vector<String>& addedSelectors);
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
     explicit CSSSelectorWatch(Document&);
-    void callbackSelectorChangeTimerFired(Timer<CSSSelectorWatch>*);
-    Document& document() const { return *m_document; }
+    void callbackSelectorChangeTimerFired(TimerBase*);
 
-    RawPtrWillBeMember<Document> m_document;
-
-    WillBeHeapVector<RefPtrWillBeMember<StyleRule>> m_watchedCallbackSelectors;
+    HeapVector<Member<StyleRule>> m_watchedCallbackSelectors;
 
     // Maps a CSS selector string with a -webkit-callback property to the number
     // of matching ComputedStyle objects in this document.
@@ -75,11 +78,15 @@ private:
     HashSet<String> m_addedSelectors;
     HashSet<String> m_removedSelectors;
 
-    Timer<CSSSelectorWatch> m_callbackSelectorChangeTimer;
+    TaskRunnerTimer<CSSSelectorWatch> m_callbackSelectorChangeTimer;
 
-    // When an element is reparented, the new location's style is evaluated after the expriation of the relayout timer.
-    // We don't want to send redundant callbacks to the embedder, so this counter lets us wait another time around the event loop.
+    // When an element is reparented, the new location's style is evaluated after
+    // the expriation of the relayout timer.  We don't want to send redundant
+    // callbacks to the embedder, so this counter lets us wait another time around
+    // the event loop.
     int m_timerExpirations;
+
+    friend class CSSSelectorWatchTest;
 };
 
 } // namespace blink

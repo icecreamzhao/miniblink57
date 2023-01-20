@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 // An old version of Media Capture and Streams defines URL.createObjectURL:
 // https://w3c.github.io/mediacapture-main/archives/20131017/getusermedia.html
 
@@ -37,10 +36,4 @@
 
 partial interface URL {
     [Exposed=(Window,DedicatedWorker,SharedWorker), CallWith=ExecutionContext] static DOMString createObjectURL(MediaStream stream);
-=======
-// http://www.w3.org/TR/mediacapture-streams/#idl-def-URL
-
-partial interface URL {
-    [CallWith=ExecutionContext] static DOMString? createObjectURL(MediaStream stream);
->>>>>>> miniblink49
 };

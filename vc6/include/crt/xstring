@@ -894,12 +894,8 @@ inline string& string::push_back(string::const_iterator _F, string::const_iterat
 
 inline void string::clear()
 {
-<<<<<<< HEAD
     if (_Ptr && 0 != _Len)
         _Eos(0);
-=======
-    _Eos(0);
->>>>>>> miniblink49
 }
 
 inline wstring& wstring::push_back(const wchar_t* _S, size_t _M)

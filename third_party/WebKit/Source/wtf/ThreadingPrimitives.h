@@ -31,13 +31,8 @@
 #ifndef ThreadingPrimitives_h
 #define ThreadingPrimitives_h
 
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/Assertions.h"
-=======
-#include "wtf/Assertions.h"
-#include "wtf/FastAllocBase.h"
->>>>>>> miniblink49
 #include "wtf/Locker.h"
 #include "wtf/Noncopyable.h"
 #include "wtf/WTFExport.h"
@@ -46,27 +41,16 @@
 #include <windows.h>
 #endif
 
-<<<<<<< HEAD
 #if OS(POSIX)
-=======
-#if USE(PTHREADS)
->>>>>>> miniblink49
 #include <pthread.h>
 #endif
 
 namespace WTF {
 
-<<<<<<< HEAD
 #if OS(POSIX)
 struct PlatformMutex {
     pthread_mutex_t m_internalMutex;
 #if DCHECK_IS_ON()
-=======
-#if USE(PTHREADS)
-struct PlatformMutex {
-    pthread_mutex_t m_internalMutex;
-#if ENABLE(ASSERT)
->>>>>>> miniblink49
     size_t m_recursionCount;
 #endif
 };
@@ -93,28 +77,19 @@ typedef void* PlatformCondition;
 #endif
 
 class WTF_EXPORT MutexBase {
-<<<<<<< HEAD
     WTF_MAKE_NONCOPYABLE(MutexBase);
     USING_FAST_MALLOC(MutexBase);
 
-=======
-    WTF_MAKE_NONCOPYABLE(MutexBase); WTF_MAKE_FAST_ALLOCATED(MutexBase);
->>>>>>> miniblink49
 public:
     ~MutexBase();
 
     void lock();
     void unlock();
-<<<<<<< HEAD
 #if DCHECK_IS_ON()
     bool locked()
     {
         return m_mutex.m_recursionCount > 0;
     }
-=======
-#if ENABLE(ASSERT)
-    bool locked() { return m_mutex.m_recursionCount > 0; }
->>>>>>> miniblink49
 #endif
 
 public:
@@ -128,33 +103,24 @@ protected:
 
 class WTF_EXPORT Mutex : public MutexBase {
 public:
-<<<<<<< HEAD
     Mutex()
         : MutexBase(false)
     {
     }
-=======
-    Mutex() : MutexBase(false) { }
->>>>>>> miniblink49
     bool tryLock();
 };
 
 class WTF_EXPORT RecursiveMutex : public MutexBase {
 public:
-<<<<<<< HEAD
     RecursiveMutex()
         : MutexBase(true)
     {
     }
-=======
-    RecursiveMutex() : MutexBase(true) { }
->>>>>>> miniblink49
     bool tryLock();
 };
 
 typedef Locker<MutexBase> MutexLocker;
 
-<<<<<<< HEAD
 class MutexTryLocker final {
     STACK_ALLOCATED();
     WTF_MAKE_NONCOPYABLE(MutexTryLocker);
@@ -165,12 +131,6 @@ public:
         , m_locked(mutex.tryLock())
     {
     }
-=======
-class MutexTryLocker {
-    WTF_MAKE_NONCOPYABLE(MutexTryLocker);
-public:
-    MutexTryLocker(Mutex& mutex) : m_mutex(mutex), m_locked(mutex.tryLock()) { }
->>>>>>> miniblink49
     ~MutexTryLocker()
     {
         if (m_locked)
@@ -184,29 +144,19 @@ private:
     bool m_locked;
 };
 
-<<<<<<< HEAD
 class WTF_EXPORT ThreadCondition final {
     USING_FAST_MALLOC(ThreadCondition); // Only HeapTest.cpp requires.
     WTF_MAKE_NONCOPYABLE(ThreadCondition);
 
-=======
-class WTF_EXPORT ThreadCondition {
-    WTF_MAKE_NONCOPYABLE(ThreadCondition);
->>>>>>> miniblink49
 public:
     ThreadCondition();
     ~ThreadCondition();
 
     void wait(MutexBase&);
-<<<<<<< HEAD
     // Returns true if the condition was signaled before absoluteTime, false if
     // the absoluteTime was reached or is in the past.
     // The absoluteTime is in seconds, starting on January 1, 1970. The time is
     // assumed to use the same time zone as WTF::currentTime().
-=======
-    // Returns true if the condition was signaled before absoluteTime, false if the absoluteTime was reached or is in the past.
-    // The absoluteTime is in seconds, starting on January 1, 1970. The time is assumed to use the same time zone as WTF::currentTime().
->>>>>>> miniblink49
     bool timedWait(MutexBase&, double absoluteTime);
     void signal();
     void broadcast();
@@ -216,33 +166,20 @@ private:
 };
 
 #if OS(WIN)
-<<<<<<< HEAD
 // The absoluteTime is in seconds, starting on January 1, 1970. The time is
 // assumed to use the same time zone as WTF::currentTime().
 // Returns an interval in milliseconds suitable for passing to one of the Win32
 // wait functions (e.g., ::WaitForSingleObject).
-=======
-// The absoluteTime is in seconds, starting on January 1, 1970. The time is assumed to use the same time zone as WTF::currentTime().
-// Returns an interval in milliseconds suitable for passing to one of the Win32 wait functions (e.g., ::WaitForSingleObject).
->>>>>>> miniblink49
 DWORD absoluteTimeToWaitTimeoutInterval(double absoluteTime);
 #endif
 
 } // namespace WTF
 
-<<<<<<< HEAD
 using WTF::Mutex;
 using WTF::MutexBase;
 using WTF::MutexLocker;
 using WTF::MutexTryLocker;
 using WTF::RecursiveMutex;
-=======
-using WTF::MutexBase;
-using WTF::Mutex;
-using WTF::RecursiveMutex;
-using WTF::MutexLocker;
-using WTF::MutexTryLocker;
->>>>>>> miniblink49
 using WTF::ThreadCondition;
 
 #if OS(WIN)

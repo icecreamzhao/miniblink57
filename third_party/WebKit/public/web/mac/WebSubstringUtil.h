@@ -32,10 +32,6 @@
 #define WebSubstringUtil_h
 
 #include "../../platform/WebCommon.h"
-<<<<<<< HEAD
-=======
-#include "public/web/WebFrame.h"
->>>>>>> miniblink49
 
 #if __OBJC__
 @class NSAttributedString;
@@ -45,18 +41,13 @@ class NSAttributedString;
 
 namespace blink {
 
-<<<<<<< HEAD
 class WebFrameWidget;
 class WebLocalFrame;
-=======
-class WebView;
->>>>>>> miniblink49
 struct WebPoint;
 
 class WebSubstringUtil {
 public:
     // Returns an autoreleased NSAttributedString that is the word under
-<<<<<<< HEAD
     // the given point inside the given WebFrameWidget or nil on error.
     // Upon return, |baselinePoint| is set to the left baseline point in
     // AppKit coordinates.
@@ -77,20 +68,6 @@ public:
         size_t location,
         size_t length,
         WebPoint* baselinePoint);
-=======
-    // the given point, or nil on error.
-    // Upon return, |baselinePoint| is set to the left baseline point in
-    // AppKit coordinates.
-    BLINK_EXPORT static NSAttributedString* attributedWordAtPoint(WebView*,
-        WebPoint,
-        WebPoint& baselinePoint);
-
-    // Returns an autoreleased NSAttributedString that is a substring of the
-    // Frame at the given range, or nil on error.
-    BLINK_EXPORT static NSAttributedString* attributedSubstringInRange(WebLocalFrame*,
-        size_t location,
-        size_t length);
->>>>>>> miniblink49
 };
 
 } // namespace blink

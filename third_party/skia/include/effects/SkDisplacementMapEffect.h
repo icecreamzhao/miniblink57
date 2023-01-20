@@ -9,10 +9,6 @@
 #define SkDisplacementMapEffect_DEFINED
 
 #include "SkImageFilter.h"
-<<<<<<< HEAD
-=======
-#include "SkBitmap.h"
->>>>>>> miniblink49
 
 class SK_API SkDisplacementMapEffect : public SkImageFilter {
 public:
@@ -24,7 +20,6 @@ public:
         kA_ChannelSelectorType
     };
 
-<<<<<<< HEAD
     ~SkDisplacementMapEffect() override;
 
     static sk_sp<SkImageFilter> Make(ChannelSelectorType xChannelSelector,
@@ -67,41 +62,6 @@ protected:
         ChannelSelectorType yChannelSelector,
         SkScalar scale, sk_sp<SkImageFilter> inputs[2],
         const CropRect* cropRect);
-=======
-    ~SkDisplacementMapEffect();
-
-    static SkDisplacementMapEffect* Create(ChannelSelectorType xChannelSelector,
-                                           ChannelSelectorType yChannelSelector,
-                                           SkScalar scale, SkImageFilter* displacement,
-                                           SkImageFilter* color = NULL,
-                                           const CropRect* cropRect = NULL);
-
-    SK_DECLARE_PUBLIC_FLATTENABLE_DESERIALIZATION_PROCS(SkDisplacementMapEffect)
-
-    virtual bool onFilterImage(Proxy* proxy,
-                               const SkBitmap& src,
-                               const Context& ctx,
-                               SkBitmap* dst,
-                               SkIPoint* offset) const override;
-    void computeFastBounds(const SkRect& src, SkRect* dst) const override;
-
-    virtual bool onFilterBounds(const SkIRect& src, const SkMatrix&,
-                                SkIRect* dst) const override;
-
-#if SK_SUPPORT_GPU
-    bool canFilterImageGPU() const override { return true; }
-    virtual bool filterImageGPU(Proxy* proxy, const SkBitmap& src, const Context& ctx,
-                                SkBitmap* result, SkIPoint* offset) const override;
-#endif
-
-    SK_TO_STRING_OVERRIDE()
-
-protected:
-    SkDisplacementMapEffect(ChannelSelectorType xChannelSelector,
-                            ChannelSelectorType yChannelSelector,
-                            SkScalar scale, SkImageFilter* inputs[2],
-                            const CropRect* cropRect);
->>>>>>> miniblink49
     void flatten(SkWriteBuffer&) const override;
 
 private:

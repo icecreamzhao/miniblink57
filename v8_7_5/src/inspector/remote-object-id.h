@@ -12,7 +12,6 @@ namespace v8_inspector {
 using protocol::Response;
 
 class RemoteObjectIdBase {
-<<<<<<< HEAD
 public:
     int contextId() const { return m_injectedScriptId; }
 
@@ -56,48 +55,3 @@ private:
 } // namespace v8_inspector
 
 #endif // V8_INSPECTOR_REMOTE_OBJECT_ID_H_
-=======
- public:
-  int contextId() const { return m_injectedScriptId; }
-
- protected:
-  RemoteObjectIdBase();
-  ~RemoteObjectIdBase() = default;
-
-  std::unique_ptr<protocol::DictionaryValue> parseInjectedScriptId(
-      const String16&);
-
-  int m_injectedScriptId;
-};
-
-class RemoteObjectId final : public RemoteObjectIdBase {
- public:
-  static Response parse(const String16&, std::unique_ptr<RemoteObjectId>*);
-  ~RemoteObjectId() = default;
-  int id() const { return m_id; }
-
- private:
-  RemoteObjectId();
-
-  int m_id;
-};
-
-class RemoteCallFrameId final : public RemoteObjectIdBase {
- public:
-  static Response parse(const String16&, std::unique_ptr<RemoteCallFrameId>*);
-  ~RemoteCallFrameId() = default;
-
-  int frameOrdinal() const { return m_frameOrdinal; }
-
-  static String16 serialize(int injectedScriptId, int frameOrdinal);
-
- private:
-  RemoteCallFrameId();
-
-  int m_frameOrdinal;
-};
-
-}  // namespace v8_inspector
-
-#endif  // V8_INSPECTOR_REMOTE_OBJECT_ID_H_
->>>>>>> miniblink49

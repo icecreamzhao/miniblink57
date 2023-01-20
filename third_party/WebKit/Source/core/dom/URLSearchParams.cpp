@@ -5,7 +5,7 @@
 #include "core/dom/URLSearchParams.h"
 
 #include "core/dom/DOMURL.h"
-#include "platform/network/FormDataBuilder.h"
+#include "platform/network/FormDataEncoder.h"
 #include "platform/weborigin/KURL.h"
 #include "wtf/text/TextEncoding.h"
 
@@ -13,32 +13,35 @@ namespace blink {
 
 namespace {
 
-class URLSearchParamsIterationSource final
-    : public PairIterable<String, String>::IterationSource {
-public:
-    URLSearchParamsIterationSource(Vector<std::pair<String, String>> params)
-        : m_params(params), m_current(0) {}
+    class URLSearchParamsIterationSource final
+        : public PairIterable<String, String>::IterationSource {
+    public:
+        URLSearchParamsIterationSource(Vector<std::pair<String, String>> params)
+            : m_params(params)
+            , m_current(0)
+        {
+        }
 
-    bool next(ScriptState*,
-        String& key,
-        String& value,
-        ExceptionState&) override
-    {
-        if (m_current >= m_params.size())
-            return false;
+        bool next(ScriptState*,
+            String& key,
+            String& value,
+            ExceptionState&) override
+        {
+            if (m_current >= m_params.size())
+                return false;
 
-        key = m_params[m_current].first;
-        value = m_params[m_current].second;
-        m_current++;
-        return true;
-    }
+            key = m_params[m_current].first;
+            value = m_params[m_current].second;
+            m_current++;
+            return true;
+        }
 
-private:
-    Vector<std::pair<String, String>> m_params;
-    size_t m_current;
-};
+    private:
+        Vector<std::pair<String, String>> m_params;
+        size_t m_current;
+    };
 
-}  // namespace
+} // namespace
 
 URLSearchParams* URLSearchParams::create(const URLSearchParamsInit& init)
 {
@@ -51,7 +54,7 @@ URLSearchParams* URLSearchParams::create(const URLSearchParamsInit& init)
     if (init.isURLSearchParams())
         return new URLSearchParams(init.getAsURLSearchParams());
 
-    ASSERT(init.isNull());
+    DCHECK(init.isNull());
     return new URLSearchParams(String());
 }
 
@@ -64,18 +67,18 @@ URLSearchParams::URLSearchParams(const String& queryString, DOMURL* urlObject)
 
 URLSearchParams::URLSearchParams(URLSearchParams* searchParams)
 {
-    ASSERT(searchParams);
+    DCHECK(searchParams);
     m_params = searchParams->m_params;
 }
 
-URLSearchParams::~URLSearchParams() {}
+URLSearchParams::~URLSearchParams() { }
 
 DEFINE_TRACE(URLSearchParams)
 {
     visitor->trace(m_urlObject);
 }
 
-#if ASSERT
+#if DCHECK_IS_ON()
 DOMURL* URLSearchParams::urlObject() const
 {
     return m_urlObject;
@@ -87,10 +90,10 @@ void URLSearchParams::runUpdateSteps()
     if (!m_urlObject)
         return;
 
-//     if (m_urlObject->isInUpdate())
-//         return;
+    if (m_urlObject->isInUpdate())
+        return;
 
-    m_urlObject->setSearch(toString());
+    m_urlObject->setSearchInternal(toString());
 }
 
 static String decodeString(String input)
@@ -113,15 +116,14 @@ void URLSearchParams::setInput(const String& queryString)
             size_t endOfName = queryString.find('=', start);
             if (endOfName == kNotFound || endOfName > nameValueEnd)
                 endOfName = nameValueEnd;
-            String name =
-                decodeString(queryString.substring(nameStart, endOfName - nameStart));
+            String name = decodeString(queryString.substring(nameStart, endOfName - nameStart));
             String value;
             if (endOfName != nameValueEnd)
                 value = decodeString(
                     queryString.substring(endOfName + 1, nameValueEnd - endOfName - 1));
             if (value.isNull())
                 value = "";
-            m_params.append(std::make_pair(name, value));
+            m_params.push_back(std::make_pair(name, value));
         }
         start = nameValueEnd + 1;
     }
@@ -137,7 +139,7 @@ String URLSearchParams::toString() const
 
 void URLSearchParams::append(const String& name, const String& value)
 {
-    m_params.append(std::make_pair(name, value));
+    m_params.push_back(std::make_pair(name, value));
     runUpdateSteps();
 }
 
@@ -166,7 +168,7 @@ Vector<String> URLSearchParams::getAll(const String& name) const
     Vector<String> result;
     for (const auto& param : m_params) {
         if (param.first == name)
-            result.append(param.second);
+            result.push_back(param.second);
     }
     return result;
 }
@@ -207,16 +209,18 @@ void URLSearchParams::set(const String& name, const String& value)
 
 void URLSearchParams::encodeAsFormData(Vector<char>& encodedData) const
 {
-    for (const auto& param : m_params) {
-        FormDataBuilder::addKeyValuePairAsFormData(encodedData, param.first.utf8(), param.second.utf8(), FormData::FormURLEncoded);
-    }
+    for (const auto& param : m_params)
+        FormDataEncoder::addKeyValuePairAsFormData(
+            encodedData, param.first.utf8(), param.second.utf8(),
+            EncodedFormData::FormURLEncoded, FormDataEncoder::DoNotNormalizeCRLF);
 }
 
-// PassRefPtr<EncodedFormData> URLSearchParams::toEncodedFormData() const {
-//   Vector<char> encodedData;
-//   encodeAsFormData(encodedData);
-//   return EncodedFormData::create(encodedData.data(), encodedData.size());
-// }
+PassRefPtr<EncodedFormData> URLSearchParams::toEncodedFormData() const
+{
+    Vector<char> encodedData;
+    encodeAsFormData(encodedData);
+    return EncodedFormData::create(encodedData.data(), encodedData.size());
+}
 
 PairIterable<String, String>::IterationSource* URLSearchParams::startIteration(
     ScriptState*,
@@ -225,4 +229,4 @@ PairIterable<String, String>::IterationSource* URLSearchParams::startIteration(
     return new URLSearchParamsIterationSource(m_params);
 }
 
-}  // namespace blink
+} // namespace blink

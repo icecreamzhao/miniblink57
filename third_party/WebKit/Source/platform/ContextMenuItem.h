@@ -28,11 +28,7 @@
 #define ContextMenuItem_h
 
 #include "platform/PlatformExport.h"
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
-=======
-#include "wtf/OwnPtr.h"
->>>>>>> miniblink49
 #include "wtf/text/WTFString.h"
 
 namespace blink {
@@ -53,7 +49,6 @@ enum ContextMenuItemType {
 };
 
 class PLATFORM_EXPORT ContextMenuItem {
-<<<<<<< HEAD
     DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
 public:
@@ -68,12 +63,6 @@ public:
         const String& icon,
         bool enabled,
         bool checked);
-=======
-    WTF_MAKE_FAST_ALLOCATED(ContextMenuItem);
-public:
-    ContextMenuItem(ContextMenuItemType, ContextMenuAction, const String& title, const String& icon, ContextMenu* subMenu = 0);
-    ContextMenuItem(ContextMenuItemType, ContextMenuAction, const String& title, const String& icon, bool enabled, bool checked);
->>>>>>> miniblink49
 
     ~ContextMenuItem();
 
@@ -91,15 +80,11 @@ public:
 
     void setSubMenu(ContextMenu*);
 
-<<<<<<< HEAD
     ContextMenuItem(ContextMenuAction,
         const String&,
         bool enabled,
         bool checked,
         const Vector<ContextMenuItem>& subMenuItems);
-=======
-    ContextMenuItem(ContextMenuAction, const String&, bool enabled, bool checked, const Vector<ContextMenuItem>& subMenuItems);
->>>>>>> miniblink49
 
     void setTitle(const String& title) { m_title = title; }
     const String& title() const { return m_title; }
@@ -119,10 +104,6 @@ private:
     Vector<ContextMenuItem> m_subMenuItems;
 };
 
-<<<<<<< HEAD
 } // namespace blink
-=======
-}
->>>>>>> miniblink49
 
 #endif // ContextMenuItem_h

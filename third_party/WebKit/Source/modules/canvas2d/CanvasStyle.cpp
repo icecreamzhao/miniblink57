@@ -26,31 +26,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "modules/canvas2d/CanvasStyle.h"
 
 #include "core/CSSPropertyNames.h"
 #include "core/css/StylePropertySet.h"
 #include "core/css/parser/CSSParser.h"
 #include "core/html/HTMLCanvasElement.h"
-<<<<<<< HEAD
 #include "core/html/parser/HTMLParserIdioms.h"
 #include "modules/canvas2d/CanvasGradient.h"
 #include "modules/canvas2d/CanvasPattern.h"
 #include "platform/graphics/skia/SkiaUtils.h"
 #include "third_party/skia/include/core/SkShader.h"
-=======
-#include "modules/canvas2d/CanvasGradient.h"
-#include "modules/canvas2d/CanvasPattern.h"
->>>>>>> miniblink49
 #include "wtf/PassRefPtr.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 enum ColorParseResult {
     ParsedRGBA,
     ParsedCurrentColor,
@@ -60,11 +50,6 @@ enum ColorParseResult {
 
 static ColorParseResult parseColor(Color& parsedColor,
     const String& colorString)
-=======
-enum ColorParseResult { ParsedRGBA, ParsedCurrentColor, ParsedSystemColor, ParseFailed };
-
-static ColorParseResult parseColor(RGBA32& parsedColor, const String& colorString)
->>>>>>> miniblink49
 {
     if (equalIgnoringCase(colorString, "currentcolor"))
         return ParsedCurrentColor;
@@ -76,7 +61,6 @@ static ColorParseResult parseColor(RGBA32& parsedColor, const String& colorStrin
     return ParseFailed;
 }
 
-<<<<<<< HEAD
 static Color currentColor(HTMLCanvasElement* canvas)
 {
     if (!canvas || !canvas->isConnected() || !canvas->inlineStyle())
@@ -92,30 +76,12 @@ bool parseColorOrCurrentColor(Color& parsedColor,
     HTMLCanvasElement* canvas)
 {
     ColorParseResult parseResult = parseColor(parsedColor, colorString.stripWhiteSpace(isHTMLSpace<UChar>));
-=======
-static RGBA32 currentColor(HTMLCanvasElement* canvas)
-{
-    if (!canvas || !canvas->inDocument() || !canvas->inlineStyle())
-        return Color::black;
-    RGBA32 rgba = Color::black;
-    CSSParser::parseColor(rgba, canvas->inlineStyle()->getPropertyValue(CSSPropertyColor));
-    return rgba;
-}
-
-bool parseColorOrCurrentColor(RGBA32& parsedColor, const String& colorString, HTMLCanvasElement* canvas)
-{
-    ColorParseResult parseResult = parseColor(parsedColor, colorString);
->>>>>>> miniblink49
     switch (parseResult) {
     case ParsedRGBA:
     case ParsedSystemColor:
         return true;
     case ParsedCurrentColor:
-<<<<<<< HEAD
         parsedColor = canvas ? currentColor(canvas) : Color::black;
-=======
-        parsedColor = currentColor(canvas);
->>>>>>> miniblink49
         return true;
     case ParseFailed:
         return false;
@@ -155,7 +121,6 @@ CanvasStyle* CanvasStyle::createFromPattern(CanvasPattern* pattern)
     return new CanvasStyle(pattern);
 }
 
-<<<<<<< HEAD
 void CanvasStyle::applyToPaint(SkPaint& paint) const
 {
     switch (m_type) {
@@ -172,21 +137,6 @@ void CanvasStyle::applyToPaint(SkPaint& paint) const
     default:
         ASSERT_NOT_REACHED();
     }
-=======
-SkShader* CanvasStyle::shader() const
-{
-    switch (m_type) {
-    case ColorRGBA:
-        return nullptr;
-    case Gradient:
-        return canvasGradient()->gradient()->shader();
-    case ImagePattern:
-        return canvasPattern()->pattern()->shader();
-    default:
-        ASSERT_NOT_REACHED();
-    }
-    return nullptr;
->>>>>>> miniblink49
 }
 
 RGBA32 CanvasStyle::paintColor() const
@@ -203,8 +153,4 @@ DEFINE_TRACE(CanvasStyle)
     visitor->trace(m_pattern);
 }
 
-<<<<<<< HEAD
 } // namespace blink
-=======
-}
->>>>>>> miniblink49

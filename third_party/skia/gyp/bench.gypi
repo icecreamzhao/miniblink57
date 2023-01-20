@@ -6,36 +6,22 @@
   'include_dirs': [
     '../bench/subset',
     '../bench',
-<<<<<<< HEAD
     '../include/private',
     '../src/core',
     '../src/effects',
     '../src/gpu',
     '../src/pdf',
     '../src/utils',
-=======
-    '../src/core',
-    '../src/effects',
-    '../src/gpu',
-    '../src/utils',
-    '../tools',
->>>>>>> miniblink49
   ],
   'sources': [ '<!@(python find.py ../bench "*.cpp")' ],
 
   'dependencies': [
     'etc1.gyp:libetc1',
-<<<<<<< HEAD
     'pdf.gyp:pdf',
     'skia_lib.gyp:skia_lib',
     'tools.gyp:resources',
     'tools.gyp:sk_tool_utils',
     'tools.gyp:url_data_manager',
-=======
-    'skia_lib.gyp:skia_lib',
-    'tools.gyp:resources',
-    'tools.gyp:sk_tool_utils',
->>>>>>> miniblink49
   ],
   'conditions': [
     ['skia_gpu == 1', {

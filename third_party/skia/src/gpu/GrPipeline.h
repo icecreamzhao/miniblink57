@@ -9,7 +9,6 @@
 #define GrPipeline_DEFINED
 
 #include "GrColor.h"
-<<<<<<< HEAD
 #include "GrFragmentProcessor.h"
 #include "GrGpu.h"
 #include "GrNonAtomicRef.h"
@@ -19,19 +18,11 @@
 #include "GrProcOptInfo.h"
 #include "GrProgramDesc.h"
 #include "GrStencilSettings.h"
-=======
-#include "GrGpu.h"
-#include "GrPendingFragmentStage.h"
-#include "GrPrimitiveProcessor.h"
-#include "GrProgramDesc.h"
-#include "GrStencil.h"
->>>>>>> miniblink49
 #include "GrTypesPriv.h"
 #include "SkMatrix.h"
 #include "SkRefCnt.h"
 
 class GrBatch;
-<<<<<<< HEAD
 class GrDrawContext;
 class GrDeviceCoordTexture;
 class GrPipelineBuilder;
@@ -51,16 +42,10 @@ struct GrPipelineOptimizations {
     GrBatchToXPOverrides fOverrides;
 };
 
-=======
-class GrDeviceCoordTexture;
-class GrPipelineBuilder;
-
->>>>>>> miniblink49
 /**
  * Class that holds an optimized version of a GrPipelineBuilder. It is meant to be an immutable
  * class, and contains all data needed to set the state for a gpu draw.
  */
-<<<<<<< HEAD
 class GrPipeline : public GrNonAtomicRef<GrPipeline> {
 public:
     ///////////////////////////////////////////////////////////////////////////
@@ -110,30 +95,12 @@ public:
         }
         return true;
     }
-=======
-class GrPipeline {
-public:
-    
-
-    GrPipeline(const GrPipelineBuilder&,
-               const GrProcOptInfo& colorPOI,
-               const GrProcOptInfo& coveragePOI,
-               const GrCaps&,
-               const GrScissorState&,
-               const GrXferProcessor::DstTexture*);
-
-    /*
-     * Returns true if these pipelines are equivalent.
-     */
-    bool isEqual(const GrPipeline& that) const;
->>>>>>> miniblink49
 
     /// @}
 
     ///////////////////////////////////////////////////////////////////////////
     /// @name GrFragmentProcessors
 
-<<<<<<< HEAD
     // Make the renderTarget's drawTarget (if it exists) be dependent on any
     // drawTargets in this pipeline
     void addDependenciesTo(GrRenderTarget* rt) const;
@@ -171,25 +138,6 @@ public:
     const GrFragmentProcessor& getFragmentProcessor(int idx) const
     {
         return *fFragmentProcessors[idx].get();
-=======
-
-    int numColorFragmentStages() const { return fNumColorStages; }
-    int numCoverageFragmentStages() const { return fFragmentStages.count() - fNumColorStages; }
-    int numFragmentStages() const { return fFragmentStages.count(); }
-
-    const GrXferProcessor* getXferProcessor() const { return fXferProcessor.get(); }
-
-    const GrPendingFragmentStage& getColorStage(int idx) const {
-        SkASSERT(idx < this->numColorFragmentStages());
-        return fFragmentStages[idx];
-    }
-    const GrPendingFragmentStage& getCoverageStage(int idx) const {
-        SkASSERT(idx < this->numCoverageFragmentStages());
-        return fFragmentStages[fNumColorStages + idx];
-    }
-    const GrPendingFragmentStage& getFragmentStage(int idx) const {
-        return fFragmentStages[idx];
->>>>>>> miniblink49
     }
 
     /// @}
@@ -205,7 +153,6 @@ public:
 
     const GrScissorState& getScissorState() const { return fScissorState; }
 
-<<<<<<< HEAD
     bool isHWAntialiasState() const { return SkToBool(fFlags & kHWAA_Flag); }
     bool snapVerticesToPixelCenters() const { return SkToBool(fFlags & kSnapVertices_Flag); }
     bool getDisableOutputConversionToSRGB() const
@@ -225,13 +172,6 @@ public:
     {
         return this->getXferProcessor().xferBarrierType(fRenderTarget.get(), caps);
     }
-=======
-    bool isDitherState() const { return SkToBool(fFlags & kDither_Flag); }
-    bool isHWAntialiasState() const { return SkToBool(fFlags & kHWAA_Flag); }
-    bool snapVerticesToPixelCenters() const { return SkToBool(fFlags & kSnapVertices_Flag); }
-    // Skip any draws that refer to this pipeline (they should be a no-op).
-    bool mustSkip() const { return NULL == this->getRenderTarget(); }
->>>>>>> miniblink49
 
     /**
      * Gets whether the target is drawing clockwise, counterclockwise,
@@ -240,7 +180,6 @@ public:
      */
     GrPipelineBuilder::DrawFace getDrawFace() const { return fDrawFace; }
 
-<<<<<<< HEAD
     ///////////////////////////////////////////////////////////////////////////
 
     bool ignoresCoverage() const { return fIgnoresCoverage; }
@@ -250,35 +189,15 @@ private:
     { /** Initialized in factory function*/
     }
 
-=======
-
-    ///////////////////////////////////////////////////////////////////////////
-
-    bool readsFragPosition() const { return fReadsFragPosition; }
-
-    const GrPipelineInfo& infoForPrimitiveProcessor() const {
-        return fInfoForPrimitiveProcessor;
-    }
-
-private:
->>>>>>> miniblink49
     /**
      * Alter the program desc and inputs (attribs and processors) based on the blend optimization.
      */
     void adjustProgramFromOptimizations(const GrPipelineBuilder& ds,
-<<<<<<< HEAD
         GrXferProcessor::OptFlags,
         const GrProcOptInfo& colorPOI,
         const GrProcOptInfo& coveragePOI,
         int* firstColorProcessorIdx,
         int* firstCoverageProcessorIdx);
-=======
-                                        GrXferProcessor::OptFlags,
-                                        const GrProcOptInfo& colorPOI,
-                                        const GrProcOptInfo& coveragePOI,
-                                        int* firstColorStageIdx,
-                                        int* firstCoverageStageIdx);
->>>>>>> miniblink49
 
     /**
      * Calculates the primary and secondary output types of the shader. For certain output types
@@ -286,7 +205,6 @@ private:
      * blend coeffs will represent those used by backend API.
      */
     void setOutputStateInfo(const GrPipelineBuilder& ds, GrXferProcessor::OptFlags,
-<<<<<<< HEAD
         const GrCaps&);
 
     enum Flags {
@@ -312,33 +230,6 @@ private:
 
     // This value is also the index in fFragmentProcessors where coverage processors begin.
     int fNumColorProcessors;
-=======
-                            const GrCaps&);
-
-    enum Flags {
-        kDither_Flag            = 0x1,
-        kHWAA_Flag              = 0x2,
-        kSnapVertices_Flag      = 0x4,
-    };
-
-    typedef GrPendingIOResource<GrRenderTarget, kWrite_GrIOType> RenderTarget;
-    typedef SkSTArray<8, GrPendingFragmentStage> FragmentStageArray;
-    typedef GrPendingProgramElement<const GrXferProcessor> ProgramXferProcessor;
-    RenderTarget                        fRenderTarget;
-    GrScissorState                      fScissorState;
-    GrStencilSettings                   fStencilSettings;
-    GrPipelineBuilder::DrawFace         fDrawFace;
-    uint32_t                            fFlags;
-    ProgramXferProcessor                fXferProcessor;
-    FragmentStageArray                  fFragmentStages;
-    bool                                fReadsFragPosition;
-    GrPipelineInfo                      fInfoForPrimitiveProcessor;
-
-    // This function is equivalent to the offset into fFragmentStages where coverage stages begin.
-    int                                 fNumColorStages;
-
-    GrProgramDesc fDesc;
->>>>>>> miniblink49
 
     typedef SkRefCnt INHERITED;
 };

@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -9,10 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #ifndef SkSVGMetadata_DEFINED
 #define SkSVGMetadata_DEFINED
 
@@ -22,10 +14,7 @@ class SkSVGMetadata : public SkSVGElement {
     DECLARE_SVG_INFO(Metadata);
     virtual bool isDef();
     virtual bool isNotDef();
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 private:
     typedef SkSVGElement INHERITED;
 };

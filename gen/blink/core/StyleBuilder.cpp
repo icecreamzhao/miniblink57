@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "core/css/resolver/StyleBuilder.h"
 
 #include "StyleBuilderFunctions.h"
@@ -14,8 +13,13 @@
 
 namespace blink {
 
-void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& state, CSSValue* value, bool isInitial, bool isInherit) {
-    switch(property) {
+void StyleBuilder::applyProperty(CSSPropertyID property,
+    StyleResolverState& state,
+    const CSSValue& value,
+    bool isInitial,
+    bool isInherit)
+{
+    switch (property) {
     case CSSPropertyWebkitMaskBoxImageWidth:
         if (isInitial)
             StyleBuilderFunctions::applyInitialCSSPropertyWebkitMaskBoxImageWidth(state);
@@ -52,14 +56,14 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyFillRule(state, value);
         return;
 
-//     case CSSPropertyWebkitLineBoxContain:
-//         if (isInitial)
-//             StyleBuilderFunctions::applyInitialCSSPropertyWebkitLineBoxContain(state);
-//         else if (isInherit)
-//             StyleBuilderFunctions::applyInheritCSSPropertyWebkitLineBoxContain(state);
-//         else
-//             StyleBuilderFunctions::applyValueCSSPropertyWebkitLineBoxContain(state, value);
-//         return;
+    case CSSPropertyFontVariantNumeric:
+        if (isInitial)
+            StyleBuilderFunctions::applyInitialCSSPropertyFontVariantNumeric(state);
+        else if (isInherit)
+            StyleBuilderFunctions::applyInheritCSSPropertyFontVariantNumeric(state);
+        else
+            StyleBuilderFunctions::applyValueCSSPropertyFontVariantNumeric(state, value);
+        return;
 
     case CSSPropertyTextDecoration:
         if (isInitial)
@@ -115,15 +119,6 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyTextDecorationColor(state, value);
         return;
 
-    case CSSPropertyWebkitAppRegion:
-        if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyWebkitAppRegion(state);
-        else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyWebkitAppRegion(state);
-        else
-            StyleBuilderFunctions::applyValueCSSPropertyWebkitAppRegion(state, value);
-        return;
-
     case CSSPropertyAnimationName:
         if (isInitial)
             StyleBuilderFunctions::applyInitialCSSPropertyAnimationName(state);
@@ -169,6 +164,15 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyOutlineWidth(state, value);
         return;
 
+    case CSSPropertyColumnRuleWidth:
+        if (isInitial)
+            StyleBuilderFunctions::applyInitialCSSPropertyColumnRuleWidth(state);
+        else if (isInherit)
+            StyleBuilderFunctions::applyInheritCSSPropertyColumnRuleWidth(state);
+        else
+            StyleBuilderFunctions::applyValueCSSPropertyColumnRuleWidth(state, value);
+        return;
+
     case CSSPropertyStrokeOpacity:
         if (isInitial)
             StyleBuilderFunctions::applyInitialCSSPropertyStrokeOpacity(state);
@@ -178,13 +182,13 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyStrokeOpacity(state, value);
         return;
 
-    case CSSPropertyWebkitColumnWidth:
+    case CSSPropertyOffsetRotate:
         if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyWebkitColumnWidth(state);
+            StyleBuilderFunctions::applyInitialCSSPropertyOffsetRotate(state);
         else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyWebkitColumnWidth(state);
+            StyleBuilderFunctions::applyInheritCSSPropertyOffsetRotate(state);
         else
-            StyleBuilderFunctions::applyValueCSSPropertyWebkitColumnWidth(state, value);
+            StyleBuilderFunctions::applyValueCSSPropertyOffsetRotate(state, value);
         return;
 
     case CSSPropertyFontFamily:
@@ -232,13 +236,22 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskComposite(state, value);
         return;
 
-    case CSSPropertyWebkitAppearance:
+    case CSSPropertyContain:
         if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyWebkitAppearance(state);
+            StyleBuilderFunctions::applyInitialCSSPropertyContain(state);
         else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyWebkitAppearance(state);
+            StyleBuilderFunctions::applyInheritCSSPropertyContain(state);
         else
-            StyleBuilderFunctions::applyValueCSSPropertyWebkitAppearance(state, value);
+            StyleBuilderFunctions::applyValueCSSPropertyContain(state, value);
+        return;
+
+    case CSSPropertyWebkitMaskImage:
+        if (isInitial)
+            StyleBuilderFunctions::applyInitialCSSPropertyWebkitMaskImage(state);
+        else if (isInherit)
+            StyleBuilderFunctions::applyInheritCSSPropertyWebkitMaskImage(state);
+        else
+            StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskImage(state, value);
         return;
 
     case CSSPropertyBorderBottomStyle:
@@ -259,6 +272,15 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyHeight(state, value);
         return;
 
+    case CSSPropertyBorderImageSource:
+        if (isInitial)
+            StyleBuilderFunctions::applyInitialCSSPropertyBorderImageSource(state);
+        else if (isInherit)
+            StyleBuilderFunctions::applyInheritCSSPropertyBorderImageSource(state);
+        else
+            StyleBuilderFunctions::applyValueCSSPropertyBorderImageSource(state, value);
+        return;
+
     case CSSPropertyPaintOrder:
         if (isInitial)
             StyleBuilderFunctions::applyInitialCSSPropertyPaintOrder(state);
@@ -275,15 +297,6 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyInheritCSSPropertyTextRendering(state);
         else
             StyleBuilderFunctions::applyValueCSSPropertyTextRendering(state, value);
-        return;
-
-    case CSSPropertyWebkitColumnBreakAfter:
-        if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyWebkitColumnBreakAfter(state);
-        else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyWebkitColumnBreakAfter(state);
-        else
-            StyleBuilderFunctions::applyValueCSSPropertyWebkitColumnBreakAfter(state, value);
         return;
 
     case CSSPropertyBorderBottomLeftRadius:
@@ -322,6 +335,15 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskPositionX(state, value);
         return;
 
+    case CSSPropertyFontVariationSettings:
+        if (isInitial)
+            StyleBuilderFunctions::applyInitialCSSPropertyFontVariationSettings(state);
+        else if (isInherit)
+            StyleBuilderFunctions::applyInheritCSSPropertyFontVariationSettings(state);
+        else
+            StyleBuilderFunctions::applyValueCSSPropertyFontVariationSettings(state, value);
+        return;
+
     case CSSPropertyTextDecorationLine:
         if (isInitial)
             StyleBuilderFunctions::applyInitialCSSPropertyTextDecorationLine(state);
@@ -340,13 +362,13 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyContent(state, value);
         return;
 
-    case CSSPropertyWebkitColumnSpan:
+    case CSSPropertyFilter:
         if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyWebkitColumnSpan(state);
+            StyleBuilderFunctions::applyInitialCSSPropertyFilter(state);
         else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyWebkitColumnSpan(state);
+            StyleBuilderFunctions::applyInheritCSSPropertyFilter(state);
         else
-            StyleBuilderFunctions::applyValueCSSPropertyWebkitColumnSpan(state, value);
+            StyleBuilderFunctions::applyValueCSSPropertyFilter(state, value);
         return;
 
     case CSSPropertyWebkitBackgroundClip:
@@ -394,15 +416,6 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyImageRendering(state, value);
         return;
 
-    case CSSPropertyWebkitUserSelect:
-        if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyWebkitUserSelect(state);
-        else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyWebkitUserSelect(state);
-        else
-            StyleBuilderFunctions::applyValueCSSPropertyWebkitUserSelect(state, value);
-        return;
-
     case CSSPropertyWebkitTextEmphasisStyle:
         if (isInitial)
             StyleBuilderFunctions::applyInitialCSSPropertyWebkitTextEmphasisStyle(state);
@@ -446,6 +459,24 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyInheritCSSPropertyClipPath(state);
         else
             StyleBuilderFunctions::applyValueCSSPropertyClipPath(state, value);
+        return;
+
+    case CSSPropertyBreakBefore:
+        if (isInitial)
+            StyleBuilderFunctions::applyInitialCSSPropertyBreakBefore(state);
+        else if (isInherit)
+            StyleBuilderFunctions::applyInheritCSSPropertyBreakBefore(state);
+        else
+            StyleBuilderFunctions::applyValueCSSPropertyBreakBefore(state, value);
+        return;
+
+    case CSSPropertyWebkitTextFillColor:
+        if (isInitial)
+            StyleBuilderFunctions::applyInitialCSSPropertyWebkitTextFillColor(state);
+        else if (isInherit)
+            StyleBuilderFunctions::applyInheritCSSPropertyWebkitTextFillColor(state);
+        else
+            StyleBuilderFunctions::applyValueCSSPropertyWebkitTextFillColor(state, value);
         return;
 
     case CSSPropertyObjectFit:
@@ -574,15 +605,6 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyWebkitFontSmoothing(state, value);
         return;
 
-    case CSSPropertyPageBreakBefore:
-        if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyPageBreakBefore(state);
-        else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyPageBreakBefore(state);
-        else
-            StyleBuilderFunctions::applyValueCSSPropertyPageBreakBefore(state, value);
-        return;
-
     case CSSPropertyAnimationDelay:
         if (isInitial)
             StyleBuilderFunctions::applyInitialCSSPropertyAnimationDelay(state);
@@ -592,31 +614,13 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyAnimationDelay(state, value);
         return;
 
-    case CSSPropertyWebkitColumnRuleColor:
+    case CSSPropertyBreakAfter:
         if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyWebkitColumnRuleColor(state);
+            StyleBuilderFunctions::applyInitialCSSPropertyBreakAfter(state);
         else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyWebkitColumnRuleColor(state);
+            StyleBuilderFunctions::applyInheritCSSPropertyBreakAfter(state);
         else
-            StyleBuilderFunctions::applyValueCSSPropertyWebkitColumnRuleColor(state, value);
-        return;
-
-    case CSSPropertyWebkitFontFeatureSettings:
-        if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyWebkitFontFeatureSettings(state);
-        else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyWebkitFontFeatureSettings(state);
-        else
-            StyleBuilderFunctions::applyValueCSSPropertyWebkitFontFeatureSettings(state, value);
-        return;
-
-    case CSSPropertyWebkitTextStrokeColor:
-        if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyWebkitTextStrokeColor(state);
-        else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyWebkitTextStrokeColor(state);
-        else
-            StyleBuilderFunctions::applyValueCSSPropertyWebkitTextStrokeColor(state, value);
+            StyleBuilderFunctions::applyValueCSSPropertyBreakAfter(state, value);
         return;
 
     case CSSPropertyOpacity:
@@ -664,22 +668,22 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyClear(state, value);
         return;
 
-    case CSSPropertyWebkitColumnBreakInside:
+    case CSSPropertyPaddingRight:
         if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyWebkitColumnBreakInside(state);
+            StyleBuilderFunctions::applyInitialCSSPropertyPaddingRight(state);
         else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyWebkitColumnBreakInside(state);
+            StyleBuilderFunctions::applyInheritCSSPropertyPaddingRight(state);
         else
-            StyleBuilderFunctions::applyValueCSSPropertyWebkitColumnBreakInside(state, value);
+            StyleBuilderFunctions::applyValueCSSPropertyPaddingRight(state, value);
         return;
 
-    case CSSPropertyWebkitMaskBoxImageSource:
+    case CSSPropertyTextCombineUpright:
         if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyWebkitMaskBoxImageSource(state);
+            StyleBuilderFunctions::applyInitialCSSPropertyTextCombineUpright(state);
         else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyWebkitMaskBoxImageSource(state);
+            StyleBuilderFunctions::applyInheritCSSPropertyTextCombineUpright(state);
         else
-            StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskBoxImageSource(state, value);
+            StyleBuilderFunctions::applyValueCSSPropertyTextCombineUpright(state, value);
         return;
 
     case CSSPropertyTransitionProperty:
@@ -698,15 +702,6 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyInheritCSSPropertyTransformStyle(state);
         else
             StyleBuilderFunctions::applyValueCSSPropertyTransformStyle(state, value);
-        return;
-
-    case CSSPropertyMotionRotation:
-        if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyMotionRotation(state);
-        else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyMotionRotation(state);
-        else
-            StyleBuilderFunctions::applyValueCSSPropertyMotionRotation(state, value);
         return;
 
     case CSSPropertyWebkitBorderHorizontalSpacing:
@@ -736,6 +731,15 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyCaptionSide(state, value);
         return;
 
+    case CSSPropertyColumnCount:
+        if (isInitial)
+            StyleBuilderFunctions::applyInitialCSSPropertyColumnCount(state);
+        else if (isInherit)
+            StyleBuilderFunctions::applyInheritCSSPropertyColumnCount(state);
+        else
+            StyleBuilderFunctions::applyValueCSSPropertyColumnCount(state, value);
+        return;
+
     case CSSPropertyWebkitPrintColorAdjust:
         if (isInitial)
             StyleBuilderFunctions::applyInitialCSSPropertyWebkitPrintColorAdjust(state);
@@ -744,15 +748,6 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
         else
             StyleBuilderFunctions::applyValueCSSPropertyWebkitPrintColorAdjust(state, value);
         return;
-
-//     case CSSPropertyScrollBlocksOn:
-//         if (isInitial)
-//             StyleBuilderFunctions::applyInitialCSSPropertyScrollBlocksOn(state);
-//         else if (isInherit)
-//             StyleBuilderFunctions::applyInheritCSSPropertyScrollBlocksOn(state);
-//         else
-//             StyleBuilderFunctions::applyValueCSSPropertyScrollBlocksOn(state, value);
-//         return;
 
     case CSSPropertyStrokeDasharray:
         if (isInitial)
@@ -781,15 +776,6 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyWidows(state, value);
         return;
 
-    case CSSPropertyLetterSpacing:
-        if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyLetterSpacing(state);
-        else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyLetterSpacing(state);
-        else
-            StyleBuilderFunctions::applyValueCSSPropertyLetterSpacing(state, value);
-        return;
-
     case CSSPropertyWebkitRubyPosition:
         if (isInitial)
             StyleBuilderFunctions::applyInitialCSSPropertyWebkitRubyPosition(state);
@@ -799,13 +785,13 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyWebkitRubyPosition(state, value);
         return;
 
-    case CSSPropertyWebkitTransformOriginZ:
+    case CSSPropertyFlexShrink:
         if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyWebkitTransformOriginZ(state);
+            StyleBuilderFunctions::applyInitialCSSPropertyFlexShrink(state);
         else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyWebkitTransformOriginZ(state);
+            StyleBuilderFunctions::applyInheritCSSPropertyFlexShrink(state);
         else
-            StyleBuilderFunctions::applyValueCSSPropertyWebkitTransformOriginZ(state, value);
+            StyleBuilderFunctions::applyValueCSSPropertyFlexShrink(state, value);
         return;
 
     case CSSPropertyWebkitTransformOriginY:
@@ -862,6 +848,15 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyScrollBehavior(state, value);
         return;
 
+    case CSSPropertyWebkitTextStrokeColor:
+        if (isInitial)
+            StyleBuilderFunctions::applyInitialCSSPropertyWebkitTextStrokeColor(state);
+        else if (isInherit)
+            StyleBuilderFunctions::applyInheritCSSPropertyWebkitTextStrokeColor(state);
+        else
+            StyleBuilderFunctions::applyValueCSSPropertyWebkitTextStrokeColor(state, value);
+        return;
+
     case CSSPropertyFill:
         if (isInitial)
             StyleBuilderFunctions::applyInitialCSSPropertyFill(state);
@@ -880,13 +875,13 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyGridAutoFlow(state, value);
         return;
 
-    case CSSPropertyMotionPath:
+    case CSSPropertyWebkitTextEmphasisPosition:
         if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyMotionPath(state);
+            StyleBuilderFunctions::applyInitialCSSPropertyWebkitTextEmphasisPosition(state);
         else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyMotionPath(state);
+            StyleBuilderFunctions::applyInheritCSSPropertyWebkitTextEmphasisPosition(state);
         else
-            StyleBuilderFunctions::applyValueCSSPropertyMotionPath(state, value);
+            StyleBuilderFunctions::applyValueCSSPropertyWebkitTextEmphasisPosition(state, value);
         return;
 
     case CSSPropertyStopColor:
@@ -943,6 +938,15 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskBoxImageRepeat(state, value);
         return;
 
+    case CSSPropertyWordSpacing:
+        if (isInitial)
+            StyleBuilderFunctions::applyInitialCSSPropertyWordSpacing(state);
+        else if (isInherit)
+            StyleBuilderFunctions::applyInheritCSSPropertyWordSpacing(state);
+        else
+            StyleBuilderFunctions::applyValueCSSPropertyWordSpacing(state, value);
+        return;
+
     case CSSPropertyPerspectiveOrigin:
         if (isInitial)
             StyleBuilderFunctions::applyInitialCSSPropertyPerspectiveOrigin(state);
@@ -959,15 +963,6 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyInheritCSSPropertyTextAnchor(state);
         else
             StyleBuilderFunctions::applyValueCSSPropertyTextAnchor(state, value);
-        return;
-
-    case CSSPropertyWebkitColumnCount:
-        if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyWebkitColumnCount(state);
-        else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyWebkitColumnCount(state);
-        else
-            StyleBuilderFunctions::applyValueCSSPropertyWebkitColumnCount(state, value);
         return;
 
     case CSSPropertyFontStyle:
@@ -1004,15 +999,6 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyInheritCSSPropertyBorderTopLeftRadius(state);
         else
             StyleBuilderFunctions::applyValueCSSPropertyBorderTopLeftRadius(state, value);
-        return;
-
-    case CSSPropertyFontVariant:
-        if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyFontVariant(state);
-        else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyFontVariant(state);
-        else
-            StyleBuilderFunctions::applyValueCSSPropertyFontVariant(state, value);
         return;
 
     case CSSPropertyWritingMode:
@@ -1105,15 +1091,6 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyIsolation(state, value);
         return;
 
-//     case CSSPropertyGlyphOrientationHorizontal:
-//         if (isInitial)
-//             StyleBuilderFunctions::applyInitialCSSPropertyGlyphOrientationHorizontal(state);
-//         else if (isInherit)
-//             StyleBuilderFunctions::applyInheritCSSPropertyGlyphOrientationHorizontal(state);
-//         else
-//             StyleBuilderFunctions::applyValueCSSPropertyGlyphOrientationHorizontal(state, value);
-//         return;
-
     case CSSPropertyFillOpacity:
         if (isInitial)
             StyleBuilderFunctions::applyInitialCSSPropertyFillOpacity(state);
@@ -1177,15 +1154,6 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyScrollSnapPointsY(state, value);
         return;
 
-    case CSSPropertyWebkitColumnGap:
-        if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyWebkitColumnGap(state);
-        else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyWebkitColumnGap(state);
-        else
-            StyleBuilderFunctions::applyValueCSSPropertyWebkitColumnGap(state, value);
-        return;
-
     case CSSPropertyUnicodeBidi:
         if (isInitial)
             StyleBuilderFunctions::applyInitialCSSPropertyUnicodeBidi(state);
@@ -1204,13 +1172,13 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyAnimationIterationCount(state, value);
         return;
 
-    case CSSPropertyWebkitRtlOrdering:
+    case CSSPropertyWebkitWritingMode:
         if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyWebkitRtlOrdering(state);
+            StyleBuilderFunctions::applyInitialCSSPropertyWebkitWritingMode(state);
         else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyWebkitRtlOrdering(state);
+            StyleBuilderFunctions::applyInheritCSSPropertyWebkitWritingMode(state);
         else
-            StyleBuilderFunctions::applyValueCSSPropertyWebkitRtlOrdering(state, value);
+            StyleBuilderFunctions::applyValueCSSPropertyWebkitWritingMode(state, value);
         return;
 
     case CSSPropertyFloat:
@@ -1238,6 +1206,15 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyInheritCSSPropertyTransformOrigin(state);
         else
             StyleBuilderFunctions::applyValueCSSPropertyTransformOrigin(state, value);
+        return;
+
+    case CSSPropertyWebkitRtlOrdering:
+        if (isInitial)
+            StyleBuilderFunctions::applyInitialCSSPropertyWebkitRtlOrdering(state);
+        else if (isInherit)
+            StyleBuilderFunctions::applyInheritCSSPropertyWebkitRtlOrdering(state);
+        else
+            StyleBuilderFunctions::applyValueCSSPropertyWebkitRtlOrdering(state, value);
         return;
 
     case CSSPropertyMarginTop:
@@ -1285,13 +1262,13 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyBorderImageOutset(state, value);
         return;
 
-    case CSSPropertyPaddingRight:
+    case CSSPropertyFontVariantCaps:
         if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyPaddingRight(state);
+            StyleBuilderFunctions::applyInitialCSSPropertyFontVariantCaps(state);
         else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyPaddingRight(state);
+            StyleBuilderFunctions::applyInheritCSSPropertyFontVariantCaps(state);
         else
-            StyleBuilderFunctions::applyValueCSSPropertyPaddingRight(state, value);
+            StyleBuilderFunctions::applyValueCSSPropertyFontVariantCaps(state, value);
         return;
 
     case CSSPropertyWebkitBoxOrdinalGroup:
@@ -1348,6 +1325,24 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyOverflowY(state, value);
         return;
 
+    case CSSPropertyColumnRuleColor:
+        if (isInitial)
+            StyleBuilderFunctions::applyInitialCSSPropertyColumnRuleColor(state);
+        else if (isInherit)
+            StyleBuilderFunctions::applyInheritCSSPropertyColumnRuleColor(state);
+        else
+            StyleBuilderFunctions::applyValueCSSPropertyColumnRuleColor(state, value);
+        return;
+
+    case CSSPropertyHyphens:
+        if (isInitial)
+            StyleBuilderFunctions::applyInitialCSSPropertyHyphens(state);
+        else if (isInherit)
+            StyleBuilderFunctions::applyInheritCSSPropertyHyphens(state);
+        else
+            StyleBuilderFunctions::applyValueCSSPropertyHyphens(state, value);
+        return;
+
     case CSSPropertyGridTemplateColumns:
         if (isInitial)
             StyleBuilderFunctions::applyInitialCSSPropertyGridTemplateColumns(state);
@@ -1355,6 +1350,15 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyInheritCSSPropertyGridTemplateColumns(state);
         else
             StyleBuilderFunctions::applyValueCSSPropertyGridTemplateColumns(state, value);
+        return;
+
+    case CSSPropertyTextSizeAdjust:
+        if (isInitial)
+            StyleBuilderFunctions::applyInitialCSSPropertyTextSizeAdjust(state);
+        else if (isInherit)
+            StyleBuilderFunctions::applyInheritCSSPropertyTextSizeAdjust(state);
+        else
+            StyleBuilderFunctions::applyValueCSSPropertyTextSizeAdjust(state, value);
         return;
 
     case CSSPropertyPerspective:
@@ -1366,6 +1370,15 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyPerspective(state, value);
         return;
 
+    case CSSPropertyUserSelect:
+        if (isInitial)
+            StyleBuilderFunctions::applyInitialCSSPropertyUserSelect(state);
+        else if (isInherit)
+            StyleBuilderFunctions::applyInheritCSSPropertyUserSelect(state);
+        else
+            StyleBuilderFunctions::applyValueCSSPropertyUserSelect(state, value);
+        return;
+
     case CSSPropertyLineHeight:
         if (isInitial)
             StyleBuilderFunctions::applyInitialCSSPropertyLineHeight(state);
@@ -1375,6 +1388,15 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyLineHeight(state, value);
         return;
 
+    case CSSPropertyColumnGap:
+        if (isInitial)
+            StyleBuilderFunctions::applyInitialCSSPropertyColumnGap(state);
+        else if (isInherit)
+            StyleBuilderFunctions::applyInheritCSSPropertyColumnGap(state);
+        else
+            StyleBuilderFunctions::applyValueCSSPropertyColumnGap(state, value);
+        return;
+
     case CSSPropertyMaskSourceType:
         if (isInitial)
             StyleBuilderFunctions::applyInitialCSSPropertyMaskSourceType(state);
@@ -1382,6 +1404,15 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyInheritCSSPropertyMaskSourceType(state);
         else
             StyleBuilderFunctions::applyValueCSSPropertyMaskSourceType(state, value);
+        return;
+
+    case CSSPropertySnapHeight:
+        if (isInitial)
+            StyleBuilderFunctions::applyInitialCSSPropertySnapHeight(state);
+        else if (isInherit)
+            StyleBuilderFunctions::applyInheritCSSPropertySnapHeight(state);
+        else
+            StyleBuilderFunctions::applyValueCSSPropertySnapHeight(state, value);
         return;
 
     case CSSPropertyBackgroundRepeatY:
@@ -1474,22 +1505,13 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyPosition(state, value);
         return;
 
-//     case CSSPropertyGlyphOrientationVertical:
-//         if (isInitial)
-//             StyleBuilderFunctions::applyInitialCSSPropertyGlyphOrientationVertical(state);
-//         else if (isInherit)
-//             StyleBuilderFunctions::applyInheritCSSPropertyGlyphOrientationVertical(state);
-//         else
-//             StyleBuilderFunctions::applyValueCSSPropertyGlyphOrientationVertical(state, value);
-//         return;
-
-    case CSSPropertyWebkitTextFillColor:
+    case CSSPropertyWebkitAppRegion:
         if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyWebkitTextFillColor(state);
+            StyleBuilderFunctions::applyInitialCSSPropertyWebkitAppRegion(state);
         else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyWebkitTextFillColor(state);
+            StyleBuilderFunctions::applyInheritCSSPropertyWebkitAppRegion(state);
         else
-            StyleBuilderFunctions::applyValueCSSPropertyWebkitTextFillColor(state, value);
+            StyleBuilderFunctions::applyValueCSSPropertyWebkitAppRegion(state, value);
         return;
 
     case CSSPropertyFontStretch:
@@ -1591,31 +1613,22 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyWebkitMarginAfterCollapse(state, value);
         return;
 
-    case CSSPropertyWebkitTextEmphasisPosition:
+    case CSSPropertyOffsetPosition:
         if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyWebkitTextEmphasisPosition(state);
+            StyleBuilderFunctions::applyInitialCSSPropertyOffsetPosition(state);
         else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyWebkitTextEmphasisPosition(state);
+            StyleBuilderFunctions::applyInheritCSSPropertyOffsetPosition(state);
         else
-            StyleBuilderFunctions::applyValueCSSPropertyWebkitTextEmphasisPosition(state, value);
+            StyleBuilderFunctions::applyValueCSSPropertyOffsetPosition(state, value);
         return;
 
-    case CSSPropertyWordSpacing:
+    case CSSPropertyBackdropFilter:
         if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyWordSpacing(state);
+            StyleBuilderFunctions::applyInitialCSSPropertyBackdropFilter(state);
         else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyWordSpacing(state);
+            StyleBuilderFunctions::applyInheritCSSPropertyBackdropFilter(state);
         else
-            StyleBuilderFunctions::applyValueCSSPropertyWordSpacing(state, value);
-        return;
-
-    case CSSPropertyPageBreakAfter:
-        if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyPageBreakAfter(state);
-        else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyPageBreakAfter(state);
-        else
-            StyleBuilderFunctions::applyValueCSSPropertyPageBreakAfter(state, value);
+            StyleBuilderFunctions::applyValueCSSPropertyBackdropFilter(state, value);
         return;
 
     case CSSPropertyOutlineStyle:
@@ -1654,6 +1667,24 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyWebkitBoxLines(state, value);
         return;
 
+    case CSSPropertyOffsetAnchor:
+        if (isInitial)
+            StyleBuilderFunctions::applyInitialCSSPropertyOffsetAnchor(state);
+        else if (isInherit)
+            StyleBuilderFunctions::applyInheritCSSPropertyOffsetAnchor(state);
+        else
+            StyleBuilderFunctions::applyValueCSSPropertyOffsetAnchor(state, value);
+        return;
+
+    case CSSPropertyColumnSpan:
+        if (isInitial)
+            StyleBuilderFunctions::applyInitialCSSPropertyColumnSpan(state);
+        else if (isInherit)
+            StyleBuilderFunctions::applyInheritCSSPropertyColumnSpan(state);
+        else
+            StyleBuilderFunctions::applyValueCSSPropertyColumnSpan(state, value);
+        return;
+
     case CSSPropertyTableLayout:
         if (isInitial)
             StyleBuilderFunctions::applyInitialCSSPropertyTableLayout(state);
@@ -1663,13 +1694,13 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyTableLayout(state, value);
         return;
 
-    case CSSPropertyStroke:
+    case CSSPropertyGridRowGap:
         if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyStroke(state);
+            StyleBuilderFunctions::applyInitialCSSPropertyGridRowGap(state);
         else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyStroke(state);
+            StyleBuilderFunctions::applyInheritCSSPropertyGridRowGap(state);
         else
-            StyleBuilderFunctions::applyValueCSSPropertyStroke(state, value);
+            StyleBuilderFunctions::applyValueCSSPropertyGridRowGap(state, value);
         return;
 
     case CSSPropertyBorderRightStyle:
@@ -1726,31 +1757,58 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyWidth(state, value);
         return;
 
-    case CSSPropertyTouchAction:
+    case CSSPropertyColumnRuleStyle:
         if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyTouchAction(state);
+            StyleBuilderFunctions::applyInitialCSSPropertyColumnRuleStyle(state);
         else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyTouchAction(state);
+            StyleBuilderFunctions::applyInheritCSSPropertyColumnRuleStyle(state);
         else
-            StyleBuilderFunctions::applyValueCSSPropertyTouchAction(state, value);
+            StyleBuilderFunctions::applyValueCSSPropertyColumnRuleStyle(state, value);
         return;
 
-//     case CSSPropertyWebkitBackgroundComposite:
-//         if (isInitial)
-//             StyleBuilderFunctions::applyInitialCSSPropertyWebkitBackgroundComposite(state);
-//         else if (isInherit)
-//             StyleBuilderFunctions::applyInheritCSSPropertyWebkitBackgroundComposite(state);
-//         else
-//             StyleBuilderFunctions::applyValueCSSPropertyWebkitBackgroundComposite(state, value);
-//         return;
-
-    case CSSPropertyWebkitClipPath:
+    case CSSPropertyOffsetPath:
         if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyWebkitClipPath(state);
+            StyleBuilderFunctions::applyInitialCSSPropertyOffsetPath(state);
         else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyWebkitClipPath(state);
+            StyleBuilderFunctions::applyInheritCSSPropertyOffsetPath(state);
         else
-            StyleBuilderFunctions::applyValueCSSPropertyWebkitClipPath(state, value);
+            StyleBuilderFunctions::applyValueCSSPropertyOffsetPath(state, value);
+        return;
+
+    case CSSPropertyTextDecorationSkip:
+        if (isInitial)
+            StyleBuilderFunctions::applyInitialCSSPropertyTextDecorationSkip(state);
+        else if (isInherit)
+            StyleBuilderFunctions::applyInheritCSSPropertyTextDecorationSkip(state);
+        else
+            StyleBuilderFunctions::applyValueCSSPropertyTextDecorationSkip(state, value);
+        return;
+
+    case CSSPropertyBreakInside:
+        if (isInitial)
+            StyleBuilderFunctions::applyInitialCSSPropertyBreakInside(state);
+        else if (isInherit)
+            StyleBuilderFunctions::applyInheritCSSPropertyBreakInside(state);
+        else
+            StyleBuilderFunctions::applyValueCSSPropertyBreakInside(state, value);
+        return;
+
+    case CSSPropertyWebkitMaskBoxImageSource:
+        if (isInitial)
+            StyleBuilderFunctions::applyInitialCSSPropertyWebkitMaskBoxImageSource(state);
+        else if (isInherit)
+            StyleBuilderFunctions::applyInheritCSSPropertyWebkitMaskBoxImageSource(state);
+        else
+            StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskBoxImageSource(state, value);
+        return;
+
+    case CSSPropertyFontFeatureSettings:
+        if (isInitial)
+            StyleBuilderFunctions::applyInitialCSSPropertyFontFeatureSettings(state);
+        else if (isInherit)
+            StyleBuilderFunctions::applyInheritCSSPropertyFontFeatureSettings(state);
+        else
+            StyleBuilderFunctions::applyValueCSSPropertyFontFeatureSettings(state, value);
         return;
 
     case CSSPropertyStrokeMiterlimit:
@@ -1760,6 +1818,15 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyInheritCSSPropertyStrokeMiterlimit(state);
         else
             StyleBuilderFunctions::applyValueCSSPropertyStrokeMiterlimit(state, value);
+        return;
+
+    case CSSPropertyOverflowAnchor:
+        if (isInitial)
+            StyleBuilderFunctions::applyInitialCSSPropertyOverflowAnchor(state);
+        else if (isInherit)
+            StyleBuilderFunctions::applyInheritCSSPropertyOverflowAnchor(state);
+        else
+            StyleBuilderFunctions::applyValueCSSPropertyOverflowAnchor(state, value);
         return;
 
     case CSSPropertyGridColumnStart:
@@ -1787,15 +1854,6 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyInheritCSSPropertyListStylePosition(state);
         else
             StyleBuilderFunctions::applyValueCSSPropertyListStylePosition(state, value);
-        return;
-
-    case CSSPropertyWebkitFilter:
-        if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyWebkitFilter(state);
-        else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyWebkitFilter(state);
-        else
-            StyleBuilderFunctions::applyValueCSSPropertyWebkitFilter(state, value);
         return;
 
     case CSSPropertyOutlineOffset:
@@ -1897,13 +1955,13 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyWebkitMarginBeforeCollapse(state, value);
         return;
 
-    case CSSPropertyWebkitMaskImage:
+    case CSSPropertyWebkitAppearance:
         if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyWebkitMaskImage(state);
+            StyleBuilderFunctions::applyInitialCSSPropertyWebkitAppearance(state);
         else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyWebkitMaskImage(state);
+            StyleBuilderFunctions::applyInheritCSSPropertyWebkitAppearance(state);
         else
-            StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskImage(state, value);
+            StyleBuilderFunctions::applyValueCSSPropertyWebkitAppearance(state, value);
         return;
 
     case CSSPropertyAnimationTimingFunction:
@@ -1949,15 +2007,6 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyInheritCSSPropertyBorderLeftStyle(state);
         else
             StyleBuilderFunctions::applyValueCSSPropertyBorderLeftStyle(state, value);
-        return;
-
-    case CSSPropertyWebkitColumnRuleWidth:
-        if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyWebkitColumnRuleWidth(state);
-        else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyWebkitColumnRuleWidth(state);
-        else
-            StyleBuilderFunctions::applyValueCSSPropertyWebkitColumnRuleWidth(state, value);
         return;
 
     case CSSPropertyWebkitUserDrag:
@@ -2023,15 +2072,6 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyY(state, value);
         return;
 
-//     case CSSPropertyFilter:
-//         if (isInitial)
-//             StyleBuilderFunctions::applyInitialCSSPropertyFilter(state);
-//         else if (isInherit)
-//             StyleBuilderFunctions::applyInheritCSSPropertyFilter(state);
-//         else
-//             StyleBuilderFunctions::applyValueCSSPropertyFilter(state, value);
-//         return;
-
     case CSSPropertyR:
         if (isInitial)
             StyleBuilderFunctions::applyInitialCSSPropertyR(state);
@@ -2050,22 +2090,31 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyResize(state, value);
         return;
 
-    case CSSPropertyFontSizeAdjust:
+    case CSSPropertyOffsetDistance:
         if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyFontSizeAdjust(state);
+            StyleBuilderFunctions::applyInitialCSSPropertyOffsetDistance(state);
         else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyFontSizeAdjust(state);
+            StyleBuilderFunctions::applyInheritCSSPropertyOffsetDistance(state);
         else
-            StyleBuilderFunctions::applyValueCSSPropertyFontSizeAdjust(state, value);
+            StyleBuilderFunctions::applyValueCSSPropertyOffsetDistance(state, value);
         return;
 
-    case CSSPropertyFlexShrink:
+    case CSSPropertyLetterSpacing:
         if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyFlexShrink(state);
+            StyleBuilderFunctions::applyInitialCSSPropertyLetterSpacing(state);
         else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyFlexShrink(state);
+            StyleBuilderFunctions::applyInheritCSSPropertyLetterSpacing(state);
         else
-            StyleBuilderFunctions::applyValueCSSPropertyFlexShrink(state, value);
+            StyleBuilderFunctions::applyValueCSSPropertyLetterSpacing(state, value);
+        return;
+
+    case CSSPropertyWebkitTransformOriginZ:
+        if (isInitial)
+            StyleBuilderFunctions::applyInitialCSSPropertyWebkitTransformOriginZ(state);
+        else if (isInherit)
+            StyleBuilderFunctions::applyInheritCSSPropertyWebkitTransformOriginZ(state);
+        else
+            StyleBuilderFunctions::applyValueCSSPropertyWebkitTransformOriginZ(state, value);
         return;
 
     case CSSPropertyAnimationDirection:
@@ -2086,6 +2135,15 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyWebkitTextOrientation(state, value);
         return;
 
+    case CSSPropertyD:
+        if (isInitial)
+            StyleBuilderFunctions::applyInitialCSSPropertyD(state);
+        else if (isInherit)
+            StyleBuilderFunctions::applyInheritCSSPropertyD(state);
+        else
+            StyleBuilderFunctions::applyValueCSSPropertyD(state, value);
+        return;
+
     case CSSPropertyColorInterpolationFilters:
         if (isInitial)
             StyleBuilderFunctions::applyInitialCSSPropertyColorInterpolationFilters(state);
@@ -2093,15 +2151,6 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyInheritCSSPropertyColorInterpolationFilters(state);
         else
             StyleBuilderFunctions::applyValueCSSPropertyColorInterpolationFilters(state, value);
-        return;
-
-    case CSSPropertyWebkitColumnBreakBefore:
-        if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyWebkitColumnBreakBefore(state);
-        else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyWebkitColumnBreakBefore(state);
-        else
-            StyleBuilderFunctions::applyValueCSSPropertyWebkitColumnBreakBefore(state, value);
         return;
 
     case CSSPropertyTextTransform:
@@ -2167,6 +2216,15 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyDirection(state, value);
         return;
 
+    case CSSPropertyTextOrientation:
+        if (isInitial)
+            StyleBuilderFunctions::applyInitialCSSPropertyTextOrientation(state);
+        else if (isInherit)
+            StyleBuilderFunctions::applyInheritCSSPropertyTextOrientation(state);
+        else
+            StyleBuilderFunctions::applyValueCSSPropertyTextOrientation(state, value);
+        return;
+
     case CSSPropertyClip:
         if (isInitial)
             StyleBuilderFunctions::applyInitialCSSPropertyClip(state);
@@ -2201,6 +2259,15 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyInheritCSSPropertyWebkitBorderImage(state);
         else
             StyleBuilderFunctions::applyValueCSSPropertyWebkitBorderImage(state, value);
+        return;
+
+    case CSSPropertyTouchAction:
+        if (isInitial)
+            StyleBuilderFunctions::applyInitialCSSPropertyTouchAction(state);
+        else if (isInherit)
+            StyleBuilderFunctions::applyInheritCSSPropertyTouchAction(state);
+        else
+            StyleBuilderFunctions::applyValueCSSPropertyTouchAction(state, value);
         return;
 
     case CSSPropertyWebkitBorderVerticalSpacing:
@@ -2266,6 +2333,15 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyMaxHeight(state, value);
         return;
 
+    case CSSPropertyStroke:
+        if (isInitial)
+            StyleBuilderFunctions::applyInitialCSSPropertyStroke(state);
+        else if (isInherit)
+            StyleBuilderFunctions::applyInheritCSSPropertyStroke(state);
+        else
+            StyleBuilderFunctions::applyValueCSSPropertyStroke(state, value);
+        return;
+
     case CSSPropertyWillChange:
         if (isInitial)
             StyleBuilderFunctions::applyInitialCSSPropertyWillChange(state);
@@ -2293,13 +2369,13 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskBoxImageSlice(state, value);
         return;
 
-    case CSSPropertyWebkitWritingMode:
+    case CSSPropertyOrphans:
         if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyWebkitWritingMode(state);
+            StyleBuilderFunctions::applyInitialCSSPropertyOrphans(state);
         else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyWebkitWritingMode(state);
+            StyleBuilderFunctions::applyInheritCSSPropertyOrphans(state);
         else
-            StyleBuilderFunctions::applyValueCSSPropertyWebkitWritingMode(state, value);
+            StyleBuilderFunctions::applyValueCSSPropertyOrphans(state, value);
         return;
 
     case CSSPropertyBackgroundPositionY:
@@ -2356,22 +2432,13 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyBackgroundOrigin(state, value);
         return;
 
-    case CSSPropertyWebkitColumnRuleStyle:
+    case CSSPropertyWebkitPerspectiveOriginY:
         if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyWebkitColumnRuleStyle(state);
+            StyleBuilderFunctions::applyInitialCSSPropertyWebkitPerspectiveOriginY(state);
         else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyWebkitColumnRuleStyle(state);
+            StyleBuilderFunctions::applyInheritCSSPropertyWebkitPerspectiveOriginY(state);
         else
-            StyleBuilderFunctions::applyValueCSSPropertyWebkitColumnRuleStyle(state, value);
-        return;
-
-    case CSSPropertyWebkitBoxFlexGroup:
-        if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyWebkitBoxFlexGroup(state);
-        else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyWebkitBoxFlexGroup(state);
-        else
-            StyleBuilderFunctions::applyValueCSSPropertyWebkitBoxFlexGroup(state, value);
+            StyleBuilderFunctions::applyValueCSSPropertyWebkitPerspectiveOriginY(state, value);
         return;
 
     case CSSPropertyTextAlignLast:
@@ -2392,6 +2459,24 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyWebkitMarginTopCollapse(state, value);
         return;
 
+    case CSSPropertyCaretColor:
+        if (isInitial)
+            StyleBuilderFunctions::applyInitialCSSPropertyCaretColor(state);
+        else if (isInherit)
+            StyleBuilderFunctions::applyInheritCSSPropertyCaretColor(state);
+        else
+            StyleBuilderFunctions::applyValueCSSPropertyCaretColor(state, value);
+        return;
+
+    case CSSPropertyColumnWidth:
+        if (isInitial)
+            StyleBuilderFunctions::applyInitialCSSPropertyColumnWidth(state);
+        else if (isInherit)
+            StyleBuilderFunctions::applyInheritCSSPropertyColumnWidth(state);
+        else
+            StyleBuilderFunctions::applyValueCSSPropertyColumnWidth(state, value);
+        return;
+
     case CSSPropertyCursor:
         if (isInitial)
             StyleBuilderFunctions::applyInitialCSSPropertyCursor(state);
@@ -2408,6 +2493,15 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyInheritCSSPropertyTabSize(state);
         else
             StyleBuilderFunctions::applyValueCSSPropertyTabSize(state, value);
+        return;
+
+    case CSSPropertyOffsetRotation:
+        if (isInitial)
+            StyleBuilderFunctions::applyInitialCSSPropertyOffsetRotation(state);
+        else if (isInherit)
+            StyleBuilderFunctions::applyInheritCSSPropertyOffsetRotation(state);
+        else
+            StyleBuilderFunctions::applyValueCSSPropertyOffsetRotation(state, value);
         return;
 
     case CSSPropertyCounterIncrement:
@@ -2444,24 +2538,6 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyInheritCSSPropertyEmptyCells(state);
         else
             StyleBuilderFunctions::applyValueCSSPropertyEmptyCells(state, value);
-        return;
-
-    case CSSPropertyBorderImageSource:
-        if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyBorderImageSource(state);
-        else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyBorderImageSource(state);
-        else
-            StyleBuilderFunctions::applyValueCSSPropertyBorderImageSource(state, value);
-        return;
-
-    case CSSPropertyMotionOffset:
-        if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyMotionOffset(state);
-        else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyMotionOffset(state);
-        else
-            StyleBuilderFunctions::applyValueCSSPropertyMotionOffset(state, value);
         return;
 
     case CSSPropertyTextOverflow:
@@ -2698,15 +2774,6 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyWebkitMaskRepeatX(state, value);
         return;
 
-    case CSSPropertyPageBreakInside:
-        if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyPageBreakInside(state);
-        else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyPageBreakInside(state);
-        else
-            StyleBuilderFunctions::applyValueCSSPropertyPageBreakInside(state, value);
-        return;
-
     case CSSPropertyListStyleType:
         if (isInitial)
             StyleBuilderFunctions::applyInitialCSSPropertyListStyleType(state);
@@ -2714,6 +2781,15 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyInheritCSSPropertyListStyleType(state);
         else
             StyleBuilderFunctions::applyValueCSSPropertyListStyleType(state, value);
+        return;
+
+    case CSSPropertyImageOrientation:
+        if (isInitial)
+            StyleBuilderFunctions::applyInitialCSSPropertyImageOrientation(state);
+        else if (isInherit)
+            StyleBuilderFunctions::applyInheritCSSPropertyImageOrientation(state);
+        else
+            StyleBuilderFunctions::applyValueCSSPropertyImageOrientation(state, value);
         return;
 
     case CSSPropertyTextAlign:
@@ -2743,13 +2819,13 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyObjectPosition(state, value);
         return;
 
-    case CSSPropertyOrphans:
+    case CSSPropertyGridColumnGap:
         if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyOrphans(state);
+            StyleBuilderFunctions::applyInitialCSSPropertyGridColumnGap(state);
         else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyOrphans(state);
+            StyleBuilderFunctions::applyInheritCSSPropertyGridColumnGap(state);
         else
-            StyleBuilderFunctions::applyValueCSSPropertyOrphans(state, value);
+            StyleBuilderFunctions::applyValueCSSPropertyGridColumnGap(state, value);
         return;
 
     case CSSPropertyScrollSnapDestination:
@@ -2761,13 +2837,13 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyScrollSnapDestination(state, value);
         return;
 
-    case CSSPropertyWebkitPerspectiveOriginY:
+    case CSSPropertyWebkitBoxFlexGroup:
         if (isInitial)
-            StyleBuilderFunctions::applyInitialCSSPropertyWebkitPerspectiveOriginY(state);
+            StyleBuilderFunctions::applyInitialCSSPropertyWebkitBoxFlexGroup(state);
         else if (isInherit)
-            StyleBuilderFunctions::applyInheritCSSPropertyWebkitPerspectiveOriginY(state);
+            StyleBuilderFunctions::applyInheritCSSPropertyWebkitBoxFlexGroup(state);
         else
-            StyleBuilderFunctions::applyValueCSSPropertyWebkitPerspectiveOriginY(state, value);
+            StyleBuilderFunctions::applyValueCSSPropertyWebkitBoxFlexGroup(state, value);
         return;
 
     case CSSPropertyWebkitPerspectiveOriginX:
@@ -2777,6 +2853,15 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyInheritCSSPropertyWebkitPerspectiveOriginX(state);
         else
             StyleBuilderFunctions::applyValueCSSPropertyWebkitPerspectiveOriginX(state, value);
+        return;
+
+    case CSSPropertyFontSizeAdjust:
+        if (isInitial)
+            StyleBuilderFunctions::applyInitialCSSPropertyFontSizeAdjust(state);
+        else if (isInherit)
+            StyleBuilderFunctions::applyInheritCSSPropertyFontSizeAdjust(state);
+        else
+            StyleBuilderFunctions::applyValueCSSPropertyFontSizeAdjust(state, value);
         return;
 
     case CSSPropertyBorderBottomColor:
@@ -2806,20 +2891,19 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
             StyleBuilderFunctions::applyValueCSSPropertyVisibility(state, value);
         return;
 
-	case CSSPropertyVariable:
-		ASSERT(!isInitial && !isInherit);
-		StyleBuilderFunctions::applyValueCSSPropertyVariable(state, value);
-		return;
-
+    case CSSPropertyVariable:
+        ASSERT(!isInitial && !isInherit);
+        StyleBuilderFunctions::applyValueCSSPropertyVariable(state, value);
+        return;
     case CSSPropertyWebkitBorderEndColor:
     case CSSPropertyWebkitBorderBeforeStyle:
     case CSSPropertyWebkitBorderEndStyle:
     case CSSPropertyWebkitPaddingStart:
-    case CSSPropertyWebkitPaddingEnd:
     case CSSPropertyWebkitBorderStartWidth:
     case CSSPropertyWebkitMaxLogicalWidth:
     case CSSPropertyWebkitLogicalHeight:
     case CSSPropertyWebkitMinLogicalWidth:
+    case CSSPropertyMinInlineSize:
     case CSSPropertyWebkitBorderBeforeWidth:
     case CSSPropertyWebkitPaddingBefore:
     case CSSPropertyWebkitBorderBeforeColor:
@@ -2827,34 +2911,31 @@ void StyleBuilder::applyProperty(CSSPropertyID property, StyleResolverState& sta
     case CSSPropertyWebkitBorderAfterWidth:
     case CSSPropertyWebkitMinLogicalHeight:
     case CSSPropertyWebkitBorderEndWidth:
+    case CSSPropertyWebkitPaddingEnd:
     case CSSPropertyWebkitLogicalWidth:
     case CSSPropertyWebkitBorderAfterColor:
+    case CSSPropertyMinBlockSize:
+    case CSSPropertyBlockSize:
+    case CSSPropertyWebkitMarginBefore:
     case CSSPropertyWebkitMaxLogicalHeight:
+    case CSSPropertyMaxBlockSize:
+    case CSSPropertyInlineSize:
     case CSSPropertyWebkitBorderStartColor:
     case CSSPropertyWebkitBorderAfterStyle:
     case CSSPropertyWebkitPaddingAfter:
     case CSSPropertyWebkitBorderStartStyle:
-    case CSSPropertyWebkitMarginBefore:
+    case CSSPropertyMaxInlineSize:
     case CSSPropertyWebkitMarginStart:
-    case CSSPropertyWebkitMarginAfter:
-    {
-        CSSPropertyID resolvedProperty = CSSProperty::resolveDirectionAwareProperty(property, state.style()->direction(), state.style()->writingMode());
+    case CSSPropertyWebkitMarginAfter: {
+        CSSPropertyID resolvedProperty = CSSProperty::resolveDirectionAwareProperty(property, state.style()->direction(), state.style()->getWritingMode());
         ASSERT(resolvedProperty != property);
         applyProperty(resolvedProperty, state, value);
         return;
     }
-    case CSSPropertyMinZoom:
     case CSSPropertyPage:
     case CSSPropertyAll:
-    case CSSPropertyOrientation:
-    case CSSPropertyUnicodeRange:
     case CSSPropertyWebkitTextDecorationsInEffect:
-    case CSSPropertyMaxZoom:
-    case CSSPropertyUserZoom:
-    case CSSPropertySrc:
-    //case CSSPropertyEnableBackground:
     case CSSPropertyWebkitFontSizeDelta:
-    case CSSPropertyFilter:
         return;
     default:
         ASSERT_NOT_REACHED();

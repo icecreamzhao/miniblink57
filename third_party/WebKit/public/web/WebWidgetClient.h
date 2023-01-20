@@ -33,7 +33,6 @@
 
 #include "WebNavigationPolicy.h"
 #include "public/platform/WebCommon.h"
-<<<<<<< HEAD
 #include "public/platform/WebDragOperation.h"
 #include "public/platform/WebLayerTreeView.h"
 #include "public/platform/WebPoint.h"
@@ -42,42 +41,26 @@
 #include "public/platform/WebScreenInfo.h"
 #include "public/web/WebMeaningfulLayout.h"
 #include "public/web/WebTextDirection.h"
-=======
-#include "public/platform/WebLayerTreeView.h"
-#include "public/platform/WebPoint.h"
-#include "public/platform/WebRect.h"
-#include "public/platform/WebScreenInfo.h"
->>>>>>> miniblink49
 #include "public/web/WebTouchAction.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 class WebDragData;
 class WebGestureEvent;
 class WebImage;
-=======
-class WebGestureEvent;
->>>>>>> miniblink49
 class WebNode;
 class WebString;
 class WebWidget;
 struct WebCursorInfo;
 struct WebFloatPoint;
-<<<<<<< HEAD
 struct WebFloatRect;
 struct WebFloatSize;
-=======
-struct WebFloatSize;
-struct WebSize;
->>>>>>> miniblink49
 
 class WebWidgetClient {
 public:
     // Called when a region of the WebWidget needs to be re-painted.
     virtual void didInvalidateRect(const WebRect&) { }
 
-<<<<<<< HEAD
     // Attempt to initialize compositing view for this widget. If successful,
     // returns a valid WebLayerTreeView which is owned by the
     // WebWidgetClient.
@@ -95,40 +78,6 @@ public:
     virtual void didMeaningfulLayout(WebMeaningfulLayout) { }
 
     virtual void didFirstLayoutAfterFinishedParsing() { }
-=======
-    // Called when the Widget has changed size as a result of an auto-resize.
-    virtual void didAutoResize(const WebSize& newSize) { }
-
-    // Called when the Widget has a new layout size. As a result of
-    // setting the new layout size, the frame for this widget has possibly
-    // been marked as needing layout. Widgets must mark their containers
-    // for layout when the plguin container controls widget layout, otherwise
-    // the frame layout will not occur.
-    virtual void didUpdateLayoutSize(const WebSize& newSize) { }
-
-    // Attempt to initialize compositing for this widget. If this is successful,
-    // layerTreeView() will return a valid WebLayerTreeView.
-    virtual void initializeLayerTreeView() { }
-
-    // Return a compositing view used for this widget. This is owned by the
-    // WebWidgetClient.
-    virtual WebLayerTreeView* layerTreeView() { return 0; }
-    // FIXME: Remove all overrides of this and change layerTreeView() above to ASSERT_NOT_REACHED.
-    virtual bool allowsBrokenNullLayerTreeView() const { return false; }
-
-    // Sometimes the WebWidget enters a state where it will generate a sequence
-    // of invalidations that should not, by themselves, trigger the compositor
-    // to schedule a new frame. This call indicates to the embedder that it
-    // should suppress compositor scheduling temporarily.
-    virtual void suppressCompositorScheduling(bool enable) { }
-
-    // Called when a call to WebWidget::animate is required
-    virtual void scheduleAnimation() { }
-
-    // Called when the widget acquires or loses focus, respectively.
-    virtual void didFocus() { }
-    virtual void didBlur() { }
->>>>>>> miniblink49
 
     // Called when the cursor for the widget changes.
     virtual void didChangeCursor(const WebCursorInfo&) { }
@@ -140,7 +89,6 @@ public:
     // Called to show the widget according to the given policy.
     virtual void show(WebNavigationPolicy) { }
 
-<<<<<<< HEAD
     // Called to get/set the position of the widget's window in screen
     // coordinates. Note, the window includes any decorations such as borders,
     // scrollbars, URL bar, tab strip, etc. if they exist.
@@ -154,32 +102,10 @@ public:
     // Called when a tooltip should be shown at the current cursor position.
     virtual void setToolTipText(const WebString&, WebTextDirection hint) { }
 
-=======
-    // Called to get/set the position of the widget in screen coordinates.
-    virtual WebRect windowRect() { return WebRect(); }
-    virtual void setWindowRect(const WebRect&) { }
-
-    // Called when a tooltip should be shown at the current cursor position.
-    virtual void setToolTipText(const WebString&, WebTextDirection hint) { }
-
-    // Called to get the position of the resizer rect in window coordinates.
-    virtual WebRect windowResizerRect() { return WebRect(); }
-
-    // Called to get the position of the root window containing the widget
-    // in screen coordinates.
-    virtual WebRect rootWindowRect() { return WebRect(); }
-
->>>>>>> miniblink49
     // Called to query information about the screen where this widget is
     // displayed.
     virtual WebScreenInfo screenInfo() { return WebScreenInfo(); }
 
-<<<<<<< HEAD
-=======
-    // Called to get the scale factor of the display.
-    virtual float deviceScaleFactor() { return 1; }
-
->>>>>>> miniblink49
     // When this method gets called, WebWidgetClient implementation should
     // reset the input method by cancelling any ongoing composition.
     virtual void resetInputMethod() { }
@@ -200,7 +126,6 @@ public:
     virtual bool isPointerLocked() { return false; }
 
     // Called when a gesture event is handled.
-<<<<<<< HEAD
     virtual void didHandleGestureEvent(const WebGestureEvent& event,
         bool eventCancelled) { }
 
@@ -210,35 +135,16 @@ public:
         const WebFloatSize& accumulatedOverscroll,
         const WebFloatPoint& positionInViewport,
         const WebFloatSize& velocityInViewport) { }
-=======
-    virtual void didHandleGestureEvent(const WebGestureEvent& event, bool eventCancelled) { }
-
-    // Called when overscrolled on main thread.
-    virtual void didOverscroll(const WebFloatSize& unusedDelta, const WebFloatSize& accumulatedRootOverScroll, const WebFloatPoint& position, const WebFloatSize& velocity) { }
->>>>>>> miniblink49
 
     // Called to update if touch events should be sent.
     virtual void hasTouchEventHandlers(bool) { }
 
-<<<<<<< HEAD
     // Called during WebWidget::HandleInputEvent for a TouchStart event to inform
     // the embedder of the touch actions that are permitted for this touch.
     virtual void setTouchAction(WebTouchAction touchAction) { }
 
     // Request the browser to show virtual keyboard for current input type.
     virtual void showVirtualKeyboard() { }
-=======
-    // Called during WebWidget::HandleInputEvent for a TouchStart event to inform the embedder
-    // of the touch actions that are permitted for this touch.
-    virtual void setTouchAction(WebTouchAction touchAction) { }
-
-    // Called when value of focused text field gets dirty, e.g. value is
-    // modified by script, not by user input.
-    virtual void didUpdateTextOfFocusedElementByNonUserInput() { }
-
-    // Request the browser to show the IME for current input type.
-    virtual void showImeIfNeeded() { }
->>>>>>> miniblink49
 
     // Request that the browser show a UI for an unhandled tap, if needed.
     // Invoked during the handling of a GestureTap input event whenever the
@@ -253,7 +159,6 @@ public:
     // This provides a heuristic to help identify when a page is doing
     // something as a result of a tap without explicitly consuming the event.
     virtual void showUnhandledTapUIIfNeeded(const WebPoint& tappedPosition,
-<<<<<<< HEAD
         const WebNode& tappedNode,
         bool pageChanged) { }
 
@@ -279,14 +184,6 @@ public:
         const WebImage& dragImage,
         const WebPoint& dragImageOffset) { }
 
-=======
-        const WebNode& tappedNode, bool pageChanged) { }
-
-    // Called immediately after a mousedown event is dispatched due to a mouse
-    // press or gesture tap.
-    // Note: This is called even when the mouse down event is prevent default.
-    virtual void onMouseDown(const WebNode& mouseDownNode) { }
->>>>>>> miniblink49
 protected:
     ~WebWidgetClient() { }
 };

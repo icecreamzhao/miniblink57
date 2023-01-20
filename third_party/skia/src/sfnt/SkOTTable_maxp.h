@@ -24,15 +24,10 @@ struct SkOTTableMaximumProfile {
     union Version {
         SK_OT_Fixed version;
 
-<<<<<<< HEAD
         struct CFF : SkOTTableMaximumProfile_CFF {
         } cff;
         struct TT : SkOTTableMaximumProfile_TT {
         } tt;
-=======
-        struct CFF : SkOTTableMaximumProfile_CFF { } cff;
-        struct TT : SkOTTableMaximumProfile_TT { } tt;
->>>>>>> miniblink49
     } version;
 };
 

@@ -7,7 +7,6 @@
 #ifndef lapi_h
 #define lapi_h
 
-<<<<<<< HEAD
 #include "llimits.h"
 #include "lstate.h"
 
@@ -26,20 +25,5 @@
 
 #define api_checknelems(L, n) api_check(L, (n) < (L->top - L->ci->func), \
     "not enough elements in the stack")
-=======
-
-#include "llimits.h"
-#include "lstate.h"
-
-#define api_incr_top(L)   {L->top++; api_check(L, L->top <= L->ci->top, \
-				"stack overflow");}
-
-#define adjustresults(L,nres) \
-    { if ((nres) == LUA_MULTRET && L->ci->top < L->top) L->ci->top = L->top; }
-
-#define api_checknelems(L,n)	api_check(L, (n) < (L->top - L->ci->func), \
-				  "not enough elements in the stack")
-
->>>>>>> miniblink49
 
 #endif

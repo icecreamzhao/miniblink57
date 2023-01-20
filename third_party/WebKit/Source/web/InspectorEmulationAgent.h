@@ -5,7 +5,6 @@
 #ifndef InspectorEmulationAgent_h
 #define InspectorEmulationAgent_h
 
-<<<<<<< HEAD
 #include "core/inspector/InspectorBaseAgent.h"
 #include "core/inspector/protocol/Emulation.h"
 #include "platform/WebTaskRunner.h"
@@ -46,42 +45,10 @@ public:
     // InspectorBaseAgent overrides.
     Response disable() override;
     void restore() override;
-=======
-#include "core/InspectorFrontend.h"
-#include "core/inspector/InspectorBaseAgent.h"
-
-namespace blink {
-
-class WebViewImpl;
-
-using ErrorString = String;
-
-class InspectorEmulationAgent final : public InspectorBaseAgent<InspectorEmulationAgent, InspectorFrontend::Emulation>, public InspectorBackendDispatcher::EmulationCommandHandler {
-    WTF_MAKE_NONCOPYABLE(InspectorEmulationAgent);
-public:
-    static PassOwnPtrWillBeRawPtr<InspectorEmulationAgent> create(WebViewImpl*);
-    ~InspectorEmulationAgent() override;
-
-    void viewportChanged();
-
-    // InspectorBackendDispatcher::EmulationCommandHandler implementation.
-    void resetScrollAndPageScaleFactor(ErrorString*) override;
-    void setPageScaleFactor(ErrorString*, double pageScaleFactor) override;
-    void setScriptExecutionDisabled(ErrorString*, bool) override;
-    void setTouchEmulationEnabled(ErrorString*, bool enabled, const String* configuration) override;
-    void setEmulatedMedia(ErrorString*, const String&) override;
-
-    // InspectorBaseAgent overrides.
-    void disable(ErrorString*) override;
-    void restore() override;
-    void discardAgent() override;
-    void didCommitLoadForLocalFrame(LocalFrame*) override;
->>>>>>> miniblink49
 
     DECLARE_VIRTUAL_TRACE();
 
 private:
-<<<<<<< HEAD
     InspectorEmulationAgent(WebLocalFrameImpl*, Client*);
     WebViewImpl* webViewImpl();
     void virtualTimeBudgetExpired();
@@ -93,15 +60,4 @@ private:
 
 } // namespace blink
 
-=======
-    explicit InspectorEmulationAgent(WebViewImpl*);
-
-    WebViewImpl* m_webViewImpl;
-};
-
-
-} // namespace blink
-
-
->>>>>>> miniblink49
 #endif // !defined(InspectorEmulationAgent_h)

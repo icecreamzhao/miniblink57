@@ -28,18 +28,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
-
->>>>>>> miniblink49
 #include "modules/filesystem/FileWriterBase.h"
 
 #include "core/events/ProgressEvent.h"
 #include "core/fileapi/Blob.h"
 #include "core/fileapi/FileError.h"
 #include "public/platform/WebFileWriter.h"
-<<<<<<< HEAD
 #include <memory>
 
 namespace blink {
@@ -52,20 +46,6 @@ void FileWriterBase::initialize(std::unique_ptr<WebFileWriter> writer,
     ASSERT(!m_writer);
     ASSERT(length >= 0);
     m_writer = std::move(writer);
-=======
-
-namespace blink {
-
-FileWriterBase::~FileWriterBase()
-{
-}
-
-void FileWriterBase::initialize(PassOwnPtr<WebFileWriter> writer, long long length)
-{
-    ASSERT(!m_writer);
-    ASSERT(length >= 0);
-    m_writer = writer;
->>>>>>> miniblink49
     m_length = length;
 }
 
@@ -85,7 +65,6 @@ void FileWriterBase::seekInternal(long long position)
     m_position = position;
 }
 
-<<<<<<< HEAD
 void FileWriterBase::resetWriter()
 {
     m_writer = nullptr;
@@ -98,6 +77,4 @@ void FileWriterBase::dispose()
     resetWriter();
 }
 
-=======
->>>>>>> miniblink49
 } // namespace blink

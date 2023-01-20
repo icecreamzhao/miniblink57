@@ -47,7 +47,6 @@ class VoidCallback;
 
 class MODULES_EXPORT Entry : public EntryBase, public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
-<<<<<<< HEAD
 
 public:
     DOMFileSystem* filesystem() const
@@ -76,16 +75,6 @@ public:
         EntryCallback* successCallback = nullptr,
         ErrorCallback* = nullptr) const;
     String toURL(ScriptState*) const;
-=======
-public:
-    DOMFileSystem* filesystem() const { return static_cast<DOMFileSystem*>(m_fileSystem.get()); }
-
-    void getMetadata(MetadataCallback* successCallback = nullptr, ErrorCallback* = nullptr);
-    void moveTo(DirectoryEntry* parent, const String& name = String(), EntryCallback* successCallback = nullptr, ErrorCallback* = nullptr) const;
-    void copyTo(DirectoryEntry* parent, const String& name = String(), EntryCallback* successCallback = nullptr, ErrorCallback* = nullptr) const;
-    void remove(VoidCallback* successCallback = nullptr, ErrorCallback* = nullptr) const;
-    void getParent(EntryCallback* successCallback = nullptr, ErrorCallback* = nullptr) const;
->>>>>>> miniblink49
 
     DECLARE_VIRTUAL_TRACE();
 

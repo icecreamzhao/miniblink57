@@ -23,14 +23,9 @@ public:
     HWUISink() { }
 
     Error draw(const Src&, SkBitmap*, SkWStream*, SkString*) const override;
-<<<<<<< HEAD
     bool serial() const override { return true; }
     const char* fileExtension() const override { return "png"; }
     SinkFlags flags() const override { return SinkFlags { SinkFlags::kGPU, SinkFlags::kDirect }; }
-=======
-    int enclave() const override { return kGPU_Enclave; }
-    const char* fileExtension() const override { return "png"; }
->>>>>>> miniblink49
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -42,7 +37,6 @@ public:
     explicit ViaAndroidSDK(Sink*);
 
     Error draw(const Src&, SkBitmap*, SkWStream*, SkString*) const override;
-<<<<<<< HEAD
     bool serial() const override { return fSink->serial(); }
     const char* fileExtension() const override { return fSink->fileExtension(); }
     SinkFlags flags() const override
@@ -51,10 +45,6 @@ public:
         flags.approach = SinkFlags::kIndirect;
         return flags;
     }
-=======
-    int enclave() const override { return fSink->enclave(); }
-    const char* fileExtension() const override { return fSink->fileExtension(); }
->>>>>>> miniblink49
 
 private:
     SkAutoTDelete<Sink> fSink;
@@ -62,16 +52,8 @@ private:
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-<<<<<<< HEAD
 } // namespace DM
 
 #endif // SK_BUILD_FOR_ANDROID_FRAMEWORK
 
 #endif // DMSrcSinkAndroid_DEFINED
-=======
-}  // namespace DM
-
-#endif  // SK_BUILD_FOR_ANDROID_FRAMEWORK
-
-#endif  // DMSrcSinkAndroid_DEFINED
->>>>>>> miniblink49

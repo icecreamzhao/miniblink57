@@ -33,7 +33,6 @@ public:
     DeviceType getDeviceType() const { return fType; }
 
 protected:
-<<<<<<< HEAD
     SkSurface* createSurface() override
     {
         SkSurfaceProps props(INHERITED::getSurfaceProps());
@@ -43,16 +42,6 @@ protected:
         static const SkImageInfo info = SkImageInfo::MakeN32Premul(
             SkScalarRoundToInt(this->width()), SkScalarRoundToInt(this->height()));
         return fSurface = SkSurface::MakeRaster(info, &props).release();
-=======
-    SkSurface* createSurface() override {
-        SkSurfaceProps props(INHERITED::getSurfaceProps());
-        if (kGPU_DeviceType == fType) {
-            return SkSurface::NewRenderTargetDirect(fRenderTarget, &props);
-        }
-        static const SkImageInfo info = SkImageInfo::MakeN32Premul(
-                SkScalarRoundToInt(this->width()), SkScalarRoundToInt(this->height()));
-        return fSurface = SkSurface::NewRaster(info, &props);
->>>>>>> miniblink49
     }
 
     void draw(SkCanvas* canvas) override;
@@ -61,11 +50,7 @@ protected:
     void onSizeChange() override;
 
 private:
-<<<<<<< HEAD
     bool findNextMatch(); // Set example to the first one that matches FLAGS_match.
-=======
-    bool findNextMatch();  // Set example to the first one that matches FLAGS_match.
->>>>>>> miniblink49
     void setTitle();
     void setUpRenderTarget();
     bool onHandleChar(SkUnichar unichar) override;

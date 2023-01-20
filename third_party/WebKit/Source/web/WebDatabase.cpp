@@ -28,24 +28,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "public/web/WebDatabase.h"
 
 #include "modules/webdatabase/DatabaseTracker.h"
 #include "modules/webdatabase/QuotaTracker.h"
 #include "platform/weborigin/SecurityOrigin.h"
-<<<<<<< HEAD
 #include "public/platform/WebSecurityOrigin.h"
-=======
->>>>>>> miniblink49
 #include "public/platform/WebString.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 void WebDatabase::updateDatabaseSize(const WebSecurityOrigin& origin,
     const WebString& name,
     long long size)
@@ -70,26 +62,6 @@ void WebDatabase::closeDatabaseImmediately(const WebSecurityOrigin& origin,
 {
     DatabaseTracker::tracker().closeDatabasesImmediately(origin.get(),
         databaseName);
-=======
-void WebDatabase::updateDatabaseSize(const WebString& originIdentifier, const WebString& name, long long size)
-{
-    QuotaTracker::instance().updateDatabaseSize(originIdentifier, name, size);
-}
-
-void WebDatabase::updateSpaceAvailable(const WebString& originIdentifier, long long spaceAvailable)
-{
-    QuotaTracker::instance().updateSpaceAvailableToOrigin(originIdentifier, spaceAvailable);
-}
-
-void WebDatabase::resetSpaceAvailable(const WebString& originIdentifier)
-{
-    QuotaTracker::instance().resetSpaceAvailableToOrigin(originIdentifier);
-}
-
-void WebDatabase::closeDatabaseImmediately(const WebString& originIdentifier, const WebString& databaseName)
-{
-    DatabaseTracker::tracker().closeDatabasesImmediately(originIdentifier, databaseName);
->>>>>>> miniblink49
 }
 
 } // namespace blink

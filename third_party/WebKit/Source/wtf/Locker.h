@@ -28,15 +28,11 @@
 #ifndef Locker_h
 #define Locker_h
 
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
-=======
->>>>>>> miniblink49
 #include "wtf/Noncopyable.h"
 
 namespace WTF {
 
-<<<<<<< HEAD
 template <typename T>
 class Locker final {
     STACK_ALLOCATED();
@@ -50,22 +46,11 @@ public:
     }
     ~Locker() { m_lockable.unlock(); }
 
-=======
-template <typename T> class Locker {
-    WTF_MAKE_NONCOPYABLE(Locker);
-public:
-    Locker(T& lockable) : m_lockable(lockable) { m_lockable.lock(); }
-    ~Locker() { m_lockable.unlock(); }
->>>>>>> miniblink49
 private:
     T& m_lockable;
 };
 
-<<<<<<< HEAD
 } // namespace WTF
-=======
-}
->>>>>>> miniblink49
 
 using WTF::Locker;
 

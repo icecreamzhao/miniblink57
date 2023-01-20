@@ -22,32 +22,20 @@
 
 /** Returns -1 if n < 0, else returns 0
  */
-<<<<<<< HEAD
 #define SkExtractSign(n) ((int32_t)(n) >> 31)
-=======
-#define SkExtractSign(n)    ((int32_t)(n) >> 31)
->>>>>>> miniblink49
 
 /** If sign == -1, returns -n, else sign must be 0, and returns n.
  Typically used in conjunction with SkExtractSign().
  */
-<<<<<<< HEAD
 static inline int32_t SkApplySign(int32_t n, int32_t sign)
 {
-=======
-static inline int32_t SkApplySign(int32_t n, int32_t sign) {
->>>>>>> miniblink49
     SkASSERT(sign == 0 || sign == -1);
     return (n ^ sign) - sign;
 }
 
 /** Return x with the sign of y */
-<<<<<<< HEAD
 static inline int32_t SkCopySign32(int32_t x, int32_t y)
 {
-=======
-static inline int32_t SkCopySign32(int32_t x, int32_t y) {
->>>>>>> miniblink49
     return SkApplySign(x, SkExtractSign(x ^ y));
 }
 
@@ -56,12 +44,8 @@ static inline int32_t SkCopySign32(int32_t x, int32_t y) {
  Note: only works as long as max - value doesn't wrap around
  @return max if value >= max, else value
  */
-<<<<<<< HEAD
 static inline unsigned SkClampUMax(unsigned value, unsigned max)
 {
-=======
-static inline unsigned SkClampUMax(unsigned value, unsigned max) {
->>>>>>> miniblink49
     if (value > max) {
         value = max;
     }
@@ -73,52 +57,33 @@ static inline unsigned SkClampUMax(unsigned value, unsigned max) {
 /** Return a*b/255, truncating away any fractional bits. Only valid if both
  a and b are 0..255
  */
-<<<<<<< HEAD
 static inline U8CPU SkMulDiv255Trunc(U8CPU a, U8CPU b)
 {
     SkASSERT((uint8_t)a == a);
     SkASSERT((uint8_t)b == b);
     unsigned prod = a * b + 1;
-=======
-static inline U8CPU SkMulDiv255Trunc(U8CPU a, U8CPU b) {
-    SkASSERT((uint8_t)a == a);
-    SkASSERT((uint8_t)b == b);
-    unsigned prod = SkMulS16(a, b) + 1;
->>>>>>> miniblink49
     return (prod + (prod >> 8)) >> 8;
 }
 
 /** Return (a*b)/255, taking the ceiling of any fractional bits. Only valid if
  both a and b are 0..255. The expected result equals (a * b + 254) / 255.
  */
-<<<<<<< HEAD
 static inline U8CPU SkMulDiv255Ceiling(U8CPU a, U8CPU b)
 {
     SkASSERT((uint8_t)a == a);
     SkASSERT((uint8_t)b == b);
     unsigned prod = a * b + 255;
-=======
-static inline U8CPU SkMulDiv255Ceiling(U8CPU a, U8CPU b) {
-    SkASSERT((uint8_t)a == a);
-    SkASSERT((uint8_t)b == b);
-    unsigned prod = SkMulS16(a, b) + 255;
->>>>>>> miniblink49
     return (prod + (prod >> 8)) >> 8;
 }
 
 /** Just the rounding step in SkDiv255Round: round(value / 255)
  */
-<<<<<<< HEAD
 static inline unsigned SkDiv255Round(unsigned prod)
 {
-=======
-static inline unsigned SkDiv255Round(unsigned prod) {
->>>>>>> miniblink49
     prod += 128;
     return (prod + (prod >> 8)) >> 8;
 }
 
-<<<<<<< HEAD
 static inline float SkPinToUnitFloat(float x)
 {
     return SkTMin(SkTMax(x, 0.0f), 1.0f);
@@ -212,6 +177,4 @@ static inline int GrNextPow2(int n)
     SkASSERT(n >= 0); // this impl only works for non-neg.
     return n ? (1 << (32 - SkCLZ(n - 1))) : 1;
 }
-=======
->>>>>>> miniblink49
 #endif

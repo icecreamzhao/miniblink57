@@ -117,7 +117,6 @@ struct SkOTTableHead {
     SK_OT_USHORT lowestRecPPEM;
     struct FontDirectionHint {
         SK_TYPED_ENUM(Value, SK_OT_SHORT,
-<<<<<<< HEAD
             ((FullyMixedDirectionalGlyphs, SkTEndian_SwapBE16(0)))((OnlyStronglyLTR, SkTEndian_SwapBE16(1)))((StronglyLTR, SkTEndian_SwapBE16(2)))((OnlyStronglyRTL, static_cast<SK_OT_SHORT>(SkTEndian_SwapBE16((uint16_t)-1))))((StronglyRTL, static_cast<SK_OT_SHORT>(SkTEndian_SwapBE16((uint16_t)-2))))
                 SK_SEQ_END,
             (value)SK_SEQ_END)
@@ -127,47 +126,19 @@ struct SkOTTableHead {
             ((ShortOffsets, SkTEndian_SwapBE16(0)))((LongOffsets, SkTEndian_SwapBE16(1)))
                 SK_SEQ_END,
             (value)SK_SEQ_END)
-=======
-            ((FullyMixedDirectionalGlyphs, SkTEndian_SwapBE16(0)))
-            ((OnlyStronglyLTR, SkTEndian_SwapBE16(1)))
-            ((StronglyLTR, SkTEndian_SwapBE16(2)))
-            ((OnlyStronglyRTL, static_cast<SK_OT_SHORT>(SkTEndian_SwapBE16((uint16_t)-1))))
-            ((StronglyRTL, static_cast<SK_OT_SHORT>(SkTEndian_SwapBE16((uint16_t)-2))))
-            SK_SEQ_END,
-        (value)SK_SEQ_END)
-    } fontDirectionHint;
-    struct IndexToLocFormat {
-        SK_TYPED_ENUM(Value, SK_OT_SHORT,
-            ((ShortOffsets, SkTEndian_SwapBE16(0)))
-            ((LongOffsets, SkTEndian_SwapBE16(1)))
-            SK_SEQ_END,
-        (value)SK_SEQ_END)
->>>>>>> miniblink49
     } indexToLocFormat;
     struct GlyphDataFormat {
         SK_TYPED_ENUM(Value, SK_OT_SHORT,
             ((CurrentFormat, SkTEndian_SwapBE16(0)))
-<<<<<<< HEAD
                 SK_SEQ_END,
             (value)SK_SEQ_END)
-=======
-            SK_SEQ_END,
-        (value)SK_SEQ_END)
->>>>>>> miniblink49
     } glyphDataFormat;
 };
 
 #pragma pack(pop)
 
-<<<<<<< HEAD
 #include <stddef.h>
 static_assert(offsetof(SkOTTableHead, glyphDataFormat) == 52, "SkOTTableHead_glyphDataFormat_not_at_52");
 static_assert(sizeof(SkOTTableHead) == 54, "sizeof_SkOTTableHead_not_54");
-=======
-
-#include <stddef.h>
-SK_COMPILE_ASSERT(offsetof(SkOTTableHead, glyphDataFormat) == 52, SkOTTableHead_glyphDataFormat_not_at_52);
-SK_COMPILE_ASSERT(sizeof(SkOTTableHead) == 54, sizeof_SkOTTableHead_not_54);
->>>>>>> miniblink49
 
 #endif

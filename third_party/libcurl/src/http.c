@@ -3091,7 +3091,6 @@ static void print_http_error(struct Curl_easy *data)
   failf(data, "The requested URL returned error: %d", k->httpcode);
 }
 
-<<<<<<< HEAD
 void remove_origin_when_redirected(struct curl_slist** headers)
 {
   struct curl_slist* item = *headers;
@@ -3130,8 +3129,6 @@ char* fix_add_fragment(char* newurl, const char* oldurl)
   return returl;
 }
 
-=======
->>>>>>> miniblink49
 /*
  * Read any HTTP header lines from the server and pass them to the client app.
  */
@@ -3916,12 +3913,9 @@ CURLcode Curl_http_readwrite_headers(struct Curl_easy *data,
         if(data->set.http_follow_location) {
           DEBUGASSERT(!data->req.newurl);
           data->req.newurl = strdup(data->req.location); /* clone */
-<<<<<<< HEAD
           //data->req.newurl = fix_add_fragment(data->req.location, data->change.url);
 
           remove_origin_when_redirected(&data->set.headers);
-=======
->>>>>>> miniblink49
           if(!data->req.newurl)
             return CURLE_OUT_OF_MEMORY;
 

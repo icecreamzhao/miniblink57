@@ -3,7 +3,8 @@
  *           (C) 1999 Antti Koivisto (koivisto@kde.org)
  *           (C) 2001 Peter Kelly (pmk@post.com)
  *           (C) 2001 Dirk Mueller (mueller@kde.org)
- * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2013 Apple Inc. All rights reserved.
+ * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2013 Apple Inc. All rights
+ * reserved.
  *           (C) 2007 Eric Seidel (eric@webkit.org)
  *
  * This library is free software; you can redistribute it and/or
@@ -22,7 +23,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/dom/NamedNodeMap.h"
 
 #include "bindings/core/v8/ExceptionState.h"
@@ -34,61 +34,57 @@ namespace blink {
 
 using namespace HTMLNames;
 
-#if !ENABLE(OILPAN)
-void NamedNodeMap::ref()
-{
-    m_element->ref();
-}
-
-void NamedNodeMap::deref()
-{
-    m_element->deref();
-}
-#endif
-
-PassRefPtrWillBeRawPtr<Attr> NamedNodeMap::getNamedItem(const AtomicString& name) const
+Attr* NamedNodeMap::getNamedItem(const AtomicString& name) const
 {
     return m_element->getAttributeNode(name);
 }
 
-PassRefPtrWillBeRawPtr<Attr> NamedNodeMap::getNamedItemNS(const AtomicString& namespaceURI, const AtomicString& localName) const
+Attr* NamedNodeMap::getNamedItemNS(const AtomicString& namespaceURI,
+    const AtomicString& localName) const
 {
     return m_element->getAttributeNodeNS(namespaceURI, localName);
 }
 
-PassRefPtrWillBeRawPtr<Attr> NamedNodeMap::removeNamedItem(const AtomicString& name, ExceptionState& exceptionState)
+Attr* NamedNodeMap::removeNamedItem(const AtomicString& name,
+    ExceptionState& exceptionState)
 {
-    size_t index = m_element->attributes().findIndex(name, m_element->shouldIgnoreAttributeCase());
+    size_t index = m_element->attributes().findIndex(
+        name, m_element->shouldIgnoreAttributeCase());
     if (index == kNotFound) {
-        exceptionState.throwDOMException(NotFoundError, "No item with name '" + name + "' was found.");
+        exceptionState.throwDOMException(
+            NotFoundError, "No item with name '" + name + "' was found.");
         return nullptr;
     }
     return m_element->detachAttribute(index);
 }
 
-PassRefPtrWillBeRawPtr<Attr> NamedNodeMap::removeNamedItemNS(const AtomicString& namespaceURI, const AtomicString& localName, ExceptionState& exceptionState)
+Attr* NamedNodeMap::removeNamedItemNS(const AtomicString& namespaceURI,
+    const AtomicString& localName,
+    ExceptionState& exceptionState)
 {
-    size_t index = m_element->attributes().findIndex(QualifiedName(nullAtom, localName, namespaceURI));
+    size_t index = m_element->attributes().findIndex(
+        QualifiedName(nullAtom, localName, namespaceURI));
     if (index == kNotFound) {
-        exceptionState.throwDOMException(NotFoundError, "No item with name '" + namespaceURI + "::" + localName + "' was found.");
+        exceptionState.throwDOMException(
+            NotFoundError, "No item with name '" + namespaceURI + "::" + localName + "' was found.");
         return nullptr;
     }
     return m_element->detachAttribute(index);
 }
 
-PassRefPtrWillBeRawPtr<Attr> NamedNodeMap::setNamedItem(Attr* attr, ExceptionState& exceptionState)
+Attr* NamedNodeMap::setNamedItem(Attr* attr, ExceptionState& exceptionState)
 {
-    ASSERT(attr);
+    DCHECK(attr);
     return m_element->setAttributeNode(attr, exceptionState);
 }
 
-PassRefPtrWillBeRawPtr<Attr> NamedNodeMap::setNamedItemNS(Attr* attr, ExceptionState& exceptionState)
+Attr* NamedNodeMap::setNamedItemNS(Attr* attr, ExceptionState& exceptionState)
 {
-    ASSERT(attr);
+    DCHECK(attr);
     return m_element->setAttributeNodeNS(attr, exceptionState);
 }
 
-PassRefPtrWillBeRawPtr<Attr> NamedNodeMap::item(unsigned index) const
+Attr* NamedNodeMap::item(unsigned index) const
 {
     AttributeCollection attributes = m_element->attributes();
     if (index >= attributes.size())

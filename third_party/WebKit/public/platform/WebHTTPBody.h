@@ -38,35 +38,23 @@
 #include "WebURL.h"
 
 #if INSIDE_BLINK
-<<<<<<< HEAD
 #include "wtf/PassRefPtr.h"
-=======
-namespace WTF { template <typename T> class PassRefPtr; }
->>>>>>> miniblink49
 #endif
 
 namespace blink {
 
-<<<<<<< HEAD
 class EncodedFormData;
-=======
-class FormData;
->>>>>>> miniblink49
 class WebHTTPBodyPrivate;
 
 class WebHTTPBody {
 public:
     struct Element {
-<<<<<<< HEAD
         enum Type { 
             TypeData,
             TypeFile,
             TypeBlob,
             TypeFileSystemURL 
         } type;
-=======
-        enum Type { TypeData, TypeFile, TypeBlob, TypeFileSystemURL } type;
->>>>>>> miniblink49
         WebData data;
         WebString filePath;
         long long fileStart;
@@ -78,7 +66,6 @@ public:
 
     ~WebHTTPBody() { reset(); }
 
-<<<<<<< HEAD
     WebHTTPBody()
         : m_private(0)
     {
@@ -88,10 +75,6 @@ public:
     {
         assign(b);
     }
-=======
-    WebHTTPBody() : m_private(0) { }
-    WebHTTPBody(const WebHTTPBody& b) : m_private(0) { assign(b); }
->>>>>>> miniblink49
     WebHTTPBody& operator=(const WebHTTPBody& b)
     {
         assign(b);
@@ -115,7 +98,6 @@ public:
     BLINK_PLATFORM_EXPORT void appendData(const WebData&);
     BLINK_PLATFORM_EXPORT void appendFile(const WebString&);
     // Passing -1 to fileLength means to the end of the file.
-<<<<<<< HEAD
     BLINK_PLATFORM_EXPORT void appendFileRange(const WebString&,
         long long fileStart,
         long long fileLength,
@@ -127,13 +109,6 @@ public:
         long long start,
         long long length,
         double modificationTime);
-=======
-    BLINK_PLATFORM_EXPORT void appendFileRange(const WebString&, long long fileStart, long long fileLength, double modificationTime);
-    BLINK_PLATFORM_EXPORT void appendBlob(const WebString& uuid);
-
-    // Append a resource which is identified by the FileSystem URL.
-    BLINK_PLATFORM_EXPORT void appendFileSystemURLRange(const WebURL&, long long start, long long length, double modificationTime);
->>>>>>> miniblink49
 
     // Identifies a particular form submission instance. A value of 0 is
     // used to indicate an unspecified identifier.
@@ -144,16 +119,10 @@ public:
     BLINK_PLATFORM_EXPORT void setContainsPasswordData(bool);
 
 #if INSIDE_BLINK
-<<<<<<< HEAD
     BLINK_PLATFORM_EXPORT WebHTTPBody(WTF::PassRefPtr<EncodedFormData>);
     BLINK_PLATFORM_EXPORT WebHTTPBody& operator=(
         WTF::PassRefPtr<EncodedFormData>);
     BLINK_PLATFORM_EXPORT operator WTF::PassRefPtr<EncodedFormData>() const;
-=======
-    BLINK_PLATFORM_EXPORT WebHTTPBody(const WTF::PassRefPtr<FormData>&);
-    BLINK_PLATFORM_EXPORT WebHTTPBody& operator=(const WTF::PassRefPtr<FormData>&);
-    BLINK_PLATFORM_EXPORT operator WTF::PassRefPtr<FormData>() const;
->>>>>>> miniblink49
 #endif
 
 private:

@@ -37,14 +37,17 @@ namespace blink {
 
 class ResetInputType final : public BaseButtonInputType {
 public:
-    static PassRefPtrWillBeRawPtr<InputType> create(HTMLInputElement&);
+    static InputType* create(HTMLInputElement&);
 
 private:
-    ResetInputType(HTMLInputElement& element) : BaseButtonInputType(element) { }
+    ResetInputType(HTMLInputElement& element)
+        : BaseButtonInputType(element)
+    {
+    }
     const AtomicString& formControlType() const override;
     bool supportsValidation() const override;
     void handleDOMActivateEvent(Event*) override;
-    String defaultValue() const override;
+    String defaultLabel() const override;
     bool isTextButton() const override;
 };
 

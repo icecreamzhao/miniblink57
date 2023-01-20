@@ -49,7 +49,6 @@ struct WebFindOptions {
     // Whether this operation should look for matches only at the start of words.
     bool wordStart;
 
-<<<<<<< HEAD
     // When combined with wordStart, accepts a match in the middle of a word if
     // the match begins with an uppercase letter followed by a lowercase or
     // non-letter. Accepts several other intra-word matches.
@@ -59,25 +58,15 @@ struct WebFindOptions {
     // after the frame navigates.
     bool force;
 
-=======
-    // When combined with wordStart, accepts a match in the middle of a word if the match begins with
-    // an uppercase letter followed by a lowercase or non-letter. Accepts several other intra-word matches.
-    bool medialCapitalAsWordStart;
-
->>>>>>> miniblink49
     WebFindOptions()
         : forward(true)
         , matchCase(false)
         , findNext(false)
         , wordStart(false)
-<<<<<<< HEAD
         , medialCapitalAsWordStart(false)
         , force(false)
     {
     }
-=======
-        , medialCapitalAsWordStart(false) { }
->>>>>>> miniblink49
 };
 
 } // namespace blink

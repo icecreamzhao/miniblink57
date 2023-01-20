@@ -24,15 +24,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "platform/network/ResourceError.h"
 
 #include "platform/network/ResourceRequest.h"
-=======
-#include "config.h"
-#include "platform/network/ResourceError.h"
-
->>>>>>> miniblink49
 #include "platform/weborigin/KURL.h"
 #include "public/platform/Platform.h"
 #include "public/platform/WebURL.h"
@@ -47,7 +41,6 @@ ResourceError ResourceError::cancelledError(const String& failingURL)
     return Platform::current()->cancelledError(KURL(ParsedURLString, failingURL));
 }
 
-<<<<<<< HEAD
 ResourceError ResourceError::cancelledDueToAccessCheckError(
     const String& failingURL,
     ResourceRequestBlockedReason blockedReason)
@@ -63,12 +56,6 @@ ResourceError ResourceError::cacheMissError(const String& failingURL)
 {
     ResourceError error(errorDomainBlinkInternal, 0, failingURL, String());
     error.setIsCacheMiss(true);
-=======
-ResourceError ResourceError::cancelledDueToAccessCheckError(const String& failingURL)
-{
-    ResourceError error = cancelledError(failingURL);
-    error.setIsAccessCheck(true);
->>>>>>> miniblink49
     return error;
 }
 
@@ -85,10 +72,7 @@ ResourceError ResourceError::copy() const
     errorCopy.m_isTimeout = m_isTimeout;
     errorCopy.m_staleCopyInCache = m_staleCopyInCache;
     errorCopy.m_wasIgnoredByHandler = m_wasIgnoredByHandler;
-<<<<<<< HEAD
     errorCopy.m_isCacheMiss = m_isCacheMiss;
-=======
->>>>>>> miniblink49
     return errorCopy;
 }
 
@@ -127,12 +111,9 @@ bool ResourceError::compare(const ResourceError& a, const ResourceError& b)
     if (a.wasIgnoredByHandler() != b.wasIgnoredByHandler())
         return false;
 
-<<<<<<< HEAD
     if (a.isCacheMiss() != b.isCacheMiss())
         return false;
 
-=======
->>>>>>> miniblink49
     return true;
 }
 

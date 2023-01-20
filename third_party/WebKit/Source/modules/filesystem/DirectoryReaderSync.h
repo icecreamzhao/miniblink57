@@ -46,15 +46,10 @@ typedef HeapVector<Member<EntrySync>> EntrySyncHeapVector;
 
 class DirectoryReaderSync : public DirectoryReaderBase, public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
-<<<<<<< HEAD
 
 public:
     static DirectoryReaderSync* create(DOMFileSystemBase* fileSystem,
         const String& fullPath)
-=======
-public:
-    static DirectoryReaderSync* create(DOMFileSystemBase* fileSystem, const String& fullPath)
->>>>>>> miniblink49
     {
         return new DirectoryReaderSync(fileSystem, fullPath);
     }
@@ -68,14 +63,7 @@ public:
         m_entries.appendVector(entries);
     }
 
-<<<<<<< HEAD
     void setError(FileError::ErrorCode code) { m_errorCode = code; }
-=======
-    void setError(FileError::ErrorCode code)
-    {
-        m_errorCode = code;
-    }
->>>>>>> miniblink49
 
     DECLARE_VIRTUAL_TRACE();
 

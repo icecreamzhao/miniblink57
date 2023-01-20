@@ -23,12 +23,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/layout/LayoutVideo.h"
 
 #include "core/HTMLNames.h"
 #include "core/dom/Document.h"
 #include "core/html/HTMLVideoElement.h"
+#include "core/layout/LayoutBlockFlow.h"
 #include "core/layout/LayoutFullScreen.h"
 #include "core/paint/VideoPainter.h"
 #include "public/platform/WebLayer.h"
@@ -43,9 +43,7 @@ LayoutVideo::LayoutVideo(HTMLVideoElement* video)
     setIntrinsicSize(calculateIntrinsicSize());
 }
 
-LayoutVideo::~LayoutVideo()
-{
-}
+LayoutVideo::~LayoutVideo() { }
 
 LayoutSize LayoutVideo::defaultSize()
 {
@@ -82,15 +80,17 @@ LayoutSize LayoutVideo::calculateIntrinsicSize()
 
     // Spec text from 4.8.6
     //
-    // The intrinsic width of a video element's playback area is the intrinsic width
-    // of the video resource, if that is available; otherwise it is the intrinsic
-    // width of the poster frame, if that is available; otherwise it is 300 CSS pixels.
+    // The intrinsic width of a video element's playback area is the intrinsic
+    // width of the video resource, if that is available; otherwise it is the
+    // intrinsic width of the poster frame, if that is available; otherwise it is
+    // 300 CSS pixels.
     //
-    // The intrinsic height of a video element's playback area is the intrinsic height
-    // of the video resource, if that is available; otherwise it is the intrinsic
-    // height of the poster frame, if that is available; otherwise it is 150 CSS pixels.
+    // The intrinsic height of a video element's playback area is the intrinsic
+    // height of the video resource, if that is available; otherwise it is the
+    // intrinsic height of the poster frame, if that is available; otherwise it is
+    // 150 CSS pixels.
     WebMediaPlayer* webMediaPlayer = mediaElement()->webMediaPlayer();
-    if (webMediaPlayer && video->readyState() >= HTMLVideoElement::HAVE_METADATA) {
+    if (webMediaPlayer && video->getReadyState() >= HTMLVideoElement::kHaveMetadata) {
         IntSize size = webMediaPlayer->naturalSize();
         if (!size.isEmpty())
             return LayoutSize(size);
@@ -102,9 +102,10 @@ LayoutSize LayoutVideo::calculateIntrinsicSize()
     // <video> in standalone media documents should not use the default 300x150
     // size since they also have audio-only files. By setting the intrinsic
     // size to 300x1 the video will resize itself in these cases, and audio will
-    // have the correct height (it needs to be > 0 for controls to layout properly).
+    // have the correct height (it needs to be > 0 for controls to layout
+    // properly).
     if (video->ownerDocument() && video->ownerDocument()->isMediaDocument())
-        return LayoutSize(defaultSize().width(), 1);
+        return LayoutSize(defaultSize().width(), LayoutUnit(1));
 
     return defaultSize();
 }
@@ -113,9 +114,10 @@ void LayoutVideo::imageChanged(WrappedImagePtr newImage, const IntRect* rect)
 {
     LayoutMedia::imageChanged(newImage, rect);
 
-    // Cache the image intrinsic size so we can continue to use it to draw the image correctly
-    // even if we know the video intrinsic size but aren't able to draw video frames yet
-    // (we don't want to scale the poster to the video size without keeping aspect ratio).
+    // Cache the image intrinsic size so we can continue to use it to draw the
+    // image correctly even if we know the video intrinsic size but aren't able to
+    // draw video frames yet (we don't want to scale the poster to the video size
+    // without keeping aspect ratio).
     if (videoElement()->shouldDisplayPosterImage())
         m_cachedImageSize = intrinsicSize();
 
@@ -124,29 +126,15 @@ void LayoutVideo::imageChanged(WrappedImagePtr newImage, const IntRect* rect)
     updateIntrinsicSize();
 }
 
-IntRect LayoutVideo::videoBox() const
-{
-    const LayoutSize* overriddenIntrinsicSize = nullptr;
-    if (videoElement()->shouldDisplayPosterImage())
-        overriddenIntrinsicSize = &m_cachedImageSize;
-
-    return pixelSnappedIntRect(replacedContentRect(overriddenIntrinsicSize));
-}
-
 bool LayoutVideo::shouldDisplayVideo() const
 {
     return !videoElement()->shouldDisplayPosterImage();
 }
 
-void LayoutVideo::paintReplaced(const PaintInfo& paintInfo, const LayoutPoint& paintOffset)
+void LayoutVideo::paintReplaced(const PaintInfo& paintInfo,
+    const LayoutPoint& paintOffset) const
 {
     VideoPainter(*this).paintReplaced(paintInfo, paintOffset);
-}
-
-bool LayoutVideo::acceleratedRenderingInUse()
-{
-    WebLayer* webLayer = mediaElement()->platformLayer();
-    return webLayer && !webLayer->isOrphan();
 }
 
 void LayoutVideo::layout()
@@ -183,14 +171,16 @@ void LayoutVideo::updatePlayer()
     videoElement()->setNeedsCompositingUpdate();
 }
 
-LayoutUnit LayoutVideo::computeReplacedLogicalWidth(ShouldComputePreferred shouldComputePreferred) const
+LayoutUnit LayoutVideo::computeReplacedLogicalWidth(
+    ShouldComputePreferred shouldComputePreferred) const
 {
     return LayoutReplaced::computeReplacedLogicalWidth(shouldComputePreferred);
 }
 
-LayoutUnit LayoutVideo::computeReplacedLogicalHeight() const
+LayoutUnit LayoutVideo::computeReplacedLogicalHeight(
+    LayoutUnit estimatedUsedWidth) const
 {
-    return LayoutReplaced::computeReplacedLogicalHeight();
+    return LayoutReplaced::computeReplacedLogicalHeight(estimatedUsedWidth);
 }
 
 LayoutUnit LayoutVideo::minimumReplacedHeight() const
@@ -198,12 +188,28 @@ LayoutUnit LayoutVideo::minimumReplacedHeight() const
     return LayoutReplaced::minimumReplacedHeight();
 }
 
+LayoutRect LayoutVideo::replacedContentRect() const
+{
+    if (shouldDisplayVideo()) {
+        // Video codecs may need to restart from an I-frame when the output is
+        // resized. Round size in advance to avoid 1px snap difference.
+        // TODO(trchen): The way of rounding is different from LayoutPart just to
+        // match existing behavior. This is probably a bug and We should unify it
+        // with LayoutPart.
+        return LayoutRect(pixelSnappedIntRect(computeObjectFit()));
+    }
+    // If we are displaying the poster image no pre-rounding is needed, but the
+    // size of the image should be used for fitting instead.
+    return computeObjectFit(&m_cachedImageSize);
+}
+
 bool LayoutVideo::supportsAcceleratedRendering() const
 {
     return !!mediaElement()->platformLayer();
 }
 
-static const LayoutBlock* layoutObjectPlaceholder(const LayoutObject* layoutObject)
+static const LayoutBlock* layoutObjectPlaceholder(
+    const LayoutObject* layoutObject)
 {
     LayoutObject* parent = layoutObject->parent();
     if (!parent)
@@ -216,18 +222,18 @@ static const LayoutBlock* layoutObjectPlaceholder(const LayoutObject* layoutObje
     return fullScreen->placeholder();
 }
 
-LayoutUnit LayoutVideo::offsetLeft() const
+LayoutUnit LayoutVideo::offsetLeft(const Element* parent) const
 {
     if (const LayoutBlock* block = layoutObjectPlaceholder(this))
-        return block->offsetLeft();
-    return LayoutMedia::offsetLeft();
+        return block->offsetLeft(parent);
+    return LayoutMedia::offsetLeft(parent);
 }
 
-LayoutUnit LayoutVideo::offsetTop() const
+LayoutUnit LayoutVideo::offsetTop(const Element* parent) const
 {
     if (const LayoutBlock* block = layoutObjectPlaceholder(this))
-        return block->offsetTop();
-    return LayoutMedia::offsetTop();
+        return block->offsetTop(parent);
+    return LayoutMedia::offsetTop(parent);
 }
 
 LayoutUnit LayoutVideo::offsetWidth() const
@@ -246,11 +252,9 @@ LayoutUnit LayoutVideo::offsetHeight() const
 
 CompositingReasons LayoutVideo::additionalCompositingReasons() const
 {
-    if (RuntimeEnabledFeatures::overlayFullscreenVideoEnabled()) {
-        HTMLMediaElement* media = toHTMLMediaElement(node());
-        if (media->isFullscreen())
-            return CompositingReasonVideo;
-    }
+    HTMLMediaElement* element = toHTMLMediaElement(node());
+    if (element->isFullscreen() && element->usesOverlayFullscreenVideo())
+        return CompositingReasonVideo;
 
     if (shouldDisplayVideo() && supportsAcceleratedRendering())
         return CompositingReasonVideo;

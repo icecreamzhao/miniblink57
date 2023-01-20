@@ -993,11 +993,7 @@ double Object::Number() const {
 
 
 bool Object::IsNaN() const {
-<<<<<<< HEAD
   return this->IsHeapNumber() && std_isnan(HeapNumber::cast(this)->value());
-=======
-  return this->IsHeapNumber() && std::isnan(HeapNumber::cast(this)->value());
->>>>>>> miniblink49
 }
 
 
@@ -2417,11 +2413,7 @@ void FixedDoubleArray::set(int index, double value) {
   DCHECK(map() != GetHeap()->fixed_cow_array_map() &&
          map() != GetHeap()->fixed_array_map());
   int offset = kHeaderSize + index * kDoubleSize;
-<<<<<<< HEAD
   if (std_isnan(value)) {
-=======
-  if (std::isnan(value)) {
->>>>>>> miniblink49
     WRITE_DOUBLE_FIELD(this, offset, std::numeric_limits<double>::quiet_NaN());
   } else {
     WRITE_DOUBLE_FIELD(this, offset, value);

@@ -29,9 +29,5 @@
  */
 
 callback interface EntriesCallback {
-<<<<<<< HEAD
     void handleEvent(sequence<Entry> entries);
-=======
-    void handleEvent(Entry[] entries);
->>>>>>> miniblink49
 };

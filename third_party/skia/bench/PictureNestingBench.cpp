@@ -18,12 +18,8 @@ class PictureNesting : public Benchmark {
 public:
     PictureNesting(const char* name, int maxLevel, int maxPictureLevel)
         : fMaxLevel(maxLevel)
-<<<<<<< HEAD
         , fMaxPictureLevel(maxPictureLevel)
     {
-=======
-        , fMaxPictureLevel(maxPictureLevel) {
->>>>>>> miniblink49
         fName.printf("picture_nesting_%s_%d", name, this->countPics());
         fPaint.setColor(SK_ColorRED);
         fPaint.setAntiAlias(true);
@@ -31,7 +27,6 @@ public:
     }
 
 protected:
-<<<<<<< HEAD
     const char* onGetName() override
     {
         return fName.c_str();
@@ -39,33 +34,18 @@ protected:
 
     void doDraw(SkCanvas* canvas)
     {
-=======
-    const char* onGetName() override {
-        return fName.c_str();
-    }
-
-    void doDraw(SkCanvas* canvas) {
->>>>>>> miniblink49
         SkIPoint canvasSize = onGetSize();
         canvas->save();
         canvas->scale(SkIntToScalar(canvasSize.x()), SkIntToScalar(canvasSize.y()));
 
-<<<<<<< HEAD
         SkDEBUGCODE(int pics =) this->sierpinsky(canvas, 0, fPaint);
-=======
-        SkDEBUGCODE(int pics = ) this->sierpinsky(canvas, 0, fPaint);
->>>>>>> miniblink49
         SkASSERT(pics == this->countPics());
 
         canvas->restore();
     }
 
-<<<<<<< HEAD
     int sierpinsky(SkCanvas* canvas, int lvl, const SkPaint& paint)
     {
-=======
-    int sierpinsky(SkCanvas* canvas, int lvl, const SkPaint& paint) {
->>>>>>> miniblink49
         if (++lvl > fMaxLevel) {
             return 0;
         }
@@ -82,7 +62,6 @@ protected:
 
         c->drawLine(0.5, 0, 0, 1, paint);
         c->drawLine(0.5, 0, 1, 1, paint);
-<<<<<<< HEAD
         c->drawLine(0, 1, 1, 1, paint);
 
         c->save();
@@ -100,26 +79,6 @@ protected:
 
         if (recordPicture) {
             canvas->drawPicture(recorder.finishRecordingAsPicture());
-=======
-        c->drawLine(0,   1, 1, 1, paint);
-
-        c->save();
-            c->scale(0.5, 0.5);
-
-            c->translate(0, 1);
-            pics += this->sierpinsky(c, lvl, paint);
-
-            c->translate(1, 0);
-            pics += this->sierpinsky(c, lvl, paint);
-
-            c->translate(-0.5, -1);
-            pics += this->sierpinsky(c, lvl, paint);
-        c->restore();
-
-        if (recordPicture) {
-            SkAutoTUnref<SkPicture> picture(recorder.endRecording());
-            canvas->drawPicture(picture);
->>>>>>> miniblink49
         }
 
         return pics;
@@ -129,12 +88,8 @@ protected:
     int fMaxPictureLevel;
 
 private:
-<<<<<<< HEAD
     int countPics() const
     {
-=======
-    int countPics() const {
->>>>>>> miniblink49
         // Solve: pics from sierpinsky
         // f(m) = 1 + 3*f(m - 1)
         // f(0) = 0
@@ -150,11 +105,7 @@ private:
     }
 
     SkString fName;
-<<<<<<< HEAD
     SkPaint fPaint;
-=======
-    SkPaint  fPaint;
->>>>>>> miniblink49
 
     typedef Benchmark INHERITED;
 };
@@ -162,7 +113,6 @@ private:
 class PictureNestingRecording : public PictureNesting {
 public:
     PictureNestingRecording(int maxLevel, int maxPictureLevel)
-<<<<<<< HEAD
         : INHERITED("recording", maxLevel, maxPictureLevel)
     {
     }
@@ -175,31 +125,14 @@ protected:
 
     void onDraw(int loops, SkCanvas*) override
     {
-=======
-        : INHERITED("recording", maxLevel, maxPictureLevel) {
-    }
-
-protected:
-    virtual bool isSuitableFor(Backend backend) {
-        return backend == kNonRendering_Backend;
-    }
-
-    virtual void onDraw(const int loops, SkCanvas*) {
->>>>>>> miniblink49
         SkIPoint canvasSize = onGetSize();
         SkPictureRecorder recorder;
 
         for (int i = 0; i < loops; i++) {
             SkCanvas* c = recorder.beginRecording(SkIntToScalar(canvasSize.x()),
-<<<<<<< HEAD
                 SkIntToScalar(canvasSize.y()));
             this->doDraw(c);
             (void)recorder.finishRecordingAsPicture();
-=======
-                                                  SkIntToScalar(canvasSize.y()));
-            this->doDraw(c);
-            SkAutoTUnref<SkPicture> picture(recorder.endRecording());
->>>>>>> miniblink49
         }
     }
 
@@ -210,7 +143,6 @@ private:
 class PictureNestingPlayback : public PictureNesting {
 public:
     PictureNestingPlayback(int maxLevel, int maxPictureLevel)
-<<<<<<< HEAD
         : INHERITED("playback", maxLevel, maxPictureLevel)
     {
     }
@@ -219,18 +151,10 @@ protected:
     void onDelayedSetup() override
     {
         this->INHERITED::onDelayedSetup();
-=======
-        : INHERITED("playback", maxLevel, maxPictureLevel) {
-    }
-protected:
-    void onPreDraw() override {
-        this->INHERITED::onPreDraw();
->>>>>>> miniblink49
 
         SkIPoint canvasSize = onGetSize();
         SkPictureRecorder recorder;
         SkCanvas* c = recorder.beginRecording(SkIntToScalar(canvasSize.x()),
-<<<<<<< HEAD
             SkIntToScalar(canvasSize.y()));
 
         this->doDraw(c);
@@ -239,31 +163,17 @@ protected:
 
     void onDraw(int loops, SkCanvas* canvas) override
     {
-=======
-                                              SkIntToScalar(canvasSize.y()));
-
-        this->doDraw(c);
-        fPicture.reset(recorder.endRecording());
-    }
-
-    virtual void onDraw(const int loops, SkCanvas* canvas) {
->>>>>>> miniblink49
         for (int i = 0; i < loops; i++) {
             canvas->drawPicture(fPicture);
         }
     }
 
 private:
-<<<<<<< HEAD
     sk_sp<SkPicture> fPicture;
-=======
-    SkAutoTUnref<SkPicture> fPicture;
->>>>>>> miniblink49
 
     typedef PictureNesting INHERITED;
 };
 
-<<<<<<< HEAD
 DEF_BENCH(return new PictureNestingRecording(8, 0);)
 DEF_BENCH(return new PictureNestingRecording(8, 1);)
 DEF_BENCH(return new PictureNestingRecording(8, 2);)
@@ -283,24 +193,3 @@ DEF_BENCH(return new PictureNestingPlayback(8, 5);)
 DEF_BENCH(return new PictureNestingPlayback(8, 6);)
 DEF_BENCH(return new PictureNestingPlayback(8, 7);)
 DEF_BENCH(return new PictureNestingPlayback(8, 8);)
-=======
-DEF_BENCH( return new PictureNestingRecording(8, 0); )
-DEF_BENCH( return new PictureNestingRecording(8, 1); )
-DEF_BENCH( return new PictureNestingRecording(8, 2); )
-DEF_BENCH( return new PictureNestingRecording(8, 3); )
-DEF_BENCH( return new PictureNestingRecording(8, 4); )
-DEF_BENCH( return new PictureNestingRecording(8, 5); )
-DEF_BENCH( return new PictureNestingRecording(8, 6); )
-DEF_BENCH( return new PictureNestingRecording(8, 7); )
-DEF_BENCH( return new PictureNestingRecording(8, 8); )
-
-DEF_BENCH( return new PictureNestingPlayback(8, 0); )
-DEF_BENCH( return new PictureNestingPlayback(8, 1); )
-DEF_BENCH( return new PictureNestingPlayback(8, 2); )
-DEF_BENCH( return new PictureNestingPlayback(8, 3); )
-DEF_BENCH( return new PictureNestingPlayback(8, 4); )
-DEF_BENCH( return new PictureNestingPlayback(8, 5); )
-DEF_BENCH( return new PictureNestingPlayback(8, 6); )
-DEF_BENCH( return new PictureNestingPlayback(8, 7); )
-DEF_BENCH( return new PictureNestingPlayback(8, 8); )
->>>>>>> miniblink49

@@ -23,7 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 // https://dvcs.w3.org/hg/speech-api/raw-file/tip/webspeechapi.html#dfn-speechreco
 
 [
@@ -44,31 +43,11 @@
     [RuntimeEnabled=MediaStreamSpeech] attribute MediaStreamTrack? audioTrack;
 
     // methods to drive the speech interaction
-=======
-[
-    GarbageCollected,
-    NoInterfaceObject,
-    ActiveDOMObject,
-    Constructor,
-    ConstructorCallWith=ExecutionContext,
-] interface SpeechRecognition : EventTarget {
-    attribute SpeechGrammarList grammars;
-    attribute DOMString lang;
-    attribute DOMString serviceURI;
-    attribute boolean continuous;
-    attribute boolean interimResults;
-    attribute unsigned long maxAlternatives;
-    [RuntimeEnabled=MediaStreamSpeech] attribute MediaStreamTrack audioTrack;
-
->>>>>>> miniblink49
     [RaisesException] void start();
     [ImplementedAs=stopFunction] void stop();
     void abort();
 
-<<<<<<< HEAD
     // event methods
-=======
->>>>>>> miniblink49
     attribute EventHandler onaudiostart;
     attribute EventHandler onsoundstart;
     attribute EventHandler onspeechstart;

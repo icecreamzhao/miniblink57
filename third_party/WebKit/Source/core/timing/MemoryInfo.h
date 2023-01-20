@@ -34,10 +34,12 @@
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "core/CoreExport.h"
 #include "platform/heap/Handle.h"
+#include "wtf/Allocator.h"
 
 namespace blink {
 
 struct HeapInfo {
+    DISALLOW_NEW();
     HeapInfo()
         : usedJSHeapSize(0)
         , totalJSHeapSize(0)
@@ -50,13 +52,12 @@ struct HeapInfo {
     size_t jsHeapSizeLimit;
 };
 
-class CORE_EXPORT MemoryInfo final : public GarbageCollected<MemoryInfo>, public ScriptWrappable {
+class CORE_EXPORT MemoryInfo final : public GarbageCollected<MemoryInfo>,
+                                     public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static MemoryInfo* create()
-    {
-        return new MemoryInfo();
-    }
+    static MemoryInfo* create() { return new MemoryInfo(); }
 
     size_t totalJSHeapSize() const { return m_info.totalJSHeapSize; }
     size_t usedJSHeapSize() const { return m_info.usedJSHeapSize; }

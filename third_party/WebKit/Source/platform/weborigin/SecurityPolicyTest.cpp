@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "platform/weborigin/SecurityPolicy.h"
 
 #include "platform/weborigin/KURL.h"
@@ -67,20 +66,6 @@ TEST(SecurityPolicyTest, ShouldHideReferrerRespectsReferrerSchemesRegistry)
     SchemeRegistry::registerURLSchemeAsAllowedForReferrer(foobarScheme);
     EXPECT_FALSE(SecurityPolicy::shouldHideReferrer(exampleHttpUrl, foobarURL));
     SchemeRegistry::removeURLSchemeAsAllowedForReferrer(foobarScheme);
-=======
-#include "config.h"
-#include "platform/weborigin/SecurityPolicy.h"
-
-#include "platform/weborigin/KURL.h"
-#include "platform/weborigin/SecurityOrigin.h"
-#include <gtest/gtest.h>
-
-namespace blink {
-
-TEST(SecurityPolicyTest, ReferrerIsAlwaysAWebURL)
-{
-    EXPECT_TRUE(String() == SecurityPolicy::generateReferrer(ReferrerPolicyAlways, KURL(ParsedURLString, "http://example.com/"), String::fromUTF8("chrome://somepage/")).referrer);
->>>>>>> miniblink49
 }
 
 TEST(SecurityPolicyTest, GenerateReferrer)
@@ -100,58 +85,35 @@ TEST(SecurityPolicyTest, GenerateReferrer)
     const char secureURLB[] = "https://b.test/path/to/file.html";
     const char secureOriginA[] = "https://a.test/";
 
-<<<<<<< HEAD
     const char blobURL[] = "blob:http://a.test/b3aae9c8-7f90-440d-8d7c-43aa20d72fde";
     const char filesystemURL[] = "filesystem:http://a.test/path/t/file.html";
-=======
-    const char blobURL[] = "blob:http%3A//a.test/b3aae9c8-7f90-440d-8d7c-43aa20d72fde";
-    const char filesystemURL[] = "filesystem:http%3A//a.test/path/t/file.html";
->>>>>>> miniblink49
 
     TestCase inputs[] = {
         // HTTP -> HTTP: Same Origin
         { ReferrerPolicyAlways, insecureURLA, insecureURLA, insecureURLA },
         { ReferrerPolicyDefault, insecureURLA, insecureURLA, insecureURLA },
-<<<<<<< HEAD
         { ReferrerPolicyNoReferrerWhenDowngrade, insecureURLA, insecureURLA,
             insecureURLA },
         { ReferrerPolicyNever, insecureURLA, insecureURLA, 0 },
         { ReferrerPolicyOrigin, insecureURLA, insecureURLA, insecureOriginA },
         { ReferrerPolicyOriginWhenCrossOrigin, insecureURLA, insecureURLA,
             insecureURLA },
-=======
-        { ReferrerPolicyNoReferrerWhenDowngrade, insecureURLA, insecureURLA, insecureURLA },
-        { ReferrerPolicyNever, insecureURLA, insecureURLA, 0 },
-        { ReferrerPolicyOrigin, insecureURLA, insecureURLA, insecureOriginA },
-        { ReferrerPolicyOriginWhenCrossOrigin, insecureURLA, insecureURLA, insecureURLA },
->>>>>>> miniblink49
 
         // HTTP -> HTTP: Cross Origin
         { ReferrerPolicyAlways, insecureURLA, insecureURLB, insecureURLA },
         { ReferrerPolicyDefault, insecureURLA, insecureURLB, insecureURLA },
-<<<<<<< HEAD
         { ReferrerPolicyNoReferrerWhenDowngrade, insecureURLA, insecureURLB,
             insecureURLA },
         { ReferrerPolicyNever, insecureURLA, insecureURLB, 0 },
         { ReferrerPolicyOrigin, insecureURLA, insecureURLB, insecureOriginA },
         { ReferrerPolicyOriginWhenCrossOrigin, insecureURLA, insecureURLB,
             insecureOriginA },
-=======
-        { ReferrerPolicyNoReferrerWhenDowngrade, insecureURLA, insecureURLB, insecureURLA },
-        { ReferrerPolicyNever, insecureURLA, insecureURLB, 0 },
-        { ReferrerPolicyOrigin, insecureURLA, insecureURLB, insecureOriginA },
-        { ReferrerPolicyOriginWhenCrossOrigin, insecureURLA, insecureURLB, insecureOriginA },
->>>>>>> miniblink49
 
         // HTTPS -> HTTPS: Same Origin
         { ReferrerPolicyAlways, secureURLA, secureURLA, secureURLA },
         { ReferrerPolicyDefault, secureURLA, secureURLA, secureURLA },
-<<<<<<< HEAD
         { ReferrerPolicyNoReferrerWhenDowngrade, secureURLA, secureURLA,
             secureURLA },
-=======
-        { ReferrerPolicyNoReferrerWhenDowngrade, secureURLA, secureURLA, secureURLA },
->>>>>>> miniblink49
         { ReferrerPolicyNever, secureURLA, secureURLA, 0 },
         { ReferrerPolicyOrigin, secureURLA, secureURLA, secureOriginA },
         { ReferrerPolicyOriginWhenCrossOrigin, secureURLA, secureURLA, secureURLA },
@@ -159,36 +121,22 @@ TEST(SecurityPolicyTest, GenerateReferrer)
         // HTTPS -> HTTPS: Cross Origin
         { ReferrerPolicyAlways, secureURLA, secureURLB, secureURLA },
         { ReferrerPolicyDefault, secureURLA, secureURLB, secureURLA },
-<<<<<<< HEAD
         { ReferrerPolicyNoReferrerWhenDowngrade, secureURLA, secureURLB,
             secureURLA },
         { ReferrerPolicyNever, secureURLA, secureURLB, 0 },
         { ReferrerPolicyOrigin, secureURLA, secureURLB, secureOriginA },
         { ReferrerPolicyOriginWhenCrossOrigin, secureURLA, secureURLB,
             secureOriginA },
-=======
-        { ReferrerPolicyNoReferrerWhenDowngrade, secureURLA, secureURLB, secureURLA },
-        { ReferrerPolicyNever, secureURLA, secureURLB, 0 },
-        { ReferrerPolicyOrigin, secureURLA, secureURLB, secureOriginA },
-        { ReferrerPolicyOriginWhenCrossOrigin, secureURLA, secureURLB, secureOriginA },
->>>>>>> miniblink49
 
         // HTTP -> HTTPS
         { ReferrerPolicyAlways, insecureURLA, secureURLB, insecureURLA },
         { ReferrerPolicyDefault, insecureURLA, secureURLB, insecureURLA },
-<<<<<<< HEAD
         { ReferrerPolicyNoReferrerWhenDowngrade, insecureURLA, secureURLB,
             insecureURLA },
         { ReferrerPolicyNever, insecureURLA, secureURLB, 0 },
         { ReferrerPolicyOrigin, insecureURLA, secureURLB, insecureOriginA },
         { ReferrerPolicyOriginWhenCrossOrigin, insecureURLA, secureURLB,
             insecureOriginA },
-=======
-        { ReferrerPolicyNoReferrerWhenDowngrade, insecureURLA, secureURLB, insecureURLA },
-        { ReferrerPolicyNever, insecureURLA, secureURLB, 0 },
-        { ReferrerPolicyOrigin, insecureURLA, secureURLB, insecureOriginA },
-        { ReferrerPolicyOriginWhenCrossOrigin, insecureURLA, secureURLB, insecureOriginA },
->>>>>>> miniblink49
 
         // HTTPS -> HTTP
         { ReferrerPolicyAlways, secureURLA, insecureURLB, secureURLA },
@@ -196,12 +144,8 @@ TEST(SecurityPolicyTest, GenerateReferrer)
         { ReferrerPolicyNoReferrerWhenDowngrade, secureURLA, insecureURLB, 0 },
         { ReferrerPolicyNever, secureURLA, insecureURLB, 0 },
         { ReferrerPolicyOrigin, secureURLA, insecureURLB, secureOriginA },
-<<<<<<< HEAD
         { ReferrerPolicyOriginWhenCrossOrigin, secureURLA, secureURLB,
             secureOriginA },
-=======
-        { ReferrerPolicyOriginWhenCrossOrigin, secureURLA, secureURLB, secureOriginA },
->>>>>>> miniblink49
 
         // blob and filesystem URL handling
         { ReferrerPolicyAlways, insecureURLA, blobURL, 0 },
@@ -212,12 +156,8 @@ TEST(SecurityPolicyTest, GenerateReferrer)
 
     for (TestCase test : inputs) {
         KURL destination(ParsedURLString, test.destination);
-<<<<<<< HEAD
         Referrer result = SecurityPolicy::generateReferrer(
             test.policy, destination, String::fromUTF8(test.referrer));
-=======
-        Referrer result = SecurityPolicy::generateReferrer(test.policy, destination, String::fromUTF8(test.referrer));
->>>>>>> miniblink49
         if (test.expected) {
             EXPECT_EQ(String::fromUTF8(test.expected), result.referrer)
                 << "'" << test.referrer << "' to '" << test.destination
@@ -226,7 +166,6 @@ TEST(SecurityPolicyTest, GenerateReferrer)
         } else {
             EXPECT_TRUE(result.referrer.isEmpty())
                 << "'" << test.referrer << "' to '" << test.destination
-<<<<<<< HEAD
                 << "' should have been empty: was '" << result.referrer.utf8().data()
                 << "'.";
         }
@@ -234,11 +173,6 @@ TEST(SecurityPolicyTest, GenerateReferrer)
                 ? ReferrerPolicyNoReferrerWhenDowngrade
                 : test.policy,
             result.referrerPolicy);
-=======
-                << "' should have been empty: was '" << result.referrer.utf8().data() << "'.";
-        }
-        EXPECT_EQ(test.policy, result.referrerPolicy);
->>>>>>> miniblink49
     }
 }
 
@@ -252,18 +186,10 @@ TEST(SecurityPolicyTest, TrustworthyWhiteList)
     };
 
     for (const char* url : insecureURLs) {
-<<<<<<< HEAD
         RefPtr<SecurityOrigin> origin = SecurityOrigin::createFromString(url);
         EXPECT_FALSE(origin->isPotentiallyTrustworthy());
         SecurityPolicy::addOriginTrustworthyWhiteList(origin);
         EXPECT_TRUE(origin->isPotentiallyTrustworthy());
-=======
-        String errorMessage;
-        RefPtr<SecurityOrigin> origin = SecurityOrigin::createFromString(url);
-        EXPECT_FALSE(origin->isPotentiallyTrustworthy(errorMessage));
-        SecurityPolicy::addOriginTrustworthyWhiteList(origin);
-        EXPECT_TRUE(origin->isPotentiallyTrustworthy(errorMessage));
->>>>>>> miniblink49
     }
 
     // Tests that adding URLs that have inner-urls to the whitelist
@@ -273,7 +199,6 @@ TEST(SecurityPolicyTest, TrustworthyWhiteList)
         const char* anotherUrlInOrigin;
     };
     TestCase insecureURLsWithInnerOrigin[] = {
-<<<<<<< HEAD
         { "blob:http://e.test/b3aae9c8-7f90-440d-8d7c-43aa20d72fde",
             "http://e.test/foo.html" },
         { "filesystem:http://f.test/path/t/file.html", "http://f.test/bar.html" },
@@ -282,42 +207,15 @@ TEST(SecurityPolicyTest, TrustworthyWhiteList)
         { "http://h.test/bar.html", "filesystem:http://h.test/path/t/file.html" },
     };
     for (const TestCase& test : insecureURLsWithInnerOrigin) {
-=======
-        {
-            "blob:http://e.test/b3aae9c8-7f90-440d-8d7c-43aa20d72fde",
-            "http://e.test/foo.html"
-        }, {
-            "filesystem:http://f.test/path/t/file.html",
-            "http://f.test/bar.html"
-        }, {
-            "http://g.test/foo.html",
-            "blob:http://g.test/b3aae9c8-7f90-440d-8d7c-43aa20d72fde"
-        }, {
-            "http://h.test/bar.html",
-            "filesystem:http://h.test/path/t/file.html"
-        },
-    };
-    for (const TestCase& test : insecureURLsWithInnerOrigin) {
-        String errorMessage;
-
->>>>>>> miniblink49
         // Actually origins of both URLs should be same.
         RefPtr<SecurityOrigin> origin1 = SecurityOrigin::createFromString(test.url);
         RefPtr<SecurityOrigin> origin2 = SecurityOrigin::createFromString(test.anotherUrlInOrigin);
 
-<<<<<<< HEAD
         EXPECT_FALSE(origin1->isPotentiallyTrustworthy());
         EXPECT_FALSE(origin2->isPotentiallyTrustworthy());
         SecurityPolicy::addOriginTrustworthyWhiteList(origin1);
         EXPECT_TRUE(origin1->isPotentiallyTrustworthy());
         EXPECT_TRUE(origin2->isPotentiallyTrustworthy());
-=======
-        EXPECT_FALSE(origin1->isPotentiallyTrustworthy(errorMessage));
-        EXPECT_FALSE(origin2->isPotentiallyTrustworthy(errorMessage));
-        SecurityPolicy::addOriginTrustworthyWhiteList(origin1);
-        EXPECT_TRUE(origin1->isPotentiallyTrustworthy(errorMessage));
-        EXPECT_TRUE(origin2->isPotentiallyTrustworthy(errorMessage));
->>>>>>> miniblink49
     }
 }
 

@@ -7,15 +7,9 @@
 
 #include "SkFontMgr.h"
 #include "SkFontMgr_fontconfig.h"
-<<<<<<< HEAD
 #include "SkTypes.h"
 
 SkFontMgr* SkFontMgr::Factory()
 {
     return SkFontMgr_New_FontConfig(nullptr);
-=======
-
-SkFontMgr* SkFontMgr::Factory() {
-    return SkFontMgr_New_FontConfig(NULL);
->>>>>>> miniblink49
 }

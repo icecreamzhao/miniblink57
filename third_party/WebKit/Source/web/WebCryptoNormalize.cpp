@@ -28,10 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "public/web/WebCryptoNormalize.h"
 
 #include "bindings/core/v8/Dictionary.h"
@@ -44,7 +40,6 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 WebCryptoAlgorithm normalizeCryptoAlgorithm(
     v8::Local<v8::Object> algorithmObject,
     WebCryptoOperation operation,
@@ -55,13 +50,6 @@ WebCryptoAlgorithm normalizeCryptoAlgorithm(
     // FIXME: Avoid using NonThrowableExceptionState.
     NonThrowableExceptionState exceptionState;
     Dictionary algorithmDictionary(isolate, algorithmObject, exceptionState);
-=======
-WebCryptoAlgorithm normalizeCryptoAlgorithm(v8::Local<v8::Object> algorithmObject, WebCryptoOperation operation, int* exceptionCode, WebString* errorDetails, v8::Isolate* isolate)
-{
-    // FIXME: Avoid using NonThrowableExceptionState.
-    NonThrowableExceptionState exceptionState;
-    Dictionary algorithmDictionary(algorithmObject, isolate, exceptionState);
->>>>>>> miniblink49
     if (!algorithmDictionary.isUndefinedOrNull() && !algorithmDictionary.isObject())
         return WebCryptoAlgorithm();
     WebCryptoAlgorithm algorithm;

@@ -39,10 +39,6 @@
 #include "../platform/WebVector.h"
 #include "WebHistoryItem.h"
 #include "WebMenuItemInfo.h"
-<<<<<<< HEAD
-=======
-#include "WebNode.h"
->>>>>>> miniblink49
 
 #define WEBCONTEXT_MEDIATYPEFILE_DEFINED
 
@@ -125,12 +121,8 @@ struct WebContextMenuData {
     // The raw text of the selection in context.
     WebString selectedText;
 
-<<<<<<< HEAD
     // Title attribute or alt attribute (if title is not available) of the
     // selection in context.
-=======
-    // Title attribute or alt attribute (if title is not available) of the selection in context.
->>>>>>> miniblink49
     WebString titleText;
 
     // Whether spell checking is enabled.
@@ -193,30 +185,15 @@ struct WebContextMenuData {
     // Which edit operations are available in the context.
     int editFlags;
 
-<<<<<<< HEAD
-=======
-    // Security information for the context.
-    WebCString securityInfo;
-
->>>>>>> miniblink49
     // The referrer policy applicable to this context.
     WebReferrerPolicy referrerPolicy;
 
     // Custom context menu items provided by the WebCore internals.
     WebVector<WebMenuItemInfo> customItems;
 
-<<<<<<< HEAD
     WebContextMenuData()
         : mediaType(MediaTypeNone)
         , hasImageContents(true)
-=======
-    // The node that was clicked.
-    WebNode node;
-
-    WebContextMenuData()
-        : mediaType(MediaTypeNone)
-        , hasImageContents(false)
->>>>>>> miniblink49
         , mediaFlags(MediaNone)
         , isSpellCheckingEnabled(false)
         , misspellingHash(0)
@@ -224,13 +201,9 @@ struct WebContextMenuData {
         , writingDirectionDefault(CheckableMenuItemDisabled)
         , writingDirectionLeftToRight(CheckableMenuItemEnabled)
         , writingDirectionRightToLeft(CheckableMenuItemEnabled)
-<<<<<<< HEAD
         , editFlags(0)
     {
     }
-=======
-        , editFlags(0) { }
->>>>>>> miniblink49
 };
 
 } // namespace blink

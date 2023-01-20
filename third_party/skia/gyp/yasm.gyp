@@ -62,7 +62,6 @@
   },
   'target_defaults': {
     # Silence warnings in libc++ builds (C code doesn't need this flag).
-<<<<<<< HEAD
     'ldflags!': [ '-stdlib=libc++', '-fsanitize=<(skia_sanitizer)' ],
     # https://crbug.com/489901
     'cflags!': [
@@ -71,11 +70,6 @@
         '-fsanitize-memory-track-origins',
     ],
     'libraries!': [ '-llog', ],
-=======
-    'ldflags!': [ '-stdlib=libc++', '-fsanitize=address' ],
-    # https://crbug.com/489901
-    'cflags!': [ '-fsanitize=bounds', '-fsanitize=address' ],
->>>>>>> miniblink49
   },
   'targets': [
     {

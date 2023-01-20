@@ -19,11 +19,7 @@
  * \file
  * \brief C++ API: Dictionary Based Break Iterator
  */
-<<<<<<< HEAD
 
-=======
- 
->>>>>>> miniblink49
 U_NAMESPACE_BEGIN
 
 #ifndef U_HIDE_DEPRECATED_API
@@ -35,11 +31,7 @@ U_NAMESPACE_BEGIN
  */
 typedef RuleBasedBreakIterator DictionaryBasedBreakIterator;
 
-<<<<<<< HEAD
 #endif /* U_HIDE_DEPRECATED_API */
-=======
-#endif  /* U_HIDE_DEPRECATED_API */
->>>>>>> miniblink49
 
 U_NAMESPACE_END
 

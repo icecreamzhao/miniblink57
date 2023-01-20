@@ -26,7 +26,6 @@
 
 namespace v8 {
 namespace internal {
-<<<<<<< HEAD
     namespace GDBJITInterface {
 #ifdef ENABLE_GDB_JIT_INTERFACE
         // JitCodeEventHandler that creates ELF/Mach-O objects and registers them with
@@ -38,16 +37,3 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_GDB_JIT_H_
-=======
-namespace GDBJITInterface {
-#ifdef ENABLE_GDB_JIT_INTERFACE
-// JitCodeEventHandler that creates ELF/Mach-O objects and registers them with
-// GDB.
-void EventHandler(const v8::JitCodeEvent* event);
-#endif
-}  // namespace GDBJITInterface
-}  // namespace internal
-}  // namespace v8
-
-#endif  // V8_GDB_JIT_H_
->>>>>>> miniblink49

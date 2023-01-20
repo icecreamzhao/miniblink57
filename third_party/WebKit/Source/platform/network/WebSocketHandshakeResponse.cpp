@@ -28,10 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/network/WebSocketHandshakeResponse.h"
 
 #include "platform/network/WebSocketHandshakeRequest.h"
@@ -40,19 +36,9 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 WebSocketHandshakeResponse::WebSocketHandshakeResponse() { }
 
 WebSocketHandshakeResponse::~WebSocketHandshakeResponse() { }
-=======
-WebSocketHandshakeResponse::WebSocketHandshakeResponse()
-{
-}
-
-WebSocketHandshakeResponse::~WebSocketHandshakeResponse()
-{
-}
->>>>>>> miniblink49
 
 int WebSocketHandshakeResponse::statusCode() const
 {
@@ -80,12 +66,8 @@ const HTTPHeaderMap& WebSocketHandshakeResponse::headerFields() const
     return m_headerFields;
 }
 
-<<<<<<< HEAD
 void WebSocketHandshakeResponse::addHeaderField(const AtomicString& name,
     const AtomicString& value)
-=======
-void WebSocketHandshakeResponse::addHeaderField(const AtomicString& name, const AtomicString& value)
->>>>>>> miniblink49
 {
     WebSocketHandshakeRequest::addAndMergeHeader(&m_headerFields, name, value);
 }

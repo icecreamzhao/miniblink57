@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "core/loader/FrameLoadRequest.h"
 #include "core/page/Page.h"
 #include "core/page/ScopedPageSuspender.h"
@@ -41,19 +40,6 @@
 #include "web/WebLocalFrameImpl.h"
 #include "web/WebViewImpl.h"
 #include "web/tests/FrameTestHelpers.h"
-=======
-#include "config.h"
-
-#include "core/page/Page.h"
-#include "public/web/WebFrameClient.h"
-#include "public/web/WebInputEvent.h"
-#include "public/web/WebLocalFrame.h"
-#include "public/web/WebView.h"
-#include "public/web/WebViewClient.h"
-#include "web/WebViewImpl.h"
-#include "web/tests/FrameTestHelpers.h"
-#include <gtest/gtest.h>
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -64,7 +50,6 @@ void setCurrentInputEventForTest(const WebInputEvent* event)
 
 namespace {
 
-<<<<<<< HEAD
     class TestWebViewClient : public FrameTestHelpers::TestWebViewClient {
     public:
         explicit TestWebViewClient(WebNavigationPolicy* target)
@@ -78,26 +63,6 @@ namespace {
     private:
         WebNavigationPolicy* m_target;
     };
-=======
-class TestWebViewClient : public FrameTestHelpers::TestWebViewClient {
-public:
-    explicit TestWebViewClient(WebNavigationPolicy* target) : m_target(target) { }
-    ~TestWebViewClient() override { }
-
-    void show(WebNavigationPolicy policy) override
-    {
-        *m_target = policy;
-    }
-
-private:
-    WebNavigationPolicy* m_target;
-};
-
-class TestWebFrameClient : public WebFrameClient {
-public:
-    ~TestWebFrameClient() override { }
-};
->>>>>>> miniblink49
 
 } // anonymous namespace
 
@@ -112,21 +77,14 @@ public:
 protected:
     void SetUp() override
     {
-<<<<<<< HEAD
         m_webView = toWebViewImpl(
             WebView::create(&m_webViewClient, WebPageVisibilityStateVisible));
         m_webView->setMainFrame(
             WebLocalFrame::create(WebTreeScopeType::Document, &m_webFrameClient));
-=======
-        m_webView = toWebViewImpl(WebView::create(&m_webViewClient));
-        m_mainFrame = WebLocalFrame::create(WebTreeScopeType::Document, &m_webFrameClient);
-        m_webView->setMainFrame(m_mainFrame);
->>>>>>> miniblink49
         m_chromeClientImpl = toChromeClientImpl(&m_webView->page()->chromeClient());
         m_result = WebNavigationPolicyIgnore;
     }
 
-<<<<<<< HEAD
     void TearDown() override { m_webView->close(); }
 
     WebNavigationPolicy getNavigationPolicyWithMouseEvent(
@@ -136,19 +94,6 @@ protected:
     {
         WebMouseEvent event(WebInputEvent::MouseUp, modifiers,
             WebInputEvent::TimeStampForTesting);
-=======
-    void TearDown() override
-    {
-        m_webView->close();
-        m_mainFrame->close();
-    }
-
-    WebNavigationPolicy getNavigationPolicyWithMouseEvent(int modifiers, WebMouseEvent::Button button, bool asPopup)
-    {
-        WebMouseEvent event;
-        event.modifiers = modifiers;
-        event.type = WebInputEvent::MouseUp;
->>>>>>> miniblink49
         event.button = button;
         setCurrentInputEventForTest(&event);
         m_chromeClientImpl->setScrollbarsVisible(!asPopup);
@@ -167,24 +112,14 @@ protected:
     WebNavigationPolicy m_result;
     TestWebViewClient m_webViewClient;
     WebViewImpl* m_webView;
-<<<<<<< HEAD
     FrameTestHelpers::TestWebFrameClient m_webFrameClient;
     Persistent<ChromeClientImpl> m_chromeClientImpl;
-=======
-    WebFrame* m_mainFrame;
-    TestWebFrameClient m_webFrameClient;
-    ChromeClientImpl* m_chromeClientImpl;
->>>>>>> miniblink49
 };
 
 TEST_F(GetNavigationPolicyTest, LeftClick)
 {
     int modifiers = 0;
-<<<<<<< HEAD
     WebMouseEvent::Button button = WebMouseEvent::Button::Left;
-=======
-    WebMouseEvent::Button button = WebMouseEvent::ButtonLeft;
->>>>>>> miniblink49
     bool asPopup = false;
     EXPECT_EQ(WebNavigationPolicyNewForegroundTab,
         getNavigationPolicyWithMouseEvent(modifiers, button, asPopup));
@@ -193,11 +128,7 @@ TEST_F(GetNavigationPolicyTest, LeftClick)
 TEST_F(GetNavigationPolicyTest, LeftClickPopup)
 {
     int modifiers = 0;
-<<<<<<< HEAD
     WebMouseEvent::Button button = WebMouseEvent::Button::Left;
-=======
-    WebMouseEvent::Button button = WebMouseEvent::ButtonLeft;
->>>>>>> miniblink49
     bool asPopup = true;
     EXPECT_EQ(WebNavigationPolicyNewPopup,
         getNavigationPolicyWithMouseEvent(modifiers, button, asPopup));
@@ -206,11 +137,7 @@ TEST_F(GetNavigationPolicyTest, LeftClickPopup)
 TEST_F(GetNavigationPolicyTest, ShiftLeftClick)
 {
     int modifiers = WebInputEvent::ShiftKey;
-<<<<<<< HEAD
     WebMouseEvent::Button button = WebMouseEvent::Button::Left;
-=======
-    WebMouseEvent::Button button = WebMouseEvent::ButtonLeft;
->>>>>>> miniblink49
     bool asPopup = false;
     EXPECT_EQ(WebNavigationPolicyNewWindow,
         getNavigationPolicyWithMouseEvent(modifiers, button, asPopup));
@@ -219,11 +146,7 @@ TEST_F(GetNavigationPolicyTest, ShiftLeftClick)
 TEST_F(GetNavigationPolicyTest, ShiftLeftClickPopup)
 {
     int modifiers = WebInputEvent::ShiftKey;
-<<<<<<< HEAD
     WebMouseEvent::Button button = WebMouseEvent::Button::Left;
-=======
-    WebMouseEvent::Button button = WebMouseEvent::ButtonLeft;
->>>>>>> miniblink49
     bool asPopup = true;
     EXPECT_EQ(WebNavigationPolicyNewPopup,
         getNavigationPolicyWithMouseEvent(modifiers, button, asPopup));
@@ -236,11 +159,7 @@ TEST_F(GetNavigationPolicyTest, ControlOrMetaLeftClick)
 #else
     int modifiers = WebInputEvent::ControlKey;
 #endif
-<<<<<<< HEAD
     WebMouseEvent::Button button = WebMouseEvent::Button::Left;
-=======
-    WebMouseEvent::Button button = WebMouseEvent::ButtonLeft;
->>>>>>> miniblink49
     bool asPopup = false;
     EXPECT_EQ(WebNavigationPolicyNewBackgroundTab,
         getNavigationPolicyWithMouseEvent(modifiers, button, asPopup));
@@ -253,11 +172,7 @@ TEST_F(GetNavigationPolicyTest, ControlOrMetaLeftClickPopup)
 #else
     int modifiers = WebInputEvent::ControlKey;
 #endif
-<<<<<<< HEAD
     WebMouseEvent::Button button = WebMouseEvent::Button::Left;
-=======
-    WebMouseEvent::Button button = WebMouseEvent::ButtonLeft;
->>>>>>> miniblink49
     bool asPopup = true;
     EXPECT_EQ(WebNavigationPolicyNewBackgroundTab,
         getNavigationPolicyWithMouseEvent(modifiers, button, asPopup));
@@ -271,11 +186,7 @@ TEST_F(GetNavigationPolicyTest, ControlOrMetaAndShiftLeftClick)
     int modifiers = WebInputEvent::ControlKey;
 #endif
     modifiers |= WebInputEvent::ShiftKey;
-<<<<<<< HEAD
     WebMouseEvent::Button button = WebMouseEvent::Button::Left;
-=======
-    WebMouseEvent::Button button = WebMouseEvent::ButtonLeft;
->>>>>>> miniblink49
     bool asPopup = false;
     EXPECT_EQ(WebNavigationPolicyNewForegroundTab,
         getNavigationPolicyWithMouseEvent(modifiers, button, asPopup));
@@ -289,11 +200,7 @@ TEST_F(GetNavigationPolicyTest, ControlOrMetaAndShiftLeftClickPopup)
     int modifiers = WebInputEvent::ControlKey;
 #endif
     modifiers |= WebInputEvent::ShiftKey;
-<<<<<<< HEAD
     WebMouseEvent::Button button = WebMouseEvent::Button::Left;
-=======
-    WebMouseEvent::Button button = WebMouseEvent::ButtonLeft;
->>>>>>> miniblink49
     bool asPopup = true;
     EXPECT_EQ(WebNavigationPolicyNewForegroundTab,
         getNavigationPolicyWithMouseEvent(modifiers, button, asPopup));
@@ -303,11 +210,7 @@ TEST_F(GetNavigationPolicyTest, MiddleClick)
 {
     int modifiers = 0;
     bool asPopup = false;
-<<<<<<< HEAD
     WebMouseEvent::Button button = WebMouseEvent::Button::Middle;
-=======
-    WebMouseEvent::Button button = WebMouseEvent::ButtonMiddle;
->>>>>>> miniblink49
     EXPECT_EQ(WebNavigationPolicyNewBackgroundTab,
         getNavigationPolicyWithMouseEvent(modifiers, button, asPopup));
 }
@@ -316,11 +219,7 @@ TEST_F(GetNavigationPolicyTest, MiddleClickPopup)
 {
     int modifiers = 0;
     bool asPopup = true;
-<<<<<<< HEAD
     WebMouseEvent::Button button = WebMouseEvent::Button::Middle;
-=======
-    WebMouseEvent::Button button = WebMouseEvent::ButtonMiddle;
->>>>>>> miniblink49
     EXPECT_EQ(WebNavigationPolicyNewBackgroundTab,
         getNavigationPolicyWithMouseEvent(modifiers, button, asPopup));
 }
@@ -357,7 +256,6 @@ TEST_F(GetNavigationPolicyTest, NotResizableForcesPopup)
     EXPECT_FALSE(isNavigationPolicyPopup());
 }
 
-<<<<<<< HEAD
 class ViewCreatingClient : public FrameTestHelpers::TestWebViewClient {
 public:
     WebView* createView(WebLocalFrame* opener,
@@ -405,6 +303,4 @@ TEST_F(CreateWindowTest, CreateWindowFromSuspendedPage)
             NavigationPolicyNewForegroundTab));
 }
 
-=======
->>>>>>> miniblink49
 } // namespace blink

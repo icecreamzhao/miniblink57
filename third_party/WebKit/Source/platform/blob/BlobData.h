@@ -31,7 +31,6 @@
 #ifndef BlobData_h
 #define BlobData_h
 
-<<<<<<< HEAD
 #include "base/gtest_prod_util.h"
 #include "platform/FileMetadata.h"
 #include "platform/weborigin/KURL.h"
@@ -39,14 +38,6 @@
 #include "wtf/ThreadSafeRefCounted.h"
 #include "wtf/text/WTFString.h"
 #include <memory>
-=======
-#include "platform/FileMetadata.h"
-#include "platform/weborigin/KURL.h"
-#include "wtf/Forward.h"
-#include "wtf/PassOwnPtr.h"
-#include "wtf/ThreadSafeRefCounted.h"
-#include "wtf/text/WTFString.h"
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -54,14 +45,7 @@ class BlobDataHandle;
 
 class PLATFORM_EXPORT RawData : public ThreadSafeRefCounted<RawData> {
 public:
-<<<<<<< HEAD
     static PassRefPtr<RawData> create() { return adoptRef(new RawData()); }
-=======
-    static PassRefPtr<RawData> create()
-    {
-        return adoptRef(new RawData());
-    }
->>>>>>> miniblink49
 
     void detachFromCurrentThread();
 
@@ -76,10 +60,7 @@ private:
 };
 
 struct PLATFORM_EXPORT BlobDataItem {
-<<<<<<< HEAD
     DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
-=======
->>>>>>> miniblink49
     static const long long toEndOfFile;
 
     // Default constructor.
@@ -112,14 +93,10 @@ struct PLATFORM_EXPORT BlobDataItem {
     }
 
     // Constructor for File type (partial file).
-<<<<<<< HEAD
     BlobDataItem(const String& path,
         long long offset,
         long long length,
         double expectedModificationTime)
-=======
-    BlobDataItem(const String& path, long long offset, long long length, double expectedModificationTime)
->>>>>>> miniblink49
         : type(File)
         , path(path)
         , offset(offset)
@@ -129,13 +106,9 @@ struct PLATFORM_EXPORT BlobDataItem {
     }
 
     // Constructor for Blob type.
-<<<<<<< HEAD
     BlobDataItem(PassRefPtr<BlobDataHandle> blobDataHandle,
         long long offset,
         long long length)
-=======
-    BlobDataItem(PassRefPtr<BlobDataHandle> blobDataHandle, long long offset, long long length)
->>>>>>> miniblink49
         : type(Blob)
         , blobDataHandle(blobDataHandle)
         , offset(offset)
@@ -145,14 +118,10 @@ struct PLATFORM_EXPORT BlobDataItem {
     }
 
     // Constructor for FileSystem file type.
-<<<<<<< HEAD
     BlobDataItem(const KURL& fileSystemURL,
         long long offset,
         long long length,
         double expectedModificationTime)
-=======
-    BlobDataItem(const KURL& fileSystemURL, long long offset, long long length, double expectedModificationTime)
->>>>>>> miniblink49
         : type(FileSystemURL)
         , fileSystemURL(fileSystemURL)
         , offset(offset)
@@ -164,19 +133,10 @@ struct PLATFORM_EXPORT BlobDataItem {
     // Detaches from current thread so that it can be passed to another thread.
     void detachFromCurrentThread();
 
-<<<<<<< HEAD
     const enum { Data,
         File,
         Blob,
         FileSystemURL } type;
-=======
-    const enum {
-        Data,
-        File,
-        Blob,
-        FileSystemURL
-    } type;
->>>>>>> miniblink49
 
     RefPtr<RawData> data; // For Data type.
     String path; // For File type.
@@ -204,7 +164,6 @@ private:
 typedef Vector<BlobDataItem> BlobDataItemList;
 
 class PLATFORM_EXPORT BlobData {
-<<<<<<< HEAD
     USING_FAST_MALLOC(BlobData);
     WTF_MAKE_NONCOPYABLE(BlobData);
 
@@ -214,11 +173,6 @@ public:
     // have an unknown-length file if it is the only item in the blob.
     static std::unique_ptr<BlobData> createForFileWithUnknownSize(
         const String& path);
-=======
-    WTF_MAKE_FAST_ALLOCATED(BlobData);
-public:
-    static PassOwnPtr<BlobData> create();
->>>>>>> miniblink49
 
     // Detaches from current thread so that it can be passed to another thread.
     void detachFromCurrentThread();
@@ -230,7 +184,6 @@ public:
 
     void appendBytes(const void*, size_t length);
     void appendData(PassRefPtr<RawData>, long long offset, long long length);
-<<<<<<< HEAD
     void appendFile(const String& path,
         long long offset,
         long long length,
@@ -271,37 +224,6 @@ private:
 
 class PLATFORM_EXPORT BlobDataHandle
     : public ThreadSafeRefCounted<BlobDataHandle> {
-=======
-    void appendFile(const String& path);
-    void appendFile(const String& path, long long offset, long long length, double expectedModificationTime);
-    void appendBlob(PassRefPtr<BlobDataHandle>, long long offset, long long length);
-    void appendFileSystemURL(const KURL&, long long offset, long long length, double expectedModificationTime);
-    void appendText(const String&, bool normalizeLineEndingsToNative);
-
-    // The value of the size property for a Blob who has this data.
-    // BlobDataItem::toEndOfFile if the Blob has a file whose size was not yet determined.
-    long long length() const;
-
-private:
-    friend class BlobDataTest_Consolidation_Test;
-
-    BlobData() { }
-
-    bool canConsolidateData(size_t length);
-
-    // Make this private so that the otherwise-generated implicit assignment
-    // operator doesn't reference BlobDataItemList's operator=, which would
-    // require BlobDataItem to have an implicit operator= which it can't have
-    // because it has a const member.
-    BlobData& operator=(const BlobData&);
-
-    String m_contentType;
-    BlobDataItemList m_items;
-};
-
-
-class PLATFORM_EXPORT BlobDataHandle : public ThreadSafeRefCounted<BlobDataHandle> {
->>>>>>> miniblink49
 public:
     // For empty blob construction.
     static PassRefPtr<BlobDataHandle> create()
@@ -310,7 +232,6 @@ public:
     }
 
     // For initial creation.
-<<<<<<< HEAD
     static PassRefPtr<BlobDataHandle> create(std::unique_ptr<BlobData> data,
         long long size)
     {
@@ -321,36 +242,19 @@ public:
     static PassRefPtr<BlobDataHandle> create(const String& uuid,
         const String& type,
         long long size)
-=======
-    static PassRefPtr<BlobDataHandle> create(PassOwnPtr<BlobData> data, long long size)
-    {
-        return adoptRef(new BlobDataHandle(data, size));
-    }
-
-    // For deserialization of script values and ipc messages.
-    static PassRefPtr<BlobDataHandle> create(const String& uuid, const String& type, long long size)
->>>>>>> miniblink49
     {
         return adoptRef(new BlobDataHandle(uuid, type, size));
     }
 
     String uuid() const { return m_uuid.isolatedCopy(); }
     String type() const { return m_type.isolatedCopy(); }
-<<<<<<< HEAD
     unsigned long long size() const { return m_size; }
-=======
-    unsigned long long size() { return m_size; }
->>>>>>> miniblink49
 
     ~BlobDataHandle();
 
 private:
     BlobDataHandle();
-<<<<<<< HEAD
     BlobDataHandle(std::unique_ptr<BlobData>, long long size);
-=======
-    BlobDataHandle(PassOwnPtr<BlobData>, long long size);
->>>>>>> miniblink49
     BlobDataHandle(const String& uuid, const String& type, long long size);
 
     const String m_uuid;

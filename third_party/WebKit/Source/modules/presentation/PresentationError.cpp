@@ -2,19 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "modules/presentation/PresentationError.h"
 
 #include "core/dom/DOMException.h"
 #include "core/dom/ExceptionCode.h"
 #include "public/platform/modules/presentation/WebPresentationError.h"
-<<<<<<< HEAD
-=======
-#include "wtf/OwnPtr.h"
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -28,11 +20,7 @@ DOMException* PresentationError::take(const WebPresentationError& error)
         code = NotFoundError;
         break;
     case WebPresentationError::ErrorTypeSessionRequestCancelled:
-<<<<<<< HEAD
         code = NotAllowedError;
-=======
-        code = AbortError;
->>>>>>> miniblink49
         break;
     case WebPresentationError::ErrorTypeAvailabilityNotSupported:
         code = NotSupportedError;

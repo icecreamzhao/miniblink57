@@ -8,10 +8,6 @@
 #define PathOpsThreadedCommon_DEFINED
 
 #include "SkGraphics.h"
-<<<<<<< HEAD
-=======
-#include "SkRunnable.h"
->>>>>>> miniblink49
 #include "SkTDArray.h"
 
 #define PATH_STR_SIZE 512
@@ -36,14 +32,10 @@ struct PathOpsThreadState {
 
 class PathOpsThreadedTestRunner {
 public:
-<<<<<<< HEAD
     PathOpsThreadedTestRunner(skiatest::Reporter* reporter)
         : fReporter(reporter)
     {
     }
-=======
-    PathOpsThreadedTestRunner(skiatest::Reporter* reporter) : fReporter(reporter) {}
->>>>>>> miniblink49
 
     ~PathOpsThreadedTestRunner();
 
@@ -54,18 +46,11 @@ public:
     skiatest::Reporter* fReporter;
 };
 
-<<<<<<< HEAD
 class PathOpsThreadedRunnable {
 public:
     PathOpsThreadedRunnable(void (*testFun)(PathOpsThreadState*), int a, int b, int c, int d,
         PathOpsThreadedTestRunner* runner)
     {
-=======
-class PathOpsThreadedRunnable : public SkRunnable {
-public:
-    PathOpsThreadedRunnable(void (*testFun)(PathOpsThreadState*), int a, int b, int c, int d,
-            PathOpsThreadedTestRunner* runner) {
->>>>>>> miniblink49
         fState.fA = a;
         fState.fB = b;
         fState.fC = c;
@@ -75,12 +60,8 @@ public:
     }
 
     PathOpsThreadedRunnable(void (*testFun)(PathOpsThreadState*), const char* str,
-<<<<<<< HEAD
         PathOpsThreadedTestRunner* runner)
     {
-=======
-            PathOpsThreadedTestRunner* runner) {
->>>>>>> miniblink49
         SkASSERT(strlen(str) < sizeof(fState.fSerialNo) - 1);
         strcpy(fState.fSerialNo, str);
         fState.fReporter = runner->fReporter;
@@ -88,12 +69,8 @@ public:
     }
 
     PathOpsThreadedRunnable(void (*testFun)(PathOpsThreadState*), int dirNo, const char* str,
-<<<<<<< HEAD
         PathOpsThreadedTestRunner* runner)
     {
-=======
-            PathOpsThreadedTestRunner* runner) {
->>>>>>> miniblink49
         SkASSERT(strlen(str) < sizeof(fState.fSerialNo) - 1);
         fState.fA = dirNo;
         strcpy(fState.fSerialNo, str);
@@ -101,12 +78,8 @@ public:
         fTestFun = testFun;
     }
 
-<<<<<<< HEAD
     void operator()()
     {
-=======
-    void run() override {
->>>>>>> miniblink49
         SkBitmap bitmap;
         fState.fBitmap = &bitmap;
         char pathStr[PATH_STR_SIZE];

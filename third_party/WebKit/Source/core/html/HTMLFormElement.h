@@ -2,7 +2,8 @@
  * Copyright (C) 1999 Lars Knoll (knoll@kde.org)
  *           (C) 1999 Antti Koivisto (koivisto@kde.org)
  *           (C) 2000 Dirk Mueller (mueller@kde.org)
- * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Apple Inc. All rights reserved.
+ * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Apple Inc. All rights
+ * reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,14 +30,11 @@
 #include "core/html/HTMLFormControlElement.h"
 #include "core/html/forms/RadioButtonGroupScope.h"
 #include "core/loader/FormSubmission.h"
-#include "wtf/OwnPtr.h"
-#include "wtf/WeakPtr.h"
 
 namespace blink {
 
 class Event;
-class FormAssociatedElement;
-class GenericEventQueue;
+class ListedElement;
 class HTMLFormControlElement;
 class HTMLFormControlsCollection;
 class HTMLImageElement;
@@ -44,13 +42,14 @@ class RadioNodeListOrElement;
 
 class CORE_EXPORT HTMLFormElement final : public HTMLElement {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static PassRefPtrWillBeRawPtr<HTMLFormElement> create(Document&);
+    static HTMLFormElement* create(Document&);
     ~HTMLFormElement() override;
     DECLARE_VIRTUAL_TRACE();
 
-    PassRefPtrWillBeRawPtr<HTMLFormControlsCollection> elements();
-    void getNamedElements(const AtomicString&, WillBeHeapVector<RefPtrWillBeMember<Element>>&);
+    HTMLFormControlsCollection* elements();
+    void getNamedElements(const AtomicString&, HeapVector<Member<Element>>&);
 
     unsigned length() const;
     HTMLElement* item(unsigned index);
@@ -63,16 +62,13 @@ public:
 
     bool shouldAutocomplete() const;
 
-    void associate(FormAssociatedElement&);
-    void disassociate(FormAssociatedElement&);
+    void associate(ListedElement&);
+    void disassociate(ListedElement&);
     void associate(HTMLImageElement&);
     void disassociate(HTMLImageElement&);
-#if !ENABLE(OILPAN)
-    WeakPtr<HTMLFormElement> createWeakPtr();
-#endif
     void didAssociateByParser();
 
-    void prepareForSubmission(Event*);
+    void prepareForSubmission(Event*, HTMLFormControlElement* submitButton);
     void submitFromJavaScript();
     void reset();
 
@@ -89,34 +85,25 @@ public:
     String method() const;
     void setMethod(const AtomicString&);
 
-    bool wasUserSubmitted() const;
-
-    HTMLFormControlElement* defaultButton() const;
+    // Find the 'default button.'
+    // https://html.spec.whatwg.org/multipage/forms.html#default-button
+    HTMLFormControlElement* findDefaultButton() const;
 
     bool checkValidity();
     bool reportValidity();
     bool matchesValidityPseudoClasses() const final;
     bool isValidElement() final;
 
-    enum AutocompleteResult {
-        AutocompleteResultSuccess,
-        AutocompleteResultErrorDisabled,
-        AutocompleteResultErrorCancel,
-        AutocompleteResultErrorInvalid,
-    };
+    RadioButtonGroupScope& radioButtonGroupScope()
+    {
+        return m_radioButtonGroupScope;
+    }
 
-    void requestAutocomplete();
-    void finishRequestAutocomplete(AutocompleteResult);
-
-    DEFINE_ATTRIBUTE_EVENT_LISTENER(autocomplete);
-    DEFINE_ATTRIBUTE_EVENT_LISTENER(autocompleteerror);
-
-    RadioButtonGroupScope& radioButtonGroupScope() { return m_radioButtonGroupScope; }
-
-    const FormAssociatedElement::List& associatedElements() const;
-    const WillBeHeapVector<RawPtrWillBeMember<HTMLImageElement>>& imageElements();
+    const ListedElement::List& listedElements() const;
+    const HeapVector<Member<HTMLImageElement>>& imageElements();
 
     void anonymousNamedGetter(const AtomicString& name, RadioNodeListOrElement&);
+    void invalidateDefaultButtonStyle() const;
 
 private:
     explicit HTMLFormElement(Document&);
@@ -128,8 +115,7 @@ private:
 
     void handleLocalEvents(Event&) override;
 
-    void attributeWillChange(const QualifiedName&, const AtomicString& oldValue, const AtomicString& newValue) override;
-    void parseAttribute(const QualifiedName&, const AtomicString&) override;
+    void parseAttribute(const AttributeModificationParams&) override;
     bool isURLAttribute(const Attribute&) const override;
     bool hasLegalLinkAttribute(const QualifiedName&) const override;
 
@@ -137,13 +123,13 @@ private:
 
     void copyNonAttributePropertiesFromElement(const Element&) override;
 
-    void submitDialog(PassRefPtrWillBeRawPtr<FormSubmission>);
-    void submit(Event*, bool activateSubmitButton, bool processingUserGesture);
+    void submitDialog(FormSubmission*);
+    void submit(Event*, HTMLFormControlElement* submitButton);
 
-    void scheduleFormSubmission(PassRefPtrWillBeRawPtr<FormSubmission>);
+    void scheduleFormSubmission(FormSubmission*);
 
-    void collectAssociatedElements(Node& root, FormAssociatedElement::List&) const;
-    void collectImageElements(Node& root, WillBeHeapVector<RawPtrWillBeMember<HTMLImageElement>>&);
+    void collectListedElements(Node& root, ListedElement::List&) const;
+    void collectImageElements(Node& root, HeapVector<Member<HTMLImageElement>>&);
 
     // Returns true if the submission should proceed.
     bool validateInteractively();
@@ -151,40 +137,42 @@ private:
     // Validates each of the controls, and stores controls of which 'invalid'
     // event was not canceled to the specified vector. Returns true if there
     // are any invalid controls in this form.
-    bool checkInvalidControlsAndCollectUnhandled(WillBeHeapVector<RefPtrWillBeMember<HTMLFormControlElement>>*, CheckValidityEventBehavior);
+    bool checkInvalidControlsAndCollectUnhandled(
+        HeapVector<Member<HTMLFormControlElement>>*,
+        CheckValidityEventBehavior);
 
     Element* elementFromPastNamesMap(const AtomicString&);
     void addToPastNamesMap(Element*, const AtomicString& pastName);
     void removeFromPastNamesMap(HTMLElement&);
 
-    typedef WillBeHeapHashMap<AtomicString, RawPtrWillBeMember<Element>> PastNamesMap;
+    typedef HeapHashMap<AtomicString, Member<Element>> PastNamesMap;
 
     FormSubmission::Attributes m_attributes;
-    OwnPtrWillBeMember<PastNamesMap> m_pastNamesMap;
+    Member<PastNamesMap> m_pastNamesMap;
 
     RadioButtonGroupScope m_radioButtonGroupScope;
 
-    // Do not access m_associatedElements directly. Use associatedElements() instead.
-    FormAssociatedElement::List m_associatedElements;
+    // Do not access m_listedElements directly. Use listedElements()
+    // instead.
+    ListedElement::List m_listedElements;
     // Do not access m_imageElements directly. Use imageElements() instead.
-    WillBeHeapVector<RawPtrWillBeMember<HTMLImageElement>> m_imageElements;
-#if !ENABLE(OILPAN)
-    WeakPtrFactory<HTMLFormElement> m_weakPtrFactory;
-#endif
-    bool m_associatedElementsAreDirty : 1;
+    HeapVector<Member<HTMLImageElement>> m_imageElements;
+
+    // https://html.spec.whatwg.org/multipage/forms.html#planned-navigation
+    // Unlike the specification, we use this only for web-exposed submit()
+    // function in 'submit' event handler.
+    Member<FormSubmission> m_plannedNavigation;
+
+    bool m_isSubmitting = false;
+    bool m_inUserJSSubmitEvent = false;
+
+    bool m_listedElementsAreDirty : 1;
     bool m_imageElementsAreDirty : 1;
     bool m_hasElementsAssociatedByParser : 1;
+    bool m_hasElementsAssociatedByFormAttribute : 1;
     bool m_didFinishParsingChildren : 1;
-
-    bool m_wasUserSubmitted : 1;
-    bool m_isSubmittingOrInUserJSSubmitEvent : 1;
-    bool m_shouldSubmit : 1;
-
     bool m_isInResetFunction : 1;
-
     bool m_wasDemoted : 1;
-
-    OwnPtrWillBeMember<GenericEventQueue> m_pendingAutocompleteEventsQueue;
 };
 
 } // namespace blink

@@ -17,11 +17,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/svg/SVGPathByteStreamBuilder.h"
 
 #include "core/svg/SVGPathByteStream.h"
-#include "core/svg/SVGPathSeg.h"
+#include "core/svg/SVGPathData.h"
 #include "platform/geometry/FloatPoint.h"
 
 namespace blink {
@@ -34,13 +33,9 @@ public:
         , m_byteStream(byteStream)
     {
     }
-    ~CoalescingBuffer()
-    {
-        for (size_t i = 0; i < m_currentOffset; ++i)
-            m_byteStream.append(m_bytes[i]);
-    }
+    ~CoalescingBuffer() { m_byteStream.append(m_bytes, m_currentOffset); }
 
-    template<typename DataType>
+    template <typename DataType>
     void writeType(DataType value)
     {
         ByteType<DataType> data;
@@ -58,7 +53,10 @@ public:
         writeType<float>(point.x());
         writeType<float>(point.y());
     }
-    void writeSegmentType(unsigned short value) { writeType<unsigned short>(value); }
+    void writeSegmentType(unsigned short value)
+    {
+        writeType<unsigned short>(value);
+    }
 
 private:
     // Adjust size to fit the largest command (in serialized/byte-stream format).
@@ -68,7 +66,8 @@ private:
     SVGPathByteStream& m_byteStream;
 };
 
-SVGPathByteStreamBuilder::SVGPathByteStreamBuilder(SVGPathByteStream& byteStream)
+SVGPathByteStreamBuilder::SVGPathByteStreamBuilder(
+    SVGPathByteStream& byteStream)
     : m_byteStream(byteStream)
 {
 }

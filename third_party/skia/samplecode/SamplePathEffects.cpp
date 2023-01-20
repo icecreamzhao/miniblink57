@@ -6,7 +6,6 @@
  */
 
 #include "SampleCode.h"
-<<<<<<< HEAD
 #include "Sk1DPathEffect.h"
 #include "SkAnimTimer.h"
 #include "SkCanvas.h"
@@ -22,30 +21,11 @@
 #include "SkView.h"
 
 #define CORNER_RADIUS 12
-=======
-#include "SkAnimTimer.h"
-#include "SkView.h"
-#include "SkCanvas.h"
-#include "SkGradientShader.h"
-#include "SkPath.h"
-#include "SkRegion.h"
-#include "SkShader.h"
-#include "SkUtils.h"
-#include "Sk1DPathEffect.h"
-#include "SkCornerPathEffect.h"
-#include "SkPathMeasure.h"
-#include "SkRandom.h"
-#include "SkColorPriv.h"
-#include "SkPixelXorXfermode.h"
-
-#define CORNER_RADIUS   12
->>>>>>> miniblink49
 
 static const int gXY[] = {
     4, 0, 0, -4, 8, -4, 12, 0, 8, 4, 0, 4
 };
 
-<<<<<<< HEAD
 static sk_sp<SkPathEffect> make_pe(int flags, SkScalar phase)
 {
     if (flags == 1) {
@@ -60,26 +40,10 @@ static sk_sp<SkPathEffect> make_pe(int flags, SkScalar phase)
     path.offset(SkIntToScalar(-6), 0);
 
     auto outer = SkPath1DPathEffect::Make(path, 12, phase, SkPath1DPathEffect::kRotate_Style);
-=======
-static SkPathEffect* make_pe(int flags, SkScalar phase) {
-    if (flags == 1)
-        return SkCornerPathEffect::Create(SkIntToScalar(CORNER_RADIUS));
-
-    SkPath  path;
-    path.moveTo(SkIntToScalar(gXY[0]), SkIntToScalar(gXY[1]));
-    for (unsigned i = 2; i < SK_ARRAY_COUNT(gXY); i += 2)
-        path.lineTo(SkIntToScalar(gXY[i]), SkIntToScalar(gXY[i+1]));
-    path.close();
-    path.offset(SkIntToScalar(-6), 0);
-
-    SkPathEffect* outer = SkPath1DPathEffect::Create(path, 12, phase,
-                                                     SkPath1DPathEffect::kRotate_Style);
->>>>>>> miniblink49
 
     if (flags == 2)
         return outer;
 
-<<<<<<< HEAD
     auto inner = SkCornerPathEffect::Make(SkIntToScalar(CORNER_RADIUS));
 
     return SkComposePathEffect::Make(outer, inner);
@@ -100,32 +64,6 @@ static sk_sp<SkPathEffect> make_warp_pe(SkScalar phase)
     auto inner = SkCornerPathEffect::Make(SkIntToScalar(CORNER_RADIUS));
 
     return SkComposePathEffect::Make(outer, inner);
-=======
-    SkPathEffect* inner = SkCornerPathEffect::Create(SkIntToScalar(CORNER_RADIUS));
-
-    SkPathEffect* pe = SkComposePathEffect::Create(outer, inner);
-    outer->unref();
-    inner->unref();
-    return pe;
-}
-
-static SkPathEffect* make_warp_pe(SkScalar phase) {
-    SkPath  path;
-    path.moveTo(SkIntToScalar(gXY[0]), SkIntToScalar(gXY[1]));
-    for (unsigned i = 2; i < SK_ARRAY_COUNT(gXY); i += 2)
-        path.lineTo(SkIntToScalar(gXY[i]), SkIntToScalar(gXY[i+1]));
-    path.close();
-    path.offset(SkIntToScalar(-6), 0);
-
-    SkPathEffect* outer = SkPath1DPathEffect::Create(
-        path, 12, phase, SkPath1DPathEffect::kMorph_Style);
-    SkPathEffect* inner = SkCornerPathEffect::Create(SkIntToScalar(CORNER_RADIUS));
-
-    SkPathEffect* pe = SkComposePathEffect::Create(outer, inner);
-    outer->unref();
-    inner->unref();
-    return pe;
->>>>>>> miniblink49
 }
 
 ///////////////////////////////////////////////////////////
@@ -135,12 +73,8 @@ static SkPathEffect* make_warp_pe(SkScalar phase) {
 
 class TestRastBuilder : public SkLayerRasterizer::Builder {
 public:
-<<<<<<< HEAD
     TestRastBuilder()
     {
-=======
-    TestRastBuilder() {
->>>>>>> miniblink49
         SkPaint paint;
         paint.setAntiAlias(true);
 
@@ -153,16 +87,11 @@ public:
 };
 
 class PathEffectView : public SampleView {
-<<<<<<< HEAD
     SkPath fPath;
-=======
-    SkPath  fPath;
->>>>>>> miniblink49
     SkPoint fClickPt;
     SkScalar fPhase;
 
 public:
-<<<<<<< HEAD
     PathEffectView()
         : fPhase(0)
     {
@@ -182,24 +111,6 @@ protected:
             x += dist / steps;
             SkScalar tmpY = y + SkIntToScalar(rand.nextS() % 25);
             if (i == steps / 2) {
-=======
-    PathEffectView() : fPhase(0) {
-        }
-
-protected:
-    void onOnceBeforeDraw() override {
-        SkRandom    rand;
-        int         steps = 20;
-        SkScalar    dist = SkIntToScalar(400);
-        SkScalar    x = SkIntToScalar(20);
-        SkScalar    y = SkIntToScalar(50);
-
-        fPath.moveTo(x, y);
-        for (int i = 0; i < steps; i++) {
-            x += dist/steps;
-            SkScalar tmpY = y + SkIntToScalar(rand.nextS() % 25);
-            if (i == steps/2) {
->>>>>>> miniblink49
                 fPath.moveTo(x, tmpY);
             } else {
                 fPath.lineTo(x, tmpY);
@@ -207,15 +118,9 @@ protected:
         }
 
         {
-<<<<<<< HEAD
             SkRect oval;
             oval.set(SkIntToScalar(20), SkIntToScalar(30),
                 SkIntToScalar(100), SkIntToScalar(60));
-=======
-            SkRect  oval;
-            oval.set(SkIntToScalar(20), SkIntToScalar(30),
-                     SkIntToScalar(100), SkIntToScalar(60));
->>>>>>> miniblink49
             oval.offset(x, 0);
             fPath.addRoundRect(oval, SkIntToScalar(8), SkIntToScalar(8));
         }
@@ -225,12 +130,8 @@ protected:
         this->setBGColor(0xFFDDDDDD);
     }
 
-<<<<<<< HEAD
     bool onQuery(SkEvent* evt) override
     {
-=======
-    bool onQuery(SkEvent* evt) override {
->>>>>>> miniblink49
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "PathEffects");
             return true;
@@ -238,38 +139,25 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-<<<<<<< HEAD
     void onDrawContent(SkCanvas* canvas) override
     {
-=======
-    void onDrawContent(SkCanvas* canvas) override {
->>>>>>> miniblink49
         SkPaint paint;
 
         canvas->translate(0, 50);
 
         paint.setColor(SK_ColorBLUE);
-<<<<<<< HEAD
         paint.setPathEffect(make_pe(2, fPhase));
-=======
-        paint.setPathEffect(make_pe(2, fPhase))->unref();
->>>>>>> miniblink49
         canvas->drawPath(fPath, paint);
 
         canvas->translate(0, 50);
 
         paint.setARGB(0xFF, 0, 0xBB, 0);
-<<<<<<< HEAD
         paint.setPathEffect(make_pe(3, fPhase));
-=======
-        paint.setPathEffect(make_pe(3, fPhase))->unref();
->>>>>>> miniblink49
         canvas->drawPath(fPath, paint);
 
         canvas->translate(0, 50);
 
         paint.setARGB(0xFF, 0, 0, 0);
-<<<<<<< HEAD
         paint.setPathEffect(make_warp_pe(fPhase));
         TestRastBuilder testRastBuilder;
         paint.setRasterizer(testRastBuilder.detach());
@@ -278,15 +166,6 @@ protected:
 
     bool onAnimate(const SkAnimTimer& timer) override
     {
-=======
-        paint.setPathEffect(make_warp_pe(fPhase))->unref();
-        TestRastBuilder testRastBuilder;
-        paint.setRasterizer(testRastBuilder.detachRasterizer())->unref();
-        canvas->drawPath(fPath, paint);
-    }
-
-    bool onAnimate(const SkAnimTimer& timer) override {
->>>>>>> miniblink49
         fPhase = timer.scaled(40);
         return true;
     }

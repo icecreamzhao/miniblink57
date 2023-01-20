@@ -5,7 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "SkBitmap.h"
 #include "SkCanvas.h"
 #include "SkString.h"
@@ -16,18 +15,6 @@ namespace skiagm {
 
 static void create_bitmap(SkBitmap* bitmap)
 {
-=======
-#include "gm.h"
-#include "SkBitmap.h"
-#include "SkCanvas.h"
-#include "SkDevice.h"
-#include "SkString.h"
-#include "SkSurface.h"
-
-namespace skiagm {
-
-static void create_bitmap(SkBitmap* bitmap) {
->>>>>>> miniblink49
     const int W = 100;
     const int H = 100;
     bitmap->allocN32Pixels(W, H);
@@ -36,16 +23,11 @@ static void create_bitmap(SkBitmap* bitmap) {
     canvas.drawColor(SK_ColorRED);
     SkPaint paint;
     paint.setColor(SK_ColorBLUE);
-<<<<<<< HEAD
     canvas.drawCircle(SkIntToScalar(W) / 2, SkIntToScalar(H) / 2, SkIntToScalar(W) / 2, paint);
-=======
-    canvas.drawCircle(SkIntToScalar(W)/2, SkIntToScalar(H)/2, SkIntToScalar(W)/2, paint);
->>>>>>> miniblink49
 }
 
 class ExtractBitmapGM : public GM {
 public:
-<<<<<<< HEAD
     ExtractBitmapGM() { }
 
 protected:
@@ -62,21 +44,6 @@ protected:
 
     void onDraw(SkCanvas* canvas) override
     {
-=======
-    ExtractBitmapGM() {}
-
-protected:
-    // overrides from SkEventSink
-    SkString onShortName() override {
-        return SkString("extractbitmap");
-    }
-
-    SkISize onISize() override {
-        return SkISize::Make(600, 600);
-    }
-
-    void onDraw(SkCanvas* canvas) override {
->>>>>>> miniblink49
         SkBitmap bitmap;
         create_bitmap(&bitmap);
         int x = bitmap.width() / 2;

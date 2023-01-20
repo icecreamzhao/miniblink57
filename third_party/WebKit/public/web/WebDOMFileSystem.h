@@ -45,12 +45,8 @@ namespace v8 {
 class Isolate;
 class Object;
 class Value;
-<<<<<<< HEAD
 template <class T>
 class Local;
-=======
-template <class T> class Local;
->>>>>>> miniblink49
 }
 
 namespace blink {
@@ -98,7 +94,6 @@ public:
     BLINK_EXPORT WebFileSystem::Type type() const;
     BLINK_EXPORT WebURL rootURL() const;
 
-<<<<<<< HEAD
     BLINK_EXPORT v8::Local<v8::Value> toV8Value(
         v8::Local<v8::Object> creationContext,
         v8::Isolate*);
@@ -107,13 +102,6 @@ public:
         EntryType,
         v8::Local<v8::Object> creationContext,
         v8::Isolate*);
-=======
-    BLINK_EXPORT v8::Local<v8::Value> toV8Value(v8::Local<v8::Object> creationContext, v8::Isolate*);
-    BLINK_EXPORT v8::Local<v8::Value> createV8Entry(
-        const WebString& path,
-        EntryType,
-        v8::Local<v8::Object> creationContext, v8::Isolate*);
->>>>>>> miniblink49
 
     bool isNull() const { return m_private.isNull(); }
 

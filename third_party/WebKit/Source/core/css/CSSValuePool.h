@@ -29,6 +29,10 @@
 #include "core/CSSPropertyNames.h"
 #include "core/CSSValueKeywords.h"
 #include "core/CoreExport.h"
+#include "core/css/CSSColorValue.h"
+#include "core/css/CSSCustomIdentValue.h"
+#include "core/css/CSSFontFamilyValue.h"
+#include "core/css/CSSIdentifierValue.h"
 #include "core/css/CSSInheritedValue.h"
 #include "core/css/CSSInitialValue.h"
 #include "core/css/CSSPrimitiveValue.h"
@@ -40,52 +44,113 @@
 
 namespace blink {
 
-class CORE_EXPORT CSSValuePool :  public NoBaseWillBeGarbageCollectedFinalized<CSSValuePool> {
-    WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED(CSSValuePool);
+class CORE_EXPORT CSSValuePool
+    : public GarbageCollectedFinalized<CSSValuePool> {
+    WTF_MAKE_NONCOPYABLE(CSSValuePool);
+
 public:
-    PassRefPtrWillBeRawPtr<CSSValueList> createFontFaceValue(const AtomicString&);
-    PassRefPtrWillBeRawPtr<CSSPrimitiveValue> createFontFamilyValue(const String&);
-    PassRefPtrWillBeRawPtr<CSSInheritedValue> createInheritedValue() { return m_inheritedValue; }
-    PassRefPtrWillBeRawPtr<CSSInitialValue> createImplicitInitialValue() { return m_implicitInitialValue; }
-    PassRefPtrWillBeRawPtr<CSSInitialValue> createExplicitInitialValue() { return m_explicitInitialValue; }
-    PassRefPtrWillBeRawPtr<CSSUnsetValue> createUnsetValue() { return m_unsetValue; }
-    PassRefPtrWillBeRawPtr<CSSPrimitiveValue> createIdentifierValue(CSSValueID identifier);
-    PassRefPtrWillBeRawPtr<CSSPrimitiveValue> createIdentifierValue(CSSPropertyID identifier);
-    PassRefPtrWillBeRawPtr<CSSPrimitiveValue> createColorValue(unsigned rgbValue);
-    PassRefPtrWillBeRawPtr<CSSPrimitiveValue> createValue(double value, CSSPrimitiveValue::UnitType);
-    PassRefPtrWillBeRawPtr<CSSPrimitiveValue> createValue(const String& value, CSSPrimitiveValue::UnitType type) { return CSSPrimitiveValue::create(value, type); }
-    PassRefPtrWillBeRawPtr<CSSPrimitiveValue> createValue(const Length& value, const ComputedStyle&);
-    PassRefPtrWillBeRawPtr<CSSPrimitiveValue> createValue(const Length& value, float zoom) { return CSSPrimitiveValue::create(value, zoom); }
-    template<typename T> static PassRefPtrWillBeRawPtr<CSSPrimitiveValue> createValue(T value) { return CSSPrimitiveValue::create(value); }
+    // TODO(sashab): Make all the value pools store const CSSValues.
+    static const int maximumCacheableIntegerValue = 255;
+    using ColorValueCache = HeapHashMap<unsigned, Member<CSSColorValue>>;
+    static const unsigned maximumColorCacheSize = 512;
+    using FontFaceValueCache = HeapHashMap<AtomicString, Member<const CSSValueList>>;
+    static const unsigned maximumFontFaceCacheSize = 128;
+    using FontFamilyValueCache = HeapHashMap<String, Member<CSSFontFamilyValue>>;
+
+    // Cached individual values.
+    CSSColorValue* transparentColor() { return m_colorTransparent; }
+    CSSColorValue* whiteColor() { return m_colorWhite; }
+    CSSColorValue* blackColor() { return m_colorBlack; }
+    CSSInheritedValue* inheritedValue() { return m_inheritedValue; }
+    CSSInitialValue* initialValue() { return m_initialValue; }
+    CSSUnsetValue* unsetValue() { return m_unsetValue; }
+
+    // Vector caches.
+    CSSIdentifierValue* identifierCacheValue(CSSValueID ident)
+    {
+        return m_identifierValueCache[ident];
+    }
+    CSSIdentifierValue* setIdentifierCacheValue(CSSValueID ident,
+        CSSIdentifierValue* cssValue)
+    {
+        return m_identifierValueCache[ident] = cssValue;
+    }
+    CSSPrimitiveValue* pixelCacheValue(int intValue)
+    {
+        return m_pixelValueCache[intValue];
+    }
+    CSSPrimitiveValue* setPixelCacheValue(int intValue,
+        CSSPrimitiveValue* cssValue)
+    {
+        return m_pixelValueCache[intValue] = cssValue;
+    }
+    CSSPrimitiveValue* percentCacheValue(int intValue)
+    {
+        return m_percentValueCache[intValue];
+    }
+    CSSPrimitiveValue* setPercentCacheValue(int intValue,
+        CSSPrimitiveValue* cssValue)
+    {
+        return m_percentValueCache[intValue] = cssValue;
+    }
+    CSSPrimitiveValue* numberCacheValue(int intValue)
+    {
+        return m_numberValueCache[intValue];
+    }
+    CSSPrimitiveValue* setNumberCacheValue(int intValue,
+        CSSPrimitiveValue* cssValue)
+    {
+        return m_numberValueCache[intValue] = cssValue;
+    }
+
+    // Hash map caches.
+    ColorValueCache::AddResult getColorCacheEntry(RGBA32 rgbValue)
+    {
+        // Just wipe out the cache and start rebuilding if it gets too big.
+        if (m_colorValueCache.size() > maximumColorCacheSize)
+            m_colorValueCache.clear();
+        return m_colorValueCache.add(rgbValue, nullptr);
+    }
+    FontFamilyValueCache::AddResult getFontFamilyCacheEntry(
+        const String& familyName)
+    {
+        return m_fontFamilyValueCache.add(familyName, nullptr);
+    }
+    FontFaceValueCache::AddResult getFontFaceCacheEntry(
+        const AtomicString& string)
+    {
+        // Just wipe out the cache and start rebuilding if it gets too big.
+        if (m_fontFaceValueCache.size() > maximumFontFaceCacheSize)
+            m_fontFaceValueCache.clear();
+        return m_fontFaceValueCache.add(string, nullptr);
+    }
 
     DECLARE_TRACE();
 
 private:
     CSSValuePool();
 
-    RefPtrWillBeMember<CSSInheritedValue> m_inheritedValue;
-    RefPtrWillBeMember<CSSInitialValue> m_implicitInitialValue;
-    RefPtrWillBeMember<CSSInitialValue> m_explicitInitialValue;
-    RefPtrWillBeMember<CSSUnsetValue> m_unsetValue;
+    // Cached individual values.
+    Member<CSSInheritedValue> m_inheritedValue;
+    Member<CSSInitialValue> m_initialValue;
+    Member<CSSUnsetValue> m_unsetValue;
+    Member<CSSColorValue> m_colorTransparent;
+    Member<CSSColorValue> m_colorWhite;
+    Member<CSSColorValue> m_colorBlack;
 
-    WillBeHeapVector<RefPtrWillBeMember<CSSPrimitiveValue>, numCSSValueKeywords> m_identifierValueCache;
+    // Vector caches.
+    HeapVector<Member<CSSIdentifierValue>, numCSSValueKeywords>
+        m_identifierValueCache;
+    HeapVector<Member<CSSPrimitiveValue>, maximumCacheableIntegerValue + 1>
+        m_pixelValueCache;
+    HeapVector<Member<CSSPrimitiveValue>, maximumCacheableIntegerValue + 1>
+        m_percentValueCache;
+    HeapVector<Member<CSSPrimitiveValue>, maximumCacheableIntegerValue + 1>
+        m_numberValueCache;
 
-    typedef WillBeHeapHashMap<unsigned, RefPtrWillBeMember<CSSPrimitiveValue>> ColorValueCache;
+    // Hash map caches.
     ColorValueCache m_colorValueCache;
-    RefPtrWillBeMember<CSSPrimitiveValue> m_colorTransparent;
-    RefPtrWillBeMember<CSSPrimitiveValue> m_colorWhite;
-    RefPtrWillBeMember<CSSPrimitiveValue> m_colorBlack;
-
-    static const int maximumCacheableIntegerValue = 255;
-
-    WillBeHeapVector<RefPtrWillBeMember<CSSPrimitiveValue>, maximumCacheableIntegerValue + 1> m_pixelValueCache;
-    WillBeHeapVector<RefPtrWillBeMember<CSSPrimitiveValue>, maximumCacheableIntegerValue + 1> m_percentValueCache;
-    WillBeHeapVector<RefPtrWillBeMember<CSSPrimitiveValue>, maximumCacheableIntegerValue + 1> m_numberValueCache;
-
-    typedef WillBeHeapHashMap<AtomicString, RefPtrWillBeMember<CSSValueList>> FontFaceValueCache;
     FontFaceValueCache m_fontFaceValueCache;
-
-    typedef WillBeHeapHashMap<String, RefPtrWillBeMember<CSSPrimitiveValue>> FontFamilyValueCache;
     FontFamilyValueCache m_fontFamilyValueCache;
 
     friend CORE_EXPORT CSSValuePool& cssValuePool();
@@ -93,6 +158,6 @@ private:
 
 CORE_EXPORT CSSValuePool& cssValuePool();
 
-}
+} // namespace blink
 
 #endif

@@ -37,10 +37,13 @@ namespace blink {
 
 class PasswordInputType final : public BaseTextInputType {
 public:
-    static PassRefPtrWillBeRawPtr<InputType> create(HTMLInputElement&);
+    static InputType* create(HTMLInputElement&);
 
 private:
-    PasswordInputType(HTMLInputElement& element) : BaseTextInputType(element) { }
+    explicit PasswordInputType(HTMLInputElement& element)
+        : BaseTextInputType(element)
+    {
+    }
     void countUsage() override;
     const AtomicString& formControlType() const override;
     bool shouldSaveAndRestoreFormControlState() const override;
@@ -49,6 +52,8 @@ private:
     bool shouldRespectListAttribute() override;
     void enableSecureTextInput() override;
     void disableSecureTextInput() override;
+    void onAttachWithLayoutObject() override;
+    void onDetachWithLayoutObject() override;
 };
 
 } // namespace blink

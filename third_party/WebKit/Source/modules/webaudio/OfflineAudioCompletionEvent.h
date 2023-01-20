@@ -10,7 +10,6 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
-<<<<<<< HEAD
  * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -22,18 +21,6 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
-=======
- * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
->>>>>>> miniblink49
  */
 
 #ifndef OfflineAudioCompletionEvent_h
@@ -41,17 +28,13 @@
 
 #include "modules/EventModules.h"
 #include "modules/webaudio/AudioBuffer.h"
-<<<<<<< HEAD
 #include "modules/webaudio/OfflineAudioCompletionEventInit.h"
-=======
->>>>>>> miniblink49
 #include "wtf/PassRefPtr.h"
 #include "wtf/RefPtr.h"
 
 namespace blink {
 
 class AudioBuffer;
-<<<<<<< HEAD
 class OfflineAudioCompletionEventInit;
 
 class OfflineAudioCompletionEvent final : public Event {
@@ -63,14 +46,6 @@ public:
     static OfflineAudioCompletionEvent* create(
         const AtomicString& type,
         const OfflineAudioCompletionEventInit&);
-=======
-
-class OfflineAudioCompletionEvent final : public Event {
-    DEFINE_WRAPPERTYPEINFO();
-public:
-    static PassRefPtrWillBeRawPtr<OfflineAudioCompletionEvent> create();
-    static PassRefPtrWillBeRawPtr<OfflineAudioCompletionEvent> create(AudioBuffer* renderedBuffer);
->>>>>>> miniblink49
 
     ~OfflineAudioCompletionEvent() override;
 
@@ -83,15 +58,10 @@ public:
 private:
     OfflineAudioCompletionEvent();
     explicit OfflineAudioCompletionEvent(AudioBuffer* renderedBuffer);
-<<<<<<< HEAD
     explicit OfflineAudioCompletionEvent(const AtomicString& type,
         const OfflineAudioCompletionEventInit&);
 
     Member<AudioBuffer> m_renderedBuffer;
-=======
-
-    PersistentWillBeMember<AudioBuffer> m_renderedBuffer;
->>>>>>> miniblink49
 };
 
 } // namespace blink

@@ -37,10 +37,6 @@ namespace blink {
 
 // This function assumes NSColors are in DeviceRGB colorspace
 PLATFORM_EXPORT NSColor* nsColor(const Color&);
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 }
 
 #endif

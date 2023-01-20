@@ -28,10 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "public/platform/WebFileSystemCallbacks.h"
 
 #include "platform/AsyncFileSystemCallbacks.h"
@@ -41,7 +37,6 @@
 #include "public/platform/WebFileSystemEntry.h"
 #include "public/platform/WebFileWriter.h"
 #include "public/platform/WebString.h"
-<<<<<<< HEAD
 #include "wtf/PassRefPtr.h"
 #include "wtf/PtrUtil.h"
 #include "wtf/RefCounted.h"
@@ -56,25 +51,11 @@ public:
         std::unique_ptr<AsyncFileSystemCallbacks> callbacks)
     {
         return adoptRef(new WebFileSystemCallbacksPrivate(std::move(callbacks)));
-=======
-#include "wtf/PassOwnPtr.h"
-#include "wtf/PassRefPtr.h"
-#include "wtf/RefCounted.h"
-
-namespace blink {
-
-class WebFileSystemCallbacksPrivate : public RefCounted<WebFileSystemCallbacksPrivate> {
-public:
-    static PassRefPtr<WebFileSystemCallbacksPrivate> create(const PassOwnPtr<AsyncFileSystemCallbacks>& callbacks)
-    {
-        return adoptRef(new WebFileSystemCallbacksPrivate(callbacks));
->>>>>>> miniblink49
     }
 
     AsyncFileSystemCallbacks* callbacks() { return m_callbacks.get(); }
 
 private:
-<<<<<<< HEAD
     WebFileSystemCallbacksPrivate(
         std::unique_ptr<AsyncFileSystemCallbacks> callbacks)
         : m_callbacks(std::move(callbacks))
@@ -87,15 +68,6 @@ WebFileSystemCallbacks::WebFileSystemCallbacks(
     std::unique_ptr<AsyncFileSystemCallbacks>&& callbacks)
 {
     m_private = WebFileSystemCallbacksPrivate::create(std::move(callbacks));
-=======
-    WebFileSystemCallbacksPrivate(const PassOwnPtr<AsyncFileSystemCallbacks>& callbacks) : m_callbacks(callbacks) { }
-    OwnPtr<AsyncFileSystemCallbacks> m_callbacks;
-};
-
-WebFileSystemCallbacks::WebFileSystemCallbacks(const PassOwnPtr<AsyncFileSystemCallbacks>& callbacks)
-{
-    m_private = WebFileSystemCallbacksPrivate::create(callbacks);
->>>>>>> miniblink49
 }
 
 void WebFileSystemCallbacks::reset()
@@ -127,7 +99,6 @@ void WebFileSystemCallbacks::didReadMetadata(const WebFileInfo& webFileInfo)
     m_private.reset();
 }
 
-<<<<<<< HEAD
 void WebFileSystemCallbacks::didCreateSnapshotFile(
     const WebFileInfo& webFileInfo)
 {
@@ -139,16 +110,6 @@ void WebFileSystemCallbacks::didCreateSnapshotFile(
     blobData->appendFile(webFileInfo.platformPath, 0, webFileInfo.length,
         invalidFileTime());
     RefPtr<BlobDataHandle> snapshotBlob = BlobDataHandle::create(std::move(blobData), webFileInfo.length);
-=======
-void WebFileSystemCallbacks::didCreateSnapshotFile(const WebFileInfo& webFileInfo)
-{
-    ASSERT(!m_private.isNull());
-    // It's important to create a BlobDataHandle that refers to the platform file path prior
-    // to return from this method so the underlying file will not be deleted.
-    OwnPtr<BlobData> blobData = BlobData::create();
-    blobData->appendFile(webFileInfo.platformPath);
-    RefPtr<BlobDataHandle> snapshotBlob = BlobDataHandle::create(blobData.release(), webFileInfo.length);
->>>>>>> miniblink49
 
     FileMetadata fileMetadata;
     fileMetadata.modificationTime = webFileInfo.modificationTime;
@@ -159,7 +120,6 @@ void WebFileSystemCallbacks::didCreateSnapshotFile(const WebFileInfo& webFileInf
     m_private.reset();
 }
 
-<<<<<<< HEAD
 void WebFileSystemCallbacks::didReadDirectory(
     const WebVector<WebFileSystemEntry>& entries,
     bool hasMore)
@@ -168,30 +128,18 @@ void WebFileSystemCallbacks::didReadDirectory(
     for (size_t i = 0; i < entries.size(); ++i)
         m_private->callbacks()->didReadDirectoryEntry(entries[i].name,
             entries[i].isDirectory);
-=======
-void WebFileSystemCallbacks::didReadDirectory(const WebVector<WebFileSystemEntry>& entries, bool hasMore)
-{
-    ASSERT(!m_private.isNull());
-    for (size_t i = 0; i < entries.size(); ++i)
-        m_private->callbacks()->didReadDirectoryEntry(entries[i].name, entries[i].isDirectory);
->>>>>>> miniblink49
     m_private->callbacks()->didReadDirectoryEntries(hasMore);
     m_private.reset();
 }
 
-<<<<<<< HEAD
 void WebFileSystemCallbacks::didOpenFileSystem(const WebString& name,
     const WebURL& rootURL)
-=======
-void WebFileSystemCallbacks::didOpenFileSystem(const WebString& name, const WebURL& rootURL)
->>>>>>> miniblink49
 {
     ASSERT(!m_private.isNull());
     m_private->callbacks()->didOpenFileSystem(name, rootURL);
     m_private.reset();
 }
 
-<<<<<<< HEAD
 void WebFileSystemCallbacks::didResolveURL(const WebString& name,
     const WebURL& rootURL,
     WebFileSystemType type,
@@ -210,19 +158,6 @@ void WebFileSystemCallbacks::didCreateFileWriter(WebFileWriter* webFileWriter,
     ASSERT(!m_private.isNull());
     m_private->callbacks()->didCreateFileWriter(WTF::wrapUnique(webFileWriter),
         length);
-=======
-void WebFileSystemCallbacks::didResolveURL(const WebString& name, const WebURL& rootURL, WebFileSystemType type, const WebString& filePath, bool isDirectory)
-{
-    ASSERT(!m_private.isNull());
-    m_private->callbacks()->didResolveURL(name, rootURL, static_cast<FileSystemType>(type), filePath, isDirectory);
-    m_private.reset();
-}
-
-void WebFileSystemCallbacks::didCreateFileWriter(WebFileWriter* webFileWriter, long long length)
-{
-    ASSERT(!m_private.isNull());
-    m_private->callbacks()->didCreateFileWriter(adoptPtr(webFileWriter), length);
->>>>>>> miniblink49
     m_private.reset();
 }
 

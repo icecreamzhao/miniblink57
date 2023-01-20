@@ -7,7 +7,6 @@
 
 #include "SampleCode.h"
 #include "SkAnimTimer.h"
-<<<<<<< HEAD
 #include "SkCanvas.h"
 #include "SkDrawable.h"
 #include "SkPath.h"
@@ -46,19 +45,6 @@ static sk_sp<SkImage> make_atlas(int atlasSize, int cellSize)
 {
     SkImageInfo info = SkImageInfo::MakeN32Premul(atlasSize, atlasSize);
     auto surface(SkSurface::MakeRaster(info));
-=======
-#include "SkView.h"
-#include "SkCanvas.h"
-#include "SkDrawable.h"
-#include "SkPath.h"
-#include "SkRandom.h"
-#include "SkRSXform.h"
-#include "SkSurface.h"
-
-static SkImage* make_atlas(int atlasSize, int cellSize) {
-    SkImageInfo info = SkImageInfo::MakeN32Premul(atlasSize, atlasSize);
-    SkAutoTUnref<SkSurface> surface(SkSurface::NewRaster(info));
->>>>>>> miniblink49
     SkCanvas* canvas = surface->getCanvas();
 
     SkPaint paint;
@@ -75,19 +61,11 @@ static SkImage* make_atlas(int atlasSize, int cellSize) {
             paint.setColor(rand.nextU());
             paint.setAlpha(0xFF);
             int index = i % strlen(s);
-<<<<<<< HEAD
             canvas->drawText(&s[index], 1, x + half, y + half + half / 2, paint);
             i += 1;
         }
     }
     return surface->makeImageSnapshot();
-=======
-            canvas->drawText(&s[index], 1, x + half, y + half + half/2, paint);
-            i += 1;
-        }
-    }
-    return surface->newImageSnapshot();
->>>>>>> miniblink49
 }
 
 class DrawAtlasDrawable : public SkDrawable {
@@ -98,7 +76,6 @@ class DrawAtlasDrawable : public SkDrawable {
     };
 
     struct Rec {
-<<<<<<< HEAD
         SkPoint fCenter;
         SkVector fVelocity;
         SkScalar fScale;
@@ -110,18 +87,6 @@ class DrawAtlasDrawable : public SkDrawable {
 
         void advance(const SkRect& bounds)
         {
-=======
-        SkPoint     fCenter;
-        SkVector    fVelocity;
-        SkScalar    fScale;
-        SkScalar    fDScale;
-        SkScalar    fRadian;
-        SkScalar    fDRadian;
-        SkScalar    fAlpha;
-        SkScalar    fDAlpha;
-
-        void advance(const SkRect& bounds) {
->>>>>>> miniblink49
             fCenter += fVelocity;
             if (fCenter.fX > bounds.right()) {
                 SkASSERT(fVelocity.fX > 0);
@@ -141,11 +106,7 @@ class DrawAtlasDrawable : public SkDrawable {
             }
 
             fScale += fDScale;
-<<<<<<< HEAD
             if (fScale > 2 || fScale < SK_Scalar1 / 2) {
-=======
-            if (fScale > 2 || fScale < SK_Scalar1/2) {
->>>>>>> miniblink49
                 fDScale = -fDScale;
             }
 
@@ -161,7 +122,6 @@ class DrawAtlasDrawable : public SkDrawable {
                 fDAlpha = -fDAlpha;
             }
         }
-<<<<<<< HEAD
 
         SkRSXform asRSXform() const
         {
@@ -172,30 +132,10 @@ class DrawAtlasDrawable : public SkDrawable {
 
     DrawAtlasProc fProc;
 
-=======
-        
-        SkRSXform asRSXform() const {
-            SkMatrix m;
-            m.setTranslate(-8, -8);
-            m.postScale(fScale, fScale);
-            m.postRotate(SkRadiansToDegrees(fRadian));
-            m.postTranslate(fCenter.fX, fCenter.fY);
-
-            SkRSXform x;
-            x.fSCos = m.getScaleX();
-            x.fSSin = m.getSkewY();
-            x.fTx = m.getTranslateX();
-            x.fTy = m.getTranslateY();
-            return x;
-        }
-    };
-
->>>>>>> miniblink49
     enum {
         N = 256,
     };
 
-<<<<<<< HEAD
     sk_sp<SkImage> fAtlas;
     Rec fRec[N];
     SkRect fTex[N];
@@ -210,18 +150,6 @@ public:
     {
         SkRandom rand;
         fAtlas = make_atlas(kAtlasSize, kCellSize);
-=======
-    SkAutoTUnref<SkImage> fAtlas;
-    Rec         fRec[N];
-    SkRect      fTex[N];
-    SkRect      fBounds;
-    bool        fUseColors;
-
-public:
-    DrawAtlasDrawable(const SkRect& r) : fBounds(r), fUseColors(false) {
-        SkRandom rand;
-        fAtlas.reset(make_atlas(kAtlasSize, kCellSize));
->>>>>>> miniblink49
         const SkScalar kMaxSpeed = 5;
         const SkScalar cell = SkIntToScalar(kCellSize);
         int i = 0;
@@ -230,21 +158,12 @@ public:
                 const SkScalar sx = SkIntToScalar(x);
                 const SkScalar sy = SkIntToScalar(y);
                 fTex[i].setXYWH(sx, sy, cell, cell);
-<<<<<<< HEAD
 
                 fRec[i].fCenter.set(sx + cell / 2, sy + 3 * cell / 4);
                 fRec[i].fVelocity.fX = rand.nextSScalar1() * kMaxSpeed;
                 fRec[i].fVelocity.fY = rand.nextSScalar1() * kMaxSpeed;
                 fRec[i].fScale = 1;
                 fRec[i].fDScale = rand.nextSScalar1() / 16;
-=======
-                
-                fRec[i].fCenter.set(sx + cell/2, sy + 3*cell/4);
-                fRec[i].fVelocity.fX = rand.nextSScalar1() * kMaxSpeed;
-                fRec[i].fVelocity.fY = rand.nextSScalar1() * kMaxSpeed;
-                fRec[i].fScale = 1;
-                fRec[i].fDScale = rand.nextSScalar1() / 4;
->>>>>>> miniblink49
                 fRec[i].fRadian = 0;
                 fRec[i].fDRadian = rand.nextSScalar1() / 8;
                 fRec[i].fAlpha = rand.nextUScalar1();
@@ -254,22 +173,14 @@ public:
         }
     }
 
-<<<<<<< HEAD
     void toggleUseColors()
     {
-=======
-    void toggleUseColors() {
->>>>>>> miniblink49
         fUseColors = !fUseColors;
     }
 
 protected:
-<<<<<<< HEAD
     void onDraw(SkCanvas* canvas) override
     {
-=======
-    void onDraw(SkCanvas* canvas) override {
->>>>>>> miniblink49
         SkRSXform xform[N];
         SkColor colors[N];
 
@@ -284,21 +195,12 @@ protected:
         paint.setFilterQuality(kLow_SkFilterQuality);
 
         const SkRect cull = this->getBounds();
-<<<<<<< HEAD
         const SkColor* colorsPtr = fUseColors ? colors : nullptr;
         fProc(canvas, fAtlas.get(), xform, fTex, colorsPtr, N, &cull, &paint);
     }
 
     SkRect onGetBounds() override
     {
-=======
-        const SkColor* colorsPtr = fUseColors ? colors : NULL;
-        canvas->drawAtlas(fAtlas, xform, fTex, colorsPtr, N, SkXfermode::kModulate_Mode,
-                          &cull, &paint);
-    }
-    
-    SkRect onGetBounds() override {
->>>>>>> miniblink49
         const SkScalar border = kMaxScale * kCellSize;
         SkRect r = fBounds;
         r.outset(border, border);
@@ -310,7 +212,6 @@ private:
 };
 
 class DrawAtlasView : public SampleView {
-<<<<<<< HEAD
     const char* fName;
     DrawAtlasDrawable* fDrawable;
 
@@ -323,52 +224,30 @@ public:
 
     ~DrawAtlasView() override
     {
-=======
-    DrawAtlasDrawable* fDrawable;
-
-public:
-    DrawAtlasView() {
-        fDrawable = new DrawAtlasDrawable(SkRect::MakeWH(640, 480));
-    }
-
-    ~DrawAtlasView() override {
->>>>>>> miniblink49
         fDrawable->unref();
     }
 
 protected:
-<<<<<<< HEAD
     bool onQuery(SkEvent* evt) override
     {
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, fName);
-=======
-    bool onQuery(SkEvent* evt) override {
-        if (SampleCode::TitleQ(*evt)) {
-            SampleCode::TitleR(evt, "DrawAtlas");
->>>>>>> miniblink49
             return true;
         }
         SkUnichar uni;
         if (SampleCode::CharQ(*evt, &uni)) {
             switch (uni) {
-<<<<<<< HEAD
             case 'C':
                 fDrawable->toggleUseColors();
                 this->inval(nullptr);
                 return true;
             default:
                 break;
-=======
-                case 'C': fDrawable->toggleUseColors(); this->inval(NULL); return true;
-                default: break;
->>>>>>> miniblink49
             }
         }
         return this->INHERITED::onQuery(evt);
     }
 
-<<<<<<< HEAD
     void onDrawContent(SkCanvas* canvas) override
     {
         canvas->drawDrawable(fDrawable);
@@ -378,13 +257,6 @@ protected:
     {
         return true;
     }
-=======
-    void onDrawContent(SkCanvas* canvas) override {
-        canvas->drawDrawable(fDrawable);
-        this->inval(NULL);
-    }
-
->>>>>>> miniblink49
 #if 0
     // TODO: switch over to use this for our animation
     bool onAnimate(const SkAnimTimer& timer) override {
@@ -400,10 +272,5 @@ private:
 
 //////////////////////////////////////////////////////////////////////////////
 
-<<<<<<< HEAD
 DEF_SAMPLE(return new DrawAtlasView("DrawAtlas", draw_atlas);)
 DEF_SAMPLE(return new DrawAtlasView("DrawAtlasSim", draw_atlas_sim);)
-=======
-static SkView* MyFactory() { return new DrawAtlasView; }
-static SkViewRegister reg(MyFactory);
->>>>>>> miniblink49

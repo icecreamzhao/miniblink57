@@ -2,7 +2,8 @@
  * Copyright (C) 2000 Lars Knoll (knoll@kde.org)
  *           (C) 2000 Antti Koivisto (koivisto@kde.org)
  *           (C) 2000 Dirk Mueller (mueller@kde.org)
- * Copyright (C) 2003, 2005, 2006, 2007, 2008, 2013 Apple Inc. All rights reserved.
+ * Copyright (C) 2003, 2005, 2006, 2007, 2008, 2013 Apple Inc. All rights
+ * reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,7 +22,6 @@
  *
  */
 
-#include "config.h"
 #include "core/style/NinePieceImage.h"
 
 #include "core/style/DataEquivalency.h"
@@ -41,7 +41,13 @@ NinePieceImage::NinePieceImage()
 {
 }
 
-NinePieceImage::NinePieceImage(PassRefPtr<StyleImage> image, LengthBox imageSlices, bool fill, const BorderImageLengthBox& borderSlices, const BorderImageLengthBox& outset, ENinePieceImageRule horizontalRule, ENinePieceImageRule verticalRule)
+NinePieceImage::NinePieceImage(StyleImage* image,
+    LengthBox imageSlices,
+    bool fill,
+    const BorderImageLengthBox& borderSlices,
+    const BorderImageLengthBox& outset,
+    ENinePieceImageRule horizontalRule,
+    ENinePieceImageRule verticalRule)
 {
     m_data.init();
     m_data.access()->image = image;
@@ -58,9 +64,15 @@ NinePieceImageData::NinePieceImageData()
     , horizontalRule(StretchImageRule)
     , verticalRule(StretchImageRule)
     , image(nullptr)
-    , imageSlices(Length(100, Percent), Length(100, Percent), Length(100, Percent), Length(100, Percent))
+    , imageSlices(Length(100, Percent),
+          Length(100, Percent),
+          Length(100, Percent),
+          Length(100, Percent))
     , borderSlices(1.0, 1.0, 1.0, 1.0)
-    , outset(Length(0, Fixed), Length(0, Fixed), Length(0, Fixed), Length(0, Fixed))
+    , outset(Length(0, Fixed),
+          Length(0, Fixed),
+          Length(0, Fixed),
+          Length(0, Fixed))
 {
 }
 
@@ -78,13 +90,7 @@ NinePieceImageData::NinePieceImageData(const NinePieceImageData& other)
 
 bool NinePieceImageData::operator==(const NinePieceImageData& other) const
 {
-    return dataEquivalent(image, other.image)
-        && imageSlices == other.imageSlices
-        && fill == other.fill
-        && borderSlices == other.borderSlices
-        && outset == other.outset
-        && horizontalRule == other.horizontalRule
-        && verticalRule == other.verticalRule;
+    return dataEquivalent(image, other.image) && imageSlices == other.imageSlices && fill == other.fill && borderSlices == other.borderSlices && outset == other.outset && horizontalRule == other.horizontalRule && verticalRule == other.verticalRule;
 }
 
-}
+} // namespace blink

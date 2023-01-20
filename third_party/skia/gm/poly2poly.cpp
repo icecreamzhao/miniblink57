@@ -5,12 +5,9 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "Resources.h"
 #include "SkPath.h"
 #include "SkTypeface.h"
-=======
->>>>>>> miniblink49
 #include "gm.h"
 
 class SkJSCanvas {
@@ -35,7 +32,6 @@ public:
     void fillText(const char text[], double x, double y);
 
 private:
-<<<<<<< HEAD
     SkCanvas* fTarget;
     SkPaint fFillPaint;
     SkPaint fStrokePaint;
@@ -45,15 +41,6 @@ private:
 SkJSCanvas::SkJSCanvas(SkCanvas* target)
     : fTarget(target)
 {
-=======
-    SkCanvas*   fTarget;
-    SkPaint     fFillPaint;
-    SkPaint     fStrokePaint;
-    SkPath      fPath;
-};
-
-SkJSCanvas::SkJSCanvas(SkCanvas* target) : fTarget(target) {
->>>>>>> miniblink49
     fFillPaint.setAntiAlias(true);
     sk_tool_utils::set_portable_typeface(&fFillPaint);
     fStrokePaint.setAntiAlias(true);
@@ -61,17 +48,12 @@ SkJSCanvas::SkJSCanvas(SkCanvas* target) : fTarget(target) {
     fStrokePaint.setStrokeWidth(SK_Scalar1);
 }
 
-<<<<<<< HEAD
 SkJSCanvas::~SkJSCanvas() { }
-=======
-SkJSCanvas::~SkJSCanvas() {}
->>>>>>> miniblink49
 
 void SkJSCanvas::save() { fTarget->save(); }
 void SkJSCanvas::restore() { fTarget->restore(); }
 
 void SkJSCanvas::beginPath() { fPath.reset(); }
-<<<<<<< HEAD
 void SkJSCanvas::moveTo(double x, double y)
 {
     fPath.moveTo(SkDoubleToScalar(x), SkDoubleToScalar(y));
@@ -79,19 +61,11 @@ void SkJSCanvas::moveTo(double x, double y)
 
 void SkJSCanvas::lineTo(double x, double y)
 {
-=======
-void SkJSCanvas::moveTo(double x, double y) {
-    fPath.moveTo(SkDoubleToScalar(x), SkDoubleToScalar(y));
-}
-
-void SkJSCanvas::lineTo(double x, double y) {
->>>>>>> miniblink49
     fPath.lineTo(SkDoubleToScalar(x), SkDoubleToScalar(y));
 }
 
 void SkJSCanvas::closePath() { fPath.close(); }
 
-<<<<<<< HEAD
 void SkJSCanvas::fill()
 {
     fTarget->drawPath(fPath, fFillPaint);
@@ -99,32 +73,18 @@ void SkJSCanvas::fill()
 
 void SkJSCanvas::stroke()
 {
-=======
-void SkJSCanvas::fill() {
-    fTarget->drawPath(fPath, fFillPaint);
-}
-
-void SkJSCanvas::stroke() {
->>>>>>> miniblink49
     fStrokePaint.setStrokeWidth(SkDoubleToScalar(lineWidth));
     fTarget->drawPath(fPath, fStrokePaint);
 }
 
-<<<<<<< HEAD
 void SkJSCanvas::fillText(const char text[], double x, double y)
 {
     fTarget->drawText(text, strlen(text),
         SkDoubleToScalar(x), SkDoubleToScalar(y), fFillPaint);
-=======
-void SkJSCanvas::fillText(const char text[], double x, double y) {
-    fTarget->drawText(text, strlen(text),
-                      SkDoubleToScalar(x), SkDoubleToScalar(y), fFillPaint);
->>>>>>> miniblink49
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-<<<<<<< HEAD
 static void dump(const SkPath& path)
 {
     const SkRect& r = path.getBounds();
@@ -155,27 +115,6 @@ static void test_stroke(SkCanvas* canvas)
         path.moveTo(0, 0);
         path.lineTo(100, 100);
         path.moveTo(200, 200);
-=======
-static void dump(const SkPath& path) {
-    const SkRect& r = path.getBounds();
-    SkDebugf("isEmpty %d, bounds [%g %g %g %g]\n", path.isEmpty(),
-             r.fLeft, r.fTop, r.fRight, r.fBottom);
-}
-
-static void test_stroke(SkCanvas* canvas) {
-    if (true) {
-        SkPath path;
-        dump(path);
-        path.reset(); path.moveTo(0, 0);
-        dump(path);
-        path.reset(); path.moveTo(100, 100);
-        dump(path);
-        path.reset(); path.moveTo(0, 0); path.moveTo(100, 100);
-        dump(path);
-        path.reset(); path.moveTo(0, 0); path.lineTo(100, 100);
-        dump(path);
-        path.reset(); path.moveTo(0, 0); path.lineTo(100, 100); path.moveTo(200, 200);
->>>>>>> miniblink49
         dump(path);
     }
 
@@ -258,7 +197,6 @@ static void test_stroke(SkCanvas* canvas) {
 
 class Poly2PolyGM : public skiagm::GM {
 public:
-<<<<<<< HEAD
     Poly2PolyGM() { }
 
 protected:
@@ -269,49 +207,25 @@ protected:
 
     SkISize onISize() override
     {
-=======
-    Poly2PolyGM() {}
-
-protected:
-
-    SkString onShortName() override {
-        return SkString("poly2poly");
-    }
-
-    SkISize onISize() override {
->>>>>>> miniblink49
         return SkISize::Make(835, 840);
     }
 
     static void doDraw(SkCanvas* canvas, SkPaint* paint, const int isrc[],
-<<<<<<< HEAD
         const int idst[], int count)
     {
-=======
-                       const int idst[], int count) {
->>>>>>> miniblink49
         SkMatrix matrix;
         SkPoint src[4], dst[4];
 
         for (int i = 0; i < count; i++) {
-<<<<<<< HEAD
             src[i].set(SkIntToScalar(isrc[2 * i + 0]), SkIntToScalar(isrc[2 * i + 1]));
             dst[i].set(SkIntToScalar(idst[2 * i + 0]), SkIntToScalar(idst[2 * i + 1]));
-=======
-            src[i].set(SkIntToScalar(isrc[2*i+0]), SkIntToScalar(isrc[2*i+1]));
-            dst[i].set(SkIntToScalar(idst[2*i+0]), SkIntToScalar(idst[2*i+1]));
->>>>>>> miniblink49
         }
 
         canvas->save();
         matrix.setPolyToPoly(src, dst, count);
         canvas->concat(matrix);
 
-<<<<<<< HEAD
         paint->setColor(sk_tool_utils::color_to_565(SK_ColorGRAY));
-=======
-        paint->setColor(SK_ColorGRAY);
->>>>>>> miniblink49
         paint->setStyle(SkPaint::kStroke_Style);
         const SkScalar D = SkIntToScalar(64);
         canvas->drawRectCoords(0, 0, D, D, *paint);
@@ -322,7 +236,6 @@ protected:
         paint->getFontMetrics(&fm);
         paint->setColor(SK_ColorRED);
         paint->setStyle(SkPaint::kFill_Style);
-<<<<<<< HEAD
         SkScalar x = D / 2;
         SkScalar y = D / 2 - (fm.fAscent + fm.fDescent) / 2;
         uint16_t glyphID = 3; // X
@@ -346,23 +259,6 @@ protected:
         paint.setAntiAlias(true);
         paint.setTypeface(fEmFace);
         paint.setTextEncoding(SkPaint::kGlyphID_TextEncoding);
-=======
-        SkScalar x = D/2;
-        SkScalar y = D/2 - (fm.fAscent + fm.fDescent)/2;
-        SkString str;
-        str.appendS32(count);
-        canvas->drawText(str.c_str(), str.size(), x, y, *paint);
-
-        canvas->restore();
-    }
-
-    void onDraw(SkCanvas* canvas) override {
-        if (false) { test_stroke(canvas); return; }
-
-        SkPaint paint;
-        paint.setAntiAlias(true);
-        sk_tool_utils::set_portable_typeface(&paint);
->>>>>>> miniblink49
         paint.setStrokeWidth(SkIntToScalar(4));
         paint.setTextSize(SkIntToScalar(40));
         paint.setTextAlign(SkPaint::kCenter_Align);
@@ -402,16 +298,9 @@ protected:
 
 private:
     typedef skiagm::GM INHERITED;
-<<<<<<< HEAD
     sk_sp<SkTypeface> fEmFace;
-=======
->>>>>>> miniblink49
 };
 
 //////////////////////////////////////////////////////////////////////////////
 
-<<<<<<< HEAD
 DEF_GM(return new Poly2PolyGM;)
-=======
-DEF_GM( return new Poly2PolyGM; )
->>>>>>> miniblink49

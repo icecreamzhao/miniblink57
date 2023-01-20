@@ -9,14 +9,4 @@
 #include "modules/EventModulesNames.h"
 #include "modules/EventTargetModulesNames.h"
 
-<<<<<<< HEAD
-=======
-namespace blink {
-
-class IDBRequest;
-class MediaStream;
-
-} // namespace blink
-
->>>>>>> miniblink49
 #endif // EventTargetModules_h

@@ -28,10 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "public/web/WebImageDecoder.h"
 
 #include "platform/SharedBuffer.h"
@@ -41,11 +37,6 @@
 #include "public/platform/WebData.h"
 #include "public/platform/WebImage.h"
 #include "public/platform/WebSize.h"
-<<<<<<< HEAD
-=======
-#include "wtf/OwnPtr.h"
-#include "wtf/PassOwnPtr.h"
->>>>>>> miniblink49
 #include "wtf/PassRefPtr.h"
 
 namespace blink {
@@ -59,7 +50,6 @@ void WebImageDecoder::init(Type type)
 {
     size_t maxDecodedBytes = Platform::current()->maxDecodedImageBytes();
 
-<<<<<<< HEAD
     //   switch (type) {
     //     case TypeBMP:
     //       m_private = new BMPImageDecoder(
@@ -73,92 +63,50 @@ void WebImageDecoder::init(Type type)
     //       break;
     //   }
     DebugBreak();
-=======
-    switch (type) {
-    case TypeBMP:
-        m_private = new BMPImageDecoder(ImageSource::AlphaPremultiplied, ImageSource::GammaAndColorProfileApplied, maxDecodedBytes);
-        break;
-    case TypeICO:
-        m_private = new ICOImageDecoder(ImageSource::AlphaPremultiplied, ImageSource::GammaAndColorProfileApplied, maxDecodedBytes);
-        break;
-    }
->>>>>>> miniblink49
 }
 
 void WebImageDecoder::setData(const WebData& data, bool allDataReceived)
 {
-<<<<<<< HEAD
     DCHECK(m_private);
-=======
-    ASSERT(m_private);
->>>>>>> miniblink49
     m_private->setData(PassRefPtr<SharedBuffer>(data).get(), allDataReceived);
 }
 
 bool WebImageDecoder::isFailed() const
 {
-<<<<<<< HEAD
     DCHECK(m_private);
-=======
-    ASSERT(m_private);
->>>>>>> miniblink49
     return m_private->failed();
 }
 
 bool WebImageDecoder::isSizeAvailable() const
 {
-<<<<<<< HEAD
     DCHECK(m_private);
-=======
-    ASSERT(m_private);
->>>>>>> miniblink49
     return m_private->isSizeAvailable();
 }
 
 WebSize WebImageDecoder::size() const
 {
-<<<<<<< HEAD
     DCHECK(m_private);
-=======
-    ASSERT(m_private);
->>>>>>> miniblink49
     return m_private->size();
 }
 
 size_t WebImageDecoder::frameCount() const
 {
-<<<<<<< HEAD
     DCHECK(m_private);
-=======
-    ASSERT(m_private);
->>>>>>> miniblink49
     return m_private->frameCount();
 }
 
 bool WebImageDecoder::isFrameCompleteAtIndex(int index) const
 {
-<<<<<<< HEAD
     DCHECK(m_private);
     ImageFrame* const frameBuffer = m_private->frameBufferAtIndex(index);
     if (!frameBuffer)
         return false;
     return frameBuffer->getStatus() == ImageFrame::FrameComplete;
-=======
-    ASSERT(m_private);
-    ImageFrame* const frameBuffer = m_private->frameBufferAtIndex(index);
-    if (!frameBuffer)
-        return false;
-    return frameBuffer->status() == ImageFrame::FrameComplete;
->>>>>>> miniblink49
 }
 
 WebImage WebImageDecoder::getFrameAtIndex(int index = 0) const
 {
-<<<<<<< HEAD
     DCHECK(m_private);
-=======
-    ASSERT(m_private);
->>>>>>> miniblink49
     ImageFrame* const frameBuffer = m_private->frameBufferAtIndex(index);
     if (!frameBuffer)
         return WebImage();

@@ -20,7 +20,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/html/HTMLQuoteElement.h"
 
 #include "core/HTMLNames.h"
@@ -30,10 +29,11 @@ namespace blink {
 
 using namespace HTMLNames;
 
-inline HTMLQuoteElement::HTMLQuoteElement(const QualifiedName& tagName, Document& document)
+inline HTMLQuoteElement::HTMLQuoteElement(const QualifiedName& tagName,
+    Document& document)
     : HTMLElement(tagName, document)
 {
-    ASSERT(hasTagName(qTag) || hasTagName(blockquoteTag));
+    DCHECK(hasTagName(qTag) || hasTagName(blockquoteTag));
 }
 
 DEFINE_ELEMENT_FACTORY_WITH_TAGNAME(HTMLQuoteElement)
@@ -53,4 +53,4 @@ const QualifiedName& HTMLQuoteElement::subResourceAttributeName() const
     return citeAttr;
 }
 
-}
+} // namespace blink

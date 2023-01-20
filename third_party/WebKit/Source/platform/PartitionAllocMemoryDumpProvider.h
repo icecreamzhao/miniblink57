@@ -5,7 +5,6 @@
 #ifndef PartitionAllocMemoryDumpProvider_h
 #define PartitionAllocMemoryDumpProvider_h
 
-<<<<<<< HEAD
 #include "base/trace_event/memory_dump_provider.h"
 #include "public/platform/WebCommon.h"
 #include "wtf/Noncopyable.h"
@@ -27,19 +26,10 @@ class BLINK_PLATFORM_EXPORT PartitionAllocMemoryDumpProvider final
     // USING_FAST_MALLOC. c.f. crbug.com/584196
     WTF_MAKE_NONCOPYABLE(PartitionAllocMemoryDumpProvider);
 
-=======
-#include "public/platform/WebCommon.h"
-#include "public/platform/WebMemoryDumpProvider.h"
-
-namespace blink {
-
-class BLINK_PLATFORM_EXPORT PartitionAllocMemoryDumpProvider final : public WebMemoryDumpProvider {
->>>>>>> miniblink49
 public:
     static PartitionAllocMemoryDumpProvider* instance();
     ~PartitionAllocMemoryDumpProvider() override;
 
-<<<<<<< HEAD
     // MemoryDumpProvider implementation.
     bool OnMemoryDump(const base::trace_event::MemoryDumpArgs&,
         base::trace_event::ProcessMemoryDump*) override;
@@ -55,13 +45,6 @@ private:
     Mutex m_allocationRegisterMutex;
     std::unique_ptr<base::trace_event::AllocationRegister> m_allocationRegister;
     bool m_isHeapProfilingEnabled;
-=======
-    // WebMemoryDumpProvider implementation.
-    bool onMemoryDump(WebProcessMemoryDump*) override;
-
-private:
-    PartitionAllocMemoryDumpProvider();
->>>>>>> miniblink49
 };
 
 } // namespace blink

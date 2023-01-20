@@ -5,17 +5,10 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "SkBlurMask.h"
 #include "SkBlurMaskFilter.h"
 #include "SkCanvas.h"
 #include "gm.h"
-=======
-#include "gm.h"
-#include "SkBlurMask.h"
-#include "SkBlurMaskFilter.h"
-#include "SkCanvas.h"
->>>>>>> miniblink49
 
 // This GM tests out the quick reject bounds of the blur mask filter. It draws
 // four blurred rects around a central clip. The blurred rect geometry outset
@@ -26,7 +19,6 @@
 // will be the same.
 class BlurQuickRejectGM : public skiagm::GM {
 public:
-<<<<<<< HEAD
     BlurQuickRejectGM() { }
 
 protected:
@@ -42,36 +34,15 @@ protected:
 
     void onDraw(SkCanvas* canvas) override
     {
-=======
-    BlurQuickRejectGM() {}
-
-protected:
-    SkString onShortName() override {
-        return SkString("blurquickreject");
-    }
-
-    SkISize onISize() override {
-        return SkISize::Make(kWidth, kHeight);
-    }
-
-    void onDraw(SkCanvas* canvas) override {
->>>>>>> miniblink49
         static const SkScalar kBlurRadius = SkIntToScalar(20);
         static const SkScalar kBoxSize = SkIntToScalar(100);
 
         SkRect clipRect = SkRect::MakeXYWH(0, 0, kBoxSize, kBoxSize);
         SkRect blurRects[] = {
-<<<<<<< HEAD
             { -kBoxSize - (kBlurRadius + 1), 0, -(kBlurRadius + 1), kBoxSize },
             { 0, -kBoxSize - (kBlurRadius + 1), kBoxSize, -(kBlurRadius + 1) },
             { kBoxSize + kBlurRadius + 1, 0, 2 * kBoxSize + kBlurRadius + 1, kBoxSize },
             { 0, kBoxSize + kBlurRadius + 1, kBoxSize, 2 * kBoxSize + kBlurRadius + 1 }
-=======
-            { -kBoxSize - (kBlurRadius+1), 0, -(kBlurRadius+1), kBoxSize },
-            { 0, -kBoxSize - (kBlurRadius+1), kBoxSize, -(kBlurRadius+1) },
-            { kBoxSize+kBlurRadius+1, 0, 2*kBoxSize+kBlurRadius+1, kBoxSize },
-            { 0, kBoxSize+kBlurRadius+1, kBoxSize, 2*kBoxSize+kBlurRadius+1 }
->>>>>>> miniblink49
         };
         SkColor colors[] = {
             SK_ColorRED,
@@ -88,14 +59,8 @@ protected:
 
         SkPaint blurPaint;
         blurPaint.setFilterQuality(kLow_SkFilterQuality);
-<<<<<<< HEAD
         blurPaint.setMaskFilter(SkBlurMaskFilter::Make(kNormal_SkBlurStyle,
             SkBlurMask::ConvertRadiusToSigma(kBlurRadius)));
-=======
-        SkMaskFilter* mf = SkBlurMaskFilter::Create(kNormal_SkBlurStyle,
-                                                    SkBlurMask::ConvertRadiusToSigma(kBlurRadius));
-        blurPaint.setMaskFilter(mf)->unref();
->>>>>>> miniblink49
 
         canvas->clear(SK_ColorBLACK);
         canvas->save();
@@ -117,8 +82,4 @@ private:
     typedef GM INHERITED;
 };
 
-<<<<<<< HEAD
 DEF_GM(return new BlurQuickRejectGM();)
-=======
-DEF_GM( return new BlurQuickRejectGM(); )
->>>>>>> miniblink49

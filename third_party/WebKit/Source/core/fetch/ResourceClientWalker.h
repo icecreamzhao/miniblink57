@@ -18,29 +18,32 @@
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
 
-    This class provides all functionality needed for loading images, style sheets and html
-    pages from the web. It has a memory cache for these objects.
+    This class provides all functionality needed for loading images, style
+    sheets and html pages from the web. It has a memory cache for these objects.
 */
 
 #ifndef ResourceClientWalker_h
 #define ResourceClientWalker_h
 
 #include "core/fetch/ResourceClient.h"
-#include "wtf/HashCountedSet.h"
-#include "wtf/Vector.h"
+#include "platform/heap/Handle.h"
+#include "wtf/Allocator.h"
 
 namespace blink {
 
-// Call this "walker" instead of iterator so people won't expect Qt or STL-style iterator interface.
-// Just keep calling next() on this. It's safe from deletions of items.
-template<typename T> class ResourceClientWalker {
+// Call this "walker" instead of iterator so people won't expect Qt or STL-style
+// iterator interface. Just keep calling next() on this. It's safe from
+// deletions of items.
+template <typename T>
+class ResourceClientWalker {
+    STACK_ALLOCATED();
+
 public:
-    ResourceClientWalker(const HashCountedSet<ResourceClient*>& set)
-        : m_clientSet(set), m_clientVector(set.size()), m_index(0)
+    explicit ResourceClientWalker(
+        const HeapHashCountedSet<WeakMember<ResourceClient>>& set)
+        : m_clientSet(set)
     {
-        size_t clientIndex = 0;
-        for (const auto& resourceClient : set)
-            m_clientVector[clientIndex++] = resourceClient.key;
+        copyToVector(m_clientSet, m_clientVector);
     }
 
     T* next()
@@ -48,20 +51,21 @@ public:
         size_t size = m_clientVector.size();
         while (m_index < size) {
             ResourceClient* next = m_clientVector[m_index++];
+            DCHECK(next);
             if (m_clientSet.contains(next)) {
-                ASSERT(T::expectedType() == ResourceClient::expectedType() || next->resourceClientType() == T::expectedType());
+                DCHECK(T::isExpectedType(next));
                 return static_cast<T*>(next);
             }
         }
-
-        return 0;
+        return nullptr;
     }
+
 private:
-    const HashCountedSet<ResourceClient*>& m_clientSet;
-    Vector<ResourceClient*> m_clientVector;
-    size_t m_index;
+    const HeapHashCountedSet<WeakMember<ResourceClient>>& m_clientSet;
+    HeapVector<Member<ResourceClient>> m_clientVector;
+    size_t m_index = 0;
 };
 
-}
+} // namespace blink
 
 #endif

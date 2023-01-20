@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -9,7 +5,6 @@
  * found in the LICENSE file.
  */
 #include "SampleCode.h"
-<<<<<<< HEAD
 #include "SkCanvas.h"
 #include "SkGradientShader.h"
 #include "SkGraphics.h"
@@ -37,37 +32,6 @@ protected:
     // overrides from SkEventSink
     virtual bool onQuery(SkEvent* evt)
     {
-=======
-#include "SkView.h"
-#include "SkCanvas.h"
-#include "SkGraphics.h"
-#include "SkRandom.h"
-#include "SkGradientShader.h"
-#include "SkPicture.h"
-
-static SkShader* make_linear() {
-    SkPoint pts[] = { 0, 0, SK_Scalar1/500, SK_Scalar1/500 };
-    SkColor colors[] = { SK_ColorRED, SK_ColorBLUE };
-    return SkGradientShader::CreateLinear(pts, colors, NULL, 2,
-                                          SkShader::kClamp_TileMode);
-}
-
-class ClampView : public SampleView {
-    SkShader*   fGrad;
-
-public:
-    ClampView() {
-        fGrad = make_linear();
-    }
-
-    virtual ~ClampView() {
-        fGrad->unref();
-    }
-
-protected:
-    // overrides from SkEventSink
-    virtual bool onQuery(SkEvent* evt) {
->>>>>>> miniblink49
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "Clamp");
             return true;
@@ -75,20 +39,12 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-<<<<<<< HEAD
     virtual void onDrawContent(SkCanvas* canvas)
     {
         SkPaint paint;
         paint.setShader(fGrad);
 
         //        canvas->translate(this->width()/2, this->height()/2);
-=======
-    virtual void onDrawContent(SkCanvas* canvas) {
-        SkPaint paint;
-        paint.setShader(fGrad);
-
-//        canvas->translate(this->width()/2, this->height()/2);
->>>>>>> miniblink49
         canvas->translate(64, 64);
         canvas->drawPaint(paint);
 

@@ -31,29 +31,21 @@
 #ifndef WebSharedWorkerRepositoryClient_h
 #define WebSharedWorkerRepositoryClient_h
 
-<<<<<<< HEAD
 #include "WebSharedWorkerCreationContextType.h"
 #include "WebSharedWorkerCreationErrors.h"
 #include "public/platform/WebAddressSpace.h"
 #include <memory>
-=======
-#include "WebSharedWorkerConnector.h"
->>>>>>> miniblink49
 
 namespace blink {
 
 enum WebContentSecurityPolicyType;
-<<<<<<< HEAD
 class WebMessagePortChannel;
 class WebSharedWorkerConnectListener;
-=======
->>>>>>> miniblink49
 class WebString;
 class WebURL;
 
 class WebSharedWorkerRepositoryClient {
 public:
-<<<<<<< HEAD
     // Unique identifier for the parent document of a worker (unique within a
     // given process).
     using DocumentID = unsigned long long;
@@ -73,16 +65,6 @@ public:
 
     // Invoked when a document has been detached. DocumentID can be re-used after
     // documentDetached() is invoked.
-=======
-    // Unique identifier for the parent document of a worker (unique within a given process).
-    typedef unsigned long long DocumentID;
-
-    // Creates a new shared worker connector. This may return null.
-    virtual WebSharedWorkerConnector* createSharedWorkerConnector(const WebURL& url, const WebString& name, DocumentID id, const WebString& contentSecurityPolicy, WebContentSecurityPolicyType) { return 0; }
-
-
-    // Invoked when a document has been detached. DocumentID can be re-used after documentDetached() is invoked.
->>>>>>> miniblink49
     virtual void documentDetached(DocumentID) { }
 };
 

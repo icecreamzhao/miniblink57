@@ -31,17 +31,21 @@
 #define MediaControlElements_h
 
 #include "core/html/shadow/MediaControlElementTypes.h"
+#include "public/platform/WebLocalizedString.h"
 
 namespace blink {
+
+class TextTrack;
 
 // ----------------------------
 
 class MediaControlPanelElement final : public MediaControlDivElement {
 public:
-    static PassRefPtrWillBeRawPtr<MediaControlPanelElement> create(MediaControls&);
+    static MediaControlPanelElement* create(MediaControls&);
 
     void setIsDisplayed(bool);
 
+    bool isOpaque() const;
     void makeOpaque();
     void makeTransparent();
 
@@ -53,7 +57,7 @@ private:
 
     void startTimer();
     void stopTimer();
-    void transitionTimerFired(Timer<MediaControlPanelElement>*);
+    void transitionTimerFired(TimerBase*);
     void didBecomeVisible();
 
     bool m_isDisplayed;
@@ -66,7 +70,7 @@ private:
 
 class MediaControlPanelEnclosureElement final : public MediaControlDivElement {
 public:
-    static PassRefPtrWillBeRawPtr<MediaControlPanelEnclosureElement> create(MediaControls&);
+    static MediaControlPanelEnclosureElement* create(MediaControls&);
 
 private:
     explicit MediaControlPanelEnclosureElement(MediaControls&);
@@ -74,23 +78,28 @@ private:
 
 // ----------------------------
 
-class MediaControlOverlayEnclosureElement final : public MediaControlDivElement {
+class MediaControlOverlayEnclosureElement final
+    : public MediaControlDivElement {
 public:
-    static PassRefPtrWillBeRawPtr<MediaControlOverlayEnclosureElement> create(MediaControls&);
+    static MediaControlOverlayEnclosureElement* create(MediaControls&);
 
 private:
     explicit MediaControlOverlayEnclosureElement(MediaControls&);
-    void* preDispatchEventHandler(Event*) override;
+    EventDispatchHandlingState* preDispatchEventHandler(Event*) override;
 };
 
 // ----------------------------
 
 class MediaControlMuteButtonElement final : public MediaControlInputElement {
 public:
-    static PassRefPtrWillBeRawPtr<MediaControlMuteButtonElement> create(MediaControls&);
+    static MediaControlMuteButtonElement* create(MediaControls&);
 
     bool willRespondToMouseClickEvents() override { return true; }
     void updateDisplayType() override;
+
+    WebLocalizedString::Name getOverflowStringName() override;
+
+    bool hasOverflowButton() override { return true; }
 
 private:
     explicit MediaControlMuteButtonElement(MediaControls&);
@@ -102,10 +111,14 @@ private:
 
 class MediaControlPlayButtonElement final : public MediaControlInputElement {
 public:
-    static PassRefPtrWillBeRawPtr<MediaControlPlayButtonElement> create(MediaControls&);
+    static MediaControlPlayButtonElement* create(MediaControls&);
 
     bool willRespondToMouseClickEvents() override { return true; }
     void updateDisplayType() override;
+
+    WebLocalizedString::Name getOverflowStringName() override;
+
+    bool hasOverflowButton() override { return true; }
 
 private:
     explicit MediaControlPlayButtonElement(MediaControls&);
@@ -115,9 +128,10 @@ private:
 
 // ----------------------------
 
-class MediaControlOverlayPlayButtonElement final : public MediaControlInputElement {
+class MediaControlOverlayPlayButtonElement final
+    : public MediaControlInputElement {
 public:
-    static PassRefPtrWillBeRawPtr<MediaControlOverlayPlayButtonElement> create(MediaControls&);
+    static MediaControlOverlayPlayButtonElement* create(MediaControls&);
 
     void updateDisplayType() override;
 
@@ -130,13 +144,18 @@ private:
 
 // ----------------------------
 
-class MediaControlToggleClosedCaptionsButtonElement final : public MediaControlInputElement {
+class MediaControlToggleClosedCaptionsButtonElement final
+    : public MediaControlInputElement {
 public:
-    static PassRefPtrWillBeRawPtr<MediaControlToggleClosedCaptionsButtonElement> create(MediaControls&);
+    static MediaControlToggleClosedCaptionsButtonElement* create(MediaControls&);
 
     bool willRespondToMouseClickEvents() override { return true; }
 
     void updateDisplayType() override;
+
+    WebLocalizedString::Name getOverflowStringName() override;
+
+    bool hasOverflowButton() override { return true; }
 
 private:
     explicit MediaControlToggleClosedCaptionsButtonElement(MediaControls&);
@@ -146,9 +165,90 @@ private:
 
 // ----------------------------
 
+class MediaControlTextTrackListElement final : public MediaControlDivElement {
+public:
+    static MediaControlTextTrackListElement* create(MediaControls&);
+
+    bool willRespondToMouseClickEvents() override { return true; }
+
+    void setVisible(bool);
+
+private:
+    explicit MediaControlTextTrackListElement(MediaControls&);
+
+    void defaultEventHandler(Event*) override;
+
+    void refreshTextTrackListMenu();
+
+    // Returns the label for the track when a valid track is passed in and "Off"
+    // when the parameter is null.
+    String getTextTrackLabel(TextTrack*);
+    // Creates the track element in the list when a valid track is passed in and
+    // the "Off" item when the parameter is null.
+    Element* createTextTrackListItem(TextTrack*);
+};
+
+// ----------------------------
+// Represents the overflow menu which is displayed when the width of the media
+// player is small enough that at least two buttons are no longer visible.
+class MediaControlOverflowMenuButtonElement final
+    : public MediaControlInputElement {
+public:
+    static MediaControlOverflowMenuButtonElement* create(MediaControls&);
+
+    // The overflow button should respond to mouse clicks since we want a click
+    // to open up the menu.
+    bool willRespondToMouseClickEvents() override { return true; }
+
+private:
+    explicit MediaControlOverflowMenuButtonElement(MediaControls&);
+
+    void defaultEventHandler(Event*) override;
+};
+
+// ----------------------------
+// Holds a list of elements within the overflow menu.
+class MediaControlOverflowMenuListElement final
+    : public MediaControlDivElement {
+public:
+    static MediaControlOverflowMenuListElement* create(MediaControls&);
+
+private:
+    explicit MediaControlOverflowMenuListElement(MediaControls&);
+
+    void defaultEventHandler(Event*) override;
+};
+
+// ----------------------------
+// Represents a button that allows users to download media if the file is
+// downloadable.
+class MediaControlDownloadButtonElement final
+    : public MediaControlInputElement {
+public:
+    static MediaControlDownloadButtonElement* create(MediaControls&);
+
+    WebLocalizedString::Name getOverflowStringName() override;
+
+    bool hasOverflowButton() override { return true; }
+
+    // Returns true if the download button should be shown. We should
+    // show the button for only non-MSE, non-EME, and non-MediaStream content.
+    bool shouldDisplayDownloadButton();
+
+    DECLARE_VIRTUAL_TRACE();
+
+private:
+    explicit MediaControlDownloadButtonElement(MediaControls&);
+
+    void defaultEventHandler(Event*) override;
+
+    // Points to an anchor element that contains the URL of the media file.
+    Member<HTMLAnchorElement> m_anchor;
+};
+
 class MediaControlTimelineElement final : public MediaControlInputElement {
 public:
-    static PassRefPtrWillBeRawPtr<MediaControlTimelineElement> create(MediaControls&);
+    static MediaControlTimelineElement* create(MediaControls&);
 
     bool willRespondToMouseClickEvents() override;
 
@@ -166,13 +266,18 @@ private:
 
 // ----------------------------
 
-class MediaControlFullscreenButtonElement final : public MediaControlInputElement {
+class MediaControlFullscreenButtonElement final
+    : public MediaControlInputElement {
 public:
-    static PassRefPtrWillBeRawPtr<MediaControlFullscreenButtonElement> create(MediaControls&);
+    static MediaControlFullscreenButtonElement* create(MediaControls&);
 
     bool willRespondToMouseClickEvents() override { return true; }
 
     void setIsFullscreen(bool);
+
+    WebLocalizedString::Name getOverflowStringName() override;
+
+    bool hasOverflowButton() override { return true; }
 
 private:
     explicit MediaControlFullscreenButtonElement(MediaControls&);
@@ -184,11 +289,20 @@ private:
 
 class MediaControlCastButtonElement final : public MediaControlInputElement {
 public:
-    static PassRefPtrWillBeRawPtr<MediaControlCastButtonElement> create(MediaControls&, bool isOverlayButton);
+    static MediaControlCastButtonElement* create(MediaControls&,
+        bool isOverlayButton);
 
     bool willRespondToMouseClickEvents() override { return true; }
 
     void setIsPlayingRemotely(bool);
+
+    WebLocalizedString::Name getOverflowStringName() override;
+
+    bool hasOverflowButton() override { return true; }
+
+    // This will show a cast button if it is not covered by another element.
+    // This MUST be called for cast button elements that are overlay elements.
+    void tryShowOverlay();
 
 private:
     explicit MediaControlCastButtonElement(MediaControls&, bool isOverlayButton);
@@ -198,13 +312,28 @@ private:
     bool keepEventInNode(Event*) override;
 
     bool m_isOverlayButton;
+
+    // This is used for UMA histogram (Cast.Sender.Overlay). New values should
+    // be appended only and must be added before |Count|.
+    enum class CastOverlayMetrics {
+        Created = 0,
+        Shown,
+        Clicked,
+        Count // Keep last.
+    };
+    void recordMetrics(CastOverlayMetrics);
+
+    // UMA related boolean. They are used to prevent counting something twice
+    // for the same media element.
+    bool m_clickUseCounted = false;
+    bool m_showUseCounted = false;
 };
 
 // ----------------------------
 
 class MediaControlVolumeSliderElement final : public MediaControlInputElement {
 public:
-    static PassRefPtrWillBeRawPtr<MediaControlVolumeSliderElement> create(MediaControls&);
+    static MediaControlVolumeSliderElement* create(MediaControls&);
 
     bool willRespondToMouseMoveEvents() override;
     bool willRespondToMouseClickEvents() override;
@@ -219,9 +348,10 @@ private:
 
 // ----------------------------
 
-class MediaControlTimeRemainingDisplayElement final : public MediaControlTimeDisplayElement {
+class MediaControlTimeRemainingDisplayElement final
+    : public MediaControlTimeDisplayElement {
 public:
-    static PassRefPtrWillBeRawPtr<MediaControlTimeRemainingDisplayElement> create(MediaControls&);
+    static MediaControlTimeRemainingDisplayElement* create(MediaControls&);
 
 private:
     explicit MediaControlTimeRemainingDisplayElement(MediaControls&);
@@ -229,9 +359,10 @@ private:
 
 // ----------------------------
 
-class MediaControlCurrentTimeDisplayElement final : public MediaControlTimeDisplayElement {
+class MediaControlCurrentTimeDisplayElement final
+    : public MediaControlTimeDisplayElement {
 public:
-    static PassRefPtrWillBeRawPtr<MediaControlCurrentTimeDisplayElement> create(MediaControls&);
+    static MediaControlCurrentTimeDisplayElement* create(MediaControls&);
 
 private:
     explicit MediaControlCurrentTimeDisplayElement(MediaControls&);

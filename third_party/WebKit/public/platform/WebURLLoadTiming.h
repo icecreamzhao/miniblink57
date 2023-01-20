@@ -34,13 +34,10 @@
 #include "WebCommon.h"
 #include "WebPrivatePtr.h"
 
-<<<<<<< HEAD
 #if INSIDE_BLINK
 #include "wtf/PassRefPtr.h"
 #endif
 
-=======
->>>>>>> miniblink49
 namespace blink {
 
 class ResourceLoadTiming;
@@ -105,7 +102,6 @@ public:
     BLINK_PLATFORM_EXPORT double sslEnd() const;
     BLINK_PLATFORM_EXPORT void setSSLEnd(double);
 
-<<<<<<< HEAD
     BLINK_PLATFORM_EXPORT double pushStart() const;
     BLINK_PLATFORM_EXPORT void setPushStart(double);
 
@@ -116,11 +112,6 @@ public:
     BLINK_PLATFORM_EXPORT WebURLLoadTiming(WTF::PassRefPtr<ResourceLoadTiming>);
     BLINK_PLATFORM_EXPORT WebURLLoadTiming& operator=(
         WTF::PassRefPtr<ResourceLoadTiming>);
-=======
-#if INSIDE_BLINK
-    BLINK_PLATFORM_EXPORT WebURLLoadTiming(const WTF::PassRefPtr<ResourceLoadTiming>&);
-    BLINK_PLATFORM_EXPORT WebURLLoadTiming& operator=(const WTF::PassRefPtr<ResourceLoadTiming>&);
->>>>>>> miniblink49
     BLINK_PLATFORM_EXPORT operator WTF::PassRefPtr<ResourceLoadTiming>() const;
 #endif
 

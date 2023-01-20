@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -11,12 +7,8 @@
 
 #include "SkRect.h"
 
-<<<<<<< HEAD
 void SkIRect::join(int32_t left, int32_t top, int32_t right, int32_t bottom)
 {
-=======
-void SkIRect::join(int32_t left, int32_t top, int32_t right, int32_t bottom) {
->>>>>>> miniblink49
     // do nothing if the params are empty
     if (left >= right || top >= bottom) {
         return;
@@ -26,7 +18,6 @@ void SkIRect::join(int32_t left, int32_t top, int32_t right, int32_t bottom) {
     if (fLeft >= fRight || fTop >= fBottom) {
         this->set(left, top, right, bottom);
     } else {
-<<<<<<< HEAD
         if (left < fLeft)
             fLeft = left;
         if (top < fTop)
@@ -40,16 +31,6 @@ void SkIRect::join(int32_t left, int32_t top, int32_t right, int32_t bottom) {
 
 void SkIRect::sort()
 {
-=======
-        if (left < fLeft) fLeft = left;
-        if (top < fTop) fTop = top;
-        if (right > fRight) fRight = right;
-        if (bottom > fBottom) fBottom = bottom;
-    }
-}
-
-void SkIRect::sort() {
->>>>>>> miniblink49
     if (fLeft > fRight) {
         SkTSwap<int32_t>(fLeft, fRight);
     }
@@ -60,12 +41,8 @@ void SkIRect::sort() {
 
 /////////////////////////////////////////////////////////////////////////////
 
-<<<<<<< HEAD
 void SkRect::toQuad(SkPoint quad[4]) const
 {
-=======
-void SkRect::toQuad(SkPoint quad[4]) const {
->>>>>>> miniblink49
     SkASSERT(quad);
 
     quad[0].set(fLeft, fTop);
@@ -76,22 +53,14 @@ void SkRect::toQuad(SkPoint quad[4]) const {
 
 #include "SkNx.h"
 
-<<<<<<< HEAD
 static inline bool is_finite(const Sk4s& value)
 {
-=======
-static inline bool is_finite(const Sk4s& value) {
->>>>>>> miniblink49
     auto finite = value * Sk4s(0) == Sk4s(0);
     return finite.allTrue();
 }
 
-<<<<<<< HEAD
 bool SkRect::setBoundsCheck(const SkPoint pts[], int count)
 {
-=======
-bool SkRect::setBoundsCheck(const SkPoint pts[], int count) {
->>>>>>> miniblink49
     SkASSERT((pts && count > 0) || count == 0);
 
     bool isFinite = true;
@@ -106,11 +75,7 @@ bool SkRect::setBoundsCheck(const SkPoint pts[], int count) {
             pts += 1;
             count -= 1;
         } else {
-<<<<<<< HEAD
             min = Sk4s::Load(pts);
-=======
-            min = Sk4s::Load(&pts[0].fX);
->>>>>>> miniblink49
             pts += 2;
             count -= 2;
         }
@@ -119,11 +84,7 @@ bool SkRect::setBoundsCheck(const SkPoint pts[], int count) {
 
         count >>= 1;
         for (int i = 0; i < count; ++i) {
-<<<<<<< HEAD
             Sk4s xy = Sk4s::Load(pts);
-=======
-            Sk4s xy = Sk4s::Load(&pts->fX);
->>>>>>> miniblink49
             accum = accum * xy;
             min = Sk4s::Min(min, xy);
             max = Sk4s::Max(max, xy);
@@ -140,11 +101,7 @@ bool SkRect::setBoundsCheck(const SkPoint pts[], int count) {
             min.store(minArray);
             max.store(maxArray);
             this->set(SkTMin(minArray[0], minArray[2]), SkTMin(minArray[1], minArray[3]),
-<<<<<<< HEAD
                 SkTMax(maxArray[0], maxArray[2]), SkTMax(maxArray[1], maxArray[3]));
-=======
-                      SkTMax(maxArray[0], maxArray[2]), SkTMax(maxArray[1], maxArray[3]));
->>>>>>> miniblink49
         } else {
             // we hit a non-finite value, so zero everything and return false
             this->setEmpty();
@@ -159,7 +116,6 @@ bool SkRect::setBoundsCheck(const SkPoint pts[], int count) {
     SkScalar R = SkMinScalar(ar, br);                   \
     SkScalar T = SkMaxScalar(at, bt);                   \
     SkScalar B = SkMinScalar(ab, bb);                   \
-<<<<<<< HEAD
     do {                                                \
         if (L >= R || T >= B)                           \
             return false;                               \
@@ -167,17 +123,11 @@ bool SkRect::setBoundsCheck(const SkPoint pts[], int count) {
 
 bool SkRect::intersect(SkScalar left, SkScalar top, SkScalar right, SkScalar bottom)
 {
-=======
-    do { if (L >= R || T >= B) return false; } while (0)
-
-bool SkRect::intersect(SkScalar left, SkScalar top, SkScalar right, SkScalar bottom) {
->>>>>>> miniblink49
     CHECK_INTERSECT(left, top, right, bottom, fLeft, fTop, fRight, fBottom);
     this->setLTRB(L, T, R, B);
     return true;
 }
 
-<<<<<<< HEAD
 bool SkRect::intersect(const SkRect& r)
 {
     return this->intersect(r.fLeft, r.fTop, r.fRight, r.fBottom);
@@ -185,24 +135,13 @@ bool SkRect::intersect(const SkRect& r)
 
 bool SkRect::intersect(const SkRect& a, const SkRect& b)
 {
-=======
-bool SkRect::intersect(const SkRect& r) {
-    return this->intersect(r.fLeft, r.fTop, r.fRight, r.fBottom);
-}
-
-bool SkRect::intersect(const SkRect& a, const SkRect& b) {
->>>>>>> miniblink49
     CHECK_INTERSECT(a.fLeft, a.fTop, a.fRight, a.fBottom, b.fLeft, b.fTop, b.fRight, b.fBottom);
     this->setLTRB(L, T, R, B);
     return true;
 }
 
-<<<<<<< HEAD
 void SkRect::join(SkScalar left, SkScalar top, SkScalar right, SkScalar bottom)
 {
-=======
-void SkRect::join(SkScalar left, SkScalar top, SkScalar right, SkScalar bottom) {
->>>>>>> miniblink49
     // do nothing if the params are empty
     if (left >= right || top >= bottom) {
         return;
@@ -212,15 +151,9 @@ void SkRect::join(SkScalar left, SkScalar top, SkScalar right, SkScalar bottom) 
     if (fLeft >= fRight || fTop >= fBottom) {
         this->set(left, top, right, bottom);
     } else {
-<<<<<<< HEAD
         fLeft = SkMinScalar(fLeft, left);
         fTop = SkMinScalar(fTop, top);
         fRight = SkMaxScalar(fRight, right);
-=======
-        fLeft   = SkMinScalar(fLeft, left);
-        fTop    = SkMinScalar(fTop, top);
-        fRight  = SkMaxScalar(fRight, right);
->>>>>>> miniblink49
         fBottom = SkMaxScalar(fBottom, bottom);
     }
 }
@@ -230,33 +163,21 @@ void SkRect::join(SkScalar left, SkScalar top, SkScalar right, SkScalar bottom) 
 #include "SkString.h"
 #include "SkStringUtils.h"
 
-<<<<<<< HEAD
 static const char* set_scalar(SkString* storage, SkScalar value, SkScalarAsStringType asType)
 {
-=======
-static const char* set_scalar(SkString* storage, SkScalar value, SkScalarAsStringType asType) {
->>>>>>> miniblink49
     storage->reset();
     SkAppendScalar(storage, value, asType);
     return storage->c_str();
 }
 
-<<<<<<< HEAD
 void SkRect::dump(bool asHex) const
 {
-=======
-void SkRect::dump(bool asHex) const {
->>>>>>> miniblink49
     SkScalarAsStringType asType = asHex ? kHex_SkScalarAsStringType : kDec_SkScalarAsStringType;
 
     SkString line;
     if (asHex) {
         SkString tmp;
-<<<<<<< HEAD
         line.printf("SkRect::MakeLTRB(%s, /* %f */\n", set_scalar(&tmp, fLeft, asType), fLeft);
-=======
-        line.printf( "SkRect::MakeLTRB(%s, /* %f */\n", set_scalar(&tmp, fLeft, asType), fLeft);
->>>>>>> miniblink49
         line.appendf("                 %s, /* %f */\n", set_scalar(&tmp, fTop, asType), fTop);
         line.appendf("                 %s, /* %f */\n", set_scalar(&tmp, fRight, asType), fRight);
         line.appendf("                 %s  /* %f */);", set_scalar(&tmp, fBottom, asType), fBottom);
@@ -267,11 +188,7 @@ void SkRect::dump(bool asHex) const {
         SkAppendScalarDec(&strR, fRight);
         SkAppendScalarDec(&strB, fBottom);
         line.printf("SkRect::MakeLTRB(%s, %s, %s, %s);",
-<<<<<<< HEAD
             strL.c_str(), strT.c_str(), strR.c_str(), strB.c_str());
-=======
-                    strL.c_str(), strT.c_str(), strR.c_str(), strB.c_str());
->>>>>>> miniblink49
     }
     SkDebugf("%s\n", line.c_str());
 }

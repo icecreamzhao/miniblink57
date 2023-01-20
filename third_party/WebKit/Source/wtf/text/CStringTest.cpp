@@ -23,7 +23,6 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "wtf/text/CString.h"
 
 #include "testing/gtest/include/gtest/gtest.h"
@@ -43,15 +42,6 @@ namespace {
 
 } // anonymous namespace
 
-=======
-#include "config.h"
-#include "wtf/text/CString.h"
-
-#include <gtest/gtest.h>
-
-namespace WTF {
-
->>>>>>> miniblink49
 TEST(CStringTest, NullStringConstructor)
 {
     CString string;
@@ -102,21 +92,13 @@ TEST(CStringTest, EmptyRegularConstructor)
 TEST(CStringTest, UninitializedConstructor)
 {
     char* buffer;
-<<<<<<< HEAD
     CString emptyString = CString::createUninitialized(0, buffer);
-=======
-    CString emptyString = CString::newUninitialized(0, buffer);
->>>>>>> miniblink49
     EXPECT_FALSE(emptyString.isNull());
     EXPECT_EQ(buffer, emptyString.data());
     EXPECT_EQ(0, buffer[0]);
 
     const size_t length = 25;
-<<<<<<< HEAD
     CString uninitializedString = CString::createUninitialized(length, buffer);
-=======
-    CString uninitializedString = CString::newUninitialized(length, buffer);
->>>>>>> miniblink49
     EXPECT_FALSE(uninitializedString.isNull());
     EXPECT_EQ(buffer, uninitializedString.data());
     EXPECT_EQ(0, uninitializedString.data()[length]);
@@ -129,21 +111,6 @@ TEST(CStringTest, ZeroTerminated)
     EXPECT_EQ(0, stringWithLength.data()[3]);
 }
 
-<<<<<<< HEAD
-=======
-TEST(CStringTest, CopyOnWrite)
-{
-    const char* initialString = "Webkit";
-    CString string(initialString);
-    CString copy = string;
-
-    string.mutableData()[3] = 'K';
-    EXPECT_TRUE(string != copy);
-    EXPECT_STREQ("WebKit", string.data());
-    EXPECT_STREQ(initialString, copy.data());
-}
-
->>>>>>> miniblink49
 TEST(CStringTest, Comparison)
 {
     // Comparison with another CString.
@@ -231,7 +198,6 @@ TEST(CStringTest, Comparison)
     EXPECT_TRUE(c != d);
 }
 
-<<<<<<< HEAD
 TEST(CStringTest, Printer)
 {
     EXPECT_STREQ("<null>", printedString(CString()).data());
@@ -241,6 +207,4 @@ TEST(CStringTest, Printer)
         printedString(CString("\xff\0\x01xyz", 6)).data());
 }
 
-=======
->>>>>>> miniblink49
 } // namespace WTF

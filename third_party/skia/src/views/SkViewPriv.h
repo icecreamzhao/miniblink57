@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -11,7 +7,6 @@
 #ifndef SkViewPriv_DEFINED
 #define SkViewPriv_DEFINED
 
-<<<<<<< HEAD
 #include "SkTagList.h"
 #include "SkView.h"
 
@@ -21,16 +16,6 @@ struct Layout_SkTagList : SkTagList {
     Layout_SkTagList(SkView::Layout* layout)
         : SkTagList(kViewLayout_SkTagList)
         , fLayout(layout)
-=======
-#include "SkView.h"
-#include "SkTagList.h"
-
-struct Layout_SkTagList : SkTagList {
-    SkView::Layout*    fLayout;
-
-    Layout_SkTagList(SkView::Layout* layout)
-        : SkTagList(kViewLayout_SkTagList), fLayout(layout)
->>>>>>> miniblink49
     {
         SkASSERT(layout);
         layout->ref();
@@ -42,18 +27,11 @@ struct Layout_SkTagList : SkTagList {
 };
 
 struct Artist_SkTagList : SkTagList {
-<<<<<<< HEAD
     SkView::Artist* fArtist;
 
     Artist_SkTagList(SkView::Artist* artist)
         : SkTagList(kViewArtist_SkTagList)
         , fArtist(artist)
-=======
-    SkView::Artist*    fArtist;
-
-    Artist_SkTagList(SkView::Artist* artist)
-        : SkTagList(kViewArtist_SkTagList), fArtist(artist)
->>>>>>> miniblink49
     {
         SkASSERT(artist);
         artist->ref();

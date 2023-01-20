@@ -20,11 +20,7 @@
  * \file 
  * \brief C++ API: Replaceable String
  */
-<<<<<<< HEAD
 
-=======
- 
->>>>>>> miniblink49
 U_NAMESPACE_BEGIN
 
 class UnicodeString;
@@ -85,11 +81,7 @@ public:
      * Returns the number of 16-bit code units in the text.
      * @return number of 16-bit code units in text
      * @stable ICU 1.8
-<<<<<<< HEAD
      */
-=======
-     */ 
->>>>>>> miniblink49
     inline int32_t length() const;
 
     /**
@@ -126,13 +118,8 @@ public:
      * @stable ICU 2.1
      */
     virtual void extractBetween(int32_t start,
-<<<<<<< HEAD
         int32_t limit,
         UnicodeString& target) const = 0;
-=======
-                                int32_t limit,
-                                UnicodeString& target) const = 0;
->>>>>>> miniblink49
 
     /**
      * Replaces a substring of this object with the given text.  If the
@@ -155,14 +142,9 @@ public:
      * @stable ICU 2.0
      */
     virtual void handleReplaceBetween(int32_t start,
-<<<<<<< HEAD
         int32_t limit,
         const UnicodeString& text)
         = 0;
-=======
-                                      int32_t limit,
-                                      const UnicodeString& text) = 0;
->>>>>>> miniblink49
     // Note: All other methods in this class take the names of
     // existing UnicodeString methods.  This method is the exception.
     // It is named differently because all replace methods of
@@ -216,16 +198,9 @@ public:
      * @see getDynamicClassID
      * @stable ICU 2.6
      */
-<<<<<<< HEAD
     virtual Replaceable* clone() const;
 
 protected:
-=======
-    virtual Replaceable *clone() const;
-
-protected:
-
->>>>>>> miniblink49
     /**
      * Default constructor.
      * @stable ICU 2.4
@@ -246,11 +221,7 @@ protected:
     /**
      * Virtual version of length().
      * @stable ICU 2.4
-<<<<<<< HEAD
      */
-=======
-     */ 
->>>>>>> miniblink49
     virtual int32_t getLength() const = 0;
 
     /**
@@ -266,38 +237,23 @@ protected:
     virtual UChar32 getChar32At(int32_t offset) const = 0;
 };
 
-<<<<<<< HEAD
 inline Replaceable::Replaceable() { }
 
 inline int32_t
 Replaceable::length() const
 {
-=======
-inline Replaceable::Replaceable() {}
-
-inline int32_t
-Replaceable::length() const {
->>>>>>> miniblink49
     return getLength();
 }
 
 inline UChar
-<<<<<<< HEAD
 Replaceable::charAt(int32_t offset) const
 {
-=======
-Replaceable::charAt(int32_t offset) const {
->>>>>>> miniblink49
     return getCharAt(offset);
 }
 
 inline UChar32
-<<<<<<< HEAD
 Replaceable::char32At(int32_t offset) const
 {
-=======
-Replaceable::char32At(int32_t offset) const {
->>>>>>> miniblink49
     return getChar32At(offset);
 }
 

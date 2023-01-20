@@ -28,22 +28,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "modules/filesystem/DataTransferItemFileSystem.h"
 
 #include "bindings/core/v8/ScriptState.h"
 #include "core/clipboard/DataObject.h"
 #include "core/clipboard/DataTransfer.h"
 #include "core/clipboard/DataTransferItem.h"
-=======
-#include "config.h"
-#include "modules/filesystem/DataTransferItemFileSystem.h"
-
-#include "core/clipboard/DataObject.h"
-#include "core/clipboard/DataTransfer.h"
-#include "core/clipboard/DataTransferItem.h"
-#include "core/dom/ExecutionContext.h"
->>>>>>> miniblink49
 #include "core/fileapi/File.h"
 #include "modules/filesystem/DOMFilePath.h"
 #include "modules/filesystem/DOMFileSystem.h"
@@ -57,16 +47,10 @@
 namespace blink {
 
 // static
-<<<<<<< HEAD
 Entry* DataTransferItemFileSystem::webkitGetAsEntry(ScriptState* scriptState,
     DataTransferItem& item)
 {
     if (!item.getDataObjectItem()->isFilename())
-=======
-Entry* DataTransferItemFileSystem::webkitGetAsEntry(ExecutionContext* executionContext, DataTransferItem& item)
-{
-    if (!item.dataObjectItem()->isFilename())
->>>>>>> miniblink49
         return 0;
 
     // For dragged files getAsFile must be pretty lightweight.
@@ -76,31 +60,20 @@ Entry* DataTransferItemFileSystem::webkitGetAsEntry(ExecutionContext* executionC
         return 0;
     ASSERT(file->isFile());
 
-<<<<<<< HEAD
     DOMFileSystem* domFileSystem = DraggedIsolatedFileSystemImpl::getDOMFileSystem(
         item.getDataTransfer()->dataObject(),
         scriptState->getExecutionContext(), *item.getDataObjectItem());
-=======
-    DOMFileSystem* domFileSystem = DraggedIsolatedFileSystemImpl::getDOMFileSystem(item.dataTransfer()->dataObject(), executionContext);
->>>>>>> miniblink49
     if (!domFileSystem) {
         // IsolatedFileSystem may not be enabled.
         return 0;
     }
 
-<<<<<<< HEAD
     // The dropped entries are mapped as top-level entries in the isolated
     // filesystem.
     String virtualPath = DOMFilePath::append("/", toFile(file)->name());
 
     // FIXME: This involves synchronous file operation. Consider passing file type
     // data when we dispatch drag event.
-=======
-    // The dropped entries are mapped as top-level entries in the isolated filesystem.
-    String virtualPath = DOMFilePath::append("/", toFile(file)->name());
-
-    // FIXME: This involves synchronous file operation. Consider passing file type data when we dispatch drag event.
->>>>>>> miniblink49
     FileMetadata metadata;
     if (!getFileMetadata(toFile(file)->path(), metadata))
         return 0;

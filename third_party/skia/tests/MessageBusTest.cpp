@@ -14,12 +14,8 @@ struct TestMessage {
 };
 DECLARE_SKMESSAGEBUS_MESSAGE(TestMessage)
 
-<<<<<<< HEAD
 DEF_TEST(MessageBus, r)
 {
-=======
-DEF_TEST(MessageBus, r) {
->>>>>>> miniblink49
     // Register two inboxes to receive all TestMessages.
     SkMessageBus<TestMessage>::Inbox inbox1, inbox2;
 

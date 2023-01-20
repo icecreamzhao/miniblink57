@@ -2,14 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
 #include "core/paint/SVGInlineTextBoxPainter.h"
 
-#include "core/dom/DocumentMarkerController.h"
-#include "core/dom/RenderedDocumentMarker.h"
 #include "core/editing/Editor.h"
+#include "core/editing/markers/DocumentMarkerController.h"
+#include "core/editing/markers/RenderedDocumentMarker.h"
 #include "core/frame/LocalFrame.h"
 #include "core/layout/LayoutTheme.h"
+#include "core/layout/api/LineLayoutAPIShim.h"
+#include "core/layout/api/SelectionState.h"
 #include "core/layout/line/InlineFlowBox.h"
 #include "core/layout/svg/LayoutSVGInlineText.h"
 #include "core/layout/svg/SVGLayoutSupport.h"
@@ -19,59 +20,125 @@
 #include "core/paint/LayoutObjectDrawingRecorder.h"
 #include "core/paint/PaintInfo.h"
 #include "core/paint/SVGPaintContext.h"
+#include "core/style/AppliedTextDecoration.h"
 #include "core/style/ShadowList.h"
 #include "platform/graphics/GraphicsContextStateSaver.h"
+#include <memory>
 
 namespace blink {
 
-static inline bool textShouldBePainted(LayoutSVGInlineText& textLayoutObject)
+static inline bool textShouldBePainted(
+    const LayoutSVGInlineText& textLayoutObject)
 {
-    // Font::pixelSize(), returns FontDescription::computedPixelSize(), which returns "int(x + 0.5)".
-    // If the absolute font size on screen is below x=0.5, don't render anything.
-    return textLayoutObject.scaledFont().fontDescription().computedPixelSize();
+    // Font::pixelSize(), returns FontDescription::computedPixelSize(), which
+    // returns "int(x + 0.5)".  If the absolute font size on screen is below
+    // x=0.5, don't render anything.
+    return textLayoutObject.scaledFont().getFontDescription().computedPixelSize();
 }
 
-bool SVGInlineTextBoxPainter::shouldPaintSelection() const
+bool SVGInlineTextBoxPainter::shouldPaintSelection(
+    const PaintInfo& paintInfo) const
 {
-    bool isPrinting = m_svgInlineTextBox.layoutObject().document().printing();
-    return !isPrinting && m_svgInlineTextBox.selectionState() != LayoutObject::SelectionNone;
+    // Don't paint selections when printing.
+    if (paintInfo.isPrinting())
+        return false;
+    // Don't paint selections when rendering a mask, clip-path (as a mask),
+    // pattern or feImage (element reference.)
+    if (paintInfo.isRenderingResourceSubtree())
+        return false;
+    return m_svgInlineTextBox.getSelectionState() != SelectionNone;
 }
 
-void SVGInlineTextBoxPainter::paint(const PaintInfo& paintInfo, const LayoutPoint& paintOffset)
+static bool hasShadow(const PaintInfo& paintInfo, const ComputedStyle& style)
 {
-    ASSERT(paintInfo.shouldPaintWithinRoot(&m_svgInlineTextBox.layoutObject()));
-    ASSERT(paintInfo.phase == PaintPhaseForeground || paintInfo.phase == PaintPhaseSelection);
-    ASSERT(m_svgInlineTextBox.truncation() == cNoTruncation);
+    // Text shadows are disabled when printing. http://crbug.com/258321
+    return style.textShadow() && !paintInfo.isPrinting();
+}
 
-    if (m_svgInlineTextBox.layoutObject().style()->visibility() != VISIBLE)
+FloatRect SVGInlineTextBoxPainter::boundsForDrawingRecorder(
+    const PaintInfo& paintInfo,
+    const ComputedStyle& style,
+    const LayoutPoint& paintOffset,
+    bool includeSelectionRect) const
+{
+    LayoutRect bounds(m_svgInlineTextBox.location() + paintOffset,
+        m_svgInlineTextBox.size());
+    if (hasShadow(paintInfo, style))
+        bounds.expand(style.textShadow()->rectOutsetsIncludingOriginal());
+    if (includeSelectionRect) {
+        bounds.unite(m_svgInlineTextBox.localSelectionRect(
+            m_svgInlineTextBox.start(),
+            m_svgInlineTextBox.start() + m_svgInlineTextBox.len()));
+    }
+    return FloatRect(bounds);
+}
+
+LayoutObject& SVGInlineTextBoxPainter::inlineLayoutObject() const
+{
+    return *LineLayoutAPIShim::layoutObjectFrom(
+        m_svgInlineTextBox.getLineLayoutItem());
+}
+
+LayoutObject& SVGInlineTextBoxPainter::parentInlineLayoutObject() const
+{
+    return *LineLayoutAPIShim::layoutObjectFrom(
+        m_svgInlineTextBox.parent()->getLineLayoutItem());
+}
+
+LayoutSVGInlineText& SVGInlineTextBoxPainter::inlineText() const
+{
+    return toLayoutSVGInlineText(inlineLayoutObject());
+}
+
+void SVGInlineTextBoxPainter::paint(const PaintInfo& paintInfo,
+    const LayoutPoint& paintOffset)
+{
+    DCHECK(paintInfo.phase == PaintPhaseForeground || paintInfo.phase == PaintPhaseSelection);
+    DCHECK(m_svgInlineTextBox.truncation() == cNoTruncation);
+
+    if (m_svgInlineTextBox.getLineLayoutItem().style()->visibility() != EVisibility::kVisible || !m_svgInlineTextBox.len())
         return;
 
-    // We're explicitly not supporting composition & custom underlines and custom highlighters -- unlike InlineTextBox.
-    // If we ever need that for SVG, it's very easy to refactor and reuse the code.
+    // We're explicitly not supporting composition & custom underlines and custom
+    // highlighters -- unlike InlineTextBox.  If we ever need that for SVG, it's
+    // very easy to refactor and reuse the code.
 
-    if (paintInfo.phase == PaintPhaseSelection && !shouldPaintSelection())
+    bool haveSelection = shouldPaintSelection(paintInfo);
+    if (!haveSelection && paintInfo.phase == PaintPhaseSelection)
         return;
 
-    LayoutSVGInlineText& textLayoutObject = toLayoutSVGInlineText(m_svgInlineTextBox.layoutObject());
+    LayoutSVGInlineText& textLayoutObject = inlineText();
     if (!textShouldBePainted(textLayoutObject))
         return;
 
     DisplayItem::Type displayItemType = DisplayItem::paintPhaseToDrawingType(paintInfo.phase);
-    if (!DrawingRecorder::useCachedDrawingIfPossible(*paintInfo.context, m_svgInlineTextBox, displayItemType)) {
-        LayoutObject& parentLayoutObject = m_svgInlineTextBox.parent()->layoutObject();
+    if (!DrawingRecorder::useCachedDrawingIfPossible(
+            paintInfo.context, m_svgInlineTextBox, displayItemType)) {
+        LayoutObject& parentLayoutObject = parentInlineLayoutObject();
         const ComputedStyle& style = parentLayoutObject.styleRef();
 
-        DrawingRecorder recorder(*paintInfo.context, m_svgInlineTextBox, displayItemType, paintInfo.rect);
-        InlineTextBoxPainter(m_svgInlineTextBox).paintDocumentMarkers(
-            paintInfo.context, paintOffset, style,
-            textLayoutObject.scaledFont(), true);
+        bool includeSelectionRect = paintInfo.phase != PaintPhaseSelection && (haveSelection || InlineTextBoxPainter::paintsMarkerHighlights(textLayoutObject));
+        DrawingRecorder recorder(
+            paintInfo.context, m_svgInlineTextBox, displayItemType,
+            boundsForDrawingRecorder(paintInfo, style, paintOffset,
+                includeSelectionRect));
+        InlineTextBoxPainter textPainter(m_svgInlineTextBox);
+        textPainter.paintDocumentMarkers(paintInfo, paintOffset, style,
+            textLayoutObject.scaledFont(),
+            DocumentMarkerPaintPhase::Background);
 
         if (!m_svgInlineTextBox.textFragments().isEmpty())
             paintTextFragments(paintInfo, parentLayoutObject);
+
+        textPainter.paintDocumentMarkers(paintInfo, paintOffset, style,
+            textLayoutObject.scaledFont(),
+            DocumentMarkerPaintPhase::Foreground);
     }
 }
 
-void SVGInlineTextBoxPainter::paintTextFragments(const PaintInfo& paintInfo, LayoutObject& parentLayoutObject)
+void SVGInlineTextBoxPainter::paintTextFragments(
+    const PaintInfo& paintInfo,
+    LayoutObject& parentLayoutObject)
 {
     const ComputedStyle& style = parentLayoutObject.styleRef();
     const SVGComputedStyle& svgStyle = style.svgStyle();
@@ -80,9 +147,9 @@ void SVGInlineTextBoxPainter::paintTextFragments(const PaintInfo& paintInfo, Lay
     bool hasVisibleStroke = svgStyle.hasVisibleStroke();
 
     const ComputedStyle* selectionStyle = &style;
-    bool shouldPaintSelection = this->shouldPaintSelection();
+    bool shouldPaintSelection = this->shouldPaintSelection(paintInfo);
     if (shouldPaintSelection) {
-        selectionStyle = parentLayoutObject.getCachedPseudoStyle(SELECTION);
+        selectionStyle = parentLayoutObject.getCachedPseudoStyle(PseudoIdSelection);
         if (selectionStyle) {
             const SVGComputedStyle& svgSelectionStyle = selectionStyle->svgStyle();
 
@@ -100,34 +167,38 @@ void SVGInlineTextBoxPainter::paintTextFragments(const PaintInfo& paintInfo, Lay
         hasVisibleStroke = false;
     }
 
-    AffineTransform fragmentTransform;
     unsigned textFragmentsSize = m_svgInlineTextBox.textFragments().size();
     for (unsigned i = 0; i < textFragmentsSize; ++i) {
-        SVGTextFragment& fragment = m_svgInlineTextBox.textFragments().at(i);
+        const SVGTextFragment& fragment = m_svgInlineTextBox.textFragments().at(i);
 
-        GraphicsContextStateSaver stateSaver(*paintInfo.context, false);
-        fragment.buildFragmentTransform(fragmentTransform);
-        if (!fragmentTransform.isIdentity()) {
+        GraphicsContextStateSaver stateSaver(paintInfo.context, false);
+        if (fragment.isTransformed()) {
             stateSaver.save();
-            paintInfo.context->concatCTM(fragmentTransform);
+            paintInfo.context.concatCTM(fragment.buildFragmentTransform());
         }
 
-        // Spec: All text decorations except line-through should be drawn before the text is filled and stroked; thus, the text is rendered on top of these decorations.
-        unsigned decorations = style.textDecorationsInEffect();
-        if (decorations & TextDecorationUnderline)
-            paintDecoration(paintInfo, TextDecorationUnderline, fragment);
-        if (decorations & TextDecorationOverline)
-            paintDecoration(paintInfo, TextDecorationOverline, fragment);
+        // Spec: All text decorations except line-through should be drawn before the
+        // text is filled and stroked; thus, the text is rendered on top of these
+        // decorations.
+        const Vector<AppliedTextDecoration>& decorations = style.appliedTextDecorations();
+        for (const AppliedTextDecoration& decoration : decorations) {
+            if (decoration.lines() & TextDecorationUnderline)
+                paintDecoration(paintInfo, TextDecorationUnderline, fragment);
+            if (decoration.lines() & TextDecorationOverline)
+                paintDecoration(paintInfo, TextDecorationOverline, fragment);
+        }
 
         for (int i = 0; i < 3; i++) {
             switch (svgStyle.paintOrderType(i)) {
             case PT_FILL:
                 if (hasFill)
-                    paintText(paintInfo, style, *selectionStyle, fragment, ApplyToFillMode, shouldPaintSelection);
+                    paintText(paintInfo, style, *selectionStyle, fragment,
+                        ApplyToFillMode, shouldPaintSelection);
                 break;
             case PT_STROKE:
                 if (hasVisibleStroke)
-                    paintText(paintInfo, style, *selectionStyle, fragment, ApplyToStrokeMode, shouldPaintSelection);
+                    paintText(paintInfo, style, *selectionStyle, fragment,
+                        ApplyToStrokeMode, shouldPaintSelection);
                 break;
             case PT_MARKERS:
                 // Markers don't apply to text
@@ -138,78 +209,81 @@ void SVGInlineTextBoxPainter::paintTextFragments(const PaintInfo& paintInfo, Lay
             }
         }
 
-        // Spec: Line-through should be drawn after the text is filled and stroked; thus, the line-through is rendered on top of the text.
-        if (decorations & TextDecorationLineThrough)
-            paintDecoration(paintInfo, TextDecorationLineThrough, fragment);
+        // Spec: Line-through should be drawn after the text is filled and stroked;
+        // thus, the line-through is rendered on top of the text.
+        for (const AppliedTextDecoration& decoration : decorations) {
+            if (decoration.lines() & TextDecorationLineThrough)
+                paintDecoration(paintInfo, TextDecorationLineThrough, fragment);
+        }
     }
 }
 
-void SVGInlineTextBoxPainter::paintSelectionBackground(const PaintInfo& paintInfo)
+void SVGInlineTextBoxPainter::paintSelectionBackground(
+    const PaintInfo& paintInfo)
 {
-    if (m_svgInlineTextBox.layoutObject().style()->visibility() != VISIBLE)
+    if (m_svgInlineTextBox.getLineLayoutItem().style()->visibility() != EVisibility::kVisible)
         return;
 
-    ASSERT(!m_svgInlineTextBox.layoutObject().document().printing());
+    DCHECK(!paintInfo.isPrinting());
 
-    if (paintInfo.phase == PaintPhaseSelection || !shouldPaintSelection())
+    if (paintInfo.phase == PaintPhaseSelection || !shouldPaintSelection(paintInfo))
         return;
 
-    Color backgroundColor = m_svgInlineTextBox.layoutObject().selectionBackgroundColor();
+    Color backgroundColor = m_svgInlineTextBox.getLineLayoutItem().selectionBackgroundColor();
     if (!backgroundColor.alpha())
         return;
 
-    LayoutSVGInlineText& textLayoutObject = toLayoutSVGInlineText(m_svgInlineTextBox.layoutObject());
+    LayoutSVGInlineText& textLayoutObject = inlineText();
     if (!textShouldBePainted(textLayoutObject))
         return;
 
-    const ComputedStyle& style = m_svgInlineTextBox.parent()->layoutObject().styleRef();
+    const ComputedStyle& style = m_svgInlineTextBox.parent()->getLineLayoutItem().styleRef();
 
     int startPosition, endPosition;
     m_svgInlineTextBox.selectionStartEnd(startPosition, endPosition);
 
-    int fragmentStartPosition = 0;
-    int fragmentEndPosition = 0;
-    AffineTransform fragmentTransform;
-    unsigned textFragmentsSize = m_svgInlineTextBox.textFragments().size();
-    for (unsigned i = 0; i < textFragmentsSize; ++i) {
-        SVGTextFragment& fragment = m_svgInlineTextBox.textFragments().at(i);
+    const Vector<SVGTextFragmentWithRange> fragmentInfoList = collectFragmentsInRange(startPosition, endPosition);
+    for (const SVGTextFragmentWithRange& fragmentWithRange : fragmentInfoList) {
+        const SVGTextFragment& fragment = fragmentWithRange.fragment;
+        GraphicsContextStateSaver stateSaver(paintInfo.context);
+        if (fragment.isTransformed())
+            paintInfo.context.concatCTM(fragment.buildFragmentTransform());
 
-        fragmentStartPosition = startPosition;
-        fragmentEndPosition = endPosition;
-        if (!m_svgInlineTextBox.mapStartEndPositionsIntoFragmentCoordinates(fragment, fragmentStartPosition, fragmentEndPosition))
-            continue;
-
-        GraphicsContextStateSaver stateSaver(*paintInfo.context);
-        fragment.buildFragmentTransform(fragmentTransform);
-        if (!fragmentTransform.isIdentity())
-            paintInfo.context->concatCTM(fragmentTransform);
-
-        paintInfo.context->setFillColor(backgroundColor);
-        paintInfo.context->fillRect(m_svgInlineTextBox.selectionRectForTextFragment(fragment, fragmentStartPosition, fragmentEndPosition, style), backgroundColor);
+        paintInfo.context.setFillColor(backgroundColor);
+        paintInfo.context.fillRect(m_svgInlineTextBox.selectionRectForTextFragment(
+                                       fragment, fragmentWithRange.startPosition,
+                                       fragmentWithRange.endPosition, style),
+            backgroundColor);
     }
 }
 
-static inline LayoutObject* findLayoutObjectDefininingTextDecoration(InlineFlowBox* parentBox)
+static inline LayoutObject* findLayoutObjectDefininingTextDecoration(
+    InlineFlowBox* parentBox)
 {
-    // Lookup first layout object in parent hierarchy which has text-decoration set.
-    LayoutObject* layoutObject = 0;
+    // Lookup first layout object in parent hierarchy which has text-decoration
+    // set.
+    LayoutObject* layoutObject = nullptr;
     while (parentBox) {
-        layoutObject = &parentBox->layoutObject();
+        layoutObject = LineLayoutAPIShim::layoutObjectFrom(parentBox->getLineLayoutItem());
 
-        if (layoutObject->style() && layoutObject->style()->textDecoration() != TextDecorationNone)
+        if (layoutObject->style() && layoutObject->style()->getTextDecoration() != TextDecorationNone)
             break;
 
         parentBox = parentBox->parent();
     }
 
-    ASSERT(layoutObject);
+    DCHECK(layoutObject);
     return layoutObject;
 }
 
-// Offset from the baseline for |decoration|. Positive offsets are above the baseline.
-static inline float baselineOffsetForDecoration(TextDecoration decoration, const FontMetrics& fontMetrics, float thickness)
+// Offset from the baseline for |decoration|. Positive offsets are above the
+// baseline.
+static inline float baselineOffsetForDecoration(TextDecoration decoration,
+    const FontMetrics& fontMetrics,
+    float thickness)
 {
-    // FIXME: For SVG Fonts we need to use the attributes defined in the <font-face> if specified.
+    // FIXME: For SVG Fonts we need to use the attributes defined in the
+    // <font-face> if specified.
     // Compatible with Batik/Presto.
     if (decoration == TextDecorationUnderline)
         return -thickness * 1.5f;
@@ -224,40 +298,56 @@ static inline float baselineOffsetForDecoration(TextDecoration decoration, const
 
 static inline float thicknessForDecoration(TextDecoration, const Font& font)
 {
-    // FIXME: For SVG Fonts we need to use the attributes defined in the <font-face> if specified.
+    // FIXME: For SVG Fonts we need to use the attributes defined in the
+    // <font-face> if specified.
     // Compatible with Batik/Presto
-    return font.fontDescription().computedSize() / 20.0f;
+    return font.getFontDescription().computedSize() / 20.0f;
 }
 
-void SVGInlineTextBoxPainter::paintDecoration(const PaintInfo& paintInfo, TextDecoration decoration, const SVGTextFragment& fragment)
+void SVGInlineTextBoxPainter::paintDecoration(const PaintInfo& paintInfo,
+    TextDecoration decoration,
+    const SVGTextFragment& fragment)
 {
-    if (m_svgInlineTextBox.layoutObject().style()->textDecorationsInEffect() == TextDecorationNone)
+    if (m_svgInlineTextBox.getLineLayoutItem()
+            .style()
+            ->textDecorationsInEffect()
+        == TextDecorationNone)
         return;
 
     if (fragment.width <= 0)
         return;
 
-    // Find out which style defined the text-decoration, as its fill/stroke properties have to be used for drawing instead of ours.
+    // Find out which style defined the text-decoration, as its fill/stroke
+    // properties have to be used for drawing instead of ours.
     LayoutObject* decorationLayoutObject = findLayoutObjectDefininingTextDecoration(m_svgInlineTextBox.parent());
     const ComputedStyle& decorationStyle = decorationLayoutObject->styleRef();
 
-    if (decorationStyle.visibility() == HIDDEN)
+    if (decorationStyle.visibility() != EVisibility::kVisible)
         return;
 
     float scalingFactor = 1;
     Font scaledFont;
-    LayoutSVGInlineText::computeNewScaledFontForStyle(decorationLayoutObject, &decorationStyle, scalingFactor, scaledFont);
-    ASSERT(scalingFactor);
+    LayoutSVGInlineText::computeNewScaledFontForStyle(*decorationLayoutObject,
+        scalingFactor, scaledFont);
+    DCHECK(scalingFactor);
 
     float thickness = thicknessForDecoration(decoration, scaledFont);
     if (thickness <= 0)
         return;
 
-    float decorationOffset = baselineOffsetForDecoration(decoration, scaledFont.fontMetrics(), thickness);
-    FloatPoint decorationOrigin(fragment.x, fragment.y - decorationOffset / scalingFactor);
+    const SimpleFontData* fontData = scaledFont.primaryFont();
+    DCHECK(fontData);
+    if (!fontData)
+        return;
+
+    float decorationOffset = baselineOffsetForDecoration(
+        decoration, fontData->getFontMetrics(), thickness);
+    FloatPoint decorationOrigin(fragment.x,
+        fragment.y - decorationOffset / scalingFactor);
 
     Path path;
-    path.addRect(FloatRect(decorationOrigin, FloatSize(fragment.width, thickness / scalingFactor)));
+    path.addRect(FloatRect(decorationOrigin,
+        FloatSize(fragment.width, thickness / scalingFactor)));
 
     const SVGComputedStyle& svgDecorationStyle = decorationStyle.svgStyle();
 
@@ -266,24 +356,33 @@ void SVGInlineTextBoxPainter::paintDecoration(const PaintInfo& paintInfo, TextDe
         case PT_FILL:
             if (svgDecorationStyle.hasFill()) {
                 SkPaint fillPaint;
-                if (!SVGPaintContext::paintForLayoutObject(paintInfo, decorationStyle, *decorationLayoutObject, ApplyToFillMode, fillPaint))
+                if (!SVGPaintContext::paintForLayoutObject(
+                        paintInfo, decorationStyle, *decorationLayoutObject,
+                        ApplyToFillMode, fillPaint))
                     break;
                 fillPaint.setAntiAlias(true);
-                paintInfo.context->drawPath(path.skPath(), fillPaint);
+                paintInfo.context.drawPath(path.getSkPath(), fillPaint);
             }
             break;
         case PT_STROKE:
             if (svgDecorationStyle.hasVisibleStroke()) {
                 SkPaint strokePaint;
-                if (!SVGPaintContext::paintForLayoutObject(paintInfo, decorationStyle, *decorationLayoutObject, ApplyToStrokeMode, strokePaint))
+                if (!SVGPaintContext::paintForLayoutObject(
+                        paintInfo, decorationStyle, *decorationLayoutObject,
+                        ApplyToStrokeMode, strokePaint))
                     break;
                 strokePaint.setAntiAlias(true);
+                float strokeScaleFactor = svgDecorationStyle.vectorEffect() == VE_NON_SCALING_STROKE
+                    ? 1 / scalingFactor
+                    : 1;
                 StrokeData strokeData;
-                SVGLayoutSupport::applyStrokeStyleToStrokeData(strokeData, decorationStyle, *decorationLayoutObject);
-                if (svgDecorationStyle.vectorEffect() == VE_NON_SCALING_STROKE)
-                    strokeData.setThickness(strokeData.thickness() / scalingFactor);
+                SVGLayoutSupport::applyStrokeStyleToStrokeData(
+                    strokeData, decorationStyle, *decorationLayoutObject,
+                    strokeScaleFactor);
+                if (strokeScaleFactor != 1)
+                    strokeData.setThickness(strokeData.thickness() * strokeScaleFactor);
                 strokeData.setupPaint(&strokePaint);
-                paintInfo.context->drawPath(path.skPath(), strokePaint);
+                paintInfo.context.drawPath(path.getSkPath(), strokePaint);
             }
             break;
         case PT_MARKERS:
@@ -294,157 +393,264 @@ void SVGInlineTextBoxPainter::paintDecoration(const PaintInfo& paintInfo, TextDe
     }
 }
 
-void SVGInlineTextBoxPainter::paintTextWithShadows(const PaintInfo& paintInfo, const ComputedStyle& style,
-    TextRun& textRun, const SVGTextFragment& fragment, int startPosition, int endPosition,
-    LayoutSVGResourceMode resourceMode)
+bool SVGInlineTextBoxPainter::setupTextPaint(const PaintInfo& paintInfo,
+    const ComputedStyle& style,
+    LayoutSVGResourceMode resourceMode,
+    SkPaint& paint)
 {
-    LayoutSVGInlineText& textLayoutObject = toLayoutSVGInlineText(m_svgInlineTextBox.layoutObject());
+    LayoutSVGInlineText& textLayoutObject = inlineText();
 
     float scalingFactor = textLayoutObject.scalingFactor();
-    ASSERT(scalingFactor);
+    DCHECK(scalingFactor);
 
-    const Font& scaledFont = textLayoutObject.scaledFont();
-    const ShadowList* shadowList = style.textShadow();
-    GraphicsContext* context = paintInfo.context;
-
-    // Text shadows are disabled when printing. http://crbug.com/258321
-    bool hasShadow = shadowList && !context->printing();
-
-    FloatPoint textOrigin(fragment.x, fragment.y);
-    FloatSize textSize(fragment.width, fragment.height);
     AffineTransform paintServerTransform;
-    const AffineTransform* additionalPaintServerTransform = 0;
+    const AffineTransform* additionalPaintServerTransform = nullptr;
 
-    GraphicsContextStateSaver stateSaver(*context, false);
     if (scalingFactor != 1) {
-        textOrigin.scale(scalingFactor, scalingFactor);
-        textSize.scale(scalingFactor);
-        stateSaver.save();
-        context->scale(1 / scalingFactor, 1 / scalingFactor);
         // Adjust the paint-server coordinate space.
         paintServerTransform.scale(scalingFactor);
         additionalPaintServerTransform = &paintServerTransform;
     }
 
-    SkPaint paint;
-    if (!SVGPaintContext::paintForLayoutObject(paintInfo, style, m_svgInlineTextBox.parent()->layoutObject(), resourceMode, paint, additionalPaintServerTransform))
-        return;
+    if (!SVGPaintContext::paintForLayoutObject(
+            paintInfo, style, parentInlineLayoutObject(), resourceMode, paint,
+            additionalPaintServerTransform))
+        return false;
     paint.setAntiAlias(true);
 
-    if (hasShadow) {
-        OwnPtr<DrawLooperBuilder> drawLooperBuilder = shadowList->createDrawLooper(DrawLooperBuilder::ShadowRespectsAlpha, style.visitedDependentColor(CSSPropertyColor));
-        RefPtr<SkDrawLooper> drawLooper = drawLooperBuilder->detachDrawLooper();
-        paint.setLooper(drawLooper.get());
+    if (hasShadow(paintInfo, style)) {
+        paint.setLooper(style.textShadow()->createDrawLooper(
+            DrawLooperBuilder::ShadowRespectsAlpha,
+            style.visitedDependentColor(CSSPropertyColor)));
     }
 
     if (resourceMode == ApplyToStrokeMode) {
+        // The stroke geometry needs be generated based on the scaled font.
+        float strokeScaleFactor = style.svgStyle().vectorEffect() != VE_NON_SCALING_STROKE ? scalingFactor
+                                                                                           : 1;
         StrokeData strokeData;
-        SVGLayoutSupport::applyStrokeStyleToStrokeData(strokeData, style, m_svgInlineTextBox.parent()->layoutObject());
-        if (style.svgStyle().vectorEffect() != VE_NON_SCALING_STROKE)
-            strokeData.setThickness(strokeData.thickness() * scalingFactor);
+        SVGLayoutSupport::applyStrokeStyleToStrokeData(
+            strokeData, style, parentInlineLayoutObject(), strokeScaleFactor);
+        if (strokeScaleFactor != 1)
+            strokeData.setThickness(strokeData.thickness() * strokeScaleFactor);
         strokeData.setupPaint(&paint);
+    }
+    return true;
+}
+
+void SVGInlineTextBoxPainter::paintText(const PaintInfo& paintInfo,
+    TextRun& textRun,
+    const SVGTextFragment& fragment,
+    int startPosition,
+    int endPosition,
+    const SkPaint& paint)
+{
+    LayoutSVGInlineText& textLayoutObject = inlineText();
+    const Font& scaledFont = textLayoutObject.scaledFont();
+
+    float scalingFactor = textLayoutObject.scalingFactor();
+    DCHECK(scalingFactor);
+
+    FloatPoint textOrigin(fragment.x, fragment.y);
+    FloatSize textSize(fragment.width, fragment.height);
+
+    GraphicsContext& context = paintInfo.context;
+    GraphicsContextStateSaver stateSaver(context, false);
+    if (scalingFactor != 1) {
+        textOrigin.scale(scalingFactor, scalingFactor);
+        textSize.scale(scalingFactor);
+        stateSaver.save();
+        context.scale(1 / scalingFactor, 1 / scalingFactor);
     }
 
     TextRunPaintInfo textRunPaintInfo(textRun);
     textRunPaintInfo.from = startPosition;
     textRunPaintInfo.to = endPosition;
 
-    float baseline = scaledFont.fontMetrics().floatAscent();
+    const SimpleFontData* fontData = scaledFont.primaryFont();
+    DCHECK(fontData);
+    if (!fontData)
+        return;
+    float baseline = fontData->getFontMetrics().floatAscent();
     textRunPaintInfo.bounds = FloatRect(textOrigin.x(), textOrigin.y() - baseline,
         textSize.width(), textSize.height());
 
-    context->drawText(scaledFont, textRunPaintInfo, textOrigin, paint);
+    context.drawText(scaledFont, textRunPaintInfo, textOrigin, paint);
 }
 
-void SVGInlineTextBoxPainter::paintText(const PaintInfo& paintInfo, const ComputedStyle& style,
-    const ComputedStyle& selectionStyle, const SVGTextFragment& fragment,
-    LayoutSVGResourceMode resourceMode, bool shouldPaintSelection)
+void SVGInlineTextBoxPainter::paintText(const PaintInfo& paintInfo,
+    const ComputedStyle& style,
+    const ComputedStyle& selectionStyle,
+    const SVGTextFragment& fragment,
+    LayoutSVGResourceMode resourceMode,
+    bool shouldPaintSelection)
 {
     int startPosition = 0;
     int endPosition = 0;
     if (shouldPaintSelection) {
         m_svgInlineTextBox.selectionStartEnd(startPosition, endPosition);
-        shouldPaintSelection = m_svgInlineTextBox.mapStartEndPositionsIntoFragmentCoordinates(fragment, startPosition, endPosition);
+        shouldPaintSelection = m_svgInlineTextBox.mapStartEndPositionsIntoFragmentCoordinates(
+            fragment, startPosition, endPosition);
     }
 
-    // Fast path if there is no selection, just draw the whole chunk part using the regular style
+    // Fast path if there is no selection, just draw the whole chunk part using
+    // the regular style.
     TextRun textRun = m_svgInlineTextBox.constructTextRun(style, fragment);
     if (!shouldPaintSelection || startPosition >= endPosition) {
-        paintTextWithShadows(paintInfo, style, textRun, fragment, 0, fragment.length, resourceMode);
+        SkPaint paint;
+        if (setupTextPaint(paintInfo, style, resourceMode, paint))
+            paintText(paintInfo, textRun, fragment, 0, fragment.length, paint);
         return;
     }
 
-    // Eventually draw text using regular style until the start position of the selection
+    // Eventually draw text using regular style until the start position of the
+    // selection.
     bool paintSelectedTextOnly = paintInfo.phase == PaintPhaseSelection;
-    if (startPosition > 0 && !paintSelectedTextOnly)
-        paintTextWithShadows(paintInfo, style, textRun, fragment, 0, startPosition, resourceMode);
+    if (startPosition > 0 && !paintSelectedTextOnly) {
+        SkPaint paint;
+        if (setupTextPaint(paintInfo, style, resourceMode, paint))
+            paintText(paintInfo, textRun, fragment, 0, startPosition, paint);
+    }
 
-    // Draw text using selection style from the start to the end position of the selection
+    // Draw text using selection style from the start to the end position of the
+    // selection.
     if (style != selectionStyle) {
         StyleDifference diff;
         diff.setNeedsPaintInvalidationObject();
-        SVGResourcesCache::clientStyleChanged(&m_svgInlineTextBox.parent()->layoutObject(), diff, selectionStyle);
+        SVGResourcesCache::clientStyleChanged(&parentInlineLayoutObject(), diff,
+            selectionStyle);
     }
 
-    paintTextWithShadows(paintInfo, selectionStyle, textRun, fragment, startPosition, endPosition, resourceMode);
+    SkPaint paint;
+    if (setupTextPaint(paintInfo, selectionStyle, resourceMode, paint))
+        paintText(paintInfo, textRun, fragment, startPosition, endPosition, paint);
 
     if (style != selectionStyle) {
         StyleDifference diff;
         diff.setNeedsPaintInvalidationObject();
-        SVGResourcesCache::clientStyleChanged(&m_svgInlineTextBox.parent()->layoutObject(), diff, style);
+        SVGResourcesCache::clientStyleChanged(&parentInlineLayoutObject(), diff,
+            style);
     }
 
-    // Eventually draw text using regular style from the end position of the selection to the end of the current chunk part
-    if (endPosition < static_cast<int>(fragment.length) && !paintSelectedTextOnly)
-        paintTextWithShadows(paintInfo, style, textRun, fragment, endPosition, fragment.length, resourceMode);
+    // Eventually draw text using regular style from the end position of the
+    // selection to the end of the current chunk part.
+    if (endPosition < static_cast<int>(fragment.length) && !paintSelectedTextOnly) {
+        SkPaint paint;
+        if (setupTextPaint(paintInfo, style, resourceMode, paint))
+            paintText(paintInfo, textRun, fragment, endPosition, fragment.length,
+                paint);
+    }
 }
 
-void SVGInlineTextBoxPainter::paintTextMatchMarker(GraphicsContext* context, const LayoutPoint&, DocumentMarker* marker, const ComputedStyle& style, const Font& font)
+Vector<SVGTextFragmentWithRange> SVGInlineTextBoxPainter::collectTextMatches(
+    const DocumentMarker& marker) const
 {
-    // SVG is only interested in the TextMatch markers.
-    if (marker->type() != DocumentMarker::TextMatch)
+    const Vector<SVGTextFragmentWithRange> emptyTextMatchList;
+
+    // SVG does not support grammar or spellcheck markers, so skip anything but
+    // TextMatch.
+    if (marker.type() != DocumentMarker::TextMatch)
+        return emptyTextMatchList;
+
+    if (!inlineLayoutObject().frame()->editor().markedTextMatchesAreHighlighted())
+        return emptyTextMatchList;
+
+    int markerStartPosition = std::max<int>(marker.startOffset() - m_svgInlineTextBox.start(), 0);
+    int markerEndPosition = std::min<int>(marker.endOffset() - m_svgInlineTextBox.start(),
+        m_svgInlineTextBox.len());
+
+    if (markerStartPosition >= markerEndPosition)
+        return emptyTextMatchList;
+
+    return collectFragmentsInRange(markerStartPosition, markerEndPosition);
+}
+
+Vector<SVGTextFragmentWithRange>
+SVGInlineTextBoxPainter::collectFragmentsInRange(int startPosition,
+    int endPosition) const
+{
+    Vector<SVGTextFragmentWithRange> fragmentInfoList;
+    const Vector<SVGTextFragment>& fragments = m_svgInlineTextBox.textFragments();
+    for (const SVGTextFragment& fragment : fragments) {
+        // TODO(ramya.v): If these can't be negative we should use unsigned.
+        int fragmentStartPosition = startPosition;
+        int fragmentEndPosition = endPosition;
+        if (!m_svgInlineTextBox.mapStartEndPositionsIntoFragmentCoordinates(
+                fragment, fragmentStartPosition, fragmentEndPosition))
+            continue;
+
+        fragmentInfoList.push_back(SVGTextFragmentWithRange(
+            fragment, fragmentStartPosition, fragmentEndPosition));
+    }
+    return fragmentInfoList;
+}
+
+void SVGInlineTextBoxPainter::paintTextMatchMarkerForeground(
+    const PaintInfo& paintInfo,
+    const LayoutPoint& point,
+    const DocumentMarker& marker,
+    const ComputedStyle& style,
+    const Font& font)
+{
+    const Vector<SVGTextFragmentWithRange> textMatchInfoList = collectTextMatches(marker);
+    if (textMatchInfoList.isEmpty())
         return;
 
-    LayoutSVGInlineText& textLayoutObject = toLayoutSVGInlineText(m_svgInlineTextBox.layoutObject());
+    Color textColor = LayoutTheme::theme().platformTextSearchColor(marker.activeMatch());
 
-    AffineTransform fragmentTransform;
-    for (InlineTextBox* box = textLayoutObject.firstTextBox(); box; box = box->nextTextBox()) {
-        if (!box->isSVGInlineTextBox())
-            continue;
+    SkPaint fillPaint;
+    fillPaint.setColor(textColor.rgb());
+    fillPaint.setAntiAlias(true);
 
-        SVGInlineTextBox* textBox = toSVGInlineTextBox(box);
+    SkPaint strokePaint;
+    bool shouldPaintStroke = false;
+    if (setupTextPaint(paintInfo, style, ApplyToStrokeMode, strokePaint)) {
+        shouldPaintStroke = true;
+        strokePaint.setLooper(nullptr);
+        strokePaint.setColor(textColor.rgb());
+    }
 
-        int markerStartPosition = std::max<int>(marker->startOffset() - textBox->start(), 0);
-        int markerEndPosition = std::min<int>(marker->endOffset() - textBox->start(), textBox->len());
+    for (const SVGTextFragmentWithRange& textMatchInfo : textMatchInfoList) {
+        const SVGTextFragment& fragment = textMatchInfo.fragment;
+        GraphicsContextStateSaver stateSaver(paintInfo.context);
+        if (fragment.isTransformed())
+            paintInfo.context.concatCTM(fragment.buildFragmentTransform());
 
-        if (markerStartPosition >= markerEndPosition)
-            continue;
+        TextRun textRun = m_svgInlineTextBox.constructTextRun(style, fragment);
+        paintText(paintInfo, textRun, fragment, textMatchInfo.startPosition,
+            textMatchInfo.endPosition, fillPaint);
+        if (shouldPaintStroke)
+            paintText(paintInfo, textRun, fragment, textMatchInfo.startPosition,
+                textMatchInfo.endPosition, strokePaint);
+    }
+}
 
-        const Vector<SVGTextFragment>& fragments = textBox->textFragments();
-        unsigned textFragmentsSize = fragments.size();
-        for (unsigned i = 0; i < textFragmentsSize; ++i) {
-            const SVGTextFragment& fragment = fragments.at(i);
+void SVGInlineTextBoxPainter::paintTextMatchMarkerBackground(
+    const PaintInfo& paintInfo,
+    const LayoutPoint& point,
+    const DocumentMarker& marker,
+    const ComputedStyle& style,
+    const Font& font)
+{
+    const Vector<SVGTextFragmentWithRange> textMatchInfoList = collectTextMatches(marker);
+    if (textMatchInfoList.isEmpty())
+        return;
 
-            int fragmentStartPosition = markerStartPosition;
-            int fragmentEndPosition = markerEndPosition;
-            if (!textBox->mapStartEndPositionsIntoFragmentCoordinates(fragment, fragmentStartPosition, fragmentEndPosition))
-                continue;
+    Color color = LayoutTheme::theme().platformTextSearchHighlightColor(
+        marker.activeMatch());
+    for (const SVGTextFragmentWithRange& textMatchInfo : textMatchInfoList) {
+        const SVGTextFragment& fragment = textMatchInfo.fragment;
 
-            FloatRect fragmentRect = textBox->selectionRectForTextFragment(fragment, fragmentStartPosition, fragmentEndPosition, style);
-            fragment.buildFragmentTransform(fragmentTransform);
-
-            // Draw the marker highlight.
-            if (m_svgInlineTextBox.layoutObject().frame()->editor().markedTextMatchesAreHighlighted()) {
-                Color color = marker->activeMatch() ?
-                    LayoutTheme::theme().platformActiveTextSearchHighlightColor() :
-                    LayoutTheme::theme().platformInactiveTextSearchHighlightColor();
-                GraphicsContextStateSaver stateSaver(*context);
-                if (!fragmentTransform.isIdentity())
-                    context->concatCTM(fragmentTransform);
-                context->setFillColor(color);
-                context->fillRect(fragmentRect, color);
-            }
+        GraphicsContextStateSaver stateSaver(paintInfo.context, false);
+        if (fragment.isTransformed()) {
+            stateSaver.save();
+            paintInfo.context.concatCTM(fragment.buildFragmentTransform());
         }
+        FloatRect fragmentRect = m_svgInlineTextBox.selectionRectForTextFragment(
+            fragment, textMatchInfo.startPosition, textMatchInfo.endPosition,
+            style);
+        paintInfo.context.setFillColor(color);
+        paintInfo.context.fillRect(fragmentRect);
     }
 }
 

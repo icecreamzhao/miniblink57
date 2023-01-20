@@ -323,13 +323,8 @@ static inline float ExecuteF32Sub(float a, float b, TrapReason* trap) {
   // Some architectures (e.g. MIPS) need extra checking to preserve the payload
   // of a NaN operand.
   if (result - result != 0) {
-<<<<<<< HEAD
     if (std_isnan(a)) return quiet(a);
     if (std_isnan(b)) return quiet(b);
-=======
-    if (std::isnan(a)) return quiet(a);
-    if (std::isnan(b)) return quiet(b);
->>>>>>> miniblink49
   }
   return result;
 }
@@ -351,13 +346,8 @@ static inline double ExecuteF64Sub(double a, double b, TrapReason* trap) {
   // Some architectures (e.g. MIPS) need extra checking to preserve the payload
   // of a NaN operand.
   if (result - result != 0) {
-<<<<<<< HEAD
     if (std_isnan(a)) return quiet(a);
     if (std_isnan(b)) return quiet(b);
-=======
-    if (std::isnan(a)) return quiet(a);
-    if (std::isnan(b)) return quiet(b);
->>>>>>> miniblink49
   }
   return result;
 }
@@ -1629,11 +1619,7 @@ class ThreadImpl : public WasmInterpreter::Thread {
     WasmVal rval = Pop();                                \
     WasmVal lval = Pop();                                \
     ctype result = lval.to<ctype>() op rval.to<ctype>(); \
-<<<<<<< HEAD
     possible_nondeterminism_ |= std_isnan(result);      \
-=======
-    possible_nondeterminism_ |= std::isnan(result);      \
->>>>>>> miniblink49
     WasmVal result_val(result);                          \
     Push(pc, result_val);                                \
     break;                                               \
@@ -1671,11 +1657,7 @@ class ThreadImpl : public WasmInterpreter::Thread {
     TrapReason trap = kTrapCount;                    \
     volatile ctype val = Pop().to<ctype>();          \
     ctype result = Execute##name(val, &trap);        \
-<<<<<<< HEAD
     possible_nondeterminism_ |= std_isnan(result);  \
-=======
-    possible_nondeterminism_ |= std::isnan(result);  \
->>>>>>> miniblink49
     WasmVal result_val(result);                      \
     if (trap != kTrapCount) return DoTrap(trap, pc); \
     Push(pc, result_val);                            \

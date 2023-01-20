@@ -23,16 +23,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/editing/VisibleSelection.h"
 
 #include "bindings/core/v8/ExceptionState.h"
 #include "core/dom/Document.h"
 #include "core/dom/Element.h"
 #include "core/dom/Range.h"
-#include "core/editing/htmlediting.h"
+#include "core/editing/EditingUtilities.h"
+#include "core/editing/SelectionAdjuster.h"
 #include "core/editing/iterators/CharacterIterator.h"
-#include "core/layout/LayoutObject.h"
 #include "platform/geometry/LayoutPoint.h"
 #include "wtf/Assertions.h"
 #include "wtf/text/CString.h"
@@ -41,340 +40,285 @@
 
 namespace blink {
 
-VisibleSelection::VisibleSelection()
-    : m_affinity(DOWNSTREAM)
-    , m_changeObserver(nullptr)
+template <typename Strategy>
+VisibleSelectionTemplate<Strategy>::VisibleSelectionTemplate()
+    : m_affinity(TextAffinity::Downstream)
     , m_selectionType(NoSelection)
     , m_baseIsFirst(true)
     , m_isDirectional(false)
+    , m_granularity(CharacterGranularity)
+    , m_hasTrailingWhitespace(false)
 {
 }
 
-VisibleSelection::VisibleSelection(const Position& pos, EAffinity affinity, bool isDirectional)
-    : VisibleSelection(pos, pos, affinity, isDirectional)
+template <typename Strategy>
+VisibleSelectionTemplate<Strategy>::VisibleSelectionTemplate(
+    const SelectionTemplate<Strategy>& selection)
+    : m_base(selection.base())
+    , m_extent(selection.extent())
+    , m_affinity(selection.affinity())
+    , m_selectionType(NoSelection)
+    , m_isDirectional(selection.isDirectional())
+    , m_granularity(selection.granularity())
+    , m_hasTrailingWhitespace(selection.hasTrailingWhitespace())
+{
+    validate(m_granularity);
+}
+
+#ifdef TENCENT_CHANGES
+
+template <typename Strategy>
+VisibleSelectionTemplate<Strategy>::VisibleSelectionTemplate(const PositionTemplate<Strategy>& pos, TextAffinity affinity, bool isDirectional)
+    : VisibleSelectionTemplate(pos, pos, affinity, isDirectional)
 {
 }
 
-VisibleSelection::VisibleSelection(const Position& base, const Position& extent, EAffinity affinity, bool isDirectional)
+template <typename Strategy>
+VisibleSelectionTemplate<Strategy>::VisibleSelectionTemplate(const PositionTemplate<Strategy>& base, const PositionTemplate<Strategy>& extent, TextAffinity affinity, bool isDirectional)
     : m_base(base)
     , m_extent(extent)
     , m_affinity(affinity)
-    , m_changeObserver(nullptr)
     , m_isDirectional(isDirectional)
+    , m_granularity(CharacterGranularity)
+    , m_hasTrailingWhitespace(false)
 {
     validate();
 }
 
-VisibleSelection::VisibleSelection(const PositionInComposedTree& base, const PositionInComposedTree& extent, EAffinity affinity, bool isDirectional)
-    : VisibleSelection(toPositionInDOMTree(base), toPositionInDOMTree(extent), affinity, isDirectional)
+template <typename Strategy>
+VisibleSelectionTemplate<Strategy>::VisibleSelectionTemplate(const PositionWithAffinityTemplate<Strategy>& pos, bool isDirectional)
+    : VisibleSelectionTemplate(pos.position(), pos.affinity(), isDirectional)
 {
 }
 
-VisibleSelection::VisibleSelection(const VisiblePosition& pos, bool isDirectional)
-    : VisibleSelection(pos, pos, isDirectional)
+template <typename Strategy>
+VisibleSelectionTemplate<Strategy>::VisibleSelectionTemplate(const VisiblePositionTemplate<Strategy>& pos, bool isDirectional)
+    : VisibleSelectionTemplate(pos, pos, isDirectional)
 {
 }
 
-VisibleSelection::VisibleSelection(const VisiblePosition& base, const VisiblePosition& extent, bool isDirectional)
-    : VisibleSelection(base.deepEquivalent(), extent.deepEquivalent(), base.affinity(), isDirectional)
+template <typename Strategy>
+VisibleSelectionTemplate<Strategy>::VisibleSelectionTemplate(const VisiblePositionTemplate<Strategy>& base, const VisiblePositionTemplate<Strategy>& extent, bool isDirectional)
+    : VisibleSelectionTemplate(base.deepEquivalent(), extent.deepEquivalent(), base.affinity(), isDirectional)
 {
 }
 
-VisibleSelection::VisibleSelection(const EphemeralRange& range, EAffinity affinity, bool isDirectional)
-    : VisibleSelection(range.startPosition(), range.endPosition(), affinity, isDirectional)
+template <typename Strategy>
+VisibleSelectionTemplate<Strategy>::VisibleSelectionTemplate(const EphemeralRangeTemplate<Strategy>& range, TextAffinity affinity, bool isDirectional)
+    : VisibleSelectionTemplate(range.startPosition(), range.endPosition(), affinity, isDirectional)
 {
 }
 
-VisibleSelection::VisibleSelection(const Range* range, EAffinity affinity, bool isDirectional)
-    : VisibleSelection(range->startPosition(), range->endPosition(), affinity, isDirectional)
+template <typename Strategy>
+void VisibleSelectionTemplate<Strategy>::expandUsingGranularity(TextGranularity granularity)
 {
+    if (isNone())
+        return;
+    validate(granularity);
 }
 
-VisibleSelection::VisibleSelection(const VisibleSelection& other)
+#endif
+
+template <typename Strategy>
+VisibleSelectionTemplate<Strategy> VisibleSelectionTemplate<Strategy>::create(const SelectionTemplate<Strategy>& selection)
+{
+    return VisibleSelectionTemplate(selection);
+}
+
+VisibleSelection createVisibleSelection(const SelectionInDOMTree& selection)
+{
+    return VisibleSelection::create(selection);
+}
+
+VisibleSelectionInFlatTree createVisibleSelection(const SelectionInFlatTree& selection)
+{
+    return VisibleSelectionInFlatTree::create(selection);
+}
+
+template <typename Strategy>
+static SelectionType computeSelectionType(const PositionTemplate<Strategy>& start, const PositionTemplate<Strategy>& end)
+{
+    if (start.isNull()) {
+        DCHECK(end.isNull());
+        return NoSelection;
+    }
+    if (start == end)
+        return CaretSelection;
+    // TODO(yosin) We should call |Document::updateStyleAndLayout()| here for
+    // |mostBackwardCaretPosition()|. However, we are here during
+    // |Node::removeChild()|.
+    start.anchorNode()->updateDistribution();
+    end.anchorNode()->updateDistribution();
+    if (mostBackwardCaretPosition(start) == mostBackwardCaretPosition(end))
+        return CaretSelection;
+    return RangeSelection;
+}
+
+template <typename Strategy>
+VisibleSelectionTemplate<Strategy>::VisibleSelectionTemplate(
+    const VisibleSelectionTemplate<Strategy>& other)
     : m_base(other.m_base)
     , m_extent(other.m_extent)
     , m_start(other.m_start)
     , m_end(other.m_end)
-    , m_baseInComposedTree(other.m_baseInComposedTree)
-    , m_extentInComposedTree(other.m_extentInComposedTree)
-    , m_startInComposedTree(other.m_startInComposedTree)
-    , m_endInComposedTree(other.m_endInComposedTree)
     , m_affinity(other.m_affinity)
-    , m_changeObserver(nullptr) // Observer is associated with only one VisibleSelection, so this should not be copied.
     , m_selectionType(other.m_selectionType)
     , m_baseIsFirst(other.m_baseIsFirst)
     , m_isDirectional(other.m_isDirectional)
+    , m_granularity(other.m_granularity)
+    , m_hasTrailingWhitespace(other.m_hasTrailingWhitespace)
 {
 }
 
-VisibleSelection& VisibleSelection::operator=(const VisibleSelection& other)
+template <typename Strategy>
+VisibleSelectionTemplate<Strategy>& VisibleSelectionTemplate<Strategy>::
+operator=(const VisibleSelectionTemplate<Strategy>& other)
 {
-    didChange();
-
     m_base = other.m_base;
     m_extent = other.m_extent;
     m_start = other.m_start;
     m_end = other.m_end;
-    m_baseInComposedTree = other.m_baseInComposedTree;
-    m_extentInComposedTree = other.m_extentInComposedTree;
-    m_startInComposedTree = other.m_startInComposedTree;
-    m_endInComposedTree = other.m_endInComposedTree;
     m_affinity = other.m_affinity;
-    m_changeObserver = nullptr;
     m_selectionType = other.m_selectionType;
     m_baseIsFirst = other.m_baseIsFirst;
     m_isDirectional = other.m_isDirectional;
+    m_granularity = other.m_granularity;
+    m_hasTrailingWhitespace = other.m_hasTrailingWhitespace;
     return *this;
 }
 
-#if !ENABLE(OILPAN)
-VisibleSelection::~VisibleSelection()
+template <typename Strategy>
+SelectionTemplate<Strategy> VisibleSelectionTemplate<Strategy>::asSelection()
+    const
 {
-    didChange();
-}
-#endif
-
-VisibleSelection VisibleSelection::selectionFromContentsOfNode(Node* node)
-{
-    ASSERT(!editingIgnoresContent(node));
-    return VisibleSelection(firstPositionInNode(node), lastPositionInNode(node), DOWNSTREAM);
-}
-
-SelectionType VisibleSelection::selectionTypeInComposedTree() const
-{
-    return selectionType(m_startInComposedTree, m_endInComposedTree);
+    typename SelectionTemplate<Strategy>::Builder builder;
+    if (m_base.isNotNull())
+        builder.setBaseAndExtent(m_base, m_extent);
+    return builder.setAffinity(m_affinity)
+        .setGranularity(m_granularity)
+        .setIsDirectional(m_isDirectional)
+        .setHasTrailingWhitespace(m_hasTrailingWhitespace)
+        .build();
 }
 
-void VisibleSelection::setBase(const Position& position)
+template <typename Strategy>
+void VisibleSelectionTemplate<Strategy>::setBase(
+    const PositionTemplate<Strategy>& position)
 {
-    Position oldBase = m_base;
+    DCHECK(!needsLayoutTreeUpdate(position));
     m_base = position;
     validate();
-    if (m_base != oldBase)
-        didChange();
 }
 
-void VisibleSelection::setBase(const PositionInComposedTree& position)
+template <typename Strategy>
+void VisibleSelectionTemplate<Strategy>::setBase(
+    const VisiblePositionTemplate<Strategy>& visiblePosition)
 {
-    Position oldBase = m_base;
-    m_base = toPositionInDOMTree(position);
-    m_extent = toPositionInDOMTree(extentInComposedTree());
-    validate();
-    if (m_base != oldBase)
-        didChange();
-}
-
-void VisibleSelection::setBase(const VisiblePosition& visiblePosition)
-{
-    Position oldBase = m_base;
+    DCHECK(visiblePosition.isValid());
     m_base = visiblePosition.deepEquivalent();
     validate();
-    if (m_base != oldBase)
-        didChange();
 }
 
-void VisibleSelection::setExtent(const Position& position)
+template <typename Strategy>
+void VisibleSelectionTemplate<Strategy>::setExtent(
+    const PositionTemplate<Strategy>& position)
 {
-    Position oldExtent = m_extent;
+    DCHECK(!needsLayoutTreeUpdate(position));
     m_extent = position;
     validate();
-    if (m_extent != oldExtent)
-        didChange();
 }
 
-void VisibleSelection::setExtent(const VisiblePosition& visiblePosition)
+template <typename Strategy>
+void VisibleSelectionTemplate<Strategy>::setExtent(
+    const VisiblePositionTemplate<Strategy>& visiblePosition)
 {
-    Position oldExtent = m_extent;
+    DCHECK(visiblePosition.isValid());
     m_extent = visiblePosition.deepEquivalent();
     validate();
-    if (m_extent != oldExtent)
-        didChange();
 }
 
-void VisibleSelection::setExtent(const PositionInComposedTree& position)
+EphemeralRange firstEphemeralRangeOf(const VisibleSelection& selection)
 {
-    Position oldExtent = m_extent;
-    m_extent = toPositionInDOMTree(position);
-    m_base = toPositionInDOMTree(baseInComposedTree());
-    validate();
-    if (m_extent != oldExtent)
-        didChange();
+    if (selection.isNone())
+        return EphemeralRange();
+    Position start = selection.start().parentAnchoredEquivalent();
+    Position end = selection.end().parentAnchoredEquivalent();
+    return EphemeralRange(start, end);
 }
 
-PositionInComposedTree VisibleSelection::baseInComposedTree() const
+Range* firstRangeOf(const VisibleSelection& selection)
 {
-    return m_baseInComposedTree;
+    return createRange(firstEphemeralRangeOf(selection));
 }
 
-PositionInComposedTree VisibleSelection::extentInComposedTree() const
-{
-    return m_extentInComposedTree;
-}
-
-PositionInComposedTree VisibleSelection::startInComposedTree() const
-{
-    return m_startInComposedTree;
-}
-
-PositionInComposedTree VisibleSelection::endInComposedTree() const
-{
-    return m_endInComposedTree;
-}
-
-PassRefPtrWillBeRawPtr<Range> VisibleSelection::firstRange() const
+template <typename Strategy>
+EphemeralRangeTemplate<Strategy>
+VisibleSelectionTemplate<Strategy>::toNormalizedEphemeralRange() const
 {
     if (isNone())
-        return nullptr;
-    Position start = m_start.parentAnchoredEquivalent();
-    Position end = m_end.parentAnchoredEquivalent();
-    return Range::create(*start.document(), start, end);
-}
-
-bool VisibleSelection::intersectsNode(Node* node) const
-{
-    if (isNone())
-        return false;
-    Position start = m_start.parentAnchoredEquivalent();
-    Position end = m_end.parentAnchoredEquivalent();
-    TrackExceptionState exceptionState;
-    return Range::intersectsNode(node, start, end, exceptionState) && !exceptionState.hadException();
-}
-
-PassRefPtrWillBeRawPtr<Range> VisibleSelection::toNormalizedRange() const
-{
-    Position start, end;
-    if (toNormalizedPositions(start, end))
-        return Range::create(*start.document(), start, end);
-    return nullptr;
-}
-
-template <typename PositionType>
-void normalizePositionsAlgorithm(const PositionType& start, const PositionType& end, PositionType* outStart, PositionType* outEnd)
-{
-    ASSERT(start.isNotNull());
-    ASSERT(end.isNotNull());
-    ASSERT(start.compareTo(end) <= 0);
-    start.document()->updateLayoutIgnorePendingStylesheets();
-
-    PositionType normalizedStart = start.downstream();
-    PositionType normalizedEnd = end.upstream();
-    // The order of the positions of |start| and |end| can be swapped after
-    // upstream/downstream. e.g. editing/pasteboard/copy-display-none.html
-    if (normalizedStart.compareTo(normalizedEnd) > 0)
-        std::swap(normalizedStart, normalizedEnd);
-    *outStart = normalizedStart.parentAnchoredEquivalent();
-    *outEnd = normalizedEnd.parentAnchoredEquivalent();
-}
-
-void VisibleSelection::normalizePositions(const Position& start, const Position& end, Position* outStart, Position* outEnd)
-{
-    return normalizePositionsAlgorithm<Position>(start, end, outStart, outEnd);
-}
-
-void VisibleSelection::normalizePositions(const PositionInComposedTree& start, const PositionInComposedTree& end, PositionInComposedTree* outStart, PositionInComposedTree* outEnd)
-{
-    return normalizePositionsAlgorithm<PositionInComposedTree>(start, end, outStart, outEnd);
-}
-
-bool VisibleSelection::toNormalizedPositions(Position& start, Position& end) const
-{
-    if (isNone())
-        return false;
+        return EphemeralRangeTemplate<Strategy>();
 
     // Make sure we have an updated layout since this function is called
     // in the course of running edit commands which modify the DOM.
-    // Failing to call this can result in equivalentXXXPosition calls returning
+    // Failing to ensure this can result in equivalentXXXPosition calls returning
     // incorrect results.
-    m_start.document()->updateLayout();
-
-    // Check again, because updating layout can clear the selection.
-    if (isNone())
-        return false;
+    DCHECK(!m_start.document()->needsLayoutTreeUpdate());
 
     if (isCaret()) {
-        // If the selection is a caret, move the range start upstream. This helps us match
-        // the conventions of text editors tested, which make style determinations based
-        // on the character before the caret, if any.
-        start = m_start.upstream().parentAnchoredEquivalent();
-        end = start;
-    } else {
-        // If the selection is a range, select the minimum range that encompasses the selection.
-        // Again, this is to match the conventions of text editors tested, which make style
-        // determinations based on the first character of the selection.
-        // For instance, this operation helps to make sure that the "X" selected below is the
-        // only thing selected. The range should not be allowed to "leak" out to the end of the
-        // previous text node, or to the beginning of the next text node, each of which has a
-        // different style.
-        //
-        // On a treasure map, <b>X</b> marks the spot.
-        //                       ^ selected
-        //
-        ASSERT(isRange());
-        normalizePositions(m_start, m_end, &start, &end);
+        // If the selection is a caret, move the range start upstream. This
+        // helps us match the conventions of text editors tested, which make
+        // style determinations based on the character before the caret, if any.
+        const PositionTemplate<Strategy> start = mostBackwardCaretPosition(m_start).parentAnchoredEquivalent();
+        return EphemeralRangeTemplate<Strategy>(start, start);
     }
-
-    if (!start.containerNode() || !end.containerNode())
-        return false;
-
-    return true;
+    // If the selection is a range, select the minimum range that encompasses
+    // the selection. Again, this is to match the conventions of text editors
+    // tested, which make style determinations based on the first character of
+    // the selection. For instance, this operation helps to make sure that the
+    // "X" selected below is the only thing selected. The range should not be
+    // allowed to "leak" out to the end of the previous text node, or to the
+    // beginning of the next text node, each of which has a different style.
+    //
+    // On a treasure map, <b>X</b> marks the spot.
+    //                       ^ selected
+    //
+    DCHECK(isRange());
+    return normalizeRange(EphemeralRangeTemplate<Strategy>(m_start, m_end));
 }
 
-bool VisibleSelection::expandUsingGranularity(TextGranularity granularity)
+template <typename Strategy>
+static EphemeralRangeTemplate<Strategy> makeSearchRange(
+    const PositionTemplate<Strategy>& pos)
 {
-    if (isNone())
-        return false;
-
-    // FIXME: Do we need to check all of them?
-    Position oldBase = m_base;
-    Position oldExtent = m_extent;
-    Position oldStart = m_start;
-    Position oldEnd = m_end;
-    validate(granularity);
-    if (m_base != oldBase || m_extent != oldExtent || m_start != oldStart || m_end != oldEnd)
-        didChange();
-    return true;
-}
-
-bool VisibleSelection::expandUsingGranularityInComposedTree(TextGranularity granularity)
-{
-    m_base = toPositionInDOMTree(baseInComposedTree());
-    m_extent = toPositionInDOMTree(extentInComposedTree());
-    return expandUsingGranularity(granularity);
-}
-
-static PassRefPtrWillBeRawPtr<Range> makeSearchRange(const Position& pos)
-{
-    Node* node = pos.deprecatedNode();
+    Node* node = pos.anchorNode();
     if (!node)
-        return nullptr;
+        return EphemeralRangeTemplate<Strategy>();
     Document& document = node->document();
     if (!document.documentElement())
-        return nullptr;
+        return EphemeralRangeTemplate<Strategy>();
     Element* boundary = enclosingBlockFlowElement(*node);
     if (!boundary)
-        return nullptr;
+        return EphemeralRangeTemplate<Strategy>();
 
-    RefPtrWillBeRawPtr<Range> searchRange(Range::create(document));
-    TrackExceptionState exceptionState;
-
-    Position start(pos.parentAnchoredEquivalent());
-    searchRange->selectNodeContents(boundary, exceptionState);
-    searchRange->setStart(start.containerNode(), start.offsetInContainerNode(), exceptionState);
-
-    ASSERT(!exceptionState.hadException());
-    if (exceptionState.hadException())
-        return nullptr;
-
-    return searchRange.release();
+    return EphemeralRangeTemplate<Strategy>(
+        pos, PositionTemplate<Strategy>::lastPositionInNode(boundary));
 }
 
-void VisibleSelection::appendTrailingWhitespace()
+template <typename Strategy>
+void VisibleSelectionTemplate<Strategy>::appendTrailingWhitespace()
 {
-    RefPtrWillBeRawPtr<Range> searchRange = makeSearchRange(m_end);
-    if (!searchRange)
+    if (isNone())
+        return;
+    DCHECK_EQ(m_granularity, WordGranularity);
+    if (!isRange())
+        return;
+    const EphemeralRangeTemplate<Strategy> searchRange = makeSearchRange(end());
+    if (searchRange.isNull())
         return;
 
-    CharacterIterator charIt(searchRange->startPosition(), searchRange->endPosition(), TextIteratorEmitsCharactersBetweenAllVisiblePositions);
+    CharacterIteratorAlgorithm<Strategy> charIt(
+        searchRange.startPosition(), searchRange.endPosition(),
+        TextIteratorEmitsCharactersBetweenAllVisiblePositions);
     bool changed = false;
 
     for (; charIt.length(); charIt.advance(1)) {
@@ -382,24 +326,25 @@ void VisibleSelection::appendTrailingWhitespace()
         if ((!isSpaceOrNewline(c) && c != noBreakSpaceCharacter) || c == '\n')
             break;
         m_end = charIt.endPosition();
-        m_endInComposedTree = toPositionInComposedTree(m_end);
         changed = true;
     }
-    if (changed)
-        didChange();
+    if (!changed)
+        return;
+    m_hasTrailingWhitespace = true;
 }
 
-void VisibleSelection::setBaseAndExtentToDeepEquivalents()
+template <typename Strategy>
+void VisibleSelectionTemplate<Strategy>::setBaseAndExtentToDeepEquivalents()
 {
     // Move the selection to rendered positions, if possible.
     bool baseAndExtentEqual = m_base == m_extent;
     if (m_base.isNotNull()) {
-        m_base = VisiblePosition(m_base, m_affinity).deepEquivalent();
+        m_base = createVisiblePosition(m_base, m_affinity).deepEquivalent();
         if (baseAndExtentEqual)
             m_extent = m_base;
     }
     if (m_extent.isNotNull() && !baseAndExtentEqual)
-        m_extent = VisiblePosition(m_extent, m_affinity).deepEquivalent();
+        m_extent = createVisiblePosition(m_extent, m_affinity).deepEquivalent();
 
     // Make sure we do not have a dangling base or extent.
     if (m_base.isNull() && m_extent.isNull()) {
@@ -411,360 +356,260 @@ void VisibleSelection::setBaseAndExtentToDeepEquivalents()
         m_extent = m_base;
         m_baseIsFirst = true;
     } else {
-        m_baseIsFirst = comparePositions(m_base, m_extent) <= 0;
+        m_baseIsFirst = m_base.compareTo(m_extent) <= 0;
     }
 }
 
-void VisibleSelection::setStartRespectingGranularity(TextGranularity granularity, EWordSide wordSide)
+template <typename Strategy>
+static PositionTemplate<Strategy> computeStartRespectingGranularity(
+    const PositionWithAffinityTemplate<Strategy>& passedStart,
+    TextGranularity granularity)
 {
-    ASSERT(m_base.isNotNull());
-    ASSERT(m_extent.isNotNull());
-
-    m_start = m_baseIsFirst ? m_base : m_extent;
+    DCHECK(passedStart.isNotNull());
 
     switch (granularity) {
     case CharacterGranularity:
         // Don't do any expansion.
-        break;
+        return passedStart.position();
     case WordGranularity: {
         // General case: Select the word the caret is positioned inside of.
-        // If the caret is on the word boundary, select the word according to |wordSide|.
-        // Edge case: If the caret is after the last word in a soft-wrapped line or the last word in
-        // the document, select that last word (LeftWordIfOnBoundary).
-        // Edge case: If the caret is after the last word in a paragraph, select from the the end of the
-        // last word to the line break (also RightWordIfOnBoundary);
-        VisiblePosition visibleStart = VisiblePosition(m_start, m_affinity);
-        EWordSide side = wordSide;
-        if (isEndOfEditableOrNonEditableContent(visibleStart) || (isEndOfLine(visibleStart) && !isStartOfLine(visibleStart) && !isEndOfParagraph(visibleStart)))
-            side = LeftWordIfOnBoundary;
-        m_start = startOfWord(visibleStart, side).deepEquivalent();
-        break;
+        // If the caret is on the word boundary, select the word according to
+        // |wordSide|.
+        // Edge case: If the caret is after the last word in a soft-wrapped line
+        // or the last word in the document, select that last word
+        // (LeftWordIfOnBoundary).
+        // Edge case: If the caret is after the last word in a paragraph, select
+        // from the the end of the last word to the line break (also
+        // RightWordIfOnBoundary);
+        const VisiblePositionTemplate<Strategy> visibleStart = createVisiblePosition(passedStart);
+        if (isEndOfEditableOrNonEditableContent(visibleStart) || (isEndOfLine(visibleStart) && !isStartOfLine(visibleStart) && !isEndOfParagraph(visibleStart))) {
+            return startOfWord(visibleStart, LeftWordIfOnBoundary).deepEquivalent();
+        }
+        return startOfWord(visibleStart, RightWordIfOnBoundary).deepEquivalent();
     }
-    case SentenceGranularity: {
-        m_start = startOfSentence(VisiblePosition(m_start, m_affinity)).deepEquivalent();
-        break;
-    }
-    case LineGranularity: {
-        m_start = startOfLine(VisiblePosition(m_start, m_affinity)).deepEquivalent();
-        break;
-    }
+    case SentenceGranularity:
+        return startOfSentence(createVisiblePosition(passedStart))
+            .deepEquivalent();
+    case LineGranularity:
+        return startOfLine(createVisiblePosition(passedStart)).deepEquivalent();
     case LineBoundary:
-        m_start = startOfLine(VisiblePosition(m_start, m_affinity)).deepEquivalent();
-        break;
+        return startOfLine(createVisiblePosition(passedStart)).deepEquivalent();
     case ParagraphGranularity: {
-        VisiblePosition pos(m_start, m_affinity);
+        const VisiblePositionTemplate<Strategy> pos = createVisiblePosition(passedStart);
         if (isStartOfLine(pos) && isEndOfEditableOrNonEditableContent(pos))
-            pos = pos.previous();
-        m_start = startOfParagraph(pos).deepEquivalent();
-        break;
+            return startOfParagraph(previousPositionOf(pos)).deepEquivalent();
+        return startOfParagraph(pos).deepEquivalent();
     }
     case DocumentBoundary:
-        m_start = startOfDocument(VisiblePosition(m_start, m_affinity)).deepEquivalent();
-        break;
+        return startOfDocument(createVisiblePosition(passedStart))
+            .deepEquivalent();
     case ParagraphBoundary:
-        m_start = startOfParagraph(VisiblePosition(m_start, m_affinity)).deepEquivalent();
-        break;
+        return startOfParagraph(createVisiblePosition(passedStart))
+            .deepEquivalent();
     case SentenceBoundary:
-        m_start = startOfSentence(VisiblePosition(m_start, m_affinity)).deepEquivalent();
-        break;
+        return startOfSentence(createVisiblePosition(passedStart))
+            .deepEquivalent();
     }
 
-    // Make sure we do not have a Null position.
-    if (m_start.isNull())
-        m_start = m_baseIsFirst ? m_base : m_extent;
-    resetPositionsInComposedTree();
+    NOTREACHED();
+    return passedStart.position();
 }
 
-void VisibleSelection::setEndRespectingGranularity(TextGranularity granularity, EWordSide wordSide)
+template <typename Strategy>
+static PositionTemplate<Strategy> computeEndRespectingGranularity(
+    const PositionTemplate<Strategy>& start,
+    const PositionWithAffinityTemplate<Strategy>& passedEnd,
+    TextGranularity granularity)
 {
-    ASSERT(m_base.isNotNull());
-    ASSERT(m_extent.isNotNull());
-
-    m_end = m_baseIsFirst ? m_extent : m_base;
+    DCHECK(passedEnd.isNotNull());
 
     switch (granularity) {
     case CharacterGranularity:
         // Don't do any expansion.
-        break;
+        return passedEnd.position();
     case WordGranularity: {
         // General case: Select the word the caret is positioned inside of.
-        // If the caret is on the word boundary, select the word according to |wordSide|.
-        // Edge case: If the caret is after the last word in a soft-wrapped line or the last word in
-        // the document, select that last word (LeftWordIfOnBoundary).
-        // Edge case: If the caret is after the last word in a paragraph, select from the the end of the
-        // last word to the line break (also RightWordIfOnBoundary);
-        VisiblePosition originalEnd(m_end, m_affinity);
-        EWordSide side = wordSide;
+        // If the caret is on the word boundary, select the word according to
+        // |wordSide|.
+        // Edge case: If the caret is after the last word in a soft-wrapped line
+        // or the last word in the document, select that last word
+        // (|LeftWordIfOnBoundary|).
+        // Edge case: If the caret is after the last word in a paragraph, select
+        // from the the end of the last word to the line break (also
+        // |RightWordIfOnBoundary|);
+        const VisiblePositionTemplate<Strategy> originalEnd = createVisiblePosition(passedEnd);
+        EWordSide side = RightWordIfOnBoundary;
         if (isEndOfEditableOrNonEditableContent(originalEnd) || (isEndOfLine(originalEnd) && !isStartOfLine(originalEnd) && !isEndOfParagraph(originalEnd)))
             side = LeftWordIfOnBoundary;
 
-        VisiblePosition wordEnd(endOfWord(originalEnd, side));
-        VisiblePosition end(wordEnd);
+        const VisiblePositionTemplate<Strategy> wordEnd = endOfWord(originalEnd, side);
+        if (!isEndOfParagraph(originalEnd))
+            return wordEnd.deepEquivalent();
+        if (isEmptyTableCell(start.anchorNode()))
+            return wordEnd.deepEquivalent();
 
-        if (isEndOfParagraph(originalEnd) && !isEmptyTableCell(m_start.deprecatedNode())) {
-            // Select the paragraph break (the space from the end of a paragraph to the start of
-            // the next one) to match TextEdit.
-            end = wordEnd.next();
-
-            if (Element* table = isFirstPositionAfterTable(end)) {
-                // The paragraph break after the last paragraph in the last cell of a block table ends
-                // at the start of the paragraph after the table.
-                if (isBlock(table))
-                    end = end.next(CannotCrossEditingBoundary);
-                else
-                    end = wordEnd;
-            }
-
+        // Select the paragraph break (the space from the end of a paragraph
+        // to the start of the next one) to match TextEdit.
+        const VisiblePositionTemplate<Strategy> end = nextPositionOf(wordEnd);
+        Element* const table = tableElementJustBefore(end);
+        if (!table) {
             if (end.isNull())
-                end = wordEnd;
-
+                return wordEnd.deepEquivalent();
+            return end.deepEquivalent();
         }
 
-        m_end = end.deepEquivalent();
-        break;
+        if (!isEnclosingBlock(table))
+            return wordEnd.deepEquivalent();
+
+        // The paragraph break after the last paragraph in the last cell
+        // of a block table ends at the start of the paragraph after the
+        // table.
+        const VisiblePositionTemplate<Strategy> next = nextPositionOf(end, CannotCrossEditingBoundary);
+        if (next.isNull())
+            return wordEnd.deepEquivalent();
+        return next.deepEquivalent();
     }
-    case SentenceGranularity: {
-        m_end = endOfSentence(VisiblePosition(m_end, m_affinity)).deepEquivalent();
-        break;
-    }
+    case SentenceGranularity:
+        return endOfSentence(createVisiblePosition(passedEnd)).deepEquivalent();
     case LineGranularity: {
-        VisiblePosition end = endOfLine(VisiblePosition(m_end, m_affinity));
-        // If the end of this line is at the end of a paragraph, include the space
-        // after the end of the line in the selection.
-        if (isEndOfParagraph(end)) {
-            VisiblePosition next = end.next();
-            if (next.isNotNull())
-                end = next;
-        }
-        m_end = end.deepEquivalent();
-        break;
+        const VisiblePositionTemplate<Strategy> end = endOfLine(createVisiblePosition(passedEnd));
+        if (!isEndOfParagraph(end))
+            return end.deepEquivalent();
+        // If the end of this line is at the end of a paragraph, include the
+        // space after the end of the line in the selection.
+        const VisiblePositionTemplate<Strategy> next = nextPositionOf(end);
+        if (next.isNull())
+            return end.deepEquivalent();
+        return next.deepEquivalent();
     }
     case LineBoundary:
-        m_end = endOfLine(VisiblePosition(m_end, m_affinity)).deepEquivalent();
-        break;
+        return endOfLine(createVisiblePosition(passedEnd)).deepEquivalent();
     case ParagraphGranularity: {
-        VisiblePosition visibleParagraphEnd = endOfParagraph(VisiblePosition(m_end, m_affinity));
+        const VisiblePositionTemplate<Strategy> visibleParagraphEnd = endOfParagraph(createVisiblePosition(passedEnd));
 
-        // Include the "paragraph break" (the space from the end of this paragraph to the start
-        // of the next one) in the selection.
-        VisiblePosition end(visibleParagraphEnd.next());
+        // Include the "paragraph break" (the space from the end of this
+        // paragraph to the start of the next one) in the selection.
+        const VisiblePositionTemplate<Strategy> end = nextPositionOf(visibleParagraphEnd);
 
-        if (Element* table = isFirstPositionAfterTable(end)) {
-            // The paragraph break after the last paragraph in the last cell of a block table ends
-            // at the start of the paragraph after the table, not at the position just after the table.
-            if (isBlock(table))
-                end = end.next(CannotCrossEditingBoundary);
-            // There is no parargraph break after the last paragraph in the last cell of an inline table.
-            else
-                end = visibleParagraphEnd;
+        Element* const table = tableElementJustBefore(end);
+        if (!table) {
+            if (end.isNull())
+                return visibleParagraphEnd.deepEquivalent();
+            return end.deepEquivalent();
         }
 
-        if (end.isNull())
-            end = visibleParagraphEnd;
+        if (!isEnclosingBlock(table)) {
+            // There is no paragraph break after the last paragraph in the
+            // last cell of an inline table.
+            return visibleParagraphEnd.deepEquivalent();
+        }
 
-        m_end = end.deepEquivalent();
-        break;
+        // The paragraph break after the last paragraph in the last cell of
+        // a block table ends at the start of the paragraph after the table,
+        // not at the position just after the table.
+        const VisiblePositionTemplate<Strategy> next = nextPositionOf(end, CannotCrossEditingBoundary);
+        if (next.isNull())
+            return visibleParagraphEnd.deepEquivalent();
+        return next.deepEquivalent();
     }
     case DocumentBoundary:
-        m_end = endOfDocument(VisiblePosition(m_end, m_affinity)).deepEquivalent();
-        break;
+        return endOfDocument(createVisiblePosition(passedEnd)).deepEquivalent();
     case ParagraphBoundary:
-        m_end = endOfParagraph(VisiblePosition(m_end, m_affinity)).deepEquivalent();
-        break;
+        return endOfParagraph(createVisiblePosition(passedEnd)).deepEquivalent();
     case SentenceBoundary:
-        m_end = endOfSentence(VisiblePosition(m_end, m_affinity)).deepEquivalent();
-        break;
+        return endOfSentence(createVisiblePosition(passedEnd)).deepEquivalent();
     }
-
-    // Make sure we do not have a Null position.
-    if (m_end.isNull())
-        m_end = m_baseIsFirst ? m_extent : m_base;
-    resetPositionsInComposedTree();
+    NOTREACHED();
+    return passedEnd.position();
 }
 
-SelectionType VisibleSelection::selectionType(const Position& start, const Position& end)
+template <typename Strategy>
+void VisibleSelectionTemplate<Strategy>::updateSelectionType()
 {
-    if (start.isNull()) {
-        ASSERT(end.isNull());
-        return NoSelection;
-    }
-    if (start == end || start.upstream() == end.upstream())
-        return CaretSelection;
-    return RangeSelection;
-}
-
-SelectionType VisibleSelection::selectionType(const PositionInComposedTree& start, const PositionInComposedTree& end)
-{
-    if (start.isNull()) {
-        ASSERT(end.isNull());
-        return NoSelection;
-    }
-    if (start == end || start.upstream() == end.upstream())
-        return CaretSelection;
-    return RangeSelection;
-}
-
-void VisibleSelection::updateSelectionType()
-{
-    m_selectionType = selectionType(m_start, m_end);
+    m_selectionType = computeSelectionType(m_start, m_end);
 
     // Affinity only makes sense for a caret
     if (m_selectionType != CaretSelection)
-        m_affinity = DOWNSTREAM;
+        m_affinity = TextAffinity::Downstream;
 }
 
-static Node* enclosingShadowHost(Node* node)
+template <typename Strategy>
+void VisibleSelectionTemplate<Strategy>::validate(TextGranularity granularity)
 {
-    for (Node* runner = node; runner; runner = ComposedTreeTraversal::parent(*runner)) {
-        if (isShadowHost(runner))
-            return runner;
-    }
-    return nullptr;
-}
+    DCHECK(!needsLayoutTreeUpdate(m_base));
+    DCHECK(!needsLayoutTreeUpdate(m_extent));
+    // TODO(xiaochengh): Add a DocumentLifecycle::DisallowTransitionScope here.
 
-static bool isEnclosedBy(const PositionInComposedTree& position, const Node& node)
-{
-    ASSERT(position.isNotNull());
-    Node* anchorNode = position.anchorNode();
-    if (anchorNode == node)
-        return position.anchorType() != PositionAnchorType::AfterAnchor && position.anchorType() != PositionAnchorType::BeforeAnchor;
-
-    return ComposedTreeTraversal::isDescendantOf(*anchorNode, node);
-}
-
-static bool isSelectionBoundary(const Node& node)
-{
-    return isHTMLTextAreaElement(node) || isHTMLInputElement(node) || isHTMLSelectElement(node);
-}
-
-static Node* enclosingShadowHostForStart(const PositionInComposedTree& position)
-{
-    Node* node = position.nodeAsRangeFirstNode();
-    if (!node)
-        return nullptr;
-    Node* shadowHost = enclosingShadowHost(node);
-    if (!shadowHost)
-        return nullptr;
-    if (!isEnclosedBy(position, *shadowHost))
-        return nullptr;
-    return isSelectionBoundary(*shadowHost) ? shadowHost : nullptr;
-}
-
-static Node* enclosingShadowHostForEnd(const PositionInComposedTree& position)
-{
-    Node* node = position.nodeAsRangeLastNode();
-    if (!node)
-        return nullptr;
-    Node* shadowHost = enclosingShadowHost(node);
-    if (!shadowHost)
-        return nullptr;
-    if (!isEnclosedBy(position, *shadowHost))
-        return nullptr;
-    return isSelectionBoundary(*shadowHost) ? shadowHost : nullptr;
-}
-
-static bool isCrossingSelectionBoundary(const PositionInComposedTree& start, const PositionInComposedTree& end)
-{
-    Node* shadowHostStart = enclosingShadowHostForStart(start);
-    Node* shadowHostEnd = enclosingShadowHostForEnd(end);
-    return shadowHostStart != shadowHostEnd;
-}
-
-void VisibleSelection::validate(TextGranularity granularity)
-{
+    m_granularity = granularity;
+    m_hasTrailingWhitespace = false;
     setBaseAndExtentToDeepEquivalents();
     if (m_base.isNull() || m_extent.isNull()) {
-        m_base = m_extent = m_start = m_end = Position();
-        m_baseInComposedTree = m_extentInComposedTree = m_startInComposedTree = m_endInComposedTree = PositionInComposedTree();
+        m_base = m_extent = m_start = m_end = PositionTemplate<Strategy>();
         updateSelectionType();
         return;
     }
 
-    m_start = m_baseIsFirst ? m_base : m_extent;
-    m_end = m_baseIsFirst ? m_extent : m_base;
-    setStartRespectingGranularity(granularity);
-    ASSERT(m_start.isNotNull());
-    setEndRespectingGranularity(granularity);
-    ASSERT(m_end.isNotNull());
+    const PositionTemplate<Strategy> start = m_baseIsFirst ? m_base : m_extent;
+    const PositionTemplate<Strategy> newStart = computeStartRespectingGranularity(
+        PositionWithAffinityTemplate<Strategy>(start, m_affinity), granularity);
+    m_start = newStart.isNotNull() ? newStart : start;
+
+    const PositionTemplate<Strategy> end = m_baseIsFirst ? m_extent : m_base;
+    const PositionTemplate<Strategy> newEnd = computeEndRespectingGranularity(
+        m_start, PositionWithAffinityTemplate<Strategy>(end, m_affinity),
+        granularity);
+    m_end = newEnd.isNotNull() ? newEnd : end;
+
     adjustSelectionToAvoidCrossingShadowBoundaries();
-    Position origExtent = m_extent;
-    Position origEnd = m_end;
     adjustSelectionToAvoidCrossingEditingBoundaries();
-    if (origExtent != m_extent || origEnd != m_end) {
-        // |m_extent| is adjusted. So, we need to adjust end position in the
-        // composed tree
-        resetPositionsInComposedTree();
-    }
     updateSelectionType();
 
-    if (selectionType() == RangeSelection) {
-        // "Constrain" the selection to be the smallest equivalent range of nodes.
-        // This is a somewhat arbitrary choice, but experience shows that it is
-        // useful to make to make the selection "canonical" (if only for
+    if (getSelectionType() == RangeSelection) {
+        // "Constrain" the selection to be the smallest equivalent range of
+        // nodes. This is a somewhat arbitrary choice, but experience shows that
+        // it is useful to make to make the selection "canonical" (if only for
         // purposes of comparing selections). This is an ideal point of the code
-        // to do this operation, since all selection changes that result in a RANGE
-        // come through here before anyone uses it.
-        // FIXME: Canonicalizing is good, but haven't we already done it (when we
-        // set these two positions to VisiblePosition deepEquivalent()s above)?
-        m_start = m_start.downstream();
-        m_end = m_end.upstream();
-
-        // Even by downstreaming, |m_start| can be moved to the upper place from
-        // the original position, same as |m_end|.
-        // e.g.) editing/shadow/select-contenteditable-shadowhost.html
-        m_startInComposedTree = m_startInComposedTree.downstream();
-        m_endInComposedTree = m_endInComposedTree.upstream();
-        adjustStartAndEndInComposedTree();
-
-        if (isCrossingSelectionBoundary(m_startInComposedTree, m_endInComposedTree))
-            resetPositionsInComposedTree();
-
-        // FIXME: Position::downstream() or Position::upStream() might violate editing boundaries
-        // if an anchor node has a Shadow DOM. So we adjust selection to avoid crossing editing
-        // boundaries again. See https://bugs.webkit.org/show_bug.cgi?id=87463
-        origExtent = m_extent;
-        origEnd = m_end;
-        adjustSelectionToAvoidCrossingEditingBoundaries();
-        if (origExtent != m_extent || origEnd != m_end)
-            resetPositionsInComposedTree();
+        // to do this operation, since all selection changes that result in a
+        // RANGE come through here before anyone uses it.
+        // TODO(yosin) Canonicalizing is good, but haven't we already done it
+        // (when we set these two positions to |VisiblePosition|
+        // |deepEquivalent()|s above)?
+        m_start = mostForwardCaretPosition(m_start);
+        m_end = mostBackwardCaretPosition(m_end);
     }
+}
 
-    // isCrossingSelectionBoundary() can be true by upstreaming/downstreaming the
-    // positions (in the composed tree).
-    if (!isCrossingSelectionBoundary(m_startInComposedTree, m_endInComposedTree))
+template <typename Strategy>
+bool VisibleSelectionTemplate<Strategy>::isValidFor(
+    const Document& document) const
+{
+    if (isNone())
+        return true;
+
+    return m_base.document() == &document && !m_base.isOrphan() && !m_extent.isOrphan() && !m_start.isOrphan() && !m_end.isOrphan();
+}
+
+// TODO(yosin) This function breaks the invariant of this class.
+// But because we use VisibleSelection to store values in editing commands for
+// use when undoing the command, we need to be able to create a selection that
+// while currently invalid, will be valid once the changes are undone. This is a
+// design problem. To fix it we either need to change the invariants of
+// |VisibleSelection| or create a new class for editing to use that can
+// manipulate selections that are not currently valid.
+template <typename Strategy>
+void VisibleSelectionTemplate<Strategy>::setWithoutValidation(
+    const PositionTemplate<Strategy>& base,
+    const PositionTemplate<Strategy>& extent)
+{
+    if (base.isNull() || extent.isNull()) {
+        m_base = m_extent = m_start = m_end = PositionTemplate<Strategy>();
+        updateSelectionType();
         return;
-    adjustSelectionToAvoidCrossingSelectionBoundaryInComposedTree();
-}
-
-void VisibleSelection::resetPositionsInComposedTree()
-{
-    m_baseInComposedTree = toPositionInComposedTree(m_base);
-    m_extentInComposedTree = toPositionInComposedTree(m_extent);
-    m_endInComposedTree = toPositionInComposedTree(m_end);
-    m_startInComposedTree = toPositionInComposedTree(m_start);
-    adjustStartAndEndInComposedTree();
-}
-
-// FIXME: This function breaks the invariant of this class.
-// But because we use VisibleSelection to store values in editing commands for use when
-// undoing the command, we need to be able to create a selection that while currently
-// invalid, will be valid once the changes are undone. This is a design problem.
-// To fix it we either need to change the invariants of VisibleSelection or create a new
-// class for editing to use that can manipulate selections that are not currently valid.
-void VisibleSelection::setWithoutValidation(const Position& base, const Position& extent)
-{
-    ASSERT(!base.isNull());
-    ASSERT(!extent.isNull());
-
-    // TODO(hajimehoshi): We doubt this assertion is needed. This was introduced
-    // by http://trac.webkit.org/browser/trunk/WebCore/editing/Selection.cpp?annotate=blame&rev=21071
-    ASSERT(m_affinity == DOWNSTREAM);
+    }
 
     m_base = base;
     m_extent = extent;
-    m_baseInComposedTree = toPositionInComposedTree(base);
-    m_extentInComposedTree = toPositionInComposedTree(extent);
-    m_baseIsFirst = comparePositions(base, extent) <= 0;
+    m_baseIsFirst = base.compareTo(extent) <= 0;
     if (m_baseIsFirst) {
         m_start = base;
         m_end = extent;
@@ -773,142 +618,39 @@ void VisibleSelection::setWithoutValidation(const Position& base, const Position
         m_end = base;
     }
     m_selectionType = base == extent ? CaretSelection : RangeSelection;
-    m_startInComposedTree = toPositionInComposedTree(m_start);
-    m_endInComposedTree = toPositionInComposedTree(m_end);
-    didChange();
-}
-
-void VisibleSelection::setWithoutValidation(const PositionInComposedTree& base, const PositionInComposedTree& extent)
-{
-    setWithoutValidation(toPositionInDOMTree(base), toPositionInDOMTree(extent));
-}
-
-static PositionInComposedTree adjustPositionInComposedTreeForStart(const PositionInComposedTree& position, Node* shadowHost)
-{
-    if (isEnclosedBy(position, *shadowHost)) {
-        if (position.anchorType() == PositionAnchorType::BeforeChildren)
-            return PositionInComposedTree::beforeNode(shadowHost);
-        return PositionInComposedTree::afterNode(shadowHost);
+    if (m_selectionType != CaretSelection) {
+        // Since |m_affinity| for non-|CaretSelection| is always |Downstream|,
+        // we should keep this invariant. Note: This function can be called with
+        // |m_affinity| is |TextAffinity::Upstream|.
+        m_affinity = TextAffinity::Downstream;
     }
-
-    // We use |firstChild|'s after instead of beforeAllChildren for backward
-    // compatibility. The positions are same but the anchors would be different,
-    // and selection painting uses anchor nodes.
-    if (Node* firstChild = ComposedTreeTraversal::firstChild(*shadowHost))
-        return PositionInComposedTree::beforeNode(firstChild);
-    return PositionInComposedTree();
 }
 
-static Position adjustPositionForEnd(const Position& currentPosition, Node* startContainerNode)
+template <typename Strategy>
+void VisibleSelectionTemplate<
+    Strategy>::adjustSelectionToAvoidCrossingShadowBoundaries()
 {
-    TreeScope& treeScope = startContainerNode->treeScope();
-
-    ASSERT(currentPosition.containerNode()->treeScope() != treeScope);
-
-    if (Node* ancestor = treeScope.ancestorInThisScope(currentPosition.containerNode())) {
-        if (ancestor->contains(startContainerNode))
-            return positionAfterNode(ancestor);
-        return positionBeforeNode(ancestor);
-    }
-
-    if (Node* lastChild = treeScope.rootNode().lastChild())
-        return positionAfterNode(lastChild);
-
-    return Position();
-}
-
-PositionInComposedTree adjustPositionInComposedTreeForEnd(const PositionInComposedTree& position, Node* shadowHost)
-{
-    if (isEnclosedBy(position, *shadowHost)) {
-        if (position.anchorType() == PositionAnchorType::AfterChildren)
-            return PositionInComposedTree::afterNode(shadowHost);
-        return PositionInComposedTree::beforeNode(shadowHost);
-    }
-
-    // We use |lastChild|'s after instead of afterAllChildren for backward
-    // compatibility. The positions are same but the anchors would be different,
-    // and selection painting uses anchor nodes.
-    if (Node* lastChild = ComposedTreeTraversal::lastChild(*shadowHost))
-        return PositionInComposedTree::afterNode(lastChild);
-    return PositionInComposedTree();
-}
-
-static Position adjustPositionForStart(const Position& currentPosition, Node* endContainerNode)
-{
-    TreeScope& treeScope = endContainerNode->treeScope();
-
-    ASSERT(currentPosition.containerNode()->treeScope() != treeScope);
-
-    if (Node* ancestor = treeScope.ancestorInThisScope(currentPosition.containerNode())) {
-        if (ancestor->contains(endContainerNode))
-            return positionBeforeNode(ancestor);
-        return positionAfterNode(ancestor);
-    }
-
-    if (Node* firstChild = treeScope.rootNode().firstChild())
-        return positionBeforeNode(firstChild);
-
-    return Position();
-}
-
-void VisibleSelection::adjustSelectionToAvoidCrossingShadowBoundaries()
-{
-    if (m_base.isNull() || m_start.isNull() || m_end.isNull())
+    if (m_base.isNull() || m_start.isNull() || m_base.isNull())
         return;
+    SelectionAdjuster::adjustSelectionToAvoidCrossingShadowBoundaries(this);
+}
 
-    // TODO(hajimehoshi): Checking treeScope is wrong when a node is
-    // distributed, but we leave it as it is for backward compatibility.
-    if (m_start.anchorNode()->treeScope() == m_end.anchorNode()->treeScope())
-        return;
-
-    if (m_baseIsFirst) {
-        m_extent = adjustPositionForEnd(m_end, m_start.containerNode());
-        m_end = m_extent;
-    } else {
-        m_extent = adjustPositionForStart(m_start, m_end.containerNode());
-        m_start = m_extent;
+static Element* lowestEditableAncestor(Node* node)
+{
+    while (node) {
+        if (hasEditableStyle(*node))
+            return rootEditableElement(*node);
+        if (isHTMLBodyElement(*node))
+            break;
+        node = node->parentNode();
     }
 
-    // TODO(hajimehoshi): We should check if |start| and/or |end| are <input> or
-    // <textarea>
-    Node* start = m_start.anchorNode();
-    Node* end = m_end.anchorNode();
-    if ((start && isSelectionBoundary(*start)) || (end && isSelectionBoundary(*end)))
-        resetPositionsInComposedTree();
-
-    ASSERT(m_start.anchorNode()->treeScope() == m_end.anchorNode()->treeScope());
+    return nullptr;
 }
 
-// This function is called twice. The first is called when |m_start| and |m_end|
-// or |m_extent| are same, and the second when |m_start| and |m_end| are changed
-// after downstream/upstream.
-void VisibleSelection::adjustSelectionToAvoidCrossingSelectionBoundaryInComposedTree()
-{
-    Node* shadowHostStart = enclosingShadowHostForStart(m_startInComposedTree);
-    Node* shadowHostEnd = enclosingShadowHostForEnd(m_endInComposedTree);
-    if (shadowHostStart == shadowHostEnd)
-        return;
-
-    auto origEndICT = m_endInComposedTree;
-    auto origExtentICT = m_extentInComposedTree;
-    Node* shadowHost = nullptr;
-    if (isBaseFirstInComposedTree()) {
-        shadowHost = shadowHostStart ? shadowHostStart : shadowHostEnd;
-        m_endInComposedTree = adjustPositionInComposedTreeForEnd(m_endInComposedTree, shadowHost);
-        m_extentInComposedTree = m_endInComposedTree;
-    } else {
-        shadowHost = shadowHostEnd ? shadowHostEnd : shadowHostStart;
-        m_startInComposedTree = adjustPositionInComposedTreeForStart(m_startInComposedTree, shadowHost);
-        m_extentInComposedTree = m_startInComposedTree;
-    }
-}
-
-bool VisibleSelection::isBaseFirstInComposedTree() const
-{
-    return m_baseInComposedTree.isNotNull() && m_baseInComposedTree.compareTo(m_extentInComposedTree) <= 0;
-}
-
-void VisibleSelection::adjustSelectionToAvoidCrossingEditingBoundaries()
+template <typename Strategy>
+void VisibleSelectionTemplate<
+    Strategy>::adjustSelectionToAvoidCrossingEditingBoundaries()
 {
     if (m_base.isNull() || m_start.isNull() || m_end.isNull())
         return;
@@ -917,92 +659,103 @@ void VisibleSelection::adjustSelectionToAvoidCrossingEditingBoundaries()
     ContainerNode* startRoot = highestEditableRoot(m_start);
     ContainerNode* endRoot = highestEditableRoot(m_end);
 
-    Element* baseEditableAncestor = lowestEditableAncestor(m_base.containerNode());
+    Element* baseEditableAncestor = lowestEditableAncestor(m_base.computeContainerNode());
 
-    // The base, start and end are all in the same region.  No adjustment necessary.
+    // The base, start and end are all in the same region.  No adjustment
+    // necessary.
     if (baseRoot == startRoot && baseRoot == endRoot)
         return;
 
     // The selection is based in editable content.
     if (baseRoot) {
-        // If the start is outside the base's editable root, cap it at the start of that root.
-        // If the start is in non-editable content that is inside the base's editable root, put it
-        // at the first editable position after start inside the base's editable root.
+        // If the start is outside the base's editable root, cap it at the start of
+        // that root.
+        // If the start is in non-editable content that is inside the base's
+        // editable root, put it at the first editable position after start inside
+        // the base's editable root.
         if (startRoot != baseRoot) {
-            VisiblePosition first = firstEditableVisiblePositionAfterPositionInRoot(m_start, baseRoot);
+            const VisiblePositionTemplate<Strategy> first = firstEditableVisiblePositionAfterPositionInRoot(m_start, *baseRoot);
             m_start = first.deepEquivalent();
             if (m_start.isNull()) {
-                ASSERT_NOT_REACHED();
+                NOTREACHED();
                 m_start = m_end;
             }
         }
-        // If the end is outside the base's editable root, cap it at the end of that root.
-        // If the end is in non-editable content that is inside the base's root, put it
-        // at the last editable position before the end inside the base's root.
+        // If the end is outside the base's editable root, cap it at the end of that
+        // root.
+        // If the end is in non-editable content that is inside the base's root, put
+        // it at the last editable position before the end inside the base's root.
         if (endRoot != baseRoot) {
-            VisiblePosition last = lastEditableVisiblePositionBeforePositionInRoot(m_end, baseRoot);
+            const VisiblePositionTemplate<Strategy> last = lastEditableVisiblePositionBeforePositionInRoot(m_end, *baseRoot);
             m_end = last.deepEquivalent();
             if (m_end.isNull())
                 m_end = m_start;
         }
-    // The selection is based in non-editable content.
+        // The selection is based in non-editable content.
     } else {
-        // FIXME: Non-editable pieces inside editable content should be atomic, in the same way that editable
-        // pieces in non-editable content are atomic.
+        // FIXME: Non-editable pieces inside editable content should be atomic, in
+        // the same way that editable pieces in non-editable content are atomic.
 
-        // The selection ends in editable content or non-editable content inside a different editable ancestor,
-        // move backward until non-editable content inside the same lowest editable ancestor is reached.
-        Element* endEditableAncestor = lowestEditableAncestor(m_end.containerNode());
+        // The selection ends in editable content or non-editable content inside a
+        // different editable ancestor, move backward until non-editable content
+        // inside the same lowest editable ancestor is reached.
+        Element* endEditableAncestor = lowestEditableAncestor(m_end.computeContainerNode());
         if (endRoot || endEditableAncestor != baseEditableAncestor) {
-
-            Position p = previousVisuallyDistinctCandidate(m_end);
-            Element* shadowAncestor = endRoot ? endRoot->shadowHost() : 0;
+            PositionTemplate<Strategy> p = previousVisuallyDistinctCandidate(m_end);
+            Element* shadowAncestor = endRoot ? endRoot->ownerShadowHost() : nullptr;
             if (p.isNull() && shadowAncestor)
-                p = positionAfterNode(shadowAncestor);
-            while (p.isNotNull() && !(lowestEditableAncestor(p.containerNode()) == baseEditableAncestor && !isEditablePosition(p))) {
-                Element* root = editableRootForPosition(p);
-                shadowAncestor = root ? root->shadowHost() : 0;
-                p = isAtomicNode(p.containerNode()) ? positionInParentBeforeNode(*p.containerNode()) : previousVisuallyDistinctCandidate(p);
+                p = PositionTemplate<Strategy>::afterNode(shadowAncestor);
+            while (p.isNotNull() && !(lowestEditableAncestor(p.computeContainerNode()) == baseEditableAncestor && !isEditablePosition(p))) {
+                Element* root = rootEditableElementOf(p);
+                shadowAncestor = root ? root->ownerShadowHost() : nullptr;
+                p = isAtomicNode(p.computeContainerNode())
+                    ? PositionTemplate<Strategy>::inParentBeforeNode(
+                        *p.computeContainerNode())
+                    : previousVisuallyDistinctCandidate(p);
                 if (p.isNull() && shadowAncestor)
-                    p = positionAfterNode(shadowAncestor);
+                    p = PositionTemplate<Strategy>::afterNode(shadowAncestor);
             }
-            VisiblePosition previous(p);
+            const VisiblePositionTemplate<Strategy> previous = createVisiblePosition(p);
 
             if (previous.isNull()) {
                 // The selection crosses an Editing boundary.  This is a
                 // programmer error in the editing code.  Happy debugging!
-                ASSERT_NOT_REACHED();
-                m_base = Position();
-                m_extent = Position();
+                NOTREACHED();
+                m_base = PositionTemplate<Strategy>();
+                m_extent = PositionTemplate<Strategy>();
                 validate();
                 return;
             }
             m_end = previous.deepEquivalent();
         }
 
-        // The selection starts in editable content or non-editable content inside a different editable ancestor,
-        // move forward until non-editable content inside the same lowest editable ancestor is reached.
-        Element* startEditableAncestor = lowestEditableAncestor(m_start.containerNode());
+        // The selection starts in editable content or non-editable content inside a
+        // different editable ancestor, move forward until non-editable content
+        // inside the same lowest editable ancestor is reached.
+        Element* startEditableAncestor = lowestEditableAncestor(m_start.computeContainerNode());
         if (startRoot || startEditableAncestor != baseEditableAncestor) {
-            Position p = nextVisuallyDistinctCandidate(m_start);
-            Element* shadowAncestor = startRoot ? startRoot->shadowHost() : 0;
+            PositionTemplate<Strategy> p = nextVisuallyDistinctCandidate(m_start);
+            Element* shadowAncestor = startRoot ? startRoot->ownerShadowHost() : nullptr;
             if (p.isNull() && shadowAncestor)
-                p = positionBeforeNode(shadowAncestor);
-            while (p.isNotNull() && !(lowestEditableAncestor(p.containerNode()) == baseEditableAncestor && !isEditablePosition(p))) {
-                Element* root = editableRootForPosition(p);
-                shadowAncestor = root ? root->shadowHost() : 0;
-                p = isAtomicNode(p.containerNode()) ? positionInParentAfterNode(*p.containerNode()) : nextVisuallyDistinctCandidate(p);
+                p = PositionTemplate<Strategy>::beforeNode(shadowAncestor);
+            while (p.isNotNull() && !(lowestEditableAncestor(p.computeContainerNode()) == baseEditableAncestor && !isEditablePosition(p))) {
+                Element* root = rootEditableElementOf(p);
+                shadowAncestor = root ? root->ownerShadowHost() : nullptr;
+                p = isAtomicNode(p.computeContainerNode())
+                    ? PositionTemplate<Strategy>::inParentAfterNode(
+                        *p.computeContainerNode())
+                    : nextVisuallyDistinctCandidate(p);
                 if (p.isNull() && shadowAncestor)
-                    p = positionBeforeNode(shadowAncestor);
+                    p = PositionTemplate<Strategy>::beforeNode(shadowAncestor);
             }
-            VisiblePosition next(p);
+            const VisiblePositionTemplate<Strategy> next = createVisiblePosition(p);
 
             if (next.isNull()) {
                 // The selection crosses an Editing boundary.  This is a
                 // programmer error in the editing code.  Happy debugging!
-                ASSERT_NOT_REACHED();
-                m_base = Position();
-                m_extent = Position();
+                NOTREACHED();
+                m_base = PositionTemplate<Strategy>();
+                m_extent = PositionTemplate<Strategy>();
                 validate();
                 return;
             }
@@ -1011,131 +764,52 @@ void VisibleSelection::adjustSelectionToAvoidCrossingEditingBoundaries()
     }
 
     // Correct the extent if necessary.
-    if (baseEditableAncestor != lowestEditableAncestor(m_extent.containerNode()))
+    if (baseEditableAncestor != lowestEditableAncestor(m_extent.computeContainerNode()))
         m_extent = m_baseIsFirst ? m_end : m_start;
 }
 
-void VisibleSelection::adjustStartAndEndInComposedTree()
-{
-    if (m_startInComposedTree.isNull())
-        return;
-    if (m_startInComposedTree.compareTo(m_endInComposedTree) <= 0)
-        return;
-    std::swap(m_startInComposedTree, m_endInComposedTree);
-}
-
-VisiblePosition VisibleSelection::visiblePositionRespectingEditingBoundary(const LayoutPoint& localPoint, Node* targetNode) const
-{
-    return VisiblePosition(positionRespectingEditingBoundary(localPoint, targetNode));
-}
-
-PositionWithAffinity VisibleSelection::positionRespectingEditingBoundary(const LayoutPoint& localPoint, Node* targetNode) const
-{
-    if (!targetNode->layoutObject())
-        return PositionWithAffinity();
-
-    LayoutPoint selectionEndPoint = localPoint;
-    Element* editableElement = rootEditableElement();
-
-    if (editableElement && !editableElement->contains(targetNode)) {
-        if (!editableElement->layoutObject())
-            return PositionWithAffinity();
-
-        FloatPoint absolutePoint = targetNode->layoutObject()->localToAbsolute(FloatPoint(selectionEndPoint));
-        selectionEndPoint = roundedLayoutPoint(editableElement->layoutObject()->absoluteToLocal(absolutePoint));
-        targetNode = editableElement;
-    }
-
-    return targetNode->layoutObject()->positionForPoint(selectionEndPoint);
-}
-
-bool VisibleSelection::isContentEditable() const
+template <typename Strategy>
+bool VisibleSelectionTemplate<Strategy>::isContentEditable() const
 {
     return isEditablePosition(start());
 }
 
-bool VisibleSelection::hasEditableStyle() const
+template <typename Strategy>
+bool VisibleSelectionTemplate<Strategy>::hasEditableStyle() const
 {
-    return isEditablePosition(start(), ContentIsEditable, DoNotUpdateStyle);
+    return isEditablePosition(start());
 }
 
-bool VisibleSelection::isContentRichlyEditable() const
+template <typename Strategy>
+bool VisibleSelectionTemplate<Strategy>::isContentRichlyEditable() const
 {
-    return isRichlyEditablePosition(start());
+    return isRichlyEditablePosition(toPositionInDOMTree(start()));
 }
 
-Element* VisibleSelection::rootEditableElement() const
+template <typename Strategy>
+Element* VisibleSelectionTemplate<Strategy>::rootEditableElement() const
 {
-    return editableRootForPosition(start());
+    return rootEditableElementOf(start());
 }
 
-Node* VisibleSelection::nonBoundaryShadowTreeRootNode() const
+template <typename Strategy>
+void VisibleSelectionTemplate<Strategy>::updateIfNeeded()
 {
-    return start().deprecatedNode() && !start().deprecatedNode()->isShadowRoot() ? start().deprecatedNode()->nonBoundaryShadowTreeRootNode() : 0;
+    Document* document = m_base.document();
+    if (!document)
+        return;
+    DCHECK(!document->needsLayoutTreeUpdate());
+    const bool hasTrailingWhitespace = m_hasTrailingWhitespace;
+    validate(m_granularity);
+    if (!hasTrailingWhitespace)
+        return;
+    appendTrailingWhitespace();
 }
 
-VisibleSelection::ChangeObserver::ChangeObserver()
-{
-}
-
-VisibleSelection::ChangeObserver::~ChangeObserver()
-{
-}
-
-void VisibleSelection::setChangeObserver(ChangeObserver& observer)
-{
-    ASSERT(!m_changeObserver);
-    m_changeObserver = &observer;
-}
-
-void VisibleSelection::clearChangeObserver()
-{
-    ASSERT(m_changeObserver);
-    m_changeObserver = nullptr;
-}
-
-void VisibleSelection::didChange()
-{
-    if (m_changeObserver)
-        m_changeObserver->didChangeVisibleSelection();
-}
-
-DEFINE_TRACE(VisibleSelection)
-{
-    visitor->trace(m_base);
-    visitor->trace(m_extent);
-    visitor->trace(m_start);
-    visitor->trace(m_end);
-    visitor->trace(m_baseInComposedTree);
-    visitor->trace(m_extentInComposedTree);
-    visitor->trace(m_startInComposedTree);
-    visitor->trace(m_endInComposedTree);
-    visitor->trace(m_changeObserver);
-}
-
-static bool isValidPosition(const Position& position)
-{
-    if (!position.inDocument())
-        return false;
-
-    if (position.anchorType() != PositionAnchorType::OffsetInAnchor)
-        return true;
-
-    if (position.offsetInContainerNode() < 0)
-        return false;
-
-    const unsigned offset = static_cast<unsigned>(position.offsetInContainerNode());
-    const unsigned nodeLength = position.anchorNode()->lengthOfContents();
-    return offset <= nodeLength;
-}
-
-void VisibleSelection::validatePositionsIfNeeded()
-{
-    if (!isValidPosition(m_base) || !isValidPosition(m_extent) || !isValidPosition(m_start) || !isValidPosition(m_end))
-        validate();
-}
-
-bool VisibleSelection::InDOMTree::equalSelections(const VisibleSelection& selection1, const VisibleSelection& selection2)
+template <typename Strategy>
+static bool equalSelectionsAlgorithm(
+    const VisibleSelectionTemplate<Strategy>& selection1,
+    const VisibleSelectionTemplate<Strategy>& selection2)
 {
     if (selection1.affinity() != selection2.affinity() || selection1.isDirectional() != selection2.isDirectional())
         return false;
@@ -1143,82 +817,74 @@ bool VisibleSelection::InDOMTree::equalSelections(const VisibleSelection& select
     if (selection1.isNone())
         return selection2.isNone();
 
-    return selection1.start() == selection2.start() && selection1.end() == selection2.end() && selection1.affinity() == selection2.affinity()
-        && selection1.isDirectional() == selection2.isDirectional() && selection1.base() == selection2.base() && selection1.extent() == selection2.extent();
+    const VisibleSelectionTemplate<Strategy> selectionWrapper1(selection1);
+    const VisibleSelectionTemplate<Strategy> selectionWrapper2(selection2);
+
+    return selectionWrapper1.start() == selectionWrapper2.start() && selectionWrapper1.end() == selectionWrapper2.end() && selectionWrapper1.base() == selectionWrapper2.base() && selectionWrapper1.extent() == selectionWrapper2.extent();
 }
 
-bool VisibleSelection::InComposedTree::equalSelections(const VisibleSelection& a, const VisibleSelection& b)
+template <typename Strategy>
+bool VisibleSelectionTemplate<Strategy>::operator==(
+    const VisibleSelectionTemplate<Strategy>& other) const
 {
-    return a.startInComposedTree() == b.startInComposedTree() && a.endInComposedTree() == b.endInComposedTree() && a.affinity() == b.affinity() && a.isBaseFirst() == b.isBaseFirst() && a.isDirectional() == b.isDirectional();
+    return equalSelectionsAlgorithm<Strategy>(*this, other);
 }
 
 #ifndef NDEBUG
 
-void VisibleSelection::debugPosition(const char* message) const
+template <typename Strategy>
+void VisibleSelectionTemplate<Strategy>::showTreeForThis() const
 {
-    fprintf(stderr, "VisibleSelection (%s) ===============\n", message);
-
-    if (m_baseIsFirst) {
-        m_start.debugPosition("start: ");
-        m_base.debugPosition("base: ");
-        m_end.debugPosition("end: ");
-        m_extent.debugPosition("extent: ");
-    } else {
-        m_start.debugPosition("start: ");
-        m_extent.debugPosition("extent: ");
-        m_end.debugPosition("end: ");
-        m_base.debugPosition("base: ");
-    }
-    if (isBaseFirstInComposedTree()) {
-        startInComposedTree().debugPosition("startInComposedTree: ");
-        baseInComposedTree().debugPosition("baseInComposedTree: ");
-        endInComposedTree().debugPosition("endInComposedTree: ");
-        extentInComposedTree().debugPosition("extentInComposedTree: ");
-    } else {
-        startInComposedTree().debugPosition("startInComposedTree: ");
-        extentInComposedTree().debugPosition("extentInComposedTree: ");
-        endInComposedTree().debugPosition("endInComposedTree: ");
-        baseInComposedTree().debugPosition("baseInComposedTree: ");
-    }
-
-    fprintf(stderr, "isDirectional=%s\n", isDirectional() ? "true" : "false");
-    fprintf(stderr, "affinity=%s\n", affinity() == DOWNSTREAM ? "DOWNSTREaM" : affinity() == UPSTREAM ? "UPSTREAM" : "UNKNOWN");
-    fprintf(stderr, "================================\n");
-}
-
-void VisibleSelection::formatForDebugger(char* buffer, unsigned length) const
-{
-    StringBuilder result;
-    String s;
-
-    if (isNone()) {
-        result.appendLiteral("<none>");
-    } else {
-        const int FormatBufferSize = 1024;
-        char s[FormatBufferSize];
-        result.appendLiteral("from ");
-        start().formatForDebugger(s, FormatBufferSize);
-        result.append(s);
-        result.appendLiteral(" to ");
-        end().formatForDebugger(s, FormatBufferSize);
-        result.append(s);
-    }
-
-    strncpy(buffer, result.toString().utf8().data(), length - 1);
-}
-
-void VisibleSelection::showTreeForThis() const
-{
-    if (start().anchorNode()) {
-        start().anchorNode()->showTreeAndMark(start().anchorNode(), "S", end().anchorNode(), "E");
-        fputs("start: ", stderr);
-        start().showAnchorTypeAndOffset();
-        fputs("end: ", stderr);
-        end().showAnchorTypeAndOffset();
-    }
+    if (!start().anchorNode())
+        return;
+    LOG(INFO) << "\n"
+              << start()
+                     .anchorNode()
+                     ->toMarkedTreeString(start().anchorNode(), "S",
+                         end().anchorNode(), "E")
+                     .utf8()
+                     .data()
+              << "start: " << start().toAnchorTypeAndOffsetString().utf8().data()
+              << "\n"
+              << "end: " << end().toAnchorTypeAndOffsetString().utf8().data();
 }
 
 #endif
+
+template <typename Strategy>
+void VisibleSelectionTemplate<Strategy>::PrintTo(
+    const VisibleSelectionTemplate<Strategy>& selection,
+    std::ostream* ostream)
+{
+    if (selection.isNone()) {
+        *ostream << "VisibleSelection()";
+        return;
+    }
+    *ostream << "VisibleSelection(base: " << selection.base()
+             << " extent:" << selection.extent()
+             << " start: " << selection.start() << " end: " << selection.end()
+             << ' ' << selection.affinity() << ' '
+             << (selection.isDirectional() ? "Directional" : "NonDirectional")
+             << ')';
+}
+
+template class CORE_TEMPLATE_EXPORT VisibleSelectionTemplate<EditingStrategy>;
+template class CORE_TEMPLATE_EXPORT
+    VisibleSelectionTemplate<EditingInFlatTreeStrategy>;
+
+std::ostream& operator<<(std::ostream& ostream,
+    const VisibleSelection& selection)
+{
+    VisibleSelection::PrintTo(selection, &ostream);
+    return ostream;
+}
+
+std::ostream& operator<<(std::ostream& ostream,
+    const VisibleSelectionInFlatTree& selection)
+{
+    VisibleSelectionInFlatTree::PrintTo(selection, &ostream);
+    return ostream;
+}
 
 } // namespace blink
 
@@ -1235,4 +901,14 @@ void showTree(const blink::VisibleSelection* sel)
         sel->showTreeForThis();
 }
 
+void showTree(const blink::VisibleSelectionInFlatTree& sel)
+{
+    sel.showTreeForThis();
+}
+
+void showTree(const blink::VisibleSelectionInFlatTree* sel)
+{
+    if (sel)
+        sel->showTreeForThis();
+}
 #endif

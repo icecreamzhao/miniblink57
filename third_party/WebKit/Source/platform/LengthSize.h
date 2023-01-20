@@ -22,25 +22,15 @@
 #define LengthSize_h
 
 #include "platform/Length.h"
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
-=======
->>>>>>> miniblink49
 
 namespace blink {
 
 class LengthSize {
-<<<<<<< HEAD
     DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
 
 public:
     LengthSize() { }
-=======
-public:
-    LengthSize()
-    {
-    }
->>>>>>> miniblink49
 
     LengthSize(const Length& width, const Length& height)
         : m_width(width)

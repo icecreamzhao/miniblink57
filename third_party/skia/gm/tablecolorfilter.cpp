@@ -5,41 +5,24 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-#include "gm.h"
->>>>>>> miniblink49
 #include "SkCanvas.h"
 #include "SkColorFilterImageFilter.h"
 #include "SkGradientShader.h"
 #include "SkTableColorFilter.h"
-<<<<<<< HEAD
 #include "gm.h"
 
 static sk_sp<SkShader> make_shader0(int w, int h)
 {
     SkPoint pts[] = { { 0, 0 }, { SkIntToScalar(w), SkIntToScalar(h) } };
-=======
-
-static SkShader* make_shader0(int w, int h) {
-    SkPoint pts[] = { {0, 0}, {SkIntToScalar(w), SkIntToScalar(h)} };
->>>>>>> miniblink49
     SkColor colors[] = {
         SK_ColorBLACK, SK_ColorGREEN, SK_ColorCYAN,
         SK_ColorRED, 0, SK_ColorBLUE, SK_ColorWHITE
     };
-<<<<<<< HEAD
     return SkGradientShader::MakeLinear(pts, colors, nullptr, SK_ARRAY_COUNT(colors),
         SkShader::kClamp_TileMode);
 }
 static void make_bm0(SkBitmap* bm)
 {
-=======
-    return SkGradientShader::CreateLinear(pts, colors, NULL, SK_ARRAY_COUNT(colors),
-                                          SkShader::kClamp_TileMode);
-}
-static void make_bm0(SkBitmap* bm) {
->>>>>>> miniblink49
     int W = 120;
     int H = 120;
     bm->allocN32Pixels(W, H);
@@ -47,7 +30,6 @@ static void make_bm0(SkBitmap* bm) {
 
     SkCanvas canvas(*bm);
     SkPaint paint;
-<<<<<<< HEAD
     paint.setShader(make_shader0(W, H));
     canvas.drawPaint(paint);
 }
@@ -69,73 +51,37 @@ static void make_bm1(SkBitmap* bm)
     int H = 120;
     SkScalar cx = SkIntToScalar(W) / 2;
     SkScalar cy = SkIntToScalar(H) / 2;
-=======
-    paint.setShader(make_shader0(W, H))->unref();
-    canvas.drawPaint(paint);
-}
-static SkShader* make_shader1(int w, int h) {
-    SkScalar cx = SkIntToScalar(w)/2;
-    SkScalar cy = SkIntToScalar(h)/2;
-    SkColor colors[] = {
-        SK_ColorRED, SK_ColorGREEN, SK_ColorBLUE,
-    };
-    return SkGradientShader::CreateRadial(SkPoint::Make(cx, cy), cx, colors, NULL,
-                                          SK_ARRAY_COUNT(colors), SkShader::kClamp_TileMode);
-}
-static void make_bm1(SkBitmap* bm) {
-    int W = 120;
-    int H = 120;
-    SkScalar cx = SkIntToScalar(W)/2;
-    SkScalar cy = SkIntToScalar(H)/2;
->>>>>>> miniblink49
     bm->allocN32Pixels(W, H);
     bm->eraseColor(SK_ColorTRANSPARENT);
 
     SkCanvas canvas(*bm);
     SkPaint paint;
-<<<<<<< HEAD
     paint.setShader(make_shader1(W, H));
-=======
-    paint.setShader(make_shader1(W, H))->unref();
->>>>>>> miniblink49
     paint.setAntiAlias(true);
     canvas.drawCircle(cx, cy, cx, paint);
 }
 
-<<<<<<< HEAD
 static void make_table0(uint8_t table[])
 {
-=======
-static void make_table0(uint8_t table[]) {
->>>>>>> miniblink49
     for (int i = 0; i < 256; ++i) {
         int n = i >> 5;
         table[i] = (n << 5) | (n << 2) | (n >> 1);
     }
 }
-<<<<<<< HEAD
 static void make_table1(uint8_t table[])
 {
-=======
-static void make_table1(uint8_t table[]) {
->>>>>>> miniblink49
     for (int i = 0; i < 256; ++i) {
         table[i] = i * i / 255;
     }
 }
-<<<<<<< HEAD
 static void make_table2(uint8_t table[])
 {
-=======
-static void make_table2(uint8_t table[]) {
->>>>>>> miniblink49
     for (int i = 0; i < 256; ++i) {
         float fi = i / 255.0f;
         table[i] = static_cast<uint8_t>(sqrtf(fi) * 255);
     }
 }
 
-<<<<<<< HEAD
 static sk_sp<SkColorFilter> make_null_cf()
 {
     return nullptr;
@@ -168,34 +114,10 @@ static sk_sp<SkColorFilter> make_cf3()
     uint8_t table2[256];
     make_table2(table2);
     return SkTableColorFilter::MakeARGB(nullptr, table0, table1, table2);
-=======
-static SkColorFilter* make_null_cf() {
-    return NULL;
-}
-
-static SkColorFilter* make_cf0() {
-    uint8_t table[256]; make_table0(table);
-    return SkTableColorFilter::Create(table);
-}
-static SkColorFilter* make_cf1() {
-    uint8_t table[256]; make_table1(table);
-    return SkTableColorFilter::Create(table);
-}
-static SkColorFilter* make_cf2() {
-    uint8_t table[256]; make_table2(table);
-    return SkTableColorFilter::Create(table);
-}
-static SkColorFilter* make_cf3() {
-    uint8_t table0[256]; make_table0(table0);
-    uint8_t table1[256]; make_table1(table1);
-    uint8_t table2[256]; make_table2(table2);
-    return SkTableColorFilter::CreateARGB(NULL, table0, table1, table2);
->>>>>>> miniblink49
 }
 
 class TableColorFilterGM : public skiagm::GM {
 public:
-<<<<<<< HEAD
     TableColorFilterGM() { }
 
 protected:
@@ -217,26 +139,6 @@ protected:
         static sk_sp<SkColorFilter> (*gColorFilterMakers[])() = {
             make_null_cf, make_cf0, make_cf1, make_cf2, make_cf3
         };
-=======
-    TableColorFilterGM() {}
-
-protected:
-    virtual SkString onShortName() {
-        return SkString("tablecolorfilter");
-    }
-
-    virtual SkISize onISize() {
-        return SkISize::Make(700, 1650);
-    }
-
-    virtual void onDraw(SkCanvas* canvas) {
-        canvas->drawColor(0xFFDDDDDD);
-        canvas->translate(20, 20);
-
-
-        static SkColorFilter* (*gColorFilterMakers[])() = { make_null_cf, make_cf0, make_cf1,
-                                                 make_cf2, make_cf3 };
->>>>>>> miniblink49
         static void (*gBitmapMakers[])(SkBitmap*) = { make_bm0, make_bm1 };
 
         // This test will be done once for each bitmap with the results stacked vertically.
@@ -276,7 +178,6 @@ protected:
             // each draw being at xOffset of the previous one
             for (unsigned i = 1; i < SK_ARRAY_COUNT(gColorFilterMakers); ++i) {
                 x += xOffset;
-<<<<<<< HEAD
                 paint.setColorFilter(gColorFilterMakers[i]());
                 canvas->drawBitmap(bm, x, y, &paint);
             }
@@ -287,35 +188,16 @@ protected:
                 sk_sp<SkColorFilter> colorFilter1(gColorFilterMakers[i]());
                 sk_sp<SkImageFilter> imageFilter1(SkColorFilterImageFilter::Make(
                     std::move(colorFilter1), nullptr));
-=======
-                paint.setColorFilter(gColorFilterMakers[i]())->unref();
-                canvas->drawBitmap(bm, x, y, &paint);
-            }
-
-            paint.setColorFilter(NULL);
-
-            for (unsigned i = 0; i < SK_ARRAY_COUNT(gColorFilterMakers); ++i) {
-                SkAutoTUnref<SkColorFilter> colorFilter1(gColorFilterMakers[i]());
-                SkAutoTUnref<SkImageFilter> imageFilter1(SkColorFilterImageFilter::Create(
-                            colorFilter1, NULL, NULL));
->>>>>>> miniblink49
 
                 // Move down to the next line and draw it
                 // each draw being at xOffset of the previous one
                 y += yOffset;
                 x = 0;
                 for (unsigned j = 1; j < SK_ARRAY_COUNT(gColorFilterMakers); ++j) {
-<<<<<<< HEAD
                     sk_sp<SkColorFilter> colorFilter2(gColorFilterMakers[j]());
                     sk_sp<SkImageFilter> imageFilter2(SkColorFilterImageFilter::Make(
                         std::move(colorFilter2), imageFilter1, nullptr));
                     paint.setImageFilter(std::move(imageFilter2));
-=======
-                    SkAutoTUnref<SkColorFilter> colorFilter2(gColorFilterMakers[j]());
-                    SkAutoTUnref<SkImageFilter> imageFilter2(SkColorFilterImageFilter::Create(
-                                colorFilter2, imageFilter1, NULL));
-                    paint.setImageFilter(imageFilter2);
->>>>>>> miniblink49
                     canvas->drawBitmap(bm, x, y, &paint);
                     x += xOffset;
                 }
@@ -329,11 +211,7 @@ protected:
 private:
     typedef GM INHERITED;
 };
-<<<<<<< HEAD
 DEF_GM(return new TableColorFilterGM;)
-=======
-DEF_GM( return new TableColorFilterGM; )
->>>>>>> miniblink49
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -342,7 +220,6 @@ class ComposeColorFilterGM : public skiagm::GM {
         COLOR_COUNT = 3,
         MODE_COUNT = 4,
     };
-<<<<<<< HEAD
     const SkColor* fColors;
     const SkXfermode::Mode* fModes;
     SkString fName;
@@ -380,50 +257,11 @@ protected:
         for (int i = 0; i < MODE_COUNT; ++i) {
             for (int j = 0; j < COLOR_COUNT; ++j) {
                 filters[index++] = SkColorFilter::MakeModeFilter(fColors[j], fModes[i]);
-=======
-    const SkColor*          fColors;
-    const SkXfermode::Mode* fModes;
-    SkString                fName;
-
-public:
-    ComposeColorFilterGM(const SkColor colors[], const SkXfermode::Mode modes[],
-                         const char suffix[])
-        : fColors(colors), fModes(modes)
-    {
-        fName.printf("colorcomposefilter_%s", suffix);
-    }
-    
-protected:
-    virtual SkString onShortName() {
-        return fName;
-    }
-    
-    virtual SkISize onISize() {
-        return SkISize::Make(790, 790);
-    }
-
-    virtual void onDraw(SkCanvas* canvas) {
-        SkBitmap bm;
-        make_bm1(&bm);
-
-        canvas->drawColor(0xFFDDDDDD);
-
-        const int MODES = MODE_COUNT * COLOR_COUNT;
-        SkAutoTUnref<SkColorFilter> filters[MODES];
-        int index = 0;
-        for (int i = 0; i < MODE_COUNT; ++i) {
-            for (int j = 0; j < COLOR_COUNT; ++j) {
-                filters[index++].reset(SkColorFilter::CreateModeFilter(fColors[j], fModes[i]));
->>>>>>> miniblink49
             }
         }
 
         SkPaint paint;
-<<<<<<< HEAD
         paint.setShader(make_shader1(50, 50));
-=======
-        paint.setShader(make_shader1(50, 50))->unref();
->>>>>>> miniblink49
         SkRect r = SkRect::MakeWH(50, 50);
         const SkScalar spacer = 10;
 
@@ -450,13 +288,7 @@ protected:
         for (int y = 0; y < MODES; ++y) {
             canvas->save();
             for (int x = 0; x < MODES; ++x) {
-<<<<<<< HEAD
                 paint.setColorFilter(SkColorFilter::MakeComposeFilter(filters[y], filters[x]));
-=======
-                SkAutoTUnref<SkColorFilter> compose(SkColorFilter::CreateComposeFilter(filters[y],
-                                                                                       filters[x]));
-                paint.setColorFilter(compose);
->>>>>>> miniblink49
                 canvas->drawRect(r, paint);
                 canvas->translate(r.width() + spacer, 0);
             }
@@ -464,11 +296,7 @@ protected:
             canvas->translate(0, r.height() + spacer);
         }
     }
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> miniblink49
 private:
     typedef GM INHERITED;
 };
@@ -480,11 +308,7 @@ const SkXfermode::Mode gModes0[] = {
     SkXfermode::kColorBurn_Mode,
     SkXfermode::kExclusion_Mode,
 };
-<<<<<<< HEAD
 DEF_GM(return new ComposeColorFilterGM(gColors0, gModes0, "wacky");)
-=======
-DEF_GM( return new ComposeColorFilterGM(gColors0, gModes0, "wacky"); )
->>>>>>> miniblink49
 
 const SkColor gColors1[] = { 0x80FF0000, 0x8000FF00, 0x800000FF };
 const SkXfermode::Mode gModes1[] = {
@@ -493,8 +317,4 @@ const SkXfermode::Mode gModes1[] = {
     SkXfermode::kDstOut_Mode,
     SkXfermode::kSrcATop_Mode,
 };
-<<<<<<< HEAD
 DEF_GM(return new ComposeColorFilterGM(gColors1, gModes1, "alpha");)
-=======
-DEF_GM( return new ComposeColorFilterGM(gColors1, gModes1, "alpha"); )
->>>>>>> miniblink49

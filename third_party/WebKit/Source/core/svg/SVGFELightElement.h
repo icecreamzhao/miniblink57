@@ -57,9 +57,15 @@ public:
     SVGAnimatedNumber* pointsAtZ() { return m_pointsAtZ.get(); }
     const SVGAnimatedNumber* pointsAtZ() const { return m_pointsAtZ.get(); }
     SVGAnimatedNumber* specularExponent() { return m_specularExponent.get(); }
-    const SVGAnimatedNumber* specularExponent() const { return m_specularExponent.get(); }
+    const SVGAnimatedNumber* specularExponent() const
+    {
+        return m_specularExponent.get();
+    }
     SVGAnimatedNumber* limitingConeAngle() { return m_limitingConeAngle.get(); }
-    const SVGAnimatedNumber* limitingConeAngle() const { return m_limitingConeAngle.get(); }
+    const SVGAnimatedNumber* limitingConeAngle() const
+    {
+        return m_limitingConeAngle.get();
+    }
 
     DECLARE_VIRTUAL_TRACE();
 
@@ -72,16 +78,16 @@ private:
 
     bool layoutObjectIsNeeded(const ComputedStyle&) override { return false; }
 
-    RefPtrWillBeMember<SVGAnimatedNumber> m_azimuth;
-    RefPtrWillBeMember<SVGAnimatedNumber> m_elevation;
-    RefPtrWillBeMember<SVGAnimatedNumber> m_x;
-    RefPtrWillBeMember<SVGAnimatedNumber> m_y;
-    RefPtrWillBeMember<SVGAnimatedNumber> m_z;
-    RefPtrWillBeMember<SVGAnimatedNumber> m_pointsAtX;
-    RefPtrWillBeMember<SVGAnimatedNumber> m_pointsAtY;
-    RefPtrWillBeMember<SVGAnimatedNumber> m_pointsAtZ;
-    RefPtrWillBeMember<SVGAnimatedNumber> m_specularExponent;
-    RefPtrWillBeMember<SVGAnimatedNumber> m_limitingConeAngle;
+    Member<SVGAnimatedNumber> m_azimuth;
+    Member<SVGAnimatedNumber> m_elevation;
+    Member<SVGAnimatedNumber> m_x;
+    Member<SVGAnimatedNumber> m_y;
+    Member<SVGAnimatedNumber> m_z;
+    Member<SVGAnimatedNumber> m_pointsAtX;
+    Member<SVGAnimatedNumber> m_pointsAtY;
+    Member<SVGAnimatedNumber> m_pointsAtZ;
+    Member<SVGAnimatedNumber> m_specularExponent;
+    Member<SVGAnimatedNumber> m_limitingConeAngle;
 };
 
 inline bool isSVGFELightElement(const SVGElement& element)

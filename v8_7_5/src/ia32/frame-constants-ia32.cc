@@ -14,7 +14,6 @@
 namespace v8 {
 namespace internal {
 
-<<<<<<< HEAD
     Register JavaScriptFrame::fp_register() { return ebp; }
     Register JavaScriptFrame::context_register() { return esi; }
     Register JavaScriptFrame::constant_pool_pointer_register() { UNREACHABLE(); }
@@ -34,22 +33,3 @@ namespace internal {
 } // namespace v8
 
 #endif // V8_TARGET_ARCH_IA32
-=======
-Register JavaScriptFrame::fp_register() { return ebp; }
-Register JavaScriptFrame::context_register() { return esi; }
-Register JavaScriptFrame::constant_pool_pointer_register() { UNREACHABLE(); }
-
-int InterpreterFrameConstants::RegisterStackSlotCount(int register_count) {
-  return register_count;
-}
-
-int BuiltinContinuationFrameConstants::PaddingSlotCount(int register_count) {
-  USE(register_count);
-  return 0;
-}
-
-}  // namespace internal
-}  // namespace v8
-
-#endif  // V8_TARGET_ARCH_IA32
->>>>>>> miniblink49

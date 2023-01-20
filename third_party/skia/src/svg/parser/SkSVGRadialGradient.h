@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2006 The Android Open Source Project
  *
@@ -9,10 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #ifndef SkSVGRadialGradient_DEFINED
 #define SkSVGRadialGradient_DEFINED
 
@@ -20,10 +12,7 @@
 
 class SkSVGRadialGradient : public SkSVGGradient {
     DECLARE_SVG_INFO(RadialGradient);
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 protected:
     SkString f_cx;
     SkString f_cy;
@@ -33,10 +22,7 @@ protected:
     SkString f_gradientUnits;
     SkString f_r;
     SkString fMatrixID;
-<<<<<<< HEAD
 
-=======
->>>>>>> miniblink49
 private:
     typedef SkSVGGradient INHERITED;
 };

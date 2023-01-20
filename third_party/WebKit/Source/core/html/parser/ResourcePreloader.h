@@ -7,16 +7,22 @@
 
 #include "core/CoreExport.h"
 #include "core/html/parser/PreloadRequest.h"
+#include <memory>
 
 namespace blink {
+
+class NetworkHintsInterface;
 
 class CORE_EXPORT ResourcePreloader {
 public:
     virtual void takeAndPreload(PreloadRequestStream&);
+
 private:
-    virtual void preload(PassOwnPtr<PreloadRequest>) = 0;
+    virtual void preload(std::unique_ptr<PreloadRequest>,
+        const NetworkHintsInterface&)
+        = 0;
 };
 
-}
+} // namespace blink
 
 #endif

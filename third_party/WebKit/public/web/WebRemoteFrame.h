@@ -5,12 +5,9 @@
 #ifndef WebRemoteFrame_h
 #define WebRemoteFrame_h
 
-<<<<<<< HEAD
 #include "public/platform/WebFeaturePolicy.h"
 #include "public/platform/WebInsecureRequestPolicy.h"
 #include "public/web/WebContentSecurityPolicy.h"
-=======
->>>>>>> miniblink49
 #include "public/web/WebFrame.h"
 #include "public/web/WebSandboxFlags.h"
 
@@ -18,7 +15,6 @@ namespace blink {
 
 enum class WebTreeScopeType;
 class WebFrameClient;
-<<<<<<< HEAD
 class WebLayer;
 class WebRemoteFrameClient;
 class WebString;
@@ -28,20 +24,12 @@ public:
     BLINK_EXPORT static WebRemoteFrame* create(WebTreeScopeType,
         WebRemoteFrameClient*,
         WebFrame* opener = nullptr);
-=======
-class WebRemoteFrameClient;
-
-class WebRemoteFrame : public WebFrame {
-public:
-    BLINK_EXPORT static WebRemoteFrame* create(WebTreeScopeType, WebRemoteFrameClient*);
->>>>>>> miniblink49
 
     // Functions for the embedder replicate the frame tree between processes.
     // TODO(dcheng): The embedder currently does not replicate local frames in
     // insertion order, so the local child version takes a previous sibling to
     // ensure that it is inserted into the correct location in the list of
     // children.
-<<<<<<< HEAD
     virtual WebLocalFrame* createLocalChild(WebTreeScopeType,
         const WebString& name,
         const WebString& uniqueName,
@@ -62,14 +50,6 @@ public:
 
     // Layer for the in-process compositor.
     virtual void setWebLayer(WebLayer*) = 0;
-=======
-    virtual WebLocalFrame* createLocalChild(WebTreeScopeType, const WebString& name, WebSandboxFlags, WebFrameClient*, WebFrame* previousSibling) = 0;
-
-    virtual WebRemoteFrame* createRemoteChild(WebTreeScopeType, const WebString& name, WebSandboxFlags, WebRemoteFrameClient*) = 0;
-
-    // Transfer initial drawing parameters from a local frame.
-    virtual void initializeFromFrame(WebLocalFrame*) const = 0;
->>>>>>> miniblink49
 
     // Set security origin replicated from another process.
     virtual void setReplicatedOrigin(const WebSecurityOrigin&) const = 0;
@@ -77,7 +57,6 @@ public:
     // Set sandbox flags replicated from another process.
     virtual void setReplicatedSandboxFlags(WebSandboxFlags) const = 0;
 
-<<<<<<< HEAD
     // Set frame |name| and |uniqueName| replicated from another process.
     virtual void setReplicatedName(const WebString& name,
         const WebString& uniqueName) const = 0;
@@ -104,17 +83,10 @@ public:
     virtual void setReplicatedPotentiallyTrustworthyUniqueOrigin(bool) const = 0;
 
     virtual void dispatchLoadEventOnFrameOwner() const = 0;
-=======
-    // Set frame name replicated from another process.
-    virtual void setReplicatedName(const WebString&) const = 0;
-
-    virtual void DispatchLoadEventForFrameOwner() const = 0;
->>>>>>> miniblink49
 
     virtual void didStartLoading() = 0;
     virtual void didStopLoading() = 0;
 
-<<<<<<< HEAD
     // Returns true if this frame should be ignored during hittesting.
     virtual bool isIgnoredForHitTest() const = 0;
 
@@ -144,10 +116,6 @@ protected:
     WebLocalFrame* toWebLocalFrame() override = 0;
     bool isWebRemoteFrame() const override = 0;
     WebRemoteFrame* toWebRemoteFrame() override = 0;
-=======
-protected:
-    explicit WebRemoteFrame(WebTreeScopeType scope) : WebFrame(scope) { }
->>>>>>> miniblink49
 };
 
 } // namespace blink

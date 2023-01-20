@@ -28,22 +28,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/html/track/TrackBase.h"
 
 #include "core/html/HTMLMediaElement.h"
 
 namespace blink {
 
-static WebMediaPlayer::TrackId nextTrackId()
-{
-    static WebMediaPlayer::TrackId next = 0;
-    return ++next;
-}
-
-TrackBase::TrackBase(Type type, const AtomicString& label, const AtomicString& language, const String& id)
-    : m_trackId(nextTrackId())
-    , m_type(type)
+TrackBase::TrackBase(WebMediaPlayer::TrackType type,
+    const AtomicString& kind,
+    const AtomicString& label,
+    const AtomicString& language,
+    const String& id)
+    : m_type(type)
+    , m_kind(kind)
     , m_label(label)
     , m_language(language)
     , m_id(id)
@@ -51,13 +48,7 @@ TrackBase::TrackBase(Type type, const AtomicString& label, const AtomicString& l
 {
 }
 
-TrackBase::~TrackBase()
-{
-#if !ENABLE(OILPAN)
-    ASSERT(!m_mediaElement);
-#endif
-}
-
+TrackBase::~TrackBase() { }
 
 Node* TrackBase::owner() const
 {
@@ -66,15 +57,8 @@ Node* TrackBase::owner() const
 
 DEFINE_TRACE(TrackBase)
 {
+    Supplementable<TrackBase>::trace(visitor);
     visitor->trace(m_mediaElement);
-}
-
-void TrackBase::setKind(const AtomicString& kind)
-{
-    if (isValidKind(kind))
-        m_kind = kind;
-    else
-        m_kind = defaultKind();
 }
 
 } // namespace blink

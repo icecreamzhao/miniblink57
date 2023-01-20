@@ -28,31 +28,27 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/html/forms/ColorInputType.h"
 
-#include "bindings/core/v8/ExceptionStatePlaceholder.h"
+#include "bindings/core/v8/ExceptionState.h"
 #include "bindings/core/v8/ScriptController.h"
 #include "core/CSSPropertyNames.h"
 #include "core/InputTypeNames.h"
 #include "core/dom/shadow/ShadowRoot.h"
 #include "core/events/MouseEvent.h"
 #include "core/events/ScopedEventQueue.h"
+#include "core/frame/FrameView.h"
 #include "core/html/HTMLDataListElement.h"
 #include "core/html/HTMLDataListOptionsCollection.h"
 #include "core/html/HTMLDivElement.h"
 #include "core/html/HTMLInputElement.h"
 #include "core/html/HTMLOptionElement.h"
 #include "core/html/forms/ColorChooser.h"
-#include "core/inspector/ConsoleMessage.h"
 #include "core/layout/LayoutTheme.h"
-#include "core/layout/LayoutView.h"
 #include "core/page/ChromeClient.h"
-#include "platform/JSONValues.h"
 #include "platform/RuntimeEnabledFeatures.h"
 #include "platform/UserGestureIndicator.h"
 #include "platform/graphics/Color.h"
-#include "wtf/PassOwnPtr.h"
 #include "wtf/text/WTFString.h"
 
 namespace blink {
@@ -78,20 +74,35 @@ static bool isValidColorString(const String& value)
     return color.setFromString(value) && !color.hasAlpha();
 }
 
-PassRefPtrWillBeRawPtr<InputType> ColorInputType::create(HTMLInputElement& element)
+ColorInputType::ColorInputType(HTMLInputElement& element)
+    : InputType(element)
+    , KeyboardClickableInputTypeView(element)
 {
-    return adoptRefWillBeNoop(new ColorInputType(element));
 }
 
-ColorInputType::~ColorInputType()
+InputType* ColorInputType::create(HTMLInputElement& element)
 {
+    return new ColorInputType(element);
 }
+
+ColorInputType::~ColorInputType() { }
 
 DEFINE_TRACE(ColorInputType)
 {
     visitor->trace(m_chooser);
-    BaseClickableWithKeyInputType::trace(visitor);
+    KeyboardClickableInputTypeView::trace(visitor);
     ColorChooserClient::trace(visitor);
+    InputType::trace(visitor);
+}
+
+InputTypeView* ColorInputType::createView()
+{
+    return this;
+}
+
+InputType::ValueMode ColorInputType::valueMode() const
+{
+    return ValueMode::kValue;
 }
 
 void ColorInputType::countUsage()
@@ -109,16 +120,10 @@ bool ColorInputType::supportsRequired() const
     return false;
 }
 
-String ColorInputType::fallbackValue() const
-{
-    return String("#000000");
-}
-
 String ColorInputType::sanitizeValue(const String& proposedValue) const
 {
     if (!isValidColorString(proposedValue))
-        return fallbackValue();
-
+        return "#000000";
     return proposedValue.lower();
 }
 
@@ -126,32 +131,30 @@ Color ColorInputType::valueAsColor() const
 {
     Color color;
     bool success = color.setFromString(element().value());
-    ASSERT_UNUSED(success, success);
+    DCHECK(success);
     return color;
 }
 
 void ColorInputType::createShadowSubtree()
 {
-    ASSERT(element().shadow());
+    DCHECK(element().shadow());
 
     Document& document = element().document();
-    RefPtrWillBeRawPtr<HTMLDivElement> wrapperElement = HTMLDivElement::create(document);
-    wrapperElement->setShadowPseudoId(AtomicString("-webkit-color-swatch-wrapper", AtomicString::ConstructFromLiteral));
-    RefPtrWillBeRawPtr<HTMLDivElement> colorSwatch = HTMLDivElement::create(document);
-    colorSwatch->setShadowPseudoId(AtomicString("-webkit-color-swatch", AtomicString::ConstructFromLiteral));
-    wrapperElement->appendChild(colorSwatch.release());
-    element().userAgentShadowRoot()->appendChild(wrapperElement.release());
+    HTMLDivElement* wrapperElement = HTMLDivElement::create(document);
+    wrapperElement->setShadowPseudoId(
+        AtomicString("-webkit-color-swatch-wrapper"));
+    HTMLDivElement* colorSwatch = HTMLDivElement::create(document);
+    colorSwatch->setShadowPseudoId(AtomicString("-webkit-color-swatch"));
+    wrapperElement->appendChild(colorSwatch);
+    element().userAgentShadowRoot()->appendChild(wrapperElement);
 
     element().updateView();
 }
 
-void ColorInputType::setValue(const String& value, bool valueChanged, TextFieldEventBehavior eventBehavior)
+void ColorInputType::didSetValue(const String&, bool valueChanged)
 {
-    InputType::setValue(value, valueChanged, eventBehavior);
-
     if (!valueChanged)
         return;
-
     element().updateView();
     if (m_chooser)
         m_chooser->setSelectedColor(valueAsColor());
@@ -159,15 +162,16 @@ void ColorInputType::setValue(const String& value, bool valueChanged, TextFieldE
 
 void ColorInputType::handleDOMActivateEvent(Event* event)
 {
-    if (element().isDisabledFormControl() || !element().layoutObject())
+    if (element().isDisabledFormControl())
         return;
 
-    if (!UserGestureIndicator::processingUserGesture())
+    if (!UserGestureIndicator::utilizeUserGesture())
         return;
 
     ChromeClient* chromeClient = this->chromeClient();
     if (chromeClient && !m_chooser)
-        m_chooser = chromeClient->openColorChooser(element().document().frame(), this, valueAsColor());
+        m_chooser = chromeClient->openColorChooser(element().document().frame(),
+            this, valueAsColor());
 
     event->setDefaultHandled();
 }
@@ -189,16 +193,25 @@ bool ColorInputType::typeMismatchFor(const String& value) const
 
 void ColorInputType::warnIfValueIsInvalid(const String& value) const
 {
-    if (!equalIgnoringCase(value, element().sanitizeValue(value))) {
-        element().document().addConsoleMessage(ConsoleMessage::create(RenderingMessageSource, WarningMessageLevel,
-            String::format("The specified value %s does not conform to the required format.  The format is \"#rrggbb\" where rr, gg, bb are two-digit hexadecimal numbers.", JSONValue::quoteString(value).utf8().data())));
-    }
+    if (!equalIgnoringCase(value, element().sanitizeValue(value)))
+        addWarningToConsole(
+            "The specified value %s does not conform to the required format.  The "
+            "format is \"#rrggbb\" where rr, gg, bb are two-digit hexadecimal "
+            "numbers.",
+            value);
+}
+
+void ColorInputType::valueAttributeChanged()
+{
+    if (!element().hasDirtyValue())
+        element().updateView();
 }
 
 void ColorInputType::didChooseColor(const Color& color)
 {
     if (element().isDisabledFormControl() || color == valueAsColor())
         return;
+    EventQueueScope scope;
     element().setValueFromRenderer(color.serialized());
     element().updateView();
     if (!LayoutTheme::theme().isModalColorChooser())
@@ -207,9 +220,8 @@ void ColorInputType::didChooseColor(const Color& color)
 
 void ColorInputType::didEndChooser()
 {
-    EventQueueScope scope;
     if (LayoutTheme::theme().isModalColorChooser())
-        element().dispatchFormControlChangeEvent();
+        element().enqueueChangeEvent();
     m_chooser.clear();
 }
 
@@ -225,13 +237,15 @@ void ColorInputType::updateView()
     if (!colorSwatch)
         return;
 
-    colorSwatch->setInlineStyleProperty(CSSPropertyBackgroundColor, element().value());
+    colorSwatch->setInlineStyleProperty(CSSPropertyBackgroundColor,
+        element().value());
 }
 
 HTMLElement* ColorInputType::shadowColorSwatch() const
 {
     ShadowRoot* shadow = element().userAgentShadowRoot();
-    return shadow ? toHTMLElement(shadow->firstChild()->firstChild()) : 0;
+    return shadow ? toHTMLElementOrDie(shadow->firstChild()->firstChild())
+                  : nullptr;
 }
 
 Element& ColorInputType::ownerElement() const
@@ -241,7 +255,8 @@ Element& ColorInputType::ownerElement() const
 
 IntRect ColorInputType::elementRectRelativeToViewport() const
 {
-    return element().document().view()->contentsToViewport(element().pixelSnappedBoundingBox());
+    return element().document().view()->contentsToViewport(
+        element().pixelSnappedBoundingBox());
 }
 
 Color ColorInputType::currentColor()
@@ -259,15 +274,16 @@ Vector<ColorSuggestion> ColorInputType::suggestions() const
     Vector<ColorSuggestion> suggestions;
     HTMLDataListElement* dataList = element().dataList();
     if (dataList) {
-        RefPtrWillBeRawPtr<HTMLDataListOptionsCollection> options = dataList->options();
+        HTMLDataListOptionsCollection* options = dataList->options();
         for (unsigned i = 0; HTMLOptionElement* option = options->item(i); i++) {
             if (!element().isValidValue(option->value()))
                 continue;
             Color color;
             if (!color.setFromString(option->value()))
                 continue;
-            ColorSuggestion suggestion(color, option->label().left(maxSuggestionLabelLength));
-            suggestions.append(suggestion);
+            ColorSuggestion suggestion(
+                color, option->label().left(maxSuggestionLabelLength));
+            suggestions.push_back(suggestion);
             if (suggestions.size() >= maxSuggestions)
                 break;
         }

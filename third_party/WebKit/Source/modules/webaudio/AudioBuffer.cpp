@@ -26,17 +26,11 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
-#if ENABLE(WEB_AUDIO)
->>>>>>> miniblink49
 #include "modules/webaudio/AudioBuffer.h"
 
 #include "bindings/core/v8/ExceptionMessages.h"
 #include "bindings/core/v8/ExceptionState.h"
 #include "core/dom/ExceptionCode.h"
-<<<<<<< HEAD
 #include "modules/webaudio/AudioBufferOptions.h"
 #include "modules/webaudio/BaseAudioContext.h"
 #include "platform/audio/AudioBus.h"
@@ -51,19 +45,6 @@ AudioBuffer* AudioBuffer::create(unsigned numberOfChannels,
     float sampleRate)
 {
     if (!AudioUtilities::isValidAudioBufferSampleRate(sampleRate) || numberOfChannels > BaseAudioContext::maxNumberOfChannels() || !numberOfChannels || !numberOfFrames)
-=======
-#include "modules/webaudio/AudioContext.h"
-#include "platform/audio/AudioBus.h"
-#include "platform/audio/AudioFileReader.h"
-#include "platform/audio/AudioUtilities.h"
-#include "wtf/Float32Array.h"
-
-namespace blink {
-
-AudioBuffer* AudioBuffer::create(unsigned numberOfChannels, size_t numberOfFrames, float sampleRate)
-{
-    if (!AudioUtilities::isValidAudioBufferSampleRate(sampleRate) || numberOfChannels > AudioContext::maxNumberOfChannels() || !numberOfChannels || !numberOfFrames)
->>>>>>> miniblink49
         return nullptr;
 
     AudioBuffer* buffer = new AudioBuffer(numberOfChannels, numberOfFrames, sampleRate);
@@ -73,7 +54,6 @@ AudioBuffer* AudioBuffer::create(unsigned numberOfChannels, size_t numberOfFrame
     return buffer;
 }
 
-<<<<<<< HEAD
 AudioBuffer* AudioBuffer::create(unsigned numberOfChannels,
     size_t numberOfFrames,
     float sampleRate,
@@ -82,37 +62,12 @@ AudioBuffer* AudioBuffer::create(unsigned numberOfChannels,
     if (!numberOfChannels || numberOfChannels > BaseAudioContext::maxNumberOfChannels()) {
         exceptionState.throwDOMException(
             NotSupportedError, ExceptionMessages::indexOutsideRange("number of channels", numberOfChannels, 1u, ExceptionMessages::InclusiveBound, BaseAudioContext::maxNumberOfChannels(), ExceptionMessages::InclusiveBound));
-=======
-AudioBuffer* AudioBuffer::create(unsigned numberOfChannels, size_t numberOfFrames, float sampleRate, ExceptionState& exceptionState)
-{
-    if (!numberOfChannels || numberOfChannels > AudioContext::maxNumberOfChannels()) {
-        exceptionState.throwDOMException(
-            NotSupportedError,
-            ExceptionMessages::indexOutsideRange(
-                "number of channels",
-                numberOfChannels,
-                1u,
-                ExceptionMessages::InclusiveBound,
-                AudioContext::maxNumberOfChannels(),
-                ExceptionMessages::InclusiveBound));
->>>>>>> miniblink49
         return nullptr;
     }
 
     if (!AudioUtilities::isValidAudioBufferSampleRate(sampleRate)) {
         exceptionState.throwDOMException(
-<<<<<<< HEAD
             NotSupportedError, ExceptionMessages::indexOutsideRange("sample rate", sampleRate, AudioUtilities::minAudioBufferSampleRate(), ExceptionMessages::InclusiveBound, AudioUtilities::maxAudioBufferSampleRate(), ExceptionMessages::InclusiveBound));
-=======
-            NotSupportedError,
-            ExceptionMessages::indexOutsideRange(
-                "sample rate",
-                sampleRate,
-                AudioUtilities::minAudioBufferSampleRate(),
-                ExceptionMessages::InclusiveBound,
-                AudioUtilities::maxAudioBufferSampleRate(),
-                ExceptionMessages::InclusiveBound));
->>>>>>> miniblink49
         return nullptr;
     }
 
@@ -120,13 +75,7 @@ AudioBuffer* AudioBuffer::create(unsigned numberOfChannels, size_t numberOfFrame
         exceptionState.throwDOMException(
             NotSupportedError,
             ExceptionMessages::indexExceedsMinimumBound(
-<<<<<<< HEAD
                 "number of frames", numberOfFrames, static_cast<size_t>(0)));
-=======
-                "number of frames",
-                numberOfFrames,
-                static_cast<size_t>(0)));
->>>>>>> miniblink49
         return nullptr;
     }
 
@@ -134,22 +83,12 @@ AudioBuffer* AudioBuffer::create(unsigned numberOfChannels, size_t numberOfFrame
 
     if (!audioBuffer) {
         exceptionState.throwDOMException(
-<<<<<<< HEAD
             NotSupportedError, "createBuffer(" + String::number(numberOfChannels) + ", " + String::number(numberOfFrames) + ", " + String::number(sampleRate) + ") failed.");
-=======
-            NotSupportedError,
-            "createBuffer("
-            + String::number(numberOfChannels) + ", "
-            + String::number(numberOfFrames) + ", "
-            + String::number(sampleRate)
-            + ") failed.");
->>>>>>> miniblink49
     }
 
     return audioBuffer;
 }
 
-<<<<<<< HEAD
 AudioBuffer* AudioBuffer::create(BaseAudioContext* context,
     const AudioBufferOptions& options,
     ExceptionState& exceptionState)
@@ -179,9 +118,6 @@ AudioBuffer* AudioBuffer::createFromAudioFileData(const void* data,
     size_t dataSize,
     bool mixToMono,
     float sampleRate)
-=======
-AudioBuffer* AudioBuffer::createFromAudioFileData(const void* data, size_t dataSize, bool mixToMono, float sampleRate)
->>>>>>> miniblink49
 {
     RefPtr<AudioBus> bus = createBusFromInMemoryAudioFile(data, dataSize, mixToMono, sampleRate);
     if (bus) {
@@ -208,11 +144,7 @@ bool AudioBuffer::createdSuccessfully(unsigned desiredNumberOfChannels) const
     return numberOfChannels() == desiredNumberOfChannels;
 }
 
-<<<<<<< HEAD
 DOMFloat32Array* AudioBuffer::createFloat32ArrayOrNull(size_t length)
-=======
-PassRefPtr<DOMFloat32Array> AudioBuffer::createFloat32ArrayOrNull(size_t length)
->>>>>>> miniblink49
 {
     RefPtr<WTF::Float32Array> bufferView = WTF::Float32Array::createOrNull(length);
     if (!bufferView)
@@ -220,20 +152,15 @@ PassRefPtr<DOMFloat32Array> AudioBuffer::createFloat32ArrayOrNull(size_t length)
     return DOMFloat32Array::create(bufferView.release());
 }
 
-<<<<<<< HEAD
 AudioBuffer::AudioBuffer(unsigned numberOfChannels,
     size_t numberOfFrames,
     float sampleRate)
-=======
-AudioBuffer::AudioBuffer(unsigned numberOfChannels, size_t numberOfFrames, float sampleRate)
->>>>>>> miniblink49
     : m_sampleRate(sampleRate)
     , m_length(numberOfFrames)
 {
     m_channels.reserveCapacity(numberOfChannels);
 
     for (unsigned i = 0; i < numberOfChannels; ++i) {
-<<<<<<< HEAD
         DOMFloat32Array* channelDataArray = createFloat32ArrayOrNull(m_length);
         // If the channel data array could not be created, just return. The caller
         // will need to check that the desired number of channels were created.
@@ -242,17 +169,6 @@ AudioBuffer::AudioBuffer(unsigned numberOfChannels, size_t numberOfFrames, float
 
         channelDataArray->setNeuterable(false);
         m_channels.push_back(channelDataArray);
-=======
-        RefPtr<DOMFloat32Array> channelDataArray = createFloat32ArrayOrNull(m_length);
-        // If the channel data array could not be created, just return. The caller will need to
-        // check that the desired number of channels were created.
-        if (!channelDataArray) {
-            return;
-        }
-
-        channelDataArray->setNeuterable(false);
-        m_channels.append(channelDataArray);
->>>>>>> miniblink49
     }
 }
 
@@ -264,15 +180,9 @@ AudioBuffer::AudioBuffer(AudioBus* bus)
     unsigned numberOfChannels = bus->numberOfChannels();
     m_channels.reserveCapacity(numberOfChannels);
     for (unsigned i = 0; i < numberOfChannels; ++i) {
-<<<<<<< HEAD
         DOMFloat32Array* channelDataArray = createFloat32ArrayOrNull(m_length);
         // If the channel data array could not be created, just return. The caller
         // will need to check that the desired number of channels were created.
-=======
-        RefPtr<DOMFloat32Array> channelDataArray = createFloat32ArrayOrNull(m_length);
-        // If the channel data array could not be created, just return. The caller will need to
-        // check that the desired number of channels were created.
->>>>>>> miniblink49
         if (!channelDataArray)
             return;
 
@@ -280,7 +190,6 @@ AudioBuffer::AudioBuffer(AudioBus* bus)
         const float* src = bus->channel(i)->data();
         float* dst = channelDataArray->data();
         memmove(dst, src, m_length * sizeof(*dst));
-<<<<<<< HEAD
         m_channels.push_back(channelDataArray);
     }
 }
@@ -295,21 +204,6 @@ DOMFloat32Array* AudioBuffer::getChannelData(unsigned channelIndex,
     }
 
     return getChannelData(channelIndex);
-=======
-        m_channels.append(channelDataArray);
-    }
-}
-
-PassRefPtr<DOMFloat32Array> AudioBuffer::getChannelData(unsigned channelIndex, ExceptionState& exceptionState)
-{
-    if (channelIndex >= m_channels.size()) {
-        exceptionState.throwDOMException(IndexSizeError, "channel index (" + String::number(channelIndex) + ") exceeds number of channels (" + String::number(m_channels.size()) + ")");
-        return nullptr;
-    }
-
-    DOMFloat32Array* channelData = m_channels[channelIndex].get();
-    return DOMFloat32Array::create(channelData->buffer(), channelData->byteOffset(), channelData->length());
->>>>>>> miniblink49
 }
 
 DOMFloat32Array* AudioBuffer::getChannelData(unsigned channelIndex)
@@ -320,18 +214,13 @@ DOMFloat32Array* AudioBuffer::getChannelData(unsigned channelIndex)
     return m_channels[channelIndex].get();
 }
 
-<<<<<<< HEAD
 void AudioBuffer::copyFromChannel(DOMFloat32Array* destination,
     long channelNumber,
     ExceptionState& exceptionState)
-=======
-void AudioBuffer::copyFromChannel(DOMFloat32Array* destination, long channelNumber, ExceptionState& exceptionState)
->>>>>>> miniblink49
 {
     return copyFromChannel(destination, channelNumber, 0, exceptionState);
 }
 
-<<<<<<< HEAD
 void AudioBuffer::copyFromChannel(DOMFloat32Array* destination,
     long channelNumber,
     unsigned long startInChannel,
@@ -340,29 +229,6 @@ void AudioBuffer::copyFromChannel(DOMFloat32Array* destination,
     if (channelNumber < 0 || channelNumber >= static_cast<long>(m_channels.size())) {
         exceptionState.throwDOMException(
             IndexSizeError, ExceptionMessages::indexOutsideRange("channelNumber", channelNumber, 0L, ExceptionMessages::InclusiveBound, static_cast<long>(m_channels.size() - 1), ExceptionMessages::InclusiveBound));
-=======
-void AudioBuffer::copyFromChannel(DOMFloat32Array* destination, long channelNumber, unsigned long startInChannel, ExceptionState& exceptionState)
-{
-    if (!destination) {
-        exceptionState.throwDOMException(
-            TypeMismatchError,
-            ExceptionMessages::argumentNullOrIncorrectType(
-                1,
-                "Float32Array"));
-        return;
-    }
-
-    if (channelNumber < 0 || channelNumber >= static_cast<long>(m_channels.size())) {
-        exceptionState.throwDOMException(
-            IndexSizeError,
-            ExceptionMessages::indexOutsideRange(
-                "channelNumber",
-                channelNumber,
-                0L,
-                ExceptionMessages::InclusiveBound,
-                static_cast<long>(m_channels.size() - 1),
-                ExceptionMessages::InclusiveBound));
->>>>>>> miniblink49
         return;
     }
 
@@ -370,18 +236,7 @@ void AudioBuffer::copyFromChannel(DOMFloat32Array* destination, long channelNumb
 
     if (startInChannel >= channelData->length()) {
         exceptionState.throwDOMException(
-<<<<<<< HEAD
             IndexSizeError, ExceptionMessages::indexOutsideRange("startInChannel", startInChannel, 0UL, ExceptionMessages::InclusiveBound, static_cast<unsigned long>(channelData->length()), ExceptionMessages::ExclusiveBound));
-=======
-            IndexSizeError,
-            ExceptionMessages::indexOutsideRange(
-                "startInChannel",
-                startInChannel,
-                0UL,
-                ExceptionMessages::InclusiveBound,
-                static_cast<unsigned long>(channelData->length()),
-                ExceptionMessages::ExclusiveBound));
->>>>>>> miniblink49
 
         return;
     }
@@ -392,29 +247,19 @@ void AudioBuffer::copyFromChannel(DOMFloat32Array* destination, long channelNumb
     const float* src = channelData->data();
     float* dst = destination->data();
 
-<<<<<<< HEAD
     DCHECK(src);
     DCHECK(dst);
-=======
-    ASSERT(src);
-    ASSERT(dst);
->>>>>>> miniblink49
 
     memcpy(dst, src + startInChannel, count * sizeof(*src));
 }
 
-<<<<<<< HEAD
 void AudioBuffer::copyToChannel(DOMFloat32Array* source,
     long channelNumber,
     ExceptionState& exceptionState)
-=======
-void AudioBuffer::copyToChannel(DOMFloat32Array* source, long channelNumber, ExceptionState& exceptionState)
->>>>>>> miniblink49
 {
     return copyToChannel(source, channelNumber, 0, exceptionState);
 }
 
-<<<<<<< HEAD
 void AudioBuffer::copyToChannel(DOMFloat32Array* source,
     long channelNumber,
     unsigned long startInChannel,
@@ -423,29 +268,6 @@ void AudioBuffer::copyToChannel(DOMFloat32Array* source,
     if (channelNumber < 0 || channelNumber >= static_cast<long>(m_channels.size())) {
         exceptionState.throwDOMException(
             IndexSizeError, ExceptionMessages::indexOutsideRange("channelNumber", channelNumber, 0L, ExceptionMessages::InclusiveBound, static_cast<long>(m_channels.size() - 1), ExceptionMessages::InclusiveBound));
-=======
-void AudioBuffer::copyToChannel(DOMFloat32Array* source, long channelNumber, unsigned long startInChannel, ExceptionState& exceptionState)
-{
-    if (!source) {
-        exceptionState.throwDOMException(
-            TypeMismatchError,
-            ExceptionMessages::argumentNullOrIncorrectType(
-                1,
-                "Float32Array"));
-        return;
-    }
-
-    if (channelNumber < 0 || channelNumber >= static_cast<long>(m_channels.size())) {
-        exceptionState.throwDOMException(
-            IndexSizeError,
-            ExceptionMessages::indexOutsideRange(
-                "channelNumber",
-                channelNumber,
-                0L,
-                ExceptionMessages::InclusiveBound,
-                static_cast<long>(m_channels.size() - 1),
-                ExceptionMessages::InclusiveBound));
->>>>>>> miniblink49
         return;
     }
 
@@ -453,18 +275,7 @@ void AudioBuffer::copyToChannel(DOMFloat32Array* source, long channelNumber, uns
 
     if (startInChannel >= channelData->length()) {
         exceptionState.throwDOMException(
-<<<<<<< HEAD
             IndexSizeError, ExceptionMessages::indexOutsideRange("startInChannel", startInChannel, 0UL, ExceptionMessages::InclusiveBound, static_cast<unsigned long>(channelData->length()), ExceptionMessages::ExclusiveBound));
-=======
-            IndexSizeError,
-            ExceptionMessages::indexOutsideRange(
-                "startInChannel",
-                startInChannel,
-                0UL,
-                ExceptionMessages::InclusiveBound,
-                static_cast<unsigned long>(channelData->length()),
-                ExceptionMessages::ExclusiveBound));
->>>>>>> miniblink49
 
         return;
     }
@@ -475,13 +286,8 @@ void AudioBuffer::copyToChannel(DOMFloat32Array* source, long channelNumber, uns
     const float* src = source->data();
     float* dst = channelData->data();
 
-<<<<<<< HEAD
     DCHECK(src);
     DCHECK(dst);
-=======
-    ASSERT(src);
-    ASSERT(dst);
->>>>>>> miniblink49
 
     memcpy(dst + startInChannel, src, count * sizeof(*dst));
 }
@@ -497,8 +303,3 @@ void AudioBuffer::zero()
 }
 
 } // namespace blink
-<<<<<<< HEAD
-=======
-
-#endif // ENABLE(WEB_AUDIO)
->>>>>>> miniblink49

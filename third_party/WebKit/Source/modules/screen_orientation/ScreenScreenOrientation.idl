@@ -2,12 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-<<<<<<< HEAD
 partial interface Screen {
-=======
-[
-    RuntimeEnabled=ScreenOrientation
-] partial interface Screen {
->>>>>>> miniblink49
     [CallWith=ScriptState] readonly attribute ScreenOrientation orientation;
 };

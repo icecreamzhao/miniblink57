@@ -5,18 +5,11 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "SkStringUtils.h"
 #include "SkString.h"
 
 void SkAddFlagToString(SkString* string, bool flag, const char* flagStr, bool* needSeparator)
 {
-=======
-#include "SkString.h"
-#include "SkStringUtils.h"
-
-void SkAddFlagToString(SkString* string, bool flag, const char* flagStr, bool* needSeparator) {
->>>>>>> miniblink49
     if (flag) {
         if (*needSeparator) {
             string->append("|");
@@ -26,7 +19,6 @@ void SkAddFlagToString(SkString* string, bool flag, const char* flagStr, bool* n
     }
 }
 
-<<<<<<< HEAD
 void SkAppendScalar(SkString* str, SkScalar value, SkScalarAsStringType asType)
 {
     switch (asType) {
@@ -72,22 +64,3 @@ SkString SkTabString(const SkString& string, int tabCnt)
     }
     return result;
 }
-=======
-void SkAppendScalar(SkString* str, SkScalar value, SkScalarAsStringType asType) {
-    switch (asType) {
-        case kHex_SkScalarAsStringType:
-            str->appendf("SkBits2Float(0x%08x)", SkFloat2Bits(value));
-            break;
-        case kDec_SkScalarAsStringType: {
-            SkString tmp;
-            tmp.printf("%g", value);
-            if (tmp.contains('.')) {
-                tmp.appendUnichar('f');
-            }
-            str->append(tmp);
-            break;
-        }
-    }
-}
-
->>>>>>> miniblink49

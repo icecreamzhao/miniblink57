@@ -8,35 +8,23 @@
 #include "SampleCode.h"
 #include "SkCanvas.h"
 #include "SkPaint.h"
-<<<<<<< HEAD
 #include "SkPath.h"
-=======
->>>>>>> miniblink49
 #include "SkRandom.h"
 #include "SkView.h"
 
 // Generates y values for the chart plots.
-<<<<<<< HEAD
 static void gen_data(SkScalar yAvg, SkScalar ySpread, int count, SkTDArray<SkScalar>* dataPts)
 {
-=======
-static void gen_data(SkScalar yAvg, SkScalar ySpread, int count, SkTDArray<SkScalar>* dataPts) {
->>>>>>> miniblink49
     dataPts->setCount(count);
     static SkRandom gRandom;
     for (int i = 0; i < count; ++i) {
         (*dataPts)[i] = gRandom.nextRangeScalar(yAvg - SkScalarHalf(ySpread),
-<<<<<<< HEAD
             yAvg + SkScalarHalf(ySpread));
-=======
-                                                yAvg + SkScalarHalf(ySpread));
->>>>>>> miniblink49
     }
 }
 
 // Generates a path to stroke along the top of each plot and a fill path for the area below each
 // plot. The fill path is bounded below by the bottomData plot points or a horizontal line at
-<<<<<<< HEAD
 // yBase if bottomData == nullptr.
 // The plots are animated by rotating the data points by leftShift.
 static void gen_paths(const SkTDArray<SkScalar>& topData,
@@ -50,20 +38,6 @@ static void gen_paths(const SkTDArray<SkScalar>& topData,
     fill->rewind();
     plot->incReserve(topData.count());
     if (nullptr == bottomData) {
-=======
-// yBase if bottomData == NULL.
-// The plots are animated by rotating the data points by leftShift.
-static void gen_paths(const SkTDArray<SkScalar>& topData,
-                      const SkTDArray<SkScalar>* bottomData,
-                      SkScalar yBase,
-                      SkScalar xLeft, SkScalar xDelta,
-                      int leftShift,
-                      SkPath* plot, SkPath* fill) {
-    plot->rewind();
-    fill->rewind();
-    plot->incReserve(topData.count());
-    if (NULL == bottomData) {
->>>>>>> miniblink49
         fill->incReserve(topData.count() + 2);
     } else {
         fill->incReserve(2 * topData.count());
@@ -111,23 +85,15 @@ static void gen_paths(const SkTDArray<SkScalar>& topData,
 // filling
 class ChartView : public SampleView {
 public:
-<<<<<<< HEAD
     ChartView()
     {
-=======
-    ChartView() {
->>>>>>> miniblink49
         fShift = 0;
         fSize.set(-1, -1);
     }
 
 protected:
-<<<<<<< HEAD
     bool onQuery(SkEvent* evt) override
     {
-=======
-    bool onQuery(SkEvent* evt) override {
->>>>>>> miniblink49
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "Chart");
             return true;
@@ -135,12 +101,8 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-<<<<<<< HEAD
     void onDrawContent(SkCanvas* canvas) override
     {
-=======
-    void onDrawContent(SkCanvas* canvas) override {
->>>>>>> miniblink49
         bool sizeChanged = false;
         if (canvas->getDeviceSize() != fSize) {
             fSize = canvas->getDeviceSize();
@@ -185,7 +147,6 @@ protected:
         fillPaint.setAntiAlias(true);
         fillPaint.setStyle(SkPaint::kFill_Style);
 
-<<<<<<< HEAD
         SkTDArray<SkScalar>* prevData = nullptr;
         for (int i = 0; i < kNumGraphs; ++i) {
             gen_paths(fData[i],
@@ -196,18 +157,6 @@ protected:
                 fShift,
                 &plotPath,
                 &fillPath);
-=======
-        SkTDArray<SkScalar>* prevData = NULL;
-        for (int i = 0; i < kNumGraphs; ++i) {
-            gen_paths(fData[i],
-                      prevData,
-                      height,
-                      0,
-                      SkIntToScalar(kPixelsPerTick),
-                      fShift,
-                      &plotPath,
-                      &fillPath);
->>>>>>> miniblink49
 
             // Make the fills partially transparent
             fillPaint.setColor((gColors[i] & 0x00ffffff) | 0x80000000);
@@ -220,11 +169,7 @@ protected:
         }
 
         fShift += kShiftPerFrame;
-<<<<<<< HEAD
         this->inval(nullptr);
-=======
-        this->inval(NULL);
->>>>>>> miniblink49
     }
 
 private:
@@ -233,13 +178,8 @@ private:
         kPixelsPerTick = 3,
         kShiftPerFrame = 1,
     };
-<<<<<<< HEAD
     int fShift;
     SkISize fSize;
-=======
-    int                 fShift;
-    SkISize             fSize;
->>>>>>> miniblink49
     SkTDArray<SkScalar> fData[kNumGraphs];
     typedef SampleView INHERITED;
 };

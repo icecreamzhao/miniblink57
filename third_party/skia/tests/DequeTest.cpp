@@ -8,23 +8,14 @@
 #include "SkDeque.h"
 #include "Test.h"
 
-<<<<<<< HEAD
 static void assert_count(skiatest::Reporter* reporter, const SkDeque& deq, int count)
 {
-=======
-static void assert_count(skiatest::Reporter* reporter, const SkDeque& deq, int count) {
->>>>>>> miniblink49
     if (0 == count) {
         REPORTER_ASSERT(reporter, deq.empty());
         REPORTER_ASSERT(reporter, 0 == deq.count());
         REPORTER_ASSERT(reporter, sizeof(int) == deq.elemSize());
-<<<<<<< HEAD
         REPORTER_ASSERT(reporter, nullptr == deq.front());
         REPORTER_ASSERT(reporter, nullptr == deq.back());
-=======
-        REPORTER_ASSERT(reporter, NULL == deq.front());
-        REPORTER_ASSERT(reporter, NULL == deq.back());
->>>>>>> miniblink49
     } else {
         REPORTER_ASSERT(reporter, !deq.empty());
         REPORTER_ASSERT(reporter, count == deq.count());
@@ -40,12 +31,8 @@ static void assert_count(skiatest::Reporter* reporter, const SkDeque& deq, int c
 }
 
 static void assert_iter(skiatest::Reporter* reporter, const SkDeque& deq,
-<<<<<<< HEAD
     int max, int min)
 {
-=======
-                        int max, int min) {
->>>>>>> miniblink49
     // test forward iteration
     SkDeque::Iter iter(deq, SkDeque::Iter::kFront_IterStart);
     void* ptr;
@@ -55,11 +42,7 @@ static void assert_iter(skiatest::Reporter* reporter, const SkDeque& deq,
         REPORTER_ASSERT(reporter, value == *(int*)ptr);
         value -= 1;
     }
-<<<<<<< HEAD
     REPORTER_ASSERT(reporter, value + 1 == min);
-=======
-    REPORTER_ASSERT(reporter, value+1 == min);
->>>>>>> miniblink49
 
     // test reverse iteration
     iter.reset(deq, SkDeque::Iter::kBack_IterStart);
@@ -69,22 +52,14 @@ static void assert_iter(skiatest::Reporter* reporter, const SkDeque& deq,
         REPORTER_ASSERT(reporter, value == *(int*)ptr);
         value += 1;
     }
-<<<<<<< HEAD
     REPORTER_ASSERT(reporter, value - 1 == max);
-=======
-    REPORTER_ASSERT(reporter, value-1 == max);
->>>>>>> miniblink49
 
     // test mixed iteration
     iter.reset(deq, SkDeque::Iter::kFront_IterStart);
 
     value = max;
     // forward iteration half-way
-<<<<<<< HEAD
     for (int i = 0; i < deq.count() / 2 && (ptr = iter.next()); i++) {
-=======
-    for (int i = 0; i < deq.count()/2 && (ptr = iter.next()); i++) {
->>>>>>> miniblink49
         REPORTER_ASSERT(reporter, value == *(int*)ptr);
         value -= 1;
     }
@@ -93,11 +68,7 @@ static void assert_iter(skiatest::Reporter* reporter, const SkDeque& deq,
         REPORTER_ASSERT(reporter, value == *(int*)ptr);
         value += 1;
     }
-<<<<<<< HEAD
     REPORTER_ASSERT(reporter, value - 1 == max);
-=======
-    REPORTER_ASSERT(reporter, value-1 == max);
->>>>>>> miniblink49
 }
 
 // This helper is intended to only give the unit test access to SkDeque's
@@ -106,25 +77,16 @@ class DequeUnitTestHelper {
 public:
     int fNumBlocksAllocated;
 
-<<<<<<< HEAD
     DequeUnitTestHelper(const SkDeque& deq)
     {
-=======
-    DequeUnitTestHelper(const SkDeque& deq) {
->>>>>>> miniblink49
         fNumBlocksAllocated = deq.numBlocksAllocated();
     }
 };
 
 static void assert_blocks(skiatest::Reporter* reporter,
-<<<<<<< HEAD
     const SkDeque& deq,
     int allocCount)
 {
-=======
-                          const SkDeque& deq,
-                          int allocCount) {
->>>>>>> miniblink49
     DequeUnitTestHelper helper(deq);
 
     if (0 == deq.count()) {
@@ -134,21 +96,12 @@ static void assert_blocks(skiatest::Reporter* reporter,
         // A block isn't freed in the deque when it first becomes empty so
         // sometimes an extra block lingers around
         REPORTER_ASSERT(reporter,
-<<<<<<< HEAD
             expected == helper.fNumBlocksAllocated || expected + 1 == helper.fNumBlocksAllocated);
     }
 }
 
 static void TestSub(skiatest::Reporter* reporter, int allocCount)
 {
-=======
-            expected == helper.fNumBlocksAllocated ||
-            expected+1 == helper.fNumBlocksAllocated);
-    }
-}
-
-static void TestSub(skiatest::Reporter* reporter, int allocCount) {
->>>>>>> miniblink49
     SkDeque deq(sizeof(int), allocCount);
     int i;
 
@@ -212,12 +165,8 @@ static void TestSub(skiatest::Reporter* reporter, int allocCount) {
     assert_blocks(reporter, deq, allocCount);
 }
 
-<<<<<<< HEAD
 DEF_TEST(Deque, reporter)
 {
-=======
-DEF_TEST(Deque, reporter) {
->>>>>>> miniblink49
     // test it once with the default allocation count
     TestSub(reporter, 1);
     // test it again with a generous allocation count

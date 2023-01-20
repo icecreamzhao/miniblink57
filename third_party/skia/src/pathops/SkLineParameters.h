@@ -27,13 +27,8 @@
 
 class SkLineParameters {
 public:
-<<<<<<< HEAD
     bool cubicEndPoints(const SkDCubic& pts)
     {
-=======
-
-    bool cubicEndPoints(const SkDCubic& pts) {
->>>>>>> miniblink49
         int endIndex = 1;
         cubicEndPoints(pts, 0, endIndex);
         if (dy() != 0) {
@@ -46,11 +41,7 @@ public:
                 return true;
             }
             if (dx() == 0) {
-<<<<<<< HEAD
                 cubicEndPoints(pts, 0, ++endIndex); // line
-=======
-                cubicEndPoints(pts, 0, ++endIndex);  // line
->>>>>>> miniblink49
                 SkASSERT(endIndex == 3);
                 return false;
             }
@@ -77,49 +68,31 @@ public:
         return true;
     }
 
-<<<<<<< HEAD
     void cubicEndPoints(const SkDCubic& pts, int s, int e)
     {
-=======
-    void cubicEndPoints(const SkDCubic& pts, int s, int e) {
->>>>>>> miniblink49
         fA = pts[s].fY - pts[e].fY;
         fB = pts[e].fX - pts[s].fX;
         fC = pts[s].fX * pts[e].fY - pts[e].fX * pts[s].fY;
     }
 
-<<<<<<< HEAD
     double cubicPart(const SkDCubic& part)
     {
         cubicEndPoints(part);
         if (part[0] == part[1] || ((const SkDLine&)part[0]).nearRay(part[2])) {
-=======
-    double cubicPart(const SkDCubic& part) {
-        cubicEndPoints(part);
-        if (part[0] == part[1] || ((const SkDLine& ) part[0]).nearRay(part[2])) {
->>>>>>> miniblink49
             return pointDistance(part[3]);
         }
         return pointDistance(part[2]);
     }
 
-<<<<<<< HEAD
     void lineEndPoints(const SkDLine& pts)
     {
-=======
-    void lineEndPoints(const SkDLine& pts) {
->>>>>>> miniblink49
         fA = pts[0].fY - pts[1].fY;
         fB = pts[1].fX - pts[0].fX;
         fC = pts[0].fX * pts[1].fY - pts[1].fX * pts[0].fY;
     }
 
-<<<<<<< HEAD
     bool quadEndPoints(const SkDQuad& pts)
     {
-=======
-    bool quadEndPoints(const SkDQuad& pts) {
->>>>>>> miniblink49
         quadEndPoints(pts, 0, 1);
         if (dy() != 0) {
             return true;
@@ -138,28 +111,19 @@ public:
         return true;
     }
 
-<<<<<<< HEAD
     void quadEndPoints(const SkDQuad& pts, int s, int e)
     {
-=======
-    void quadEndPoints(const SkDQuad& pts, int s, int e) {
->>>>>>> miniblink49
         fA = pts[s].fY - pts[e].fY;
         fB = pts[e].fX - pts[s].fX;
         fC = pts[s].fX * pts[e].fY - pts[e].fX * pts[s].fY;
     }
 
-<<<<<<< HEAD
     double quadPart(const SkDQuad& part)
     {
-=======
-    double quadPart(const SkDQuad& part) {
->>>>>>> miniblink49
         quadEndPoints(part);
         return pointDistance(part[2]);
     }
 
-<<<<<<< HEAD
     double normalSquared() const
     {
         return fA * fA + fB * fB;
@@ -167,13 +131,6 @@ public:
 
     bool normalize()
     {
-=======
-    double normalSquared() const {
-        return fA * fA + fB * fB;
-    }
-
-    bool normalize() {
->>>>>>> miniblink49
         double normal = sqrt(normalSquared());
         if (approximately_zero(normal)) {
             fA = fB = fC = 0;
@@ -186,12 +143,8 @@ public:
         return true;
     }
 
-<<<<<<< HEAD
     void cubicDistanceY(const SkDCubic& pts, SkDCubic& distance) const
     {
-=======
-    void cubicDistanceY(const SkDCubic& pts, SkDCubic& distance) const {
->>>>>>> miniblink49
         double oneThird = 1 / 3.0;
         for (int index = 0; index < 4; ++index) {
             distance[index].fX = index * oneThird;
@@ -199,12 +152,8 @@ public:
         }
     }
 
-<<<<<<< HEAD
     void quadDistanceY(const SkDQuad& pts, SkDQuad& distance) const
     {
-=======
-    void quadDistanceY(const SkDQuad& pts, SkDQuad& distance) const {
->>>>>>> miniblink49
         double oneHalf = 1 / 2.0;
         for (int index = 0; index < 3; ++index) {
             distance[index].fX = index * oneHalf;
@@ -212,17 +161,12 @@ public:
         }
     }
 
-<<<<<<< HEAD
     double controlPtDistance(const SkDCubic& pts, int index) const
     {
-=======
-    double controlPtDistance(const SkDCubic& pts, int index) const {
->>>>>>> miniblink49
         SkASSERT(index == 1 || index == 2);
         return fA * pts[index].fX + fB * pts[index].fY + fC;
     }
 
-<<<<<<< HEAD
     double controlPtDistance(const SkDQuad& pts) const
     {
         return fA * pts[1].fX + fB * pts[1].fY + fC;
@@ -240,21 +184,6 @@ public:
 
     double dy() const
     {
-=======
-    double controlPtDistance(const SkDQuad& pts) const {
-        return fA * pts[1].fX + fB * pts[1].fY + fC;
-    }
-
-    double pointDistance(const SkDPoint& pt) const {
-        return fA * pt.fX + fB * pt.fY + fC;
-    }
-
-    double dx() const {
-        return fB;
-    }
-
-    double dy() const {
->>>>>>> miniblink49
         return -fA;
     }
 

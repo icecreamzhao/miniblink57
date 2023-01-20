@@ -32,6 +32,7 @@
 #define HTMLDimension_h
 
 #include "core/CoreExport.h"
+#include "wtf/Allocator.h"
 #include "wtf/Forward.h"
 #include "wtf/Vector.h"
 
@@ -40,10 +41,12 @@ namespace blink {
 // This class corresponds to a dimension as described in HTML5 by the
 // "rules for parsing a list of dimensions" (section 2.4.4.6).
 class HTMLDimension {
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
+
 public:
-    enum HTMLDimensionType {
-        Relative, Percentage, Absolute
-    };
+    enum HTMLDimensionType { Relative,
+        Percentage,
+        Absolute };
 
     HTMLDimension()
         : m_type(Absolute)
@@ -69,7 +72,10 @@ public:
     {
         return m_type == other.m_type && m_value == other.m_value;
     }
-    bool operator!=(const HTMLDimension& other) const { return !(*this == other); }
+    bool operator!=(const HTMLDimension& other) const
+    {
+        return !(*this == other);
+    }
 
 private:
     HTMLDimensionType m_type;
@@ -77,6 +83,7 @@ private:
 };
 
 CORE_EXPORT Vector<HTMLDimension> parseListOfDimensions(const String&);
+CORE_EXPORT bool parseDimensionValue(const String&, HTMLDimension&);
 
 } // namespace blink
 

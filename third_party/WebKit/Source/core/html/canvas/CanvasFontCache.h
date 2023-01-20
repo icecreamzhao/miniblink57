@@ -13,13 +13,17 @@
 #include "wtf/HashMap.h"
 #include "wtf/ListHashSet.h"
 #include "wtf/text/WTFString.h"
+#include <memory>
 
 namespace blink {
 
+class ComputedStyle;
 class Document;
 class FontCachePurgePreventer;
 
-class CORE_EXPORT CanvasFontCache final : public GarbageCollectedFinalized<CanvasFontCache>, public WebThread::TaskObserver {
+class CORE_EXPORT CanvasFontCache final
+    : public GarbageCollectedFinalized<CanvasFontCache>,
+      public WebThread::TaskObserver {
 public:
     static CanvasFontCache* create(Document& document)
     {
@@ -39,8 +43,8 @@ public:
     bool getFontUsingDefaultStyle(const String&, Font&);
 
     // TaskObserver implementation
-    virtual void didProcessTask();
-    virtual void willProcessTask() { }
+    void didProcessTask() override;
+    void willProcessTask() override { }
 
     // For testing
     bool isInCache(const String&);
@@ -50,17 +54,18 @@ public:
 private:
     explicit CanvasFontCache(Document&);
     void schedulePruningIfNeeded();
-    typedef WillBeHeapHashMap<String, RefPtrWillBeMember<MutableStylePropertySet>> MutableStylePropertyMap;
+    typedef HeapHashMap<String, Member<MutableStylePropertySet>>
+        MutableStylePropertyMap;
 
     HashMap<String, Font> m_fontsResolvedUsingDefaultStyle;
     MutableStylePropertyMap m_fetchedFonts;
     ListHashSet<String> m_fontLRUList;
-    OwnPtr<FontCachePurgePreventer> m_mainCachePurgePreventer;
-    RawPtrWillBeMember<Document> m_document;
+    std::unique_ptr<FontCachePurgePreventer> m_mainCachePurgePreventer;
+    Member<Document> m_document;
     RefPtr<ComputedStyle> m_defaultFontStyle;
     bool m_pruningScheduled;
 };
 
-} // blink
+} // namespace blink
 
 #endif

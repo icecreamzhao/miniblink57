@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2009 The Android Open Source Project
  *
@@ -9,10 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #ifndef SkCubicClipper_DEFINED
 #define SkCubicClipper_DEFINED
 
@@ -31,7 +23,6 @@ public:
 
     void setClip(const SkIRect& clip);
 
-<<<<<<< HEAD
     bool SK_WARN_UNUSED_RESULT clipCubic(const SkPoint src[4], SkPoint dst[4]);
 
     static bool SK_WARN_UNUSED_RESULT ChopMonoAtY(const SkPoint pts[4], SkScalar y, SkScalar* t);
@@ -41,12 +32,3 @@ private:
 };
 
 #endif // SkCubicClipper_DEFINED
-=======
-    bool clipCubic(const SkPoint src[4], SkPoint dst[4]);
-
-private:
-    SkRect      fClip;
-};
-
-#endif  // SkCubicClipper_DEFINED
->>>>>>> miniblink49

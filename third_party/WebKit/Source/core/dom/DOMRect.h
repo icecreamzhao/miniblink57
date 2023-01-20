@@ -11,10 +11,18 @@
 
 namespace blink {
 
+class DOMRect;
+class DOMRectInit;
+
 class CORE_EXPORT DOMRect final : public DOMRectReadOnly {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
-    static DOMRect* create(double x = 0, double y = 0, double width = 0, double height = 0);
+    static DOMRect* create(double x = 0,
+        double y = 0,
+        double width = 0,
+        double height = 0);
+    static DOMRect* fromRect(const DOMRectInit&);
 
     void setX(double x) { m_x = x; }
     void setY(double y) { m_y = y; }

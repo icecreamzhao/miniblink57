@@ -13,10 +13,6 @@
 
 #include "unicode/utypes.h"
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /**
  * \file
  * \brief C API: Parse Error Information
@@ -24,11 +20,7 @@
 /**
  * The capacity of the context strings in UParseError.
  * @stable ICU 2.0
-<<<<<<< HEAD
  */
-=======
- */ 
->>>>>>> miniblink49
 enum { U_PARSE_CONTEXT_LEN = 16 };
 
 /**
@@ -69,11 +61,7 @@ typedef struct UParseError {
      * parse does not support line numbers, the value will be <= 0.
      * @stable ICU 2.0
      */
-<<<<<<< HEAD
     int32_t line;
-=======
-    int32_t        line;
->>>>>>> miniblink49
 
     /**
      * The character offset to the error.  If the line field is >= 1,
@@ -82,33 +70,21 @@ typedef struct UParseError {
      * does not support this field, it will have a value < 0.
      * @stable ICU 2.0
      */
-<<<<<<< HEAD
     int32_t offset;
-=======
-    int32_t        offset;
->>>>>>> miniblink49
 
     /**
      * Textual context before the error.  Null-terminated.  The empty
      * string if not supported by parser.
      * @stable ICU 2.0   
      */
-<<<<<<< HEAD
     UChar preContext[U_PARSE_CONTEXT_LEN];
-=======
-    UChar          preContext[U_PARSE_CONTEXT_LEN];
->>>>>>> miniblink49
 
     /**
      * The error itself and/or textual context after the error.
      * Null-terminated.  The empty string if not supported by parser.
      * @stable ICU 2.0   
      */
-<<<<<<< HEAD
     UChar postContext[U_PARSE_CONTEXT_LEN];
-=======
-    UChar          postContext[U_PARSE_CONTEXT_LEN];
->>>>>>> miniblink49
 
 } UParseError;
 

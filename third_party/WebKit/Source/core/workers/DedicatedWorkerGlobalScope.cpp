@@ -28,95 +28,84 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/workers/DedicatedWorkerGlobalScope.h"
 
 #include "bindings/core/v8/ExceptionState.h"
 #include "bindings/core/v8/SerializedScriptValue.h"
-#include "core/frame/LocalDOMWindow.h"
+#include "core/dom/ExecutionContextTask.h"
+#include "core/frame/csp/ContentSecurityPolicy.h"
+#include "core/origin_trials/OriginTrialContext.h"
 #include "core/workers/DedicatedWorkerThread.h"
+#include "core/workers/InProcessWorkerObjectProxy.h"
 #include "core/workers/WorkerClients.h"
-#include "core/workers/WorkerObjectProxy.h"
 #include "core/workers/WorkerThreadStartupData.h"
+#include <memory>
 
 namespace blink {
 
-PassRefPtrWillBeRawPtr<DedicatedWorkerGlobalScope> DedicatedWorkerGlobalScope::create(DedicatedWorkerThread* thread, PassOwnPtr<WorkerThreadStartupData> startupData, double timeOrigin)
+DedicatedWorkerGlobalScope* DedicatedWorkerGlobalScope::create(
+    DedicatedWorkerThread* thread,
+    std::unique_ptr<WorkerThreadStartupData> startupData,
+    double timeOrigin)
 {
     // Note: startupData is finalized on return. After the relevant parts has been
     // passed along to the created 'context'.
-    RefPtrWillBeRawPtr<DedicatedWorkerGlobalScope> context = adoptRefWillBeNoop(new DedicatedWorkerGlobalScope(startupData->m_scriptURL, startupData->m_userAgent, thread, timeOrigin, startupData->m_starterOrigin, startupData->m_workerClients.release()));
-    context->applyContentSecurityPolicyFromVector(*startupData->m_contentSecurityPolicyHeaders);
-    return context.release();
+    DedicatedWorkerGlobalScope* context = new DedicatedWorkerGlobalScope(
+        startupData->m_scriptURL, startupData->m_userAgent, thread, timeOrigin,
+        std::move(startupData->m_starterOriginPrivilegeData),
+        startupData->m_workerClients);
+    context->applyContentSecurityPolicyFromVector(
+        *startupData->m_contentSecurityPolicyHeaders);
+    context->setWorkerSettings(std::move(startupData->m_workerSettings));
+    if (!startupData->m_referrerPolicy.isNull())
+        context->parseAndSetReferrerPolicy(startupData->m_referrerPolicy);
+    context->setAddressSpace(startupData->m_addressSpace);
+    OriginTrialContext::addTokens(context,
+        startupData->m_originTrialTokens.get());
+    return context;
 }
 
-DedicatedWorkerGlobalScope::DedicatedWorkerGlobalScope(const KURL& url, const String& userAgent, DedicatedWorkerThread* thread, double timeOrigin, const SecurityOrigin* starterOrigin, PassOwnPtrWillBeRawPtr<WorkerClients> workerClients)
-    : WorkerGlobalScope(url, userAgent, thread, timeOrigin, starterOrigin, workerClients)
+DedicatedWorkerGlobalScope::DedicatedWorkerGlobalScope(
+    const KURL& url,
+    const String& userAgent,
+    DedicatedWorkerThread* thread,
+    double timeOrigin,
+    std::unique_ptr<SecurityOrigin::PrivilegeData> starterOriginPrivilegeData,
+    WorkerClients* workerClients)
+    : WorkerGlobalScope(url,
+        userAgent,
+        thread,
+        timeOrigin,
+        std::move(starterOriginPrivilegeData),
+        workerClients)
 {
 }
 
-DedicatedWorkerGlobalScope::~DedicatedWorkerGlobalScope()
-{
-}
+DedicatedWorkerGlobalScope::~DedicatedWorkerGlobalScope() { }
 
 const AtomicString& DedicatedWorkerGlobalScope::interfaceName() const
 {
     return EventTargetNames::DedicatedWorkerGlobalScope;
 }
 
-void DedicatedWorkerGlobalScope::postMessage(ExecutionContext* context, PassRefPtr<SerializedScriptValue> message, const MessagePortArray* ports, ExceptionState& exceptionState)
+void DedicatedWorkerGlobalScope::postMessage(
+    ExecutionContext* context,
+    PassRefPtr<SerializedScriptValue> message,
+    const MessagePortArray& ports,
+    ExceptionState& exceptionState)
 {
     // Disentangle the port in preparation for sending it to the remote context.
-    OwnPtr<MessagePortChannelArray> channels = MessagePort::disentanglePorts(context, ports, exceptionState);
+    std::unique_ptr<MessagePortChannelArray> channels = MessagePort::disentanglePorts(context, ports, exceptionState);
     if (exceptionState.hadException())
         return;
-    thread()->workerObjectProxy().postMessageToWorkerObject(message, channels.release());
+    workerObjectProxy().postMessageToWorkerObject(std::move(message),
+        std::move(channels));
 }
 
-void DedicatedWorkerGlobalScope::importScripts(const Vector<String>& urls, ExceptionState& exceptionState)
+InProcessWorkerObjectProxy& DedicatedWorkerGlobalScope::workerObjectProxy()
+    const
 {
-    Base::importScripts(urls, exceptionState);
-    thread()->workerObjectProxy().reportPendingActivity(hasPendingActivity());
-}
-
-DedicatedWorkerThread* DedicatedWorkerGlobalScope::thread() const
-{
-    return static_cast<DedicatedWorkerThread*>(Base::thread());
-}
-
-class UseCounterTask : public ExecutionContextTask {
-public:
-    static PassOwnPtr<UseCounterTask> createCount(UseCounter::Feature feature) { return adoptPtr(new UseCounterTask(feature, false)); }
-    static PassOwnPtr<UseCounterTask> createDeprecation(UseCounter::Feature feature) { return adoptPtr(new UseCounterTask(feature, true)); }
-
-private:
-    UseCounterTask(UseCounter::Feature feature, bool isDeprecation)
-        : m_feature(feature)
-        , m_isDeprecation(isDeprecation)
-    {
-    }
-
-    virtual void performTask(ExecutionContext* context) override
-    {
-        ASSERT(context->isDocument());
-        if (m_isDeprecation)
-            UseCounter::countDeprecation(context, m_feature);
-        else
-            UseCounter::count(context, m_feature);
-    }
-
-    UseCounter::Feature m_feature;
-    bool m_isDeprecation;
-};
-
-void DedicatedWorkerGlobalScope::countFeature(UseCounter::Feature feature) const
-{
-    thread()->workerObjectProxy().postTaskToMainExecutionContext(UseCounterTask::createCount(feature));
-}
-
-void DedicatedWorkerGlobalScope::countDeprecation(UseCounter::Feature feature) const
-{
-    thread()->workerObjectProxy().postTaskToMainExecutionContext(UseCounterTask::createDeprecation(feature));
+    return static_cast<DedicatedWorkerThread*>(thread())->workerObjectProxy();
 }
 
 DEFINE_TRACE(DedicatedWorkerGlobalScope)

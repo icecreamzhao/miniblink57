@@ -13,7 +13,6 @@
 
 class SkGlyphCache;
 
-<<<<<<< HEAD
 class SkTextBaseIter {
 protected:
     SkTextBaseIter(const char text[], size_t length, const SkPaint& paint,
@@ -43,27 +42,11 @@ public:
 
     const SkPaint& getPaint() const { return fPaint; }
     SkScalar getPathScale() const { return fScale; }
-=======
-class SkTextToPathIter {
-public:
-    SkTextToPathIter(const char text[], size_t length, const SkPaint& paint,
-                     bool applyStrokeAndPathEffects);
-    ~SkTextToPathIter();
-
-    const SkPaint&  getPaint() const { return fPaint; }
-    SkScalar        getPathScale() const { return fScale; }
-
-    struct Rec {
-        const SkPath*   fPath;  // may be null for "whitespace" glyphs
-        SkScalar        fXPos;
-    };
->>>>>>> miniblink49
 
     /**
      *  Returns false when all of the text has been consumed
      */
     bool next(const SkPath** path, SkScalar* xpos);
-<<<<<<< HEAD
 };
 
 class SkTextInterceptsIter : SkTextBaseIter {
@@ -118,21 +101,6 @@ private:
     SkScalar fBounds[2];
     SkScalar fBoundsBase[2];
     TextType fTextType;
-=======
-
-private:
-    SkGlyphCache*   fCache;
-    SkPaint         fPaint;
-    SkScalar        fScale;
-    SkFixed         fPrevAdvance;
-    const char*     fText;
-    const char*     fStop;
-    SkMeasureCacheProc fGlyphCacheProc;
-
-    SkScalar        fXPos;      // accumulated xpos, returned in next
-    SkAutoKern      fAutoKern;
-    int             fXYIndex;   // cache for horizontal -vs- vertical text
->>>>>>> miniblink49
 };
 
 #endif

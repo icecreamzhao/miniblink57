@@ -20,15 +20,14 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/xml/XSLTProcessor.h"
 
 #include "core/dom/DOMImplementation.h"
 #include "core/dom/DocumentEncodingData.h"
 #include "core/dom/DocumentFragment.h"
-#include "core/editing/markup.h"
-#include "core/frame/LocalDOMWindow.h"
+#include "core/editing/serializers/Serialization.h"
 #include "core/frame/FrameView.h"
+#include "core/frame/LocalDOMWindow.h"
 #include "core/frame/LocalFrame.h"
 #include "core/frame/csp/ContentSecurityPolicy.h"
 #include "core/loader/FrameLoaderClient.h"
@@ -40,35 +39,35 @@ namespace blink {
 
 static inline void transformTextStringToXHTMLDocumentString(String& text)
 {
-    // Modify the output so that it is a well-formed XHTML document with a <pre> tag enclosing the text.
-    text.replaceWithLiteral('&', "&amp;");
-    text.replaceWithLiteral('<', "&lt;");
+    // Modify the output so that it is a well-formed XHTML document with a <pre>
+    // tag enclosing the text.
+    text.replace('&', "&amp;");
+    text.replace('<', "&lt;");
     text = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-        "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n"
-        "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n"
-        "<head><title/></head>\n"
-        "<body>\n"
-        "<pre>" + text + "</pre>\n"
-        "</body>\n"
-        "</html>\n";
+           "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" "
+           "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n"
+           "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n"
+           "<head><title/></head>\n"
+           "<body>\n"
+           "<pre>"
+        + text + "</pre>\n"
+                 "</body>\n"
+                 "</html>\n";
 }
 
-XSLTProcessor::~XSLTProcessor()
-{
-#if !ENABLE(OILPAN)
-    // Stylesheet shouldn't outlive its root node.
-    ASSERT(!m_stylesheetRootNode || !m_stylesheet || m_stylesheet->hasOneRef());
-#endif
-}
+XSLTProcessor::~XSLTProcessor() { }
 
-PassRefPtrWillBeRawPtr<Document> XSLTProcessor::createDocumentFromSource(const String& sourceString,
-    const String& sourceEncoding, const String& sourceMIMEType, Node* sourceNode, LocalFrame* frame)
+Document* XSLTProcessor::createDocumentFromSource(const String& sourceString,
+    const String& sourceEncoding,
+    const String& sourceMIMEType,
+    Node* sourceNode,
+    LocalFrame* frame)
 {
-    RefPtrWillBeRawPtr<Document> ownerDocument(sourceNode->document());
-    bool sourceIsDocument = (sourceNode == ownerDocument.get());
+    Document* ownerDocument = &sourceNode->document();
+    bool sourceIsDocument = (sourceNode == ownerDocument);
     String documentSource = sourceString;
 
-    RefPtrWillBeRawPtr<Document> result = nullptr;
+    Document* result = nullptr;
     DocumentInit init(sourceIsDocument ? ownerDocument->url() : KURL(), frame);
 
     bool forceXHTML = sourceMIMEType == "text/plain";
@@ -76,23 +75,24 @@ PassRefPtrWillBeRawPtr<Document> XSLTProcessor::createDocumentFromSource(const S
         transformTextStringToXHTMLDocumentString(documentSource);
 
     if (frame) {
-        RefPtrWillBeRawPtr<Document> oldDocument = frame->document();
-        // Before parsing, we need to save & detach the old document and get the new document
-        // in place. Document::detach() tears down the FrameView, so remember whether or not
-        // there was one.
+        Document* oldDocument = frame->document();
+        // Before parsing, we need to save & detach the old document and get the new
+        // document in place. Document::shutdown() tears down the FrameView, so
+        // remember whether or not there was one.
         bool hasView = frame->view();
-        oldDocument->detach();
+        oldDocument->shutdown();
         // Re-create the FrameView if needed.
         if (hasView)
             frame->loader().client()->transitionToCommittedForNewPage();
-        result = frame->localDOMWindow()->installNewDocument(sourceMIMEType, init, forceXHTML);
+        result = frame->domWindow()->installNewDocument(sourceMIMEType, init,
+            forceXHTML);
 
         if (oldDocument) {
-            DocumentXSLT::from(*result).setTransformSourceDocument(oldDocument.get());
-            result->updateSecurityOrigin(oldDocument->securityOrigin());
+            DocumentXSLT::from(*result).setTransformSourceDocument(oldDocument);
+            result->updateSecurityOrigin(oldDocument->getSecurityOrigin());
             result->setCookieURL(oldDocument->cookieURL());
 
-            RefPtr<ContentSecurityPolicy> csp = ContentSecurityPolicy::create();
+            ContentSecurityPolicy* csp = ContentSecurityPolicy::create();
             csp->copyStateFrom(oldDocument->contentSecurityPolicy());
             result->initContentSecurityPolicy(csp);
         }
@@ -101,24 +101,29 @@ PassRefPtrWillBeRawPtr<Document> XSLTProcessor::createDocumentFromSource(const S
     }
 
     DocumentEncodingData data;
-    data.setEncoding(sourceEncoding.isEmpty() ? UTF8Encoding() : WTF::TextEncoding(sourceEncoding));
+    data.setEncoding(sourceEncoding.isEmpty()
+            ? UTF8Encoding()
+            : WTF::TextEncoding(sourceEncoding));
     result->setEncodingData(data);
     result->setContent(documentSource);
 
-    return result.release();
+    return result;
 }
 
-PassRefPtrWillBeRawPtr<Document> XSLTProcessor::transformToDocument(Node* sourceNode)
+Document* XSLTProcessor::transformToDocument(Node* sourceNode)
 {
     String resultMIMEType;
     String resultString;
     String resultEncoding;
-    if (!transformToString(sourceNode, resultMIMEType, resultString, resultEncoding))
+    if (!transformToString(sourceNode, resultMIMEType, resultString,
+            resultEncoding))
         return nullptr;
-    return createDocumentFromSource(resultString, resultEncoding, resultMIMEType, sourceNode, 0);
+    return createDocumentFromSource(resultString, resultEncoding, resultMIMEType,
+        sourceNode, 0);
 }
 
-PassRefPtrWillBeRawPtr<DocumentFragment> XSLTProcessor::transformToFragment(Node* sourceNode, Document* outputDoc)
+DocumentFragment* XSLTProcessor::transformToFragment(Node* sourceNode,
+    Document* outputDoc)
 {
     String resultMIMEType;
     String resultString;
@@ -128,26 +133,32 @@ PassRefPtrWillBeRawPtr<DocumentFragment> XSLTProcessor::transformToFragment(Node
     if (outputDoc->isHTMLDocument())
         resultMIMEType = "text/html";
 
-    if (!transformToString(sourceNode, resultMIMEType, resultString, resultEncoding))
+    if (!transformToString(sourceNode, resultMIMEType, resultString,
+            resultEncoding))
         return nullptr;
-    return createFragmentForTransformToFragment(resultString, resultMIMEType, *outputDoc);
+    return createFragmentForTransformToFragment(resultString, resultMIMEType,
+        *outputDoc);
 }
 
-void XSLTProcessor::setParameter(const String& /*namespaceURI*/, const String& localName, const String& value)
+void XSLTProcessor::setParameter(const String& /*namespaceURI*/,
+    const String& localName,
+    const String& value)
 {
     // FIXME: namespace support?
     // should make a QualifiedName here but we'd have to expose the impl
     m_parameters.set(localName, value);
 }
 
-String XSLTProcessor::getParameter(const String& /*namespaceURI*/, const String& localName) const
+String XSLTProcessor::getParameter(const String& /*namespaceURI*/,
+    const String& localName) const
 {
     // FIXME: namespace support?
     // should make a QualifiedName here but we'd have to expose the impl
     return m_parameters.get(localName);
 }
 
-void XSLTProcessor::removeParameter(const String& /*namespaceURI*/, const String& localName)
+void XSLTProcessor::removeParameter(const String& /*namespaceURI*/,
+    const String& localName)
 {
     // FIXME: namespace support?
     m_parameters.remove(localName);

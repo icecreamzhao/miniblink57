@@ -39,20 +39,14 @@ struct NPObject;
 
 namespace blink {
 
-<<<<<<< HEAD
 class WebDocument;
-=======
->>>>>>> miniblink49
 class WebElement;
 class WebPlugin;
 class WebString;
 class WebURL;
 class WebURLRequest;
 class WebLayer;
-<<<<<<< HEAD
 class WebDOMMessageEvent;
-=======
->>>>>>> miniblink49
 struct WebPoint;
 struct WebRect;
 
@@ -67,7 +61,6 @@ public:
     // Returns the element containing this plugin.
     virtual WebElement element() = 0;
 
-<<<<<<< HEAD
     // Returns the owning document for the plugin.
     virtual WebDocument document() = 0;
 
@@ -83,46 +76,18 @@ public:
     // TODO(esprehn): Why are progress events sync and message events async!?
     virtual void enqueueMessageEvent(const WebDOMMessageEvent&) = 0;
 
-=======
->>>>>>> miniblink49
     virtual void invalidate() = 0;
     virtual void invalidateRect(const WebRect&) = 0;
     virtual void scrollRect(const WebRect&) = 0;
 
-<<<<<<< HEAD
     // Schedules an animation of the WebView that contains the plugin, as well as
     // the plugin.
     virtual void scheduleAnimation() = 0;
-=======
-    // Causes the container to be marked as needing layout, which in turn will cause
-    // layoutIfNeeded() to be called on any contained WebPlugin during the container's
-    // web view's lifecycle update, and in particular before calling paint() on the
-    // WebPlugin.
-    virtual void setNeedsLayout() = 0;
->>>>>>> miniblink49
 
     // Causes the container to report its current geometry via
     // WebPlugin::updateGeometry.
     virtual void reportGeometry() = 0;
 
-<<<<<<< HEAD
-=======
-    // Allow the plugin to pass script objects to the browser. The container
-    // tracks ownership of script objects in order to allow browser references
-    // to them to be dropped when clearScriptObjects is called.
-    virtual void allowScriptObjects() = 0;
-
-    // Drop any references to script objects allocated by the plugin.
-    // These are objects derived from WebPlugin::scriptableObject.  This is
-    // called when the plugin is being destroyed or if it needs to be
-    // re-initialized.
-    virtual void clearScriptObjects() = 0;
-
-    // Returns the scriptable object associated with the DOM element
-    // containing the plugin.
-    virtual NPObject* scriptableObjectForElement() = 0;
-
->>>>>>> miniblink49
     // Returns the scriptable object associated with the DOM element
     // containing the plugin as a native v8 object.
     virtual v8::Local<v8::Object> v8ObjectForElement() = 0;
@@ -132,31 +97,19 @@ public:
     // execution, if any.
     virtual WebString executeScriptURL(const WebURL&, bool popupsAllowed) = 0;
 
-<<<<<<< HEAD
     virtual void clearScriptObjects() = 0;
 
     virtual NPObject* scriptableObjectForElement() = 0;
 
-=======
->>>>>>> miniblink49
     // Loads an URL in the specified frame (or the frame containing this
     // plugin if target is empty).  If notifyNeeded is true, then upon
     // completion, WebPlugin::didFinishLoadingFrameRequest is called if the
     // load was successful or WebPlugin::didFailLoadingFrameRequest is
     // called if the load failed.  The given notifyData is passed along to
     // the callback.
-<<<<<<< HEAD
     virtual void loadFrameRequest(const WebURLRequest&,
         const WebString& target)
         = 0;
-=======
-    virtual void loadFrameRequest(
-        const WebURLRequest&, const WebString& target, bool notifyNeeded, void* notifyData) = 0;
-
-    // Notifies that the zoom level has changed.
-    // Note, this does NOT affect pageScaleFactor or pageZoomFactor
-    virtual void zoomLevelChanged(double zoomLevel) = 0;
->>>>>>> miniblink49
 
     // Determines whether the given rectangle in this plugin is above all other
     // content. The rectangle is in the plugin's coordinate system.
@@ -177,7 +130,6 @@ public:
     // Converts plugin's local coordinate to root frame's coordinates.
     virtual WebPoint localToRootFramePoint(const WebPoint&) = 0;
 
-<<<<<<< HEAD
     // Returns the plugin this container owns. This plugin will be
     // automatically destroyed when the container is destroyed.
     virtual WebPlugin* plugin() = 0;
@@ -185,9 +137,6 @@ public:
     // Sets the plugin owned by this container. If the container already owned
     // a different plugin before this call, that old plugin is now unowned.
     // The caller is then responsible for destroying the old plugin.
-=======
-    virtual WebPlugin* plugin() = 0;
->>>>>>> miniblink49
     virtual void setPlugin(WebPlugin*) = 0;
 
     virtual float deviceScaleFactor() = 0;
@@ -198,13 +147,10 @@ public:
     // WebPluginContainer does *not* take ownership.
     virtual void setWebLayer(WebLayer*) = 0;
 
-<<<<<<< HEAD
     virtual void requestFullscreen() = 0;
     virtual bool isFullscreenElement() const = 0;
     virtual void cancelFullscreen() = 0;
 
-=======
->>>>>>> miniblink49
 protected:
     ~WebPluginContainer() { }
 };

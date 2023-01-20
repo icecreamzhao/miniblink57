@@ -32,10 +32,7 @@
 #define WTF_StreamBuffer_h
 
 #include "wtf/Deque.h"
-<<<<<<< HEAD
 #include "wtf/OwnPtr.h"
-=======
->>>>>>> miniblink49
 #include "wtf/PassOwnPtr.h"
 
 namespace WTF {

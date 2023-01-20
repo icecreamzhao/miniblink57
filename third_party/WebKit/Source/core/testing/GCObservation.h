@@ -34,14 +34,15 @@
 #include "bindings/core/v8/ScopedPersistent.h"
 #include "bindings/core/v8/ScriptWrappable.h"
 #include "platform/heap/Handle.h"
-#include "wtf/PassRefPtr.h"
-#include "wtf/RefCounted.h"
+
 #include <v8.h>
 
 namespace blink {
 
-class GCObservation final : public GarbageCollectedFinalized<GCObservation>, public ScriptWrappable {
+class GCObservation final : public GarbageCollectedFinalized<GCObservation>,
+                            public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
+
 public:
     static GCObservation* create(v8::Local<v8::Value> observedValue)
     {

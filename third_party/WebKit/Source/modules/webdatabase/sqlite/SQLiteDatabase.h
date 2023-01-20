@@ -34,11 +34,7 @@
 #include "wtf/text/WTFString.h"
 
 #if COMPILER(MSVC)
-<<<<<<< HEAD
 #pragma warning(disable : 4800)
-=======
-#pragma warning(disable: 4800)
->>>>>>> miniblink49
 #endif
 
 struct sqlite3;
@@ -56,16 +52,10 @@ extern const int SQLResultInterrupt;
 extern const int SQLResultConstraint;
 
 class SQLiteDatabase {
-<<<<<<< HEAD
     DISALLOW_NEW();
     WTF_MAKE_NONCOPYABLE(SQLiteDatabase);
     friend class SQLiteTransaction;
 
-=======
-    DISALLOW_ALLOCATION();
-    WTF_MAKE_NONCOPYABLE(SQLiteDatabase);
-    friend class SQLiteTransaction;
->>>>>>> miniblink49
 public:
     SQLiteDatabase();
     ~SQLiteDatabase();
@@ -89,19 +79,12 @@ public:
 
     void setBusyTimeout(int ms);
 
-<<<<<<< HEAD
     // Sets the maximum size in bytes.
     // Depending on per-database attributes, the size will only be settable in
     // units that are the page size of the database, which is established at
     // creation.  These chunks will never be anything other than 512, 1024, 2048,
     // 4096, 8192, 16384, or 32768 bytes in size.  setMaximumSize() will round the
     // size down to the next smallest chunk if the passed size doesn't align.
-=======
-    // Sets the maximum size in bytes
-    // Depending on per-database attributes, the size will only be settable in units that are the page size of the database, which is established at creation
-    // These chunks will never be anything other than 512, 1024, 2048, 4096, 8192, 16384, or 32768 bytes in size.
-    // setMaximumSize() will round the size down to the next smallest chunk if the passed size doesn't align.
->>>>>>> miniblink49
     void setMaximumSize(int64_t);
 
     // Gets the number of unused bytes in the database file.
@@ -111,12 +94,8 @@ public:
     int lastError();
     const char* lastErrorMsg();
 
-<<<<<<< HEAD
     sqlite3* sqlite3Handle() const
     {
-=======
-    sqlite3* sqlite3Handle() const {
->>>>>>> miniblink49
         ASSERT(m_sharable || currentThread() == m_openingThread || !m_db);
         return m_db;
     }
@@ -132,7 +111,6 @@ public:
     //        requires SQLite to store additional information about each page in
     //        the database file.
     // INCREMENTAL - SQLite stores extra information for each page in the database
-<<<<<<< HEAD
     //               file, but removes the empty pages only when PRAGMA
     //               INCREMANTAL_VACUUM is called.
     enum AutoVacuumPragma {
@@ -151,17 +129,6 @@ private:
         const char*,
         const char*,
         const char*);
-=======
-    //               file, but removes the empty pages only when PRAGMA INCREMANTAL_VACUUM
-    //               is called.
-    enum AutoVacuumPragma { AutoVacuumNone = 0, AutoVacuumFull = 1, AutoVacuumIncremental = 2 };
-    bool turnOnIncrementalAutoVacuum();
-
-    DECLARE_TRACE();
-
-private:
-    static int authorizerFunction(void*, int, const char*, const char*, const char*, const char*);
->>>>>>> miniblink49
 
     void enableAuthorizer(bool enable);
 
@@ -174,11 +141,7 @@ private:
     bool m_sharable;
 
     Mutex m_authorizerLock;
-<<<<<<< HEAD
     CrossThreadPersistent<DatabaseAuthorizer> m_authorizer;
-=======
-    Member<DatabaseAuthorizer> m_authorizer;
->>>>>>> miniblink49
 
     ThreadIdentifier m_openingThread;
 

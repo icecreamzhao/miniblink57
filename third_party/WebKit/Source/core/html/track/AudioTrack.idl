@@ -7,7 +7,6 @@
 [
     RuntimeEnabled=AudioVideoTracks,
     SetWrapperReferenceFrom=owner,
-    WillBeGarbageCollected,
 ] interface AudioTrack {
   readonly attribute DOMString id;
   readonly attribute DOMString kind;

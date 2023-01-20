@@ -29,11 +29,6 @@
  */
 
 partial interface Internals {
-<<<<<<< HEAD
     boolean isVibrating(Navigator navigator);
     sequence<unsigned long> pendingVibrationPattern(Navigator navigator);
-=======
-    boolean isVibrating(Document document);
-    sequence<unsigned long> pendingVibrationPattern(Document document);
->>>>>>> miniblink49
 };

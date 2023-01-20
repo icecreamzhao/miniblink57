@@ -23,21 +23,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
-
->>>>>>> miniblink49
 #include "modules/speech/SpeechRecognitionResultList.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 SpeechRecognitionResultList* SpeechRecognitionResultList::create(
     const HeapVector<Member<SpeechRecognitionResult>>& results)
-=======
-SpeechRecognitionResultList* SpeechRecognitionResultList::create(const HeapVector<Member<SpeechRecognitionResult>>& results)
->>>>>>> miniblink49
 {
     return new SpeechRecognitionResultList(results);
 }
@@ -50,12 +41,8 @@ SpeechRecognitionResult* SpeechRecognitionResultList::item(unsigned index)
     return m_results[index];
 }
 
-<<<<<<< HEAD
 SpeechRecognitionResultList::SpeechRecognitionResultList(
     const HeapVector<Member<SpeechRecognitionResult>>& results)
-=======
-SpeechRecognitionResultList::SpeechRecognitionResultList(const HeapVector<Member<SpeechRecognitionResult>>& results)
->>>>>>> miniblink49
     : m_results(results)
 {
 }

@@ -2,14 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "config.h"
-#include "UnionTypesTest.h"
+#include "core/testing/UnionTypesTest.h"
 
 #include "wtf/text/StringBuilder.h"
 
 namespace blink {
 
-void UnionTypesTest::doubleOrStringOrStringArrayAttribute(DoubleOrStringOrStringArray& doubleOrStringOrStringArray)
+void UnionTypesTest::doubleOrStringOrStringArrayAttribute(
+    DoubleOrStringOrStringArray& doubleOrStringOrStringArray)
 {
     switch (m_attributeType) {
     case SpecificTypeNone:
@@ -30,7 +30,8 @@ void UnionTypesTest::doubleOrStringOrStringArrayAttribute(DoubleOrStringOrString
     }
 }
 
-void UnionTypesTest::setDoubleOrStringOrStringArrayAttribute(const DoubleOrStringOrStringArray& doubleOrStringOrStringArray)
+void UnionTypesTest::setDoubleOrStringOrStringArrayAttribute(
+    const DoubleOrStringOrStringArray& doubleOrStringOrStringArray)
 {
     if (doubleOrStringOrStringArray.isDouble()) {
         m_attributeDouble = doubleOrStringOrStringArray.getAsDouble();
@@ -58,7 +59,8 @@ String UnionTypesTest::doubleOrStringArg(DoubleOrString& doubleOrString)
     return String();
 }
 
-String UnionTypesTest::doubleOrInternalEnumArg(DoubleOrInternalEnum& doubleOrInternalEnum)
+String UnionTypesTest::doubleOrInternalEnumArg(
+    DoubleOrInternalEnum& doubleOrInternalEnum)
 {
     if (doubleOrInternalEnum.isDouble())
         return "double is passed: " + String::numberToStringECMAScript(doubleOrInternalEnum.getAsDouble());
@@ -68,7 +70,8 @@ String UnionTypesTest::doubleOrInternalEnumArg(DoubleOrInternalEnum& doubleOrInt
     return String();
 }
 
-String UnionTypesTest::doubleOrStringArrayArg(HeapVector<DoubleOrString>& array)
+String UnionTypesTest::doubleOrStringArrayArg(
+    HeapVector<DoubleOrString>& array)
 {
     if (!array.size())
         return "";
@@ -76,29 +79,36 @@ String UnionTypesTest::doubleOrStringArrayArg(HeapVector<DoubleOrString>& array)
     StringBuilder builder;
     for (DoubleOrString& doubleOrString : array) {
         ASSERT(!doubleOrString.isNull());
-        if (doubleOrString.isDouble())
-            builder.append("double: " + String::numberToStringECMAScript(doubleOrString.getAsDouble()));
-        else if (doubleOrString.isString())
-            builder.append("string: " + doubleOrString.getAsString());
-        else
+        if (doubleOrString.isDouble()) {
+            builder.append("double: ");
+            builder.append(
+                String::numberToStringECMAScript(doubleOrString.getAsDouble()));
+        } else if (doubleOrString.isString()) {
+            builder.append("string: ");
+            builder.append(doubleOrString.getAsString());
+        } else {
             ASSERT_NOT_REACHED();
+        }
         builder.append(", ");
     }
     return builder.substring(0, builder.length() - 2);
 }
 
-String UnionTypesTest::doubleOrStringSequenceArg(HeapVector<DoubleOrString>& sequence)
+String UnionTypesTest::doubleOrStringSequenceArg(
+    HeapVector<DoubleOrString>& sequence)
 {
     return doubleOrStringArrayArg(sequence);
 }
 
-String UnionTypesTest::nodeListOrElementArg(NodeListOrElement& nodeListOrElement)
+String UnionTypesTest::nodeListOrElementArg(
+    NodeListOrElement& nodeListOrElement)
 {
     ASSERT(!nodeListOrElement.isNull());
     return nodeListOrElementOrNullArg(nodeListOrElement);
 }
 
-String UnionTypesTest::nodeListOrElementOrNullArg(NodeListOrElement& nodeListOrElementOrNull)
+String UnionTypesTest::nodeListOrElementOrNullArg(
+    NodeListOrElement& nodeListOrElementOrNull)
 {
     if (nodeListOrElementOrNull.isNull())
         return "null or undefined is passed";
@@ -110,7 +120,8 @@ String UnionTypesTest::nodeListOrElementOrNullArg(NodeListOrElement& nodeListOrE
     return String();
 }
 
-String UnionTypesTest::doubleOrStringOrStringArrayArg(const DoubleOrStringOrStringArray& doubleOrStringOrStringArray)
+String UnionTypesTest::doubleOrStringOrStringArrayArg(
+    const DoubleOrStringOrStringArray& doubleOrStringOrStringArray)
 {
     if (doubleOrStringOrStringArray.isNull())
         return "null";
@@ -135,7 +146,8 @@ String UnionTypesTest::doubleOrStringOrStringArrayArg(const DoubleOrStringOrStri
     return builder.substring(0, builder.length() - 2) + "]";
 }
 
-String UnionTypesTest::doubleOrStringOrStringSequenceArg(const DoubleOrStringOrStringSequence& doubleOrStringOrStringSequence)
+String UnionTypesTest::doubleOrStringOrStringSequenceArg(
+    const DoubleOrStringOrStringSequence& doubleOrStringOrStringSequence)
 {
     if (doubleOrStringOrStringSequence.isNull())
         return "null";
@@ -160,4 +172,4 @@ String UnionTypesTest::doubleOrStringOrStringSequenceArg(const DoubleOrStringOrS
     return builder.substring(0, builder.length() - 2) + "]";
 }
 
-}
+} // namespace blink

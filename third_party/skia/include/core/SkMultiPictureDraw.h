@@ -8,13 +8,8 @@
 #ifndef SkMultiPictureDraw_DEFINED
 #define SkMultiPictureDraw_DEFINED
 
-<<<<<<< HEAD
 #include "../private/SkTDArray.h"
 #include "SkMatrix.h"
-=======
-#include "SkMatrix.h"
-#include "SkTDArray.h"
->>>>>>> miniblink49
 
 class SkCanvas;
 class SkPaint;
@@ -44,15 +39,9 @@ public:
      *                  and then apply the paint when the result is drawn
      */
     void add(SkCanvas* canvas,
-<<<<<<< HEAD
         const SkPicture* picture,
         const SkMatrix* matrix = NULL,
         const SkPaint* paint = NULL);
-=======
-             const SkPicture* picture,
-             const SkMatrix* matrix = NULL,
-             const SkPaint* paint = NULL);
->>>>>>> miniblink49
 
     /**
      *  Perform all the previously added draws. This will reset the state
@@ -68,17 +57,10 @@ public:
 
 private:
     struct DrawData {
-<<<<<<< HEAD
         SkCanvas* fCanvas; // reffed
         const SkPicture* fPicture; // reffed
         SkMatrix fMatrix;
         SkPaint* fPaint; // owned
-=======
-        SkCanvas*        fCanvas;  // reffed
-        const SkPicture* fPicture; // reffed
-        SkMatrix         fMatrix;
-        SkPaint*         fPaint;   // owned
->>>>>>> miniblink49
 
         void init(SkCanvas*, const SkPicture*, const SkMatrix*, const SkPaint*);
         void draw();

@@ -45,7 +45,6 @@ class ExceptionState;
 
 class EntrySync : public EntryBase, public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
-<<<<<<< HEAD
 
 public:
     static EntrySync* create(EntryBase*);
@@ -62,16 +61,6 @@ public:
     EntrySync* copyTo(DirectoryEntrySync* parent,
         const String& name,
         ExceptionState&) const;
-=======
-public:
-    static EntrySync* create(EntryBase*);
-
-    DOMFileSystemSync* filesystem() const { return static_cast<DOMFileSystemSync*>(m_fileSystem.get()); }
-
-    Metadata* getMetadata(ExceptionState&);
-    EntrySync* moveTo(DirectoryEntrySync* parent, const String& name, ExceptionState&) const;
-    EntrySync* copyTo(DirectoryEntrySync* parent, const String& name, ExceptionState&) const;
->>>>>>> miniblink49
     void remove(ExceptionState&) const;
     EntrySync* getParent() const;
 

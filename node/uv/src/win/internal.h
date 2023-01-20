@@ -30,27 +30,25 @@
 #include "winsock.h"
 
 #ifdef _MSC_VER
-# define INLINE __inline
-# define UV_THREAD_LOCAL __declspec( thread )
+#define INLINE __inline
+#define UV_THREAD_LOCAL __declspec(thread)
 #else
-# define INLINE inline
-# define UV_THREAD_LOCAL __thread
+#define INLINE inline
+#define UV_THREAD_LOCAL __thread
 #endif
-
 
 #ifdef _DEBUG
 
 extern UV_THREAD_LOCAL int uv__crt_assert_enabled;
 
-#define UV_BEGIN_DISABLE_CRT_ASSERT()                           \
-  {                                                             \
-    int uv__saved_crt_assert_enabled = uv__crt_assert_enabled;  \
-    uv__crt_assert_enabled = FALSE;
+#define UV_BEGIN_DISABLE_CRT_ASSERT()                              \
+    {                                                              \
+        int uv__saved_crt_assert_enabled = uv__crt_assert_enabled; \
+        uv__crt_assert_enabled = FALSE;
 
-
-#define UV_END_DISABLE_CRT_ASSERT()                             \
-    uv__crt_assert_enabled = uv__saved_crt_assert_enabled;      \
-  }
+#define UV_END_DISABLE_CRT_ASSERT()                        \
+    uv__crt_assert_enabled = uv__saved_crt_assert_enabled; \
+    }
 
 #else
 #define UV_BEGIN_DISABLE_CRT_ASSERT()
@@ -63,8 +61,8 @@ extern UV_THREAD_LOCAL int uv__crt_assert_enabled;
  */
 
 /* Used by all handles. */
-#define UV_HANDLE_CLOSED                        0x00000002
-#define UV_HANDLE_ENDGAME_QUEUED                0x00000008
+#define UV_HANDLE_CLOSED 0x00000002
+#define UV_HANDLE_ENDGAME_QUEUED 0x00000008
 
 /* uv-common.h: #define UV__HANDLE_CLOSING      0x00000001 */
 /* uv-common.h: #define UV__HANDLE_ACTIVE       0x00000040 */
@@ -72,44 +70,43 @@ extern UV_THREAD_LOCAL int uv__crt_assert_enabled;
 /* uv-common.h: #define UV_HANDLE_INTERNAL      0x00000080 */
 
 /* Used by streams and UDP handles. */
-#define UV_HANDLE_READING                       0x00000100
-#define UV_HANDLE_BOUND                         0x00000200
-#define UV_HANDLE_LISTENING                     0x00000800
-#define UV_HANDLE_CONNECTION                    0x00001000
-#define UV_HANDLE_READABLE                      0x00008000
-#define UV_HANDLE_WRITABLE                      0x00010000
-#define UV_HANDLE_READ_PENDING                  0x00020000
-#define UV_HANDLE_SYNC_BYPASS_IOCP              0x00040000
-#define UV_HANDLE_ZERO_READ                     0x00080000
-#define UV_HANDLE_EMULATE_IOCP                  0x00100000
-#define UV_HANDLE_BLOCKING_WRITES               0x00200000
-#define UV_HANDLE_CANCELLATION_PENDING          0x00400000
+#define UV_HANDLE_READING 0x00000100
+#define UV_HANDLE_BOUND 0x00000200
+#define UV_HANDLE_LISTENING 0x00000800
+#define UV_HANDLE_CONNECTION 0x00001000
+#define UV_HANDLE_READABLE 0x00008000
+#define UV_HANDLE_WRITABLE 0x00010000
+#define UV_HANDLE_READ_PENDING 0x00020000
+#define UV_HANDLE_SYNC_BYPASS_IOCP 0x00040000
+#define UV_HANDLE_ZERO_READ 0x00080000
+#define UV_HANDLE_EMULATE_IOCP 0x00100000
+#define UV_HANDLE_BLOCKING_WRITES 0x00200000
+#define UV_HANDLE_CANCELLATION_PENDING 0x00400000
 
 /* Used by uv_tcp_t and uv_udp_t handles */
-#define UV_HANDLE_IPV6                          0x01000000
+#define UV_HANDLE_IPV6 0x01000000
 
 /* Only used by uv_tcp_t handles. */
-#define UV_HANDLE_TCP_NODELAY                   0x02000000
-#define UV_HANDLE_TCP_KEEPALIVE                 0x04000000
-#define UV_HANDLE_TCP_SINGLE_ACCEPT             0x08000000
-#define UV_HANDLE_TCP_ACCEPT_STATE_CHANGING     0x10000000
-#define UV_HANDLE_TCP_SOCKET_CLOSED             0x20000000
-#define UV_HANDLE_SHARED_TCP_SOCKET             0x40000000
+#define UV_HANDLE_TCP_NODELAY 0x02000000
+#define UV_HANDLE_TCP_KEEPALIVE 0x04000000
+#define UV_HANDLE_TCP_SINGLE_ACCEPT 0x08000000
+#define UV_HANDLE_TCP_ACCEPT_STATE_CHANGING 0x10000000
+#define UV_HANDLE_TCP_SOCKET_CLOSED 0x20000000
+#define UV_HANDLE_SHARED_TCP_SOCKET 0x40000000
 
 /* Only used by uv_pipe_t handles. */
-#define UV_HANDLE_NON_OVERLAPPED_PIPE           0x01000000
-#define UV_HANDLE_PIPESERVER                    0x02000000
-#define UV_HANDLE_PIPE_READ_CANCELABLE          0x04000000
+#define UV_HANDLE_NON_OVERLAPPED_PIPE 0x01000000
+#define UV_HANDLE_PIPESERVER 0x02000000
+#define UV_HANDLE_PIPE_READ_CANCELABLE 0x04000000
 
 /* Only used by uv_tty_t handles. */
-#define UV_HANDLE_TTY_READABLE                  0x01000000
-#define UV_HANDLE_TTY_RAW                       0x02000000
-#define UV_HANDLE_TTY_SAVED_POSITION            0x04000000
-#define UV_HANDLE_TTY_SAVED_ATTRIBUTES          0x08000000
+#define UV_HANDLE_TTY_READABLE 0x01000000
+#define UV_HANDLE_TTY_RAW 0x02000000
+#define UV_HANDLE_TTY_SAVED_POSITION 0x04000000
+#define UV_HANDLE_TTY_SAVED_ATTRIBUTES 0x08000000
 
 /* Only used by uv_poll_t handles. */
-#define UV_HANDLE_POLL_SLOW                     0x02000000
-
+#define UV_HANDLE_POLL_SLOW 0x02000000
 
 /*
  * Requests: see req-inl.h
@@ -124,8 +121,8 @@ extern UV_THREAD_LOCAL int uv__crt_assert_enabled;
  */
 
 typedef struct {
-  WSAPROTOCOL_INFOW socket_info;
-  int delayed_error;
+    WSAPROTOCOL_INFOW socket_info;
+    int delayed_error;
 } uv__ipc_socket_info_ex;
 
 int uv_tcp_listen(uv_tcp_t* handle, int backlog, uv_connection_cb cb);
@@ -323,8 +320,8 @@ int uv__convert_utf16_to_utf8(const WCHAR* utf16, int utf16len, char** utf8);
  * Process stdio handles.
  */
 int uv__stdio_create(uv_loop_t* loop,
-                     const uv_process_options_t* options,
-                     BYTE** buffer_ptr);
+    const uv_process_options_t* options,
+    BYTE** buffer_ptr);
 void uv__stdio_destroy(BYTE* buffer);
 void uv__stdio_noinherit(BYTE* buffer);
 int uv__stdio_verify(BYTE* buffer, WORD size);
@@ -347,11 +344,11 @@ BOOL uv_get_acceptex_function(SOCKET socket, LPFN_ACCEPTEX* target);
 BOOL uv_get_connectex_function(SOCKET socket, LPFN_CONNECTEX* target);
 
 int WSAAPI uv_wsarecv_workaround(SOCKET socket, WSABUF* buffers,
-    DWORD buffer_count, DWORD* bytes, DWORD* flags, WSAOVERLAPPED *overlapped,
+    DWORD buffer_count, DWORD* bytes, DWORD* flags, WSAOVERLAPPED* overlapped,
     LPWSAOVERLAPPED_COMPLETION_ROUTINE completion_routine);
 int WSAAPI uv_wsarecvfrom_workaround(SOCKET socket, WSABUF* buffers,
     DWORD buffer_count, DWORD* bytes, DWORD* flags, struct sockaddr* addr,
-    int* addr_len, WSAOVERLAPPED *overlapped,
+    int* addr_len, WSAOVERLAPPED* overlapped,
     LPWSAOVERLAPPED_COMPLETION_ROUTINE completion_routine);
 
 int WSAAPI uv_msafd_poll(SOCKET socket, AFD_POLL_INFO* info_in,

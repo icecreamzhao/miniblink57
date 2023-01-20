@@ -6,18 +6,9 @@
 
 [
     Exposed=(Window,ServiceWorker),
-<<<<<<< HEAD
     RuntimeEnabled=PushMessaging,
 ] interface PushManager {
     [CallWith=ScriptState, RaisesException] Promise<PushSubscription> subscribe(optional PushSubscriptionOptionsInit options);
     [CallWith=ScriptState] Promise<PushSubscription?> getSubscription();
     [CallWith=ScriptState, RaisesException] Promise permissionState(optional PushSubscriptionOptionsInit options);
-=======
-    GarbageCollected,
-    RuntimeEnabled=PushMessaging,
-] interface PushManager {
-    [CallWith=ScriptState] Promise<PushSubscription> subscribe(optional PushSubscriptionOptions options);
-    [CallWith=ScriptState] Promise<PushSubscription?> getSubscription();
-    [CallWith=ScriptState] Promise permissionState(optional PushSubscriptionOptions options);
->>>>>>> miniblink49
 };

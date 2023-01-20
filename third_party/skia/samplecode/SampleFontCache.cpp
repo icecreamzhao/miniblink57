@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -9,7 +5,6 @@
  * found in the LICENSE file.
  */
 #include "SampleCode.h"
-<<<<<<< HEAD
 #include "SkCanvas.h"
 #include "SkGraphics.h"
 #include "SkRandom.h"
@@ -19,16 +14,6 @@
 
 static void call_measure()
 {
-=======
-#include "SkView.h"
-#include "SkCanvas.h"
-#include "SkGraphics.h"
-#include "SkRandom.h"
-
-#include <pthread.h>
-
-static void call_measure() {
->>>>>>> miniblink49
     SkPaint paint;
     uint16_t text[32];
     SkRandom rand;
@@ -47,12 +32,8 @@ static void call_measure() {
     }
 }
 
-<<<<<<< HEAD
 static void call_draw(SkCanvas* canvas)
 {
-=======
-static void call_draw(SkCanvas* canvas) {
->>>>>>> miniblink49
     SkPaint paint;
     uint16_t text[32];
     SkRandom rand;
@@ -66,12 +47,7 @@ static void call_draw(SkCanvas* canvas) {
     SkScalar y = SkIntToScalar(20);
 
     canvas->drawColor(SK_ColorWHITE);
-<<<<<<< HEAD
     for (int i = 9; i < 36; i++) {
-=======
-    for (int i = 9; i < 36; i++)
-    {
->>>>>>> miniblink49
         SkPaint::FontMetrics m;
 
         paint.setTextSize(SkIntToScalar(i));
@@ -83,7 +59,6 @@ static void call_draw(SkCanvas* canvas) {
 
 static bool gDone;
 
-<<<<<<< HEAD
 static void* measure_proc(void* context)
 {
     while (!gDone) {
@@ -96,52 +71,27 @@ static void* draw_proc(void* context)
 {
     SkBitmap* bm = (SkBitmap*)context;
     SkCanvas canvas(*bm);
-=======
-static void* measure_proc(void* context) {
-    while (!gDone) {
-        call_measure();
-    }
-    return NULL;
-}
-
-static void* draw_proc(void* context) {
-    SkBitmap* bm = (SkBitmap*)context;
-    SkCanvas    canvas(*bm);
->>>>>>> miniblink49
 
     while (!gDone) {
         call_draw(&canvas);
     }
-<<<<<<< HEAD
     return nullptr;
-=======
-    return NULL;
->>>>>>> miniblink49
 }
 
 class FontCacheView : public SampleView {
 public:
     enum { N = 4 };
 
-<<<<<<< HEAD
     pthread_t fMThreads[N];
     pthread_t fDThreads[N];
     SkBitmap fBitmaps[N];
 
     FontCacheView()
     {
-=======
-    pthread_t   fMThreads[N];
-    pthread_t   fDThreads[N];
-    SkBitmap    fBitmaps[N];
-
-    FontCacheView() {
->>>>>>> miniblink49
         gDone = false;
         for (int i = 0; i < N; i++) {
             int status;
 
-<<<<<<< HEAD
             status = pthread_create(&fMThreads[i], nullptr, measure_proc, nullptr);
             SkASSERT(0 == status);
 
@@ -149,26 +99,13 @@ public:
                 kRGB_565_SkColorType,
                 kOpaque_SkAlphaType));
             status = pthread_create(&fDThreads[i], nullptr, draw_proc, &fBitmaps[i]);
-=======
-            status = pthread_create(&fMThreads[i], NULL,  measure_proc, NULL);
-            SkASSERT(0 == status);
-
-            fBitmaps[i].allocPixels(SkImageInfo::Make(320, 240,
-                                                      kRGB_565_SkColorType,
-                                                      kOpaque_SkAlphaType));
-            status = pthread_create(&fDThreads[i], NULL,  draw_proc, &fBitmaps[i]);
->>>>>>> miniblink49
             SkASSERT(0 == status);
         }
         this->setBGColor(0xFFDDDDDD);
     }
 
-<<<<<<< HEAD
     virtual ~FontCacheView()
     {
-=======
-    virtual ~FontCacheView() {
->>>>>>> miniblink49
         gDone = true;
         for (int i = 0; i < N; i++) {
             void* ret;
@@ -181,12 +118,8 @@ public:
 
 protected:
     // overrides from SkEventSink
-<<<<<<< HEAD
     virtual bool onQuery(SkEvent* evt)
     {
-=======
-    virtual bool onQuery(SkEvent* evt) {
->>>>>>> miniblink49
         if (SampleCode::TitleQ(*evt)) {
             SampleCode::TitleR(evt, "FontCache");
             return true;
@@ -194,23 +127,15 @@ protected:
         return this->INHERITED::onQuery(evt);
     }
 
-<<<<<<< HEAD
     virtual void onDrawContent(SkCanvas* canvas)
     {
-=======
-    virtual void onDrawContent(SkCanvas* canvas) {
->>>>>>> miniblink49
         SkScalar x = 0;
         SkScalar y = 0;
         for (int i = 0; i < N; i++) {
             canvas->drawBitmap(fBitmaps[i], x, y);
             x += SkIntToScalar(fBitmaps[i].width());
         }
-<<<<<<< HEAD
         this->inval(nullptr);
-=======
-        this->inval(NULL);
->>>>>>> miniblink49
     }
 
 private:

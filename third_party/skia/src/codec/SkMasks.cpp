@@ -5,13 +5,8 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "SkMasks.h"
 #include "SkCodecPriv.h"
-=======
-#include "SkCodecPriv.h"
-#include "SkMasks.h"
->>>>>>> miniblink49
 #include "SkTypes.h"
 
 /*
@@ -52,12 +47,8 @@ const static uint8_t n_bit_to_8_bit_lookup_table[] = {
  * Convert an n bit component to an 8-bit component
  *
  */
-<<<<<<< HEAD
 static uint8_t convert_to_8(uint8_t component, uint32_t n)
 {
-=======
-static uint8_t convert_to_8(uint32_t component, uint32_t n) {
->>>>>>> miniblink49
     if (0 == n) {
         return 0;
     } else if (8 > n) {
@@ -69,12 +60,8 @@ static uint8_t convert_to_8(uint32_t component, uint32_t n) {
 }
 
 static uint8_t get_comp(uint32_t pixel, uint32_t mask, uint32_t shift,
-<<<<<<< HEAD
     uint32_t size)
 {
-=======
-                        uint32_t size) {
->>>>>>> miniblink49
     return convert_to_8((pixel & mask) >> shift, size);
 }
 
@@ -83,7 +70,6 @@ static uint8_t get_comp(uint32_t pixel, uint32_t mask, uint32_t shift,
  * Get a color component
  *
  */
-<<<<<<< HEAD
 uint8_t SkMasks::getRed(uint32_t pixel) const
 {
     return get_comp(pixel, fRed.mask, fRed.shift, fRed.size);
@@ -98,18 +84,6 @@ uint8_t SkMasks::getBlue(uint32_t pixel) const
 }
 uint8_t SkMasks::getAlpha(uint32_t pixel) const
 {
-=======
-uint8_t SkMasks::getRed(uint32_t pixel) {
-    return get_comp(pixel, fRed.mask, fRed.shift, fRed.size);
-}
-uint8_t SkMasks::getGreen(uint32_t pixel) {
-    return get_comp(pixel, fGreen.mask, fGreen.shift, fGreen.size);
-}
-uint8_t SkMasks::getBlue(uint32_t pixel) {
-    return get_comp(pixel, fBlue.mask, fBlue.shift, fBlue.size);
-}
-uint8_t SkMasks::getAlpha(uint32_t pixel) {
->>>>>>> miniblink49
     return get_comp(pixel, fAlpha.mask, fAlpha.shift, fAlpha.size);
 }
 
@@ -118,17 +92,8 @@ uint8_t SkMasks::getAlpha(uint32_t pixel) {
  * Process an input mask to obtain the necessary information
  *
  */
-<<<<<<< HEAD
 const SkMasks::MaskInfo process_mask(uint32_t mask, uint32_t bpp)
 {
-=======
-const SkMasks::MaskInfo process_mask(uint32_t mask, uint32_t bpp) {
-    // Trim the masks to the allowed number of bits
-    if (bpp < 32) {
-        mask &= (1 << bpp) - 1;
-    }
-
->>>>>>> miniblink49
     // Determine properties of the mask
     uint32_t tempMask = mask;
     uint32_t shift = 0;
@@ -142,7 +107,6 @@ const SkMasks::MaskInfo process_mask(uint32_t mask, uint32_t bpp) {
         for (; tempMask & 1; tempMask >>= 1) {
             size++;
         }
-<<<<<<< HEAD
         // Verify that the mask is continuous
         if (tempMask) {
             SkCodecPrintf("Warning: Bit mask is not continuous.\n");
@@ -150,20 +114,12 @@ const SkMasks::MaskInfo process_mask(uint32_t mask, uint32_t bpp) {
             for (; tempMask; tempMask >>= 1) {
                 size++;
             }
-=======
-        // Check that the mask is continuous
-        if (tempMask != 0) {
-            SkCodecPrintf("Warning: Bit masks is not continuous.\n");
->>>>>>> miniblink49
         }
         // Truncate masks greater than 8 bits
         if (size > 8) {
             shift += size - 8;
             size = 8;
-<<<<<<< HEAD
             mask &= 0xFF << shift;
-=======
->>>>>>> miniblink49
         }
     }
 
@@ -177,12 +133,8 @@ const SkMasks::MaskInfo process_mask(uint32_t mask, uint32_t bpp) {
  * Create the masks object
  *
  */
-<<<<<<< HEAD
 SkMasks* SkMasks::CreateMasks(InputMasks masks, uint32_t bitsPerPixel)
 {
-=======
-SkMasks* SkMasks::CreateMasks(InputMasks masks, uint32_t bitsPerPixel) {
->>>>>>> miniblink49
     // Trim the input masks according to bitsPerPixel
     if (bitsPerPixel < 32) {
         masks.red &= (1 << bitsPerPixel) - 1;
@@ -192,15 +144,8 @@ SkMasks* SkMasks::CreateMasks(InputMasks masks, uint32_t bitsPerPixel) {
     }
 
     // Check that masks do not overlap
-<<<<<<< HEAD
     if (((masks.red & masks.green) | (masks.red & masks.blue) | (masks.red & masks.alpha) | (masks.green & masks.blue) | (masks.green & masks.alpha) | (masks.blue & masks.alpha)) != 0) {
         return nullptr;
-=======
-    if (((masks.red & masks.green) | (masks.red & masks.blue) |
-            (masks.red & masks.alpha) | (masks.green & masks.blue) |
-            (masks.green & masks.alpha) | (masks.blue & masks.alpha)) != 0) {
-        return NULL;
->>>>>>> miniblink49
     }
 
     // Collect information about the masks
@@ -209,27 +154,14 @@ SkMasks* SkMasks::CreateMasks(InputMasks masks, uint32_t bitsPerPixel) {
     const MaskInfo blue = process_mask(masks.blue, bitsPerPixel);
     const MaskInfo alpha = process_mask(masks.alpha, bitsPerPixel);
 
-<<<<<<< HEAD
     return new SkMasks(red, green, blue, alpha);
 }
 
 SkMasks::SkMasks(const MaskInfo& red, const MaskInfo& green,
     const MaskInfo& blue, const MaskInfo& alpha)
-=======
-    return SkNEW_ARGS(SkMasks, (red, green, blue, alpha));
-}
-
-
-SkMasks::SkMasks(const MaskInfo red, const MaskInfo green,
-                 const MaskInfo blue, const MaskInfo alpha)
->>>>>>> miniblink49
     : fRed(red)
     , fGreen(green)
     , fBlue(blue)
     , fAlpha(alpha)
-<<<<<<< HEAD
 {
 }
-=======
-{}
->>>>>>> miniblink49

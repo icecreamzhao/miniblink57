@@ -28,12 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 // https://webaudio.github.io/web-midi-api/#MIDIOutput
-=======
-// http://www.w3.org/TR/webmidi/#idl-def-MIDIOutput
-// http://cwilso.github.io/web-midi-api/#idl-def-MIDIOutput
->>>>>>> miniblink49
 
 [
     SetWrapperReferenceTo(MIDIAccess midiAccess),

@@ -39,29 +39,45 @@ class Node;
 class TouchEventContext;
 
 class CORE_EXPORT NodeEventContext {
-    ALLOW_ONLY_INLINE_ALLOCATION();
-    DECLARE_EMPTY_DESTRUCTOR_WILL_BE_REMOVED(NodeEventContext);
+    DISALLOW_NEW_EXCEPT_PLACEMENT_NEW();
+
 public:
     // FIXME: Use ContainerNode instead of Node.
-    NodeEventContext(PassRefPtrWillBeRawPtr<Node>, PassRefPtrWillBeRawPtr<EventTarget> currentTarget);
+    NodeEventContext(Node*, EventTarget* currentTarget);
     DECLARE_TRACE();
 
     Node* node() const { return m_node.get(); }
 
-    void setTreeScopeEventContext(PassRefPtrWillBeRawPtr<TreeScopeEventContext> prpTreeScopeEventContext) { m_treeScopeEventContext = prpTreeScopeEventContext; }
-    TreeScopeEventContext& treeScopeEventContext() { ASSERT(m_treeScopeEventContext); return *m_treeScopeEventContext; }
+    void setTreeScopeEventContext(TreeScopeEventContext* treeScopeEventContext)
+    {
+        m_treeScopeEventContext = treeScopeEventContext;
+    }
+    TreeScopeEventContext& treeScopeEventContext()
+    {
+        DCHECK(m_treeScopeEventContext);
+        return *m_treeScopeEventContext;
+    }
 
     EventTarget* target() const { return m_treeScopeEventContext->target(); }
-    EventTarget* relatedTarget() const { return m_treeScopeEventContext->relatedTarget(); }
-    TouchEventContext* touchEventContext() const { return m_treeScopeEventContext->touchEventContext(); }
+    EventTarget* relatedTarget() const
+    {
+        return m_treeScopeEventContext->relatedTarget();
+    }
+    TouchEventContext* touchEventContext() const
+    {
+        return m_treeScopeEventContext->touchEventContext();
+    }
 
-    bool currentTargetSameAsTarget() const { return m_currentTarget.get() == target(); }
+    bool currentTargetSameAsTarget() const
+    {
+        return m_currentTarget.get() == target();
+    }
     void handleLocalEvents(Event&) const;
 
 private:
-    RefPtrWillBeMember<Node> m_node;
-    RefPtrWillBeMember<EventTarget> m_currentTarget;
-    RefPtrWillBeMember<TreeScopeEventContext> m_treeScopeEventContext;
+    Member<Node> m_node;
+    Member<EventTarget> m_currentTarget;
+    Member<TreeScopeEventContext> m_treeScopeEventContext;
 };
 
 } // namespace blink

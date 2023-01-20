@@ -31,18 +31,12 @@
 #ifndef MIDIPort_h
 #define MIDIPort_h
 
-<<<<<<< HEAD
 #include "bindings/core/v8/ActiveScriptWrappable.h"
 #include "bindings/core/v8/ScriptPromise.h"
 #include "bindings/core/v8/TraceWrapperMember.h"
 #include "core/dom/ContextLifecycleObserver.h"
 #include "core/dom/ExceptionCode.h"
 #include "media/midi/midi_service.mojom-blink.h"
-=======
-#include "bindings/core/v8/ScriptPromise.h"
-#include "core/dom/ActiveDOMObject.h"
-#include "core/dom/ExceptionCode.h"
->>>>>>> miniblink49
 #include "modules/EventTargetModules.h"
 #include "modules/webmidi/MIDIAccessor.h"
 #include "platform/heap/Handle.h"
@@ -51,19 +45,12 @@ namespace blink {
 
 class MIDIAccess;
 
-<<<<<<< HEAD
 class MIDIPort : public EventTargetWithInlineData,
                  public ActiveScriptWrappable<MIDIPort>,
                  public ContextLifecycleObserver {
     DEFINE_WRAPPERTYPEINFO();
     USING_GARBAGE_COLLECTED_MIXIN(MIDIPort);
 
-=======
-class MIDIPort : public RefCountedGarbageCollectedEventTargetWithInlineData<MIDIPort>, public ActiveDOMObject {
-    REFCOUNTED_GARBAGE_COLLECTED_EVENT_TARGET(MIDIPort);
-    DEFINE_WRAPPERTYPEINFO();
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(MIDIPort);
->>>>>>> miniblink49
 public:
     enum ConnectionState {
         ConnectionStateOpen,
@@ -71,15 +58,8 @@ public:
         ConnectionStatePending
     };
 
-<<<<<<< HEAD
     enum TypeCode { TypeInput,
         TypeOutput };
-=======
-    enum TypeCode {
-        TypeInput,
-        TypeOutput
-    };
->>>>>>> miniblink49
 
     ~MIDIPort() override { }
 
@@ -95,18 +75,12 @@ public:
     ScriptPromise close(ScriptState*);
 
     MIDIAccess* midiAccess() const { return m_access; }
-<<<<<<< HEAD
     midi::mojom::PortState getState() const { return m_state; }
     void setState(midi::mojom::PortState);
-=======
-    MIDIAccessor::MIDIPortState getState() const { return m_state; }
-    void setState(MIDIAccessor::MIDIPortState);
->>>>>>> miniblink49
     ConnectionState getConnection() const { return m_connection; }
 
     DECLARE_VIRTUAL_TRACE();
 
-<<<<<<< HEAD
     DECLARE_VIRTUAL_TRACE_WRAPPERS();
 
     DEFINE_ATTRIBUTE_EVENT_LISTENER(statechange);
@@ -132,20 +106,6 @@ protected:
         TypeCode,
         const String& version,
         midi::mojom::PortState);
-=======
-    DEFINE_ATTRIBUTE_EVENT_LISTENER(statechange);
-
-    // EventTarget
-    const AtomicString& interfaceName() const override { return EventTargetNames::MIDIPort; }
-    ExecutionContext* executionContext() const final;
-
-    // ActiveDOMObject
-    bool hasPendingActivity() const override;
-    void stop() override;
-
-protected:
-    MIDIPort(MIDIAccess*, const String& id, const String& manufacturer, const String& name, TypeCode, const String& version, MIDIAccessor::MIDIPortState);
->>>>>>> miniblink49
 
     void open();
 
@@ -153,24 +113,15 @@ private:
     ScriptPromise accept(ScriptState*);
     ScriptPromise reject(ScriptState*, ExceptionCode, const String& message);
 
-<<<<<<< HEAD
     void setStates(midi::mojom::PortState, ConnectionState);
-=======
-    void setStates(MIDIAccessor::MIDIPortState, ConnectionState);
->>>>>>> miniblink49
 
     String m_id;
     String m_manufacturer;
     String m_name;
     TypeCode m_type;
     String m_version;
-<<<<<<< HEAD
     TraceWrapperMember<MIDIAccess> m_access;
     midi::mojom::PortState m_state;
-=======
-    Member<MIDIAccess> m_access;
-    MIDIAccessor::MIDIPortState m_state;
->>>>>>> miniblink49
     ConnectionState m_connection;
 };
 

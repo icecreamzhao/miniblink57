@@ -41,29 +41,17 @@
 // 255,               if lum0 <= lum1 and code(x,y) == 7
 
 static const int kLATCPaletteSize = 8;
-<<<<<<< HEAD
 static void generate_latc_palette(uint8_t palette[], uint8_t lum0, uint8_t lum1)
 {
-=======
-static void generate_latc_palette(uint8_t palette[], uint8_t lum0, uint8_t lum1) {
->>>>>>> miniblink49
     palette[0] = lum0;
     palette[1] = lum1;
     if (lum0 > lum1) {
         for (int i = 1; i < 7; i++) {
-<<<<<<< HEAD
             palette[i + 1] = ((7 - i) * lum0 + i * lum1) / 7;
         }
     } else {
         for (int i = 1; i < 5; i++) {
             palette[i + 1] = ((5 - i) * lum0 + i * lum1) / 5;
-=======
-            palette[i+1] = ((7-i)*lum0 + i*lum1) / 7;
-        }
-    } else {
-        for (int i = 1; i < 5; i++) {
-            palette[i+1] = ((5-i)*lum0 + i*lum1) / 5;
->>>>>>> miniblink49
         }
         palette[6] = 0;
         palette[7] = 255;
@@ -82,7 +70,6 @@ static void generate_latc_palette(uint8_t palette[], uint8_t lum0, uint8_t lum1)
 
 // Absolute difference between two values. More correct than SkTAbs(a - b)
 // because it works on unsigned values.
-<<<<<<< HEAD
 template <typename T>
 inline T abs_diff(const T& a, const T& b)
 {
@@ -91,13 +78,6 @@ inline T abs_diff(const T& a, const T& b)
 
 static bool is_extremal(uint8_t pixel)
 {
-=======
-template <typename T> inline T abs_diff(const T &a, const T &b) {
-    return (a > b) ? (a - b) : (b - a);
-}
-
-static bool is_extremal(uint8_t pixel) {
->>>>>>> miniblink49
     return 0 == pixel || 255 == pixel;
 }
 
@@ -105,7 +85,6 @@ typedef uint64_t (*A84x4To64BitProc)(const uint8_t block[]);
 
 // This function is used by both R11 EAC and LATC to compress 4x4 blocks
 // of 8-bit alpha into 64-bit values that comprise the compressed data.
-<<<<<<< HEAD
 // For both formats, we need to make sure that the dimensions of the
 // src pixels are divisible by 4, and copy 4x4 blocks one at a time
 // for compression.
@@ -113,14 +92,6 @@ static bool compress_4x4_a8_to_64bit(uint8_t* dst, const uint8_t* src,
     int width, int height, size_t rowBytes,
     A84x4To64BitProc proc)
 {
-=======
-// For both formats, we need to make sure that the dimensions of the 
-// src pixels are divisible by 4, and copy 4x4 blocks one at a time
-// for compression.
-static bool compress_4x4_a8_to_64bit(uint8_t* dst, const uint8_t* src,
-                                     int width, int height, size_t rowBytes,
-                                     A84x4To64BitProc proc) {
->>>>>>> miniblink49
     // Make sure that our data is well-formed enough to be considered for compression
     if (0 == width || 0 == height || (width % 4) != 0 || (height % 4) != 0) {
         return false;
@@ -135,11 +106,7 @@ static bool compress_4x4_a8_to_64bit(uint8_t* dst, const uint8_t* src,
         for (int x = 0; x < blocksX; ++x) {
             // Load block
             for (int k = 0; k < 4; ++k) {
-<<<<<<< HEAD
                 memcpy(block + k * 4, src + k * rowBytes + 4 * x, 4);
-=======
-                memcpy(block + k*4, src + k*rowBytes + 4*x, 4);
->>>>>>> miniblink49
             }
 
             // Compress it
@@ -165,12 +132,8 @@ static const int kLATCPixelsPerBlock = kLATCBlockSize * kLATCBlockSize;
 // Compress a block by using the bounding box of the pixels. It is assumed that
 // there are no extremal pixels in this block otherwise we would have used
 // compressBlockBBIgnoreExtremal.
-<<<<<<< HEAD
 static uint64_t compress_latc_block_bb(const uint8_t pixels[])
 {
-=======
-static uint64_t compress_latc_block_bb(const uint8_t pixels[]) {
->>>>>>> miniblink49
     uint8_t minVal = 255;
     uint8_t maxVal = 0;
     for (int i = 0; i < kLATCPixelsPerBlock; ++i) {
@@ -202,27 +165,15 @@ static uint64_t compress_latc_block_bb(const uint8_t pixels[]) {
         indices |= idx;
     }
 
-<<<<<<< HEAD
     return SkEndian_SwapLE64(
         static_cast<uint64_t>(maxVal) | (static_cast<uint64_t>(minVal) << 8) | (indices << 16));
-=======
-    return
-        SkEndian_SwapLE64(
-            static_cast<uint64_t>(maxVal) |
-            (static_cast<uint64_t>(minVal) << 8) |
-            (indices << 16));
->>>>>>> miniblink49
 }
 
 // Compress a block by using the bounding box of the pixels without taking into
 // account the extremal values. The generated palette will contain extremal values
 // and fewer points along the line segment to interpolate.
-<<<<<<< HEAD
 static uint64_t compress_latc_block_bb_ignore_extremal(const uint8_t pixels[])
 {
-=======
-static uint64_t compress_latc_block_bb_ignore_extremal(const uint8_t pixels[]) {
->>>>>>> miniblink49
     uint8_t minVal = 255;
     uint8_t maxVal = 0;
     for (int i = 0; i < kLATCPixelsPerBlock; ++i) {
@@ -268,21 +219,10 @@ static uint64_t compress_latc_block_bb_ignore_extremal(const uint8_t pixels[]) {
         indices |= idx;
     }
 
-<<<<<<< HEAD
     return SkEndian_SwapLE64(
         static_cast<uint64_t>(minVal) | (static_cast<uint64_t>(maxVal) << 8) | (indices << 16));
 }
 
-=======
-    return
-        SkEndian_SwapLE64(
-            static_cast<uint64_t>(minVal) |
-            (static_cast<uint64_t>(maxVal) << 8) |
-            (indices << 16));
-}
-
-
->>>>>>> miniblink49
 // Compress LATC block. Each 4x4 block of pixels is decompressed by LATC from two
 // values LUM0 and LUM1, and an index into the generated palette. Details of how
 // the palette is generated can be found in the comments of generatePalette above.
@@ -292,12 +232,8 @@ static uint64_t compress_latc_block_bb_ignore_extremal(const uint8_t pixels[]) {
 // palette that has the extremal values built in. Otherwise, we use the full bounding
 // box.
 
-<<<<<<< HEAD
 static uint64_t compress_latc_block(const uint8_t pixels[])
 {
-=======
-static uint64_t compress_latc_block(const uint8_t pixels[]) {
->>>>>>> miniblink49
     // Collect unique pixels
     int nUniquePixels = 0;
     uint8_t uniquePixels[kLATCPixelsPerBlock];
@@ -317,15 +253,9 @@ static uint64_t compress_latc_block(const uint8_t pixels[]) {
     if (1 == nUniquePixels) {
         return SkEndian_SwapLE64(pixels[0] | (pixels[0] << 8));
 
-<<<<<<< HEAD
         // Similarly, if there are only two unique pixels, then our compression is
         // easy again: place the pixels in the block header, and assign the indices
         // with one or zero depending on which pixel they belong to.
-=======
-    // Similarly, if there are only two unique pixels, then our compression is
-    // easy again: place the pixels in the block header, and assign the indices
-    // with one or zero depending on which pixel they belong to.
->>>>>>> miniblink49
     } else if (2 == nUniquePixels) {
         uint64_t outBlock = 0;
         for (int i = kLATCPixelsPerBlock - 1; i >= 0; --i) {
@@ -355,11 +285,7 @@ static uint64_t compress_latc_block(const uint8_t pixels[]) {
     if (nonExtremalPixels == nUniquePixels) {
         // This is really just for correctness, in all of my tests we
         // never take this step. We don't lose too much perf here because
-<<<<<<< HEAD
         // most of the processing in this function is worth it for the
-=======
-        // most of the processing in this function is worth it for the 
->>>>>>> miniblink49
         // 1 == nUniquePixels optimization.
         return compress_latc_block_bb(pixels);
     } else {
@@ -367,11 +293,7 @@ static uint64_t compress_latc_block(const uint8_t pixels[]) {
     }
 }
 
-<<<<<<< HEAD
 #endif // COMPRESS_LATC_SLOW
-=======
-#endif  // COMPRESS_LATC_SLOW
->>>>>>> miniblink49
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -379,7 +301,6 @@ static uint64_t compress_latc_block(const uint8_t pixels[]) {
 
 // Take the top three bits of each index and pack them into the low 12
 // bits of the integer.
-<<<<<<< HEAD
 static inline uint32_t pack_index(uint32_t x)
 {
     // Pack it in...
@@ -387,35 +308,14 @@ static inline uint32_t pack_index(uint32_t x)
     return (x >> 24) | ((x >> 13) & 0x38) | ((x >> 2) & 0x1C0) | ((x << 9) & 0xE00);
 #else
     return (x & 0x7) | ((x >> 5) & 0x38) | ((x >> 10) & 0x1C0) | ((x >> 15) & 0xE00);
-=======
-static inline uint32_t pack_index(uint32_t x) {
-    // Pack it in...
-#if defined (SK_CPU_BENDIAN)
-    return
-        (x >> 24) |
-        ((x >> 13) & 0x38) |
-        ((x >> 2) & 0x1C0) |
-        ((x << 9) & 0xE00);
-#else
-    return
-        (x & 0x7) |
-        ((x >> 5) & 0x38) |
-        ((x >> 10) & 0x1C0) |
-        ((x >> 15) & 0xE00);
->>>>>>> miniblink49
 #endif
 }
 
 // Converts each 8-bit byte in the integer into an LATC index, and then packs
 // the indices into the low 12 bits of the integer.
-<<<<<<< HEAD
 static inline uint32_t convert_index(uint32_t x)
 {
     // Since the palette is
-=======
-static inline uint32_t convert_index(uint32_t x) {
-    // Since the palette is 
->>>>>>> miniblink49
     // 255, 0, 219, 182, 146, 109, 73, 36
     // we need to map the high three bits of each byte in the integer
     // from
@@ -441,16 +341,11 @@ static inline uint32_t convert_index(uint32_t x) {
     // Mask out high bits:
     // 9 7 6 5 4 3 2 0 --> 1 7 6 5 4 3 2 0
     x &= 0x07070707;
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> miniblink49
     return pack_index(x);
 }
 
 typedef uint64_t (*PackIndicesProc)(const uint8_t* alpha, size_t rowBytes);
-<<<<<<< HEAD
 template <PackIndicesProc packIndicesProc>
 static void compress_a8_latc_block(uint8_t** dstPtr, const uint8_t* src, size_t rowBytes)
 {
@@ -464,40 +359,18 @@ inline uint64_t PackRowMajor(const uint8_t* indices, size_t rowBytes)
     for (int i = 0; i < 4; ++i) {
         const uint32_t idx = *(reinterpret_cast<const uint32_t*>(indices + i * rowBytes));
         result |= static_cast<uint64_t>(convert_index(idx)) << 12 * i;
-=======
-template<PackIndicesProc packIndicesProc>
-static void compress_a8_latc_block(uint8_t** dstPtr, const uint8_t* src, size_t rowBytes) {
-    *(reinterpret_cast<uint64_t*>(*dstPtr)) =
-        SkEndian_SwapLE64(0xFF | (packIndicesProc(src, rowBytes) << 16));
-    *dstPtr += 8;
-}
-
-inline uint64_t PackRowMajor(const uint8_t *indices, size_t rowBytes) {
-    uint64_t result = 0;
-    for (int i = 0; i < 4; ++i) {
-        const uint32_t idx = *(reinterpret_cast<const uint32_t*>(indices + i*rowBytes));
-        result |= static_cast<uint64_t>(convert_index(idx)) << 12*i;
->>>>>>> miniblink49
     }
     return result;
 }
 
-<<<<<<< HEAD
 inline uint64_t PackColumnMajor(const uint8_t* indices, size_t rowBytes)
 {
-=======
-inline uint64_t PackColumnMajor(const uint8_t *indices, size_t rowBytes) {
->>>>>>> miniblink49
     // !SPEED! Blarg, this is kind of annoying. SSE4 can make this
     // a LOT faster.
     uint8_t transposed[16];
     for (int i = 0; i < 4; ++i) {
         for (int j = 0; j < 4; ++j) {
-<<<<<<< HEAD
             transposed[j * 4 + i] = indices[i * rowBytes + j];
-=======
-            transposed[j*4+i] = indices[i*rowBytes + j];
->>>>>>> miniblink49
         }
     }
 
@@ -505,12 +378,8 @@ inline uint64_t PackColumnMajor(const uint8_t *indices, size_t rowBytes) {
 }
 
 static bool compress_4x4_a8_latc(uint8_t* dst, const uint8_t* src,
-<<<<<<< HEAD
     int width, int height, size_t rowBytes)
 {
-=======
-                                 int width, int height, size_t rowBytes) {
->>>>>>> miniblink49
 
     if (width < 0 || ((width % 4) != 0) || height < 0 || ((height % 4) != 0)) {
         return false;
@@ -519,18 +388,13 @@ static bool compress_4x4_a8_latc(uint8_t* dst, const uint8_t* src,
     uint8_t** dstPtr = &dst;
     for (int y = 0; y < height; y += 4) {
         for (int x = 0; x < width; x += 4) {
-<<<<<<< HEAD
             compress_a8_latc_block<PackRowMajor>(dstPtr, src + y * rowBytes + x, rowBytes);
-=======
-            compress_a8_latc_block<PackRowMajor>(dstPtr, src + y*rowBytes + x, rowBytes);
->>>>>>> miniblink49
         }
     }
 
     return true;
 }
 
-<<<<<<< HEAD
 void CompressA8LATCBlockVertical(uint8_t* dst, const uint8_t block[])
 {
     compress_a8_latc_block<PackColumnMajor>(&dst, block, 4);
@@ -541,16 +405,6 @@ void CompressA8LATCBlockVertical(uint8_t* dst, const uint8_t block[])
 void decompress_latc_block(uint8_t* dst, int dstRowBytes, const uint8_t* src)
 {
     uint64_t block = SkEndian_SwapLE64(*(reinterpret_cast<const uint64_t*>(src)));
-=======
-void CompressA8LATCBlockVertical(uint8_t* dst, const uint8_t block[]) {
-    compress_a8_latc_block<PackColumnMajor>(&dst, block, 4);
-}
-
-#endif  // COMPRESS_LATC_FAST
-
-void decompress_latc_block(uint8_t* dst, int dstRowBytes, const uint8_t* src) {
-    uint64_t block = SkEndian_SwapLE64(*(reinterpret_cast<const uint64_t *>(src)));
->>>>>>> miniblink49
     uint8_t lum0 = block & 0xFF;
     uint8_t lum1 = (block >> 8) & 0xFF;
 
@@ -571,28 +425,19 @@ void decompress_latc_block(uint8_t* dst, int dstRowBytes, const uint8_t* src) {
 // blitter for the LATC format. The static functions required to be in this
 // struct are documented in SkTextureCompressor_Blitter.h
 struct CompressorLATC {
-<<<<<<< HEAD
     static inline void CompressA8Vertical(uint8_t* dst, const uint8_t block[])
     {
-=======
-    static inline void CompressA8Vertical(uint8_t* dst, const uint8_t block[]) {
->>>>>>> miniblink49
         compress_a8_latc_block<PackColumnMajor>(&dst, block, 4);
     }
 
     static inline void CompressA8Horizontal(uint8_t* dst, const uint8_t* src,
-<<<<<<< HEAD
         int srcRowBytes)
     {
-=======
-                                            int srcRowBytes) {
->>>>>>> miniblink49
         compress_a8_latc_block<PackRowMajor>(&dst, src, srcRowBytes);
     }
 
 #if PEDANTIC_BLIT_RECT
     static inline void UpdateBlock(uint8_t* dst, const uint8_t* src, int srcRowBytes,
-<<<<<<< HEAD
         const uint8_t* mask)
     {
         // Pack the mask
@@ -600,34 +445,18 @@ struct CompressorLATC {
         for (int i = 0; i < 4; ++i) {
             const uint32_t idx = *(reinterpret_cast<const uint32_t*>(src + i * srcRowBytes));
             cmpMask |= static_cast<uint64_t>(pack_index(idx)) << 12 * i;
-=======
-                                   const uint8_t* mask) {
-        // Pack the mask
-        uint64_t cmpMask = 0;
-        for (int i = 0; i < 4; ++i) {
-            const uint32_t idx = *(reinterpret_cast<const uint32_t*>(src + i*srcRowBytes));
-            cmpMask |= static_cast<uint64_t>(pack_index(idx)) << 12*i;
->>>>>>> miniblink49
         }
         cmpMask = SkEndian_SwapLE64(cmpMask << 16); // avoid header
 
         uint64_t cmpSrc;
-<<<<<<< HEAD
         uint8_t* cmpSrcPtr = reinterpret_cast<uint8_t*>(&cmpSrc);
-=======
-        uint8_t *cmpSrcPtr = reinterpret_cast<uint8_t*>(&cmpSrc);
->>>>>>> miniblink49
         compress_a8_latc_block<PackRowMajor>(&cmpSrcPtr, src, srcRowBytes);
 
         // Mask out header
         cmpSrc = cmpSrc & cmpMask;
 
         // Read destination encoding
-<<<<<<< HEAD
         uint64_t* cmpDst = reinterpret_cast<uint64_t*>(dst);
-=======
-        uint64_t *cmpDst = reinterpret_cast<uint64_t*>(dst);
->>>>>>> miniblink49
 
         // If the destination is the encoding for a blank block, then we need
         // to properly set the header
@@ -639,23 +468,15 @@ struct CompressorLATC {
         *cmpDst &= ~cmpMask;
         *cmpDst |= cmpSrc;
     }
-<<<<<<< HEAD
 #endif // PEDANTIC_BLIT_RECT
-=======
-#endif  // PEDANTIC_BLIT_RECT
->>>>>>> miniblink49
 };
 
 ////////////////////////////////////////////////////////////////////////////////
 
 namespace SkTextureCompressor {
 
-<<<<<<< HEAD
 bool CompressA8ToLATC(uint8_t* dst, const uint8_t* src, int width, int height, size_t rowBytes)
 {
-=======
-bool CompressA8ToLATC(uint8_t* dst, const uint8_t* src, int width, int height, size_t rowBytes) {
->>>>>>> miniblink49
 #if COMPRESS_LATC_FAST
     return compress_4x4_a8_latc(dst, src, width, height, rowBytes);
 #elif COMPRESS_LATC_SLOW
@@ -666,16 +487,10 @@ bool CompressA8ToLATC(uint8_t* dst, const uint8_t* src, int width, int height, s
 }
 
 SkBlitter* CreateLATCBlitter(int width, int height, void* outputBuffer,
-<<<<<<< HEAD
     SkTBlitterAllocator* allocator)
 {
     if ((width % 4) != 0 || (height % 4) != 0) {
         return nullptr;
-=======
-                             SkTBlitterAllocator* allocator) {
-    if ((width % 4) != 0 || (height % 4) != 0) {
-        return NULL;
->>>>>>> miniblink49
     }
 
 #if COMPRESS_LATC_FAST
@@ -688,7 +503,6 @@ SkBlitter* CreateLATCBlitter(int width, int height, void* outputBuffer,
     sk_bzero(outputBuffer, width * height / 2);
 
     return allocator->createT<
-<<<<<<< HEAD
         SkTCompressedAlphaBlitter<4, 8, CompressorLATC>, int, int, void*>(width, height, outputBuffer);
 #elif COMPRESS_LATC_SLOW
     // TODO (krajcevski)
@@ -698,17 +512,6 @@ SkBlitter* CreateLATCBlitter(int width, int height, void* outputBuffer,
 
 void DecompressLATC(uint8_t* dst, int dstRowBytes, const uint8_t* src, int width, int height)
 {
-=======
-        SkTCompressedAlphaBlitter<4, 8, CompressorLATC>, int, int, void* >
-        (width, height, outputBuffer);
-#elif COMPRESS_LATC_SLOW
-    // TODO (krajcevski)
-    return NULL;
-#endif
-}
-
-void DecompressLATC(uint8_t* dst, int dstRowBytes, const uint8_t* src, int width, int height) {
->>>>>>> miniblink49
     for (int j = 0; j < height; j += 4) {
         for (int i = 0; i < width; i += 4) {
             decompress_latc_block(dst + i, dstRowBytes, src);
@@ -718,8 +521,4 @@ void DecompressLATC(uint8_t* dst, int dstRowBytes, const uint8_t* src, int width
     }
 }
 
-<<<<<<< HEAD
 } // SkTextureCompressor
-=======
-}  // SkTextureCompressor
->>>>>>> miniblink49

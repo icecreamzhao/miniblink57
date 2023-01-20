@@ -6,7 +6,6 @@
 #define EventDispatchForbiddenScope_h
 
 #include "platform/PlatformExport.h"
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
 #include "wtf/Assertions.h"
 #include "wtf/AutoReset.h"
@@ -19,17 +18,6 @@ class EventDispatchForbiddenScope {
     STACK_ALLOCATED();
     WTF_MAKE_NONCOPYABLE(EventDispatchForbiddenScope);
 
-=======
-#include "wtf/Assertions.h"
-#include "wtf/MainThread.h"
-#include "wtf/TemporaryChange.h"
-
-namespace blink {
-
-#if ENABLE(ASSERT)
-
-class EventDispatchForbiddenScope {
->>>>>>> miniblink49
 public:
     EventDispatchForbiddenScope()
     {
@@ -52,33 +40,18 @@ public:
     }
 
     class AllowUserAgentEvents {
-<<<<<<< HEAD
         STACK_ALLOCATED();
 
     public:
         AllowUserAgentEvents()
             : m_change(&s_count, 0)
-=======
-    public:
-        AllowUserAgentEvents()
-            : m_change(s_count, 0)
->>>>>>> miniblink49
         {
             ASSERT(isMainThread());
         }
 
-<<<<<<< HEAD
         ~AllowUserAgentEvents() { ASSERT(!s_count); }
 
         AutoReset<unsigned> m_change;
-=======
-        ~AllowUserAgentEvents()
-        {
-            ASSERT(!s_count);
-        }
-
-        TemporaryChange<unsigned> m_change;
->>>>>>> miniblink49
     };
 
 private:
@@ -88,12 +61,9 @@ private:
 #else
 
 class EventDispatchForbiddenScope {
-<<<<<<< HEAD
     STACK_ALLOCATED();
     WTF_MAKE_NONCOPYABLE(EventDispatchForbiddenScope);
 
-=======
->>>>>>> miniblink49
 public:
     EventDispatchForbiddenScope() { }
 
@@ -103,11 +73,7 @@ public:
     };
 };
 
-<<<<<<< HEAD
 #endif // DCHECK_IS_ON()
-=======
-#endif // ENABLE(ASSERT)
->>>>>>> miniblink49
 
 } // namespace blink
 

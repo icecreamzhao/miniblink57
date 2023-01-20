@@ -6,10 +6,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #ifndef SkMetaData_DEFINED
 #define SkMetaData_DEFINED
 
@@ -54,17 +50,12 @@ public:
     bool findS32(const char name[], int32_t* value = NULL) const;
     bool findScalar(const char name[], SkScalar* value = NULL) const;
     const SkScalar* findScalars(const char name[], int* count,
-<<<<<<< HEAD
         SkScalar values[] = NULL) const;
-=======
-                                SkScalar values[] = NULL) const;
->>>>>>> miniblink49
     const char* findString(const char name[]) const;
     bool findPtr(const char name[], void** value = NULL, PtrProc* = NULL) const;
     bool findBool(const char name[], bool* value = NULL) const;
     const void* findData(const char name[], size_t* byteCount = NULL) const;
 
-<<<<<<< HEAD
     bool hasS32(const char name[], int32_t value) const
     {
         int32_t v;
@@ -92,30 +83,6 @@ public:
     }
     bool hasData(const char name[], const void* data, size_t byteCount) const
     {
-=======
-    bool hasS32(const char name[], int32_t value) const {
-        int32_t v;
-        return this->findS32(name, &v) && v == value;
-    }
-    bool hasScalar(const char name[], SkScalar value) const {
-        SkScalar v;
-        return this->findScalar(name, &v) && v == value;
-    }
-    bool hasString(const char name[], const char value[]) const {
-        const char* v = this->findString(name);
-        return  (v == NULL && value == NULL) ||
-                (v != NULL && value != NULL && !strcmp(v, value));
-    }
-    bool hasPtr(const char name[], void* value) const {
-        void* v;
-        return this->findPtr(name, &v) && v == value;
-    }
-    bool hasBool(const char name[], bool value) const {
-        bool    v;
-        return this->findBool(name, &v) && v == value;
-    }
-    bool hasData(const char name[], const void* data, size_t byteCount) const {
->>>>>>> miniblink49
         size_t len;
         const void* ptr = this->findData(name, &len);
         return ptr && len == byteCount && !memcmp(ptr, data, len);
@@ -138,7 +105,6 @@ public:
     bool removeData(const char name[]);
 
     // helpers for SkRefCnt
-<<<<<<< HEAD
     bool findRefCnt(const char name[], SkRefCnt** ptr = NULL)
     {
         return this->findPtr(name, reinterpret_cast<void**>(ptr));
@@ -153,18 +119,6 @@ public:
     }
     bool removeRefCnt(const char name[])
     {
-=======
-    bool findRefCnt(const char name[], SkRefCnt** ptr = NULL) {
-        return this->findPtr(name, reinterpret_cast<void**>(ptr));
-    }
-    bool hasRefCnt(const char name[], SkRefCnt* ptr) {
-        return this->hasPtr(name, ptr);
-    }
-    void setRefCnt(const char name[], SkRefCnt* ptr) {
-        this->setPtr(name, ptr, RefCntProc);
-    }
-    bool removeRefCnt(const char name[]) {
->>>>>>> miniblink49
         return this->removePtr(name);
     }
 
@@ -185,14 +139,10 @@ public:
 
     class Iter {
     public:
-<<<<<<< HEAD
         Iter()
             : fRec(NULL)
         {
         }
-=======
-        Iter() : fRec(NULL) {}
->>>>>>> miniblink49
         Iter(const SkMetaData&);
 
         /** Reset the iterator, so that calling next() will return the first
@@ -213,7 +163,6 @@ public:
 
 public:
     struct Rec {
-<<<<<<< HEAD
         Rec* fNext;
         uint16_t fDataCount; // number of elements
         uint8_t fDataLen; // sizeof a single element
@@ -223,26 +172,11 @@ public:
         void* data() { return (this + 1); }
         const char* name() const { return (const char*)this->data() + fDataLen * fDataCount; }
         char* name() { return (char*)this->data() + fDataLen * fDataCount; }
-=======
-        Rec*        fNext;
-        uint16_t    fDataCount; // number of elements
-        uint8_t     fDataLen;   // sizeof a single element
-        uint8_t     fType;
-
-        const void* data() const { return (this + 1); }
-        void*       data() { return (this + 1); }
-        const char* name() const { return (const char*)this->data() + fDataLen * fDataCount; }
-        char*       name() { return (char*)this->data() + fDataLen * fDataCount; }
->>>>>>> miniblink49
 
         static Rec* Alloc(size_t);
         static void Free(Rec*);
     };
-<<<<<<< HEAD
     Rec* fRec;
-=======
-    Rec*    fRec;
->>>>>>> miniblink49
 
     const Rec* find(const char name[], Type) const;
     void* set(const char name[], const void* data, size_t len, Type, int count);

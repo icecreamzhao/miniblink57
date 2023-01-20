@@ -23,11 +23,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
-
->>>>>>> miniblink49
 #include "public/platform/WebMediaDeviceInfo.h"
 
 #include "public/platform/WebString.h"
@@ -36,7 +31,6 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 class WebMediaDeviceInfoPrivate final
     : public RefCounted<WebMediaDeviceInfoPrivate> {
 public:
@@ -45,11 +39,6 @@ public:
         WebMediaDeviceInfo::MediaDeviceKind,
         const WebString& label,
         const WebString& groupId);
-=======
-class WebMediaDeviceInfoPrivate final : public RefCounted<WebMediaDeviceInfoPrivate> {
-public:
-    static PassRefPtr<WebMediaDeviceInfoPrivate> create(const WebString& deviceId, WebMediaDeviceInfo::MediaDeviceKind, const WebString& label, const WebString& groupId);
->>>>>>> miniblink49
 
     const WebString& deviceId() const { return m_deviceId; }
     WebMediaDeviceInfo::MediaDeviceKind kind() const { return m_kind; }
@@ -57,14 +46,10 @@ public:
     const WebString& groupId() const { return m_groupId; }
 
 private:
-<<<<<<< HEAD
     WebMediaDeviceInfoPrivate(const WebString& deviceId,
         WebMediaDeviceInfo::MediaDeviceKind,
         const WebString& label,
         const WebString& groupId);
-=======
-    WebMediaDeviceInfoPrivate(const WebString& deviceId, WebMediaDeviceInfo::MediaDeviceKind, const WebString& label, const WebString& groupId);
->>>>>>> miniblink49
 
     WebString m_deviceId;
     WebMediaDeviceInfo::MediaDeviceKind m_kind;
@@ -72,7 +57,6 @@ private:
     WebString m_groupId;
 };
 
-<<<<<<< HEAD
 PassRefPtr<WebMediaDeviceInfoPrivate> WebMediaDeviceInfoPrivate::create(
     const WebString& deviceId,
     WebMediaDeviceInfo::MediaDeviceKind kind,
@@ -88,14 +72,6 @@ WebMediaDeviceInfoPrivate::WebMediaDeviceInfoPrivate(
     WebMediaDeviceInfo::MediaDeviceKind kind,
     const WebString& label,
     const WebString& groupId)
-=======
-PassRefPtr<WebMediaDeviceInfoPrivate> WebMediaDeviceInfoPrivate::create(const WebString& deviceId, WebMediaDeviceInfo::MediaDeviceKind kind, const WebString& label, const WebString& groupId)
-{
-    return adoptRef(new WebMediaDeviceInfoPrivate(deviceId, kind, label, groupId));
-}
-
-WebMediaDeviceInfoPrivate::WebMediaDeviceInfoPrivate(const WebString& deviceId, WebMediaDeviceInfo::MediaDeviceKind kind, const WebString& label, const WebString& groupId)
->>>>>>> miniblink49
     : m_deviceId(deviceId)
     , m_kind(kind)
     , m_label(label)
@@ -113,14 +89,10 @@ void WebMediaDeviceInfo::reset()
     m_private.reset();
 }
 
-<<<<<<< HEAD
 void WebMediaDeviceInfo::initialize(const WebString& deviceId,
     WebMediaDeviceInfo::MediaDeviceKind kind,
     const WebString& label,
     const WebString& groupId)
-=======
-void WebMediaDeviceInfo::initialize(const WebString& deviceId, WebMediaDeviceInfo::MediaDeviceKind kind, const WebString& label, const WebString& groupId)
->>>>>>> miniblink49
 {
     m_private = WebMediaDeviceInfoPrivate::create(deviceId, kind, label, groupId);
 }
@@ -150,7 +122,3 @@ WebString WebMediaDeviceInfo::groupId() const
 }
 
 } // namespace blink
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49

@@ -21,53 +21,81 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "config.h"
 #include "core/events/WheelEvent.h"
 
 #include "core/clipboard/DataTransfer.h"
 #include "platform/PlatformMouseEvent.h"
-#include "platform/PlatformWheelEvent.h"
 
 namespace blink {
+
+namespace {
+
+    unsigned convertDeltaMode(const WebMouseWheelEvent& event)
+    {
+        return event.scrollByPage ? WheelEvent::kDomDeltaPage
+                                  : WheelEvent::kDomDeltaPixel;
+    }
+
+    // Negate a long value without integer overflow.
+    long negateIfPossible(long value)
+    {
+        if (value == LONG_MIN)
+            return value;
+        return -value;
+    }
+
+} // namespace
+
+WheelEvent* WheelEvent::create(const WebMouseWheelEvent& event,
+    AbstractView* view)
+{
+    return new WheelEvent(event, view);
+}
 
 WheelEvent::WheelEvent()
     : m_deltaX(0)
     , m_deltaY(0)
     , m_deltaZ(0)
-    , m_deltaMode(DOM_DELTA_PIXEL)
-    , m_canScroll(true)
-    , m_hasPreciseScrollingDeltas(false)
-    , m_railsMode(RailsModeFree)
+    , m_deltaMode(kDomDeltaPixel)
 {
 }
 
-WheelEvent::WheelEvent(const AtomicString& type, const WheelEventInit& initializer)
+WheelEvent::WheelEvent(const AtomicString& type,
+    const WheelEventInit& initializer)
     : MouseEvent(type, initializer)
-    , m_wheelDelta(initializer.wheelDeltaX() ? initializer.wheelDeltaX() : -initializer.deltaX(), initializer.wheelDeltaY() ? initializer.wheelDeltaY() : -initializer.deltaY())
-    , m_deltaX(initializer.deltaX() ? initializer.deltaX() : -initializer.wheelDeltaX())
-    , m_deltaY(initializer.deltaY() ? initializer.deltaY() : -initializer.wheelDeltaY())
+    , m_wheelDelta(initializer.wheelDeltaX() ? initializer.wheelDeltaX()
+                                             : -initializer.deltaX(),
+          initializer.wheelDeltaY() ? initializer.wheelDeltaY()
+                                    : -initializer.deltaY())
+    , m_deltaX(initializer.deltaX()
+              ? initializer.deltaX()
+              : negateIfPossible(initializer.wheelDeltaX()))
+    , m_deltaY(initializer.deltaY()
+              ? initializer.deltaY()
+              : negateIfPossible(initializer.wheelDeltaY()))
     , m_deltaZ(initializer.deltaZ())
     , m_deltaMode(initializer.deltaMode())
-    , m_canScroll(true)
-    , m_hasPreciseScrollingDeltas(false)
-    , m_railsMode(RailsModeFree)
 {
 }
 
-WheelEvent::WheelEvent(const FloatPoint& wheelTicks, const FloatPoint& rawDelta, unsigned deltaMode,
-    PassRefPtrWillBeRawPtr<AbstractView> view, const IntPoint& screenLocation, const IntPoint& windowLocation,
-    bool ctrlKey, bool altKey, bool shiftKey, bool metaKey, unsigned short buttons, bool canScroll, bool hasPreciseScrollingDeltas, RailsMode railsMode)
-    : MouseEvent(EventTypeNames::wheel, true, true, view, 0, screenLocation.x(), screenLocation.y(),
-        windowLocation.x(), windowLocation.y(), 0, 0, ctrlKey, altKey, shiftKey, metaKey, 0, buttons,
-        nullptr, nullptr, false, PlatformMouseEvent::RealOrIndistinguishable)
-    , m_wheelDelta(wheelTicks.x() * TickMultiplier, wheelTicks.y() * TickMultiplier)
-    , m_deltaX(-rawDelta.x())
-    , m_deltaY(-rawDelta.y())
+WheelEvent::WheelEvent(const WebMouseWheelEvent& event, AbstractView* view)
+    : MouseEvent(EventTypeNames::wheel,
+        true,
+        event.isCancelable(),
+        view,
+        PlatformMouseEvent::RealOrIndistinguishable,
+        // TODO(zino): Should support canvas hit region because the
+        // wheel event is a kind of mouse event. Please see
+        // http://crbug.com/594075
+        String(),
+        event)
+    , m_wheelDelta(event.wheelTicksX * TickMultiplier,
+          event.wheelTicksY * TickMultiplier)
+    , m_deltaX(-event.deltaXInRootFrame())
+    , m_deltaY(-event.deltaYInRootFrame())
     , m_deltaZ(0)
-    , m_deltaMode(deltaMode)
-    , m_canScroll(canScroll)
-    , m_hasPreciseScrollingDeltas(hasPreciseScrollingDeltas)
-    , m_railsMode(railsMode)
+    , m_deltaMode(convertDeltaMode(event))
+    , m_nativeEvent(event)
 {
 }
 
@@ -86,41 +114,14 @@ bool WheelEvent::isWheelEvent() const
     return true;
 }
 
+EventDispatchMediator* WheelEvent::createMediator()
+{
+    return EventDispatchMediator::create(this);
+}
+
 DEFINE_TRACE(WheelEvent)
 {
     MouseEvent::trace(visitor);
-}
-
-inline static unsigned deltaMode(const PlatformWheelEvent& event)
-{
-    return event.granularity() == ScrollByPageWheelEvent ? WheelEvent::DOM_DELTA_PAGE : WheelEvent::DOM_DELTA_PIXEL;
-}
-
-PassRefPtrWillBeRawPtr<WheelEventDispatchMediator> WheelEventDispatchMediator::create(const PlatformWheelEvent& event, PassRefPtrWillBeRawPtr<AbstractView> view)
-{
-    return adoptRefWillBeNoop(new WheelEventDispatchMediator(event, view));
-}
-
-WheelEventDispatchMediator::WheelEventDispatchMediator(const PlatformWheelEvent& event, PassRefPtrWillBeRawPtr<AbstractView> view)
-{
-    setEvent(WheelEvent::create(FloatPoint(event.wheelTicksX(), event.wheelTicksY()), FloatPoint(event.deltaX(), event.deltaY()),
-        deltaMode(event), view, event.globalPosition(), event.position(),
-        event.ctrlKey(), event.altKey(), event.shiftKey(), event.metaKey(),
-        MouseEvent::platformModifiersToButtons(event.modifiers()),
-        event.canScroll(), event.hasPreciseScrollingDeltas(),
-        static_cast<Event::RailsMode>(event.railsMode())));
-}
-
-WheelEvent& WheelEventDispatchMediator::event() const
-{
-    return toWheelEvent(EventDispatchMediator::event());
-}
-
-bool WheelEventDispatchMediator::dispatchEvent(EventDispatcher& dispatcher) const
-{
-    if (!(event().deltaX() || event().deltaY()))
-        return true;
-    return EventDispatchMediator::dispatchEvent(dispatcher) && !event().defaultHandled();
 }
 
 } // namespace blink

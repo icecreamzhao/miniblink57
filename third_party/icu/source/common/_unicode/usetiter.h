@@ -7,15 +7,9 @@
 #ifndef USETITER_H
 #define USETITER_H
 
-<<<<<<< HEAD
 #include "unicode/unistr.h"
 #include "unicode/uobject.h"
 #include "unicode/utypes.h"
-=======
-#include "unicode/utypes.h"
-#include "unicode/uobject.h"
-#include "unicode/unistr.h"
->>>>>>> miniblink49
 
 /**
  * \file 
@@ -66,12 +60,7 @@ class UnicodeString;
  */
 class U_COMMON_API UnicodeSetIterator : public UObject {
 
-<<<<<<< HEAD
 protected:
-=======
- protected:
-
->>>>>>> miniblink49
     /**
      * Value of <tt>codepoint</tt> if the iterator points to a string.
      * If <tt>codepoint == IS_STRING</tt>, then examine
@@ -106,12 +95,7 @@ protected:
      */
     const UnicodeString* string;
 
-<<<<<<< HEAD
 public:
-=======
- public:
-
->>>>>>> miniblink49
     /**
      * Create an iterator over the given set.  The iterator is valid
      * only so long as <tt>set</tt> is valid.
@@ -255,12 +239,7 @@ public:
 
     // ======================= PRIVATES ===========================
 
-<<<<<<< HEAD
 protected:
-=======
- protected:
-
->>>>>>> miniblink49
     // endElement and nextElements are really UChar32's, but we keep
     // them as signed int32_t's so we can do comparisons with
     // endElement set to -1.  Leave them as int32_t's.
@@ -299,11 +278,7 @@ protected:
      *  string and the current iteration item is a code point, not a string.
      *  @internal
      */
-<<<<<<< HEAD
     UnicodeString* cpString;
-=======
-    UnicodeString *cpString;
->>>>>>> miniblink49
 
     /** Copy constructor. Disallowed.
      * @stable ICU 2.4
@@ -319,7 +294,6 @@ protected:
      * @stable ICU 2.4
      */
     virtual void loadRange(int32_t range);
-<<<<<<< HEAD
 };
 
 inline UBool UnicodeSetIterator::isString() const
@@ -337,24 +311,6 @@ inline UChar32 UnicodeSetIterator::getCodepointEnd() const
     return codepointEnd;
 }
 
-=======
-
-};
-
-inline UBool UnicodeSetIterator::isString() const {
-    return codepoint == (UChar32)IS_STRING;
-}
-
-inline UChar32 UnicodeSetIterator::getCodepoint() const {
-    return codepoint;
-}
-
-inline UChar32 UnicodeSetIterator::getCodepointEnd() const {
-    return codepointEnd;
-}
-
-
->>>>>>> miniblink49
 U_NAMESPACE_END
 
 #endif

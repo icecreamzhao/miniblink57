@@ -5704,7 +5704,6 @@ if ( pIrp->RequestorMode != KernelMode ) { \
     return STATUS_INVALID_DEVICE_REQUEST; \
 }
 
-<<<<<<< HEAD
 typedef /* [public][public][public][public] */
 enum __MIDL___MIDL_itf_devicetopology_0000_0000_0005 {
     ePcxChanMap_FL_FR	= 0,
@@ -5792,8 +5791,6 @@ typedef KSIDENTIFIER* PKSEVENT;
 
 // DEFINE_GUIDSTRUCT("00000001-0000-0010-8000-00aa00389b71", KSDATAFORMAT_SUBTYPE_PCM);
 // #define KSDATAFORMAT_SUBTYPE_PCM DEFINE_GUIDNAMED(KSDATAFORMAT_SUBTYPE_PCM)
-=======
->>>>>>> miniblink49
 
 #endif // !_KS_
 

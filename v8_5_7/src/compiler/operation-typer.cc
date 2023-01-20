@@ -120,13 +120,8 @@ Type* OperationTyper::Rangify(Type* type) {
   double max = type->Max();
   // Handle the degenerate case of empty bitset types (such as
   // OtherUnsigned31 and OtherSigned32 on 64-bit architectures).
-<<<<<<< HEAD
   if (std_isnan(min)) {
     DCHECK(std_isnan(max));
-=======
-  if (std::isnan(min)) {
-    DCHECK(std::isnan(max));
->>>>>>> miniblink49
     return type;
   }
   return Type::Range(min, max, zone());
@@ -141,19 +136,11 @@ double array_min(double a[], size_t n) {
   DCHECK(n != 0);
   double x = +V8_INFINITY;
   for (size_t i = 0; i < n; ++i) {
-<<<<<<< HEAD
     if (!std_isnan(a[i])) {
       x = std::min(a[i], x);
     }
   }
   DCHECK(!std_isnan(x));
-=======
-    if (!std::isnan(a[i])) {
-      x = std::min(a[i], x);
-    }
-  }
-  DCHECK(!std::isnan(x));
->>>>>>> miniblink49
   return x == 0 ? 0 : x;  // -0 -> 0
 }
 
@@ -164,19 +151,11 @@ double array_max(double a[], size_t n) {
   DCHECK(n != 0);
   double x = -V8_INFINITY;
   for (size_t i = 0; i < n; ++i) {
-<<<<<<< HEAD
     if (!std_isnan(a[i])) {
       x = std::max(a[i], x);
     }
   }
   DCHECK(!std_isnan(x));
-=======
-    if (!std::isnan(a[i])) {
-      x = std::max(a[i], x);
-    }
-  }
-  DCHECK(!std::isnan(x));
->>>>>>> miniblink49
   return x == 0 ? 0 : x;  // -0 -> 0
 }
 
@@ -195,11 +174,7 @@ Type* OperationTyper::AddRanger(double lhs_min, double lhs_max, double rhs_min,
   // actual result cannot be nan either.
   int nans = 0;
   for (int i = 0; i < 4; ++i) {
-<<<<<<< HEAD
     if (std_isnan(results[i])) ++nans;
-=======
-    if (std::isnan(results[i])) ++nans;
->>>>>>> miniblink49
   }
   if (nans == 4) return Type::NaN();
   Type* type =
@@ -226,11 +201,7 @@ Type* OperationTyper::SubtractRanger(double lhs_min, double lhs_max,
   // result cannot be nan either.
   int nans = 0;
   for (int i = 0; i < 4; ++i) {
-<<<<<<< HEAD
     if (std_isnan(results[i])) ++nans;
-=======
-    if (std::isnan(results[i])) ++nans;
->>>>>>> miniblink49
   }
   if (nans == 4) return Type::NaN();  // [inf..inf] - [inf..inf] (all same sign)
   Type* type =

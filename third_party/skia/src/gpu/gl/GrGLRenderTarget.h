@@ -5,10 +5,6 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 #ifndef GrGLRenderTarget_DEFINED
 #define GrGLRenderTarget_DEFINED
 
@@ -17,10 +13,7 @@
 #include "SkScalar.h"
 
 class GrGLGpu;
-<<<<<<< HEAD
 class GrGLStencilAttachment;
-=======
->>>>>>> miniblink49
 
 class GrGLRenderTarget : public GrRenderTarget {
 public:
@@ -29,7 +22,6 @@ public:
     enum { kUnresolvableFBOID = 0 };
 
     struct IDDesc {
-<<<<<<< HEAD
         GrGLuint fRTFBOID;
         GrBackendObjectOwnership fRTFBOOwnership;
         GrGLuint fTexFBOID;
@@ -41,16 +33,6 @@ public:
         const GrSurfaceDesc&,
         const IDDesc&,
         int stencilBits);
-=======
-        GrGLuint                     fRTFBOID;
-        GrGLuint                     fTexFBOID;
-        GrGLuint                     fMSColorRenderbufferID;
-        GrGpuResource::LifeCycle     fLifeCycle;
-        GrRenderTarget::SampleConfig fSampleConfig;
-    };
-
-    GrGLRenderTarget(GrGLGpu*, const GrSurfaceDesc&, const IDDesc&);
->>>>>>> miniblink49
 
     void setViewport(const GrGLIRect& rect) { fViewport = rect; }
     const GrGLIRect& getViewport() const { return fViewport; }
@@ -64,15 +46,9 @@ public:
     GrGLuint textureFBOID() const { return fTexFBOID; }
 
     // override of GrRenderTarget
-<<<<<<< HEAD
     ResolveType getResolveType() const override
     {
         if (!this->isUnifiedMultisampled() || fRTFBOID == fTexFBOID) {
-=======
-    ResolveType getResolveType() const override {
-        if (!this->isUnifiedMultisampled() ||
-            fRTFBOID == fTexFBOID) {
->>>>>>> miniblink49
             // catches FBO 0 and non MSAA case
             return kAutoResolves_ResolveType;
         } else if (kUnresolvableFBOID == fTexFBOID) {
@@ -84,7 +60,6 @@ public:
 
     GrBackendObject getRenderTargetHandle() const override { return fRTFBOID; }
 
-<<<<<<< HEAD
     bool canAttemptStencilAttachment() const override;
 
     // GrGLRenderTarget overrides dumpMemoryStatistics so it can log its texture and renderbuffer
@@ -94,19 +69,6 @@ public:
 protected:
     // Constructor for subclasses.
     GrGLRenderTarget(GrGLGpu*, const GrSurfaceDesc&, const IDDesc&);
-=======
-    /** When we don't own the FBO ID we don't attempt to modify its attachments. */
-    bool canAttemptStencilAttachment() const override {
-        return kCached_LifeCycle == fRTLifecycle || kUncached_LifeCycle == fRTLifecycle;
-    }
-
-protected:
-    // The public constructor registers this object with the cache. However, only the most derived
-    // class should register with the cache. This constructor does not do the registration and
-    // rather moves that burden onto the derived class.
-    enum Derived { kDerived };
-    GrGLRenderTarget(GrGLGpu*, const GrSurfaceDesc&, const IDDesc&, Derived);
->>>>>>> miniblink49
 
     void init(const GrSurfaceDesc&, const IDDesc&);
 
@@ -117,7 +79,6 @@ protected:
     size_t onGpuMemorySize() const override;
 
 private:
-<<<<<<< HEAD
     // Constructor for instances wrapping backend objects.
     GrGLRenderTarget(GrGLGpu*, const GrSurfaceDesc&, const IDDesc&, GrGLStencilAttachment*);
 
@@ -135,32 +96,15 @@ private:
     GrGLuint fMSColorRenderbufferID;
 
     GrBackendObjectOwnership fRTFBOOwnership;
-=======
-    GrGLuint    fRTFBOID;
-    GrGLuint    fTexFBOID;
-    GrGLuint    fMSColorRenderbufferID;
-
-    // We track this separately from GrGpuResource because this may be both a texture and a render
-    // target, and the texture may be wrapped while the render target is not.
-    LifeCycle   fRTLifecycle;
->>>>>>> miniblink49
 
     // when we switch to this render target we want to set the viewport to
     // only render to content area (as opposed to the whole allocation) and
     // we want the rendering to be at top left (GL has origin in bottom left)
-<<<<<<< HEAD
     GrGLIRect fViewport;
 
     // onGpuMemorySize() needs to know the VRAM footprint of the FBO(s). However, abandon and
     // release zero out the IDs and the cache needs to know the size even after those actions.
     size_t fGpuMemorySize;
-=======
-    GrGLIRect   fViewport;
-
-    // onGpuMemorySize() needs to know the VRAM footprint of the FBO(s). However, abandon and
-    // release zero out the IDs and the cache needs to know the size even after those actions.
-    size_t      fGpuMemorySize;
->>>>>>> miniblink49
 
     typedef GrRenderTarget INHERITED;
 };

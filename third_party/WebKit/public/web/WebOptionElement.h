@@ -31,16 +31,11 @@
 #ifndef WebOptionElement_h
 #define WebOptionElement_h
 
-<<<<<<< HEAD
-=======
-#include "../platform/WebVector.h"
->>>>>>> miniblink49
 #include "WebElement.h"
 
 namespace blink {
 
 class HTMLOptionElement;
-<<<<<<< HEAD
 class WebString;
 
 class WebOptionElement final : public WebElement {
@@ -53,14 +48,6 @@ public:
         : WebElement(element)
     {
     }
-=======
-
-// Provides readonly access to some properties of a DOM option element node.
-class WebOptionElement : public WebElement {
-public:
-    WebOptionElement() : WebElement() { }
-    WebOptionElement(const WebOptionElement& element) : WebElement(element) { }
->>>>>>> miniblink49
 
     WebOptionElement& operator=(const WebOptionElement& element)
     {
@@ -69,7 +56,6 @@ public:
     }
     void assign(const WebOptionElement& element) { WebElement::assign(element); }
 
-<<<<<<< HEAD
     BLINK_EXPORT WebString value() const;
     BLINK_EXPORT WebString text() const;
     BLINK_EXPORT WebString label() const;
@@ -83,23 +69,6 @@ public:
 
 DECLARE_WEB_NODE_TYPE_CASTS(WebOptionElement);
 
-=======
-    BLINK_EXPORT void setValue(const WebString&);
-    BLINK_EXPORT WebString value() const;
-
-    BLINK_EXPORT int index() const;
-    BLINK_EXPORT WebString text() const;
-    BLINK_EXPORT WebString label() const;
-    BLINK_EXPORT bool isEnabled() const;
-
-#if BLINK_IMPLEMENTATION
-    WebOptionElement(const PassRefPtrWillBeRawPtr<HTMLOptionElement>&);
-    WebOptionElement& operator=(const PassRefPtrWillBeRawPtr<HTMLOptionElement>&);
-    operator PassRefPtrWillBeRawPtr<HTMLOptionElement>() const;
-#endif
-};
-
->>>>>>> miniblink49
 } // namespace blink
 
 #endif

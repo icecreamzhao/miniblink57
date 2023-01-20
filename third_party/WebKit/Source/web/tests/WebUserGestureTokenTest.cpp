@@ -28,7 +28,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
 #include "public/web/WebUserGestureToken.h"
 
 #include "core/dom/DocumentUserGestureToken.h"
@@ -36,15 +35,6 @@
 #include "public/web/WebScopedUserGesture.h"
 #include "public/web/WebUserGestureIndicator.h"
 #include "testing/gtest/include/gtest/gtest.h"
-=======
-#include "config.h"
-#include "public/web/WebUserGestureToken.h"
-
-#include "platform/UserGestureIndicator.h"
-#include "public/web/WebScopedUserGesture.h"
-#include "public/web/WebUserGestureIndicator.h"
-#include <gtest/gtest.h>
->>>>>>> miniblink49
 
 namespace blink {
 
@@ -52,11 +42,6 @@ TEST(WebUserGestureTokenTest, Basic)
 {
     WebUserGestureToken token;
     EXPECT_FALSE(token.hasGestures());
-<<<<<<< HEAD
-=======
-    UserGestureIndicator::clearProcessedUserGestureSinceLoad();
-    EXPECT_FALSE(UserGestureIndicator::processedUserGestureSinceLoad());
->>>>>>> miniblink49
 
     {
         WebScopedUserGesture indicator(token);
@@ -64,17 +49,10 @@ TEST(WebUserGestureTokenTest, Basic)
     }
 
     {
-<<<<<<< HEAD
         UserGestureIndicator indicator(DocumentUserGestureToken::create(
             nullptr, UserGestureToken::NewGesture));
         EXPECT_TRUE(WebUserGestureIndicator::isProcessingUserGesture());
         token = WebUserGestureIndicator::currentUserGestureToken();
-=======
-        UserGestureIndicator indicator(DefinitelyProcessingNewUserGesture);
-        EXPECT_TRUE(WebUserGestureIndicator::isProcessingUserGesture());
-        token = WebUserGestureIndicator::currentUserGestureToken();
-        EXPECT_TRUE(UserGestureIndicator::processedUserGestureSinceLoad());
->>>>>>> miniblink49
     }
 
     EXPECT_TRUE(token.hasGestures());
@@ -93,11 +71,6 @@ TEST(WebUserGestureTokenTest, Basic)
         WebScopedUserGesture indicator(token);
         EXPECT_FALSE(WebUserGestureIndicator::isProcessingUserGesture());
     }
-<<<<<<< HEAD
-=======
-
-    EXPECT_TRUE(UserGestureIndicator::processedUserGestureSinceLoad());
->>>>>>> miniblink49
 }
 
 } // namespace blink

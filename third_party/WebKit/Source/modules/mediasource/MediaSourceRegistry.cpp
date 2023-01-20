@@ -28,33 +28,20 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "modules/mediasource/MediaSourceRegistry.h"
 
 #include "modules/mediasource/MediaSource.h"
 #include "platform/weborigin/KURL.h"
-<<<<<<< HEAD
-=======
-#include "wtf/MainThread.h"
->>>>>>> miniblink49
 
 namespace blink {
 
 MediaSourceRegistry& MediaSourceRegistry::registry()
 {
-<<<<<<< HEAD
     DCHECK(isMainThread());
-=======
-    ASSERT(isMainThread());
->>>>>>> miniblink49
     DEFINE_STATIC_LOCAL(MediaSourceRegistry, instance, ());
     return instance;
 }
 
-<<<<<<< HEAD
 void MediaSourceRegistry::registerURL(SecurityOrigin*,
     const KURL& url,
     URLRegistrable* registrable)
@@ -65,27 +52,12 @@ void MediaSourceRegistry::registerURL(SecurityOrigin*,
     MediaSource* source = static_cast<MediaSource*>(registrable);
     source->addedToRegistry();
     m_mediaSources.set(url.getString(), source);
-=======
-void MediaSourceRegistry::registerURL(SecurityOrigin*, const KURL& url, URLRegistrable* registrable)
-{
-    ASSERT(&registrable->registry() == this);
-    ASSERT(isMainThread());
-
-    MediaSource* source = static_cast<MediaSource*>(registrable);
-    source->addedToRegistry();
-    m_mediaSources.set(url.string(), source);
->>>>>>> miniblink49
 }
 
 void MediaSourceRegistry::unregisterURL(const KURL& url)
 {
-<<<<<<< HEAD
     DCHECK(isMainThread());
     PersistentHeapHashMap<String, Member<MediaSource>>::iterator iter = m_mediaSources.find(url.getString());
-=======
-    ASSERT(isMainThread());
-    PersistentHeapHashMap<String, Member<MediaSource>>::iterator iter = m_mediaSources.find(url.string());
->>>>>>> miniblink49
     if (iter == m_mediaSources.end())
         return;
 
@@ -96,13 +68,8 @@ void MediaSourceRegistry::unregisterURL(const KURL& url)
 
 URLRegistrable* MediaSourceRegistry::lookup(const String& url)
 {
-<<<<<<< HEAD
     DCHECK(isMainThread());
     return url.isNull() ? nullptr : m_mediaSources.get(url);
-=======
-    ASSERT(isMainThread());
-    return m_mediaSources.get(url);
->>>>>>> miniblink49
 }
 
 MediaSourceRegistry::MediaSourceRegistry()

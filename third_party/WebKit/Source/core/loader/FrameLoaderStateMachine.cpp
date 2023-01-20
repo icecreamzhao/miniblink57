@@ -14,7 +14,8 @@
  *     its contributors may be used to endorse or promote products derived
  *     from this software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY
  * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
  * DISCLAIMED. IN NO EVENT SHALL APPLE OR ITS CONTRIBUTORS BE LIABLE FOR ANY
@@ -26,13 +27,12 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/loader/FrameLoaderStateMachine.h"
 
 #include "wtf/Assertions.h"
+#include "wtf/text/WTFString.h"
 
 namespace blink {
-
 
 FrameLoaderStateMachine::FrameLoaderStateMachine()
     : m_state(CreatingInitialEmptyDocument)
@@ -61,8 +61,25 @@ bool FrameLoaderStateMachine::isDisplayingInitialEmptyDocument() const
 
 void FrameLoaderStateMachine::advanceTo(State state)
 {
-    ASSERT(m_state < state);
+    DCHECK_LT(m_state, state);
     m_state = state;
+}
+
+String FrameLoaderStateMachine::toString() const
+{
+    switch (m_state) {
+    case CreatingInitialEmptyDocument:
+        return "CreatingInitialEmptyDocument";
+    case DisplayingInitialEmptyDocument:
+        return "DisplayingInitialEmptyDocument";
+    case CommittedFirstRealLoad:
+        return "CommittedFirstRealLoad";
+    case CommittedMultipleRealLoads:
+        return "CommittedMultipleRealLoads";
+    default:
+        NOTREACHED();
+    }
+    return "";
 }
 
 } // namespace blink

@@ -12,7 +12,6 @@ namespace v8 {
 class Isolate;
 
 namespace platform {
-<<<<<<< HEAD
     namespace tracing {
 
         TraceConfig* TraceConfig::CreateDefaultTraceConfig()
@@ -45,33 +44,3 @@ namespace platform {
     } // namespace tracing
 } // namespace platform
 } // namespace v8
-=======
-namespace tracing {
-
-TraceConfig* TraceConfig::CreateDefaultTraceConfig() {
-  TraceConfig* trace_config = new TraceConfig();
-  trace_config->included_categories_.push_back("v8");
-  return trace_config;
-}
-
-bool TraceConfig::IsCategoryGroupEnabled(const char* category_group) const {
-  std::stringstream category_stream(category_group);
-  while (category_stream.good()) {
-    std::string category;
-    getline(category_stream, category, ',');
-    for (const auto& included_category : included_categories_) {
-      if (category == included_category) return true;
-    }
-  }
-  return false;
-}
-
-void TraceConfig::AddIncludedCategory(const char* included_category) {
-  DCHECK(included_category != nullptr && strlen(included_category) > 0);
-  included_categories_.push_back(included_category);
-}
-
-}  // namespace tracing
-}  // namespace platform
-}  // namespace v8
->>>>>>> miniblink49

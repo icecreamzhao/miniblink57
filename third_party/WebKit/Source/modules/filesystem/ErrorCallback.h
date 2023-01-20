@@ -35,26 +35,15 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 class DOMException;
-=======
-class FileError;
->>>>>>> miniblink49
 
 class ErrorCallback : public GarbageCollectedFinalized<ErrorCallback> {
 public:
     virtual ~ErrorCallback() { }
     DEFINE_INLINE_VIRTUAL_TRACE() { }
-<<<<<<< HEAD
     virtual void handleEvent(DOMException*) = 0;
 };
 
 } // namespace blink
-=======
-    virtual void handleEvent(FileError*) = 0;
-};
-
-} // namespace
->>>>>>> miniblink49
 
 #endif // ErrorCallback_h

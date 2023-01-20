@@ -29,20 +29,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/fonts/FontPlatformData.h"
 
 #include "SkTypeface.h"
 #include "platform/LayoutTestSupport.h"
 #include "platform/fonts/FontCache.h"
 #include "platform/graphics/GraphicsContext.h"
-<<<<<<< HEAD
 #include "platform/graphics/skia/SkiaUtils.h"
-=======
->>>>>>> miniblink49
 #include <windows.h>
 
 namespace blink {
@@ -51,75 +44,45 @@ namespace blink {
 // if available.
 const float kMaxSizeForEmbeddedBitmap = 24.0f;
 
-<<<<<<< HEAD
 static bool s_useSubpixelPositioning = false;
 
-=======
->>>>>>> miniblink49
 void FontPlatformData::setupPaint(SkPaint* paint, float, const Font*) const
 {
     const float ts = m_textSize >= 0 ? m_textSize : 12;
     paint->setTextSize(SkFloatToScalar(m_textSize));
-<<<<<<< HEAD
     paint->setTypeface(toSkSp(m_typeface));
-=======
-    paint->setTypeface(typeface());
->>>>>>> miniblink49
     paint->setFakeBoldText(m_syntheticBold);
     paint->setTextSkewX(m_syntheticItalic ? -SK_Scalar1 / 4 : 0);
 
     uint32_t textFlags = paintTextFlags();
     uint32_t flags = paint->getFlags();
-<<<<<<< HEAD
     static const uint32_t textFlagsMask = SkPaint::kAntiAlias_Flag
         | SkPaint::kLCDRenderText_Flag
         | SkPaint::kEmbeddedBitmapText_Flag
         | SkPaint::kSubpixelText_Flag;
-=======
-    static const uint32_t textFlagsMask = SkPaint::kAntiAlias_Flag |
-        SkPaint::kLCDRenderText_Flag |
-        SkPaint::kGenA8FromLCD_Flag;
->>>>>>> miniblink49
     flags &= ~textFlagsMask;
 
     if (ts <= kMaxSizeForEmbeddedBitmap)
         flags |= SkPaint::kEmbeddedBitmapText_Flag;
 
     if (ts >= m_minSizeForAntiAlias) {
-<<<<<<< HEAD
         // Disable subpixel text for certain older fonts at smaller sizes as
         // they tend to get quite blurry at non-integer sizes and positions.
         // For high-DPI this workaround isn't required.
         if ((ts >= m_minSizeForSubpixel || FontCache::fontCache()->deviceScaleFactor() >= 1.5)
-=======
-
-        if (m_useSubpixelPositioning
-            // Disable subpixel text for certain older fonts at smaller sizes as
-            // they tend to get quite blurry at non-integer sizes and positions.
-            // For high-DPI this workaround isn't required.
-            && (ts >= m_minSizeForSubpixel
-                || FontCache::fontCache()->deviceScaleFactor() >= 1.5)
-
->>>>>>> miniblink49
             // Subpixel text positioning looks pretty bad without font
             // smoothing. Disable it unless some type of font smoothing is used.
             // As most tests run without font smoothing we enable it for tests
             // to ensure we get good test coverage matching the more common
             // smoothing enabled behavior.
-<<<<<<< HEAD
             && ((textFlags & SkPaint::kAntiAlias_Flag) || LayoutTestSupport::isRunningLayoutTest())
             && s_useSubpixelPositioning
             )
-=======
-            && ((textFlags & SkPaint::kAntiAlias_Flag)
-                || LayoutTestSupport::isRunningLayoutTest()))
->>>>>>> miniblink49
             flags |= SkPaint::kSubpixelText_Flag;
 
         SkASSERT(!(textFlags & ~textFlagsMask));
         flags |= textFlags;
     }
-<<<<<<< HEAD
     paint->setFlags(flags);
 }
 
@@ -129,10 +92,6 @@ static bool isWebFont(const String& familyName)
     // 1. 24 characters, followed by a '\0'
     // 2. the last two characters are '=='
     return familyName.length() == 24 && '=' == familyName[22] && '=' == familyName[23];
-=======
-
-    paint->setFlags(flags);
->>>>>>> miniblink49
 }
 
 // Lookup the current system settings for font smoothing.
@@ -167,24 +126,11 @@ static uint32_t getSystemTextFlags()
     return gFlags;
 }
 
-<<<<<<< HEAD
-=======
-static bool isWebFont(const String& familyName)
-{
-    // Web-fonts have artifical names constructed to always be:
-    // 1. 24 characters, followed by a '\0'
-    // 2. the last two characters are '=='
-    return familyName.length() == 24
-        && '=' == familyName[22] && '=' == familyName[23];
-}
-
->>>>>>> miniblink49
 static int computePaintTextFlags(String fontFamilyName)
 {
     if (LayoutTestSupport::isRunningLayoutTest())
         return LayoutTestSupport::isFontAntialiasingEnabledForTest() ? SkPaint::kAntiAlias_Flag : 0;
 
-<<<<<<< HEAD
     int textFlags = 0;
     textFlags = getSystemTextFlags();
     if (FontCache::fontCache()->antialiasedTextEnabled()) {
@@ -193,9 +139,6 @@ static int computePaintTextFlags(String fontFamilyName)
             : 0;
         textFlags = SkPaint::kAntiAlias_Flag | lcdFlag;
     }
-=======
-    int textFlags = getSystemTextFlags();
->>>>>>> miniblink49
 
     // Many web-fonts are so poorly hinted that they are terrible to read when drawn in BW.
     // In these cases, we have decided to FORCE these fonts to be drawn with at least grayscale AA,
@@ -206,22 +149,9 @@ static int computePaintTextFlags(String fontFamilyName)
     return textFlags;
 }
 
-<<<<<<< HEAD
 void FontPlatformData::querySystemForRenderStyle()
-=======
-
-void FontPlatformData::querySystemForRenderStyle(bool)
->>>>>>> miniblink49
 {
     m_paintTextFlags = computePaintTextFlags(fontFamilyName());
 }
 
-<<<<<<< HEAD
-=======
-bool FontPlatformData::defaultUseSubpixelPositioning()
-{
-    return FontCache::fontCache()->useSubpixelPositioning();
-}
-
->>>>>>> miniblink49
 } // namespace blink

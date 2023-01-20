@@ -23,20 +23,12 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "public/web/WebHitTestResult.h"
 
 #include "core/dom/Element.h"
 #include "core/dom/Node.h"
 #include "core/editing/VisiblePosition.h"
 #include "core/layout/HitTestResult.h"
-<<<<<<< HEAD
-=======
-#include "core/layout/LayoutObject.h"
->>>>>>> miniblink49
 #include "platform/weborigin/KURL.h"
 #include "public/platform/WebPoint.h"
 #include "public/platform/WebURL.h"
@@ -45,18 +37,11 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 class WebHitTestResultPrivate
     : public GarbageCollectedFinalized<WebHitTestResultPrivate> {
 public:
     static WebHitTestResultPrivate* create(const HitTestResult&);
     static WebHitTestResultPrivate* create(const WebHitTestResultPrivate&);
-=======
-class WebHitTestResultPrivate : public RefCountedWillBeGarbageCollectedFinalized<WebHitTestResultPrivate> {
-public:
-    static PassRefPtrWillBeRawPtr<WebHitTestResultPrivate> create(const HitTestResult&);
-    static PassRefPtrWillBeRawPtr<WebHitTestResultPrivate> create(const WebHitTestResultPrivate&);
->>>>>>> miniblink49
     DEFINE_INLINE_TRACE() { visitor->trace(m_result); }
     const HitTestResult& result() const { return m_result; }
 
@@ -67,27 +52,18 @@ private:
     HitTestResult m_result;
 };
 
-<<<<<<< HEAD
 inline WebHitTestResultPrivate::WebHitTestResultPrivate(
     const HitTestResult& result)
-=======
-inline WebHitTestResultPrivate::WebHitTestResultPrivate(const HitTestResult& result)
->>>>>>> miniblink49
     : m_result(result)
 {
 }
 
-<<<<<<< HEAD
 inline WebHitTestResultPrivate::WebHitTestResultPrivate(
     const WebHitTestResultPrivate& result)
-=======
-inline WebHitTestResultPrivate::WebHitTestResultPrivate(const WebHitTestResultPrivate& result)
->>>>>>> miniblink49
     : m_result(result.m_result)
 {
 }
 
-<<<<<<< HEAD
 WebHitTestResultPrivate* WebHitTestResultPrivate::create(
     const HitTestResult& result)
 {
@@ -98,16 +74,6 @@ WebHitTestResultPrivate* WebHitTestResultPrivate::create(
     const WebHitTestResultPrivate& result)
 {
     return new WebHitTestResultPrivate(result);
-=======
-PassRefPtrWillBeRawPtr<WebHitTestResultPrivate> WebHitTestResultPrivate::create(const HitTestResult& result)
-{
-    return adoptRefWillBeNoop(new WebHitTestResultPrivate(result));
-}
-
-PassRefPtrWillBeRawPtr<WebHitTestResultPrivate> WebHitTestResultPrivate::create(const WebHitTestResultPrivate& result)
-{
-    return adoptRefWillBeNoop(new WebHitTestResultPrivate(result));
->>>>>>> miniblink49
 }
 
 WebNode WebHitTestResult::node() const

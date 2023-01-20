@@ -32,10 +32,7 @@
 #define OriginAccessEntry_h
 
 #include "platform/PlatformExport.h"
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
-=======
->>>>>>> miniblink49
 #include "wtf/text/WTFString.h"
 
 namespace blink {
@@ -43,11 +40,8 @@ namespace blink {
 class SecurityOrigin;
 
 class PLATFORM_EXPORT OriginAccessEntry {
-<<<<<<< HEAD
     USING_FAST_MALLOC(OriginAccessEntry);
 
-=======
->>>>>>> miniblink49
 public:
     enum SubdomainSetting {
         // 'www.example.com' matches an OriginAccessEntry for 'example.com'
@@ -66,7 +60,6 @@ public:
         DoesNotMatchOrigin
     };
 
-<<<<<<< HEAD
     // If host is empty string and SubdomainSetting is not DisallowSubdomains, the
     // entry will match all domains in the specified protocol.
     // IPv6 addresses must include brackets (e.g.
@@ -79,12 +72,6 @@ public:
     // 'matchesDomain' relaxes this constraint.
     MatchResult matchesOrigin(const SecurityOrigin&) const;
     MatchResult matchesDomain(const SecurityOrigin&) const;
-=======
-    // If host is empty string and SubdomainSetting is not DisallowSubdomains, the entry will match all domains in the specified protocol.
-    // IPv6 addresses must include brackets (e.g. '[2001:db8:85a3::8a2e:370:7334]', not '2001:db8:85a3::8a2e:370:7334').
-    OriginAccessEntry(const String& protocol, const String& host, SubdomainSetting);
-    MatchResult matchesOrigin(const SecurityOrigin&) const;
->>>>>>> miniblink49
 
     const String& protocol() const { return m_protocol; }
     const String& host() const { return m_host; }
@@ -101,7 +88,6 @@ private:
     bool m_hostIsPublicSuffix;
 };
 
-<<<<<<< HEAD
 PLATFORM_EXPORT inline bool operator==(const OriginAccessEntry& a,
     const OriginAccessEntry& b)
 {
@@ -110,16 +96,6 @@ PLATFORM_EXPORT inline bool operator==(const OriginAccessEntry& a,
 
 PLATFORM_EXPORT inline bool operator!=(const OriginAccessEntry& a,
     const OriginAccessEntry& b)
-=======
-PLATFORM_EXPORT inline bool operator==(const OriginAccessEntry& a, const OriginAccessEntry& b)
-{
-    return equalIgnoringCase(a.protocol(), b.protocol())
-        && equalIgnoringCase(a.host(), b.host())
-        && a.subdomainSettings() == b.subdomainSettings();
-}
-
-PLATFORM_EXPORT inline bool operator!=(const OriginAccessEntry& a, const OriginAccessEntry& b)
->>>>>>> miniblink49
 {
     return !(a == b);
 }

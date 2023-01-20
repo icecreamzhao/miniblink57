@@ -26,17 +26,11 @@
 #ifndef ResourceLoadPriority_h
 #define ResourceLoadPriority_h
 
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
 
 namespace blink {
 
 enum ResourceLoadPriority : int {
-=======
-namespace blink {
-
-enum ResourceLoadPriority {
->>>>>>> miniblink49
     // The unresolved priority is here for the convenience of the clients. It
     // should not be passed to the ResourceLoadScheduler.
     ResourceLoadPriorityUnresolved = -1,
@@ -49,7 +43,6 @@ enum ResourceLoadPriority {
     ResourceLoadPriorityHighest = ResourceLoadPriorityVeryHigh,
 };
 
-<<<<<<< HEAD
 struct ResourcePriority final {
     STACK_ALLOCATED();
 
@@ -76,9 +69,3 @@ public:
 } // namespace blink
 
 #endif
-=======
-}
-
-#endif
-
->>>>>>> miniblink49

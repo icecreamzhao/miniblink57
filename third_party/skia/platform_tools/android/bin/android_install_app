@@ -1,26 +1,15 @@
 #!/bin/bash
 #
-<<<<<<< HEAD
 # android_install_app: installs the Skia development apps on the device.
 
 function print_usage {
   echo "USAGE: android_install_app [options] AppName"
-=======
-# android_install_app: installs the skia sampleApp on the device.
-
-function print_usage {
-  echo "USAGE: android_install_app [options]"
->>>>>>> miniblink49
   echo " Options:         -f  Forces the package to be installed by removing any"
   echo "                      previously installed packages"
   echo "                  -h  Prints this help message"
   echo "            --release Install the release build of Skia"
   echo "      -s [device_s/n] Serial number of the device to be used"
-<<<<<<< HEAD
   echo "              AppName Can be either SampleApp or Viewer"
-=======
-  echo "              AppName Can be either SampleApp or VisualBench"
->>>>>>> miniblink49
 }
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -29,11 +18,6 @@ source $SCRIPT_DIR/android_setup.sh
 source $SCRIPT_DIR/utils/setup_adb.sh
 
 forceRemoval="false"
-<<<<<<< HEAD
-=======
-installLauncher="false"
-installOptions="-r"
->>>>>>> miniblink49
 app=""
 
 for arg in ${APP_ARGS[@]}; do
@@ -59,11 +43,7 @@ for arg in ${APP_ARGS[@]}; do
 done
 
 if [[ ${app} == "" ]]; then
-<<<<<<< HEAD
   echo "Defaulting to installing SampleApp."
-=======
-  echo "defaulting to installing SampleApp."
->>>>>>> miniblink49
   app="SampleApp"
 fi
 
@@ -74,7 +54,6 @@ then
     $ADB ${DEVICE_SERIAL} uninstall com.skia > /dev/null
 fi
 
-<<<<<<< HEAD
 if [[ "$BUILDTYPE" == "Release" ]];
 then
     apk_suffix="release.apk"
@@ -90,8 +69,4 @@ APP_LC=$(echo $app | tr "[:upper:]" "[:lower:]")
 
 echo "Installing ${APP_LC} from ${APP_LC}/build/outputs/apk/${APP_LC}-${ANDROID_ARCH}-${apk_suffix}"
 $ADB ${DEVICE_SERIAL} install -r ${SCRIPT_DIR}/../apps/${APP_LC}/build/outputs/apk/${APP_LC}-${ANDROID_ARCH}-${apk_suffix}
-=======
-echo "Installing ${app} from ${SKIA_OUT}/${BUILDTYPE}"
-$ADB ${DEVICE_SERIAL} install ${installOptions} ${SKIA_OUT}/${BUILDTYPE}/android/${app}/bin/${app}.apk
->>>>>>> miniblink49
 

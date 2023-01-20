@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2012 Google Inc.
  *
@@ -34,28 +30,16 @@
  */
 class SkRTree : public SkBBoxHierarchy {
 public:
-<<<<<<< HEAD
-=======
-    
-
->>>>>>> miniblink49
     /**
      * If you have some prior information about the distribution of bounds you're expecting, you
      * can provide an optional aspect ratio parameter. This allows the bulk-load algorithm to
      * create better proportioned tiles of rectangles.
      */
     explicit SkRTree(SkScalar aspectRatio = 1);
-<<<<<<< HEAD
     virtual ~SkRTree() { }
 
     void insert(const SkRect[], int N) override;
     void search(const SkRect& query, SkTDArray<int>* results) const override;
-=======
-    virtual ~SkRTree() {}
-
-    void insert(const SkRect[], int N) override;
-    void search(const SkRect& query, SkTDArray<unsigned>* results) const override;
->>>>>>> miniblink49
     size_t bytesUsed() const override;
 
     // Methods and constants below here are only public for tests.
@@ -78,11 +62,7 @@ private:
     struct Branch {
         union {
             Node* fSubtree;
-<<<<<<< HEAD
             int fOpIndex;
-=======
-            unsigned fOpIndex;
->>>>>>> miniblink49
         };
         SkRect fBounds;
     };
@@ -93,11 +73,7 @@ private:
         Branch fChildren[kMaxChildren];
     };
 
-<<<<<<< HEAD
     void search(Node* root, const SkRect& query, SkTDArray<int>* results) const;
-=======
-    void search(Node* root, const SkRect& query, SkTDArray<unsigned>* results) const;
->>>>>>> miniblink49
 
     // Consumes the input array.
     Branch bulkLoad(SkTDArray<Branch>* branches, int level = 0);

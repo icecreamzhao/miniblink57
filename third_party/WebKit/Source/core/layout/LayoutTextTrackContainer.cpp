@@ -25,7 +25,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/layout/LayoutTextTrackContainer.h"
 
 #include "core/frame/DeprecatedScheduleStyleRecalcDuringLayout.h"
@@ -42,36 +41,42 @@ LayoutTextTrackContainer::LayoutTextTrackContainer(Element* element)
 void LayoutTextTrackContainer::layout()
 {
     LayoutBlockFlow::layout();
-    if (style()->display() == NONE)
+    if (style()->display() == EDisplay::None)
         return;
 
-    DeprecatedScheduleStyleRecalcDuringLayout marker(node()->document().lifecycle());
+    DeprecatedScheduleStyleRecalcDuringLayout marker(
+        node()->document().lifecycle());
 
     LayoutObject* mediaLayoutObject = parent();
     if (!mediaLayoutObject || !mediaLayoutObject->isVideo())
         return;
     if (updateSizes(toLayoutVideo(*mediaLayoutObject)))
-        toElement(node())->setInlineStyleProperty(CSSPropertyFontSize, m_fontSize, CSSPrimitiveValue::CSS_PX);
+        toElement(node())->setInlineStyleProperty(
+            CSSPropertyFontSize, m_fontSize, CSSPrimitiveValue::UnitType::Pixels);
 }
 
-bool LayoutTextTrackContainer::updateSizes(const LayoutVideo& videoLayoutObject)
+bool LayoutTextTrackContainer::updateSizes(
+    const LayoutVideo& videoLayoutObject)
 {
     // FIXME: The video size is used to calculate the font size (a workaround
     // for lack of per-spec vh/vw support) but the whole media element is used
     // for cue rendering. This is inconsistent. See also the somewhat related
     // spec bug: https://www.w3.org/Bugs/Public/show_bug.cgi?id=28105
-    IntSize videoSize = videoLayoutObject.videoBox().size();
-    if (m_videoSize == videoSize)
-        return false;
-    m_videoSize = videoSize;
+    LayoutSize videoSize = videoLayoutObject.replacedContentRect().size();
 
-    float smallestDimension = std::min(m_videoSize.height(), m_videoSize.width());
+    float smallestDimension = std::min(videoSize.height().toFloat(), videoSize.width().toFloat());
 
     float fontSize = smallestDimension * 0.05f;
-    if (m_fontSize == fontSize)
-        return false;
-    m_fontSize = fontSize;
-    return true;
+
+    // Avoid excessive FP precision issue.
+    // C11 5.2.4.2.2:9 requires assignment and cast to remove extra precision, but
+    // the behavior is currently not portable. fontSize may have precision higher
+    // than m_fontSize thus straight comparison can fail despite they cast to the
+    // same float value.
+    volatile float& currentFontSize = m_fontSize;
+    float oldFontSize = currentFontSize;
+    currentFontSize = fontSize;
+    return currentFontSize != oldFontSize;
 }
 
 } // namespace blink

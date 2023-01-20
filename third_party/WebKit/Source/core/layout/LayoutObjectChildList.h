@@ -34,7 +34,8 @@ namespace blink {
 class LayoutObject;
 
 class LayoutObjectChildList {
-    DISALLOW_ALLOCATION();
+    DISALLOW_NEW();
+
 public:
     LayoutObjectChildList()
         : m_firstChild(nullptr)
@@ -45,22 +46,24 @@ public:
     LayoutObject* firstChild() const { return m_firstChild; }
     LayoutObject* lastChild() const { return m_lastChild; }
 
-    // FIXME: Temporary while LayoutBox still exists. Eventually this will just happen during insert/append/remove methods on the child list, and nobody
-    // will need to manipulate firstChild or lastChild directly.
-    void setFirstChild(LayoutObject* child) { m_firstChild = child; }
-    void setLastChild(LayoutObject* child) { m_lastChild = child; }
-
     void destroyLeftoverChildren();
 
-    LayoutObject* removeChildNode(LayoutObject* owner, LayoutObject*, bool notifyLayoutObject = true);
-    void insertChildNode(LayoutObject* owner, LayoutObject* newChild, LayoutObject* beforeChild, bool notifyLayoutObject = true);
-    void appendChildNode(LayoutObject* owner, LayoutObject* newChild, bool notifyLayoutObject = true)
+    LayoutObject* removeChildNode(LayoutObject* owner,
+        LayoutObject*,
+        bool notifyLayoutObject = true);
+    void insertChildNode(LayoutObject* owner,
+        LayoutObject* newChild,
+        LayoutObject* beforeChild,
+        bool notifyLayoutObject = true);
+    void appendChildNode(LayoutObject* owner,
+        LayoutObject* newChild,
+        bool notifyLayoutObject = true)
     {
         insertChildNode(owner, newChild, 0, notifyLayoutObject);
     }
 
 private:
-    void invalidatePaintOnRemoval(const LayoutObject& oldChild);
+    void invalidatePaintOnRemoval(LayoutObject& oldChild);
 
     LayoutObject* m_firstChild;
     LayoutObject* m_lastChild;

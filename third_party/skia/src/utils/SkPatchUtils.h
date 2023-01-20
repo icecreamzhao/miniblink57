@@ -12,11 +12,7 @@
 #include "SkMatrix.h"
 
 class SK_API SkPatchUtils {
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> miniblink49
 public:
     /**
      * Structure that holds the vertex data related to the tessellation of a patch. It is passed
@@ -29,7 +25,6 @@ public:
         SkPoint* fTexCoords;
         uint32_t* fColors;
         uint16_t* fIndices;
-<<<<<<< HEAD
 
         VertexData()
             : fVertexCount(0)
@@ -50,64 +45,29 @@ public:
         }
     };
 
-=======
-        
-        VertexData()
-        : fVertexCount(0)
-        , fIndexCount(0)
-        , fPoints(NULL)
-        , fTexCoords(NULL)
-        , fColors(NULL)
-        , fIndices(NULL) { }
-        
-        ~VertexData() {
-            SkDELETE_ARRAY(fPoints);
-            SkDELETE_ARRAY(fTexCoords);
-            SkDELETE_ARRAY(fColors);
-            SkDELETE_ARRAY(fIndices);
-        }
-    };
-    
->>>>>>> miniblink49
     // Enums for control points based on the order specified in the constructor (clockwise).
     enum CubicCtrlPts {
         kTopP0_CubicCtrlPts = 0,
         kTopP1_CubicCtrlPts = 1,
         kTopP2_CubicCtrlPts = 2,
         kTopP3_CubicCtrlPts = 3,
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> miniblink49
         kRightP0_CubicCtrlPts = 3,
         kRightP1_CubicCtrlPts = 4,
         kRightP2_CubicCtrlPts = 5,
         kRightP3_CubicCtrlPts = 6,
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> miniblink49
         kBottomP0_CubicCtrlPts = 9,
         kBottomP1_CubicCtrlPts = 8,
         kBottomP2_CubicCtrlPts = 7,
         kBottomP3_CubicCtrlPts = 6,
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> miniblink49
         kLeftP0_CubicCtrlPts = 0,
         kLeftP1_CubicCtrlPts = 11,
         kLeftP2_CubicCtrlPts = 10,
         kLeftP3_CubicCtrlPts = 9,
     };
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> miniblink49
     // Enum for corner also clockwise.
     enum Corner {
         kTopLeft_Corner = 0,
@@ -115,88 +75,50 @@ public:
         kBottomRight_Corner,
         kBottomLeft_Corner
     };
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> miniblink49
     enum {
         kNumCtrlPts = 12,
         kNumCorners = 4,
         kNumPtsCubic = 4
     };
-<<<<<<< HEAD
 
     /**
      * Method that calculates a level of detail (number of subdivisions) for a patch in both axis.
      */
     static SkISize GetLevelOfDetail(const SkPoint cubics[12], const SkMatrix* matrix);
 
-=======
-    
-    /**
-     * Method that calculates a level of detail (number of subdivisions) for a patch in both axis. 
-     */
-    static SkISize GetLevelOfDetail(const SkPoint cubics[12], const SkMatrix* matrix);
-    
->>>>>>> miniblink49
     /**
      * Get the points corresponding to the top cubic of cubics.
      */
     static void getTopCubic(const SkPoint cubics[12], SkPoint points[4]);
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> miniblink49
     /**
      * Get the points corresponding to the bottom cubic of cubics.
      */
     static void getBottomCubic(const SkPoint cubics[12], SkPoint points[4]);
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> miniblink49
     /**
      * Get the points corresponding to the left cubic of cubics.
      */
     static void getLeftCubic(const SkPoint cubics[12], SkPoint points[4]);
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> miniblink49
     /**
      * Get the points corresponding to the right cubic of cubics.
      */
     static void getRightCubic(const SkPoint cubics[12], SkPoint points[4]);
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> miniblink49
     /**
      * Function that evaluates the coons patch interpolation.
      * data refers to the pointer of the PatchData struct in which the tessellation data is set.
      * cubics refers to the points of the cubics.
      * lod refers the level of detail for each axis.
      * colors refers to the corner colors that will be bilerp across the patch (optional parameter)
-<<<<<<< HEAD
      * texCoords refers to the corner texture coordinates that will be bilerp across the patch
         (optional parameter)
      */
     static bool getVertexData(SkPatchUtils::VertexData* data, const SkPoint cubics[12],
         const SkColor colors[4], const SkPoint texCoords[4],
         int lodX, int lodY);
-=======
-     * texCoords refers to the corner texture coordinates that will be bilerp across the patch 
-        (optional parameter)
-     */
-    static bool getVertexData(SkPatchUtils::VertexData* data, const SkPoint cubics[12],
-                              const SkColor colors[4], const SkPoint texCoords[4],
-                              int lodX, int lodY);
->>>>>>> miniblink49
 };
 
 #endif

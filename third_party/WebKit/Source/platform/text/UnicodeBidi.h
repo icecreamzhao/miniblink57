@@ -28,7 +28,6 @@
 
 namespace blink {
 
-<<<<<<< HEAD
 enum class UnicodeBidi : unsigned {
     kNormal,
     kEmbed,
@@ -49,27 +48,5 @@ inline bool isOverride(UnicodeBidi unicodeBidi)
 }
 
 } // namespace blink
-=======
-enum EUnicodeBidi {
-    UBNormal,
-    Embed,
-    Override,
-    Isolate,
-    Plaintext,
-    IsolateOverride,
-};
-
-inline bool isIsolated(const EUnicodeBidi& unicodeBidi)
-{
-    return unicodeBidi == Isolate || unicodeBidi == IsolateOverride || unicodeBidi == Plaintext;
-}
-
-inline bool isOverride(EUnicodeBidi unicodeBidi)
-{
-    return unicodeBidi == Override || unicodeBidi == IsolateOverride;
-}
-
-}
->>>>>>> miniblink49
 
 #endif

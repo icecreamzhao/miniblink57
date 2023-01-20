@@ -6,21 +6,12 @@
  * found in the LICENSE file.
  */
 
-<<<<<<< HEAD
 #include "SkAnimateBase.h"
 #include "SkADrawable.h"
-=======
-
-#include "SkAnimateBase.h"
->>>>>>> miniblink49
 #include "SkAnimateMaker.h"
 #include "SkAnimateProperties.h"
 #include "SkAnimatorScript.h"
 #include "SkDisplayApply.h"
-<<<<<<< HEAD
-=======
-#include "SkADrawable.h"
->>>>>>> miniblink49
 
 #if SK_USE_CONDENSED_INFO == 0
 
@@ -29,11 +20,7 @@ const SkMemberInfo SkAnimateBase::fInfo[] = {
     SK_MEMBER_ARRAY(blend, Float),
     SK_MEMBER(dur, MSec),
     SK_MEMBER_PROPERTY(dynamic, Boolean),
-<<<<<<< HEAD
     SK_MEMBER(field, String), // name of member info in target
-=======
-    SK_MEMBER(field, String),   // name of member info in target
->>>>>>> miniblink49
     SK_MEMBER(formula, DynamicString),
     SK_MEMBER(from, DynamicString),
     SK_MEMBER(lval, DynamicString),
@@ -50,7 +37,6 @@ const SkMemberInfo SkAnimateBase::fInfo[] = {
 
 DEFINE_GET_MEMBER(SkAnimateBase);
 
-<<<<<<< HEAD
 SkAnimateBase::SkAnimateBase()
     : begin(0)
     , dur(1)
@@ -70,22 +56,12 @@ SkAnimateBase::SkAnimateBase()
     , fResetPending(0)
     , fTargetIsScope(0)
 {
-=======
-SkAnimateBase::SkAnimateBase() : begin(0), dur(1), repeat(SK_Scalar1),
-        fApply(NULL), fFieldInfo(NULL), fFieldOffset(0), fStart((SkMSec) -1), fTarget(NULL),
-        fChanged(0), fDelayed(0), fDynamic(0), fHasEndEvent(0), fHasValues(0),
-        fMirror(0), fReset(0), fResetPending(0), fTargetIsScope(0) {
->>>>>>> miniblink49
     blend.setCount(1);
     blend[0] = SK_Scalar1;
 }
 
-<<<<<<< HEAD
 SkAnimateBase::~SkAnimateBase()
 {
-=======
-SkAnimateBase::~SkAnimateBase() {
->>>>>>> miniblink49
     SkDisplayTypes type = fValues.getType();
     if (type == SkType_String || type == SkType_DynamicString) {
         SkASSERT(fValues.count() == 1);
@@ -93,7 +69,6 @@ SkAnimateBase::~SkAnimateBase() {
     }
 }
 
-<<<<<<< HEAD
 int SkAnimateBase::components()
 {
     return 1;
@@ -104,36 +79,18 @@ SkDisplayable* SkAnimateBase::deepCopy(SkAnimateMaker* maker)
     SkAnimateBase* result = (SkAnimateBase*)INHERITED::deepCopy(maker);
     result->fApply = fApply;
     result->fFieldInfo = fFieldInfo;
-=======
-int SkAnimateBase::components() {
-    return 1;
-}
-
-SkDisplayable* SkAnimateBase::deepCopy(SkAnimateMaker* maker) {
-    SkAnimateBase* result = (SkAnimateBase*) INHERITED::deepCopy(maker);
-    result->fApply = fApply;
-    result->fFieldInfo =fFieldInfo;
->>>>>>> miniblink49
     result->fHasValues = false;
     return result;
 }
 
-<<<<<<< HEAD
 void SkAnimateBase::dirty()
 {
-=======
-void SkAnimateBase::dirty() {
->>>>>>> miniblink49
     fChanged = true;
 }
 
 #ifdef SK_DUMP_ENABLED
-<<<<<<< HEAD
 void SkAnimateBase::dump(SkAnimateMaker* maker)
 {
-=======
-void SkAnimateBase::dump(SkAnimateMaker* maker) {
->>>>>>> miniblink49
     dumpBase(maker);
     if (target.size() > 0)
         SkDebugf("target=\"%s\" ", target.c_str());
@@ -158,7 +115,6 @@ void SkAnimateBase::dump(SkAnimateMaker* maker) {
 }
 #endif
 
-<<<<<<< HEAD
 SkDisplayable* SkAnimateBase::getParent() const
 {
     return (SkDisplayable*)fApply;
@@ -192,39 +148,6 @@ bool SkAnimateBase::getProperty(int index, SkScriptValue* value) const
     default:
         SkASSERT(0);
         return false;
-=======
-SkDisplayable* SkAnimateBase::getParent() const {
-    return (SkDisplayable*) fApply;
-}
-
-bool SkAnimateBase::getProperty(int index, SkScriptValue* value) const {
-    int boolResult;
-    switch (index) {
-        case SK_PROPERTY(dynamic):
-            boolResult = fDynamic;
-            goto returnBool;
-        case SK_PROPERTY(mirror):
-            boolResult = fMirror;
-            goto returnBool;
-        case SK_PROPERTY(reset):
-            boolResult = fReset;
-returnBool:
-            value->fOperand.fS32 = SkToBool(boolResult);
-            value->fType = SkType_Boolean;
-            break;
-        case SK_PROPERTY(step):
-            if (fApply == NULL)
-                return false;    // !!! notify there's an error?
-            fApply->getStep(value);
-            break;
-        case SK_PROPERTY(values):
-            value->fOperand.fString = (SkString*) &to;
-            value->fType = SkType_String;
-            break;
-        default:
-            SkASSERT(0);
-            return false;
->>>>>>> miniblink49
     }
     return true;
 }
@@ -234,12 +157,8 @@ bool SkAnimateBase::hasExecute() const
     return false;
 }
 
-<<<<<<< HEAD
 void SkAnimateBase::onEndElement(SkAnimateMaker& maker)
 {
-=======
-void SkAnimateBase::onEndElement(SkAnimateMaker& maker) {
->>>>>>> miniblink49
     fChanged = false;
     setTarget(maker);
     if (field.size()) {
@@ -251,19 +170,11 @@ void SkAnimateBase::onEndElement(SkAnimateMaker& maker) {
         // lval must be of the form x[y]
         const char* lvalStr = lval.c_str();
         const char* arrayEnd = strchr(lvalStr, '[');
-<<<<<<< HEAD
         if (arrayEnd == nullptr)
             return; //should this return an error?
         size_t arrayNameLen = arrayEnd - lvalStr;
         SkString arrayStr(lvalStr, arrayNameLen);
         SkASSERT(fTarget); //this return an error?
-=======
-        if (arrayEnd == NULL)
-            return; //should this return an error?
-        size_t arrayNameLen = arrayEnd - lvalStr;
-        SkString arrayStr(lvalStr, arrayNameLen);
-        SkASSERT(fTarget);  //this return an error?
->>>>>>> miniblink49
         fFieldInfo = fTarget->getMember(arrayStr.c_str());
         SkString scriptStr(arrayEnd + 1, lval.size() - arrayNameLen - 2);
         SkAnimatorScript::EvaluateInt(maker, this, scriptStr.c_str(), &fFieldOffset);
@@ -275,7 +186,6 @@ void SkAnimateBase::packARGB(SkScalar array[], int count, SkTDOperandArray* conv
     SkASSERT(count == 4);
     converted->setCount(1);
     SkColor color = SkColorSetARGB(SkScalarRoundToInt(array[0]),
-<<<<<<< HEAD
         SkScalarRoundToInt(array[1]),
         SkScalarRoundToInt(array[2]),
         SkScalarRoundToInt(array[3]));
@@ -315,56 +225,12 @@ bool SkAnimateBase::setProperty(int index, SkScriptValue& value)
         break;
     default:
         return false;
-=======
-                                   SkScalarRoundToInt(array[1]),
-                                   SkScalarRoundToInt(array[2]),
-                                   SkScalarRoundToInt(array[3]));
-    (*converted)[0].fS32 = color;
-}
-
-
-
-void SkAnimateBase::refresh(SkAnimateMaker& ) {
-}
-
-bool SkAnimateBase::setParent(SkDisplayable* apply) {
-    SkASSERT(apply->isApply());
-    fApply = (SkApply*) apply;
-    return false;
-}
-
-bool SkAnimateBase::setProperty(int index, SkScriptValue& value) {
-    bool boolValue = SkToBool(value.fOperand.fS32);
-    switch (index) {
-        case SK_PROPERTY(dynamic):
-            fDynamic = boolValue;
-            goto checkForBool;
-        case SK_PROPERTY(values):
-            fHasValues = true;
-            SkASSERT(value.fType == SkType_String);
-            to = *value.fOperand.fString;
-            break;
-        case SK_PROPERTY(mirror):
-            fMirror = boolValue;
-            goto checkForBool;
-        case SK_PROPERTY(reset):
-            fReset = boolValue;
-checkForBool:
-            SkASSERT(value.fType == SkType_Boolean);
-            break;
-        default:
-            return false;
->>>>>>> miniblink49
     }
     return true;
 }
 
-<<<<<<< HEAD
 void SkAnimateBase::setTarget(SkAnimateMaker& maker)
 {
-=======
-void SkAnimateBase::setTarget(SkAnimateMaker& maker) {
->>>>>>> miniblink49
     if (target.size()) {
         SkAnimatorScript engine(maker, this, SkType_Displayable);
         const char* script = target.c_str();
@@ -372,11 +238,7 @@ void SkAnimateBase::setTarget(SkAnimateMaker& maker) {
         bool success = engine.evaluateScript(&script, &scriptValue);
         if (success && scriptValue.fType == SkType_Displayable)
             fTarget = scriptValue.fOperand.fDrawable;
-<<<<<<< HEAD
         else if (maker.find(target.c_str(), (SkDisplayable**)&fTarget) == false) {
-=======
-        else if (maker.find(target.c_str(), (SkDisplayable**) &fTarget) == false) {
->>>>>>> miniblink49
             if (fApply->getMode() == SkApply::kMode_create)
                 return; // may not be an error
             if (engine.getError() != SkScriptEngine::kNoError)
@@ -392,11 +254,7 @@ void SkAnimateBase::setTarget(SkAnimateMaker& maker) {
     }
 }
 
-<<<<<<< HEAD
 bool SkAnimateBase::targetNeedsInitialization() const
 {
-=======
-bool SkAnimateBase::targetNeedsInitialization() const {
->>>>>>> miniblink49
     return false;
 }

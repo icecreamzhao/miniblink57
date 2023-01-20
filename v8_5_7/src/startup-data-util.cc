@@ -36,22 +36,14 @@ void DeleteStartupData(v8::StartupData* data) {
 }
 
 
-<<<<<<< HEAD
 void __cdecl FreeStartupData() {
-=======
-void FreeStartupData() {
->>>>>>> miniblink49
   DeleteStartupData(&g_natives);
   DeleteStartupData(&g_snapshot);
 }
 
 
 void Load(const char* blob_file, v8::StartupData* startup_data,
-<<<<<<< HEAD
           void (V8CALL*setter_fn)(v8::StartupData*)) {
-=======
-          void (*setter_fn)(v8::StartupData*)) {
->>>>>>> miniblink49
   ClearStartupData(startup_data);
 
   CHECK(blob_file);

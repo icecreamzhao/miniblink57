@@ -11,13 +11,22 @@
 
 namespace blink {
 
-class CORE_EXPORT VideoTrack final : public NoBaseWillBeGarbageCollectedFinalized<VideoTrack>, public TrackBase, public ScriptWrappable {
+class CORE_EXPORT VideoTrack final
+    : public GarbageCollectedFinalized<VideoTrack>,
+      public TrackBase,
+      public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(VideoTrack);
+    USING_GARBAGE_COLLECTED_MIXIN(VideoTrack);
+
 public:
-    static PassRefPtrWillBeRawPtr<VideoTrack> create(const String& id, const AtomicString& kind, const AtomicString& label, const AtomicString& language, bool selected)
+    static VideoTrack* create(const String& id,
+        const AtomicString& kind,
+        const AtomicString& label,
+        const AtomicString& language,
+        bool selected)
     {
-        return adoptRefWillBeNoop(new VideoTrack(id, kind, label, language, selected));
+        return new VideoTrack(id, isValidKindKeyword(kind) ? kind : emptyAtom,
+            label, language, selected);
     }
 
     ~VideoTrack() override;
@@ -41,16 +50,16 @@ public:
     static bool isValidKindKeyword(const String&);
 
 private:
-    VideoTrack(const String& id, const AtomicString& kind, const AtomicString& label, const AtomicString& language, bool selected);
-
-    // TrackBase
-    bool isValidKind(const AtomicString& kind) const override { return isValidKindKeyword(kind); }
-    AtomicString defaultKind() const override;
+    VideoTrack(const String& id,
+        const AtomicString& kind,
+        const AtomicString& label,
+        const AtomicString& language,
+        bool selected);
 
     bool m_selected;
 };
 
-DEFINE_TRACK_TYPE_CASTS(VideoTrack, TrackBase::VideoTrack);
+DEFINE_TRACK_TYPE_CASTS(VideoTrack, WebMediaPlayer::VideoTrack);
 
 } // namespace blink
 

@@ -96,11 +96,7 @@ template<class _Ty> inline
 	{_Ty _Tmp = _X;
 	_X = _Y, _Y = _Tmp; }
 
-<<<<<<< HEAD
 // // TEMPLATE CLASS remove_reference
-=======
-// // TEMPLATE CLASS remove_reference
->>>>>>> miniblink49
 // template<class _Ty>
 // struct remove_reference
 // {	// remove reference

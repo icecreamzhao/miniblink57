@@ -32,10 +32,7 @@
 #define BlobURL_h
 
 #include "platform/PlatformExport.h"
-<<<<<<< HEAD
 #include "wtf/Allocator.h"
-=======
->>>>>>> miniblink49
 #include "wtf/Forward.h"
 
 namespace blink {
@@ -51,11 +48,8 @@ class SecurityOrigin;
 // the loader conducts security checks that examine the origin of host page
 // encoded in the blob url.
 class PLATFORM_EXPORT BlobURL {
-<<<<<<< HEAD
     STATIC_ONLY(BlobURL);
 
-=======
->>>>>>> miniblink49
 public:
     static KURL createPublicURL(SecurityOrigin*);
     static String getOrigin(const KURL&);
@@ -65,15 +59,8 @@ public:
 private:
     static KURL createBlobURL(const String& originString);
     static const char kBlobProtocol[];
-<<<<<<< HEAD
 };
 
 } // namespace blink
-=======
-    BlobURL() { }
-};
-
-}
->>>>>>> miniblink49
 
 #endif // BlobURL_h

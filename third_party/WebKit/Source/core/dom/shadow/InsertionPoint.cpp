@@ -28,15 +28,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "config.h"
 #include "core/dom/shadow/InsertionPoint.h"
 
 #include "core/HTMLNames.h"
-#include "core/dom/Document.h"
 #include "core/dom/ElementTraversal.h"
 #include "core/dom/QualifiedName.h"
 #include "core/dom/StaticNodeList.h"
+#include "core/dom/StyleChangeReason.h"
 #include "core/dom/shadow/ElementShadow.h"
+#include "core/dom/shadow/ElementShadowV0.h"
 
 namespace blink {
 
@@ -49,34 +49,34 @@ InsertionPoint::InsertionPoint(const QualifiedName& tagName, Document& document)
     setHasCustomStyleCallbacks();
 }
 
-InsertionPoint::~InsertionPoint()
-{
-}
+InsertionPoint::~InsertionPoint() { }
 
 void InsertionPoint::setDistributedNodes(DistributedNodes& distributedNodes)
 {
-    if (shouldUseFallbackElements()) {
-        for (Node* child = firstChild(); child; child = child->nextSibling())
-            child->lazyReattachIfAttached();
-    }
-
     // Attempt not to reattach nodes that would be distributed to the exact same
     // location by comparing the old and new distributions.
 
     size_t i = 0;
     size_t j = 0;
 
-    for ( ; i < m_distributedNodes.size() && j < distributedNodes.size(); ++i, ++j) {
+    for (; i < m_distributedNodes.size() && j < distributedNodes.size();
+         ++i, ++j) {
         if (m_distributedNodes.size() < distributedNodes.size()) {
-            // If the new distribution is larger than the old one, reattach all nodes in
-            // the new distribution that were inserted.
-            for ( ; j < distributedNodes.size() && m_distributedNodes.at(i) != distributedNodes.at(j); ++j)
+            // If the new distribution is larger than the old one, reattach all nodes
+            // in the new distribution that were inserted.
+            for (; j < distributedNodes.size() && m_distributedNodes.at(i) != distributedNodes.at(j);
+                 ++j)
                 distributedNodes.at(j)->lazyReattachIfAttached();
+            if (j == distributedNodes.size())
+                break;
         } else if (m_distributedNodes.size() > distributedNodes.size()) {
-            // If the old distribution is larger than the new one, reattach all nodes in
-            // the old distribution that were removed.
-            for ( ; i < m_distributedNodes.size() && m_distributedNodes.at(i) != distributedNodes.at(j); ++i)
+            // If the old distribution is larger than the new one, reattach all nodes
+            // in the old distribution that were removed.
+            for (; i < m_distributedNodes.size() && m_distributedNodes.at(i) != distributedNodes.at(j);
+                 ++i)
                 m_distributedNodes.at(i)->lazyReattachIfAttached();
+            if (i == m_distributedNodes.size())
+                break;
         } else if (m_distributedNodes.at(i) != distributedNodes.at(j)) {
             // If both distributions are the same length reattach both old and new.
             m_distributedNodes.at(i)->lazyReattachIfAttached();
@@ -84,61 +84,68 @@ void InsertionPoint::setDistributedNodes(DistributedNodes& distributedNodes)
         }
     }
 
-    // If we hit the end of either list above we need to reattach all remaining nodes.
+    // If we hit the end of either list above we need to reattach all remaining
+    // nodes.
 
-    for ( ; i < m_distributedNodes.size(); ++i)
+    for (; i < m_distributedNodes.size(); ++i)
         m_distributedNodes.at(i)->lazyReattachIfAttached();
 
-    for ( ; j < distributedNodes.size(); ++j)
+    for (; j < distributedNodes.size(); ++j)
         distributedNodes.at(j)->lazyReattachIfAttached();
 
     m_distributedNodes.swap(distributedNodes);
-#if ENABLE(OILPAN)
-    // Deallocate a Vector and a HashMap explicitly in order that Oilpan can
-    // recycle them without GC.
+    // Deallocate a Vector and a HashMap explicitly so that
+    // Oilpan can recycle them without an intervening GC.
     distributedNodes.clear();
-#endif
     m_distributedNodes.shrinkToFit();
 }
 
-void InsertionPoint::attach(const AttachContext& context)
+void InsertionPoint::attachLayoutTree(const AttachContext& context)
 {
-    // We need to attach the distribution here so that they're inserted in the right order
-    // otherwise the n^2 protection inside LayoutTreeBuilder will cause them to be
-    // inserted in the wrong place later. This also lets distributed nodes benefit from
-    // the n^2 protection.
+    // We need to attach the distribution here so that they're inserted in the
+    // right order otherwise the n^2 protection inside LayoutTreeBuilder will
+    // cause them to be inserted in the wrong place later. This also lets
+    // distributed nodes benefit from the n^2 protection.
     for (size_t i = 0; i < m_distributedNodes.size(); ++i) {
         if (m_distributedNodes.at(i)->needsAttach())
-            m_distributedNodes.at(i)->attach(context);
+            m_distributedNodes.at(i)->attachLayoutTree(context);
     }
 
-    HTMLElement::attach(context);
+    HTMLElement::attachLayoutTree(context);
 }
 
-void InsertionPoint::detach(const AttachContext& context)
+void InsertionPoint::detachLayoutTree(const AttachContext& context)
 {
     for (size_t i = 0; i < m_distributedNodes.size(); ++i)
         m_distributedNodes.at(i)->lazyReattachIfAttached();
 
-    HTMLElement::detach(context);
+    HTMLElement::detachLayoutTree(context);
 }
 
 void InsertionPoint::willRecalcStyle(StyleRecalcChange change)
 {
-    if (change < Inherit && styleChangeType() < SubtreeStyleChange)
-        return;
-    for (size_t i = 0; i < m_distributedNodes.size(); ++i)
-        m_distributedNodes.at(i)->setNeedsStyleRecalc(SubtreeStyleChange, StyleChangeReasonForTracing::create(StyleChangeReason::PropagateInheritChangeToDistributedNodes));
-}
+    StyleChangeType styleChangeType = NoStyleChange;
 
-bool InsertionPoint::shouldUseFallbackElements() const
-{
-    return isActive() && !hasDistribution();
+    if (change > Inherit || getStyleChangeType() > LocalStyleChange)
+        styleChangeType = SubtreeStyleChange;
+    else if (change > NoInherit)
+        styleChangeType = LocalStyleChange;
+    else
+        return;
+
+    for (size_t i = 0; i < m_distributedNodes.size(); ++i)
+        m_distributedNodes.at(i)->setNeedsStyleRecalc(
+            styleChangeType,
+            StyleChangeReasonForTracing::create(
+                StyleChangeReason::PropagateInheritChangeToDistributedNodes));
 }
 
 bool InsertionPoint::canBeActive() const
 {
-    if (!isInShadowTree())
+    ShadowRoot* shadowRoot = containingShadowRoot();
+    if (!shadowRoot)
+        return false;
+    if (shadowRoot->isV1())
         return false;
     return !Traversal<InsertionPoint>::firstAncestor(*this);
 }
@@ -148,15 +155,13 @@ bool InsertionPoint::isActive() const
     if (!canBeActive())
         return false;
     ShadowRoot* shadowRoot = containingShadowRoot();
-    if (!shadowRoot)
-        return false;
+    DCHECK(shadowRoot);
     if (!isHTMLShadowElement(*this) || shadowRoot->descendantShadowElementCount() <= 1)
         return true;
 
-    // Slow path only when there are more than one shadow elements in a shadow tree. That should be a rare case.
-    const WillBeHeapVector<RefPtrWillBeMember<InsertionPoint>>& insertionPoints = shadowRoot->descendantInsertionPoints();
-    for (size_t i = 0; i < insertionPoints.size(); ++i) {
-        InsertionPoint* point = insertionPoints[i].get();
+    // Slow path only when there are more than one shadow elements in a shadow
+    // tree. That should be a rare case.
+    for (const auto& point : shadowRoot->descendantInsertionPoints()) {
         if (isHTMLShadowElement(*point))
             return point == this;
     }
@@ -173,11 +178,11 @@ bool InsertionPoint::isContentInsertionPoint() const
     return isHTMLContentElement(*this) && isActive();
 }
 
-PassRefPtrWillBeRawPtr<StaticNodeList> InsertionPoint::getDistributedNodes()
+StaticNodeList* InsertionPoint::getDistributedNodes()
 {
     updateDistribution();
 
-    WillBeHeapVector<RefPtrWillBeMember<Node>> nodes;
+    HeapVector<Member<Node>> nodes;
     nodes.reserveInitialCapacity(m_distributedNodes.size());
     for (size_t i = 0; i < m_distributedNodes.size(); ++i)
         nodes.uncheckedAppend(m_distributedNodes.at(i));
@@ -199,20 +204,27 @@ void InsertionPoint::childrenChanged(const ChildrenChange& change)
     }
 }
 
-Node::InsertionNotificationRequest InsertionPoint::insertedInto(ContainerNode* insertionPoint)
+Node::InsertionNotificationRequest InsertionPoint::insertedInto(
+    ContainerNode* insertionPoint)
 {
     HTMLElement::insertedInto(insertionPoint);
     if (ShadowRoot* root = containingShadowRoot()) {
-        if (ElementShadow* rootOwner = root->owner()) {
-            rootOwner->setNeedsDistributionRecalc();
-            if (canBeActive() && !m_registeredWithShadowRoot && insertionPoint->treeScope().rootNode() == root) {
-                m_registeredWithShadowRoot = true;
-                root->didAddInsertionPoint(this);
-                if (canAffectSelector())
-                    rootOwner->willAffectSelector();
+        if (!root->isV1()) {
+            if (ElementShadow* rootOwner = root->owner()) {
+                rootOwner->setNeedsDistributionRecalc();
+                if (canBeActive() && !m_registeredWithShadowRoot && insertionPoint->treeScope().rootNode() == root) {
+                    m_registeredWithShadowRoot = true;
+                    root->didAddInsertionPoint(this);
+                    if (canAffectSelector())
+                        rootOwner->v0().willAffectSelector();
+                }
             }
         }
     }
+
+    // We could have been distributed into in a detached subtree, make sure to
+    // clear the distribution when inserted again to avoid cycles.
+    clearDistribution();
 
     return InsertionDone;
 }
@@ -228,19 +240,21 @@ void InsertionPoint::removedFrom(ContainerNode* insertionPoint)
             rootOwner->setNeedsDistributionRecalc();
     }
 
-    // host can be null when removedFrom() is called from ElementShadow destructor.
+    // host can be null when removedFrom() is called from ElementShadow
+    // destructor.
     ElementShadow* rootOwner = root ? root->owner() : 0;
 
-    // Since this insertion point is no longer visible from the shadow subtree, it need to clean itself up.
+    // Since this insertion point is no longer visible from the shadow subtree, it
+    // need to clean itself up.
     clearDistribution();
 
     if (m_registeredWithShadowRoot && insertionPoint->treeScope().rootNode() == root) {
-        ASSERT(root);
+        DCHECK(root);
         m_registeredWithShadowRoot = false;
         root->didRemoveInsertionPoint(this);
-        if (rootOwner) {
+        if (!root->isV1() && rootOwner) {
             if (canAffectSelector())
-                rootOwner->willAffectSelector();
+                rootOwner->v0().willAffectSelector();
         }
     }
 
@@ -255,41 +269,43 @@ DEFINE_TRACE(InsertionPoint)
 
 const InsertionPoint* resolveReprojection(const Node* projectedNode)
 {
-    ASSERT(projectedNode);
+    DCHECK(projectedNode);
     const InsertionPoint* insertionPoint = 0;
     const Node* current = projectedNode;
     ElementShadow* lastElementShadow = 0;
     while (true) {
-        ElementShadow* shadow = shadowWhereNodeCanBeDistributed(*current);
-        if (!shadow || shadow == lastElementShadow)
+        ElementShadow* shadow = shadowWhereNodeCanBeDistributedForV0(*current);
+        if (!shadow || shadow->isV1() || shadow == lastElementShadow)
             break;
         lastElementShadow = shadow;
-        const InsertionPoint* insertedTo = shadow->finalDestinationInsertionPointFor(projectedNode);
+        const InsertionPoint* insertedTo = shadow->v0().finalDestinationInsertionPointFor(projectedNode);
         if (!insertedTo)
             break;
-        ASSERT(current != insertedTo);
+        DCHECK_NE(current, insertedTo);
         current = insertedTo;
         insertionPoint = insertedTo;
     }
     return insertionPoint;
 }
 
-void collectDestinationInsertionPoints(const Node& node, WillBeHeapVector<RawPtrWillBeMember<InsertionPoint>, 8>& results)
+void collectDestinationInsertionPoints(
+    const Node& node,
+    HeapVector<Member<InsertionPoint>, 8>& results)
 {
     const Node* current = &node;
     ElementShadow* lastElementShadow = 0;
     while (true) {
-        ElementShadow* shadow = shadowWhereNodeCanBeDistributed(*current);
-        if (!shadow || shadow == lastElementShadow)
+        ElementShadow* shadow = shadowWhereNodeCanBeDistributedForV0(*current);
+        if (!shadow || shadow->isV1() || shadow == lastElementShadow)
             return;
         lastElementShadow = shadow;
-        const DestinationInsertionPoints* insertionPoints = shadow->destinationInsertionPointsFor(&node);
+        const DestinationInsertionPoints* insertionPoints = shadow->v0().destinationInsertionPointsFor(&node);
         if (!insertionPoints)
             return;
         for (size_t i = 0; i < insertionPoints->size(); ++i)
-            results.append(insertionPoints->at(i).get());
-        ASSERT(current != insertionPoints->last().get());
-        current = insertionPoints->last().get();
+            results.push_back(insertionPoints->at(i).get());
+        DCHECK_NE(current, insertionPoints->back().get());
+        current = insertionPoints->back().get();
     }
 }
 

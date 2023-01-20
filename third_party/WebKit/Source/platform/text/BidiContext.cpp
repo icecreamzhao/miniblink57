@@ -1,11 +1,7 @@
 /*
  * Copyright (C) 2000 Lars Knoll (knoll@kde.org)
-<<<<<<< HEAD
  * Copyright (C) 2003, 2004, 2006, 2007, 2009, 2010 Apple Inc.
  * All right reserved.
-=======
- * Copyright (C) 2003, 2004, 2006, 2007, 2009, 2010 Apple Inc. All right reserved.
->>>>>>> miniblink49
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,10 +20,6 @@
  *
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/text/BidiContext.h"
 
 #include "wtf/StdLibExtras.h"
@@ -42,7 +34,6 @@ struct SameSizeAsBidiContext : public RefCounted<SameSizeAsBidiContext> {
     void* parent;
 };
 
-<<<<<<< HEAD
 static_assert(sizeof(BidiContext) == sizeof(SameSizeAsBidiContext),
     "BidiContext should stay small");
 
@@ -52,16 +43,10 @@ inline PassRefPtr<BidiContext> BidiContext::createUncached(
     bool override,
     BidiEmbeddingSource source,
     BidiContext* parent)
-=======
-static_assert(sizeof(BidiContext) == sizeof(SameSizeAsBidiContext), "BidiContext should stay small");
-
-inline PassRefPtr<BidiContext> BidiContext::createUncached(unsigned char level, Direction direction, bool override, BidiEmbeddingSource source, BidiContext* parent)
->>>>>>> miniblink49
 {
     return adoptRef(new BidiContext(level, direction, override, source, parent));
 }
 
-<<<<<<< HEAD
 PassRefPtr<BidiContext> BidiContext::create(unsigned char level,
     CharDirection direction,
     bool override,
@@ -71,19 +56,11 @@ PassRefPtr<BidiContext> BidiContext::create(unsigned char level,
     ASSERT(direction == (level % 2 ? RightToLeft : LeftToRight));
 
     if (parent || level >= 2)
-=======
-PassRefPtr<BidiContext> BidiContext::create(unsigned char level, Direction direction, bool override, BidiEmbeddingSource source, BidiContext* parent)
-{
-    ASSERT(direction == (level % 2 ? RightToLeft : LeftToRight));
-
-    if (parent)
->>>>>>> miniblink49
         return createUncached(level, direction, override, source, parent);
 
     ASSERT(level <= 1);
     if (!level) {
         if (!override) {
-<<<<<<< HEAD
             DEFINE_STATIC_REF(
                 BidiContext, ltrContext,
                 (createUncached(0, LeftToRight, false, FromStyleOrDOM, 0)));
@@ -93,18 +70,10 @@ PassRefPtr<BidiContext> BidiContext::create(unsigned char level, Direction direc
         DEFINE_STATIC_REF(
             BidiContext, ltrOverrideContext,
             (createUncached(0, LeftToRight, true, FromStyleOrDOM, 0)));
-=======
-            DEFINE_STATIC_REF(BidiContext, ltrContext, (createUncached(0, LeftToRight, false, FromStyleOrDOM, 0)));
-            return ltrContext;
-        }
-
-        DEFINE_STATIC_REF(BidiContext, ltrOverrideContext, (createUncached(0, LeftToRight, true, FromStyleOrDOM, 0)));
->>>>>>> miniblink49
         return ltrOverrideContext;
     }
 
     if (!override) {
-<<<<<<< HEAD
         DEFINE_STATIC_REF(
             BidiContext, rtlContext,
             (createUncached(1, RightToLeft, false, FromStyleOrDOM, 0)));
@@ -119,17 +88,6 @@ PassRefPtr<BidiContext> BidiContext::create(unsigned char level, Direction direc
 static inline PassRefPtr<BidiContext> copyContextAndRebaselineLevel(
     BidiContext* context,
     BidiContext* parent)
-=======
-        DEFINE_STATIC_REF(BidiContext, rtlContext, (createUncached(1, RightToLeft, false, FromStyleOrDOM, 0)));
-        return rtlContext;
-    }
-
-    DEFINE_STATIC_REF(BidiContext, rtlOverrideContext, (createUncached(1, RightToLeft, true, FromStyleOrDOM, 0)));
-    return rtlOverrideContext;
-}
-
-static inline PassRefPtr<BidiContext> copyContextAndRebaselineLevel(BidiContext* context, BidiContext* parent)
->>>>>>> miniblink49
 {
     ASSERT(context);
     unsigned char newLevel = parent ? parent->level() : 0;
@@ -138,7 +96,6 @@ static inline PassRefPtr<BidiContext> copyContextAndRebaselineLevel(BidiContext*
     else if (parent)
         newLevel = nextGreaterEvenLevel(newLevel);
 
-<<<<<<< HEAD
     return BidiContext::create(newLevel, context->dir(), context->override(),
         context->source(), parent);
 }
@@ -148,32 +105,15 @@ static inline PassRefPtr<BidiContext> copyContextAndRebaselineLevel(BidiContext*
 // and recalculate their levels.
 PassRefPtr<BidiContext>
 BidiContext::copyStackRemovingUnicodeEmbeddingContexts()
-=======
-    return BidiContext::create(newLevel, context->dir(), context->override(), context->source(), parent);
-}
-
-// The BidiContext stack must be immutable -- they're re-used for re-layout after
-// DOM modification/editing -- so we copy all the non-unicode contexts, and
-// recalculate their levels.
-PassRefPtr<BidiContext> BidiContext::copyStackRemovingUnicodeEmbeddingContexts()
->>>>>>> miniblink49
 {
     Vector<BidiContext*, 64> contexts;
     for (BidiContext* iter = this; iter; iter = iter->parent()) {
         if (iter->source() != FromUnicode)
-<<<<<<< HEAD
             contexts.push_back(iter);
     }
     ASSERT(contexts.size());
 
     RefPtr<BidiContext> topContext = copyContextAndRebaselineLevel(contexts.back(), 0);
-=======
-            contexts.append(iter);
-    }
-    ASSERT(contexts.size());
-
-    RefPtr<BidiContext> topContext = copyContextAndRebaselineLevel(contexts.last(), 0);
->>>>>>> miniblink49
     for (int i = contexts.size() - 1; i > 0; --i)
         topContext = copyContextAndRebaselineLevel(contexts[i - 1], topContext.get());
 

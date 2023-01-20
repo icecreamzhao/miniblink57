@@ -28,45 +28,29 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/plugins/PluginListBuilder.h"
 
 #include "public/platform/WebString.h"
 
 namespace blink {
 
-<<<<<<< HEAD
 void PluginListBuilder::addPlugin(const WebString& name,
     const WebString& description,
     const WebString& fileName)
-=======
-void PluginListBuilder::addPlugin(const WebString& name, const WebString& description, const WebString& fileName)
->>>>>>> miniblink49
 {
     PluginInfo info;
     info.name = name;
     info.desc = description;
     info.file = fileName;
-<<<<<<< HEAD
     m_results->push_back(info);
 }
 
 void PluginListBuilder::addMediaTypeToLastPlugin(const WebString& name,
     const WebString& description)
-=======
-    m_results->append(info);
-}
-
-void PluginListBuilder::addMediaTypeToLastPlugin(const WebString& name, const WebString& description)
->>>>>>> miniblink49
 {
     MimeClassInfo info;
     info.type = name;
     info.desc = description;
-<<<<<<< HEAD
     m_results->back().mimes.push_back(info);
 }
 
@@ -75,15 +59,6 @@ void PluginListBuilder::addFileExtensionToLastMediaType(
 {
     MimeClassInfo& info = m_results->back().mimes.back();
     info.extensions.push_back(extension);
-=======
-    m_results->last().mimes.append(info);
-}
-
-void PluginListBuilder::addFileExtensionToLastMediaType(const WebString& extension)
-{
-    MimeClassInfo& info = m_results->last().mimes.last();
-    info.extensions.append(extension);
->>>>>>> miniblink49
 }
 
 } // namespace blink

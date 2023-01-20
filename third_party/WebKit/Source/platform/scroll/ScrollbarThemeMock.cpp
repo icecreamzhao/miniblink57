@@ -23,33 +23,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-<<<<<<< HEAD
-=======
-#include "config.h"
->>>>>>> miniblink49
 #include "platform/scroll/ScrollbarThemeMock.h"
 
 #include "platform/RuntimeEnabledFeatures.h"
 #include "platform/graphics/GraphicsContext.h"
 #include "platform/graphics/paint/DrawingRecorder.h"
-<<<<<<< HEAD
 #include "platform/scroll/Scrollbar.h"
-=======
-#include "platform/scroll/ScrollbarThemeClient.h"
->>>>>>> miniblink49
 
 namespace blink {
 
 static int cScrollbarThickness[] = { 15, 11 };
 
-<<<<<<< HEAD
-=======
-IntRect ScrollbarThemeMock::trackRect(ScrollbarThemeClient* scrollbar, bool)
-{
-    return scrollbar->frameRect();
-}
-
->>>>>>> miniblink49
 int ScrollbarThemeMock::scrollbarThickness(ScrollbarControlSize controlSize)
 {
     return cScrollbarThickness[controlSize];
@@ -60,7 +44,6 @@ bool ScrollbarThemeMock::usesOverlayScrollbars() const
     return RuntimeEnabledFeatures::overlayScrollbarsEnabled();
 }
 
-<<<<<<< HEAD
 IntRect ScrollbarThemeMock::trackRect(const ScrollbarThemeClient& scrollbar,
     bool)
 {
@@ -111,28 +94,3 @@ void ScrollbarThemeMock::paintScrollCorner(GraphicsContext& context,
 }
 
 } // namespace blink
-=======
-void ScrollbarThemeMock::paintTrackBackground(GraphicsContext* context, ScrollbarThemeClient* scrollbar, const IntRect& trackRect)
-{
-    if (DrawingRecorder::useCachedDrawingIfPossible(*context, *scrollbar, DisplayItem::ScrollbarTrackBackground))
-        return;
-
-    DrawingRecorder recorder(*context, *scrollbar, DisplayItem::ScrollbarTrackBackground, trackRect);
-    context->fillRect(trackRect, scrollbar->enabled() ? Color::lightGray : Color(0xFFE0E0E0));
-}
-
-void ScrollbarThemeMock::paintThumb(GraphicsContext* context, ScrollbarThemeClient* scrollbar, const IntRect& thumbRect)
-{
-    if (!scrollbar->enabled())
-        return;
-
-    if (DrawingRecorder::useCachedDrawingIfPossible(*context, *scrollbar, DisplayItem::ScrollbarThumb))
-        return;
-
-    DrawingRecorder recorder(*context, *scrollbar, DisplayItem::ScrollbarThumb, thumbRect);
-    context->fillRect(thumbRect, Color::darkGray);
-}
-
-}
-
->>>>>>> miniblink49

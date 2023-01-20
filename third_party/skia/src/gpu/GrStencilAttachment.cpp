@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> miniblink49
 /*
  * Copyright 2011 Google Inc.
  *
@@ -13,12 +9,8 @@
 #include "GrResourceKey.h"
 
 void GrStencilAttachment::ComputeSharedStencilAttachmentKey(int width, int height, int sampleCnt,
-<<<<<<< HEAD
     GrUniqueKey* key)
 {
-=======
-                                                            GrUniqueKey* key) {
->>>>>>> miniblink49
     static const GrUniqueKey::Domain kDomain = GrUniqueKey::GenerateDomain();
     GrUniqueKey::Builder builder(key, kDomain, 3);
     builder[0] = width;
