@@ -70,7 +70,7 @@
 #include "src/disassembler.h"
 #include "src/eh-frame.h"
 #endif
-#include "src/base/thread-local.h"
+#include "../v8_7_5/src/base/thread-local.h"
 
 namespace wke {
 extern bool g_enableSkipJsError;

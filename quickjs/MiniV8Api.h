@@ -139,7 +139,7 @@ struct V8Head {
     void** m_isolatHandleScopeIndex; // ·½±ãv8::HandleScope::CreateHandle
     void** m_isolatGlobalScopeIndex;
 
-    int32_t m_countId;
+    int m_countTest;
     JSValue m_qjsValue;
 
     intptr_t m_objectGroupId;
@@ -573,8 +573,7 @@ public:
 
     int getId() const
     {
-        return m_head.m_countId;
-        //return m_id;
+        return m_id;
     }
 
     static const int kMaxaAlignedPointerArraySize = 8;
@@ -627,7 +626,7 @@ public:
     void* m_alignedPointerInInternalFields[kMaxaAlignedPointerArraySize];
     int m_internalFieldCount;
     V8Value* m_internalFields[kMaxaAlignedPointerArraySize];
-    //int m_id;
+    int m_id;
 };
 
 class V8Primitive : public V8Value {
@@ -804,7 +803,7 @@ public:
     {
         // TODO: m_signature
         //printDebug("~~V8Function: %p\n", this);
-        if (m_head.m_countId == 1131)
+        if (m_head.m_countTest == 1131)
             OutputDebugStringA("");
 
         m_data.Reset();
@@ -899,7 +898,7 @@ public:
     void inherit(const V8Template* parent);
     void newTemplateInstance(miniv8::V8Object* obj, bool isSetPrototype);
 
-    size_t getRegisterId() const { return m_registerId; }
+    size_t getId() const { return m_id; }
 
     void Set(v8::Local<v8::Name> name, v8::Local<v8::Data> value, v8::PropertyAttribute attr);
 
@@ -951,7 +950,7 @@ protected:
     V8ObjectTemplate* m_instanceTemplate;
     V8ObjectTemplate* m_prototypeTemplate;
 
-    size_t m_registerId;
+    size_t m_id;
 
     std::map<std::string, Accessor> m_accessors;
     std::map<std::string, JSValue> m_props;
@@ -1088,32 +1087,19 @@ inline std::string getStringFromV8String(v8::Local<v8::String> str)
 
 class V8ArrayBuffer : public V8Object {
 public:
-    static V8ArrayBuffer* create(V8Context* ctx, JSValue value)
-    {
-        return (V8ArrayBuffer*)V8Object::createFromType(ctx, value, kOTArrayBuffer);
-    }
-
-    size_t getByteLength();
-    uint8_t* getContents(size_t* size);
-
-private:
-    friend class V8Object;
     V8ArrayBuffer(V8Context* ctx, JSValue value)
         : V8Object(ctx, value)
     {
         m_internalFieldCount = 2;
         m_head.m_type = kOTArrayBuffer;
     }
+
+    size_t getByteLength();
+    uint8_t* getContents(size_t* size);
 };
 
 class V8ArrayBufferView : public V8Object {
 public:
-    static V8ArrayBufferView* create(V8Context* ctx, JSValue value)
-    {
-        return (V8ArrayBufferView*)V8Object::createFromType(ctx, value, kOTArrayBufferView);
-    }
-    
-
     v8::Local<v8::ArrayBuffer> getBuffer();
     size_t getByteOffset();
     size_t getByteLength();

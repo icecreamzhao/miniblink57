@@ -37,6 +37,7 @@ mbNetSendWsText
 mbNetSendWsBlob
 mbNetEnableResPacket
 mbCreateWebView
+mbCreateWebViewBindGTKWindow
 mbCreateWebWindow
 mbCreateWebCustomWindow
 mbDestroyWebView

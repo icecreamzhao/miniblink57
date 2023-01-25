@@ -80,6 +80,10 @@
 namespace v8 {
 namespace internal {
 
+#ifndef V8_TYPED_ARRAY_MAX_SIZE_IN_HEAP
+#define V8_TYPED_ARRAY_MAX_SIZE_IN_HEAP 64
+#endif
+
 compiler::TNode<IntPtrT> TypedArrayCreatetypedarrayBuiltinsFromDSLAssembler::CalculateTotalElementsByteSize(compiler::TNode<IntPtrT> p_byteLength) {
   compiler::CodeAssemblerParameterizedLabel<IntPtrT> block0(&ca_, compiler::CodeAssemblerLabel::kNonDeferred);
   compiler::CodeAssemblerParameterizedLabel<IntPtrT, IntPtrT> block1(&ca_, compiler::CodeAssemblerLabel::kNonDeferred);
@@ -3466,6 +3470,8 @@ compiler::TNode<JSTypedArray> TypedArrayCreatetypedarrayBuiltinsFromDSLAssembler
     ca_.Bind(&block4, &tmp21, &tmp22, &tmp23, &tmp24);
   return compiler::TNode<JSTypedArray>{tmp24};
 }
+
+#undef V8_TYPED_ARRAY_MAX_SIZE_IN_HEAP
 
 }  // namespace internal
 }  // namespace v8
