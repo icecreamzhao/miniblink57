@@ -262,6 +262,7 @@ void TextCodecICU::registerCodecs(TextCodecRegistrar registrar)
 
     // add by weolar
     registrar("gb2312", create, 0);
+    registrar("gb18030", create, 0);
     registrar("GBK", create, 0);
 }
 
@@ -413,7 +414,14 @@ String TextCodecICU::decode(const char* bytes,
     bool& sawError)
 {
     std::vector<UChar> resultBuffer;
-    if (strcasecmp(m_encoding.name(), "gb2312") && strcasecmp(m_encoding.name(), "GBK"))
+    if (strcasecmp(m_encoding.name(), "gb2312") &&
+        strcasecmp(m_encoding.name(), "GBK") &&
+        strcasecmp(m_encoding.name(), "gb18030") &&
+        strcasecmp(m_encoding.name(), "gb_2312")
+        )
+        return String();
+
+    if (0 == length)
         return String();
 
     WTF::MByteToWChar(bytes, length, &resultBuffer, CP_ACP);
