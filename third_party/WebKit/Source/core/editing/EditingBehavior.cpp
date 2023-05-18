@@ -165,6 +165,7 @@ namespace {
 #if !OS(MACOSX)
         // On OS X, we pipe these back to the browser, so that it can do menu item
         // blinking.
+        { 'c', CtrlKey, "Copy" },
         { 'C', CtrlKey, "Copy" },
         { 'V', CtrlKey, "Paste" },
         { 'V', CtrlKey | ShiftKey, "PasteAndMatchStyle" },
