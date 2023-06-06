@@ -719,6 +719,8 @@ private:
 // static
 /*constexpr*/ inline TimeDelta TimeDelta::FromDouble(double value)
 {
+// #pragma GCC diagnostic push
+// #pragma GCC diagnostic ignored "-Wimplicit-const-int-float-conversion"
     // TODO(crbug.com/612601): Use saturated_cast<int64_t>(value) once we sort out
     // the Min() behavior.
     return value > std::numeric_limits<int64_t>::max()
@@ -726,6 +728,7 @@ private:
         : value < -std::numeric_limits<int64_t>::max()
             ? -Max()
             : TimeDelta(static_cast<int64_t>(value));
+// #pragma GCC diagnostic pop
 }
 
 // static

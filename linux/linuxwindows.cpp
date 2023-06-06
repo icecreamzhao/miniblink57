@@ -254,7 +254,7 @@ BOOL SetForegroundWindow(HWND hWnd)
 
 BOOL PostMessageW(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
-    printf("PostMessageW\n");
+    //printf("PostMessageW\n");
     return FALSE;
 }
 
@@ -561,9 +561,10 @@ BOOL KillTimer(HWND hWnd, UINT_PTR uIDEvent)
 
 HRESULT RevokeDragDrop(HWND hwnd)
 {
-    printf("RevokeDragDrop\n");
+    //printf("RevokeDragDrop\n");
     return 0;
 }
+
 BOOL GetWindowRect(HWND hWnd, LPRECT lpRect)
 {
     printf("GetWindowRect\n");
@@ -583,7 +584,7 @@ HCURSOR SetCursor(HCURSOR hCursor)
 }
 HWND GetFocus()
 {
-    printf("GetFocus\n");
+    //printf("GetFocus\n");
     return NULL;
 }
 
@@ -782,12 +783,12 @@ int GetMenuItemCount(HMENU hMenu)
 }
 BOOL ReleaseCapture()
 {
-    printf("ReleaseCapture\n");
+    //printf("ReleaseCapture\n");
     return FALSE;
 }
 HWND SetCapture(HWND hWnd)
 {
-    printf("SetCapture\n");
+    //printf("SetCapture\n");
     return NULL;
 }
 
@@ -808,7 +809,7 @@ UINT GetDoubleClickTime()
 }
 HWND SetFocus(HWND hWnd)
 {
-    printf("SetFocus\n");
+    //printf("SetFocus\n");
     return NULL;
 }
 

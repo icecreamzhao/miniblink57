@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30711.63
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MiniBlink", "blink\blink.vcxproj", "{D4CF74E8-8AE3-4534-92BE-10503E556E87}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3B6807E7-4125-4892-8F4D-568B61462CAF} = {3B6807E7-4125-4892-8F4D-568B61462CAF}
+		{E0724841-ACFF-4E01-8C8D-E95A747E76EC} = {E0724841-ACFF-4E01-8C8D-E95A747E76EC}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "skia", "skia\skia.vcxproj", "{3B6807E7-4125-4892-8F4D-568B61462CAF}"
 EndProject

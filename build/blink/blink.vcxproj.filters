@@ -26978,9 +26978,6 @@
     <ClInclude Include="..\build_config.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\linux\linuxwinimpl.h">
-      <Filter>linux</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\third_party\WebKit\Source\wtf\text\qt4\wchar.h">
       <Filter>third_party\WebKit\Source\wtf\text\qt4</Filter>
     </ClInclude>

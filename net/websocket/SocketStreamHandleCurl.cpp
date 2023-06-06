@@ -41,6 +41,7 @@
 //#include "base/thread.h"
 #include <process.h>
 #include <netlistmgr.h>
+#include "base/atomic_mb.h"
 
 using namespace blink;
 
@@ -434,7 +435,7 @@ void SocketStreamHandle::stopThread()
     if (!m_workerThread)
         return;
 
-    _InterlockedExchange(reinterpret_cast<long volatile*>(&m_stopThread), 1);
+    MB_InterlockedExchange(reinterpret_cast<long volatile*>(&m_stopThread), 1);
     waitForThreadCompletion(m_workerThread);
     m_workerThread = 0;
     deref();

@@ -114,6 +114,8 @@ void SoftwareOutputDevice::EndPaint()
 #endif
     }
 
+    //m_memoryCanvas->clear(SK_ColorBLUE); // weolar
+
 #if defined(OS_WIN)
     HDC hMemoryDC = skia::BeginPlatformPaint(m_hWnd, m_memoryCanvas);
     m_webPageOcBridge->onEndPaintStep2(hMemoryDC, damage_rect_.ToRECT());

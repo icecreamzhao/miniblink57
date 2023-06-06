@@ -94,7 +94,7 @@ static bool checkThreadCallIsValidImpl(const char* funcName, bool isBlinkThread)
 
     ::MessageBoxW(nullptr, textMsg.c_str(), u16("警告"), MB_OK);
 #else
-    printf("current thread:%u, main thread:%u", ::GetCurrentThreadId(), common::ThreadCall::getUiThreadId());
+    printf("function: %s, current thread:%u, main thread:%u", funcName, ::GetCurrentThreadId(), common::ThreadCall::getUiThreadId());
 #endif
     ::TerminateProcess((HANDLE)-1, 5);
     return false;
@@ -213,23 +213,17 @@ mbWebView MB_CALL_TYPE mbCreateWebCustomWindow(HWND parent, DWORD style, DWORD s
     return (int)result->getId();
 }
 
-
 mbWebView MB_CALL_TYPE mbCreateWebViewBindGTKWindow(void* rootWindow, void* drawingArea, DWORD style, DWORD styleEx, int width, int height)
 {
-#ifdef OS_LINUX
     checkThreadCallIsValid(__FUNCTION__);
     mb::MbWebView* result = new mb::MbWebView();
     result->bindGTKWindow(rootWindow, drawingArea, style, styleEx, width, height);
     common::ThreadCall::callBlinkThreadAsync(MB_FROM_HERE, [result] {
         result->createWkeWebWindowOrViewInBlinkThread(true);
-        });
+    });
 
     return (int)result->getId();
-#else
-    return NULL;
-#endif
 }
-
 
 mbWebView MB_CALL_TYPE mbCreateWebView()
 {
@@ -254,6 +248,9 @@ void MB_CALL_TYPE mbDestroyWebView(mbWebView webviewHandle)
         return;
 
     webview->preDestroy();
+
+    printf("mbDestroyWebView: webview:%p, %p\n", webview, webview->getClosure().m_ClosingCallback);
+    webview->getClosure().m_ClosingCallback = nullptr;
 
     if (webview->m_destroyCallback)
         webview->m_destroyCallback(webviewHandle, webview->m_destroyCallbackParam, nullptr);
@@ -2761,6 +2758,11 @@ void MB_CALL_TYPE mbRunMessageLoop()
 //         ::Sleep(2);
 //     }
     common::ThreadCall::uiMessageLoop();
+}
+
+void MB_CALL_TYPE mbExitMessageLoop()
+{
+    common::ThreadCall::exitUiMessageLoop();
 }
 
 void MB_CALL_TYPE mbGetCaretRect(mbWebView webviewHandle, mbRect* r)

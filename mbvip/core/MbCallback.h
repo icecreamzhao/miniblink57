@@ -37,8 +37,9 @@ static bool WKE_CALL_TYPE onLoadUrlBegin(wkeWebView wkeWebview, void* param, con
 
     if (webview->handleResPacket(url, job))
         return true;
-    
-    BOOL b = webview->getClosure().m_LoadUrlBeginCallback(webviewHandle, webview->getClosure().m_LoadUrlBeginParam, url, job);
+
+    mbLoadUrlBeginCallback m_LoadUrlBeginCallback = webview->getClosure().m_LoadUrlBeginCallback;
+    BOOL b = m_LoadUrlBeginCallback(webviewHandle, webview->getClosure().m_LoadUrlBeginParam, url, job);
     return !!b;
 }
 

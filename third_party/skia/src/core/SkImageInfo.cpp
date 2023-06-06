@@ -21,8 +21,22 @@ static bool color_type_is_valid(SkColorType colorType)
 
 SkImageInfo SkImageInfo::MakeS32(int width, int height, SkAlphaType at)
 {
-    return SkImageInfo(width, height, kN32_SkColorType, at,
-        SkColorSpace::NewNamed(SkColorSpace::kSRGB_Named));
+    return SkImageInfo(width, height, kN32_SkColorType, at, SkColorSpace::NewNamed(SkColorSpace::kSRGB_Named));
+}
+
+SkImageInfo SkImageInfo::MakeN32(int width, int height, SkAlphaType at, sk_sp<SkColorSpace> cs)
+{
+    return Make(width, height, kN32_SkColorType, at, cs);
+}
+
+SkImageInfo SkImageInfo::MakeN32Premul(int width, int height, sk_sp<SkColorSpace> cs)
+{
+    return Make(width, height, kN32_SkColorType, kPremul_SkAlphaType, cs);
+}
+
+SkImageInfo SkImageInfo::MakeN32Premul(const SkISize& size)
+{
+    return MakeN32Premul(size.width(), size.height());
 }
 
 static const int kColorTypeMask = 0x0F;

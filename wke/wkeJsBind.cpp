@@ -2065,6 +2065,10 @@ void onCreateGlobalObjectInMainFrame(content::WebFrameClientImpl* client, blink:
     
     const char* injectCode =
         "window.chrome = {app:null, runtime:null};\n"
+        "window.ResizeObserver = function(callback) {}\n"
+        "window.ResizeObserver.prototype.disconnect = function() {}\n"
+        "window.ResizeObserver.prototype.observe = function(target, options) {}\n"
+        "window.ResizeObserver.prototype.unobserve = function() {}\n"
         "window.Intl = {\n"
         "    DateTimeFormat: function(locales, options) {\n"
         "        return {\n"
@@ -2085,13 +2089,21 @@ void onCreateGlobalObjectInMainFrame(content::WebFrameClientImpl* client, blink:
         "window.Intl.DateTimeFormat.supportedLocalesOf = function(locales, options) {\n"
         "    return locales;\n"
         "}\n"
+        "function __NumberFormat__() {}\n"
+        "__NumberFormat__.prototype.resolvedOptions = function() { \n"
+        "    return {'locale': 'zh-cn'}; \n"
+        "}\n"
+        "__NumberFormat__.prototype.format = function(num) { return num; }\n"
+        "__NumberFormat__.supportedLocalesOf = function(locales, options) { return ['zh-cn']; }\n"
+        "window.Intl.NumberFormat = __NumberFormat__;"
         "window.indexedDB = {\n"
         "    open: function(a, b) {\n"
         "        var ret = {};\n"
         "        setTimeout(function() {\n"
         "            if ('onerror' in ret) {\n"
-        "                var err = { preventDefault : function(){} };\n"
-        "                ret.onerror(err);\n"
+        "                var error = {name:'error', message:'mb indexedDB not impl', push: function() {}};"
+        "                var evt = { preventDefault : function(){}, target: {'error': error} };\n"
+        "                ret.onerror(evt);\n"
         "            }\n"
         "        }, 1);\n"
         "        return ret;\n"
@@ -2099,7 +2111,7 @@ void onCreateGlobalObjectInMainFrame(content::WebFrameClientImpl* client, blink:
         "}\n"
         "//window.fixErrObj = { src: 1234567, getChildren: function() {} };\n"
         ;
-
+    
     blink::WebScriptSource injectSource(blink::WebString::fromUTF8(injectCode));
     frame->executeScript(injectSource);
 

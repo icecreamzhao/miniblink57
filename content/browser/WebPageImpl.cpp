@@ -73,6 +73,7 @@
 #include "wke/wkeGlobalVar.h"
 #endif
 #include "skia/ext/bitmap_platform_device_win.h"
+#include "base/atomic_mb.h"
 
 extern DWORD g_paintToMemoryCanvasInUiThreadCount;
 extern DWORD g_mouseCount;
@@ -407,8 +408,8 @@ public:
         int layerDirty = m_page->m_layerDirty; 
         int needsLayout = m_page->m_needsLayout; 
         if (m_isComefromMainFrame) {
-            _InterlockedExchange(reinterpret_cast<long volatile*>(&m_page->m_layerDirty), 0);
-            _InterlockedExchange(reinterpret_cast<long volatile*>(&m_page->m_needsLayout), 0);
+            MB_InterlockedExchange(reinterpret_cast<long volatile*>(&m_page->m_layerDirty), 0);
+            MB_InterlockedExchange(reinterpret_cast<long volatile*>(&m_page->m_needsLayout), 0);
         }
         m_isLayout = (0 != layerDirty || 0 != needsLayout);
 
@@ -434,8 +435,8 @@ public:
         int layerDirty = m_page->m_layerDirty;
         int needsLayout = m_page->m_needsLayout;
         if (m_isComefromMainFrame) {
-            _InterlockedExchange(reinterpret_cast<long volatile*>(&m_page->m_layerDirty), 0);
-            _InterlockedExchange(reinterpret_cast<long volatile*>(&m_page->m_needsLayout), 0);
+            MB_InterlockedExchange(reinterpret_cast<long volatile*>(&m_page->m_layerDirty), 0);
+            MB_InterlockedExchange(reinterpret_cast<long volatile*>(&m_page->m_needsLayout), 0);
         }
 
         bool isLayout = 0 != layerDirty || 0 != needsLayout;
@@ -848,7 +849,7 @@ void WebPageImpl::setNeedsCommitAndNotLayout()
 
 void WebPageImpl::setNeedsCommit()
 {
-    _InterlockedExchange(reinterpret_cast<long volatile*>(&m_needsLayout), 1);
+    MB_InterlockedExchange(reinterpret_cast<long volatile*>(&m_needsLayout), 1);
     setNeedsCommitAndNotLayout();
 }
 
@@ -938,7 +939,7 @@ void WebPageImpl::executeMainFrame()
 
 void WebPageImpl::onLayerTreeDirty()
 {
-    _InterlockedExchange(reinterpret_cast<long volatile*>(&m_layerDirty), 1);
+    MB_InterlockedExchange(reinterpret_cast<long volatile*>(&m_layerDirty), 1);
     setNeedsCommitAndNotLayout();
 }
 
@@ -1939,10 +1940,10 @@ void WebPageImpl::loadURL(int64 frameId, const wchar_t* url, const blink::Referr
     blink::WebURL webURL = kurl;
     blink::WebURLRequest request(webURL);
     request.setHTTPReferrer(referrer.referrer, blink::WebReferrerPolicyOrigin);
-    loadRequest(frameId, request);
+    loadRequest(frameId, request, false);
 }
 
-void WebPageImpl::loadRequest(int64 frameId, const blink::WebURLRequest& request)
+void WebPageImpl::loadRequest(int64 frameId, const blink::WebURLRequest& request, bool isViewSource)
 {
     if (!m_webViewImpl || !m_webViewImpl->mainFrame())
         return;
@@ -1956,6 +1957,7 @@ void WebPageImpl::loadRequest(int64 frameId, const blink::WebURLRequest& request
     
     requestWrap.setHTTPHeaderField(WebString::fromLatin1("Accept"), WebString::fromLatin1("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"));
     webFrame->loadRequest(requestWrap);
+    webFrame->enableViewSourceMode(isViewSource);
     m_webViewImpl->setFocus(true);
 }
 
@@ -2067,6 +2069,9 @@ public:
     {
         if (wke::g_wkeUiThreadPostTaskCallback)
             return;
+#ifndef _WIN32
+        __debugbreak();
+#endif
         wke::g_wkeUiThreadPostTaskCallback = PostTaskWrap::uiThreadPostTaskCallback;
 
         m_uiPostTasks = new std::vector<PostTaskWrap*>();
@@ -2103,6 +2108,10 @@ public:
 
     static int WKE_CALL_TYPE uiThreadPostTaskCallback(HWND hWnd, wkeUiThreadRunCallback callback, void* param)
     {
+#ifndef _WIN32
+        printf("uiThreadPostTaskCallback\n");
+        __debugbreak();
+#endif
         PostTaskWrap* task = new PostTaskWrap(hWnd, callback, param);
 
         ::EnterCriticalSection(&m_uiPostTasksMutex);
@@ -2568,6 +2577,7 @@ bool WebPageImpl::initSetting()
     settings->setAllowFileAccessFromFileURLs(true);
     settings->setAcceleratedCompositingEnabled(true);
     settings->setUseSolidColorScrollbars(false);
+    settings->setDefaultTextEncodingName(blink::WebString::fromASCII("UTF8"));
     //settings->setPinchOverlayScrollbarThickness(8);
     //settings->setSpatialNavigationEnabled(true);
     settings->setLocalStorageEnabled(true);

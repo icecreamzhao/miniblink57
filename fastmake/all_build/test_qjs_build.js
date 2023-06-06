@@ -191,8 +191,8 @@ var json = [{
 			"-DUSE_THREADS_POSIX=1",
 			"-DUSE_OPENSSL=1",
 		],
-		"objdir":"G:/mycode/miniblink57/out/tmp/curl/" + constVal.targetDir,
-		"outdir":"G:/mycode/miniblink57/out/" + constVal.targetDir,
+		"objdir":"p:/mycode/miniblink57/out/tmp/curl/" + constVal.targetDir,
+		"outdir":"p:/mycode/miniblink57/out/" + constVal.targetDir,
 		"target":"libcurl.a",
 		"beginLibs":[
 		],

@@ -142,7 +142,7 @@ static String getDefaultFontList()
     FcObjectSet* os = FcObjectSetBuild(FC_FAMILY, FC_STYLE, FC_LANG, (char*)0);
     FcFontSet* fs = FcFontList(config, pat, os);
 
-    printf("Total fonts: %d\n", fs->nfont);
+    //printf("Total fonts: %d\n", fs->nfont);
 
     for (int i = 0; fs && i < fs->nfont; i++) {
         FcPattern* font = fs->fonts[i];
@@ -177,7 +177,7 @@ static String getDefaultFontList()
     defaultFont.split(u16(','), false, spli);
     defaultFont = spli[0];
 
-    printf("getDefaultFontList: %s\n", defaultFont.utf8().data());
+    //printf("getDefaultFontList: %s\n", defaultFont.utf8().data());
 
     return defaultFont;
 }
@@ -205,7 +205,7 @@ PassRefPtr<SimpleFontData> FontCache::getLastResortFallbackFont(const FontDescri
             AtomicString family(defaultFont);
             FontFaceCreationParams params(family);
             fontPlatformData = getFontPlatformData(description, params);
-            printf("FontCache::getLastResortFallbackFont~: %p\n", fontPlatformData);
+            //printf("FontCache::getLastResortFallbackFont~: %p\n", fontPlatformData);
         }
     }
 #endif

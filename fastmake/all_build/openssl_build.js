@@ -8,6 +8,7 @@ var json = [{
 		{"ndkIncludePath":constVal.ndkIncludePath},
 		{"ndkBinPath":constVal.ndkBinPath},
 		{"targetDir": constVal.targetDir},
+		{"sysroot": constVal.sysroot},
 	],
 	"compile":{
 		"ccompiler":"${clangPath}/clang.exe",

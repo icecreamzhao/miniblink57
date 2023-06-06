@@ -13,6 +13,7 @@
 #include "v8.h"
 #endif
 #include "base/strings/string16.h"
+#include "base/atomic_mb.h"
 
 namespace node {
 class Environment;
@@ -36,9 +37,8 @@ public:
     void createWkeWebWindowOrViewInBlinkThread(bool isWebWindowMode);
     void createWkeWebWindowInUiThread(mbWindowType type, HWND parent, int x, int y, int width, int height);
     void createWkeWebWindowImplInUiThread(HWND parent, DWORD style, DWORD styleEx, int x, int y, int width, int height);
-#ifdef OS_LINUX
     void bindGTKWindow(void* rootWindow, void* drawingArea, DWORD style, DWORD styleEx, int width, int height);
-#endif
+
     int64_t getId() const { return m_id; }
     mbWebView getWebviewHandle() const { return (mbWebView)m_id; }
 
@@ -130,19 +130,21 @@ public:
     mbPrintingCallback m_printingCallback;
     void* m_printingCallbackParam;
 
+    CallbackClosure m_closure;
+
     void setIsMouseKeyMessageEnable(bool b) { m_enableMouseKeyMessage = b; }
     void setIsTransparent(bool b) { m_isTransparent = b; }
     void setBackgroundColor(COLORREF c) { m_backgroundColor = c; }
 
     void setNavigateIndex(int index)
     {
-        _InterlockedExchange((long volatile*)(&m_navigateIndex), index);
+        MB_InterlockedExchange((long volatile*)(&m_navigateIndex), index);
     }
 
     int getNavigateIndex() const
     {
-        int index = 0;
-        _InterlockedExchange((long volatile*)(&index), m_navigateIndex);
+        long index = 0;
+        MB_InterlockedExchange((long volatile*)(&index), m_navigateIndex);
         return index;
     }
 
@@ -211,14 +213,13 @@ private:
 
     long m_navigateIndex;
 
-	std::string m_title;
-	std::string m_url;
+    std::string m_title;
+    std::string m_url;
 
     std::map<std::string, void*> m_userKeyValues;
     mutable CRITICAL_SECTION m_userKeyValuesLock;
 
     long m_createWebViewRequestCount;
-    CallbackClosure m_closure;
 
     CRITICAL_SECTION m_mouseMsgQueueLock;
     struct MouseMsg {

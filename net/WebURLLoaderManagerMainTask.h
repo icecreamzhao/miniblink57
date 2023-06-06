@@ -15,6 +15,7 @@
 #include "third_party/WebKit/public/web/WebLocalFrame.h"
 #include "third_party/WebKit/Source/wtf/Threading.h"
 #include "wke/wkeWebView.h"
+#include "base/atomic_mb.h"
 
 void WKE_CALL_TYPE wkeDeleteWillSendRequestInfo(wkeWebView webWindow, wkeWillSendRequestInfo* info);
 
@@ -1006,7 +1007,7 @@ void WebURLLoaderManagerMainTask::handleDidSendData(MainTaskArgs* args, WebURLLo
 
     unsigned long long sentData = size * nmemb;
 
-    _InterlockedExchangeAdd(reinterpret_cast<long volatile*>(&job->m_sentDataBytes), static_cast<long>(sentData));
+    MB_InterlockedExchangeAdd(reinterpret_cast<long volatile*>(&job->m_sentDataBytes), static_cast<long>(sentData));
     WebURLLoaderManager::sharedInstance()->handleDidSentData(job, job->m_sentDataBytes, job->m_totalBytesToBeSent);
 }
 

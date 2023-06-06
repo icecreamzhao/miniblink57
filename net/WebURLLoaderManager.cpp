@@ -94,6 +94,7 @@
 #include "base/path_service.h"
 #include "base/files/file_path.h"
 #include "base/files/file_util.h"
+#include "base/atomic_mb.h"
 
 using namespace blink;
 
@@ -1022,7 +1023,7 @@ static void setupPostOrPutOnIoThread(WebURLLoaderInternal* job, bool isPost, Set
             curl_easy_setopt(job->m_handle, CURLOPT_POSTFIELDSIZE, element->data.size());
             curl_easy_setopt(job->m_handle, CURLOPT_COPYPOSTFIELDS, element->data.data());
 
-            _InterlockedExchangeAdd(reinterpret_cast<long volatile*>(&job->m_sentDataBytes), static_cast<long>(element->data.size()));
+            MB_InterlockedExchangeAdd(reinterpret_cast<long volatile*>(&job->m_sentDataBytes), static_cast<long>(element->data.size()));
 
             delete element;
             return;

@@ -141,11 +141,8 @@ v8::Local<v8::Value> ScriptController::executeScriptAndReturnValue(
     const ScriptSourceCode& source,
     AccessControlStatus accessControlStatus)
 {
-    TRACE_EVENT1("devtools.timeline", "EvaluateScript", "data",
-        InspectorEvaluateScriptEvent::data(
-            frame(), source.url().getString(), source.startPosition()));
-    InspectorInstrumentation::NativeBreakpoint nativeBreakpoint(
-        frame()->document(), "scriptFirstStatement", false);
+    TRACE_EVENT1("devtools.timeline", "EvaluateScript", "data", InspectorEvaluateScriptEvent::data(frame(), source.url().getString(), source.startPosition()));
+    InspectorInstrumentation::NativeBreakpoint nativeBreakpoint(frame()->document(), "scriptFirstStatement", false);
 
     v8::Local<v8::Value> result;
     {

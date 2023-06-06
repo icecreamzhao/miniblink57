@@ -46,13 +46,13 @@ public:
     // SingleThreadTaskRunner implementation
     bool PostDelayedTask(const tracked_objects::Location& from_here, const base::Closure& task, base::TimeDelta delay) override
     {
-        m_thread->postDelayedTask(from_here, new RunnerTaskWrap(task), delay.ToInternalValue());
+        m_thread->postDelayedTask(from_here, new RunnerTaskWrap(task), delay.ToInternalValue() / 1000);
         return true;
     }
 
     bool PostNonNestableDelayedTask(const tracked_objects::Location& from_here, const base::Closure& task, base::TimeDelta delay) override
     {
-        m_thread->postDelayedTask(from_here, new RunnerTaskWrap(task), delay.ToInternalValue());
+        m_thread->postDelayedTask(from_here, new RunnerTaskWrap(task), delay.ToInternalValue() / 1000);
         return true;
     }
 

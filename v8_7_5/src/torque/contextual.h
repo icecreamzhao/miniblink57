@@ -10,6 +10,7 @@
 #include "src/base/macros.h"
 #include "src/base/platform/platform.h"
 #include "src/base/thread-local.h"
+#include "../../../base/atomic_mb.h"
 
 namespace v8 {
 namespace internal {
@@ -99,12 +100,12 @@ namespace internal {
         static long run_once = 0;                                                                   \
         static VarName::VariableType* s_var = nullptr;                                              \
         do {                                                                                        \
-            volatile long old_var = _InterlockedCompareExchange((long volatile*)&(run_once), 2, 0); \
+            volatile long old_var = MB_InterlockedCompareExchange((long volatile*)&(run_once), 2, 0); \
             if (0 == old_var) {                                                                     \
                 top_slot = TlsAlloc();                                                              \
                 s_var = (VarName::VariableType*)malloc(sizeof(void*));                              \
                 ::TlsSetValue(top_slot, s_var);                                                     \
-                _InterlockedExchange((long volatile*)&(run_once), 1);                               \
+                MB_InterlockedExchange((long volatile*)&(run_once), 1);                               \
                 break;                                                                              \
             } else if (1 == old_var) {                                                              \
                 s_var = (VarName::VariableType*)::TlsGetValue(top_slot);                            \
@@ -131,12 +132,12 @@ namespace internal {
         static long run_once = 0;                                                                   \
         static VarName::VariableType* s_var = nullptr;                                              \
         do {                                                                                        \
-            volatile long old_var = _InterlockedCompareExchange((long volatile*)&(run_once), 2, 0); \
+            volatile long old_var = MB_InterlockedCompareExchange((volatile long*)&(run_once), 2, 0); \
             if (0 == old_var) {                                                                     \
                 pthread_key_create(&top_slot, NULL);                                                \
                 s_var = (VarName::VariableType*)malloc(sizeof(void*));                              \
                 pthread_setspecific(top_slot, s_var);                                               \
-                _InterlockedExchange((long volatile*)&(run_once), 1);                               \
+                MB_InterlockedExchange((volatile long*)&(run_once), 1);                               \
                 break;                                                                              \
             } else if (1 == old_var) {                                                              \
                 s_var = (VarName::VariableType*)pthread_getspecific(top_slot);                      \

@@ -3,6 +3,7 @@
 #include <vector>
 #include <stdio.h>
 #include <malloc.h>
+#include "base/atomic_mb.h"
 
 namespace net {
 
@@ -66,7 +67,7 @@ bool ActivatingObjCheck::isActivatingLocked(intptr_t loader)
 
 int ActivatingObjCheck::genId()
 {
-    _InterlockedIncrement((long *)&m_newestId);
+    MB_InterlockedIncrement((long*)&m_newestId);
     return m_newestId;
 }
 

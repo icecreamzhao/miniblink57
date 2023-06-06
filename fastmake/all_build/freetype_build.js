@@ -8,6 +8,7 @@ var json = [{
 		{"ndkIncludePath":constVal.ndkIncludePath},
 		{"ndkBinPath":constVal.ndkBinPath},
 		{"targetDir": constVal.targetDir},
+		{"sysroot": constVal.sysroot},
 	],
 	"compile":{
 		"ccompiler":"${clangPath}/clang.exe",
@@ -32,9 +33,6 @@ var json = [{
 		"src":[
 			"${srcPath}/third_party/freetype/src/src/winfonts/winfnt.c",
 			"${srcPath}/third_party/freetype/src/src/autofit/autofit.c",
-			"${srcPath}/third_party/freetype/src/src/base/ftbase.c",
-			"${srcPath}/third_party/freetype/src/src/base/ftinit.c",
-			"${srcPath}/third_party/freetype/src/src/base/ftsystem.c",
 			"${srcPath}/third_party/freetype/src/src/bdf/bdf.c",
 			"${srcPath}/third_party/freetype/src/src/cache/ftcache.c",
 			"${srcPath}/third_party/freetype/src/src/cff/cff.c",
@@ -52,6 +50,9 @@ var json = [{
 			"${srcPath}/third_party/freetype/src/src/truetype/truetype.c",
 			"${srcPath}/third_party/freetype/src/src/type1/type1.c",
 			"${srcPath}/third_party/freetype/src/src/type42/type42.c",
+			"${srcPath}/third_party/freetype/src/src/base/ftbase.c",
+			"${srcPath}/third_party/freetype/src/src/base/ftinit.c",
+			"${srcPath}/third_party/freetype/src/src/base/ftsystem.c",
 			"${srcPath}/third_party/freetype/src/src/base/ftdebug.c",
 			"${srcPath}/third_party/freetype/src/src/base/ftbbox.c",
 			"${srcPath}/third_party/freetype/src/src/base/ftbdf.c",

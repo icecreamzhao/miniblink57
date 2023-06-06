@@ -39,7 +39,7 @@
 #include <memory>
 
 extern "C" {
-#include "third_party/libjpeg/jpeglib.h"
+#include "third_party/libjpeg_turbo/jpeglib.h"
 #include <setjmp.h>
 #include <stdio.h> // jpeglib.h needs stdio.h FILE
 }

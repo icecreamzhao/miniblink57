@@ -116,6 +116,9 @@ PassRefPtr<SimpleFontData> FontCache::fallbackFontForCharacter(
     const SimpleFontData* originalFontData,
     FontFallbackPriority fallbackPriority)
 {
+    if (0 == character)
+        character = 0x20; // to space
+
     // First try the specified font with standard style & weight.
     if (fallbackPriority != FontFallbackPriority::EmojiEmoji
         && (fontDescription.style() == FontStyleItalic

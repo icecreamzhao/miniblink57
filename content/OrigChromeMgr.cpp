@@ -28,6 +28,7 @@
 #include "third_party/WebKit/public/platform/WebMediaPlayerSource.h"
 #include "ui/gl/gl_surface.h"
 #include <shlwapi.h>
+#include "base/atomic_mb.h"
 
 namespace content {
 
@@ -96,13 +97,13 @@ static long s_uiThreadRunnerCount = 0;
 
 static void blinkRunner(OrigTaskType task)
 {
-    _InterlockedDecrement((long*)&s_blinkThreadRunnerCount);
+    MB_InterlockedDecrement((long*)&s_blinkThreadRunnerCount);
     task();
 }
 
 static void uiRunner(OrigTaskType task)
 {
-    _InterlockedDecrement((long*)&s_uiThreadRunnerCount);
+    MB_InterlockedDecrement((long*)&s_uiThreadRunnerCount);
     task();
 }
 
@@ -111,7 +112,7 @@ void OrigChromeMgr::postBlinkTask(OrigTaskType task)
     if (!m_inst || s_blinkThreadRunnerCount > 0)
         return;
 
-    _InterlockedIncrement((long*)&s_blinkThreadRunnerCount);
+    MB_InterlockedIncrement((long*)&s_blinkThreadRunnerCount);
     m_inst->m_blinkLoop->PostTask(FROM_HERE, base::Bind(&blinkRunner, task));
 }
 
@@ -119,7 +120,7 @@ void OrigChromeMgr::postUiTask(OrigTaskType task)
 {
     if (!m_inst || s_uiThreadRunnerCount > 0)
         return;
-    _InterlockedIncrement((long*)&s_uiThreadRunnerCount);
+    MB_InterlockedIncrement((long*)&s_uiThreadRunnerCount);
     m_inst->m_uiLoop->PostTask(FROM_HERE, base::Bind(&uiRunner, task));
 }
 

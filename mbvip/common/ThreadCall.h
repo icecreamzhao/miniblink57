@@ -85,6 +85,7 @@ public:
 
     static void shutdown();
 
+    static void exitUiMessageLoop();
     static void exitBlinkMessageLoop();
     static void blinkMessageLoop(uv_loop_t* loop, v8::Platform* platform, v8::Isolate* isolate);
     static void uiMessageLoop();

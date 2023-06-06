@@ -1214,7 +1214,7 @@ blink::WebBlobRegistry* BlinkPlatformImpl::getBlobRegistry()
 
 blink::WebClipboard* BlinkPlatformImpl::clipboard()
 {
-#if defined(OS_WIN) 
+#if 1// defined(OS_WIN) 
     if (!m_clipboardImpl)
         m_clipboardImpl = new WebClipboardImpl();
     return m_clipboardImpl;

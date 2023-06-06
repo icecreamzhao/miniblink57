@@ -2777,5 +2777,8 @@
     <ClCompile Include="..\..\third_party\skia\src\sfnt\SkOTUtils.cpp">
       <Filter>src\sfnt</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\third_party\skia\src\effects\SkArithmeticImageFilter.cpp">
+      <Filter>src\effects</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

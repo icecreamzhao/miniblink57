@@ -6,6 +6,7 @@
 
 #include "base/atomic_ref_count.h"
 #include "base/bind.h"
+#include "base/atomic_mb.h"
 
 namespace {
 
@@ -54,3 +55,56 @@ base::Closure BarrierClosure(int num_callbacks_left,
 }
 
 } // namespace base
+
+#if !defined(WIN32)
+long MB_InterlockedIncrement(long volatile* _Target)
+{
+    return _InterlockedIncrement((int volatile*) _Target);
+}
+
+long MB_InterlockedExchange(long volatile* _Target, long _Value)
+{
+    return _InterlockedExchange((int volatile*)_Target, _Value);
+}
+
+long MB_InterlockedExchangeAdd(long volatile* _Addend, long _Value)
+{
+    return _InterlockedExchangeAdd((int volatile*)_Addend, _Value);
+}
+
+long MB_InterlockedDecrement(long volatile* _Target)
+{
+    return _InterlockedDecrement((int volatile*)_Target);
+}
+
+long MB_InterlockedCompareExchange(long volatile* _Destination, long _Exchange, long _Comparand)
+{
+    return _InterlockedCompareExchange((int volatile*)_Destination, _Exchange, _Comparand);
+}
+#else
+long MB_InterlockedIncrement(long volatile* _Target)
+{
+    return _InterlockedIncrement((long volatile*)_Target);
+}
+
+long MB_InterlockedExchange(long volatile* _Target, long _Value)
+{
+    return _InterlockedExchange((long volatile*)_Target, _Value);
+}
+
+long MB_InterlockedExchangeAdd(long volatile* _Addend, long _Value)
+{
+    return _InterlockedExchangeAdd((long volatile*)_Addend, _Value);
+}
+
+long MB_InterlockedDecrement(long volatile* _Target)
+{
+    return _InterlockedDecrement((long volatile*)_Target);
+}
+
+long MB_InterlockedCompareExchange(long volatile* _Destination, long _Exchange, long _Comparand)
+{
+    return _InterlockedCompareExchange((long volatile*)_Destination, _Exchange, _Comparand);
+}
+#endif
+

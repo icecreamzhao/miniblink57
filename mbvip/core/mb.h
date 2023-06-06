@@ -11,7 +11,7 @@
 #ifndef MB_DEFINE_H
 #define MB_DEFINE_H
 
-#include <windows.h>
+#include "windows.h"
 #if !defined(WIN32)
 #include <dlfcn.h>
 #include <stdio.h>
@@ -19,10 +19,14 @@
 
 //////////////////////////////////////////////////////////////////////////
 
-#if defined(__clang__)
+#if defined(__clang__)|| defined(__GNUC__)
 #define MB_DLLEXPORT __attribute__ ((visibility("default")))
+#if __cplusplus == 201703L || _MSVC_LANG == 201703L
 //#define MB_SELECTANY __attribute__((selectany))
+#define MB_SELECTANY inline
+#else
 #define MB_SELECTANY 
+#endif
 #else
 typedef __int64 int64_t;
 #define MB_DLLEXPORT __declspec(dllexport)
@@ -846,7 +850,7 @@ ITERATOR0(void, mbUninit, "") \
 ITERATOR0(mbSettings*, mbCreateInitSettings, "方便c#等其他语言创建setting结构体") \
 ITERATOR3(void, mbSetInitSettings, mbSettings* settings, const char* name, const char* value, "") \
 ITERATOR0(mbWebView, mbCreateWebView, "") \
-ITERATOR6(mbWebView, mbCreateWebViewBindGTKWindow, void* rootWindow, void* drawingArea, DWORD style, DWORD styleEx, int width, int height, "Linux下，用于GTK绑定窗口，Win下无效") \
+ITERATOR6(mbWebView, mbCreateWebViewBindGTKWindow, void* rootWindow, void* drawingArea, DWORD style, DWORD styleEx, int width, int height, "用于GTK绑定窗口") \
 ITERATOR1(void, mbDestroyWebView, mbWebView, "") \
 ITERATOR6(mbWebView, mbCreateWebWindow, mbWindowType type, HWND parent, int x, int y, int width, int height, "") \
 ITERATOR7(mbWebView, mbCreateWebCustomWindow, HWND parent, DWORD style, DWORD styleEx, int x, int y, int width, int height, "") \
@@ -1065,6 +1069,7 @@ ITERATOR2(void, mbPluginListBuilderAddFileExtensionToLastMediaType, void* builde
 \
 ITERATOR0(void, mbEnableHighDPISupport, "") \
 ITERATOR0(void, mbRunMessageLoop, "") \
+ITERATOR0(void, mbExitMessageLoop, "") \
 ITERATOR3(void, mbOnLoadUrlFinish, mbWebView webView, mbLoadUrlFinishCallback callback, void* callbackParam, "") \
 ITERATOR3(void, mbOnLoadUrlHeadersReceived, mbWebView webView, mbLoadUrlHeadersReceivedCallback callback, void* callbackParam, "") \
 ITERATOR3(void, mbOnDocumentReadyInBlinkThread, mbWebView webView, mbDocumentReadyCallback callback, void* param, "") \
@@ -1164,8 +1169,9 @@ inline void mbInit(const mbSettings* settings)
 inline void mbInit(const mbSettings* settings)
 {
     printf("mbInit\n");
-    void* g_hMiniblinkMod = dlopen("/home/daniel/Desktop/wkexe/miniblink.so", RTLD_LAZY);
-    printf("g_hMiniblinkMod: %p\n", g_hMiniblinkMod);
+    //void* g_hMiniblinkMod = dlopen("/home/daniel/Desktop/wkexe/miniblink.so", RTLD_LAZY);
+    void* g_hMiniblinkMod = dlopen("./miniblink.so", RTLD_LAZY);
+    printf("g_hMiniblinkMod: %p, %s \n", g_hMiniblinkMod, dlerror());
     FN_mbInit mbInitExFunc = (FN_mbInit)dlsym(g_hMiniblinkMod, "mbInit");
     printf("mbInitExFunc: %p\n", mbInitExFunc);
     mbInitExFunc(settings);

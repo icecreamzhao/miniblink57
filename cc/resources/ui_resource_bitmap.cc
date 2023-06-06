@@ -21,7 +21,9 @@ namespace {
     {
         UIResourceBitmap::UIResourceFormat format = UIResourceBitmap::RGBA8;
         switch (sk_type) {
-        case kN32_SkColorType:
+        case kRGBA_8888_SkColorType:
+        case kBGRA_8888_SkColorType:
+        //case kN32_SkColorType:
             format = UIResourceBitmap::RGBA8;
             break;
         case kAlpha_8_SkColorType:

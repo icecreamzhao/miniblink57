@@ -111,14 +111,15 @@ var json = [{
 		],
 		"linkerCmd":[
 			"-strip-all",
-			"-dynamic-linker /lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+			//"-dynamic-linker /lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+            "-dynamic-linker /lib64/ld-linux-x86-64.so.2",
 			"-l${sysroot}/lib/x86_64-linux-gnu/libc-2.27.so",
 			"-l${sysroot}/usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.6200.3",
 			"-l${sysroot}/usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.9",
 			"-l${sysroot}/usr/lib/x86_64-linux-gnu/libgdk-3.so.0.2404.9",
 			"-l${sysroot}/usr/lib/x86_64-linux-gnu/libcairo.so.2.11600.0",
 			"-l${sysroot}/usr/lib/x86_64-linux-gnu/libpthread.so",
-			"-l${sysroot}/usr/lib/x86_64-linux-gnu/libpcreposix.so.3.13.3",
+			//"-l${sysroot}/usr/lib/x86_64-linux-gnu/libpcreposix.so.3.13.3",
 			"-l${sysroot}/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.28",
 			"-l${sysroot}/usr/lib/x86_64-linux-gnu/libgobject-2.0.so.0.6200.3",
 			"-lC:/cygwin64/usr/local/x86_64-unknown-linux-gnu/x86_64-unknown-linux-gnu/sysroot/lib/libdl.so.2",
@@ -129,7 +130,7 @@ var json = [{
 			"${sysroot}/usr/lib/x86_64-linux-gnu/crtn.o",
 			"${sysroot}/usr/lib/gcc/x86_64-linux-gnu/7/crtend.o"
 		],
-		"linker":"${ndkBinPath}/ld.gold.exe"
+		"linker":constVal.linker//"${ndkBinPath}/ld.gold.exe"
 	}
 }];
 

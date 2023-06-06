@@ -30,7 +30,6 @@ std::unique_ptr<blink::WebCryptoDigestor> WebCryptoImpl::createDigestor(blink::W
     //return new WebCryptoDigestorImpl();
     DebugBreak();
     return nullptr;
-
 }
 
 }

@@ -22,11 +22,11 @@
     <Filter Include="src\libpng">
       <UniqueIdentifier>{bae7b74a-dd6c-4979-9534-f5bd7597cad2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\libjpeg">
-      <UniqueIdentifier>{12c7ed51-e48c-4cdd-b3cb-1c7e1c96a993}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\brotli">
       <UniqueIdentifier>{a6940a28-81fe-44b3-b08e-8af127d17f4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\libjpeg_turbo">
+      <UniqueIdentifier>{9d7deff1-3743-4713-82c4-3d0bd6c009e1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -138,33 +138,6 @@
     <ClInclude Include="..\..\third_party\ots\include\opentype-sanitiser.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\libjpeg\jconfig.h">
-      <Filter>src\libjpeg</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\libjpeg\jdct.h">
-      <Filter>src\libjpeg</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\libjpeg\jerror.h">
-      <Filter>src\libjpeg</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\libjpeg\jinclude.h">
-      <Filter>src\libjpeg</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\libjpeg\jmemsys.h">
-      <Filter>src\libjpeg</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\libjpeg\jmorecfg.h">
-      <Filter>src\libjpeg</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\libjpeg\jpegint.h">
-      <Filter>src\libjpeg</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\libjpeg\jpeglib.h">
-      <Filter>src\libjpeg</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\libjpeg\jversion.h">
-      <Filter>src\libjpeg</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\third_party\libpng\pngpriv.h">
       <Filter>src\libpng</Filter>
     </ClInclude>
@@ -184,9 +157,6 @@
       <Filter>src\libpng</Filter>
     </ClInclude>
     <ClInclude Include="..\..\third_party\libpng\pnglibconf.h">
-      <Filter>src\libpng</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\libjpeg\iccjpeg.h">
       <Filter>src\libpng</Filter>
     </ClInclude>
     <ClInclude Include="..\..\third_party\brotli\dec\decode.h">
@@ -221,6 +191,9 @@
     </ClInclude>
     <ClInclude Include="..\..\third_party\brotli\dec\context.h">
       <Filter>src\brotli</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\libjpeg_turbo\jpeglib.h">
+      <Filter>src\libjpeg_turbo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -317,144 +290,6 @@
     <ClCompile Include="..\..\third_party\ots\src\prep.cc">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jcarith.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jccoefct.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jccolor.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jcdctmgr.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jchuff.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jcinit.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jcmainct.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jcmarker.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jcmaster.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jcomapi.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jcparam.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jcprepct.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jcsample.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jctrans.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jdapimin.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jdapistd.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jdarith.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jdatadst.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jdatasrc.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jdcoefct.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jdcolor.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jddctmgr.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jdhuff.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jdinput.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jdmainct.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jdmarker.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jdmaster.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jdmerge.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jdpostct.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jdsample.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jdtrans.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jerror.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jfdctflt.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jfdctfst.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jfdctint.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jidctflt.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jidctfst.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jidctint.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jmemmgr.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jmemnobs.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jquant1.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jquant2.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jutils.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jaricom.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jcapimin.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jcapistd.c">
-      <Filter>src\libjpeg</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\third_party\libpng\pngmem.c">
       <Filter>src\libpng</Filter>
     </ClCompile>
@@ -500,9 +335,6 @@
     <ClCompile Include="..\..\third_party\libpng\pngget.c">
       <Filter>src\libpng</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\iccjpeg.c">
-      <Filter>src\libpng</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\third_party\ots\src\woff2.cc">
       <Filter>src</Filter>
     </ClCompile>
@@ -523,6 +355,231 @@
     </ClCompile>
     <ClCompile Include="..\..\third_party\brotli\dec\decode.c">
       <Filter>src\brotli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\cdjpeg.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\wrtarga.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\wrrle.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\wrppm.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\wrjpgcom.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\wrgif.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\wrbmp.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\transupp.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\tjutil.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\rdtarga.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\rdswitch.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\rdrle.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\rdppm.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\rdjpgcom.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\rdgif.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\rdcolmap.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\rdbmp.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jutils.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jsimd_none.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jquant2.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jquant1.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jmemnobs.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jmemname.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jmemmgr.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jmemansi.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jidctred.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jidctint.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jidctfst.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jidctflt.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jfdctint.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jfdctfst.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jfdctflt.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jerror.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdtrans.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdsample.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdpostct.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdphuff.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdmerge.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdmaster.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdmarker.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdmainct.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdinput.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdicc.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdhuff.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jddctmgr.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdcoefct.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdatasrc-tj.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdatasrc.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdatadst-tj.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdatadst.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdarith.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdapistd.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdapimin.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jctrans.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcsample.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcprepct.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcphuff.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcparam.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcomapi.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcmaster.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcmarker.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcmainct.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcinit.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcicc.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jchuff.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcdctmgr.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jccolor.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jccoefct.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcarith.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcapistd.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcapimin.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jaricom.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\example.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdcolor.c">
+      <Filter>src\libjpeg_turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\iccjpeg.c">
+      <Filter>src\libjpeg_turbo</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

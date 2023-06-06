@@ -33,6 +33,10 @@ bool computeDigest(HashAlgorithm algorithm,
     size_t length,
     DigestValue& digestResult)
 {
+#if 1
+    digestResult.append((uint8_t*)(digestable), length);
+#else
+
     WebCryptoAlgorithmId algorithmId = toWebCryptoAlgorithmId(algorithm);
     WebCrypto* crypto = Platform::current()->crypto();
     unsigned char* result;
@@ -48,6 +52,7 @@ bool computeDigest(HashAlgorithm algorithm,
         return false;
 
     digestResult.append(static_cast<uint8_t*>(result), resultSize);
+#endif
     return true;
 }
 

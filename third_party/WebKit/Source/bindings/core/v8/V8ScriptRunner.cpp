@@ -633,6 +633,7 @@ v8::MaybeLocal<v8::Value> V8ScriptRunner::runCompiledScript(
 
     RELEASE_ASSERT(!context->isIteratingOverObservers());
 
+    OutputDebugStringA("V8ScriptRunner::runCompiledScript begin\n");
     // Run the script and keep track of the current recursion depth.
     v8::MaybeLocal<v8::Value> result;
     {
@@ -649,6 +650,7 @@ v8::MaybeLocal<v8::Value> V8ScriptRunner::runCompiledScript(
         ThreadDebugger::didExecuteScript(isolate);
         PerformanceMonitor::didExecuteScript(context);
     }
+    OutputDebugStringA("V8ScriptRunner::runCompiledScript end\n");
 
     crashIfIsolateIsDead(isolate);
     return result;

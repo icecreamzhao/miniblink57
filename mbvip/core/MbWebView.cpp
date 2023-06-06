@@ -36,11 +36,55 @@
 #include "third_party/WebKit/Source/wtf/text/qt4/mbchar.h"
 
 #include <vector>
+#include "base/atomic_mb.h"
+
+#if !defined(OS_WIN)
+#if defined(SK_CPU_LENDIAN)
+static inline uint32_t pixel_format_skia_n32_to_cairo_argb(uint32_t color)
+{
+    // ABGR to ARGB
+    unsigned int c1 = ((color >> 16) & 0xff) << 0;
+    unsigned int c2 = ((color >> 0) & 0xff) << 16;
+    color &= 0xff00ff00;
+    return (color & 0xff00ff00) | c1 | c2;
+}
+
+static void copy_buffer_skia_n32_to_cairo_argb(void* dst, size_t dst_row_byte_size, const void* src, size_t src_row_byte_size,
+    unsigned int x, unsigned int y, unsigned int width, unsigned int height)
+{
+    uint32_t* dst_data;
+    const uint32_t* src_data;
+
+    if (width == 0 || height == 0)
+        return;
+
+    dst_data = (uint32_t*)dst + x;
+    src_data = (uint32_t*)src + x;
+
+    while (height--) {
+        uint32_t* d = dst_data;
+        const uint32_t* s = src_data;
+        unsigned int w = width;
+        while (w--) {
+            *d++ = pixel_format_skia_n32_to_cairo_argb(*s++);
+        }
+        dst_data += dst_row_byte_size / sizeof(uint32_t);
+        src_data += src_row_byte_size / sizeof(uint32_t);
+    }
+}
+
+#elif defined(SK_CPU_BENDIAN)
+#error "no implementation for SK_CPU_BENDIAN"
+#else
+#error "SK_CPU_xENDIAN not configure"
+#endif
+
+#endif
 
 namespace mb {
 
-long atomicIncrement(long volatile* addend) { return _InterlockedIncrement(reinterpret_cast<long volatile*>(addend)); }
-long atomicDecrement(long volatile* addend) { return _InterlockedDecrement(reinterpret_cast<long volatile*>(addend)); }
+long atomicIncrement(long volatile* addend) { return MB_InterlockedIncrement(reinterpret_cast<long volatile*>(addend)); }
+long atomicDecrement(long volatile* addend) { return MB_InterlockedDecrement(reinterpret_cast<long volatile*>(addend)); }
 const WCHAR* kClassWndName = u16("mbWebWindowClass");
 extern unsigned int g_mbMask;
 extern bool g_enableNativeSetCapture;
@@ -101,6 +145,8 @@ void MbWebView::preDestroy()
     common::LiveIdDetect::get()->deconstructed(m_id);
     m_state = kPageDestroying;
     ::RevokeDragDrop(m_hWnd);
+    ::SetPropW(m_hWnd, kClassWndName, NULL);
+    //::SetWindowLongPtrW(m_hWnd, GWLP_USERDATA, 0);
 }
 
 MbWebView::~MbWebView()
@@ -507,9 +553,9 @@ void MbWebView::createWkeWebWindowImplInUiThread(HWND parent, DWORD style, DWORD
     m_isWebWindowMode = true; // TODO
 }
 
-#ifdef OS_LINUX
 void MbWebView::bindGTKWindow(void* rootWindow, void* drawingArea, DWORD style, DWORD styleEx, int width, int height)
 {
+#if !defined(WIN32)
     const WCHAR* szClassName = u16("MtMbWebWindow");
     MSG msg = { 0 };
     WNDCLASSEXW wndClass = { 0 };
@@ -529,8 +575,8 @@ void MbWebView::bindGTKWindow(void* rootWindow, void* drawingArea, DWORD style, 
         wndClass.lpszClassName = szClassName;
         RegisterClassExW(&wndClass);
     }
-
-    m_hWnd = BindWindowByGTK(
+    
+    m_hWnd = bindWindowByGTK(
         rootWindow,
         drawingArea,
         styleEx,        // window ex-style
@@ -547,8 +593,8 @@ void MbWebView::bindGTKWindow(void* rootWindow, void* drawingArea, DWORD style, 
         mbShowWindow(getWebviewHandle(), true);
 
     m_isWebWindowMode = true; // TODO
-}
 #endif
+}
 
 void MbWebView::createWkeWebWindowInUiThread(mbWindowType type, HWND parent, int x, int y, int width, int height)
 {
@@ -915,32 +961,24 @@ void MbWebView::onPaintUpdatedInCompositeThread(const HDC hdc, int x, int y, int
 
         m_bitmap = new SkBitmap();
         SkImageInfo info = SkImageInfo::MakeN32(cx, cy, kOpaque_SkAlphaType);
+        //SkImageInfo info = SkImageInfo::Make(cx, cy, kBGRA_8888_SkColorType, kPremul_SkAlphaType, nullptr);
+
         byteData = cairo_image_surface_get_data(m_surface);
-        m_bitmap->installPixels(info, byteData, cairo_image_surface_get_stride(m_surface), NULL, nullptr, nullptr);
+        bool b = m_bitmap->installPixels(info, byteData, cairo_image_surface_get_stride(m_surface), NULL, nullptr, nullptr);
         m_memoryCanvas = new SkCanvas(*m_bitmap);
     }
-    else if (m_isTransparent){
-        //gtk_window_set_decorated(GTK_WINDOW(window), FALSE);       // 设置无边框
-    }
 
-    if (m_memoryCanvas) {
+    if (m_memoryCanvas) {        
         SkRect isrc = SkRect::MakeXYWH(x, y, cx, cy);
         SkRect dst = isrc;
         m_memoryCanvas->drawBitmapRect(bitmap, isrc, dst, nullptr);
-
-//         unsigned char* line = cairo_image_surface_get_data(m_surface) + x * 4;
-//         unsigned char* p;
-//         for (int start_y = y; start_y < y + cy; start_y++) {
-//             p = line;
-//             for (int start_x = x; start_x < x + cx; start_x++) {
-//                 unsigned char tmp = p[0];
-//                 p[0] = p[2];
-//                 p[2] = tmp;
-//                 p += 4;
-//             }
-//             line += cairo_image_surface_get_stride(m_surface);
-//         }
     }
+
+//     if (m_memoryCanvas) {
+//         copy_buffer_skia_n32_to_cairo_argb((void*)cairo_image_surface_get_data(m_surface), (size_t)cairo_image_surface_get_stride(m_surface),
+//             (void*)bitmap.getPixels(), (size_t)bitmap.rowBytes(),
+//             (unsigned int)x, (unsigned int)y, (unsigned int)cx, (unsigned int)cy);
+//     }
 #endif
 }
 
@@ -979,7 +1017,7 @@ void MbWebView::onPaintUpdatedInUiThread(const HDC hdc, int x, int y, int cx, in
         
         ::ReleaseDC(m_hWnd, hdcScreen);
 #else
-        //gtk_window_set_decorated(GTK_WINDOW(window), FALSE);       // 设置无边框
+        ;
 #endif
     }
 
@@ -998,8 +1036,6 @@ void MbWebView::onPaintUpdatedInUiThread(const HDC hdc, int x, int y, int cx, in
         mbRect r = { x, y, cx, cy };
         paintBitUpdatedCallback(getWebviewHandle(), getClosure().m_PaintBitUpdatedParam, m_bits, &r, clientSize.cx, clientSize.cy);
     }
-#else
-    ;
 #endif
     ::LeaveCriticalSection(&m_memoryCanvasLock);
 
@@ -1033,8 +1069,6 @@ void MbWebView::onPrePaintUpdatedInCompositeThread(const HDC hdc, int x, int y, 
         ::InvalidateRect(m_hWnd, &rc, false);
     }
 }
-
-
 
 HDC MbWebView::getViewDC()
 {
@@ -1368,23 +1402,8 @@ void MbWebView::onPaint(HWND hWnd, WPARAM wParam)
 //                     source_data[y * stride + x] = 0xff112233;
 //                 }
 //             }
-
-//             unsigned char* line = cairo_image_surface_get_data(m_surface) + destX * 4;
-//             unsigned char* p;
-//             for (int start_y = destY; start_y < destY + height; start_y++) {
-//                 p = line;
-//                 for (int start_x = destX; start_x < destX + width; start_x++) {
-//                     unsigned char tmp = p[0];
-//                     p[0] = p[2];
-//                     p[2] = tmp;
-//                     p += 4;
-//                 }
-//                 line += cairo_image_surface_get_stride(m_surface);
-//             }
-            
             cairo_surface_mark_dirty(m_surface);
             cairo_set_source_surface(cr, m_surface, 0, 0);
-            cairo_paint(cr);
             ::LeaveCriticalSection(&m_memoryCanvasLock);
         }
 #endif
@@ -1428,6 +1447,7 @@ LRESULT MbWebView::windowProcImpl(HWND hWnd, UINT message, WPARAM wParam, LPARAM
         break;
 
     case WM_CLOSE:
+      printf("MbWebView::windowProcImpl, this:%p, %p\n", this, getClosure().m_ClosingCallback);
         if (getClosure().m_ClosingCallback) {
             if (!getClosure().m_ClosingCallback(getWebviewHandle(), getClosure().m_ClosingParam, nullptr))
                 return 0;
@@ -1492,6 +1512,9 @@ LRESULT MbWebView::windowProcImpl(HWND hWnd, UINT message, WPARAM wParam, LPARAM
             flags |= WKE_REPEAT;
         if (HIWORD(lParam) & KF_EXTENDED)
             flags |= WKE_EXTENDED;
+
+        if (virtualKeyCode == 0x43)
+            OutputDebugStringA("");
 
         if (mbFireKeyDownEvent(getWebviewHandle(), virtualKeyCode, flags, false))
             return 0;

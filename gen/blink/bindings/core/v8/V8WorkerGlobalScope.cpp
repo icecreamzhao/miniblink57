@@ -270,22 +270,20 @@ namespace WorkerGlobalScopeV8Internal {
 
     static void performanceAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
     {
-        //   v8::Local<v8::Object> holder = info.Holder();
-        //
-        //   WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
-        //
-        //   WorkerPerformance* cppValue(WorkerGlobalScopePerformance::performance(*impl));
-        //
-        //   // Keep the wrapper object for the return value alive as long as |this|
-        //   // object is alive in order to save creation time of the wrapper object.
-        //   if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-        //     return;
-        //   v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-        //   const char kKeepAliveKey[] = "KeepAlive#WorkerGlobalScope#performance";
-        //   V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-        //
-        //   v8SetReturnValue(info, v8Value);
-        DebugBreak();
+//         v8::Local<v8::Object> holder = info.Holder();
+//         WorkerGlobalScope* impl = V8WorkerGlobalScope::toImpl(holder);
+//         WorkerPerformance* cppValue(WorkerGlobalScopePerformance::performance(*impl));
+// 
+//         // Keep the wrapper object for the return value alive as long as |this|
+//         // object is alive in order to save creation time of the wrapper object.
+//         if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+//             return;
+//         v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+//         const char kKeepAliveKey[] = "KeepAlive#WorkerGlobalScope#performance";
+//         V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+// 
+//         v8SetReturnValue(info, v8Value);
+        OutputDebugStringA("Worker performance not impl\n");
     }
 
     CORE_EXPORT void performanceAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)

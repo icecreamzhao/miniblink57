@@ -30,6 +30,7 @@ void postTaskToUiThread(const blink::WebTraceLocation& location, HWND hWnd, std:
     uesOrigCC = !!OrigChromeMgr::getInst();
 #endif
 
+    printf("postTaskToUiThread\n");
     if (uesOrigCC) { // 如果不使用原版cc，则不管是否开启多线程渲染，窗口都创建在blink线程
         std::function<void(void)>* closureDummy = new std::function<void(void)>(std::move(closure));
         wke::g_wkeUiThreadPostTaskCallback(hWnd, &closureCall, closureDummy);

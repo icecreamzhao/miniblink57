@@ -108,26 +108,21 @@ bool isScrollLockOn()
 // src\ui\events\keycodes\dom\keycode_converter.cc
 static void buildModifiers(WebInputEvent* evt)
 {
-    if (GetKeyState(VK_SHIFT) & HIGH_BIT_MASK_SHORT)
-        evt->setModifiers(evt->modifiers() | ((int)WebInputEvent::ShiftKey));
+    // weolar
+//     if (GetKeyState(VK_SHIFT) & HIGH_BIT_MASK_SHORT)
+//         evt->setModifiers(evt->modifiers() | ((int)WebInputEvent::ShiftKey));
     if (GetKeyState(VK_CONTROL) & HIGH_BIT_MASK_SHORT)
         evt->setModifiers(evt->modifiers() | ((int)WebInputEvent::ControlKey));
-    if (GetKeyState(VK_MENU) & HIGH_BIT_MASK_SHORT)
-        evt->setModifiers(evt->modifiers() | ((int)WebInputEvent::AltKey));
-    if (isCapsLockOn())
-        evt->setModifiers(evt->modifiers() | ((int)WebInputEvent::CapsLockOn));
-    if (isNumLockOn())
-        evt->setModifiers(evt->modifiers() | ((int)WebInputEvent::NumLockOn));
+//     if (GetKeyState(VK_MENU) & HIGH_BIT_MASK_SHORT)
+//         evt->setModifiers(evt->modifiers() | ((int)WebInputEvent::AltKey));
+//     if (isCapsLockOn())
+//         evt->setModifiers(evt->modifiers() | ((int)WebInputEvent::CapsLockOn));
+//     if (isNumLockOn())
+//         evt->setModifiers(evt->modifiers() | ((int)WebInputEvent::NumLockOn));
 }
 
 WebKeyboardEvent PlatformEventHandler::buildKeyboardEvent(WebInputEvent::Type type, UINT message, WPARAM wParam, LPARAM lParam)
 {
-//     unsigned int flags = 0;
-//     if (HIWORD(lParam) & KF_REPEAT)
-//         flags |= KF_REPEAT;
-//     if (HIWORD(lParam) & KF_EXTENDED)
-//         flags |= KF_REPEAT;
-
     LPARAM keyData = lParam; // MAKELPARAM(0, (WORD)flags);
     WebKeyboardEvent keyEvent;
     keyEvent.windowsKeyCode = (type == WebInputEvent::RawKeyDown || type == WebInputEvent::KeyUp) ? wParam : 0;
@@ -139,8 +134,17 @@ WebKeyboardEvent PlatformEventHandler::buildKeyboardEvent(WebInputEvent::Type ty
     keyEvent.setType(type);
 
     buildModifiers(&keyEvent);
+
     if (isKeypadEvent(wParam, keyData, type))
         keyEvent.setModifiers(keyEvent.modifiers() | WebInputEvent::IsKeyPad);
+
+    //printf("PlatformEventHandler::buildKeyboardEvent: %x\n", keyEvent.modifiers());
+
+    char* output = (char*)malloc(0x100);
+    sprintf(output, "PlatformEventHandler::buildKeyboardEvent: modifiers:%x, windowsKeyCode:%x\n", keyEvent.modifiers(), keyEvent.windowsKeyCode);
+    OutputDebugStringA(output);
+    free(output);
+
 #if defined(OS_WIN)
     if (VK_LEFT == keyEvent.windowsKeyCode)
         wcscpy(keyEvent.text, L"Left");
