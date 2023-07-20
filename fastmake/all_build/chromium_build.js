@@ -630,7 +630,6 @@ var json = [{
         "cmd":[
             "--target=x86_64-linux-guneabi", 
             "-std=c++14",
-            "-fno-exceptions",
             "-fms-extensions",
             "-D_GNU_SOURCE",
             "-DUSE_GLIB=1",
@@ -641,7 +640,7 @@ var json = [{
             "-DANGLE_ENABLE_GLSL=1",
             "-DBUILDING_CEF_SHARED",
             "-DUSING_CEF_SHARED",
-            "-DENABLE_ASSERT=1",
+            //"-DENABLE_ASSERT=1",
             "-DMEDIA_IMPLEMENTATION=1",
             "-DUSE_PROPRIETARY_CODECS=1",
             "-D_LIB"

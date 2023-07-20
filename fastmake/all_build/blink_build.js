@@ -53,6 +53,7 @@ var json = [{
             "${srcPath}/node/cares/config/linux",
             "${srcPath}/node/uv/include",
             "${srcPath}/third_party/khronos",
+            "${srcPath}/third_party/libwebp",
             "${srcPath}/third_party/libxml/src/include",
             "${srcPath}/third_party/libxml/win32/include",
             "${srcPath}/third_party/skia/include/core",
@@ -103,7 +104,7 @@ var json = [{
             "${srcPath}/content/compositor/SoftwareOutputDevice.cpp",
             "${srcPath}/content/browser/WebPageImpl.cpp",
 //            "${srcPath}/content/OrigChromeMgr.cpp",
-            //"${srcPath}/net/WebURLLoaderManager.cpp",
+            "${srcPath}/net/WebURLLoaderManager.cpp",
             "${srcPath}/content/browser/PlatformEventHandler.cpp",
             //"${srcPath}/third_party/WebKit/Source/platform/weborigin/KURL.cpp",
             //"${srcPath}/third_party/WebKit/Source/platform/text/TextBreakIteratorICU.cpp",
@@ -131,10 +132,14 @@ var json = [{
             "${srcPath}/mbvip/core/mb.cpp",
             "${srcPath}/mbvip/core/mb2.cpp",
             "${srcPath}/mbvip/core/MbWebView.cpp",
-                
+            "${srcPath}/mbvip/download/SimpleDownload.cpp",
+            
             "${srcPath}/content/web_impl_win/WebClipboardImplLinux.cpp",
             "${srcPath}/third_party/WebKit/Source/platform/graphics/DecodingImageGenerator.cpp",
             "${srcPath}/third_party/WebKit/Source/platform/graphics/DeferredImageDecoder.cpp",
+            "${srcPath}/third_party/WebKit/Source/platform/image-decoders/ImageDecoder.cpp",
+             "${srcPath}/third_party/WebKit/Source/platform/image-decoders/webp/WEBPImageDecoder.cpp",
+            "${srcPath}/third_party/WebKit/Source/core/loader/WorkerThreadableLoader.cpp",
             "${srcPath}/third_party/WebKit/Source/core/frame/ImageBitmap.cpp",
             "${srcPath}/third_party/WebKit/Source/platform/image-decoders/ImageFrame.cpp",
             
@@ -148,6 +153,8 @@ var json = [{
 //            "${srcPath}/ui/gfx/linux_font_delegate.cc",
 //            "${srcPath}/ui/gfx/font_render_params.cc",
 //            "${srcPath}/ui/gfx/font_render_params_linux.cc",
+
+            "${srcPath}/third_party/WebKit/Source/platform/fonts/shaping/ShapeResult.cpp",
         ],
         "src":[
             "${srcPath}/linux/testmain.cpp",
@@ -3321,6 +3328,7 @@ var json = [{
             "${srcPath}/gen/blink/core/WMLNames.cpp",
             "${srcPath}/gen/blink/bindings/core/v8/V8ConsoleBase.cpp",
             "${srcPath}/third_party/WebKit/Source/platform/image-decoders/wbmp/WBMPImageDecoder.cpp",
+            "${srcPath}/third_party/WebKit/Source/platform/image-decoders/webp/WEBPImageDecoder.cpp",
             "${srcPath}/third_party/WebKit/Source/wtf/RefCountedLeakCounter.cpp",
             "${srcPath}/content/browser/PlatformEventHandler.cpp",
             "${srcPath}/content/browser/PlatformMessagePortChannel.cpp",
@@ -3426,6 +3434,7 @@ var json = [{
             "${srcPath}/mbvip/core/mb.cpp",
             "${srcPath}/mbvip/core/mb2.cpp",
             "${srcPath}/mbvip/core/MbWebView.cpp",
+            "${srcPath}/mbvip/download/SimpleDownload.cpp",
             "${srcPath}/content/web_impl_win/WebViewSchedulerImpl.cpp",
             "${srcPath}/content/web_impl_win/WebFrameSchedulerImpl.cpp",
             "${srcPath}/content/web_impl_win/WebTaskRunnerImpl.cpp",
@@ -3836,12 +3845,11 @@ var json = [{
             "${srcPath}/gin/per_context_data.cc",
             "${srcPath}/ui/gfx/selection_bound.cc",
             "${srcPath}/ui/gfx/color_space.cc",
-            "${srcPath}/node/nodeblink.cpp",
+            //"${srcPath}/node/nodeblink.cpp",
             "${srcPath}/linux/linuxgdi.cpp",
             "${srcPath}/linux/linuxwindows.cpp"
         ],
         "cmd":[
-            "-fno-exceptions",
             "--target=x86_64-linux-guneabi", 
             "-std=c++14",
             "-fms-extensions",
@@ -3908,7 +3916,7 @@ var json = [{
             "${srcPath}/out/${targetDir}/libskia.a",
             "${srcPath}/out/${targetDir}/libchromium.a",
             "${srcPath}/out/${targetDir}/libcurl.a",
-            "${srcPath}/out/${targetDir}/libnodejs.a",
+            //"${srcPath}/out/${targetDir}/libnodejs.a",
             //"${srcPath}/out/${targetDir}/libelectron.a",
             "${srcPath}/out/${targetDir}/libopenssl.a",
             "${srcPath}/out/${targetDir}/libthird_party_util.a",
@@ -3928,9 +3936,10 @@ if (!constVal.isBuildElectronMode) {
 } else {
     json[0].compile.beginLibs.push("${sysroot}/usr/lib/gcc/x86_64-linux-gnu/7/crtbegin.o");
     json[0].compile.endLibs.push("${srcPath}/out/${targetDir}/libelectron.a");
+    json[0].compile.endLibs.push("${srcPath}/out/${targetDir}/libnodejs.a");
 }
 
-if (constVal.v8dir == "v8_7_5") {
+if (false && constVal.v8dir == "v8_7_5") {
     json[0].compile.endLibs.unshift("${srcPath}/out/${targetDir}/lib" + constVal.v8dir + "_1.a");
     json[0].compile.endLibs.unshift("${srcPath}/out/${targetDir}/lib" + constVal.v8dir + "_2.a");
     json[0].compile.endLibs.unshift("${srcPath}/out/${targetDir}/lib" + constVal.v8dir + "_1.a");

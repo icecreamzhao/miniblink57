@@ -451,7 +451,6 @@ var json = [{
         ],
         // 
         "cmd":[
-            "-fno-exceptions",
             "--target=x86_64-linux-guneabi", 
             "-std=c++14",
             "-fms-extensions",
