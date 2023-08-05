@@ -42,8 +42,13 @@
 #include <memory>
 
 extern "C" {
+#if 0//defined(WIN32)
+#include "third_party/libjpeg/iccjpeg.h"
+#include "third_party/libjpeg/jpeglib.h"
+#else
 #include "third_party/libjpeg_turbo/iccjpeg.h"
 #include "third_party/libjpeg_turbo/jpeglib.h"
+#endif
 #include <setjmp.h>
 #include <stdio.h> // jpeglib.h needs stdio FILE.
 }

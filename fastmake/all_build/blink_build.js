@@ -3939,7 +3939,7 @@ if (!constVal.isBuildElectronMode) {
     json[0].compile.endLibs.push("${srcPath}/out/${targetDir}/libnodejs.a");
 }
 
-if (false && constVal.v8dir == "v8_7_5") {
+if (constVal.v8dir == "v8_7_5") {
     json[0].compile.endLibs.unshift("${srcPath}/out/${targetDir}/lib" + constVal.v8dir + "_1.a");
     json[0].compile.endLibs.unshift("${srcPath}/out/${targetDir}/lib" + constVal.v8dir + "_2.a");
     json[0].compile.endLibs.unshift("${srcPath}/out/${targetDir}/lib" + constVal.v8dir + "_1.a");

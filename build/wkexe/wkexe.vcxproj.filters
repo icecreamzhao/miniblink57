@@ -22,6 +22,9 @@
     <Filter Include="src\quickjs">
       <UniqueIdentifier>{a8bc11dc-5c49-45aa-a3b0-a437a41f3fcb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\test">
+      <UniqueIdentifier>{e25ecf4f-64fc-495f-b915-9b0da4ad82e7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -118,6 +121,9 @@
     </ClCompile>
     <ClCompile Include="..\..\wkexe\vip\wkexe_linux_exp.cpp">
       <Filter>src\vip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\wkexe\test\test_main.cpp">
+      <Filter>src\test</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

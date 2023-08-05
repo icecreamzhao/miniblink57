@@ -220,3 +220,5 @@ mbNetGetReferrer
 mbOnLoadUrlHeadersReceived
 mbOnLoadUrlFinish
 mbGetProcAddr
+mbCreateWebViewBindGTKWindow
+mbExitMessageLoop

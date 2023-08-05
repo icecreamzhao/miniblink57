@@ -1053,6 +1053,8 @@ bool HarfBuzzShaper::shapeHarfBuzzRuns(ShapeResult* result)
 
     const LayoutLocale& loc = fontDescription.localeOrDefault();
     CString locale = loc.ascii();
+    if (locale.length() == 0 || !locale.data())
+        return false;
 
     const hb_language_t language = hb_language_from_string(locale.data(), locale.length());
 

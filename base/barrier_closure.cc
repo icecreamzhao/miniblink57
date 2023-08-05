@@ -56,7 +56,7 @@ base::Closure BarrierClosure(int num_callbacks_left,
 
 } // namespace base
 
-#if !defined(WIN32)
+#if 0//!defined(WIN32)
 long MB_InterlockedIncrement(long volatile* _Target)
 {
     return _InterlockedIncrement((int volatile*) _Target);

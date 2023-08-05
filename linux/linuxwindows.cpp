@@ -392,10 +392,71 @@ BOOL FindClose(HANDLE hFindFile)
     printf("FindClose\n");
     return FALSE;
 }
+
+void* __memcpy(void* dst, const void* src, size_t len) {
+    unsigned char* p1 = (unsigned char*)dst;
+    const unsigned char* p2 = (const unsigned char*)src;
+    while (len--)
+        *p1++ = *p2++;
+    return dst;
+}
+
+void __memset(void* dst, const char c, size_t len)
+{
+    for (size_t i = 0; i < len; ++i) {
+        *((char*)dst + i) = c;
+    }
+}
+
+size_t __wcslen(const WCHAR* str)
+{
+    const WCHAR* p = str;
+    while (*p++ != u16('\0'));
+    return p - str - 1;
+}
+
+void __wcscpy(WCHAR* dest, const WCHAR* source)
+{
+    while (*source)
+        *dest++ = *source++;
+    *dest = L'\0';
+}
+
+WCHAR* __wcscat(WCHAR* dest, const WCHAR* src)
+{
+    size_t len = __wcslen(dest);
+    for (size_t i = 0; ; ++i) {
+        if (src[i])
+            dest[len + i] = src[i];
+        else {
+            dest[len + i] = u16('\0');
+            break;
+        }
+    }
+    return dest;
+}
+
 BOOL PathAppendW(LPWSTR pszPath, LPCWSTR pMore)
 {
-    printf("PathAppendW\n");
-    return FALSE;
+    //printf("PathAppendW\n");
+    const int len = __wcslen(pszPath);
+    const int moreLen = __wcslen(pMore);
+    if (len + moreLen >= MAX_PATH)
+        return FALSE;
+    if (len == 0) {
+        __wcscpy(pszPath, pMore);
+        return TRUE;
+    }
+    if (moreLen == 0) {
+        return TRUE;
+    }
+
+    if (pszPath[len - 1] != u16('\\') && pszPath[len - 1] != u16('/')) {
+        pszPath[len] = u16('/');
+        pszPath[len + 1] = u16('\0');
+    }
+    __wcscat(pszPath, pMore);
+    return TRUE;
 }
 
 DWORD GetTempPathW(DWORD nBufferLength, LPWSTR lpBuffer)

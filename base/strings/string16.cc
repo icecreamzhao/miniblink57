@@ -3,19 +3,7 @@
 // found in the LICENSE file.
 
 #include "base/strings/string16.h"
-
-#if defined(WCHAR_T_IS_UTF16)
-
-#error This file should not be used on 2-byte wchar_t systems
-// If this winds up being needed on 2-byte wchar_t systems, either the
-// definitions below can be used, or the host system's wide character
-// functions like wmemcmp can be wrapped.
-
-#elif defined(WCHAR_T_IS_UTF32)
-
-#include <ostream>
-
-#include "base/strings/utf_string_conversions.h"
+#include <string.h>
 
 namespace base {
 
@@ -72,6 +60,23 @@ char16* c16memset(char16* s, char16 c, size_t n)
     }
     return s_orig;
 }
+
+}
+
+#if defined(WCHAR_T_IS_UTF16)
+
+// #error This file should not be used on 2-byte wchar_t systems
+// If this winds up being needed on 2-byte wchar_t systems, either the
+// definitions below can be used, or the host system's wide character
+// functions like wmemcmp can be wrapped.
+
+#elif defined(WCHAR_T_IS_UTF32)
+
+#include <ostream>
+
+#include "base/strings/utf_string_conversions.h"
+
+namespace base {
 
 std::ostream& operator<<(std::ostream& out, const string16& str)
 {

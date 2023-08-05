@@ -29,7 +29,7 @@
 #include "platform/image-decoders/ico/ICOImageDecoder.h"
 #include "platform/image-decoders/jpeg/JPEGImageDecoder.h"
 #include "platform/image-decoders/png/PNGImageDecoder.h"
-// #include "platform/image-decoders/webp/WEBPImageDecoder.h"
+#include "platform/image-decoders/webp/WEBPImageDecoder.h"
 #include "platform/image-decoders/gdiplus/ImageGDIPlusDecoder.h"
 #if ENABLE_WML
 #include "platform/image-decoders/wbmp/WBMPImageDecoder.h"
@@ -115,7 +115,7 @@ std::unique_ptr<ImageDecoder> ImageDecoder::create(
         decoder.reset(new GIFImageDecoder(alphaOption, colorBehavior, maxDecodedBytes));
         break;
     case SniffResult::WEBP:
-        //decoder.reset(new WEBPImageDecoder(alphaOption, colorBehavior, maxDecodedBytes));
+        decoder.reset(new WEBPImageDecoder(alphaOption, colorBehavior, maxDecodedBytes));
         break;
     case SniffResult::ICO:
         decoder.reset(new ICOImageDecoder(alphaOption, colorBehavior, maxDecodedBytes));

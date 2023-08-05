@@ -29,6 +29,8 @@
 #include "mbvip/core/RenderInit.h"
 #endif
 
+#include "content/browser/PostTaskHelper.h"
+
 #if !defined(OS_WIN)
 #include <cairo.h>
 #endif
@@ -37,6 +39,10 @@
 
 #include <vector>
 #include "base/atomic_mb.h"
+
+namespace wke {
+void connetDevTools(wkeWebView frontEnd, wkeWebView embedder);
+}
 
 #if !defined(OS_WIN)
 #if defined(SK_CPU_LENDIAN)
@@ -1447,7 +1453,7 @@ LRESULT MbWebView::windowProcImpl(HWND hWnd, UINT message, WPARAM wParam, LPARAM
         break;
 
     case WM_CLOSE:
-      printf("MbWebView::windowProcImpl, this:%p, %p\n", this, getClosure().m_ClosingCallback);
+        printf("MbWebView::windowProcImpl, this:%p, %p\n", this, getClosure().m_ClosingCallback);
         if (getClosure().m_ClosingCallback) {
             if (!getClosure().m_ClosingCallback(getWebviewHandle(), getClosure().m_ClosingParam, nullptr))
                 return 0;
@@ -1789,6 +1795,90 @@ void* MbWebView::getUserKeyValue(const char* key) const
     void* ret = it->second;
     ::LeaveCriticalSection(&m_userKeyValuesLock);
     return ret;
+}
+
+class ShowDevToolsInUiThread {
+public:
+    ShowDevToolsInUiThread(MbWebView* parent, const std::string& url, mbOnShowDevtoolsCallback callback, void* param)
+    {
+        m_mbDevToolsWebView = NULL_WEBVIEW;
+        m_parent = parent->getId();
+        m_url = url;
+        m_callback = callback;
+        m_param = param;
+
+        m_memoryBMP = nullptr;
+        m_memoryDC = nullptr;
+        ::InitializeCriticalSection(&m_memoryCanvasLock);
+    }
+
+    void createInBlinkThread()
+    {
+        //content::WebPage::connetDevTools(devToolsWebView->webPage(), m_parent->webPage());
+        MbWebView* devToolsWebView = (MbWebView*)common::LiveIdDetect::get()->getPtr(m_mbDevToolsWebView);
+        MbWebView* parent = (MbWebView*)common::LiveIdDetect::get()->getPtr(m_parent);
+        if (!devToolsWebView || !parent)
+            return;
+        wke::connetDevTools(devToolsWebView->getWkeWebView(), parent->getWkeWebView());
+
+        ShowDevToolsInUiThread* self = this;
+        content::postTaskToUiThread(FROM_HERE, NULL, [self] {
+            self->createInUiThreadStep2();
+        });
+    }
+
+    void createInUiThreadStep1()
+    {
+        m_mbDevToolsWebView = mbCreateWebWindow(MB_WINDOW_TYPE_POPUP, nullptr, 200, 200, 800, 600);
+        //m_parent->m_devToolsWebView = devToolsWebView;
+
+        ShowDevToolsInUiThread* self = this;
+        content::postTaskToMainThread(FROM_HERE, [self] {
+            self->createInBlinkThread();
+        });
+
+        // if (m_callback)
+        //     m_callback(devToolsWebView, m_param);
+    }
+
+    void createInUiThreadStep2()
+    {
+       
+
+        //         WrapInfo* wrapInfo = new WrapInfo();
+        //         wrapInfo->hWnd = mbGetHostHWND(devToolsWebView);
+        //         wrapInfo->self = this;
+        //         wrapInfo->parent = m_parent;
+        // 
+        //         wrapInfo->id = wkeGetWebviewId(devToolsWebView);
+
+        mbLoadURL(m_mbDevToolsWebView, m_url.c_str());
+        mbShowWindow(m_mbDevToolsWebView, TRUE);
+        //wkeOnWindowDestroy(m_mbDevToolsWebView, handleDevToolsWebViewDestroy, (void*)wrapInfo);
+        //wkeOnPaintUpdated(m_mbDevToolsWebView, onPaintUpdated, (void*)wrapInfo);
+        mbSetWindowTitle(m_mbDevToolsWebView, "Miniblink Devtools");
+        mbSetZoomFactor(m_mbDevToolsWebView, /*m_parent->zoomFactor()*/1);
+        mbSetDragDropEnable(m_mbDevToolsWebView, false);
+    }
+
+private:
+    mbWebView m_mbDevToolsWebView;
+    mbWebView m_parent;
+    std::string m_url;
+    mbOnShowDevtoolsCallback m_callback;
+    void* m_param;
+
+    CRITICAL_SECTION m_memoryCanvasLock;
+    HBITMAP m_memoryBMP;
+    HDC m_memoryDC;
+};
+
+void MbWebView::showDevTools(const utf8* url, mbOnShowDevtoolsCallback callback, void* param)
+{
+    ShowDevToolsInUiThread* dev = new ShowDevToolsInUiThread(this, url, callback, param);
+    content::postTaskToUiThread(FROM_HERE, NULL, [dev] {
+        dev->createInUiThreadStep1();
+    });
 }
 
 }

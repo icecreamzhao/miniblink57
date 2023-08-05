@@ -42,7 +42,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\$(Configuration)\</IntDir>
-    <OutDir>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\</OutDir>
+    <OutDir>$(SolutionDir)..\out\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\</OutDir>
@@ -83,6 +83,7 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <DisableSpecificWarnings>4800;4291;4996;4244;4305;4068;</DisableSpecificWarnings>
       <LanguageStandard>Default</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -1336,6 +1337,7 @@
     <ClCompile Include="..\..\base\strings\nullable_string16.cc" />
     <ClCompile Include="..\..\base\strings\pattern_base.cc" />
     <ClCompile Include="..\..\base\strings\safe_sprintf.cc" />
+    <ClCompile Include="..\..\base\strings\string16.cc" />
     <ClCompile Include="..\..\base\strings\stringprintf.cc" />
     <ClCompile Include="..\..\base\strings\string_number_conversions.cc" />
     <ClCompile Include="..\..\base\strings\string_piece.cc" />

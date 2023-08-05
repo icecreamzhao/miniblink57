@@ -79,6 +79,7 @@
 // #define VLD_FORCE_ENABLE 1
 // #include "C:\\Program Files (x86)\\Visual Leak Detector\\include\\vld.h"
 
+HMODULE g_hModule;
 DWORD g_paintToMemoryCanvasInUiThreadCount = 0;
 DWORD g_rasterTaskCount = 0;
 DWORD g_mouseCount = 0;

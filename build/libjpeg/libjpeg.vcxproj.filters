@@ -4,6 +4,30 @@
     <Filter Include="src">
       <UniqueIdentifier>{3a4ce0f4-5050-42c1-bf6e-2a9c54180474}</UniqueIdentifier>
     </Filter>
+    <Filter Include="turbo">
+      <UniqueIdentifier>{af15deea-0418-46ea-80fc-ff4efb627991}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="webp">
+      <UniqueIdentifier>{028f57e9-bd6c-405a-902c-4de8e9c8fd35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="webp\dec">
+      <UniqueIdentifier>{ac2e653e-c9ab-4df3-9c80-0b563e21fd99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="webp\demux">
+      <UniqueIdentifier>{854de242-16ad-4bae-baa7-739e01e06f08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="webp\dsp">
+      <UniqueIdentifier>{ba702f4f-4169-48f6-a315-8902c9f6aa21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="webp\enc">
+      <UniqueIdentifier>{0924ba23-f74b-41ba-a613-6bb3c2f44878}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="webp\utils">
+      <UniqueIdentifier>{737cdf7b-b853-45c4-b867-ee75e8893cfe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="webp\webp">
+      <UniqueIdentifier>{5da73d4a-15fc-4280-be12-2edaae7330eb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\third_party\libjpeg\jaricom.c">
@@ -144,6 +168,408 @@
     <ClCompile Include="..\..\third_party\libjpeg\jutils.c">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\wrtarga.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\cdjpeg.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\djpeg.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\example.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\iccjpeg.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jaricom.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcapimin.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcapistd.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcarith.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jccoefct.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jccolor.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcdctmgr.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jchuff.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcicc.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcinit.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcmainct.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcmarker.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcmaster.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcomapi.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcparam.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcphuff.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcprepct.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcsample.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jctrans.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdapimin.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdapistd.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdarith.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdatadst.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdatadst-tj.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdatasrc.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdatasrc-tj.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdcoefct.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdcolor.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jddctmgr.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdhuff.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdicc.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdinput.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdmainct.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdmarker.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdmaster.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdmerge.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdphuff.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdpostct.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdsample.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdtrans.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jerror.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jfdctflt.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jfdctfst.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jfdctint.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jidctflt.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jidctfst.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jidctint.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jidctred.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jmemmgr.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jmemname.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jquant1.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jquant2.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jsimd_none.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jutils.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\rdbmp.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\rdcolmap.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\rdgif.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\rdppm.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\rdrle.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\rdswitch.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\rdtarga.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\tjutil.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\transupp.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\wrbmp.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\wrgif.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\wrppm.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\wrrle.c">
+      <Filter>turbo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\dec\webp.c">
+      <Filter>webp\dec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\dec\buffer.c">
+      <Filter>webp\dec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\dec\dec_alpha.c">
+      <Filter>webp\dec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\dec\dec_frame.c">
+      <Filter>webp\dec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\dec\dec_quant.c">
+      <Filter>webp\dec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\dec\dec_tree.c">
+      <Filter>webp\dec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\dec\dec_vp8l.c">
+      <Filter>webp\dec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\dec\idec.c">
+      <Filter>webp\dec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\dec\io.c">
+      <Filter>webp\dec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\dec\vp8.c">
+      <Filter>webp\dec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\demux\demux.c">
+      <Filter>webp\demux</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\dsp\yuv_sse2.c">
+      <Filter>webp\dsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\dsp\alpha_processing.c">
+      <Filter>webp\dsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\dsp\alpha_processing_sse2.c">
+      <Filter>webp\dsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\dsp\cpu.c">
+      <Filter>webp\dsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\dsp\dec.c">
+      <Filter>webp\dsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\dsp\dec_clip_tables.c">
+      <Filter>webp\dsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\dsp\dec_mips32.c">
+      <Filter>webp\dsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\dsp\dec_sse2.c">
+      <Filter>webp\dsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\dsp\enc.c">
+      <Filter>webp\dsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\dsp\enc_avx2.c">
+      <Filter>webp\dsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\dsp\enc_mips32.c">
+      <Filter>webp\dsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\dsp\enc_sse2.c">
+      <Filter>webp\dsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\dsp\lossless.c">
+      <Filter>webp\dsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\dsp\lossless_mips32.c">
+      <Filter>webp\dsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\dsp\lossless_sse2.c">
+      <Filter>webp\dsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\dsp\upsampling.c">
+      <Filter>webp\dsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\dsp\upsampling_sse2.c">
+      <Filter>webp\dsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\dsp\yuv.c">
+      <Filter>webp\dsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\dsp\yuv_mips32.c">
+      <Filter>webp\dsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\enc\webpenc.c">
+      <Filter>webp\enc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\enc\alpha.c">
+      <Filter>webp\enc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\enc\analysis.c">
+      <Filter>webp\enc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\enc\backward_references.c">
+      <Filter>webp\enc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\enc\config.c">
+      <Filter>webp\enc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\enc\cost.c">
+      <Filter>webp\enc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\enc\filter.c">
+      <Filter>webp\enc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\enc\frame.c">
+      <Filter>webp\enc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\enc\histogram.c">
+      <Filter>webp\enc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\enc\iterator.c">
+      <Filter>webp\enc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\enc\picture.c">
+      <Filter>webp\enc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\enc\picture_csp.c">
+      <Filter>webp\enc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\enc\picture_psnr.c">
+      <Filter>webp\enc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\enc\picture_rescale.c">
+      <Filter>webp\enc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\enc\picture_tools.c">
+      <Filter>webp\enc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\enc\quant.c">
+      <Filter>webp\enc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\enc\syntax.c">
+      <Filter>webp\enc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\enc\token.c">
+      <Filter>webp\enc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\enc\tree.c">
+      <Filter>webp\enc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\enc\vp8l.c">
+      <Filter>webp\enc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\utils\utils.c">
+      <Filter>webp\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\utils\bit_writer.c">
+      <Filter>webp\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\utils\color_cache.c">
+      <Filter>webp\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\utils\filters.c">
+      <Filter>webp\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\utils\huffman_encode.c">
+      <Filter>webp\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\utils\quant_levels.c">
+      <Filter>webp\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\utils\quant_levels_dec.c">
+      <Filter>webp\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\utils\random.c">
+      <Filter>webp\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\utils\rescaler.c">
+      <Filter>webp\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\utils\thread.c">
+      <Filter>webp\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\utils\bit_reader_webp.c">
+      <Filter>webp\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\utils\huffman_webp.c">
+      <Filter>webp\utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\third_party\libjpeg\jconfig.h">
@@ -172,6 +598,27 @@
     </ClInclude>
     <ClInclude Include="..\..\third_party\libjpeg\jversion.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\libwebp\webp\types.h">
+      <Filter>webp\webp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\libwebp\webp\config.h">
+      <Filter>webp\webp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\libwebp\webp\decode.h">
+      <Filter>webp\webp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\libwebp\webp\demux.h">
+      <Filter>webp\webp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\libwebp\webp\encode.h">
+      <Filter>webp\webp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\libwebp\webp\format_constants.h">
+      <Filter>webp\webp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\libwebp\webp\mux_types.h">
+      <Filter>webp\webp</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

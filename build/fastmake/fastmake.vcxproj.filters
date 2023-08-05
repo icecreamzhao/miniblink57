@@ -2774,6 +2774,9 @@
     <ClCompile Include="..\..\..\quickjs-master\quickjs.c">
       <Filter>src\quickjs</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\livi-browser-gtk\livi-browser-gtk-no-evco\src\livi_browser.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\chromium\M84\build\linux\debian_sid_amd64-sysroot\usr\include\libpng">

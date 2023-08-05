@@ -33,9 +33,6 @@
 #include "platform/weborigin/Suborigin.h"
 #include <memory>
 
-// #pragma optimize("", off)
-// #pragma clang optimize off
-
 namespace blink {
 
 DOMWindow::DOMWindow(Frame& frame)

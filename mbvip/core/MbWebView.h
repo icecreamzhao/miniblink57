@@ -65,6 +65,8 @@ public:
 	void setUrl(const std::string& url) { m_url = url; }
 	const std::string& getUrl() const { return m_url; }
 
+    void showDevTools(const utf8* url, mbOnShowDevtoolsCallback cb, void* param);
+
     mbRect getCaretRect();
 
     void setPacketPathName(const WCHAR* pathName);

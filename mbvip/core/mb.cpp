@@ -17,6 +17,7 @@
 #include "printing/PrintingSetting.h"
 #include "download/DownloadMgr.h"
 #endif // ENABLE_IN_MB_MAIN
+#include "mbvip/download/SimpleDownload.h"
 
 #include "third_party/WebKit/Source/wtf/text/qt4/mbchar.h"
 
@@ -759,7 +760,11 @@ void MB_CALL_TYPE mbSetDebugConfig(mbWebView webviewHandle, const char* debug, c
     if (0 == strcmp(debug, "disableNativeSetCapture")) {
         mb::g_enableNativeSetCapture = false;
     } else if (0 == strcmp(debug, "disableNativeSetFocus")) {
-      mb::g_enableNativeSetFocus = false;
+        mb::g_enableNativeSetFocus = false;
+    } else if (0 == strcmp(debug, "showDevTools")) {
+        mb::MbWebView* webview = (mb::MbWebView*)common::LiveIdDetect::get()->getPtr(webviewHandle);
+        webview->showDevTools(param, nullptr, nullptr);
+        return;
     }
 
     std::string* debugString = new std::string(debug);
@@ -939,6 +944,38 @@ void MB_CALL_TYPE mbOnCreateView(mbWebView webviewHandle, mbCreateViewCallback c
     webview->getClosure().setCreateViewCallback(callback, param);
 }
 
+static mbDownloadOpt mbSimpleDownload(mbWebView mbWebview,
+    const WCHAR* path,
+    const mbDialogOptions* dialogOpt,
+    const mbDownloadOptions* downloadOptions,
+    size_t expectedContentLength,
+    const char* url,
+    const char* mime,
+    const char* disposition,
+    mbNetJob job,
+    mbNetJobDataBind* dataBind,
+    mbDownloadBind* callbackBind)
+{
+    mb::MbWebView* webview = (mb::MbWebView*)common::LiveIdDetect::get()->getPtr(mbWebview);
+    if (!webview)
+        return kMbDownloadOptCancel;
+
+    webview->setIsMouseKeyMessageEnable(false);
+    download::SimpleDownload* downloader = download::SimpleDownload::create(mbWebview, path, dialogOpt, downloadOptions,
+        expectedContentLength,
+        url,
+        mime,
+        disposition,
+        job,
+        dataBind,
+        callbackBind);
+    if (downloader)
+        return kMbDownloadOptCacheData;
+
+    webview->setIsMouseKeyMessageEnable(true);
+    return kMbDownloadOptCancel;
+}
+
 struct DownloadWrap {
     std::string url;
     std::string mime;
@@ -968,23 +1005,26 @@ BOOL MB_CALL_TYPE mbPopupDownloadMgr(mbWebView webviewHandle, const char* url, v
 }
 
 mbDownloadOpt MB_CALL_TYPE mbPopupDialogAndDownload(mbWebView webviewHandle,
-    void* param,
+    const mbDialogOptions* dialogOpt, 
     size_t expectedContentLength,
     const char* url,
-    const char* mime,
-    const char* disposition,
-    mbNetJob job,
-    mbNetJobDataBind* dataBind,
+    const char* mime, 
+    const char* disposition, 
+    mbNetJob job, 
+    mbNetJobDataBind* dataBind, 
     mbDownloadBind* callbackBind)
 {
-#if ENABLE_IN_MB_MAIN
-    return DownloadMgr::simpleDownload(webviewHandle, nullptr, expectedContentLength, url, mime, disposition, job, dataBind, callbackBind);
+// #if ENABLE_IN_MB_MAIN
+//     return DownloadMgr::simpleDownload(webviewHandle, nullptr, expectedContentLength, url, mime, disposition, job, dataBind, callbackBind);
+// #endif
+#if 1 // ENABLE_IN_MB_MAIN
+    return mbSimpleDownload(webviewHandle, nullptr, dialogOpt, nullptr, expectedContentLength, url, mime, disposition, job, dataBind, callbackBind);
 #endif
     return kMbDownloadOptCancel;
 }
 
 mbDownloadOpt MB_CALL_TYPE mbDownloadByPath(mbWebView webviewHandle,
-    void* param,
+    const mbDownloadOptions* downloadOptions,
     const WCHAR* path,
     size_t expectedContentLength,
     const char* url,
@@ -994,8 +1034,11 @@ mbDownloadOpt MB_CALL_TYPE mbDownloadByPath(mbWebView webviewHandle,
     mbNetJobDataBind* dataBind,
     mbDownloadBind* callbackBind)
 {
-#if ENABLE_IN_MB_MAIN
-    return DownloadMgr::simpleDownload(webviewHandle, path, expectedContentLength, url, mime, disposition, job, dataBind, callbackBind);
+// #if ENABLE_IN_MB_MAIN
+//     return DownloadMgr::simpleDownload(webviewHandle, path, expectedContentLength, url, mime, disposition, job, dataBind, callbackBind);
+// #endif
+#if 1 // ENABLE_IN_MB_MAIN
+    return mbSimpleDownload(webviewHandle, path, nullptr, downloadOptions, expectedContentLength, url, mime, disposition, job, dataBind, callbackBind);
 #endif
     return kMbDownloadOptCancel;
 }

@@ -11,7 +11,7 @@
 #endif
 #include "third_party/WebKit/Source/wtf/text/qt4/mbchar.h"
 
-HMODULE g_hModule;
+extern HMODULE g_hModule;
 
 namespace common {
 

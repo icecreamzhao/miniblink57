@@ -6080,6 +6080,9 @@
     <ClCompile Include="..\..\media\filters\ffmpeg_demuxer.cc">
       <Filter>media\filters</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\base\strings\string16.cc">
+      <Filter>base\strings</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\base\BUILD.gn">

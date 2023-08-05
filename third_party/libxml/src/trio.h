@@ -29,7 +29,12 @@
  * HAVE_CONFIG_H as a compiler option themselves.
  */
 #if defined(HAVE_CONFIG_H)
-# include "config.h"
+//# include "config.h"
+#if defined(_MSC_VER)
+#include "../win32/config.h"
+#else
+#include "../linux/configlinux.h"
+#endif
 #endif
 
 #include "triodef.h"

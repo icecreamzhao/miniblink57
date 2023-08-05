@@ -46,7 +46,7 @@
     <_ProjectFileVersion>11.0.50727.1</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\</OutDir>
+    <OutDir>$(SolutionDir)..\out\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\$(Configuration)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
     <LibraryPath>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\;$(LibraryPath)</LibraryPath>
@@ -60,14 +60,14 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>TENCENT_FITSCREEN=1;ENABLE_WKE=1;ENABLE_MB=1;_HAS_CONSTEXPR=0;ANGLE_ENABLE_GLSL;USE_AURA;OS_WIN;BUILDING_CEF_SHARED;USING_CEF_SHARED;WIN32;_DEBUG;_WINDOWS;INSIDE_BLINK=1;BLINK_IMPLEMENTATION=1;ENABLE_ASSERT=1;ENABLE_WML=1;CARES_STATICLIB=1;CURL_STATICLIB=1;SK_SUPPORT_LEGACY_CREATESHADER_PTR=1;SK_SUPPORT_LEGACY_PICTURE_PTR=1;SK_R32_SHIFT=0;SK_G32_SHIFT=8;SK_B32_SHIFT=16;SK_A32_SHIFT=24;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>TENCENT_FITSCREEN=1;ENABLE_WKE=1;ENABLE_MB=1;_HAS_CONSTEXPR=0;ANGLE_ENABLE_GLSL;USE_AURA;OS_WIN;BUILDING_CEF_SHARED;USING_CEF_SHARED;WIN32;_DEBUG;_WINDOWS;INSIDE_BLINK=1;BLINK_IMPLEMENTATION=1;ENABLE_ASSERT=1;ENABLE_WML=1;CARES_STATICLIB=1;CURL_STATICLIB=1;SK_SUPPORT_LEGACY_CREATESHADER_PTR=1;SK_SUPPORT_LEGACY_PICTURE_PTR=1;SK_R32_SHIFT22=0;SK_G32_SHIFT2=8;SK_B32_SHIFT22=16;SK_A32_SHIFT22=24;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>../../;../../gen/v8_7_5/include;../../v8_7_5;../../v8_7_5/include;../../third_party/;../../third_party/npapi;../../third_party/WebKit;../../third_party/WebKit/Source;../../cef;../../third_party/icu/source/common;../../gen/blink;../../gen/blink/core;../../gen/blink/bindings/modules/v8;../../gen/blink/bindings/core/v8;../../gen/third_party/WebKit;../../gpu;../../third_party/khronos;../../third_party/libxml/src/include;../../third_party/libxml/win32/include;../../third_party/skia/include/core;../../third_party/skia/include/config;../../third_party/skia/include/codec;../../third_party/skia/include/device;../../third_party/skia/include/effects;../../third_party/skia/include/images;../../third_party/skia/include/pathops;../../third_party/skia/include/ports;../../third_party/skia/include/private;../../third_party/skia/include/utils;../../third_party/angle/include;../../third_party/angle/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../third_party/libwebp;../../;../../gen/v8_7_5/include;../../v8_7_5;../../v8_7_5/include;../../third_party/;../../third_party/npapi;../../third_party/WebKit;../../third_party/WebKit/Source;../../cef;../../third_party/icu/source/common;../../gen/blink;../../gen/blink/core;../../gen/blink/bindings/modules/v8;../../gen/blink/bindings/core/v8;../../gen/third_party/WebKit;../../gpu;../../third_party/khronos;../../third_party/libxml/src/include;../../third_party/libxml/win32/include;../../third_party/skia/include/core;../../third_party/skia/include/config;../../third_party/skia/include/codec;../../third_party/skia/include/device;../../third_party/skia/include/effects;../../third_party/skia/include/images;../../third_party/skia/include/pathops;../../third_party/skia/include/ports;../../third_party/skia/include/private;../../third_party/skia/include/utils;../../third_party/angle/include;../../third_party/angle/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4800;4291;4996;4244;4305;4624;4068;</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PrecompiledHeaderFile>config.h</PrecompiledHeaderFile>
@@ -78,9 +78,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\;$(SolutionDir)..\third_party\ffmpeg\lib\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Userenv.lib;Setupapi.lib;PowrProf.lib;Version.lib;Msimg32.lib;Imm32.lib;Dbghelp.lib;v8_7_5.lib;skia.lib;winmm.lib;Ws2_32.lib;Usp10.lib;Shlwapi.lib;wininet.lib;GDIPlus.lib;Crypt32.lib;Wldap32.lib;libxml.lib;zlib.lib;ots.lib;chromium.lib;libcurl.lib;libpng.lib;openssl.lib;harfbuzz.lib;angle.lib;version.lib;libjpeg.lib;nodejs.lib;DbgHelp.lib;ffmpeg.dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\miniblink$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\out\$(Configuration)\;$(SolutionDir)..\third_party\ffmpeg\lib\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Userenv.lib;Setupapi.lib;PowrProf.lib;Version.lib;Msimg32.lib;Imm32.lib;Dbghelp.lib;v8_7_5.lib;skia.lib;winmm.lib;Ws2_32.lib;Usp10.lib;Shlwapi.lib;wininet.lib;GDIPlus.lib;Crypt32.lib;Wldap32.lib;libxml.lib;zlib.lib;ots.lib;chromium.lib;libcurl.lib;libpng.lib;openssl.lib;harfbuzz.lib;version.lib;libjpeg.lib;DbgHelp.lib;ffmpeg.dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(SolutionDir)..\out\$(Configuration)\miniblink_5775_x32.dll</OutputFile>
       <ImportLibrary>
       </ImportLibrary>
       <IgnoreSpecificDefaultLibraries>LIBCMT.lib</IgnoreSpecificDefaultLibraries>
@@ -95,7 +95,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>../../;../../gen/v8_7_5/include;../../v8_7_5;../../v8_7_5/include;../../third_party/;../../third_party/npapi;../../third_party/WebKit;../../third_party/WebKit/Source;../../cef;../../third_party/icu/source/common;../../gen/blink;../../gen/blink/core;../../gen/blink/bindings/modules/v8;../../gen/blink/bindings/core/v8;../../gen/third_party/WebKit;../../gpu;../../third_party/khronos;../../third_party/libxml/src/include;../../third_party/libxml/win32/include;../../third_party/skia/include/core;../../third_party/skia/include/config;../../third_party/skia/include/codec;../../third_party/skia/include/device;../../third_party/skia/include/effects;../../third_party/skia/include/images;../../third_party/skia/include/pathops;../../third_party/skia/include/ports;../../third_party/skia/include/private;../../third_party/skia/include/utils;../../third_party/angle/include;../../third_party/angle/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../;../../gen/v8_7_5/include;../../v8_7_5;../../v8_7_5/include;../../third_party/;../../third_party/npapi;../../third_party/WebKit;../../third_party/WebKit/Source;../../cef;../../third_party/icu/source/common;../../gen/blink;../../gen/blink/core;../../gen/blink/bindings/modules/v8;../../gen/blink/bindings/core/v8;../../gen/third_party/WebKit;../../gpu;../../third_party/khronos;../../third_party/libwebp;../../third_party/libxml/src/include;../../third_party/libxml/win32/include;../../third_party/skia/include/core;../../third_party/skia/include/config;../../third_party/skia/include/codec;../../third_party/skia/include/device;../../third_party/skia/include/effects;../../third_party/skia/include/images;../../third_party/skia/include/pathops;../../third_party/skia/include/ports;../../third_party/skia/include/private;../../third_party/skia/include/utils;../../third_party/angle/include;../../third_party/angle/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>config.h</PrecompiledHeaderFile>
       <DisableSpecificWarnings>4800;4291;4996;4244;4305;4530;4068;</DisableSpecificWarnings>
       <ForcedIncludeFiles>config.h</ForcedIncludeFiles>
@@ -113,10 +113,10 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\;$(SolutionDir)..\third_party\ffmpeg\lib\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\;$(SolutionDir)..\third_party\ffmpeg\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>Userenv.lib;Setupapi.lib;PowrProf.lib;Version.lib;Msimg32.lib;Imm32.lib;Dbghelp.lib;v8_7_5.lib;skia.lib;winmm.lib;Ws2_32.lib;Usp10.lib;Shlwapi.lib;wininet.lib;GDIPlus.lib;Crypt32.lib;Wldap32.lib;libxml.lib;libjpeg.lib;libpng.lib;zlib.lib;ots.lib;chromium.lib;libcurl.lib;openssl.lib;harfbuzz.lib;ffmpeg.dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/FORCE:UNRESOLVED /NODEFAULTLIB:library %(AdditionalOptions)</AdditionalOptions>
-      <OutputFile>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\miniblink$(TargetExt)</OutputFile>
+      <OutputFile>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\miniblink_5775_x32.dll</OutputFile>
       <ModuleDefinitionFile>$(SolutionDir)../mbvip/core/mtmb.def</ModuleDefinitionFile>
       <DelayLoadDLLs>ffmpeg.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
     </Link>
@@ -1028,6 +1028,7 @@
     <ClCompile Include="..\..\mbvip\core\mb.cpp" />
     <ClCompile Include="..\..\mbvip\core\mb2.cpp" />
     <ClCompile Include="..\..\mbvip\core\MbWebView.cpp" />
+    <ClCompile Include="..\..\mbvip\download\SimpleDownload.cpp" />
     <ClCompile Include="..\..\net\ActivatingObjCheck.cpp" />
     <ClCompile Include="..\..\net\AsyncFileStream.cpp" />
     <ClCompile Include="..\..\net\BlobResourceLoader.cpp" />
@@ -1734,6 +1735,7 @@
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\image-decoders\png\PNGImageReader.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\image-decoders\SegmentReader.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\image-decoders\wbmp\WBMPImageDecoder.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\image-decoders\webp\WEBPImageDecoder.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\image-encoders\ImageEncoderUtils.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\image-encoders\JPEGImageEncoder.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\platform\image-encoders\PNGImageEncoder.cpp" />
@@ -4747,6 +4749,8 @@
     <ClInclude Include="..\..\mbvip\core\mtmb.h" />
     <ClInclude Include="..\..\mbvip\core\PromptWnd.h" />
     <ClInclude Include="..\..\mbvip\core\RenderInit.h" />
+    <ClInclude Include="..\..\mbvip\download\DownloadUtil.h" />
+    <ClInclude Include="..\..\mbvip\download\SimpleDownload.h" />
     <ClInclude Include="..\..\net\ActivatingObjCheck.h" />
     <ClInclude Include="..\..\net\AsyncFileStream.h" />
     <ClInclude Include="..\..\net\BlinkSynchronousLoader.h" />
@@ -7915,6 +7919,7 @@
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\image-decoders\png\PNGImageReader.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\image-decoders\SegmentReader.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\image-decoders\wbmp\WBMPImageDecoder.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\image-decoders\webp\WEBPImageDecoder.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\image-encoders\ImageEncoderUtils.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\image-encoders\JPEGImageEncoder.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\platform\image-encoders\PNGImageEncoder.h" />

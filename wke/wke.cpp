@@ -2500,6 +2500,13 @@ void WKE_CALL_TYPE wkeRunMessageLoop()
 
 namespace wke {
 
+void connetDevTools(wkeWebView frontEnd, wkeWebView embedder)
+{
+    content::WebPage* frontEndWebpage = frontEnd->getWebPage();
+    content::WebPage* embedderWebpage = embedder->getWebPage();
+    content::WebPage::connetDevTools(frontEndWebpage, embedderWebpage);
+}
+
 bool checkThreadCallIsValid(const char* funcName)
 {
     String output;

@@ -1204,6 +1204,12 @@
     <Filter Include="linux">
       <UniqueIdentifier>{737bc8e1-3d9c-4c91-afb7-5b3ac16a5d7a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="mbvip\download">
+      <UniqueIdentifier>{e8b43b82-d67e-4e94-8527-8a7b6be89037}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\WebKit\Source\platform\image-decoders\webp">
+      <UniqueIdentifier>{a45c5073-7d00-4c32-9b57-f8be73c54439}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -12440,6 +12446,12 @@
     </ClCompile>
     <ClCompile Include="..\..\mbvip\core\mb2.cpp">
       <Filter>mbvip\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\mbvip\download\SimpleDownload.cpp">
+      <Filter>mbvip\download</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\image-decoders\webp\WEBPImageDecoder.cpp">
+      <Filter>third_party\WebKit\Source\platform\image-decoders\webp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -26980,6 +26992,15 @@
     </ClInclude>
     <ClInclude Include="..\..\third_party\WebKit\Source\wtf\text\qt4\wchar.h">
       <Filter>third_party\WebKit\Source\wtf\text\qt4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mbvip\download\DownloadUtil.h">
+      <Filter>mbvip\download</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mbvip\download\SimpleDownload.h">
+      <Filter>mbvip\download</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\image-decoders\webp\WEBPImageDecoder.h">
+      <Filter>third_party\WebKit\Source\platform\image-decoders\webp</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

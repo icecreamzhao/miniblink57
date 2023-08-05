@@ -329,17 +329,17 @@ void WEBPImageDecoder::applyPostProcessing(size_t frameIndex)
         const SkColorSpaceXform::ColorFormat srcFormat = SkColorSpaceXform::kBGRA_8888_ColorFormat;
         const SkColorSpaceXform::ColorFormat dstFormat = SkColorSpaceXform::kRGBA_8888_ColorFormat;
         for (int y = m_decodedHeight; y < decodedHeight; ++y) {
-            const int canvasY = top + y;
-            uint8_t* row = reinterpret_cast<uint8_t*>(buffer.getAddr(left, canvasY));
-            xform->apply(dstFormat, row, srcFormat, row, width,
-                kUnpremul_SkAlphaType);
-
-            uint8_t* pixel = row;
-            for (int x = 0; x < width; ++x, pixel += 4) {
-                const int canvasX = left + x;
-                buffer.setRGBA(canvasX, canvasY, pixel[0], pixel[1], pixel[2],
-                    pixel[3]);
-            }
+//             const int canvasY = top + y;
+//             uint8_t* row = reinterpret_cast<uint8_t*>(buffer.getAddr(left, canvasY));
+//             xform->apply(dstFormat, row, srcFormat, row, width, kUnpremul_SkAlphaType);
+// 
+//             uint8_t* pixel = row;
+//             for (int x = 0; x < width; ++x, pixel += 4) {
+//                 const int canvasX = left + x;
+//                 buffer.setRGBA(canvasX, canvasY, pixel[0], pixel[1], pixel[2],
+//                     pixel[3]);
+//             }
+            DebugBreak();
         }
     }
 
