@@ -168,6 +168,7 @@
 // However, only a forward declaration is needed.
 //struct timeval;
 
+#if defined(WIN32)
 #if USING_VC6RT != 1
 #include "WinSock2.h"
 #else
@@ -183,6 +184,7 @@ struct timeval {
 #endif // HAVE_STRUCT_TIMEVAL
 
 #endif // USING_VC6RT
+#endif // WIN32
 
 #if defined(__cplusplus)
 extern "C" {
