@@ -122,8 +122,8 @@ var json = [{
             //"-l${sysroot}/usr/lib/x86_64-linux-gnu/libpcreposix.so.3.13.3",
             "-l${sysroot}/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.28",
             "-l${sysroot}/usr/lib/x86_64-linux-gnu/libgobject-2.0.so.0.6200.3",
-            "-lC:/cygwin64/usr/local/x86_64-unknown-linux-gnu/x86_64-unknown-linux-gnu/sysroot/lib/libdl.so.2",
-            "-lC:/cygwin64/usr/local/x86_64-unknown-linux-gnu/x86_64-unknown-linux-gnu/sysroot/lib/libgcc_s.so.1",
+            "-l${sdkPath}/sysroot/lib/libdl.so.2",
+            "-l${sdkPath}/sysroot/lib/libgcc_s.so.1",
             "-l${sysroot}/lib/x86_64-linux-gnu/libm-2.27.so"
             ],
         "endLibs":[

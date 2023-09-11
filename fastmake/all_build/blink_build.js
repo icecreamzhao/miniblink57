@@ -3881,6 +3881,7 @@ var json = [{
             "${sysroot}/usr/lib/gcc/x86_64-linux-gnu/7/libgcc.a",
             "${sysroot}/usr/lib/x86_64-linux-gnu/libffi.a"
         ],
+
         "linkerCmd":[
             //"-LD:/usr/lib/gcc/i586-linux-gnu/4.9",
             //"-LD:/usr/lib/i386-linux-gnu",
@@ -3902,16 +3903,15 @@ var json = [{
             "-l${sysroot}/usr/lib/x86_64-linux-gnu/libgobject-2.0.so.0.6200.3",
             //"-l${sysroot}/lib/x86_64-linux-gnu/libdl.so.2",
             //"-l${sysroot}/lib/x86_64-linux-gnu/libgcc_s.so.1",
-            "-lC:/cygwin64/usr/local/x86_64-unknown-linux-gnu/x86_64-unknown-linux-gnu/sysroot/lib/libdl.so.2",
-            "-lC:/cygwin64/usr/local/x86_64-unknown-linux-gnu/x86_64-unknown-linux-gnu/sysroot/lib/libgcc_s.so.1",
+            "-l${sdkPath}/sysroot/lib/libdl.so.2",
+            "-l${sdkPath}/sysroot/lib/libgcc_s.so.1",
             "-l${sysroot}/lib/x86_64-linux-gnu/libm-2.27.so"
             ],
+
         "endLibs":[
             //"${srcPath}/out/${targetDir}/lib${v8dir}.a",
-            //"${srcPath}/out/${targetDir}/libv8_7_5_1.a",
-            //"${srcPath}/out/${targetDir}/libv8_7_5_2.a",
-            //"${srcPath}/out/${targetDir}/libv8_7_5_1.a",
-            //"${srcPath}/out/${targetDir}/libv8_7_5_2.a",
+            "${srcPath}/out/${targetDir}/libv8_7_5_1.a",
+            "${srcPath}/out/${targetDir}/libv8_7_5_2.a",
             
             "${srcPath}/out/${targetDir}/libskia.a",
             "${srcPath}/out/${targetDir}/libchromium.a",
@@ -3939,13 +3939,13 @@ if (!constVal.isBuildElectronMode) {
     json[0].compile.endLibs.push("${srcPath}/out/${targetDir}/libnodejs.a");
 }
 
-if (constVal.v8dir == "v8_7_5") {
+/*if (constVal.v8dir == "v8_7_5") {
     json[0].compile.endLibs.unshift("${srcPath}/out/${targetDir}/lib" + constVal.v8dir + "_1.a");
     json[0].compile.endLibs.unshift("${srcPath}/out/${targetDir}/lib" + constVal.v8dir + "_2.a");
     json[0].compile.endLibs.unshift("${srcPath}/out/${targetDir}/lib" + constVal.v8dir + "_1.a");
     json[0].compile.endLibs.unshift("${srcPath}/out/${targetDir}/lib" + constVal.v8dir + "_2.a");
 } else {
     json[0].compile.endLibs.unshift("${srcPath}/out/${targetDir}/lib" + constVal.v8dir + ".a");
-}
+}*/
 
 buildCommonSetting(json);

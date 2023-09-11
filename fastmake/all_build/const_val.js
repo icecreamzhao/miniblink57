@@ -4,21 +4,16 @@ jsPrint("cmdstr:" + cmdstr);
 const cmd = JSON.parse(cmdstr);
 
 var constValue = {
-    "sdkPath":"C:/cygwin64/usr/local/x86_64-unknown-linux-gnu/x86_64-unknown-linux-gnu",
+    "sdkPath":"D:/MB/mb_linux_sdk/x86_64-unknown-linux-gnu/x86_64-unknown-linux-gnu",
     
-    "clangPath":     "C:/Microsoft/AndroidNDK64/android-ndk-r16b/toolchains/llvm/prebuilt/windows-x86_64/bin",
-    "ndkIncludePath":"C:/Microsoft/AndroidNDK64/android-ndk-r16b/toolchains/llvm/prebuilt/windows-x86_64/lib64/clang/5.0/include",
-    "ndkBinPath":    "C:/Microsoft/AndroidNDK64/android-ndk-r16b/toolchains/aarch64-linux-android-4.9/prebuilt/windows-x86_64/aarch64-linux-android/bin",
-
-//    "clangPath":     "P:/Microsoft/AndroidNDK64/android-ndk-r21e/toolchains/llvm/prebuilt/windows-x86_64/bin",
-//    "ndkIncludePath":"P:/Microsoft/AndroidNDK64/android-ndk-r21e/toolchains/llvm/prebuilt/windows-x86_64/lib64/clang/5.0/include",
-//    "ndkBinPath":    "P:/Microsoft/AndroidNDK64/android-ndk-r21e/toolchains/aarch64-linux-android-4.9/prebuilt/windows-x86_64/aarch64-linux-android/bin",
-
-    "srcPath":"g:/mycode/miniblink57",
-    "targetDir":"linuxdebugx64",
+    "clangPath":"C:/Android/android-ndk-r16b/toolchains/llvm/prebuilt/windows-x86_64/bin",
+    "ndkIncludePath":"C:/Android/android-ndk-r16b/toolchains/llvm/prebuilt/windows-x86_64/lib64/clang/5.0/include",
+    "ndkBinPath": "C:/Android/android-ndk-r16b/toolchains/aarch64-linux-android-4.9/prebuilt/windows-x86_64/aarch64-linux-android/bin",
+    "srcPath":"D:/MB/miniblink57",
+    "targetDir":"linux_debug_x64",
     "isDebug": cmd.isDebug,
     "v8dir": cmd.v8dir,
-    "sysroot": "G:/chromium/M84/build/linux/debian_sid_amd64-sysroot",
+    "sysroot": "D:/MB/mb_linux_sdk/debian_sid_amd64-sysroot",
 };
 constValue.linker = constValue.ndkBinPath + "/ld.gold.exe"; //"${ndkBinPath}/ld.gold.exe"
 
@@ -29,9 +24,9 @@ jsPrint("constValue.isBuildElectronMode:" + constValue.isBuildElectronMode);
 jsPrint("constValue.compileCfg:" + constValue.compileCfg);
 
 if (cmd.compileCfg == "debug") {
-    constValue.targetDir = "linuxdebugx64";
+    constValue.targetDir = "linux_debug_x64";
 } else if (cmd.compileCfg == "release") {
-    constValue.targetDir = "linuxreleasex64";
+    constValue.targetDir = "linux_release_x64";
 } else if (cmd.compileCfg == "release_v857") {
     constValue.targetDir = "linux_release_v857_x64";
 } else {
@@ -65,13 +60,10 @@ export const buildCommonSetting = function(json) {
         json[0].compile.cmd.push("-DNDEBUG");
         //json[0].compile.cmd.push("-DENABLE_ASSERT=1");
         json[0].compile.cmd.push("-fno-rtti");
-        json[0].compile.cmd.push("-Os");
+        //json[0].compile.cmd.push("-Os");
         json[0].compile.cmd.push("-fno-exceptions");
         json[0].compile.cmd.push("-fvisibility=hidden");
     }
     
     qfmRebuild(json[0].compile.objdir, JSON.stringify(json));
 };
-//export function FunctionName(){ print("22222"); };
-//let k;
-//export default k = 12;

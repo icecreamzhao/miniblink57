@@ -1,8 +1,8 @@
 
 #include "FastMakeMain.h"
 
-#include "P:/mycode/quickjs-master/quickjs.h"
-#include "P:/mycode/quickjs-master/quickjs-libc.h"
+#include "quickjs-vs/quickjs.h"
+#include "quickjs-vs/quickjs-libc.h"
 
 #include "mbvip/common/Util.h"
 #include "mbvip/common/StringUtil.h"
@@ -37,7 +37,7 @@ void printDebug(const char* format, ...)
     va_end(argList);
 }
 
-static JSValue jsPrint(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv, void* userdata, JS_BOOL is_constructor)
+static JSValue jsPrint(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv, void* userdata)
 {
     int i;
     const char* str;
@@ -49,20 +49,20 @@ static JSValue jsPrint(JSContext* ctx, JSValueConst this_val, int argc, JSValueC
         if (!str)
             return JS_EXCEPTION;
         OutputDebugStringA(str);
-        JS_FreeCString(ctx, argv[i], str);
+        JS_FreeCString(ctx, str);
     }
     OutputDebugStringA("\n");
 
     return JS_UNDEFINED;
 }
 
-static JSValue jsQfmGetCmdline(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv, void* userdata, JS_BOOL is_constructor)
+static JSValue jsQfmGetCmdline(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv, void* userdata)
 {
     const CtxInfo* ctxInfo = (const CtxInfo*)JS_GetContextOpaque(ctx);
     return JS_NewStringLen(ctx, ctxInfo->cmd.c_str(), ctxInfo->cmd.size());
 }
 
-static JSValue jsQfmRebuild(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv, void* userdata, JS_BOOL is_constructor)
+static JSValue jsQfmRebuild(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv, void* userdata)
 {
     const CtxInfo* ctxInfo = (const CtxInfo*)JS_GetContextOpaque(ctx);
     const char* targetDir = JS_ToCString(ctx, argv[0]);
@@ -89,8 +89,8 @@ static JSValue jsQfmRebuild(JSContext* ctx, JSValueConst this_val, int argc, JSV
     else
         fmFastBuild(jsonPathW, ctxInfo->opt);
 
-    JS_FreeCString(ctx, argv[0], targetDir);
-    JS_FreeCString(ctx, argv[1], json);
+    JS_FreeCString(ctx, targetDir);
+    JS_FreeCString(ctx, json);
 
     return JS_UNDEFINED;
 }
@@ -100,14 +100,14 @@ static void printWhenError(JSContext* ctx)
     JSValue exception_val = JS_GetException(ctx);
     BOOL is_error = JS_IsError(ctx, exception_val);
 
-    jsPrint(ctx, JS_NULL, 1, &exception_val, nullptr, FALSE);
+    jsPrint(ctx, JS_NULL, 1, &exception_val, nullptr);
 
     if (is_error) {
         JSValue val = JS_GetPropertyStr(ctx, exception_val, "stack");
         if (!JS_IsUndefined(val)) {
             const char* stack = JS_ToCString(ctx, val);
             printDebug("%s\n", stack);
-            JS_FreeCString(ctx, val, stack);
+            JS_FreeCString(ctx, stack);
         }
         JS_FreeValue(ctx, val);
     }

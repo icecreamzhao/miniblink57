@@ -1793,99 +1793,30 @@ void buildDebug()
     OutputDebugStringA("buildDebug finish\n");
 }
 
-void qjsBuild()
+
+int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
     // compileCfg -> debug|release|releaseSymbol
     std::string cmd;
     {
         cmd = "{\"compileCfg\":\"releaseSymbol\", \"isBuildElectronMode\":false, \"v8dir\":\"v8_7_5\"}"; // release版本带调试符号,v8高版本
-        ///qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "electron_build.js", cmd, kRebuildOptAll);
-        ///qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "node_build.js", cmd, kRebuildOptAll);
-        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "chromium_build.js", cmd, kRebuildOptAll);
-        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "curl_build.js", cmd, kRebuildOptAll);
-        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "freetype_build.js", cmd, kRebuildOptAll);
-        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "openssl_build.js", cmd, kRebuildOptAll);
-        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "skia_build.js", cmd, kRebuildOptAll);
-        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "util_build.js", cmd, kRebuildOptAll);
-        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "v875_build.js", cmd, kRebuildOptAll);
-        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "v875_1_build.js", cmd, kRebuildOptAll);
-        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "v875_2_build.js", cmd, kRebuildOptAll);
-        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "blink_build.js", cmd, kRebuildOptAll);
-        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "wkexe_build.js", cmd, kRebuildOptAll);
-    }
-    {
-        cmd = "{\"compileCfg\":\"release\", \"isBuildElectronMode\":false, \"v8dir\":\"v8_7_5\"}"; // V8高版本
-        ///qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "electron_build.js", cmd, kRebuildOptAll);
-        ///qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "v875_build.js", cmd, kRebuildOptAll);
-        ///qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "node_build.js", cmd, kRebuildOptAll);
-        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "chromium_build.js", cmd, kRebuildOptAll);
-        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "curl_build.js", cmd, kRebuildOptAll);
-        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "freetype_build.js", cmd, kRebuildOptAll);
-        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "openssl_build.js", cmd, kRebuildOptAll);
-        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "skia_build.js", cmd, kRebuildOptAll);
-        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "util_build.js", cmd, kRebuildOptAll);
-        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "v875_1_build.js", cmd, kRebuildOptAll);
-        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "v875_2_build.js", cmd, kRebuildOptAll);
-        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "blink_build.js", cmd, kRebuildOptAll);
-        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "wkexe_build.js", cmd, kRebuildOptAll);
+//         qjsRebuild("D:\\MB\\miniblink57\\fastmake\\all_build\\", "electron_build.js", cmd, kRebuildOptAll);
+//         qjsRebuild("D:\\MB\\miniblink57\\fastmake\\all_build\\", "node_build.js", cmd, kRebuildOptAll);
+//         qjsRebuild("D:\\MB\\miniblink57\\fastmake\\all_build\\", "chromium_build.js", cmd, kRebuildOptAll);
+//         qjsRebuild("D:\\MB\\miniblink57\\fastmake\\all_build\\", "curl_build.js", cmd, kRebuildOptAll);
+//         qjsRebuild("D:\\MB\\miniblink57\\fastmake\\all_build\\", "freetype_build.js", cmd, kRebuildOptAll);
+//         qjsRebuild("D:\\MB\\miniblink57\\fastmake\\all_build\\", "openssl_build.js", cmd, kRebuildOptAll);
+//         qjsRebuild("D:\\MB\\miniblink57\\fastmake\\all_build\\", "skia_build.js", cmd, kRebuildOptAll);
+//         qjsRebuild("D:\\MB\\miniblink57\\fastmake\\all_build\\", "util_build.js", cmd, kRebuildOptAll);
+//         //qjsRebuild("D:\\MB\\miniblink57\\fastmake\\all_build\\", "v875_build.js", cmd, kRebuildOptAll);
+//          qjsRebuild("D:\\MB\\miniblink57\\fastmake\\all_build\\", "v875_1_build.js", cmd, kRebuildOptAll);
+//          qjsRebuild("D:\\MB\\miniblink57\\fastmake\\all_build\\", "v875_2_build.js", cmd, kRebuildOptAll);
+//          //qjsRebuild("D:\\MB\\miniblink57\\fastmake\\all_build\\", "v857_build.js", cmd, kRebuildOptAll);
+         qjsRebuild("D:\\MB\\miniblink57\\fastmake\\all_build\\", "blink_build.js", cmd, kRebuildOptAll);
+         //qjsRebuild("D:\\MB\\miniblink57\\fastmake\\all_build\\", "wkexe_build.js", cmd, kRebuildOptAll);
     }
 
-    {
-        cmd = "{\"compileCfg\":\"release_v857\", \"isBuildElectronMode\":false, \"v8dir\":\"v8_5_7\"}"; // V8低版本
-        ////qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "electron_build.js", cmd, kRebuildOptAll);
-        ////qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "node_build.js", cmd, kRebuildOptAll);
-        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "chromium_build.js", cmd, kRebuildOptAll);
-        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "curl_build.js", cmd, kRebuildOptAll);
-        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "freetype_build.js", cmd, kRebuildOptAll);
-        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "openssl_build.js", cmd, kRebuildOptAll);
-        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "skia_build.js", cmd, kRebuildOptAll);
-        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "util_build.js", cmd, kRebuildOptAll);
-        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "v857_build.js", cmd, kRebuildOptAll);
-        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "blink_build.js", cmd, kRebuildOptAll);
-        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "wkexe_build.js", cmd, kRebuildOptAll);
-    }
-    MessageBoxA(0, "build finish!", 0, 0);
-}
-
-int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
-{
-    //buildDebug();
-    //buildRelease();
-    //------------------------
-//     std::vector<char> buffer;
-//     common::readFile(L"G:\\mycode\\miniblink57\\fastmake\\test_qjs_build.js", &buffer);
-//     buffer.push_back('\0');
-// 
-//     runQjsTest("G:\\mycode\\miniblink57\\fastmake\\", buffer.data(), buffer.size());
-    //------------
-    qjsBuild();
-    //------------
-//     listAllFileInDrectory(L"G:\\mycode\\miniblink57\\out\\tmp");
-//     return 0;
-//---
-//     std::vector<std::wstring> files;
-//     getAllFiles(L"G:\\chromium\\M84\\build\\linux\\debian_sid_amd64-sysroot\\usr\\lib", &files);
-//     binFindStr(files, "_byteswap_ulong");
-// // 
-// //     getAllFiles(L"C:\\cygwin64\\usr\\local\\x86_64-unknown-linux-gnu", &files);
-// //     binFindStr(files, "_byteswap_ulong");
-// 
-//     getAllFiles(L"C:\\cygwin64\\usr\\local\\x86_64-unknown-linux-gnu", &files);
-//     binFindStr(files, "fstat");
-// 
-//     return 0;
-    
-    //---
-//     parseVcxprojfilters();
-//     return 0;
-    //---------
-//     fmBuild(L"G:\\test\\sln_test\\firstlinux\\testlinux\\build.json");
-//     return 0;
-    //---
-
-//     fmFastBuild(L"G:\\mycode\\mb\\third_party\\ffmpeg\\ffmpeg.json", kRebuildOptNotCompileOnlyLink);
-//     return 0;
-    //---
+    MessageBoxA(NULL, "Build Finish!", "Succeed", MB_OK | MB_ICONINFORMATION);
 
     return 0;
 }
