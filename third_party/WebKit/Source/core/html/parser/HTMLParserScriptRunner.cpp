@@ -28,6 +28,8 @@
 #include "bindings/core/v8/Microtask.h"
 #include "bindings/core/v8/ScriptSourceCode.h"
 #include "bindings/core/v8/V8PerIsolateData.h"
+#include "bindings/core/v8/ScriptPromiseResolver.h"
+#include "bindings/core/v8/ModuleRecord.h"
 #include "core/dom/DocumentParserTiming.h"
 #include "core/dom/Element.h"
 #include "core/dom/IgnoreDestructiveWriteCountIncrementer.h"
@@ -53,101 +55,101 @@ namespace blink {
 
 namespace {
 
-    // TODO(bmcquade): move this to a shared location if we find ourselves wanting
-    // to trace similar data elsewhere in the codebase.
-    std::unique_ptr<TracedValue> getTraceArgsForScriptElement(
-        Element* element,
-        const TextPosition& textPosition)
-    {
-        std::unique_ptr<TracedValue> value = TracedValue::create();
-        ScriptLoader* scriptLoader = toScriptLoaderIfPossible(element);
-        if (scriptLoader && scriptLoader->resource())
-            value->setString("url", scriptLoader->resource()->url().getString());
-        if (element->ownerDocument() && element->ownerDocument()->frame()) {
-            value->setString(
-                "frame",
-                String::format("0x%" PRIx64,
-                    static_cast<uint64_t>(reinterpret_cast<intptr_t>(
-                        element->ownerDocument()->frame()))));
-        }
-        if (textPosition.m_line.zeroBasedInt() > 0 || textPosition.m_column.zeroBasedInt() > 0) {
-            value->setInteger("lineNumber", textPosition.m_line.oneBasedInt());
-            value->setInteger("columnNumber", textPosition.m_column.oneBasedInt());
-        }
-        return value;
+// TODO(bmcquade): move this to a shared location if we find ourselves wanting
+// to trace similar data elsewhere in the codebase.
+std::unique_ptr<TracedValue> getTraceArgsForScriptElement(
+    Element* element,
+    const TextPosition& textPosition)
+{
+    std::unique_ptr<TracedValue> value = TracedValue::create();
+    ScriptLoader* scriptLoader = toScriptLoaderIfPossible(element);
+    if (scriptLoader && scriptLoader->resource())
+        value->setString("url", scriptLoader->resource()->url().getString());
+    if (element->ownerDocument() && element->ownerDocument()->frame()) {
+        value->setString(
+            "frame",
+            String::format("0x%" PRIx64,
+                static_cast<uint64_t>(reinterpret_cast<intptr_t>(
+                    element->ownerDocument()->frame()))));
     }
-
-    bool doExecuteScript(Element* scriptElement,
-        const ScriptSourceCode& sourceCode,
-        const TextPosition& textPosition)
-    {
-        ScriptLoader* scriptLoader = toScriptLoaderIfPossible(scriptElement);
-        DCHECK(scriptLoader);
-        TRACE_EVENT_WITH_FLOW1(
-            "blink", "HTMLParserScriptRunner ExecuteScript", scriptElement,
-            TRACE_EVENT_FLAG_FLOW_IN, "data",
-            getTraceArgsForScriptElement(scriptElement, textPosition));
-        return scriptLoader->executeScript(sourceCode);
+    if (textPosition.m_line.zeroBasedInt() > 0 || textPosition.m_column.zeroBasedInt() > 0) {
+        value->setInteger("lineNumber", textPosition.m_line.oneBasedInt());
+        value->setInteger("columnNumber", textPosition.m_column.oneBasedInt());
     }
+    return value;
+}
 
-    void traceParserBlockingScript(const PendingScript* pendingScript,
-        bool waitingForResources)
-    {
-        // The HTML parser must yield before executing script in the following
-        // cases:
-        // * the script's execution is blocked on the completed load of the script
-        //   resource
-        //   (https://html.spec.whatwg.org/multipage/scripting.html#pending-parsing-blocking-script)
-        // * the script's execution is blocked on the load of a style sheet or other
-        //   resources that are blocking scripts
-        //   (https://html.spec.whatwg.org/multipage/semantics.html#a-style-sheet-that-is-blocking-scripts)
-        //
-        // Both of these cases can introduce significant latency when loading a
-        // web page, especially for users on slow connections, since the HTML parser
-        // must yield until the blocking resources finish loading.
-        //
-        // We trace these parser yields here using flow events, so we can track
-        // both when these yields occur, as well as how long the parser had
-        // to yield. The connecting flow events are traced once the parser becomes
-        // unblocked when the script actually executes, in doExecuteScript.
-        Element* element = pendingScript->element();
-        if (!element)
-            return;
-        TextPosition scriptStartPosition = pendingScript->startingPosition();
-        if (!pendingScript->isReady()) {
-            if (waitingForResources) {
-                TRACE_EVENT_WITH_FLOW1(
-                    "blink", "YieldParserForScriptLoadAndBlockingResources", element,
-                    TRACE_EVENT_FLAG_FLOW_OUT, "data",
-                    getTraceArgsForScriptElement(element, scriptStartPosition));
-            } else {
-                TRACE_EVENT_WITH_FLOW1(
-                    "blink", "YieldParserForScriptLoad", element,
-                    TRACE_EVENT_FLAG_FLOW_OUT, "data",
-                    getTraceArgsForScriptElement(element, scriptStartPosition));
-            }
-        } else if (waitingForResources) {
+bool doExecuteScript(Element* scriptElement,
+    const ScriptSourceCode& sourceCode,
+    const TextPosition& textPosition)
+{
+    ScriptLoader* scriptLoader = toScriptLoaderIfPossible(scriptElement);
+    DCHECK(scriptLoader);
+    TRACE_EVENT_WITH_FLOW1(
+        "blink", "HTMLParserScriptRunner ExecuteScript", scriptElement,
+        TRACE_EVENT_FLAG_FLOW_IN, "data",
+        getTraceArgsForScriptElement(scriptElement, textPosition));
+    return scriptLoader->executeScript(sourceCode);
+}
+
+void traceParserBlockingScript(const PendingScript* pendingScript,
+    bool waitingForResources)
+{
+    // The HTML parser must yield before executing script in the following
+    // cases:
+    // * the script's execution is blocked on the completed load of the script
+    //   resource
+    //   (https://html.spec.whatwg.org/multipage/scripting.html#pending-parsing-blocking-script)
+    // * the script's execution is blocked on the load of a style sheet or other
+    //   resources that are blocking scripts
+    //   (https://html.spec.whatwg.org/multipage/semantics.html#a-style-sheet-that-is-blocking-scripts)
+    //
+    // Both of these cases can introduce significant latency when loading a
+    // web page, especially for users on slow connections, since the HTML parser
+    // must yield until the blocking resources finish loading.
+    //
+    // We trace these parser yields here using flow events, so we can track
+    // both when these yields occur, as well as how long the parser had
+    // to yield. The connecting flow events are traced once the parser becomes
+    // unblocked when the script actually executes, in doExecuteScript.
+    Element* element = pendingScript->element();
+    if (!element)
+        return;
+    TextPosition scriptStartPosition = pendingScript->startingPosition();
+    if (!pendingScript->isReady()) {
+        if (waitingForResources) {
             TRACE_EVENT_WITH_FLOW1(
-                "blink", "YieldParserForScriptBlockingResources", element,
+                "blink", "YieldParserForScriptLoadAndBlockingResources", element,
+                TRACE_EVENT_FLAG_FLOW_OUT, "data",
+                getTraceArgsForScriptElement(element, scriptStartPosition));
+        } else {
+            TRACE_EVENT_WITH_FLOW1(
+                "blink", "YieldParserForScriptLoad", element,
                 TRACE_EVENT_FLAG_FLOW_OUT, "data",
                 getTraceArgsForScriptElement(element, scriptStartPosition));
         }
+    } else if (waitingForResources) {
+        TRACE_EVENT_WITH_FLOW1(
+            "blink", "YieldParserForScriptBlockingResources", element,
+            TRACE_EVENT_FLAG_FLOW_OUT, "data",
+            getTraceArgsForScriptElement(element, scriptStartPosition));
+    }
+}
+
+static KURL documentURLForScriptExecution(Document* document)
+{
+    if (!document)
+        return KURL();
+
+    if (!document->frame()) {
+        if (document->importsController())
+            return document->url();
+        return KURL();
     }
 
-    static KURL documentURLForScriptExecution(Document* document)
-    {
-        if (!document)
-            return KURL();
-
-        if (!document->frame()) {
-            if (document->importsController())
-                return document->url();
-            return KURL();
-        }
-
-        // Use the URL of the currently active document for this frame.
-        return document->frame()->document()->url();
-    }
+    // Use the URL of the currently active document for this frame.
+    return document->frame()->document()->url();
+}
 
 } // namespace
 
@@ -195,10 +197,53 @@ bool HTMLParserScriptRunner::isParserBlockingScriptReady()
     return m_parserBlockingScript->isReady();
 }
 
+void HTMLParserScriptRunner::executePendingModuleScript(PendingScript* pendingScript, ScriptStreamer::Type pendingScriptType)
+{
+    // Stop watching loads before executeScript to prevent recursion if the script reloads itself.
+    pendingScript->stopWatchingForLoad();
+
+    if (!isExecutingScript()) {
+        Microtask::performCheckpoint(V8PerIsolateData::mainThreadIsolate());
+        if (pendingScriptType == ScriptStreamer::ParsingBlocking) {
+            // The parser cannot be unblocked as a microtask requested another
+            // resource
+            if (!m_document->isScriptExecutionReady())
+                return;
+        }
+    }
+
+    ModuleRecord* moduleRecord = pendingScript->getModuleRecord();
+    pendingScript->dispose();
+    if (!moduleRecord)
+        return;
+
+    HTMLParserReentryPermit::ScriptNestingLevelIncrementer nestingLevelIncrementer = m_reentryPermit->incrementScriptNestingLevel();
+    IgnoreDestructiveWriteCountIncrementer ignoreDestructiveWriteCountIncrementer(m_document);
+
+    ASSERT(isExecutingScript());
+    Document* contextDocument = m_document->contextDocument();
+    if (!contextDocument)
+        return;
+
+    LocalFrame* frame = contextDocument->frame();
+    ScriptState* scriptState = ScriptState::forMainWorld(frame);
+    if (!scriptState)
+        return;
+
+    v8::Isolate::Scope isoldateScope(scriptState->isolate());
+    v8::HandleScope handleScope(scriptState->isolate());
+    moduleRecord->executeModuleScript(scriptState->isolate(), scriptState->context());
+}
+
 void HTMLParserScriptRunner::executePendingScriptAndDispatchEvent(
     PendingScript* pendingScript,
     ScriptStreamer::Type pendingScriptType)
 {
+    if (pendingScript->isModule()) {
+        executePendingModuleScript(pendingScript, pendingScriptType);
+        return;
+    }
+
     bool errorOccurred = false;
     ScriptSourceCode sourceCode = pendingScript->getSource(
         documentURLForScriptExecution(m_document), errorOccurred);
@@ -271,10 +316,10 @@ void fetchBlockedDocWriteScript(Element* script,
 void emitWarningForDocWriteScripts(const String& url, Document& document)
 {
     String message = "The Parser-blocking, cross site (i.e. different eTLD+1) "
-                     "script, "
+        "script, "
         + url + ", invoked via document.write was NOT BLOCKED on this page load, but MAY "
-                "be blocked by the browser in future page loads with poor network "
-                "connectivity.";
+        "be blocked by the browser in future page loads with poor network "
+        "connectivity.";
     document.addConsoleMessage(
         ConsoleMessage::create(JSMessageSource, WarningMessageLevel, message));
     WTFLogAlways("%s", message.utf8().data());
@@ -283,9 +328,9 @@ void emitWarningForDocWriteScripts(const String& url, Document& document)
 void emitErrorForDocWriteScripts(const String& url, Document& document)
 {
     String message = "The Parser-blocking, cross site (i.e. different eTLD+1) "
-                     "script, "
+        "script, "
         + url + ", invoked via document.write was BLOCKED by the browser due to poor "
-                "network connectivity. ";
+        "network connectivity. ";
     document.addConsoleMessage(
         ConsoleMessage::create(JSMessageSource, ErrorMessageLevel, message));
     WTFLogAlways("%s", message.utf8().data());
@@ -330,8 +375,7 @@ void HTMLParserScriptRunner::possiblyFetchBlockedDocWriteScript(
     fetchBlockedDocWriteScript(element, isParserInserted, startingPosition);
 }
 
-void HTMLParserScriptRunner::pendingScriptFinished(
-    PendingScript* pendingScript)
+void HTMLParserScriptRunner::pendingScriptFinished(PendingScript* pendingScript)
 {
     // Handle cancellations of parser-blocking script loads without
     // notifying the host (i.e., parser) if these were initiated by nested
@@ -427,27 +471,102 @@ void HTMLParserScriptRunner::executeScriptsWaitingForResources()
     executeParsingBlockingScripts();
 }
 
+bool HTMLParserScriptRunner::requestPendingModuleScript(Document* document, const ModuleRecord* parentModuleRecord, const String& sourceUrl, ScriptPromiseResolver* resolver)
+{
+    if (!m_document)
+        m_document = document;
+
+    PendingScript* pendingScript = PendingScript::create(nullptr, nullptr);
+    if (!pendingScript->requesetModuleScript(document, parentModuleRecord, sourceUrl, resolver)) // 如果url是modulator里存在的，则会返回false，不需要重复请求了
+        return false;
+
+//     String testurl = "requestPendingModuleScript:";
+//     testurl.append(pendingScript.getModuleRecord()->url().getUTF8String());
+//     testurl.append("\n");
+//     OutputDebugStringA(testurl.utf8().data());
+
+    DCHECK(pendingScript->resource());
+    pendingScript->watchForLoad(this);
+
+    m_scriptsToExecuteAfterParsing.prepend(pendingScript);
+    return true;
+}
+
+bool HTMLParserScriptRunner::parsePendingModuleScripts()
+{
+    // 先确保所有module都已经下载完成，以后优化执行顺序。比如记录依赖关系，没有全部下载也可以执行完那些对未下载无依赖的js
+    bool canExecuteModuleScript = true;
+
+    HeapDeque<Member<PendingScript>>::iterator it = m_scriptsToExecuteAfterParsing.begin();
+    for (; it != m_scriptsToExecuteAfterParsing.end(); ++it) {
+        DCHECK(!isExecutingScript());
+        DCHECK(!hasParserBlockingScript());
+        DCHECK((*it)->resource() || (*it)->hasModuleScriptString());
+
+        PendingScript* pendingScript = *it;
+
+        if (!pendingScript->isReady()) {
+            if (!pendingScript->isWatchingForLoad())
+                pendingScript->watchForLoad(this);
+            canExecuteModuleScript = false;
+            continue;
+        }
+
+        if (pendingScript->isModule() && !pendingScript->hadGetModuleDepend()) {
+            Vector<String> depends = pendingScript->compileModuleAndRequestDepend(this, m_document); // 编译并且获取有哪些依赖
+            for (size_t i = 0; i < depends.size(); ++i) {
+                if (requestPendingModuleScript(m_document, pendingScript->getModuleRecord(), depends[i], nullptr)) { // 发出网络请求获取这些依赖
+                    canExecuteModuleScript = false;
+                }
+            }
+
+            if (!canExecuteModuleScript)
+                it = m_scriptsToExecuteAfterParsing.begin(); // 新加入的模块脚本被放在了头部，所以要从头开始再遍历
+        }
+    }
+
+    return canExecuteModuleScript;
+}
+
 bool HTMLParserScriptRunner::executeScriptsWaitingForParsing()
 {
-    TRACE_EVENT0("blink",
-        "HTMLParserScriptRunner::executeScriptsWaitingForParsing");
+    TRACE_EVENT0("blink", "HTMLParserScriptRunner::executeScriptsWaitingForParsing");
+
+#ifndef NO_MODULE
+    if (m_isRunningScripts)
+        return false;
+    m_isRunningScripts = true;
+
+    bool canExecuteModuleScript = parsePendingModuleScripts();
+    if (!canExecuteModuleScript) {
+        m_isRunningScripts = false;
+        return false;
+    }
+#endif
+
     while (!m_scriptsToExecuteAfterParsing.isEmpty()) {
         DCHECK(!isExecutingScript());
         DCHECK(!hasParserBlockingScript());
-        DCHECK(m_scriptsToExecuteAfterParsing.first()->resource());
-        if (!m_scriptsToExecuteAfterParsing.first()->isReady()) {
-            m_scriptsToExecuteAfterParsing.first()->watchForLoad(this);
-            traceParserBlockingScript(m_scriptsToExecuteAfterParsing.first().get(),
-                !m_document->isScriptExecutionReady());
-            m_scriptsToExecuteAfterParsing.first()->markParserBlockingLoadStartTime();
+        PendingScript* it = m_scriptsToExecuteAfterParsing.first().get();
+        DCHECK(it->resource() || it->hasModuleScriptString());
+        if (!it->isReady()) {
+            it->watchForLoad(this);
+            traceParserBlockingScript(it, !m_document->isScriptExecutionReady());
+            it->markParserBlockingLoadStartTime();
+            m_isRunningScripts = false;
             return false;
         }
+
         PendingScript* first = m_scriptsToExecuteAfterParsing.takeFirst();
         executePendingScriptAndDispatchEvent(first, ScriptStreamer::Deferred);
         // FIXME: What is this m_document check for?
-        if (!m_document)
+        if (!m_document) {
+            m_isRunningScripts = false;
             return false;
+        }
     }
+
+    m_isRunningScripts = false;
     return true;
 }
 
@@ -492,17 +611,21 @@ void HTMLParserScriptRunner::requestDeferredScript(Element* element)
         }
     }
 
-    DCHECK(pendingScript->resource());
+    DCHECK(pendingScript->resource() || pendingScript->hasModuleScriptString());
     m_scriptsToExecuteAfterParsing.append(pendingScript);
 }
 
-bool HTMLParserScriptRunner::requestPendingScript(PendingScript* pendingScript,
-    Element* script) const
+bool HTMLParserScriptRunner::requestPendingScript(PendingScript* pendingScript, Element* script) const
 {
     DCHECK(!pendingScript->element());
     pendingScript->setElement(script);
     // This should correctly return 0 for empty or invalid srcValues.
-    ScriptResource* resource = toScriptLoaderIfPossible(script)->resource();
+    ScriptLoader* scriptLoader = toScriptLoaderIfPossible(script);
+    if (!scriptLoader->scriptContent().isEmpty()) {
+        pendingScript->setModuleScriptString(scriptLoader->scriptContent());
+        return true;
+    }
+    ScriptResource* resource = scriptLoader->resource();
     if (!resource) {
         DVLOG(1) << "Not implemented."; // Dispatch error event.
         return false;

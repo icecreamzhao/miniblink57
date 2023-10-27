@@ -200,11 +200,10 @@ public:
             DCHECK(V8Node::hasInstance(wrapper, m_isolate));
             Node* node = V8Node::toImpl(wrapper);
             if (node->hasEventListeners())
-                addReferencesForNodeWithEventListeners(
-                    m_isolate, node, v8::Persistent<v8::Object>::Cast(*value));
+                addReferencesForNodeWithEventListeners(m_isolate, node, v8::Persistent<v8::Object>::Cast(*value));
+
             Node* root = V8GCController::opaqueRootForGC(m_isolate, node);
-            m_isolate->SetObjectGroupId(
-                *value, v8::UniqueId(reinterpret_cast<intptr_t>(root)));
+            m_isolate->SetObjectGroupId(*value, v8::UniqueId(reinterpret_cast<intptr_t>(root)));
             if (m_constructRetainedObjectInfos)
                 m_groupsWhichNeedRetainerInfo.push_back(root);
         } else if (classId == WrapperTypeInfo::ObjectClassId) {
@@ -297,9 +296,7 @@ namespace {
 
 } // namespace
 
-void V8GCController::gcPrologue(v8::Isolate* isolate,
-    v8::GCType type,
-    v8::GCCallbackFlags flags)
+void V8GCController::gcPrologue(v8::Isolate* isolate, v8::GCType type, v8::GCCallbackFlags flags)
 {
     if (isMainThread())
         ScriptForbiddenScope::enter();
@@ -321,34 +318,25 @@ void V8GCController::gcPrologue(v8::Isolate* isolate,
         if (ThreadState::current())
             ThreadState::current()->willStartV8GC(BlinkGC::V8MinorGC);
 
-        TRACE_EVENT_BEGIN1("devtools.timeline,v8", "MinorGC",
-            "usedHeapSizeBefore", usedHeapSize(isolate));
+        TRACE_EVENT_BEGIN1("devtools.timeline,v8", "MinorGC", "usedHeapSizeBefore", usedHeapSize(isolate));
         visitWeakHandlesForMinorGC(isolate);
         break;
     case v8::kGCTypeMarkSweepCompact:
         if (ThreadState::current())
             ThreadState::current()->willStartV8GC(BlinkGC::V8MajorGC);
 
-        TRACE_EVENT_BEGIN2("devtools.timeline,v8", "MajorGC",
-            "usedHeapSizeBefore", usedHeapSize(isolate), "type",
-            "atomic pause");
-        gcPrologueForMajorGC(
-            isolate, flags & v8::kGCCallbackFlagConstructRetainedObjectInfos);
+        TRACE_EVENT_BEGIN2("devtools.timeline,v8", "MajorGC", "usedHeapSizeBefore", usedHeapSize(isolate), "type", "atomic pause");
+        gcPrologueForMajorGC(isolate, flags & v8::kGCCallbackFlagConstructRetainedObjectInfos);
         break;
     case v8::kGCTypeIncrementalMarking:
         if (ThreadState::current())
             ThreadState::current()->willStartV8GC(BlinkGC::V8MajorGC);
 
-        TRACE_EVENT_BEGIN2("devtools.timeline,v8", "MajorGC",
-            "usedHeapSizeBefore", usedHeapSize(isolate), "type",
-            "incremental marking");
-        gcPrologueForMajorGC(
-            isolate, flags & v8::kGCCallbackFlagConstructRetainedObjectInfos);
+        TRACE_EVENT_BEGIN2("devtools.timeline,v8", "MajorGC", "usedHeapSizeBefore", usedHeapSize(isolate), "type", "incremental marking");
+        gcPrologueForMajorGC(isolate, flags & v8::kGCCallbackFlagConstructRetainedObjectInfos);
         break;
     case v8::kGCTypeProcessWeakCallbacks:
-        TRACE_EVENT_BEGIN2("devtools.timeline,v8", "MajorGC",
-            "usedHeapSizeBefore", usedHeapSize(isolate), "type",
-            "weak processing");
+        TRACE_EVENT_BEGIN2("devtools.timeline,v8", "MajorGC", "usedHeapSizeBefore", usedHeapSize(isolate), "type", "weak processing");
         break;
     default:
         ASSERT_NOT_REACHED();
@@ -389,12 +377,10 @@ void V8GCController::gcEpilogue(v8::Isolate* isolate,
                 BlinkGC::V8MajorGC);
         break;
     case v8::kGCTypeIncrementalMarking:
-        TRACE_EVENT_END1("devtools.timeline,v8", "MajorGC", "usedHeapSizeAfter",
-            usedHeapSize(isolate));
+        TRACE_EVENT_END1("devtools.timeline,v8", "MajorGC", "usedHeapSizeAfter", usedHeapSize(isolate));
         break;
     case v8::kGCTypeProcessWeakCallbacks:
-        TRACE_EVENT_END1("devtools.timeline,v8", "MajorGC", "usedHeapSizeAfter",
-            usedHeapSize(isolate));
+        TRACE_EVENT_END1("devtools.timeline,v8", "MajorGC", "usedHeapSizeAfter", usedHeapSize(isolate));
         break;
     default:
         ASSERT_NOT_REACHED();

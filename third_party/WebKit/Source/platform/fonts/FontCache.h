@@ -113,6 +113,9 @@ public:
     static void setFontManager(const sk_sp<SkFontMgr>&);
 
 #if OS(WIN)
+    static bool useDirectWrite() { return s_useDirectWrite; }
+    static void setUseDirectWrite(bool useDirectWrite) { s_useDirectWrite = useDirectWrite; }
+
     static bool antialiasedTextEnabled()
     {
         return s_antialiasedTextEnabled;
@@ -200,6 +203,7 @@ private:
     static SkFontMgr* s_fontManager;
 
 #if OS(WIN)
+    static bool s_useDirectWrite;
     static bool s_antialiasedTextEnabled;
     static bool s_lcdTextEnabled;
     static float s_deviceScaleFactor;

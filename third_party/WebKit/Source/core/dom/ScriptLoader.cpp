@@ -194,6 +194,11 @@ bool ScriptLoader::isScriptTypeSupported(
         supportLegacyTypes);
 }
 
+static bool isModuleScript(ScriptLoaderClient* client)
+{
+    return equalIgnoringCase(client->typeAttributeValue(), "module");
+}
+
 // http://dev.w3.org/html5/spec/Overview.html#prepare-a-script
 bool ScriptLoader::prepareScript(const TextPosition& scriptStartPosition,
     LegacyTypeSupport supportLegacyTypes)
@@ -216,7 +221,7 @@ bool ScriptLoader::prepareScript(const TextPosition& scriptStartPosition,
 
     // FIXME: HTML5 spec says we should check that all children are either
     // comments or empty text nodes.
-    if (!client->hasSourceAttribute() && !m_element->hasChildren())
+    if (client->hasNomoduleAttribute() || (!client->hasSourceAttribute() && !m_element->hasChildren()))
         return false;
 
     if (!m_element->isConnected())
@@ -250,7 +255,7 @@ bool ScriptLoader::prepareScript(const TextPosition& scriptStartPosition,
 
     if (client->hasSourceAttribute()) {
         FetchRequest::DeferOption defer = FetchRequest::NoDefer;
-        if (!m_parserInserted || client->asyncAttributeValue() || client->deferAttributeValue())
+        if (!m_parserInserted || client->asyncAttributeValue() || client->deferAttributeValue() || isModuleScript(client))
             defer = FetchRequest::LazyLoad;
         if (m_documentWriteIntervention == DocumentWriteIntervention::FetchDocWrittenScriptDeferIdle)
             defer = FetchRequest::IdleLoad;
@@ -267,7 +272,7 @@ bool ScriptLoader::prepareScript(const TextPosition& scriptStartPosition,
         return true;
     }
 
-    if (client->hasSourceAttribute() && client->deferAttributeValue() && m_parserInserted && !client->asyncAttributeValue()) {
+    if (isModuleScript(client) || (client->hasSourceAttribute() && client->deferAttributeValue() && m_parserInserted && !client->asyncAttributeValue())) {
         m_willExecuteWhenDocumentFinishedParsing = true;
         m_willBeParserExecuted = true;
     } else if (client->hasSourceAttribute() && m_parserInserted && !client->asyncAttributeValue()) {

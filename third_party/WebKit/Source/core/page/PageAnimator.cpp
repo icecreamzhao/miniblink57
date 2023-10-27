@@ -69,6 +69,7 @@ void PageAnimator::serviceScriptedAnimations(
             }
             SVGDocumentExtensions::serviceOnAnimationFrame(*document);
         }
+
         // TODO(skyostil): This function should not run for documents without views.
         DocumentLifecycle::DisallowThrottlingScope noThrottlingScope(
             document->lifecycle());

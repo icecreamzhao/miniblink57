@@ -40,6 +40,11 @@ namespace blink {
 class Element;
 class PendingScript;
 class ScriptSourceCode;
+class ModuleScriptLoader;
+class ModuleRecord;
+class HTMLParserScriptRunner;
+class Document;
+class ScriptPromiseResolver;
 
 class CORE_EXPORT PendingScriptClient : public GarbageCollectedMixin {
 public:
@@ -108,6 +113,20 @@ public:
 
     void dispose();
 
+    //////////////////////////////////////////////////////////////////////////
+    bool isModule() const;
+    bool hadGetModuleDepend() const;
+    bool requesetModuleScript(Document* document, const ModuleRecord* parentModuleRecord, const String& sourceUrl, ScriptPromiseResolver* resolver);
+    Vector<String> compileModuleAndRequestDepend(HTMLParserScriptRunner* scriptRunner, Document* document);
+    //v8::Local<v8::Module> getModule(v8::Isolate* isolate) const { return m_module.newLocal(isolate); }
+    ModuleRecord* getModuleRecord() const { return m_moduleRecord; }
+    bool isWatchingForLoad() const { return m_watchingForLoad; }
+    void setModuleScriptString(const String& str);
+    bool hasModuleScriptString() const;
+private:
+    void setGetModuleDepend();
+    //////////////////////////////////////////////////////////////////////////
+
 private:
     PendingScript(Element*, ScriptResource*);
     PendingScript() = delete;
@@ -125,6 +144,14 @@ private:
     TextPosition m_startingPosition; // Only used for inline script tags.
     bool m_integrityFailure;
     double m_parserBlockingLoadStartTime;
+
+    //////////////////////////////////////////////////////////////////////////模块相关实现
+    bool m_isModule;
+    bool m_hadGetModuleDepend;
+    Member<ModuleScriptLoader> m_moduleScriptLoader; // 没有<script>标签而是js里面import引入的脚本
+    Member<ModuleRecord> m_moduleRecord;
+    String m_moduleScriptString;
+    //////////////////////////////////////////////////////////////////////////
 
     Member<ScriptStreamer> m_streamer;
     Member<PendingScriptClient> m_client;

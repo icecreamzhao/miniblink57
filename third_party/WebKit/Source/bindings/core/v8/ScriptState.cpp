@@ -111,4 +111,12 @@ ScriptState* ScriptState::forWorld(LocalFrame* frame, DOMWrapperWorld& world)
     return scriptState;
 }
 
+Modulator* ScriptState::modulator() const
+{
+    if (!m_perContextData)
+        return nullptr;
+
+    return m_perContextData->modulator();
+}
+
 } // namespace blink

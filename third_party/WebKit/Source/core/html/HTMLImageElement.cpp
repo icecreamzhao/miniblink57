@@ -116,7 +116,10 @@ HTMLImageElement* HTMLImageElement::create(Document& document,
     return new HTMLImageElement(document, createdByParser);
 }
 
-HTMLImageElement::~HTMLImageElement() { }
+HTMLImageElement::~HTMLImageElement() 
+{
+
+}
 
 DEFINE_TRACE(HTMLImageElement)
 {

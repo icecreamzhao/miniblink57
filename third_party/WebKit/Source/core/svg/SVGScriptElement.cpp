@@ -163,6 +163,11 @@ bool SVGScriptElement::hasSourceAttribute() const
     return href()->isSpecified();
 }
 
+bool SVGScriptElement::hasNomoduleAttribute() const
+{
+    return false;
+}
+
 Element* SVGScriptElement::cloneElementWithoutAttributesAndChildren()
 {
     return new SVGScriptElement(document(), false, m_loader->alreadyStarted());

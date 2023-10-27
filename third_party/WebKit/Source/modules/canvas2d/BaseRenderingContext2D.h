@@ -26,6 +26,7 @@ class Image;
 class ImageBuffer;
 class Path2D;
 class SVGMatrixTearOff;
+class TextMetrics;
 
 typedef CSSImageValueOrHTMLImageElementOrHTMLVideoElementOrHTMLCanvasElementOrImageBitmapOrOffscreenCanvas
     CanvasImageSourceUnion;
@@ -129,6 +130,12 @@ public:
     void clearRect(double x, double y, double width, double height);
     void fillRect(double x, double y, double width, double height);
     void strokeRect(double x, double y, double width, double height);
+
+    void fillText(ExecutionContext* executionContext, const String& text, double x, double y);
+    void fillText(ExecutionContext* executionContext, const String& text, double x, double y, double maxWidth);
+    void strokeText(ExecutionContext* executionContext, const String& text, double x, double y);
+    void strokeText(ExecutionContext* executionContext, const String& text, double x, double y, double maxWidth);
+    TextMetrics* measureText(ExecutionContext* executionContext, const String& text);
 
     void drawImage(ExecutionContext*,
         const CanvasImageSourceUnion&,
@@ -298,6 +305,16 @@ public:
 
 protected:
     BaseRenderingContext2D();
+
+    void drawTextInternal(ExecutionContext* executionContext, const String&,
+        double x,
+        double y,
+        CanvasRenderingContext2DState::PaintType,
+        double* maxWidth = nullptr);
+ 
+    void setFont(ExecutionContext* executionContext, const String& newFont);
+    const Font& accessFont(ExecutionContext* executionContext);
+    float getFontBaseline(const FontMetrics& fontMetrics) const;
 
     CanvasRenderingContext2DState& modifiableState();
     const CanvasRenderingContext2DState& state() const

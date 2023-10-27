@@ -26,12 +26,18 @@
 #include "core/dom/PendingScript.h"
 
 #include "bindings/core/v8/ScriptSourceCode.h"
+#include "bindings/core/v8/ModuleRecord.h"
+#include "bindings/core/v8/Modulator.h"
+#include "core/dom/ModuleScriptLoader.h"
 #include "core/dom/Element.h"
 #include "core/frame/SubresourceIntegrity.h"
+#include "core/html/parser/HTMLParserIdioms.h"
 #include "platform/SharedBuffer.h"
 #include "wtf/CurrentTime.h"
 
 namespace blink {
+
+//const char* kInlineScriptUrl = "inline_script_url";
 
 PendingScript* PendingScript::create(Element* element,
     ScriptResource* resource)
@@ -44,8 +50,15 @@ PendingScript::PendingScript(Element* element, ScriptResource* resource)
     , m_element(element)
     , m_integrityFailure(false)
     , m_parserBlockingLoadStartTime(0)
+    //////////////////////////////////////////////////////////////////////////
+    , m_isModule(false)
+    , m_hadGetModuleDepend(false)
+    //////////////////////////////////////////////////////////////////////////
     , m_client(nullptr)
 {
+    if (element)
+        m_isModule = equalIgnoringCase(m_element->getAttribute(HTMLNames::typeAttr), "module");
+
     setScriptResource(resource);
     MemoryCoordinator::instance().registerClient(this);
 }
@@ -101,6 +114,8 @@ void PendingScript::streamingFinished()
 void PendingScript::setElement(Element* element)
 {
     m_element = element;
+    if (element)
+        m_isModule = equalIgnoringCase(m_element->getAttribute(HTMLNames::typeAttr), "module");
 }
 
 void PendingScript::setScriptResource(ScriptResource* resource)
@@ -190,8 +205,7 @@ DEFINE_TRACE(PendingScript)
     MemoryCoordinatorClient::trace(visitor);
 }
 
-ScriptSourceCode PendingScript::getSource(const KURL& documentURL,
-    bool& errorOccurred) const
+ScriptSourceCode PendingScript::getSource(const KURL& documentURL, bool& errorOccurred) const
 {
     if (resource()) {
         errorOccurred = resource()->errorOccurred() || m_integrityFailure;
@@ -199,6 +213,8 @@ ScriptSourceCode PendingScript::getSource(const KURL& documentURL,
         if (m_streamer && !m_streamer->streamingSuppressed())
             return ScriptSourceCode(m_streamer, resource());
         return ScriptSourceCode(resource());
+    } else if (hasModuleScriptString()) {
+        return ScriptSourceCode(m_moduleScriptString, documentURL);
     }
     errorOccurred = false;
     return ScriptSourceCode(m_element->textContent(), documentURL,
@@ -239,5 +255,121 @@ void PendingScript::onMemoryStateChange(MemoryState state)
     m_streamer->cancel();
     m_streamer = nullptr;
 }
+
+//////////////////////////////////////////////////////////////////////////
+// module
+bool PendingScript::isModule() const
+{
+    return m_isModule;
+}
+
+bool PendingScript::hadGetModuleDepend() const
+{
+    return m_hadGetModuleDepend;
+}
+
+void PendingScript::setGetModuleDepend()
+{
+    DCHECK(m_isModule && !m_hadGetModuleDepend);
+    m_hadGetModuleDepend = true;
+}
+
+bool PendingScript::requesetModuleScript(Document* document, const ModuleRecord* parentModuleRecord, const String& sourceUrl, ScriptPromiseResolver* resolver)
+{
+    m_isModule = true;
+
+    if (stripLeadingAndTrailingHTMLSpaces(sourceUrl).isEmpty())
+        return false;
+
+    KURL url = document->completeURL(sourceUrl);
+    if (parentModuleRecord)
+        url = KURL(parentModuleRecord->url(), sourceUrl);
+
+    m_moduleScriptLoader = ModuleScriptLoader::create(document, url, resolver ? FetchRequest::NoDefer : FetchRequest::LazyLoad);
+    if (!m_moduleScriptLoader)
+        return false;
+
+    ScriptState* scriptState = ScriptState::forMainWorld(document->frame());
+    v8::Isolate* isolate = scriptState->isolate();
+    v8::Isolate::Scope isoldateScope(isolate);
+    v8::HandleScope handleScope(isolate);
+
+    m_moduleRecord = new ModuleRecord(url, scriptState->isolate(), v8::Local<v8::Module>(), resolver);
+    Modulator* modulator = Modulator::from(scriptState->context());
+    modulator->add(m_moduleRecord);
+    m_moduleScriptLoader->setModulator(modulator);
+
+    setScriptResource(m_moduleScriptLoader->resource());
+    return true;
+}
+
+void PendingScript::setModuleScriptString(const String& str)
+{
+    m_moduleScriptString = str;
+}
+
+bool PendingScript::hasModuleScriptString() const
+{
+    return !m_moduleScriptString.isEmpty();
+}
+
+Vector<String> PendingScript::compileModuleAndRequestDepend(HTMLParserScriptRunner* scriptRunner, Document* document)
+{
+    setGetModuleDepend();
+
+    ScriptState* scriptState = ScriptState::forMainWorld(document->frame());
+    v8::Isolate* isolate = scriptState->isolate();
+    v8::Isolate::Scope isoldateScope(isolate);
+    v8::HandleScope handleScope(isolate);
+    v8::EscapableHandleScope escapableHandleScope(isolate);
+    ScriptState::Scope scope(scriptState);
+
+    KURL url = document->url();
+    if (resource())
+        url = resource()->url();
+    
+    v8::ScriptOrigin origin(
+        v8String(isolate, url.getUTF8String()),
+        v8::Integer::New(isolate, startingPosition().m_line.zeroBasedInt()),
+        v8::Integer::New(isolate, startingPosition().m_column.zeroBasedInt()),
+        v8::Boolean::New(isolate, true),   // resource_is_shared_cross_origin
+        v8::Local<v8::Integer>(),          // script id
+        v8::String::Empty(isolate),        // source_map_url
+        v8::Boolean::New(isolate, false),  // resource_is_opaque
+        v8::False(isolate),                // is_wasm
+        v8::True(isolate)                  // is_module
+    );
+
+    bool errorOccurred = false;
+    double loadFinishTime = resource() && resource()->url().protocolIsInHTTPFamily() ? resource()->loadFinishTime() : 0;
+    ScriptSourceCode sourceCode = getSource(/*documentURLForScriptExecution(document)*/document->url(), errorOccurred);
+
+    Vector<String> ret;
+    v8::Local<v8::String> code = v8String(isolate, sourceCode.source());
+    v8::ScriptCompiler::Source source(code, origin);
+    v8::MaybeLocal<v8::Module> v8module = v8::ScriptCompiler::CompileModule(isolate, &source);
+
+    if (v8module.IsEmpty())
+        return ret;
+
+    v8::Local<v8::Module> module = v8module.ToLocalChecked();
+    if (!m_moduleRecord.get()) {
+        m_moduleRecord = new ModuleRecord(url, isolate, module, nullptr);
+    } else {
+        m_moduleRecord->setModule(isolate, module); // 里面会调用m_parentResolver->resolve
+    }
+    Modulator* modulator = Modulator::from(scriptState->context());
+    modulator->setScriptRunner(scriptRunner);
+    modulator->add(m_moduleRecord);
+
+    int length = module->GetModuleRequestsLength();
+    for (int i = 0; i < length; ++i) {
+        v8::Local<v8::String> v8name = module->GetModuleRequest(i);
+        ret.append(toCoreString(v8name));
+    }
+
+    return ret;
+}
+//////////////////////////////////////////////////////////////////////////
 
 } // namespace blink

@@ -15,6 +15,7 @@
 #include "public/platform/Platform.h"
 //#include "public/platform/mime_registry.mojom-blink.h"
 #include "wtf/text/WTFString.h"
+#include "include/v8-version.h"
 
 // https://opensource.apple.com/source/Libc/Libc-262/gen/fnmatch.c.auto.html
 // https://www.cnblogs.com/oloroso/p/6861576.html
@@ -513,6 +514,9 @@ bool MIMETypeRegistry::isSupportedJavaScriptMIMEType(const String& mimeType)
             "text/javascript1.3",
             "text/jscript",
             "text/livescript",
+#if V8_MAJOR_VERSION >= 7
+            "module",
+#endif
         };
         for (size_t i = 0; i < WTF_ARRAY_LENGTH(types); ++i)
             supportedJavaScriptMIMETypes->add(types[i]);

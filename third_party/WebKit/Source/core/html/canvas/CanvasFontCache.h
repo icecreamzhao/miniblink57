@@ -51,6 +51,8 @@ public:
 
     ~CanvasFontCache();
 
+    void setDocument(Document* doc) { m_document = doc; }
+
 private:
     explicit CanvasFontCache(Document&);
     void schedulePruningIfNeeded();

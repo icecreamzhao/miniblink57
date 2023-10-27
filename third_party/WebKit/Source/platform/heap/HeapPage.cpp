@@ -53,6 +53,9 @@
 #include "wtf/allocator/Partitions.h"
 #include "wtf/allocator/PageAllocator.h"
 
+#pragma optimize("", off)
+#pragma clang optimize off
+
 #ifdef ANNOTATE_CONTIGUOUS_CONTAINER
 // FIXME: have ContainerAnnotations.h define an ENABLE_-style name instead.
 #define ENABLE_ASAN_CONTAINER_ANNOTATIONS 1

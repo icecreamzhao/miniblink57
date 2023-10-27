@@ -79,6 +79,7 @@ static FallbackListShaperCache* gFallbackListShaperCache = nullptr;
 SkFontMgr* FontCache::s_fontManager = nullptr;
 
 #if OS(WIN)
+bool FontCache::s_useDirectWrite = false;
 bool FontCache::s_antialiasedTextEnabled = false;
 bool FontCache::s_lcdTextEnabled = false;
 float FontCache::s_deviceScaleFactor = 1.0;

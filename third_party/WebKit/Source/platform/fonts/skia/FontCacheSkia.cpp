@@ -268,8 +268,19 @@ PassRefPtr<SkTypeface> FontCache::createTypeface(const FontDescription& fontDesc
     // provided font Manager rather than calling SkTypeface::CreateFromName which may redirect the
     // call to the default font Manager.
     // On Windows the font manager is always present.
-    if (m_fontManager)
+
+    bool useDW = true;
+#if OS(WIN)
+    useDW = useDirectWrite();
+#endif
+    if (m_fontManager) {
+        return adoptRef(useDW
+            ? m_fontManager->matchFamilyStyle(name.data(), fontDescription.skiaFontStyle())
+            : m_fontManager->legacyCreateTypeface(name.data(), fontDescription.skiaFontStyle())
+        );
+
         return adoptRef(m_fontManager->matchFamilyStyle(name.data(), fontDescription.skiaFontStyle()));
+    }
 #endif
 
     // FIXME: Use m_fontManager, matchFamilyStyle instead of
