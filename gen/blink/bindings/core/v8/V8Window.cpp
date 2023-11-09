@@ -7764,11 +7764,10 @@ void V8Window::installV8WindowTemplate(v8::Isolate* isolate, const DOMWrapperWor
         V8DOMConfiguration::installAccessor(isolate, world, instanceTemplate, prototypeTemplate, interfaceTemplate, signature, accessorcustomElementsConfiguration);
     }
     if (RuntimeEnabledFeatures::experimentalCanvasFeaturesEnabled()) {
-        DebugBreak();
-        //     const V8DOMConfiguration::AttributeConfiguration attributeFloat32ImageDataConfiguration = {"Float32ImageData", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Float32ImageData::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-        //     V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeFloat32ImageDataConfiguration);
-        //     const V8DOMConfiguration::AttributeConfiguration attributeOffscreenCanvasConfiguration = {"OffscreenCanvas", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8OffscreenCanvas::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder};
-        //     V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeOffscreenCanvasConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeFloat32ImageDataConfiguration = { "Float32ImageData", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8Float32ImageData::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeFloat32ImageDataConfiguration);
+        const V8DOMConfiguration::AttributeConfiguration attributeOffscreenCanvasConfiguration = { "OffscreenCanvas", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8OffscreenCanvas::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };
+        V8DOMConfiguration::installAttribute(isolate, world, instanceTemplate, prototypeTemplate, attributeOffscreenCanvasConfiguration);
     }
     if (RuntimeEnabledFeatures::geometryInterfacesEnabled()) {
         const V8DOMConfiguration::AttributeConfiguration attributeDOMMatrixConfiguration = { "DOMMatrix", v8ConstructorAttributeGetter, 0, 0, 0, nullptr, const_cast<WrapperTypeInfo*>(&V8DOMMatrix::wrapperTypeInfo), static_cast<v8::AccessControl>(v8::DEFAULT), static_cast<v8::PropertyAttribute>(v8::DontEnum), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder };

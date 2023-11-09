@@ -1165,6 +1165,129 @@ namespace OffscreenCanvasRenderingContext2DV8Internal {
         OffscreenCanvasRenderingContext2DV8Internal::strokeRectMethod(info);
     }
 
+    static void fillTextMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "fillText");
+
+        OffscreenCanvasRenderingContext2D* impl = V8OffscreenCanvasRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 3)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+            return;
+        }
+
+        V8StringResource<> text;
+        double x;
+        double y;
+        double maxWidth;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        text = info[0];
+        if (!text.prepare())
+            return;
+
+        x = toDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toDouble(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        if (UNLIKELY(numArgsPassed <= 3)) {
+            impl->fillText(executionContext, text, x, y);
+            return;
+        }
+        maxWidth = toDouble(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->fillText(executionContext, text, x, y, maxWidth);
+    }
+
+    MODULES_EXPORT void fillTextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        OffscreenCanvasRenderingContext2DV8Internal::fillTextMethod(info);
+    }
+
+    static void strokeTextMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "CanvasRenderingContext2D", "strokeText");
+
+        OffscreenCanvasRenderingContext2D* impl = V8OffscreenCanvasRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 3)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(3, info.Length()));
+            return;
+        }
+
+        V8StringResource<> text;
+        double x;
+        double y;
+        double maxWidth;
+        int numArgsPassed = info.Length();
+        while (numArgsPassed > 0) {
+            if (!info[numArgsPassed - 1]->IsUndefined())
+                break;
+            --numArgsPassed;
+        }
+        text = info[0];
+        if (!text.prepare())
+            return;
+
+        x = toDouble(info.GetIsolate(), info[1], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        y = toDouble(info.GetIsolate(), info[2], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        if (UNLIKELY(numArgsPassed <= 3)) {
+            impl->strokeText(executionContext, text, x, y);
+            return;
+        }
+        maxWidth = toDouble(info.GetIsolate(), info[3], exceptionState);
+        if (exceptionState.hadException())
+            return;
+
+        impl->strokeText(executionContext, text, x, y, maxWidth);
+    }
+
+    MODULES_EXPORT void strokeTextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        OffscreenCanvasRenderingContext2DV8Internal::strokeTextMethod(info);
+    }
+
+    static void measureTextMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        OffscreenCanvasRenderingContext2D* impl = V8OffscreenCanvasRenderingContext2D::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("measureText", "CanvasRenderingContext2D", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        V8StringResource<> text;
+        text = info[0];
+        if (!text.prepare())
+            return;
+
+        ExecutionContext* executionContext = currentExecutionContext(info.GetIsolate());
+        v8SetReturnValue(info, impl->measureText(executionContext, text));
+    }
+
+    MODULES_EXPORT void measureTextMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        OffscreenCanvasRenderingContext2DV8Internal::measureTextMethod(info);
+    }
+
     static void beginPathMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
     {
         OffscreenCanvasRenderingContext2D* impl = V8OffscreenCanvasRenderingContext2D::toImpl(info.Holder());
@@ -2463,6 +2586,12 @@ const V8DOMConfiguration::MethodConfiguration V8OffscreenCanvasRenderingContext2
     { "clearRect", OffscreenCanvasRenderingContext2DV8Internal::clearRectMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
     { "fillRect", OffscreenCanvasRenderingContext2DV8Internal::fillRectMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
     { "strokeRect", OffscreenCanvasRenderingContext2DV8Internal::strokeRectMethodCallback, 0, 4, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    
+    { "fillText", OffscreenCanvasRenderingContext2DV8Internal::fillTextMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "strokeText", OffscreenCanvasRenderingContext2DV8Internal::strokeTextMethodCallback, 0, 3, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "measureText", OffscreenCanvasRenderingContext2DV8Internal::measureTextMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+
+  
     { "beginPath", OffscreenCanvasRenderingContext2DV8Internal::beginPathMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
     { "fill", OffscreenCanvasRenderingContext2DV8Internal::fillMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
     { "stroke", OffscreenCanvasRenderingContext2DV8Internal::strokeMethodCallback, 0, 0, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },

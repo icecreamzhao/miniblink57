@@ -59,21 +59,21 @@ namespace CryptoV8Internal {
 
     static void subtleAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
     {
-        v8::Local<v8::Object> holder = info.Holder();
-
-        Crypto* impl = V8Crypto::toImpl(holder);
-
-        SubtleCrypto* cppValue(WTF::getPtr(impl->subtle()));
-
-        // Keep the wrapper object for the return value alive as long as |this|
-        // object is alive in order to save creation time of the wrapper object.
-        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-            return;
-        v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-        const char kKeepAliveKey[] = "KeepAlive#Crypto#subtle";
-        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-
-        v8SetReturnValue(info, v8Value);
+//         v8::Local<v8::Object> holder = info.Holder();
+// 
+//         Crypto* impl = V8Crypto::toImpl(holder);
+// 
+//         SubtleCrypto* cppValue(WTF::getPtr(impl->subtle()));
+// 
+//         // Keep the wrapper object for the return value alive as long as |this|
+//         // object is alive in order to save creation time of the wrapper object.
+//         if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
+//             return;
+//         v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
+//         const char kKeepAliveKey[] = "KeepAlive#Crypto#subtle";
+//         V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+// 
+//         v8SetReturnValue(info, v8Value);
     }
 
     MODULES_EXPORT void subtleAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
