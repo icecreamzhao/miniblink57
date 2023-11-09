@@ -24,45 +24,160 @@ Modulator::~Modulator()
 
 }
 
-// MyScriptPromiseResolver::MyScriptPromiseResolver(v8::Local<v8::Context> context, v8::Local<v8::Promise::Resolver> resolver)
-// {
-//     m_context = new v8::Persistent<v8::Context>(context->GetIsolate(), context);
-//     m_resolver = new v8::Persistent<v8::Promise::Resolver>(context->GetIsolate(), resolver);
-// }
-// 
-// void MyScriptPromiseResolver::reject()
-// {
-//     v8::Isolate* isolate = v8::Isolate::GetCurrent();
-//     v8::HandleScope handleScope(isolate);
-//     v8::Local<v8::Promise::Resolver> resolverLocal = m_resolver->Get(isolate);
-//     v8::Local<v8::Context> contextLocal = m_context->Get(isolate);
-// 
-//     resolverLocal->Reject(contextLocal, v8::Undefined(isolate));
-// 
-//     m_resolver->Reset();
-//     m_context->Reset();
-//     delete m_resolver;
-//     delete m_context;
-//     m_resolver = nullptr;
-//     m_context = nullptr;
-// }
-// 
-// void MyScriptPromiseResolver::resolve(v8::Local<v8::Value> val)
-// {
-//     v8::Isolate* isolate = v8::Isolate::GetCurrent();
-//     v8::HandleScope handleScope(isolate);
-//     v8::Local<v8::Promise::Resolver> resolverLocal = m_resolver->Get(isolate);
-//     v8::Local<v8::Context> contextLocal = m_context->Get(isolate);
-// 
-//     resolverLocal->Resolve(contextLocal, val);
-// 
-//     m_resolver->Reset();
-//     m_context->Reset();
-//     delete m_resolver;
-//     delete m_context;
-//     m_resolver = nullptr;
-//     m_context = nullptr;
-// }
+// ParsedSpecifier represents a parsed specifier, either
+// - a non-bare specifier, parsed as a KURL as specced by
+//   https://html.spec.whatwg.org/#resolve-a-module-specifier or
+// - a bare specifier, stored as a String as-is.
+
+// Non-import-maps cases:
+// Bare specifiers should be rejected by callers as resolution errors.
+// Then ParsedSpecifier represents the result of
+// https://html.spec.whatwg.org/#resolve-a-module-specifier
+// and behaves just like a KURL via GetUrl().
+
+// Import-maps cases:
+// In the import map spec, specifiers are handled mostly as strings,
+// occasionally converted to/from URLs.
+// In Blink, we pass ParsedSpecifier throughout the import map resolution,
+// instead of passing String with occasionally converting to KURL.
+// This avoid duplicated URL parsing.
+class ParsedSpecifier final {
+public:
+    // Parse |specifier|, which may be a non-bare or bare specifier.
+    // This implements
+    // https://html.spec.whatwg.org/#resolve-a-module-specifier
+    // but doesn't reject bare specifiers, which should be rejected by callers
+    // if needed.
+    static ParsedSpecifier create(const String& specifier, const KURL& base_url);
+
+    enum class Type { kInvalid, kBare, kURL };
+
+    Type getType() const
+    {
+        return m_type;
+    }
+
+    // Returns the string to be used as the key of import maps.
+    // This is the bare specifier itself if type is kBare, or
+    // serialized URL if type is kURL.
+    String getImportMapKeyString() const;
+
+    // Returns the URL, if type is kURL, or an null URL otherwise.
+    KURL getUrl() const;
+
+    bool isValid() const
+    {
+        return getType() != Type::kInvalid;
+    }
+
+private:
+    // Invalid specifier.
+    ParsedSpecifier()
+        : m_type(Type::kInvalid)
+    {
+    }
+    // Non-bare specifier.
+    explicit ParsedSpecifier(const KURL& url)
+        : m_type(Type::kURL)
+        , m_url(url)
+    {
+    }
+    // Bare specifier.
+    explicit ParsedSpecifier(const String& bareSpecifier)
+        : m_type(Type::kBare)
+        , m_bareSpecifier(bareSpecifier)
+    {
+    }
+
+    const Type m_type;
+    const KURL m_url;
+    const String m_bareSpecifier;
+};
+
+// <specdef href="https://html.spec.whatwg.org/#resolve-a-module-specifier">
+// <specdef label="import-specifier"
+// href="https://wicg.github.io/import-maps/#parse-a-url-like-import-specifier">
+// This can return a kBare ParsedSpecifier for cases where the spec concepts
+// listed above should return failure/null. The users of ParsedSpecifier should
+// handle kBare cases properly, depending on contexts and whether import maps
+// are enabled.
+ParsedSpecifier ParsedSpecifier::create(const String& specifier, const KURL& base_url)
+{
+    // <spec step="1">Apply the URL parser to specifier. If the result is not
+    // failure, return the result.</spec>
+    //
+    // <spec label="import-specifier" step="2">Let url be the result of parsing
+    // specifier (with no base URL).</spec>
+    KURL url(ParsedURLString, specifier);
+    if (WTF::kNotFound != specifier.find("://") && url.isValid()) {
+        // <spec label="import-specifier" step="4">If url¡¯s scheme is either a fetch
+        // scheme or "std", then return url.</spec>
+        //
+        // TODO(hiroshige): This check is done in the callers of ParsedSpecifier.
+        return ParsedSpecifier(url);
+    }
+
+    // <spec step="2">If specifier does not start with the character U+002F
+    // SOLIDUS (/), the two-character sequence U+002E FULL STOP, U+002F SOLIDUS
+    // (./), or the three-character sequence U+002E FULL STOP, U+002E FULL STOP,
+    // U+002F SOLIDUS (../), return failure.</spec>
+    //
+    // <spec label="import-specifier" step="1">If specifier starts with "/", "./",
+    // or "../", then:</spec>
+    if (!specifier.startsWith("/") && !specifier.startsWith("./") && !specifier.startsWith("../")) {
+        // Do not consider an empty specifier as a valid bare specifier.
+        //
+        // <spec
+        // href="https://wicg.github.io/import-maps/#normalize-a-specifier-key"
+        // step="1">If specifierKey is the empty string, then:</spec>
+        if (specifier.isEmpty())
+            return ParsedSpecifier();
+
+        // <spec label="import-specifier" step="3">If url is failure, then return
+        // null.</spec>
+        return ParsedSpecifier(specifier);
+    }
+
+    // <spec step="3">Return the result of applying the URL parser to specifier
+    // with base URL as the base URL.</spec>
+    //
+    // <spec label="import-specifier" step="1.1">Let url be the result of parsing
+    // specifier with baseURL as the base URL.</spec>
+    ASSERT(base_url.isValid());
+    KURL absolute_url(base_url, specifier);
+    // <spec label="import-specifier" step="1.3">Return url.</spec>
+    if (absolute_url.isValid())
+        return ParsedSpecifier(absolute_url);
+
+    // <spec label="import-specifier" step="1.2">If url is failure, then return
+    // null.</spec>
+    return ParsedSpecifier();
+}
+
+String ParsedSpecifier::getImportMapKeyString() const
+{
+    switch (getType()) {
+    case Type::kInvalid:
+        return String();
+    case Type::kBare:
+        return m_bareSpecifier;
+    case Type::kURL:
+        return m_url.getString();
+    }
+    return String();
+}
+
+KURL ParsedSpecifier::getUrl() const
+{
+    switch (getType()) {
+    case Type::kInvalid:
+    case Type::kBare:
+        return KURL();
+    case Type::kURL:
+        return m_url;
+    }
+    return KURL();
+}
 
 void Modulator::resolveDynamically(
     ScriptState* scriptState,
@@ -114,9 +229,17 @@ void Modulator::resolveDynamicallyDelay(
         if (!frame) 
             break;
 
-        KURL urlFull(url, specifier);
-        bool b = m_scriptRunner->requestPendingModuleScript(document, /*parentModuleRecord*/nullptr, urlFull.getUTF8String(), resolver);
-        if (b)
+        //KURL urlFull(url, specifier);
+        ParsedSpecifier parsedSpecifier = ParsedSpecifier::create(specifier, url);
+        if (!parsedSpecifier.isValid())
+            break;
+
+        if (parsedSpecifier.getType() == ParsedSpecifier::Type::kBare)
+            break;
+
+        KURL urlFull = parsedSpecifier.getUrl();
+        bool ok = m_scriptRunner->requestPendingModuleScript(document, /*parentModuleRecord*/nullptr, urlFull.getUTF8String(), resolver);
+        if (ok)
             resolver = nullptr;
     } while (false);
 
