@@ -41,7 +41,8 @@ void GetTimeoutsCommandHandler::ExecuteInternal(const MBCommandExecutor& executo
 //     }
 //     response_value[PAGE_LOAD_TIMEOUT_NAME] = executor.page_load_timeout();
 
-    response_value[SCRIPT_TIMEOUT_NAME] = 15000;
+    response_value[SCRIPT_TIMEOUT_NAME] = 35000;
+    response_value[PAGE_LOAD_TIMEOUT_NAME] = 35000;
 
     response->SetSuccessResponse(response_value);
 }

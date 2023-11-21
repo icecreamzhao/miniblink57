@@ -31,26 +31,34 @@ ExecuteAsyncScriptCommandHandler::~ExecuteAsyncScriptCommandHandler(void)
 {
 }
 
+void readFile(const wchar_t* path, std::vector<char>* buffer);
+
 void ExecuteAsyncScriptCommandHandler::ExecuteInternal(const MBCommandExecutor& executor, const ParametersMap& command, Response* response)
 {
+    OutputDebugStringA("ExecuteAsyncScriptCommandHandler 1\n");
+
     ParametersMap::const_iterator scriptIt = command.find("script");
     ParametersMap::const_iterator argsIt = command.find("args");
     if (scriptIt == command.end()) {
+        OutputDebugStringA("ExecuteAsyncScriptCommandHandler 2\n");
         response->SetErrorResponse(ERROR_INVALID_ARGUMENT, "Missing parameter: script");
         return;
     }
 
     if (!scriptIt->second.isString()) {
+        OutputDebugStringA("ExecuteAsyncScriptCommandHandler 3\n");
         response->SetErrorResponse(ERROR_INVALID_ARGUMENT, "script parameter must be a string");
         return;
     }
 
     if (argsIt == command.end()) {
+        OutputDebugStringA("ExecuteAsyncScriptCommandHandler 4\n");
         response->SetErrorResponse(ERROR_INVALID_ARGUMENT, "Missing parameter: args");
         return;
     }
 
     if (!argsIt->second.isArray()) {
+        OutputDebugStringA("ExecuteAsyncScriptCommandHandler 5\n");
         response->SetErrorResponse(ERROR_INVALID_ARGUMENT, "args parameter must be an array");
         return;
     }
@@ -61,11 +69,35 @@ void ExecuteAsyncScriptCommandHandler::ExecuteInternal(const MBCommandExecutor& 
     // Need to support line oriented comment
     if (script.find("//") != std::string::npos)
         script = script + "\n";
+    OutputDebugStringA("ExecuteAsyncScriptCommandHandler 6\n");
+
+    while (true) {
+        int state = mbQueryState(executor.view(), "dispatchWillCommitProvisionalLoad");
+        if (-1 == state) {
+            OutputDebugStringA("ExecuteAsyncScriptCommandHandler 7\n");
+            response->SetErrorResponse(ERROR_INVALID_ARGUMENT, "view is not ready");
+            return;
+        } else if (1 == state)
+            break;
+        ::Sleep(1000);
+    }
+    OutputDebugStringA("ExecuteAsyncScriptCommandHandler 8\n");
+
+//     std::vector<char> kExecuteAsyncScriptScriptBuffer;
+//     readFile(L"G:\\mycode\\miniblink57\\tmp\\ExecuteAsyncScriptCommandHandler.js", &kExecuteAsyncScriptScriptBuffer);
+//     kExecuteAsyncScriptScriptBuffer.push_back('\0');
+// 
+//     script = kExecuteAsyncScriptScriptBuffer.data();
+
+    std::string asyncScript = "async function() {" + script;
+    asyncScript += "; console.log('async func exec!!!!!!!!!!!!!!!!!!!!!!:' + callback);";
+    asyncScript += "}";
 
     Json::Value result;
-    bool status = callUserAsyncFunction(executor.view(), response, "async function(){" + script + "}", json_args, &result);
+    bool status = callUserAsyncFunction(executor.view(), response, asyncScript, json_args, &result);
     if (!status)
         return;
+    OutputDebugStringA("ExecuteAsyncScriptCommandHandler 2\n");
     response->SetSuccessResponse(result);
 }
 

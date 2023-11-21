@@ -17,17 +17,18 @@
 #ifndef WEBDRIVER_IE_ACCEPTALERTCOMMANDHANDLER_H_
 #define WEBDRIVER_IE_ACCEPTALERTCOMMANDHANDLER_H_
 
-#include "../IECommandHandler.h"
+#include "webdriver/MBCommandHandler.h"
+#include "webdriver/MBCommandExecutor.h"
 
 namespace webdriver {
 
-class AcceptAlertCommandHandler : public IECommandHandler {
+class AcceptAlertCommandHandler : public MBCommandHandler {
 public:
     AcceptAlertCommandHandler(void);
     virtual ~AcceptAlertCommandHandler(void);
 
 protected:
-    void ExecuteInternal(const IECommandExecutor& executor, const ParametersMap& command_parameters, Response* response);
+    void ExecuteInternal(const MBCommandExecutor& executor, const ParametersMap& command_parameters, Response* response);
 };
 
 } // namespace webdriver

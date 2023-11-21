@@ -27,7 +27,7 @@ public:
     virtual ~DismissAlertCommandHandler(void);
 
 protected:
-    void ExecuteInternal(const IECommandExecutor& executor, const ParametersMap& command_parameters, Response* response);
+    void ExecuteInternal(const MBCommandExecutor& executor, const ParametersMap& command_parameters, Response* response);
 };
 
 } // namespace webdriver

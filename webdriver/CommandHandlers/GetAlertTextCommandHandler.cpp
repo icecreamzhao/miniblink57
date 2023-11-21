@@ -15,10 +15,8 @@
 // limitations under the License.
 
 #include "GetAlertTextCommandHandler.h"
-#include "errorcodes.h"
-#include "../Alert.h"
-#include "../Browser.h"
-#include "../IECommandExecutor.h"
+#include "webdriver/server/errorcodes.h"
+#include "mbvip/core/mb.h"
 
 namespace webdriver {
 
@@ -30,24 +28,36 @@ GetAlertTextCommandHandler::~GetAlertTextCommandHandler(void)
 {
 }
 
-void GetAlertTextCommandHandler::ExecuteInternal(const IECommandExecutor& executor, const ParametersMap& command_parameters, Response* response)
+void GetAlertTextCommandHandler::ExecuteInternal(const MBCommandExecutor& executor, const ParametersMap& command_parameters, Response* response)
 {
-    BrowserHandle browser_wrapper;
-    int status_code = executor.GetCurrentBrowser(&browser_wrapper);
-    if (status_code != WD_SUCCESS) {
-        response->SetErrorResponse(status_code, "Unable to get browser");
+    mbWebView webview = executor.view();
+    if (NULL_WEBVIEW == webview) {
+        response->SetErrorResponse(ENOSUCHALERT, "Unable to get current browser");
         return;
     }
-    // This sleep is required to give IE time to draw the dialog.
-    ::Sleep(100);
-    HWND alert_handle = browser_wrapper->GetActiveDialogWindowHandle();
-    if (alert_handle == NULL) {
-        response->SetErrorResponse(ENOSUCHALERT, "No alert is active");
-    } else {
-        Alert dialog(browser_wrapper, alert_handle);
-        std::string alert_text_value = dialog.GetText();
-        response->SetSuccessResponse(alert_text_value);
-    }
+
+    const std::string* newStr = (const std::string*)mbGetUserKeyValue(webview, "AlertText");
+    if (newStr)
+        response->SetSuccessResponse(*newStr);
+    else
+        response->SetSuccessResponse("");
+
+//     BrowserHandle browser_wrapper;
+//     int status_code = executor.GetCurrentBrowser(&browser_wrapper);
+//     if (status_code != WD_SUCCESS) {
+//         response->SetErrorResponse(status_code, "Unable to get browser");
+//         return;
+//     }
+//     // This sleep is required to give IE time to draw the dialog.
+//     ::Sleep(100);
+//     HWND alert_handle = browser_wrapper->GetActiveDialogWindowHandle();
+//     if (alert_handle == NULL) {
+//         response->SetErrorResponse(ENOSUCHALERT, "No alert is active");
+//     } else {
+//         Alert dialog(browser_wrapper, alert_handle);
+//         std::string alert_text_value = dialog.GetText();
+//         response->SetSuccessResponse(alert_text_value);
+//     }
 }
 
 } // namespace webdriver

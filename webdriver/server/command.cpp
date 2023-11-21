@@ -68,6 +68,7 @@ void Command::Deserialize(const std::string& json)
         this->is_valid_parameters_ = true;
         Json::Value command_parameter_object = root["parameters"];
         if (!command_parameter_object.isObject()) {
+            //MessageBoxA(0, "Command::Deserialize fail", 0, 0);
             WDLOG(WARN) << "The value of the 'parameters' attribute is not a JSON "
                       << "object. This is invalid for the WebDriver JSON Wire "
                       << "Protocol.";

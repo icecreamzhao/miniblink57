@@ -14,11 +14,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "SetWindowRectCommandHandler.h"
-#include "errorcodes.h"
-#include "json.h"
-#include "../Browser.h"
-#include "../IECommandExecutor.h"
+#include "webdriver/CommandHandlers/SetWindowRectCommandHandler.h"
+
+#include "webdriver/CommandHandlers/ElementUtil.h"
+#include "webdriver/server/errorcodes.h"
+#include "webdriver/MBCommandExecutor.h"
+#include "webdriver/WebDriverConstants.h"
 
 namespace webdriver {
 
@@ -30,12 +31,12 @@ SetWindowRectCommandHandler::~SetWindowRectCommandHandler(void)
 {
 }
 
-void SetWindowRectCommandHandler::ExecuteInternal(const IECommandExecutor& executor, const ParametersMap& command_parameters, Response* response)
+void SetWindowRectCommandHandler::ExecuteInternal(const MBCommandExecutor& executor, const ParametersMap& command_parameters, Response* response)
 {
     int width = -1;
     int height = -1;
-    int x = -1;
-    int y = -1;
+    int x = 0;
+    int y = 0;
 
     std::string argument_error_message = "";
     Json::Value width_parameter;
@@ -78,52 +79,75 @@ void SetWindowRectCommandHandler::ExecuteInternal(const IECommandExecutor& execu
 
     int status_code = WD_SUCCESS;
 
-    BrowserHandle browser_wrapper;
-    status_code = executor.GetCurrentBrowser(&browser_wrapper);
-    if (status_code != WD_SUCCESS) {
+    if (NULL_WEBVIEW == executor.view()) {
         response->SetErrorResponse(ERROR_NO_SUCH_WINDOW, "Error retrieving current window");
         return;
     }
 
-    // If the window is minimized, maximized, or full screen,
-    // the window needs to be restored.
-    browser_wrapper->Restore();
+    mbRect current_window_rect;
+    mbGetSize(executor.view(), &current_window_rect);
 
-    HWND window_handle = browser_wrapper->GetTopLevelWindowHandle();
-    RECT current_window_rect;
-    ::GetWindowRect(window_handle, &current_window_rect);
-    if (!is_x_defined || !is_y_defined) {
-        x = current_window_rect.left;
-        y = current_window_rect.top;
-    }
-    if (!is_height_defined || !is_width_defined) {
-        height = current_window_rect.bottom - current_window_rect.top;
-        width = current_window_rect.right - current_window_rect.left;
-    }
+    if (!is_height_defined)
+        width = current_window_rect.w;
+    if (!is_width_defined)
+        height = current_window_rect.h;
+    
+    mbResize(executor.view(), width, height);
 
-    BOOL set_window_pos_result = ::SetWindowPos(window_handle, NULL, x, y, width, height, 0);
-    if (!set_window_pos_result) {
-        response->SetErrorResponse(ERROR_UNKNOWN_ERROR, "Unexpected error setting window size (SetWindowPos API failed)");
-        return;
-    }
-
-    HWND browser_window_handle = browser_wrapper->GetTopLevelWindowHandle();
-    RECT window_rect;
-    ::GetWindowRect(browser_window_handle, &window_rect);
     Json::Value returned_rect;
-    returned_rect["width"] = window_rect.right - window_rect.left;
-    returned_rect["height"] = window_rect.bottom - window_rect.top;
-    returned_rect["x"] = window_rect.left;
-    returned_rect["y"] = window_rect.top;
+
+    returned_rect["x"] = x;
+    returned_rect["y"] = y;
+    returned_rect["width"] = width;
+    returned_rect["height"] = height;
+
+//     BrowserHandle browser_wrapper;
+//     status_code = executor.GetCurrentBrowser(&browser_wrapper);
+//     if (status_code != WD_SUCCESS) {
+//         response->SetErrorResponse(ERROR_NO_SUCH_WINDOW, "Error retrieving current window");
+//         return;
+//     }
+// 
+//     // If the window is minimized, maximized, or full screen,
+//     // the window needs to be restored.
+//     browser_wrapper->Restore();
+//
+//     HWND window_handle = browser_wrapper->GetTopLevelWindowHandle();
+//     RECT current_window_rect;
+//     ::GetWindowRect(window_handle, &current_window_rect);
+//     if (!is_x_defined || !is_y_defined) {
+//         x = current_window_rect.left;
+//         y = current_window_rect.top;
+//     }
+//     if (!is_height_defined || !is_width_defined) {
+//         height = current_window_rect.bottom - current_window_rect.top;
+//         width = current_window_rect.right - current_window_rect.left;
+//     }
+// 
+//     BOOL set_window_pos_result = ::SetWindowPos(window_handle, NULL, x, y, width, height, 0);
+//     if (!set_window_pos_result) {
+//         response->SetErrorResponse(ERROR_UNKNOWN_ERROR, "Unexpected error setting window size (SetWindowPos API failed)");
+//         return;
+//     }
+// 
+//     HWND browser_window_handle = browser_wrapper->GetTopLevelWindowHandle();
+//     RECT window_rect;
+//     ::GetWindowRect(browser_window_handle, &window_rect);
+//     Json::Value returned_rect;
+//     returned_rect["width"] = window_rect.right - window_rect.left;
+//     returned_rect["height"] = window_rect.bottom - window_rect.top;
+//     returned_rect["x"] = window_rect.left;
+//     returned_rect["y"] = window_rect.top;
+
     response->SetSuccessResponse(returned_rect);
 }
 
 bool SetWindowRectCommandHandler::GetNumericParameter(
     const std::string& argument_name, const bool is_positive_required, const Json::Value& parameter_value, int* argument_value, std::string* error_message)
 {
-    int max_value = MAXINT;
+    int max_value = /*MAXINT*/2147483647;
     std::string max_value_description = "2^31 - 1";
-    int min_value = MININT;
+    int min_value = (-2147483647 - 1)/*MININT*/;
     std::string min_value_description = "-2^31";
     if (is_positive_required) {
         min_value = 0;

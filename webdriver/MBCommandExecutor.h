@@ -34,11 +34,7 @@ public:
         return this->m_port;
     }
 
-    void setView(mbWebView view, const std::string& browserId)
-    {
-        m_mbView = view;
-        m_browserId = browserId;
-    }
+    void setView(mbWebView view, const std::string& browserId);
 
     mbWebView view() const
     {
@@ -95,7 +91,8 @@ public:
 
     int createNewBrowser(std::string* errorMessage, mbWebView* mbwebview, std::string* browserId);
     int getManagedBrowser(const std::string& browserId, mbWebView* webview) const;
-    void getManagedBrowserHandles(std::vector<std::string>* managedBrowsers) const;;
+    void getManagedBrowserHandles(std::vector<std::string>* managedBrowsers) const;
+    void eraseManagedBrowserHandle(mbWebView webview);
 
     bool executeCommand(const std::string& serialized_command, std::string* serialized_response);
     void initialize(int port, const std::string& sessionId);
@@ -103,6 +100,7 @@ public:
     static unsigned int CALLBACK threadProc(LPVOID lpParameter);
 
 private:
+    static mbWebView MB_CALL_TYPE onCreateViewCallback(mbWebView webView, void* param, mbNavigationType navigationType, const utf8* url, const mbWindowFeatures* windowFeatures);
     void addManagedBrowser(mbWebView mbView, const std::string& browserId);
 
     mbWebView m_mbView = NULL_WEBVIEW;
@@ -114,6 +112,8 @@ private:
     int m_port = -1;
     bool m_isValid = true;
     bool m_isQuitting = false;
+
+    mutable CRITICAL_SECTION m_managedBrowsersLock;
 
     typedef std::unordered_map<std::string, mbWebView> BrowserMap;
     BrowserMap m_managedBrowsers;

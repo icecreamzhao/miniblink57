@@ -19,7 +19,7 @@
 #include "webdriver/server/command_types.h"
 #include "webdriver/server/wd_logging.h"
 
-// #include "CommandHandlers/AcceptAlertCommandHandler.h"
+#include "CommandHandlers/AcceptAlertCommandHandler.h"
 // #include "CommandHandlers/ActionsCommandHandler.h"
 // #include "CommandHandlers/AddCookieCommandHandler.h"
 #include "CommandHandlers/ClickElementCommandHandler.h"
@@ -28,7 +28,7 @@
 #include "CommandHandlers/CreateNewWindowCommandHandler.h"
 // #include "CommandHandlers/DeleteAllCookiesCommandHandler.h"
 // #include "CommandHandlers/DeleteCookieCommandHandler.h"
-// #include "CommandHandlers/DismissAlertCommandHandler.h"
+#include "CommandHandlers/DismissAlertCommandHandler.h"
 // #include "CommandHandlers/ElementEqualsCommandHandler.h"
 #include "CommandHandlers/ExecuteAsyncScriptCommandHandler.h"
 #include "CommandHandlers/ExecuteScriptCommandHandler.h"
@@ -38,7 +38,7 @@
 #include "CommandHandlers/FindElementsCommandHandler.h"
 // #include "CommandHandlers/FullScreenWindowCommandHandler.h"
 // #include "CommandHandlers/GetActiveElementCommandHandler.h"
-// #include "CommandHandlers/GetAlertTextCommandHandler.h"
+#include "CommandHandlers/GetAlertTextCommandHandler.h"
 // #include "CommandHandlers/GetAllCookiesCommandHandler.h"
 #include "CommandHandlers/GetAllWindowHandlesCommandHandler.h"
 // #include "CommandHandlers/GetCurrentUrlCommandHandler.h"
@@ -64,17 +64,17 @@
 // #include "CommandHandlers/MinimizeWindowCommandHandler.h"
 // #include "CommandHandlers/MaximizeWindowCommandHandler.h"
 #include "CommandHandlers/NewSessionCommandHandler.h"
-// #include "CommandHandlers/QuitCommandHandler.h"
+#include "CommandHandlers/QuitCommandHandler.h"
 #include "CommandHandlers/RefreshCommandHandler.h"
 #include "CommandHandlers/ReleaseActionsCommandHandler.h"
-// #include "CommandHandlers/ScreenshotCommandHandler.h"
+#include "CommandHandlers/ScreenshotCommandHandler.h"
 // #include "CommandHandlers/ScreenshotElementCommandHandler.h"
 #include "CommandHandlers/SendKeysCommandHandler.h"
 // #include "CommandHandlers/SendKeysToAlertCommandHandler.h"
 // #include "CommandHandlers/SetAlertCredentialsCommandHandler.h"
 #include "CommandHandlers/SetTimeoutsCommandHandler.h"
-// #include "CommandHandlers/SetWindowRectCommandHandler.h"
-// #include "CommandHandlers/SwitchToFrameCommandHandler.h"
+#include "CommandHandlers/SetWindowRectCommandHandler.h"
+#include "CommandHandlers/SwitchToFrameCommandHandler.h"
 // #include "CommandHandlers/SwitchToParentFrameCommandHandler.h"
 #include "CommandHandlers/SwitchToWindowCommandHandler.h"
 #include "webdriver/MBCommandHandler.h"
@@ -114,7 +114,7 @@ void CommandHandlerRepository::PopulateCommandHandlers()
 
     this->command_handlers_[webdriver::CommandType::NoCommand] = CommandHandlerHandle(new MBCommandHandler);
     this->command_handlers_[webdriver::CommandType::NewSession] = CommandHandlerHandle(new NewSessionCommandHandler);
-//     this->command_handlers_[webdriver::CommandType::Quit] = CommandHandlerHandle(new QuitCommandHandler);
+    this->command_handlers_[webdriver::CommandType::Quit] = CommandHandlerHandle(new QuitCommandHandler);
     this->command_handlers_[webdriver::CommandType::GetTimeouts] = CommandHandlerHandle(new GetTimeoutsCommandHandler);
     this->command_handlers_[webdriver::CommandType::SetTimeouts] = CommandHandlerHandle(new SetTimeoutsCommandHandler);
     this->command_handlers_[webdriver::CommandType::Get] = CommandHandlerHandle(new GoToUrlCommandHandler);
@@ -129,11 +129,11 @@ void CommandHandlerRepository::PopulateCommandHandlers()
     this->command_handlers_[webdriver::CommandType::SwitchToWindow] = CommandHandlerHandle(new SwitchToWindowCommandHandler);
     this->command_handlers_[webdriver::CommandType::GetWindowHandles] = CommandHandlerHandle(new GetAllWindowHandlesCommandHandler);
     this->command_handlers_[webdriver::CommandType::NewWindow] = CommandHandlerHandle(new CreateNewWindowCommandHandler);
-// 
-//     this->command_handlers_[webdriver::CommandType::SwitchToFrame] = CommandHandlerHandle(new SwitchToFrameCommandHandler);
+
+    this->command_handlers_[webdriver::CommandType::SwitchToFrame] = CommandHandlerHandle(new SwitchToFrameCommandHandler);
 //     this->command_handlers_[webdriver::CommandType::SwitchToParentFrame] = CommandHandlerHandle(new SwitchToParentFrameCommandHandler);
 //     this->command_handlers_[webdriver::CommandType::GetWindowRect] = CommandHandlerHandle(new GetWindowRectCommandHandler);
-//     this->command_handlers_[webdriver::CommandType::SetWindowRect] = CommandHandlerHandle(new SetWindowRectCommandHandler);
+    this->command_handlers_[webdriver::CommandType::SetWindowRect] = CommandHandlerHandle(new SetWindowRectCommandHandler);
 //     this->command_handlers_[webdriver::CommandType::MaximizeWindow] = CommandHandlerHandle(new MaximizeWindowCommandHandler);
 //     this->command_handlers_[webdriver::CommandType::MinimizeWindow] = CommandHandlerHandle(new MinimizeWindowCommandHandler);
 //     this->command_handlers_[webdriver::CommandType::FullscreenWindow] = CommandHandlerHandle(new FullScreenWindowCommandHandler);
@@ -163,11 +163,11 @@ void CommandHandlerRepository::PopulateCommandHandlers()
 //     this->command_handlers_[webdriver::CommandType::DeleteAllCookies] = CommandHandlerHandle(new DeleteAllCookiesCommandHandler);
 //     this->command_handlers_[webdriver::CommandType::Actions] = CommandHandlerHandle(new ActionsCommandHandler);
     this->command_handlers_[webdriver::CommandType::ReleaseActions] = CommandHandlerHandle(new ReleaseActionsCommandHandler);
-//     this->command_handlers_[webdriver::CommandType::DismissAlert] = CommandHandlerHandle(new DismissAlertCommandHandler);
-//     this->command_handlers_[webdriver::CommandType::AcceptAlert] = CommandHandlerHandle(new AcceptAlertCommandHandler);
-//     this->command_handlers_[webdriver::CommandType::GetAlertText] = CommandHandlerHandle(new GetAlertTextCommandHandler);
+    this->command_handlers_[webdriver::CommandType::DismissAlert] = CommandHandlerHandle(new DismissAlertCommandHandler);
+    this->command_handlers_[webdriver::CommandType::AcceptAlert] = CommandHandlerHandle(new AcceptAlertCommandHandler);
+    this->command_handlers_[webdriver::CommandType::GetAlertText] = CommandHandlerHandle(new GetAlertTextCommandHandler);
 //     this->command_handlers_[webdriver::CommandType::SendKeysToAlert] = CommandHandlerHandle(new SendKeysToAlertCommandHandler);
-//     this->command_handlers_[webdriver::CommandType::Screenshot] = CommandHandlerHandle(new ScreenshotCommandHandler);
+    this->command_handlers_[webdriver::CommandType::Screenshot] = CommandHandlerHandle(new ScreenshotCommandHandler);
 //     this->command_handlers_[webdriver::CommandType::ElementScreenshot] = CommandHandlerHandle(new ScreenshotElementCommandHandler);
 // 
 //     // Additional commands required to be supported, but not defined

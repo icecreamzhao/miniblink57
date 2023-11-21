@@ -215,7 +215,8 @@ LogThread* g_logThread = nullptr;
 
 extern "C" void OutputDebugStringToFile(const char* str)
 {
-    g_logThread->pushStr(str);
+    //g_logThread->pushStr(str);
+    OutputDebugStringA(str);
 }
 
 int main(int argc, char* argv[])

@@ -494,7 +494,7 @@ Json::Value NewSessionCommandHandler::CreateReturnedCapabilities(const MBCommand
     }
 
     Json::Value timeouts;
-    timeouts[IMPLICIT_WAIT_TIMEOUT_NAME] = 0;//executor.implicit_wait_timeout(); == 0
+    timeouts[IMPLICIT_WAIT_TIMEOUT_NAME] = 10000;//executor.implicit_wait_timeout(); == 0
     timeouts[PAGE_LOAD_TIMEOUT_NAME] = "3000000";// executor.page_load_timeout(); == 300000
     timeouts["script"] = 300000;
     capabilities[TIMEOUTS_CAPABILITY] = timeouts;

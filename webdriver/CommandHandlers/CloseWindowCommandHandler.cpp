@@ -21,6 +21,7 @@
 #include "webdriver/server/wd_logging.h"
 #include "webdriver/server/errorcodes.h"
 #include "mbvip/core/mb.h"
+#include <functional>
 
 namespace webdriver {
 
@@ -31,6 +32,8 @@ CloseWindowCommandHandler::CloseWindowCommandHandler(void)
 CloseWindowCommandHandler::~CloseWindowCommandHandler(void)
 {
 }
+
+void postToUiThreadSync(std::function<void(void)>&& closure);
 
 void CloseWindowCommandHandler::ExecuteInternal(const MBCommandExecutor& executor, const ParametersMap& command_parameters, Response* response)
 {
@@ -47,7 +50,14 @@ void CloseWindowCommandHandler::ExecuteInternal(const MBCommandExecutor& executo
         response->SetErrorResponse(ERROR_NO_SUCH_WINDOW, "Unable to get browser");
         return;
     }
-    mbDestroyWebView(webview);
+
+    MBCommandExecutor* executorPtr = (MBCommandExecutor*)&executor;
+    executorPtr->eraseManagedBrowserHandle(webview);
+
+    CloseWindowCommandHandler* self = this;
+    postToUiThreadSync([self, &webview] {
+        mbDestroyWebView(webview);
+    });
 
     if (current_window_count == 1) {
         MBCommandExecutor& mutableExecutor = const_cast<MBCommandExecutor&>(executor);

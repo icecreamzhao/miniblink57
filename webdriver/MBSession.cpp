@@ -119,11 +119,15 @@ bool MBSession::ExecuteCommand(const std::string& serializedCommand, std::string
     WDLOG(TRACE) << "Entering MBSession::ExecuteCommand";
 
     MBSession* self = this;
-    bool ret = false;
-    //postToUiThreadSync([self, serializedCommand, serializedResponse, &ret] {
-        ret = self->m_commandExecutor->executeCommand(serializedCommand, serializedResponse);
-    //});
-    return ret;
+    self->m_commandExecutor->executeCommand(serializedCommand, serializedResponse);
+
+    bool isValid = m_commandExecutor->is_valid();
+//     postToUiThreadSync([self, serializedCommand, serializedResponse, &ret] {
+//         self->m_commandExecutor
+//     });
+    if (!isValid)
+        MessageBoxA(0, "m_commandExecutor->is_valid fail", 0, 0);
+    return isValid;
 // 
 //     // Sending a command consists of five actions:
 //     // 1. Setting the command to be executed

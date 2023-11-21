@@ -14,11 +14,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "DismissAlertCommandHandler.h"
-#include "errorcodes.h"
-#include "../Alert.h"
-#include "../Browser.h"
-#include "../IECommandExecutor.h"
+#include "webdriver/CommandHandlers/DismissAlertCommandHandler.h"
+#include "webdriver/server/errorcodes.h"
+#include "mbvip/core/mb.h"
 
 namespace webdriver {
 
@@ -30,32 +28,42 @@ DismissAlertCommandHandler::~DismissAlertCommandHandler(void)
 {
 }
 
-void DismissAlertCommandHandler::ExecuteInternal(const IECommandExecutor& executor, const ParametersMap& command_parameters, Response* response)
+void DismissAlertCommandHandler::ExecuteInternal(const MBCommandExecutor& executor, const ParametersMap& command_parameters, Response* response)
 {
-    BrowserHandle browser_wrapper;
-    int status_code = executor.GetCurrentBrowser(&browser_wrapper);
-    if (status_code != WD_SUCCESS) {
-        response->SetErrorResponse(status_code, "Unable to get browser");
+    OutputDebugStringA("DismissAlertCommandHandler::ExecuteInternal\n");
+    mbWebView webview = executor.view();
+    if (NULL_WEBVIEW == webview) {
+        OutputDebugStringA("DismissAlertCommandHandler::ExecuteInternal error\n");
+        response->SetErrorResponse(ENOSUCHALERT, "Unable to get current browser");
         return;
     }
-    // This sleep is required to give IE time to draw the dialog.
-    ::Sleep(100);
-    HWND alert_handle = browser_wrapper->GetActiveDialogWindowHandle();
-    if (alert_handle == NULL) {
-        response->SetErrorResponse(ENOSUCHALERT, "No alert is active");
-    } else {
-        Alert dialog(browser_wrapper, alert_handle);
-        status_code = dialog.Dismiss();
-        if (status_code != WD_SUCCESS) {
-            response->SetErrorResponse(status_code, "Could not find Cancel button");
-        }
+    mbSetUserKeyValue(webview, "AlertWaitFlag", "DismissAlert");
+    response->SetSuccessResponse(Json::Value::null);
 
-        // Add sleep to give IE time to close dialog and start Navigation if it's necessary
-        ::Sleep(100);
-        browser_wrapper->set_wait_required(true);
-
-        response->SetSuccessResponse(Json::Value::null);
-    }
+//     BrowserHandle browser_wrapper;
+//     int status_code = executor.GetCurrentBrowser(&browser_wrapper);
+//     if (status_code != WD_SUCCESS) {
+//         response->SetErrorResponse(status_code, "Unable to get browser");
+//         return;
+//     }
+//     // This sleep is required to give IE time to draw the dialog.
+//     ::Sleep(100);
+//     HWND alert_handle = browser_wrapper->GetActiveDialogWindowHandle();
+//     if (alert_handle == NULL) {
+//         response->SetErrorResponse(ENOSUCHALERT, "No alert is active");
+//     } else {
+//         Alert dialog(browser_wrapper, alert_handle);
+//         status_code = dialog.Dismiss();
+//         if (status_code != WD_SUCCESS) {
+//             response->SetErrorResponse(status_code, "Could not find Cancel button");
+//         }
+// 
+//         // Add sleep to give IE time to close dialog and start Navigation if it's necessary
+//         ::Sleep(100);
+//         browser_wrapper->set_wait_required(true);
+// 
+//         response->SetSuccessResponse(Json::Value::null);
+//     }
 }
 
 } // namespace webdriver

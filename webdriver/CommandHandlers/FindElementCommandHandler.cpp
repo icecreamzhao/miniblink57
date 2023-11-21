@@ -32,43 +32,78 @@ FindElementCommandHandler::~FindElementCommandHandler(void)
 {
 }
 
+static void MB_CALL_TYPE onGetSourceCallback(mbWebView webView, void* param, const utf8* mhtml)
+{
+    int* waitFlag = (int*)param;
+    *waitFlag = 1;
+
+    if (!mhtml) {
+        OutputDebugStringA("onGetSourceCallback fail\n");
+        return;
+    }
+    std::string output = "onGetSourceCallback: ";
+    output += mhtml;
+    output += "\n";
+//     if (output.size() > 500)
+//         return;
+
+    OutputDebugStringA(output.c_str());
+}
+
 void FindElementCommandHandler::ExecuteInternal(const MBCommandExecutor& executor, const ParametersMap& command_parameters, Response* response)
 {
-    ParametersMap::const_iterator using_parameter_iterator = command_parameters.find("using");
-    ParametersMap::const_iterator value_parameter_iterator = command_parameters.find("value");
-    if (using_parameter_iterator == command_parameters.end()) {
+    ParametersMap::const_iterator usingIt = command_parameters.find("using");
+    ParametersMap::const_iterator valueIt = command_parameters.find("value");
+    if (usingIt == command_parameters.end()) {
         response->SetErrorResponse(ERROR_INVALID_ARGUMENT, "Missing parameter: using");
         return;
     }
-    if (!using_parameter_iterator->second.isString()) {
+    if (!usingIt->second.isString()) {
         response->SetErrorResponse(ERROR_INVALID_ARGUMENT, "using parameter must be a string");
         return;
     }
-    if (value_parameter_iterator == command_parameters.end()) {
+    if (valueIt == command_parameters.end()) {
         response->SetErrorResponse(ERROR_INVALID_ARGUMENT, "Missing parameter: value");
         return;
     }
-    if (!value_parameter_iterator->second.isString()) {
+    if (!valueIt->second.isString()) {
         response->SetErrorResponse(ERROR_INVALID_ARGUMENT, "value parameter must be a string");
         return;
     }
 
-    std::string mechanism = using_parameter_iterator->second.asString();
-    std::string value = value_parameter_iterator->second.asString();
+    std::string mechanism = usingIt->second.asString();
+    std::string value = valueIt->second.asString();
 
     if (mechanism != "css selector" && mechanism != "tag name" && mechanism != "link text" && mechanism != "partial link text" && mechanism != "xpath") {
         response->SetErrorResponse(ERROR_INVALID_ARGUMENT, "using parameter value '" + mechanism + "' is not a valid value");
         return;
     }
-    
-    bool ok = findElementCommon(1, true,
-        nullptr /*root_element_id*/,
-        executor.view(),
-        mechanism, value,
-        //std::unique_ptr<base::Value>*value,
-        false /*isShadowRoot*/,
-        response);
 
+    for (int retryCount = 0; true; ++retryCount) {
+        Json::Value result;
+        bool ok = findElementCommon(1, true, nullptr, executor.view(), mechanism, value, false, &result, response);
+        if (!ok || !result.isNull())
+            break;
+       
+        if (retryCount > 4 && result.isNull()) {
+            char* output = (char*)malloc(0x200);
+            sprintf_s(output, 0x199, "FindElementCommandHandler fail 1: %s\n", value.c_str());
+            OutputDebugStringA(output);
+            free(output);
+            //MessageBoxA(0, "mhtml", "onGetSourceCallback", 0);
+
+            int waitFlag = 0;
+            mbGetSource(executor.view(), onGetSourceCallback, &waitFlag);
+            while (waitFlag == 0) {
+                ::Sleep(100);
+            }
+            OutputDebugStringA("FindElementCommandHandler fail 2\n");
+
+            response->SetErrorResponse(ERROR_NO_SUCH_ELEMENT, "no such element");
+            break;
+        }
+        ::Sleep(100);
+    }
     //response->SetSuccessResponse(/*found_elements*/"{\"value\":{\"element-6066-11e4-a52e-4f735466cecf\":\"939eadc3-ef54-44cf-a4a8-5f35253d3a75\"}}");
 }
 

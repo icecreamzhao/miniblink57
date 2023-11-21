@@ -17,17 +17,18 @@
 #ifndef WEBDRIVER_IE_SWITCHTOFRAMECOMMANDHANDLER_H_
 #define WEBDRIVER_IE_SWITCHTOFRAMECOMMANDHANDLER_H_
 
-#include "../IECommandHandler.h"
+#include "webdriver/MBCommandHandler.h"
+#include "webdriver/MBCommandExecutor.h"
 
 namespace webdriver {
 
-class SwitchToFrameCommandHandler : public IECommandHandler {
+class SwitchToFrameCommandHandler : public MBCommandHandler {
 public:
     SwitchToFrameCommandHandler(void);
     virtual ~SwitchToFrameCommandHandler(void);
 
 protected:
-    void ExecuteInternal(const IECommandExecutor& executor, const ParametersMap& command_parameters, Response* response);
+    void ExecuteInternal(const MBCommandExecutor& executor, const ParametersMap& command_parameters, Response* response);
 };
 
 } // namespace webdriver

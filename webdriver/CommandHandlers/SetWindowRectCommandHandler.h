@@ -16,7 +16,7 @@
 #ifndef WEBDRIVER_IE_SETWINDOWRECTCOMMANDHANDLER_H_
 #define WEBDRIVER_IE_SETWINDOWRECTCOMMANDHANDLER_H_
 
-#include "../IECommandHandler.h"
+#include "webdriver/MBCommandHandler.h"
 
 namespace Json {
 class Value;
@@ -24,13 +24,13 @@ class Value;
 
 namespace webdriver {
 
-class SetWindowRectCommandHandler : public IECommandHandler {
+class SetWindowRectCommandHandler : public MBCommandHandler {
 public:
     SetWindowRectCommandHandler(void);
     virtual ~SetWindowRectCommandHandler(void);
 
 protected:
-    void ExecuteInternal(const IECommandExecutor& executor, const ParametersMap& command_parameters, Response* response);
+    void ExecuteInternal(const MBCommandExecutor& executor, const ParametersMap& command_parameters, Response* response);
 
 private:
     bool GetNumericParameter(

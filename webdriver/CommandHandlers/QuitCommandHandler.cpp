@@ -14,10 +14,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "QuitCommandHandler.h"
-#include "errorcodes.h"
-#include "../Browser.h"
-#include "../IECommandExecutor.h"
+#include "webdriver/CommandHandlers/QuitCommandHandler.h"
+#include <functional>
 
 namespace webdriver {
 
@@ -29,25 +27,34 @@ QuitCommandHandler::~QuitCommandHandler(void)
 {
 }
 
-void QuitCommandHandler::ExecuteInternal(const IECommandExecutor& executor, const ParametersMap& command_parameters, Response* response)
+void postToUiThreadSync(std::function<void(void)>&& closure);
+
+void QuitCommandHandler::ExecuteInternal(const MBCommandExecutor& executor, const ParametersMap& command_parameters, Response* response)
 {
-    IECommandExecutor& mutable_executor = const_cast<IECommandExecutor&>(executor);
-    mutable_executor.set_is_quitting(true);
+    MBCommandExecutor& mutableExecutor = const_cast<MBCommandExecutor&>(executor);
+    mutableExecutor.setIsQuitting(true);
 
-    std::vector<std::string> managed_browser_handles;
-    executor.GetManagedBrowserHandles(&managed_browser_handles);
+    std::vector<std::string> browserHandles;
+    executor.getManagedBrowserHandles(&browserHandles);
 
-    std::vector<std::string>::iterator end = managed_browser_handles.end();
-    for (std::vector<std::string>::iterator it = managed_browser_handles.begin(); it != end; ++it) {
-        BrowserHandle browser_wrapper;
-        int status_code = executor.GetManagedBrowser(*it, &browser_wrapper);
-        if (status_code == WD_SUCCESS && !browser_wrapper->is_closing()) {
-            browser_wrapper->Close();
+    std::vector<std::string>::iterator end = browserHandles.end();
+    for (std::vector<std::string>::iterator it = browserHandles.begin(); it != end; ++it) {
+//         BrowserHandle browser_wrapper;
+//         int status_code = executor.getManagedBrowser(*it, &browser_wrapper);
+//         if (status_code == WD_SUCCESS && !browser_wrapper->is_closing()) {
+//             browser_wrapper->Close();
+//         }
+        mbWebView webview = NULL_WEBVIEW;
+        mutableExecutor.getManagedBrowser(*it, &webview);
+        if (NULL_WEBVIEW != webview) {
+            postToUiThreadSync([&webview] {
+                mbDestroyWebView(webview);
+            });
         }
     }
 
     // Calling quit will always result in an invalid session.
-    mutable_executor.set_is_valid(false);
+    mutableExecutor.setIsValid(false);
     response->SetSuccessResponse(Json::Value::null);
 }
 

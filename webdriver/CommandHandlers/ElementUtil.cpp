@@ -102,10 +102,24 @@ bool parseCallFunctionResult(const Json::Value& tempResult, Json::Value* result,
     return true;
 }
 
-bool hasFocus(mbWebView web_view, Response* response, bool* hasfocus)
+static void waitUtilReady(mbWebView webview, Response* response)
+{
+    while (true) {
+        int state = mbQueryState(webview, "dispatchWillCommitProvisionalLoad");
+        if (-1 == state) {
+            OutputDebugStringA("waitUtilReady: webview is not valid\n");
+            response->SetErrorResponse(ERROR_INVALID_SESSION_ID, "invalid session id");
+            return;
+        } else if (1 == state)
+            break;
+        ::Sleep(10);
+    }
+}
+
+bool hasFocus(mbWebView webview, Response* response, bool* hasfocus)
 {
     Json::Value value;
-    bool status = evaluateScriptWithTimeout(web_view, 
+    bool status = evaluateScriptWithTimeout(webview,
         //"let ret = document.hasFocus(); window.mbQuery(0, \"{\\\"status\\\": 0, \\\"value\\\": \" + ret + \"}\", null)",
         "let ret = document.hasFocus(); window.mbQuery(0, \"\" + ret + \"\", null)",
         Json::Value::null, response, &value);
@@ -183,6 +197,7 @@ bool evaluateScriptWithTimeout(
     Json::Value* result
     )
 {
+    waitUtilReady(webview, response);
     mbRunJs(webview, mbWebFrameGetMainFrame(webview), function.c_str(), TRUE, nullptr, nullptr, nullptr);
 
     s_JsQueryInfo.wait = 1;
@@ -281,9 +296,16 @@ bool callAsyncFunctionInternal(
     asyncArgs.append(is_user_supplied);
     Json::Value tmp;
 
-    bool status = callFunctionWithTimeout(webview, response, kExecuteAsyncScriptScript, asyncArgs, &tmp);
+//     std::vector<char> kExecuteAsyncScriptScriptBuffer;
+//     readFile(L"G:\\mycode\\miniblink57\\tmp\\kExecuteAsyncScriptScript.js", &kExecuteAsyncScriptScriptBuffer);
+//     kExecuteAsyncScriptScriptBuffer.push_back('\0');
+
+    bool status = callFunctionWithTimeout(webview, response, kExecuteAsyncScriptScript/*kExecuteAsyncScriptScriptBuffer.data()*/, asyncArgs, &tmp);
     if (!status)
         return status;
+
+    ::Sleep(100);
+    OutputDebugStringA("callAsyncFunctionInternal entry\n");
 
     const char kDocUnloadError[] = "document unloaded while waiting for result";
     std::vector<char> buf;
@@ -291,11 +313,15 @@ bool callAsyncFunctionInternal(
     sprintf(buf.data(),
         "function() {"
         "  var info = document.$chrome_asyncScriptInfo;"
-        "  if (!info)"
+        "  if (!info) {"
+        "    console.log('kQueryResult, callAsyncFunctionInternal -------------fail 1:' + info);"
         "    return {status: %d, value: '%s'};"
+        "  }"
         "  var result = info.result;"
-        "  if (!result)"
+        "  if (!result) {"
+        "    console.log('kQueryResult, callAsyncFunctionInternal -------------fail 2:' + result);"
         "    return {status: 0};"
+        "  }"
         "  delete info.result;"
         "  return result;"
         "}",
@@ -339,20 +365,21 @@ bool callAsyncFunctionInternal(
             return false;
         }
 
-        Json::Value value = queryValue.get("value", Json::Value::null);
-        if (!value.empty()) {
+        if (queryValue.isMember("value")) {
+            Json::Value value = queryValue.get("value", Json::Value::null);
             *result = value;
             return true;
         }
 
+        OutputDebugStringA("callAsyncFunctionInternal, retry\n");
         retryCount++;
         // Since async-scripts return immediately, need to time period here instead.
-        if (retryCount > 5) {
-            MessageBoxA(0, "callAsyncFunctionInternal", 0, 0);
+        if (retryCount > 3) {
+            //MessageBoxA(0, "callAsyncFunctionInternal", 0, 0);
             response->SetErrorResponse(ERROR_SCRIPT_TIMEOUT, "time out");
             return false;
         }
-        ::Sleep(1000);
+        ::Sleep(100);
     }
 }
 
@@ -397,12 +424,13 @@ bool callFunctionWithTimeout(
         "    let json = JSON.stringify(r);\n"
         "    window.mbQuery(0, json, null);\n"
         "  } catch (e) {\n"
-        "    console.log((\"catch\" + e));"
+        "    console.log((\"catch:\" + e));\n"
         "    window.mbQuery(-1, e + \"\", null);\n"
         "  }\n"
         "})\n";
-    expression += ".catch(function(e) { \nconsole.log(\"catch\" + e);\nwindow.mbQuery(-1, e + \"\", null);});\n";
+    expression += ".catch(function(e) { \nconsole.log(\"catch:\" + e);\nwindow.mbQuery(-1, e + \"\", null);});\n";
 
+    waitUtilReady(webview, response);
     mbRunJs(webview, mbWebFrameGetMainFrame(webview), expression.c_str(), TRUE, nullptr, nullptr, nullptr);
 
     s_JsQueryInfo.wait = 1;
@@ -443,8 +471,8 @@ bool findElementCommon(int intervalMs,
     mbWebView webview,
     const std::string& strategy,
     const std::string& target,
-    //std::unique_ptr<base::Value>* value,
     bool isShadowRoot,
+    Json::Value* result,
     Response* response)
 {
     /*
@@ -488,7 +516,7 @@ bool findElementCommon(int intervalMs,
             arguments.append(createElement(*rootElementId));
     }
 
-    return callFunctionWithTimeout(webview, response, script, arguments, nullptr);
+    return callFunctionWithTimeout(webview, response, script, arguments, result);
 }
 
 // example of element_id - d9cf1666-0066-4c07-bb86-03edcbab6680

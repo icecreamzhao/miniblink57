@@ -107,14 +107,15 @@ void Response::SetResponse(const std::string& error, const Json::Value& response
 
 void Response::SetErrorResponse(const std::string& error, const std::string& message)
 {
-    WDLOG(TRACE) << "Entering Response::SetErrorResponse";
+    //WDLOG(TRACE) << "Entering Response::SetErrorResponse";
+    WDLOG(WARN) << "Error response has status code " << error << " and message '" << message << "' message";
     this->SetResponse(error, message);
 }
 
 void Response::SetErrorResponse(const int status_code, const std::string& message)
 {
-    WDLOG(TRACE) << "Entering Response::SetErrorResponse";
-    WDLOG(WARN) << "Error response has status code " << status_code << " and message '" << message << "' message";
+    //WDLOG(TRACE) << "Entering Response::SetErrorResponse";
+    //WDLOG(WARN) << "Error response has status code " << status_code << " and message '" << message << "' message";
     this->SetErrorResponse(ConvertErrorCode(status_code), message);
 }
 

@@ -61,13 +61,17 @@ void FindElementsCommandHandler::ExecuteInternal(const MBCommandExecutor& execut
         return;
     }
 
-    findElementCommon(1, false,
+    Json::Value result;
+    bool ok = findElementCommon(1, false,
         nullptr /*root_element_id*/,
         executor.view(),
         mechanism, value,
-        //std::unique_ptr<base::Value>*value,
         false /*isShadowRoot*/,
+        &result,
         response);
+    if (ok && result.isNull()) {
+        response->SetErrorResponse(ERROR_NO_SUCH_ELEMENT, "no such element");
+    }
 
 //     BrowserHandle browser_wrapper;
 //     int status_code = executor.GetCurrentBrowser(&browser_wrapper);

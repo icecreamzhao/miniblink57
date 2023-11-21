@@ -56,8 +56,8 @@ bool findElementCommon(int intervalMs,
     mbWebView webview,
     const std::string& strategy,
     const std::string& target,
-    //std::unique_ptr<base::Value>* value,
     bool isShadowRoot,
+    Json::Value* result,
     Response* response);
 
 bool isElementAttributeEqualToIgnoreCase(
