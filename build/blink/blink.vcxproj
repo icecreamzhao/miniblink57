@@ -15,7 +15,7 @@
     <RootNamespace>blink</RootNamespace>
     <Keyword>Win32Proj</Keyword>
     <ProjectName>MiniBlink</ProjectName>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>7.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup>
@@ -23,13 +23,13 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141_xp</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141_xp</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -46,16 +46,18 @@
     <_ProjectFileVersion>11.0.50727.1</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)..\out\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)..\out\win_$(Configuration)_x86\</OutDir>
+    <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\win_$(Configuration)_x86\</IntDir>
     <LinkIncremental>true</LinkIncremental>
     <LibraryPath>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\;$(LibraryPath)</LibraryPath>
+    <TargetName>miniblink_5775_x32</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\</OutDir>
-    <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)..\out\win_$(Configuration)_x86\</OutDir>
+    <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\win_$(Configuration)_x86\</IntDir>
     <LinkIncremental>true</LinkIncremental>
     <LibraryPath>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\;$(LibraryPath)</LibraryPath>
+    <TargetName>miniblink_5775_x32</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -72,20 +74,20 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PrecompiledHeaderFile>config.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>config.h</ForcedIncludeFiles>
-      <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\out\$(Configuration)\;$(SolutionDir)..\third_party\ffmpeg\lib\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\out\win_$(Configuration)_x86\;$(SolutionDir)..\third_party\ffmpeg\lib\</AdditionalLibraryDirectories>
       <AdditionalDependencies>Userenv.lib;Setupapi.lib;PowrProf.lib;Version.lib;Msimg32.lib;Imm32.lib;Dbghelp.lib;v8_7_5.lib;skia.lib;winmm.lib;Ws2_32.lib;Usp10.lib;Shlwapi.lib;wininet.lib;GDIPlus.lib;Crypt32.lib;Wldap32.lib;libxml.lib;zlib.lib;ots.lib;chromium.lib;libcurl.lib;libpng.lib;openssl.lib;harfbuzz.lib;version.lib;libjpeg.lib;DbgHelp.lib;ffmpeg.dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(SolutionDir)..\out\$(Configuration)\miniblink_5775_x32.dll</OutputFile>
+      <OutputFile>$(SolutionDir)..\out\win_$(Configuration)_x86\miniblink_5775_x32.dll</OutputFile>
       <ImportLibrary>
       </ImportLibrary>
       <IgnoreSpecificDefaultLibraries>LIBCMT.lib</IgnoreSpecificDefaultLibraries>
       <ModuleDefinitionFile>$(SolutionDir)../mbvip/core/mtmb.def</ModuleDefinitionFile>
       <DelayLoadDLLs>ffmpeg.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <ProgramDatabaseFile>$(SolutionDir)..\out\win_$(Configuration)_x86\miniblink_5775_x32.pdb</ProgramDatabaseFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -113,12 +115,13 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\;$(SolutionDir)..\third_party\ffmpeg\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Userenv.lib;Setupapi.lib;PowrProf.lib;Version.lib;Msimg32.lib;Imm32.lib;Dbghelp.lib;v8_7_5.lib;skia.lib;winmm.lib;Ws2_32.lib;Usp10.lib;Shlwapi.lib;wininet.lib;GDIPlus.lib;Crypt32.lib;Wldap32.lib;libxml.lib;libjpeg.lib;libpng.lib;zlib.lib;ots.lib;chromium.lib;libcurl.lib;openssl.lib;harfbuzz.lib;ffmpeg.dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\out\win_$(Configuration)_x86;$(SolutionDir)..\third_party\ffmpeg\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Userenv.lib;Setupapi.lib;PowrProf.lib;Version.lib;Msimg32.lib;Imm32.lib;Dbghelp.lib;v8_7_5.lib;skia.lib;winmm.lib;Ws2_32.lib;Usp10.lib;Shlwapi.lib;wininet.lib;GDIPlus.lib;Crypt32.lib;Wldap32.lib;libxml.lib;zlib.lib;ots.lib;chromium.lib;libcurl.lib;openssl.lib;harfbuzz.lib;ffmpeg.dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/FORCE:UNRESOLVED /NODEFAULTLIB:library %(AdditionalOptions)</AdditionalOptions>
-      <OutputFile>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\miniblink_5775_x32.dll</OutputFile>
+      <OutputFile>$(SolutionDir)..\out\win_$(Configuration)_x86\miniblink_5775_x32.dll</OutputFile>
       <ModuleDefinitionFile>$(SolutionDir)../mbvip/core/mtmb.def</ModuleDefinitionFile>
       <DelayLoadDLLs>ffmpeg.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <ProgramDatabaseFile>$(SolutionDir)..\out\win_$(Configuration)_x86\miniblink_5775_x32.pdb</ProgramDatabaseFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -748,6 +751,7 @@
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8CredentialData.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8CredentialRequestOptions.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8CredentialsContainer.cpp" />
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8Crypto.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8DataTransferItemPartial.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8DedicatedWorkerGlobalScopePartial.cpp" />
     <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8DeprecatedStorageInfo.cpp" />
@@ -1111,6 +1115,8 @@
     <ClCompile Include="..\..\third_party\WebKit\Source\bindings\core\v8\custom\V8DevToolsHostCustom.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\bindings\core\v8\custom\V8IntersectionObserverCustom.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\bindings\core\v8\IDLDictionaryBase.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\bindings\core\v8\Modulator.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\bindings\core\v8\ModuleRecord.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\bindings\core\v8\npruntime.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\bindings\core\v8\NPV8Object.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\bindings\core\v8\V8NPObject.cpp" />
@@ -1119,6 +1125,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\dom\ModuleScriptLoader.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\core\dom\ProcessingInstruction.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\core\editing\commands\SmartReplaceICU.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\core\inspector\DevToolsHost.cpp" />
@@ -1255,6 +1262,8 @@
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\credentialmanager\NavigatorCredentials.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\credentialmanager\PasswordCredential.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\credentialmanager\SiteBoundCredential.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\crypto\CryptoModules.cpp" />
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\crypto\DOMWindowCrypto.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\csspaint\CSSPaintDefinition.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\csspaint\CSSPaintImageGeneratorImpl.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\modules\csspaint\PaintRenderingContext2D.cpp" />
@@ -2718,7 +2727,6 @@
     <ClCompile Include="..\..\third_party\WebKit\Source\core\dom\LiveNodeListBase.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\core\dom\MessageChannel.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\core\dom\MessagePort.cpp" />
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\dom\Modulator.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\core\dom\MutationObserver.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\core\dom\MutationObserverInterestGroup.cpp" />
     <ClCompile Include="..\..\third_party\WebKit\Source\core\dom\MutationObserverRegistration.cpp" />
@@ -4527,6 +4535,7 @@
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8CredentialData.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8CredentialRequestOptions.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8CredentialsContainer.h" />
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8Crypto.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8DedicatedWorkerGlobalScopePartial.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8DeprecatedStorageInfo.h" />
     <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8DeprecatedStorageQuota.h" />
@@ -4847,6 +4856,8 @@
     <ClInclude Include="..\..\third_party\WebKit\Source\bindings\core\v8\LocalWindowProxy.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\bindings\core\v8\Maplike.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\bindings\core\v8\Microtask.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\bindings\core\v8\Modulator.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\bindings\core\v8\ModuleRecord.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\bindings\core\v8\NativeValueTraits.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\bindings\core\v8\npruntime_impl.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\bindings\core\v8\npruntime_priv.h" />
@@ -5484,7 +5495,7 @@
     <ClInclude Include="..\..\third_party\WebKit\Source\core\dom\LiveNodeListBase.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\core\dom\MessageChannel.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\core\dom\MessagePort.h" />
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\dom\Modulator.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\core\dom\ModuleScriptLoader.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\core\dom\MutationCallback.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\core\dom\MutationObserver.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\core\dom\MutationObserverInterestGroup.h" />
@@ -7386,6 +7397,8 @@
     <ClInclude Include="..\..\third_party\WebKit\Source\modules\credentialmanager\NavigatorCredentials.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\modules\credentialmanager\PasswordCredential.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\modules\credentialmanager\SiteBoundCredential.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\crypto\Crypto.h" />
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\crypto\DOMWindowCrypto.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\modules\csspaint\CSSPaintDefinition.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\modules\csspaint\CSSPaintImageGeneratorImpl.h" />
     <ClInclude Include="..\..\third_party\WebKit\Source\modules\csspaint\PaintRenderingContext2D.h" />

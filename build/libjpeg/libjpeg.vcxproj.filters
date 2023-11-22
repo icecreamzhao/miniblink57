@@ -330,9 +330,6 @@
     <ClCompile Include="..\..\third_party\libjpeg_turbo\jmemmgr.c">
       <Filter>turbo</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg_turbo\jmemname.c">
-      <Filter>turbo</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\third_party\libjpeg_turbo\jquant1.c">
       <Filter>turbo</Filter>
     </ClCompile>

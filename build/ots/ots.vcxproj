@@ -14,19 +14,19 @@
     <ProjectGuid>{3A656E0E-C23A-4F36-9A5B-569F501587B4}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>ots</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141_xp</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141_xp</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -41,12 +41,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\$(Configuration)\</IntDir>
-    <OutDir>$(SolutionDir)..\out\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\win_$(Configuration)_x86\</IntDir>
+    <OutDir>$(SolutionDir)..\out\win_$(Configuration)_x86</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\</OutDir>
-    <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)..\out\win_$(Configuration)_x86</OutDir>
+    <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\win_$(Configuration)_x86\</IntDir>
     <IncludePath>$(IncludePath)</IncludePath>
     <ReferencePath>$(ReferencePath)</ReferencePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
@@ -59,7 +59,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;ZLIB_DLL;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../third_party/zlib/;../../third_party/ots/include;../../third_party/ots/;../../third_party/brotli;../../third_party/sfntly/src/cpp/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../third_party/libyuv/include;../../third_party/zlib/;../../third_party/ots/include;../../third_party/ots/;../../third_party/brotli;../../third_party/sfntly/src/cpp/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -78,7 +78,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;WIN32;_LIB;ZLIB_DLL;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../third_party/sfntly/src/cpp/src;../../third_party/zlib/;../../third_party/ots/include;../../third_party/ots/;../../third_party/brotli</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../third_party/sfntly/src/cpp/src;../../third_party/zlib/;../../third_party/ots/include;../../third_party/ots/;../../third_party/brotli;../../third_party/libyuv/include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
       <AdditionalOptions>/Zc:threadSafeInit- %(AdditionalOptions)</AdditionalOptions>
@@ -113,6 +113,13 @@
     <ClInclude Include="..\..\third_party\libpng\pnglibconf.h" />
     <ClInclude Include="..\..\third_party\libpng\pngpriv.h" />
     <ClInclude Include="..\..\third_party\libpng\pngstruct.h" />
+    <ClInclude Include="..\..\third_party\libwebp\webp\config.h" />
+    <ClInclude Include="..\..\third_party\libwebp\webp\decode.h" />
+    <ClInclude Include="..\..\third_party\libwebp\webp\demux.h" />
+    <ClInclude Include="..\..\third_party\libwebp\webp\encode.h" />
+    <ClInclude Include="..\..\third_party\libwebp\webp\format_constants.h" />
+    <ClInclude Include="..\..\third_party\libwebp\webp\mux_types.h" />
+    <ClInclude Include="..\..\third_party\libwebp\webp\types.h" />
     <ClInclude Include="..\..\third_party\ots\include\opentype-sanitiser.h" />
     <ClInclude Include="..\..\third_party\ots\include\ots-memory-stream.h" />
     <ClInclude Include="..\..\third_party\ots\src\cff.h" />
@@ -209,8 +216,6 @@
     <ClCompile Include="..\..\third_party\libjpeg_turbo\jidctred.c" />
     <ClCompile Include="..\..\third_party\libjpeg_turbo\jmemansi.c" />
     <ClCompile Include="..\..\third_party\libjpeg_turbo\jmemmgr.c" />
-    <ClCompile Include="..\..\third_party\libjpeg_turbo\jmemname.c" />
-    <ClCompile Include="..\..\third_party\libjpeg_turbo\jmemnobs.c" />
     <ClCompile Include="..\..\third_party\libjpeg_turbo\jquant1.c" />
     <ClCompile Include="..\..\third_party\libjpeg_turbo\jquant2.c" />
     <ClCompile Include="..\..\third_party\libjpeg_turbo\jsimd_none.c" />
@@ -227,7 +232,6 @@
     <ClCompile Include="..\..\third_party\libjpeg_turbo\transupp.c" />
     <ClCompile Include="..\..\third_party\libjpeg_turbo\wrbmp.c" />
     <ClCompile Include="..\..\third_party\libjpeg_turbo\wrgif.c" />
-    <ClCompile Include="..\..\third_party\libjpeg_turbo\wrjpgcom.c" />
     <ClCompile Include="..\..\third_party\libjpeg_turbo\wrppm.c" />
     <ClCompile Include="..\..\third_party\libjpeg_turbo\wrrle.c" />
     <ClCompile Include="..\..\third_party\libjpeg_turbo\wrtarga.c" />
@@ -276,6 +280,108 @@
     <ClCompile Include="..\..\third_party\libpng\pngwutil.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\dec\buffer.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dec\dec_alpha.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dec\dec_frame.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dec\dec_quant.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dec\dec_tree.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dec\dec_vp8l.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dec\idec.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dec\io.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dec\vp8.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dec\webp.c" />
+    <ClCompile Include="..\..\third_party\libwebp\demux\demux.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\alpha_processing.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\alpha_processing_sse2.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\cpu.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\dec.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\dec_clip_tables.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\dec_mips32.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\dec_sse2.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\enc.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\enc_avx2.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\enc_mips32.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\enc_sse2.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\lossless.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\lossless_mips32.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\lossless_sse2.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\upsampling.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\upsampling_sse2.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\yuv.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\yuv_mips32.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\yuv_sse2.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\alpha.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\analysis.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\backward_references.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\config.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\cost.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\filter.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\frame.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\histogram.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\iterator.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\picture.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\picture_csp.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\picture_psnr.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\picture_rescale.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\picture_tools.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\quant.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\syntax.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\token.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\tree.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\vp8l.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\webpenc.c" />
+    <ClCompile Include="..\..\third_party\libwebp\utils\bit_reader_webp.c" />
+    <ClCompile Include="..\..\third_party\libwebp\utils\bit_writer.c" />
+    <ClCompile Include="..\..\third_party\libwebp\utils\color_cache.c" />
+    <ClCompile Include="..\..\third_party\libwebp\utils\filters.c" />
+    <ClCompile Include="..\..\third_party\libwebp\utils\huffman_encode.c" />
+    <ClCompile Include="..\..\third_party\libwebp\utils\huffman_webp.c" />
+    <ClCompile Include="..\..\third_party\libwebp\utils\quant_levels.c" />
+    <ClCompile Include="..\..\third_party\libwebp\utils\quant_levels_dec.c" />
+    <ClCompile Include="..\..\third_party\libwebp\utils\random.c" />
+    <ClCompile Include="..\..\third_party\libwebp\utils\rescaler.c" />
+    <ClCompile Include="..\..\third_party\libwebp\utils\thread.c" />
+    <ClCompile Include="..\..\third_party\libwebp\utils\utils.c" />
+    <ClCompile Include="..\..\third_party\libyuv\source\compare.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\compare_common.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\compare_gcc.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\compare_neon.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\compare_neon64.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\compare_win.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\convert.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\convert_argb.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\convert_from.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\convert_from_argb.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\convert_jpeg.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\convert_to_argb.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\convert_to_i420.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\cpu_id.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\mjpeg_decoder.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\mjpeg_validate.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\planar_functions.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\rotate.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\rotate_any.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\rotate_argb.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\rotate_common.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\rotate_gcc.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\rotate_neon.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\rotate_neon64.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\rotate_win.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\row_any.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\row_common.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\row_gcc.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\row_neon.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\row_neon64.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\row_win.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\scale.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\scale_any.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\scale_argb.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\scale_common.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\scale_gcc.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\scale_neon.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\scale_neon64.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\scale_win.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\video_common.cc" />
     <ClCompile Include="..\..\third_party\ots\src\cff.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
@@ -401,6 +507,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\out\win_Release_x86\wkexe_5775_x32.exe" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
