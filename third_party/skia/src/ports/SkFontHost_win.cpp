@@ -2325,7 +2325,7 @@ int LogFontTypeface::onGetUPEM() const
 
 SkTypeface::LocalizedStrings* LogFontTypeface::onCreateFamilyNameIterator() const
 {
-#ifdef MINIBLINK_NOT_IMPLEMENTED
+#if 1 // def MINIBLINK_NOT_IMPLEMENTED
     SkTypeface::LocalizedStrings* nameIter = SkOTUtils::LocalizedStrings_NameTable::CreateForFamilyNames(*this);
     if (nullptr == nameIter) {
         SkString familyName;
@@ -2336,10 +2336,10 @@ SkTypeface::LocalizedStrings* LogFontTypeface::onCreateFamilyNameIterator() cons
     return nameIter;
 #endif // MINIBLINK_NOT_IMPLEMENTED
 
-    SkString familyName;
-    this->getFamilyName(&familyName);
-    SkString language("zh-cn"); //undetermined
-    return new SkOTUtils::LocalizedStrings_SingleName(familyName, language);
+//     SkString familyName;
+//     this->getFamilyName(&familyName);
+//     SkString language("zh-cn"); //undetermined
+//     return new SkOTUtils::LocalizedStrings_SingleName(familyName, language);
 }
 
 int LogFontTypeface::onGetTableTags(SkFontTableTag tags[]) const
