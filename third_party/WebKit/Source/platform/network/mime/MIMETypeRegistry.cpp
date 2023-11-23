@@ -420,11 +420,8 @@ String MIMETypeRegistry::getMIMETypeForPath(const String& path)
 bool MIMETypeRegistry::isSupportedMIMEType(const String& mimeType)
 {
     //return mime_util::IsSupportedMimeType(ToLowerASCIIOrEmpty(mimeType));
-    if ("text/html" == mimeType)
+    if ("text/html" == mimeType || "text/vnd.wap.wml" == mimeType || "application/xhtml+xml" == mimeType)
         return true;
-    if ("text/vnd.wap.wml" == mimeType)
-        return true;
-
     return false;
 }
 
