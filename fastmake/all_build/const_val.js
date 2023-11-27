@@ -5,7 +5,6 @@ const cmd = JSON.parse(cmdstr);
 
 var constValue = {
     "sdkPath":"D:/MB/mb_linux_sdk/x86_64-unknown-linux-gnu/x86_64-unknown-linux-gnu",
-    
     "clangPath":"C:/Android/android-ndk-r16b/toolchains/llvm/prebuilt/windows-x86_64/bin",
     "ndkIncludePath":"C:/Android/android-ndk-r16b/toolchains/llvm/prebuilt/windows-x86_64/lib64/clang/5.0/include",
     "ndkBinPath": "C:/Android/android-ndk-r16b/toolchains/aarch64-linux-android-4.9/prebuilt/windows-x86_64/aarch64-linux-android/bin",
