@@ -150,6 +150,11 @@ public:
         return index;
     }
 
+    void resetState();
+
+    SIZE getClientSizeLocked();
+    bool hasDispatchWillCommitProvisionalLoad() const;
+
     wkeWebFrameHandle getMainFrameId() const { return m_mainFrameId; }
     void setMainFrameId(wkeWebFrameHandle id) { m_mainFrameId = id; }
 
@@ -175,8 +180,9 @@ private:
 
 private:
     void setClientSizeLocked(int w, int h);
-    SIZE getClientSizeLocked();
+
     static void WKE_CALL_TYPE onCaretChangedCallback(wkeWebView webView, void* param, const wkeRect* r);
+    static void WKE_CALL_TYPE onOtherLoadCallback(wkeWebView webView, void* param, wkeOtherLoadType type, wkeTempCallbackInfo* info);
 
     int64_t m_id;
     PageState m_state;
@@ -212,6 +218,8 @@ private:
     HRGN m_draggableRegion;
     bool m_enableMouseKeyMessage;
     float m_zoomFactor;
+
+    bool m_hasDispatchWillCommitProvisionalLoad = false;
 
     long m_navigateIndex;
 

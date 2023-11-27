@@ -450,7 +450,7 @@ typedef void(MB_CALL_TYPE* mbAcceleratedPaintCallback)(mbWebView webView, void* 
 typedef void(MB_CALL_TYPE *mbPaintBitUpdatedCallback)(mbWebView webView, void* param, const void* buffer, const mbRect* r, int width, int height);
 typedef void(MB_CALL_TYPE *mbAlertBoxCallback)(mbWebView webView, void* param, const utf8* msg);
 typedef BOOL(MB_CALL_TYPE *mbConfirmBoxCallback)(mbWebView webView, void* param, const utf8* msg);
-typedef mbStringPtr(MB_CALL_TYPE *mbPromptBoxCallback)(mbWebView webView, void* param, const utf8* msg, const utf8* defaultResult);
+typedef mbStringPtr(MB_CALL_TYPE *mbPromptBoxCallback)(mbWebView webView, void* param, const utf8* msg, const utf8* defaultResult, BOOL* result);
 typedef BOOL(MB_CALL_TYPE *mbNavigationCallback)(mbWebView webView, void* param, mbNavigationType navigationType, const utf8* url);
 typedef mbWebView(MB_CALL_TYPE *mbCreateViewCallback)(mbWebView webView, void* param, mbNavigationType navigationType, const utf8* url, const mbWindowFeatures* windowFeatures);
 typedef void(MB_CALL_TYPE *mbDocumentReadyCallback)(mbWebView webView, void* param, mbWebFrameHandle frameId);
@@ -904,6 +904,7 @@ ITERATOR1(const utf8*, mbGetString, mbStringPtr str, "") \
 \
 ITERATOR2(void, mbSetProxy, mbWebView webView, const mbProxy* proxy, "") \
 ITERATOR3(void, mbSetDebugConfig, mbWebView webView, const char* debugString, const char* param, "") \
+ITERATOR2(int, mbQueryState, mbWebView webView, const char* type, "") \
 \
 ITERATOR3(void, mbNetSetData, mbNetJob jobPtr, void* buf, int len, "调用此函数后,网络层收到数据会存储在一buf内,接收数据完成后响应OnLoadUrlEnd事件.#此调用严重影响性能,慎用" \
     "此函数和mbNetSetData的区别是，mbNetHookRequest会在接受到真正网络数据后再调用回调，并允许回调修改网络数据。"\
@@ -991,6 +992,7 @@ ITERATOR1(const utf8*, mbGetCookieOnBlinkThread, mbWebView webView, "") \
 ITERATOR1(void, mbClearCookie, mbWebView webView, "") \
 \
 ITERATOR3(void, mbResize, mbWebView webView, int w, int h, "") \
+ITERATOR2(void, mbGetSize, mbWebView webView, mbRect* rc, "") \
 \
 ITERATOR3(void, mbOnNavigation, mbWebView webView, mbNavigationCallback callback, void* param, "") \
 ITERATOR3(void, mbOnNavigationSync, mbWebView webView, mbNavigationCallback callback, void* param, "") \
@@ -1132,6 +1134,7 @@ ITERATOR3(void, mbInsertCSSByFrame, mbWebView webView, mbWebFrameHandle frameId,
 ITERATOR3(void, mbWebFrameGetMainWorldScriptContext, mbWebView webView, mbWebFrameHandle frameId, v8ContextPtr contextOut, "") \
 ITERATOR3(void, mbOnWillReleaseScriptContext, mbWebView webView, mbWillReleaseScriptContextCallback callback, void* callbackParam, "") \
 ITERATOR1(const char*, mbNetGetReferrer, mbNetJob jobPtr, "获取request的referrer") \
+ITERATOR2(void, mbPostToUiThread, mbOnCallUiThread callback, void* param, "") \
 ITERATOR2(void, mbSetEditable, mbWebView webView, bool editable, "") \
 ITERATOR1(void*, mbGetProcAddr, const char* name, "")
 

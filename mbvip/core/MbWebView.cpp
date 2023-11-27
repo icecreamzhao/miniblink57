@@ -148,6 +148,11 @@ MbWebView::MbWebView()
 
 void MbWebView::preDestroy()
 {
+    char* output = (char*)malloc(0x100);
+    sprintf_s(output, 0x99, "MbWebView::preDestroy: %p, %d\n", this, (int)m_id);
+    OutputDebugStringA(output);
+    free(output);
+
     common::LiveIdDetect::get()->deconstructed(m_id);
     m_state = kPageDestroying;
     ::RevokeDragDrop(m_hWnd);
@@ -279,8 +284,9 @@ bool WKE_CALL_TYPE onPromptBox(wkeWebView wkeWebview, void* param, const wkeStri
         return false;
 
     mbStringPtr resultVal = nullptr;
+    BOOL isOk = TRUE;
     if (self->getClosure().m_PromptBoxCallback)
-        resultVal = self->getClosure().m_PromptBoxCallback(self->getWebviewHandle(), self->getClosure().m_PromptBoxParam, wkeGetString(msg), wkeGetString(defaultResult));
+        resultVal = self->getClosure().m_PromptBoxCallback(self->getWebviewHandle(), self->getClosure().m_PromptBoxParam, wkeGetString(msg), wkeGetString(defaultResult), &isOk);
     else {
         PromptWnd prompt(self->getHostWnd());
         std::string result = prompt.run(wkeGetString(msg), wkeGetString(defaultResult));
@@ -294,7 +300,7 @@ bool WKE_CALL_TYPE onPromptBox(wkeWebView wkeWebview, void* param, const wkeStri
         mbDeleteString(resultVal);
     }
 #endif
-    return true;
+    return isOk;
 }
 
 bool WKE_CALL_TYPE onContextMenuItemClickCallback(wkeWebView webView, void* param, wkeOnContextMenuItemClickType type, wkeOnContextMenuItemClickStep step, wkeWebFrameHandle frameId, void* info)
@@ -322,6 +328,34 @@ void WKE_CALL_TYPE MbWebView::onCaretChangedCallback(wkeWebView webView, void* p
     ::LeaveCriticalSection(&(self->m_clientSizeLock));
 }
 
+void MbWebView::resetState()
+{
+    m_hasDispatchWillCommitProvisionalLoad = false;
+}
+
+bool MbWebView::hasDispatchWillCommitProvisionalLoad() const 
+{
+    return m_hasDispatchWillCommitProvisionalLoad; 
+}
+
+void WKE_CALL_TYPE MbWebView::onOtherLoadCallback(wkeWebView webView, void* param, wkeOtherLoadType type, wkeTempCallbackInfo* info)
+{
+    int64_t id = (int64_t)param;
+    MbWebView* self = (MbWebView*)common::LiveIdDetect::get()->getPtr(id);
+    if (!self)
+        return;
+
+    ::EnterCriticalSection(&(self->m_clientSizeLock));
+
+    if (WKE_DID_START_LOADING == type) { // 有url load的时候会调用
+        self->resetState();
+    } else if (WKE_WILL_COMMIT_PROVISIONAL_LOAD == type) { // 有第一个数据来到的时候会调用
+        self->m_hasDispatchWillCommitProvisionalLoad = true;
+    }
+
+    ::LeaveCriticalSection(&(self->m_clientSizeLock));
+}
+
 void MbWebView::initWebviewInBlinkThread(wkeWebView wkeWebview)
 {
     if (m_wkeWebview)
@@ -346,6 +380,7 @@ void MbWebView::initWebviewInBlinkThread(wkeWebView wkeWebview)
     wkeOnPromptBox(wkeWebview, onPromptBox, (void*)m_id);
     wkeOnContextMenuItemClick(wkeWebview, onContextMenuItemClickCallback, (void*)m_id);
     wkeOnCaretChanged(wkeWebview, onCaretChangedCallback, (void*)m_id);
+    wkeOnOtherLoad(wkeWebview, onOtherLoadCallback, (void*)m_id);
 
     if (m_isTransparent)
         wkeSetTransparent(wkeWebview, true);
@@ -756,21 +791,6 @@ void MbWebView::onResize(int w, int h, bool needSetHostWnd)
     if (m_isWebWindowMode && needSetHostWnd)
         ::SetWindowPos(m_hWnd, NULL, 0, 0, w, h, SWP_NOZORDER | SWP_NOMOVE | SWP_NOACTIVATE);
 }
-
-// void readFile(const wchar_t* path, std::vector<char>* buffer)
-// {
-//     HANDLE hFile = CreateFileW(path, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-//     if (INVALID_HANDLE_VALUE == hFile)
-//         return;
-// 
-//     DWORD fileSizeHigh;
-//     const DWORD bufferSize = ::GetFileSize(hFile, &fileSizeHigh);
-// 
-//     DWORD numberOfBytesRead = 0;
-//     buffer->resize(bufferSize);
-//     BOOL b = ::ReadFile(hFile, &buffer->at(0), bufferSize, &numberOfBytesRead, nullptr);
-//     ::CloseHandle(hFile);
-// }
 
 #if ENABLE_IN_MB_MAIN
 #if ENABLE_NODEJS
@@ -1790,8 +1810,10 @@ void* MbWebView::getUserKeyValue(const char* key) const
 {
     ::EnterCriticalSection(&m_userKeyValuesLock);
     std::map<std::string, void*>::const_iterator it = m_userKeyValues.find(key);
-    if (m_userKeyValues.end() == it)
+    if (m_userKeyValues.end() == it) {
+        ::LeaveCriticalSection(&m_userKeyValuesLock);
         return nullptr;
+    }
     void* ret = it->second;
     ::LeaveCriticalSection(&m_userKeyValuesLock);
     return ret;
