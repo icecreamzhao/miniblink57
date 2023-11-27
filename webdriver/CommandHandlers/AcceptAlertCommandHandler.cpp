@@ -15,6 +15,7 @@
 // limitations under the License.
 
 #include "AcceptAlertCommandHandler.h"
+#include "webdriver/CommandHandlers/ElementUtil.h"
 #include "webdriver/server/errorcodes.h"
 #include "mbvip/core/mb.h"
 
@@ -30,12 +31,24 @@ AcceptAlertCommandHandler::~AcceptAlertCommandHandler(void)
 
 void AcceptAlertCommandHandler::ExecuteInternal(const MBCommandExecutor& executor, const ParametersMap& command_parameters, Response* response)
 {
+    OutputDebugStringA("AcceptAlertCommandHandler::ExecuteInternal\n");
     mbWebView webview = executor.view();
     if (NULL_WEBVIEW == webview) {
         response->SetErrorResponse(ENOSUCHALERT, "Unable to get current browser");
         return;
     }
-    mbSetUserKeyValue(webview, "AlertWaitFlag", "AcceptAlert");
+    JsQueryInfo* jsQueryInfo = (JsQueryInfo*)mbGetUserKeyValue(webview, "JsQueryInfo");
+    if (!jsQueryInfo->isAlertOpen) {
+        OutputDebugStringA("AcceptAlertCommandHandler, isAlertOpen == false\n");
+        response->SetErrorResponse(ENOSUCHALERT, "No alert is active");
+        return;
+    }
+
+    ::EnterCriticalSection(&jsQueryInfo->lock);
+    jsQueryInfo->alertWaitFlag = "accept";
+    jsQueryInfo->isAlertOpen = false;
+    ::LeaveCriticalSection(&jsQueryInfo->lock);
+
     response->SetSuccessResponse(Json::Value::null);
 
 //     BrowserHandle browser_wrapper;

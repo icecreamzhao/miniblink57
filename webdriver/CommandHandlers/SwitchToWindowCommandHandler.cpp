@@ -49,13 +49,13 @@ void SwitchToWindowCommandHandler::ExecuteInternal(const MBCommandExecutor& exec
         executor.getManagedBrowserHandles(&browsers);
 
         for (unsigned int i = 0; i < browsers.size(); ++i) {
-            mbWebView browser;
-            int get_handle_loop_status_code = executor.getManagedBrowser(browsers[i], &browser);
-            if (get_handle_loop_status_code == WD_SUCCESS) {
+            mbWebView webviewHandle;
+            int status = executor.getManagedBrowser(browsers[i], &webviewHandle);
+            if (WD_SUCCESS == status) {
                 std::string browserName = browsers[i];
                 if (browserName == desiredName) {
-                    foundBrowserId = browsers[i];
-                    foundBrowserWebview = browser;
+                    foundBrowserId = browserName;
+                    foundBrowserWebview = webviewHandle;
                     break;
                 }
             }
@@ -66,6 +66,7 @@ void SwitchToWindowCommandHandler::ExecuteInternal(const MBCommandExecutor& exec
     } while (tries < limit && foundBrowserId == "");
 
     if (foundBrowserId == "") {
+        MessageBoxA(0, "SwitchToWindowCommandHandler No window found", 0, 0);
         response->SetErrorResponse(ERROR_NO_SUCH_WINDOW, "No window found");
         return;
     }

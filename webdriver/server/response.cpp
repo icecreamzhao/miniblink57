@@ -33,7 +33,7 @@ Response::~Response(void)
 
 void Response::Deserialize(const std::string& json)
 {
-    WDLOG(TRACE) << "Entering Response::Deserialize";
+    //WDLOG(TRACE) << "Entering Response::Deserialize";
 
     Json::Value response_object;
     std::string parse_errors;
@@ -72,7 +72,7 @@ std::string trimJson(const std::string& json)
 
 std::string Response::Serialize(void)
 {
-    WDLOG(TRACE) << "Entering Response::Serialize";
+    //WDLOG(TRACE) << "Entering Response::Serialize";
 
     Json::Value json_object;
     if (this->error_.size() > 0) {

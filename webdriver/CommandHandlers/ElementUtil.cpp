@@ -1,11 +1,15 @@
 
 #include "webdriver/CommandHandlers/ElementUtil.h"
 
-#include "webdriver/jsoncpp/jsoncpp.h"
-#include "webdriver/server/errorcodes.h"
+#include "webdriver/MBCommandExecutor.h"
+#include "webdriver/WebDriverConstants.h"
 #include "webdriver/js.h"
 #include "webdriver/atoms.h"
 #include "webdriver/StringUtilities.h"
+#include "webdriver/jsoncpp/jsoncpp.h"
+#include "webdriver/server/wd_logging.h"
+#include "webdriver/server/errorcodes.h"
+#include "webdriver/server/command_types.h"
 #include <windows.h>
 #include <vector>
 #include <string>
@@ -102,18 +106,146 @@ bool parseCallFunctionResult(const Json::Value& tempResult, Json::Value* result,
     return true;
 }
 
-static void waitUtilReady(mbWebView webview, Response* response)
+bool checkNotifyUnexpectedAlert(const std::string& unexpectedAlertBehavior)
 {
-    while (true) {
+    bool isNotifyUnexpectedAlert = unexpectedAlertBehavior.size() == 0 || unexpectedAlertBehavior == IGNORE_UNEXPECTED_ALERTS
+        || unexpectedAlertBehavior == DISMISS_AND_NOTIFY_UNEXPECTED_ALERTS || unexpectedAlertBehavior == ACCEPT_AND_NOTIFY_UNEXPECTED_ALERTS;
+    //isNotifyUnexpectedAlert = isNotifyUnexpectedAlert && dialog.is_standard_alert();
+    return isNotifyUnexpectedAlert;
+}
+
+bool handleUnexpectedAlert(mbWebView webview, const std::string& unexpectedAlertBehavior, bool forceUseDismiss, std::string* alertText)
+{
+    JsQueryInfo* jsQueryInfo = (JsQueryInfo*)mbGetUserKeyValue(webview, "JsQueryInfo");
+    ::EnterCriticalSection(&jsQueryInfo->lock);
+    *alertText = jsQueryInfo->alertText;
+
+    if (unexpectedAlertBehavior == ACCEPT_UNEXPECTED_ALERTS || unexpectedAlertBehavior == ACCEPT_AND_NOTIFY_UNEXPECTED_ALERTS) {
+        WDLOG(DEBUG) << "Automatically accepting the alert, " << unexpectedAlertBehavior;
+        jsQueryInfo->alertWaitFlag = "accept";
+        jsQueryInfo->alertText = "";
+        jsQueryInfo->isAlertOpen = false;
+    } else if (unexpectedAlertBehavior.size() == 0 || unexpectedAlertBehavior == DISMISS_UNEXPECTED_ALERTS
+        || unexpectedAlertBehavior == DISMISS_AND_NOTIFY_UNEXPECTED_ALERTS || forceUseDismiss) {
+        // If a quit command was issued, we should not ignore an unhandled
+        // alert, even if the alert behavior is set to "ignore".
+        WDLOG(DEBUG) << "Automatically dismissing the alert, " << unexpectedAlertBehavior;
+        //         if (dialog.is_standard_alert() || dialog.is_security_alert()) {
+        //             dialog.Dismiss();
+        //         } else {
+        //             // The dialog was non-standard. The most common case of this is
+        //             // an onBeforeUnload dialog, which must be accepted to continue.
+        //             dialog.Accept();
+        //         }
+        jsQueryInfo->alertWaitFlag = "dismiss";
+        jsQueryInfo->alertText = "";
+        jsQueryInfo->isAlertOpen = false;
+    } else { // 如果是IGNORE_UNEXPECTED_ALERTS，则什么都不做，等python自己操作，或者用户手动关闭alert
+
+    }    
+    ::LeaveCriticalSection(&jsQueryInfo->lock);
+
+    bool isNotifyUnexpectedAlert = checkNotifyUnexpectedAlert(unexpectedAlertBehavior);
+    return isNotifyUnexpectedAlert;
+}
+
+static bool isCommandValidWithAlertPresent(const std::string& commandType)
+{
+    if (commandType == webdriver::CommandType::GetAlertText || commandType == webdriver::CommandType::SendKeysToAlert
+        || commandType == webdriver::CommandType::AcceptAlert || commandType == webdriver::CommandType::DismissAlert
+        || commandType == webdriver::CommandType::SetAlertCredentials || commandType == webdriver::CommandType::GetTimeouts
+        || commandType == webdriver::CommandType::SetTimeouts || commandType == webdriver::CommandType::Screenshot
+        || commandType == webdriver::CommandType::ElementScreenshot || commandType == webdriver::CommandType::GetCurrentWindowHandle
+        || commandType == webdriver::CommandType::GetWindowHandles || commandType == webdriver::CommandType::SwitchToWindow) {
+        return true;
+    }
+    return false;
+}
+
+// false表示没处理，继续往下执行别的cmd
+bool handleAlert(mbWebView webview, const std::string& unexpectedAlertBehavior,
+    const std::string& commandType, Response* response, /*std::string* serializedResponse,*/ bool* isOk)
+{
+    if (webview == NULL_WEBVIEW)
+        return false;
+
+    JsQueryInfo* jsQueryInfo = (JsQueryInfo*)mbGetUserKeyValue(webview, "JsQueryInfo");
+    if (!jsQueryInfo->isAlertOpen)
+        return false;
+
+    if (isCommandValidWithAlertPresent(commandType))
+        return false;
+
+    //MessageBoxA(0, "MBCommandExecutor::handleAlert", 0, 0);
+    // 只有部分命令需要拒绝alert，不然alert没法接收dismiss了
+
+    bool isQuitCommand = commandType == webdriver::CommandType::Quit;
+    std::string alertText;
+    bool isNotifyUnexpectedAlert = handleUnexpectedAlert(webview, unexpectedAlertBehavior, isQuitCommand, &alertText);
+    if (isQuitCommand)
+        return false;
+
+    if (isNotifyUnexpectedAlert) {
+        // To keep pace with what the specification suggests, we'll
+        // return the text of the alert in the error response.
+        response->SetErrorResponse(EUNEXPECTEDALERTOPEN, "{Alert text : " + alertText + "}");
+        response->AddAdditionalData("text", alertText);
+        response->AddAdditionalData("data.text", alertText);
+        //*serializedResponse = response->Serialize();
+        *isOk = false;
+
+        WDLOG(DEBUG) << "handleAlert: unexpected alert open. unexpectedAlertBehavior: " << unexpectedAlertBehavior;
+    } else {
+//         WDLOG(DEBUG) << "Command other than quit was issued, and option to not notify was specified. Continuing with "
+//             << "command after automatically closing alert.";
+        // Push a wait cycle, then re-execute the current command (which
+        // hasn't actually been executed yet). Note that an empty string
+        // for the deferred response parameter of CreateWaitThread will
+        // re-queue the execution of the command.
+        //this->CreateWaitThread("", true);
+        //
+        //response->SetSuccessResponse(Json::Value::null);
+        //*isOk = true;
+        OutputDebugStringA("handleAlert: SetSuccessResponse\n");
+        return false;        
+    }
+    return true;
+}
+
+static void assertAlertOpen(JsQueryInfo* jsQueryInfo, const char* failText)
+{
+    if (jsQueryInfo->isAlertOpen) { // 之前进入cmd处理的时候就应该把alert都干掉了。另外下面的callFunctionWithTimeout有可能产生新的alert
+        MessageBoxA(0, failText, 0, 0);
+        OutputDebugStringA(failText);
+    }
+}
+
+static bool waitUtilReady(mbWebView webview, Response* response)
+{
+    JsQueryInfo* jsQueryInfo = (JsQueryInfo*)mbGetUserKeyValue(webview, "JsQueryInfo");
+    MBCommandExecutor* exec = (MBCommandExecutor*)mbGetUserKeyValue(webview, "MBCommandExecutor");
+    int count = 0;
+    while (count++ < 100) {
+//         bool isOk = false;
+//         if (handleAlert(webview, exec->getUnexpectedAlertBehavior(), CommandType::ExecuteAsyncScript, response, &isOk)) {
+//             OutputDebugStringA("waitUtilReady: unexpected alert open\n");
+//             return isOk;
+//         }
+        assertAlertOpen(jsQueryInfo, "waitUtilReady, isAlertOpen!");
         int state = mbQueryState(webview, "dispatchWillCommitProvisionalLoad");
         if (-1 == state) {
             OutputDebugStringA("waitUtilReady: webview is not valid\n");
             response->SetErrorResponse(ERROR_INVALID_SESSION_ID, "invalid session id");
-            return;
-        } else if (1 == state)
-            break;
+            return false;
+        } else if (1 == state) {
+            return true;
+        }
         ::Sleep(10);
     }
+
+    OutputDebugStringA("waitUtilReady: webview is not Ready\n");
+    response->SetErrorResponse(ERROR_NO_SUCH_ELEMENT, "no such element");
+    return false;
 }
 
 bool hasFocus(mbWebView webview, Response* response, bool* hasfocus)
@@ -170,23 +302,27 @@ bool isElementFocused(
     return true;
 }
 
-void MB_CALL_TYPE onRunJsCallback(mbWebView webView, void* param, mbJsExecState es, mbJsValue v)
+void MB_CALL_TYPE onRunJsCallback(mbWebView webview, void* param, mbJsExecState es, mbJsValue v)
 {
     DebugBreak();
 }
 
-struct JsQueryInfo {
-    int wait = 0;
-    int msgType = -1;
-    std::string result;
-};
-JsQueryInfo s_JsQueryInfo;
-
-void MB_CALL_TYPE onJsQueryCallback(mbWebView webView, void* param, mbJsExecState es, int64_t queryId, int customMsg, const utf8* request)
+void MB_CALL_TYPE onJsQueryCallback(mbWebView webview, void* param, mbJsExecState es, int64_t queryId, int customMsg, const utf8* request)
 {
-    s_JsQueryInfo.msgType = customMsg;
-    s_JsQueryInfo.result = request;
-    s_JsQueryInfo.wait = 0;
+    JsQueryInfo* jsQueryInfo = (JsQueryInfo*)mbGetUserKeyValue(webview, "JsQueryInfo");
+    jsQueryInfo->msgType = customMsg;
+    jsQueryInfo->result = request;
+    jsQueryInfo->wait = 0;
+}
+
+static void fillAlertErrorResponse(const JsQueryInfo* jsQueryInfo, Response* response)
+{
+    ::EnterCriticalSection(&jsQueryInfo->lock);
+    std::string alertText = "{Alert text : ";
+    alertText += jsQueryInfo->alertText;
+    alertText += "}";
+    response->SetErrorResponse(ERROR_UNEXPECTED_ALERT_OPEN, alertText);
+    ::LeaveCriticalSection(&jsQueryInfo->lock);
 }
 
 bool evaluateScriptWithTimeout(
@@ -197,15 +333,27 @@ bool evaluateScriptWithTimeout(
     Json::Value* result
     )
 {
-    waitUtilReady(webview, response);
+    JsQueryInfo* jsQueryInfo = (JsQueryInfo*)mbGetUserKeyValue(webview, "JsQueryInfo");
+    MBCommandExecutor* exec = (MBCommandExecutor*)mbGetUserKeyValue(webview, "MBCommandExecutor");
+    if (!waitUtilReady(webview, response))
+        return false;
     mbRunJs(webview, mbWebFrameGetMainFrame(webview), function.c_str(), TRUE, nullptr, nullptr, nullptr);
 
-    s_JsQueryInfo.wait = 1;
-    while (1 == s_JsQueryInfo.wait) {
+    jsQueryInfo->wait = 1;
+    while (1 == jsQueryInfo->wait) {
+//         bool isOk = false;
+//         if (handleAlert(webview, exec->getUnexpectedAlertBehavior(), CommandType::ExecuteAsyncScript, response, &isOk)) {
+//             OutputDebugStringA("evaluateScriptWithTimeout: unexpected alert open\n");
+//             return isOk;
+//         }
+        if (jsQueryInfo->isAlertOpen) {
+            fillAlertErrorResponse(jsQueryInfo, response);
+            return false;
+        }
         Sleep(10);
     }
-    if (s_JsQueryInfo.msgType < -1) {
-        response->SetErrorResponse(ERROR_INVALID_ARGUMENT, s_JsQueryInfo.result);
+    if (jsQueryInfo->msgType < -1) {
+        response->SetErrorResponse(ERROR_INVALID_ARGUMENT, jsQueryInfo->result);
         return false;
     }
 
@@ -213,7 +361,7 @@ bool evaluateScriptWithTimeout(
     readerBuilder["emitUTF8"] = true;
     std::unique_ptr<Json::CharReader> charRead(readerBuilder.newCharReader());
     std::string strerr;
-    bool ok = charRead->parse(s_JsQueryInfo.result.c_str(), s_JsQueryInfo.result.c_str() + s_JsQueryInfo.result.size(), result, &strerr);
+    bool ok = charRead->parse(jsQueryInfo->result.c_str(), jsQueryInfo->result.c_str() + jsQueryInfo->result.size(), result, &strerr);
     if (!ok) {
         response->SetErrorResponse(ERROR_INVALID_ARGUMENT, "callFunction json parse fail");
         return false;
@@ -300,6 +448,9 @@ bool callAsyncFunctionInternal(
 //     readFile(L"G:\\mycode\\miniblink57\\tmp\\kExecuteAsyncScriptScript.js", &kExecuteAsyncScriptScriptBuffer);
 //     kExecuteAsyncScriptScriptBuffer.push_back('\0');
 
+    JsQueryInfo* jsQueryInfo = (JsQueryInfo*)mbGetUserKeyValue(webview, "JsQueryInfo");
+    // 之前进入cmd处理的时候就应该把alert都干掉了。另外下面的callFunctionWithTimeout有可能产生新的alert
+    assertAlertOpen(jsQueryInfo, "callAsyncFunctionInternal, isAlertOpen!\n");
     bool status = callFunctionWithTimeout(webview, response, kExecuteAsyncScriptScript/*kExecuteAsyncScriptScriptBuffer.data()*/, asyncArgs, &tmp);
     if (!status)
         return status;
@@ -311,15 +462,16 @@ bool callAsyncFunctionInternal(
     std::vector<char> buf;
     buf.resize(1000);
     sprintf(buf.data(),
-        "function() {"
-        "  var info = document.$chrome_asyncScriptInfo;"
-        "  if (!info) {"
-        "    console.log('kQueryResult, callAsyncFunctionInternal -------------fail 1:' + info);"
-        "    return {status: %d, value: '%s'};"
-        "  }"
-        "  var result = info.result;"
-        "  if (!result) {"
-        "    console.log('kQueryResult, callAsyncFunctionInternal -------------fail 2:' + result);"
+        "function() {\n"
+        "  var info = document.$chrome_asyncScriptInfo;\n"
+        "  if (!info) {\n"
+        "    console.log('kQueryResult, callAsyncFunctionInternal -------------fail 1:' + info);\n"
+        "    return {status: %d, value: '%s'};\n"
+        "  }\n"
+        "  var result = info.result;\n"
+        "  if (!result) {\n"
+        "    console.log('kQueryResult, callAsyncFunctionInternal -------------fail 2:' + result);\n"
+        "    console.log('kQueryResult, callAsyncFunctionInternal -------------fail result:' + JSON.stringify(info));\n"
         "    return {status: 0};"
         "  }"
         "  delete info.result;"
@@ -329,14 +481,33 @@ bool callAsyncFunctionInternal(
         kDocUnloadError);
     std::string kQueryResult = buf.data();
 
+
     int retryCount = 0;
     while (true) {
+        if (jsQueryInfo->isAlertOpen) {
+            Json::Value value = Json::Value::null;
+            *result = value;
+            // 参考E:\chroium\M108\src\chrome\test\chromedriver\window_commands.cc ExecuteWindowCommand，这里返回ok了
+            response->SetSuccessResponse(value);
+            return true;
+        }
+
         Json::Value no_args;
         Json::Value queryValue;
         status = callFunction(webview, response, kQueryResult, no_args, &queryValue);
         if (!status) {
 //             if (status.code() == kNoSuchFrame)
 //                 return Status(kJavaScriptError, kDocUnloadError);
+// 
+            // 在执行js的时候弹出alert，本次直接返回成功，也不用等执行结果了。但下次执行js的时候会根据options行为看是否要报错
+            if (response->error() == ERROR_UNEXPECTED_ALERT_OPEN) {
+                assertAlertOpen(jsQueryInfo, "callAsyncFunctionInternal, wait result alert fail!\n");
+                Json::Value value = Json::Value::null;
+                *result = value;
+                // 参考E:\chroium\M108\src\chrome\test\chromedriver\window_commands.cc ExecuteWindowCommand，这里返回ok了
+                response->SetSuccessResponse(value);
+                return true;
+            }
             return status;
         }
 
@@ -371,11 +542,21 @@ bool callAsyncFunctionInternal(
             return true;
         }
 
-        OutputDebugStringA("callAsyncFunctionInternal, retry\n");
+//         if (jsQueryInfo->isAlertOpen) {
+//             // response->SetErrorResponse(ERROR_UNEXPECTED_ALERT_OPEN, ERROR_UNEXPECTED_ALERT_OPEN);
+//             // return false;
+// 
+//             Json::Value value = Json::Value::null;
+//             *result = value;
+//             response->SetSuccessResponse(value);
+//             return true;
+//         }
+        
         retryCount++;
         // Since async-scripts return immediately, need to time period here instead.
-        if (retryCount > 3) {
-            //MessageBoxA(0, "callAsyncFunctionInternal", 0, 0);
+        if (retryCount > 10) {
+            OutputDebugStringA("callAsyncFunctionInternal, time out\n");
+            MessageBoxA(0, "ElementUtil.cpp: callAsyncFunctionInternal, time out", 0, 0);
             response->SetErrorResponse(ERROR_SCRIPT_TIMEOUT, "time out");
             return false;
         }
@@ -401,6 +582,8 @@ bool callFunctionWithTimeout(
     Json::Value* result
     )
 {
+    JsQueryInfo* jsQueryInfo = (JsQueryInfo*)mbGetUserKeyValue(webview, "JsQueryInfo");
+    MBCommandExecutor* exec = (MBCommandExecutor*)mbGetUserKeyValue(webview, "MBCommandExecutor");
     Json::StreamWriterBuilder writer;
     std::string json(Json::writeString(writer, args));
 
@@ -430,15 +613,27 @@ bool callFunctionWithTimeout(
         "})\n";
     expression += ".catch(function(e) { \nconsole.log(\"catch:\" + e);\nwindow.mbQuery(-1, e + \"\", null);});\n";
 
-    waitUtilReady(webview, response);
+    if (!waitUtilReady(webview, response))
+        return false;
     mbRunJs(webview, mbWebFrameGetMainFrame(webview), expression.c_str(), TRUE, nullptr, nullptr, nullptr);
 
-    s_JsQueryInfo.wait = 1;
-    while (1 == s_JsQueryInfo.wait) {
+    Json::Value value = Json::Value::null;
+    jsQueryInfo->wait = 1;
+    while (1 == jsQueryInfo->wait) {
+//         bool isOk = false; // 参考E:\chroium\M108\src\chrome\test\chromedriver\window_commands.cc ExecuteWindowCommand，这里返回ok了
+//         if (handleAlert(webview, exec->getUnexpectedAlertBehavior(), CommandType::ExecuteAsyncScript, response, &isOk)) {
+//             *result = value;
+//             OutputDebugStringA("callFunctionWithTimeout: unexpected alert open\n");
+//             return isOk;
+//         }
+        if (jsQueryInfo->isAlertOpen) {
+            fillAlertErrorResponse(jsQueryInfo, response);
+            return false;
+        }
         Sleep(10);
     }
-    if (s_JsQueryInfo.msgType < -1) {
-        response->SetErrorResponse(ERROR_INVALID_ARGUMENT, s_JsQueryInfo.result);
+    if (jsQueryInfo->msgType < -1) {
+        response->SetErrorResponse(ERROR_INVALID_ARGUMENT, jsQueryInfo->result);
         return false;
     }
 
@@ -447,14 +642,13 @@ bool callFunctionWithTimeout(
     std::unique_ptr<Json::CharReader> charRead(readerBuilder.newCharReader());
     Json::Value root;
     std::string strerr;
-    std::string jsResultStr = s_JsQueryInfo.result;
+    std::string jsResultStr = jsQueryInfo->result;
     bool status = charRead->parse(jsResultStr.c_str(), jsResultStr.c_str() + jsResultStr.size(), &root, &strerr);
     if (!status) {
         response->SetErrorResponse(ERROR_INVALID_ARGUMENT, "callFunction json parse fail");
         return false;
     }
 
-    Json::Value value;
     status = parseCallFunctionResult(root, &value, response);
     if (!status)
         return false;

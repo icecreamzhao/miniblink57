@@ -159,7 +159,7 @@ void Server::GenerateOptionsList(std::vector<const char*>* options)
 
 int Server::OnNewHttpRequest(struct mg_connection* conn)
 {
-    WDLOG(TRACE) << "Entering Server::OnNewHttpRequest";
+    //WDLOG(TRACE) << "Entering Server::OnNewHttpRequest";
     mg_context* context = mg_get_context(conn);
     Server* current_server = reinterpret_cast<Server*>(mg_get_user_data(context));
     const mg_request_info* request_info = mg_get_request_info(conn);
@@ -224,7 +224,7 @@ void Server::Stop()
 
 int Server::ProcessRequest(struct mg_connection* conn, const struct mg_request_info* request_info)
 {
-    WDLOG(TRACE) << "Entering Server::ProcessRequest";
+    //WDLOG(TRACE) << "Entering Server::ProcessRequest";
 
     int http_response_code = 0;
     std::string http_verb = request_info->request_method;
@@ -306,7 +306,7 @@ std::string Server::ReadRequestBody(struct mg_connection* conn, const struct mg_
 
 std::string Server::DispatchCommand(const std::string& uri, const std::string& http_verb, const std::string& command_body)
 {
-    WDLOG(TRACE) << "Entering Server::DispatchCommand";
+    //WDLOG(TRACE) << "Entering Server::DispatchCommand";
 
     std::string session_id = "";
     std::string locator_parameters = "";
@@ -316,7 +316,7 @@ std::string Server::DispatchCommand(const std::string& uri, const std::string& h
 
     char* output = (char*)malloc(0x100);
     sprintf(output, "Server::DispatchCommand: %s\n", command.c_str());
-    OutputDebugStringToFile(output);
+    OutputDebugStringA(output);
     free(output);
 
     if (command == webdriver::CommandType::NoCommand) {
@@ -430,7 +430,7 @@ std::string Server::ListSessions()
 
 bool Server::LookupSession(const std::string& session_id, SessionHandle* session_handle)
 {
-    WDLOG(TRACE) << "Entering Server::LookupSession";
+    //WDLOG(TRACE) << "Entering Server::LookupSession";
 
     SessionMap::iterator it = this->sessions_.find(session_id);
     if (it == this->sessions_.end()) {
@@ -442,7 +442,7 @@ bool Server::LookupSession(const std::string& session_id, SessionHandle* session
 
 int Server::SendResponseToClient(struct mg_connection* conn, const struct mg_request_info* request_info, const std::string& serialized_response)
 {
-    WDLOG(TRACE) << "Entering Server::SendResponseToClient";
+    //WDLOG(TRACE) << "Entering Server::SendResponseToClient";
 
     int return_code = 0;
     if (serialized_response.size() > 0) {
@@ -490,7 +490,7 @@ int Server::SendResponseToClient(struct mg_connection* conn, const struct mg_req
 // not covered in the JSON protocol.
 void Server::SendHttpOk(struct mg_connection* connection, const struct mg_request_info* request_info, const std::string& body, const std::string& content_type)
 {
-    WDLOG(TRACE) << "Entering Server::SendHttpOk, " << body.size();
+    //WDLOG(TRACE) << "Entering Server::SendHttpOk, " << body.size();
 
     std::string body_to_send = body + "\r\n";
 
@@ -627,7 +627,7 @@ void Server::SendHttpSeeOther(struct mg_connection* connection, const struct mg_
 
 std::string Server::LookupCommand(const std::string& uri, const std::string& http_verb, std::string* session_id, std::string* locator)
 {
-    WDLOG(TRACE) << "Entering Server::LookupCommand";
+    //WDLOG(TRACE) << "Entering Server::LookupCommand";
 
     std::string value = webdriver::CommandType::NoCommand;
     std::vector<std::string> url_fragments;

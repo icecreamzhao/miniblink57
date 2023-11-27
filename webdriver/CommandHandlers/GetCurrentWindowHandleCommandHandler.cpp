@@ -39,6 +39,7 @@ void GetCurrentWindowHandleCommandHandler::ExecuteInternal(const MBCommandExecut
     mbWebView webview;
     int status_code = executor.getManagedBrowser(currentBrowserId, &webview);
     if (status_code != WD_SUCCESS) {
+        OutputDebugStringA("GetCurrentWindowHandleCommandHandler fail: Window is closed\n");
         response->SetErrorResponse(ERROR_NO_SUCH_WINDOW, "Window is closed");
     } else {
         response->SetSuccessResponse(currentBrowserId);

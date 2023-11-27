@@ -42,7 +42,7 @@ void NewSessionCommandHandler::ExecuteInternal(const MBCommandExecutor& executor
     std::string error_message = "";
 
     // Find W3C capabilities first.
-    MBCommandExecutor& mutable_executor = const_cast<MBCommandExecutor&>(executor);
+    MBCommandExecutor& mutableExecutor = const_cast<MBCommandExecutor&>(executor);
 
     ParametersMap::const_iterator it = command_parameters.find("capabilities");
     if (it != command_parameters.end()) {
@@ -52,7 +52,7 @@ void NewSessionCommandHandler::ExecuteInternal(const MBCommandExecutor& executor
             // validated_capabilities returns an array with validated capabilities
             // in it. If there are no entries in the array, then something failed
             // validation. The error_message string will tell us what.
-            mutable_executor.setIsValid(false);
+            mutableExecutor.setIsValid(false);
             response->SetErrorResponse(ERROR_INVALID_ARGUMENT, error_message);
             return;
         }
@@ -60,7 +60,7 @@ void NewSessionCommandHandler::ExecuteInternal(const MBCommandExecutor& executor
         returned_capabilities = this->ProcessCapabilities(executor, validated_capabilities, &error_message);
     } else {
         error_message = "No property named 'capabilities' found in new session request body.";
-        mutable_executor.setIsValid(false);
+        mutableExecutor.setIsValid(false);
         response->SetErrorResponse(ERROR_INVALID_ARGUMENT, error_message);
         return;
     }
@@ -69,7 +69,7 @@ void NewSessionCommandHandler::ExecuteInternal(const MBCommandExecutor& executor
         // The browser was not created successfully, therefore the
         // session must be marked as invalid so the server can
         // properly shut it down.
-        mutable_executor.setIsValid(false);
+        mutableExecutor.setIsValid(false);
         response->SetErrorResponse(ERROR_SESSION_NOT_CREATED, error_message);
         return;
     }
@@ -77,12 +77,12 @@ void NewSessionCommandHandler::ExecuteInternal(const MBCommandExecutor& executor
     error_message = "";
     mbWebView mbwebview;
     std::string browserId;
-    int result_code = mutable_executor.createNewBrowser(&error_message, &mbwebview, &browserId);
+    int result_code = mutableExecutor.createNewBrowser(&error_message, &mbwebview, &browserId);
     if (result_code != WD_SUCCESS) {
         // The browser was not created successfully, therefore the
         // session must be marked as invalid so the server can
         // properly shut it down.
-        mutable_executor.setIsValid(false);
+        mutableExecutor.setIsValid(false);
         response->SetErrorResponse(ERROR_SESSION_NOT_CREATED, "Unexpected error launching Internet Explorer. " + error_message);
         return;
     }
@@ -258,20 +258,19 @@ Json::Value NewSessionCommandHandler::ProcessCapabilities(const MBCommandExecuto
         Json::Value merged_capabilities = capabilities[static_cast<int>(i)];
         if (this->MatchCapabilities(executor, merged_capabilities, &match_error)) {
             WDLOG(DEBUG) << "Processing matched capability set with index " << i;
-            MBCommandExecutor& mutable_executor = const_cast<MBCommandExecutor&>(executor);
+            MBCommandExecutor& mutableExecutor = const_cast<MBCommandExecutor&>(executor);
 
-#if 0
             Json::Value unexpected_alert_behavior
                 = this->GetCapability(merged_capabilities, UNHANDLED_PROMPT_BEHAVIOR_CAPABILITY, Json::stringValue, Json::Value(Json::stringValue));
-            mutable_executor.set_unexpected_alert_behavior(unexpected_alert_behavior.asString());
-
+            mutableExecutor.setUnexpectedAlertBehavior(unexpected_alert_behavior.asString());
+#if 0
             Json::Value page_load_strategy
                 = this->GetCapability(merged_capabilities, PAGE_LOAD_STRATEGY_CAPABILITY, Json::stringValue, NORMAL_PAGE_LOAD_STRATEGY);
-            mutable_executor.set_page_load_strategy(this->GetPageLoadStrategyValue(page_load_strategy.asString()));
+            mutableExecutor.set_page_load_strategy(this->GetPageLoadStrategyValue(page_load_strategy.asString()));
 
             Json::Value use_strict_file_interactability
                 = this->GetCapability(merged_capabilities, STRICT_FILE_INTERACTABILITY_CAPABILITY, Json::booleanValue, false);
-            mutable_executor.set_use_strict_file_interactability(use_strict_file_interactability.asBool());
+            mutableExecutor.set_use_strict_file_interactability(use_strict_file_interactability.asBool());
 #endif
             Json::Value timeouts = this->GetCapability(merged_capabilities, TIMEOUTS_CAPABILITY, Json::objectValue, Json::Value());
             this->SetTimeoutSettings(executor, timeouts);
@@ -311,18 +310,18 @@ Json::Value NewSessionCommandHandler::ProcessCapabilities(const MBCommandExecuto
 void NewSessionCommandHandler::SetTimeoutSettings(const MBCommandExecutor& executor, const Json::Value& capabilities)
 {
 //     WDLOG(TRACE) << "Entering NewSessionCommandHandler::SetTimeoutSettings";
-//     MBCommandExecutor& mutable_executor = const_cast<MBCommandExecutor&>(executor);
+//     MBCommandExecutor& mutableExecutor = const_cast<MBCommandExecutor&>(executor);
 //     if (capabilities.isMember(IMPLICIT_WAIT_TIMEOUT_NAME)) {
-//         mutable_executor.set_implicit_wait_timeout(capabilities[IMPLICIT_WAIT_TIMEOUT_NAME].asUInt64());
+//         mutableExecutor.set_implicit_wait_timeout(capabilities[IMPLICIT_WAIT_TIMEOUT_NAME].asUInt64());
 //     }
 //     if (capabilities.isMember(PAGE_LOAD_TIMEOUT_NAME)) {
-//         mutable_executor.set_page_load_timeout(capabilities[PAGE_LOAD_TIMEOUT_NAME].asUInt64());
+//         mutableExecutor.set_page_load_timeout(capabilities[PAGE_LOAD_TIMEOUT_NAME].asUInt64());
 //     }
 //     if (capabilities.isMember(SCRIPT_TIMEOUT_NAME)) {
 //         if (capabilities[SCRIPT_TIMEOUT_NAME].isNull()) {
-//             mutable_executor.set_async_script_timeout(-1);
+//             mutableExecutor.set_async_script_timeout(-1);
 //         } else {
-//             mutable_executor.set_async_script_timeout(capabilities[SCRIPT_TIMEOUT_NAME].asInt64());
+//             mutableExecutor.set_async_script_timeout(capabilities[SCRIPT_TIMEOUT_NAME].asInt64());
 //         }
 //     }
 }
@@ -373,10 +372,10 @@ void NewSessionCommandHandler::SetBrowserFactorySettings(const MBCommandExecutor
 //         Json::Value edge_executable_path = this->GetCapability(capabilities, EDGE_EXECUTABLE_PATH, Json::stringValue, Json::Value(Json::stringValue));
 //         factory_settings.edge_executable_path = edge_executable_path.asString();
 // 
-//         MBCommandExecutor& mutable_executor = const_cast<MBCommandExecutor&>(executor);
-//         mutable_executor.browser_factory()->Initialize(factory_settings);
-//         mutable_executor.set_is_edge_mode(factory_settings.attach_to_edge_ie);
-//         mutable_executor.set_edge_executable_path(factory_settings.edge_executable_path);
+//         MBCommandExecutor& mutableExecutor = const_cast<MBCommandExecutor&>(executor);
+//         mutableExecutor.browser_factory()->Initialize(factory_settings);
+//         mutableExecutor.set_is_edge_mode(factory_settings.attach_to_edge_ie);
+//         mutableExecutor.set_edge_executable_path(factory_settings.edge_executable_path);
     }
 }
 
@@ -422,17 +421,17 @@ void NewSessionCommandHandler::SetProxySettings(const MBCommandExecutor& executo
 // 
 //         proxy_settings.use_per_process_proxy = use_per_process_proxy;
 // 
-//         MBCommandExecutor& mutable_executor = const_cast<MBCommandExecutor&>(executor);
-//         mutable_executor.proxy_manager()->Initialize(proxy_settings);
+//         MBCommandExecutor& mutableExecutor = const_cast<MBCommandExecutor&>(executor);
+//         mutableExecutor.proxy_manager()->Initialize(proxy_settings);
 //     }
 }
 
 void NewSessionCommandHandler::SetInputSettings(const MBCommandExecutor& executor, const Json::Value& capabilities)
 {
 //     WDLOG(TRACE) << "Entering NewSessionCommandHandler::SetInputSettings";
-//     MBCommandExecutor& mutable_executor = const_cast<MBCommandExecutor&>(executor);
+//     MBCommandExecutor& mutableExecutor = const_cast<MBCommandExecutor&>(executor);
 //     InputManagerSettings input_manager_settings;
-//     input_manager_settings.element_repository = mutable_executor.element_manager();
+//     input_manager_settings.element_repository = mutableExecutor.element_manager();
 // 
 //     Json::Value enable_native_events = this->GetCapability(capabilities, NATIVE_EVENTS_CAPABILITY, Json::booleanValue, true);
 //     input_manager_settings.use_native_events = enable_native_events.asBool();
@@ -446,7 +445,7 @@ void NewSessionCommandHandler::SetInputSettings(const MBCommandExecutor& executo
 //     Json::Value file_upload_dialog_timeout
 //         = this->GetCapability(capabilities, FILE_UPLOAD_DIALOG_TIMEOUT_CAPABILITY, Json::intValue, Json::Value(Json::intValue));
 //     if (file_upload_dialog_timeout.asInt() > 0) {
-//         mutable_executor.set_file_upload_dialog_timeout(file_upload_dialog_timeout.asInt());
+//         mutableExecutor.set_file_upload_dialog_timeout(file_upload_dialog_timeout.asInt());
 //     }
 // 
 //     Json::Value enable_persistent_hover = this->GetCapability(capabilities, ENABLE_PERSISTENT_HOVER_CAPABILITY, Json::booleanValue, true);
@@ -458,7 +457,7 @@ void NewSessionCommandHandler::SetInputSettings(const MBCommandExecutor& executo
 //     } else {
 //         input_manager_settings.enable_persistent_hover = enable_persistent_hover.asBool();
 //     }
-//     mutable_executor.input_manager()->Initialize(input_manager_settings);
+//     mutableExecutor.input_manager()->Initialize(input_manager_settings);
 }
 
 Json::Value NewSessionCommandHandler::CreateReturnedCapabilities(const MBCommandExecutor& executor)
@@ -487,8 +486,8 @@ Json::Value NewSessionCommandHandler::CreateReturnedCapabilities(const MBCommand
     capabilities["webauthn:extension:largeBlob"] = true;
     capabilities["webauthn:virtualAuthenticators"] = true;
 
-    if (executor.unexpected_alert_behavior().size() > 0) {
-        capabilities[UNHANDLED_PROMPT_BEHAVIOR_CAPABILITY] = executor.unexpected_alert_behavior();
+    if (executor.getUnexpectedAlertBehavior().size() > 0) {
+        capabilities[UNHANDLED_PROMPT_BEHAVIOR_CAPABILITY] = executor.getUnexpectedAlertBehavior();
     } else {
         capabilities[UNHANDLED_PROMPT_BEHAVIOR_CAPABILITY] = DISMISS_AND_NOTIFY_UNEXPECTED_ALERTS;
     }

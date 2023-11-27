@@ -79,11 +79,18 @@ void FindElementCommandHandler::ExecuteInternal(const MBCommandExecutor& executo
         return;
     }
 
+    mbWebView webview = executor.view();
+    JsQueryInfo* jsQueryInfo = (JsQueryInfo*)mbGetUserKeyValue(webview, "JsQueryInfo");
     for (int retryCount = 0; true; ++retryCount) {
         Json::Value result;
-        bool ok = findElementCommon(1, true, nullptr, executor.view(), mechanism, value, false, &result, response);
+        bool ok = findElementCommon(1, true, nullptr, webview, mechanism, value, false, &result, response);
         if (!ok || !result.isNull())
             break;
+
+        if (result.isNull() && jsQueryInfo->isAlertOpen) {
+            response->SetErrorResponse(ERROR_UNEXPECTED_ALERT_OPEN, ERROR_UNEXPECTED_ALERT_OPEN);
+            break;
+        }
        
         if (retryCount > 4 && result.isNull()) {
             char* output = (char*)malloc(0x200);

@@ -15,6 +15,7 @@
 // limitations under the License.
 
 #include "webdriver/CommandHandlers/DismissAlertCommandHandler.h"
+#include "webdriver/CommandHandlers/ElementUtil.h"
 #include "webdriver/server/errorcodes.h"
 #include "mbvip/core/mb.h"
 
@@ -37,7 +38,17 @@ void DismissAlertCommandHandler::ExecuteInternal(const MBCommandExecutor& execut
         response->SetErrorResponse(ENOSUCHALERT, "Unable to get current browser");
         return;
     }
-    mbSetUserKeyValue(webview, "AlertWaitFlag", "DismissAlert");
+    JsQueryInfo* jsQueryInfo = (JsQueryInfo*)mbGetUserKeyValue(webview, "JsQueryInfo");
+    if (!jsQueryInfo->isAlertOpen) {
+        OutputDebugStringA("DismissAlertCommandHandler, isAlertOpen == false\n");
+        response->SetErrorResponse(ENOSUCHALERT, "No alert is active");
+        return;
+    }
+
+    ::EnterCriticalSection(&jsQueryInfo->lock);
+    jsQueryInfo->alertWaitFlag = "dismiss";
+    jsQueryInfo->isAlertOpen = false;
+    ::LeaveCriticalSection(&jsQueryInfo->lock);
     response->SetSuccessResponse(Json::Value::null);
 
 //     BrowserHandle browser_wrapper;

@@ -19,6 +19,7 @@
 namespace webdriver {
 
 class CommandHandlerRepository;
+class Response;
 
 class MBCommandExecutor {
 public:
@@ -72,9 +73,20 @@ public:
         return this->m_sessionId;
     }
 
-    std::string unexpected_alert_behavior(void) const
+    std::string getUnexpectedAlertBehavior(void) const
     {
-        return "";
+        return m_unexpectedAlertBehavior;
+    }
+
+    void setUnexpectedAlertBehavior(const std::string& behavior)
+    {
+        std::string output("setUnexpectedAlertBehavior:");
+        output += behavior;
+        output += "\n";
+        OutputDebugStringA(output.c_str());
+//         if (!behavior.empty())
+//             MessageBoxA(0, "setUnexpectedAlertBehavior", 0, 0);
+        m_unexpectedAlertBehavior = behavior;
     }
 
     const BrowserFactorySettings& settings() const
@@ -88,6 +100,7 @@ public:
     }
 
     static bool isValidWebView(mbWebView webviewHandle);
+    void closeAllWindow();
 
     int createNewBrowser(std::string* errorMessage, mbWebView* mbwebview, std::string* browserId);
     int getManagedBrowser(const std::string& browserId, mbWebView* webview) const;
@@ -100,6 +113,8 @@ public:
     static unsigned int CALLBACK threadProc(LPVOID lpParameter);
 
 private:
+    void initWebview(mbWebView mbView);
+
     static mbWebView MB_CALL_TYPE onCreateViewCallback(mbWebView webView, void* param, mbNavigationType navigationType, const utf8* url, const mbWindowFeatures* windowFeatures);
     void addManagedBrowser(mbWebView mbView, const std::string& browserId);
 
@@ -112,6 +127,8 @@ private:
     int m_port = -1;
     bool m_isValid = true;
     bool m_isQuitting = false;
+
+    std::string m_unexpectedAlertBehavior;
 
     mutable CRITICAL_SECTION m_managedBrowsersLock;
 

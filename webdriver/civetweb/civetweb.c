@@ -10249,9 +10249,9 @@ parse_http_request(char *buf, int len, struct mg_request_info *ri)
 
 	/* The second word is the URI */
 	ri->request_uri = buf;
-	OutputDebugStringA("parse_http_request: ");
-	OutputDebugStringA(buf);
-	OutputDebugStringA("\n");
+// 	OutputDebugStringA("parse_http_request: ");
+// 	OutputDebugStringA(buf);
+// 	OutputDebugStringA("\n");
 
 	if (skip_to_end_of_word_and_terminate(&buf, 0) <= 0) {
 		return -1;

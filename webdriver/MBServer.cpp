@@ -20,6 +20,7 @@
 #include "webdriver/MBSession.h"
 //#include "webdriver/FileUtilities.h"
 #include "webdriver/server/server.h"
+#include <time.h>
 
 namespace webdriver {
 
@@ -31,6 +32,7 @@ MBServer::MBServer(
     WDLOG(INFO) << "Driver version: " << version;
     this->version_ = version;
     this->AddCommand("/session/:sessionid/ie/script/background", "POST", "executeBackgroundScript");
+    srand(time(NULL));
 }
 
 MBServer::~MBServer(void)

@@ -61,6 +61,11 @@ void CreateNewWindowCommandHandler::ExecuteInternal(const MBCommandExecutor& exe
     std::string browserId;
     mutableExecutor.createNewBrowser(&errorMessage, &webview, &browserId);
 
+    char* output = (char*)malloc(400);
+    sprintf_s(output, 399, "CreateNewWindowCommandHandler: %s\n", browserId.c_str());
+    OutputDebugStringA(output);
+    free(output);
+
     Json::Value result;
     result["handle"] = browserId;
     result["type"] = window_type;

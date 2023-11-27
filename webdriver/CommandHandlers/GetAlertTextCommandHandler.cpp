@@ -16,6 +16,7 @@
 
 #include "GetAlertTextCommandHandler.h"
 #include "webdriver/server/errorcodes.h"
+#include "webdriver/CommandHandlers/ElementUtil.h"
 #include "mbvip/core/mb.h"
 
 namespace webdriver {
@@ -36,11 +37,18 @@ void GetAlertTextCommandHandler::ExecuteInternal(const MBCommandExecutor& execut
         return;
     }
 
-    const std::string* newStr = (const std::string*)mbGetUserKeyValue(webview, "AlertText");
-    if (newStr)
-        response->SetSuccessResponse(*newStr);
-    else
-        response->SetSuccessResponse("");
+    JsQueryInfo* jsQueryInfo = (JsQueryInfo*)mbGetUserKeyValue(webview, "JsQueryInfo");
+    if (!jsQueryInfo->isAlertOpen) {
+        OutputDebugStringA("GetAlertTextCommandHandler, isAlertOpen == false\n");
+        response->SetErrorResponse(ENOSUCHALERT, "No alert is active");
+        return;
+    }
+
+    ::EnterCriticalSection(&jsQueryInfo->lock);
+    std::string alertText = jsQueryInfo->alertText;
+    ::LeaveCriticalSection(&jsQueryInfo->lock);
+
+    response->SetSuccessResponse(alertText);
 
 //     BrowserHandle browser_wrapper;
 //     int status_code = executor.GetCurrentBrowser(&browser_wrapper);

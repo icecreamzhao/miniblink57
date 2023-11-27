@@ -51,7 +51,6 @@ MBSession::~MBSession(void)
 
 std::string MBSession::uuidCreate()
 {
-    srand(time(NULL));
     char buf[100] = { 0 };
     sprintf(buf,
         "{%08X-%04X-%04X-%04X-%04X%04X%04X}",
@@ -66,7 +65,8 @@ std::string MBSession::uuidCreate()
 
 void MBSession::Initialize(void* initParams)
 {
-    OutputDebugStringToFile("MBSession::Initialize 1\n");
+    OutputDebugStringA("MBSession::Initialize 1\n");
+
     WDLOG(TRACE) << "Entering MBSession::Initialize";
 
     SessionParameters* sessionPara = (SessionParameters*)initParams;
@@ -96,7 +96,9 @@ void MBSession::Initialize(void* initParams)
 
 void MBSession::ShutDown(void)
 {
-    DebugBreak();
+    //DebugBreak();
+    OutputDebugStringA("MBSession::ShutDown \n");
+    m_commandExecutor->closeAllWindow();
 }
 
 bool MBSession::WaitForCommandExecutorExit(int timeout_in_milliseconds)
@@ -116,17 +118,14 @@ bool MBSession::WaitForCommandExecutorExit(int timeout_in_milliseconds)
 // 本函数执行在http server work线程
 bool MBSession::ExecuteCommand(const std::string& serializedCommand, std::string* serializedResponse)
 {
-    WDLOG(TRACE) << "Entering MBSession::ExecuteCommand";
+    //WDLOG(TRACE) << "Entering MBSession::ExecuteCommand";
 
     MBSession* self = this;
     self->m_commandExecutor->executeCommand(serializedCommand, serializedResponse);
 
     bool isValid = m_commandExecutor->is_valid();
-//     postToUiThreadSync([self, serializedCommand, serializedResponse, &ret] {
-//         self->m_commandExecutor
-//     });
-    if (!isValid)
-        MessageBoxA(0, "m_commandExecutor->is_valid fail", 0, 0);
+    if (!isValid && std::string::npos == serializedCommand.find("quit"))
+        MessageBoxA(0, "MBSession::ExecuteCommand: m_commandExecutor->is_valid fail", 0, 0);
     return isValid;
 // 
 //     // Sending a command consists of five actions:

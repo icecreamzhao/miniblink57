@@ -39,11 +39,15 @@ void GoToUrlCommandHandler::ExecuteInternal(const MBCommandExecutor& executor, c
         return;
     } else {
         std::string url = url_parameter_iterator->second.asString();
-        std::string output("GoToUrlCommandHandler:");
-        output += url;
-        output += "\n";
-        OutputDebugStringA(output.c_str());
+
+        const int kSize = url.size() + 200;
+        char* output = (char*)malloc(kSize);
+        sprintf_s(output, kSize - 1, "GoToUrlCommandHandler: %d, %s\n", executor.view(), url.c_str());
+        OutputDebugStringA(output);
+        free(output);
+
         mbLoadURL(executor.view(), url.c_str());
+
 //         BrowserHandle browser_wrapper;
 //         int status_code = executor.GetCurrentBrowser(&browser_wrapper);
 //         if (status_code != WD_SUCCESS) {

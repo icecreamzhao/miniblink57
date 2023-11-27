@@ -61,15 +61,20 @@ void FindElementsCommandHandler::ExecuteInternal(const MBCommandExecutor& execut
         return;
     }
 
+    mbWebView webview = executor.view();
+    JsQueryInfo* jsQueryInfo = (JsQueryInfo*)mbGetUserKeyValue(webview, "JsQueryInfo");
     Json::Value result;
     bool ok = findElementCommon(1, false,
         nullptr /*root_element_id*/,
-        executor.view(),
+        webview,
         mechanism, value,
         false /*isShadowRoot*/,
         &result,
         response);
-    if (ok && result.isNull()) {
+    if (result.isNull() && jsQueryInfo->isAlertOpen) {
+        MessageBoxA(0, "No run here", 0, 0);
+        response->SetErrorResponse(ERROR_UNEXPECTED_ALERT_OPEN, ERROR_UNEXPECTED_ALERT_OPEN);
+    } else if (ok && result.isNull()) {
         response->SetErrorResponse(ERROR_NO_SUCH_ELEMENT, "no such element");
     }
 

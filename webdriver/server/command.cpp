@@ -32,7 +32,7 @@ Command::~Command()
 
 void Command::Deserialize(const std::string& json)
 {
-    WDLOG(TRACE) << "Entering Command::Deserialize";
+    //WDLOG(TRACE) << "Entering Command::Deserialize";
 
     // Clear the existing maps.
     this->command_parameters_.clear();

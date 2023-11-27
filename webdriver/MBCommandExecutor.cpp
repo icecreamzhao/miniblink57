@@ -5,11 +5,14 @@
 #include "webdriver/CommandHandlerRepository.h"
 #include "webdriver/MBCommandHandler.h"
 #include "webdriver/CommandExecutor.h"
+#include "webdriver/WebDriverConstants.h"
+#include "webdriver/CommandHandlers/ElementUtil.h"
 #include "webdriver/server/command.h"
 #include "webdriver/server/response.h"
 #include "webdriver/server/errorcodes.h"
 #include "webdriver/server/command_types.h"
 #include "webdriver/server/wd_logging.h"
+
 #include <functional>
 #include <process.h>
 #include <string.h>
@@ -88,6 +91,20 @@ void postToUiThreadSync(std::function<void(void)>&& closure)
     }
 }
 
+static void MB_CALL_TYPE onCallMbThreadAsync(mbWebView webView, void* param)
+{
+    CallMbThreadInfo* info = (CallMbThreadInfo*)param;
+    (info->closure)();
+    delete info;
+}
+
+void postToUiThreadAsync(std::function<void(void)>&& closure)
+{
+    CallMbThreadInfo* info = new CallMbThreadInfo();
+    info->closure = std::move(closure);
+    mbPostToUiThread(onCallMbThreadAsync, (void*)info);
+}
+
 #ifndef _WIN32
 void mbInitCustom(const mbSettings* settings)
 {
@@ -146,51 +163,103 @@ unsigned int MBCommandExecutor::threadProc(LPVOID lpParameter)
 #else
     mbInitCustom(nullptr);    
 #endif
-    OutputDebugStringToFile("MBCommandExecutor::threadProc 4\n");
+
+    char* output = (char*)malloc(0x100);
+    sprintf_s(output, 0x99, "MBCommandExecutor::threadProc: %d\n", ::GetCurrentThreadId());
+    OutputDebugStringA(output);
+    free(output);
+
     *wait = 1;
 
     mbRunMessageLoop();
+
+    OutputDebugStringA("MBCommandExecutor::threadProc exit!\n");
     return 0;
 }
 
 void MB_CALL_TYPE onJsQueryCallback(mbWebView webView, void* param, mbJsExecState es, int64_t queryId, int customMsg, const utf8* request);
 
-static void MB_CALL_TYPE onAlertBoxCallback(mbWebView webview, void* param, const utf8* msg)
+BOOL onBoxCallback(mbWebView webview, void* param, const utf8* msg)
 {
-    std::string output("Alert: ");
+    JsQueryInfo* jsQueryInfo = (JsQueryInfo*)mbGetUserKeyValue(webview, "JsQueryInfo");
+
+    ::EnterCriticalSection(&jsQueryInfo->lock);
+    jsQueryInfo->isAlertOpen = true;
+    jsQueryInfo->alertWaitFlag = "";
+    jsQueryInfo->alertText = msg;
+    ::LeaveCriticalSection(&jsQueryInfo->lock);
+
+    BOOL ok = FALSE;
+    int count = 0;
+    while (/*count < 20*/true) {
+        count++;
+
+        std::string alertWaitFlag;
+        ::EnterCriticalSection(&jsQueryInfo->lock);
+        alertWaitFlag = jsQueryInfo->alertWaitFlag;
+        ::LeaveCriticalSection(&jsQueryInfo->lock);
+
+        if ("accept" == alertWaitFlag) {
+            ok = TRUE;
+            break;
+        } else if ("dismiss" == alertWaitFlag) {
+            ok = FALSE;
+            break;
+        }
+        Sleep(100);
+    }
+
+    ::EnterCriticalSection(&jsQueryInfo->lock);
+    jsQueryInfo->isAlertOpen = false;
+    jsQueryInfo->alertWaitFlag = "";
+    ::LeaveCriticalSection(&jsQueryInfo->lock);
+
+    return ok;
+}
+
+mbStringPtr MB_CALL_TYPE onPromptBoxCallback(mbWebView webview, void* param, const utf8* msg, const utf8* defaultResult, BOOL* result)
+{
+    OutputDebugStringA("onPromptBoxCallback\n");
+    *result = onBoxCallback(webview, param, msg);
+
+    char* output = (char*)malloc(400);
+    sprintf_s(output, 399, "onPromptBoxCallback: [%s] [%s], [%d]\n", msg, defaultResult, *result);
+    OutputDebugStringA(output);
+    free(output);
+
+    return mbCreateString(defaultResult, strlen(defaultResult));
+}
+
+BOOL MB_CALL_TYPE onConfirmBoxCallback(mbWebView webview, void* param, const utf8* msg)
+{
+    std::string output("onConfirmBoxCallback: ");
     output += msg;
     output += '\n';
     OutputDebugStringA(output.c_str());
-    //MessageBoxA(0, output.c_str(), 0, 0);
 
-    const std::string* newStr = (const std::string*)mbGetUserKeyValue(webview, "AlertText");
-    if (newStr)
-        delete newStr;
-    newStr = new std::string(msg);
-    mbSetUserKeyValue(webview, "AlertText", (void*)newStr);
-    OutputDebugStringA("onAlertBoxCallback 1\n");
+    bool ok = onBoxCallback(webview, param, msg);
+    OutputDebugStringA("onConfirmBoxCallback ok\n");
+    return ok;
+}
 
-    int count = 0;
-    while (count < 20) {
-        count++;
-        const char* alertWaitFlag = (const char*)mbGetUserKeyValue(webview, "AlertWaitFlag");
-        if (alertWaitFlag) {
-            std::string alertWaitFlagStr = alertWaitFlag;
-            if ("AcceptAlert" == alertWaitFlagStr || "DismissAlert" == alertWaitFlagStr)
-                break;
-        }
-        Sleep(500);
-    }
-    OutputDebugStringA("onAlertBoxCallback 2\n");
+static void MB_CALL_TYPE onAlertBoxCallback(mbWebView webview, void* param, const utf8* msg)
+{
+    std::string output("onAlertBoxCallback: ");
+    output += msg;
+    output += '\n';
+    OutputDebugStringA(output.c_str());
+
+    onBoxCallback(webview, param, msg);
+    OutputDebugStringA("onAlertBoxCallback ok\n");
 }
 
 static BOOL MB_CALL_TYPE onLoadUrlBegin(mbWebView webView, void* param, const char* url, void* job)
 {
     //http://web-platform.test:8000/webdriver/tests/support/inline.py?doc=%3C%21doctype+html%3E%0A%3Cmeta+charset%3DUTF-8%3E%0A%3Ca+href%3D%23%3Elink+text%3C%2Fa%3E&mime=text%2Fhtml&charset=UTF-8
-    if (0 == strstr(url, "inline.py?doc=%3C%21doctype+html%3E%0A%3Cmeta+charset%3DUTF-8%3E%0A%3Ca+href%3D%23%3Elink+text%3C%2Fa%3E"))
-        return FALSE;
+//     if (0 == strstr(url, "inline.py?doc=%3C%21doctype+html%3E%0A%3Cmeta+charset%3DUTF-8%3E%0A%3Ca+href%3D%23%3Elink+text%3C%2Fa%3E"))
+//         return FALSE;
 
-    mbNetHookRequest(job);
+    //mbNetHookRequest(job);
     return TRUE;
 }
 
@@ -202,32 +271,36 @@ static void MB_CALL_TYPE onLoadUrlEnd(mbWebView webView, void* param, const char
     OutputDebugStringA(urlStr.c_str());
 }
 
-static void initWebview(mbWebView mbView)
-{
-    ::mbSetNavigationToNewWindowEnable(mbView, TRUE);
-    ::mbSetCspCheckEnable(mbView, TRUE);
-    ::mbShowWindow(mbView, TRUE);
-    ::mbOnAlertBox(mbView, onAlertBoxCallback, nullptr);
-    ::mbOnLoadUrlBegin(mbView, onLoadUrlBegin, nullptr);
-    ::mbOnLoadUrlEnd(mbView, onLoadUrlEnd, nullptr);
-}
-
 // 本函数位于webkit线程
 mbWebView MBCommandExecutor::onCreateViewCallback(mbWebView webView, void* param, mbNavigationType navigationType, const utf8* url, const mbWindowFeatures* windowFeatures)
 {
     std::string output = "onCreateViewCallback:";
     output += url;
     output += "\n";
-    OutputDebugStringToFile(output.c_str());
+    OutputDebugStringA(output.c_str());
 
     mbWebView mbView = mbCreateWebWindow(MB_WINDOW_TYPE_POPUP, NULL, 110, 60, 600, 700);
-    ::mbOnCreateView(mbView, onCreateViewCallback, nullptr);
-    initWebview(mbView);
-
+   
     MBCommandExecutor* executor = (MBCommandExecutor*)param;
+    executor->initWebview(mbView);
     executor->addManagedBrowser(mbView, MBSession::uuidCreate());
 
     return mbView;
+}
+
+void MBCommandExecutor::initWebview(mbWebView mbView)
+{
+    ::mbSetUserKeyValue(mbView, "JsQueryInfo", (void*)new JsQueryInfo());
+    ::mbSetNavigationToNewWindowEnable(mbView, TRUE);
+    ::mbSetCspCheckEnable(mbView, TRUE);
+    ::mbShowWindow(mbView, TRUE);
+    ::mbOnAlertBox(mbView, onAlertBoxCallback, nullptr);
+    ::mbOnConfirmBox(mbView, onConfirmBoxCallback, nullptr);
+    ::mbOnPromptBox(mbView, onPromptBoxCallback, nullptr);
+    ::mbOnLoadUrlBegin(mbView, onLoadUrlBegin, nullptr);
+    ::mbOnLoadUrlEnd(mbView, onLoadUrlEnd, nullptr);
+    ::mbOnCreateView(mbView, MBCommandExecutor::onCreateViewCallback, (void*)this);
+    ::mbOnJsQuery(mbView, onJsQueryCallback, (void*)this);
 }
 
 // 本函数执行在http server work线程
@@ -239,9 +312,7 @@ int MBCommandExecutor::createNewBrowser(std::string* errorMessage, mbWebView* mb
     MBCommandExecutor* self = this;
     postToUiThreadSync([self , &mbView] {
         mbView = mbCreateWebWindow(MB_WINDOW_TYPE_POPUP, NULL, 100, 50, 600, 700);
-        mbOnJsQuery(mbView, onJsQueryCallback, (void*)self);
-        mbOnCreateView(mbView, onCreateViewCallback, (void*)self);
-        initWebview(mbView);
+        self->initWebview(mbView);
     });
 
     if (mbwebview)
@@ -249,7 +320,8 @@ int MBCommandExecutor::createNewBrowser(std::string* errorMessage, mbWebView* mb
 
     //LOG(INFO) << "Persistent hovering set to: " << this->input_manager_->use_persistent_hover();
     //this->proxy_manager_->SetProxySettings(process_window_info.hwndBrowser);
-    addManagedBrowser(mbView, MBSession::uuidCreate());
+    *browserId = MBSession::uuidCreate();
+    addManagedBrowser(mbView, *browserId);
 
     return WD_SUCCESS;
 }
@@ -258,10 +330,17 @@ void MBCommandExecutor::addManagedBrowser(mbWebView mbView, const std::string& b
 {
     WDLOG(TRACE) << "Entering MBCommandExecutor::AddManagedBrowser"; // 只有SwitchToWindowCommandHandler才能强行设置当前webview
     ::EnterCriticalSection(&m_managedBrowsersLock);
+    const size_t oldSize = m_managedBrowsers.size();
     m_managedBrowsers[browserId] = mbView;
+
+    char* output = (char*)malloc(400);
+    sprintf_s(output, 399, "MBCommandExecutor::addManagedBrowser: %d %p, oldSize:%d %d\n", mbView, this, oldSize, m_managedBrowsers.size());
+    OutputDebugStringA(output);
+    free(output);
+
     ::LeaveCriticalSection(&m_managedBrowsersLock);
 
-    if (m_mbView == NULL_WEBVIEW) {
+    if (view() == NULL_WEBVIEW) {
         WDLOG(TRACE) << "Setting current browser id to " << browserId;
         setView(mbView, browserId);
     }
@@ -272,12 +351,13 @@ void MBCommandExecutor::setView(mbWebView view, const std::string& browserId)
     ::EnterCriticalSection(&m_managedBrowsersLock);
     m_mbView = view;
     m_browserId = browserId;
+    ::mbSetUserKeyValue(m_mbView, "MBCommandExecutor", this);
     ::LeaveCriticalSection(&m_managedBrowsersLock);
 }
 
 int MBCommandExecutor::getManagedBrowser(const std::string& browserId, mbWebView* webview) const
 {
-    WDLOG(TRACE) << "Entering MBCommandExecutor::GetManagedBrowser";
+    //WDLOG(TRACE) << "Entering MBCommandExecutor::GetManagedBrowser";
 
     if (!is_valid()) {
         WDLOG(TRACE) << "Current command executor is not valid";
@@ -302,6 +382,21 @@ int MBCommandExecutor::getManagedBrowser(const std::string& browserId, mbWebView
     return WD_SUCCESS;
 }
 
+void MBCommandExecutor::closeAllWindow()
+{
+    OutputDebugStringA("MBCommandExecutor::closeAllWindow\n");
+    ::EnterCriticalSection(&m_managedBrowsersLock);
+    BrowserMap::const_iterator it = m_managedBrowsers.begin();
+    for (; it != m_managedBrowsers.end(); ++it) {
+        mbWebView mbView = it->second;
+        postToUiThreadAsync([mbView] {
+            mbDestroyWebView(mbView);
+        });
+    }
+    m_managedBrowsers.clear();
+    ::LeaveCriticalSection(&m_managedBrowsersLock);
+}
+
 bool MBCommandExecutor::isValidWebView(mbWebView webviewHandle)
 {
     BOOL b = mbOnPrinting(webviewHandle, nullptr, nullptr);
@@ -318,18 +413,30 @@ void MBCommandExecutor::eraseManagedBrowserHandle(mbWebView webview)
     ::EnterCriticalSection(&m_managedBrowsersLock);
     BrowserMap::const_iterator it = m_managedBrowsers.begin();
     for (; it != m_managedBrowsers.end(); ++it) {
-        if (webview == it->second) {
-            m_managedBrowsers.erase(it);
-            break;
+        if (webview != it->second)
+            continue;
+
+        m_managedBrowsers.erase(it);
+        if (view() == webview) {
+            if (m_managedBrowsers.size() != 0) {
+                it = m_managedBrowsers.begin();
+                setView(it->second, it->first);
+            }
         }
+        break;
     }
+
+    char* output = (char*)malloc(400);
+    sprintf_s(output, 399, "MBCommandExecutor::eraseManagedBrowserHandle: %d\n", m_managedBrowsers.size());
+    OutputDebugStringA(output);
+    free(output);
+
     ::LeaveCriticalSection(&m_managedBrowsersLock);
 }
 
-
 void MBCommandExecutor::getManagedBrowserHandles(std::vector<std::string>* managedBrowsers) const
 {
-    WDLOG(TRACE) << "Entering MBCommandExecutor::GetManagedBrowserHandles";
+    //WDLOG(TRACE) << "Entering MBCommandExecutor::GetManagedBrowserHandles";
 
     ::EnterCriticalSection(&m_managedBrowsersLock);
     BrowserMap::const_iterator it = m_managedBrowsers.begin();
@@ -350,20 +457,24 @@ bool MBCommandExecutor::executeCommand(const std::string& serializedCommand, std
     Response response;
 
     bool isOk = false;
-    if (!m_commandHandlers->IsValidCommand(command.command_type())) {
+    std::string commandType = command.command_type();
+    if (!m_commandHandlers->IsValidCommand(commandType)) {
         std::string output = "Command not implemented:";
-        output += command.command_type();
+        output += commandType;
         MessageBoxA(0, output.c_str(), 0, 0);
-        WDLOG(WARN) << "Unable to find command handler for " << command.command_type();
+        WDLOG(WARN) << "Unable to find command handler for " << commandType;
         response.SetErrorResponse(ERROR_UNKNOWN_COMMAND, "Command not implemented");
     } else if (!command.is_valid_parameters()) {
-        WDLOG(WARN) << "command.is_valid_parameters for " << command.command_type();
+        WDLOG(WARN) << "command.is_valid_parameters for " << commandType;
         response.SetErrorResponse(ERROR_INVALID_ARGUMENT, "parameters property of command is not a valid JSON object");
     } else {
-        std::string command_type = command.command_type();
-        CommandHandlerHandle handle = m_commandHandlers->GetCommandHandler(command.command_type());
-        handle->Execute(*this, command, &response);
-        isOk = true;
+        if (handleAlert(view(), m_unexpectedAlertBehavior, commandType, &response, /*serializedResponse,*/ &isOk)) {
+
+        } else {
+            CommandHandlerHandle handle = m_commandHandlers->GetCommandHandler(commandType);
+            handle->Execute(*this, command, &response);
+            isOk = true;
+        }
     }    
     *serializedResponse = response.Serialize();
     return isOk;

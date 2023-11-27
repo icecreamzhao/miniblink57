@@ -8,6 +8,24 @@
 
 namespace webdriver {
 
+struct JsQueryInfo {
+    int wait = 0;
+    int msgType = -1;
+    std::string result;
+
+    std::string alertText; // 不存在这里了，因为还得加锁，麻烦
+    std::string alertWaitFlag;
+    bool isAlertOpen = false; // 标注alert曾经打开过
+    mutable CRITICAL_SECTION lock;
+
+    JsQueryInfo() 
+    {
+        ::InitializeCriticalSection(&lock);
+    }
+};
+bool handleAlert(mbWebView webview, const std::string& unexpectedAlertBehavior,
+    const std::string& commandType, Response* response, /*std::string* serializedResponse,*/ bool* isOk);
+
 bool checkElement(const std::string& element_id, Response* response);
 
 Json::Value createElement(const std::string& element_id);
