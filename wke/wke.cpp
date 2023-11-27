@@ -22,6 +22,8 @@
 #include "net/cookies/WebCookieJarCurlImpl.h"
 #include "third_party/WebKit/public/web/WebKit.h"
 #include "third_party/WebKit/public/web/WebFrame.h"
+#include "third_party/WebKit/public/web/WebFrameSerializer.h"
+#include "third_party/WebKit/public/web/WebFrameSerializerClient.h"
 //#include "third_party/WebKit/public/web/WebDragOperation.h"
 #include "third_party/WebKit/public/web/WebDocument.h"
 #include "third_party/WebKit/public/web/WebCustomElement.h"
@@ -2213,25 +2215,63 @@ BOOL WKE_CALL_TYPE wkeIsLoadComplete(wkeWebView webView)
     return wkeIsLoadingCompleted(webView);
 }
 
+extern int g_testWebFrameSerializerImpl;
+namespace blink {
+extern Document* g_document;
+}
+
+class WebFrameSerializerClientImpl : public blink::WebFrameSerializerClient {
+public:
+    void didSerializeDataForFrame(const blink::WebCString& data, blink::WebFrameSerializerClient::FrameSerializationStatus status) override 
+    {
+        if (data.isEmpty() || data.isNull()) {
+            if (g_testWebFrameSerializerImpl == 1) {
+                //g_document->showTreeForThisAcrossFrame();
+//                 MessageBoxA(0, "WebFrameSerializerClientImpl::didSerializeDataForFrame fail", 0, 0);
+//                 OutputDebugStringA("WebFrameSerializerClientImpl::didSerializeDataForFrame fail\n");
+//                 DebugBreak();
+            }
+            return;
+        }
+        m_result = data.data();
+    }
+    std::string m_result;
+};
+
+class LinkRewritingDelegateImpl : public blink::WebFrameSerializer::LinkRewritingDelegate {
+public:
+    bool rewriteFrameSource(WebFrame*, WebString* rewrittenLink) override
+    {
+        return false;
+    }
+
+    bool rewriteLink(const WebURL&, WebString* rewrittenLink)  override
+    {
+        return false;
+    }
+};
+
 const utf8* WKE_CALL_TYPE wkeGetSource(wkeWebView webView)
 {
     WKE_CHECK_WEBVIEW_AND_THREAD_IS_VALID(webView, nullptr);
-//     content::WebPage* page = webView->webPage();
-//     if (!page)
-//         return nullptr;
-// 
-//     blink::WebFrame* webFrame = page->mainFrame();
-//     if (!webFrame)
-//         return nullptr;
+    content::WebPage* page = webView->webPage();
+    if (!page)
+        return nullptr;
+
+    blink::WebFrame* webFrame = page->mainFrame();
+    if (!webFrame)
+        return nullptr;
 //     blink::WebString result = webFrame->contentAsMarkup();
 //     if (result.isNull() || result.isEmpty())
 //         return nullptr;
-// 
-//     std::string resultUtf8 = result.utf8();
-//     return wke::createTempCharString(resultUtf8.c_str(), resultUtf8.size());
+    WebFrameSerializerClientImpl serializerImpl;
+    LinkRewritingDelegateImpl delegateImpl;
+    if (!blink::WebFrameSerializer::serialize((WebLocalFrame*)webFrame, &serializerImpl, &delegateImpl))
+        return nullptr;
+    if (serializerImpl.m_result.empty())
+        return nullptr;
 
-    DebugBreak();
-    return nullptr;
+    return wke::createTempCharString(serializerImpl.m_result.c_str(), serializerImpl.m_result.size());
 }
 
 const utf8* WKE_CALL_TYPE wkeTitle(wkeWebView webView)

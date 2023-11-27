@@ -1754,8 +1754,6 @@ void CWebView::showDevTools(const utf8* url, wkeOnShowDevtoolsCallback callback,
     m_isCreatedDevTools = true;
     //blink::Platform::current()->currentThread()->addTaskObserver(new ShowDevToolsTaskObserver(this, url, callback, param));
     DebugBreak();
-
-
 }
 
 net::WebCookieJarImpl* CWebView::getCookieJar()
