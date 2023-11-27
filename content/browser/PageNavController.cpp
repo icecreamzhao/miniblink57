@@ -390,29 +390,23 @@ using namespace blink;
 
 DEFINE_TRACE(PageNavController)
 {
-#if 1 // ENABLE(OILPAN)
     for (size_t i = 0; i < m_frameHistoryStates.size(); ++i) {
         AllFrameHistoryItemSet* entrys = m_frameHistoryStates[i];
         visitor->trace(entrys);
     }
-#endif
 }
 
 DEFINE_TRACE(PageNavController::FrameHistoryItem)
 {
-#if ENABLE(OILPAN)
     //visitor->trace(historyItem);
-#endif
 }
 
 DEFINE_TRACE(PageNavController::AllFrameHistoryItemSet)
 {
-#if 1 // ENABLE(OILPAN)
     for (size_t i = 0; i < m_frameHistoryItems.size(); ++i) {
         FrameHistoryItem* item = m_frameHistoryItems[i];
         visitor->trace(item);
     }
-#endif
 }
 
 

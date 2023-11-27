@@ -75,6 +75,7 @@
 #endif
 #include "skia/ext/bitmap_platform_device_win.h"
 #include "base/atomic_mb.h"
+#include "base/win/windows_version.h"
 
 extern DWORD g_paintToMemoryCanvasInUiThreadCount;
 extern DWORD g_mouseCount;
@@ -2474,6 +2475,12 @@ void WebPageImpl::moveValidationMessage(const blink::WebRect& anchorInViewport)
 
 }
 
+// 这函数暂时没用上
+void WebPageImpl::willCommitProvisionalLoad()
+{
+    m_hadWillCommitProvisionalLoad = true;
+}
+
 void WebPageImpl::didStartProvisionalLoad()
 {
     m_firstDrawCount = 0;
@@ -2512,21 +2519,21 @@ private:
     HWND m_hWnd;
 };
 
-// bool WebPageImpl::runFileChooser(const blink::WebFileChooserParams& params, blink::WebFileChooserCompletion* completion)
-// {
-//     RootWndAutoDisable rootWndAutoDisable(m_hWnd);
-//     setIsMouseKeyMessageEnable(false);
-// 
-//     WebPageImpl* self = this;
-//     int id = wkeWebView()->getId();
-//     std::function<void(void)>* callback = new std::function<void(void)>([self, id] {
-//         if (net::ActivatingObjCheck::inst()->isActivating(id))
-//             self->setIsMouseKeyMessageEnable(true);
-//     });
-//     bool b = runFileChooserImpl(params, completion, id, callback);
-//     blink::Platform::current()->currentThread()->postDelayedTask(FROM_HERE, new DelayPopupAterFileChooserTask(m_hWnd), 1000);
-//     return b;
-// }
+bool WebPageImpl::runFileChooser(const blink::WebFileChooserParams& params, blink::WebFileChooserCompletion* completion)
+{
+    RootWndAutoDisable rootWndAutoDisable(m_hWnd);
+    setIsMouseKeyMessageEnable(false);
+
+    WebPageImpl* self = this;
+    int id = wkeWebView()->getId();
+    std::function<void(void)>* callback = new std::function<void(void)>([self, id] {
+        if (net::ActivatingObjCheck::inst()->isActivating(id))
+            self->setIsMouseKeyMessageEnable(true);
+    });
+    bool b = runFileChooserImpl(m_hWnd, params, completion, id, callback);
+    blink::Platform::current()->currentThread()->postDelayedTask(FROM_HERE, new DelayPopupAterFileChooserTask(m_hWnd), 1000);
+    return b;
+}
 
 void WebPageImpl::willEnterDebugLoop()
 {
@@ -2584,8 +2591,11 @@ bool WebPageImpl::initSetting()
     settings->setTextAreasAreResizable(true);
     
 #if defined(OS_WIN)
-    //settings->setStandardFontFamily(WebString(L"微软雅黑", 4));
-    settings->setStandardFontFamily(blink::WebString(L"宋体", 2));
+    base::win::OSInfo* osinfo = base::win::OSInfo::GetInstance();
+    if (osinfo->version() < base::win::VERSION_VISTA)
+        settings->setStandardFontFamily(blink::WebString(L"宋体", 2));
+    else
+        settings->setStandardFontFamily(WebString(L"微软雅黑", 4));
 #else
     settings->setStandardFontFamily(blink::WebString::fromUTF8("Simsun"));
 #endif

@@ -242,6 +242,12 @@ void WebPage::didExitDebugLoop()
         m_pageImpl->didExitDebugLoop();
 }
 
+void WebPage::willCommitProvisionalLoad()
+{
+    if (m_pageImpl)
+        m_pageImpl->willCommitProvisionalLoad();
+}
+
 void WebPage::didStartProvisionalLoad()
 {
     if (m_pageImpl)

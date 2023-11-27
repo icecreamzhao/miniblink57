@@ -42,6 +42,8 @@ public:
 
     virtual void loadURLExternally(const WebURLRequest&, WebNavigationPolicy, const WebString& downloadName, bool shouldReplaceCurrentEntry) override;
 
+    virtual bool runFileChooser(const blink::WebFileChooserParams& params, WebFileChooserCompletion* chooserCompletion);
+
     // Factory methods -----------------------------------------------------
 
     // May return null.
@@ -87,6 +89,8 @@ public:
 
     // A form submission is about to occur.
     virtual void willSubmitForm(const WebFormElement&) override;
+
+    virtual void willCommitProvisionalLoad(WebLocalFrame*) override;
 
     // A datasource has been created for a new navigation.  The given
     // datasource will become the provisional datasource for the frame.

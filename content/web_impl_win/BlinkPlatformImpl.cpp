@@ -236,6 +236,7 @@ static WebThreadImpl* currentTlsThread()
 
 static void setRuntimeEnabledFeatures()
 {
+    blink::RuntimeEnabledFeatures::setModuleScriptsEnabled(true);
     blink::RuntimeEnabledFeatures::setTraceWrappablesEnabled(true);
     blink::RuntimeEnabledFeatures::setAccelerated2dCanvasEnabled(false);
     blink::RuntimeEnabledFeatures::setDisplayList2dCanvasEnabled(false);
@@ -259,10 +260,12 @@ static void setRuntimeEnabledFeatures()
 //     blink::RuntimeEnabledFeatures::setKeyboardEventCodeEnabled(true);
     blink::RuntimeEnabledFeatures::setCSSOMSmoothScrollEnabled(true);
     blink::RuntimeEnabledFeatures::setSlimmingPaintInvalidationEnabled(true);
-
     //blink::RuntimeEnabledFeatures::setCompositorAnimationTimelinesEnabled(true);
 
-    //blink::FontCache::setUseDirectWrite(false);
+    blink::RuntimeEnabledFeatures::setExperimentalCanvasFeaturesEnabled(true);
+#if OS(WIN)
+    blink::FontCache::setUseDirectWrite(false);
+#endif
 }
 
 typedef BOOL (WINAPI* PFN_SetThreadStackGuarantee)(PULONG StackSizeInBytes);
@@ -1397,3 +1400,10 @@ blink::WebGestureCurve* BlinkPlatformImpl::createFlingAnimationCurve(blink::WebG
 }
 
 } // namespace content
+
+BOOL WINAPI BaseDllMain(PVOID h, DWORD reason, PVOID reserved);
+
+BOOL WINAPI DllMain(PVOID h, DWORD reason, PVOID reserved)
+{
+    return BaseDllMain(h, reason, reserved);
+}

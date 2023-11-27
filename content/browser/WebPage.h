@@ -163,6 +163,7 @@ public:
     void willEnterDebugLoop();
     void didExitDebugLoop();
 
+    void willCommitProvisionalLoad();
     void didStartProvisionalLoad();
 
     void setScreenInfo(const blink::WebScreenInfo& info);

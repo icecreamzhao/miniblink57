@@ -46,11 +46,40 @@ DevToolsClient::~DevToolsClient()
     DevToolsMgr::getInst()->removeLivedId(m_id);
 }
 
+class DocumentReadyToAgentTask : public blink::WebThread::Task {
+public:
+    DocumentReadyToAgentTask(int devToolsClientId, DevToolsAgent* devToolsAgent)
+    {
+        m_devToolsClientId = devToolsClientId;
+        m_devToolsAgent = devToolsAgent;
+        m_devToolsAgentId = devToolsAgent->getId();
+    }
+    virtual ~DocumentReadyToAgentTask() override
+    {
+
+    }
+    virtual void run() override
+    {
+        if (!DevToolsMgr::getInst()->isLivedId(m_devToolsAgentId))
+            return;
+        String devToolsAgentId = String::format("%d", m_devToolsClientId);
+        m_devToolsAgent->onAttach(devToolsAgentId.utf8().data());
+    }
+
+private:
+    int m_devToolsClientId;
+    DevToolsAgent* m_devToolsAgent;
+    int m_devToolsAgentId;
+};
+
 void DevToolsClient::setDevToolsAgent(DevToolsAgent* devToolsAgent)
 {
     m_devToolsAgent = devToolsAgent;
+
+    blink::Platform::current()->currentThread()->postTask(FROM_HERE, new DocumentReadyToAgentTask(getId(), m_devToolsAgent));
 }
 
+// 收到被调试端发来的消息
 void DevToolsClient::onMessageReceivedFromEmbedder(int callId, const std::string* response, const std::string* state)
 {
     //std::string javascript = "DevToolsAPI.dispatchMessage(" + *response + ");";
@@ -87,38 +116,12 @@ private:
     int m_devToolsAgentId;
 };
 
-class DocumentReadyToAgentTask : public blink::WebThread::Task {
-public:
-    DocumentReadyToAgentTask(int devToolsClientId, DevToolsAgent* devToolsAgent)
-    {
-        m_devToolsClientId = devToolsClientId;
-        m_devToolsAgent = devToolsAgent;
-        m_devToolsAgentId = devToolsAgent->getId();
-    }
-    virtual ~DocumentReadyToAgentTask() override
-    {
-
-    }
-    virtual void run() override
-    {
-        if (!DevToolsMgr::getInst()->isLivedId(m_devToolsAgentId))
-            return;
-        String devToolsAgentId = String::format("%d", m_devToolsClientId);
-        m_devToolsAgent->onAttach(devToolsAgentId.utf8().data());
-    }
-
-private:
-    int m_devToolsClientId;
-    DevToolsAgent* m_devToolsAgent;
-    int m_devToolsAgentId;
-};
-
 void DevToolsClient::onDocumentReady()
 {
-    blink::Platform::current()->currentThread()->postTask(FROM_HERE, 
-        new DocumentReadyToAgentTask(getId(), m_devToolsAgent));
+
 }
 
+// 发送消息给被调试端
 void DevToolsClient::sendMessageToBackend(const blink::WebString& message)
 {
     String messageStr = message;
@@ -127,12 +130,13 @@ void DevToolsClient::sendMessageToBackend(const blink::WebString& message)
     if (!m_devToolsProtocolDispatcher->dispatcher(messageStr.utf8().data()) && m_devToolsAgent != nullptr)
         blink::Platform::current()->currentThread()->postTask(FROM_HERE, new MessageToAgentTask(m_devToolsAgent, messageStr.utf8().data()));
 
-//     output = "sendMessageToBackend:";
-//     output.append(messageStr);
-//     output.append("\n");
-//     OutputDebugStringA(output.utf8().data());
+    output = "sendMessageToBackend:";
+    output.append(messageStr);
+    output.append("\n");
+    OutputDebugStringA(output.utf8().data());
 }
 
+// 发送消息给外面的devtools工具页面
 void DevToolsClient::sendMessageToEmbedder(const blink::WebString& message)
 {
     String messageStr = message;

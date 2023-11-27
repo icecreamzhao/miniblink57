@@ -118,17 +118,6 @@ WebFrameClientImpl::~WebFrameClientImpl()
 void WebFrameClientImpl::didAddMessageToConsole(const WebConsoleMessage& message,
     const WebString& sourceName, unsigned sourceLine, const WebString& stackTrace)
 {
-//     WTF::String outstr(L"console:");
-// 
-//     outstr.append((WTF::String)(message.text));
-//     outstr.append(L" ;sourceName:");
-//     outstr.append(sourceName);
-// 
-//     outstr.append(L" ;sourceLine:");
-//     outstr.append(String::number(sourceLine));
-//     outstr.append(L" \n");
-//     OutputDebugStringW(outstr.charactersWithNullTermination().data());
-
     WTF::String outstr;
     outstr.append(String::format("Console:[%d],[", sourceLine));
     outstr.append(message.text);
@@ -321,8 +310,7 @@ void WebFrameClientImpl::didStartLoading(bool toDifferentDocument)
         wkeTempCallbackInfo* tempInfo = wkeGetTempCallbackInfo(m_webPage->wkeWebView());
         tempInfo->size = sizeof(wkeTempCallbackInfo);
         tempInfo->frame = nullptr;
-        handler.otherLoadCallback(m_webPage->wkeWebView(), handler.otherLoadCallbackParam,
-            WKE_DID_START_LOADING, tempInfo);
+        handler.otherLoadCallback(m_webPage->wkeWebView(), handler.otherLoadCallbackParam, WKE_DID_START_LOADING, tempInfo);
     }
 #endif
 }
@@ -339,6 +327,24 @@ void WebFrameClientImpl::didChangeLoadProgress(double loadProgress)
 
 void WebFrameClientImpl::willSendSubmitEvent(const WebFormElement&) { }
 void WebFrameClientImpl::willSubmitForm(const WebFormElement&) { }
+
+// load url后，收到第一条数据会调用这里
+void WebFrameClientImpl::willCommitProvisionalLoad(WebLocalFrame* localFrame)
+{
+    if (localFrame && !localFrame->parent())
+        m_webPage->willCommitProvisionalLoad();
+
+#if (defined ENABLE_WKE) && (ENABLE_WKE == 1)
+    wke::AutoDisableFreeV8TempObejct autoDisableFreeV8TempObejct;
+    wke::CWebViewHandler& handler = m_webPage->wkeHandler();
+    if (handler.otherLoadCallback && m_webPage->getState() == pageInited) {
+        wkeTempCallbackInfo* tempInfo = wkeGetTempCallbackInfo(m_webPage->wkeWebView());
+        tempInfo->size = sizeof(wkeTempCallbackInfo);
+        tempInfo->frame = nullptr;
+        handler.otherLoadCallback(m_webPage->wkeWebView(), handler.otherLoadCallbackParam, WKE_WILL_COMMIT_PROVISIONAL_LOAD, tempInfo);
+    }
+#endif
+}
 
 void WebFrameClientImpl::didCreateDataSource(WebLocalFrame*, WebDataSource* dataSource)
 {
@@ -999,6 +1005,23 @@ void WebFrameClientImpl::loadURLExternally(const WebURLRequest& request, WebNavi
     WebURLLoaderClientWrapped* clientWrapped = new WebURLLoaderClientWrapped(this, m_webPage, m_frame, downloadName, kurl);
     clientWrapped->willFollowRedirect(requestWrapped, blink::WebURLResponse());
     loader->loadAsynchronously(requestWrapped, clientWrapped);
+}
+
+bool WebFrameClientImpl::runFileChooser(const blink::WebFileChooserParams& params, WebFileChooserCompletion* chooserCompletion)
+{
+//     RootWndAutoDisable rootWndAutoDisable(m_hWnd);
+//     webPage->webPageImpl()->setIsMouseKeyMessageEnable(false);
+// 
+//     WebPageImpl* self = webPage->webPageImpl();
+//     int id = wkeWebView()->getId();
+//     std::function<void(void)>* callback = new std::function<void(void)>([self, id] {
+//         if (net::ActivatingObjCheck::inst()->isActivating(id))
+//             self->setIsMouseKeyMessageEnable(true);
+//     });
+//     bool b = runFileChooserImpl(m_hWnd, params, completion, id, callback);
+//     blink::Platform::current()->currentThread()->postDelayedTask(FROM_HERE, new DelayPopupAterFileChooserTask(m_hWnd), 1000);
+//     return b;
+    return m_webPage->webPageImpl()->runFileChooser(params, chooserCompletion);
 }
 
 // WebGeolocationClient* WebFrameClientImpl::geolocationClient()
