@@ -19,12 +19,20 @@ var json = [{
         "include":[
             "${sdkPath}/include/c++/7.2.0",
             "${sdkPath}/include/c++/7.2.0/include",
-            "${ndkIncludePath}",
             "${sdkPath}/include/c++/7.2.0/x86_64-unknown-linux-gnu/",
+            "${ndkIncludePath}",
             "${srcPath}",
-            "${sdkPath}/sysroot/usr/include",
-            "${sdkPath}/sysroot/usr/",
-            "${sdkPath}/sysroot/usr/include/linux",
+            ////////////////////////////////////////////////////////////////////////////////
+            "${sysroot}/usr/include/aarch64-linux-gnu/c++/10",
+            "${sysroot}/usr/include/aarch64-linux-gnu",
+            "${sysroot}/usr/include/c++/10",
+            "${sysroot}/usr/include",
+            "${sysroot}/usr/include/linux",
+            ////////////////////////////////////////////////////////////////////////////////////
+            //"${sdkPath}/sysroot/usr/include",
+            //"${sdkPath}/sysroot/usr/",
+            //"${sdkPath}/sysroot/usr/include/linux",
+                
             "${sysroot}/usr/include/cairo",
             "${sysroot}/usr/include/glib-2.0",
             "${sysroot}/usr/include/gtk-3.0",
@@ -40,11 +48,8 @@ var json = [{
             "${srcPath}/linux/linuxwindows.cpp",
         ],
         "src":[
-            //"${srcPath}/wkexe/vip/wkexe_linux.cpp",
             "${srcPath}/wkexe/vip/wkexe_linux_exp.cpp",
             "${srcPath}/linux/linuxwindows.cpp",
-            //"${srcPath}/linux/linuxgdi.cpp",
-
             "${srcPath}/webdriver/WebDriver.cpp",
             "${srcPath}/webdriver/MBServer.cpp",
             "${srcPath}/webdriver/MBSession.cpp",
@@ -89,10 +94,12 @@ var json = [{
             "${srcPath}/webdriver/CommandHandlers/GetAlertTextCommandHandler.cpp",
             "${srcPath}/webdriver/CommandHandlers/AcceptAlertCommandHandler.cpp",
             "${srcPath}/webdriver/CommandHandlers/DismissAlertCommandHandler.cpp",
+            "${srcPath}/webdriver/CommandHandlers/QuitCommandHandler.cpp",
+            "${srcPath}/webdriver/CommandHandlers/SwitchToFrameCommandHandler.cpp",
         ],
         "cmd":[
             "-fno-exceptions",
-            "--target=x86_64-linux-guneabi", 
+            //"--target=x86_64-linux-guneabi", 
             "-std=c++14",
             "-fms-extensions",
             "-Dunix=1",
@@ -105,34 +112,56 @@ var json = [{
         "outdir":"${srcPath}/out/${targetDir}",
         "target":"chromedriver",
         "beginLibs":[
-            "${sysroot}/usr/lib/x86_64-linux-gnu/crt1.o",
-            "${sysroot}/usr/lib/x86_64-linux-gnu/crti.o",
-            "${sysroot}/usr/lib/gcc/x86_64-linux-gnu/7/crtbegin.o",
-            "${sysroot}/usr/lib/x86_64-linux-gnu/libc_nonshared.a",
-            "${sysroot}/usr/lib/gcc/x86_64-linux-gnu/7/libgcc_eh.a",
-            "${sysroot}/usr/lib/gcc/x86_64-linux-gnu/7/libgcc.a",
-            "${sysroot}/usr/lib/x86_64-linux-gnu/libffi.a"
+            //"${sysroot}/usr/lib/x86_64-linux-gnu/crt1.o",
+            //"${sysroot}/usr/lib/x86_64-linux-gnu/crti.o",
+            //"${sysroot}/usr/lib/gcc/x86_64-linux-gnu/7/crtbegin.o",
+            //"${sysroot}/usr/lib/x86_64-linux-gnu/libc_nonshared.a",
+            //"${sysroot}/usr/lib/gcc/x86_64-linux-gnu/7/libgcc_eh.a",
+            //"${sysroot}/usr/lib/gcc/x86_64-linux-gnu/7/libgcc.a",
+            //"${sysroot}/usr/lib/x86_64-linux-gnu/libffi.a",
+            
+            "${sysroot}/usr/lib/aarch64-linux-gnu/crt1.o",
+            "${sysroot}/usr/lib/aarch64-linux-gnu/crti.o",
+            "${sysroot}/usr/lib/gcc/aarch64-linux-gnu/10/crtbegin.o",
+            "${sysroot}/usr/lib/aarch64-linux-gnu/libc_nonshared.a",
+            "${sysroot}/usr/lib/gcc/aarch64-linux-gnu/10/libgcc_eh.a",
+            "${sysroot}/usr/lib/gcc/aarch64-linux-gnu/10/libgcc.a",
+            "${sysroot}/usr/lib/aarch64-linux-gnu/libffi.a"
         ],
         "linkerCmd":[
             "-strip-all",
-            //"-dynamic-linker /lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+            //"-dynamic-linker /lib64/ld-linux-x86-64.so.2",
+            //"-l${sysroot}/lib/x86_64-linux-gnu/libc-2.27.so",
+            //"-l${sysroot}/usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.6200.3",
+            //"-l${sysroot}/usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.9",
+            //"-l${sysroot}/usr/lib/x86_64-linux-gnu/libgdk-3.so.0.2404.9",
+            //"-l${sysroot}/usr/lib/x86_64-linux-gnu/libcairo.so.2.11600.0",
+            //"-l${sysroot}/usr/lib/x86_64-linux-gnu/libpthread.so",
+            //"-l${sysroot}/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.28",
+            //"-l${sysroot}/usr/lib/x86_64-linux-gnu/libgobject-2.0.so.0.6200.3",
+            //"-lC:/cygwin64/usr/local/x86_64-unknown-linux-gnu/x86_64-unknown-linux-gnu/sysroot/lib/libdl.so.2",
+            //"-lC:/cygwin64/usr/local/x86_64-unknown-linux-gnu/x86_64-unknown-linux-gnu/sysroot/lib/libgcc_s.so.1",
+            //"-l${sysroot}/lib/x86_64-linux-gnu/libm-2.27.so"
+            
             "-dynamic-linker /lib64/ld-linux-x86-64.so.2",
-            "-l${sysroot}/lib/x86_64-linux-gnu/libc-2.27.so",
-            "-l${sysroot}/usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.6200.3",
-            "-l${sysroot}/usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.9",
-            "-l${sysroot}/usr/lib/x86_64-linux-gnu/libgdk-3.so.0.2404.9",
-            "-l${sysroot}/usr/lib/x86_64-linux-gnu/libcairo.so.2.11600.0",
-            "-l${sysroot}/usr/lib/x86_64-linux-gnu/libpthread.so",
-            //"-l${sysroot}/usr/lib/x86_64-linux-gnu/libpcreposix.so.3.13.3",
-            "-l${sysroot}/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.28",
-            "-l${sysroot}/usr/lib/x86_64-linux-gnu/libgobject-2.0.so.0.6200.3",
-            "-lC:/cygwin64/usr/local/x86_64-unknown-linux-gnu/x86_64-unknown-linux-gnu/sysroot/lib/libdl.so.2",
-            "-lC:/cygwin64/usr/local/x86_64-unknown-linux-gnu/x86_64-unknown-linux-gnu/sysroot/lib/libgcc_s.so.1",
-            "-l${sysroot}/lib/x86_64-linux-gnu/libm-2.27.so"
+            "-l${sdkPath}/aarch64-linux-gnu/libc/lib/libc-2.25.so",
+            "-l${sysroot}/usr/lib/aarch64-linux-gnu/libglib-2.0.so.0.6600.7",
+            "-l${sysroot}/usr/lib/aarch64-linux-gnu/libgtk-3.so.0.2404.20",
+            "-l${sysroot}/usr/lib/aarch64-linux-gnu/libgdk-3.so.0.2404.20",
+            "-l${sysroot}/usr/lib/aarch64-linux-gnu/libcairo.so.2.11600.0",
+            "-l${sysroot}/usr/lib/aarch64-linux-gnu/libpthread.so",
+            "-l${sysroot}/usr/lib/aarch64-linux-gnu/libstdc++.so.6.0.28",
+            "-l${sysroot}/usr/lib/aarch64-linux-gnu/libgobject-2.0.so.0.6600.7",
+            "-l${sdkPath}/aarch64-linux-gnu/libc/lib/libdl.so.2",
+            "-l${sdkPath}/aarch64-linux-gnu/lib64/libgcc_s.so.1",
+            "-l${sysroot}/lib/aarch64-linux-gnu/libm-2.31.so"
             ],
         "endLibs":[
-            "${sysroot}/usr/lib/x86_64-linux-gnu/crtn.o",
-            "${sysroot}/usr/lib/gcc/x86_64-linux-gnu/7/crtend.o"
+            //"${sysroot}/usr/lib/x86_64-linux-gnu/crtn.o",
+            //"${sysroot}/usr/lib/gcc/x86_64-linux-gnu/7/crtend.o"
+            
+            "${sdkPath}/aarch64-linux-gnu/libc/usr/lib/crtn.o",
+            "${sdkPath}/lib/gcc/aarch64-linux-gnu/7.5.0/crtend.o"
         ],
         "linker":constVal.linker//"${ndkBinPath}/ld.gold.exe"
     }

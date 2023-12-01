@@ -358,7 +358,7 @@ var json = [{
 		],
 		// 
 		"cmd":[
-			"--target=x86_64-linux-guneabi",
+			//"--target=x86_64-linux-guneabi",
 			"-std=c++11",
 			"-fms-extensions",
 			"-D_GNU_SOURCE",

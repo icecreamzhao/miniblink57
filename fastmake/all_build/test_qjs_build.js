@@ -169,7 +169,7 @@ var json = [{
 		],
 		// 
 		"cmd":[
-			"--target=x86_64-linux-guneabi",
+			//"--target=x86_64-linux-guneabi",
 			"-fms-extensions",
 			//"-fshort-wchar",
 			"-D_GNU_SOURCE",

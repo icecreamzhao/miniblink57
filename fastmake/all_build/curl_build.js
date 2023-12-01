@@ -170,7 +170,7 @@ var json = [{
 		],
 		// 
 		"cmd":[
-			"--target=x86_64-linux-guneabi",
+			//"--target=x86_64-linux-guneabi",
 			"-fms-extensions",
 			"-fno-exceptions",
 			//"-fshort-wchar",

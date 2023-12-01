@@ -587,7 +587,7 @@ var json = [{
         ],
         // 
         "cmd":[
-            "--target=x86_64-linux-guneabi", 
+            //"--target=x86_64-linux-guneabi", 
             "-std=c++14",
             "-fms-extensions",
             //"-fshort-wchar",
