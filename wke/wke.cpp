@@ -2215,7 +2215,7 @@ BOOL WKE_CALL_TYPE wkeIsLoadComplete(wkeWebView webView)
     return wkeIsLoadingCompleted(webView);
 }
 
-extern int g_testWebFrameSerializerImpl;
+//extern int g_testWebFrameSerializerImpl;
 namespace blink {
 extern Document* g_document;
 }
@@ -2225,12 +2225,12 @@ public:
     void didSerializeDataForFrame(const blink::WebCString& data, blink::WebFrameSerializerClient::FrameSerializationStatus status) override 
     {
         if (data.isEmpty() || data.isNull()) {
-            if (g_testWebFrameSerializerImpl == 1) {
-                //g_document->showTreeForThisAcrossFrame();
-//                 MessageBoxA(0, "WebFrameSerializerClientImpl::didSerializeDataForFrame fail", 0, 0);
-//                 OutputDebugStringA("WebFrameSerializerClientImpl::didSerializeDataForFrame fail\n");
-//                 DebugBreak();
-            }
+//            if (g_testWebFrameSerializerImpl == 1) {
+//                //g_document->showTreeForThisAcrossFrame();
+////                 MessageBoxA(0, "WebFrameSerializerClientImpl::didSerializeDataForFrame fail", 0, 0);
+////                 OutputDebugStringA("WebFrameSerializerClientImpl::didSerializeDataForFrame fail\n");
+////                 DebugBreak();
+//            }
             return;
         }
         m_result = data.data();

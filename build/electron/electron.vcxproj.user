@@ -10,4 +10,10 @@
     <LocalDebuggerCommand>G:\mycode\mb\out\Release\electron.exe</LocalDebuggerCommand>
     <LocalDebuggerWorkingDirectory>G:\mycode\mb\out\Release</LocalDebuggerWorkingDirectory>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">
+    <LocalDebuggerCommandArguments>G:\test\web_test\ele_test\SessionTest.js</LocalDebuggerCommandArguments>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommand>G:\mycode\mb\out\Release\electron.exe</LocalDebuggerCommand>
+    <LocalDebuggerWorkingDirectory>G:\mycode\mb\out\Release</LocalDebuggerWorkingDirectory>
+  </PropertyGroup>
 </Project>
