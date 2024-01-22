@@ -235,8 +235,6 @@ WebPageImpl::WebPageImpl(COLORREF bdColor)
     initSetting();
 
     //m_frameLoaderClient = FrameLoaderClientImpl::create(webLocalFrameImpl);
-
-
     m_platformEventHandler = new PlatformEventHandler((blink::WebWidget*)(void*)m_webViewImpl, m_webViewImpl);
 
 #ifdef ENABLE_MC
@@ -2595,9 +2593,11 @@ bool WebPageImpl::initSetting()
     if (osinfo->version() < base::win::VERSION_VISTA)
         settings->setStandardFontFamily(blink::WebString(L"宋体", 2));
     else
-        settings->setStandardFontFamily(WebString(L"微软雅黑", 4));
+        settings->setStandardFontFamily(blink::WebString(L"微软雅黑", 4));
 #else
-    settings->setStandardFontFamily(blink::WebString::fromUTF8("Simsun"));
+    //settings->setStandardFontFamily(blink::WebString::fromUTF8("Simsun"));
+    //settings->setStandardFontFamily(blink::WebString::fromUTF8("Open Sans"));
+    settings->setStandardFontFamily(blink::WebString::fromUTF8("Song"));
 #endif
     //settings->setUsesEncodingDetector(true);
     settings->setJavaScriptEnabled(true);

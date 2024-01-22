@@ -22,6 +22,8 @@
 
 namespace content {
 
+#if defined(OS_WIN)
+
 static void appendStringToVector(std::vector<char>* result, const Vector<char>& str)
 {
     result->reserve(result->size() + str.size());
@@ -413,23 +415,6 @@ public:
         // Image Files(*.gif;*.jpeg;*.png)\0*.gif;*.jpeg;*.png\0All Files(*.*)\0*.*\0\0
         std::vector<char> filter;
 
-        //         appendStringToVector(&filter, "Custom Files");
-        //         filter.push_back('\0');
-        //
-        //         for (size_t i = 0; i < params.acceptTypes.size(); ++i) {
-        //             String mimeType = params.acceptTypes[i];
-        //             if (mimeType.isNull() || mimeType.isEmpty())
-        //                 continue;
-        //             if ('.' == mimeType[0])
-        //                 mimeType.remove(0, 1);
-        //             mimeType = mimeType.lower();
-        // 
-        //             WebMimeRegistryImpl* mimeRegistry = (WebMimeRegistryImpl*)blink::Platform::current()->mimeRegistry();
-        //             Vector<blink::WebString> exts = mimeRegistry->extensionsForMimeType(mimeType);
-        //             addForExtensions2(exts, mimeType, &filter);
-        //         }
-        //         filter.push_back('\0');
-
         Vector<blink::WebString> exts;
         for (size_t i = 0; i < params.acceptTypes.size(); ++i) {
             String mimeType = params.acceptTypes[i];
@@ -718,6 +703,17 @@ static bool runFileChooserImpl(HWND hWnd,
     ::CloseHandle(threadHandle);
     return true;
 }
+
+#else
+bool runFileChooserImpl(HWND hWnd,
+    const blink::WebFileChooserParams& params,
+    blink::WebFileChooserCompletion* completion,
+    int webviewId,
+    std::function<void(void)>* completionCallback)
+{
+    return false;
+}
+#endif
 
 }
 

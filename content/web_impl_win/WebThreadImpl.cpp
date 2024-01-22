@@ -7,7 +7,9 @@
 #include "content/web_impl_win/WebSchedulerImpl.h"
 #include "content/web_impl_win/ActivatingTimerCheck.h"
 #include "content/browser/SharedTimerWin.h"
+#include "content/TaskObserverAdapter.h"
 #include "third_party/WebKit/public/platform/WebTraceLocation.h"
+#include "third_party/WebKit/public/platform/scheduler/base/task_time_observer.h"
 #include "third_party/WebKit/Source/wtf/ThreadingPrimitives.h"
 #include "third_party/WebKit/Source/wtf/CurrentTime.h"
 #include "base/synchronization/waitable_event.h"
@@ -303,10 +305,12 @@ blink::PlatformThreadId WebThreadImpl::threadId() const
     return m_threadId;
 }
 
-static std::vector<WebThreadImpl::TaskObserver*>::iterator findObserver(std::vector<WebThreadImpl::TaskObserver*>& observers, WebThreadImpl::TaskObserver* observer)
+std::vector<TaskObserverAdapter*>::iterator WebThreadImpl::findObserver(std::vector<TaskObserverAdapter*>& observers, void* observer)
 {
-    for (std::vector<WebThreadImpl::TaskObserver*>::iterator it = observers.begin(); it != observers.end(); ++it) {
-        if (*it == observer)
+    for (std::vector<TaskObserverAdapter*>::iterator it = observers.begin(); it != observers.end(); ++it) {
+        if ((*it)->m_taskObs == observer)
+            return it;
+        if ((*it)->m_taskTimeObs == observer)
             return it;
     }
 
@@ -319,7 +323,7 @@ public:
     virtual void run() override {};
 };
 
-void WebThreadImpl::addTaskObserver(TaskObserver* observer)
+void WebThreadImpl::addTaskObserverImpl(TaskObserverAdapter* observer)
 {
 #ifndef NO_USE_ORIG_CHROME
     if (OrigChromeMgr::getInst() && m_isMainThread)
@@ -351,7 +355,7 @@ void WebThreadImpl::addTaskObserver(TaskObserver* observer)
     m_isObserversDirty = true;
 }
 
-void WebThreadImpl::removeTaskObserver(TaskObserver* observer)
+void WebThreadImpl::removeTaskObserverImpl(const TaskObserverAdapter& observer)
 {
 #ifndef NO_USE_ORIG_CHROME
     if (OrigChromeMgr::getInst() && m_isMainThread)
@@ -360,11 +364,35 @@ void WebThreadImpl::removeTaskObserver(TaskObserver* observer)
 
     ::EnterCriticalSection(&m_observersMutex);
     for (size_t i = 0; i < m_observers.size(); ++i) {
-        if (observer == m_observers[i])
+        if (m_observers[i]->isEqual(observer)) {
+            delete m_observers[i];
             m_observers[i] = nullptr;
+        }
     }
     ::LeaveCriticalSection(&m_observersMutex);
     m_isObserversDirty = true;
+}
+
+void WebThreadImpl::addTaskObserver(blink::WebThread::TaskObserver* observer)
+{
+    addTaskObserverImpl(new TaskObserverAdapter(observer));
+}
+
+void WebThreadImpl::removeTaskObserver(blink::WebThread::TaskObserver* observer)
+{
+    TaskObserverAdapter adapter(observer);
+    removeTaskObserverImpl(adapter);
+}
+
+void WebThreadImpl::addTaskTimeObserver(blink::scheduler::TaskTimeObserver* observer)
+{
+    addTaskObserverImpl(new TaskObserverAdapter(observer));
+}
+
+void WebThreadImpl::removeTaskTimeObserver(blink::scheduler::TaskTimeObserver* observer)
+{
+    TaskObserverAdapter adapter(observer);
+    removeTaskObserverImpl(adapter);
 }
 
 void WebThreadImpl::willProcessTasks()
@@ -376,10 +404,11 @@ void WebThreadImpl::willProcessTasks()
             ::LeaveCriticalSection(&m_observersMutex);
             break;
         }
-        TaskObserver* observer = m_observers[i];
+        TaskObserverAdapter* observer = m_observers[i];
         ::LeaveCriticalSection(&m_observersMutex);
+        base::PendingTask pendingTask(FROM_HERE, base::Bind([] {}));
         if (observer)
-            observer->willProcessTask();
+            observer->WillProcessTask(pendingTask);
     }
     clearEmptyObservers();
 }
@@ -392,10 +421,12 @@ void WebThreadImpl::didProcessTasks()
             ::LeaveCriticalSection(&m_observersMutex);
             break;
         }
-        TaskObserver* observer = m_observers[i];
+        TaskObserverAdapter* observer = m_observers[i];
         ::LeaveCriticalSection(&m_observersMutex);
+
+        base::PendingTask pendingTask(FROM_HERE, base::Bind([] {}));
         if (observer)
-            observer->didProcessTask();
+            observer->DidProcessTask(pendingTask);
     }
     clearEmptyObservers();
 }
@@ -407,7 +438,7 @@ void WebThreadImpl::clearEmptyObservers()
     m_isObserversDirty = false;
 
     ::EnterCriticalSection(&m_observersMutex);
-    std::vector<WebThreadImpl::TaskObserver*>::iterator it = m_observers.begin();
+    std::vector<TaskObserverAdapter*>::iterator it = m_observers.begin();
     for (; it != m_observers.end();) {
         if (nullptr == *it)
             it = m_observers.erase(it);

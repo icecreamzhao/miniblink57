@@ -11,6 +11,7 @@
 #include "content/WebSharedBitmapManager.h"
 #include "content/gpu/ChildGpuMemoryBufferManager.h"
 #include "content/media/audio_renderer_mixer_manager.h"
+#include "content/TaskObserverAdapter.h"
 // #include "gpu/blink/webgraphicscontext3d_in_process_command_buffer_impl.h"
 #include "media/audio/audio_manager.h"
 #include "media/audio/audio_manager_base.h"
@@ -146,28 +147,7 @@ void OrigChromeMgr::postWebDelayedTask(const blink::WebTraceLocation& from, blin
     messageLoop->PostDelayedTask(location, base::Bind(&webRunner, task), base::TimeDelta::FromMilliseconds(delayMs));
 }
 
-class TaskObserverAdapter : public base::MessageLoop::TaskObserver {
-public:
-    TaskObserverAdapter(blink::WebThread::TaskObserver* observer)
-        : m_observer(observer)
-    {
-    }
-
-    void WillProcessTask(const base::PendingTask& pending_task) override
-    {
-        m_observer->willProcessTask();
-    }
-
-    void DidProcessTask(const base::PendingTask& pending_task) override
-    {
-        m_observer->didProcessTask();
-    }
-
-private:
-    blink::WebThread::TaskObserver* m_observer;
-};
-
-void OrigChromeMgr::addTaskObserver(blink::WebThread::TaskObserver* observer)
+void OrigChromeMgr::addTaskObserver(TaskObserverAdapter* observer)
 {
     if (!m_inst->m_blinkLoop) {
         m_inst->m_blinkLoop = new base::MessageLoop(base::MessageLoop::TYPE_IO);
@@ -176,17 +156,24 @@ void OrigChromeMgr::addTaskObserver(blink::WebThread::TaskObserver* observer)
     }
     base::MessageLoop* messageLoop = m_inst->m_blinkLoop;
 
-    std::pair<TaskObserverMap::iterator, bool> result = m_inst->m_taskObserverMap.insert(std::make_pair(observer, nullptr));
+    TaskObserverMap::iterator iter = m_inst->m_taskObserverMap.find(observer->getTask());
+    if (iter != m_inst->m_taskObserverMap.end()) {
+        DebugBreak();
+        delete observer;
+        return;
+    }
+
+    std::pair<TaskObserverMap::iterator, bool> result = m_inst->m_taskObserverMap.insert(std::make_pair(observer->getTask(), nullptr));
     if (result.second)
-        result.first->second = new TaskObserverAdapter(observer);
+        result.first->second = observer;
 
     messageLoop->AddTaskObserver(result.first->second);
 }
 
-void OrigChromeMgr::removeTaskObserver(blink::WebThread::TaskObserver* observer)
+void OrigChromeMgr::removeTaskObserver(const TaskObserverAdapter& observer)
 {
     base::MessageLoop* messageLoop = m_inst->m_blinkLoop;
-    TaskObserverMap::iterator iter = m_inst->m_taskObserverMap.find(observer);
+    TaskObserverMap::iterator iter = m_inst->m_taskObserverMap.find(observer.getTask());
     if (iter == m_inst->m_taskObserverMap.end())
         return;
     messageLoop->RemoveTaskObserver(iter->second);

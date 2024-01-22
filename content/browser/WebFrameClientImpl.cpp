@@ -174,6 +174,7 @@ WebLocalFrame* WebFrameClientImpl::createChildFrame(WebLocalFrame* parent, WebTr
     return webLocalFrameImpl; // TODO delete;
 }
 
+
 void WebFrameClientImpl::frameDetached(WebLocalFrame* child, DetachType)
 {
     if (WebFrame* parent = child->parent())
@@ -428,7 +429,10 @@ void WebFrameClientImpl::didCreateNewDocument(WebLocalFrame* frame)
 {
 }
 
-void WebFrameClientImpl::didClearWindowObject(WebLocalFrame* frame) { }
+void WebFrameClientImpl::didClearWindowObject(WebLocalFrame* frame) 
+{
+    //frame->close();
+}
 
 void WebFrameClientImpl::didCreateDocumentElement(WebLocalFrame* frame) { }
 
