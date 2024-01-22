@@ -17,22 +17,23 @@ var json = [{
         "cppcompiler":"${clangPath}/clang++.exe",
             
         "include":[
-            "${sdkPath}/include/c++/7.2.0",
-            "${sdkPath}/include/c++/7.2.0/include",
-            "${ndkIncludePath}",
-            "${sdkPath}/include/c++/7.2.0/x86_64-unknown-linux-gnu/",
-            "${srcPath}",
-            "${sdkPath}/sysroot/usr/include",
-            "${sdkPath}/sysroot/usr/",
-            "${sdkPath}/sysroot/usr/include/linux",
-            "${sysroot}/usr/include/cairo",
-            "${sysroot}/usr/include/glib-2.0",
-            "${sysroot}/usr/include/gtk-3.0",
-            "${sysroot}/usr/include/gdk-pixbuf-2.0",
-            "${sysroot}/usr/include/atk-1.0",
-            "${sysroot}/usr/include/pango-1.0",
-            "${sysroot}/usr/lib/x86_64-linux-gnu/glib-2.0/include",
-            "${srcPath}/linux",
+//            "${sdkPath}/include/c++/7.2.0",
+//            "${sdkPath}/include/c++/7.2.0/include",
+//            "${ndkIncludePath}",
+//            "${sdkPath}/include/c++/7.2.0/x86_64-unknown-linux-gnu/",
+//            "${srcPath}",
+//            "${sdkPath}/sysroot/usr/include",
+//            "${sdkPath}/sysroot/usr/",
+//            "${sdkPath}/sysroot/usr/include/linux",
+//            "${sysroot}/usr/include/cairo",
+//            "${sysroot}/usr/include/glib-2.0",
+//            "${sysroot}/usr/include/gtk-3.0",
+//            "${sysroot}/usr/include/gdk-pixbuf-2.0",
+//            "${sysroot}/usr/include/atk-1.0",
+//            "${sysroot}/usr/include/pango-1.0",
+//            "${sysroot}/usr/lib/x86_64-linux-gnu/glib-2.0/include",
+//            "${srcPath}/linux",
+            ...constVal.includePaths,
             "${srcPath}/gen/${v8dir}/include",
             "${srcPath}/${v8dir}",
             "${srcPath}/${v8dir}/include",
@@ -71,23 +72,31 @@ var json = [{
             "${srcPath}/third_party/angle/src"
         ],
         "prebuildSrc":[
-            "${srcPath}/gen/blink/bindings/modules/v8/V8Crypto.cpp",
-            "${srcPath}/third_party/WebKit/Source/core/dom/ModuleScriptLoader.cpp",
-            "${srcPath}/third_party/WebKit/Source/core/html/canvas/CanvasAsyncBlobCreator.cpp",
-            "${srcPath}/third_party/WebKit/Source/platform/fonts/linux/FontCacheLinux.cpp",
-            "${srcPath}/third_party/WebKit/Source/bindings/core/v8/V8ValueCache.cpp",
-            "${srcPath}/third_party/WebKit/Source/bindings/core/v8/V8ScriptRunner.cpp",
-            "${srcPath}/third_party/WebKit/Source/core/loader/resource/TextResource.cpp",
-            "${srcPath}/third_party/WebKit/Source/core/html/parser/TextResourceDecoder.cpp",
-            "${srcPath}/third_party/WebKit/Source/wtf/text/TextCodecICU.cpp",
+                
+            "${srcPath}/third_party/WebKit/Source/platform/fonts/skia/FontCacheSkia.cpp",
+            "${srcPath}/third_party/WebKit/Source/platform/fonts/FontCache.cpp",
+            "${srcPath}/third_party/WebKit/Source/platform/fonts/FontFallbackList.cpp",
+            "${srcPath}/third_party/WebKit/Source/platform/fonts/Font.cpp",
+            "${srcPath}/third_party/WebKit/Source/platform/heap/asm/SaveRegisters_x86.cpp",
+            //"${srcPath}/third_party/WebKit/Source/platform/heap/asm/SaveRegisters_arm64.S",
+//            "${srcPath}/third_party/WebKit/Source/core/dom/ModuleScriptLoader.cpp",
+//            "${srcPath}/third_party/WebKit/Source/core/html/canvas/CanvasAsyncBlobCreator.cpp",
+//            "${srcPath}/third_party/WebKit/Source/platform/fonts/linux/FontCacheLinux.cpp",
+//            "${srcPath}/third_party/WebKit/Source/bindings/core/v8/V8ValueCache.cpp",
+//            "${srcPath}/third_party/WebKit/Source/bindings/core/v8/V8ScriptRunner.cpp",
+//            "${srcPath}/third_party/WebKit/Source/core/loader/resource/TextResource.cpp",
+//            "${srcPath}/third_party/WebKit/Source/core/html/parser/TextResourceDecoder.cpp",
+//            "${srcPath}/third_party/WebKit/Source/wtf/text/TextCodecICU.cpp",
             "${srcPath}/linux/linuxwindows.cpp",
             "${srcPath}/linux/linuxgdi.cpp",
             //"${srcPath}/linux/testmain.cpp",
-            //"${srcPath}/skia/ext/convolver_SSE2.cc",
             
-            //"${srcPath}/gin/isolate_holder.cc",
-            //"${srcPath}/gin/v8_initializer.cc",
-            //"${srcPath}/content/web_impl_win/BlinkPlatformImpl.cpp",
+            "${srcPath}/third_party/WebKit/Source/platform/heap/ThreadState.cpp",
+            "${srcPath}/gin/v8_initializer.cc",
+            "${srcPath}/third_party/WebKit/Source/platform/WebThreadSupportingGC.cpp",
+            "${srcPath}/third_party/WebKit/Source/web/WebKit.cpp",
+            "${srcPath}/third_party/WebKit/Source/platform/exported/Platform.cpp",
+            "${srcPath}/content/web_impl_win/BlinkPlatformImpl.cpp",
             //"${srcPath}/content/browser/PostTaskHelper.cpp",
             //"${srcPath}/third_party/WebKit/Source/bindings/core/v8/V8Initializer.cpp",
             //"${srcPath}/gin/v8_platform.cc",
@@ -99,7 +108,7 @@ var json = [{
             //"${srcPath}/net/DefaultFullPath.cpp",
             //"${srcPath}/net/PageNetExtraData.cpp",
             //"${srcPath}/net/WebStorageAreaImpl.cpp",
-            "${srcPath}/content/compositor/SoftwareOutputDevice.cpp",
+            //"${srcPath}/content/compositor/SoftwareOutputDevice.cpp",
             "${srcPath}/content/browser/WebPageImpl.cpp",
 //            "${srcPath}/content/OrigChromeMgr.cpp",
             "${srcPath}/net/WebURLLoaderManager.cpp",
@@ -130,9 +139,9 @@ var json = [{
             "${srcPath}/mbvip/core/mb.cpp",
             "${srcPath}/mbvip/core/mb2.cpp",
             "${srcPath}/mbvip/core/MbWebView.cpp",
-            "${srcPath}/mbvip/download/SimpleDownload.cpp",
+            //"${srcPath}/mbvip/download/SimpleDownload.cpp",
             
-            "${srcPath}/content/web_impl_win/WebClipboardImplLinux.cpp",
+            //"${srcPath}/content/web_impl_win/WebClipboardImplLinux.cpp",
 //            "${srcPath}/third_party/WebKit/Source/platform/graphics/DecodingImageGenerator.cpp",
 //            "${srcPath}/third_party/WebKit/Source/platform/graphics/DeferredImageDecoder.cpp",
 //            "${srcPath}/third_party/WebKit/Source/platform/image-decoders/ImageDecoder.cpp",
@@ -141,18 +150,10 @@ var json = [{
 //            "${srcPath}/third_party/WebKit/Source/core/frame/ImageBitmap.cpp",
 //            "${srcPath}/third_party/WebKit/Source/platform/image-decoders/ImageFrame.cpp",
             
-            //"${srcPath}/third_party/WebKit/Source/platform/heap/SafePoint.cpp",
+            "${srcPath}/third_party/WebKit/Source/platform/heap/SafePoint.cpp",
             //"${srcPath}/third_party/WebKit/Source/platform/fonts/FontDescription.cpp",
-            "${srcPath}/third_party/WebKit/Source/platform/fonts/skia/FontCacheSkia.cpp"
             //"${srcPath}/content/browser/WebFrameClientImpl.cpp",
-//            "${srcPath}/ui/gfx/platform_font_linux.cc",
-//            "${srcPath}/ui/gfx/font_list.cc",
-//            "${srcPath}/ui/gfx/font_list_impl.cc",
-//            "${srcPath}/ui/gfx/linux_font_delegate.cc",
-//            "${srcPath}/ui/gfx/font_render_params.cc",
-//            "${srcPath}/ui/gfx/font_render_params_linux.cc",
-
-            "${srcPath}/third_party/WebKit/Source/platform/fonts/shaping/ShapeResult.cpp",
+            //"${srcPath}/third_party/WebKit/Source/platform/fonts/shaping/ShapeResult.cpp",
         ],
         "src":[
             "${srcPath}/linux/testmain.cpp",
@@ -187,6 +188,7 @@ var json = [{
             "${srcPath}/third_party/WebKit/Source/bindings/core/v8/ArrayValue.cpp",
             "${srcPath}/third_party/WebKit/Source/bindings/core/v8/BindingSecurity.cpp",
             "${srcPath}/third_party/WebKit/Source/bindings/core/v8/ConditionalFeatures.cpp",
+            "${srcPath}/third_party/WebKit/Source/bindings/core/v8/custom/V8CustomXPathNSResolver.cpp",
             "${srcPath}/third_party/WebKit/Source/bindings/core/v8/custom/V8CSSStyleDeclarationCustom.cpp",
             "${srcPath}/third_party/WebKit/Source/bindings/core/v8/custom/V8CSSStyleRuleCustom.cpp",
             "${srcPath}/third_party/WebKit/Source/bindings/core/v8/custom/V8CustomEventCustom.cpp",
@@ -1892,6 +1894,7 @@ var json = [{
             "${srcPath}/gen/blink/platform/ColorData.cpp",
             "${srcPath}/gen/blink/platform/FontFamilyNames.cpp",
             "${srcPath}/gen/blink/platform/RuntimeEnabledFeatures.cpp",
+            "${srcPath}/gen/blink/core/XPathGrammar.cpp",
             "${srcPath}/gen/blink/core/animation/KeyframeEffectOptions.cpp",
             "${srcPath}/gen/blink/core/animation/ComputedTimingProperties.cpp",
             "${srcPath}/gen/blink/core/css/FontFaceSetLoadEventInit.cpp",
@@ -2246,6 +2249,7 @@ var json = [{
             "${srcPath}/third_party/WebKit/Source/platform/heap/PersistentNode.cpp",
             "${srcPath}/third_party/WebKit/Source/platform/heap/SafePoint.cpp",
             "${srcPath}/third_party/WebKit/Source/platform/heap/asm/SaveRegisters_x86.cpp",
+            //"${srcPath}/third_party/WebKit/Source/platform/heap/asm/SaveRegisters_arm64.S",
             "${srcPath}/third_party/WebKit/Source/platform/heap/SparseHeapBitmap.cpp",
             "${srcPath}/third_party/WebKit/Source/platform/heap/StackFrameDepth.cpp",
             "${srcPath}/third_party/WebKit/Source/platform/heap/ThreadState.cpp",
@@ -3424,6 +3428,7 @@ var json = [{
             "${srcPath}/content/resources/listPickerCss.cpp",
             "${srcPath}/content/resources/listPickerJs.cpp",
             "${srcPath}/content/resources/MediaPlayerData.cpp",
+            "${srcPath}/content/resources/MediaPlayerDataNew.cpp",
             "${srcPath}/third_party/WebKit/Source/web/WebStorageEventDispatcherImpl.cpp",
             "${srcPath}/net/MultipartHandle.cpp",
             "${srcPath}/mbvip/common/CallMgr.cpp",
@@ -3875,44 +3880,12 @@ var json = [{
         "objdir":"${srcPath}/out/tmp/blink/${targetDir}",
         "outdir":"${srcPath}/out/${targetDir}",
         "target":"1.exe",
-        "beginLibs":[
-            "${sysroot}/usr/lib/x86_64-linux-gnu/crt1.o",
-            "${sysroot}/usr/lib/x86_64-linux-gnu/crti.o",
-            //"${sysroot}/usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o",
-            "${sysroot}/usr/lib/x86_64-linux-gnu/libc_nonshared.a",
-            "${sysroot}/usr/lib/gcc/x86_64-linux-gnu/7/libgcc_eh.a",
-            "${sysroot}/usr/lib/gcc/x86_64-linux-gnu/7/libgcc.a",
-            "${sysroot}/usr/lib/x86_64-linux-gnu/libffi.a"
-        ],
-
-        "linkerCmd":[
-            //"-LD:/usr/lib/gcc/i586-linux-gnu/4.9",
-            //"-LD:/usr/lib/i386-linux-gnu",
-            //"-strip-all",
-            "-z defs",
-            "-fPIC",
-            //"-dynamic-linker /lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
-            //"-rpath=/home/daniel/Desktop/test_web",
-            "-dynamic-linker /lib64/ld-linux-x86-64.so.2",
-            "-l${sysroot}/lib/x86_64-linux-gnu/libc-2.27.so",
-            "-l${sysroot}/usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.6200.3",
-            //"-lG:/chromium/M84/build/linux/debian_sid_amd64-sysroot/usr/lib/x86_64-linux-gnu/libffi.so.6.0.4",
-            "-l${sysroot}/usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.9",
-            "-l${sysroot}/usr/lib/x86_64-linux-gnu/libgdk-3.so.0.2404.9",
-            "-l${sysroot}/usr/lib/x86_64-linux-gnu/libcairo.so.2.11600.0",
-            "-l${sysroot}/usr/lib/x86_64-linux-gnu/libpthread.so",
-            //"-l${sysroot}/usr/lib/x86_64-linux-gnu/libpcreposix.so.3.13.3",
-            "-l${sysroot}/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.28",
-            "-l${sysroot}/usr/lib/x86_64-linux-gnu/libgobject-2.0.so.0.6200.3",
-            //"-l${sysroot}/lib/x86_64-linux-gnu/libdl.so.2",
-            //"-l${sysroot}/lib/x86_64-linux-gnu/libgcc_s.so.1",
-            "-l${sdkPath}/sysroot/lib/libdl.so.2",
-            "-l${sdkPath}/sysroot/lib/libgcc_s.so.1",
-            "-l${sysroot}/lib/x86_64-linux-gnu/libm-2.27.so"
-            ],
-
+        "beginLibs":[],
+        "linkerCmd":[],
         "endLibs":[
             //"${srcPath}/out/${targetDir}/lib${v8dir}.a",
+            "${srcPath}/out/${targetDir}/libv8_7_5_1.a",
+            "${srcPath}/out/${targetDir}/libv8_7_5_2.a",
             "${srcPath}/out/${targetDir}/libv8_7_5_1.a",
             "${srcPath}/out/${targetDir}/libv8_7_5_2.a",
             
@@ -3924,20 +3897,95 @@ var json = [{
             "${srcPath}/out/${targetDir}/libopenssl.a",
             "${srcPath}/out/${targetDir}/libthird_party_util.a",
             "${srcPath}/out/${targetDir}/libfreetype.a",
-            "${sysroot}/usr/lib/x86_64-linux-gnu/crtn.o",
-            "${sysroot}/usr/lib/gcc/x86_64-linux-gnu/7/crtend.o"
+            //"${sysroot}/usr/lib/x86_64-linux-gnu/crtn.o",
+            //"${sysroot}/usr/lib/gcc/x86_64-linux-gnu/7/crtend.o"
         ],
         "linker":constVal.linker
     }
 }];
 
+var endLibs = [];
+
+if ("aarch64-linux-guneabi" == constVal.target) { // ARM64
+    json[0].compile.linkerCmd = [
+        "-z defs",
+        "-fPIC",
+        //"-dynamic-linker /lib64/ld-linux-x86-64.so.2",
+        "-l${sysroot}/lib/aarch64-linux-gnu/libc-2.31.so",
+        "-l${sysroot}/usr/lib/aarch64-linux-gnu/libglib-2.0.so.0.6600.7",
+        "-l${sysroot}/usr/lib/aarch64-linux-gnu/libgtk-3.so.0.2404.20",
+        "-l${sysroot}/usr/lib/aarch64-linux-gnu/libgdk-3.so.0.2404.20",
+        "-l${sysroot}/usr/lib/aarch64-linux-gnu/libcairo.so.2.11600.0",
+        "-l${sysroot}/usr/lib/aarch64-linux-gnu/libpthread.so",
+        "-l${sysroot}/usr/lib/aarch64-linux-gnu/libstdc++.so.6.0.28",
+        "-l${sysroot}/usr/lib/aarch64-linux-gnu/libgobject-2.0.so.0.6600.7",
+        "-l${sdkPath}/aarch64-linux-gnu/libc/lib/libdl.so.2",
+        "-l${sdkPath}/aarch64-linux-gnu/libc/lib/libgcc_s.so.1",
+        "-l${sysroot}/lib/aarch64-linux-gnu/libm-2.31.so"];
+        
+    json[0].compile.beginLibs = [
+        "${sysroot}/usr/lib/aarch64-linux-gnu/crt1.o",
+        "${sysroot}/usr/lib/aarch64-linux-gnu/crti.o",
+        "${sysroot}/usr/lib/aarch64-linux-gnu/libc_nonshared.a",
+        "${sysroot}/usr/lib/gcc/aarch64-linux-gnu/10/libgcc_eh.a",
+        "${sysroot}/usr/lib/gcc/aarch64-linux-gnu/10/libgcc.a",
+        "${sysroot}/usr/lib/aarch64-linux-gnu/libffi.a"
+    ];
+
+    json[0].compile.endLibs.push("${sysroot}/usr/lib/aarch64-linux-gnu/crtn.o");
+    json[0].compile.endLibs.push("${sysroot}/usr/lib/gcc/aarch64-linux-gnu/10/crtend.o");
+} else {  // X64
+    json[0].compile.linkerCmd = [
+        //"-LD:/usr/lib/gcc/i586-linux-gnu/4.9",
+        //"-LD:/usr/lib/i386-linux-gnu",
+        //"-strip-all",
+        "-z defs",
+        "-fPIC",
+        //"-dynamic-linker /lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+        //"-rpath=/home/daniel/Desktop/test_web",
+        "-dynamic-linker /lib64/ld-linux-x86-64.so.2",
+        "-l${sysroot}/lib/x86_64-linux-gnu/libc-2.27.so",
+        "-l${sysroot}/usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.6200.3",
+        //"-lG:/chromium/M84/build/linux/debian_sid_amd64-sysroot/usr/lib/x86_64-linux-gnu/libffi.so.6.0.4",
+        "-l${sysroot}/usr/lib/x86_64-linux-gnu/libgtk-3.so.0.2404.9",
+        "-l${sysroot}/usr/lib/x86_64-linux-gnu/libgdk-3.so.0.2404.9",
+        "-l${sysroot}/usr/lib/x86_64-linux-gnu/libcairo.so.2.11600.0",
+        "-l${sysroot}/usr/lib/x86_64-linux-gnu/libpthread.so",
+        //"-l${sysroot}/usr/lib/x86_64-linux-gnu/libpcreposix.so.3.13.3",
+        "-l${sysroot}/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.28",
+        "-l${sysroot}/usr/lib/x86_64-linux-gnu/libgobject-2.0.so.0.6200.3",
+        //"-l${sysroot}/lib/x86_64-linux-gnu/libdl.so.2",
+        //"-l${sysroot}/lib/x86_64-linux-gnu/libgcc_s.so.1",
+        "-l${sdkPath}/sysroot/lib/libdl.so.2",
+        "-l${sdkPath}/sysroot/lib/libgcc_s.so.1",
+        "-l${sysroot}/lib/x86_64-linux-gnu/libm-2.27.so"];
+        
+    json[0].compile.beginLibs = [
+        "${sysroot}/usr/lib/x86_64-linux-gnu/crt1.o",
+        "${sysroot}/usr/lib/x86_64-linux-gnu/crti.o",
+        "${sysroot}/usr/lib/x86_64-linux-gnu/libc_nonshared.a",
+        "${sysroot}/usr/lib/gcc/x86_64-linux-gnu/7/libgcc_eh.a",
+        "${sysroot}/usr/lib/gcc/x86_64-linux-gnu/7/libgcc.a",
+        "${sysroot}/usr/lib/x86_64-linux-gnu/libffi.a"
+    ];
+    json[0].compile.endLibs.push("${sysroot}/usr/lib/x86_64-linux-gnu/crtn.o");
+    json[0].compile.endLibs.push("${sysroot}/usr/lib/gcc/x86_64-linux-gnu/7/crtend.o");
+}
+
 // 默认编译成electron，带参数则编译成so
 if (!constVal.isBuildElectronMode) {
-    json[0].compile.beginLibs.push("${sysroot}/usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o");
+    if ("aarch64-linux-guneabi" == constVal.target) // ARM64
+        json[0].compile.beginLibs.push("${sysroot}/usr/lib/gcc/aarch64-linux-gnu/10/crtbeginS.o");
+    else
+        json[0].compile.beginLibs.push("${sysroot}/usr/lib/gcc/x86_64-linux-gnu/7/crtbeginS.o");
+    
     json[0].compile.target = "miniblink.so";
     json[0].compile.linkerCmd.push("-shared");
 } else {
-    json[0].compile.beginLibs.push("${sysroot}/usr/lib/gcc/x86_64-linux-gnu/7/crtbegin.o");
+    if ("aarch64-linux-guneabi" == constVal.target) // ARM64
+        json[0].compile.beginLibs.push("${sysroot}/usr/lib/gcc/aarch64-linux-gnu/10/crtbegin.o");
+    else
+        json[0].compile.beginLibs.push("${sysroot}/usr/lib/gcc/x86_64-linux-gnu/7/crtbegin.o");
     json[0].compile.endLibs.push("${srcPath}/out/${targetDir}/libelectron.a");
     json[0].compile.endLibs.push("${srcPath}/out/${targetDir}/libnodejs.a");
 }

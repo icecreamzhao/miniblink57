@@ -984,7 +984,7 @@ static void parseDFile(const std::string& srcPath, const std::string& dPath, std
     uint32_t hash = strHash(fileDeps->file);
 
     std::vector<std::string> lines = splitString(buffer.data(), '\n');
-    if (lines.size() <= 2) {
+    if (lines.size() <= 1) {
         OutputDebugStringW(L"parseDFile is empty\n");
     } else {
         for (size_t i = 2; i < lines.size(); ++i) {
@@ -1501,7 +1501,7 @@ bool CompileInfo::doLink() const
     ::DeleteFileA(targetFullPath.c_str());
 
     if (m_isLib) {
-        cmd += " -q ";
+        cmd += " -s -q ";
         cmd += targetFullPath;
         cmd += ' ';
 
@@ -1574,7 +1574,13 @@ bool CompileInfo::doLink() const
         OutputDebugStringW(L"cmd 命令行太长\n");
         return false;
     }
-    std::wstring cmdW = common::utf8ToUtf16(m_linker + " @" + resposeFile);
+
+    std::string linkCmd = m_linker + " @" + resposeFile;
+//     if (m_isLib) {
+//         linkCmd = m_linker + " -s @" + resposeFile; //-s参数是arm模式下用的，相当于调用ranlib.exe
+//     }
+
+    std::wstring cmdW = common::utf8ToUtf16(linkCmd);
     wcscpy(cmdParam->szCommand, cmdW.c_str());
     OutputDebugStringA("doLink:");
     OutputDebugStringA(m_target.c_str());
@@ -1593,6 +1599,8 @@ bool CompileInfo::doLink() const
     }
 
     cmdResult = cmdHandler->HandleCommand(cmdParam.get());
+    if (cmdResult != S_OK)
+        DebugBreak();
     return true;
 }
 
@@ -1833,10 +1841,28 @@ void qjsBuild()
 //         qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "v875_2_build.js", cmd, kRebuildOptAll);
         //qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "blink_build.js", cmd, kRebuildOptPrebuildSrcAndLink);
 //         qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "wkexe_build.js", cmd, kRebuildOptAll);
-        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "webdriver.js", cmd, kRebuildOptAll);
+//         qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "webdriver.js", cmd, kRebuildOptAll);
+//         ExitProcess(1);
+    }
+    {
+        cmd = "{\"compileCfg\":\"release_v875_arm\", \"isBuildElectronMode\":false, \"v8dir\":\"v8_7_5\"}"; // V8高版本，ARM
+        //         ///qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "electron_build.js", cmd, kRebuildOptAll);
+        //         ///qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "v875_build.js", cmd, kRebuildOptAll);
+        //         ///qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "node_build.js", cmd, kRebuildOptAll);
+//         qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "chromium_build.js", cmd, kRebuildOptAll);
+//         qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "curl_build.js", cmd, kRebuildOptAll);
+//         qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "freetype_build.js", cmd, kRebuildOptAll);
+//         qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "openssl_build.js", cmd, kRebuildOptAll);
+//         qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "util_build.js", cmd, kRebuildOptAll);
+//         qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "v875_1_build.js", cmd, kRebuildOptAll);
+//         qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "v875_2_build.js", cmd, kRebuildOptAll);
+// 
+        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "skia_build.js", cmd, kRebuildOptPrebuildSrcAndLink);
+        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "blink_build.js", cmd, kRebuildOptPrebuildSrcAndLink);
+        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "wkexe_build.js", cmd, kRebuildOptAll);
+        //qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "webdriver.js", cmd, kRebuildOptAll);
         ExitProcess(1);
     }
-
     {
         cmd = "{\"compileCfg\":\"release_v857\", \"isBuildElectronMode\":false, \"v8dir\":\"v8_5_7\"}"; // V8低版本
         ////qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "electron_build.js", cmd, kRebuildOptAll);

@@ -5,6 +5,7 @@
 #include "base/trace_event/trace_event_impl.h"
 
 #include <stddef.h>
+#include <math.h>
 
 #include "base/format_macros.h"
 #include "base/json/string_escape.h"

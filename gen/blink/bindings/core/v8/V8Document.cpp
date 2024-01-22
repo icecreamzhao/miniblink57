@@ -5957,129 +5957,134 @@ namespace DocumentV8Internal {
         DocumentV8Internal::querySelectorAllMethod(info);
     }
 
-    // static void createExpressionMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-    //   ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createExpression");
-    //
-    //   Document* impl = V8Document::toImpl(info.Holder());
-    //
-    //   if (UNLIKELY(info.Length() < 1)) {
-    //     exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
-    //     return;
-    //   }
-    //
-    //   V8StringResource<> expression;
-    //   XPathNSResolver* resolver;
-    //   expression = info[0];
-    //   if (!expression.prepare())
-    //     return;
-    //
-    //   if (!info[1]->IsUndefined()) {
-    //     resolver = toXPathNSResolver(ScriptState::current(info.GetIsolate()), info[1]);
-    //     if (!resolver && !isUndefinedOrNull(info[1])) {
-    //       exceptionState.throwTypeError("parameter 2 is not of type 'XPathNSResolver'.");
-    //
-    //       return;
-    //     }
-    //   } else {
-    //     resolver = nullptr;
-    //   }
-    //
-    //   XPathExpression* result = DocumentXPathEvaluator::createExpression(*impl, expression, resolver, exceptionState);
-    //   if (exceptionState.hadException()) {
-    //     return;
-    //   }
-    //   v8SetReturnValueFast(info, result, impl);
-    // }
-    //
-    // CORE_EXPORT  void createExpressionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-    //   UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentXPathCreateExpression);
-    //   DocumentV8Internal::createExpressionMethod(info);
-    // }
-    //
-    // static void createNSResolverMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-    //   Document* impl = V8Document::toImpl(info.Holder());
-    //
-    //   if (UNLIKELY(info.Length() < 1)) {
-    //     V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("createNSResolver", "Document", ExceptionMessages::notEnoughArguments(1, info.Length())));
-    //     return;
-    //   }
-    //
-    //   Node* nodeResolver;
-    //   nodeResolver = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-    //   if (!nodeResolver) {
-    //     V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("createNSResolver", "Document", "parameter 1 is not of type 'Node'."));
-    //
-    //     return;
-    //   }
-    //
-    //   v8SetReturnValueFast(info, DocumentXPathEvaluator::createNSResolver(*impl, nodeResolver), impl);
-    // }
-    //
-    // CORE_EXPORT  void createNSResolverMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-    //   UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentXPathCreateNSResolver);
-    //   DocumentV8Internal::createNSResolverMethod(info);
-    // }
-    //
-    // static void evaluateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) {
-    //   ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "evaluate");
-    //
-    //   Document* impl = V8Document::toImpl(info.Holder());
-    //
-    //   if (UNLIKELY(info.Length() < 2)) {
-    //     exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
-    //     return;
-    //   }
-    //
-    //   V8StringResource<> expression;
-    //   Node* contextNode;
-    //   XPathNSResolver* resolver;
-    //   unsigned type;
-    //   ScriptValue inResult;
-    //   expression = info[0];
-    //   if (!expression.prepare())
-    //     return;
-    //
-    //   contextNode = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[1]);
-    //   if (!contextNode) {
-    //     exceptionState.throwTypeError("parameter 2 is not of type 'Node'.");
-    //
-    //     return;
-    //   }
-    //
-    //   if (!info[2]->IsUndefined()) {
-    //     resolver = toXPathNSResolver(ScriptState::current(info.GetIsolate()), info[2]);
-    //     if (!resolver && !isUndefinedOrNull(info[2])) {
-    //       exceptionState.throwTypeError("parameter 3 is not of type 'XPathNSResolver'.");
-    //
-    //       return;
-    //     }
-    //   } else {
-    //     resolver = nullptr;
-    //   }
-    //   if (!info[3]->IsUndefined()) {
-    //     type = toUInt16(info.GetIsolate(), info[3], NormalConversion, exceptionState);
-    //     if (exceptionState.hadException())
-    //       return;
-    //   } else {
-    //     type = 0u;
-    //   }
-    //   if (!info[4]->IsUndefined()) {
-    //     inResult = ScriptValue(ScriptState::current(info.GetIsolate()), info[4]);
-    //   } else {
-    //     inResult = ScriptValue();
-    //   }
-    //
-    //   XPathResult* result = DocumentXPathEvaluator::evaluate(*impl, expression, contextNode, resolver, type, inResult, exceptionState);
-    //   if (exceptionState.hadException()) {
-    //     return;
-    //   }
-    //   v8SetReturnValueFast(info, result, impl);
-    // }
-    //
-    // CORE_EXPORT  void evaluateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
-    //   UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentXPathEvaluate);
-    //   DocumentV8Internal::evaluateMethod(info);
-    // }
+    static void createExpressionMethod(const v8::FunctionCallbackInfo<v8::Value>& info) 
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "createExpression");
+
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(1, info.Length()));
+            return;
+        }
+
+        V8StringResource<> expression;
+        XPathNSResolver* resolver;
+        expression = info[0];
+        if (!expression.prepare())
+            return;
+
+        if (!info[1]->IsUndefined()) {
+            resolver = toXPathNSResolver(ScriptState::current(info.GetIsolate()), info[1]);
+            if (!resolver && !isUndefinedOrNull(info[1])) {
+                exceptionState.throwTypeError("parameter 2 is not of type 'XPathNSResolver'.");
+
+                return;
+            }
+        } else {
+            resolver = nullptr;
+        }
+
+        XPathExpression* result = DocumentXPathEvaluator::createExpression(*impl, expression, resolver, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueFast(info, result, impl);
+    }
+
+    CORE_EXPORT  void createExpressionMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) 
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentXPathCreateExpression);
+        DocumentV8Internal::createExpressionMethod(info);
+    }
+
+    static void createNSResolverMethod(const v8::FunctionCallbackInfo<v8::Value>& info) 
+    {
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 1)) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("createNSResolver", "Document", ExceptionMessages::notEnoughArguments(1, info.Length())));
+            return;
+        }
+
+        Node* nodeResolver;
+        nodeResolver = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[0]);
+        if (!nodeResolver) {
+            V8ThrowException::throwTypeError(info.GetIsolate(), ExceptionMessages::failedToExecute("createNSResolver", "Document", "parameter 1 is not of type 'Node'."));
+
+            return;
+        }
+
+        v8SetReturnValueFast(info, DocumentXPathEvaluator::createNSResolver(*impl, nodeResolver), impl);
+    }
+
+    CORE_EXPORT  void createNSResolverMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) 
+    {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentXPathCreateNSResolver);
+        DocumentV8Internal::createNSResolverMethod(info);
+    }
+
+    static void evaluateMethod(const v8::FunctionCallbackInfo<v8::Value>& info) 
+    {
+        ExceptionState exceptionState(info.GetIsolate(), ExceptionState::ExecutionContext, "Document", "evaluate");
+
+        Document* impl = V8Document::toImpl(info.Holder());
+
+        if (UNLIKELY(info.Length() < 2)) {
+            exceptionState.throwTypeError(ExceptionMessages::notEnoughArguments(2, info.Length()));
+            return;
+        }
+
+        V8StringResource<> expression;
+        Node* contextNode;
+        XPathNSResolver* resolver;
+        unsigned type;
+        ScriptValue inResult;
+        expression = info[0];
+        if (!expression.prepare())
+            return;
+
+        contextNode = V8Node::toImplWithTypeCheck(info.GetIsolate(), info[1]);
+        if (!contextNode) {
+            exceptionState.throwTypeError("parameter 2 is not of type 'Node'.");
+
+            return;
+        }
+
+        if (!info[2]->IsUndefined()) {
+            resolver = toXPathNSResolver(ScriptState::current(info.GetIsolate()), info[2]);
+            if (!resolver && !isUndefinedOrNull(info[2])) {
+                exceptionState.throwTypeError("parameter 3 is not of type 'XPathNSResolver'.");
+
+                return;
+            }
+        } else {
+            resolver = nullptr;
+        }
+        if (!info[3]->IsUndefined()) {
+            type = toUInt16(info.GetIsolate(), info[3], NormalConversion, exceptionState);
+            if (exceptionState.hadException())
+                return;
+        } else {
+            type = 0u;
+        }
+        if (!info[4]->IsUndefined()) {
+            inResult = ScriptValue(ScriptState::current(info.GetIsolate()), info[4]);
+        } else {
+            inResult = ScriptValue();
+        }
+
+        XPathResult* result = DocumentXPathEvaluator::evaluate(*impl, expression, contextNode, resolver, type, inResult, exceptionState);
+        if (exceptionState.hadException()) {
+            return;
+        }
+        v8SetReturnValueFast(info, result, impl);
+    }
+
+    CORE_EXPORT  void evaluateMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
+        UseCounter::count(currentExecutionContext(info.GetIsolate()), UseCounter::DocumentXPathEvaluate);
+        DocumentV8Internal::evaluateMethod(info);
+    }
 
 } // namespace DocumentV8Internal
 
@@ -6257,9 +6262,9 @@ const V8DOMConfiguration::MethodConfiguration V8DocumentMethods[] = {
     { "getElementById", DocumentV8Internal::getElementByIdMethodCallback, DocumentV8Internal::getElementByIdMethodCallbackForMainWorld, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
     { "querySelector", DocumentV8Internal::querySelectorMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
     { "querySelectorAll", DocumentV8Internal::querySelectorAllMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
-    //     {"createExpression", DocumentV8Internal::createExpressionMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    //     {"createNSResolver", DocumentV8Internal::createNSResolverMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
-    //     {"evaluate", DocumentV8Internal::evaluateMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "createExpression", DocumentV8Internal::createExpressionMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "createNSResolver", DocumentV8Internal::createNSResolverMethodCallback, 0, 1, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
+    { "evaluate", DocumentV8Internal::evaluateMethodCallback, 0, 2, v8::None, V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder},
 };
 
 static void installV8DocumentTemplate(v8::Isolate* isolate, const DOMWrapperWorld& world, v8::Local<v8::FunctionTemplate> interfaceTemplate)

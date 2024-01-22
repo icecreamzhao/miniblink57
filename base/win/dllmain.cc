@@ -114,6 +114,7 @@ std::set<DWORD>* g_tls_set_thread = nullptr; // 设置过的tls的线程的id
 void* g_dll_base = nullptr;
 typedef void* (WINAPI* FN_RtlImageDirectoryEntryToData)(PVOID Base, BOOLEAN MappedAsImage, USHORT DirectoryEntry, PULONG Size);
 FN_RtlImageDirectoryEntryToData pRtlImageDirectoryEntryToData = NULL;
+int g_is_xp = -1;
 
 void* ThreadLocalFunStub() 
 {
@@ -133,21 +134,23 @@ void* ThreadLocalFunStub()
     return ret_val;
 }
 
-void* SearchTlsIndex() 
+void* SearchTlsIndex()
 {
     unsigned char* ptr = (unsigned char*)(ThreadLocalFunStub());
     if (*ptr == 0xE9) {
         ptr = (unsigned char*)(*(void**)(ptr + 1));
     }
     void* addr = NULL;
-    //A1 D0 B1 58 19       mov         eax, dword ptr[_tls_index(1958B1D0h)]
-    //64 8B 0D 2C 00 00 00 mov         ecx, dword ptr fs : [2Ch]
-    //8B 04 81             mov         eax, dword ptr[ecx + eax * 4]
+    // A1 D0 B1 58 19       mov         eax, dword ptr[_tls_index(1958B1D0h)]
+    // 64 8B 0D 2C 00 00 00 mov         ecx, dword ptr fs : [2Ch]
+    // 8B 04 81             mov         eax, dword ptr[ecx + eax * 4]
+
+    // 64 A1 2C 00 00 00    mov         eax, dword ptr fs : [0000002Ch]
+    // 8B 0C 90             mov         ecx, dword ptr[eax + edx * 4]
     for (size_t i = 0; i < 300; ++i) {
         unsigned char c = ptr[i];
-        if (ptr[i] == 0x64 /*&& ptr[i + 1] == 0x8B*/ && ptr[i + 3] == 0x2C && ptr[i + 4] == 0x00 && ptr[i + 5] == 0x00 && ptr[i + 6] == 0x00 ||
-            ptr[i] == 0x64 && ptr[i + 2] == 0x2C && ptr[i + 3] == 0x00 && ptr[i + 4] == 0x00 && ptr[i + 5] == 0x00
-            ) {
+        if ((ptr[i] == 0x64 /*&& ptr[i + 1] == 0x8B*/ && ptr[i + 3] == 0x2C && ptr[i + 4] == 0x00 && ptr[i + 5] == 0x00 && ptr[i + 6] == 0x00) ||
+            (ptr[i] == 0x64 && ptr[i + 2] == 0x2C && ptr[i + 3] == 0x00 && ptr[i + 4] == 0x00 && ptr[i + 5] == 0x00)) {
             addr = *(void**)(ptr + i - 4);
 
             char output[64] = { 0 };
@@ -171,10 +174,8 @@ static bool AllocThreadLocalStoragePointer(void*** ThreadLocalStoragePointer, in
         }
     }
 
-//     if (0 == dll_count) {
-//         OutputDebugStringA("AllocThreadLocalStoragePointer: 0 == dll_count\n");
+//     if (0 == dll_count)
 //         return false;
-//     }
     *tls_index = dll_count;
 
     char output[128] = { 0 };
@@ -185,8 +186,7 @@ static bool AllocThreadLocalStoragePointer(void*** ThreadLocalStoragePointer, in
     void** tls_vector = (void**)malloc(dll_count * sizeof(void*));
     memset(tls_vector, 0, dll_count * sizeof(void*));
 
-    if (*tls_index)
-        memcpy(tls_vector, *ThreadLocalStoragePointer, (*tls_index) * sizeof(void*));
+    memcpy(tls_vector, *ThreadLocalStoragePointer, (*tls_index) * sizeof(void*));
     *ThreadLocalStoragePointer = tls_vector;
 
     // 重新分配本线程tls_index位置的指针
@@ -197,10 +197,13 @@ static bool AllocThreadLocalStoragePointer(void*** ThreadLocalStoragePointer, in
     // 拷贝本dll的tls表给xp系统
     ULONG tls_size;
     PIMAGE_TLS_DIRECTORY tls_image = (PIMAGE_TLS_DIRECTORY)pRtlImageDirectoryEntryToData(g_dll_base, TRUE, IMAGE_DIRECTORY_ENTRY_TLS, &tls_size);
-    if (!tls_image)
+    if (!tls_image) {
+        OutputDebugStringA("AllocThreadLocalStoragePointer tls_image is null\n");
         return false;
+    }
     ULONG tls_image_size = tls_image->EndAddressOfRawData - tls_image->StartAddressOfRawData;
     memcpy((*ThreadLocalStoragePointer)[*tls_index], (void*)tls_image->StartAddressOfRawData, tls_image_size);
+
     return true;
 }
 
@@ -210,24 +213,20 @@ struct XP_PEB {
 };
 
 // G:\code\win_xp_code\nt5src\XPSP1\base\ntdll\ldrinit.c LdrpAllocateTls
-void FixTlsIndex() 
+void FixTlsIndex()
 {
-    HMODULE handle = GetModuleHandle(L"Kernel32.dll");
-    FARPROC func = GetProcAddress(handle, "QueryThreadCycleTime");
-    if (func) // xp下才需要修复
-        return;
-
     char output[128 * 2] = { 0 };
-    if (!g_tls_set_thread)
-        g_tls_set_thread = new std::set<DWORD>();
-    if (g_tls_set_thread->end() != g_tls_set_thread->find(::GetCurrentThreadId())) {
-        sprintf(output, "FixTlsIndex fail 0: %lx\n", ::GetCurrentThreadId());
-        OutputDebugStringA(output);
-        DebugBreak();
-    }
-    g_tls_set_thread->insert(::GetCurrentThreadId());
+    //   if (!g_tls_set_thread)
+    //     g_tls_set_thread = new std::set<DWORD>();
+    //   if (g_tls_set_thread->end() != g_tls_set_thread->find(::GetCurrentThreadId())) {
+    //     sprintf(output, "FixTlsIndex fail 0: %lx\n", ::GetCurrentThreadId());
+    //     OutputDebugStringA(output);
+    //     DebugBreak();
+    //   }
+    //   g_tls_set_thread->insert(::GetCurrentThreadId());
 
     XP_PEB* peb = (XP_PEB*)NtCurrentTeb();
+
     int32_t* tls_index_addr = (int32_t*)SearchTlsIndex();
     if (!tls_index_addr) {
         sprintf(output, "FixTlsIndex fail 1: %lx, %p, %x\n", ::GetCurrentThreadId(), tls_index_addr, tls_index_addr ? *tls_index_addr : 0);
@@ -241,7 +240,6 @@ void FixTlsIndex()
 
     sprintf(output, "FixTlsIndex --: %lx, %p\n", ::GetCurrentThreadId(), ThreadLocalStoragePointerDump);
     OutputDebugStringA(output);
-    //DebugBreak();
 
     if (ThreadLocalStoragePointerDump != ThreadLocalStoragePointer) {
         sprintf(output, "FixTlsIndex fail 2: %lx\n", ::GetCurrentThreadId());
@@ -277,7 +275,7 @@ struct ThreadStartAddrStubInfo {
     void* old_param = nullptr;
 };
 
-DWORD WINAPI ThreadStartAddrStub(LPVOID param)
+DWORD WINAPI ThreadStartAddrStub(LPVOID param) 
 {
     OutputDebugStringA("DllMain ThreadStartAddrStub!!!!!!!\n");
     ThreadStartAddrStubInfo* info = (ThreadStartAddrStubInfo*)param;
@@ -287,8 +285,7 @@ DWORD WINAPI ThreadStartAddrStub(LPVOID param)
     return ret;
 }
 
-HANDLE WINAPI CreateThreadStub(void* lpThreadAttributes, SIZE_T dwStackSize, LPTHREAD_START_ROUTINE lpStartAddress, LPVOID lpParameter, DWORD dwCreationFlags, LPDWORD lpThreadId)
-{
+HANDLE WINAPI CreateThreadStub(void* lpThreadAttributes, SIZE_T dwStackSize, LPTHREAD_START_ROUTINE lpStartAddress, LPVOID lpParameter, DWORD dwCreationFlags, LPDWORD lpThreadId) {
     ThreadStartAddrStubInfo* info = new ThreadStartAddrStubInfo();
     info->old_addr = lpStartAddress;
     info->old_param = lpParameter;
@@ -341,22 +338,29 @@ BOOL WINAPI BaseDllMain(PVOID h, DWORD reason, PVOID reserved)
     if (DLL_PROCESS_DETACH == reason && base::win::ShouldCrashOnProcessDetach())
         CrashOnProcessDetach();
 
-#if 0 // def SUPPORT_XP_CODE
+#if 1 // def SUPPORT_XP_CODE
     if (DLL_PROCESS_ATTACH == reason) {
         g_dll_base = h;
-        HookByHotpatch(L"kernel32.DLL", (LPCSTR)"CreateThread", ((void*)(CreateThreadStub)), (void**)&s_origCreateThread);
-        pRtlImageDirectoryEntryToData = (FN_RtlImageDirectoryEntryToData)GetProcAddress(GetModuleHandleW(L"ntdll.dll"), "RtlImageDirectoryEntryToData");
 
-        if (linker_notifications_are_active)
-            return true;
+        if (-1 == g_is_xp) {
+            HMODULE handle = GetModuleHandle(L"Kernel32.dll");
+            g_is_xp = GetProcAddress(handle, "QueryThreadCycleTime") ? 0 : 1;
+        }
+        if (1 == g_is_xp) {
+            HookByHotpatch(L"kernel32.DLL", (LPCSTR)"CreateThread", ((void*)(CreateThreadStub)), (void**)&s_origCreateThread);
+            pRtlImageDirectoryEntryToData = (FN_RtlImageDirectoryEntryToData)GetProcAddress(GetModuleHandleW(L"ntdll.dll"), "RtlImageDirectoryEntryToData");
 
-        OutputDebugStringA("DllMain FixTlsIndex!!!!!!!\n");
+            if (linker_notifications_are_active)
+                return true;
 
-        FixTlsIndex();
-        for (PIMAGE_TLS_CALLBACK* it = &__xl_a; it < &__xl_z; ++it) {
-            if (*it == nullptr || *it == on_callback)
-                continue;  // Don't bother to call our own callback.
-            (*it)(h, reason, reserved);
+            OutputDebugStringA("DllMain FixTlsIndex!!!!!!!\n");
+
+            FixTlsIndex();
+            for (PIMAGE_TLS_CALLBACK* it = &__xl_a; it < &__xl_z; ++it) {
+                if (*it == nullptr || *it == on_callback)
+                    continue;  // Don't bother to call our own callback.
+                (*it)(h, reason, reserved);
+            }
         }
     }
 #endif
@@ -367,17 +371,22 @@ BOOL WINAPI BaseDllMain(PVOID h, DWORD reason, PVOID reserved)
     if (linker_notifications_are_active)
         return true;  // Some other service is doing this work.
 
-#if 1 // ndef SUPPORT_XP_CODE
+#if 1 // def SUPPORT_XP_CODE
+    if (g_is_xp)
+        return true;
+#endif
+
     for (PIMAGE_TLS_CALLBACK* it = &__xl_a; it < &__xl_z; ++it) {
         if (*it == nullptr || *it == on_callback)
             continue;  // Don't bother to call our own callback.
         (*it)(h, reason, reserved);
     }
-#endif
+
     return true;
 }
 
-static void NTAPI on_callback(PVOID h, DWORD reason, PVOID reserved) {
+static void NTAPI on_callback(PVOID h, DWORD reason, PVOID reserved) 
+{
     // Do nothing.  We were just a place holder in the list used to test that we
     // call all items.
     // If we are called, it means that some other system is scanning the callbacks

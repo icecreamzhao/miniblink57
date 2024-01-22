@@ -2,17 +2,15 @@
 #ifndef patch_code_sync_xp_h
 #define patch_code_sync_xp_h
 
-#include <windows.h>
-#include <intrin.h>
-
 //#pragma optimize("", off)
 //#pragma clang optimize off
 #pragma pack(push, 4)
-
 #pragma GCC diagnostic ignored "-Wunused-variable"
 
-#if 1 //def SUPPORT_XP_CODE
+#if defined(__i386__) || defined(_M_IX86) || defined(__x86_64__) || defined(_M_X64)
 
+#include <windows.h>
+#include <intrin.h>
 //#include "undef.h"
 
 #ifdef _WIN64

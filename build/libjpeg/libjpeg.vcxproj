@@ -612,68 +612,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">false</ExcludedFromBuild>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\libwebp\dec\buffer.c" />
-    <ClCompile Include="..\..\third_party\libwebp\dec\dec_alpha.c" />
-    <ClCompile Include="..\..\third_party\libwebp\dec\dec_frame.c" />
-    <ClCompile Include="..\..\third_party\libwebp\dec\dec_quant.c" />
-    <ClCompile Include="..\..\third_party\libwebp\dec\dec_tree.c" />
-    <ClCompile Include="..\..\third_party\libwebp\dec\dec_vp8l.c" />
-    <ClCompile Include="..\..\third_party\libwebp\dec\idec.c" />
-    <ClCompile Include="..\..\third_party\libwebp\dec\io.c" />
-    <ClCompile Include="..\..\third_party\libwebp\dec\vp8.c" />
-    <ClCompile Include="..\..\third_party\libwebp\dec\webp.c" />
-    <ClCompile Include="..\..\third_party\libwebp\demux\demux.c" />
-    <ClCompile Include="..\..\third_party\libwebp\dsp\alpha_processing.c" />
-    <ClCompile Include="..\..\third_party\libwebp\dsp\alpha_processing_sse2.c" />
-    <ClCompile Include="..\..\third_party\libwebp\dsp\cpu.c" />
-    <ClCompile Include="..\..\third_party\libwebp\dsp\dec.c" />
-    <ClCompile Include="..\..\third_party\libwebp\dsp\dec_clip_tables.c" />
-    <ClCompile Include="..\..\third_party\libwebp\dsp\dec_mips32.c" />
-    <ClCompile Include="..\..\third_party\libwebp\dsp\dec_sse2.c" />
-    <ClCompile Include="..\..\third_party\libwebp\dsp\enc.c" />
-    <ClCompile Include="..\..\third_party\libwebp\dsp\enc_avx2.c" />
-    <ClCompile Include="..\..\third_party\libwebp\dsp\enc_mips32.c" />
-    <ClCompile Include="..\..\third_party\libwebp\dsp\enc_sse2.c" />
-    <ClCompile Include="..\..\third_party\libwebp\dsp\lossless.c" />
-    <ClCompile Include="..\..\third_party\libwebp\dsp\lossless_mips32.c" />
-    <ClCompile Include="..\..\third_party\libwebp\dsp\lossless_sse2.c" />
-    <ClCompile Include="..\..\third_party\libwebp\dsp\upsampling.c" />
-    <ClCompile Include="..\..\third_party\libwebp\dsp\upsampling_sse2.c" />
-    <ClCompile Include="..\..\third_party\libwebp\dsp\yuv.c" />
-    <ClCompile Include="..\..\third_party\libwebp\dsp\yuv_mips32.c" />
-    <ClCompile Include="..\..\third_party\libwebp\dsp\yuv_sse2.c" />
-    <ClCompile Include="..\..\third_party\libwebp\enc\alpha.c" />
-    <ClCompile Include="..\..\third_party\libwebp\enc\analysis.c" />
-    <ClCompile Include="..\..\third_party\libwebp\enc\backward_references.c" />
-    <ClCompile Include="..\..\third_party\libwebp\enc\config.c" />
-    <ClCompile Include="..\..\third_party\libwebp\enc\cost.c" />
-    <ClCompile Include="..\..\third_party\libwebp\enc\filter.c" />
-    <ClCompile Include="..\..\third_party\libwebp\enc\frame.c" />
-    <ClCompile Include="..\..\third_party\libwebp\enc\histogram.c" />
-    <ClCompile Include="..\..\third_party\libwebp\enc\iterator.c" />
-    <ClCompile Include="..\..\third_party\libwebp\enc\picture.c" />
-    <ClCompile Include="..\..\third_party\libwebp\enc\picture_csp.c" />
-    <ClCompile Include="..\..\third_party\libwebp\enc\picture_psnr.c" />
-    <ClCompile Include="..\..\third_party\libwebp\enc\picture_rescale.c" />
-    <ClCompile Include="..\..\third_party\libwebp\enc\picture_tools.c" />
-    <ClCompile Include="..\..\third_party\libwebp\enc\quant.c" />
-    <ClCompile Include="..\..\third_party\libwebp\enc\syntax.c" />
-    <ClCompile Include="..\..\third_party\libwebp\enc\token.c" />
-    <ClCompile Include="..\..\third_party\libwebp\enc\tree.c" />
-    <ClCompile Include="..\..\third_party\libwebp\enc\vp8l.c" />
-    <ClCompile Include="..\..\third_party\libwebp\enc\webpenc.c" />
-    <ClCompile Include="..\..\third_party\libwebp\utils\bit_reader_webp.c" />
-    <ClCompile Include="..\..\third_party\libwebp\utils\bit_writer.c" />
-    <ClCompile Include="..\..\third_party\libwebp\utils\color_cache.c" />
-    <ClCompile Include="..\..\third_party\libwebp\utils\filters.c" />
-    <ClCompile Include="..\..\third_party\libwebp\utils\huffman_encode.c" />
-    <ClCompile Include="..\..\third_party\libwebp\utils\huffman_webp.c" />
-    <ClCompile Include="..\..\third_party\libwebp\utils\quant_levels.c" />
-    <ClCompile Include="..\..\third_party\libwebp\utils\quant_levels_dec.c" />
-    <ClCompile Include="..\..\third_party\libwebp\utils\random.c" />
-    <ClCompile Include="..\..\third_party\libwebp\utils\rescaler.c" />
-    <ClCompile Include="..\..\third_party\libwebp\utils\thread.c" />
-    <ClCompile Include="..\..\third_party\libwebp\utils\utils.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\third_party\libjpeg\jconfig.h">
@@ -712,13 +650,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">true</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\libwebp\webp\config.h" />
-    <ClInclude Include="..\..\third_party\libwebp\webp\decode.h" />
-    <ClInclude Include="..\..\third_party\libwebp\webp\demux.h" />
-    <ClInclude Include="..\..\third_party\libwebp\webp\encode.h" />
-    <ClInclude Include="..\..\third_party\libwebp\webp\format_constants.h" />
-    <ClInclude Include="..\..\third_party\libwebp\webp\mux_types.h" />
-    <ClInclude Include="..\..\third_party\libwebp\webp\types.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9785535B-7FBE-49A2-9816-D7429D9A78ED}</ProjectGuid>

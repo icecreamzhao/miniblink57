@@ -17,30 +17,7 @@ var json = [{
         "cppcompiler":"${clangPath}/clang++.exe",
             
         "include":[
-            "${sdkPath}/include/c++/7.2.0",
-            "${sdkPath}/include/c++/7.2.0/include",
-            "${sdkPath}/include/c++/7.2.0/x86_64-unknown-linux-gnu/",
-            "${ndkIncludePath}",
-            "${srcPath}",
-            ////////////////////////////////////////////////////////////////////////////////
-            "${sysroot}/usr/include/aarch64-linux-gnu/c++/10",
-            "${sysroot}/usr/include/aarch64-linux-gnu",
-            "${sysroot}/usr/include/c++/10",
-            "${sysroot}/usr/include",
-            "${sysroot}/usr/include/linux",
-            ////////////////////////////////////////////////////////////////////////////////////
-            //"${sdkPath}/sysroot/usr/include",
-            //"${sdkPath}/sysroot/usr/",
-            //"${sdkPath}/sysroot/usr/include/linux",
-                
-            "${sysroot}/usr/include/cairo",
-            "${sysroot}/usr/include/glib-2.0",
-            "${sysroot}/usr/include/gtk-3.0",
-            "${sysroot}/usr/include/gdk-pixbuf-2.0",
-            "${sysroot}/usr/include/atk-1.0",
-            "${sysroot}/usr/include/pango-1.0",
-            "${sysroot}/usr/lib/x86_64-linux-gnu/glib-2.0/include",
-            "${srcPath}/linux"
+            ...constVal.includePaths,
         ],
         "prebuildSrc":[            
             //"${srcPath}/wkexe/vip/wkexe_linux.cpp",
@@ -98,6 +75,7 @@ var json = [{
             "${srcPath}/webdriver/CommandHandlers/SwitchToFrameCommandHandler.cpp",
         ],
         "cmd":[
+            "-march=armv8.1-a",
             "-fno-exceptions",
             //"--target=x86_64-linux-guneabi", 
             "-std=c++14",

@@ -1713,9 +1713,6 @@
     <ClInclude Include="..\..\fastmake\FastMakeMain.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\quickjs-vs\quickjs-opcode.h">
-      <Filter>src\qjs</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtk.h">
       <Filter>src\gtk+-2.24.32\gtk</Filter>
     </ClInclude>
@@ -2700,41 +2697,35 @@
     <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkregion.h">
       <Filter>src\gtk+-2.24.32\gdk</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\quickjs-master\cutils.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\..\quickjs\quickjs-atom.h">
+      <Filter>src\quickjs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\quickjs-master\libbf.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\..\quickjs\quickjs-libc.h">
+      <Filter>src\quickjs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\quickjs-master\libregexp-opcode.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\..\quickjs\cutils.h">
+      <Filter>src\quickjs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\quickjs-master\libregexp.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\..\quickjs\libbf.h">
+      <Filter>src\quickjs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\quickjs-master\libunicode-table.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\..\quickjs\libregexp.h">
+      <Filter>src\quickjs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\quickjs-master\libunicode.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\..\quickjs\libregexp-opcode.h">
+      <Filter>src\quickjs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\quickjs-master\list.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\..\quickjs\libunicode.h">
+      <Filter>src\quickjs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\quickjs-master\quickjs-atom.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\..\quickjs\libunicode-table.h">
+      <Filter>src\quickjs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\quickjs-master\quickjs-libc.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\..\quickjs\list.h">
+      <Filter>src\quickjs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\quickjs-master\quickjs-opcode.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\quickjs-master\quickjs.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\quickjs-master\unicode_gen_def.h">
-      <Filter>头文件</Filter>
+    <ClInclude Include="..\..\quickjs\quickjs.h">
+      <Filter>src\quickjs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2759,23 +2750,23 @@
     <ClCompile Include="..\..\..\livi-browser-gtk\livi-browser-gtk-no-evco\src\livi_browser.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\quickjs-master\cutils.c">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\..\quickjs\cutils.c">
+      <Filter>src\quickjs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\quickjs-master\libbf.c">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\..\quickjs\libbf.c">
+      <Filter>src\quickjs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\quickjs-master\libregexp.c">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\..\quickjs\libregexp.c">
+      <Filter>src\quickjs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\quickjs-master\libunicode.c">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\..\quickjs\libunicode.c">
+      <Filter>src\quickjs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\quickjs-master\quickjs-libc.c">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\..\quickjs\quickjs.c">
+      <Filter>src\quickjs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\quickjs-master\quickjs.c">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\..\quickjs\quickjs-libc.c">
+      <Filter>src\quickjs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

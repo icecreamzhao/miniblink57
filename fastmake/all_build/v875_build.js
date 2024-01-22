@@ -15,13 +15,14 @@ var json = [{
         "cppcompiler":"${clangPath}/clang++.exe",
             
         "include":[
-            "${sdkPath}/include/c++/7.2.0",
-            "${sdkPath}/include/c++/7.2.0/include",
-            "${ndkIncludePath}",
-            "${sdkPath}/include/c++/7.2.0/x86_64-unknown-linux-gnu/",
-            "${sdkPath}/sysroot/usr/include",
-            "${sdkPath}/sysroot/usr/",
-            "${sdkPath}/sysroot/usr/include/linux",
+//            "${sdkPath}/include/c++/7.2.0",
+//            "${sdkPath}/include/c++/7.2.0/include",
+//            "${ndkIncludePath}",
+//            "${sdkPath}/include/c++/7.2.0/x86_64-unknown-linux-gnu/",
+//            "${sdkPath}/sysroot/usr/include",
+//            "${sdkPath}/sysroot/usr/",
+//            "${sdkPath}/sysroot/usr/include/linux",
+            ...constVal.includePaths,
             "${srcPath}/linux",
             "${srcPath}/gen/v8_7_5",
             "${srcPath}/gen/v8_7_5/include",
@@ -766,7 +767,7 @@ var json = [{
         ],
         "objdir":"${srcPath}/out/tmp/v8_7_5/${targetDir}",
         "outdir":"${srcPath}/out/${targetDir}",
-                
+        
         "target":"libv8_7_5.a",
         "beginLibs":[
         ],

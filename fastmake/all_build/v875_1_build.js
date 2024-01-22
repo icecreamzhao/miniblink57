@@ -15,13 +15,14 @@ var json = [{
         "cppcompiler":"${clangPath}/clang++.exe",
             
         "include":[
-            "${sdkPath}/include/c++/7.2.0",
-            "${sdkPath}/include/c++/7.2.0/include",
-            "${ndkIncludePath}",
-            "${sdkPath}/include/c++/7.2.0/x86_64-unknown-linux-gnu/",
-            "${sdkPath}/sysroot/usr/include",
-            "${sdkPath}/sysroot/usr/",
-            "${sdkPath}/sysroot/usr/include/linux",
+//            "${sdkPath}/include/c++/7.2.0",
+//            "${sdkPath}/include/c++/7.2.0/include",
+//            "${ndkIncludePath}",
+//            "${sdkPath}/include/c++/7.2.0/x86_64-unknown-linux-gnu/",
+//            "${sdkPath}/sysroot/usr/include",
+//            "${sdkPath}/sysroot/usr/",
+//            "${sdkPath}/sysroot/usr/include/linux",
+            ...constVal.includePaths,
             "${srcPath}/linux",
             "${srcPath}/gen/v8_7_5",
             "${srcPath}/gen/v8_7_5/include",
@@ -66,6 +67,7 @@ var json = [{
             "${srcPath}/v8_7_5/src/base/debug/stack_trace.cc",
             "${srcPath}/v8_7_5/src/base/debug/stack_trace_posix.cc",
             "${srcPath}/v8_7_5/src/debug/x64/debug-x64.cc",
+            "${srcPath}/v8_7_5/src/debug/arm64/debug-arm64.cc",
             "${srcPath}/v8_7_5/src/base/platform/semaphore.cc",
             "${srcPath}/v8_7_5/src/base/platform/time.cc",
             "${srcPath}/v8_7_5/src/base/platform/condition-variable.cc",
@@ -144,6 +146,7 @@ var json = [{
             "${srcPath}/v8_7_5/src/builtins/builtins-wasm-gen.cc",
             "${srcPath}/v8_7_5/src/builtins/builtins-weak-refs.cc",
             "${srcPath}/v8_7_5/src/builtins/x64/builtins-x64.cc",
+            "${srcPath}/v8_7_5/src/builtins/arm64/builtins-arm64.cc",
             "${srcPath}/v8_7_5/src/compiler/load-elimination.cc",
             "${srcPath}/v8_7_5/src/compiler/loop-analysis.cc",
             "${srcPath}/v8_7_5/src/compiler/loop-peeling.cc",
@@ -392,7 +395,7 @@ var json = [{
             "-D_HAS_CONSTEXPR=0",
             "-D_CRT_SECURE_NO_WARNINGS",
             "-DSUPPORT_XP_CODE=1",
-            "-DV8_TARGET_ARCH_X64",
+            //"-DV8_TARGET_ARCH_X64",
             "-DV8_EMBEDDED_BUILTINS=1",
             "-DV8_TYPED_ARRAY_MAX_SIZE_IN_HEAP=0",
             "-DV8_PROMISE_INTERNAL_FIELD_COUNT=1",
@@ -422,5 +425,11 @@ var json = [{
         "linker":"${ndkBinPath}/ar.exe"
     }
 }];
+
+if ("aarch64-linux-guneabi" == constVal.target) {
+    json[0].compile.cmd.push("-DV8_TARGET_ARCH_ARM64");
+} else {
+    json[0].compile.cmd.push("-DV8_TARGET_ARCH_X64");
+}
 
 buildCommonSetting(json);

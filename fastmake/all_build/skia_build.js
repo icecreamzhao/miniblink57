@@ -15,15 +15,16 @@ var json = [{
         "cppcompiler":"${clangPath}/clang++.exe",
             
         "include":[
-            "${sdkPath}/include/c++/7.2.0",
-            "${sdkPath}/include/c++/7.2.0/include",
-            //"C:/cygwin64/usr/local/x86_64-unknown-linux-gnu/lib/gcc/x86_64-unknown-linux-gnu/7.2.0/include", // sse is compile error
-            "${ndkIncludePath}",
-            "${sdkPath}/include/c++/7.2.0/x86_64-unknown-linux-gnu/",
-            "${srcPath}",
-            "${sdkPath}/sysroot/usr/include",
-            "${sdkPath}/sysroot/usr/",
-            "${sdkPath}/sysroot/usr/include/linux",
+//            "${sdkPath}/include/c++/7.2.0",
+//            "${sdkPath}/include/c++/7.2.0/include",
+//            //"C:/cygwin64/usr/local/x86_64-unknown-linux-gnu/lib/gcc/x86_64-unknown-linux-gnu/7.2.0/include", // sse is compile error
+//            "${ndkIncludePath}",
+//            "${sdkPath}/include/c++/7.2.0/x86_64-unknown-linux-gnu/",
+//            "${srcPath}",
+//            "${sdkPath}/sysroot/usr/include",
+//            "${sdkPath}/sysroot/usr/",
+//            "${sdkPath}/sysroot/usr/include/linux",
+            ...constVal.includePaths,
             "${srcPath}/linux",
             "${srcPath}/third_party/",
             "${srcPath}/third_party/npapi",
@@ -62,8 +63,13 @@ var json = [{
             "${srcPath}/third_party/freetype/src/include"
         ],
         "prebuildSrc":[
-            "${srcPath}/third_party/skia/src/core/SkMatrix44.cpp",
-            "${srcPath}/third_party/skia/src/image/SkSurface_Raster.cpp",
+                
+            "${srcPath}/third_party/skia/src/ports/SkOSFile_posix.cpp",
+            "${srcPath}/third_party/skia/src/ports/SkFontMgr_custom.cpp",
+            "${srcPath}/third_party/skia/src/fonts/SkFontMgr_indirect.cpp",
+            "${srcPath}/third_party/skia/src/fonts/SkFontMgr_fontconfig.cpp",
+            "${srcPath}/third_party/skia/src/core/SkFontMgr.cpp",
+            //"${srcPath}/third_party/skia/src/image/SkSurface_Raster.cpp",
             //"${srcPath}/third_party/skia/src/core/SkPaint.cpp",
             //"${srcPath}/third_party/skia/src/ports/SkFontHost_fontconfig.cpp",
 //            "${srcPath}/third_party/skia/src/ports/SkTLS_pthread.cpp",
@@ -73,11 +79,8 @@ var json = [{
 //            "${srcPath}/third_party/skia/src/ports/SkFontConfigInterface_direct.cpp",
             //"${srcPath}/third_party/skia/src/core/SkPathRef.cpp",
             //"${srcPath}/third_party/skia/src/core/SkRRect.cpp",
-            //"${srcPath}/third_party/skia/src/fonts/SkFontMgr_fontconfig.cpp",
-//            "${srcPath}/third_party/skia/src/ports/SkOSFile_posix.cpp",
-            "${srcPath}/third_party/skia/src/effects/SkXfermodeImageFilter.cpp",
-            "${srcPath}/third_party/skia/src/effects/SkArithmeticImageFilter.cpp",
-            //"${srcPath}/third_party/skia/src/ports/SkFontMgr_custom.cpp"
+            //"${srcPath}/third_party/skia/src/effects/SkXfermodeImageFilter.cpp",
+            //"${srcPath}/third_party/skia/src/effects/SkArithmeticImageFilter.cpp",
         ],
         "src":[
             "${srcPath}/third_party/skia/src/fonts/SkFontMgr_fontconfig.cpp",
@@ -378,6 +381,7 @@ var json = [{
             "${srcPath}/third_party/skia/src/images/SkForceLinking.cpp",
             "${srcPath}/third_party/skia/src/images/SkImageEncoder.cpp",
             "${srcPath}/third_party/skia/src/images/SkImageEncoder_Factory.cpp",
+            "${srcPath}/third_party/skia/src/ports/SkFontMgr_custom.cpp",
             "${srcPath}/third_party/skia/src/opts/SkOpts_sse41.cpp",
             "${srcPath}/third_party/skia/src/opts/SkOpts_ssse3.cpp",
             "${srcPath}/third_party/skia/src/opts/opts_check_x86.cpp",
@@ -386,7 +390,14 @@ var json = [{
             "${srcPath}/third_party/skia/src/opts/SkBitmapProcState_opts_SSSE3.cpp",
             "${srcPath}/third_party/skia/src/opts/SkBlitRow_opts_SSE2.cpp",
             "${srcPath}/third_party/skia/src/opts/SkOpts_avx.cpp",
-            "${srcPath}/third_party/skia/src/ports/SkFontMgr_custom.cpp",
+            "${srcPath}/third_party/skia/src/opts/SkBitmapProcState_arm_neon.cpp",
+            "${srcPath}/third_party/skia/src/opts/SkBitmapProcState_matrixProcs_neon.cpp",
+            "${srcPath}/third_party/skia/src/opts/SkBitmapProcState_opts_arm.cpp",
+            "${srcPath}/third_party/skia/src/opts/SkBlitMask_opts_arm.cpp",
+            "${srcPath}/third_party/skia/src/opts/SkBlitMask_opts_arm_neon.cpp",
+            "${srcPath}/third_party/skia/src/opts/SkBlitRow_opts_arm.cpp",
+            "${srcPath}/third_party/skia/src/opts/SkBlitRow_opts_arm_neon.cpp",
+            "${srcPath}/third_party/skia/src/opts/SkBlitMask_opts_none.cpp",
             //"${srcPath}/third_party/skia/src/ports/SkFontMgr_custom_directory_factory.cpp",
             //"${srcPath}/third_party/skia/src/ports/SkFontMgr_custom_embedded_factory.cpp",
             //"${srcPath}/third_party/skia/src/ports/SkFontMgr_custom_empty_factory.cpp",
@@ -486,8 +497,12 @@ var json = [{
         "linkerCmd":[],
         "endLibs":[
         ],
-        "linker":"${ndkBinPath}/ar.exe"
+        "linker":"${ndkBinPath}/ar.exe", // C:\Microsoft\AndroidNDK64\android-ndk-r16b\toolchains\aarch64-linux-android-4.9\prebuilt\windows-x86_64\bin\aarch64-linux-android-ranlib.exe
     }
 }];
+
+if ("aarch64-linux-guneabi" == constVal.target) { // ARM64
+    json[0].compile.cmd.push("-DSK_ARM_HAS_NEON");
+}
 
 buildCommonSetting(json);

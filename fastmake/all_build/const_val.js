@@ -37,12 +37,50 @@ if (cmd.compileCfg == "debug") {
     constValue.targetDir = "linux_release_sym_x64";
 }
 
-if ("aarch64-linux-guneabi" == constValue.target) {
-    constValue.sdkPath        = "C:/Microsoft/AndroidNDK64/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu",
-    constValue.clangPath      = "C:/Microsoft/AndroidNDK64/android-ndk-r16b/toolchains/llvm/prebuilt/windows-x86_64/bin",
-    constValue.ndkBinPath     = "C:/Microsoft/AndroidNDK64/android-ndk-r16b/toolchains/arm-linux-androideabi-4.9/prebuilt/windows-x86_64/arm-linux-androideabi/bin",
-    constValue.ndkIncludePath = "C:/Microsoft/AndroidNDK64/android-ndk-r16b/toolchains/llvm/prebuilt/windows-x86_64/lib64/clang/5.0/include",
+var includePaths;
+if ("aarch64-linux-guneabi" == constValue.target) { // ARM64
+    constValue.sdkPath        = "C:/Microsoft/AndroidNDK64/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu";
+    constValue.clangPath      = "C:/Microsoft/AndroidNDK64/android-ndk-r16b/toolchains/llvm/prebuilt/windows-x86_64/bin";
+    constValue.ndkBinPath     = "C:/Microsoft/AndroidNDK64/android-ndk-r16b/toolchains/aarch64-linux-android-4.9/prebuilt/windows-x86_64/aarch64-linux-android/bin";
+    constValue.ndkIncludePath = "C:/Microsoft/AndroidNDK64/android-ndk-r16b/toolchains/llvm/prebuilt/windows-x86_64/lib64/clang/5.0/include";
+    
+    // C:\Microsoft\AndroidNDK64\android-ndk-r16b\toolchains\arm-linux-androideabi-4.9\prebuilt\windows-x86_64\lib\gcc\arm-linux-androideabi\4.9.x\include\mmintrin.h
+    includePaths = [
+        "${sysroot}/usr/include/aarch64-linux-gnu/c++/10",
+        "${sysroot}/usr/include/aarch64-linux-gnu",
+        "${sysroot}/usr/include/c++/10",
+        //"${sysroot}/usr/lib/gcc/aarch64-linux-gnu/10/include",
+        "${sysroot}/usr/include",
+        "${sysroot}/usr/include/linux",
+        "${sysroot}/usr/include/harfbuzz",
+        "${sysroot}/usr/lib/aarch64-linux-gnu/glib-2.0/include",
+        "${sdkPath}/lib/gcc/aarch64-linux-gnu/7.5.0/include",
+    ];
+} else {
+    includePaths = [
+        "${sdkPath}/include/c++/7.2.0",
+        "${sdkPath}/include/c++/7.2.0/include",
+        "${sdkPath}/include/c++/7.2.0/x86_64-unknown-linux-gnu/",
+        "${sysroot}/usr/lib/x86_64-linux-gnu/glib-2.0/include",
+        "${sdkPath}/sysroot/usr/include",
+        "${sdkPath}/sysroot/usr/",
+        "${sdkPath}/sysroot/usr/include/linux",
+    ];
 }
+
+constValue.includePaths = [
+    "C:/Microsoft/AndroidNDK64/android-ndk-r16b/toolchains/arm-linux-androideabi-4.9/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/include",
+    "${ndkIncludePath}", // 优先使用clang目录里的stddef.h、arm_neon.h，不然sysroot的这几个头文件clang会识别不了一些基本类型如'__Int8x8_t'
+    ...includePaths,
+    "${srcPath}",
+    "${sysroot}/usr/include/cairo",
+    "${sysroot}/usr/include/glib-2.0",
+    "${sysroot}/usr/include/gtk-3.0",
+    "${sysroot}/usr/include/gdk-pixbuf-2.0",
+    "${sysroot}/usr/include/atk-1.0",
+    "${sysroot}/usr/include/pango-1.0",
+    "${srcPath}/linux",
+];
 
 export const constVal = constValue;
 
@@ -53,21 +91,30 @@ export const buildCommonSetting = function(json) {
     json[0].compile.cmd.push("-fPIC");
     
     json[0].compile.cmd.push("--target=" + constValue.target);
+    //json[0].compile.cmd.push("-march=iwmmxt2");
+    
+    if ("aarch64-linux-guneabi" == constValue.target) { // ARM64
+        //json[0].compile.cmd.push("-mfpu=neon-fp16");
+        //json[0].compile.cmd.push("-mneon-for-64bits");
+        //json[0].compile.cmd.push("-mfloat-abi=hard");
+    }
     
     if (cmd.compileCfg == "debug") {
         json[0].compile.cmd.push("-g");
         json[0].compile.cmd.push("-D_DEBUG");
         json[0].compile.cmd.push("-O0");
     } else if (cmd.compileCfg == "release" || cmd.compileCfg == "release_v857" || cmd.compileCfg == "release_v875_arm") {
+        //json[0].compile.cmd.push("-O0");
+        json[0].compile.cmd.push("-Os");
+        //json[0].compile.linkerCmd.push("-strip-all");
+            
         //json[0].compile.cmd.push("-finline-functions");
         json[0].compile.cmd.push("-fomit-frame-pointer");
-        //json[0].compile.cmd.push("-msse2");
-        json[0].compile.cmd.push("-Os");
         json[0].compile.cmd.push("-DNDEBUG");
         json[0].compile.cmd.push("-fno-rtti");
         json[0].compile.cmd.push("-fvisibility=hidden");
         json[0].compile.cmd.push("-fno-exceptions");
-        json[0].compile.linkerCmd.push("-strip-all");
+        
     } else { // releaseSymbol
         json[0].compile.cmd.push("-g"); // debug core dump
         json[0].compile.cmd.push("-DNDEBUG");

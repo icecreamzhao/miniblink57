@@ -15,13 +15,14 @@ var json = [{
         "cppcompiler":"${clangPath}/clang++.exe",
             
         "include":[
-            "${sdkPath}/include/c++/7.2.0",
-            "${sdkPath}/include/c++/7.2.0/include",
-            "${ndkIncludePath}",
-            "${sdkPath}/include/c++/7.2.0/x86_64-unknown-linux-gnu/",
-            "${sdkPath}/sysroot/usr/include",
-            "${sdkPath}/sysroot/usr/",
-            "${sdkPath}/sysroot/usr/include/linux",
+//            "${sdkPath}/include/c++/7.2.0",
+//            "${sdkPath}/include/c++/7.2.0/include",
+//            "${ndkIncludePath}",
+//            "${sdkPath}/include/c++/7.2.0/x86_64-unknown-linux-gnu/",
+//            "${sdkPath}/sysroot/usr/include",
+//            "${sdkPath}/sysroot/usr/",
+//            "${sdkPath}/sysroot/usr/include/linux",
+            ...constVal.includePaths,
             "${srcPath}/linux",
             "${srcPath}/gen/v8_7_5",
             "${srcPath}/gen/v8_7_5/include",
@@ -178,6 +179,7 @@ var json = [{
             "${srcPath}/v8_7_5/src/runtime/runtime-atomics.cc",
             "${srcPath}/v8_7_5/src/runtime/runtime-bigint.cc",
             "${srcPath}/v8_7_5/src/regexp/x64/regexp-macro-assembler-x64.cc",
+            "${srcPath}/v8_7_5/src/regexp/arm64/regexp-macro-assembler-arm64.cc",
             "${srcPath}/v8_7_5/src/regexp/regexp-macro-assembler-tracer.cc",
             "${srcPath}/v8_7_5/src/regexp/regexp-parser.cc",
             "${srcPath}/v8_7_5/src/regexp/regexp-stack.cc",
@@ -384,6 +386,10 @@ var json = [{
             "${srcPath}/v8_7_5/src/compiler/backend/x64/instruction-scheduler-x64.cc",
             "${srcPath}/v8_7_5/src/compiler/backend/x64/instruction-selector-x64.cc",
             "${srcPath}/v8_7_5/src/compiler/backend/x64/unwinding-info-writer-x64.cc",
+            "${srcPath}/v8_7_5/src/compiler/backend/arm64/code-generator-arm64.cc",
+            "${srcPath}/v8_7_5/src/compiler/backend/arm64/instruction-scheduler-arm64.cc",
+            "${srcPath}/v8_7_5/src/compiler/backend/arm64/instruction-selector-arm64.cc",
+            "${srcPath}/v8_7_5/src/compiler/backend/arm64/unwinding-info-writer-arm64.cc",
             "${srcPath}/v8_7_5/src/x64/assembler-x64.cc",
             "${srcPath}/v8_7_5/src/x64/cpu-x64.cc",
             "${srcPath}/v8_7_5/src/x64/disasm-x64.cc",
@@ -391,7 +397,25 @@ var json = [{
             "${srcPath}/v8_7_5/src/x64/frame-constants-x64.cc",
             "${srcPath}/v8_7_5/src/x64/interface-descriptors-x64.cc",
             "${srcPath}/v8_7_5/src/x64/macro-assembler-x64.cc",
-            "${srcPath}/v8_7_5/src/x64/deoptimizer-x64.cc"
+            "${srcPath}/v8_7_5/src/x64/deoptimizer-x64.cc",
+            "${srcPath}/v8_7_5/src/arm64/assembler-arm64.cc",
+            "${srcPath}/v8_7_5/src/arm64/cpu-arm64.cc",
+            "${srcPath}/v8_7_5/src/arm64/decoder-arm64.cc",
+            "${srcPath}/v8_7_5/src/arm64/deoptimizer-arm64.cc",
+            "${srcPath}/v8_7_5/src/arm64/disasm-arm64.cc",
+            "${srcPath}/v8_7_5/src/arm64/eh-frame-arm64.cc",
+            "${srcPath}/v8_7_5/src/arm64/cpu-arm64.cc",
+            "${srcPath}/v8_7_5/src/arm64/frame-constants-arm64.cc",
+            "${srcPath}/v8_7_5/src/arm64/instructions-arm64.cc",
+            "${srcPath}/v8_7_5/src/arm64/instructions-arm64-constants.cc",
+            "${srcPath}/v8_7_5/src/arm64/instrument-arm64.cc",
+            "${srcPath}/v8_7_5/src/arm64/interface-descriptors-arm64.cc",
+            "${srcPath}/v8_7_5/src/arm64/macro-assembler-arm64.cc",
+            "${srcPath}/v8_7_5/src/arm64/register-arm64.cc",
+            "${srcPath}/v8_7_5/src/arm64/simulator-arm64.cc",
+            "${srcPath}/v8_7_5/src/arm64/simulator-logic-arm64.cc",
+            "${srcPath}/v8_7_5/src/arm64/utils-arm64.cc",
+                
         ],
         // 
         "cmd":[
@@ -411,7 +435,7 @@ var json = [{
             "-D_HAS_CONSTEXPR=0",
             "-D_CRT_SECURE_NO_WARNINGS",
             "-DSUPPORT_XP_CODE=1",
-            "-DV8_TARGET_ARCH_X64",
+            //"-DV8_TARGET_ARCH_X64",
             "-DV8_EMBEDDED_BUILTINS=1",
             "-DV8_TYPED_ARRAY_MAX_SIZE_IN_HEAP=0",
             "-DV8_PROMISE_INTERNAL_FIELD_COUNT=1",
@@ -441,5 +465,11 @@ var json = [{
         "linker":"${ndkBinPath}/ar.exe"
     }
 }];
+
+if ("aarch64-linux-guneabi" == constVal.target) {
+    json[0].compile.cmd.push("-DV8_TARGET_ARCH_ARM64");
+} else {
+    json[0].compile.cmd.push("-DV8_TARGET_ARCH_X64");
+}
 
 buildCommonSetting(json);

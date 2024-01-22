@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#if defined(__i386__) || defined(_M_IX86) || defined(__x86_64__) || defined(_M_X64)
 #include "cc/raster/texture_compressor_etc1_sse.h"
 
 #include <emmintrin.h>
@@ -800,3 +801,5 @@ void TextureCompressorETC1SSE::Compress(const uint8_t* src,
 }
 
 } // namespace cc
+
+#endif // #if defined(__i386__) || defined(_M_IX86) || defined(__x86_64__) || defined(_M_X64)
