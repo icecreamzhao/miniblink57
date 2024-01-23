@@ -1,4 +1,4 @@
-﻿// Copyright 2011 Google Inc. All Rights Reserved.
+// Copyright 2011 Google Inc. All Rights Reserved.
 //
 // Use of this source code is governed by a BSD-style license
 // that can be found in the COPYING file in the root of the source
@@ -78,7 +78,8 @@ typedef struct {
 // decoding takes place. The contents of the interface struct are copied, it
 // is safe to free the corresponding memory after this call. This function is
 // not thread-safe. Return false in case of invalid pointer or methods.
-WEBP_EXTERN(int) WebPSetWorkerInterface(const WebPWorkerInterface* const winterface);
+WEBP_EXTERN(int) WebPSetWorkerInterface(
+    const WebPWorkerInterface* const winterface);
 
 // Retrieve the currently set thread worker interface.
 WEBP_EXTERN(const WebPWorkerInterface*) WebPGetWorkerInterface(void);

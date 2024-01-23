@@ -2,67 +2,39 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="dec">
-      <UniqueIdentifier>{5CF68805-77C4-1FB9-A420-45FAC842525E}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="dec">
-      <UniqueIdentifier>{5CF68805-77C4-1FB9-A420-45FAC842525E}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="dec">
-      <UniqueIdentifier>{5CF68805-77C4-1FB9-A420-45FAC842525E}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="dec">
-      <UniqueIdentifier>{5CF68805-77C4-1FB9-A420-45FAC842525E}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="dec">
-      <UniqueIdentifier>{5CF68805-77C4-1FB9-A420-45FAC842525E}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="dec">
-      <UniqueIdentifier>{5CF68805-77C4-1FB9-A420-45FAC842525E}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="dec">
-      <UniqueIdentifier>{5CF68805-77C4-1FB9-A420-45FAC842525E}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="dec">
-      <UniqueIdentifier>{5CF68805-77C4-1FB9-A420-45FAC842525E}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="dec">
-      <UniqueIdentifier>{5CF68805-77C4-1FB9-A420-45FAC842525E}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="dec">
-      <UniqueIdentifier>{5CF68805-77C4-1FB9-A420-45FAC842525E}</UniqueIdentifier>
+      <UniqueIdentifier>{9DE7EE89-232D-A97B-1FEA-42132AA458A2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dec\alpha.c">
+    <CustomBuild Include="dec/alpha.c">
       <Filter>dec</Filter>
-    </ClCompile>
-    <ClCompile Include="dec\buffer.c">
+    </CustomBuild>
+    <CustomBuild Include="dec/buffer.c">
       <Filter>dec</Filter>
-    </ClCompile>
-    <ClCompile Include="dec\frame.c">
+    </CustomBuild>
+    <CustomBuild Include="dec/frame.c">
       <Filter>dec</Filter>
-    </ClCompile>
-    <ClCompile Include="dec\idec.c">
+    </CustomBuild>
+    <CustomBuild Include="dec/idec.c">
       <Filter>dec</Filter>
-    </ClCompile>
-    <ClCompile Include="dec\io.c">
+    </CustomBuild>
+    <CustomBuild Include="dec/io.c">
       <Filter>dec</Filter>
-    </ClCompile>
-    <ClCompile Include="dec\quant.c">
+    </CustomBuild>
+    <CustomBuild Include="dec/quant.c">
       <Filter>dec</Filter>
-    </ClCompile>
-    <ClCompile Include="dec\tree.c">
+    </CustomBuild>
+    <CustomBuild Include="dec/tree.c">
       <Filter>dec</Filter>
-    </ClCompile>
-    <ClCompile Include="dec\vp8.c">
+    </CustomBuild>
+    <CustomBuild Include="dec/vp8.c">
       <Filter>dec</Filter>
-    </ClCompile>
-    <ClCompile Include="dec\vp8l.c">
+    </CustomBuild>
+    <CustomBuild Include="dec/vp8l.c">
       <Filter>dec</Filter>
-    </ClCompile>
-    <ClCompile Include="dec\webp.c">
+    </CustomBuild>
+    <CustomBuild Include="dec/webp.c">
       <Filter>dec</Filter>
-    </ClCompile>
-    <None Include="libwebp.gyp"/>
+    </CustomBuild>
   </ItemGroup>
 </Project>

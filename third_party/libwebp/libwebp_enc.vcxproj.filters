@@ -2,127 +2,75 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="enc">
-      <UniqueIdentifier>{3D195042-CAF3-E4EB-53FD-C085FC7A6AC3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="enc">
-      <UniqueIdentifier>{3D195042-CAF3-E4EB-53FD-C085FC7A6AC3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="enc">
-      <UniqueIdentifier>{3D195042-CAF3-E4EB-53FD-C085FC7A6AC3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="enc">
-      <UniqueIdentifier>{3D195042-CAF3-E4EB-53FD-C085FC7A6AC3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="enc">
-      <UniqueIdentifier>{3D195042-CAF3-E4EB-53FD-C085FC7A6AC3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="enc">
-      <UniqueIdentifier>{3D195042-CAF3-E4EB-53FD-C085FC7A6AC3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="enc">
-      <UniqueIdentifier>{3D195042-CAF3-E4EB-53FD-C085FC7A6AC3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="enc">
-      <UniqueIdentifier>{3D195042-CAF3-E4EB-53FD-C085FC7A6AC3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="enc">
-      <UniqueIdentifier>{3D195042-CAF3-E4EB-53FD-C085FC7A6AC3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="enc">
-      <UniqueIdentifier>{3D195042-CAF3-E4EB-53FD-C085FC7A6AC3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="enc">
-      <UniqueIdentifier>{3D195042-CAF3-E4EB-53FD-C085FC7A6AC3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="enc">
-      <UniqueIdentifier>{3D195042-CAF3-E4EB-53FD-C085FC7A6AC3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="enc">
-      <UniqueIdentifier>{3D195042-CAF3-E4EB-53FD-C085FC7A6AC3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="enc">
-      <UniqueIdentifier>{3D195042-CAF3-E4EB-53FD-C085FC7A6AC3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="enc">
-      <UniqueIdentifier>{3D195042-CAF3-E4EB-53FD-C085FC7A6AC3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="enc">
-      <UniqueIdentifier>{3D195042-CAF3-E4EB-53FD-C085FC7A6AC3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="enc">
-      <UniqueIdentifier>{3D195042-CAF3-E4EB-53FD-C085FC7A6AC3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="enc">
-      <UniqueIdentifier>{3D195042-CAF3-E4EB-53FD-C085FC7A6AC3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="enc">
-      <UniqueIdentifier>{3D195042-CAF3-E4EB-53FD-C085FC7A6AC3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="enc">
-      <UniqueIdentifier>{3D195042-CAF3-E4EB-53FD-C085FC7A6AC3}</UniqueIdentifier>
+      <UniqueIdentifier>{175149C7-8A22-43B2-D545-1EFBDC97EE7E}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="enc\alpha.c">
+    <CustomBuild Include="enc/alpha.c">
       <Filter>enc</Filter>
-    </ClCompile>
-    <ClCompile Include="enc\analysis.c">
+    </CustomBuild>
+    <CustomBuild Include="enc/analysis.c">
       <Filter>enc</Filter>
-    </ClCompile>
-    <ClCompile Include="enc\backward_references.c">
+    </CustomBuild>
+    <CustomBuild Include="enc/backward_references.c">
       <Filter>enc</Filter>
-    </ClCompile>
-    <ClCompile Include="enc\config.c">
+    </CustomBuild>
+    <CustomBuild Include="enc/config.c">
       <Filter>enc</Filter>
-    </ClCompile>
-    <ClCompile Include="enc\cost.c">
+    </CustomBuild>
+    <CustomBuild Include="enc/cost.c">
       <Filter>enc</Filter>
-    </ClCompile>
-    <ClCompile Include="enc\filter.c">
+    </CustomBuild>
+    <CustomBuild Include="enc/delta_palettization.c">
       <Filter>enc</Filter>
-    </ClCompile>
-    <ClCompile Include="enc\frame.c">
+    </CustomBuild>
+    <CustomBuild Include="enc/filter.c">
       <Filter>enc</Filter>
-    </ClCompile>
-    <ClCompile Include="enc\histogram.c">
+    </CustomBuild>
+    <CustomBuild Include="enc/frame.c">
       <Filter>enc</Filter>
-    </ClCompile>
-    <ClCompile Include="enc\iterator.c">
+    </CustomBuild>
+    <CustomBuild Include="enc/histogram.c">
       <Filter>enc</Filter>
-    </ClCompile>
-    <ClCompile Include="enc\picture.c">
+    </CustomBuild>
+    <CustomBuild Include="enc/iterator.c">
       <Filter>enc</Filter>
-    </ClCompile>
-    <ClCompile Include="enc\picture_csp.c">
+    </CustomBuild>
+    <CustomBuild Include="enc/near_lossless.c">
       <Filter>enc</Filter>
-    </ClCompile>
-    <ClCompile Include="enc\picture_psnr.c">
+    </CustomBuild>
+    <CustomBuild Include="enc/picture.c">
       <Filter>enc</Filter>
-    </ClCompile>
-    <ClCompile Include="enc\picture_rescale.c">
+    </CustomBuild>
+    <CustomBuild Include="enc/picture_csp.c">
       <Filter>enc</Filter>
-    </ClCompile>
-    <ClCompile Include="enc\picture_tools.c">
+    </CustomBuild>
+    <CustomBuild Include="enc/picture_psnr.c">
       <Filter>enc</Filter>
-    </ClCompile>
-    <ClCompile Include="enc\quant.c">
+    </CustomBuild>
+    <CustomBuild Include="enc/picture_rescale.c">
       <Filter>enc</Filter>
-    </ClCompile>
-    <ClCompile Include="enc\syntax.c">
+    </CustomBuild>
+    <CustomBuild Include="enc/picture_tools.c">
       <Filter>enc</Filter>
-    </ClCompile>
-    <ClCompile Include="enc\token.c">
+    </CustomBuild>
+    <CustomBuild Include="enc/quant.c">
       <Filter>enc</Filter>
-    </ClCompile>
-    <ClCompile Include="enc\tree.c">
+    </CustomBuild>
+    <CustomBuild Include="enc/syntax.c">
       <Filter>enc</Filter>
-    </ClCompile>
-    <ClCompile Include="enc\vp8l.c">
+    </CustomBuild>
+    <CustomBuild Include="enc/token.c">
       <Filter>enc</Filter>
-    </ClCompile>
-    <ClCompile Include="enc\webpenc.c">
+    </CustomBuild>
+    <CustomBuild Include="enc/tree.c">
       <Filter>enc</Filter>
-    </ClCompile>
-    <None Include="libwebp.gyp"/>
+    </CustomBuild>
+    <CustomBuild Include="enc/vp8l.c">
+      <Filter>enc</Filter>
+    </CustomBuild>
+    <CustomBuild Include="enc/webpenc.c">
+      <Filter>enc</Filter>
+    </CustomBuild>
   </ItemGroup>
 </Project>

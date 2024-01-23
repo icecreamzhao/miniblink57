@@ -1,4 +1,4 @@
-﻿// Copyright 2011 Google Inc. All Rights Reserved.
+// Copyright 2011 Google Inc. All Rights Reserved.
 //
 // Use of this source code is governed by a BSD-style license
 // that can be found in the COPYING file in the root of the source
@@ -34,10 +34,9 @@ typedef struct {
 } HuffmanTreeCode;
 
 // Struct to represent the Huffman tree.
-// TODO(vikasa): Add comment for the fields of the Struct.
 typedef struct {
-  uint32_t total_count_;
-  int value_;
+  uint32_t total_count_;   // Symbol frequency.
+  int value_;              // Symbol value.
   int pool_index_left_;    // Index for the left sub-tree.
   int pool_index_right_;   // Index for the right sub-tree.
 } HuffmanTree;

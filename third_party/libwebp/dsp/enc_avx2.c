@@ -1,4 +1,4 @@
-﻿// Copyright 2014 Google Inc. All Rights Reserved.
+// Copyright 2014 Google Inc. All Rights Reserved.
 //
 // Use of this source code is governed by a BSD-style license
 // that can be found in the COPYING file in the root of the source
@@ -18,7 +18,4 @@
 //------------------------------------------------------------------------------
 // Entry point
 
-extern void VP8EncDspInitAVX2(void);
-
-void VP8EncDspInitAVX2(void) {
-}
+WEBP_DSP_INIT_STUB(VP8EncDspInitAVX2)

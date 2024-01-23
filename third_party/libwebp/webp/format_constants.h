@@ -1,4 +1,4 @@
-﻿// Copyright 2012 Google Inc. All Rights Reserved.
+// Copyright 2012 Google Inc. All Rights Reserved.
 //
 // Use of this source code is governed by a BSD-style license
 // that can be found in the COPYING file in the root of the source
@@ -15,7 +15,7 @@
 #define WEBP_WEBP_FORMAT_CONSTANTS_H_
 
 // Create fourcc of the chunk from the chunk tag characters.
-#define MKFOURCC(a, b, c, d) ((uint32_t)(a) | (b) << 8 | (c) << 16 | (d) << 24)
+#define MKFOURCC(a, b, c, d) ((a) | (b) << 8 | (c) << 16 | (uint32_t)(d) << 24)
 
 // VP8 related constants.
 #define VP8_SIGNATURE 0x9d012a              // Signature in VP8 data.

@@ -1,4 +1,4 @@
-﻿// Copyright 2012 Google Inc. All Rights Reserved.
+// Copyright 2012 Google Inc. All Rights Reserved.
 //
 // Use of this source code is governed by a BSD-style license
 // that can be found in the COPYING file in the root of the source
@@ -15,8 +15,14 @@
 #ifndef WEBP_UTILS_UTILS_H_
 #define WEBP_UTILS_UTILS_H_
 
-#include <assert.h>
+#ifdef HAVE_CONFIG_H
+#include "../webp/config.h"
+#endif
 
+#include <assert.h>
+#include <limits.h>
+
+#include "../dsp/dsp.h"
 #include "../webp/types.h"
 
 #ifdef __cplusplus
@@ -27,7 +33,14 @@ extern "C" {
 // Memory allocation
 
 // This is the maximum memory amount that libwebp will ever try to allocate.
-#define WEBP_MAX_ALLOCABLE_MEMORY (1ULL << 40)
+#ifndef WEBP_MAX_ALLOCABLE_MEMORY
+#if SIZE_MAX > (1ULL << 34)
+#define WEBP_MAX_ALLOCABLE_MEMORY (1ULL << 34)
+#else
+// For 32-bit targets keep this below INT_MAX to avoid valgrind warnings.
+#define WEBP_MAX_ALLOCABLE_MEMORY ((1ULL << 31) - (1 << 16))
+#endif
+#endif  // WEBP_MAX_ALLOCABLE_MEMORY
 
 // size-checking safe malloc/calloc: verify that the requested size is not too
 // large, or return NULL. You don't need to call these for constructs like
@@ -44,6 +57,34 @@ WEBP_EXTERN(void*) WebPSafeCalloc(uint64_t nmemb, size_t size);
 WEBP_EXTERN(void) WebPSafeFree(void* const ptr);
 
 //------------------------------------------------------------------------------
+// Alignment
+
+#define WEBP_ALIGN_CST 31
+#define WEBP_ALIGN(PTR) (((uintptr_t)(PTR) + WEBP_ALIGN_CST) & ~WEBP_ALIGN_CST)
+
+#if defined(WEBP_FORCE_ALIGNED)
+#include <string.h>
+// memcpy() is the safe way of moving potentially unaligned 32b memory.
+static WEBP_INLINE uint32_t WebPMemToUint32(const uint8_t* const ptr) {
+  uint32_t A;
+  memcpy(&A, (const int*)ptr, sizeof(A));
+  return A;
+}
+static WEBP_INLINE void WebPUint32ToMem(uint8_t* const ptr, uint32_t val) {
+  memcpy(ptr, &val, sizeof(val));
+}
+#else
+static WEBP_UBSAN_IGNORE_UNDEF WEBP_INLINE
+uint32_t WebPMemToUint32(const uint8_t* const ptr) {
+  return *(const uint32_t*)ptr;
+}
+static WEBP_UBSAN_IGNORE_UNDEF WEBP_INLINE
+void WebPUint32ToMem(uint8_t* const ptr, uint32_t val) {
+  *(uint32_t*)ptr = val;
+}
+#endif
+
+//------------------------------------------------------------------------------
 // Reading/writing data.
 
 // Read 16, 24 or 32 bits stored in little-endian order.
@@ -56,7 +97,7 @@ static WEBP_INLINE int GetLE24(const uint8_t* const data) {
 }
 
 static WEBP_INLINE uint32_t GetLE32(const uint8_t* const data) {
-  return (uint32_t)GetLE16(data) | (GetLE16(data + 2) << 16);
+  return GetLE16(data) | ((uint32_t)GetLE16(data + 2) << 16);
 }
 
 // Store 16, 24 or 32 bits in little-endian order.
@@ -111,6 +152,34 @@ static WEBP_INLINE int BitsLog2Floor(uint32_t n) {
   return log;
 }
 #endif
+
+//------------------------------------------------------------------------------
+// Pixel copying.
+
+struct WebPPicture;
+
+// Copy width x height pixels from 'src' to 'dst' honoring the strides.
+WEBP_EXTERN(void) WebPCopyPlane(const uint8_t* src, int src_stride,
+                                uint8_t* dst, int dst_stride,
+                                int width, int height);
+
+// Copy ARGB pixels from 'src' to 'dst' honoring strides. 'src' and 'dst' are
+// assumed to be already allocated and using ARGB data.
+WEBP_EXTERN(void) WebPCopyPixels(const struct WebPPicture* const src,
+                                 struct WebPPicture* const dst);
+
+//------------------------------------------------------------------------------
+// Unique colors.
+
+// Returns count of unique colors in 'pic', assuming pic->use_argb is true.
+// If the unique color count is more than MAX_COLOR_COUNT, returns
+// MAX_COLOR_COUNT+1.
+// If 'palette' is not NULL and number of unique colors is less than or equal to
+// MAX_COLOR_COUNT, also outputs the actual unique colors into 'palette'.
+// Note: 'palette' is assumed to be an array already allocated with at least
+// MAX_COLOR_COUNT elements.
+WEBP_EXTERN(int) WebPGetColorPalette(const struct WebPPicture* const pic,
+                                     uint32_t* const palette);
 
 //------------------------------------------------------------------------------
 

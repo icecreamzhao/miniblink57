@@ -1,4 +1,4 @@
-﻿// Copyright 2013 Google Inc. All Rights Reserved.
+// Copyright 2013 Google Inc. All Rights Reserved.
 //
 // Use of this source code is governed by a BSD-style license
 // that can be found in the COPYING file in the root of the source
@@ -21,11 +21,11 @@ extern "C" {
 #endif
 
 // Apply post-processing to input 'data' of size 'width'x'height' assuming that
-// the source was quantized to a reduced number of levels.
+// the source was quantized to a reduced number of levels. 'stride' is in bytes.
 // Strength is in [0..100] and controls the amount of dithering applied.
 // Returns false in case of error (data is NULL, invalid parameters,
 // malloc failure, ...).
-int WebPDequantizeLevels(uint8_t* const data, int width, int height,
+int WebPDequantizeLevels(uint8_t* const data, int width, int height, int stride,
                          int strength);
 
 #ifdef __cplusplus

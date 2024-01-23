@@ -1,4 +1,4 @@
-﻿// Copyright 2014 Google Inc. All Rights Reserved.
+// Copyright 2014 Google Inc. All Rights Reserved.
 //
 // Use of this source code is governed by a BSD-style license
 // that can be found in the COPYING file in the root of the source
@@ -344,7 +344,7 @@ const int8_t* const VP8ksclip2 = &sclip2[112];
 const uint8_t* const VP8kclip1 = &clip1[255];
 const uint8_t* const VP8kabs0 = &abs0[255];
 
-void VP8InitClipTables(void) {
+WEBP_TSAN_IGNORE_FUNCTION void VP8InitClipTables(void) {
 #if !defined(USE_STATIC_TABLES)
   int i;
   if (!tables_ok) {
