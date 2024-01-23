@@ -493,11 +493,11 @@ bool Parser::expandQName(const String& qName,
     return true;
 }
 
-int xpathyyparse(blink::XPath::Parser*)
-{
-    DebugBreak();
-    return 0;
-}
+// int xpathyyparse(blink::XPath::Parser*)
+// {
+//     DebugBreak();
+//     return 0;
+// }
 
 Expression* Parser::parseStatement(const String& statement,
     XPathNSResolver* resolver,

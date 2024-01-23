@@ -50,8 +50,7 @@ V8PerContextData::V8PerContextData(v8::Local<v8::Context> context)
     , m_constructorMap(m_isolate)
     , m_contextHolder(WTF::makeUnique<gin::ContextHolder>(m_isolate))
     , m_context(m_isolate, context)
-    , m_activityLogger(nullptr)
-    , m_modulator(Modulator::create())
+    , m_activityLogger(nullptr)   
 {
     m_contextHolder->SetContext(context);
 
@@ -192,6 +191,13 @@ void V8PerContextData::addCustomElementBinding(
     std::unique_ptr<V0CustomElementBinding> binding)
 {
     m_customElementBindings.push_back(std::move(binding));
+}
+
+Modulator* V8PerContextData::modulator() 
+{ 
+    if (!m_modulator.get())
+        m_modulator = Modulator::create();
+    return m_modulator.get();
 }
 
 void V8PerContextData::setModulator(Modulator* modulator)

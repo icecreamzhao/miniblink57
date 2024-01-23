@@ -866,7 +866,6 @@ bool LocalDOMWindow::confirm(ScriptState* scriptState, const String& message)
     //       UseCounter::count(document(), UseCounter::ConfirmEngagementMax);
     //       break;
     //   }
-    DebugBreak();
 
     if (v8::MicrotasksScope::IsRunningMicrotasks(scriptState->isolate())) {
         UseCounter::count(document(), UseCounter::During_Microtask_Confirm);
@@ -920,7 +919,6 @@ String LocalDOMWindow::prompt(ScriptState* scriptState,
     //       UseCounter::count(document(), UseCounter::PromptEngagementMax);
     //       break;
     //   }
-    DebugBreak();
 
     if (v8::MicrotasksScope::IsRunningMicrotasks(scriptState->isolate())) {
         UseCounter::count(document(), UseCounter::During_Microtask_Prompt);

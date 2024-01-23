@@ -272,6 +272,8 @@ PassRefPtr<SkTypeface> FontCache::createTypeface(const FontDescription& fontDesc
     bool useDW = true;
 #if OS(WIN)
     useDW = useDirectWrite();
+#else
+    useDW = false;
 #endif
     if (m_fontManager) {
         return adoptRef(useDW
@@ -286,8 +288,7 @@ PassRefPtr<SkTypeface> FontCache::createTypeface(const FontDescription& fontDesc
     // FIXME: Use m_fontManager, matchFamilyStyle instead of
     // legacyCreateTypeface on all platforms.
     RefPtr<SkFontMgr> fm = adoptRef(SkFontMgr::RefDefault());
-    return adoptRef(fm->legacyCreateTypeface(name.data(),
-        fontDescription.skiaFontStyle()));
+    return adoptRef(fm->legacyCreateTypeface(name.data(), fontDescription.skiaFontStyle()));
 }
 
 #if !OS(WIN)

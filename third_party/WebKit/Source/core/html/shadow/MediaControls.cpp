@@ -302,19 +302,12 @@ void MediaControls::initializeControls()
     // because it determines how the elements show up in the overflow menu
     // relative to each other.  The first item appended appears at the top of the
     // overflow menu.
-    m_overflowList->appendChild(m_playButton->createOverflowElement(
-        *this, MediaControlPlayButtonElement::create(*this)));
-    m_overflowList->appendChild(m_fullscreenButton->createOverflowElement(
-        *this, MediaControlFullscreenButtonElement::create(*this)));
-    m_overflowList->appendChild(m_downloadButton->createOverflowElement(
-        *this, MediaControlDownloadButtonElement::create(*this)));
-    m_overflowList->appendChild(m_muteButton->createOverflowElement(
-        *this, MediaControlMuteButtonElement::create(*this)));
-    m_overflowList->appendChild(m_castButton->createOverflowElement(
-        *this, MediaControlCastButtonElement::create(*this, false)));
-    m_overflowList->appendChild(
-        m_toggleClosedCaptionsButton->createOverflowElement(
-            *this, MediaControlToggleClosedCaptionsButtonElement::create(*this)));
+    m_overflowList->appendChild(m_playButton->createOverflowElement(*this, MediaControlPlayButtonElement::create(*this)));
+    m_overflowList->appendChild(m_fullscreenButton->createOverflowElement(*this, MediaControlFullscreenButtonElement::create(*this)));
+    m_overflowList->appendChild(m_downloadButton->createOverflowElement(*this, MediaControlDownloadButtonElement::create(*this)));
+    m_overflowList->appendChild(m_muteButton->createOverflowElement(*this, MediaControlMuteButtonElement::create(*this)));
+    m_overflowList->appendChild(m_castButton->createOverflowElement(*this, MediaControlCastButtonElement::create(*this, false)));
+    m_overflowList->appendChild(m_toggleClosedCaptionsButton->createOverflowElement(*this, MediaControlToggleClosedCaptionsButtonElement::create(*this)));
 }
 
 void MediaControls::reset()
@@ -353,8 +346,7 @@ void MediaControls::reset()
 
     refreshCastButtonVisibilityWithoutUpdate();
 
-    m_downloadButton->setIsWanted(
-        m_downloadButton->shouldDisplayDownloadButton());
+    m_downloadButton->setIsWanted(m_downloadButton->shouldDisplayDownloadButton());
 }
 
 LayoutObject* MediaControls::layoutObjectForTextTrackLayout()
