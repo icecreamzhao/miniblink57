@@ -616,10 +616,36 @@ WebNavigationPolicy WebFrameClientImpl::decidePolicyForNavigation(const Navigati
 
 void WebFrameClientImpl::didDispatchPingLoader(const WebURL& url) {}
 
+// W:\chromium\liebao57\chrome_57_b2987_8003\src\content\browser\loader\mime_sniffing_resource_handler.cc
+const char kAcceptHeader[] = "Accept";
+const char kFrameAcceptHeader[] = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8";
+const char kStylesheetAcceptHeader[] = "text/css,*/*;q=0.1";
+const char kImageAcceptHeader[] = "image/webp,image/*,*/*;q=0.8";
+//const char kDefaultAcceptHeader[] = "*/*";
+const char kDefaultAcceptHeader[] = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
+
 static void setRequestHead(WebLocalFrame* webFrame, WebPage* webPage, WebURLRequest& request)
 {
-    request.addHTTPHeaderField("Accept-Language", webPage->webPageImpl()->acceptLanguages());
+    const char* acceptValue = nullptr;
+    blink::WebURLRequest::RequestContext requestContext = request.getRequestContext();
+    switch (requestContext) {
+    case blink::WebURLRequest::RequestContextFrame:
+        acceptValue = kFrameAcceptHeader;
+        break;
+    case blink::WebURLRequest::RequestContextStyle:
+        acceptValue = kStylesheetAcceptHeader;
+        break;
+    case blink::WebURLRequest::RequestContextFavicon:
+    case blink::WebURLRequest::RequestContextImageSet:
+        acceptValue = kImageAcceptHeader;
+        break;
+    default:
+        acceptValue = kDefaultAcceptHeader;
+        break;
+    }
 
+    request.addHTTPHeaderField("Accept-Language", webPage->webPageImpl()->acceptLanguages());
+    request.addHTTPHeaderField(kAcceptHeader, blink::WebString::fromLatin1(acceptValue));
     request.addHTTPHeaderField("Upgrade-Insecure-Requests", "1");
     request.addHTTPHeaderField("Connection", "keep-alive");
     request.addHTTPHeaderField("Accept-Encoding", "deflate, gzip");
@@ -658,9 +684,6 @@ static void setRequestHead(WebLocalFrame* webFrame, WebPage* webPage, WebURLRequ
                 request.setFirstPartyForCookies(webFrame->top()->document().firstPartyForCookies());
         }
     }
-
-    const char kDefaultAcceptHeader[] = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
-    const char kAcceptHeader[] = "Accept";
 
     //     WebDataSource* provisionalDataSource = webFrame->provisionalDataSource();
     //     WebDataSource* dataSource = provisionalDataSource ? provisionalDataSource : webFrame->dataSource();
@@ -825,7 +848,7 @@ void WebFrameClientImpl::showContextMenu(const blink::WebContextMenuData& data)
 
 void WebFrameClientImpl::didCreateScriptContext(WebLocalFrame* frame, v8::Local<v8::Context> context, int worldId)
 {
-    v8::V8::SetCaptureStackTraceForUncaughtExceptions(true, 50, v8::StackTrace::kDetailed);
+    v8::Isolate::GetCurrent()->SetCaptureStackTraceForUncaughtExceptions(true, 50, v8::StackTrace::kDetailed);
 
     int extensionGroup = 0;
 #if (defined ENABLE_WKE) && (ENABLE_WKE == 1)
