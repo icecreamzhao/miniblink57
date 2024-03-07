@@ -66,7 +66,11 @@ CORE_EXPORT bool DictionaryHelper::get(const Dictionary& dictionary,
     if (!dictionary.get(key, v8Value))
         return false;
 
+#if V8_MAJOR_VERSION <= 7
     return v8Call(v8Value->BooleanValue(dictionary.v8Context()), value);
+#else
+    return v8Value->BooleanValue(dictionary.isolate());
+#endif
 }
 
 template <>

@@ -139,11 +139,19 @@ namespace {
         v8::MicrotasksScope microtasksScope(isolate,
             v8::MicrotasksScope::kDoNotRunMicrotasks);
         V8PerIsolateData::from(isolate)->setIsHandlingRecursionLevelError(true);
+#if V8_MAJOR_VERSION <= 7
         v8::Local<v8::Value> result = v8::Function::New(isolate->GetCurrentContext(),
             throwStackOverflowException, v8::Local<v8::Value>(), 0,
             v8::ConstructorBehavior::kThrow)
                                           .ToLocalChecked()
                                           ->Call(v8::Undefined(isolate), 0, 0);
+#else
+        ScriptForbiddenScope::AllowUserAgentScript allowScript;
+        v8::Local<v8::Context> context = isolate->GetCurrentContext();
+        v8::Local<v8::Value> result = v8::Function::New(context, throwStackOverflowException, v8::Local<v8::Value>(), 0, v8::ConstructorBehavior::kThrow)
+            .ToLocalChecked()
+            ->Call(context, v8::Undefined(isolate), 0, nullptr).ToLocalChecked();
+#endif
         V8PerIsolateData::from(isolate)->setIsHandlingRecursionLevelError(false);
         return result;
     }
@@ -297,6 +305,7 @@ namespace {
         // time stamp.
         switch (cacheOptions) {
         case V8CacheOptionsParse: {
+#if V8_MAJOR_VERSION < 10
             const v8::ScriptCompiler::CachedData* newCachedData = streamer->source()->GetCachedData();
             if (!newCachedData)
                 break;
@@ -308,6 +317,9 @@ namespace {
                 cacheTag(CacheTagParser, cacheHandler),
                 reinterpret_cast<const char*>(newCachedData->data),
                 newCachedData->length, cacheType);
+#else
+            DebugBreak();
+#endif
             break;
         }
 
@@ -372,8 +384,13 @@ namespace {
             // Use parser-cache; in-memory only.
             return bind(compileAndConsumeOrProduce, wrapPersistent(cacheHandler),
                 cacheTag(CacheTagParser, cacheHandler),
+#if V8_MAJOR_VERSION > 7
+                v8::ScriptCompiler::kConsumeCodeCache,
+                v8::ScriptCompiler::kConsumeCodeCache,
+#else
                 v8::ScriptCompiler::kConsumeParserCache,
                 v8::ScriptCompiler::kProduceParserCache,
+#endif
                 CachedMetadataHandler::CacheLocally);
             break;
 
@@ -391,7 +408,12 @@ namespace {
             }
             uint32_t codeCacheTag = cacheTag(CacheTagCode, cacheHandler);
             return bind(compileAndProduceCache, wrapPersistent(cacheHandler),
-                codeCacheTag, v8::ScriptCompiler::kProduceCodeCache,
+                codeCacheTag, 
+#if V8_MAJOR_VERSION > 7
+                v8::ScriptCompiler::kConsumeCodeCache,
+#else
+                v8::ScriptCompiler::kProduceCodeCache,
+#endif
                 CachedMetadataHandler::SendToPlatform);
             break;
         }
@@ -582,6 +604,7 @@ v8::MaybeLocal<v8::Script> V8ScriptRunner::compileScript(
 
     // NOTE: For compatibility with WebCore, ScriptSourceCode's line starts at
     // 1, whereas v8 starts at 0.
+#if V8_MAJOR_VERSION < 10
     v8::ScriptOrigin origin(
         v8String(isolate, fileName),
         v8::Integer::New(isolate, scriptStartPosition.m_line.zeroBasedInt()),
@@ -589,6 +612,15 @@ v8::MaybeLocal<v8::Script> V8ScriptRunner::compileScript(
         v8Boolean(accessControlStatus == SharableCrossOrigin, isolate),
         v8::Local<v8::Integer>(), v8String(isolate, sourceMapUrl),
         v8Boolean(accessControlStatus == OpaqueResource, isolate));
+#else
+    v8::ScriptOrigin origin(isolate,
+        v8String(isolate, fileName),
+        scriptStartPosition.m_line.zeroBasedInt(),
+        scriptStartPosition.m_column.zeroBasedInt(),
+        accessControlStatus == SharableCrossOrigin,
+        -1, v8String(isolate, sourceMapUrl),
+        accessControlStatus == OpaqueResource);
+#endif
 
     V8CompileHistogram::Cacheability cacheabilityIfNoHandler = V8CompileHistogram::Cacheability::Noncacheable;
     if (!cacheHandler && (scriptStartPosition.m_line.zeroBasedInt() == 0) && (scriptStartPosition.m_column.zeroBasedInt() == 0))
@@ -611,7 +643,11 @@ v8::MaybeLocal<v8::Module> V8ScriptRunner::compileModule(
     TRACE_EVENT1("v8", "v8.compileModule", "fileName", fileName.utf8());
     // TODO(adamk): Add Inspector integration?
     // TODO(adamk): Pass more info into ScriptOrigin.
+#if V8_MAJOR_VERSION > 7
+    v8::ScriptOrigin origin(isolate, v8String(isolate, fileName));
+#else
     v8::ScriptOrigin origin(v8String(isolate, fileName));
+#endif
     v8::ScriptCompiler::Source scriptSource(v8String(isolate, source), origin);
     return v8::ScriptCompiler::CompileModule(isolate, &scriptSource);
 }
@@ -625,7 +661,7 @@ v8::MaybeLocal<v8::Value> V8ScriptRunner::runCompiledScript(
     ScopedFrameBlamer frameBlamer(
         context->isDocument() ? toDocument(context)->frame() : nullptr);
     TRACE_EVENT1("v8", "v8.run", "fileName",
-        TRACE_STR_COPY(*v8::String::Utf8Value(
+        TRACE_STR_COPY(*v8::String::Utf8Value(isolate,
             script->GetUnboundScript()->GetScriptName())));
 
     if (v8::MicrotasksScope::GetCurrentDepth(isolate) >= kMaxRecursionDepth)

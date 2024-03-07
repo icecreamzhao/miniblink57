@@ -374,11 +374,13 @@ static bool needInserFileHead(const String& url)
     return false;
 }
 
-KURL::KURL(ParsedURLStringTag, const String& url)
+KURL::KURL(ParsedURLStringTag, const String& urlStr)
 {
     m_innerURL = nullptr;
     bool fixed = false;
     String fixSchemeUrl;
+
+    String url = WTF::ensureStringToUTF8String(urlStr);
 
     if (!url.isNull() && !url.isEmpty()) {
         if (needInserFileHead(url)) {

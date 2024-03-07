@@ -11,6 +11,7 @@
 #include "src/runtime/runtime.h"
 #include "src/type-hints.h"
 #include "src/vector-slot-pair.h"
+#include <math.h>
 
 namespace v8 {
 namespace internal {

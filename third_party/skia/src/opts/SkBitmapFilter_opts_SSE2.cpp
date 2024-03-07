@@ -4,7 +4,7 @@
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
+#if defined(__i386__) || defined(_M_IX86) || defined(__x86_64__) || defined(_M_X64)
 #include "SkBitmapFilter_opts_SSE2.h"
 #include "SkBitmap.h"
 #include "SkBitmapProcState.h"
@@ -501,3 +501,4 @@ void applySIMDPadding_SSE2(SkConvolutionFilter1D* filter)
         filter->addFilterValue(static_cast<SkConvolutionFilter1D::ConvolutionFixed>(0));
     }
 }
+#endif // #if defined(__i386__) || defined(_M_IX86) || defined(__x86_64__) || defined(_M_X64)

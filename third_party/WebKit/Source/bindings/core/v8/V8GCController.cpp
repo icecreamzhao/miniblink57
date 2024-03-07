@@ -52,6 +52,13 @@
 #include "wtf/allocator/Partitions.h"
 #include <algorithm>
 
+ // void WriteBarrier::CheckParams(Type expected_type, const Params& params)
+ // {
+ // #if V8_ENABLE_CHECKS
+ //     CHECK_EQ(expected_type, params.type);
+ // #endif // V8_ENABLE_CHECKS
+ // }
+
 namespace blink {
 
 // FIXME: This should use opaque GC roots.
@@ -274,20 +281,22 @@ namespace {
 
     void visitWeakHandlesForMinorGC(v8::Isolate* isolate)
     {
+#if V8_MAJOR_VERSION <= 7
         MinorGCUnmodifiedWrapperVisitor visitor(isolate);
         isolate->VisitWeakHandles(&visitor);
+#endif
     }
 
-    void objectGroupingForMajorGC(v8::Isolate* isolate,
-        bool constructRetainedObjectInfos)
+    void objectGroupingForMajorGC(v8::Isolate* isolate, bool constructRetainedObjectInfos)
     {
+#if V8_MAJOR_VERSION <= 7
         MajorGCWrapperVisitor visitor(isolate, constructRetainedObjectInfos);
         isolate->VisitHandlesWithClassIds(&visitor);
         visitor.notifyFinished();
+#endif
     }
 
-    void gcPrologueForMajorGC(v8::Isolate* isolate,
-        bool constructRetainedObjectInfos)
+    void gcPrologueForMajorGC(v8::Isolate* isolate, bool constructRetainedObjectInfos)
     {
         if (!RuntimeEnabledFeatures::traceWrappablesEnabled() || constructRetainedObjectInfos) {
             objectGroupingForMajorGC(isolate, constructRetainedObjectInfos);
@@ -347,10 +356,12 @@ namespace {
 
     void UpdateCollectedPhantomHandles(v8::Isolate* isolate)
     {
+#if V8_MAJOR_VERSION <= 7
         ThreadHeapStats& heapStats = ThreadState::current()->heap().heapStats();
         size_t count = isolate->NumberOfPhantomHandleResetsSinceLastCall();
         heapStats.decreaseWrapperCount(count);
         heapStats.increaseCollectedWrapperCount(count);
+#endif
     }
 
 } // namespace
@@ -533,7 +544,10 @@ public:
         VisitHandle(value, class_id);
     }
 
-    void VisitTracedGlobalHandle(const v8::TracedGlobal<v8::Value>& value) final
+    void VisitTracedGlobalHandle(const v8::TracedGlobal<v8::Value>& value) 
+#if V8_MAJOR_VERSION <= 7
+        final
+#endif
     {
         VisitHandle(&value, value.WrapperClassId());
     }
@@ -581,8 +595,9 @@ void V8GCController::traceDOMWrappers(v8::Isolate* isolate, Visitor* parentVisit
         delete v8References;
 
     DOMWrapperForwardingVisitor visitor(parentVisitor);
+#if V8_MAJOR_VERSION <= 7
     isolate->VisitHandlesWithClassIds(&visitor);
-
+#endif
     v8::EmbedderHeapTracer* tracer = V8PerIsolateData::from(isolate)->getEmbedderHeapTracer(isolate);
     // There may be no tracer during tear down garbage collections.
     // Not all threads have a tracer attached.
@@ -635,8 +650,7 @@ private:
     bool m_pendingActivityFound;
 };
 
-bool V8GCController::hasPendingActivity(v8::Isolate* isolate,
-    ExecutionContext* executionContext)
+bool V8GCController::hasPendingActivity(v8::Isolate* isolate, ExecutionContext* executionContext)
 {
     // V8GCController::hasPendingActivity is used only when a worker checks if
     // the worker contains any wrapper that has pending activities.
@@ -644,14 +658,16 @@ bool V8GCController::hasPendingActivity(v8::Isolate* isolate,
 
     DEFINE_THREAD_SAFE_STATIC_LOCAL(
         CustomCountHistogram, scanPendingActivityHistogram,
-        new CustomCountHistogram("Blink.ScanPendingActivityDuration", 1, 1000,
-            50));
+        new CustomCountHistogram("Blink.ScanPendingActivityDuration", 1, 1000, 50));
     double startTime = WTF::currentTimeMS();
     v8::HandleScope scope(isolate);
     PendingActivityVisitor visitor(isolate, executionContext);
+#if V8_MAJOR_VERSION <= 7
     toIsolate(executionContext)->VisitHandlesWithClassIds(&visitor);
-    scanPendingActivityHistogram.count(
-        static_cast<int>(WTF::currentTimeMS() - startTime));
+#else
+    DebugBreak();
+#endif
+    scanPendingActivityHistogram.count(static_cast<int>(WTF::currentTimeMS() - startTime));
     return visitor.pendingActivityFound();
 }
 

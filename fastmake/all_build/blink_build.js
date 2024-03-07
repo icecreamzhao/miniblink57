@@ -72,7 +72,7 @@ var json = [{
             "${srcPath}/third_party/angle/src"
         ],
         "prebuildSrc":[
-                
+            "W:/mycode/mb108/linux/test_head.cpp",
             "${srcPath}/third_party/WebKit/Source/platform/fonts/skia/FontCacheSkia.cpp",
             "${srcPath}/third_party/WebKit/Source/platform/fonts/FontCache.cpp",
             "${srcPath}/third_party/WebKit/Source/platform/fonts/FontFallbackList.cpp",

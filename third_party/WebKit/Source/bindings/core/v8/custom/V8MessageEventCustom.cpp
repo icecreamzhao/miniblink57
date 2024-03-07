@@ -98,13 +98,13 @@ void V8MessageEvent::initMessageEventMethodCustom(
         "MessageEvent", "initMessageEvent");
     MessageEvent* event = V8MessageEvent::toImpl(info.Holder());
     TOSTRING_VOID(V8StringResource<>, typeArg, info[0]);
-    bool canBubbleArg = false;
-    bool cancelableArg = false;
-    if (!v8Call(info[1]->BooleanValue(info.GetIsolate()->GetCurrentContext()),
-            canBubbleArg)
-        || !v8Call(info[2]->BooleanValue(info.GetIsolate()->GetCurrentContext()),
-            cancelableArg))
-        return;
+    bool canBubbleArg = info[1]->BooleanValue(info.GetIsolate());
+    bool cancelableArg = info[2]->BooleanValue(info.GetIsolate());
+//     if (!v8Call(info[1]->BooleanValue(info.GetIsolate()),
+//             canBubbleArg)
+//         || !v8Call(info[2]->BooleanValue(info.GetIsolate()),
+//             cancelableArg))
+//         return;
     v8::Local<v8::Value> dataArg = info[3];
     TOSTRING_VOID(V8StringResource<>, originArg, info[4]);
     TOSTRING_VOID(V8StringResource<>, lastEventIdArg, info[5]);

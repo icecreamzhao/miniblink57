@@ -1,9 +1,12 @@
 
 #if !defined(WIN32)
+#ifdef INSIDE_BLINK
 #include "base/strings/utf_string_conversions.h"
 #include "base/time/time.h"
 #include "mbvip/common/StringUtil.h"
 #include "third_party/WebKit/Source/wtf/HashFunctions.h"
+#endif
+
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -15,6 +18,10 @@
 #include <vector>
 #include <signal.h>
 #include <dlfcn.h>
+#include <string.h>
+#include <string>
+#include <list>
+#include <process.h>
 
 #ifndef __x86_64__
 # define _STAT_VER_LINUX	3
@@ -134,6 +141,104 @@ extern "C" void DebugBreak()
     __debugbreak();
 }
 
+class WinLogThread {
+public:
+    WinLogThread()
+    {
+        setenv("SELENIUM_LOG_LEVEL", "FATAL", 1);
+
+        //m_handle = fopen("/usr/bin/chromedriver.txt", "a");
+        //m_handle = fopen("chromedriver.txt", "a");
+        openFile("w");
+        if (!m_handle)
+            return;
+        fclose(m_handle);
+        openFile("a");
+        if (!m_handle)
+            return;
+
+        unsigned int s_threadId = 0;
+        _beginthreadex(NULL, 0, logThreadProc, (void*)(this), 0, &s_threadId);
+        while (m_mutex == nullptr) {
+            Sleep(100);
+        }
+    }
+
+    void openFile(const char* mode)
+    {
+#ifdef ENABLE_MB
+#define MBLOG_NAME "mblog.txt"
+#else
+#define MBLOG_NAME "mbexelog.txt"
+#endif
+        m_handle = fopen("/home/weolar/test/wpt-master/_venv3/bin/chrome/chromedriver/" MBLOG_NAME, mode);
+        if (!m_handle)
+            m_handle = fopen("/tmp/mbdriver/" MBLOG_NAME, mode);
+        if (!m_handle)
+            m_handle = fopen(MBLOG_NAME, mode);
+    }
+
+    static unsigned int logThreadProc(LPVOID lpParameter)
+    {
+        WinLogThread* self = (WinLogThread*)lpParameter;
+        self->threadProc();
+        return 0;
+    }
+
+    void pushStr(const char* str)
+    {
+        if (!str || !m_handle)
+            return;
+
+        EnterCriticalSection(m_mutex);
+        m_logTexts.push_back(std::string(str));
+        LeaveCriticalSection(m_mutex);
+
+        while (true) {
+            EnterCriticalSection(m_mutex);
+            if (0 != m_logTexts.size()) {
+                LeaveCriticalSection(m_mutex);
+                Sleep(10);
+            } else {
+                LeaveCriticalSection(m_mutex);
+                break;
+            }
+        }
+    }
+
+    void threadProc()
+    {
+        //printf("threadProc 1\n");
+        if (!m_handle)
+            return;
+
+        CRITICAL_SECTION* mutex = new CRITICAL_SECTION();
+        InitializeCriticalSection(mutex);
+        m_mutex = mutex;
+        //printf("threadProc 2\n");
+
+        for (; true; Sleep(1)) {
+            EnterCriticalSection(m_mutex);
+            if (m_logTexts.size() == 0) {
+                LeaveCriticalSection(m_mutex);
+                continue;
+            }
+
+            std::list<std::string>::iterator it = m_logTexts.begin();
+            std::string str = *it;
+            m_logTexts.pop_front();
+            LeaveCriticalSection(m_mutex);
+
+            fwrite(str.c_str(), sizeof(char), str.size(), m_handle);
+            fflush(m_handle);
+        }
+    }
+private:
+    FILE* m_handle = nullptr;
+    std::list<std::string> m_logTexts;
+    CRITICAL_SECTION* m_mutex = nullptr;
+};
+
 extern "C" VOID OutputDebugStringA(LPCSTR lpOutputString)
 {
     if (!lpOutputString)
@@ -141,7 +246,7 @@ extern "C" VOID OutputDebugStringA(LPCSTR lpOutputString)
     size_t len = strlen(lpOutputString);
     if (0 == len)
         return;
-
+#if 1
     std::vector<char> str(len);
     for (size_t i = 0; i < len; ++i) {
         if ('%' == lpOutputString[i])
@@ -153,8 +258,15 @@ extern "C" VOID OutputDebugStringA(LPCSTR lpOutputString)
     if (len > 200)
         str[199] = '\0';
     printf(str.data());
+#else
+    static WinLogThread* s_logThread = nullptr;
+    if (!s_logThread)
+        s_logThread = new WinLogThread();
+    s_logThread->pushStr(lpOutputString);
+#endif
 }
 
+#ifdef INSIDE_BLINK
 extern "C" VOID OutputDebugStringW(LPCWSTR lpOutputString)
 {
     if (!lpOutputString)
@@ -167,6 +279,7 @@ extern "C" VOID OutputDebugStringW(LPCWSTR lpOutputString)
     base::UTF16ToUTF8(lpOutputString, len, &str);
     OutputDebugStringA(str.c_str());
 }
+#endif
 
 static void handlePipe(int sig)
 {
@@ -577,17 +690,33 @@ BOOL GetMonitorInfoW(HMONITOR hMonitor, LPMONITORINFO lpmi)
     return FALSE;
 }
 
+#if 1 // def INSIDE_BLINK
+
+inline unsigned hashInt(uint64_t key)
+{
+  key += ~(key << 32);
+  key ^= (key >> 22);
+  key += ~(key << 13);
+  key ^= (key >> 8);
+  key += (key << 3);
+  key ^= (key >> 15);
+  key += ~(key << 27);
+  key ^= (key >> 31);
+  return static_cast<unsigned>(key);
+}
+
 DWORD GetCurrentThreadId()
 {
     pthread_t id = pthread_self();
     DWORD ret = 0;
 
     if (sizeof(pthread_t) == 8)
-        ret = WTF::hashInt((uint64_t)id);
+        ret = /*WTF::*/hashInt((uint64_t)id);
     else
         ret = id;
     return (DWORD)id;
 }
+#endif
 
 UINT_PTR SetTimer(HWND hWnd, UINT_PTR nIDEvent, UINT uElapse, TIMERPROC lpTimerFunc)
 {
@@ -818,7 +947,7 @@ VOID DeleteCriticalSection(CRITICAL_SECTION* lpCriticalSection)
 BOOL TryEnterCriticalSection(CRITICAL_SECTION* lpCriticalSection)
 {
     int rv = pthread_mutex_trylock(&(lpCriticalSection->mutex));
-    DCHECK(rv == 0 || rv == EBUSY) << ". " << strerror(rv);
+    //DCHECK(rv == 0 || rv == EBUSY) << ". " << strerror(rv);
     return rv == 0;
 }
 
@@ -942,6 +1071,8 @@ HANDLE GetClipboardData(UINT uFormat)
     printf("GetClipboardData\n");
     return NULL;
 }
+
+#ifdef INSIDE_BLINK
 BOOL QueryPerformanceCounter(LARGE_INTEGER* lpPerformanceCount)
 {
     int64_t val = (DWORD)base::Time::Now().ToInternalValue();
@@ -953,17 +1084,20 @@ DWORD GetTickCount()
 {
     return (DWORD)base::Time::Now().ToInternalValue();
 }
+#endif
 
 BOOL AlphaBlend(HDC hdcDest, int xoriginDest, int yoriginDest, int wDest, int hDest, HDC hdcSrc, int xoriginSrc, int yoriginSrc, int wSrc, int hSrc, BLENDFUNCTION ftn)
 {
     printf("AlphaBlend\n");
     return FALSE;
 }
+
 BOOL GdiAlphaBlend(HDC hdcDest, int xoriginDest, int yoriginDest, int wDest, int hDest, HDC hdcSrc, int xoriginSrc, int yoriginSrc, int wSrc, int hSrc, BLENDFUNCTION ftn)
 {
     printf("GdiAlphaBlend\n");
     return FALSE;
 }
+
 HBITMAP CreateDIBSection(HDC hdc, CONST BITMAPINFO* lpbmi, UINT usage, VOID** ppvBits, HANDLE hSection, DWORD offset)
 {
     printf("CreateDIBSection\n");
@@ -979,6 +1113,7 @@ VOID GetSystemTime(SYSTEMTIME* lpSystemTime)
 {
     printf("GetSystemTime\n");
 }
+
 BOOL QueryPerformanceFrequency(LARGE_INTEGER* lpFrequency)
 {
     printf("QueryPerformanceFrequency\n");
@@ -990,16 +1125,19 @@ BOOL QueryPerformanceFrequency(LARGE_INTEGER* lpFrequency)
     printf("_wfopen\n");
     return NULL;
 }
+
 HINSTANCE ShellExecuteA(HWND hwnd, LPCSTR lpOperation, LPCSTR lpFile, LPCSTR lpParameters, LPCSTR lpDirectory, INT nShowCmd)
 {
     printf("ShellExecuteA\n");
     return NULL;
 }
+
 BOOL PathFileExistsW(LPCWSTR pszPath)
 {
     printf("PathFileExistsW\n");
     return FALSE;
 }
+
 DWORD GetCurrentDirectoryW(DWORD nBufferLength, LPWSTR lpBuffer)
 {
     printf("GetCurrentDirectoryW\n");
@@ -1011,10 +1149,12 @@ BOOL GetClassInfoW(HINSTANCE hInstance, LPCWSTR lpClassName, LPWNDCLASSW lpWndCl
     printf("GetClassInfoW\n");
     return FALSE;
 }
+
 void DragAcceptFiles(HWND hWnd, BOOL fAccept)
 {
     printf("DragAcceptFiles\n");
 }
+
 HANDLE RemovePropW(HWND hWnd, LPCWSTR lpString)
 {
     printf("RemovePropW\n");
@@ -1055,6 +1195,7 @@ void DragFinish(HDROP hDrop)
     printf("DragFinish\n");
     return;
 }
+
 HGDIOBJ GetStockObject(int i)
 {
     printf("GetStockObject\n");
@@ -1066,36 +1207,43 @@ HIMC ImmGetContext(IN HWND)
     printf("ImmGetContext\n");
     return 0;
 }
+
 BOOL ImmSetCompositionWindow(HIMC, LPCOMPOSITIONFORM lpCompForm)
 {
     printf("ImmSetCompositionWindow\n");
     return FALSE;
 }
+
 BOOL ImmReleaseContext(HWND, HIMC)
 {
     printf("ImmReleaseContext\n");
     return FALSE;
 }
+
 int GetSystemMetrics(int nIndex)
 {
     printf("GetSystemMetrics\n");
     return 0;
 }
+
 BOOL MoveWindow(HWND hWnd, int X, int Y, int nWidth, int nHeight, BOOL bRepaint)
 {
     printf("MoveWindow\n");
     return FALSE;
 }
+
 LONG ImmGetCompositionStringW(HIMC, DWORD, LPVOID lpBuf, DWORD dwBufLen)
 {
     printf("ImmGetCompositionStringW\n");
     return 0;
 }
+
 BOOL DeleteFileW(LPCWSTR lpFileName)
 {
     printf("DeleteFileW\n");
     return FALSE;
 }
+
 BOOL TerminateProcess(HANDLE hProcess, UINT uExitCode)
 {
     printf("TerminateProcess\n");
@@ -1103,10 +1251,12 @@ BOOL TerminateProcess(HANDLE hProcess, UINT uExitCode)
     std::exit(uExitCode);
     return FALSE;
 }
+
 void CoUninitialize(void)
 {
 
 }
+
 VOID GetLocalTime(LPSYSTEMTIME lpSystemTime)
 {
     printf("GetLocalTime\n");
@@ -1123,25 +1273,30 @@ int GetWindowTextW(HWND hWnd, LPWSTR lpString, int nMaxCount)
     printf("GetWindowTextW\n");
     return 0;
 }
+
 VOID PostQuitMessage(int nExitCode)
 {
     printf("PostQuitMessage\n");
 }
+
 HBRUSH CreateSolidBrush(COLORREF color)
 {
     printf("CreateSolidBrush\n");
     return NULL;
 }
+
 int FillRect(HDC hDC, CONST RECT* lprc, HBRUSH hbr)
 {
     printf("FillRect\n");
     return 0;
 }
+
 LRESULT SendMessageW(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
     printf("SendMessageW\n");
     return 0;
 }
+
 BOOL PtInRegion(HRGN hrgn, int x, int y)
 {
     printf("PtInRegion\n");

@@ -6994,7 +6994,7 @@ namespace DOMWindowV8Internal {
         if (holder.IsEmpty())
             return;
         DOMWindow* impl = V8Window::toImpl(holder);
-        v8::String::Utf8Value attributeName(name);
+        v8::String::Utf8Value attributeName(info.GetIsolate(), name);
         ExceptionState exceptionState(info.GetIsolate(), ExceptionState::SetterContext, "Window", *attributeName);
         if (!BindingSecurity::shouldAllowAccessTo(currentDOMWindow(info.GetIsolate()), impl, exceptionState)) {
             return;

@@ -40,7 +40,9 @@
 #include "wtf/TypeTraits.h"
 #include <memory>
 
+#if !defined(_MSC_VER) && (defined(OS_WIN) || defined(OS_LINUX_FOR_WIN))
 #pragma GCC diagnostic ignored "-Winconsistent-missing-override"
+#endif
 
 namespace blink {
 

@@ -62,7 +62,7 @@ void CreateNewWindowCommandHandler::ExecuteInternal(const MBCommandExecutor& exe
     mutableExecutor.createNewBrowser(&errorMessage, &webview, &browserId);
 
     char* output = (char*)malloc(400);
-    sprintf_s(output, 399, "CreateNewWindowCommandHandler: %s\n", browserId.c_str());
+    sprintf(output, "CreateNewWindowCommandHandler: %s\n", browserId.c_str());
     OutputDebugStringA(output);
     free(output);
 

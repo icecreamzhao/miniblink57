@@ -52,7 +52,11 @@ void ModuleRecord::clearModule()
     m_module.clear();
 }
 
-static v8::MaybeLocal<v8::Module> onResolveCallback(v8::Local<v8::Context> context, v8::Local<v8::String> specifier, v8::Local<v8::Module> referrer)
+static v8::MaybeLocal<v8::Module> onResolveCallback(v8::Local<v8::Context> context, v8::Local<v8::String> specifier, 
+#if V8_MAJOR_VERSION > 7
+    v8::Local<v8::FixedArray> importAssertions,
+#endif
+    v8::Local<v8::Module> referrer)
 {
     Modulator* modulator = Modulator::from(context);
     if (!modulator)

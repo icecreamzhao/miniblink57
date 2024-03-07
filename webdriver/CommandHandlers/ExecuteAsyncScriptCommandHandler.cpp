@@ -36,13 +36,13 @@ void readFile(const wchar_t* path, std::vector<char>* buffer);
 void ExecuteAsyncScriptCommandHandler::ExecuteInternal(const MBCommandExecutor& executor, const ParametersMap& command, Response* response)
 {
     char output[100] = { 0 };
-    sprintf_s(output, 99, "ExecuteAsyncScriptCommandHandler 1: %d\n", ::GetCurrentThreadId());
+    sprintf(output, "ExecuteAsyncScriptCommandHandler 1: %d\n", ::GetCurrentThreadId());
     OutputDebugStringA(output);
 
     ParametersMap::const_iterator scriptIt = command.find("script");
     ParametersMap::const_iterator argsIt = command.find("args");
     if (scriptIt == command.end()) {
-        sprintf_s(output, 99, "ExecuteAsyncScriptCommandHandler 2 fail: %d\n", ::GetCurrentThreadId());
+        sprintf(output, "ExecuteAsyncScriptCommandHandler 2 fail: %d\n", ::GetCurrentThreadId());
         OutputDebugStringA(output);
 
         response->SetErrorResponse(ERROR_INVALID_ARGUMENT, "Missing parameter: script");
@@ -50,21 +50,21 @@ void ExecuteAsyncScriptCommandHandler::ExecuteInternal(const MBCommandExecutor& 
     }
 
     if (!scriptIt->second.isString()) {
-        sprintf_s(output, 99, "ExecuteAsyncScriptCommandHandler 3 fail: %d\n", ::GetCurrentThreadId());
+        sprintf(output, "ExecuteAsyncScriptCommandHandler 3 fail: %d\n", ::GetCurrentThreadId());
         OutputDebugStringA(output);
         response->SetErrorResponse(ERROR_INVALID_ARGUMENT, "script parameter must be a string");
         return;
     }
 
     if (argsIt == command.end()) {
-        sprintf_s(output, 99, "ExecuteAsyncScriptCommandHandler 4 fail: %d\n", ::GetCurrentThreadId());
+        sprintf(output, "ExecuteAsyncScriptCommandHandler 4 fail: %d\n", ::GetCurrentThreadId());
         OutputDebugStringA(output);
         response->SetErrorResponse(ERROR_INVALID_ARGUMENT, "Missing parameter: args");
         return;
     }
 
     if (!argsIt->second.isArray()) {
-        sprintf_s(output, 99, "ExecuteAsyncScriptCommandHandler 5 fail: %d\n", ::GetCurrentThreadId());
+        sprintf(output, "ExecuteAsyncScriptCommandHandler 5 fail: %d\n", ::GetCurrentThreadId());
         OutputDebugStringA(output);
         response->SetErrorResponse(ERROR_INVALID_ARGUMENT, "args parameter must be an array");
         return;
@@ -76,13 +76,13 @@ void ExecuteAsyncScriptCommandHandler::ExecuteInternal(const MBCommandExecutor& 
     // Need to support line oriented comment
     if (script.find("//") != std::string::npos)
         script = script + "\n";
-    sprintf_s(output, 99, "ExecuteAsyncScriptCommandHandler 2: %d\n", ::GetCurrentThreadId());
+    sprintf(output, "ExecuteAsyncScriptCommandHandler 2: %d\n", ::GetCurrentThreadId());
     OutputDebugStringA(output);
 
     while (true) {
         int state = mbQueryState(executor.view(), "dispatchWillCommitProvisionalLoad");
         if (-1 == state) {
-            sprintf_s(output, 99, "ExecuteAsyncScriptCommandHandler fail 6: %d\n", ::GetCurrentThreadId());
+            sprintf(output, "ExecuteAsyncScriptCommandHandler fail 6: %d\n", ::GetCurrentThreadId());
             OutputDebugStringA(output);
 
             response->SetErrorResponse(ERROR_INVALID_ARGUMENT, "view is not ready");
@@ -91,7 +91,7 @@ void ExecuteAsyncScriptCommandHandler::ExecuteInternal(const MBCommandExecutor& 
             break;
         ::Sleep(1000);
     }
-    sprintf_s(output, 99, "ExecuteAsyncScriptCommandHandler 3: %d\n", ::GetCurrentThreadId());
+    sprintf(output, "ExecuteAsyncScriptCommandHandler 3: %d\n", ::GetCurrentThreadId());
     OutputDebugStringA(output);
 
 //     std::vector<char> kExecuteAsyncScriptScriptBuffer;
@@ -109,7 +109,7 @@ void ExecuteAsyncScriptCommandHandler::ExecuteInternal(const MBCommandExecutor& 
     if (!status)
         return;
 
-    sprintf_s(output, 99, "ExecuteAsyncScriptCommandHandler finish: %d\n", ::GetCurrentThreadId());
+    sprintf(output, "ExecuteAsyncScriptCommandHandler finish: %d\n", ::GetCurrentThreadId());
     OutputDebugStringA(output);
     response->SetSuccessResponse(result);
 }

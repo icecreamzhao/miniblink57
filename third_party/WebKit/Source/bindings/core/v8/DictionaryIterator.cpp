@@ -72,12 +72,14 @@ bool DictionaryIterator::next(ExecutionContext* executionContext,
 
     v8::Local<v8::Value> done;
     v8::Local<v8::Boolean> doneBoolean;
-    if (!resultObject->Get(context, m_doneKey).ToLocal(&done) || !done->ToBoolean(context).ToLocal(&doneBoolean)) {
+    if (!resultObject->Get(context, m_doneKey).ToLocal(&done) /*|| !done->ToBoolean(m_isolate).ToLocal(&doneBoolean)*/) {
         CHECK(!tryCatch.Exception().IsEmpty());
         exceptionState.rethrowV8Exception(tryCatch.Exception());
         m_done = true;
         return false;
     }
+
+    doneBoolean = done->ToBoolean(m_isolate);
 
     m_done = doneBoolean->Value();
     return !m_done;

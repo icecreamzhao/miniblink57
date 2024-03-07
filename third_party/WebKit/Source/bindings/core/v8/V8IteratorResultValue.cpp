@@ -31,12 +31,12 @@ v8::MaybeLocal<v8::Value> v8UnpackIteratorResult(ScriptState* scriptState,
     if (maybeValue.IsEmpty())
         return maybeValue;
     v8::Local<v8::Value> doneValue;
-    if (!v8Call(result->Get(scriptState->context(),
-                    v8String(scriptState->isolate(), "done")),
-            doneValue)
-        || !v8Call(doneValue->BooleanValue(scriptState->context()), *done)) {
+    if (!v8Call(result->Get(scriptState->context(), v8String(scriptState->isolate(), "done")), doneValue))
         return v8::MaybeLocal<v8::Value>();
-    }
+
+    //|| !v8Call(doneValue->BooleanValue(scriptState->isolate()), *done)
+    *done = doneValue->BooleanValue(scriptState->isolate());
+
     return maybeValue;
 }
 

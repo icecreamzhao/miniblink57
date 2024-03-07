@@ -818,7 +818,7 @@ void ThreadCall::createBlinkThread(const mbSettings* settings)
     }
 
 #ifdef _WIN64
-    m_compositorTpye = kCompositorTpyeMC;
+    //m_compositorTpye = kCompositorTpyeMC;
 #endif
 
     if (m_compositorTpye != kCompositorTpyeMC)

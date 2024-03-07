@@ -32,6 +32,9 @@ ScriptModule ScriptModule::compile(v8::Isolate* isolate,
 
 v8::MaybeLocal<v8::Module> dummyCallback(v8::Local<v8::Context> context,
     v8::Local<v8::String> specifier,
+#if V8_MAJOR_VERSION > 7
+    v8::Local<v8::FixedArray> importAssertions,
+#endif
     v8::Local<v8::Module> referrer)
 {
     return v8::MaybeLocal<v8::Module>();

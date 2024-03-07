@@ -295,7 +295,7 @@ void npObjectNamedPropertyGetter(v8::Local<v8::Name> name, const v8::PropertyCal
 {
     if (!name->IsString())
         return;
-    v8::Local<v8::String> nameStr = name->ToString();
+    v8::Local<v8::String> nameStr = name->ToString(info.GetIsolate()->GetCurrentContext()).ToLocalChecked();
     NPIdentifier identifier = getStringIdentifier(info.GetIsolate(), nameStr);
     v8SetReturnValue(info, npObjectGetProperty(info.GetIsolate(), info.Holder(), identifier, nameStr));
 }
@@ -322,7 +322,7 @@ void npObjectQueryProperty(v8::Local<v8::Name> name, const v8::PropertyCallbackI
 {
     if (!name->IsString())
         return;
-    v8::Local<v8::String> nameStr = name->ToString();
+    v8::Local<v8::String> nameStr = name->ToString(info.GetIsolate()->GetCurrentContext()).ToLocalChecked();
     NPIdentifier identifier = getStringIdentifier(info.GetIsolate(), nameStr);
     if (npObjectGetProperty(info.GetIsolate(), info.Holder(), identifier, nameStr).IsEmpty())
         return;
@@ -361,7 +361,7 @@ void npObjectNamedPropertySetter(v8::Local<v8::Name> name, v8::Local<v8::Value> 
 {
     if (!name->IsString())
         return;
-    v8::Local<v8::String> nameStr = name->ToString();
+    v8::Local<v8::String> nameStr = name->ToString(info.GetIsolate()->GetCurrentContext()).ToLocalChecked();
     NPIdentifier identifier = getStringIdentifier(info.GetIsolate(), nameStr);
     v8SetReturnValue(info, npObjectSetProperty(info.Holder(), identifier, value, info.GetIsolate()));
 }
@@ -486,7 +486,20 @@ v8::Local<v8::Object> createV8ObjectForNPObject(v8::Isolate* isolate, NPObject* 
     if (npObjectDesc.IsEmpty()) {
         v8::Local<v8::FunctionTemplate> templ = v8::FunctionTemplate::New(isolate);
         templ->InstanceTemplate()->SetInternalFieldCount(npObjectInternalFieldCount);
+#if V8_MAJOR_VERSION > 7
+        v8::NamedPropertyHandlerConfiguration configuration(
+            npObjectNamedPropertyGetter,
+            npObjectNamedPropertySetter,
+            npObjectQueryProperty,
+            nullptr, // deleter
+            npObjectNamedPropertyEnumerator,
+            nullptr, // definer
+            nullptr, // descriptor
+            v8::Local<v8::Value>(), v8::PropertyHandlerFlags::kNone);
+        templ->InstanceTemplate()->SetHandler(configuration);
+#else
         templ->InstanceTemplate()->SetNamedPropertyHandler(npObjectNamedPropertyGetter, npObjectNamedPropertySetter, npObjectQueryProperty, 0, npObjectNamedPropertyEnumerator, v8::Local<v8::Value>());
+#endif
         templ->InstanceTemplate()->SetIndexedPropertyHandler(npObjectIndexedPropertyGetter, npObjectIndexedPropertySetter, 0, 0, npObjectIndexedPropertyEnumerator);
         templ->InstanceTemplate()->SetCallAsFunctionHandler(npObjectInvokeDefaultHandler);
         npObjectDesc.Set(isolate, templ);

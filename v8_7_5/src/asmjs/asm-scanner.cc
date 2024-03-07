@@ -8,6 +8,7 @@
 #include "src/conversions.h"
 #include "src/flags.h"
 #include "src/parsing/scanner.h"
+#include <math.h>
 
 namespace v8 {
 namespace internal {

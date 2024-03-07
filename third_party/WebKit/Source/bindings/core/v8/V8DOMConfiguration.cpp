@@ -33,12 +33,10 @@
 #include "bindings/core/v8/V8PerContextData.h"
 #include "platform/instrumentation/tracing/TraceEvent.h"
 
-#if 1
 #include "bindings/core/v8/V8Document.h"
 #include "third_party/WebKit/Source/core/dom/Document.h"
 #include "third_party/WebKit/Source/bindings/core/v8/V8DOMConfiguration.h"
 #include "third_party/WebKit/Source/bindings/core/v8/V8EventListenerHelper.h"
-#endif
 
 namespace blink {
 
@@ -63,6 +61,7 @@ namespace {
         v8::Local<v8::Value> data = v8::External::New(isolate, const_cast<WrapperTypeInfo*>(attribute.data));
 
         DCHECK(attribute.propertyLocationConfiguration);
+#if V8_MAJOR_VERSION < 10
         if (attribute.propertyLocationConfiguration & V8DOMConfiguration::OnInstance)
             instanceTemplate->SetNativeDataProperty(
                 name, getter, setter, data,
@@ -75,6 +74,18 @@ namespace {
                 static_cast<v8::PropertyAttribute>(attribute.attribute),
                 v8::Local<v8::AccessorSignature>(),
                 static_cast<v8::AccessControl>(attribute.settings));
+#else
+        if (attribute.propertyLocationConfiguration & V8DOMConfiguration::OnInstance)
+            instanceTemplate->SetNativeDataProperty(name, getter, setter, data,
+                static_cast<v8::PropertyAttribute>(attribute.attribute), 
+                static_cast<v8::AccessControl>(attribute.settings));
+
+        if (attribute.propertyLocationConfiguration & V8DOMConfiguration::OnPrototype)
+            prototypeTemplate->SetNativeDataProperty(
+                name, getter, setter, data,
+                static_cast<v8::PropertyAttribute>(attribute.attribute),
+                static_cast<v8::AccessControl>(attribute.settings));
+#endif
         if (attribute.propertyLocationConfiguration & V8DOMConfiguration::OnInterface)
             NOTREACHED();
     }

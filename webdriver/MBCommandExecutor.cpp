@@ -165,7 +165,7 @@ unsigned int MBCommandExecutor::threadProc(LPVOID lpParameter)
 #endif
 
     char* output = (char*)malloc(0x100);
-    sprintf_s(output, 0x99, "MBCommandExecutor::threadProc: %d\n", ::GetCurrentThreadId());
+    sprintf(output, "MBCommandExecutor::threadProc: %d\n", ::GetCurrentThreadId());
     OutputDebugStringA(output);
     free(output);
 
@@ -223,7 +223,7 @@ mbStringPtr MB_CALL_TYPE onPromptBoxCallback(mbWebView webview, void* param, con
     *result = onBoxCallback(webview, param, msg);
 
     char* output = (char*)malloc(400);
-    sprintf_s(output, 399, "onPromptBoxCallback: [%s] [%s], [%d]\n", msg, defaultResult, *result);
+    sprintf(output, "onPromptBoxCallback: [%s] [%s], [%d]\n", msg, defaultResult, *result);
     OutputDebugStringA(output);
     free(output);
 
@@ -334,7 +334,7 @@ void MBCommandExecutor::addManagedBrowser(mbWebView mbView, const std::string& b
     m_managedBrowsers[browserId] = mbView;
 
     char* output = (char*)malloc(400);
-    sprintf_s(output, 399, "MBCommandExecutor::addManagedBrowser: %d %p, oldSize:%d %d\n", mbView, this, oldSize, m_managedBrowsers.size());
+    sprintf(output, "MBCommandExecutor::addManagedBrowser: %d %p, oldSize:%d %d\n", mbView, this, oldSize, m_managedBrowsers.size());
     OutputDebugStringA(output);
     free(output);
 
@@ -427,7 +427,7 @@ void MBCommandExecutor::eraseManagedBrowserHandle(mbWebView webview)
     }
 
     char* output = (char*)malloc(400);
-    sprintf_s(output, 399, "MBCommandExecutor::eraseManagedBrowserHandle: %d\n", m_managedBrowsers.size());
+    sprintf(output, "MBCommandExecutor::eraseManagedBrowserHandle: %d\n", m_managedBrowsers.size());
     OutputDebugStringA(output);
     free(output);
 

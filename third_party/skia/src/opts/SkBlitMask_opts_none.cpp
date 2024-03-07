@@ -4,7 +4,8 @@
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
+ 
+#if defined(SK_ARM_HAS_NEON)
 #include "SkBlitMask.h"
 
 SkBlitMask::BlitLCD16RowProc SkBlitMask::PlatformBlitRowProcs16(bool isOpaque)
@@ -18,3 +19,4 @@ SkBlitMask::RowProc SkBlitMask::PlatformRowProcs(SkColorType dstCT,
 {
     return nullptr;
 }
+#endif // #if defined(SK_ARM_HAS_NEON)

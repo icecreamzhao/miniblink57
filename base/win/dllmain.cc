@@ -46,6 +46,8 @@
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 #endif
 
+extern HMODULE g_hModule;
+
 // Indicate if another service is scanning the callbacks.  When this becomes
 // set to true, then DllMain() will stop supporting the callback service. This
 // value is set to true the first time any of our callbacks are called, as that
@@ -107,7 +109,7 @@ NOINLINE static void CrashOnProcessDetach()
     *static_cast<volatile int*>(nullptr) = 0x356;
 }
 
-#if 1 // def SUPPORT_XP_CODE
+#if defined(__i386__) || defined(_M_IX86) || defined(__x86_64__)
 thread_local int* g_thread_local_stub = nullptr;
 int g_unuse = 0;
 std::set<DWORD>* g_tls_set_thread = nullptr; // 设置过的tls的线程的id
@@ -323,13 +325,13 @@ BOOL HookAddrByHotpatch(void* addr, void* pfnNew, void** pfnOld)
     VirtualProtect((LPVOID)((DWORD)pFunc - 5), 7, dwOldProtect, &dwOldProtect);
     return TRUE;
 }
-#endif
 
 BOOL HookByHotpatch(LPCWSTR szDllName, LPCSTR szFuncName, void* pfnNew, void** pfnOld) 
 {
     void* pFunc = (void*)GetProcAddress(LoadLibraryW(szDllName), szFuncName);
     return HookAddrByHotpatch((void*)pFunc, pfnNew, pfnOld);
 }
+#endif
 
 // Make DllMain call the listed callbacks.  This way any third parties that are
 // linked in will also be called.
@@ -338,9 +340,10 @@ BOOL WINAPI BaseDllMain(PVOID h, DWORD reason, PVOID reserved)
     if (DLL_PROCESS_DETACH == reason && base::win::ShouldCrashOnProcessDetach())
         CrashOnProcessDetach();
 
-#if 1 // def SUPPORT_XP_CODE
+#if defined(__i386__) || defined(_M_IX86) || defined(__x86_64__)
     if (DLL_PROCESS_ATTACH == reason) {
         g_dll_base = h;
+        g_hModule = (HMODULE)h;
 
         if (-1 == g_is_xp) {
             HMODULE handle = GetModuleHandle(L"Kernel32.dll");
@@ -371,7 +374,7 @@ BOOL WINAPI BaseDllMain(PVOID h, DWORD reason, PVOID reserved)
     if (linker_notifications_are_active)
         return true;  // Some other service is doing this work.
 
-#if 1 // def SUPPORT_XP_CODE
+#if defined(__i386__) || defined(_M_IX86) || defined(__x86_64__)
     if (g_is_xp)
         return true;
 #endif

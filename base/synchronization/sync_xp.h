@@ -7,7 +7,7 @@
 #pragma pack(push, 4)
 #pragma GCC diagnostic ignored "-Wunused-variable"
 
-#if defined(__i386__) || defined(_M_IX86) || defined(__x86_64__) || defined(_M_X64)
+#if defined(__i386__) || defined(_M_IX86) || defined(__x86_64__) /*|| defined(_M_X64)*/
 
 #include <windows.h>
 #include <intrin.h>

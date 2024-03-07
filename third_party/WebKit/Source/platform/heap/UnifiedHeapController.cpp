@@ -39,7 +39,11 @@ std::vector<std::pair<void*, void*>>* UnifiedHeapController::leakV8References()
     return v8References;
 }
 
-void UnifiedHeapController::TracePrologue()
+void UnifiedHeapController::TracePrologue(
+#if V8_MAJOR_VERSION > 7
+    v8::EmbedderHeapTracer::TraceFlags flags
+#endif
+)
 {
     //OutputDebugStringA("UnifiedHeapController::TracePrologue\n");
 //     VLOG(2) << "UnifiedHeapController::TracePrologue";
@@ -78,7 +82,11 @@ void UnifiedHeapController::EnterFinalPause(EmbedderStackState stack_state)
     //OutputDebugStringA("UnifiedHeapController::EnterFinalPause 2\n");
 }
 
-void UnifiedHeapController::TraceEpilogue()
+void UnifiedHeapController::TraceEpilogue(
+#if V8_MAJOR_VERSION > 7
+    v8::EmbedderHeapTracer::TraceSummary* trace_summary
+#endif
+)
 {
     //OutputDebugStringA("UnifiedHeapController::TraceEpilogue\n");
 //     VLOG(2) << "UnifiedHeapController::TraceEpilogue";

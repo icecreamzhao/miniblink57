@@ -8,10 +8,11 @@
 #pragma optimize("", off)
 #pragma clang optimize off
 
-#if defined(__LP64__) // arm64 or x64
+#if defined(__LP64__) || defined(_WIN64) // arm64 or x64
 
 #if defined(__aarch64__)
 
+// ARM64
 // .text: 0000000000000000                EXPORT pushAllRegisters
 // .text: 0000000000000000                pushAllRegisters
 // .text: 0000000000000000
@@ -60,13 +61,38 @@ unsigned char pushAllRegistersShellCode[] = {
     0xC0, 0x03, 0x5F, 0xD6, // RET
 };
 
-unsigned char pushAllRegistersShellCode2[] = {
-    0x1F, 0x20, 0x03, 0xD5,
-    0xC0, 0x03, 0x5F, 0xD6,
-};
-
 #else // if defined(_WIN64)
 
+#if defined(_WIN64)
+// win x64
+unsigned char pushAllRegistersShellCode[] = {
+    //;; Push all callee - saves registers to get them
+    //;; on the stack for conservative stack scanning.
+    //;; There is an 8 - byte return address on the stack and we push
+    //;; 72 bytes which maintains the required 16 - byte stack alignment
+    //;; at the call.
+    0x6A, 0x0, // push 0
+    0x56, // push rsi
+    0x57, // push rdi
+    0x53, // push rbx
+    0x55, // push rbp
+    0x41, 0x54, // push r12
+    0x41, 0x55, // push r13
+    0x41, 0x56, // push r14
+    0x41, 0x57, // push r15
+    //;; Pass the two first arguments unchanged(rcx, rdx)
+    //;; and the stack pointer after pushing callee - saved
+    //;; registers to the callback.
+    0x4D, 0x89, 0xC1, // mov r9, r8
+    0x49, 0x89, 0xE0, // mov r8, rsp
+    0x41, 0xFF, 0xD1, // call r9
+    //;; Pop the callee - saved registers.None of them were
+    //;; modified so no restoring is needed.
+    0x48, 0x83, 0xC4, 0x48, // add rsp, 72
+    0xC3 // ret
+};
+#else
+// linux x64
 unsigned char pushAllRegistersShellCode[] = {
     //;; Push all callee - saves registers to get them
     //;; on the stack for conservative stack scanning.
@@ -90,6 +116,8 @@ unsigned char pushAllRegistersShellCode[] = {
     0x48, 0x83, 0xC4, 0x38, // add rsp, 38h  
     0xC3, // ret
 };
+#endif // defined(_WIN64)
+
 #endif // __aarch64__
 
 namespace blink {
@@ -118,9 +146,7 @@ void initPushAllRegistersShellcode()
 
 extern "C" void pushAllRegisters(SafePointBarrier* p1, ThreadState* p2, PushAllRegistersCallback p3)
 {
-    OutputDebugStringA("pushAllRegisters entry!!\n");
     s_cb(p1, p2, (intptr_t*)p3);
-    OutputDebugStringA("pushAllRegisters ok\n");
 }
 
 }

@@ -760,7 +760,11 @@ String getTypeExtension(Document* document,
         if (impl.hasIs())
             return impl.is();
 
-        return toCoreString(dict.v8Value()->ToString());
+        v8::MaybeLocal<v8::String> result = dict.v8Value()->ToString(dict.isolate()->GetCurrentContext());
+        v8::Local<v8::String> resultStr;
+        if (!result.ToLocal(&resultStr))
+            return emptyString();
+        return toCoreString(resultStr);
     }
 
     return emptyString();

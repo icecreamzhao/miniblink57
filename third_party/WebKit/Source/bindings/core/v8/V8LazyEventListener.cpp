@@ -185,11 +185,20 @@ void V8LazyEventListener::compileScript(ScriptState* scriptState,
         scriptState);
 
     v8::Local<v8::String> parameterName = v8String(isolate(), m_eventParameterName);
+#if V8_MAJOR_VERSION < 10
     v8::ScriptOrigin origin(
         v8String(isolate(), m_sourceURL),
         v8::Integer::New(isolate(), m_position.m_line.zeroBasedInt()),
         v8::Integer::New(isolate(), m_position.m_column.zeroBasedInt()),
         v8::True(isolate()));
+#else
+    v8::ScriptOrigin origin(isolate(),
+        v8String(isolate(), m_sourceURL),
+        m_position.m_line.zeroBasedInt(),
+        m_position.m_column.zeroBasedInt(),
+        true);
+#endif
+
     v8::ScriptCompiler::Source source(v8String(isolate(), m_code), origin);
 
     v8::Local<v8::Function> wrappedFunction;
@@ -198,7 +207,11 @@ void V8LazyEventListener::compileScript(ScriptState* scriptState,
         // exception because we're not running any program code.  Instead,
         // it should be reported as an ErrorEvent.
         v8::TryCatch block(isolate());
-#if V8_MAJOR_VERSION >= 7
+#if V8_MAJOR_VERSION >= 10
+        wrappedFunction = v8::ScriptCompiler::CompileFunction(
+            scriptState->context(), &source, 1, &parameterName, 3,
+            scopes).ToLocalChecked();
+#elif V8_MAJOR_VERSION >= 7
         wrappedFunction = v8::ScriptCompiler::CompileFunctionInContext(
             scriptState->context(), &source, 1, &parameterName, 3,
             scopes).ToLocalChecked();

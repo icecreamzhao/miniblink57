@@ -176,7 +176,6 @@ OPENSSL_INLINE int CRYPTO_is_ARMv8_PMULL_capable(void) {
   return 0;
 #endif
 }
-
 #endif  // OPENSSL_STATIC_ARMCAP
 #endif  // OPENSSL_ARM || OPENSSL_AARCH64
 

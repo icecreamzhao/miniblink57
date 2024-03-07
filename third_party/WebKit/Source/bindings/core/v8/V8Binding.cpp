@@ -101,7 +101,7 @@ bool toBooleanSlow(v8::Isolate* isolate,
     ASSERT(!value->IsBoolean());
     v8::TryCatch block(isolate);
     bool result = false;
-    if (!v8Call(value->BooleanValue(isolate->GetCurrentContext()), result, block))
+    if (!v8Call(value->BooleanValue(isolate), result, block))
         exceptionState.rethrowV8Exception(block.Exception());
     return result;
 }

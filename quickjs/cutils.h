@@ -45,13 +45,15 @@
 #include <BaseTsd.h>
 typedef SSIZE_T ssize_t;
 static const uint64_t EPOCH = ((uint64_t)116444736000000000ULL);
+
 #else
+
 #define likely(x)       __builtin_expect(!!(x), 1)
 #define unlikely(x)     __builtin_expect(!!(x), 0)
 #define force_inline inline __attribute__((always_inline))
 #define no_inline __attribute__((noinline))
 #define __maybe_unused __attribute__((unused))
-#endif
+#endif // _MSC_VER
 
 #define xglue(x, y) x ## y
 #define glue(x, y) xglue(x, y)
@@ -132,10 +134,10 @@ static inline int clz32(unsigned int a)
 {
 #if defined(_MSC_VER)
     /* TODO: Current code requires SSE4 and BMI1, if you will have issues, use code lower
-     * unsigned long ret;
-     * _BitScanReverse(&ret, a);
-     * return (int)(31 ^ ret);
-     */
+    * unsigned long ret;
+    * _BitScanReverse(&ret, a);
+    * return (int)(31 ^ ret);
+    */
     return (int)__lzcnt(a);
 #else
     return __builtin_clz(a);
@@ -147,9 +149,9 @@ static inline int clz64(uint64_t a)
 {
 #if defined(_MSC_VER)
     /* unsigned long ret;
-     * _BitScanReverse64(&ret, a);
-     * return (int)(63 ^ ret);
-     */
+    * _BitScanReverse64(&ret, a);
+    * return (int)(63 ^ ret);
+    */
     return (int)__lzcnt64(a);
 #else
     return __builtin_clzll(a);
@@ -180,32 +182,17 @@ static inline int ctz64(uint64_t a)
 #endif
 }
 
-#ifdef _MSC_VER
-struct packed_u64 {
+struct /*__attribute__((packed))*/ packed_u64 {
     uint64_t v;
 };
 
-struct packed_u32 {
+struct /*__attribute__((packed))*/ packed_u32 {
     uint32_t v;
 };
 
-struct packed_u16 {
+struct /*__attribute__((packed))*/ packed_u16 {
     uint16_t v;
 };
-
-#else
-struct __attribute__((packed)) packed_u64 {
-    uint64_t v;
-};
-
-struct __attribute__((packed)) packed_u32 {
-    uint32_t v;
-};
-
-struct __attribute__((packed)) packed_u16 {
-    uint16_t v;
-};
-#endif
 
 static inline uint64_t get_u64(const uint8_t *tab)
 {
@@ -322,22 +309,22 @@ static inline int dbuf_put_u64(DynBuf *s, uint64_t val)
 {
     return dbuf_put(s, (uint8_t *)&val, 8);
 }
-
-#ifdef _MSC_VER
-int dbuf_printf(DynBuf* s, const char* fmt, ...);
-#else
-int __attribute__((format(printf, 2, 3))) dbuf_printf(DynBuf *s,
+int /*__attribute__((format(printf, 2, 3)))*/ dbuf_printf(DynBuf *s,
                                                       const char *fmt, ...);
-#endif
 void dbuf_free(DynBuf *s);
 static inline BOOL dbuf_error(DynBuf *s) {
     return s->error;
+}
+static inline void dbuf_set_error(DynBuf *s)
+{
+    s->error = TRUE;
 }
 
 #define UTF8_CHAR_LEN_MAX 6
 
 int unicode_to_utf8(uint8_t *buf, unsigned int c);
-int unicode_from_utf8(const uint8_t *p, int max_len, const uint8_t **pp);
+int unicode_from_utf8_ignore_error(const uint8_t* p, int max_len, const uint8_t** pp);
+int unicode_from_utf8(const uint8_t* p, int max_len, const uint8_t** pp);
 
 static inline int from_hex(int c)
 {

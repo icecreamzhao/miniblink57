@@ -1096,11 +1096,15 @@ VectorType toImplSequence(v8::Isolate* isolate,
             exceptionState.rethrowV8Exception(block.Exception());
             return VectorType();
         }
+#if V8_MAJOR_VERSION <= 7
         v8::Local<v8::Boolean> doneBoolean;
         if (!done->ToBoolean(context).ToLocal(&doneBoolean)) {
             exceptionState.rethrowV8Exception(block.Exception());
             return VectorType();
         }
+#else
+        v8::Local<v8::Boolean> doneBoolean = done->ToBoolean(isolate);
+#endif
         if (doneBoolean->Value())
             break;
         result.push_back(NativeValueTraits<ValueType>::nativeValue(isolate, element,

@@ -68,8 +68,7 @@ ScriptString ScriptString::concatenateWith(const String& string)
     v8::Local<v8::String> targetString = v8String(nonNullIsolate, string);
     if (isEmpty())
         return ScriptString(nonNullIsolate, targetString);
-    return ScriptString(nonNullIsolate,
-        v8::String::Concat(v8Value(), targetString));
+    return ScriptString(nonNullIsolate, v8::String::Concat(nonNullIsolate, v8Value(), targetString));
 }
 
 String ScriptString::flattenToString()

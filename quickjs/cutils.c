@@ -165,12 +165,9 @@ int dbuf_putstr(DynBuf *s, const char *str)
 {
     return dbuf_put(s, (const uint8_t *)str, strlen(str));
 }
-#ifdef _MSC_VER
-int dbuf_printf(DynBuf *s, const char *fmt, ...)
-#else
-int __attribute__((format(printf, 2, 3))) dbuf_printf(DynBuf *s,
+
+int /*__attribute__((format(printf, 2, 3)))*/ dbuf_printf(DynBuf *s,
                                                       const char *fmt, ...)
-#endif
 {
     va_list ap;
     char buf[128];
@@ -260,47 +257,47 @@ int unicode_from_utf8(const uint8_t *p, int max_len, const uint8_t **pp)
         *pp = p;
         return c;
     }
-#ifdef _MSC_VER
-    else if (c < 0xc0)
-        return -1;
-    else if (c < 0xe0)
-        l = 1;
-    else if (c < 0xf0)
-        l = 2;
-    else if (c < 0xf8)
-        l = 3;
-    else if (c < 0xfc)
-        l = 4;
-    else if (c < 0xfe)
-        l = 5;
-    else
-        return -1;
-#else
+
+    if (0xA9 == c || 0xA0 == c) {
+        *pp = p;
+        return 0x20; // fix: https://script.hotjar.com/sentry.40b553d1dc3c3ee52b22.js\jquery-1.7.1.min.js
+    }
+
     switch(c) {
-    case 0xc0 ... 0xdf:
+    case 0xc0: case 0xc1: case 0xc2: case 0xc3:
+    case 0xc4: case 0xc5: case 0xc6: case 0xc7:
+    case 0xc8: case 0xc9: case 0xca: case 0xcb:
+    case 0xcc: case 0xcd: case 0xce: case 0xcf:
+    case 0xd0: case 0xd1: case 0xd2: case 0xd3:
+    case 0xd4: case 0xd5: case 0xd6: case 0xd7:
+    case 0xd8: case 0xd9: case 0xda: case 0xdb:
+    case 0xdc: case 0xdd: case 0xde: case 0xdf:
         l = 1;
         break;
-    case 0xe0 ... 0xef:
+    case 0xe0: case 0xe1: case 0xe2: case 0xe3:
+    case 0xe4: case 0xe5: case 0xe6: case 0xe7:
+    case 0xe8: case 0xe9: case 0xea: case 0xeb:
+    case 0xec: case 0xed: case 0xee: case 0xef:
         l = 2;
         break;
-    case 0xf0 ... 0xf7:
+    case 0xf0: case 0xf1: case 0xf2: case 0xf3:
+    case 0xf4: case 0xf5: case 0xf6: case 0xf7:
         l = 3;
         break;
-    case 0xf8 ... 0xfb:
+    case 0xf8: case 0xf9: case 0xfa: case 0xfb:
         l = 4;
         break;
-    case 0xfc ... 0xfd:
+    case 0xfc: case 0xfd:
         l = 5;
         break;
     default:
         return -1;
     }
-#endif
     /* check that we have enough characters */
     if (l > (max_len - 1))
         return -1;
     c &= utf8_first_code_mask[l - 1];
-    for(i = 0; i < l; i++) {
+    for (i = 0; i < l; i++) {
         b = *p++;
         if (b < 0x80 || b >= 0xc0)
             return -1;
@@ -310,6 +307,211 @@ int unicode_from_utf8(const uint8_t *p, int max_len, const uint8_t **pp)
         return -1;
     *pp = p;
     return c;
+}
+
+static int enc_get_utf8_size(const unsigned char pInput)
+{
+    unsigned char c = pInput;
+    // 0xxxxxxx 返回0
+    // 10xxxxxx 不存在
+    // 110xxxxx 返回2
+    // 1110xxxx 返回3
+    // 11110xxx 返回4
+    // 111110xx 返回5
+    // 1111110x 返回6
+    if (c < 0x80) 
+        return 0;
+    if (c >= 0x80 && c < 0xC0) 
+        return -1;
+    if (c >= 0xC0 && c < 0xE0) 
+        return 2;
+    if (c >= 0xE0 && c < 0xF0) 
+        return 3;
+    if (c >= 0xF0 && c < 0xF8) 
+        return 4;
+    if (c >= 0xF8 && c < 0xFC) 
+        return 5;
+    if (c >= 0xFC)
+        return 6;
+    return 0;
+}
+
+/*****************************************************************************
+ * 将一个字符的UTF8编码转换成Unicode(UCS-2和UCS-4)编码.
+ *
+ * 参数:
+ *    pInput      指向输入缓冲区, 以UTF-8编码
+ *    Unic        指向输出缓冲区, 其保存的数据即是Unicode编码值,
+ *                类型为unsigned long .
+ *
+ * 返回值:
+ *    成功则返回该字符的UTF8编码所占用的字节数; 失败则返回0.
+ *
+ * 注意:
+ *     1. UTF8没有字节序问题, 但是Unicode有字节序要求;
+ *        字节序分为大端(Big Endian)和小端(Little Endian)两种;
+ *        在Intel处理器中采用小端法表示, 在此采用小端法表示. (低地址存低位)
+ ****************************************************************************/
+int enc_utf8_to_unicode_one(const unsigned char* pInput, unsigned long* Unic)
+{
+    //assert(pInput != NULL && Unic != NULL);
+
+    // b1 表示UTF-8编码的pInput中的高字节, b2 表示次高字节, ...
+    char b1, b2, b3, b4, b5, b6;
+
+    *Unic = 0x0; // 把 *Unic 初始化为全零
+    int utfbytes = enc_get_utf8_size(*pInput);
+    unsigned char* pOutput = (unsigned char*)Unic;
+
+    switch (utfbytes)
+    {
+    case 0:
+        *pOutput = *pInput;
+        utfbytes += 1;
+        break;
+    case 2:
+        b1 = *pInput;
+        b2 = *(pInput + 1);
+        if ((b2 & 0xE0) != 0x80) // error
+            return 0;
+        
+        if ((b2 & 0xC0) != 0x80)
+            return 0;
+        *pOutput = (b1 << 6) + (b2 & 0x3F);
+        *(pOutput + 1) = (b1 >> 2) & 0x07;
+        break;
+    case 3:
+        b1 = *pInput;
+        b2 = *(pInput + 1);
+        b3 = *(pInput + 2);
+        if (((b2 & 0xC0) != 0x80) || ((b3 & 0xC0) != 0x80))
+            return 0;
+        *pOutput = (b2 << 6) + (b3 & 0x3F);
+        *(pOutput + 1) = (b1 << 4) + ((b2 >> 2) & 0x0F);
+        break;
+    case 4:
+        b1 = *pInput;
+        b2 = *(pInput + 1);
+        b3 = *(pInput + 2);
+        b4 = *(pInput + 3);
+        if (((b2 & 0xC0) != 0x80) || ((b3 & 0xC0) != 0x80)
+            || ((b4 & 0xC0) != 0x80))
+            return 0;
+        *pOutput = (b3 << 6) + (b4 & 0x3F);
+        *(pOutput + 1) = (b2 << 4) + ((b3 >> 2) & 0x0F);
+        *(pOutput + 2) = ((b1 << 2) & 0x1C) + ((b2 >> 4) & 0x03);
+        break;
+    case 5:
+        b1 = *pInput;
+        b2 = *(pInput + 1);
+        b3 = *(pInput + 2);
+        b4 = *(pInput + 3);
+        b5 = *(pInput + 4);
+        if (((b2 & 0xC0) != 0x80) || ((b3 & 0xC0) != 0x80)
+            || ((b4 & 0xC0) != 0x80) || ((b5 & 0xC0) != 0x80))
+            return 0;
+        *pOutput = (b4 << 6) + (b5 & 0x3F);
+        *(pOutput + 1) = (b3 << 4) + ((b4 >> 2) & 0x0F);
+        *(pOutput + 2) = (b2 << 2) + ((b3 >> 4) & 0x03);
+        //*(pOutput + 3) = (b1 << 6);
+        *(pOutput + 3) = b1 & 0x3;
+        break;
+    case 6:
+        b1 = *pInput;
+        b2 = *(pInput + 1);
+        b3 = *(pInput + 2);
+        b4 = *(pInput + 3);
+        b5 = *(pInput + 4);
+        b6 = *(pInput + 5);
+        if (((b2 & 0xC0) != 0x80) || ((b3 & 0xC0) != 0x80)
+            || ((b4 & 0xC0) != 0x80) || ((b5 & 0xC0) != 0x80)
+            || ((b6 & 0xC0) != 0x80))
+            return 0;
+        *pOutput = (b5 << 6) + (b6 & 0x3F);
+        //*(pOutput + 1) = (b5 << 4) + ((b6 >> 2) & 0x0F);
+        *(pOutput + 1) = (b4 << 4) + ((b5 >> 2) & 0x0F);
+        *(pOutput + 2) = (b3 << 2) + ((b4 >> 4) & 0x03);
+        *(pOutput + 3) = ((b1 << 6) & 0x40) + (b2 & 0x3F);
+        break;
+    default:
+        return 0;
+        break;
+    }
+
+    return utfbytes;
+}
+
+int unicode_from_utf8_weolar(const uint8_t* p, int max_len, const uint8_t** pp)
+{
+    unsigned long unicode = 0;
+    int count = enc_utf8_to_unicode_one(p, &unicode);
+    if (0 == count)
+        return -1;
+    *pp = p + count;
+    return unicode;
+}
+
+int unicode_from_utf8_ignore_error(const uint8_t* p, int max_len, const uint8_t** pp)
+{
+    int ret = unicode_from_utf8(p, max_len, pp);
+    if (-1 != ret)
+        return ret;
+
+    *pp = p + 1;
+    return 0x20;
+}
+
+int utf8_to_unicode(char* pInput, char** ppOutput)
+{
+    int outputSize = 0; // 记录转换后的Unicode字符串的字节数
+
+    *ppOutput = (char*)malloc(strlen(pInput) * 2);  // 为输出字符串分配足够大的内存空间
+    memset(*ppOutput, 0, strlen(pInput) * 2);
+    char* tmp = *ppOutput; // 临时变量，用于遍历输出字符串
+
+    while (*pInput) {
+        if (*pInput > 0x00 && *pInput <= 0x7F) { // 处理单字节UTF8字符（英文字母、数字）
+            *tmp = *pInput;
+            tmp++;
+            *tmp = 0; //小端法表示，在高地址填补0
+        } else if (((*pInput) & 0xE0) == 0xC0) { //处理双字节UTF8字符
+            char high = *pInput;
+            pInput++;
+            char low = *pInput;
+
+            if ((low & 0xC0) != 0x80)  //检查是否为合法的UTF8字符表示
+                return -1; //如果不是则报错
+            
+            *tmp = (high << 6) + (low & 0x3F);
+            tmp++;
+            *tmp = (high >> 2) & 0x07;
+        } else if (((*pInput) & 0xF0) == 0xE0) { //处理三字节UTF8字符
+            char high = *pInput;
+            pInput++;
+            char middle = *pInput;
+            pInput++;
+            char low = *pInput;
+
+            if (((middle & 0xC0) != 0x80) || ((low & 0xC0) != 0x80))
+                return -1;            
+
+            *tmp = (middle << 6) + (low & 0x7F);
+            tmp++;
+            *tmp = (high << 4) + ((middle >> 2) & 0x0F);
+        } else { // 对于其他字节数的UTF8字符不进行处理
+            return -1;
+        }
+
+        pInput++;
+        tmp++;
+        outputSize += 2;
+    }
+
+    *tmp = 0;
+    tmp++;
+    *tmp = 0;
+
+    return outputSize;
 }
 
 #if 0

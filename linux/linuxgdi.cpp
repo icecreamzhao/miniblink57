@@ -1,5 +1,5 @@
 ﻿
-#if !defined(WIN32)
+#if !defined(WIN32) && !defined(_WIN32)
 #include "linux/linuxgdi.h"
 #include "mbvip/common/StringUtil.h"
 #include "mbvip/common/ThreadCall.h"

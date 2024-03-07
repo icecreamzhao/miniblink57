@@ -4,8 +4,8 @@
 #include "MiniV8Api.h"
 #include <windows.h>
 
-#pragma optimize("", off)
-#pragma clang optimize off
+// #pragma optimize("", off)
+// #pragma clang optimize off
 
 namespace miniv8 {
 
@@ -23,8 +23,10 @@ JSValue getReturnVal(JSContext* ctx, void* cehckPtr, void** retVal)
     }
 
     V8Value* ret = v8::Utils::openHandle<v8::Value, V8Value>((v8::Value*)(retVal));
-    if (ret->v == (void*)0xdddddddd)
-        OutputDebugStringA("");
+
+    if (0xdddddddd == (UINT_PTR)ret->v)
+        DebugBreak();
+
     JSValue v = ret->v(ret); // TODO:Free
     JS_DupValue(ctx, v); // TODO: 需要增加引用吗？
     return v;
@@ -131,10 +133,10 @@ void FunctionCallbackArguments::createFunctionCallbackInfo(
 JSValue FunctionCallbackArguments::objectTemplateFuncGetter(JSContext* ctx, JSValueConst thisVal, void* userdata)
 {
     ctx = miniv8::V8Context::getCurrentOrEmptyJsCtx();
-    miniv8::V8Context* context = (miniv8::V8Context*)JS_GetContextOpaque(ctx);
+    miniv8::V8Context* v8ctx = (miniv8::V8Context*)JS_GetContextOpaque(ctx);
     miniv8::V8Template::Accessor* accessor = (miniv8::V8Template::Accessor*)userdata;
-    v8::Isolate* isolate = v8::Isolate::GetCurrent();
-    miniv8::V8Isolate::AutoEnterExitContext autoEnterExitContext(context);
+    miniv8::V8Isolate* v8isolate = (miniv8::V8Isolate*)(v8::Isolate::GetCurrent());
+    miniv8::AutoEnterExitContext autoEnterExitContext(v8isolate, v8ctx);
     miniv8::V8Object* thisValV8 = nullptr;
 
     bool needFreeThisVal = false;
@@ -143,7 +145,7 @@ JSValue FunctionCallbackArguments::objectTemplateFuncGetter(JSContext* ctx, JSVa
         needFreeThisVal = true;
     }
 
-    thisValV8 = miniv8::V8Object::create(context, thisVal);
+    thisValV8 = miniv8::V8Object::create(v8ctx, thisVal);
     if (needFreeThisVal)
         JS_FreeValue(ctx, thisVal);
 
@@ -151,14 +153,16 @@ JSValue FunctionCallbackArguments::objectTemplateFuncGetter(JSContext* ctx, JSVa
     void* implicitArgs[v8::FunctionCallbackInfo<v8::Value>::kArgsLength] = { 0 };
     miniv8::V8External* external = new miniv8::V8External(accessor->data);
     miniv8::FunctionCallbackInfoWrap wrap;
-    createFunctionCallbackInfo(context, false, thisValV8, &argValue, implicitArgs, external, &wrap, 0, nullptr);
+    createFunctionCallbackInfo(v8ctx, false, thisValV8, &argValue, implicitArgs, external, &wrap, 0, nullptr);
     v8::Local<v8::External> externalv8 = v8::Utils::convert<miniv8::V8External, v8::External>(external); // 为了自动回收
 
     void** retVal = (void**)&implicitArgs[v8::FunctionCallbackInfo<v8::Value>::kReturnValueIndex];
     *retVal = &retVal;
+    v8isolate->pushRetVal(retVal);
 
     v8::FunctionCallbackInfo<v8::Value>* wrapV8 = (v8::FunctionCallbackInfo<v8::Value>*)(&wrap);
     accessor->getterFunc(*wrapV8);
+    v8isolate->popRetVal();
 
     JSValue v = miniv8::getReturnVal(ctx, &retVal, retVal);
     return v;
@@ -168,9 +172,9 @@ JSValue FunctionCallbackArguments::objectTemplateFuncSetter(JSContext* ctx, JSVa
 {
     ctx = miniv8::V8Context::getCurrentOrEmptyJsCtx();
     miniv8::V8Context* context = (miniv8::V8Context*)JS_GetContextOpaque(ctx);
-    miniv8::V8Isolate::AutoEnterExitContext autoEnterExitContext(context);
+    miniv8::V8Isolate* v8isolate = (miniv8::V8Isolate*)(v8::Isolate::GetCurrent());
+    miniv8::AutoEnterExitContext autoEnterExitContext(v8isolate, context);
     miniv8::V8Template::Accessor* accessor = (miniv8::V8Template::Accessor*)userdata;
-    v8::Isolate* isolate = v8::Isolate::GetCurrent();
     miniv8::V8Object* thisValV8 = nullptr;
 
     bool needFreeThisVal = false;
@@ -217,18 +221,27 @@ void FunctionCallbackArguments::changeExternal(const v8::FunctionCallbackInfo<v8
 // 通常是构造函数，也可能是普通函数
 // 如果是构造函数，则老quickjs是self->v(self) == funcVal，否则funcVal是JS_UNDEFINED（新版本增加is_constructor，不用这样判断了）
 // 本函数有三种情况会被调用：1、构造函数。2、普通函数。3、成员函数
-// funcVal在这三种情况下分别是1、JS_UNDEFINED。2、function对象。3、this指针
+// funcVal在这三种情况下分别是1、function对象。2、JS_UNDEFINED。3、this指针
+// 如果构造函数且self->v(self), funcVal不相等，那有一种可能：类似这样class Script extends ContextifyScript，funcVal是继承类
 JSValue FunctionCallbackArguments::onConstructorCallback(JSContext* ctx, JSValueConst funcVal, int argc, JSValueConst* argv, void* userdata, JS_BOOL is_constructor)
 {
     ctx = miniv8::V8Context::getCurrentOrEmptyJsCtx();
     miniv8::V8Function* self = (miniv8::V8Function*)userdata;
-    miniv8::V8Isolate* isolate = miniv8::V8Isolate::GetCurrent();
     miniv8::V8Context* context = (miniv8::V8Context*)JS_GetContextOpaque(ctx);
-    miniv8::V8Isolate::AutoEnterExitContext autoEnterExitContext(context);
+    miniv8::V8Isolate* v8isolate = (miniv8::V8Isolate*)(v8::Isolate::GetCurrent());
+    miniv8::AutoEnterExitContext autoEnterExitContext(v8isolate, context);
 
-    miniv8ReleaseAssert(!!context, "onConstructorCallback fail\n");
+    //miniv8ReleaseAssert(!!context, "onConstructorCallback fail\n");
     miniv8::V8Object* func = miniv8::V8Object::create(context, self->v(self)); // 这个应该是Function的指针
-    miniv8ReleaseAssert(JS_VALUE_IS_EQ(self->v(self), funcVal) || !is_constructor, "onConstructorCallback fail\n");
+
+    if (!JS_VALUE_IS_EQ(self->v(self), funcVal) && is_constructor) {
+//         JS_IsFunction(ctx, funcVal);
+//         JS_IsFunction(ctx, self->v(self));
+//         JS_PrintStack(ctx);
+        OutputDebugStringA("FunctionCallbackArguments, self->v(self) != funcVal\n");
+    }
+
+    //miniv8ReleaseAssert(JS_VALUE_IS_EQ(self->v(self), funcVal) || !is_constructor, "onConstructorCallback fail\n");
 
     if (0 == func->m_internalFieldCount)
         func->m_internalFieldCount = self->m_internalFieldCount;
@@ -244,9 +257,12 @@ JSValue FunctionCallbackArguments::onConstructorCallback(JSContext* ctx, JSValue
         newInst = funcVal;
         JS_DupValue(ctx, newInst);
     }
-
-    //printDebug("FunctionCallbackArguments: isConstructor:%d, %I64u\n", isConstructor, newInst);
+    if (0)
+        JS_PrintStack(ctx);
+    
     thisValV8 = miniv8::V8Object::create(context, newInst);
+    //printDebug("FunctionCallbackArguments: isConstructor:%d, %I64u, %p\n", isConstructor, newInst, thisValV8);
+    int newInstId = JS_GetObjId(newInst);
     JS_FreeValue(ctx, newInst);
 
     if (thisValV8->m_internalFieldCount == 0)
@@ -256,7 +272,7 @@ JSValue FunctionCallbackArguments::onConstructorCallback(JSContext* ctx, JSValue
     std::vector<void*> argValue;
     void* implicitArgs[v8::FunctionCallbackInfo<v8::Value>::kArgsLength] = { 0 };
 
-    Local<v8::Value> externalLocal = self->m_data.Get((v8::Isolate*)isolate);
+    Local<v8::Value> externalLocal = self->m_data.Get((v8::Isolate*)v8isolate);
     miniv8::V8Value* external = v8::Utils::openHandle<v8::Value, miniv8::V8Value>(*externalLocal);
     miniv8::FunctionCallbackInfoWrap wrap;
     createFunctionCallbackInfo(context, isConstructor, thisValV8, &argValue, implicitArgs, external, &wrap, argc, argv);
@@ -265,12 +281,18 @@ JSValue FunctionCallbackArguments::onConstructorCallback(JSContext* ctx, JSValue
     void** retVal = (void**)&implicitArgs[v8::FunctionCallbackInfo<v8::Value>::kReturnValueIndex];
     *retVal = &retVal;
 
-    isolate->clearErr(ctx);
+    v8isolate->clearErr(ctx);
+    v8isolate->pushRetVal(retVal);
     self->m_callback(*wrapV8); // to V8FunctionTemplate::onCall
-    if (isolate->hasErr())
-        return isolate->getErrAndClear();
+    if (0)
+        JS_PrintStack(ctx);
+    if (v8isolate->hasErr()) {
+        v8isolate->popRetVal();
+        return v8isolate->getErrAndClear();
+    }
 
     JSValue v = miniv8::getReturnVal(ctx, &retVal, retVal);
+    v8isolate->popRetVal();
 
     // 如果是构造函数，返回值必须的newInst，表示返回构造出的新实例
     if (isConstructor) {
@@ -281,6 +303,18 @@ JSValue FunctionCallbackArguments::onConstructorCallback(JSContext* ctx, JSValue
         JSValue toStringFuncVal = JS_NewCFunction2(ctx, onToStringOfFuncInst, NULL, 0, JS_CFUNC_generic, 0, self);
         JSAtom toStringAtom = JS_NewAtom(ctx, "toString");
         JS_SetProperty(ctx, v, /*JS_ATOM_toString*/toStringAtom, toStringFuncVal);
+
+        //--
+        thisValV8->setTemplId(self->getTemplId());
+        thisValV8->m_internalFieldCount = self->m_internalFieldCount;
+
+        miniv8::V8Template* templ = v8isolate->getTemplateById(self->getTemplId());
+        if (templ && templ->getInstanceTemplate()) {
+            templ->getInstanceTemplate()->newTemplateInstance(thisValV8, false);
+
+            if (0 == thisValV8->m_internalFieldCount)
+                thisValV8->m_internalFieldCount = templ->getInstanceTemplate()->getInternalFieldCount();
+        }
     } else {
         //JS_DupValue(ctx, v); // TODO: 需要增加引用吗？
     }
@@ -291,8 +325,8 @@ JSValue FunctionCallbackArguments::onConstructorCallback(JSContext* ctx, JSValue
             retV->setTemplId(self->getTemplId());
         } else {
             //miniv8ReleaseAssert(retV->getTemplId() == self->getTemplId(), "onConstructorCallback fail\n");
-            if (retV->getTemplId() != self->getTemplId())
-                OutputDebugStringA("onConstructorCallback fail\n");
+//             if (retV->getTemplId() != self->getTemplId())
+//                 OutputDebugStringA("onConstructorCallback fail\n");
         }
     }
 
@@ -306,7 +340,8 @@ JSValue MacroAssembler::objectTemplateNameGetter(JSContext* ctx, JSValueConst th
 {
     ctx = miniv8::V8Context::getCurrentOrEmptyJsCtx();
     miniv8::V8Context* context = (miniv8::V8Context*)JS_GetContextOpaque(ctx);
-    miniv8::V8Isolate::AutoEnterExitContext autoEnterExitContext(context);
+    miniv8::V8Isolate* v8isolate = (miniv8::V8Isolate*)(v8::Isolate::GetCurrent());
+    miniv8::AutoEnterExitContext autoEnterExitContext(v8isolate, context);
     miniv8::V8Template::Accessor* accessor = (miniv8::V8Template::Accessor*)userdata;
 
     miniv8::V8String* name = new miniv8::V8String(accessor->name);
@@ -336,10 +371,14 @@ JSValue MacroAssembler::objectTemplateNameGetter(JSContext* ctx, JSValueConst th
     void** retVal = &args[v8::PropertyCallbackInfo<v8::Value>::kReturnValueIndex];
     *retVal = &retVal;
 
+    v8isolate->pushRetVal(retVal);
+
     if (accessor->nameGetter)
         accessor->nameGetter(propertyName, *info);
     else
         accessor->getter(propertyName, *info);
+
+    v8isolate->popRetVal();
 
     v8::Local<v8::External> externalv8 = v8::Utils::convert<miniv8::V8External, v8::External>(external); // 为了自动回收
 
@@ -351,7 +390,8 @@ JSValue MacroAssembler::objectTemplateNameSetter(JSContext* ctx, JSValueConst th
 {
     ctx = miniv8::V8Context::getCurrentOrEmptyJsCtx();
     miniv8::V8Context* context = (miniv8::V8Context*)JS_GetContextOpaque(ctx);
-    miniv8::V8Isolate::AutoEnterExitContext autoEnterExitContext(context);
+    miniv8::V8Isolate* v8isolate = (miniv8::V8Isolate*)(v8::Isolate::GetCurrent());
+    miniv8::AutoEnterExitContext autoEnterExitContext(v8isolate, context);
     miniv8::V8Template::Accessor* accessor = (miniv8::V8Template::Accessor*)userdata;
 
     miniv8::V8String* name = new miniv8::V8String(accessor->name);
@@ -383,10 +423,13 @@ JSValue MacroAssembler::objectTemplateNameSetter(JSContext* ctx, JSValueConst th
     v8::PropertyCallbackInfo<void>* info = (v8::PropertyCallbackInfo<void>*) & infoStub;
     void** retVal = &args[v8::PropertyCallbackInfo<v8::Value>::kReturnValueIndex];
     *retVal = &retVal;
+    v8isolate->pushRetVal(retVal);
+
     if (accessor->nameSetter)
         accessor->nameSetter(propertyName, valueV8, *info);
     else
         accessor->setter(propertyName, valueV8, *info);
+    v8isolate->popRetVal();
 
     v8::Local<v8::External> externalv8 = v8::Utils::convert<miniv8::V8External, v8::External>(external); // 为了自动回收
     JSValue v = miniv8::getReturnVal(ctx, &retVal, retVal);
@@ -397,7 +440,8 @@ int v8::MacroAssembler::onNamePropertyQuery(JSContext* ctx, JSValueConst thisVal
 {
     ctx = miniv8::V8Context::getCurrentOrEmptyJsCtx();
     miniv8::V8Context* context = (miniv8::V8Context*)JS_GetContextOpaque(ctx);
-    miniv8::V8Isolate::AutoEnterExitContext autoEnterExitContext(context);
+    miniv8::V8Isolate* v8isolate = (miniv8::V8Isolate*)(v8::Isolate::GetCurrent());
+    miniv8::AutoEnterExitContext autoEnterExitContext(v8isolate, context);
     v8::NamedPropertyHandlerConfiguration* cfg = (v8::NamedPropertyHandlerConfiguration*)userdata;
     miniv8::V8Object* thisValue = miniv8::V8Object::create(context, thisVal);
     miniv8::V8External* external = (miniv8::V8External*)v8::Utils::openHandle<v8::Value, miniv8::V8Value>(*(cfg->data));
@@ -443,7 +487,8 @@ JS_BOOL v8::MacroAssembler::onNamePropertySet(JSContext* ctx, JSValueConst thisV
 {
     ctx = miniv8::V8Context::getCurrentOrEmptyJsCtx();
     miniv8::V8Context* context = (miniv8::V8Context*)JS_GetContextOpaque(ctx);
-    miniv8::V8Isolate::AutoEnterExitContext autoEnterExitContext(context);
+    miniv8::V8Isolate* v8isolate = (miniv8::V8Isolate*)(v8::Isolate::GetCurrent());
+    miniv8::AutoEnterExitContext autoEnterExitContext(v8isolate, context);
     v8::NamedPropertyHandlerConfiguration* cfg = (v8::NamedPropertyHandlerConfiguration*)userdata;
     miniv8::V8Object* thisValue = miniv8::V8Object::create(context, thisVal);
     miniv8::V8External* external = (miniv8::V8External*)v8::Utils::openHandle<v8::Value, miniv8::V8Value>(*(cfg->data));
@@ -491,7 +536,8 @@ JSValue v8::MacroAssembler::onNamePropertyGet(JSContext* ctx, JSValueConst thisV
 {
     ctx = miniv8::V8Context::getCurrentOrEmptyJsCtx();
     miniv8::V8Context* context = (miniv8::V8Context*)JS_GetContextOpaque(ctx);
-    miniv8::V8Isolate::AutoEnterExitContext autoEnterExitContext(context);
+    miniv8::V8Isolate* v8isolate = (miniv8::V8Isolate*)(v8::Isolate::GetCurrent());
+    miniv8::AutoEnterExitContext autoEnterExitContext(v8isolate, context);
     v8::NamedPropertyHandlerConfiguration* cfg = (v8::NamedPropertyHandlerConfiguration*)userdata;
     miniv8::V8Object* thisValue = miniv8::V8Object::create(context, thisVal);
     miniv8::V8External* external = (miniv8::V8External*)v8::Utils::openHandle<v8::Value, miniv8::V8Value>(*(cfg->data));
@@ -519,9 +565,12 @@ JSValue v8::MacroAssembler::onNamePropertyGet(JSContext* ctx, JSValueConst thisV
     v8::PropertyCallbackInfo<v8::Value>* info = (v8::PropertyCallbackInfo<v8::Value>*)(&infoStub);
     void** retVal = &args[v8::PropertyCallbackInfo<v8::Value>::kReturnValueIndex];
     *retVal = &retVal;
+    v8isolate->pushRetVal(retVal);
 
     cfg->getter(nameV8, *info);
     JSValue v = miniv8::getReturnVal(ctx, &retVal, retVal);
+    v8isolate->popRetVal();
+
     return v;
 }
 
@@ -529,7 +578,8 @@ JSValue v8::MacroAssembler::onIndexHandle(JSContext* ctx, JSValueConst thisVal, 
 {
     ctx = miniv8::V8Context::getCurrentOrEmptyJsCtx();
     miniv8::V8Context* context = (miniv8::V8Context*)JS_GetContextOpaque(ctx);
-    miniv8::V8Isolate::AutoEnterExitContext autoEnterExitContext(context);
+    miniv8::V8Isolate* v8isolate = (miniv8::V8Isolate*)(v8::Isolate::GetCurrent());
+    miniv8::AutoEnterExitContext autoEnterExitContext(v8isolate, context);
     v8::IndexedPropertyHandlerConfiguration* cfg = (v8::IndexedPropertyHandlerConfiguration*)userdata;
     miniv8::V8Object* thisValue = miniv8::V8Object::create(context, thisVal);
     miniv8::V8External* external = (miniv8::V8External*)v8::Utils::openHandle<v8::Value, miniv8::V8Value>(*(cfg->data));
@@ -549,9 +599,11 @@ JSValue v8::MacroAssembler::onIndexHandle(JSContext* ctx, JSValueConst thisVal, 
     v8::PropertyCallbackInfo<v8::Value>* info = (v8::PropertyCallbackInfo<v8::Value>*)(&infoStub);
     void** retVal = &args[v8::PropertyCallbackInfo<v8::Value>::kReturnValueIndex];
     *retVal = &retVal;
+    v8isolate->pushRetVal(retVal);
 
     cfg->getter(index, *info);
 
+    v8isolate->popRetVal();
     JSValue v = miniv8::getReturnVal(ctx, &retVal, retVal);
     return v;
 }
@@ -572,19 +624,19 @@ JSValue v8::MacroAssembler::wrapGetter(JSContext* ctx, JSValueConst thisVal, voi
     v8::Local<v8::String> propV8 = v8::Utils::convert<miniv8::V8String, v8::String>(prop);
 
     JSRuntime* runtime = JS_GetRuntime(ctx);
-    miniv8::V8Isolate* isolate = miniv8::V8Isolate::GetCurrent();
+    miniv8::V8Isolate* v8isolate = miniv8::V8Isolate::GetCurrent();
 
     miniv8ReleaseAssert(contextOfSelf == context, "wrapGetter fail\n");
     miniv8::V8Object* thisValV8 = miniv8::V8Object::create(context, thisVal); // TODO: free
 
-    miniv8::V8Data dataV8(context, thisVal);
+    //miniv8::V8Data dataV8(context, thisVal);
 
     void* returnValue[4] = { 0 };
-    returnValue[1] = isolate;
+    returnValue[1] = v8isolate;
 
     void* args[v8::PropertyCallbackInfo<v8::Value>::kArgsLength] = { 0 };
     args[v8::PropertyCallbackInfo<v8::Value>::kHolderIndex] = v8::Utils::maskPtr(thisValV8); // kHolderIndex
-    args[v8::PropertyCallbackInfo<v8::Value>::kIsolateIndex] = isolate; // kIsolateIndex
+    args[v8::PropertyCallbackInfo<v8::Value>::kIsolateIndex] = v8isolate; // kIsolateIndex
     args[v8::PropertyCallbackInfo<v8::Value>::kReturnValueIndex] = nullptr;// &returnValue[3]; // kReturnValueIndex
     args[v8::PropertyCallbackInfo<v8::Value>::kDataIndex] = v8::Utils::maskPtr(thisValV8);// &dataV8; // kDataIndex
     args[v8::PropertyCallbackInfo<v8::Value>::kThisIndex] = v8::Utils::maskPtr(thisValV8); // kThisIndex
@@ -599,12 +651,14 @@ JSValue v8::MacroAssembler::wrapGetter(JSContext* ctx, JSValueConst thisVal, voi
 
     void** retVal = &args[v8::PropertyCallbackInfo<v8::Value>::kReturnValueIndex];
     *retVal = &retVal;
+    v8isolate->pushRetVal(retVal);
 
     if (accessor->getter)
         accessor->getter(propV8, *infoV8);
     else if (accessor->nameGetter)
         accessor->nameGetter(propV8, *infoV8);
 
+    v8isolate->popRetVal();
     JSValue v = miniv8::getReturnVal(ctx, &retVal, retVal);
     return v;
 }
@@ -628,8 +682,8 @@ JSValue v8::MacroAssembler::wrapSetter(JSContext* ctx, JSValueConst thisVal, JSV
     miniv8::V8Context* context = (miniv8::V8Context*)JS_GetContextOpaque(ctx);
     miniv8ReleaseAssert(contextOfSelf == context, "wrapSetter fail\n");
 
-    miniv8::V8Value value(context, val);
-    v8::Local<v8::Value> valueV8 = v8::Utils::convert<miniv8::V8Value, v8::Value>(&value);
+    miniv8::V8Value* value = miniv8::V8Value::create(context, val); // !!
+    v8::Local<v8::Value> valueV8 = v8::Utils::convert<miniv8::V8Value, v8::Value>(value);
 
     miniv8::V8Object* thisValV8 = miniv8::V8Object::create(context, thisVal);
 
@@ -638,7 +692,7 @@ JSValue v8::MacroAssembler::wrapSetter(JSContext* ctx, JSValueConst thisVal, JSV
 
     void* args[v8::PropertyCallbackInfo<void>::kArgsLength] = { 0 };
     args[v8::PropertyCallbackInfo<void>::kHolderIndex] = v8::Utils::maskPtr(thisValV8); // kHolderIndex
-    args[v8::PropertyCallbackInfo<void>::kIsolateIndex] = &isolate; // kIsolateIndex
+    args[v8::PropertyCallbackInfo<void>::kIsolateIndex] = isolate; // kIsolateIndex
     args[v8::PropertyCallbackInfo<void>::kReturnValueIndex] = nullptr; // &returnValue[3]; // kReturnValueIndex
     args[v8::PropertyCallbackInfo<void>::kDataIndex] = v8::Utils::maskPtr(thisValV8);// &dataV8; // kDataIndex
     args[v8::PropertyCallbackInfo<void>::kThisIndex] = v8::Utils::maskPtr(thisValV8); // kThisIndex
@@ -840,13 +894,21 @@ static size_t qjsMallocUsableSize(const void* ptr)
     return 0;
 }
 
-V8Isolate::V8Isolate(const v8::Isolate::CreateParams& params)
+V8Isolate::V8Isolate()
+{
+    
+}
+
+void V8Isolate::init(const v8::Isolate::CreateParams& params)
 {
     m_v8CreateParams = params;
     JSMallocFunctions jsMallocFunc = {qjsMalloc, qjsFree, qjsRealloc, qjsMallocUsableSize, qjsMallocArrayBuffer, qjsFreeArrayBuffer};
     m_runtime = JS_NewRuntime2(&jsMallocFunc, params.array_buffer_allocator);
+#if INTPTR_MAX >= INT64_MAX
+    JS_SetMaxStackSize(m_runtime, (256 * 1024 * 40));
+#else
     JS_SetMaxStackSize(m_runtime, (256 * 1024 * 4));
-
+#endif
     if (0 != m_inst) {
         void* inst = TlsGetValue(m_inst);
         miniv8ReleaseAssert(!inst, "V8Isolate::V8Isolate, m_inst has be set!\n");
@@ -860,22 +922,24 @@ V8Isolate::V8Isolate(const v8::Isolate::CreateParams& params)
     m_isExiting = false;
     m_gcPrologueCallback = nullptr;
     m_gcEpilogueCallback = nullptr;
+    m_promises = nullptr;
     m_globalHandleIndex = 0;
-    m_handleScopeHandleIndex = 0;
+    m_scopeHandleIndex = 0;
+    m_callReentryCount = 0;
+    m_lastGcMilliseconds = 0;
     m_globalizeHandles.resize(kHandlesSize);
     m_globalizeCountHandles.resize(kHandlesSize);
-    m_handleScopeHandles.resize(kHandlesSize);
+    m_scopeHandles.resize(kHandlesSize);
     memset(m_globalizeHandles.data(), 0, sizeof(void*) * m_globalizeHandles.size());
     memset(m_globalizeCountHandles.data(), 0, sizeof(int32_t) * m_globalizeHandles.size());
-    memset(m_handleScopeHandles.data(), 0, sizeof(void*) * m_handleScopeHandles.size());
+    memset(m_scopeHandles.data(), 0, sizeof(void*) * m_scopeHandles.size());
     memset(m_apiPointer, 0, sizeof(void*) * kSlotSize);
     memset(m_eternals, 0, sizeof(void*) * kSlotSize);
     memset(m_eternalsPersistents, 0, sizeof(v8::Persistent<v8::Value>*) * kSlotSize);
 
     JSContext* emptyCtx = JS_NewContext(m_runtime);
+    JS_SetIsEmptyContext(emptyCtx);
     m_emptyContext = new miniv8::V8Context(this, emptyCtx);
-
-    JS_MarkCtxIsEmptyCtx(emptyCtx);
 
     typedef v8::internal::Internals I;
     *I::GetRoot((v8::Isolate*)&m_apiPointer, I::kNullValueRootIndex) = (v8::internal::Object*)v8::Utils::maskPtr(new miniv8::V8Value(nullptr, JS_NULL));
@@ -893,11 +957,22 @@ V8Isolate::V8Isolate(const v8::Isolate::CreateParams& params)
     }
     
     m_emptyContextPersistents.Reset((v8::Isolate*)this, v8::Utils::convert<miniv8::V8Context, v8::Context>(m_emptyContext));
+    printDebug("V8Isolate::init: %p\n", this);
 }
 
 V8Isolate* V8Isolate::GetCurrent()
 {
     return (V8Isolate*)TlsGetValue(m_inst);
+}
+
+void V8Isolate::pushRetVal(void** retVal)
+{
+    m_retVals.push_back(retVal);
+}
+
+void V8Isolate::popRetVal()
+{
+    m_retVals.pop_back();
 }
 
 void V8Isolate::clearErr(JSContext* ctx)
@@ -926,6 +1001,7 @@ V8Head::V8Head()
     m_prev = nullptr;
     m_isolatHandleScopeIndex = nullptr;
     m_isolatGlobalScopeIndex = nullptr;
+    m_isolatHandleScopeIndexHadClear = false;
     m_objectGroupId = 0;
     m_qjsValue = JS_NULL;
     m_weakCallback = nullptr;
@@ -959,22 +1035,37 @@ V8Head::V8Head()
 //     if (1894 == m_countId) // docment对象
 //         OutputDebugStringA("");
 // 
-//     if (1955 == m_countId) // blink::V8MessageChannel::constructorCallback
-//         OutputDebugStringA("");
-// 
 //     if (1135 == m_countId) // global的prototype对象
 //         OutputDebugStringA("");
 // 
-    if (1025 == m_countId) // 
-        OutputDebugStringA("");
-// 
-//     if (2 == m_countId) // 
+//     if (160842 == m_countId) // 
 //         OutputDebugStringA("");
+// 
+//     if (111488 == m_countId) // 
+//         OutputDebugStringA("");
+}
+
+// 检查GC的时候，是不是被释放的对象还在m_tempScopeHandles里
+bool V8Isolate::checkGcTempScopeHandles(V8Head* head)
+{
+    for (size_t j = 0; j < m_tempScopeHandles.size(); ++j) {
+        std::vector<void**>* handles = m_tempScopeHandles[j];
+
+        for (size_t i = 0; i < handles->size(); ++i) {
+            void** ptr = (void**)handles->at(i);
+            if (head->m_isolatHandleScopeIndex == ptr)
+                return true;
+        }
+    }
+    return false;
 }
 
 V8Head::~V8Head()
 {
     //printDebug("~~~V8Head: %p, %d, %I64u\n", this, m_countId, m_qjsValue);
+
+//     if (632 == m_countId)
+//         OutputDebugStringA("");
 
     V8Isolate* isolate = V8Isolate::GetCurrent();
     isolate->onHeadDelete(this);
@@ -988,8 +1079,11 @@ V8Head::~V8Head()
     if (m_next)
         m_next->m_prev = m_prev;
 
-    if (m_isolatHandleScopeIndex)
+    if (m_isolatHandleScopeIndex) {
+        miniv8ReleaseAssert(!isolate->checkGcTempScopeHandles(this), "");
+        printDebug("~V8Head: %p\n", m_isolatHandleScopeIndex);
         *m_isolatHandleScopeIndex = nullptr;
+    }
     
     if (m_isolatGlobalScopeIndex)
         *m_isolatGlobalScopeIndex = nullptr;
@@ -998,9 +1092,6 @@ V8Head::~V8Head()
 void V8Head::onTrace(void* tracer, V8Head* self)
 {
     self->m_markGC = 1;
-
-    if (1131 == self->m_countId)
-        OutputDebugStringA("");
 
     if (0 != self->m_objectGroupId)
         V8Isolate::GetCurrent()->addActivedObjectGroupId(self->m_objectGroupId);
@@ -1021,13 +1112,30 @@ void V8Head::onTraceHelper(void* tracer, V8Head* self)
     onTrace(tracer, self);
 }
 
+static void testHandleEmptyIndex(std::vector<void*>* handles)
+{
+    std::vector<V8Head*> heads;
+    for (size_t i = 0; i < handles->size(); ++i) {
+        void** ptr = (void**)(handles->at(i));
+        V8Value* head = v8::Utils::toHandle<V8Value>((uintptr_t)ptr);
+        heads.push_back((V8Head*)head);
+    }
+    OutputDebugStringA("");
+}
+
 static void** findHandleEmptyIndex(int* handleIndex, std::vector<void*>* handles)
 {
     void** ret = nullptr;
 
     size_t count = 0;
     for (size_t i = *handleIndex; ; ++i, ++count) {
+//         if (count == 20000)
+//             OutputDebugStringA("");
+//         if (i == 60000)
+//             OutputDebugStringA("");
+
         if (count == handles->size()) {
+            testHandleEmptyIndex(handles);
             DebugBreak();
             break;
         }
@@ -1054,32 +1162,157 @@ void V8Isolate::refGlobalizeHandleIndex(intptr_t idx)
 {
     int index = (idx - (intptr_t)m_globalizeHandles.data()) / (sizeof(void*));
     ++m_globalizeCountHandles[index];
-
-    if (4 == index) // 
-        OutputDebugStringA("");
-// 
-//     V8Head* head = (V8Head*)m_globalizeHandles[index];
-//     if (head) {
-//         head = (V8Head*)v8::Utils::toHandle<V8Data>((uintptr_t)head);
-// 
-//         if (21 == head->m_countId)
-//             OutputDebugStringA("");
-//     }
 }
 
 void** V8Isolate::findHandleScopeEmptyIndex()
 {
-    return findHandleEmptyIndex(&m_handleScopeHandleIndex, &m_handleScopeHandles);
+    void** ret = findHandleEmptyIndex(&m_scopeHandleIndex, &m_scopeHandles);
+
+    for (size_t j = 0; j < m_tempScopeHandles.size(); ++j) {
+        std::vector<void**>* handles = m_tempScopeHandles[j];
+        for (size_t i = 0; i < handles->size(); ++i) {
+            void** ptr = (void**)handles->at(i);
+            if (ret == ptr) { // 找一下有没重复申请了的 
+                DebugBreak();
+                return ret;
+            }
+        }
+    }
+
+    if (m_tempScopeHandles.size() > 0) { // 第一次调用可能是空的
+        std::vector<void**>* handles = m_tempScopeHandles[m_tempScopeHandles.size() - 1];
+        handles->push_back(ret);
+    }
+
+    return ret;
 }
 
 void V8Isolate::enterContext(V8Context* ctx)
 {
+//     static int s_count = 0;
+//     if (230 == s_count)
+//         OutputDebugStringA("");
+//     if (231 == s_count)
+//         OutputDebugStringA("");
+//     printDebug("enterContext:%p, %d\n", ctx, s_count);
+//     s_count++;
+
     m_currentCtxs.push_back(ctx);
 }
 
 void V8Isolate::exitContext()
 {
     m_currentCtxs.pop_back();
+    gcTempScopeHandles();
+}
+
+void V8Isolate::enterHandleScope()
+{
+    std::vector<void**>* handles = new std::vector<void**>();
+    m_tempScopeHandles.push_back(handles);
+}
+
+extern void* g_testFunc;
+
+void V8Isolate::exitHandleScope()
+{
+    std::vector<void**>* handles = m_tempScopeHandles[m_tempScopeHandles.size() - 1];
+    void** retVal = nullptr;
+    if (!m_retVals.empty()) {
+        retVal = m_retVals[m_retVals.size() - 1];
+    }
+
+    V8Value* ret = nullptr;
+    if (retVal && !V8Object::IsSmi((void*)(*retVal)))
+        ret = v8::Utils::openHandle<v8::Value, V8Value>((v8::Value*)(retVal));
+
+    for (size_t i = 0; i < handles->size(); ++i) {
+        void** ptr = (void**)handles->at(i);
+//         if (!(*ptr)) // GC的时候，有可能被释放的对象还在m_tempScopeHandles里，这会导致*ptr为null
+//             continue;
+
+        miniv8::V8Head* head = (miniv8::V8Head*)v8::Utils::toHandle<miniv8::V8Data>((uintptr_t)(*ptr));
+        if (g_testFunc == head)
+            OutputDebugStringA("");
+
+        miniv8ReleaseAssert(miniv8::V8Head::isValide(head), "V8Head is not valide\n");
+
+        uint8_t unGcType = head->m_unGcType;
+        if (unGcType & miniv8::V8Head::kIsEscapeHandleScope) {
+            head->m_unGcType &= ~miniv8::V8Head::kIsEscapeHandleScope;
+            if (m_tempScopeHandles.size() >= 2) { // escape handle需要放到上一层去管理，不然就内存泄露了
+                std::vector<void**>* lastHandles = m_tempScopeHandles[m_tempScopeHandles.size() - 2];
+                lastHandles->push_back(ptr);
+            }
+            continue;
+        }
+
+        if ((void**)ret == (void**)head)
+            continue;
+
+        // TODO: !!!!!!!
+        if (head->m_type != miniv8::V8ObjectType::kOTContext)
+            gcHandleScopeHandleItem(head, nullptr);
+    }
+    m_tempScopeHandles.pop_back();
+    delete handles;
+}
+
+void V8Isolate::escapeHandleScope(void** obj)
+{
+    if (!obj)
+        return;
+    miniv8::V8Head* head = (miniv8::V8Head*)v8::Utils::toHandle<miniv8::V8Data>((uintptr_t)(*obj));
+    miniv8ReleaseAssert(miniv8::V8Head::isValide(head), "V8Head is not valide\n");
+    head->m_unGcType |= miniv8::V8Head::kIsEscapeHandleScope;
+}
+
+// void V8Context::enterContext(V8Isolate* isolate)
+// {
+//     std::vector<void**>* handles = new std::vector<void**>();
+//     m_tempScopeHandles.push_back(handles);
+//     isolate->enterContext(this);
+// }
+// 
+// void V8Context::exitContext(V8Isolate* isolate)
+// {
+//     isolate->exitContext();
+//     std::vector<void**>* handles = m_tempScopeHandles[m_tempScopeHandles.size() - 1];
+// 
+//     for (size_t i = 0; i < handles->size(); ++i) {
+//         void** ptr = (void**)handles->at(i);
+//         miniv8::V8Head* head = (miniv8::V8Head*)v8::Utils::toHandle<miniv8::V8Data>((uintptr_t)(*ptr));
+//         miniv8ReleaseAssert(miniv8::V8Head::isValide(head), "V8Head is not valide\n");
+// 
+//         if (head->m_type != miniv8::V8ObjectType::kOTContext)
+//             isolate->gcHandleScopeHandleItem(head, nullptr);
+//     }
+//     delete handles;
+// 
+//     m_tempScopeHandles.pop_back();
+// }
+// 
+// void V8Context::registerHandleScope(void** head)
+// {
+//     miniv8ReleaseAssert(m_tempScopeHandles.size() != 0, "");
+//     std::vector<void**>* handles = m_tempScopeHandles[m_tempScopeHandles.size() - 1];
+//     handles->push_back(head);
+// }
+
+void V8Isolate::gcTempScopeHandles()
+{
+//     if (!m_currentCtxs.empty())
+//         return;
+// 
+//     for (size_t i = 0; i < m_tempScopeHandles.size(); ++i) {
+//         void** ptr = (void**)m_tempScopeHandles[i];
+//         V8Head* head = (V8Head*)v8::Utils::toHandle<V8Data>((uintptr_t)(*ptr));
+//         miniv8ReleaseAssert(V8Head::isValide(head), "V8Head is not valide\n");
+// 
+//         if (head->m_type != V8ObjectType::kOTContext)
+//             gcHandleScopeHandleItem(head, nullptr);
+//     }
+//     m_tempScopeHandles.clear();
 }
 
 static void runJobPendingCb(JSContext* ctx, BOOL is_pre_call, void* cb_data)
@@ -1091,9 +1324,11 @@ static void runJobPendingCb(JSContext* ctx, BOOL is_pre_call, void* cb_data)
 
 void V8Isolate::runMicrotasks()
 {
-    printEmptyFuncInfo(__FUNCTION__, true);
+    printEmptyFuncInfo(__FUNCTION__, false, false);
     if (m_isExiting)
         return;
+
+    miniv8::V8Isolate::AutoCallReentry autoCallReentry(this);
 
     gcHandleScopeHandles(false);
 
@@ -1106,8 +1341,9 @@ void V8Isolate::runMicrotasks()
     m_microtasks.clear();
 
     JSContext* pctx = nullptr;
-    JS_ExecutePendingJob(m_runtime, &pctx, runJobPendingCb, this);
-
+    for (int ret = 1; ret != 0; ) {
+        ret = JS_ExecutePendingJob(m_runtime, &pctx, runJobPendingCb, this);
+    }
 //     if (m_currentCtxs.empty())
 //         runGC(); // TODO: 临时设置个gc，以后去掉，因为影响性能
 }
@@ -1172,7 +1408,7 @@ V8Value::V8Value(V8Context* ctx, JSValue value) : V8Data(ctx, value)
 //     static int s_count = 1;
 //     printDebug("V8Value~: %p, %I64u, %d\n", this, value, s_count);
 // 
-//     if (1098 == s_count)
+//     if (1403 == s_count)
 //         OutputDebugStringA("");
 //     s_count++;
 }
@@ -1191,10 +1427,12 @@ V8Value* V8Value::create(V8Context* context, JSValue value)
     // add ref 是在哪里做？
     if (JS_IsString(value)) {
         ret = new V8String(context, value);
-    } else if (JS_IsFunction(ctx, value)) {
+    } else if (JS_IsFunction(ctx, value) || JS_IsBytecodeFunction(ctx, value)) {
         ret = new V8Function(context, value);
     } else if (JS_IsArray(ctx, value)) {
         ret = new V8Array(context, value);
+    } else if (JS_IsMap(value)) {
+        ret = new V8Map(context, value);
     } else if (JS_IsArrayBuffer(value)) {
         ret = V8ArrayBuffer::create(context, value);
     } else if (JS_IsWhatTypedArray(value, JS_INT16_TYPED_ARRAY)) {
@@ -1216,7 +1454,7 @@ V8Value* V8Value::create(V8Context* context, JSValue value)
     } else if (JS_IsWhatTypedArray(value, JS_FLOAT64_TYPED_ARRAY)) {
         ret = V8Float64Array::create(context, value);
     } else if (JS_IsPromise(value)) {
-        ret = V8Promise::create(context, value);
+        ret = V8Promise::getOrCreate(context, value); // TODO: 以后再做从quickjs里取出的值转成v8promise
     } else if (JS_IsObject(value)) {
         ret = V8Object::create(context, value);
     } else {// TODO: num等其他类型
@@ -1318,17 +1556,18 @@ V8Object* V8Object::createFromType(V8Context* ctx, JSValue value, V8ObjectType t
     else if (type == kOTFloat64Array)
         ret = new V8Float64Array(ctx, value);
 
-    else if (type == kOTResolver)
-        ret = new V8Resolver(ctx, value);
-    else if (type == kOTPromise)
-        ret = new V8Promise(ctx, value);
-
-    else if (type == kOTObject)
+    else if (type == kOTResolver) {
+        //ret = new V8Resolver(ctx, value);
+        DebugBreak();
+    } else if (type == kOTPromise) {
+        //ret = new V8Promise(ctx, value);
+        DebugBreak();
+    } else if (type == kOTObject)
         ret = new V8Object(ctx, value);
     else
         DebugBreak();
 
-    //JS_DupValue(ctx->ctx(), value);
+    int ref = JS_GetRefCount(ctx->ctx(), value);
     v8::Local<v8::Object> retv8 = v8::Utils::convert<miniv8::V8Object, v8::Object>(ret); // 调用一下，这样可以自动内存回收
     return ret;
 }
@@ -1358,17 +1597,16 @@ V8Object::V8Object(V8Context* ctx, JSValue value) : V8Value(ctx, value)
 {
     m_head.m_type = kOTObject;
     m_head.m_refOrDeref = V8Object::onV8HeadRefOrDerefOfV8Object;
+    m_head.m_refOrDerefCopy = m_head.m_refOrDeref;
     m_head.m_tracer = V8Object::onV8HeadTraceOfV8Object;
     
     m_props = nullptr;
     isObject = true;
     m_internalFieldCount = 0;
+    m_hadBindInstanceTemplate = false;
 
     static int s_count = 0;
     InterlockedIncrement((LONG volatile *)&s_count);
-
-    if (55 == m_head.m_countId)
-        OutputDebugStringA("");
 
     //printDebug("V8Object: %p, %d, %I64u\n", this, s_count, value);
     V8Object* old = (V8Object*)JS_GetUserdata(value);
@@ -1395,30 +1633,38 @@ V8Object::~V8Object()
             val->m_head.m_unGcType &= ~miniv8::V8Head::kIsSetInternalField;
         }
     }
-
-    if (1023 == m_head.m_countId)
-        OutputDebugStringA("");
-    
-    printDebug("~~V8Object: %p, %d, #I64u\n", this, m_head.m_countId/*, m_head.m_qjsValue*/);
+    //printDebug("~~V8Object: %p, %d, %I64u\n", this, m_head.m_countId, m_head.m_qjsValue);
 }
 
 void V8Object::onJsUserDataWeakFuncOfV8Object(JSValue obj, void* userdata, JS_USER_DATA_WEAK_STEP step)
 {
     V8Object* self = (V8Object*)userdata;
-    delete self;
+    delete self; // TODO: !!!!!!!
 }
 
 void V8Object::onV8HeadRefOrDerefOfV8Object(V8Head* head, bool ref)
 {
-    miniv8ReleaseAssert(!ref, "onV8HeadRefOrDerefOfV8Function fail\n");
     V8Object* self = (V8Object*)head;
+    if (ref) {
+        JSValue v = self->v(self);
+        JS_DupValue(nullptr, v);
+        return;
+    }
     if (JS_VALUE_IS_EQ(self->m_head.m_qjsValue, JS_NULL)) {
         delete self;
         return;
     }
 
+//     if (self->m_head.m_countId > 110000) {
+//         char* output = (char*)malloc(0x100);
+//         sprintf_s(output, 0x99, "V8Object::onV8HeadRefOrDerefOfV8Object: %d\n", self->m_head.m_countId);
+//         OutputDebugStringA(output);
+//         free(output);
+//     }
+
     JSRuntime* rt = V8Isolate::GetCurrent()->getRuntime();
     JS_FreeValueRT(rt, self->m_head.m_qjsValue); // 这里面有回调，会析构V8Data
+    //printDebug("onV8HeadRefOrDerefOfV8Object %p\n", head);
 }
 
 void V8Object::onV8HeadTraceOfV8Object(void* tracer, V8Head* ptr)
@@ -1546,6 +1792,8 @@ v8::Maybe<bool> V8Object::Set(v8::Local<v8::Context> context, v8::Local<v8::Valu
     miniv8::V8Value* v8Val = v8::Utils::openHandle<v8::Value, miniv8::V8Value>(*val);
     miniv8::V8Context* v8Context = v8::Utils::openHandle<v8::Context, miniv8::V8Context>(*context);
     JSContext* ctx = miniv8::V8Context::getCtx(v8Context);
+    if (!v8Val)
+        return v8::Just<bool>(false);
     if (!ctx)
         ctx = miniv8::V8Context::getCurrentOrEmptyJsCtx();
     
@@ -1588,6 +1836,24 @@ JSValue V8Function::onConstructorCallback(JSContext* ctx, JSValueConst thisVal, 
 
 static int s_nameCount = 0;
 
+V8Function::~V8Function()
+{
+    // TODO: m_signature
+    //printDebug("~~V8Function: %p\n", this);
+
+    JSContext* ctx = V8Context::getEmptyJsCtx();
+    JSValue v = this->v(this);
+//     JSValue v8FunctionTemplate = JS_GetPropertyStr(ctx, v, "v8FunctionTemplate");
+//     if (JS_IsObject(v8FunctionTemplate)) {
+//         //JS_FreeValue(ctx, v8FunctionTemplate);
+//         OutputDebugStringA("");
+//     }
+//     JS_DeletePropertyStr(ctx, v, "v8FunctionTemplate", 0);
+
+    m_data.Reset();
+    m_signature.Reset();
+}
+
 std::string V8Function::getName()
 {
     if (m_name.empty()) {
@@ -1624,8 +1890,13 @@ void V8Function::onJsUserDataWeakFuncOfV8Function(JSValue obj, void* userdata, J
 
 void V8Function::onV8HeadRefOrDerefOfV8Function(V8Head* head, bool ref)
 {
-    miniv8ReleaseAssert(!ref, "onV8HeadRefOrDerefOfV8Function fail\n");
     V8Function* self = (V8Function*)head;
+    if (ref) {
+        JSValue v = self->v(self);
+        JS_DupValue(nullptr, v);
+        return;
+    }
+
     if (JS_VALUE_IS_EQ(self->m_head.m_qjsValue, JS_NULL)) {
         delete self;
         return;
@@ -1637,8 +1908,13 @@ void V8Function::onV8HeadRefOrDerefOfV8Function(V8Head* head, bool ref)
 void V8Function::onV8HeadTraceOfV8Function(void* tracer, V8Head* ptr)
 {
     JSRuntime* rt = V8Isolate::GetCurrent()->getRuntime();
-    V8Template* self = (V8Template*)ptr;
+    V8Function* self = (V8Function*)ptr;
     V8Data::onV8HeadTraceOfV8Data(tracer, ptr);
+
+    if (g_testFunc == self)
+        OutputDebugStringA("");
+
+    // TODO: JS_SetPropertyStr(ctx, funInst->v(funInst), "v8FunctionTemplate", this->v(this));
 
     //if (!m_signature.IsEmpty())
     //if (!m_data.IsEmpty())
@@ -1683,6 +1959,7 @@ V8Signature::V8Signature(int funcTemplId)
     m_head.m_type = kOTSignature;
     m_funcTemplId = funcTemplId;
     m_head.m_refOrDeref = onV8HeadRefOrDerefOfV8Signature;
+    m_head.m_refOrDerefCopy = m_head.m_refOrDeref;
 }
 
 void V8FunctionTemplate::setClassName(const std::string& name)
@@ -1711,25 +1988,33 @@ void V8FunctionTemplate::onCall(const v8::FunctionCallbackInfo<v8::Value>& info)
     miniv8::V8External* external = new miniv8::V8External(self->m_userdata);
     v8::Local<v8::External> externalv8 = v8::Utils::convert<miniv8::V8External, v8::External>(external); // 为了自动回收
     v8::internal::FunctionCallbackArguments::changeExternal(info, external);
+    V8Isolate* isolate = (V8Isolate*)info.GetIsolate();
+    V8Context* ctx = isolate->getCurrentCtx();
 
     if (!self->m_instanceTemplate) {
         if (self->m_constructor)
             self->m_constructor(info);
+        if (0)
+            JS_PrintStack(ctx->ctx());
         return;
     }
 
-    V8Isolate* isolate = (V8Isolate*)info.GetIsolate();
-    V8Context* ctx = isolate->getCurrentCtx();
     V8ObjectTemplate* objTempl = self->m_instanceTemplate;
 
     v8::Local<v8::Object> objV8 = info.This();
     miniv8::V8Object* obj = v8::Utils::openHandle<v8::Object, miniv8::V8Object>(*objV8);
+    miniv8ReleaseAssert(!obj->m_hadBindInstanceTemplate, "obj->m_hadBindInstanceTemplate must be false\n");
+    obj->m_hadBindInstanceTemplate = true;
 
+    // 绑定m_instanceTemplate的东西给this
     for (std::map<std::string, JSValue>::iterator it = objTempl->m_props.begin(); it != objTempl->m_props.end(); ++it) {
         std::string name = it->first;
         JSValue val = it->second;
 
-        JSAtom prop = JS_NewAtomWithSymbol(ctx->ctx(), name.c_str());
+//         if (46518 == JS_GetObjId(obj->v(obj)))
+//             OutputDebugStringA("");
+
+        JSAtom prop = JS_NewAtomOrSymbol(ctx->ctx(), name.c_str());
         JS_DupValue(ctx->ctx(), val);
         JS_DefinePropertyValue(ctx->ctx(), obj->v(obj), prop, val, 0);
         JS_FreeAtom(ctx->ctx(), prop);
@@ -1745,10 +2030,8 @@ void V8FunctionTemplate::onCall(const v8::FunctionCallbackInfo<v8::Value>& info)
 // 
 //     JS_SetPropertyFunctionList(ctx->ctx(), obj->v(), jsMt19937ProtoFuncs, /*std::extent_v<decltype(jsMt19937ProtoFuncs)>*/ 2);
 
-    if (self->m_constructor)
-        self->m_constructor(info);
-    else
-        DebugBreak();
+    miniv8ReleaseAssert(self->m_constructor, "self->m_constructor must has value\n");
+    self->m_constructor(info);
 }
 
 struct FunctionTemplateInfo {
@@ -1771,13 +2054,6 @@ static bool checkCallSignature(miniv8::V8Isolate* isolate,  miniv8::V8Context* c
     int signatureId = signature->getFuncTemplId();
     if (signatureId == holderTemplId)
         return true;
-
-//     miniv8::V8Template* templ = isolate->getTemplateById(holderTemplId);
-//     while (templ) {
-//         if (signatureId == templ->getId())
-//             return true;
-//         templ = templ->getParentTemplate();
-//     }
 
     JSValue val = holder->v(holder);
     while (true) {
@@ -1806,10 +2082,11 @@ JSValue FunctionCallbackArguments::onCFunctionCallback(JSContext* ctx, JSValueCo
     // ctx不是真实的context，而是当时注册本函数时用的getEmptyJsCtx
     ctx = miniv8::V8Context::getCurrentOrEmptyJsCtx();
     miniv8::V8Context* context = (miniv8::V8Context*)JS_GetContextOpaque(ctx);
-    miniv8::V8Isolate::AutoEnterExitContext autoEnterExitContext(context);
+    v8::Isolate* isolate = v8::Isolate::GetCurrent();
+    miniv8::V8Isolate* v8isolate = (miniv8::V8Isolate*)isolate;
+    miniv8::AutoEnterExitContext autoEnterExitContext(v8isolate, context);
     miniv8::FunctionTemplateInfo* info = (miniv8::FunctionTemplateInfo*)userdata;
-    v8::Isolate* v8isolate = v8::Isolate::GetCurrent();
-    miniv8::V8Isolate* isolate = (miniv8::V8Isolate*)v8isolate;
+
     miniv8::V8Object* thisValV8 = nullptr;
     miniv8::V8Object* holder = nullptr;
 
@@ -1844,11 +2121,13 @@ JSValue FunctionCallbackArguments::onCFunctionCallback(JSContext* ctx, JSValueCo
     //                 return JS_ThrowTypeError(ctx, "Illegal invocation");
     //         }
 
-    v8::Local<v8::Signature> signatureV8 = info->signature.Get(v8isolate);
+    v8::Local<v8::Signature> signatureV8 = info->signature.Get(isolate);
     miniv8::V8Signature* signature = v8::Utils::openHandle<v8::Signature, miniv8::V8Signature>(*signatureV8);
 
-    if (/*false &&*/ !checkCallSignature((miniv8::V8Isolate*)v8isolate, context, signature, holder))
+    if (/*false &&*/ !checkCallSignature((miniv8::V8Isolate*)v8isolate, context, signature, holder)) {
+        JS_PrintStack(ctx);
         return JS_ThrowTypeError(ctx, "Illegal invocation");
+    }
     
     std::vector<void*> argValue;
     void* implicitArgs[v8::FunctionCallbackInfo<v8::Value>::kArgsLength] = { 0 };
@@ -1859,18 +2138,18 @@ JSValue FunctionCallbackArguments::onCFunctionCallback(JSContext* ctx, JSValueCo
     void** retVal = (void**)&implicitArgs[v8::FunctionCallbackInfo<v8::Value>::kReturnValueIndex];
     *retVal = &retVal;
 
-    isolate->clearErr(ctx);
+    v8isolate->clearErr(ctx);
+    v8isolate->pushRetVal(retVal);
 
     v8::FunctionCallbackInfo<v8::Value>* wrapV8 = (v8::FunctionCallbackInfo<v8::Value>*)(&wrap);
     info->constructor(*wrapV8);
+    v8isolate->popRetVal();
     v8::Local<v8::External> externalv8 = v8::Utils::convert<miniv8::V8External, v8::External>(external); // 为了自动回收
 
-    if (isolate->hasErr())
-        return isolate->getErrAndClear();
+    if (v8isolate->hasErr())
+        return v8isolate->getErrAndClear();
 
     JSValue v = miniv8::getReturnVal(ctx, &retVal, retVal);
-    if (0)
-        JS_PrintStack(ctx);
     return v;
 }
 
@@ -1878,8 +2157,6 @@ JSValue FunctionCallbackArguments::onCFunctionCallback(JSContext* ctx, JSValueCo
 } // v8
 
 namespace miniv8 {
-
-V8Template* g_testV8Template = nullptr;
 
 V8Template::V8Template()
     : V8Data(nullptr, JS_NULL)
@@ -1889,9 +2166,6 @@ V8Template::V8Template()
     JSContext* ctx = V8Context::getEmptyJsCtx();
     m_head.m_type = kOTTemplate;
 
-    if (m_head.m_countId == 36)
-        g_testV8Template = this;
-
     m_isDestroyed = false;
     m_head.m_qjsValue = JS_NewObject(ctx);
     m_funInst = nullptr;
@@ -1900,16 +2174,21 @@ V8Template::V8Template()
     m_instanceTemplate = nullptr;
     m_prototypeTemplate = nullptr;
     m_head.m_refOrDeref = onV8HeadRefOrDerefOfV8Template;
+    m_head.m_refOrDerefCopy = m_head.m_refOrDeref;
     m_head.m_tracer = onV8HeadTraceOfV8Template;
     JS_SetUserdata(ctx, m_head.m_qjsValue, &V8Template::onJsUserDataWeakFuncOfV8Template, this);
 
     miniv8::V8Isolate* isolate = (miniv8::V8Isolate*)v8::Isolate::GetCurrent();
     m_registerId = isolate->registerTemplate(this);
+
+    //printDebug("V8Template::V8Template: %p\n", this);
 }
 
 V8Template::~V8Template()
 {
     destroy();
+
+    //printDebug("V8Template::~~V8Template: %p\n", this);
 
 //     m_funInstPersistent.Reset();
 //     m_parentTemplate.Reset();
@@ -1923,9 +2202,6 @@ void V8Template::destroy()
         return;
     m_isDestroyed = true;
 
-    if (m_head.m_countId == 6365)
-        OutputDebugStringA("");
-
     JSContext* ctx = V8Context::getEmptyJsCtx();
     JSValue v = this->v(this);
 
@@ -1936,7 +2212,7 @@ void V8Template::destroy()
     JSValue funInst = JS_GetPropertyStr(ctx, v, "funInst");
     if (JS_IsObject(funInst)) {
         JS_DelConstructor(ctx, funInst);
-        JS_FreeValue(ctx, funInst);
+        //JS_FreeValue(ctx, funInst);
     }
     JS_DeletePropertyStr(ctx, v, "funInst", 0);
 
@@ -1959,8 +2235,11 @@ void V8Template::onJsUserDataWeakFuncOfV8Template(JSValue obj, void* userdata, J
 void V8Template::onV8HeadRefOrDerefOfV8Template(V8Head* head, bool ref)
 {
     V8Template* self = (V8Template*)head;
-    if (ref)
-        DebugBreak();
+    if (ref) {
+        JSValue v = self->v(self);
+        JS_DupValue(nullptr, v);
+        return;
+    }
     self->destroy();
 }
 
@@ -2004,14 +2283,14 @@ static void insertProps(JSContext* ctx, std::map<std::string, JSValue>* props, c
         JS_FreeValue(ctx, it->second);
         props->erase(it);
     }
-    props->insert(std::make_pair(name, val));
+    stdMapInsert(props, name, val);
 }
 
 void V8Template::Set(v8::Local<v8::Name> name, v8::Local<v8::Data> value, v8::PropertyAttribute attr)
 {
     if (value.IsEmpty())
         return; // TODO: installConstantInternal->v8::Integer::New 没实现
-    miniv8::V8Data* val = v8::Utils::openHandle<v8::Data, miniv8::V8Data>(*value); // TODO: free
+    miniv8::V8Data* val = v8::Utils::openHandle<v8::Data, miniv8::V8Data>(*value);
 
     miniv8::V8String* nameStr = (miniv8::V8String*)v8::Utils::openHandle<v8::Name, miniv8::V8Name>(*name);
     miniv8ReleaseAssert(
@@ -2031,6 +2310,10 @@ void V8Template::Set(v8::Local<v8::Name> name, v8::Local<v8::Data> value, v8::Pr
         FunctionTemplateInfo* info = new FunctionTemplateInfo(); // TODO: Free
         info->constructor = funcProp->m_constructor;
         info->userdata = funcProp->m_userdata;
+
+        v8::Local<v8::Signature> testSig = funcProp->m_signature.Get(isolate);
+        miniv8::V8Signature* testSignature = v8::Utils::openHandle<v8::Signature, miniv8::V8Signature>(*testSig);
+
         info->signature.Reset(isolate, funcProp->m_signature);
 
         JSCFunction* func = &v8::internal::FunctionCallbackArguments::onCFunctionCallback;
@@ -2045,29 +2328,17 @@ void V8Template::Set(v8::Local<v8::Name> name, v8::Local<v8::Data> value, v8::Pr
         miniv8::V8Integer* valInt = (miniv8::V8Integer*)val;
         JSValue v = valInt->v(valInt);
         insertProps(ctx->ctx(), &m_props, nameStr->getStr(), v);
-    } else if (miniv8::kOTValue == val->m_head.m_type) {
+    } else if (miniv8::kOTValue == val->m_head.m_type || miniv8::kOTPrivate == val->m_head.m_type) {
         JSValue v = val->v(val);
-        if (JS_VALUE_IS_EQ(v, JS_NULL) ||
-            JS_VALUE_IS_EQ(v, JS_TRUE) ||
-            JS_VALUE_IS_EQ(v, JS_UNDEFINED) ||
-            JS_VALUE_IS_EQ(v, JS_FALSE)) {
+        //if (!(JS_VALUE_IS_EQ(v, JS_NULL) || JS_VALUE_IS_EQ(v, JS_TRUE) || JS_VALUE_IS_EQ(v, JS_UNDEFINED) || JS_VALUE_IS_EQ(v, JS_FALSE))) 
+        {
             JS_DupValue(ctx->ctx(), v);
             insertProps(ctx->ctx(), &m_props, nameStr->getStr(), v);
-        } else
-            DebugBreak();
+        }
     } else {
         DebugBreak();
     }
 }
-
-// 
-// static const int kShouldThrowOnErrorIndex = 0;
-// static const int kHolderIndex = 1;
-// static const int kIsolateIndex = 2;
-// static const int kReturnValueDefaultValueIndex = 3;
-// static const int kReturnValueIndex = 4;
-// static const int kDataIndex = 5;
-// static const int kThisIndex = 6;
 
 static void copyIndexedPropHandleIfNotEmpty(v8::IndexedPropertyHandlerConfiguration* src, const v8::IndexedPropertyHandlerConfiguration& target)
 {
@@ -2085,8 +2356,6 @@ void V8Template::newTemplateInstance(miniv8::V8Object* obj, bool isSetPrototype)
 {
     v8::Isolate* isolate = v8::Isolate::GetCurrent();
     JSContext* ctx = miniv8::V8Context::getEmptyJsCtx(); // 不能使用context，因为context可能页面reload后就没了
-    if ((void*)0xDDDDDDDD == (void*)obj->v)
-        OutputDebugStringA("");
     JSValue v = obj->v(obj);
 
     m_head.m_unGcType |= V8Head::kIsTemplateInFunction; // 暂时不回收模版对象
@@ -2126,9 +2395,13 @@ void V8Template::newTemplateInstance(miniv8::V8Object* obj, bool isSetPrototype)
         std::string name = it->first;
         JSValue val = it->second;
 
-        JSAtom prop = JS_NewAtomWithSymbol(ctx, name.c_str());
+        int objId = JS_GetObjId(val);
+        if (46518 == objId)
+            OutputDebugStringA("");
 
-        //JS_DupValue(ctx, val); // JS_DefinePropertyValue里面会释放一次
+        JSAtom prop = JS_NewAtomOrSymbol(ctx, name.c_str());
+
+        // JS_DefinePropertyValue里面会释放一次
         JS_DupValue(ctx, val); // 这次是让V8Template::onV8HeadRefOrDerefOfV8Template释放
         JS_DefinePropertyValue(ctx, v, prop, val, 0);
         JS_OrOpPropertyFlags(ctx, v, prop, JS_PROP_CONFIGURABLE);
@@ -2178,7 +2451,7 @@ void V8Template::newTemplateInstance(miniv8::V8Object* obj, bool isSetPrototype)
 
 v8::MaybeLocal<v8::Function> V8FunctionTemplate::GetFunction(v8::Local<v8::Context> v8context)
 {
-    printEmptyFuncInfo(__FUNCTION__, true);
+    printEmptyFuncInfo(__FUNCTION__, false, false);
 
     v8::Isolate* isolate = v8::Isolate::GetCurrent();
     miniv8::V8Context* context = v8::Utils::openHandle<v8::Context, miniv8::V8Context>(*v8context);
@@ -2194,16 +2467,35 @@ v8::MaybeLocal<v8::Function> V8FunctionTemplate::GetFunction(v8::Local<v8::Conte
 //     }
 
     miniv8::V8Function* funInst = new miniv8::V8Function(nullptr, &miniv8::V8FunctionTemplate::onCall, v8::External::New(isolate, this));
+    if (0)
+        g_testFunc = funInst;
     funInst->m_internalFieldCount = m_internalFieldCount;
     funInst->m_signature.Reset(isolate, m_signature);
     funInst->setName(getClassName());
     funInst->setTemplId(getRegisterId());
-    JS_DupValue(ctx, funInst->v(funInst));
-    JS_SetPropertyStr(ctx, this->v(this), "funInst", funInst->v(funInst));
+
+    JSValue funcInstVal = funInst->v(funInst);
+    JSValue selfVal = this->v(this);
+
+    // TODO:需要绑定这个到模板对象吗？感觉好像不用
+//     JS_DupValue(ctx, funcInstVal);
+//     JS_SetPropertyStr(ctx, selfVal, "funInst", funcInstVal);
+
+    int ref1 = JS_GetRefCount(ctx, funcInstVal);
+    int ref2 = JS_GetRefCount(ctx, selfVal);
+    JS_DupValue(ctx, selfVal);
+    JS_SetPropertyStr(ctx, funcInstVal, "v8FunctionTemplate", selfVal);
+
+//     ref1 = JS_GetRefCount(ctx, funcInstVal);
+//     ref2 = JS_GetRefCount(ctx, selfVal);
+// 
+//     JS_DeletePropertyStr(ctx, funcInstVal, "v8FunctionTemplate", 0);
+//     ref1 = JS_GetRefCount(ctx, funcInstVal);
+//     ref2 = JS_GetRefCount(ctx, selfVal);
 
     ret = v8::Utils::convert<miniv8::V8Function, v8::Function>(funInst);
 
-    //printDebug("v8::FunctionTemplate::GetFunction: %p, %p, %I64u\n", funInst, *ret, funInst->v(funInst));
+    //printDebug("v8::FunctionTemplate::GetFunction: %p, %p, %I64u\n", funInst, *ret, funcInstVal);
 
     newTemplateInstance(funInst, false);
 
@@ -2222,10 +2514,10 @@ v8::MaybeLocal<v8::Function> V8FunctionTemplate::GetFunction(v8::Local<v8::Conte
     if (!prototype.IsEmpty()) {
         miniv8::V8Object* prototypeObject = v8::Utils::openHandle<v8::Object, miniv8::V8Object>(*(prototype.ToLocalChecked()));
         //printDebug("V8FunctionTemplate::GetFunction, prototypeTemplate: fun: %I64u, prototype: %I64u\n",  fun->v(fun), prototypeObject->v(prototypeObject));
-        JS_SetConstructor(ctx, funInst->v(funInst), prototypeObject->v(prototypeObject)); // TODO free: 没考虑释放问题，另外不清楚那些访问器能否起作用
+        JS_SetConstructor(ctx, funcInstVal, prototypeObject->v(prototypeObject)); // TODO free: 没考虑释放问题，另外不清楚那些访问器能否起作用
     } else {
         JSValue proto = JS_NewObject(ctx);
-        JS_SetConstructor(ctx, funInst->v(funInst), proto);
+        JS_SetConstructor(ctx, funcInstVal, proto);
         JS_FreeValue(ctx, proto);
     }
 
@@ -2245,7 +2537,7 @@ void V8Template::inherit(const V8Template* parent)
     for (std::map<std::string, miniv8::V8Template::Accessor>::const_iterator parentIt = parent->m_accessors.begin(); parentIt != parent->m_accessors.end(); ++parentIt) {
         std::map<std::string, miniv8::V8Template::Accessor>::iterator it = m_accessors.find(parentIt->first);
         if (it == m_accessors.end())
-            m_accessors.insert(std::make_pair(parentIt->first, parentIt->second));
+            stdMapInsert(&m_accessors, parentIt->first, parentIt->second);
     }
 
     for (std::map<std::string, JSValue>::const_iterator parentIt = parent->m_props.begin(); parentIt != parent->m_props.end(); ++parentIt) {
@@ -2253,28 +2545,34 @@ void V8Template::inherit(const V8Template* parent)
         if (it == m_props.end()) {
             JSValue v = parentIt->second;
             JS_DupValue(nullptr, v);
-            m_props.insert(std::make_pair(parentIt->first, v));
+            stdMapInsert(&m_props, parentIt->first, v);
         }
     }
 
     JSContext* ctx = miniv8::V8Context::getEmptyJsCtx();
     if (parent->m_instanceTemplate) {
         if (!m_instanceTemplate) {
+#if 0 // 不能直接指针传递，因为怕别的地方修改指针的内容。只能复制一份
             m_instanceTemplate = parent->m_instanceTemplate;
             JS_DupValue(ctx, m_instanceTemplate->v(m_instanceTemplate));
             JS_SetPropertyStr(ctx, this->v(this), "instanceTemplate", m_instanceTemplate->v(m_instanceTemplate));
-        } else {
-            m_instanceTemplate->inherit(parent->m_instanceTemplate);
+#else
+            m_instanceTemplate = new V8ObjectTemplate();
+#endif
         }
+        m_instanceTemplate->inherit(parent->m_instanceTemplate);
     }
     if (parent->m_prototypeTemplate) {
         if (!m_prototypeTemplate) {
+#if 0 
             m_prototypeTemplate = parent->m_prototypeTemplate;
+#else
+            m_prototypeTemplate = new V8ObjectTemplate();
+#endif
             JS_DupValue(ctx, m_prototypeTemplate->v(m_prototypeTemplate));
             JS_SetPropertyStr(ctx, this->v(this), "prototypeTemplate", m_prototypeTemplate->v(m_prototypeTemplate));
-        } else {
-            m_prototypeTemplate->inherit(parent->m_prototypeTemplate);
         }
+        m_prototypeTemplate->inherit(parent->m_prototypeTemplate);
     }
 
     m_parentTemplate = (V8Template*)parent;
@@ -2310,6 +2608,18 @@ V8String::V8String(const std::string& str) : V8Name(nullptr, JS_NULL)
     }
 }
 
+V8String::V8String(const char* str, size_t len) : V8Name(nullptr, JS_NULL)
+{
+    init();
+
+    // 先初始化一次。获取不到就用getEmptyJsCtx
+    JSContext* ctx = V8Context::getCurrentOrEmptyJsCtx();
+    miniv8ReleaseAssert(ctx, "");
+
+    m_head.m_qjsValue = JS_NewStringLen(ctx, str, len);
+    bindJsValue();
+}
+
 V8String::V8String(v8::String::ExternalOneByteStringResource* resource) : V8Name(NULL, JS_NULL)
 {
     init();
@@ -2328,9 +2638,6 @@ V8String::V8String(v8::String::ExternalStringResource* resource) : V8Name(NULL, 
 
 V8String::~V8String()
 {
-    if (27 == m_head.m_countId)
-        OutputDebugStringA("");
-
     if (m_str)
         delete m_str;
     if (m_twoByteExternalString)
@@ -2347,22 +2654,6 @@ void V8String::bindJsValue()
     JS_SetUserdata(ctx, m_head.m_qjsValue, &V8String::onJsUserDataWeakFuncOfV8String, this); // 延迟绑定
 }
 
-// void V8String::ensureQjsVal(V8Context* context, bool useEmptyCtx)
-// {
-//     V8Context* m_ctx = context;
-//     if (!JS_VALUE_IS_EQ(m_head.m_qjsValue, JS_NULL))
-//         return;
-//     JSContext* ctx = V8Context::getCtx(context);
-//     if (!ctx) {
-//         if (!useEmptyCtx)
-//             return;
-//         ctx = V8Context::getEmptyJsCtx();
-//     }
-//         
-//     m_head.m_qjsValue = JS_NewStringLen(ctx, m_str->c_str(), m_str->size());
-//     //m_str = ""; // TODO:暂时不清空缓存。 
-// }
-
 JSValue V8String::V8String_v(V8Data* ptr)
 {
     V8String* self = (V8String*)ptr;
@@ -2378,13 +2669,26 @@ JSValue V8String::V8String_v(V8Data* ptr)
     return self->m_head.m_qjsValue;
 }
 
+static bool isInvalidQjsValue(JSValue qjsValue)
+{
+    if (JS_VALUE_IS_EQ(qjsValue, JS_NULL) ||
+        JS_VALUE_IS_EQ(qjsValue, JS_SymbolGetIterator(NULL)) ||
+        JS_VALUE_IS_EQ(qjsValue, JS_SymbolUnscopables(NULL)) ||
+        JS_VALUE_IS_EQ(qjsValue, JS_SymbolToStringTag(NULL)))
+        return true;
+    return false;
+}
+
 void V8String::onV8HeadRefOrDerefOfV8String(V8Head* head, bool ref)
 {
-    miniv8ReleaseAssert(!ref, "onV8HeadRefOrDerefOfV8Function fail\n");
     V8String* self = (V8String*)head;
-    if (JS_VALUE_IS_EQ(self->m_head.m_qjsValue, JS_NULL) ||
-        JS_VALUE_IS_EQ(self->m_head.m_qjsValue, JS_SymbolGetIterator(NULL)) ||
-        JS_VALUE_IS_EQ(self->m_head.m_qjsValue, JS_SymbolToStringTag(NULL))) {
+    if (ref) {
+        JSValue v = self->v(self);
+        JS_DupValue(nullptr, v);
+        return;
+    }
+
+    if (isInvalidQjsValue(self->m_head.m_qjsValue)) {
         delete self;
         return;
     }
@@ -2398,6 +2702,7 @@ void V8String::init()
 {
     m_head.m_type = kOTString;
     m_head.m_refOrDeref = onV8HeadRefOrDerefOfV8String;
+    m_head.m_refOrDerefCopy = m_head.m_refOrDeref;
     v = V8String_v;
     m_twoByteExternalString = nullptr;
     m_oneByteExternalString = nullptr;
@@ -2460,25 +2765,46 @@ V8Symbol::V8Symbol(const std::string& str) : V8String()
     m_str = new std::string(str);
     v = V8String_v;
     m_head.m_refOrDeref = onV8HeadRefOrDerefOfV8Symbol;
+    m_head.m_refOrDerefCopy = m_head.m_refOrDeref;
 
-    if (str == "Symbol.iterator")
-        m_head.m_qjsValue =  JS_SymbolGetIterator(NULL);
-    else if (str == "Symbol.toStringTag") {
+    if (str == "Symbol.iterator") {
+        m_head.m_qjsValue = JS_SymbolGetIterator(NULL);
+    } else if (str == "Symbol.toStringTag") {
         m_head.m_qjsValue = JS_SymbolToStringTag(NULL);
+    } else if (str == "Symbol.unscopables") {
+        m_head.m_qjsValue = JS_SymbolUnscopables(NULL);
     } else {
-        JSContext* ctx = V8Context::getCurrentJsCtx();
-        m_head.m_qjsValue = JS_NewStringLen(ctx, str.c_str(), str.size());
-        //JS_DupValue(ctx, m_head.m_qjsValue);
+        JSContext* ctx = V8Context::getEmptyJsCtx();
+        m_head.m_qjsValue = JS_NewSymbolByStr(ctx, str.c_str(), str.size());
     } 
+}
+
+std::string V8Symbol::getStr()
+{
+    if (m_str)
+        return *m_str;
+
+    JSContext* ctx = V8Context::getEmptyJsCtx();
+
+    std::string str;
+    size_t len = 0;
+
+    JSAtom atom = JS_ValueToAtom(ctx, m_head.m_qjsValue);
+    const char* nameString = JS_AtomToCString(ctx, atom);
+    if (!nameString)
+        return "";
+    m_str = new std::string(nameString);
+    return *m_str;
 }
 
 void V8Symbol::onV8HeadRefOrDerefOfV8Symbol(V8Head* head, bool ref)
 {
     miniv8ReleaseAssert(!ref, "V8Symbol::onV8HeadRefOrDerefOfV8Symbol fail\n");
     V8Symbol* self = (V8Symbol*)head;
-    if (JS_VALUE_IS_EQ(self->m_head.m_qjsValue, JS_NULL) ||
-        JS_VALUE_IS_EQ(self->m_head.m_qjsValue, JS_SymbolGetIterator(NULL)) ||
-        JS_VALUE_IS_EQ(self->m_head.m_qjsValue, JS_SymbolToStringTag(NULL))) {
+    if (ref)
+        return;
+
+    if (isInvalidQjsValue(self->m_head.m_qjsValue)) {
         delete self;
         return;
     }
@@ -2505,8 +2831,14 @@ V8External::~V8External()
 
 void V8External::onV8HeadRefOrDerefOfV8External(V8Head* head, bool ref)
 {
-    miniv8ReleaseAssert(!ref, "onV8HeadRefOrDerefOfV8External fail\n");
+    //miniv8ReleaseAssert(!ref, "onV8HeadRefOrDerefOfV8External fail\n");
     V8External* self = (V8External*)head;
+    if (ref) {
+        JSValue v = self->v(self);
+        JS_DupValue(nullptr, v);
+        return;
+    }
+    
     JSRuntime* rt = V8Isolate::GetCurrent()->getRuntime();
     JS_FreeValueRT(rt, self->m_head.m_qjsValue); // 这里面有回调，会析构V8Data
 }
@@ -2520,6 +2852,7 @@ void V8External::onUserDataWeakFuncOfV8External(JSValue obj, void* userdata, JS_
 void V8External::initQjsValue(bool isCheckCtx)
 {
     m_head.m_refOrDeref = onV8HeadRefOrDerefOfV8External;
+    m_head.m_refOrDerefCopy = m_head.m_refOrDeref;
     JSContext* ctx = V8Context::getCurrentJsCtx();
     if (!ctx) {
         miniv8ReleaseAssert(!isCheckCtx, "V8External::initQjsValue fail\n");
@@ -2608,16 +2941,40 @@ size_t V8ArrayBufferView::getEleCount()
     return byteLength / bytesPerElement;
 }
 
-size_t V8ArrayBufferView::getCopyContents(void* dest, size_t byteLength)
+size_t V8ArrayBufferView::copyContents(void* dest, size_t byteLength)
 {
-    DebugBreak();
-    return 0;
+    printEmptyFuncInfo(__FUNCTION__, false, true);
+    JSContext* ctx = V8Context::getCurrentJsCtx();
+
+    size_t byteOffset = 0;
+    size_t byteLen = 0;
+    size_t bytesPerElement = 0;
+    JSValue arrayBuffer = JS_GetTypedArrayBuffer(ctx, m_head.m_qjsValue, &byteOffset, &byteLen, &bytesPerElement);
+
+    size_t actuallyWrittenLen = byteLength;
+    if (byteLength > byteLen)
+        actuallyWrittenLen = byteLen;
+
+    size_t size = 0;
+    uint8_t* data = JS_GetArrayBuffer(ctx, &size, arrayBuffer);
+    memcpy(data, data + byteOffset, actuallyWrittenLen);
+    JS_FreeValue(ctx, arrayBuffer);
+    
+    return actuallyWrittenLen;
 }
 
 bool V8ArrayBufferView::hasBuffer() const
 {
-    DebugBreak();
-    return 0;
+    JSContext* ctx = V8Context::getCurrentJsCtx();
+
+    size_t byteOffset = 0;
+    size_t byteLen = 0;
+    size_t bytesPerElement = 0;
+    JSValue arrayBuffer = JS_GetTypedArrayBuffer(ctx, m_head.m_qjsValue, &byteOffset, &byteLen, &bytesPerElement);
+
+    bool b = JS_IsException(arrayBuffer) == FALSE;
+    JS_FreeValue(ctx, arrayBuffer);
+    return b;
 }
 
 void V8Resolver::onJsUserDataWeakFuncOfV8Resolver(JSValue obj, void* userdata, JS_USER_DATA_WEAK_STEP step)
@@ -2628,38 +2985,46 @@ void V8Resolver::onJsUserDataWeakFuncOfV8Resolver(JSValue obj, void* userdata, J
 
 void V8Resolver::onV8HeadRefOrDerefOfV8Resolver(V8Head* head, bool ref)
 {
-    miniv8ReleaseAssert(!ref, "onV8HeadRefOrDerefOfV8Resolver fail\n");
-    V8Resolver* self = (V8Resolver*)head;
-    miniv8::V8Context* context = miniv8::V8Context::getEmptyCtx();
-    JSContext* ctx = context->ctx();
+    //miniv8ReleaseAssert(!ref, "onV8HeadRefOrDerefOfV8Resolver fail\n");
+    V8Promise::onV8HeadRefOrDerefOfV8Promise(head, ref);
 
-    int count = JS_GetRefCount(ctx, self->m_head.m_qjsValue);
-    JS_DeletePropertyStr(ctx, self->m_head.m_qjsValue, "promise", 0);
-    count = JS_GetRefCount(ctx, self->m_head.m_qjsValue);
-
-    JSRuntime* rt = V8Isolate::GetCurrent()->getRuntime();
-    JS_FreeValueRT(rt, self->m_head.m_qjsValue);
+//     V8Resolver* self = (V8Resolver*)head;
+//     miniv8::V8Context* context = miniv8::V8Context::getEmptyCtx();
+//     JSContext* ctx = context->ctx();
+//     if (ref) {
+//         JSValue v = self->v(self);
+//         JS_DupValue(nullptr, v);
+//         return;
+//     }
+// 
+//     //int count = JS_GetRefCount(ctx, self->m_head.m_qjsValue);
+//     JS_DeletePropertyStr(ctx, self->m_head.m_qjsValue, "promise", 0);
+//     //count = JS_GetRefCount(ctx, self->m_head.m_qjsValue);
+// 
+//     JSRuntime* rt = V8Isolate::GetCurrent()->getRuntime();
+//     JS_FreeValueRT(rt, self->m_head.m_qjsValue);
 }
 
 void V8Resolver::onV8HeadTraceOfV8Resolver(void* tracer, V8Head* ptr)
 {
     V8Resolver* self = (V8Resolver*)ptr;
-    V8Data::onV8HeadTraceOfV8Data(tracer, ptr);
+    V8Promise::onV8HeadTraceOfV8Promise(tracer, ptr);
 
-    if (self->m_promise)
-        V8Head::onTraceHelper(tracer, &(self->m_promise->m_head));
+//     if (self->m_promise)
+//         V8Head::onTraceHelper(tracer, &(self->m_promise->m_head));
 }
 
-V8Resolver::V8Resolver(V8Context* ctx, JSValue value)
-    : V8Object(ctx, JS_NULL)
+V8Resolver::V8Resolver(V8Context* ctx)
+    : V8Promise(ctx)
 {
     m_head.m_type = kOTResolver;
-    m_promise = nullptr;
-
+    //m_promise = nullptr;
+    
     m_head.m_refOrDeref = &V8Resolver::onV8HeadRefOrDerefOfV8Resolver;
+    m_head.m_refOrDerefCopy = m_head.m_refOrDeref;
     m_head.m_tracer = &V8Resolver::onV8HeadTraceOfV8Resolver;
-    m_head.m_qjsValue = value;
-    JS_DupValue(ctx->ctx(), m_head.m_qjsValue);
+    //m_head.m_qjsValue = value;
+    //JS_DupValue(ctx->ctx(), m_head.m_qjsValue);
     JS_SetUserdata(ctx->ctx(), m_head.m_qjsValue, &V8Resolver::onJsUserDataWeakFuncOfV8Resolver, this);
 }
 
@@ -2669,9 +3034,20 @@ V8Resolver::~V8Resolver()
     JSContext* ctx = context->ctx();
 }
 
-V8Promise* V8Promise::create(V8Context* ctx, JSValue value)
+V8Promise* V8Promise::create(V8Context* ctx)
 {
-    return new V8Promise(ctx, value);
+    return new V8Promise(ctx);
+}
+
+V8Promise* V8Promise::getOrCreate(V8Context* ctx, JSValue value)
+{
+    V8Promise* ret = (V8Promise*)JS_GetUserdata(value);
+    if (ret) {
+        miniv8ReleaseAssert(ret && ret->m_head.m_type == kOTPromise, "");
+        return ret;
+    }
+    ret = new V8Promise(ctx, value);
+    return ret;
 }
 
 V8Promise::V8Promise(V8Context* ctx, JSValue value)
@@ -2680,16 +3056,87 @@ V8Promise::V8Promise(V8Context* ctx, JSValue value)
     m_head.m_type = kOTPromise;
     m_resolvingFuncs[0] = JS_NULL;
     m_resolvingFuncs[1] = JS_NULL;
+    m_prev = nullptr;
+    m_next = nullptr;
     m_head.m_qjsValue = value;
+    //bindResolvingFuncs(ctx);
     JS_DupValue(ctx->ctx(), m_head.m_qjsValue);
     m_head.m_refOrDeref = &V8Promise::onV8HeadRefOrDerefOfV8Promise;
+    m_head.m_refOrDerefCopy = m_head.m_refOrDeref;
+    m_head.m_tracer = &V8Promise::onV8HeadTraceOfV8Promise;
     JS_SetUserdata(ctx->ctx(), m_head.m_qjsValue, &V8Promise::onJsUserDataWeakFuncOfV8Promise, this);
+
+    V8Isolate* isolate = V8Isolate::GetCurrent();
+    if (isolate->m_promises) {
+        isolate->m_promises->m_next = this;
+        m_prev = isolate->m_promises;
+    }
+    isolate->m_promises = this;
+}
+
+V8Promise::V8Promise(V8Context* ctx)
+    : V8Object(ctx, JS_NULL)
+{
+    m_head.m_type = kOTPromise;
+    m_resolvingFuncs[0] = JS_NULL;
+    m_resolvingFuncs[1] = JS_NULL;
+    m_prev = nullptr;
+    m_next = nullptr;
+    //m_head.m_qjsValue = value;
+    bindResolvingFuncs(ctx);
+    JS_DupValue(ctx->ctx(), m_head.m_qjsValue);
+    m_head.m_refOrDeref = &V8Promise::onV8HeadRefOrDerefOfV8Promise;
+    m_head.m_refOrDerefCopy = m_head.m_refOrDeref;
+    m_head.m_tracer = &V8Promise::onV8HeadTraceOfV8Promise;
+    //JS_SetUserdata(ctx->ctx(), m_head.m_qjsValue, &V8Promise::onJsUserDataWeakFuncOfV8Promise, this);
+
+    V8Isolate* isolate = V8Isolate::GetCurrent();
+    if (isolate->m_promises) {
+        isolate->m_promises->m_next = this;
+        m_prev = isolate->m_promises;
+    }
+    isolate->m_promises = this;
 }
 
 V8Promise::~V8Promise()
 {
+    V8Isolate* isolate = V8Isolate::GetCurrent();
+    if (isolate->m_promises == this)
+        isolate->m_promises = m_prev;
+
+    if (m_prev)
+        m_prev->m_next = m_next;
+
+    if (m_next)
+        m_next->m_prev = m_prev;
+
     JSRuntime* rt = V8Isolate::GetCurrent()->getRuntime();
     miniv8ReleaseAssert(JS_VALUE_IS_EQ(m_resolvingFuncs[0], JS_NULL) && JS_VALUE_IS_EQ(m_resolvingFuncs[1], JS_NULL), "");
+}
+
+void V8Promise::bindResolvingFuncs(V8Context* context)
+{
+    JSContext* ctx = context->ctx();
+    if (!JS_VALUE_IS_EQ(m_resolvingFuncs[0], JS_NULL))
+        return;
+
+    m_head.m_qjsValue = JS_NewPromiseCapability(ctx, m_resolvingFuncs);
+    int count = JS_GetRefCount(ctx, m_head.m_qjsValue);
+    count = JS_GetRefCount(ctx, m_resolvingFuncs[0]);
+
+    JS_DupValue(ctx, m_resolvingFuncs[0]);
+    JS_DupValue(ctx, m_resolvingFuncs[1]);
+    count = JS_GetRefCount(ctx, m_head.m_qjsValue);
+}
+
+void V8Promise::onV8HeadTraceOfV8Promise(void* tracer, V8Head* ptr)
+{
+    onV8HeadTraceOfV8Object(tracer, ptr);
+    V8Promise* self = (V8Promise*)ptr;
+    // V8Head::onTraceHelper(tracer, &(val->m_head));
+    JSRuntime* rt = V8Isolate::GetCurrent()->getRuntime();
+    JS_MarkUserdataObj(rt, self->m_resolvingFuncs[0], onMarkUserdataFunc, tracer);
+    JS_MarkUserdataObj(rt, self->m_resolvingFuncs[1], onMarkUserdataFunc, tracer);
 }
 
 void V8Promise::onV8HeadRefOrDerefOfV8Promise(V8Head* head, bool ref)
@@ -2698,27 +3145,61 @@ void V8Promise::onV8HeadRefOrDerefOfV8Promise(V8Head* head, bool ref)
     V8Promise* self = (V8Promise*)head;
     miniv8::V8Context* context = miniv8::V8Context::getEmptyCtx();
     JSContext* ctx = context->ctx();
+    if (ref) {
+        JSValue v = self->v(self);
+        JS_DupValue(nullptr, v);
+        return;
+    }
 
     JSRuntime* rt = V8Isolate::GetCurrent()->getRuntime();
+
+    int count = JS_GetRefCount(ctx, self->m_resolvingFuncs[0]);
 
     JS_FreeValueRT(rt, self->m_resolvingFuncs[0]);
     JS_FreeValueRT(rt, self->m_resolvingFuncs[1]);
 
-    self->m_resolvingFuncs[0] = JS_NULL;
-    self->m_resolvingFuncs[1] = JS_NULL;
+//     self->m_resolvingFuncs[0] = JS_NULL;
+//     self->m_resolvingFuncs[1] = JS_NULL;
 
-    int count = JS_GetRefCount(ctx, self->m_head.m_qjsValue);
+    count = JS_GetRefCount(ctx, self->m_head.m_qjsValue);
     JS_FreeValueRT(rt, self->m_head.m_qjsValue);
 }
 
 void V8Promise::onJsUserDataWeakFuncOfV8Promise(JSValue obj, void* userdata, JS_USER_DATA_WEAK_STEP step)
 {
     V8Promise* self = (V8Promise*)userdata;
+    JSRuntime* rt = V8Isolate::GetCurrent()->getRuntime();
+    int count = JS_GetRefCount(nullptr, self->m_resolvingFuncs[0]);
+    JS_FreeValueRT(rt, self->m_resolvingFuncs[0]);
+    JS_FreeValueRT(rt, self->m_resolvingFuncs[1]);
     delete self;
 }
 
 //---------------------------------------------------------
 // GC逻辑
+
+V8Isolate::AutoCallReentry::AutoCallReentry(V8Isolate* isolate)
+{
+    m_isolate = isolate;
+
+    if (0 == m_isolate->m_callReentryCount) {
+        SYSTEMTIME systemTime; 
+        FILETIME fileTime;
+
+        GetSystemTime(&systemTime);
+        SystemTimeToFileTime(&systemTime, &fileTime);
+
+        int64_t milliseconds = (((int64_t)fileTime.dwHighDateTime) << 32) + fileTime.dwLowDateTime;
+
+        if (milliseconds - isolate->m_lastGcMilliseconds > 30 * 1000 * 1000) {
+            isolate->runGC();
+            isolate->m_lastGcMilliseconds = milliseconds;
+            OutputDebugStringA("");
+        }
+    }
+
+    m_isolate->m_callReentryCount++;
+}
 
 void V8Isolate::onHeadDelete(V8Head* headPtr)
 {
@@ -2727,6 +3208,36 @@ void V8Isolate::onHeadDelete(V8Head* headPtr)
         if (head == headPtr)
             m_needFreedHeads[i] = nullptr;
     }
+}
+
+void V8Isolate::gcHandleScopeHandleItem(V8Head* head, void** validHead)
+{
+    if (!(head->m_unGcType & miniv8::V8Head::kIsEscapeHandleScope)) {
+        //printDebug("gcHandleScopeHandleItem: %p\n", head->m_isolatHandleScopeIndex);
+        miniv8ReleaseAssert(!validHead || head->m_isolatHandleScopeIndex == validHead, "V8Isolate::exitContext fail\n");
+        *head->m_isolatHandleScopeIndex = nullptr; // TODO:2023.2.26，强制回收，应该没问题吧？
+        head->m_isolatHandleScopeIndex = nullptr;
+        head->m_isolatHandleScopeIndexHadClear = true;
+    }
+
+    if (head->m_isolatGlobalScopeIndex || head->m_unGcType) // 有全局句柄\m_unGcType的不回收
+        return;
+
+    if (head->m_isolatHandleScopeIndex)
+        miniv8ReleaseAssert(!validHead || head->m_isolatHandleScopeIndex == validHead, "V8Isolate::exitContext fail\n");
+
+    if (head->m_type == V8ObjectType::kOTContext)
+        OutputDebugStringA("");
+
+//     if (V8ObjectType::kOTArrayBuffer == head->m_type)
+//         printDebug("gcHandleScopeHandleItem:%p, %llu, %d, %p\n", head, head->m_qjsValue, JS_GetRefCount(NULL, head->m_qjsValue), head->m_isolatHandleScopeIndex);
+
+    // head->m_refOrDeref可能会在JS_FreeValue没析构head，比如还有js在引用。此时在gc的时候会走到JS_FreeValue绑定的回调
+    // 必须防止m_refOrDeref多次调用
+    V8HeadRefOrDerefFun refOrDeref = head->m_refOrDeref;
+    head->m_refOrDeref = nullptr;
+    if (refOrDeref)
+        refOrDeref(head, false); // 里面可能会调用JS_FreeValue
 }
 
 void V8Isolate::gcHandleScopeHandles(bool isForce)
@@ -2739,28 +3250,16 @@ void V8Isolate::gcHandleScopeHandles(bool isForce)
     if (!isForce && (s_sleep % 5 != 0)) // 没事别运行gc
         return;
 
-    // 先回收一些最简单可以判断的情况，例如没任何对象引用。这里遍历m_handleScopeHandles以后要改成链表，这样速度快很多
-    for (size_t i = 0; i < m_handleScopeHandles.size(); ++i) {
-        V8Head* head = (V8Head*)m_handleScopeHandles[i];
+    // 先回收一些最简单可以判断的情况，例如没任何对象引用。这里遍历m_scopeHandles以后要改成链表，这样速度快很多
+    for (size_t i = 0; i < m_scopeHandles.size(); ++i) {
+        V8Head* head = (V8Head*)m_scopeHandles[i];
         if (!head)
             continue;
 
         head = (V8Head*)v8::Utils::toHandle<V8Data>((uintptr_t)head);
         head->m_markGC = 0;
 
-        if (head->m_isolatGlobalScopeIndex || head->m_unGcType) // 有全局句柄\m_unGcType的不回收
-            continue;
-
-        miniv8ReleaseAssert(head->m_isolatHandleScopeIndex == m_handleScopeHandles.data() + i, "V8Isolate::exitContext fail\n");
-        *head->m_isolatHandleScopeIndex = nullptr;
-        head->m_isolatHandleScopeIndex = nullptr;
-
-        // head->m_refOrDeref可能会在JS_FreeValue没析构head，比如还有js在引用。此时在gc的时候会走到JS_FreeValue绑定的回调
-        // 必须防止m_refOrDeref多次调用
-        V8HeadRefOrDerefFun refOrDeref = head->m_refOrDeref;
-        head->m_refOrDeref = nullptr;
-        if (refOrDeref)
-            refOrDeref(head, false); // 里面可能会调用JS_FreeValue
+        gcHandleScopeHandleItem(head, m_scopeHandles.data() + i);
     }
 }
 
@@ -2794,19 +3293,14 @@ static bool checkGlobalNeedFreed(V8Head* head)
 
 static bool checkNeedFreed(V8Head* head)
 {
-    if (0 != head->m_markGC)
+    if (0 != head->m_markGC || head->m_isolatHandleScopeIndex) // 有m_isolatHandleScopeIndex表示在gc的外层调用，有HandleScope存了这个head
         return false;
 
     return checkGlobalNeedFreed(head);
 }
 
-#define kInvalidWeakCallback ((void*)-1)
-
 void V8Isolate::runGlobalWeakCallback(V8Head* head)
 {
-    if (3608 == head->m_countId)
-        OutputDebugStringA("");
-
     if (head->m_weakCallback && head->m_weakCallback != kInvalidWeakCallback) {
         v8::WeakCallbackInfo<void>::Callback weakCallback = (v8::WeakCallbackInfo<void>::Callback)head->m_weakCallback;
         v8::WeakCallbackInfo<void>::Callback weakCallback2 = nullptr;
@@ -2858,7 +3352,7 @@ void V8Isolate::freedHeads(JSContext* ctx, bool isFirstCall)
         if (!head) // runGlobalWeakCallback里可能会改m_needFreedHeads的值为null
             continue;
 
-        if (/*g_testHead == head || */head->m_countId == 1907)
+        if (g_testFunc == head)
             OutputDebugStringA("");
 
         int32_t index = getGlobalizeCountHandlesIndex(head);
@@ -2878,22 +3372,13 @@ void V8Isolate::disposeGlobalImpl(V8Head* head, bool fromRunGlobalWeakCallback)
 
     int count = 0;
     int32_t index = getGlobalizeCountHandlesIndex(head);
-    if (-1 != index) {
-        // 根据v8的标准，（貌似）如果是弱引用，则引用计数为1就可以回收了。因为不用管设置了那个弱引用的global handles
-        --m_globalizeCountHandles[index];
-        count = m_globalizeCountHandles[index];
-        // 有可能是-1
-        //miniv8ReleaseAssert(count >= 0 || count == -1 && fromRunGlobalWeakCallback, "V8Isolate::disposeGlobalImpl fail\n");
+    miniv8ReleaseAssert(-1 != index, "disposeGlobalImpl fail\n");
 
-        if (24 == index) // document
-            OutputDebugStringA("");
-        if (1 == index) // context
-            OutputDebugStringA("");
-
-        if (21 == index) // template
-            OutputDebugStringA("");
-    } else
-        DebugBreak();
+    // 根据v8的标准，（貌似）如果是弱引用，则引用计数为1就可以回收了。因为不用管设置了那个弱引用的global handles
+    --m_globalizeCountHandles[index];
+    count = m_globalizeCountHandles[index];
+    // 有可能是-1
+    //miniv8ReleaseAssert(count >= 0 || count == -1 && fromRunGlobalWeakCallback, "V8Isolate::disposeGlobalImpl fail\n");
 
     if (head->m_weakCallback) {
         if (count <= 1) // 如果有弱引用，且外部引用为1，就可以析构了
@@ -2915,13 +3400,17 @@ void V8Isolate::disposeGlobalImpl(V8Head* head, bool fromRunGlobalWeakCallback)
             if (refOrDeref)
                 refOrDeref(head, false);
         }
-    } else {
-        if (0 == count) // 如果外部主动把弱引用也给reset了，就不需要再回调了
-            head->m_weakCallback = nullptr;
-    }
-
-    if (-1 == count)
+    } else if (0 == count) {
+        // 如果外部主动把弱引用也给reset了，就不需要再回调了
+        head->m_weakCallback = nullptr;
+        if (head->m_isolatGlobalScopeIndex)
+            *(head->m_isolatGlobalScopeIndex) = nullptr;
+        head->m_isolatGlobalScopeIndex = nullptr;
+    } else if (-1 == count) {
         m_globalizeCountHandles[index] = 0; // 不能设置为-1
+        DebugBreak();
+        // head->m_isolatGlobalScopeIndex = nullptr; ?
+    }
 }
 
 void V8Isolate::disposeGlobal(void* obj)
@@ -2982,13 +3471,20 @@ static void checkRepetitive(const std::vector<V8Head*>& needFreedHeads, V8Head* 
     }
 }
 
+static bool isPromisePending(V8Head* head)
+{
+    if (kOTPromise != head->m_type && kOTResolver != head->m_type)
+        return false;
+    return JS_IsPromisePending(head->m_qjsValue);
+}
+
 // 1，对每个gc对象，如果标记为被别人引用，则判断qjs value的引用计数，如果大于1，则减1，然后标记为弱引用对象
 // 2，对全局对象，如果被设置了弱引用回调，则标记为弱引用对象。同时判断qjs value的引用计数，如果大于1，则减1
 // 3，对每个弱引用对象，如果被记为没激活态，则引用计数减1，同时转成已完成弱引用状态，防止反复减1
 void V8Isolate::runGC()
 {
-    miniv8ReleaseAssert(m_currentCtxs.empty(), "V8Isolate::runGC fail\n");
-
+    //miniv8ReleaseAssert(m_currentCtxs.empty(), "V8Isolate::runGC fail\n");
+    printDebug("V8Isolate::runGC begin\n");
     gcHandleScopeHandles(true);
     m_activedObjectGroupId.clear();
     int useCount = 0;
@@ -3008,7 +3504,6 @@ void V8Isolate::runGC()
     runV8GcCallback(true);
 
     GcTracer trace;
-
     int domNodeCount = 0;
 
     // 从根对象开始遍历染色
@@ -3018,10 +3513,6 @@ void V8Isolate::runGC()
             continue;
 
         head = (V8Head*)v8::Utils::toHandle<V8Data>((uintptr_t)head);
-
-        if (g_testHead == head || head->m_countId == 1138)
-            OutputDebugStringA("");
-
         if (head->m_type == kOTObject) {
             V8Object* obj = (V8Object*)head;
             if (obj->m_alignedPointerInInternalFields[1])
@@ -3029,11 +3520,13 @@ void V8Isolate::runGC()
         }
 
         int32_t index = getGlobalizeCountHandlesIndex(head);
-        if (0 == m_globalizeCountHandles[index] || (head->m_weakCallback && m_globalizeCountHandles[index] <= 1)) // 外部已经没人引用了，或者有且仅有个弱引用的，就不trace了
-            continue;
+
+        bool forceTrace = isPromisePending(head); // V8Promise要单独处理，因为这货可以是pending状态，就算没人引用它也不能回收        
+        if (!forceTrace && (0 == m_globalizeCountHandles[index] || (head->m_weakCallback && m_globalizeCountHandles[index] <= 1)))
+            continue; // 外部已经没人引用了，或者有且仅有个弱引用的，就不trace了
 
         if (head->m_tracer)
-            head->m_tracer(&trace, head); // to V8Data::onV8HeadTraceOfV8Data...
+            head->m_tracer(&trace, head); // into V8Data::onV8HeadTraceOfV8Data...
     }
 
     for (int i = 0; i < miniv8::V8Isolate::kSlotSize; ++i) { // TODO:遍历的效率太低
@@ -3044,25 +3537,20 @@ void V8Isolate::runGC()
             val->m_head.m_tracer(&trace, &val->m_head);
     }
 
-    //     for (std::set<V8Context*>::const_iterator it = m_contexts.begin(); it != m_contexts.end(); ++it) {
-    //         V8Context* context = *it;
-    //         JSValue global = JS_GetGlobalObject(context->ctx());
-    //         miniv8::V8Object* obj = (miniv8::V8Object*)JS_GetUserdata(global);
-    //         if (obj) {
-    //             JSAtom documentAtom = JS_NewAtom(context->ctx(), "document");
-    //             JSValue document = JS_GetProperty(context->ctx(), global, documentAtom);
-    //             miniv8::V8Object* documentObj = (miniv8::V8Object*)JS_GetUserdata(document);
-    // 
-    //             obj->m_head.m_tracer(&trace, &obj->m_head);
-    //         }
-    //     }
+    // 单独tracer promise
+    V8Promise* promise = m_promises;
+    while (promise) {
+        if (isPromisePending(&promise->m_head)) {
+            if (promise->m_head.m_tracer)
+                promise->m_head.m_tracer(&trace, &promise->m_head);
+        }
+        promise = promise->m_prev;
+    }
 
     // 找出没被染色的
     V8Head* head = m_gcObjects;
     while (head) {
         if (checkNeedFreed(head)) {
-            if (head->m_countId == 3608)
-                OutputDebugStringA("");
             //checkRepetitive(m_needFreedHeads, head);
             m_needFreedHeads.push_back(head);
         } else {
@@ -3072,26 +3560,10 @@ void V8Isolate::runGC()
 
         head = head->m_prev;
     }
-//     for (size_t i = 0; i < m_globalizeHandles.size(); ++i) {
-//         V8Head* head = (V8Head*)m_globalizeHandles[i];
-//         if (!head)
-//             continue;
-//         head = (V8Head*)v8::Utils::toHandle<V8Data>((uintptr_t)head);
-// 
-//         if (g_testHead == head || head->m_countId == 39)
-//             OutputDebugStringA("");
-// 
-//         if (checkNeedFreed(head)) {
-//             m_needFreedHeads.insert(head);
-//         } else {
-//             head->m_markGC = 0;
-//             head->m_nodeFlag = 0;
-//         }
-//     }
 
     m_gcStep = kGcStepBeging;
     JSContext* ctx = V8Context::getEmptyJsCtx();
-    freedHeads(ctx, true);
+    freedHeads(ctx, true); // TODO: !!!!!!!!!!!!!!!!
     m_gcStep = kGcStepEnd;
 
     runV8GcCallback(false);
@@ -3116,6 +3588,7 @@ void V8Isolate::runGC()
             continue;
         val->m_head.m_markGC = 0;
     }
+    printDebug("V8Isolate::runGC end\n");
 }
 
 void V8Isolate::visitHandlesWithClassIds(v8::PersistentHandleVisitor* visitor)

@@ -30,8 +30,13 @@ static void logMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
     if (!value->IsString())
         return;
 
-    v8::Local<v8::String> stringInfo = value->ToString();
-    v8::String::Utf8Value stringInfoUtf8(stringInfo);
+    v8::Isolate* isolate = info.GetIsolate();
+    v8::Local<v8::String> stringInfo;
+    v8::MaybeLocal<v8::String> stringInfoMaybe = value->ToString(isolate->GetCurrentContext());
+    if (!stringInfoMaybe.ToLocal(&stringInfo))
+        return;
+
+    v8::String::Utf8Value stringInfoUtf8(isolate, stringInfo);
 //     OutputDebugStringA(*utf8);
 //     OutputDebugStringA("\n");
 
@@ -62,12 +67,12 @@ static void logMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
         std::string funcNameWTF;
 
         if (!scriptName.IsEmpty()) {
-            v8::String::Utf8Value scriptNameUtf8(scriptName);
+            v8::String::Utf8Value scriptNameUtf8(isolate, scriptName);
             scriptNameWTF = *scriptNameUtf8;
         }
 
         if (!funcName.IsEmpty()) {
-            v8::String::Utf8Value funcNameUtf8(funcName);
+            v8::String::Utf8Value funcNameUtf8(isolate, funcName);
             funcNameWTF = *funcNameUtf8;
         }
 
@@ -109,7 +114,11 @@ static void installV8ConsoleBaseTemplate(v8::Local<v8::FunctionTemplate> functio
 {
     functionTemplate->ReadOnlyPrototype();
 
-    functionTemplate->SetClassName(v8::String::NewFromUtf8(isolate, "Console"));
+    functionTemplate->SetClassName(v8::String::NewFromUtf8(isolate, "Console")
+#if V8_MAJOR_VERSION >= 10
+        .ToLocalChecked()
+#endif
+    );
 
     addFunction(isolate, functionTemplate, "assert", logMethodCallback);
     addFunction(isolate, functionTemplate, "clear", logMethodCallback);

@@ -149,7 +149,7 @@ MbWebView::MbWebView()
 void MbWebView::preDestroy()
 {
     char* output = (char*)malloc(0x100);
-    sprintf_s(output, 0x99, "MbWebView::preDestroy: %p, %d\n", this, (int)m_id);
+    sprintf(output, "MbWebView::preDestroy: %p, %d\n", this, (int)m_id);
     OutputDebugStringA(output);
     free(output);
 
@@ -277,6 +277,7 @@ void WKE_CALL_TYPE onURLChanged(wkeWebView wkeWebview, void* param, wkeWebFrameH
 
 bool WKE_CALL_TYPE onPromptBox(wkeWebView wkeWebview, void* param, const wkeString msg, const wkeString defaultResult, wkeString result)
 {
+    BOOL isOk = TRUE;
 #if defined(WIN32) 
     int64_t id = (int64_t)param;
     MbWebView* self = (MbWebView*)common::LiveIdDetect::get()->getPtr(id);
@@ -284,7 +285,7 @@ bool WKE_CALL_TYPE onPromptBox(wkeWebView wkeWebview, void* param, const wkeStri
         return false;
 
     mbStringPtr resultVal = nullptr;
-    BOOL isOk = TRUE;
+    
     if (self->getClosure().m_PromptBoxCallback)
         resultVal = self->getClosure().m_PromptBoxCallback(self->getWebviewHandle(), self->getClosure().m_PromptBoxParam, wkeGetString(msg), wkeGetString(defaultResult), &isOk);
     else {

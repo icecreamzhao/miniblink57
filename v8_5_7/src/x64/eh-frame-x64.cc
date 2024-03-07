@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#if V8_TARGET_ARCH_X64
 #include "src/eh-frame.h"
 
 namespace v8 {
@@ -61,3 +62,4 @@ const char* EhFrameDisassembler::DwarfRegisterCodeToString(int code) {
 
 }  // namespace internal
 }  // namespace v8
+#endif // #if V8_TARGET_ARCH_X64

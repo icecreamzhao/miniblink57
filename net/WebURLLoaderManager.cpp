@@ -96,6 +96,8 @@
 #include "base/files/file_util.h"
 #include "base/atomic_mb.h"
 
+#include "mbvip/core/mb.h"
+
 using namespace blink;
 
 namespace net {

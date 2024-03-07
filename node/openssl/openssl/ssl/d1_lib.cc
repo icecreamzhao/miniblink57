@@ -66,9 +66,10 @@
 
 #include "../crypto/internal.h"
 #include "internal.h"
-#if defined(WIN32) 
+
+#if defined(__x86_64__) || defined(_M_X64) || defined(__i386__) || defined(_M_IX86)
 #include <WinSock2.h>
-#endif
+#endif // #if defined(__x86_64__) || defined(_M_X64) || defined(__i386__) || defined(_M_IX86)
 
 BSSL_NAMESPACE_BEGIN
 

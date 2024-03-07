@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#if V8_TARGET_ARCH_X64
 #include "src/compiler/x64/unwinding-info-writer-x64.h"
 #include "src/compiler/instruction.h"
 
@@ -101,3 +102,4 @@ void UnwindingInfoWriter::MarkFrameDeconstructed(int pc_base) {
 }  // namespace compiler
 }  // namespace internal
 }  // namespace v8
+#endif // #if V8_TARGET_ARCH_X64

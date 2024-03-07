@@ -45,10 +45,10 @@ jpeg_CreateDecompress(j_decompress_ptr cinfo, int version, size_t structsize)
   if (structsize != sizeof(struct jpeg_decompress_struct)) {
     ERREXIT2(cinfo, JERR_BAD_STRUCT_SIZE, (int)sizeof(struct jpeg_decompress_struct), (int)structsize);
   }
-  if (sizeof(size_t) != sizeof(long)) {
-      OutputDebugStringA("sizeof(size_t) != sizeof(long)\n");
-      DebugBreak();      
-  }
+//   if (sizeof(size_t) != sizeof(long)) {
+//       OutputDebugStringA("sizeof(size_t) != sizeof(long)\n");
+//       DebugBreak();      
+//   }
 
   /* For debugging purposes, we zero the whole master structure.
    * But the application has already set the err pointer, and may have set

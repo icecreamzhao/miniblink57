@@ -151,6 +151,21 @@
     <Filter Include="src\gen\src\torque-generated">
       <UniqueIdentifier>{45d6c840-a15c-4a95-8be1-1f88f64e4148}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\x64">
+      <UniqueIdentifier>{b8e16fea-6909-425b-b06c-b8ca38f24025}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\builtins\x64">
+      <UniqueIdentifier>{8aaa28fb-596b-4e97-8b1f-6183489040cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\compiler\backend\x64">
+      <UniqueIdentifier>{48c9b9be-0714-4dc4-be36-9471291bae81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\regexp\x64">
+      <UniqueIdentifier>{2db89a83-2081-410d-b560-b77aabb76bc1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\debug\x64">
+      <UniqueIdentifier>{bd79456c-9089-47e5-a8cc-fdd4089a41b2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\v8_7_5\src\asmjs\asm-parser.h">
@@ -1201,9 +1216,6 @@
       <Filter>src\libplatform</Filter>
     </ClInclude>
     <ClInclude Include="..\..\v8_7_5\src\libplatform\worker-thread.h">
-      <Filter>src\libplatform</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\v8_7_5\src\libplatform\default_platform_wrap.h">
       <Filter>src\libplatform</Filter>
     </ClInclude>
     <ClInclude Include="..\..\v8_7_5\src\libplatform\default-foreground-task-runner.h">
@@ -2937,6 +2949,39 @@
     <ClInclude Include="..\..\gen\v8_7_5\extras-libraries-v857.h">
       <Filter>src\gen\src</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\v8_7_5\src\x64\macro-assembler-x64.h">
+      <Filter>src\x64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_7_5\src\x64\register-x64.h">
+      <Filter>src\x64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_7_5\src\x64\sse-instr.h">
+      <Filter>src\x64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_7_5\src\x64\assembler-x64.h">
+      <Filter>src\x64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_7_5\src\x64\assembler-x64-inl.h">
+      <Filter>src\x64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_7_5\src\x64\constants-x64.h">
+      <Filter>src\x64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_7_5\src\x64\frame-constants-x64.h">
+      <Filter>src\x64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_7_5\src\compiler\backend\x64\instruction-codes-x64.h">
+      <Filter>src\compiler\backend\x64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_7_5\src\compiler\backend\x64\unwinding-info-writer-x64.h">
+      <Filter>src\compiler\backend\x64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_7_5\src\libplatform\default-platform-wrap.h">
+      <Filter>src\libplatform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_7_5\src\regexp\x64\regexp-macro-assembler-x64.h">
+      <Filter>src\regexp\x64</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\v8_7_5\src\asmjs\asm-parser.cc">
@@ -3912,9 +3957,6 @@
       <Filter>src\libplatform</Filter>
     </ClCompile>
     <ClCompile Include="..\..\v8_7_5\src\libplatform\worker-thread.cc">
-      <Filter>src\libplatform</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\v8_7_5\src\libplatform\default_platform_wrap.cc">
       <Filter>src\libplatform</Filter>
     </ClCompile>
     <ClCompile Include="..\..\v8_7_5\src\libplatform\default-foreground-task-runner.cc">
@@ -4957,6 +4999,54 @@
     </ClCompile>
     <ClCompile Include="..\..\v8_7_5\src\debug\liveedit.cc">
       <Filter>src\debug</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_7_5\src\x64\macro-assembler-x64.cc">
+      <Filter>src\x64</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_7_5\src\x64\assembler-x64.cc">
+      <Filter>src\x64</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_7_5\src\x64\cpu-x64.cc">
+      <Filter>src\x64</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_7_5\src\x64\deoptimizer-x64.cc">
+      <Filter>src\x64</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_7_5\src\x64\disasm-x64.cc">
+      <Filter>src\x64</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_7_5\src\x64\eh-frame-x64.cc">
+      <Filter>src\x64</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_7_5\src\x64\frame-constants-x64.cc">
+      <Filter>src\x64</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_7_5\src\x64\interface-descriptors-x64.cc">
+      <Filter>src\x64</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_7_5\src\builtins\x64\builtins-x64.cc">
+      <Filter>src\builtins\x64</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_7_5\src\compiler\backend\x64\instruction-scheduler-x64.cc">
+      <Filter>src\compiler\backend\x64</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_7_5\src\compiler\backend\x64\instruction-selector-x64.cc">
+      <Filter>src\compiler\backend\x64</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_7_5\src\compiler\backend\x64\unwinding-info-writer-x64.cc">
+      <Filter>src\compiler\backend\x64</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_7_5\src\compiler\backend\x64\code-generator-x64.cc">
+      <Filter>src\compiler\backend\x64</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_7_5\src\libplatform\default-platform-wrap.cc">
+      <Filter>src\libplatform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_7_5\src\regexp\x64\regexp-macro-assembler-x64.cc">
+      <Filter>src\regexp\x64</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_7_5\src\debug\x64\debug-x64.cc">
+      <Filter>src\debug\x64</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

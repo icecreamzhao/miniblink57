@@ -5,6 +5,8 @@
  * found in the LICENSE file.
  */
 
+#if defined(SK_ARM_HAS_NEON)
+
 #include "SkBlitMask.h"
 #include "SkColor_opts_neon.h"
 
@@ -211,3 +213,5 @@ void SkRGB16BlitterBlitV_neon(uint16_t* device,
 
 #undef LOAD_LANE_16
 #undef STORE_LANE_16
+
+#endif // #if defined(SK_ARM_HAS_NEON)

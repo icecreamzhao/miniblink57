@@ -5,6 +5,7 @@
 #include "src/inspector/string-util.h"
 
 #include <cmath>
+#include <math.h>
 
 #include "src/base/platform/platform.h"
 #include "src/conversions.h"

@@ -115,7 +115,7 @@ namespace {
             v8::Local<v8::String> inputString = v8String(isolate, string);
             v8::TryCatch trycatch(isolate);
             v8::Local<v8::Value> parsed;
-            if (v8Call(v8::JSON::Parse(isolate, inputString), parsed, trycatch))
+            if (v8Call(v8::JSON::Parse(resolver()->getScriptState()->context(), inputString), parsed, trycatch))
                 resolver()->resolve(parsed);
             else
                 resolver()->reject(trycatch.Exception());

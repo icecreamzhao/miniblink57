@@ -424,6 +424,13 @@ void ScriptStreamer::suppressStreaming()
     m_streamingSuppressed = true;
 }
 
+SourceStream* ScriptStreamer::stream() const
+{
+    if (!m_source.get())
+        return nullptr;
+    return m_stream;
+}
+
 void ScriptStreamer::notifyAppendData(ScriptResource* resource)
 {
     DCHECK(isMainThread());
@@ -491,10 +498,13 @@ void ScriptStreamer::notifyAppendData(ScriptResource* resource)
 
         DCHECK(!m_stream);
         DCHECK(!m_source);
-        m_stream = new SourceStream(m_loadingTaskRunner.get());
+        //m_stream = new SourceStream(m_loadingTaskRunner.get());
+        std::unique_ptr<SourceStream> streamPtr = std::make_unique<SourceStream>(m_loadingTaskRunner.get());
+        m_stream = streamPtr.get();
+
         // m_source takes ownership of m_stream.
         m_source = WTF::wrapUnique(
-            new v8::ScriptCompiler::StreamedSource(m_stream, m_encoding));
+            new v8::ScriptCompiler::StreamedSource(std::move(streamPtr), m_encoding));
 
         ScriptState::Scope scope(m_scriptState.get());
         std::unique_ptr<v8::ScriptCompiler::ScriptStreamingTask>
@@ -645,8 +655,10 @@ bool ScriptStreamer::startStreamingInternal(
     // Decide what kind of cached data we should produce while streaming. Only
     // produce parser cache if the non-streaming compile takes advantage of it.
     v8::ScriptCompiler::CompileOptions compileOption = v8::ScriptCompiler::kNoCompileOptions;
+#if V8_MAJOR_VERSION <= 7
     if (settings->getV8CacheOptions() == V8CacheOptionsParse)
         compileOption = v8::ScriptCompiler::kProduceParserCache;
+#endif
 
     // The Resource might go out of scope if the script is no longer
     // needed. This makes PendingScript notify the ScriptStreamer when it is

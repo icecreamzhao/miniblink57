@@ -652,6 +652,8 @@ GlyphData Font::glyphDataForCharacter(UChar32& c, bool mirror, bool normalizeSpa
         }
     }
 
+    printf("Font::glyphDataForCharacter primaryFont: %p\n", primaryFont());
+
     // Even system fallback can fail; use the missing glyph in that case.
     // FIXME: It would be nicer to use the missing glyph from the last resort font instead.
     ASSERT(primaryFont());

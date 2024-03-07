@@ -1839,10 +1839,10 @@ void qjsBuild()
 //         qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "util_build.js", cmd, kRebuildOptAll);
 //         qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "v875_1_build.js", cmd, kRebuildOptAll);
 //         qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "v875_2_build.js", cmd, kRebuildOptAll);
-        //qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "blink_build.js", cmd, kRebuildOptPrebuildSrcAndLink);
+        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "blink_build.js", cmd, kRebuildOptPrebuildSrcAndLink);
 //         qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "wkexe_build.js", cmd, kRebuildOptAll);
 //         qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "webdriver.js", cmd, kRebuildOptAll);
-//         ExitProcess(1);
+        ExitProcess(1);
     }
     {
         cmd = "{\"compileCfg\":\"release_v875_arm\", \"isBuildElectronMode\":false, \"v8dir\":\"v8_7_5\"}"; // V8¸ß°æ±¾£¬ARM
@@ -1857,11 +1857,11 @@ void qjsBuild()
 //         qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "v875_1_build.js", cmd, kRebuildOptAll);
 //         qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "v875_2_build.js", cmd, kRebuildOptAll);
 // 
-        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "skia_build.js", cmd, kRebuildOptPrebuildSrcAndLink);
-        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "blink_build.js", cmd, kRebuildOptPrebuildSrcAndLink);
-        qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "wkexe_build.js", cmd, kRebuildOptAll);
+        //qjsRebuild("g:\\mycode\\zeminiblink57\\fastmake\\all_build\\", "skia_build.js", cmd, kRebuildOptPrebuildSrcAndLink);
+        //qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "blink_build.js", cmd, kRebuildOptPrebuildSrcAndLink);
+        //qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "wkexe_build.js", cmd, kRebuildOptAll);
         //qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "webdriver.js", cmd, kRebuildOptAll);
-        ExitProcess(1);
+        //ExitProcess(1);
     }
     {
         cmd = "{\"compileCfg\":\"release_v857\", \"isBuildElectronMode\":false, \"v8dir\":\"v8_5_7\"}"; // V8µÍ°æ±¾
@@ -1879,6 +1879,7 @@ void qjsBuild()
 //         qjsRebuild("g:\\mycode\\miniblink57\\fastmake\\all_build\\", "webdriver.js", cmd, kRebuildOptAll);
     }
     MessageBoxA(0, "build finish!", 0, 0);
+
 }
 
 int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)

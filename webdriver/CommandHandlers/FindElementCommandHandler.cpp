@@ -94,7 +94,7 @@ void FindElementCommandHandler::ExecuteInternal(const MBCommandExecutor& executo
        
         if (retryCount > 4 && result.isNull()) {
             char* output = (char*)malloc(0x200);
-            sprintf_s(output, 0x199, "FindElementCommandHandler fail 1: %s\n", value.c_str());
+            sprintf(output, "FindElementCommandHandler fail 1: %s\n", value.c_str());
             OutputDebugStringA(output);
             free(output);
             //MessageBoxA(0, "mhtml", "onGetSourceCallback", 0);

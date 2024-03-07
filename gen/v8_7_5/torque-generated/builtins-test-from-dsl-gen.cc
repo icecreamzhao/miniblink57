@@ -1,3 +1,4 @@
+#if V8_TARGET_ARCH_IA32
 #include "src/builtins/builtins-utils-gen.h"
 #include "src/builtins/builtins.h"
 #include "src/code-factory.h"
@@ -9848,4 +9849,4 @@ void TestBuiltinsFromDSLAssembler::Swap5ATSmi(CodeStubAssembler::Reference p_a, 
 
 }  // namespace internal
 }  // namespace v8
-
+#endif

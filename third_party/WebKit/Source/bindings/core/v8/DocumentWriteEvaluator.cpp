@@ -25,7 +25,7 @@ namespace {
         v8::HandleScope scope(args.GetIsolate());
         for (int i = 0; i < args.Length(); i++) {
             evaluator->recordDocumentWrite(
-                toCoreStringWithNullCheck(args[i]->ToString()));
+                toCoreStringWithNullCheck(args[i]->ToString(args.GetIsolate()->GetCurrentContext()).ToLocalChecked()));
         }
     }
 
@@ -99,38 +99,25 @@ bool DocumentWriteEvaluator::ensureEvaluationContext()
     v8::Local<v8::String> navigatorString = v8String(isolate, "navigator");
     v8::Local<v8::String> documentString = v8String(isolate, "document");
 
-    m_window.newLocal(isolate)->Set(locationString, m_location.newLocal(isolate));
-    m_window.newLocal(isolate)->Set(documentString, m_document.newLocal(isolate));
-    m_window.newLocal(isolate)->Set(navigatorString,
-        m_navigator.newLocal(isolate));
+    m_window.newLocal(isolate)->Set(context, locationString, m_location.newLocal(isolate));
+    m_window.newLocal(isolate)->Set(context, documentString, m_document.newLocal(isolate));
+    m_window.newLocal(isolate)->Set(context, navigatorString, m_navigator.newLocal(isolate));
 
-    v8::Local<v8::FunctionTemplate> writeTemplate = v8::FunctionTemplate::New(
-        isolate, documentWriteCallback, v8::External::New(isolate, this));
+    v8::Local<v8::FunctionTemplate> writeTemplate = v8::FunctionTemplate::New( isolate, documentWriteCallback, v8::External::New(isolate, this));
     writeTemplate->RemovePrototype();
-    m_document.newLocal(isolate)->Set(locationString,
-        m_location.newLocal(isolate));
-    m_document.newLocal(isolate)->Set(v8String(isolate, "write"),
-        writeTemplate->GetFunction());
-    m_document.newLocal(isolate)->Set(v8String(isolate, "writeln"),
-        writeTemplate->GetFunction());
+    m_document.newLocal(isolate)->Set(context, locationString, m_location.newLocal(isolate));
+    m_document.newLocal(isolate)->Set(context, v8String(isolate, "write"), writeTemplate->GetFunction(context).ToLocalChecked());
+    m_document.newLocal(isolate)->Set(context, v8String(isolate, "writeln"), writeTemplate->GetFunction(context).ToLocalChecked());
 
-    m_location.newLocal(isolate)->Set(v8String(isolate, "pathname"),
-        v8String(isolate, m_pathName));
-    m_location.newLocal(isolate)->Set(v8String(isolate, "hostname"),
-        v8String(isolate, m_hostName));
-    m_location.newLocal(isolate)->Set(v8String(isolate, "protocol"),
-        v8String(isolate, m_protocol));
-    m_navigator.newLocal(isolate)->Set(v8String(isolate, "userAgent"),
-        v8String(isolate, m_userAgent));
+    m_location.newLocal(isolate)->Set(context, v8String(isolate, "pathname"), v8String(isolate, m_pathName));
+    m_location.newLocal(isolate)->Set(context, v8String(isolate, "hostname"), v8String(isolate, m_hostName));
+    m_location.newLocal(isolate)->Set(context, v8String(isolate, "protocol"), v8String(isolate, m_protocol));
+    m_navigator.newLocal(isolate)->Set(context, v8String(isolate, "userAgent"), v8String(isolate, m_userAgent));
 
-    v8CallBoolean(context->Global()->Set(context, v8String(isolate, "window"),
-        m_window.newLocal(isolate)));
-    v8CallBoolean(context->Global()->Set(context, documentString,
-        m_document.newLocal(isolate)));
-    v8CallBoolean(context->Global()->Set(context, locationString,
-        m_location.newLocal(isolate)));
-    v8CallBoolean(context->Global()->Set(context, navigatorString,
-        m_navigator.newLocal(isolate)));
+    v8CallBoolean(context->Global()->Set(context, v8String(isolate, "window"), m_window.newLocal(isolate)));
+    v8CallBoolean(context->Global()->Set(context, documentString, m_document.newLocal(isolate)));
+    v8CallBoolean(context->Global()->Set(context, locationString, m_location.newLocal(isolate)));
+    v8CallBoolean(context->Global()->Set(context, navigatorString, m_navigator.newLocal(isolate)));
     return true;
 }
 

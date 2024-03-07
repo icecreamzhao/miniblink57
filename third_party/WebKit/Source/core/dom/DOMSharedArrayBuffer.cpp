@@ -15,8 +15,13 @@ v8::Local<v8::Object> DOMSharedArrayBuffer::wrap(
     DCHECK(!DOMDataStore::containsWrapper(this, isolate));
 
     const WrapperTypeInfo* wrapperTypeInfo = this->wrapperTypeInfo();
+#if V8_MAJOR_VERSION < 10
     v8::Local<v8::Object> wrapper = v8::SharedArrayBuffer::New(isolate, buffer()->dataShared(), byteLength());
-
+#else
+    unsigned length = byteLength();
+    v8::Local<v8::SharedArrayBuffer> wrapper = v8::SharedArrayBuffer::New(isolate,  byteLength());
+    memcpy(wrapper->Data(), buffer()->dataShared(), length);
+#endif
     return associateWithWrapper(isolate, wrapperTypeInfo, wrapper);
 }
 

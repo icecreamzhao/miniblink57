@@ -1056,7 +1056,7 @@ wkeWebFrameHandle CWebView::frameIdTowkeWebFrameHandle(content::WebPage* page, i
 static jsValue runJsImpl(blink::WebFrame* mainFrame, String* codeString, bool isInClosure)
 {
     //blink::UserGestureIndicator gestureIndicator(blink::DefinitelyProcessingUserGesture);
-  RefPtr<blink::UserGestureToken> userGestureToken = blink::UserGestureIndicator::currentToken();
+    RefPtr<blink::UserGestureToken> userGestureToken = blink::UserGestureIndicator::currentToken();
 
     if (codeString->startsWith("javascript:", WTF::TextCaseASCIIInsensitive))
         codeString->remove(0, sizeof("javascript:") - 1);

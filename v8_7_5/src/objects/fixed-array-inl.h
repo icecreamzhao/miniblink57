@@ -23,6 +23,7 @@
 
 // Has to be the last include (doesn't have include guards):
 #include "src/objects/object-macros.h"
+#include <math.h>
 
 namespace v8 {
 namespace internal {

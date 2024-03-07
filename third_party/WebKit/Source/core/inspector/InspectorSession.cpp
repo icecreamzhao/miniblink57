@@ -44,8 +44,11 @@ InspectorSession::InspectorSession(Client* client,
     String v8State;
     if (savedState)
         m_state->getString(kV8StateKey, &v8State);
-    m_v8Session = inspector->connect(contextGroupId, this,
-        toV8InspectorStringView(v8State));
+    m_v8Session = inspector->connect(contextGroupId, this, toV8InspectorStringView(v8State)
+#if V8_MAJOR_VERSION > 7
+        , v8_inspector::V8Inspector::kUntrusted
+#endif
+    );
 }
 
 InspectorSession::~InspectorSession()
@@ -116,6 +119,7 @@ void InspectorSession::sendResponse(
 
 void InspectorSession::sendProtocolResponse(int callId, const String& message)
 {
+#if V8_MAJOR_VERSION <= 7
     if (m_disposed)
         return;
     flushProtocolNotifications();
@@ -126,6 +130,9 @@ void InspectorSession::sendProtocolResponse(int callId, const String& message)
     else
         m_lastSentState = stateToSend;
     m_client->sendProtocolMessage(m_sessionId, callId, message, stateToSend);
+#else
+    DebugBreak();
+#endif
 }
 
 class InspectorSession::Notification {

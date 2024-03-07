@@ -17,21 +17,25 @@ namespace protocol {
     struct ValueConversions<v8_inspector::protocol::Runtime::API::RemoteObject> {
         static std::unique_ptr<v8_inspector::protocol::Runtime::API::RemoteObject> fromValue(protocol::Value* value, ErrorSupport* errors)
         {
-            if (!value) {
-                errors->addError("value expected");
-                return nullptr;
-            }
-            String json = value->serialize();
-            auto result = v8_inspector::protocol::Runtime::API::RemoteObject::fromJSONString(toV8InspectorStringView(json));
-            if (!result)
-                errors->addError("cannot parse");
-            return result;
+            DebugBreak();
+            return nullptr;
+//             if (!value) {
+//                 errors->addError("value expected");
+//                 return nullptr;
+//             }
+//             String json = value->serialize();
+//             auto result = v8_inspector::protocol::Runtime::API::RemoteObject::fromJSONString(toV8InspectorStringView(json));
+//             if (!result)
+//                 errors->addError("cannot parse");
+//             return result;
         }
 
         static std::unique_ptr<protocol::Value> toValue(const v8_inspector::protocol::Runtime::API::RemoteObject* value)
         {
-            auto json = value->toJSONString();
-            return SerializedValue::create(toCoreString(std::move(json)));
+            DebugBreak();
+            return nullptr;
+//             auto json = value->toJSONString();
+//             return SerializedValue::create(toCoreString(std::move(json)));
         }
 
         static std::unique_ptr<protocol::Value> toValue(const std::unique_ptr<v8_inspector::protocol::Runtime::API::RemoteObject>& value)
@@ -44,21 +48,25 @@ namespace protocol {
     struct ValueConversions<v8_inspector::protocol::Runtime::API::StackTrace> {
         static std::unique_ptr<v8_inspector::protocol::Runtime::API::StackTrace> fromValue(protocol::Value* value, ErrorSupport* errors)
         {
-            if (!value) {
-                errors->addError("value expected");
-                return nullptr;
-            }
-            String json = value->serialize();
-            auto result = v8_inspector::protocol::Runtime::API::StackTrace::fromJSONString(toV8InspectorStringView(json));
-            if (!result)
-                errors->addError("cannot parse");
-            return result;
+//             if (!value) {
+//                 errors->addError("value expected");
+//                 return nullptr;
+//             }
+//             String json = value->serialize();
+//             auto result = v8_inspector::protocol::Runtime::API::StackTrace::fromJSONString(toV8InspectorStringView(json));
+//             if (!result)
+//                 errors->addError("cannot parse");
+//             return result;
+            DebugBreak();
+            return nullptr;
         }
 
         static std::unique_ptr<protocol::Value> toValue(const v8_inspector::protocol::Runtime::API::StackTrace* value)
         {
-            auto json = value->toJSONString();
-            return SerializedValue::create(toCoreString(std::move(json)));
+            DebugBreak();
+            return nullptr;
+//             auto json = value->toJSONString();
+//             return SerializedValue::create(toCoreString(std::move(json)));
         }
 
         static std::unique_ptr<protocol::Value> toValue(const std::unique_ptr<v8_inspector::protocol::Runtime::API::StackTrace>& value)

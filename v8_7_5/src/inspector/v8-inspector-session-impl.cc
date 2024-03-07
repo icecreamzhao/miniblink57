@@ -108,6 +108,8 @@ V8InspectorSessionImpl::V8InspectorSessionImpl(V8InspectorImpl* inspector,
         this, this, agentState(protocol::Schema::Metainfo::domainName)));
     protocol::Schema::Dispatcher::wire(&m_dispatcher, m_schemaAgent.get());
 
+    //m_runtimeAgent->enable(); // weolar add
+
     if (savedState.length()) {
         m_runtimeAgent->restore();
         m_debuggerAgent->restore();

@@ -204,7 +204,7 @@ String FileInputType::valueInFilenameValueMode() const
     // decided to try to parse the value by looking for backslashes
     // (because that's what Windows file paths use). To be compatible
     // with that code, we make up a fake path for the file.
-    return "C:\\fakepath\\" + m_fileList->item(0)->name();
+    return /*"C:\\fakepath\\" +*/ m_fileList->item(0)->name();
 }
 
 void FileInputType::setValue(const String&,

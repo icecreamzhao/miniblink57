@@ -34,7 +34,11 @@ ScriptWrappableVisitor::ScriptWrappableVisitor(v8::Isolate* isolate)
 
 ScriptWrappableVisitor::~ScriptWrappableVisitor() { }
 
-void ScriptWrappableVisitor::TracePrologue()
+void ScriptWrappableVisitor::TracePrologue(
+#if V8_MAJOR_VERSION > 7
+    v8::EmbedderHeapTracer::TraceFlags flags
+#endif
+    )
 {
     // This CHECK ensures that wrapper tracing is not started from scopes
     // that forbid GC execution, e.g., constructors.
@@ -62,7 +66,11 @@ void ScriptWrappableVisitor::EnterFinalPause(
     ActiveScriptWrappableBase::traceActiveScriptWrappables(m_isolate, this);
 }
 
-void ScriptWrappableVisitor::TraceEpilogue()
+void ScriptWrappableVisitor::TraceEpilogue(
+#if V8_MAJOR_VERSION > 7
+    v8::EmbedderHeapTracer::TraceSummary* trace_summary
+#endif
+)
 {
     CHECK(ThreadState::current());
     CHECK(!ThreadState::current()->isWrapperTracingForbidden());
@@ -284,7 +292,11 @@ void ScriptWrappableVisitor::markWrapper(
     // delayed. Bail out in this case.
     if (!m_tracingInProgress)
         return;
+#if V8_MAJOR_VERSION <= 7
     handle->RegisterExternalReference(m_isolate);
+#else
+    DebugBreak();
+#endif
 }
 
 void ScriptWrappableVisitor::dispatchTraceWrappers(

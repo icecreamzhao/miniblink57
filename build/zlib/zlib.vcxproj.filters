@@ -16,6 +16,9 @@
     <Filter Include="src">
       <UniqueIdentifier>{3a4ce0f4-5050-42c1-bf6e-2a9c54180474}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\google">
+      <UniqueIdentifier>{6d777b83-9dc0-49ca-85aa-b782beec32ee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -27,55 +30,34 @@
     <ClInclude Include="targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\zlib\x86.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\..\third_party\zlib\google\zip_reader.h">
+      <Filter>src\google</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\zlib\zconf.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\..\third_party\zlib\google\zip_writer.h">
+      <Filter>src\google</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\zlib\zlib.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\..\third_party\zlib\google\compression_utils.h">
+      <Filter>src\google</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\zlib\zutil.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\..\third_party\zlib\google\compression_utils_portable.h">
+      <Filter>src\google</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\zlib\crc32.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\..\third_party\zlib\google\redact.h">
+      <Filter>src\google</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\zlib\deflate.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\..\third_party\zlib\google\zip.h">
+      <Filter>src\google</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\third_party\zlib\gzguts.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\zlib\inffast.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\zlib\inffixed.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\zlib\inflate.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\zlib\inftrees.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\zlib\trees.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\..\third_party\zlib\google\zip_internal.h">
+      <Filter>src\google</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\third_party\zlib\uncompr.c">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\zlib\x86.c">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\zlib\zutil.c">
-      <Filter>src</Filter>
+    <ClCompile Include="..\..\third_party\zlib\google\compression_utils_portable.cc">
+      <Filter>src\google</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\zlib\adler32.c">
       <Filter>src</Filter>
@@ -114,6 +96,15 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\zlib\trees.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\zlib\uncompr.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\zlib\x86.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\zlib\zutil.c">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

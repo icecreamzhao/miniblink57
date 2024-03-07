@@ -328,6 +328,7 @@ Vector<String> PendingScript::compileModuleAndRequestDepend(HTMLParserScriptRunn
     if (resource())
         url = resource()->url();
     
+#if V8_MAJOR_VERSION < 10
     v8::ScriptOrigin origin(
         v8String(isolate, url.getUTF8String()),
         v8::Integer::New(isolate, startingPosition().m_line.zeroBasedInt()),
@@ -339,6 +340,20 @@ Vector<String> PendingScript::compileModuleAndRequestDepend(HTMLParserScriptRunn
         v8::False(isolate),                // is_wasm
         v8::True(isolate)                  // is_module
     );
+#else
+    v8::ScriptOrigin origin(isolate,
+        v8String(isolate, url.getUTF8String()),
+        startingPosition().m_line.zeroBasedInt(),
+        startingPosition().m_column.zeroBasedInt(),
+        true, // resource_is_shared_cross_origin
+        -1, // script id
+        v8::String::Empty(isolate),
+        false, // resource_is_opaque
+        false, // is_wasm
+        false, // is_module
+        v8::Local<v8::Data>() // host_defined_options
+    );
+#endif
 
     bool errorOccurred = false;
     double loadFinishTime = resource() && resource()->url().protocolIsInHTTPFamily() ? resource()->loadFinishTime() : 0;
@@ -361,13 +376,21 @@ Vector<String> PendingScript::compileModuleAndRequestDepend(HTMLParserScriptRunn
     Modulator* modulator = Modulator::from(scriptState->context());
     modulator->setScriptRunner(scriptRunner);
     modulator->add(m_moduleRecord);
-
+#if V8_MAJOR_VERSION <= 7
     int length = module->GetModuleRequestsLength();
     for (int i = 0; i < length; ++i) {
         v8::Local<v8::String> v8name = module->GetModuleRequest(i);
         ret.append(toCoreString(v8name));
     }
-
+#else
+    v8::Local<v8::FixedArray> v8ModuleRequests = module->GetModuleRequests();
+    int length = v8ModuleRequests->Length();
+    for (int i = 0; i < length; ++i) {
+        v8::Local<v8::ModuleRequest> v8ModuleRequest = v8ModuleRequests->Get(scriptState->context(), i).As<v8::ModuleRequest>();
+        v8::Local<v8::String> v8name = v8ModuleRequest->GetSpecifier();
+        ret.append(toCoreString(v8name));
+    }
+#endif
     return ret;
 }
 //////////////////////////////////////////////////////////////////////////

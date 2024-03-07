@@ -595,6 +595,9 @@ static bool isResourceTypeFrame(WebURLLoaderInternal* job)
 // content\browser\loader\mime_type_resource_handler.cc
 static bool isDownloadResponse(WebURLLoaderInternal* job, const AtomicString& contentType, const AtomicString& contentLength)
 {
+    if (std::string::npos != job->m_url.find("pss.bdstatic.com/static/superman/font/iconfont-fa013548a9.woff2"))
+        DebugBreak();
+
     if (!isResourceTypeFrame(job))
         return false;
 

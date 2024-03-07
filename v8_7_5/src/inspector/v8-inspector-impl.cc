@@ -174,6 +174,9 @@ std::unique_ptr<V8InspectorSession> V8InspectorImpl::connect(
     std::unique_ptr<V8InspectorSessionImpl> session = V8InspectorSessionImpl::create(this, contextGroupId, sessionId, channel,
         state);
     m_sessions[contextGroupId][sessionId] = session.get();
+
+    session->runtimeAgent(); // weolar add
+
     return std::move(session);
 }
 
@@ -230,6 +233,7 @@ void V8InspectorImpl::contextCreated(const V8ContextInfo& info)
 
     DCHECK(contextById->find(contextId) == contextById->cend());
     (*contextById)[contextId].reset(context);
+
     forEachSession(
         info.contextGroupId, [&context](V8InspectorSessionImpl* session) {
             session->runtimeAgent()->addBindings(context);

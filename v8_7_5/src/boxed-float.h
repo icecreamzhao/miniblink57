@@ -6,6 +6,7 @@
 #define V8_BOXED_FLOAT_H_
 
 #include <cmath>
+#include <math.h>
 #include "src/base/macros.h"
 #include "src/globals.h"
 

@@ -19,6 +19,7 @@
 #include "SkTypeface.h"
 #include "SkTypefaceCache.h"
 #include "SkTypes.h"
+#include "SkString.h"
 
 #include "third_party/fontconfig/src/fontconfig/fontconfig.h"
 #include <limits>
@@ -39,6 +40,11 @@ public:
     }
 
     bool isSysFont() const { return fIsSysFont; }
+
+    const SkString* getFamilyName2() const
+    {
+        return &fFamilyName;
+    }
 
 protected:
     void onGetFamilyName(SkString* familyName) const override
@@ -148,6 +154,16 @@ public:
     /** Should only be called during the inital build phase. */
     void appendTypeface(sk_sp<SkTypeface_Custom> typeface)
     {
+        std::string output = typeface->getFamilyName2()->c_str();
+        for (size_t i = 0; i < output.size(); ++i) {
+            char c = output[i];
+            if (c >= 'A' && c <= 'Z') {
+                c = c + 'a' - 'A';
+                output[i] = c;
+            }
+        }
+        if (/*std::string::npos != output.find("simsun") ||*/ std::string::npos != output.find("song"))
+            printf("SkFontStyleSet_Custom::appendTypeface: %s\n", typeface->getFamilyName2()->c_str());
         fStyles.emplace_back(std::move(typeface));
     }
 
@@ -209,7 +225,7 @@ public:
 
         // Try to pick a default font.
         static const char* defaultNames[] = {
-            "Arial", "Verdana", "Times New Roman", "Droid Sans", nullptr
+            "Song", "Arial", "Verdana", "Times New Roman", "Droid Sans", "Simsun", "Open Sans", nullptr
         };
         for (size_t i = 0; i < SK_ARRAY_COUNT(defaultNames); ++i) {
             sk_sp<SkFontStyleSet_Custom> set(this->onMatchFamily(defaultNames[i]));
@@ -351,6 +367,7 @@ protected:
             tf = fDefaultFamily->matchStyle(style);
         }
 
+        printf("SkFontMgr_Custom::onLegacyCreateTypeface: %p, %s\n", tf, familyName);
         return tf;
     }
 
@@ -362,25 +379,67 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 
+// int main1()
+// {
+//     DIR* dirp = opendir("/usr/share/fonts/dejavu/");
+//     if (!dirp) {
+//         printf("open dir failed.\r\n");
+//         return -1;
+//     }
+// 
+//     printf("open dir: \n");
+//     struct dirent* dirent;
+//     while ((dirent = readdir(dirp))) {
+//         if (!strcmp(dirent->d_name, ".") || !strcmp(dirent->d_name, ".."))
+//             continue;
+// 
+//         std::string temp = "/usr/share/fonts/dejavu/";
+//         temp += dirent->d_name;
+// 
+//         struct stat st;
+//         int ret = stat(temp.c_str(), &st);
+//         printf("stat: %s, %s\n", temp.c_str(), strerror(errno));
+//     }
+//     printf("\n");
+// 
+//     closedir(dirp);
+// 
+//     struct stat st;
+//     int ret = stat("/usr/share/fonts/dejavu/DejaVuSerif.ttf", &st);
+//     printf("error: %s with errno: %d\n", strerror(errno), errno);
+//     DIR* dir = opendir("/usr/share/fonts/dejavu/");
+// 
+//     FILE* file = fopen("/usr/share/fonts/dejavu/DejaVuSerif.ttf", "r");
+//     printf("wkexe main:::::::::::::::: %d, %p, %p\n", ret, dir, file);
+// 
+//     __debugbreak();
+// }
+
 class DirectorySystemFontLoader : public SkFontMgr_Custom::SystemFontLoader {
 public:
     DirectorySystemFontLoader(const char* dir)
-        : fBaseDirectory(dir)
     {
+        SkStrSplit(dir, "|", &fBaseDirectorys);
     }
 
-    void loadSystemFonts(const SkTypeface_FreeType::Scanner& scanner,
-        SkFontMgr_Custom::Families* families) const override
+    void loadOneDirSystemFonts(const SkString& dir, const SkTypeface_FreeType::Scanner& scanner, SkFontMgr_Custom::Families* families) const
     {
-        load_directory_fonts(scanner, fBaseDirectory, ".ttf", families);
-        load_directory_fonts(scanner, fBaseDirectory, ".ttc", families);
-        load_directory_fonts(scanner, fBaseDirectory, ".otf", families);
-        load_directory_fonts(scanner, fBaseDirectory, ".pfb", families);
+        load_directory_fonts(scanner, dir, ".ttf", families);
+        load_directory_fonts(scanner, dir, ".ttc", families);
+        load_directory_fonts(scanner, dir, ".otf", families);
+        load_directory_fonts(scanner, dir, ".pfb", families);
 
         if (families->empty()) {
             SkFontStyleSet_Custom* family = new SkFontStyleSet_Custom(SkString());
             families->push_back().reset(family);
             family->appendTypeface(sk_make_sp<SkTypeface_Empty>());
+        }
+    }
+
+    void loadSystemFonts(const SkTypeface_FreeType::Scanner& scanner, SkFontMgr_Custom::Families* families) const override
+    {
+        for (size_t i = 0; i < fBaseDirectorys.count(); ++i) {
+            loadOneDirSystemFonts(fBaseDirectorys[i], scanner, families);
         }
     }
 
@@ -402,18 +461,20 @@ private:
     {
         SkOSFile::Iter iter(directory.c_str(), suffix);
         SkString name;
+        //printf("load_directory_fonts 0: %s, %s\n", directory.c_str(), suffix);
 
         while (iter.next(&name, false)) {
             SkString filename(SkOSPath::Join(directory.c_str(), name.c_str()));
+            //printf("load_directory_fonts 1: %s\n", filename.c_str());
             SkAutoTDelete<SkStream> stream(SkStream::NewFromFile(filename.c_str()));
             if (!stream.get()) {
-                SkDebugf("---- failed to open <%s>\n", filename.c_str());
+                //SkDebugf("---- failed to open <%s>\n", filename.c_str());
                 continue;
             }
 
             int numFaces;
             if (!scanner.recognizedFont(stream, &numFaces)) {
-                SkDebugf("---- failed to open <%s> as a font\n", filename.c_str());
+                //SkDebugf("---- failed to open <%s> as a font\n", filename.c_str());
                 continue;
             }
 
@@ -422,7 +483,7 @@ private:
                 SkString realname;
                 SkFontStyle style = SkFontStyle(); // avoid uninitialized warning
                 if (!scanner.scanFont(stream, faceIndex, &realname, &style, &isFixedPitch, nullptr)) {
-                    SkDebugf("---- failed to open <%s> <%d> as a font\n", filename.c_str(), faceIndex);
+                    //SkDebugf("---- failed to open <%s> <%d> as a font\n", filename.c_str(), faceIndex);
                     continue;
                 }                
 
@@ -438,17 +499,20 @@ private:
             }
         }
 
+        //printf("load_directory_fonts 2: %s\n", directory.c_str());
         SkOSFile::Iter dirIter(directory.c_str());
         while (dirIter.next(&name, true)) {
             if (name.startsWith(".")) {
                 continue;
             }
             SkString dirname(SkOSPath::Join(directory.c_str(), name.c_str()));
+            //printf("load_directory_fonts 3: %s\n", dirname.c_str());
             load_directory_fonts(scanner, dirname, suffix, families);
         }
+        //printf("load_directory_fonts end\n");
     }
 
-    SkString fBaseDirectory;
+    SkTArray<SkString> fBaseDirectorys;
 };
 
 void getFontList3()

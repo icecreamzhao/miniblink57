@@ -14,6 +14,148 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
+// #define _ADVSIMD_ALIGN(x)
+// 
+// typedef unsigned __int8  poly8_t;
+// typedef unsigned __int16 poly16_t;
+// typedef unsigned __int32 poly32_t;
+// typedef unsigned __int64 poly64_t;
+// typedef float float32_t;
+// typedef double float64_t;
+// 
+// ///////////////////////////////////////////////////////////////////////////////
+// //
+// // ARM64 Advanced SIMD 32bit type
+// //
+// typedef union /*__declspec(intrin_type)*/_ADVSIMD_ALIGN(4) __n32
+// {
+//   unsigned __int32    n32_u32[1];
+//   unsigned __int16    n32_u16[2];
+//   unsigned __int8     n32_u8[4];
+//   __int32             n32_i32[1];
+//   __int16             n32_i16[2];
+//   __int8              n32_i8[4];
+//   poly32_t            n32_p32[1];
+//   poly16_t            n32_p16[2];
+//   poly8_t             n32_p8[4];
+//   float               n32_f32[1];
+// } __n32;
+// 
+// 
+// ///////////////////////////////////////////////////////////////////////////////
+// //
+// // ARM64 Advanced SIMD 16bit type
+// //
+// typedef union /*__declspec(intrin_type)*/_ADVSIMD_ALIGN(2) __n16
+// {
+//   unsigned __int16    n16_u16[1];
+//   unsigned __int8     n16_u8[2];
+//   __int16             n16_i16[1];
+//   __int8              n16_i8[2];
+//   poly16_t            n16_p16[1];
+//   poly8_t             n16_p8[2];
+// } __n16;
+// 
+// 
+// ///////////////////////////////////////////////////////////////////////////////
+// //
+// // ARM64 Advanced SIMD 8bit type
+// //
+// typedef union /*__declspec(intrin_type)*/__n8 {
+//   unsigned __int8     n8_u8[1];
+//   __int8              n8_i8[1];
+//   poly8_t             n8_p8[1];
+// } __n8;
+// 
+// 
+// ///////////////////////////////////////////////////////////////////////////////
+// //
+// // ARM64 Advanced SIMD 64bit type
+// //
+// typedef union /*__declspec(intrin_type)*/_ADVSIMD_ALIGN(8) __n64
+// {
+//   unsigned __int64    n64_u64[1];
+//   unsigned __int32    n64_u32[2];
+//   unsigned __int16    n64_u16[4];
+//   unsigned __int8     n64_u8[8];
+//   __int64             n64_i64[1];
+//   __int32             n64_i32[2];
+//   __int16             n64_i16[4];
+//   __int8              n64_i8[8];
+//   poly64_t            n64_p64[1];
+//   poly32_t            n64_p32[2];
+//   poly16_t            n64_p16[4];
+//   poly8_t             n64_p8[8];
+//   float               n64_f32[2];
+//   double              n64_f64[1];
+// } __n64;
+// 
+// 
+// ///////////////////////////////////////////////////////////////////////////////
+// //
+// // ARM64 Advanced SIMD 128bit type
+// //
+// typedef union /*__declspec(intrin_type)*/_ADVSIMD_ALIGN(16) __n128
+// {
+//   unsigned __int64   n128_u64[2];
+//   unsigned __int32   n128_u32[4];
+//   unsigned __int16   n128_u16[8];
+//   unsigned __int8    n128_u8[16];
+//   __int64            n128_i64[2];
+//   __int32            n128_i32[4];
+//   __int16            n128_i16[8];
+//   __int8             n128_i8[16];
+//   poly64_t           n128_p64[2];
+//   poly32_t           n128_p32[4];
+//   poly16_t           n128_p16[8];
+//   poly8_t            n128_p8[16];
+//   float              n128_f32[4];
+//   double              n128_f64[2];
+// 
+//   struct {
+//     __n64  low64;
+//     __n64  high64;
+//   } DUMMYNEONSTRUCT;
+// 
+// } __n128;
+// 
+// typedef struct __n64x2 {
+//   __n64 val[2];
+// } __n64x2;
+// 
+// typedef struct __n64x3 {
+//   __n64 val[3];
+// } __n64x3;
+// 
+// typedef struct __n64x4 {
+//   __n64 val[4];
+// } __n64x4;
+// 
+// typedef struct __n128x2 {
+//   __n128 val[2];
+// } __n128x2;
+// 
+// typedef struct __n128x3 {
+//   __n128 val[3];
+// } __n128x3;
+// 
+// typedef struct __n128x4 {
+//   __n128 val[4];
+// } __n128x4;
+// 
+// 
+// //typedef __Int8x8_t int8x8_t;
+// typedef __n64    float32x2_t;
+// typedef float32x2_t xxxxxxxxx;
+
+// void testNeon()
+// {
+//   __builtin_aarch64_simd_oi __o;
+// }
+
+#include <arm_neon.h>
+
 #include "webdriver/WebDriver.h"
 
 #include "webdriver/CommandLineArguments.h"
@@ -118,7 +260,6 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmd
     return 0;
 }
 #else
-
 class LogThread {
 public:
     LogThread()

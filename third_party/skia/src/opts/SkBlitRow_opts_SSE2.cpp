@@ -4,7 +4,7 @@
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
+#if defined(__i386__) || defined(_M_IX86) || defined(__x86_64__) || defined(_M_X64)
 #include "SkBlitRow_opts_SSE2.h"
 #include "SkBitmapProcState_opts_SSE2.h"
 #include "SkColorPriv.h"
@@ -1010,3 +1010,4 @@ void S32A_D565_Opaque_Dither_SSE2(uint16_t* SK_RESTRICT dst,
         } while (--count != 0);
     }
 }
+#endif // #if defined(__i386__) || defined(_M_IX86) || defined(__x86_64__) || defined(_M_X64)

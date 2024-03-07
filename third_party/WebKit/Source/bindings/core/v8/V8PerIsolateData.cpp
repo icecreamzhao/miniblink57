@@ -72,7 +72,7 @@ static void beforeCallEnteredCallback(v8::Isolate* isolate)
     RELEASE_ASSERT(!ScriptForbiddenScope::isScriptForbidden());
 }
 
-static void microtasksCompletedCallback(v8::Isolate* isolate)
+static void microtasksCompletedCallback(v8::Isolate* isolate, void*)
 {
     V8PerIsolateData::from(isolate)->runEndOfScopeTasks();
 }
@@ -96,7 +96,7 @@ V8PerIsolateData::V8PerIsolateData(WebTaskRunner* taskRunner)
     // FIXME: Remove once all v8::Isolate::GetCurrent() calls are gone.
     isolate()->Enter();
     isolate()->AddBeforeCallEnteredCallback(&beforeCallEnteredCallback);
-    isolate()->AddMicrotasksCompletedCallback(&microtasksCompletedCallback);
+    isolate()->AddMicrotasksCompletedCallback(&microtasksCompletedCallback, nullptr);
     isolate()->SetUseCounterCallback(&useCounterCallback);
 }
 

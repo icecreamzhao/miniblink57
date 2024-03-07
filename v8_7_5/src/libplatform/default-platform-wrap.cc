@@ -1,13 +1,12 @@
 
-#include "default_platform_wrap.h"
-#include "default-platform.h"
+#include "default-platform-wrap.h"
+#include "src/libplatform/default-platform.h"
 
 namespace gin {
 
 DefaultPlatformWrap::DefaultPlatformWrap()
 {
     m_defaultPlatform = new v8::platform::DefaultPlatform();
-    m_defaultPlatform->SetThreadPoolSize(1);
 }
 
 std::shared_ptr<v8::TaskRunner> DefaultPlatformWrap::GetForegroundTaskRunner(v8::Isolate* isolate)

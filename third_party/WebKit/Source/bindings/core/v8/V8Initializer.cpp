@@ -100,8 +100,18 @@ static void reportFatalErrorInMainThread(const char* location,
     CRASH();
 }
 
-static void reportOOMErrorInMainThread(const char* location, bool isJsHeap)
+static void reportOOMErrorInMainThread(
+    const char* location, 
+#if V8_MAJOR_VERSION < 10
+    bool isJsHeap
+#else
+    const v8::OOMDetails& details
+#endif
+)
 {
+#if V8_MAJOR_VERSION >= 10
+    bool isJsHeap = details.is_heap_oom;
+#endif
     int memoryUsageMB = Platform::current()->actualMemoryUsageMB();
     DVLOG(1) << "V8 " << (isJsHeap ? "javascript" : "process") << " OOM: ("
              << location << ").  Current memory usage: " << memoryUsageMB
@@ -323,6 +333,7 @@ static void failedAccessCheckCallbackInMainThread(v8::Local<v8::Object> host,
     BindingSecurity::failedAccessCheckFor(isolate, target);
 }
 
+#if V8_MAJOR_VERSION < 10
 static bool codeGenerationCheckCallbackInMainThread(v8::Local<v8::Context> context, v8::Local<v8::String> source)
 {
     if (ExecutionContext* executionContext = toExecutionContext(context)) {
@@ -331,6 +342,18 @@ static bool codeGenerationCheckCallbackInMainThread(v8::Local<v8::Context> conte
     }
     return false;
 }
+#else
+static v8::ModifyCodeGenerationFromStringsResult
+codeGenerationCheckCallbackInMainThread(v8::Local<v8::Context> context, v8::Local<v8::Value> source, bool is_code_like)
+{
+    v8::ModifyCodeGenerationFromStringsResult result;
+    if (ExecutionContext* executionContext = toExecutionContext(context)) {
+        if (ContentSecurityPolicy* policy = toDocument(executionContext)->contentSecurityPolicy())
+            result.codegen_allowed = policy->allowEval(ScriptState::from(context), ContentSecurityPolicy::SendReport, ContentSecurityPolicy::WillThrowException);
+    }
+    return result;
+}
+#endif
 
 static bool allowWasmCompileCallbackInMainThread(v8::Isolate* isolate,
     v8::Local<v8::Value> source,
@@ -371,10 +394,17 @@ static bool allowWasmCompileCallbackInMainThread(v8::Isolate* isolate,
 // }
 
 #if V8_MAJOR_VERSION >= 7
+#if V8_MAJOR_VERSION >= 7 && V8_MAJOR_VERSION < 10
 static v8::MaybeLocal<v8::Promise> hostImportModuleDynamically(
     v8::Local<v8::Context> context,
     v8::Local<v8::ScriptOrModule> v8Referrer,
     v8::Local<v8::String> v8Specifier)
+#else
+v8::MaybeLocal<v8::Promise> hostImportModuleDynamically(
+    v8::Local<v8::Context> context, v8::Local<v8::Data> host_defined_options,
+    v8::Local<v8::Value> v8ReferrerUrl, v8::Local<v8::String> v8Specifier,
+    v8::Local<v8::FixedArray> importAssertions)
+#endif
 {
     v8::EscapableHandleScope handleScope(context->GetIsolate());
     v8::Context::Scope scope(context);
@@ -389,7 +419,9 @@ static v8::MaybeLocal<v8::Promise> hostImportModuleDynamically(
     }
 
     String specifier = toCoreStringWithNullCheck(v8Specifier);
+#if V8_MAJOR_VERSION >= 7 && V8_MAJOR_VERSION < 10
     v8::Local<v8::Value> v8ReferrerUrl = v8Referrer->GetResourceName();
+#endif
     KURL referrerUrl;
     if (v8ReferrerUrl->IsString()) {
         String referrerResourceUrlStr = toCoreString(v8::Local<v8::String>::Cast(v8ReferrerUrl));
@@ -445,8 +477,9 @@ static void initializeV8Common(v8::Isolate* isolate)
     isolate->SetHostImportModuleDynamicallyCallback(hostImportModuleDynamically);
     isolate->SetHostInitializeImportMetaObjectCallback(hostGetImportMetaProperties);
 #endif
-
+#if V8_MAJOR_VERSION <= 7
     v8::Debug::SetLiveEditEnabled(isolate, false);
+#endif
 
     isolate->SetMicrotasksPolicy(v8::MicrotasksPolicy::kScoped);
 }
@@ -526,10 +559,13 @@ void V8Initializer::initializeMainThread()
     isolate->AddMessageListenerWithErrorLevel(
         messageHandlerInMainThread,
         v8::Isolate::kMessageError | v8::Isolate::kMessageWarning | v8::Isolate::kMessageInfo | v8::Isolate::kMessageDebug | v8::Isolate::kMessageLog);
-    isolate->SetFailedAccessCheckCallbackFunction(
-        failedAccessCheckCallbackInMainThread);
-    isolate->SetAllowCodeGenerationFromStringsCallback(
-        codeGenerationCheckCallbackInMainThread);
+    isolate->SetFailedAccessCheckCallbackFunction(failedAccessCheckCallbackInMainThread);
+#if V8_MAJOR_VERSION <= 7
+    isolate->SetAllowCodeGenerationFromStringsCallback(codeGenerationCheckCallbackInMainThread);
+#else
+    isolate->SetModifyCodeGenerationFromStringsCallback(codeGenerationCheckCallbackInMainThread);
+#endif
+
     //   isolate->SetAllowWasmCompileCallback(allowWasmCompileCallbackInMainThread);
     //   isolate->SetAllowWasmInstantiateCallback(allowWasmInstantiateCallbackInMainThread);
     if (RuntimeEnabledFeatures::v8IdleTasksEnabled()) {
@@ -539,10 +575,11 @@ void V8Initializer::initializeMainThread()
 
     isolate->SetPromiseRejectCallback(promiseRejectHandlerInMainThread);
 
+#if V8_MAJOR_VERSION < 10
     if (v8::HeapProfiler* profiler = isolate->GetHeapProfiler())
         profiler->SetWrapperClassInfoProvider(
             WrapperTypeInfo::NodeClassId, &RetainedDOMInfo::createRetainedDOMInfo);
-
+#endif
     ASSERT(ThreadState::mainThreadState());
     ThreadState::mainThreadState()->addInterruptor(
         WTF::makeUnique<V8IsolateInterruptor>(isolate));

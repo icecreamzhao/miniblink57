@@ -166,7 +166,7 @@ ExceptionCatcher::~ExceptionCatcher()
         return;
 
     if (topHandler)
-        topHandler->handler(topHandler->data, *v8::String::Utf8Value(m_tryCatch.Exception()));
+        topHandler->handler(topHandler->data, *v8::String::Utf8Value(v8::Isolate::GetCurrent(), m_tryCatch.Exception()));
 }
 
 } // namespace blink

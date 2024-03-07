@@ -12,6 +12,11 @@
 #include <string.h>
 #include "../../mbvip/core/mb.h"
 
+#include <stdio.h>
+#include <sys/types.h>
+#include <dirent.h>
+#include <string.h>
+
 mbWebView MB_CALL_TYPE handleCreateView(mbWebView webView, void* param, mbNavigationType navigationType, const utf8* url, const mbWindowFeatures* windowFeatures)
 {
     mbWebView mbView = mbCreateWebWindow(MB_WINDOW_TYPE_POPUP, NULL, 110, 60, 600, 700);
@@ -49,13 +54,31 @@ static BOOL MB_CALL_TYPE handleLoadUrlBegin(mbWebView webView, void* param, cons
     return TRUE;
 }
 
+// int main1()
+// {
+//     DIR* dirp = opendir("/usr/share/fonts/");
+//     if (!dirp) {
+//         printf("open dir failed.\r\n");
+//         return -1;
+//     }
+// 
+//     struct dirent* dirent;
+//     while ((dirent = readdir(dirp))) {
+//         if (!strcmp(dirent->d_name, ".") || !strcmp(dirent->d_name, ".."))
+//             continue;
+//         printf("readdir: %s\n", dirent->d_name);
+//     }
+//     printf("\n");
+// 
+//     return closedir(dirp);
+// }
+
 int main()
 {
 //     printf("wkexe 11\n");
 //     void* g_hMiniblinkMod = dlopen("/home/daniel/Desktop/wkexe/miniblink.so", RTLD_LAZY);
 //     printf("wkexe 22: %p\n", g_hMiniblinkMod);
     mbInit(nullptr);
-    printf("wkexe: %p\n", handleLoadUrlBegin);
 
     mbWebView mbView = mbCreateWebWindow(MB_WINDOW_TYPE_POPUP, NULL, 100, 50, 600, 700);
     ::mbOnLoadUrlBegin(mbView, handleLoadUrlBegin, nullptr);
@@ -64,7 +87,8 @@ int main()
     //mbLoadURL(mbView, "view-source:https://www.baidu.com");
     //mbLoadURL(mbView, u8"view-source:/home/euweb/桌面/mini_electron/linux/main4.htm");
     //::mbLoadURL(mbView, "https://www.jjwxc.net/");
-    ::mbLoadURL(mbView, "https://www.qidian.com/");
+    //::mbLoadURL(mbView, "https://www.qidian.com/");
+    ::mbLoadURL(mbView, "https://isrc.iscas.ac.cn/");
 
     ::mbShowWindow(mbView, TRUE);
     ::mbRunMessageLoop();

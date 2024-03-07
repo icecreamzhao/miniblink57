@@ -224,7 +224,7 @@ void MB_CALL_TYPE mbOnMouseOverUrlChanged(mbWebView webviewHandle, mbMouseOverUr
 
 void MB_CALL_TYPE mbOnLoadingFinish(mbWebView webviewHandle, mbLoadingFinishCallback callback, void* param) 
 { 
-	  checkThreadCallIsValid(__FUNCTION__);
+	checkThreadCallIsValid(__FUNCTION__);
     mb::MbWebView* webview = (mb::MbWebView*)common::LiveIdDetect::get()->getPtr((int64_t)webviewHandle);
     if (!webview)
         return;

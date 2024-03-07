@@ -37,6 +37,7 @@ namespace mb {
 unsigned int g_mbMask = 0;
 bool g_enableNativeSetCapture = true;
 bool g_enableNativeSetFocus = true;
+bool g_disableUserGestureIndicator = true;
 }
 
 mbStringPtr MB_CALL_TYPE mbCreateString(const utf8* str, size_t length)
@@ -120,11 +121,19 @@ void MB_CALL_TYPE mbSetInitSettings(mbSettings* settings, const char* name, cons
         settings->mask = MB_ENABLE_DISABLE_CC;
 }
 
+namespace blink {
+void initPushAllRegistersShellcode();
+}
+
 void MB_CALL_TYPE mbInit(const mbSettings* settings)
 {
     if (g_mbIsInit)
         return;
     g_mbIsInit = true;
+
+#if defined(__LP64__) || defined(_WIN64) || __SIZEOF_LONG__ == 8
+    blink::initPushAllRegistersShellcode();
+#endif
 
 #if !defined(WIN32)
     gtk_init(nullptr, nullptr);

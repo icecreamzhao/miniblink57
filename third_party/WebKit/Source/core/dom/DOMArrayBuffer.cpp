@@ -15,8 +15,12 @@ v8::Local<v8::Object> DOMArrayBuffer::wrap(
     DCHECK(!DOMDataStore::containsWrapper(this, isolate));
 
     const WrapperTypeInfo* wrapperTypeInfo = this->wrapperTypeInfo();
+#if V8_MAJOR_VERSION < 10
     v8::Local<v8::Object> wrapper = v8::ArrayBuffer::New(isolate, data(), byteLength());
-
+#else
+    v8::Local<v8::ArrayBuffer> wrapper = v8::ArrayBuffer::New(isolate, byteLength());
+    memcpy(wrapper->Data(), data(), byteLength());
+#endif
     return associateWithWrapper(isolate, wrapperTypeInfo, wrapper);
 }
 

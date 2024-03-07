@@ -82,7 +82,7 @@ private:
     void endUserGesture() override;
     std::unique_ptr<v8_inspector::StringBuffer> valueSubtype(
         v8::Local<v8::Value>) override;
-    bool formatAccessorsAsProperties(v8::Local<v8::Value>) override;
+    bool formatAccessorsAsProperties(v8::Local<v8::Value>) /*override*/;
     double currentTimeMS() override;
     bool isInspectableHeapObject(v8::Local<v8::Object>) override;
     void consoleTime(const v8_inspector::StringView& title) override;

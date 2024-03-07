@@ -42,7 +42,7 @@ void GoToUrlCommandHandler::ExecuteInternal(const MBCommandExecutor& executor, c
 
         const int kSize = url.size() + 200;
         char* output = (char*)malloc(kSize);
-        sprintf_s(output, kSize - 1, "GoToUrlCommandHandler: %d, %s\n", executor.view(), url.c_str());
+        sprintf(output, "GoToUrlCommandHandler: %d, %s\n", executor.view(), url.c_str());
         OutputDebugStringA(output);
         free(output);
 

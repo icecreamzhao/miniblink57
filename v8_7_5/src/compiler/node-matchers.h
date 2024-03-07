@@ -6,6 +6,7 @@
 #define V8_COMPILER_NODE_MATCHERS_H_
 
 #include <cmath>
+#include <math.h>
 
 #include "src/base/compiler-specific.h"
 #include "src/compiler/node.h"

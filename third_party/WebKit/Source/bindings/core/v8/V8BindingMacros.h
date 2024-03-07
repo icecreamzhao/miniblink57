@@ -31,6 +31,8 @@
 #ifndef V8BindingMacros_h
 #define V8BindingMacros_h
 
+#include "v8.h"
+
 namespace blink {
 
 // type is an instance of class template V8StringResource<>,
@@ -99,6 +101,13 @@ inline bool v8Call(v8::MaybeLocal<T> maybeLocal,
     bool success = maybeLocal.ToLocal(&outVariable);
     ASSERT(success || tryCatch.HasCaught());
     return success;
+}
+
+template <typename T>
+inline bool v8Call(T maybeLocal, T& outVariable, v8::TryCatch& tryCatch)
+{
+    outVariable = maybeLocal;
+    return true;
 }
 
 } // namespace blink

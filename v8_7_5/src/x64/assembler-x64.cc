@@ -2,11 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#if V8_TARGET_ARCH_X64
 #include "src/x64/assembler-x64.h"
 
 #include <cstring>
-
-#if V8_TARGET_ARCH_X64
 
 #if V8_LIBC_MSVCRT
 #include <intrin.h> // _xgetbv()
@@ -1848,7 +1847,7 @@ namespace internal {
         emit(static_cast<byte>(imm.value_ & 0xFF));
         emit(static_cast<byte>(imm.value_ >> 8));
     }
-
+    
     void Assembler::emit_mov(Register dst, Operand src, int size)
     {
         EnsureSpace ensure_space(this);

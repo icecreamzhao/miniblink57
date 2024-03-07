@@ -131,10 +131,15 @@ uLong ZEXPORT adler32_z(adler, buf, len)
 }
 
 /* ========================================================================= */
-uLong ZEXPORT adler32(adler, buf, len)
+uLong ZEXPORT Cr_z_adler32(adler, buf, len)
     uLong adler;
     const Bytef *buf;
     uInt len;
+{
+    return adler32_z(adler, buf, len);
+}
+
+uLong ZEXPORT adler32(uLong adler, const Bytef* buf, uInt len)
 {
     return adler32_z(adler, buf, len);
 }

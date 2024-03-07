@@ -1617,6 +1617,10 @@ WebLocalFrameImpl::WebLocalFrameImpl(WebTreeScopeType scope,
 {
     DCHECK(m_client);
     frameCount++;
+
+    char output[100] = { 0 };
+    sprintf_s(output, 99, "WebLocalFrameImpl::WebLocalFrameImpl 1: %p\n", this);
+    OutputDebugStringA(output);
 }
 
 WebLocalFrameImpl::WebLocalFrameImpl(WebRemoteFrame* oldWebFrame,
@@ -1626,6 +1630,9 @@ WebLocalFrameImpl::WebLocalFrameImpl(WebRemoteFrame* oldWebFrame,
             : WebTreeScopeType::Document,
         client)
 {
+    char output[100] = { 0 };
+    sprintf_s(output, 99, "WebLocalFrameImpl::WebLocalFrameImpl 2: %p\n", this);
+    OutputDebugStringA(output);
 }
 
 WebLocalFrameImpl::~WebLocalFrameImpl()

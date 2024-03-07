@@ -8,6 +8,7 @@
 #include <stdint.h>
 
 #include <cmath>
+#include <math.h>
 #include <type_traits>
 
 #include "src/base/macros.h"

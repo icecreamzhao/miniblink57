@@ -66,8 +66,12 @@ DOMSharedArrayBuffer* V8SharedArrayBuffer::toImpl(v8::Local<v8::Object> object)
 
     // Transfer the ownership of the allocated memory to an SharedArrayBuffer without
     // copying.
+#if V8_MAJOR_VERSION > 7
+    WTF::ArrayBufferContents contents(v8buffer->Data(), v8buffer->ByteLength(), WTF::ArrayBufferContents::Shared);
+#else
     v8::SharedArrayBuffer::Contents v8Contents = v8buffer->Externalize();
     WTF::ArrayBufferContents contents(v8Contents.Data(), v8Contents.ByteLength(), WTF::ArrayBufferContents::Shared);
+#endif
     DOMSharedArrayBuffer* buffer = DOMSharedArrayBuffer::create(contents);
     v8::Local<v8::Object> associatedWrapper = buffer->associateWithWrapper(v8::Isolate::GetCurrent(), buffer->wrapperTypeInfo(), object);
     DCHECK(associatedWrapper == object);
