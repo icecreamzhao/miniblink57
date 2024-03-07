@@ -127,7 +127,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)..\out\win_$(Configuration)_$(Platform)\</OutDir>
     <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\win_$(Configuration)_$(Platform)\</IntDir>
-    <LinkIncremental>true</LinkIncremental>
+    <LinkIncremental>
+    </LinkIncremental>
     <LibraryPath>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\;$(LibraryPath)</LibraryPath>
     <TargetName>miniblink_5775_x64</TargetName>
   </PropertyGroup>
@@ -220,7 +221,7 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <ExceptionHandling>false</ExceptionHandling>
       <BufferSecurityCheck>false</BufferSecurityCheck>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
       <InlineFunctionExpansion>Default</InlineFunctionExpansion>
     </ClCompile>
     <Link>
@@ -234,8 +235,8 @@
       <AdditionalOptions>/FORCE:UNRESOLVED /NODEFAULTLIB:library %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(SolutionDir)..\out\win_$(Configuration)_$(Platform)\\miniblink_5775_x64.dll</OutputFile>
       <ModuleDefinitionFile>$(SolutionDir)../mbvip/core/mtmb.def</ModuleDefinitionFile>
-      <DelayLoadDLLs>ffmpeg.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
-      <ProgramDatabaseFile>$(SolutionDir)..\out\win_$(Configuration)_x86\miniblink_5775_x32.pdb</ProgramDatabaseFile>
+      <DelayLoadDLLs>ffmpeg_x64.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <ProgramDatabaseFile>$(SolutionDir)..\out\win_$(Configuration)_x64\miniblink_5775_x32.pdb</ProgramDatabaseFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">
@@ -4055,30 +4056,39 @@
     <ClCompile Include="..\..\third_party\WebKit\Source\core\xmlhttprequest\XMLHttpRequestUpload.cpp" />
     <ClCompile Include="..\..\v8_108\third_party\inspector_protocol\crdtp\cbor_crdtp.cc">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\v8_108\third_party\inspector_protocol\crdtp\dispatch_crdtp.cc">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\v8_108\third_party\inspector_protocol\crdtp\error_support.cc">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\v8_108\third_party\inspector_protocol\crdtp\json_crdtp.cc">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\v8_108\third_party\inspector_protocol\crdtp\json_platform_v8.cc">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\v8_108\third_party\inspector_protocol\crdtp\protocol_core.cc">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\v8_108\third_party\inspector_protocol\crdtp\serializable_crdtp.cc">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\v8_108\third_party\inspector_protocol\crdtp\span_crdtp.cc">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\v8_108\third_party\inspector_protocol\crdtp\status_crdtp.cc">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\wke\wke.cpp" />
     <ClCompile Include="..\..\wke\wke2.cpp" />
