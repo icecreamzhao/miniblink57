@@ -51,6 +51,7 @@
     <ClInclude Include="..\..\node\cares\src\bitncmp.h" />
     <ClInclude Include="..\..\node\cares\src\config-win32.h" />
     <ClInclude Include="..\..\node\cares\src\setup_once.h" />
+    <ClInclude Include="..\..\node\nodeblink.h" />
     <ClInclude Include="..\..\node\src\async-wrap-inl.h" />
     <ClInclude Include="..\..\node\src\async-wrap.h" />
     <ClInclude Include="..\..\node\src\base-object-inl.h" />
@@ -295,6 +296,7 @@
     <ClCompile Include="..\..\node\cares\src\windows_port.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\..\node\nodeblink.cpp" />
     <ClCompile Include="..\..\node\src\async-wrap.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -696,7 +698,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Full</Optimization>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;NODE_WANT_INTERNALS;HAVE_OPENSSL;CARES_STATICLIB;BUILDING_UV_SHARED;_WIN32_WINNT=0x0601;HAVE_PERFCTR=1;ENABLE_NODEJS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/Zc:threadSafeInit- %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <StringPooling>true</StringPooling>
@@ -704,6 +706,7 @@
       <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
       <EnableEnhancedInstructionSet>
       </EnableEnhancedInstructionSet>
+      <AdditionalIncludeDirectories>..\..\;..\..\node\uv\include;..\..\node\cares\include;..\..\v8_7_5\include;..\..\node\openssl\openssl\include;..\..\node\openssl;../../third_party/zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

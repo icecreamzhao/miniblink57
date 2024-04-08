@@ -1225,6 +1225,9 @@
     <Filter Include="v8_108\third_party\inspector_protocol\crdtp">
       <UniqueIdentifier>{6339787b-2d4b-43ac-afa1-93b1bf9c837e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="node">
+      <UniqueIdentifier>{b6505f9c-d141-462e-affc-e99cb1ba2509}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

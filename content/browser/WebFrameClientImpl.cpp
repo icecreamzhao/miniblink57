@@ -28,7 +28,7 @@
 #include "net/DataURL.h"
 
 #include "wke/wkeGlobalVar.h"
-//#include "node/nodeblink.h"
+#include "node/nodeblink.h"
 
 #include "media/blink/url_index.h"
 
