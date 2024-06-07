@@ -38,6 +38,7 @@ static std::string urlDecode(const std::string& str)
     return strTemp;
 }
 
+// attachment; filename="11??1.docx"; filename*=UTF-8''11%E6%B5%8B%E8%AF%951.docx
 static base::string16 getSaveNameFromContentDisposition(const std::string& str)
 {
     if (0 == str.size())
@@ -49,10 +50,15 @@ static base::string16 getSaveNameFromContentDisposition(const std::string& str)
     if (std::string::npos == str.find("name"))
         return base::string16();
 
-    size_t pos1 = str.find('=');
-    if (std::string::npos == pos1)
-        return base::string16();
-    pos1++;
+    size_t pos1 = str.find("UTF-8''");
+    if (std::string::npos == pos1) {
+        pos1 = str.find('=');
+        if (std::string::npos == pos1)
+            return base::string16();
+        pos1++;
+    } else {
+        pos1 += 7; // UTF-8''
+    }
 
     size_t pos2 = str.size();
     std::string path = str.substr(pos1, pos2 - pos1);
