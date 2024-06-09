@@ -636,6 +636,7 @@ static void setRequestHead(WebLocalFrame* webFrame, WebPage* webPage, WebURLRequ
         acceptValue = kStylesheetAcceptHeader;
         break;
     case blink::WebURLRequest::RequestContextFavicon:
+    case blink::WebURLRequest::RequestContextImage:
     case blink::WebURLRequest::RequestContextImageSet:
         acceptValue = kImageAcceptHeader;
         break;
@@ -1025,8 +1026,8 @@ void WebFrameClientImpl::loadURLExternally(const WebURLRequest& request, WebNavi
     blink::WebURLLoader* loader;
     loader = Platform::current()->createURLLoader();
 
-    wkeDownload2Callback cb = m_webPage->wkeHandler().download2Callback;
-    void* param = m_webPage->wkeHandler().download2CallbackParam;
+//     wkeDownload2Callback cb = m_webPage->wkeHandler().download2Callback;
+//     void* param = m_webPage->wkeHandler().download2CallbackParam;
 
     blink::WebURLRequest requestWrapped(request);
     WebURLLoaderClientWrapped* clientWrapped = new WebURLLoaderClientWrapped(this, m_webPage, m_frame, downloadName, kurl);
