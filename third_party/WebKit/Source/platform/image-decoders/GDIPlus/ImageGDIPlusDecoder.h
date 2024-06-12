@@ -27,30 +27,23 @@
 #define ImageGDIPlusDecoder_h
 
 #include "platform/image-decoders/bmp/BMPImageDecoder.h"
-#include <wtf/OwnPtr.h>
-
-namespace Gdiplus {
-class Bitmap;
-}
 
 namespace blink {
-
-class GDIPlusReader;
 
 // This class decodes the PNG image format.
 class ImageGDIPlusDecoder : public ImageDecoder {
 public:
-    enum GDIPlusDecoderType{
+    enum GDIPlusDecoderType {
         GDIPlusDecoderPNG,
         GDIPlusDecoderJPG
     };
 
-    ImageGDIPlusDecoder(ImageSource::AlphaOption, ImageSource::GammaAndColorProfileOption, GDIPlusDecoderType type, size_t maxDecodedBytes);
+    ImageGDIPlusDecoder(ImageDecoder::AlphaOption, const ColorBehavior& colorBehavior, GDIPlusDecoderType type, size_t maxDecodedBytes);
     virtual ~ImageGDIPlusDecoder();
 
-    virtual String filenameExtension() const override;
+    String filenameExtension() const override { return "bmp"; }
 
-    virtual void setData(SharedBuffer*, bool allDataReceived) override;
+    virtual void onSetData(SegmentReader* data) override;
 
     // ImageDecoder:
     // CAUTION: setFailed() deletes |m_reader|.  Be careful to avoid
@@ -59,11 +52,18 @@ public:
     bool setFailed() override;
 
 protected:
+    void setDataImpl(PassRefPtr<SegmentReader> data, bool allDataReceived);
+
+    RefPtr<SharedBuffer> m_dummyData;
     GDIPlusDecoderType m_type;
 
     // ImageDecoder:
     void decodeSize() override { decode(true); }
     void decode(size_t) override { decode(false); }
+
+    uint32_t readUint32(int offset) const;
+
+    static uint32_t readUint32(const char* data, int offset);
 
     // Decodes the image.  If |onlySize| is true, stops decoding after
     // calculating the image size. If decoding fails but there is no more
@@ -74,10 +74,18 @@ protected:
     // calculating the image size. Returns whether decoding succeeded.
     bool decodeHelper(bool onlySize);
 
-    // The reader used to do most of the BMP decoding.
-    OwnPtr<GDIPlusReader> m_reader;
+    // Processes the file header at the beginning of the data.  Sets
+    // |imgDataOffset| based on the header contents. Returns true if the
+    // file header could be decoded.
+    bool processFileHeader(size_t& imgDataOffset);
 
-    Gdiplus::Bitmap* m_gdipBitmap;
+    // An index into |m_data| representing how much we've already decoded.
+    // Note that this only tracks data _this_ class decodes; once the
+    // BMPImageReader takes over this will not be updated further.
+    size_t m_decodedOffset;
+
+    // The reader used to do most of the BMP decoding.
+    std::unique_ptr<BMPImageReader> m_reader;
 };
 
 } // namespace blink
