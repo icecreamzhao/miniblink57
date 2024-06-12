@@ -711,6 +711,8 @@ static xmlWrapOpenFunc xmlWrapOpen = xmlWrapOpenNative;
 typedef gzFile (* xmlWrapGzOpenFunc) (const char *f, const char *mode);
 static xmlWrapGzOpenFunc xmlWrapGzOpen = gzopen;
 #endif
+
+#pragma warning(disable: 4996)
 /**
  * xmlInitPlatformSpecificIo:
  *
@@ -3608,6 +3610,15 @@ xmlOutputBufferFlush(xmlOutputBufferPtr out) {
 }
 #endif /* LIBXML_OUTPUT_ENABLED */
 
+char* my_getcwd(char* DstBuf, int SizeInBytes)
+{
+#ifdef _WIN64
+    return _getcwd(DstBuf, SizeInBytes);
+#else
+    return getcwd(DstBuf, SizeInBytes);
+#endif
+}
+
 /**
  * xmlParserGetDirectory:
  * @filename:  the path to a file
@@ -3649,7 +3660,7 @@ xmlParserGetDirectory(const char *filename) {
 	else *cur = 0;
 	ret = xmlMemStrdup(dir);
     } else {
-        if (getcwd(dir, 1024) != NULL) {
+        if (my_getcwd(dir, 1024) != NULL) {
 	    dir[1023] = 0;
 	    ret = xmlMemStrdup(dir);
 	}

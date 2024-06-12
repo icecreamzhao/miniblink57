@@ -39,19 +39,37 @@ public:
 
     void attachIsolate(v8::Isolate* isolate)
     {
+#if V8_MAJOR_VERSION > 7
+        v8_isolate_ = isolate;
+#else
         isolate_ = isolate;
+#endif
+        
+        
     }
 
     void detachIsolate(v8::Isolate* isolate)
     {
+#if V8_MAJOR_VERSION > 7
+        v8_isolate_ = nullptr;
+#else
         isolate_ = nullptr;
+#endif
     }
 
     std::vector<std::pair<void*, void*>>* leakV8References();
 
     // v8::EmbedderHeapTracer implementation.
-    void TracePrologue() final;
-    void TraceEpilogue() final;
+    void TracePrologue(
+#if V8_MAJOR_VERSION > 7
+        v8::EmbedderHeapTracer::TraceFlags flags
+#endif
+    ) final;
+    void TraceEpilogue(
+#if V8_MAJOR_VERSION > 7
+        v8::EmbedderHeapTracer::TraceSummary* trace_summary
+#endif
+    ) final;
     void EnterFinalPause(EmbedderStackState) final;
     void RegisterV8References(const std::vector<std::pair<void*, void*>>&) final;
     bool AdvanceTracing(double) final;

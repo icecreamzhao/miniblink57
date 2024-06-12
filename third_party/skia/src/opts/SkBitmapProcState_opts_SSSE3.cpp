@@ -4,7 +4,7 @@
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
+#if defined(__i386__) || defined(_M_IX86) || defined(__x86_64__) || defined(_M_X64)
 #include "SkBitmapProcState_opts_SSSE3.h"
 #include "SkColorPriv.h"
 #include "SkPaint.h"
@@ -767,3 +767,4 @@ void S32_alpha_D32_filter_DXDY_SSSE3(const SkBitmapProcState& s,
 }
 
 #endif
+#endif // #if defined(__i386__) || defined(_M_IX86) || defined(__x86_64__) || defined(_M_X64)

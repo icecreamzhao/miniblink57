@@ -9,6 +9,7 @@
 #include <limits.h> // Required for INT_MAX etc.
 #include <stdarg.h>
 #include <cmath>
+#include <math.h>
 #include "src/globals.h" // Required for V8_INFINITY
 
 // ----------------------------------------------------------------------------

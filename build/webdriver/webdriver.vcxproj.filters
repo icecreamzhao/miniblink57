@@ -1,0 +1,305 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{3a4ce0f4-5050-42c1-bf6e-2a9c54180474}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\civetweb">
+      <UniqueIdentifier>{c758b663-bbd8-494a-846c-a5ac0b282efe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\CommandHandlers">
+      <UniqueIdentifier>{41b9f66d-c12e-4490-8e36-2e5d456eef5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\server">
+      <UniqueIdentifier>{b603f2d7-dfd1-43bb-9fcb-46d391b43acb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\jsoncpp">
+      <UniqueIdentifier>{a67515cd-b44f-47f7-9fd9-ea1538726249}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\webdriver\WebDriver.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\webdriver\MBServer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\webdriver\MBSession.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\webdriver\MBCommandExecutor.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\webdriver\MBCommandHandler.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\webdriver\server\session.h">
+      <Filter>src\server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\webdriver\server\command.h">
+      <Filter>src\server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\webdriver\server\command_handler.h">
+      <Filter>src\server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\webdriver\server\command_types.h">
+      <Filter>src\server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\webdriver\server\errorcodes.h">
+      <Filter>src\server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\webdriver\server\response.h">
+      <Filter>src\server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\webdriver\server\server.h">
+      <Filter>src\server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\webdriver\jsoncpp\jsoncpp.h">
+      <Filter>src\jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\webdriver\civetweb\CivetServer.h">
+      <Filter>src\civetweb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\webdriver\civetweb\civetweb.h">
+      <Filter>src\civetweb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\webdriver\civetweb\civetweb_private_lua.h">
+      <Filter>src\civetweb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\webdriver\server\uri_info.h">
+      <Filter>src\server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\webdriver\CommandHandlerRepository.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\webdriver\CommandHandlers\NewSessionCommandHandler.h">
+      <Filter>src\CommandHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\webdriver\CommandLineArguments.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\webdriver\StringUtilities.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\webdriver\CommandHandlers\GoToUrlCommandHandler.h">
+      <Filter>src\CommandHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\webdriver\CommandHandlers\FindElementCommandHandler.h">
+      <Filter>src\CommandHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\webdriver\CommandHandlers\FindElementsCommandHandler.h">
+      <Filter>src\CommandHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\webdriver\WebDriverConstants.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\webdriver\CommandHandlers\ElementUtil.h">
+      <Filter>src\CommandHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\webdriver\js.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\webdriver\atoms.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\webdriver\CommandHandlers\SendKeysCommandHandler.h">
+      <Filter>src\CommandHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\webdriver\CommandHandlers\ClickElementCommandHandler.h">
+      <Filter>src\CommandHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\webdriver\server\wd_logging.h">
+      <Filter>src\server</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\WebDriver.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\MBServer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\MBSession.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\MBCommandExecutor.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\MBCommandHandler.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\server\command.cpp">
+      <Filter>src\server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\server\response.cpp">
+      <Filter>src\server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\server\server.cpp">
+      <Filter>src\server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\jsoncpp\jsoncpp.cpp">
+      <Filter>src\jsoncpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\civetweb\civetweb.c">
+      <Filter>src\civetweb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\server\uri_info.cpp">
+      <Filter>src\server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\CommandHandlerRepository.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\CommandHandlers\NewSessionCommandHandler.cpp">
+      <Filter>src\CommandHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\CommandLineArguments.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\StringUtilities.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\CommandHandlers\GoToUrlCommandHandler.cpp">
+      <Filter>src\CommandHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\CommandHandlers\FindElementsCommandHandler.cpp">
+      <Filter>src\CommandHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\CommandHandlers\FindElementCommandHandler.cpp">
+      <Filter>src\CommandHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\CommandHandlers\ElementUtil.cpp">
+      <Filter>src\CommandHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\js.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\atoms.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\CommandHandlers\SendKeysCommandHandler.cpp">
+      <Filter>src\CommandHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\CommandHandlers\ClickElementCommandHandler.cpp">
+      <Filter>src\CommandHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\CommandHandlers\GetElementTextCommandHandler.cpp">
+      <Filter>src\CommandHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\CommandHandlers\GoForwardCommandHandler.cpp">
+      <Filter>src\CommandHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\CommandHandlers\GoBackCommandHandler.cpp">
+      <Filter>src\CommandHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\CommandHandlers\RefreshCommandHandler.cpp">
+      <Filter>src\CommandHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\CommandHandlers\ExecuteScriptCommandHandler.cpp">
+      <Filter>src\CommandHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\CommandHandlers\GetTitleCommandHandler.cpp">
+      <Filter>src\CommandHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\CommandHandlers\GetElementAttributeCommandHandler.cpp">
+      <Filter>src\CommandHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\CommandHandlers\GetTimeoutsCommandHandler.cpp">
+      <Filter>src\CommandHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\CommandHandlers\CreateNewWindowCommandHandler.cpp">
+      <Filter>src\CommandHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\CommandHandlers\CloseWindowCommandHandler.cpp">
+      <Filter>src\CommandHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\CommandHandlers\GetAllWindowHandlesCommandHandler.cpp">
+      <Filter>src\CommandHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\CommandHandlers\GetCurrentWindowHandleCommandHandler.cpp">
+      <Filter>src\CommandHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\CommandHandlers\SwitchToWindowCommandHandler.cpp">
+      <Filter>src\CommandHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\CommandHandlers\ExecuteAsyncScriptCommandHandler.cpp">
+      <Filter>src\CommandHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\CommandHandlers\SetTimeoutsCommandHandler.cpp">
+      <Filter>src\CommandHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\CommandHandlers\ReleaseActionsCommandHandler.cpp">
+      <Filter>src\CommandHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\CommandHandlers\SetWindowRectCommandHandler.cpp">
+      <Filter>src\CommandHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\CommandHandlers\ScreenshotCommandHandler.cpp">
+      <Filter>src\CommandHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\CommandHandlers\DismissAlertCommandHandler.cpp">
+      <Filter>src\CommandHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\CommandHandlers\AcceptAlertCommandHandler.cpp">
+      <Filter>src\CommandHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\CommandHandlers\GetAlertTextCommandHandler.cpp">
+      <Filter>src\CommandHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\CommandHandlers\SwitchToFrameCommandHandler.cpp">
+      <Filter>src\CommandHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\webdriver\CommandHandlers\QuitCommandHandler.cpp">
+      <Filter>src\CommandHandlers</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\webdriver\civetweb\handle_form.inl">
+      <Filter>src\civetweb</Filter>
+    </None>
+    <None Include="..\..\webdriver\civetweb\md5.inl">
+      <Filter>src\civetweb</Filter>
+    </None>
+    <None Include="..\..\webdriver\civetweb\mod_duktape.inl">
+      <Filter>src\civetweb</Filter>
+    </None>
+    <None Include="..\..\webdriver\civetweb\mod_lua.inl">
+      <Filter>src\civetweb</Filter>
+    </None>
+    <None Include="..\..\webdriver\civetweb\mod_lua_shared.inl">
+      <Filter>src\civetweb</Filter>
+    </None>
+    <None Include="..\..\webdriver\civetweb\mod_zlib.inl">
+      <Filter>src\civetweb</Filter>
+    </None>
+    <None Include="..\..\webdriver\civetweb\sha1.inl">
+      <Filter>src\civetweb</Filter>
+    </None>
+    <None Include="..\..\webdriver\civetweb\timer.inl">
+      <Filter>src\civetweb</Filter>
+    </None>
+    <None Include="..\..\webdriver\civetweb\wolfssl_extras.inl">
+      <Filter>src\civetweb</Filter>
+    </None>
+  </ItemGroup>
+</Project>

@@ -513,7 +513,12 @@ void WebPluginImpl::performRequest(PluginRequest* request)
 
         CString cstr;        
         if (result->IsString()) {
-#if V8_MAJOR_VERSION > 5
+#if V8_MAJOR_VERSION >= 10
+            ScriptState* scriptState = ScriptState::forMainWorld(m_parentFrame);
+            ScriptState::Scope scope(scriptState);
+            v8::Context::Scope contextScope(scriptState->context());
+            v8::Local<v8::String> v8String = result->ToString(scriptState->context()).ToLocalChecked();
+#elif V8_MAJOR_VERSION > 5
             v8::Local<v8::String> v8String = result->ToString(toIsolate(m_parentFrame));
 #else
             v8::Local<v8::String> v8String = result->ToString();

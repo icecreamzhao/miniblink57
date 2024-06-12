@@ -780,10 +780,11 @@ namespace v8impl {
             , _persistent(env->isolate, value)
             , _refcount(initial_refcount)
             , _delete_self(delete_self)
+            , _persistent_has_weak(false)
         {
             if (initial_refcount == 0) {
-                _persistent.SetWeak(
-                    this, FinalizeCallback, v8::WeakCallbackType::kParameter);
+                _persistent_has_weak = true;
+                _persistent.SetWeak(this, FinalizeCallback, v8::WeakCallbackType::kParameter);
             }
         }
 
@@ -812,7 +813,10 @@ namespace v8impl {
 
         static void Delete(Reference* reference)
         {
-            delete reference;
+            if (!reference->_persistent.IsEmpty() && reference->_persistent_has_weak) {
+                reference->_delete_self = true;
+            } else
+                delete reference;
         }
 
         uint32_t Ref()
@@ -830,8 +834,8 @@ namespace v8impl {
                 return 0;
             }
             if (--_refcount == 0) {
-                _persistent.SetWeak(
-                    this, FinalizeCallback, v8::WeakCallbackType::kParameter);
+                _persistent_has_weak = true;
+                _persistent.SetWeak(this, FinalizeCallback, v8::WeakCallbackType::kParameter);
             }
 
             return _refcount;
@@ -856,6 +860,7 @@ namespace v8impl {
         {
             Reference* reference = data.GetParameter();
             reference->_persistent.Reset();
+            reference->_persistent_has_weak = false;
 
             // Check before calling the finalize callback, because the callback might
             // delete it.
@@ -878,6 +883,7 @@ namespace v8impl {
         node::Persistent<v8::Value> _persistent;
         uint32_t _refcount;
         bool _delete_self;
+        bool _persistent_has_weak;
     };
 
     class TryCatch : public v8::TryCatch {

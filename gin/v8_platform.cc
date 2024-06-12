@@ -12,8 +12,10 @@
 #include "third_party/WebKit/public/platform/Platform.h"
 #include "third_party/WebKit/public/platform/WebThread.h"
 #include "third_party/WebKit/public/platform/WebTraceLocation.h"
-#if V8_MAJOR_VERSION >= 7
-#include "v8_7_5/src/libplatform/default_platform_wrap.h"
+#if V8_MAJOR_VERSION == 7
+#include "v8_7_5/src/libplatform/default-platform-wrap.h"
+#elif V8_MAJOR_VERSION == 10
+#include "v8_108/src/libplatform/default-platform-wrap.h"
 #endif
 #include "gin/v8_task_runner.h"
 #include <windows.h>
@@ -189,8 +191,19 @@ V8Platform::~V8Platform()
 #endif
 }
 
-#if V8_MAJOR_VERSION < 7
+#if V8_MAJOR_VERSION > 7
+v8::PageAllocator* V8Platform::GetPageAllocator()
+{
+    return m_defaultPlatformWrap->GetPageAllocator();
+}
 
+std::unique_ptr<v8::JobHandle> V8Platform::CreateJob(v8::TaskPriority priority, std::unique_ptr<v8::JobTask> jobTask)
+{
+    return m_defaultPlatformWrap->CreateJob(priority, std::move(jobTask));
+}
+#endif
+
+#if V8_MAJOR_VERSION < 7
 void V8Platform::CallOnBackgroundThread(
     v8::Task* task,
     v8::Platform::ExpectedRuntime expected_runtime)
@@ -222,6 +235,7 @@ void V8Platform::CallOnBackgroundThread(
 
 #endif
 
+#if V8_MAJOR_VERSION <= 7
 void V8Platform::CallOnForegroundThread(v8::Isolate* isolate, v8::Task* task)
 {
 //     if (!s_mainThread)
@@ -251,6 +265,7 @@ void V8Platform::CallDelayedOnForegroundThread(v8::Isolate* isolate, v8::Task* t
     data->getThread()->postDelayedTask(FROM_HERE, new V8TaskToWebThreadTask(task), (long long)(delayInSeconds * 1000));
 #endif
 }
+#endif
 
 double V8Platform::MonotonicallyIncreasingTime()
 {

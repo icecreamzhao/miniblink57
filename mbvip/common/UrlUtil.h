@@ -2,7 +2,8 @@
 #ifndef common_UrlUtil_h
 #define common_UrlUtil_h
 
-#include "common/StringUtil.h"
+#include "mbvip/common/StringUtil.h"
+#include "third_party/WebKit/Source/wtf/text/qt4/mbchar.h"
 
 class UrlUtil {
 public:

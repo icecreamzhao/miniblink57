@@ -28,6 +28,7 @@
 #include "net/WebURLLoaderManagerUtil.h"
 #include "net/cookies/WebCookieJarCurlImpl.h"
 #include "base/path_service.h"
+#include "mbvip/core/mb.h"
 
 #if defined(WIN32)
 #undef  PURE
@@ -170,7 +171,7 @@ void CWebView::loadPostURL(const utf8* inUrl, const char * poastData, int nLen )
     body.initialize();
     body.appendData(blink::WebData(poastData, nLen));
     request.setHTTPBody(body);
-    m_webPage->loadRequest(content::WebPage::kMainFrameId, request);
+    m_webPage->loadRequest(content::WebPage::kMainFrameId, request, false);
 }
 
 void CWebView::loadPostURL(const WCHAR* inUrl,const char * poastData, int nLen)
@@ -253,7 +254,7 @@ static bool trimPathBody(const utf8* inUrl, int length, bool isFile, std::vector
 #endif
 }
 
-static bool trimPath(const utf8* inUrl, bool isFile, std::vector<char>* out)
+static bool trimPath(const utf8* inUrl, bool isFile, bool* isViewSource, std::vector<char>* out)
 {
     // linux下，file:///是绝对路径，/开头也是绝对路径
     int length = strlen(inUrl);
@@ -266,10 +267,24 @@ static bool trimPath(const utf8* inUrl, bool isFile, std::vector<char>* out)
     const char* fileBody = inUrl;
     int fileBodyLength = length;
 
+    const char* viewSourceHead = "view-source:";
+    int viewSourceHeadLength = strlen(viewSourceHead);
+
     if (length < 3)
         return false;
 
-    if (length > fileHeadLength) { 
+    if (length > viewSourceHeadLength) {
+        if (0 == strncmp(inUrl, viewSourceHead, viewSourceHeadLength)) {
+            *isViewSource = true;
+            out->clear();
+            out->resize(length - viewSourceHeadLength);
+            strncpy(&out->at(0), inUrl + viewSourceHeadLength, length - viewSourceHeadLength);
+            out->push_back('\0');
+            return true;
+        }
+    }
+
+    if (length > fileHeadLength) {
         if (0 == strncmp(inUrl, fileHead, fileHeadLength)) { // file:///xxx.htm  file:///c:/xxx.htm
             fileBody = inUrl + fileHeadLength;
             fileBodyLength = length - fileHeadLength;
@@ -287,7 +302,8 @@ static bool trimPath(const utf8* inUrl, bool isFile, std::vector<char>* out)
 void CWebView::_loadURL(const utf8* inUrl, bool isFile)
 {
     std::vector<char> inUrlBuf;
-    if (!trimPath(inUrl, isFile, &inUrlBuf))
+    bool isViewSource = false;
+    if (!trimPath(inUrl, isFile, &isViewSource, &inUrlBuf))
         return;
 
     //cexer 必须调用String::fromUTF8显示构造第二个参数，否则String::String会把inUrl当作latin1处理。
@@ -309,7 +325,7 @@ void CWebView::_loadURL(const utf8* inUrl, bool isFile)
     blink::WebURLRequest request(url);
     request.setCachePolicy(blink::WebCachePolicy::UseProtocolCachePolicy);
     request.setHTTPMethod(blink::WebString::fromUTF8("GET"));
-    m_webPage->loadRequest(content::WebPage::kMainFrameId, request);
+    m_webPage->loadRequest(content::WebPage::kMainFrameId, request, isViewSource);
 }
 
 void CWebView::loadURL(const utf8* inUrl)
@@ -1040,7 +1056,7 @@ wkeWebFrameHandle CWebView::frameIdTowkeWebFrameHandle(content::WebPage* page, i
 static jsValue runJsImpl(blink::WebFrame* mainFrame, String* codeString, bool isInClosure)
 {
     //blink::UserGestureIndicator gestureIndicator(blink::DefinitelyProcessingUserGesture);
-  RefPtr<blink::UserGestureToken> userGestureToken = blink::UserGestureIndicator::currentToken();
+    RefPtr<blink::UserGestureToken> userGestureToken = blink::UserGestureIndicator::currentToken();
 
     if (codeString->startsWith("javascript:", WTF::TextCaseASCIIInsensitive))
         codeString->remove(0, sizeof("javascript:") - 1);
@@ -1333,7 +1349,7 @@ void CWebView::_initPage(COLORREF color)
 //     pageClients.dragClient = new DragClient;
 // 
 //     m_page = adoptPtr(new blink::Page(pageClients));
-//     blink::Settings* settings = m_page->settings();
+//     blink::Settings* settings = m_webPage->settings();
 //     settings->setMinimumFontSize(0);
 //     settings->setMinimumLogicalFontSize(9);
 //     settings->setDefaultFontSize(16);
@@ -1736,7 +1752,8 @@ void CWebView::showDevTools(const utf8* url, wkeOnShowDevtoolsCallback callback,
     if (m_isCreatedDevTools)
         return;
     m_isCreatedDevTools = true;
-    blink::Platform::current()->currentThread()->addTaskObserver(new ShowDevToolsTaskObserver(this, url, callback, param));
+    //blink::Platform::current()->currentThread()->addTaskObserver(new ShowDevToolsTaskObserver(this, url, callback, param));
+    DebugBreak();
 }
 
 net::WebCookieJarImpl* CWebView::getCookieJar()

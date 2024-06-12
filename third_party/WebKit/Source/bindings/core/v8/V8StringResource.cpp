@@ -63,7 +63,7 @@ struct V8StringTwoBytesTrait {
         CharType* buffer,
         int length)
     {
-        v8String->Write(reinterpret_cast<uint16_t*>(buffer), 0, length);
+        v8String->Write(v8::Isolate::GetCurrent(), reinterpret_cast<uint16_t*>(buffer), 0, length);
     }
 };
 
@@ -73,7 +73,7 @@ struct V8StringOneByteTrait {
         CharType* buffer,
         int length)
     {
-        v8String->WriteOneByte(buffer, 0, length);
+        v8String->WriteOneByte(v8::Isolate::GetCurrent(), buffer, 0, length);
     }
 };
 

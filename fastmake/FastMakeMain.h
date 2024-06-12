@@ -6,9 +6,9 @@
 
 enum RebuildOpt {
     kRebuildOptAll,
-    kRebuildOptPrebuildSrcAndLink,
-    kRebuildOptNotCompileOnlyLink,
-    kRebuildOptCompileTimeOutFile,
+    kRebuildOptPrebuildSrcAndLink, // 预编译
+    kRebuildOptNotCompileOnlyLink, //只链接
+    kRebuildOptCompileTimeOutFile, // 编译超时文件
 };
 
 void fmFastBuild(const std::wstring& buildJsonPath, RebuildOpt opt); // 这个是测试的

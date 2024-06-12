@@ -79,6 +79,7 @@
 // #define VLD_FORCE_ENABLE 1
 // #include "C:\\Program Files (x86)\\Visual Leak Detector\\include\\vld.h"
 
+HMODULE g_hModule;
 DWORD g_paintToMemoryCanvasInUiThreadCount = 0;
 DWORD g_rasterTaskCount = 0;
 DWORD g_mouseCount = 0;
@@ -235,6 +236,7 @@ static WebThreadImpl* currentTlsThread()
 
 static void setRuntimeEnabledFeatures()
 {
+    blink::RuntimeEnabledFeatures::setModuleScriptsEnabled(true);
     blink::RuntimeEnabledFeatures::setTraceWrappablesEnabled(true);
     blink::RuntimeEnabledFeatures::setAccelerated2dCanvasEnabled(false);
     blink::RuntimeEnabledFeatures::setDisplayList2dCanvasEnabled(false);
@@ -258,10 +260,12 @@ static void setRuntimeEnabledFeatures()
 //     blink::RuntimeEnabledFeatures::setKeyboardEventCodeEnabled(true);
     blink::RuntimeEnabledFeatures::setCSSOMSmoothScrollEnabled(true);
     blink::RuntimeEnabledFeatures::setSlimmingPaintInvalidationEnabled(true);
-
     //blink::RuntimeEnabledFeatures::setCompositorAnimationTimelinesEnabled(true);
 
-    //blink::FontCache::setUseDirectWrite(false);
+    blink::RuntimeEnabledFeatures::setExperimentalCanvasFeaturesEnabled(true);
+#if OS(WIN)
+    blink::FontCache::setUseDirectWrite(false);
+#endif
 }
 
 typedef BOOL (WINAPI* PFN_SetThreadStackGuarantee)(PULONG StackSizeInBytes);
@@ -295,13 +299,14 @@ void BlinkPlatformImpl::initialize(bool ocEnable)
 #if USING_VC6RT == 1
     scrt_initialize_thread_safe_statics();
 #endif
-    x86_check_features();
+#if defined(__x86_64__) || defined(_M_X64) || defined(__i386__) || defined(_M_IX86)
     //_control87(0x133f, 0xffff);
     //unsigned int control_word_x87 = 0;
     //__control87_2(_PC_64, MCW_PC, &control_word_x87, 0);
-
     //control87(_PC_64, MCW_PC);
-
+#else
+    //x86_check_features();
+#endif
 //     ULONG stackSizeInBytes = 894 * 1024;
 //     PFN_SetThreadStackGuarantee pSetThreadStackGuarantee = (PFN_SetThreadStackGuarantee)::GetProcAddress(::GetModuleHandleW(L"Kernel32.dll"), "SetThreadStackGuarantee");
 //     pSetThreadStackGuarantee(&stackSizeInBytes);
@@ -379,7 +384,16 @@ void BlinkPlatformImpl::initialize(bool ocEnable)
 
 #if defined(OS_LINUX)
     // flutter: https://engine.chinmaygarde.com/platform__linux_8cc_source.html
-    sk_sp<SkFontMgr> fontMgr(SkFontMgr_New_Custom_Directory("/usr/share/fonts/")); // FontCacheSkia.cpp, FontCache::getLastResortFallbackFont
+    std::string fonts;
+#if defined(__arm__) || defined(_M_ARM) || defined(__aarch64__)
+    // ARM 架构的代码
+    fonts = "/usr/share/fonts/open-chinese-fonts";
+    fonts += "|";
+    fonts += "google-noto-cjk";
+#else
+    fonts = "/usr/share/fonts";
+#endif
+    sk_sp<SkFontMgr> fontMgr(SkFontMgr_New_Custom_Directory(fonts.c_str())); // FontCacheSkia.cpp, FontCache::getLastResortFallbackFont
 #else
     sk_sp<SkFontMgr> fontMgr(SkFontMgr_New_GDI());
 #endif
@@ -402,6 +416,8 @@ void BlinkPlatformImpl::initialize(bool ocEnable)
 #endif
 
     net::sharedResourceMutex(CURL_LOCK_DATA_COOKIE);
+
+    printf("BlinkPlatformImpl::initialize ok!\n");
 }
 
 BlinkPlatformImpl::BlinkPlatformImpl() 
@@ -670,6 +686,7 @@ void BlinkPlatformImpl::doGarbageCollected()
     SkGraphics::PurgeResourceCache();
     SkGraphics::PurgeFontCache();
 
+    blink::memoryCache()->evictResources(blink::MemoryCache::EvictAllResources);
     WebPage::gcAll();
 
 #ifdef _DEBUG
@@ -948,11 +965,43 @@ blink::WebData BlinkPlatformImpl::loadResource(const char* name)
         return blink::WebData((const char*)content::gTextAreaResizeCornerData, sizeof(content::gTextAreaResizeCornerData));
     else if (0 == strcmp("textAreaResizeCorner@2x", name))
         return blink::WebData((const char*)content::gTextAreaResizeCornerData, sizeof(content::gTextAreaResizeCornerData));
+
+    else if (0 == strcmp("mediaplayerPlay", name))
+        return blink::WebData((const char*)content::mediaplayer_play, sizeof(content::mediaplayer_play));
+    else if (0 == strcmp("mediaplayerPause", name))
+        return blink::WebData((const char*)content::mediaplayer_pause, sizeof(content::mediaplayer_pause));
+    else if (0 == strcmp("mediaplayerPlayDisabled", name))
+        return blink::WebData((const char*)content::MediaplayerPlayDisabled, sizeof(content::MediaplayerPlayDisabled));
+    else if (0 == strcmp("mediaplayerOverlayPlay", name))
+        return blink::WebData((const char*)content::MediaplayerOverlayPlay, sizeof(content::MediaplayerOverlayPlay));
+    else if (0 == strcmp("mediaplayerFullscreen", name))
+        return blink::WebData((const char*)content::MediaplayerFullscreen, sizeof(content::MediaplayerFullscreen));
+    else if (0 == strcmp("mediaplayerClosedCaption", name))
+        return blink::WebData((const char*)content::mediaplayer_closedcaption, sizeof(content::mediaplayer_closedcaption));
+    else if (0 == strcmp("mediaplayerClosedCaptionDisabled", name))
+        return blink::WebData((const char*)content::mediaplayer_closedcaption_disabled, sizeof(content::mediaplayer_closedcaption_disabled));
+    else if (0 == strcmp("mediaplayerCastOn", name))
+        return blink::WebData((const char*)content::mediaplayer_cast_on, sizeof(content::mediaplayer_cast_on));
+    else if (0 == strcmp("mediaplayerCastOff", name))
+        return blink::WebData((const char*)content::mediaplayer_cast_off, sizeof(content::mediaplayer_cast_off));
+    else if (0 == strcmp("mediaplayerOverlayCastOff", name))
+        return blink::WebData((const char*)content::mediaplayer_overlay_cast_off, sizeof(content::mediaplayer_overlay_cast_off));
+    else if (0 == strcmp("mediaplayerSliderThumb", name))
+        return blink::WebData((const char*)content::MediaplayerSliderThumb, sizeof(content::MediaplayerSliderThumb));
+    else if (0 == strcmp("mediaplayerVolumeSliderThumb", name))
+        return blink::WebData((const char*)content::MediaplayerVolumeSliderThumb, sizeof(content::MediaplayerVolumeSliderThumb));
+    else if (0 == strcmp("mediaplayerDownloadIcon", name))
+        return blink::WebData((const char*)content::mediaplayer_download, sizeof(content::mediaplayer_download));
     else if (0 == strcmp("mediaControls.css", name)) {
-        std::string buffer(blink::mediaControlsUserAgentStyleSheet, sizeof(blink::mediaControlsUserAgentStyleSheet));;
-        //buffer += "video::-webkit-media-controls {display: none;}";
-        return blink::WebData(buffer.c_str(), buffer.size());
-        //return blink::WebData((const char*)blink::mediaControlsUserAgentStyleSheet, sizeof(blink::mediaControlsUserAgentStyleSheet));
+        //std::string buffer(blink::mediaControlsUserAgentStyleSheet, sizeof(blink::mediaControlsUserAgentStyleSheet));;
+        ////buffer += "video::-webkit-media-controls {display: none;}";
+        //return blink::WebData(buffer.c_str(), buffer.size());
+
+//         std::vector<char> buffer;
+//         readJsFile("G:\\mycode\\miniblink57\\third_party\\WebKit\\Source\\core\\css\\mediaControls.css", &buffer);
+//         return blink::WebData(&buffer[0], buffer.size());
+
+        return blink::WebData((const char*)content::mediaControls_css, sizeof(content::mediaControls_css));
     } else if (0 == strcmp("fullscreen.css", name)) {
 //         std::vector<char> buffer;
 //         readJsFile(L"E:\\mycode\\miniblink49\\trunk\\third_party\\WebKit\\Source\\core\\css\\fullscreen.css", &buffer);
@@ -1025,38 +1074,30 @@ blink::WebData BlinkPlatformImpl::loadResource(const char* name)
     else if (0 == strcmp("mediaplayerSoundDisabled", name))
         return blink::WebData((const char*)content::MediaplayerSoundDisabled, sizeof(content::MediaplayerSoundDisabled));
     
-    else if (0 == strcmp("mediaplayerPlay", name))
-        return blink::WebData((const char*)content::MediaplayerPlay, sizeof(content::MediaplayerPlay));
-    else if (0 == strcmp("mediaplayerPause", name))
-        return blink::WebData((const char*)content::MediaplayerPause, sizeof(content::MediaplayerPause));
-    else if (0 == strcmp("mediaplayerPlayDisabled", name))
-        return blink::WebData((const char*)content::MediaplayerPlayDisabled, sizeof(content::MediaplayerPlayDisabled));
-
-    else if (0 == strcmp("mediaplayerOverlayPlay", name))
-        return blink::WebData((const char*)content::MediaplayerOverlayPlay, sizeof(content::MediaplayerOverlayPlay));
-    else if (0 == strcmp("mediaplayerSliderThumb", name))
-        return blink::WebData((const char*)content::MediaplayerSliderThumb, sizeof(content::MediaplayerSliderThumb));
-    else if (0 == strcmp("mediaplayerVolumeSliderThumb", name))
-        return blink::WebData((const char*)content::MediaplayerVolumeSliderThumb, sizeof(content::MediaplayerVolumeSliderThumb));
-
-    else if (0 == strcmp("mediaplayerFullscreen", name))
-        return blink::WebData((const char*)content::MediaplayerFullscreen, sizeof(content::MediaplayerFullscreen));
-    else if (0 == strcmp("mediaplayerClosedCaption", name))
-        return blink::WebData((const char*)content::MediaplayerClosedcaption, sizeof(content::MediaplayerClosedcaption));
-    else if (0 == strcmp("mediaplayerClosedCaptionDisabled", name))
-        return blink::WebData((const char*)content::MediaplayerClosedcaptionDisabled, sizeof(content::MediaplayerClosedcaptionDisabled));
-
-    else if (0 == strcmp("mediaplayerCastOn", name))
-        return blink::WebData((const char*)content::MediaplayerCastOn, sizeof(content::MediaplayerCastOn));
-    else if (0 == strcmp("mediaplayerCastOff", name))
-        return blink::WebData((const char*)content::MediaplayerCastOff, sizeof(content::MediaplayerCastOff));
-    else if (0 == strcmp("mediaplayerOverlayCastOff", name))
-        return blink::WebData((const char*)content::MediaplayerOverlayCastOff, sizeof(content::MediaplayerOverlayCastOff));
-
-    else if (0 == strcmp("mediaplayerSliderThumb", name))
-        return blink::WebData((const char*)content::MediaplayerSliderThumb, sizeof(content::MediaplayerSliderThumb));
-    else if (0 == strcmp("mediaplayerVolumeSliderThumb", name))
-        return blink::WebData((const char*)content::MediaplayerVolumeSliderThumb, sizeof(content::MediaplayerVolumeSliderThumb));
+//     else if (0 == strcmp("mediaplayerPlay", name))
+//         return blink::WebData((const char*)content::MediaplayerPlay, sizeof(content::MediaplayerPlay));
+//     else if (0 == strcmp("mediaplayerPause", name))
+//         return blink::WebData((const char*)content::MediaplayerPause, sizeof(content::MediaplayerPause));
+//     else if (0 == strcmp("mediaplayerPlayDisabled", name))
+//         return blink::WebData((const char*)content::MediaplayerPlayDisabled, sizeof(content::MediaplayerPlayDisabled));
+//     else if (0 == strcmp("mediaplayerOverlayPlay", name))
+//         return blink::WebData((const char*)content::MediaplayerOverlayPlay, sizeof(content::MediaplayerOverlayPlay));
+//     else if (0 == strcmp("mediaplayerSliderThumb", name))
+//         return blink::WebData((const char*)content::MediaplayerSliderThumb, sizeof(content::MediaplayerSliderThumb));
+//     else if (0 == strcmp("mediaplayerVolumeSliderThumb", name))
+//         return blink::WebData((const char*)content::MediaplayerVolumeSliderThumb, sizeof(content::MediaplayerVolumeSliderThumb));
+//     else if (0 == strcmp("mediaplayerFullscreen", name))
+//         return blink::WebData((const char*)content::MediaplayerFullscreen, sizeof(content::MediaplayerFullscreen));
+//     else if (0 == strcmp("mediaplayerClosedCaption", name))
+//         return blink::WebData((const char*)content::MediaplayerClosedcaption, sizeof(content::MediaplayerClosedcaption));
+//     else if (0 == strcmp("mediaplayerClosedCaptionDisabled", name))
+//         return blink::WebData((const char*)content::MediaplayerClosedcaptionDisabled, sizeof(content::MediaplayerClosedcaptionDisabled));
+//     else if (0 == strcmp("mediaplayerCastOn", name))
+//         return blink::WebData((const char*)content::MediaplayerCastOn, sizeof(content::MediaplayerCastOn));
+//     else if (0 == strcmp("mediaplayerCastOff", name))
+//         return blink::WebData((const char*)content::MediaplayerCastOff, sizeof(content::MediaplayerCastOff));
+//     else if (0 == strcmp("mediaplayerOverlayCastOff", name))
+//         return blink::WebData((const char*)content::MediaplayerOverlayCastOff, sizeof(content::MediaplayerOverlayCastOff));
 
     else if (0 == strcmp("themeInputMultipleFields.css", name))
         return blink::WebData((const char*)content::ThemeInputMultipleFieldsCss, sizeof(content::ThemeInputMultipleFieldsCss));
@@ -1214,7 +1255,7 @@ blink::WebBlobRegistry* BlinkPlatformImpl::getBlobRegistry()
 
 blink::WebClipboard* BlinkPlatformImpl::clipboard()
 {
-#if defined(OS_WIN) 
+#if 1// defined(OS_WIN) 
     if (!m_clipboardImpl)
         m_clipboardImpl = new WebClipboardImpl();
     return m_clipboardImpl;
@@ -1396,3 +1437,12 @@ blink::WebGestureCurve* BlinkPlatformImpl::createFlingAnimationCurve(blink::WebG
 }
 
 } // namespace content
+
+#if defined(WIN32)
+BOOL WINAPI BaseDllMain(PVOID h, DWORD reason, PVOID reserved);
+
+BOOL WINAPI DllMain(PVOID h, DWORD reason, PVOID reserved)
+{
+    return BaseDllMain(h, reason, reserved);
+}
+#endif

@@ -205,11 +205,7 @@ public:
     /**
      *  Sets colortype to the native ARGB32 type.
      */
-    static SkImageInfo MakeN32(int width, int height, SkAlphaType at,
-        sk_sp<SkColorSpace> cs = nullptr)
-    {
-        return Make(width, height, kN32_SkColorType, at, cs);
-    }
+    static SkImageInfo MakeN32(int width, int height, SkAlphaType at, sk_sp<SkColorSpace> cs = nullptr);
 
     /**
      *  Create an ImageInfo marked as SRGB with N32 swizzle.
@@ -219,15 +215,8 @@ public:
     /**
      *  Sets colortype to the native ARGB32 type, and the alphatype to premul.
      */
-    static SkImageInfo MakeN32Premul(int width, int height, sk_sp<SkColorSpace> cs = nullptr)
-    {
-        return Make(width, height, kN32_SkColorType, kPremul_SkAlphaType, cs);
-    }
-
-    static SkImageInfo MakeN32Premul(const SkISize& size)
-    {
-        return MakeN32Premul(size.width(), size.height());
-    }
+    static SkImageInfo MakeN32Premul(int width, int height, sk_sp<SkColorSpace> cs = nullptr);
+    static SkImageInfo MakeN32Premul(const SkISize& size);
 
     static SkImageInfo MakeA8(int width, int height)
     {

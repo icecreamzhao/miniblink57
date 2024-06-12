@@ -29,7 +29,13 @@
 #include <win32config.h>
 #include <libxml/xmlversion.h>
 #else
-#include "config.h"
+ //#include "config.h"
+#if defined(_MSC_VER)
+#include "../win32/config.h"
+#else
+#include "../linux/configlinux.h"
+#endif
+
 #include <libxml/xmlversion.h>
 #endif
 

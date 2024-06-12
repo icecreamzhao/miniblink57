@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#if defined(__i386__) || defined(_M_IX86) || defined(__x86_64__) || defined(_M_X64)
+
 #include <algorithm>
 
 #include "build/build_config.h"
@@ -457,3 +459,5 @@ void ConvolveVertically_SSE2(const ConvolutionFilter1D::Fixed* filter_values,
 }
 
 } // namespace skia
+
+#endif // defined(__i386__) || defined(_M_IX86) || defined(__x86_64__) || defined(_M_X64)

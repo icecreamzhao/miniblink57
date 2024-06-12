@@ -5,6 +5,7 @@
 #include "base/json/json_parser.h"
 
 #include <cmath>
+#include <math.h>
 #include <utility>
 
 #include "base/logging.h"

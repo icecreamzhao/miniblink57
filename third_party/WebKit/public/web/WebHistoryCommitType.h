@@ -24,6 +24,6 @@ enum WebHistoryCommitType {
     WebHistoryInertCommit
 };
 
-} // namespace blink
+}
 
 #endif

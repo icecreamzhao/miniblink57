@@ -11,6 +11,7 @@
 #include "content/WebSharedBitmapManager.h"
 #include "content/gpu/ChildGpuMemoryBufferManager.h"
 #include "content/media/audio_renderer_mixer_manager.h"
+#include "content/TaskObserverAdapter.h"
 // #include "gpu/blink/webgraphicscontext3d_in_process_command_buffer_impl.h"
 #include "media/audio/audio_manager.h"
 #include "media/audio/audio_manager_base.h"
@@ -28,6 +29,7 @@
 #include "third_party/WebKit/public/platform/WebMediaPlayerSource.h"
 #include "ui/gl/gl_surface.h"
 #include <shlwapi.h>
+#include "base/atomic_mb.h"
 
 namespace content {
 
@@ -96,13 +98,13 @@ static long s_uiThreadRunnerCount = 0;
 
 static void blinkRunner(OrigTaskType task)
 {
-    _InterlockedDecrement((long*)&s_blinkThreadRunnerCount);
+    MB_InterlockedDecrement((long*)&s_blinkThreadRunnerCount);
     task();
 }
 
 static void uiRunner(OrigTaskType task)
 {
-    _InterlockedDecrement((long*)&s_uiThreadRunnerCount);
+    MB_InterlockedDecrement((long*)&s_uiThreadRunnerCount);
     task();
 }
 
@@ -111,7 +113,7 @@ void OrigChromeMgr::postBlinkTask(OrigTaskType task)
     if (!m_inst || s_blinkThreadRunnerCount > 0)
         return;
 
-    _InterlockedIncrement((long*)&s_blinkThreadRunnerCount);
+    MB_InterlockedIncrement((long*)&s_blinkThreadRunnerCount);
     m_inst->m_blinkLoop->PostTask(FROM_HERE, base::Bind(&blinkRunner, task));
 }
 
@@ -119,7 +121,7 @@ void OrigChromeMgr::postUiTask(OrigTaskType task)
 {
     if (!m_inst || s_uiThreadRunnerCount > 0)
         return;
-    _InterlockedIncrement((long*)&s_uiThreadRunnerCount);
+    MB_InterlockedIncrement((long*)&s_uiThreadRunnerCount);
     m_inst->m_uiLoop->PostTask(FROM_HERE, base::Bind(&uiRunner, task));
 }
 
@@ -145,28 +147,7 @@ void OrigChromeMgr::postWebDelayedTask(const blink::WebTraceLocation& from, blin
     messageLoop->PostDelayedTask(location, base::Bind(&webRunner, task), base::TimeDelta::FromMilliseconds(delayMs));
 }
 
-class TaskObserverAdapter : public base::MessageLoop::TaskObserver {
-public:
-    TaskObserverAdapter(blink::WebThread::TaskObserver* observer)
-        : m_observer(observer)
-    {
-    }
-
-    void WillProcessTask(const base::PendingTask& pending_task) override
-    {
-        m_observer->willProcessTask();
-    }
-
-    void DidProcessTask(const base::PendingTask& pending_task) override
-    {
-        m_observer->didProcessTask();
-    }
-
-private:
-    blink::WebThread::TaskObserver* m_observer;
-};
-
-void OrigChromeMgr::addTaskObserver(blink::WebThread::TaskObserver* observer)
+void OrigChromeMgr::addTaskObserver(TaskObserverAdapter* observer)
 {
     if (!m_inst->m_blinkLoop) {
         m_inst->m_blinkLoop = new base::MessageLoop(base::MessageLoop::TYPE_IO);
@@ -175,17 +156,24 @@ void OrigChromeMgr::addTaskObserver(blink::WebThread::TaskObserver* observer)
     }
     base::MessageLoop* messageLoop = m_inst->m_blinkLoop;
 
-    std::pair<TaskObserverMap::iterator, bool> result = m_inst->m_taskObserverMap.insert(std::make_pair(observer, nullptr));
+    TaskObserverMap::iterator iter = m_inst->m_taskObserverMap.find(observer->getTask());
+    if (iter != m_inst->m_taskObserverMap.end()) {
+        DebugBreak();
+        delete observer;
+        return;
+    }
+
+    std::pair<TaskObserverMap::iterator, bool> result = m_inst->m_taskObserverMap.insert(std::make_pair(observer->getTask(), nullptr));
     if (result.second)
-        result.first->second = new TaskObserverAdapter(observer);
+        result.first->second = observer;
 
     messageLoop->AddTaskObserver(result.first->second);
 }
 
-void OrigChromeMgr::removeTaskObserver(blink::WebThread::TaskObserver* observer)
+void OrigChromeMgr::removeTaskObserver(const TaskObserverAdapter& observer)
 {
     base::MessageLoop* messageLoop = m_inst->m_blinkLoop;
-    TaskObserverMap::iterator iter = m_inst->m_taskObserverMap.find(observer);
+    TaskObserverMap::iterator iter = m_inst->m_taskObserverMap.find(observer.getTask());
     if (iter == m_inst->m_taskObserverMap.end())
         return;
     messageLoop->RemoveTaskObserver(iter->second);

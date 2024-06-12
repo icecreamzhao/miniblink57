@@ -45,6 +45,14 @@
 #include "media/filters/ffmpeg_h265_to_annex_b_bitstream_converter.h"
 #endif
 
+#ifdef _WIN64
+extern "C" const AVCodecDescriptor * avcodec_descriptor_get(enum AVCodecID id)
+{
+    DebugBreak();
+    return nullptr;
+}
+#endif
+
 namespace media {
 
 static base::Time ExtractTimelineOffset(AVFormatContext* format_context)

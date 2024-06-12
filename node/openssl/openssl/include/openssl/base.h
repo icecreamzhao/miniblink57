@@ -53,12 +53,11 @@
 #ifndef OPENSSL_HEADER_BASE_H
 #define OPENSSL_HEADER_BASE_H
 
-
 // This file should be the first included by all BoringSSL headers.
-
 #include <stddef.h>
 #include <stdint.h>
 #include <sys/types.h>
+
 
 #if defined(__MINGW32__)
 // stdio.h is needed on MinGW for __MINGW_PRINTF_FORMAT.
@@ -85,7 +84,6 @@
 #if defined(__cplusplus)
 extern "C" {
 #endif
-
 
 #if defined(__x86_64) || defined(_M_AMD64) || defined(_M_X64)
 #define OPENSSL_64_BIT
@@ -185,7 +183,6 @@ extern "C" {
 #define BORINGSSL_API_VERSION 9
 
 #if defined(BORINGSSL_SHARED_LIBRARY)
-
 #if defined(OPENSSL_WINDOWS)
 
 #if defined(BORINGSSL_IMPLEMENTATION)

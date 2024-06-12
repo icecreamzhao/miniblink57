@@ -5,7 +5,7 @@
 #include "media/audio/win/core_audio_util_win.h"
 
 #include <devicetopology.h>
-#include <dxdiag.h>
+//#include <dxdiag.h>
 #include <functiondiscoverykeys_devpkey.h>
 #include <stddef.h>
 

@@ -186,8 +186,7 @@ void DumpStackTrace(int skip_count, void w(const char*, void*), void* arg);
 #endif
 #include <crtdbg.h>
 #undef free
-#
-#ifdef SK_DEBUGx
+#if 0 // def SK_DEBUG
 #if defined(SK_SIMULATE_FAILED_MALLOC) && defined(__cplusplus)
 void* operator new(
     size_t cb,

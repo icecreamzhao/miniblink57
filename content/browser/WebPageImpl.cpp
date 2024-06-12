@@ -47,6 +47,7 @@
 #include "content/browser/WebFrameClientImpl.h"
 #include "content/browser/PageNavController.h"
 #include "content/browser/CheckReEnter.h"
+#include "content/browser/PostTaskHelper.h"
 #include "content/ui/PopupMenuWin.h"
 #include "content/ui/PlatformCursor.h"
 #include "content/ui/RunFileChooserImpl.h"
@@ -73,6 +74,8 @@
 #include "wke/wkeGlobalVar.h"
 #endif
 #include "skia/ext/bitmap_platform_device_win.h"
+#include "base/atomic_mb.h"
+#include "base/win/windows_version.h"
 
 extern DWORD g_paintToMemoryCanvasInUiThreadCount;
 extern DWORD g_mouseCount;
@@ -132,6 +135,9 @@ void WebPageImpl::unregisterDestroyNotif(DestroyNotif* destroyNotif)
 }
 
 int64_t WebPageImpl::m_firstFrameId = 0;
+
+// window.open这种形式打开的时候需要传递oepner对像，但以前的接口没加这东西，导致window.opener是空的
+static blink::WebFrame* s_creator = nullptr;
 
 WebPageImpl::WebPageImpl(COLORREF bdColor)
 {
@@ -212,6 +218,7 @@ WebPageImpl::WebPageImpl(COLORREF bdColor)
     m_webViewImpl = WebViewImpl::create(this, blink::WebPageVisibilityStateVisible);
     m_webViewImpl->setMainFrame(webLocalFrameImpl);
     m_webFrameClient->setFrame(webLocalFrameImpl);
+    webLocalFrameImpl->setOpener(s_creator);
 
     content::BlinkPlatformImpl* platform = (content::BlinkPlatformImpl*)blink::Platform::current();
     float zoom = platform->getZoom();
@@ -228,8 +235,6 @@ WebPageImpl::WebPageImpl(COLORREF bdColor)
     initSetting();
 
     //m_frameLoaderClient = FrameLoaderClientImpl::create(webLocalFrameImpl);
-
-
     m_platformEventHandler = new PlatformEventHandler((blink::WebWidget*)(void*)m_webViewImpl, m_webViewImpl);
 
 #ifdef ENABLE_MC
@@ -407,8 +412,8 @@ public:
         int layerDirty = m_page->m_layerDirty; 
         int needsLayout = m_page->m_needsLayout; 
         if (m_isComefromMainFrame) {
-            _InterlockedExchange(reinterpret_cast<long volatile*>(&m_page->m_layerDirty), 0);
-            _InterlockedExchange(reinterpret_cast<long volatile*>(&m_page->m_needsLayout), 0);
+            MB_InterlockedExchange(reinterpret_cast<long volatile*>(&m_page->m_layerDirty), 0);
+            MB_InterlockedExchange(reinterpret_cast<long volatile*>(&m_page->m_needsLayout), 0);
         }
         m_isLayout = (0 != layerDirty || 0 != needsLayout);
 
@@ -434,8 +439,8 @@ public:
         int layerDirty = m_page->m_layerDirty;
         int needsLayout = m_page->m_needsLayout;
         if (m_isComefromMainFrame) {
-            _InterlockedExchange(reinterpret_cast<long volatile*>(&m_page->m_layerDirty), 0);
-            _InterlockedExchange(reinterpret_cast<long volatile*>(&m_page->m_needsLayout), 0);
+            MB_InterlockedExchange(reinterpret_cast<long volatile*>(&m_page->m_layerDirty), 0);
+            MB_InterlockedExchange(reinterpret_cast<long volatile*>(&m_page->m_needsLayout), 0);
         }
 
         bool isLayout = 0 != layerDirty || 0 != needsLayout;
@@ -568,7 +573,9 @@ WebView* WebPageImpl::createWkeView(WebLocalFrame* creator,
     windowFeatures.toolBarVisible = features.toolBarVisible;
     windowFeatures.fullscreen = features.fullscreen;
 
+    s_creator = creator;
     wke::CWebView* createdWebView = handler.createViewCallback(m_pagePtr->wkeWebView(), handler.createViewCallbackParam, type, &wkeUrl, &windowFeatures);
+    s_creator = nullptr;
     if (!createdWebView || createdWebView == m_pagePtr->wkeWebView())
         return nullptr;
 
@@ -761,14 +768,24 @@ void WebPageImpl::closeWidgetSoon()
 {
     ASSERT(isMainThread());
 
+    BOOL needClose = FALSE;
 #if (ENABLE_WKE == 1)
     wke::CWebViewHandler& handler = m_pagePtr->wkeHandler();
     if (handler.windowClosingCallback) {
         // 不管返回值了，也暂时不主动关闭窗口
-        handler.windowClosingCallback(m_pagePtr->wkeWebView(), handler.windowClosingCallbackParam);
+        needClose = handler.windowClosingCallback(m_pagePtr->wkeWebView(), handler.windowClosingCallbackParam);
     }
 #endif
 
+    if (m_postCloseWidgetSoonMessage)
+        return;
+
+//     WebPageImpl* self = this;
+//     if (needClose) {
+//         postTaskToMainThread(FROM_HERE, [self] {
+//             wkeDestroyWebView(self->m_pagePtr->wkeWebView());
+//         });
+//     }
     m_postCloseWidgetSoonMessage = true;
 }
 
@@ -848,7 +865,7 @@ void WebPageImpl::setNeedsCommitAndNotLayout()
 
 void WebPageImpl::setNeedsCommit()
 {
-    _InterlockedExchange(reinterpret_cast<long volatile*>(&m_needsLayout), 1);
+    MB_InterlockedExchange(reinterpret_cast<long volatile*>(&m_needsLayout), 1);
     setNeedsCommitAndNotLayout();
 }
 
@@ -938,7 +955,7 @@ void WebPageImpl::executeMainFrame()
 
 void WebPageImpl::onLayerTreeDirty()
 {
-    _InterlockedExchange(reinterpret_cast<long volatile*>(&m_layerDirty), 1);
+    MB_InterlockedExchange(reinterpret_cast<long volatile*>(&m_layerDirty), 1);
     setNeedsCommitAndNotLayout();
 }
 
@@ -1939,10 +1956,10 @@ void WebPageImpl::loadURL(int64 frameId, const wchar_t* url, const blink::Referr
     blink::WebURL webURL = kurl;
     blink::WebURLRequest request(webURL);
     request.setHTTPReferrer(referrer.referrer, blink::WebReferrerPolicyOrigin);
-    loadRequest(frameId, request);
+    loadRequest(frameId, request, false);
 }
 
-void WebPageImpl::loadRequest(int64 frameId, const blink::WebURLRequest& request)
+void WebPageImpl::loadRequest(int64 frameId, const blink::WebURLRequest& request, bool isViewSource)
 {
     if (!m_webViewImpl || !m_webViewImpl->mainFrame())
         return;
@@ -1956,6 +1973,7 @@ void WebPageImpl::loadRequest(int64 frameId, const blink::WebURLRequest& request
     
     requestWrap.setHTTPHeaderField(WebString::fromLatin1("Accept"), WebString::fromLatin1("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"));
     webFrame->loadRequest(requestWrap);
+    webFrame->enableViewSourceMode(isViewSource);
     m_webViewImpl->setFocus(true);
 }
 
@@ -2067,6 +2085,9 @@ public:
     {
         if (wke::g_wkeUiThreadPostTaskCallback)
             return;
+#ifndef _WIN32
+        __debugbreak();
+#endif
         wke::g_wkeUiThreadPostTaskCallback = PostTaskWrap::uiThreadPostTaskCallback;
 
         m_uiPostTasks = new std::vector<PostTaskWrap*>();
@@ -2103,6 +2124,10 @@ public:
 
     static int WKE_CALL_TYPE uiThreadPostTaskCallback(HWND hWnd, wkeUiThreadRunCallback callback, void* param)
     {
+#ifndef _WIN32
+        printf("uiThreadPostTaskCallback\n");
+        __debugbreak();
+#endif
         PostTaskWrap* task = new PostTaskWrap(hWnd, callback, param);
 
         ::EnterCriticalSection(&m_uiPostTasksMutex);
@@ -2448,6 +2473,12 @@ void WebPageImpl::moveValidationMessage(const blink::WebRect& anchorInViewport)
 
 }
 
+// 这函数暂时没用上
+void WebPageImpl::willCommitProvisionalLoad()
+{
+    m_hadWillCommitProvisionalLoad = true;
+}
+
 void WebPageImpl::didStartProvisionalLoad()
 {
     m_firstDrawCount = 0;
@@ -2486,21 +2517,21 @@ private:
     HWND m_hWnd;
 };
 
-// bool WebPageImpl::runFileChooser(const blink::WebFileChooserParams& params, blink::WebFileChooserCompletion* completion)
-// {
-//     RootWndAutoDisable rootWndAutoDisable(m_hWnd);
-//     setIsMouseKeyMessageEnable(false);
-// 
-//     WebPageImpl* self = this;
-//     int id = wkeWebView()->getId();
-//     std::function<void(void)>* callback = new std::function<void(void)>([self, id] {
-//         if (net::ActivatingObjCheck::inst()->isActivating(id))
-//             self->setIsMouseKeyMessageEnable(true);
-//     });
-//     bool b = runFileChooserImpl(params, completion, id, callback);
-//     blink::Platform::current()->currentThread()->postDelayedTask(FROM_HERE, new DelayPopupAterFileChooserTask(m_hWnd), 1000);
-//     return b;
-// }
+bool WebPageImpl::runFileChooser(const blink::WebFileChooserParams& params, blink::WebFileChooserCompletion* completion)
+{
+    RootWndAutoDisable rootWndAutoDisable(m_hWnd);
+    setIsMouseKeyMessageEnable(false);
+
+    WebPageImpl* self = this;
+    int id = wkeWebView()->getId();
+    std::function<void(void)>* callback = new std::function<void(void)>([self, id] {
+        if (net::ActivatingObjCheck::inst()->isActivating(id))
+            self->setIsMouseKeyMessageEnable(true);
+    });
+    bool b = runFileChooserImpl(m_hWnd, params, completion, id, callback);
+    blink::Platform::current()->currentThread()->postDelayedTask(FROM_HERE, new DelayPopupAterFileChooserTask(m_hWnd), 1000);
+    return b;
+}
 
 void WebPageImpl::willEnterDebugLoop()
 {
@@ -2558,16 +2589,22 @@ bool WebPageImpl::initSetting()
     settings->setTextAreasAreResizable(true);
     
 #if defined(OS_WIN)
-    //settings->setStandardFontFamily(WebString(L"微软雅黑", 4));
-    settings->setStandardFontFamily(blink::WebString(L"宋体", 2));
+    base::win::OSInfo* osinfo = base::win::OSInfo::GetInstance();
+    if (osinfo->version() < base::win::VERSION_VISTA)
+        settings->setStandardFontFamily(blink::WebString(L"宋体", 2));
+    else
+        settings->setStandardFontFamily(blink::WebString(L"微软雅黑", 4));
 #else
-    settings->setStandardFontFamily(blink::WebString::fromUTF8("Simsun"));
+    //settings->setStandardFontFamily(blink::WebString::fromUTF8("Simsun"));
+    //settings->setStandardFontFamily(blink::WebString::fromUTF8("Open Sans"));
+    settings->setStandardFontFamily(blink::WebString::fromUTF8("Song"));
 #endif
     //settings->setUsesEncodingDetector(true);
     settings->setJavaScriptEnabled(true);
     settings->setAllowFileAccessFromFileURLs(true);
     settings->setAcceleratedCompositingEnabled(true);
     settings->setUseSolidColorScrollbars(false);
+    settings->setDefaultTextEncodingName(blink::WebString::fromASCII("UTF8"));
     //settings->setPinchOverlayScrollbarThickness(8);
     //settings->setSpatialNavigationEnabled(true);
     settings->setLocalStorageEnabled(true);
@@ -2579,7 +2616,7 @@ bool WebPageImpl::initSetting()
     settings->setJavaScriptCanOpenWindowsAutomatically(true);
     settings->setJavaScriptCanAccessClipboard(true);
     settings->setPrimaryPointerType(blink::PointerTypeFine);
-	settings->setAllowScriptsToCloseWindows(false);
+	settings->setAllowScriptsToCloseWindows(true);
     settings->setExperimentalWebGLEnabled(true);
 
     settings->setLoadsImagesAutomatically(true);

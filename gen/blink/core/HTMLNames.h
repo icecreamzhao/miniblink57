@@ -498,11 +498,12 @@ namespace HTMLNames {
     CORE_EXPORT extern const blink::QualifiedName& webkitdropzoneAttr;
     CORE_EXPORT extern const blink::QualifiedName& widthAttr;
     CORE_EXPORT extern const blink::QualifiedName& wrapAttr;
+    CORE_EXPORT extern const blink::QualifiedName& nomoduleAttr;   
 
     const unsigned HTMLTagsCount = 139;
     CORE_EXPORT std::unique_ptr<const HTMLQualifiedName*[]> getHTMLTags();
 
-    const unsigned HTMLAttrsCount = 337;
+    const unsigned HTMLAttrsCount = 337 + 1; // add nomoduleAttr
 
     void init();
 

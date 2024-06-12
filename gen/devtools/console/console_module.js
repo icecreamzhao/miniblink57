@@ -327,7 +327,8 @@ return new Common.TextRange(lineNumber,index+1,lineNumber,columnNumber);}
 _wordsWithQuery(queryRange,substituteRange,force,currentTokenType){var query=this._editor.text(queryRange);var before=this._editor.text(new Common.TextRange(0,0,queryRange.startLine,queryRange.startColumn));var historyWords=this._historyCompletions(query,force);var excludedTokens=new Set(['js-comment','js-string-2','js-def']);var trimmedBefore=before.trim();if(!trimmedBefore.endsWith('['))
 excludedTokens.add('js-string');if(!trimmedBefore.endsWith('.'))
 excludedTokens.add('js-property');if(excludedTokens.has(currentTokenType))
-return Promise.resolve(historyWords);return Components.JavaScriptAutocomplete.completionsForTextInCurrentContext(before,query,force).then(words=>words.concat(historyWords));}
+return Promise.resolve(historyWords);
+return Components.JavaScriptAutocomplete.completionsForTextInCurrentContext(before,query,force).then(words=>words.concat(historyWords));}
 _editorSetForTest(){}};Console.ConsoleHistoryManager=class{constructor(){this._data=[];this._historyOffset=1;}
 historyData(){return this._data;}
 setHistoryData(data){this._data=data.slice();this._historyOffset=1;}

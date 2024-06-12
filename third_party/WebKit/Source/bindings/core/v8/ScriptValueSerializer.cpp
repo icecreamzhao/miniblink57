@@ -120,7 +120,7 @@ void SerializedScriptValueWriter::writeRawStringBytes(
     v8::Local<v8::String>& string)
 {
     int rawLength = string->Length();
-    string->WriteOneByte(byteAt(m_position), 0, rawLength,
+    string->WriteOneByte(v8::Isolate::GetCurrent(), byteAt(m_position), 0, rawLength,
         v8StringWriteOptions());
     m_position += rawLength;
 }
@@ -128,9 +128,9 @@ void SerializedScriptValueWriter::writeRawStringBytes(
 void SerializedScriptValueWriter::writeUtf8String(
     v8::Local<v8::String>& string)
 {
-    int utf8Length = string->Utf8Length();
+    int utf8Length = string->Utf8Length(v8::Isolate::GetCurrent());
     char* buffer = reinterpret_cast<char*>(byteAt(m_position));
-    string->WriteUtf8(buffer, utf8Length, 0, v8StringWriteOptions());
+    string->WriteUtf8(v8::Isolate::GetCurrent(), buffer, utf8Length, 0, v8StringWriteOptions());
     m_position += utf8Length;
 }
 
@@ -138,7 +138,7 @@ void SerializedScriptValueWriter::writeOneByteString(
     v8::Local<v8::String>& string)
 {
     int stringLength = string->Length();
-    int utf8Length = string->Utf8Length();
+    int utf8Length = string->Utf8Length(v8::Isolate::GetCurrent());
     ASSERT(stringLength >= 0 && utf8Length >= 0);
 
     append(StringTag);
@@ -170,7 +170,7 @@ void SerializedScriptValueWriter::writeUCharString(
 
     ASSERT(!(m_position & 1));
     uint16_t* buffer = reinterpret_cast<uint16_t*>(byteAt(m_position));
-    string->Write(buffer, 0, length, v8StringWriteOptions());
+    string->Write(v8::Isolate::GetCurrent(), buffer, 0, length, v8StringWriteOptions());
     m_position += size;
 }
 
@@ -374,7 +374,7 @@ void SerializedScriptValueWriter::writeRegExp(v8::Local<v8::String> pattern,
     v8::RegExp::Flags flags)
 {
     append(RegExpTag);
-    v8::String::Utf8Value patternUtf8Value(pattern);
+    v8::String::Utf8Value patternUtf8Value(v8::Isolate::GetCurrent(), pattern);
     doWriteString(*patternUtf8Value, patternUtf8Value.length());
     doWriteUint32(static_cast<uint32_t>(flags));
 }
@@ -952,10 +952,10 @@ ScriptValueSerializer::StateBase* ScriptValueSerializer::doSerializeObject(
         }
         return writeTransferredSharedArrayBuffer(object, index, next);
     }
-
+#if V8_MAJOR_VERSION <= 7
     if (object->IsWebAssemblyCompiledModule())
         return writeWasmCompiledModule(object, next);
-
+#endif
     // Transferable only objects
     if (V8MessagePort::hasInstance(object, isolate())) {
         uint32_t index;
@@ -1136,7 +1136,7 @@ void ScriptValueSerializer::writeString(v8::Local<v8::Value> value)
 void ScriptValueSerializer::writeStringObject(v8::Local<v8::Value> value)
 {
     v8::Local<v8::StringObject> stringObject = value.As<v8::StringObject>();
-    v8::String::Utf8Value stringValue(stringObject->ValueOf());
+    v8::String::Utf8Value stringValue(v8::Isolate::GetCurrent(), stringObject->ValueOf());
     m_writer.writeStringObject(*stringValue, stringValue.length());
 }
 

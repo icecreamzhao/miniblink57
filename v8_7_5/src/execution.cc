@@ -176,8 +176,7 @@ namespace internal {
             UNREACHABLE();
         }
 
-        V8_WARN_UNUSED_RESULT MaybeHandle<Object> Invoke(Isolate* isolate,
-            const InvokeParams& params)
+        V8_WARN_UNUSED_RESULT MaybeHandle<Object> Invoke(Isolate* isolate, const InvokeParams& params)
         {
             RuntimeCallTimerScope timer(isolate, RuntimeCallCounterId::kInvoke);
             DCHECK(!params.receiver->IsJSGlobalObject());
@@ -253,7 +252,7 @@ namespace internal {
 
                 if (FLAG_clear_exceptions_on_js_entry)
                     isolate->clear_pending_exception();
-
+                
                 if (params.execution_target == Execution::Target::kCallable) {
                     // clang-format on
                     // {new_target}, {target}, {receiver}, return value: tagged pointers
@@ -269,22 +268,19 @@ namespace internal {
                     Address recv = params.receiver->ptr();
                     Address** argv = reinterpret_cast<Address**>(params.argv);
                     RuntimeCallTimerScope timer(isolate, RuntimeCallCounterId::kJS_Execution);
-                    value = Object(stub_entry.Call(isolate->isolate_data()->isolate_root(),
-                        orig_func, func, recv, params.argc, argv));
+                    value = Object(stub_entry.Call(isolate->isolate_data()->isolate_root(), orig_func, func, recv, params.argc, argv));
                 } else {
                     DCHECK_EQ(Execution::Target::kRunMicrotasks, params.execution_target);
 
                     // clang-format off
-      // return value: tagged pointers
-      // {microtask_queue}: pointer to a C++ object
-      using JSEntryFunction = GeneratedCode<Address(
-          Address root_register_value, MicrotaskQueue* microtask_queue)>;
+                    // return value: tagged pointers
+                    // {microtask_queue}: pointer to a C++ object
+                    using JSEntryFunction = GeneratedCode<Address(Address root_register_value, MicrotaskQueue* microtask_queue)>;
                     // clang-format on
                     JSEntryFunction stub_entry = JSEntryFunction::FromAddress(isolate, code->InstructionStart());
 
                     RuntimeCallTimerScope timer(isolate, RuntimeCallCounterId::kJS_Execution);
-                    value = Object(stub_entry.Call(isolate->isolate_data()->isolate_root(),
-                        params.microtask_queue));
+                    value = Object(stub_entry.Call(isolate->isolate_data()->isolate_root(), params.microtask_queue));
                 }
             }
 

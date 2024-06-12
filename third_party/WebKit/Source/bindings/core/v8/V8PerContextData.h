@@ -111,7 +111,7 @@ public:
         m_activityLogger = activityLogger;
     }
 
-    Modulator* modulator() const { return m_modulator.get(); }
+    Modulator* modulator();
     void setModulator(Modulator*);
     void clearModulator();
 

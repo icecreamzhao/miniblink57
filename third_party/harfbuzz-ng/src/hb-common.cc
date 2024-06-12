@@ -155,7 +155,7 @@ const char *
 hb_direction_to_string (hb_direction_t direction)
 {
   if (likely ((unsigned int) (direction - HB_DIRECTION_LTR)
-	      < ARRAY_LENGTH (direction_strings)))
+          < ARRAY_LENGTH (direction_strings)))
     return direction_strings[direction - HB_DIRECTION_LTR];
 
   return "invalid";
@@ -181,7 +181,7 @@ static const char canon_map[256] = {
 
 static bool
 lang_equal (hb_language_t  v1,
-	    const void    *v2)
+        const void    *v2)
 {
   const unsigned char *p1 = (const unsigned char *) v1;
   const unsigned char *p2 = (const unsigned char *) v2;
@@ -219,11 +219,18 @@ struct hb_language_item_t {
   }
 
   inline hb_language_item_t & operator = (const char *s) {
-#if defined(OS_WIN)
-      lang = (hb_language_t) _strdup (s);
-#elif defined(OS_LINUX)
-      lang = (hb_language_t) strdup (s);
-#endif
+// #if defined(OS_WIN)
+//     lang = (hb_language_t) _strdup (s);
+// #elif defined(OS_LINUX)
+//     lang = (hb_language_t) strdup (s);
+// #endif
+    /* If a custom allocated is used calling strdup() pairs
+     * badly with a call to the custom free() in fini() below.
+     * Therefore don't call strdup(), implement its behavior.
+     */
+    size_t len = strlen(s) + 1;
+    lang = (hb_language_t)malloc(len);
+    memcpy((unsigned char*)lang, s, len);
 
     for (unsigned char *p = (unsigned char *) lang; *p; p++)
       *p = canon_map[*p];
@@ -512,9 +519,9 @@ hb_script_get_horizontal_direction (hb_script_t script)
 
 bool
 hb_user_data_array_t::set (hb_user_data_key_t *key,
-			   void *              data,
-			   hb_destroy_func_t   destroy,
-			   hb_bool_t           replace)
+               void *              data,
+               hb_destroy_func_t   destroy,
+               hb_bool_t           replace)
 {
   if (!key)
     return false;
@@ -554,8 +561,8 @@ hb_user_data_array_t::get (hb_user_data_key_t *key)
  **/
 void
 hb_version (unsigned int *major,
-	    unsigned int *minor,
-	    unsigned int *micro)
+        unsigned int *minor,
+        unsigned int *micro)
 {
   *major = HB_VERSION_MAJOR;
   *minor = HB_VERSION_MINOR;
@@ -591,8 +598,8 @@ hb_version_string (void)
  **/
 hb_bool_t
 hb_version_atleast (unsigned int major,
-		    unsigned int minor,
-		    unsigned int micro)
+            unsigned int minor,
+            unsigned int micro)
 {
   return HB_VERSION_ATLEAST (major, minor, micro);
 }

@@ -507,6 +507,7 @@ namespace HTMLNames {
     const QualifiedName& webkitdropzoneAttr = reinterpret_cast<QualifiedName*>(&AttrStorage)[334];
     const QualifiedName& widthAttr = reinterpret_cast<QualifiedName*>(&AttrStorage)[335];
     const QualifiedName& wrapAttr = reinterpret_cast<QualifiedName*>(&AttrStorage)[336];
+    const QualifiedName& nomoduleAttr = reinterpret_cast<QualifiedName*>(&AttrStorage)[337];    
 
     void init()
     {
@@ -984,6 +985,7 @@ namespace HTMLNames {
             { "width", 12902275, 5, 0, 1 },
             { "wrap", 7601899, 4, 0, 1 },
             { "xmp", 8764488, 3, 1, 0 },
+            { "nomodule", 10903441, 8, 0, 1 },
         };
 
         size_t tag_i = 0;

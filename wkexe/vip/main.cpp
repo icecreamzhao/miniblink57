@@ -20,8 +20,8 @@
 #include <set>
 #include <TlHelp32.h>
 #include <xmmintrin.h>
-#include "quickjs-vs/quickjs.h"
-#include "quickjs-vs/quickjs-libc.h"
+// #include "quickjs/quickjs.h"
+// #include "quickjs/quickjs-libc.h"
 
 // #define VLD_FORCE_ENABLE 1
 // #include "C:\\Program Files (x86)\\Visual Leak Detector\\include\\vld.h"
@@ -478,6 +478,14 @@ static int GetRealSize(size_t s) {
     return ret;
 }
 
+typedef void* (__cdecl* FN_CreateThread)(void* lpThreadAttributes, SIZE_T dwStackSize, LPTHREAD_START_ROUTINE lpStartAddress, LPVOID lpParameter, DWORD dwCreationFlags, LPDWORD lpThreadId);
+FN_CreateThread s_origCreateThread = nullptr;
+
+HANDLE MyCreateThread(void* lpThreadAttributes, SIZE_T dwStackSize, LPTHREAD_START_ROUTINE lpStartAddress, LPVOID lpParameter, DWORD dwCreationFlags, LPDWORD lpThreadId)
+{
+  return s_origCreateThread(lpThreadAttributes, dwStackSize, lpStartAddress, lpParameter, dwCreationFlags, lpThreadId);
+}
+
 void* __cdecl MyMalloc(size_t s) {
     if (0 == s)
         return nullptr;
@@ -726,60 +734,60 @@ private:
     std::string* m_source;
 };
 
-int testQuickjs()
-{
-    std::vector<char> buffer;
-    readFile(L"G:\\test\\web_test\\xmlifa\\test_v8.js", &buffer);
-
-    const char* filename = "<input>";
-
-    JSRuntime* rt;
-    JSContext* ctx;
-    rt = JS_NewRuntime();
-    ctx = JS_NewContextRaw(rt);
-    JS_AddIntrinsicBaseObjects(ctx);
-    //js_std_add_helpers(ctx, argc, argv);
-    //js_std_eval_binary(ctx, (const uint8_t *)buffer.data(), buffer.size(), 0);
-    JSValue v = JS_Eval(ctx, buffer.data(), buffer.size(), "<input>", JS_EVAL_TYPE_GLOBAL);
-    //js_std_loop(ctx);
-
-    JSValue res_val, exception_val;
-    exception_val = JS_GetException(ctx);
-
-    JSValue name, stack;
-    const char* stack_str;
-    const char *error_name;
-    int ret, error_line, pos, pos_line;
-    BOOL is_error, has_error_line;
-    
-    name = JS_GetPropertyStr(ctx, exception_val, "name");
-    error_name = JS_ToCString(ctx, name);
-    stack = JS_GetPropertyStr(ctx, exception_val, "stack");
-    if (!JS_IsUndefined(stack)) {
-        stack_str = JS_ToCString(ctx, stack);
-        if (stack_str) {
-            const char* p;
-            int len;
-
-//             if (outfile)
-//                 fprintf(outfile, "%s", stack_str);
-
-            len = strlen(filename);
-            p = strstr(stack_str, filename);
-            if (p != NULL && p[len] == ':') {
-                error_line = atoi(p + len + 1);
-                has_error_line = TRUE;
-            }
-            JS_FreeCString(ctx, stack_str);
-        }
-    }
-    JS_FreeValue(ctx, stack);
-    JS_FreeValue(ctx, name);
-
-    JS_FreeContext(ctx);
-    JS_FreeRuntime(rt);
-    return 0;
-}
+// int testQuickjs()
+// {
+//     std::vector<char> buffer;
+//     readFile(L"G:\\test\\web_test\\xmlifa\\test_v8.js", &buffer);
+// 
+//     const char* filename = "<input>";
+// 
+//     JSRuntime* rt;
+//     JSContext* ctx;
+//     rt = JS_NewRuntime();
+//     ctx = JS_NewContextRaw(rt);
+//     JS_AddIntrinsicBaseObjects(ctx);
+//     //js_std_add_helpers(ctx, argc, argv);
+//     //js_std_eval_binary(ctx, (const uint8_t *)buffer.data(), buffer.size(), 0);
+//     JSValue v = JS_Eval(ctx, buffer.data(), buffer.size(), "<input>", JS_EVAL_TYPE_GLOBAL);
+//     //js_std_loop(ctx);
+// 
+//     JSValue res_val, exception_val;
+//     exception_val = JS_GetException(ctx);
+// 
+//     JSValue name, stack;
+//     const char* stack_str;
+//     const char *error_name;
+//     int ret, error_line, pos, pos_line;
+//     BOOL is_error, has_error_line;
+//     
+//     name = JS_GetPropertyStr(ctx, exception_val, "name");
+//     error_name = JS_ToCString(ctx, name);
+//     stack = JS_GetPropertyStr(ctx, exception_val, "stack");
+//     if (!JS_IsUndefined(stack)) {
+//         stack_str = JS_ToCString(ctx, stack);
+//         if (stack_str) {
+//             const char* p;
+//             int len;
+// 
+// //             if (outfile)
+// //                 fprintf(outfile, "%s", stack_str);
+// 
+//             len = strlen(filename);
+//             p = strstr(stack_str, filename);
+//             if (p != NULL && p[len] == ':') {
+//                 error_line = atoi(p + len + 1);
+//                 has_error_line = TRUE;
+//             }
+//             JS_FreeCString(ctx, stack_str);
+//         }
+//     }
+//     JS_FreeValue(ctx, stack);
+//     JS_FreeValue(ctx, name);
+// 
+//     JS_FreeContext(ctx);
+//     JS_FreeRuntime(rt);
+//     return 0;
+// }
 
 size_t gotoPosImpl(std::string* source, size_t index, bool* find, char ch, bool ignoreSpacing)
 {
@@ -857,9 +865,35 @@ bool fixV8ErrorImpl(std::string* source)
     return find;
 }
 
+bool FindIpAddr(const std::string& str);
+void testMain();
+
 int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
-    OutputDebugStringA("");
+
+    //HookByHotpatch(L"kernel32.DLL", (LPCSTR)"CreateThread", ((void*)(MyCreateThread)), (void**)&s_origCreateThread);
+//     testMain();
+//     return 0;
+// 
+//     g_TestTls111 = new TestTls();
+//     g_TestTls222 = new TestTls();
+
+    bool b = false;
+
+    //b = FindIpAddr("candidate:842163049  1 udp 1677729535 113..74.127.28 6978  typ srflx raddr 0.0.0.0 rport 0 generation 0 ufrag 1HT/ network-cost 999");
+//     b = FindIpAddr("a 123.74.127.28 6978");
+//     b = FindIpAddr("123.74.127.28 6978");
+//     b = FindIpAddr("123.74.127. 28 6978");
+//     b = FindIpAddr("123.74.127.238");
+//     b = FindIpAddr("123.74.127.2383");
+    //b = FindIpAddr(" 123.74.127.233 ");
+    //b = FindIpAddr("123..74.127.233 ");
+//     b = FindIpAddr(" 123.74.127..28 ..");
+//     b = FindIpAddr("123.74.12 7.28");
+//     b = FindIpAddr(".123.74.12 7.28");
+
+    //fortchrome::DelChromeInk();
+    //return 0;
 
     //testQuickjs();
 //     std::vector<char> buffer;
@@ -945,7 +979,12 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmd
 
     //mbSetMbDllPath(L"G:\\mycode\\miniblink57\\Debug\\node.dll");
     //mbSetMbMainDllPath(L"G:\\mycode\\mb\\out\\Debug\\node.dll");
+#ifdef _WIN64
+    mbSetMbMainDllPath(L"miniblink_5775_x64.dll");
+#else
     mbSetMbMainDllPath(L"miniblink_5775_x32.dll");
+#endif
+
     //mbSetMbMainDllPath(L"node.dll");
 
     //settings->mainDllPath = L"node_v8_7_5.dll";

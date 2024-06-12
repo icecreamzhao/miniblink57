@@ -374,11 +374,13 @@ static bool needInserFileHead(const String& url)
     return false;
 }
 
-KURL::KURL(ParsedURLStringTag, const String& url)
+KURL::KURL(ParsedURLStringTag, const String& urlStr)
 {
     m_innerURL = nullptr;
     bool fixed = false;
     String fixSchemeUrl;
+
+    String url = WTF::ensureStringToUTF8String(urlStr);
 
     if (!url.isNull() && !url.isEmpty()) {
         if (needInserFileHead(url)) {
@@ -481,10 +483,18 @@ void KURL::init(const KURL& base, const String& relative, const TextEncoding& en
         str = strBuffer.data();
     } else {
         originalString = 0;
+
         String relA(rel.utf8().data());
         encodeRelativeString(relA, encoding, strBuffer);
         str = strBuffer.data();
         len = strlen(str);
+
+//         CString relStr = rel.utf8();
+//         len = relStr.length();
+//         strBuffer.resize(len + 1);
+//         memcpy(strBuffer.data(), relStr.data(), len);
+//         strBuffer[len] = 0;
+//         str = strBuffer.data();
     }
 
     // Get rid of leading whitespace and control characters.
@@ -1876,6 +1886,36 @@ static void encodeHostnames(const String& str, LCharBuffer& output)
     }
 }
 
+// static void encodeRelativeString(const String& rel, const TextEncoding& encoding, CharBuffer& output)
+// {
+//     LCharBuffer s;
+//     encodeHostnames(rel, s);
+// 
+//     TextEncoding pathEncoding(UTF8Encoding()); // Path is always encoded as UTF-8; other parts may depend on the scheme.
+// 
+//     int pathEnd = -1;
+//     if (encoding != pathEncoding && encoding.isValid() && !protocolIs(rel, "mailto") && !protocolIs(rel, "data") && !protocolIsJavaScript(rel)) {
+//         // Find the first instance of either # or ?, keep pathEnd at -1 otherwise.
+//         pathEnd = findFirstOf(s.data(), s.size(), 0, "#?");
+//     }
+// 
+//     if (pathEnd == -1) {
+//         CString decoded = pathEncoding.encode(String(s.data(), s.size()), URLEncodedEntitiesForUnencodables);
+//         output.resize(decoded.length());
+//         memcpy(output.data(), decoded.data(), decoded.length());
+//     } else {
+//         CString pathDecoded = pathEncoding.encode(String(s.data(), pathEnd), URLEncodedEntitiesForUnencodables);
+//         // Unencodable characters in URLs are represented by converting
+//         // them to XML entities and escaping non-alphanumeric characters.
+//         CString otherDecoded = encoding.encode(String(s.data() + pathEnd, s.size() - pathEnd), URLEncodedEntitiesForUnencodables);
+// 
+//         output.resize(pathDecoded.length() + otherDecoded.length());
+//         memcpy(output.data(), pathDecoded.data(), pathDecoded.length());
+//         memcpy(output.data() + pathDecoded.length(), otherDecoded.data(), otherDecoded.length());
+//     }
+//     output.append('\0'); // null-terminate the output.
+// }
+
 static void encodeRelativeString(const String& rel, const TextEncoding& encoding, CharBuffer& output)
 {
     LCharBuffer s;
@@ -1889,12 +1929,17 @@ static void encodeRelativeString(const String& rel, const TextEncoding& encoding
         pathEnd = findFirstOf(s.data(), s.size(), 0, "#?");
     }
 
+    bool urlIsUTF8 = WTF::isTextUTF8((const char*)s.data(), s.size());
     if (pathEnd == -1) {
-        CString decoded = pathEncoding.encode(String(s.data(), s.size()), URLEncodedEntitiesForUnencodables);
+        CString decoded((const char*)s.data(), s.size());
+        if (!urlIsUTF8)
+            decoded = pathEncoding.encode(String(s.data(), s.size()), URLEncodedEntitiesForUnencodables);
         output.resize(decoded.length());
         memcpy(output.data(), decoded.data(), decoded.length());
     } else {
-        CString pathDecoded = pathEncoding.encode(String(s.data(), pathEnd), URLEncodedEntitiesForUnencodables);
+        CString pathDecoded((const char*)s.data(), pathEnd);
+        if (!urlIsUTF8)
+            pathDecoded = pathEncoding.encode(String(s.data(), pathEnd), URLEncodedEntitiesForUnencodables);
         // Unencodable characters in URLs are represented by converting
         // them to XML entities and escaping non-alphanumeric characters.
         CString otherDecoded = encoding.encode(String(s.data() + pathEnd, s.size() - pathEnd), URLEncodedEntitiesForUnencodables);

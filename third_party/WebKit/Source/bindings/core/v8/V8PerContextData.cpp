@@ -34,7 +34,8 @@
 #include "bindings/core/v8/ScriptState.h"
 #include "bindings/core/v8/V8Binding.h"
 #include "bindings/core/v8/V8ObjectConstructor.h"
-#include "core/dom/Modulator.h"
+#include "bindings/core/v8/Modulator.h"
+//#include "core/dom/Modulator.h"
 #include "platform/InstanceCounters.h"
 #include "wtf/PtrUtil.h"
 #include "wtf/StringExtras.h"
@@ -49,7 +50,7 @@ V8PerContextData::V8PerContextData(v8::Local<v8::Context> context)
     , m_constructorMap(m_isolate)
     , m_contextHolder(WTF::makeUnique<gin::ContextHolder>(m_isolate))
     , m_context(m_isolate, context)
-    , m_activityLogger(nullptr)
+    , m_activityLogger(nullptr)   
 {
     m_contextHolder->SetContext(context);
 
@@ -192,11 +193,19 @@ void V8PerContextData::addCustomElementBinding(
     m_customElementBindings.push_back(std::move(binding));
 }
 
+Modulator* V8PerContextData::modulator() 
+{ 
+    if (!m_modulator.get())
+        m_modulator = Modulator::create();
+    return m_modulator.get();
+}
+
 void V8PerContextData::setModulator(Modulator* modulator)
 {
     DCHECK(!m_modulator);
     DCHECK(modulator);
     m_modulator = modulator;
+    DebugBreak();
 }
 
 void V8PerContextData::clearModulator()

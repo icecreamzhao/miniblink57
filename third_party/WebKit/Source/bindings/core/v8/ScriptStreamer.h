@@ -58,6 +58,8 @@ public:
     v8::ScriptCompiler::StreamedSource* source() { return m_source.get(); }
     ScriptResource* resource() const { return m_resource; }
 
+    SourceStream* stream() const;
+
     // Called when the script is not needed any more (e.g., loading was
     // cancelled). After calling cancel, PendingScript can drop its reference to
     // ScriptStreamer, and ScriptStreamer takes care of eventually deleting

@@ -119,6 +119,10 @@ public:
         m_requestURL = loader->imageSourceToKURL(loader->element()->imageSourceURL());
     }
 
+    ~Task()
+    {
+    }
+
     void run()
     {
         if (!m_loader)

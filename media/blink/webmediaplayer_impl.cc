@@ -182,7 +182,7 @@ namespace {
 
     // How much time must have elapsed since loading last progressed before we
     // assume that the decoder will have had time to complete preroll.
-    base::TimeDelta kPrerollAttemptTimeout = base::TimeDelta::FromSeconds(3);
+    /*constexpr*/ base::TimeDelta kPrerollAttemptTimeout = base::TimeDelta::FromSeconds(3);
 
 } // namespace
 
@@ -280,6 +280,9 @@ WebMediaPlayerImpl::WebMediaPlayerImpl(
     DCHECK(!adjust_allocated_memory_cb_.is_null());
     DCHECK(renderer_factory_);
     DCHECK(client_);
+
+    if (kPrerollAttemptTimeout.is_zero())
+        kPrerollAttemptTimeout = base::TimeDelta::FromSeconds(3);
 
     tick_clock_.reset(new base::DefaultTickClock());
 

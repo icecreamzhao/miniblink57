@@ -4,6 +4,27 @@
 
 namespace content {
 	
+extern unsigned char mediaplayer_cast_off[1268];
+extern unsigned char mediaplayer_cast_on[1429];
+extern unsigned char mediaplayer_closedcaption[711];
+extern unsigned char mediaplayer_closedcaption_disabled[943];
+extern unsigned char mediaplayer_closedcaptions_icon[1271];
+extern unsigned char mediaplayer_download[916];
+extern unsigned char mediaplayer_enter_fullscreen[309];
+extern unsigned char mediaplayer_exit_fullscreen[288];
+extern unsigned char mediaplayer_overflow_menu[602];
+extern unsigned char mediaplayer_overlay_cast_off[1771];
+extern unsigned char mediaplayer_overlay_cast_on[1982];
+extern unsigned char mediaplayer_pause[288];
+extern unsigned char mediaplayer_play[618];
+extern unsigned char mediaplayer_slider_thumb[577];
+extern unsigned char mediaplayer_sound_muted[1299];
+extern unsigned char mediaplayer_sound_not_muted[1142] ;
+extern unsigned char mediaplayer_subtitles_icon[896];
+extern unsigned char mediaplayer_trackselection_checkmark[1211];
+extern unsigned char mediaplayer_volume_slider_thumb[577];
+extern unsigned char mediaControls_css[14342];
+
 extern unsigned char MediaplayerCastOff[644];
 extern unsigned char MediaplayerCastOn[889];
 extern unsigned char MediaplayerClosedcaption[2497];

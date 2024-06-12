@@ -182,9 +182,16 @@ void SourceLocation::toTracedValue(TracedValue* value, const char* name) const
         return;
     value->beginArray(name);
     value->beginDictionary();
-    value->setString("functionName",
-        toCoreString(m_stackTrace->topFunctionName()));
+    value->setString("functionName", toCoreString(m_stackTrace->topFunctionName()));
+
+#if V8_MAJOR_VERSION > 7
+    uint8_t topScriptId[33] = { 0 };
+    sprintf((char*)topScriptId, "%d", m_stackTrace->topScriptId());
+    v8_inspector::StringView topScriptIdStr(topScriptId, strlen((char*)topScriptId));
+    value->setString("scriptId", toCoreString(topScriptIdStr));
+#else
     value->setString("scriptId", toCoreString(m_stackTrace->topScriptId()));
+#endif
     value->setString("url", toCoreString(m_stackTrace->topSourceURL()));
     value->setInteger("lineNumber", m_stackTrace->topLineNumber());
     value->setInteger("columnNumber", m_stackTrace->topColumnNumber());
@@ -201,7 +208,11 @@ std::unique_ptr<SourceLocation> SourceLocation::clone() const
 
 std::unique_ptr<v8_inspector::protocol::Runtime::API::StackTrace>
 SourceLocation::buildInspectorObject() const {
-    return m_stackTrace ? m_stackTrace->buildInspectorObject() : nullptr;
+    return m_stackTrace ? m_stackTrace->buildInspectorObject(
+#if V8_MAJOR_VERSION >=10
+        20
+#endif
+    ) : nullptr;
 }
 
 String SourceLocation::toString() const

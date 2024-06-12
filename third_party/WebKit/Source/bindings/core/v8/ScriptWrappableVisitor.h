@@ -109,7 +109,11 @@ public:
     // Immediately clean up all wrappers.
     static void performCleanup(v8::Isolate*);
 
-    void TracePrologue() override;
+    void TracePrologue(
+#if V8_MAJOR_VERSION > 7
+        v8::EmbedderHeapTracer::TraceFlags flags
+#endif
+    ) override;
 
     static WrapperVisitor* currentVisitor(v8::Isolate*);
 
@@ -158,7 +162,11 @@ public:
         , v8::EmbedderHeapTracer::AdvanceTracingActions
 #endif
     ) override;
-    void TraceEpilogue() override;
+    void TraceEpilogue(
+#if V8_MAJOR_VERSION > 7
+        v8::EmbedderHeapTracer::TraceSummary* trace_summary
+#endif
+    ) override;
     void AbortTracing() /*override*/;
     void EnterFinalPause() /*override*/;
     size_t NumberOfWrappersToTrace() /*override*/;

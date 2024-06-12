@@ -231,6 +231,7 @@ void TextCodecICU::registerEncodingNames(EncodingNameRegistrar registrar)
 
     // add by weolar
     registrar("gb2312", "gb2312");
+    registrar("gb18030", "gb18030");
     registrar("gb_2312", "gb_2312");
     registrar("GBK", "GBK");
     registrar("csiso58gb231280", "GBK");
@@ -261,6 +262,7 @@ void TextCodecICU::registerCodecs(TextCodecRegistrar registrar)
 
     // add by weolar
     registrar("gb2312", create, 0);
+    registrar("gb18030", create, 0);
     registrar("GBK", create, 0);
 }
 
@@ -412,7 +414,14 @@ String TextCodecICU::decode(const char* bytes,
     bool& sawError)
 {
     std::vector<UChar> resultBuffer;
-    if (strcasecmp(m_encoding.name(), "gb2312") && strcasecmp(m_encoding.name(), "GBK"))
+    if (strcasecmp(m_encoding.name(), "gb2312") &&
+        strcasecmp(m_encoding.name(), "GBK") &&
+        strcasecmp(m_encoding.name(), "gb18030") &&
+        strcasecmp(m_encoding.name(), "gb_2312")
+        )
+        return String();
+
+    if (0 == length)
         return String();
 
     WTF::MByteToWChar(bytes, length, &resultBuffer, CP_ACP);
@@ -777,18 +786,55 @@ CString TextCodecICU::encodeCommon(const CharType* characters,
     return encodeInternal(input, handling);
 }
 
-CString TextCodecICU::encode(const UChar* characters,
-    size_t length,
-    UnencodableHandling handling)
+#define GBK_CONV_CODE_PAGE  (936)
+#define BIG5_CONV_CODE_PAGE (950)
+
+static String decodeBig5(const char* bytes, size_t length)
 {
-    return encodeCommon(characters, length, handling);
+    std::vector<UChar> resultBuffer;
+    WTF::MByteToWChar(bytes, length, &resultBuffer, BIG5_CONV_CODE_PAGE);
+    if (0 == resultBuffer.size())
+        return String();
+
+    return String(&resultBuffer[0], resultBuffer.size());
 }
 
-CString TextCodecICU::encode(const LChar* characters,
-    size_t length,
-    UnencodableHandling handling)
+CString TextCodecICU::encode(const UChar* characters, size_t length, UnencodableHandling handling)
 {
-    return encodeCommon(characters, length, handling);
+    //return encodeCommon(characters, length, handling);
+
+    std::vector<char> resultBuffer;
+    if (strcasecmp(m_encoding.name(), "big5") &&
+        strcasecmp(m_encoding.name(), "gb2312") &&
+        strcasecmp(m_encoding.name(), "GBK") &&
+        strcasecmp(m_encoding.name(), "gb18030") &&
+        strcasecmp(m_encoding.name(), "gb_2312"))
+        return CString();
+
+    UINT codePage = GBK_CONV_CODE_PAGE;
+    if (0 == strcasecmp(m_encoding.name(), "big5"))
+        codePage = BIG5_CONV_CODE_PAGE;
+
+    WTF::WCharToMByte(characters, length, &resultBuffer, codePage);
+    if (0 == resultBuffer.size())
+        return CString();
+    return CString(&resultBuffer[0], resultBuffer.size());
+}
+
+CString TextCodecICU::encode(const LChar* characters, size_t length, UnencodableHandling handling)
+{
+    //return encodeCommon(characters, length, handling);
+
+    if (strcasecmp(m_encoding.name(), "gb2312") &&
+        strcasecmp(m_encoding.name(), "GBK") &&
+        strcasecmp(m_encoding.name(), "gb18030") &&
+        strcasecmp(m_encoding.name(), "gb_2312"))
+        return CString();
+
+    bool sawError = false;
+
+    String returnString = decode((const char*)characters, length, DoNotFlush, true, sawError);
+    return encode(returnString.characters16(), returnString.length(), handling);
 }
 
 } // namespace WTF

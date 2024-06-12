@@ -15,6 +15,7 @@
 #include "public/platform/Platform.h"
 //#include "public/platform/mime_registry.mojom-blink.h"
 #include "wtf/text/WTFString.h"
+#include "include/v8-version.h"
 
 // https://opensource.apple.com/source/Libc/Libc-262/gen/fnmatch.c.auto.html
 // https://www.cnblogs.com/oloroso/p/6861576.html
@@ -419,11 +420,8 @@ String MIMETypeRegistry::getMIMETypeForPath(const String& path)
 bool MIMETypeRegistry::isSupportedMIMEType(const String& mimeType)
 {
     //return mime_util::IsSupportedMimeType(ToLowerASCIIOrEmpty(mimeType));
-    if ("text/html" == mimeType)
+    if ("text/html" == mimeType || "text/vnd.wap.wml" == mimeType || "application/xhtml+xml" == mimeType)
         return true;
-    if ("text/vnd.wap.wml" == mimeType)
-        return true;
-
     return false;
 }
 
@@ -513,6 +511,9 @@ bool MIMETypeRegistry::isSupportedJavaScriptMIMEType(const String& mimeType)
             "text/javascript1.3",
             "text/jscript",
             "text/livescript",
+#if V8_MAJOR_VERSION >= 7
+            "module",
+#endif
         };
         for (size_t i = 0; i < WTF_ARRAY_LENGTH(types); ++i)
             supportedJavaScriptMIMETypes->add(types[i]);

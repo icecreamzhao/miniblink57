@@ -1,6 +1,5 @@
 ﻿
-
-#if !defined(WIN32)
+#if !defined(WIN32) && !defined(_WIN32)
 #include "linux/linuxgdi.h"
 #include "mbvip/common/StringUtil.h"
 #include "mbvip/common/ThreadCall.h"
@@ -48,6 +47,8 @@ public:
         pthread_mutex_destroy(&m_mutex);
     }
 
+    void setCtrl(bool b) { m_isCtrl = b; }
+
     void updata(const guint* state)
     {
         GdkDisplay* display = gdk_display_get_default();
@@ -84,11 +85,14 @@ public:
 //         if (type & GDK_MOD1_MASK)
 //             isAtl = true;
 
+        if (isCtrl)
+            printf("isCtrl !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+
         m_isCapsLock = isCapsLock;
         m_isNumLock = isNumLock;
         m_isScrollLock = isScrollLock;
         m_isShift = isShift;
-        m_isCtrl = isCtrl;
+        //m_isCtrl = isCtrl;
         m_isAtl = isAtl;
 
         pthread_mutex_unlock(&m_mutex);
@@ -335,17 +339,27 @@ gboolean HwndLinux::onButtonPressEvent(GtkWidget* widget, GdkEventButton* event,
         self->m_wndProc(self, WM_RBUTTONDOWN, 0, lParam);
     }
 
-    return TRUE; // We've handled the event, stop processing
+    return FALSE; // We've handled the event, stop processing
 }
 
 gboolean HwndLinux::onKeyRelease(GtkWidget* widget, GdkEventKey* event, gpointer data)
 {
     HwndLinux* self = (HwndLinux*)data;
     int key = event->keyval;
-    printf("onKeyRelease, keyval = %d\n", key);
+    printf("onKeyRelease, keyval = %x\n", key);
+
+    switch (key) {
+    case GDK_KEY_Control_L:
+        CrossThreadUiState::get()->setCtrl(false);
+    }
+
+    if ((event->state & GDK_CONTROL_MASK)) {
+        CrossThreadUiState::get()->setCtrl(false);
+    }
+
     self->m_wndProc(self, WM_KEYUP, (WPARAM)key, 0);
 
-    return TRUE;
+    return FALSE;
 }
 
 gboolean HwndLinux::onKeyPress(GtkWidget* widget, GdkEventKey* event, gpointer data)
@@ -392,12 +406,21 @@ gboolean HwndLinux::onKeyPress(GtkWidget* widget, GdkEventKey* event, gpointer d
     case GDK_Return:
         key = VK_RETURN;
         break;
-    }    
+    case GDK_KEY_Control_L:
+        CrossThreadUiState::get()->setCtrl(true);
+        key = VK_CONTROL;
+        break;
+    }
+
+    if ((event->state & GDK_CONTROL_MASK) /*&& (event->keyval == GDK_KEY_c)*/) {
+        CrossThreadUiState::get()->setCtrl(true);
+    }
+
     printf("onKeyPress, keyval = %x\n", key);
     self->m_wndProc(self, WM_KEYDOWN, (WPARAM)key, 0);
     self->m_wndProc(self, WM_CHAR, (WPARAM)key, 0);
     
-    return TRUE;
+    return FALSE;
 }
 
 gboolean HwndLinux::onFocusOut(GtkWidget *widget, GdkEventFocus *event, gpointer data)
@@ -467,7 +490,7 @@ gboolean HwndLinux::onScroll(GtkWidget* widget, GdkEventScroll* event, gpointer 
     lParam = MAKELPARAM(((int)event->x), ((int)event->y));
 
     self->m_wndProc(self, WM_MOUSEWHEEL, wParam, lParam);
-    return TRUE;
+    return FALSE;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -486,7 +509,13 @@ cairo_surface_t* createSurfaceByHwnd(HWND hwnd, int w, int h)
 
 LONG SetWindowLongW(HWND hwnd, int nIndex, LONG dwNewLong)
 {
-    printf("SetWindowLongW\n");
+    if (GWLP_USERDATA == nIndex) {
+        HwndLinux* self = (HwndLinux*)hwnd;
+        //self->m_wndProc;
+        self->m_userdata = (LPVOID)dwNewLong;
+    } else {
+        printf("SetWindowLongW\n");
+    }
     return 0;
 }
 
@@ -665,6 +694,68 @@ HWND BindWindowByGTK(void* rootWindow, void* drawingArea, DWORD dwExStyle, LPCWS
     g_signal_connect(GTK_WINDOW((GtkWidget*)rootWindow), "destroy", G_CALLBACK(&HwndLinux::onDestroy), self);
     g_signal_connect(GTK_WINDOW((GtkWidget*)rootWindow), "delete-event", G_CALLBACK(&HwndLinux::onDeleteEvent), self);
 
+
+    gtk_widget_set_events((GtkWidget*)drawingArea, gtk_widget_get_events((GtkWidget*)drawingArea) | GDK_BUTTON_PRESS_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_RELEASE_MASK | GDK_SCROLL_MASK);
+
+    CREATESTRUCTW createStruct = { 0 };
+    createStruct.lpCreateParams = lpParam;
+    self->m_wndProc(self, WM_CREATE, 0, (LPARAM)&createStruct);
+
+    self->m_widget = (GtkWidget*)rootWindow;
+    self->m_drawingArea = (GtkWidget*)drawingArea;
+
+    //printf("BindWindow: %d, %d", nWidth, nHeight);
+
+    pthread_mutex_lock(&HwndLinux::s_hwndMutex);
+    HwndLinux::s_hwnds->insert(self); // TODO: delete
+    pthread_mutex_unlock(&HwndLinux::s_hwndMutex);
+
+    return self;
+}
+
+HWND bindWindowByGTK(void* rootWindow, void* drawingArea, DWORD dwExStyle, LPCWSTR lpClassName, DWORD dwStyle, int nWidth, int nHeight, LPVOID lpParam)
+{
+    if (!HwndLinux::s_hwnds) {
+        HwndLinux::s_hwnds = new std::set<HWND>();
+        pthread_mutexattr_t attr;
+        pthread_mutexattr_init(&attr);
+        pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
+        pthread_mutex_init(&HwndLinux::s_hwndMutex, &attr);
+    }
+
+    if ((dwStyle & WS_CHILD) != 0)
+        DebugBreak();
+
+    if (nWidth == -1)
+        nWidth = 1000;
+    if (nHeight == -1)
+        nHeight = 800;
+
+    HwndLinux* self = new HwndLinux();
+    self->m_userdata = lpParam;
+
+    self->m_style = dwStyle;
+    self->m_styleex = dwExStyle;
+
+    unsigned int hash = common::hashStringW(lpClassName);
+    std::map<int, WNDCLASSEXW*>::iterator it = HwndLinux::s_wndClassMap->find(hash);
+    if (it == HwndLinux::s_wndClassMap->end())
+        DebugBreak();
+    self->m_wndProc = it->second->lpfnWndProc;
+
+    gtk_widget_set_size_request((GtkWidget*)drawingArea, nWidth, nHeight);
+
+    g_signal_connect((GtkWidget*)drawingArea, "draw", G_CALLBACK(&HwndLinux::onDraw), self);
+    g_signal_connect((GtkWidget*)drawingArea, "configure-event", G_CALLBACK(&HwndLinux::onConfigureEvent), self);
+    g_signal_connect((GtkWidget*)drawingArea, "motion-notify-event", G_CALLBACK(&HwndLinux::onMotionNotifyEvent), self);
+    g_signal_connect((GtkWidget*)drawingArea, "button-press-event", G_CALLBACK(&HwndLinux::onButtonPressEvent), self);
+    g_signal_connect((GtkWidget*)drawingArea, "button-release-event", G_CALLBACK(&HwndLinux::onButtonReleaseEvent), self);
+    g_signal_connect((GtkWidget*)drawingArea, "scroll-event", G_CALLBACK(&HwndLinux::onScroll), self);
+
+    g_signal_connect(GTK_WINDOW((GtkWidget*)rootWindow), "destroy", G_CALLBACK(&HwndLinux::onDestroy), self);
+    g_signal_connect(GTK_WINDOW((GtkWidget*)rootWindow), "delete-event", G_CALLBACK(&HwndLinux::onDeleteEvent), self);
+    g_signal_connect(GTK_WINDOW((GtkWidget*)rootWindow), "key-press-event", G_CALLBACK(&HwndLinux::onKeyPress), self);
+    g_signal_connect(GTK_WINDOW((GtkWidget*)rootWindow), "key-release-event", G_CALLBACK(&HwndLinux::onKeyRelease), self);
 
     gtk_widget_set_events((GtkWidget*)drawingArea, gtk_widget_get_events((GtkWidget*)drawingArea) | GDK_BUTTON_PRESS_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_RELEASE_MASK | GDK_SCROLL_MASK);
 
@@ -955,6 +1046,8 @@ SHORT GetKeyState(int nVirtKey)
     bool isCtrl = false;
     bool isAtl = false;
     CrossThreadUiState::get()->getState(&isCapsLock, &isNumLock, &isScrollLock, &isShift, &isCtrl, &isAtl);
+    if (isCtrl)
+        printf("GetKeyState, isCtrl, nVirtKey:%d\n", nVirtKey);
 
     if (VK_SHIFT == nVirtKey) {
         return isShift ? 0x8000 : 0;

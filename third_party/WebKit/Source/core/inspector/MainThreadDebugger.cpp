@@ -338,12 +338,9 @@ void MainThreadDebugger::consoleAPIMessage(
 
     // TODO(dgozman): we can save a copy of message and url here by making
     // FrameConsole work with StringView.
-    std::unique_ptr<SourceLocation> location = SourceLocation::create(toCoreString(url), lineNumber, columnNumber,
-        stackTrace ? stackTrace->clone() : nullptr, 0);
-    frame->console().reportMessageToClient(ConsoleAPIMessageSource,
-        consoleAPITypeToMessageLevel(type),
-        toCoreString(message), location.get());
-
+    std::unique_ptr<SourceLocation> location = SourceLocation::create(toCoreString(url), lineNumber, columnNumber, stackTrace ? stackTrace->clone() : nullptr, 0);
+    ConsoleMessage* consoleMessage = ConsoleMessage::create(JSMessageSource, consoleAPITypeToMessageLevel(type), toCoreString(message), std::move(location));
+    frame->console().addMessage(consoleMessage);
     //--
 
     String messageStr = String::format("console:[%d] [", lineNumber);
@@ -366,7 +363,6 @@ void MainThreadDebugger::consoleAPIMessage(
     }
 
     messageStr.append("]\n");
-    //OutputDebugStringW(messageStr.charactersWithNullTermination().data());
 
     if (kNotFound != messageStr.find("__callstack__")) {
         const v8::StackTrace::StackTraceOptions options = static_cast<v8::StackTrace::StackTraceOptions>(
@@ -397,12 +393,12 @@ void MainThreadDebugger::consoleAPIMessage(
             std::string funcNameWTF;
 
             if (!scriptName.IsEmpty()) {
-                v8::String::Utf8Value scriptNameUtf8(scriptName);
+                v8::String::Utf8Value scriptNameUtf8(m_isolate, scriptName);
                 scriptNameWTF = *scriptNameUtf8;
             }
 
             if (!funcName.IsEmpty()) {
-                v8::String::Utf8Value funcNameUtf8(funcName);
+                v8::String::Utf8Value funcNameUtf8(m_isolate, funcName);
                 funcNameWTF = *funcNameUtf8;
             }
             std::vector<char> output;

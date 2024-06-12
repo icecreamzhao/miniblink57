@@ -67,7 +67,7 @@ bool ReadableStreamOperations::isReadableStream(ScriptState* scriptState,
 
     v8::Local<v8::Value> args[] = { value.v8Value() };
     return V8ScriptRunner::callExtraOrCrash(scriptState, "IsReadableStream", args)
-        ->ToBoolean()
+        ->ToBoolean(scriptState->isolate())
         ->Value();
 }
 
@@ -79,7 +79,7 @@ bool ReadableStreamOperations::isDisturbed(ScriptState* scriptState,
     v8::Local<v8::Value> args[] = { stream.v8Value() };
     return V8ScriptRunner::callExtraOrCrash(scriptState,
         "IsReadableStreamDisturbed", args)
-        ->ToBoolean()
+        ->ToBoolean(scriptState->isolate())
         ->Value();
 }
 
@@ -91,7 +91,7 @@ bool ReadableStreamOperations::isLocked(ScriptState* scriptState,
     v8::Local<v8::Value> args[] = { stream.v8Value() };
     return V8ScriptRunner::callExtraOrCrash(scriptState, "IsReadableStreamLocked",
         args)
-        ->ToBoolean()
+        ->ToBoolean(scriptState->isolate())
         ->Value();
 }
 
@@ -103,7 +103,7 @@ bool ReadableStreamOperations::isReadable(ScriptState* scriptState,
     v8::Local<v8::Value> args[] = { stream.v8Value() };
     return V8ScriptRunner::callExtraOrCrash(scriptState,
         "IsReadableStreamReadable", args)
-        ->ToBoolean()
+        ->ToBoolean(scriptState->isolate())
         ->Value();
 }
 
@@ -115,7 +115,7 @@ bool ReadableStreamOperations::isClosed(ScriptState* scriptState,
     v8::Local<v8::Value> args[] = { stream.v8Value() };
     return V8ScriptRunner::callExtraOrCrash(scriptState, "IsReadableStreamClosed",
         args)
-        ->ToBoolean()
+        ->ToBoolean(scriptState->isolate())
         ->Value();
 }
 
@@ -127,7 +127,7 @@ bool ReadableStreamOperations::isErrored(ScriptState* scriptState,
     v8::Local<v8::Value> args[] = { stream.v8Value() };
     return V8ScriptRunner::callExtraOrCrash(scriptState,
         "IsReadableStreamErrored", args)
-        ->ToBoolean()
+        ->ToBoolean(scriptState->isolate())
         ->Value();
 }
 
@@ -143,7 +143,7 @@ bool ReadableStreamOperations::isReadableStreamDefaultReader(
     v8::Local<v8::Value> args[] = { value.v8Value() };
     return V8ScriptRunner::callExtraOrCrash(scriptState,
         "IsReadableStreamDefaultReader", args)
-        ->ToBoolean()
+        ->ToBoolean(scriptState->isolate())
         ->Value();
 }
 

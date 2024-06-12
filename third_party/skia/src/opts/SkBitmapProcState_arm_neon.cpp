@@ -4,6 +4,7 @@
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
+#if defined(SK_ARM_HAS_NEON)
 
 #include "SkBitmapProcState.h"
 #include "SkBitmapProcState_filter.h"
@@ -107,7 +108,7 @@ void convolveHorizontally_neon(const unsigned char* srcData,
 
         // Apply the filter to the row to get the destination pixel in |accum|.
         int32x4_t accum = vdupq_n_s32(0);
-        for (int filterX = 0; filterX<filterLength> > 2; filterX++) {
+        for (int filterX = 0; filterX < (filterLength >> 2); filterX++) {
             // Load 4 coefficients
             int16x4_t coeffs, coeff0, coeff1, coeff2, coeff3;
             coeffs = vld1_s16(filterValues);
@@ -500,3 +501,4 @@ void platformConvolutionProcs_arm_neon(SkConvolutionProcs* procs)
     procs->fConvolveHorizontally = &convolveHorizontally_neon;
     procs->fApplySIMDPadding = &applySIMDPadding_neon;
 }
+#endif // #if defined(SK_ARM_HAS_NEON)

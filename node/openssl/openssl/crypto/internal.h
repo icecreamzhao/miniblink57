@@ -432,7 +432,7 @@ static inline int constant_time_select_int(crypto_word_t mask, int a, int b) {
 #ifndef _WIN64
 #define SUPPORT_XP_CODE
 #endif
-#include "sync_xp.h" // SUPPORT_XP_CODE
+#include "../../../../base/synchronization/sync_xp.h" // SUPPORT_XP_CODE
 
 #if !defined(OPENSSL_THREADS)
 typedef uint32_t CRYPTO_once_t;

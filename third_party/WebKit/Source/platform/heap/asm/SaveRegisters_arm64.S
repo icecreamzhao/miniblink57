@@ -39,6 +39,8 @@
 .hidden pushAllRegisters
 pushAllRegisters:
         /* Save return address. */
+        nop
+        nop
         sub sp, sp, #96
         stp x19, x20, [sp, #80]
         stp x21, x22, [sp, #64]

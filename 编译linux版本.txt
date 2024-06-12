@@ -1,0 +1,17 @@
+编译方式：
+1，安装vs2022，并下载代码https://gitee.com/weolar_admin/miniblink57/
+
+2，打开miniblink57\fastmake\all_build\const_val.js文件，会看到sdkPath等路径。
+
+3，下载：
+https://pan.baidu.com/s/1PrddeZpX4q8KCrIdB5ovjg 提取码: 37nr 
+https://pan.baidu.com/s/17LZQlzGmTKvLX5Mfuw_zKw 提取码: kbmp 
+https://pan.baidu.com/s/1k9FgnNd5lr97LpyzDelr3w 提取码: i3hi 
+三个压缩包，解压到本地。
+假设路径分别是
+C:/Microsoft/AndroidNDK64/android-ndk-r16b、
+C:/cygwin64/usr/local/x86_64-unknown-linux-gnu/x86_64-unknown-linux-gnu、
+G:/chromium/M84/build/linux/debian_sid_amd64-sysroot
+路径可以随意更改，不影响编译。但要和const_val.js里的路径保持一致。
+
+4，打开miniblink57\build\minichrome57.sln工程后，编译运行fastmake项目即可

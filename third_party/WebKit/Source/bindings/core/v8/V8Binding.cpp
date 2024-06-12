@@ -101,7 +101,7 @@ bool toBooleanSlow(v8::Isolate* isolate,
     ASSERT(!value->IsBoolean());
     v8::TryCatch block(isolate);
     bool result = false;
-    if (!v8Call(value->BooleanValue(isolate->GetCurrentContext()), result, block))
+    if (!v8Call(value->BooleanValue(isolate), result, block))
         exceptionState.rethrowV8Exception(block.Exception());
     return result;
 }
@@ -708,15 +708,13 @@ String toUSVString(v8::Isolate* isolate,
 XPathNSResolver* toXPathNSResolver(ScriptState* scriptState,
     v8::Local<v8::Value> value)
 {
-    //   XPathNSResolver* resolver = nullptr;
-    //   if (V8XPathNSResolver::hasInstance(value, scriptState->isolate()))
-    //     resolver = V8XPathNSResolver::toImpl(v8::Local<v8::Object>::Cast(value));
-    //   else if (value->IsObject())
-    //     resolver =
-    //         V8CustomXPathNSResolver::create(scriptState, value.As<v8::Object>());
-    //   return resolver;
-    DebugBreak();
-    return nullptr;
+    XPathNSResolver* resolver = nullptr;
+    if (V8XPathNSResolver::hasInstance(value, scriptState->isolate()))
+      resolver = V8XPathNSResolver::toImpl(v8::Local<v8::Object>::Cast(value));
+    else if (value->IsObject())
+      resolver =
+          V8CustomXPathNSResolver::create(scriptState, value.As<v8::Object>());
+    return resolver;
 }
 
 DOMWindow* toDOMWindow(v8::Isolate* isolate, v8::Local<v8::Value> value)

@@ -146,6 +146,7 @@ void SkOSFile::Iter::reset(const char path[], const char suffix[])
     } else {
         self.fSuffix.reset();
     }
+    //printf("SkOSFile::Iter::reset: %s, %p\n", self.fPath.c_str(), self.fDIR);
 }
 
 // returns true if suffix is empty, or if str ends with suffix
@@ -160,36 +161,63 @@ static bool issuffixfor(const SkString& suffix, const char str[])
 bool SkOSFile::Iter::next(SkString* name, bool getDir)
 {
     SkOSFileIterData& self = *static_cast<SkOSFileIterData*>(fSelf.get());
-    if (self.fDIR) {
-        dirent* entry;
+    if (!self.fDIR)
+        return false;    
 
-        while ((entry = ::readdir(self.fDIR)) != nullptr) {
-            struct stat s;
-            SkString str(self.fPath);
+    dirent* entry;
 
-            if (!str.endsWith("/") && !str.endsWith("\\")) {
-                str.append("/");
-            }
-            str.append(entry->d_name);
+    while (true/*(entry = ::readdir(self.fDIR)) != nullptr*/) {
+        entry = ::readdir(self.fDIR);
+        if (entry == nullptr) {
+            //printf("SkOSFile::Iter::next fail: %s\n", self.fPath.c_str());
+            break;
+        }
+        if (!strcmp(entry->d_name, ".") || !strcmp(entry->d_name, ".."))
+            continue;
 
-            if (0 == stat(str.c_str(), &s)) {
-                if (getDir) {
-                    if (s.st_mode & S_IFDIR) {
-                        break;
-                    }
-                } else {
-                    if (!(s.st_mode & S_IFDIR) && issuffixfor(self.fSuffix, entry->d_name)) {
-                        break;
-                    }
+        struct stat s;
+        SkString str(self.fPath);
+
+        if (!str.endsWith("/") && !str.endsWith("\\")) {
+            str.append("/");
+        }
+        str.append(entry->d_name);
+
+        if (0 == stat(str.c_str(), &s)) {
+            //printf("SkOSFile::Iter::next 11: %s\n", str.c_str());
+            if (getDir) {
+                if (s.st_mode & S_IFDIR) {
+                    break;
+                }
+            } else {
+                if (!(s.st_mode & S_IFDIR) && issuffixfor(self.fSuffix, entry->d_name)) {
+                    break;
                 }
             }
-        }
-        if (entry) { // we broke out with a file
-            if (name) {
-                name->set(entry->d_name);
+        } else {
+            if (getDir) {
+                DIR* dir = opendir(str.c_str());
+                ::closedir(dir);
+                if (dir) {
+                    //printf("SkOSFile::Iter::next 22222: %s\n", str.c_str());
+                    break;
+                }
+            } else {
+                FILE* file = fopen(str.c_str(), "r");
+                fclose(file);
+                if (file)
+                    break;
             }
-            return true;
         }
     }
+    if (entry) { // we broke out with a file
+        if (name) {
+            name->set(entry->d_name);
+        }
+        //printf("SkOSFile::Iter::next end ok: %s\n", name->c_str());
+        return true;
+    }
+
+    //printf("SkOSFile::Iter::next false: %s\n", name->c_str());
     return false;
 }

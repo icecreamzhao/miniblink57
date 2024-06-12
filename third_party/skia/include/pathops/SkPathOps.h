@@ -93,4 +93,4 @@ private:
     void reset();
 };
 
-#endif
+#endif  

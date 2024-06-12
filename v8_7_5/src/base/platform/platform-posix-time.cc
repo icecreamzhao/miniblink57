@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 #include <cmath>
+#include <math.h>
 
 #include "src/base/platform/platform-posix-time.h"
 

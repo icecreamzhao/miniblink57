@@ -10,10 +10,10 @@ namespace media {
 
 // The minimum amount of media playback which can elapse before we'll report
 // watch time metrics for a playback.
-base::TimeDelta kMinimumElapsedWatchTime = base::TimeDelta::FromSeconds(7);
+/*constexpr*/ base::TimeDelta kMinimumElapsedWatchTime /*= base::TimeDelta::FromSeconds(7)*/;
 
 // The minimum width and height of videos to report watch time metrics for.
-gfx::Size kMinimumVideoSize = gfx::Size(200, 200);
+/*constexpr*/ gfx::Size kMinimumVideoSize /*= gfx::Size(200, 200)*/;
 
 static bool IsOnBatteryPower()
 {
@@ -37,6 +37,11 @@ WatchTimeReporter::WatchTimeReporter(bool has_audio,
     , initial_video_size_(initial_video_size)
     , get_media_time_cb_(get_media_time_cb)
 {
+    if (kMinimumVideoSize.IsEmpty()) {
+        kMinimumElapsedWatchTime = base::TimeDelta::FromSeconds(7);
+        kMinimumVideoSize = gfx::Size(200, 200);
+    }
+
     DCHECK(!get_media_time_cb_.is_null());
     DCHECK(has_audio_ || has_video_);
 

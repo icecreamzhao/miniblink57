@@ -47,6 +47,9 @@ void DevToolsAgent::onAttach(const std::string& hostId)
 {
     blink::WebDevToolsAgent* webAgent = getWebAgent();
     if (webAgent) {
+//         webAgent->reattach(blink::WebString::fromUTF8(hostId.c_str()), m_sessionId, 
+//             blink::WebString::fromASCII("{\"v8\":\"{\\\"Runtime\\\":{\\\"runtimeEnabled\\\":true}}\"}"));
+
         webAgent->attach(blink::WebString::fromUTF8(hostId.c_str()), m_sessionId);
         m_isAttached = true;
     }

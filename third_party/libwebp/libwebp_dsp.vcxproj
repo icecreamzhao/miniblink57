@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{BBFCF6FF-322A-0B79-B000-9A2A3E679FE5}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>libwebp_dsp</RootNamespace>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration">
+    <CharacterSet>Unicode</CharacterSet>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Label="Locals">
+    <PlatformToolset>v140_xp</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="PropertySheets">
+    <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <OutDir>../../build/$(Configuration)/</OutDir>
+    <TargetName>$(ProjectName)</TargetName>
+    <TargetPath>$(OutDir)\$(ProjectName)$(TargetExt)</TargetPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>../..;../../build/Release/gen;.;C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\shared;C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\um;C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\winrt;$(VSInstallDir)\VC\atlmfc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/Gy /FS /bigobj /d2FastFail /Zc:sizedDealloc- /Zc:threadSafeInit- /Ob2 /Oy- /d2Zi+ /Zc:inline /Gw /Oi /Zi /GR- /utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <CompileAsWinRT>false</CompileAsWinRT>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4800;4267;4996;4091;4127;4251;4351;4355;4503;4589;4611;4100;4121;4244;4505;4510;4512;4610;4838;4995;4996;4456;4457;4458;4459;4312;4267;4702;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <ExceptionHandling>false</ExceptionHandling>
+      <MinimalRebuild>false</MinimalRebuild>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions>WEBP_HAVE_SSE2;WEBP_HAVE_SSE41;V8_DEPRECATION_WARNINGS;USE_AURA=1;NO_TCMALLOC;DISABLE_NACL;FULL_SAFE_BROWSING;SAFE_BROWSING_CSD;SAFE_BROWSING_DB_LOCAL;OFFICIAL_BUILD;CHROMIUM_BUILD;ENABLE_MEDIA_ROUTER=1;FIELDTRIAL_TESTING_ENABLED;__STD_C;_CRT_RAND_S;_CRT_SECURE_NO_DEPRECATE;_HAS_EXCEPTIONS=0;_SCL_SECURE_NO_DEPRECATE;_ATL_NO_OPENGL;_WINDOWS;CERT_CHAIN_PARA_HAS_EXTRA_FIELDS;PSAPI_VERSION=1;WIN32;_SECURE_ATL;_USING_V110_SDK71_;WIN32_LEAN_AND_MEAN;NOMINMAX;_UNICODE;UNICODE;NTDDI_VERSION=0x0A000000;_WIN32_WINNT=0x0A00;WINVER=0x0A00;NDEBUG;NVALGRIND;DYNAMIC_ANNOTATIONS_ENABLED=0;_CRT_NONSTDC_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Link />
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="dsp/alpha_processing.c">
+      <Command>call ninja.exe -C $(OutDir) obj/third_party/libwebp/libwebp_dsp/alpha_processing.obj</Command>
+      <Outputs>$(OutDir)obj/third_party/libwebp/libwebp_dsp/alpha_processing.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="dsp/alpha_processing_mips_dsp_r2.c">
+      <Command>call ninja.exe -C $(OutDir) obj/third_party/libwebp/libwebp_dsp/alpha_processing_mips_dsp_r2.obj</Command>
+      <Outputs>$(OutDir)obj/third_party/libwebp/libwebp_dsp/alpha_processing_mips_dsp_r2.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="dsp/argb.c">
+      <Command>call ninja.exe -C $(OutDir) obj/third_party/libwebp/libwebp_dsp/argb.obj</Command>
+      <Outputs>$(OutDir)obj/third_party/libwebp/libwebp_dsp/argb.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="dsp/argb_mips_dsp_r2.c">
+      <Command>call ninja.exe -C $(OutDir) obj/third_party/libwebp/libwebp_dsp/argb_mips_dsp_r2.obj</Command>
+      <Outputs>$(OutDir)obj/third_party/libwebp/libwebp_dsp/argb_mips_dsp_r2.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="dsp/cost.c">
+      <Command>call ninja.exe -C $(OutDir) obj/third_party/libwebp/libwebp_dsp/cost.obj</Command>
+      <Outputs>$(OutDir)obj/third_party/libwebp/libwebp_dsp/cost.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="dsp/cost_mips32.c">
+      <Command>call ninja.exe -C $(OutDir) obj/third_party/libwebp/libwebp_dsp/cost_mips32.obj</Command>
+      <Outputs>$(OutDir)obj/third_party/libwebp/libwebp_dsp/cost_mips32.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="dsp/cost_mips_dsp_r2.c">
+      <Command>call ninja.exe -C $(OutDir) obj/third_party/libwebp/libwebp_dsp/cost_mips_dsp_r2.obj</Command>
+      <Outputs>$(OutDir)obj/third_party/libwebp/libwebp_dsp/cost_mips_dsp_r2.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="dsp/cpu.c">
+      <Command>call ninja.exe -C $(OutDir) obj/third_party/libwebp/libwebp_dsp/cpu.obj</Command>
+      <Outputs>$(OutDir)obj/third_party/libwebp/libwebp_dsp/cpu.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="dsp/dec.c">
+      <Command>call ninja.exe -C $(OutDir) obj/third_party/libwebp/libwebp_dsp/dec.obj</Command>
+      <Outputs>$(OutDir)obj/third_party/libwebp/libwebp_dsp/dec.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="dsp/dec_clip_tables.c">
+      <Command>call ninja.exe -C $(OutDir) obj/third_party/libwebp/libwebp_dsp/dec_clip_tables.obj</Command>
+      <Outputs>$(OutDir)obj/third_party/libwebp/libwebp_dsp/dec_clip_tables.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="dsp/dec_mips32.c">
+      <Command>call ninja.exe -C $(OutDir) obj/third_party/libwebp/libwebp_dsp/dec_mips32.obj</Command>
+      <Outputs>$(OutDir)obj/third_party/libwebp/libwebp_dsp/dec_mips32.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="dsp/dec_mips_dsp_r2.c">
+      <Command>call ninja.exe -C $(OutDir) obj/third_party/libwebp/libwebp_dsp/dec_mips_dsp_r2.obj</Command>
+      <Outputs>$(OutDir)obj/third_party/libwebp/libwebp_dsp/dec_mips_dsp_r2.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="dsp/dec_msa.c">
+      <Command>call ninja.exe -C $(OutDir) obj/third_party/libwebp/libwebp_dsp/dec_msa.obj</Command>
+      <Outputs>$(OutDir)obj/third_party/libwebp/libwebp_dsp/dec_msa.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="dsp/enc.c">
+      <Command>call ninja.exe -C $(OutDir) obj/third_party/libwebp/libwebp_dsp/enc.obj</Command>
+      <Outputs>$(OutDir)obj/third_party/libwebp/libwebp_dsp/enc.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="dsp/enc_avx2.c">
+      <Command>call ninja.exe -C $(OutDir) obj/third_party/libwebp/libwebp_dsp/enc_avx2.obj</Command>
+      <Outputs>$(OutDir)obj/third_party/libwebp/libwebp_dsp/enc_avx2.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="dsp/enc_mips32.c">
+      <Command>call ninja.exe -C $(OutDir) obj/third_party/libwebp/libwebp_dsp/enc_mips32.obj</Command>
+      <Outputs>$(OutDir)obj/third_party/libwebp/libwebp_dsp/enc_mips32.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="dsp/enc_mips_dsp_r2.c">
+      <Command>call ninja.exe -C $(OutDir) obj/third_party/libwebp/libwebp_dsp/enc_mips_dsp_r2.obj</Command>
+      <Outputs>$(OutDir)obj/third_party/libwebp/libwebp_dsp/enc_mips_dsp_r2.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="dsp/filters.c">
+      <Command>call ninja.exe -C $(OutDir) obj/third_party/libwebp/libwebp_dsp/filters.obj</Command>
+      <Outputs>$(OutDir)obj/third_party/libwebp/libwebp_dsp/filters.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="dsp/filters_mips_dsp_r2.c">
+      <Command>call ninja.exe -C $(OutDir) obj/third_party/libwebp/libwebp_dsp/filters_mips_dsp_r2.obj</Command>
+      <Outputs>$(OutDir)obj/third_party/libwebp/libwebp_dsp/filters_mips_dsp_r2.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="dsp/lossless.c">
+      <Command>call ninja.exe -C $(OutDir) obj/third_party/libwebp/libwebp_dsp/lossless.obj</Command>
+      <Outputs>$(OutDir)obj/third_party/libwebp/libwebp_dsp/lossless.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="dsp/lossless_enc.c">
+      <Command>call ninja.exe -C $(OutDir) obj/third_party/libwebp/libwebp_dsp/lossless_enc.obj</Command>
+      <Outputs>$(OutDir)obj/third_party/libwebp/libwebp_dsp/lossless_enc.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="dsp/lossless_enc_mips32.c">
+      <Command>call ninja.exe -C $(OutDir) obj/third_party/libwebp/libwebp_dsp/lossless_enc_mips32.obj</Command>
+      <Outputs>$(OutDir)obj/third_party/libwebp/libwebp_dsp/lossless_enc_mips32.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="dsp/lossless_enc_mips_dsp_r2.c">
+      <Command>call ninja.exe -C $(OutDir) obj/third_party/libwebp/libwebp_dsp/lossless_enc_mips_dsp_r2.obj</Command>
+      <Outputs>$(OutDir)obj/third_party/libwebp/libwebp_dsp/lossless_enc_mips_dsp_r2.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="dsp/lossless_mips_dsp_r2.c">
+      <Command>call ninja.exe -C $(OutDir) obj/third_party/libwebp/libwebp_dsp/lossless_mips_dsp_r2.obj</Command>
+      <Outputs>$(OutDir)obj/third_party/libwebp/libwebp_dsp/lossless_mips_dsp_r2.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="dsp/rescaler.c">
+      <Command>call ninja.exe -C $(OutDir) obj/third_party/libwebp/libwebp_dsp/rescaler.obj</Command>
+      <Outputs>$(OutDir)obj/third_party/libwebp/libwebp_dsp/rescaler.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="dsp/rescaler_mips32.c">
+      <Command>call ninja.exe -C $(OutDir) obj/third_party/libwebp/libwebp_dsp/rescaler_mips32.obj</Command>
+      <Outputs>$(OutDir)obj/third_party/libwebp/libwebp_dsp/rescaler_mips32.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="dsp/rescaler_mips_dsp_r2.c">
+      <Command>call ninja.exe -C $(OutDir) obj/third_party/libwebp/libwebp_dsp/rescaler_mips_dsp_r2.obj</Command>
+      <Outputs>$(OutDir)obj/third_party/libwebp/libwebp_dsp/rescaler_mips_dsp_r2.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="dsp/upsampling.c">
+      <Command>call ninja.exe -C $(OutDir) obj/third_party/libwebp/libwebp_dsp/upsampling.obj</Command>
+      <Outputs>$(OutDir)obj/third_party/libwebp/libwebp_dsp/upsampling.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="dsp/upsampling_mips_dsp_r2.c">
+      <Command>call ninja.exe -C $(OutDir) obj/third_party/libwebp/libwebp_dsp/upsampling_mips_dsp_r2.obj</Command>
+      <Outputs>$(OutDir)obj/third_party/libwebp/libwebp_dsp/upsampling_mips_dsp_r2.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="dsp/yuv.c">
+      <Command>call ninja.exe -C $(OutDir) obj/third_party/libwebp/libwebp_dsp/yuv.obj</Command>
+      <Outputs>$(OutDir)obj/third_party/libwebp/libwebp_dsp/yuv.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="dsp/yuv_mips32.c">
+      <Command>call ninja.exe -C $(OutDir) obj/third_party/libwebp/libwebp_dsp/yuv_mips32.obj</Command>
+      <Outputs>$(OutDir)obj/third_party/libwebp/libwebp_dsp/yuv_mips32.obj</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="dsp/yuv_mips_dsp_r2.c">
+      <Command>call ninja.exe -C $(OutDir) obj/third_party/libwebp/libwebp_dsp/yuv_mips_dsp_r2.obj</Command>
+      <Outputs>$(OutDir)obj/third_party/libwebp/libwebp_dsp/yuv_mips_dsp_r2.obj</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+  <Target Name="Build">
+    <Exec Command="call ninja.exe -C $(OutDir) obj/third_party/libwebp/libwebp_dsp.lib" />
+  </Target>
+  <Target Name="Clean">
+    <Exec Command="call ninja.exe -C $(OutDir) -tclean obj/third_party/libwebp/libwebp_dsp.lib" />
+  </Target>
+</Project>

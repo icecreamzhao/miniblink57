@@ -47,6 +47,8 @@ FontCache::FontCache()
 
 void FontCache::getFontForCharacter(UChar32 c, const char* preferredLocale, FontCache::PlatformFallbackFont* fallbackFont)
 {
+    if (0 == c)
+        c = 0x20; // to space
     if (Platform::current()->sandboxSupport()) {
         WebFallbackFont webFallbackFont;
         Platform::current()->sandboxSupport()->getFallbackFontForCharacter(c, preferredLocale, &webFallbackFont);
@@ -75,6 +77,8 @@ PassRefPtr<SimpleFontData> FontCache::fallbackFontForCharacter(
     const SimpleFontData*,
     FontFallbackPriority fallbackPriority)
 {
+    if (0 == c)
+        c = 0x20; // to space
     // The m_fontManager is set only if it was provided by the embedder with WebFontRendering::setSkiaFontManager. This is
     // used to emulate android fonts on linux so we always request the family from the font manager and if none is found, we return
     // the LastResort fallback font and avoid using FontCache::getFontForCharacter which would use sandbox support to

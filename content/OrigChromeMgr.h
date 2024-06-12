@@ -97,8 +97,8 @@ public:
 
     static void postWebTask(const blink::WebTraceLocation&, blink::WebThread::Task*);
     static void postWebDelayedTask(const blink::WebTraceLocation&, blink::WebThread::Task*, long long delayMs);
-    static void addTaskObserver(blink::WebThread::TaskObserver* observer);
-    static void removeTaskObserver(blink::WebThread::TaskObserver* observer);
+    static void addTaskObserver(TaskObserverAdapter* observer);
+    static void removeTaskObserver(const TaskObserverAdapter& observer);
 
     void onCreateWebview();
 
@@ -139,7 +139,7 @@ private:
     GLImplType m_glImplType;
     bool m_webglReady; // 至少有一个gl的dll准备好了，可以实现webgl
 
-    typedef std::map<blink::WebThread::TaskObserver*, TaskObserverAdapter*> TaskObserverMap;
+    typedef std::map<void*, TaskObserverAdapter*> TaskObserverMap;
     TaskObserverMap m_taskObserverMap;
 
     MediaPermissionDispatcherImpl* m_mediaPermissionDispatcherImpl;

@@ -11,8 +11,8 @@
 #if 1 // def MINIBLINK_NOT_IMPLEMENTED
 #include <zlib.h>
 #endif
-//#include "brotli/dec/decode.h"
-#include "dec/decode.h"
+#include "../../brotli/dec/decode.h"
+//#include "dec/decode.h"
 
 #include "opentype-sanitiser.h"
 #include "ots-memory-stream.h"

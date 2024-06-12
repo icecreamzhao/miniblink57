@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="enc">
+      <UniqueIdentifier>{175149C7-8A22-43B2-D545-1EFBDC97EE7E}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="enc/alpha.c">
+      <Filter>enc</Filter>
+    </CustomBuild>
+    <CustomBuild Include="enc/analysis.c">
+      <Filter>enc</Filter>
+    </CustomBuild>
+    <CustomBuild Include="enc/backward_references.c">
+      <Filter>enc</Filter>
+    </CustomBuild>
+    <CustomBuild Include="enc/config.c">
+      <Filter>enc</Filter>
+    </CustomBuild>
+    <CustomBuild Include="enc/cost.c">
+      <Filter>enc</Filter>
+    </CustomBuild>
+    <CustomBuild Include="enc/delta_palettization.c">
+      <Filter>enc</Filter>
+    </CustomBuild>
+    <CustomBuild Include="enc/filter.c">
+      <Filter>enc</Filter>
+    </CustomBuild>
+    <CustomBuild Include="enc/frame.c">
+      <Filter>enc</Filter>
+    </CustomBuild>
+    <CustomBuild Include="enc/histogram.c">
+      <Filter>enc</Filter>
+    </CustomBuild>
+    <CustomBuild Include="enc/iterator.c">
+      <Filter>enc</Filter>
+    </CustomBuild>
+    <CustomBuild Include="enc/near_lossless.c">
+      <Filter>enc</Filter>
+    </CustomBuild>
+    <CustomBuild Include="enc/picture.c">
+      <Filter>enc</Filter>
+    </CustomBuild>
+    <CustomBuild Include="enc/picture_csp.c">
+      <Filter>enc</Filter>
+    </CustomBuild>
+    <CustomBuild Include="enc/picture_psnr.c">
+      <Filter>enc</Filter>
+    </CustomBuild>
+    <CustomBuild Include="enc/picture_rescale.c">
+      <Filter>enc</Filter>
+    </CustomBuild>
+    <CustomBuild Include="enc/picture_tools.c">
+      <Filter>enc</Filter>
+    </CustomBuild>
+    <CustomBuild Include="enc/quant.c">
+      <Filter>enc</Filter>
+    </CustomBuild>
+    <CustomBuild Include="enc/syntax.c">
+      <Filter>enc</Filter>
+    </CustomBuild>
+    <CustomBuild Include="enc/token.c">
+      <Filter>enc</Filter>
+    </CustomBuild>
+    <CustomBuild Include="enc/tree.c">
+      <Filter>enc</Filter>
+    </CustomBuild>
+    <CustomBuild Include="enc/vp8l.c">
+      <Filter>enc</Filter>
+    </CustomBuild>
+    <CustomBuild Include="enc/webpenc.c">
+      <Filter>enc</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>

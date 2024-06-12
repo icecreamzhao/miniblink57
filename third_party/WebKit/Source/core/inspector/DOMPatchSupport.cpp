@@ -443,46 +443,50 @@ DOMPatchSupport::Digest* DOMPatchSupport::createDigest(
     Node* node,
     UnusedNodesMap* unusedNodesMap)
 {
-    Digest* digest = new Digest(node);
+    OutputDebugStringA("DOMPatchSupport::createDigest not impl\n");
+    DebugBreak();
+    return nullptr;
 
-    std::unique_ptr<WebCryptoDigestor> digestor = createDigestor(HashAlgorithmSha1);
-    DigestValue digestResult;
-
-    Node::NodeType nodeType = node->getNodeType();
-    digestor->consume(reinterpret_cast<const unsigned char*>(&nodeType),
-        sizeof(nodeType));
-    addStringToDigestor(digestor.get(), node->nodeName());
-    addStringToDigestor(digestor.get(), node->nodeValue());
-
-    if (node->isElementNode()) {
-        Element& element = toElement(*node);
-        Node* child = element.firstChild();
-        while (child) {
-            Digest* childInfo = createDigest(child, unusedNodesMap);
-            addStringToDigestor(digestor.get(), childInfo->m_sha1);
-            child = child->nextSibling();
-            digest->m_children.push_back(childInfo);
-        }
-
-        AttributeCollection attributes = element.attributesWithoutUpdate();
-        if (!attributes.isEmpty()) {
-            std::unique_ptr<WebCryptoDigestor> attrsDigestor = createDigestor(HashAlgorithmSha1);
-            for (auto& attribute : attributes) {
-                addStringToDigestor(attrsDigestor.get(), attribute.name().toString());
-                addStringToDigestor(attrsDigestor.get(), attribute.value().getString());
-            }
-            finishDigestor(attrsDigestor.get(), digestResult);
-            digest->m_attrsSHA1 = base64Encode(reinterpret_cast<const char*>(digestResult.data()), 10);
-            addStringToDigestor(digestor.get(), digest->m_attrsSHA1);
-            digestResult.clear();
-        }
-    }
-    finishDigestor(digestor.get(), digestResult);
-    digest->m_sha1 = base64Encode(reinterpret_cast<const char*>(digestResult.data()), 10);
-
-    if (unusedNodesMap)
-        unusedNodesMap->add(digest->m_sha1, digest);
-    return digest;
+//     Digest* digest = new Digest(node);
+// 
+//     std::unique_ptr<WebCryptoDigestor> digestor = createDigestor(HashAlgorithmSha1);
+//     DigestValue digestResult;
+// 
+//     Node::NodeType nodeType = node->getNodeType();
+//     digestor->consume(reinterpret_cast<const unsigned char*>(&nodeType),
+//         sizeof(nodeType));
+//     addStringToDigestor(digestor.get(), node->nodeName());
+//     addStringToDigestor(digestor.get(), node->nodeValue());
+// 
+//     if (node->isElementNode()) {
+//         Element& element = toElement(*node);
+//         Node* child = element.firstChild();
+//         while (child) {
+//             Digest* childInfo = createDigest(child, unusedNodesMap);
+//             addStringToDigestor(digestor.get(), childInfo->m_sha1);
+//             child = child->nextSibling();
+//             digest->m_children.push_back(childInfo);
+//         }
+// 
+//         AttributeCollection attributes = element.attributesWithoutUpdate();
+//         if (!attributes.isEmpty()) {
+//             std::unique_ptr<WebCryptoDigestor> attrsDigestor = createDigestor(HashAlgorithmSha1);
+//             for (auto& attribute : attributes) {
+//                 addStringToDigestor(attrsDigestor.get(), attribute.name().toString());
+//                 addStringToDigestor(attrsDigestor.get(), attribute.value().getString());
+//             }
+//             finishDigestor(attrsDigestor.get(), digestResult);
+//             digest->m_attrsSHA1 = base64Encode(reinterpret_cast<const char*>(digestResult.data()), 10);
+//             addStringToDigestor(digestor.get(), digest->m_attrsSHA1);
+//             digestResult.clear();
+//         }
+//     }
+//     finishDigestor(digestor.get(), digestResult);
+//     digest->m_sha1 = base64Encode(reinterpret_cast<const char*>(digestResult.data()), 10);
+// 
+//     if (unusedNodesMap)
+//         unusedNodesMap->add(digest->m_sha1, digest);
+//     return digest;
 }
 
 bool DOMPatchSupport::insertBeforeAndMarkAsUsed(

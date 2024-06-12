@@ -384,6 +384,7 @@
     <ClInclude Include="..\..\node\uv\src\heap-inl.h">
       <Filter>uv\src</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\node\nodeblink.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\node\cares\src\bitncmp.c">
@@ -776,6 +777,7 @@
     <ClCompile Include="..\..\node\uv\src\win\thread-win.c">
       <Filter>uv\src\win</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\node\nodeblink.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\node\cares\src\NEWS">

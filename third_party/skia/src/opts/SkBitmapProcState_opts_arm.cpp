@@ -4,6 +4,7 @@
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
+#if defined(SK_ARM_HAS_NEON)
 
 #include "SkBitmapProcState.h"
 #include "SkBitmapScaler.h"
@@ -30,3 +31,4 @@ void SkBitmapScaler::PlatformConvolutionProcs(SkConvolutionProcs* procs)
     SK_ARM_NEON_WRAP(platformConvolutionProcs_arm)
     (procs);
 }
+#endif // #if defined(SK_ARM_HAS_NEON)

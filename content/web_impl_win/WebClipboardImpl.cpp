@@ -297,8 +297,6 @@ void WebClipboardImpl::readAvailableTypes(ClipboardType type, Vector<WebString>*
 
     if (::IsClipboardFormatAvailable(CF_BITMAP))
         types->append(WebString::fromUTF8(kMimeTypeBMP));
-
-
 }
 
 blink::WebString WebClipboardImpl::readPlainText(Buffer buffer)

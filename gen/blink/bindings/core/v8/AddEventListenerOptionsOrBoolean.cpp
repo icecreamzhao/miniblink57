@@ -101,7 +101,7 @@ void V8AddEventListenerOptionsOrBoolean::toImpl(v8::Isolate* isolate, v8::Local<
     }
 
     {
-        impl.setBoolean(v8Value->BooleanValue());
+        impl.setBoolean(v8Value->BooleanValue(isolate));
         return;
     }
 }

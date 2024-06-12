@@ -151,6 +151,8 @@ public:
     virtual ExecutionContext* getExecutionContext() const;
     virtual void setExecutionContext(ExecutionContext*);
 
+    Modulator* modulator() const;
+
     // This can return an empty handle if the v8::Context is gone.
     v8::Local<v8::Context> context() const
     {

@@ -122,6 +122,9 @@ bool detectTextEncoding(const char* data,
     if (!encoding && matchesCount > 0)
         encoding = matches[0]->getName();
 
+    if (!encoding)
+        encoding = "GBK";
+
     *detectedEncoding = WTF::TextEncoding(encoding);
 
     delete (detector);

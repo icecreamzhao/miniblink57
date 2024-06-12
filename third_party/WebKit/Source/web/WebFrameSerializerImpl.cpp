@@ -97,7 +97,11 @@
 #include "web/WebLocalFrameImpl.h"
 #include "wtf/text/TextEncoding.h"
 
+int g_testWebFrameSerializerImpl = 0;
+
 namespace blink {
+
+Document* g_document = nullptr;
 
 // Maximum length of data buffer which is used to temporary save generated
 // html content data. This is a soft limit which might be passed if a very large
@@ -467,6 +471,9 @@ bool WebFrameSerializerImpl::serialize()
     const KURL& url = document->url();
 
     if (url.isValid()) {
+        g_testWebFrameSerializerImpl = 1;
+        g_document = document;
+
         didSerialization = true;
 
         const WTF::TextEncoding& textEncoding = document->encoding().isValid() ? document->encoding() : UTF8Encoding();
@@ -481,12 +488,13 @@ bool WebFrameSerializerImpl::serialize()
         if (documentElement)
             buildContentForNode(documentElement, &param);
 
-        encodeAndFlushBuffer(WebFrameSerializerClient::CurrentFrameIsFinished,
-            &param, ForceFlush);
+        encodeAndFlushBuffer(WebFrameSerializerClient::CurrentFrameIsFinished, &param, ForceFlush);
+        g_testWebFrameSerializerImpl = 0;
+        g_document = nullptr;
     } else {
+        OutputDebugStringA("WebFrameSerializerImpl::serialize url is not valid\n");
         // Report empty contents for invalid URLs.
-        m_client->didSerializeDataForFrame(
-            WebCString(), WebFrameSerializerClient::CurrentFrameIsFinished);
+        m_client->didSerializeDataForFrame(WebCString(), WebFrameSerializerClient::CurrentFrameIsFinished);
     }
 
     DCHECK(m_dataBuffer.isEmpty());

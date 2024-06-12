@@ -33,7 +33,7 @@ static bool domainMatch(const String& cookieDomain, const String& host)
 
     size_t index = host.find(cookieDomain);
 
-    bool tailMatch = (index != WTF::kNotFound && index + cookieDomain.length() == host.length());
+    bool tailMatch = (index != std::string::npos && index + cookieDomain.length() == host.length());
 
     // Check if host equals cookie domain.
     if (tailMatch && !index)

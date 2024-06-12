@@ -1,7 +1,7 @@
 
 #include <windows.h>
-#include <shlwapi.h>
 #include <vector>
+#include <shlwapi.h>
 
 #include "base/files/file_util.h"
 
@@ -36,33 +36,20 @@ inline bool readFile(const wchar_t* path, std::vector<char>* buffer)
 }
 
 // szPathDir结尾如果是目录而不是文件，请带上‘/’或‘\\’
-inline BOOL CreateMultiDir(const wchar_t* szPathDir)
+inline BOOL createMultiDir(const WCHAR* pathDir)
 {
-    wchar_t szPath[MAX_PATH] = { 0 };
-    wchar_t szbuf[MAX_PATH] = { 0 };
-    BOOL bFlag = FALSE;
-
-    wcscpy(szPath, szPathDir);
-
-    for (int i = 0; i < wcslen(szPath); i++)
-    {
-        if (szPath[i] == L'/' || szPath[i] == L'\\')
-        {
-            if (bFlag == TRUE)
-            {
-                if (!PathFileExists(szbuf))
-                {
-                    if (!CreateDirectory(szbuf, NULL))
-                        return FALSE;
-                }
+    const size_t len = wcslen(pathDir);
+    std::vector<WCHAR> temp(len + 1);
+    
+    for (size_t i = 0; i < len; i++) {
+        WCHAR c = pathDir[i];
+        temp[i] = c;
+        temp[i + 1] = 0;
+        if (L'/' == c || L'\\' == c) {
+            if (!::PathFileExistsW(temp.data())) {
+                if (!CreateDirectory(temp.data(), NULL))
+                    return FALSE;
             }
-
-            szbuf[i] = szPath[i];
-            bFlag = TRUE;
-        }
-        else
-        {
-            szbuf[i] = szPath[i];
         }
     }
 
@@ -71,7 +58,8 @@ inline BOOL CreateMultiDir(const wchar_t* szPathDir)
 
 inline void writeFile(const wchar_t* path, const std::vector<char>& buffer)
 {
-    CreateMultiDir(path);
+    createMultiDir(path);
+
     HANDLE hFile = CreateFileW(path, GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
     if (INVALID_HANDLE_VALUE == hFile) {
         DebugBreak();

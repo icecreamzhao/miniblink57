@@ -15,6 +15,7 @@
 #include "third_party/WebKit/public/web/WebLocalFrame.h"
 #include "third_party/WebKit/Source/wtf/Threading.h"
 #include "wke/wkeWebView.h"
+#include "base/atomic_mb.h"
 
 void WKE_CALL_TYPE wkeDeleteWillSendRequestInfo(wkeWebView webWindow, wkeWillSendRequestInfo* info);
 
@@ -594,6 +595,9 @@ static bool isResourceTypeFrame(WebURLLoaderInternal* job)
 // content\browser\loader\mime_type_resource_handler.cc
 static bool isDownloadResponse(WebURLLoaderInternal* job, const AtomicString& contentType, const AtomicString& contentLength)
 {
+    if (std::string::npos != job->m_url.find("pss.bdstatic.com/static/superman/font/iconfont-fa013548a9.woff2"))
+        DebugBreak();
+
     if (!isResourceTypeFrame(job))
         return false;
 
@@ -1006,7 +1010,7 @@ void WebURLLoaderManagerMainTask::handleDidSendData(MainTaskArgs* args, WebURLLo
 
     unsigned long long sentData = size * nmemb;
 
-    _InterlockedExchangeAdd(reinterpret_cast<long volatile*>(&job->m_sentDataBytes), static_cast<long>(sentData));
+    MB_InterlockedExchangeAdd(reinterpret_cast<long volatile*>(&job->m_sentDataBytes), static_cast<long>(sentData));
     WebURLLoaderManager::sharedInstance()->handleDidSentData(job, job->m_sentDataBytes, job->m_totalBytesToBeSent);
 }
 

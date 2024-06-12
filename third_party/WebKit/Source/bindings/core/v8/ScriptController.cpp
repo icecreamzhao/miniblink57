@@ -141,11 +141,8 @@ v8::Local<v8::Value> ScriptController::executeScriptAndReturnValue(
     const ScriptSourceCode& source,
     AccessControlStatus accessControlStatus)
 {
-    TRACE_EVENT1("devtools.timeline", "EvaluateScript", "data",
-        InspectorEvaluateScriptEvent::data(
-            frame(), source.url().getString(), source.startPosition()));
-    InspectorInstrumentation::NativeBreakpoint nativeBreakpoint(
-        frame()->document(), "scriptFirstStatement", false);
+    TRACE_EVENT1("devtools.timeline", "EvaluateScript", "data", InspectorEvaluateScriptEvent::data(frame(), source.url().getString(), source.startPosition()));
+    InspectorInstrumentation::NativeBreakpoint nativeBreakpoint(frame()->document(), "scriptFirstStatement", false);
 
     v8::Local<v8::Value> result;
     {
@@ -248,6 +245,7 @@ V8Extensions& ScriptController::registeredExtensions()
 
 void ScriptController::registerExtensionIfNeeded(v8::Extension* extension)
 {
+#if V8_MAJOR_VERSION < 10
     const V8Extensions& extensions = registeredExtensions();
     for (size_t i = 0; i < extensions.size(); ++i) {
         if (extensions[i] == extension)
@@ -255,6 +253,9 @@ void ScriptController::registerExtensionIfNeeded(v8::Extension* extension)
     }
     v8::RegisterExtension(extension);
     registeredExtensions().push_back(extension);
+#else
+    DebugBreak();
+#endif
 }
 
 void ScriptController::clearWindowProxy()
@@ -384,6 +385,7 @@ v8::Local<v8::Value> ScriptController::evaluateScriptInMainWorld(
     if (policy == DoNotExecuteScriptWhenScriptsDisabled && !canExecuteScripts(AboutToExecuteScript))
         return v8::Local<v8::Value>();
 
+    v8::MicrotasksScope microtasksScope(isolate(), v8::MicrotasksScope::kRunMicrotasks);
     ScriptState* scriptState = ScriptState::forMainWorld(frame());
     if (!scriptState)
         return v8::Local<v8::Value>();
@@ -409,6 +411,7 @@ void ScriptController::executeScriptInIsolatedWorld(
 {
     ASSERT(worldID > 0);
 
+    v8::MicrotasksScope microtasksScope(isolate(), v8::MicrotasksScope::kRunMicrotasks);
     RefPtr<DOMWrapperWorld> world = DOMWrapperWorld::ensureIsolatedWorld(isolate(), worldID);
     LocalWindowProxy* isolatedWorldWindowProxy = windowProxy(*world);
     ScriptState* scriptState = isolatedWorldWindowProxy->getScriptState();

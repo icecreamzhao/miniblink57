@@ -16,7 +16,7 @@ TextResource::TextResource(const ResourceRequest& resourceRequest,
     const String& mimeType,
     const String& charset)
     : Resource(resourceRequest, type, options)
-    , m_decoder(TextResourceDecoder::create(mimeType, charset))
+    , m_decoder(TextResourceDecoder::createWithAutoDetection(mimeType, charset, String())) // trun on usesEncodingDetector, weolar
 {
 }
 
@@ -37,12 +37,16 @@ String TextResource::decodedText() const
     DCHECK(data());
 
     StringBuilder builder;
+#if 0
     const char* segment;
     size_t position = 0;
     while (size_t length = data()->getSomeData(segment, position)) {
         builder.append(m_decoder->decode(segment, length));
         position += length;
     }
+#else
+    builder.append(m_decoder->decode(data()->data(), data()->size()));
+#endif
     builder.append(m_decoder->flush());
     return builder.toString();
 }

@@ -42,8 +42,13 @@
 #include <memory>
 
 extern "C" {
+#if 0//defined(WIN32)
 #include "third_party/libjpeg/iccjpeg.h"
 #include "third_party/libjpeg/jpeglib.h"
+#else
+#include "third_party/libjpeg_turbo/iccjpeg.h"
+#include "third_party/libjpeg_turbo/jpeglib.h"
+#endif
 #include <setjmp.h>
 #include <stdio.h> // jpeglib.h needs stdio FILE.
 }
@@ -974,8 +979,10 @@ bool JPEGImageDecoder::outputScanlines()
 
             SkColorSpaceXform* xform = colorTransform();
             if (xform) {
-                xform->apply(xformColorFormat(), row, xformColorFormat(), row,
-                    info->output_width, kOpaque_SkAlphaType);
+//                 xform->apply(xformColorFormat(), row, xformColorFormat(), row,
+//                     info->output_width, kOpaque_SkAlphaType);
+                OutputDebugStringA("JPEGImageDecoder::outputScanlines not impl\n");
+                DebugBreak();
             }
         }
         buffer.setPixelsChanged(true);

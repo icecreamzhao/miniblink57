@@ -488,6 +488,9 @@ const UChar* getFallbackFamily(UChar32 character,
     FontFallbackPriority fallbackPriority,
     SkFontMgr* fontManager)
 {
+    if (0 == character)
+        character = 0x20;
+
     ASSERT(character);
     ASSERT(fontManager);
     UBlockCode block = fallbackPriority == FontFallbackPriority::EmojiEmoji ?

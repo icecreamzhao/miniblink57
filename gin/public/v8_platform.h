@@ -83,10 +83,16 @@ public:
         v8::Task* task,
         v8::Platform::ExpectedRuntime expected_runtime) override;
 #endif
+
+#if V8_MAJOR_VERSION <= 7
     void CallOnForegroundThread(v8::Isolate* isolate, v8::Task* task) override;
     void CallDelayedOnForegroundThread(v8::Isolate* isolate,
         v8::Task* task,
         double delay_in_seconds) override;
+#else
+    v8::PageAllocator* GetPageAllocator() override;
+    std::unique_ptr<v8::JobHandle> CreateJob(v8::TaskPriority priority, std::unique_ptr<v8::JobTask> job_task) override;
+#endif
     double MonotonicallyIncreasingTime() override;
 
 private:

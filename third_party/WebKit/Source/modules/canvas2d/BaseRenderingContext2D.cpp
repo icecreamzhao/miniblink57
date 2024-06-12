@@ -9,15 +9,21 @@
 #include "core/css/cssom/CSSURLImageValue.h"
 #include "core/css/parser/CSSParser.h"
 #include "core/frame/ImageBitmap.h"
+#include "core/frame/LocalDOMWindow.h"
+#include "core/dom/StyleEngine.h"
 #include "core/html/HTMLCanvasElement.h"
 #include "core/html/HTMLImageElement.h"
 #include "core/html/HTMLVideoElement.h"
 #include "core/html/ImageData.h"
+#include "core/html/TextMetrics.h"
+#include "core/html/canvas/CanvasFontCache.h"
 #include "core/offscreencanvas/OffscreenCanvas.h"
 #include "modules/canvas2d/CanvasGradient.h"
 #include "modules/canvas2d/CanvasPattern.h"
 #include "modules/canvas2d/CanvasStyle.h"
 #include "modules/canvas2d/Path2D.h"
+#include "platform/text/BidiTextRun.h"
+#include "platform/text/UnicodeBidi.h"
 #include "platform/Histogram.h"
 #include "platform/RuntimeEnabledFeatures.h"
 #include "platform/geometry/FloatQuad.h"
@@ -29,6 +35,92 @@
 #include "platform/graphics/skia/SkiaUtils.h"
 
 namespace blink {
+
+// const size_t kHardMaxCachedFonts = 250;
+// const size_t kMaxCachedFonts = 25;
+// // Max delay to fire context lost for context in iframes.
+// static const unsigned kMaxIframeContextLoseDelay = 100;
+// 
+// class OffscreenFontCache {
+// public:
+//     void PruneLocalFontCache(size_t target_size)
+//     {
+//         while (m_fontLRUList.size() > target_size) {
+//             m_fontsResolved.remove(m_fontLRUList.last());
+//             m_fontLRUList.removeLast();
+//         }
+//     }
+// 
+//     void AddFont(String name, FontDescription font)
+//     {
+//         m_fontsResolved.add(name, font);
+//         auto add_result = m_fontLRUList.prependOrMoveToFirst(name);
+//         DCHECK(add_result.is_new_entry);
+//         PruneLocalFontCache(kHardMaxCachedFonts);
+//     }
+// 
+//     FontDescription* GetFont(String name) 
+//     {
+//         auto i = m_fontsResolved.find(name);
+//         if (i != m_fontsResolved.end()) {
+//             auto add_result = m_fontLRUList.prependOrMoveToFirst(name);
+//             DCHECK(!add_result.is_new_entry);
+//             return &(i->value);
+//         }
+//         return nullptr;
+//     }
+// 
+//     MutableStylePropertySet* parseFont(const String& fontString)
+//     {
+//         MutableStylePropertySet* parsedStyle;
+//         MutableStylePropertyMap::iterator i = m_fetchedFonts.find(fontString);
+//         if (i != m_fetchedFonts.end()) {
+//             ASSERT(m_fontLRUList.contains(fontString));
+//             parsedStyle = i->value;
+//             m_fontLRUList.remove(fontString);
+//             m_fontLRUList.add(fontString);
+//         } else {
+//             parsedStyle = MutableStylePropertySet::create(HTMLStandardMode);
+//             CSSParser::parseValue(parsedStyle, CSSPropertyFont, fontString, true);
+//             if (parsedStyle->isEmpty())
+//                 return nullptr;
+//             // According to
+//             // http://lists.w3.org/Archives/Public/public-html/2009Jul/0947.html,
+//             // the "inherit" and "initial" values must be ignored.
+//             const CSSValue* fontValue = parsedStyle->getPropertyCSSValue(CSSPropertyFontSize);
+//             if (fontValue && (fontValue->isInitialValue() || fontValue->isInheritedValue()))
+//                 return nullptr;
+//             m_fetchedFonts.add(fontString, parsedStyle);
+//             m_fontLRUList.add(fontString);
+//             // Hard limit is applied here, on the fly, while the soft limit is
+//             // applied at the end of the task.
+//             if (m_fetchedFonts.size() > kHardMaxCachedFonts) {
+//                 ASSERT(m_fetchedFonts.size() == kHardMaxCachedFonts + 1);
+//                 ASSERT(m_fontLRUList.size() == kHardMaxCachedFonts + 1);
+//                 m_fetchedFonts.remove(m_fontLRUList.first());
+//                 //m_fontsResolvedUsingDefaultStyle.remove(m_fontLRUList.first());
+//                 m_fontLRUList.removeFirst();
+//             }
+//         }
+//         //schedulePruningIfNeeded();
+//         PruneLocalFontCache(kHardMaxCachedFonts);
+// 
+//         return parsedStyle;
+//     }
+// 
+// private:
+//     typedef HeapHashMap<String, Member<MutableStylePropertySet>> MutableStylePropertyMap;
+//     MutableStylePropertyMap m_fetchedFonts;
+// 
+//     HashMap<String, FontDescription> m_fontsResolved;
+//     LinkedHashSet<String> m_fontLRUList;
+// };
+// 
+// OffscreenFontCache& GetOffscreenFontCache()
+// {
+//     DEFINE_THREAD_SAFE_STATIC_LOCAL(ThreadSpecific<OffscreenFontCache>, thread_specific_pool, ());
+//     return *thread_specific_pool;
+// }
 
 BaseRenderingContext2D::BaseRenderingContext2D()
     : m_clipAntialiasing(NotAntiAliased)
@@ -777,6 +869,330 @@ void BaseRenderingContext2D::strokeRect(double x,
         [](const SkIRect& clipBounds) // overdraw test lambda
         { return false; },
         bounds, CanvasRenderingContext2DState::StrokePaintType);
+}
+
+void BaseRenderingContext2D::fillText(ExecutionContext* executionContext, const String& text, double x, double y)
+{
+    trackDrawCall(FillText);
+    drawTextInternal(executionContext, text, x, y, CanvasRenderingContext2DState::FillPaintType);
+}
+
+void BaseRenderingContext2D::fillText(ExecutionContext* executionContext, const String& text, double x, double y, double maxWidth)
+{
+    trackDrawCall(FillText);
+    drawTextInternal(executionContext, text, x, y, CanvasRenderingContext2DState::FillPaintType, &maxWidth);
+}
+
+void BaseRenderingContext2D::strokeText(ExecutionContext* executionContext, const String& text, double x, double y)
+{
+    trackDrawCall(StrokeText);
+    drawTextInternal(executionContext, text, x, y, CanvasRenderingContext2DState::StrokePaintType);
+}
+
+void BaseRenderingContext2D::strokeText(ExecutionContext* executionContext, const String& text, double x, double y, double maxWidth)
+{
+    trackDrawCall(StrokeText);
+    drawTextInternal(executionContext, text, x, y, CanvasRenderingContext2DState::StrokePaintType, &maxWidth);
+}
+
+float BaseRenderingContext2D::getFontBaseline(const FontMetrics& fontMetrics) const
+{
+    // If the font is so tiny that the lroundf operations result in two
+    // different types of text baselines to return the same baseline, use
+    // floating point metrics (crbug.com/338908).
+    // If you changed the heuristic here, for consistency please also change it
+    // in SimpleFontData::platformInit().
+    bool useFloatAscentDescent = fontMetrics.ascent() < 3 || fontMetrics.height() < 2;
+    switch (state().getTextBaseline()) {
+    case TopTextBaseline:
+        return useFloatAscentDescent ? fontMetrics.floatAscent()
+            : fontMetrics.ascent();
+    case HangingTextBaseline:
+        // According to
+        // http://wiki.apache.org/xmlgraphics-fop/LineLayout/AlignmentHandling
+        // "FOP (Formatting Objects Processor) puts the hanging baseline at 80% of
+        // the ascender height"
+        return useFloatAscentDescent ? (fontMetrics.floatAscent() * 4.0) / 5.0
+            : (fontMetrics.ascent() * 4) / 5;
+    case BottomTextBaseline:
+    case IdeographicTextBaseline:
+        return useFloatAscentDescent ? -fontMetrics.floatDescent()
+            : -fontMetrics.descent();
+    case MiddleTextBaseline:
+        return useFloatAscentDescent
+            ? -fontMetrics.floatDescent() + fontMetrics.floatHeight() / 2.0
+            : -fontMetrics.descent() + fontMetrics.height() / 2;
+    case AlphabeticTextBaseline:
+    default:
+        // Do nothing.
+        break;
+    }
+    return 0;
+}
+
+TextMetrics* BaseRenderingContext2D::measureText(ExecutionContext* executionContext, const String& text)
+{
+    if (!executionContext->isDocument())
+        return nullptr;
+    Document* doc = (Document*)executionContext;
+
+    TextMetrics* metrics = TextMetrics::create();
+
+    // The style resolution required for fonts is not available in frame-less
+    // documents.
+//     if (!canvas()->document().frame())
+//         return metrics;
+// 
+    //doc->updateStyleAndLayoutTreeForNode(canvas());
+
+    const Font& font = accessFont(executionContext);
+    const SimpleFontData* fontData = font.primaryFont();
+    DCHECK(fontData);
+    if (!fontData)
+        return metrics;
+
+    TextDirection direction;
+    if (state().getDirection() == CanvasRenderingContext2DState::DirectionInherit)
+        direction = determineDirectionality(text);
+    else
+        DebugBreak();
+        //direction = toTextDirection(state().getDirection(), canvas());
+
+    TextRun textRun(text, 0, 0, TextRun::AllowTrailingExpansion | TextRun::ForbidLeadingExpansion,
+        direction, false);
+    textRun.setNormalizeSpace(true);
+    FloatRect textBounds = font.selectionRectForText(
+        textRun, FloatPoint(), font.getFontDescription().computedSize(), 0, -1,
+        true);
+
+    // x direction
+    metrics->setWidth(font.width(textRun));
+    metrics->setActualBoundingBoxLeft(-textBounds.x());
+    metrics->setActualBoundingBoxRight(textBounds.maxX());
+
+    // y direction
+    const FontMetrics& fontMetrics = fontData->getFontMetrics();
+    const float ascent = fontMetrics.floatAscent();
+    const float descent = fontMetrics.floatDescent();
+    const float baselineY = getFontBaseline(fontMetrics);
+
+    metrics->setFontBoundingBoxAscent(ascent - baselineY);
+    metrics->setFontBoundingBoxDescent(descent + baselineY);
+    metrics->setActualBoundingBoxAscent(-textBounds.y() - baselineY);
+    metrics->setActualBoundingBoxDescent(textBounds.maxY() + baselineY);
+
+    // Note : top/bottom and ascend/descend are currently the same, so there's no
+    // difference between the EM box's top and bottom and the font's ascend and
+    // descend
+    metrics->setEmHeightAscent(0);
+    metrics->setEmHeightDescent(0);
+
+    metrics->setHangingBaseline(0.8f * ascent - baselineY);
+    metrics->setAlphabeticBaseline(-baselineY);
+    metrics->setIdeographicBaseline(-descent - baselineY);
+    return metrics;
+}
+
+// CSSFontSelector* GetFontSelector(ExecutionContext* executionContext)
+// {
+//     if (LocalDOMWindow* window = (LocalDOMWindow*)(executionContext)) {
+//         return (CSSFontSelector*)(window->document()->styleEngine().GetFontSelector());
+//     }
+//     return nullptr;
+// //     // TODO(crbug.com/1334864): Temporary mitigation.  Remove the following
+// //     // CHECK once a more comprehensive solution has been implemented.
+// //     CHECK(GetExecutionContext()->IsWorkerGlobalScope());
+// //     return To<WorkerGlobalScope>(GetExecutionContext())->GetFontSelector();
+// }
+
+void BaseRenderingContext2D::setFont(ExecutionContext* executionContext, const String& newFont)
+{
+    if (state().hasRealizedFont() && newFont == state().unparsedFont())
+        return;
+
+    Document* doc = nullptr;
+    if (!executionContext->isDocument())
+        return;
+
+    doc = (Document*)executionContext;
+    CanvasFontCache* canvasFontCache = doc->canvasFontCache();
+
+    Font resolvedFont;
+    if (!canvasFontCache->getFontUsingDefaultStyle(newFont, resolvedFont))
+        return;
+    modifiableState().setFont(resolvedFont, doc->styleEngine().fontSelector());
+    // The parse succeeded.
+    String newFontSafeCopy(newFont); // Create a string copy since newFont can be deleted inside realizeSaves.
+    modifiableState().setUnparsedFont(newFontSafeCopy);
+}
+
+const Font& BaseRenderingContext2D::accessFont(ExecutionContext* executionContext)
+{
+    if (!state().hasRealizedFont())
+        setFont(executionContext, state().unparsedFont());
+
+    Document* doc = (Document*)executionContext;
+    doc->canvasFontCache()->willUseCurrentFont();
+    return state().font();
+}
+
+static inline TextDirection toTextDirection(CanvasRenderingContext2DState::Direction direction,
+    HTMLCanvasElement* canvas,
+    const ComputedStyle** computedStyle = 0)
+{
+//     const ComputedStyle* style = (computedStyle || direction == CanvasRenderingContext2DState::DirectionInherit)
+//         ? canvas->ensureComputedStyle()
+//         : nullptr;
+//     if (computedStyle)
+//         *computedStyle = style;
+
+    switch (direction) {
+    case CanvasRenderingContext2DState::DirectionInherit:
+        return TextDirection::kLtr;
+    case CanvasRenderingContext2DState::DirectionRTL:
+        return TextDirection::kRtl;
+    case CanvasRenderingContext2DState::DirectionLTR:
+        return TextDirection::kLtr;
+    }
+    NOTREACHED();
+    return TextDirection::kLtr;
+}
+
+class BaseRenderingContext2DAutoRestoreSkCanvas {
+    STACK_ALLOCATED();
+
+public:
+    explicit BaseRenderingContext2DAutoRestoreSkCanvas(
+        BaseRenderingContext2D* context)
+        : m_context(context)
+        , m_saveCount(0)
+    {
+        DCHECK(m_context);
+        SkCanvas* c = m_context->drawingCanvas();
+        if (c) {
+            m_saveCount = c->getSaveCount();
+        }
+    }
+
+    ~BaseRenderingContext2DAutoRestoreSkCanvas()
+    {
+        SkCanvas* c = m_context->drawingCanvas();
+        if (c)
+            c->restoreToCount(m_saveCount);
+        m_context->validateStateStack();
+    }
+
+private:
+    Member<BaseRenderingContext2D> m_context;
+    int m_saveCount;
+};
+
+void BaseRenderingContext2D::drawTextInternal(
+    ExecutionContext* executionContext,
+    const String& text,
+    double x,
+    double y,
+    CanvasRenderingContext2DState::PaintType paintType,
+    double* maxWidth)
+{
+    if (!executionContext->isDocument())
+        return;
+    Document* doc = (Document*)executionContext;
+
+    // The style resolution required for fonts is not available in frame-less
+    // documents.
+//     if (!canvas()->document().frame())
+//         return;
+
+    // accessFont needs the style to be up to date, but updating style can cause
+    // script to run, (e.g. due to autofocus) which can free the canvas (set size
+    // to 0, for example), so update style before grabbing the drawingCanvas.
+    //doc->updateStyleAndLayoutTreeForNode(canvas());
+
+    SkCanvas* c = drawingCanvas();
+    if (!c)
+        return;
+
+    if (!std_isfinite(x) || !std_isfinite(y))
+        return;
+    if (maxWidth && (!std_isfinite(*maxWidth) || *maxWidth <= 0))
+        return;
+
+    // Currently, SkPictureImageFilter does not support subpixel text
+    // anti-aliasing, which is expected when !creationAttributes().alpha(), so we
+    // need to fall out of display list mode when drawing text to an opaque
+    // canvas. crbug.com/583809
+//     if (!creationAttributes().alpha() && !isAccelerated()) {
+//         canvas()->disableDeferral(DisableDeferralReasonSubPixelTextAntiAliasingSupport);
+//     }
+
+    const Font& font = accessFont(executionContext);
+    font.getFontDescription().setSubpixelAscentDescent(true);
+    const SimpleFontData* fontData = font.primaryFont();
+    DCHECK(fontData);
+    if (!fontData)
+        return;
+    const FontMetrics& fontMetrics = fontData->getFontMetrics();
+
+    // FIXME: Need to turn off font smoothing.
+
+    const ComputedStyle* computedStyle = 0;
+    TextDirection direction = toTextDirection(state().getDirection(), /*canvas()*/nullptr, &computedStyle);
+    const bool isRTL = direction == TextDirection::kRtl;
+    const bool override = /*computedStyle ? isOverride(computedStyle->getUnicodeBidi()) :*/ false;
+
+    TextRun textRun(text, 0, 0, TextRun::AllowTrailingExpansion, direction,
+        override);
+    textRun.setNormalizeSpace(true);
+    // Draw the item text at the correct point.
+    FloatPoint location(x, y + getFontBaseline(fontMetrics));
+    double fontWidth = font.width(textRun);
+
+    bool useMaxWidth = (maxWidth && *maxWidth < fontWidth);
+    double width = useMaxWidth ? *maxWidth : fontWidth;
+
+    TextAlign align = state().getTextAlign();
+    if (align == StartTextAlign)
+        align = isRTL ? RightTextAlign : LeftTextAlign;
+    else if (align == EndTextAlign)
+        align = isRTL ? LeftTextAlign : RightTextAlign;
+
+    switch (align) {
+    case CenterTextAlign:
+        location.setX(location.x() - width / 2);
+        break;
+    case RightTextAlign:
+        location.setX(location.x() - width);
+        break;
+    default:
+        break;
+    }
+
+    // The slop built in to this mask rect matches the heuristic used in
+    // FontCGWin.cpp for GDI text.
+    TextRunPaintInfo textRunPaintInfo(textRun);
+    textRunPaintInfo.bounds = FloatRect(location.x() - fontMetrics.height() / 2,
+        location.y() - fontMetrics.ascent() - fontMetrics.lineGap(),
+        width + fontMetrics.height(), fontMetrics.lineSpacing());
+    if (paintType == CanvasRenderingContext2DState::StrokePaintType)
+        inflateStrokeRect(textRunPaintInfo.bounds);
+
+    BaseRenderingContext2DAutoRestoreSkCanvas stateRestorer(this);
+    if (useMaxWidth) {
+        drawingCanvas()->save();
+        drawingCanvas()->translate(location.x(), location.y());
+        // We draw when fontWidth is 0 so compositing operations (eg, a "copy" op)
+        // still work.
+        drawingCanvas()->scale((fontWidth > 0 ? (width / fontWidth) : 0), 1);
+        location = FloatPoint();
+    }
+
+    draw([&font, &textRunPaintInfo, &location] (SkCanvas* c, const SkPaint* paint) { // draw lambda
+        font.drawBidiText(c, textRunPaintInfo, location, Font::UseFallbackIfFontNotReady, /*cDeviceScaleFactor*/1.0, *paint);
+    },
+    [](const SkIRect& rect) { // overdraw test lambda
+         return false; 
+    }, textRunPaintInfo.bounds, paintType);
 }
 
 void BaseRenderingContext2D::clipInternal(const Path& path,

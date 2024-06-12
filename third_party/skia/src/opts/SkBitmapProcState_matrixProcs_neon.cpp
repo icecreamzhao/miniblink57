@@ -3,6 +3,7 @@
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
+#if defined(SK_ARM_HAS_NEON)
 
 #include "SkBitmapProcState.h"
 #include "SkBitmapProcState_utils.h"
@@ -235,3 +236,4 @@ void decal_filter_scale_neon(uint32_t dst[], SkFixed fx, SkFixed dx, int count)
         fx += dx;
     }
 }
+#endif // #if defined(SK_ARM_HAS_NEON)

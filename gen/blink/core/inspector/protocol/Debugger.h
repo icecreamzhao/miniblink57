@@ -17,21 +17,25 @@ namespace protocol {
     struct ValueConversions<v8_inspector::protocol::Debugger::API::SearchMatch> {
         static std::unique_ptr<v8_inspector::protocol::Debugger::API::SearchMatch> fromValue(protocol::Value* value, ErrorSupport* errors)
         {
-            if (!value) {
-                errors->addError("value expected");
-                return nullptr;
-            }
-            String json = value->serialize();
-            auto result = v8_inspector::protocol::Debugger::API::SearchMatch::fromJSONString(toV8InspectorStringView(json));
-            if (!result)
-                errors->addError("cannot parse");
-            return result;
+            DebugBreak();
+            return nullptr;
+//             if (!value) {
+//                 errors->addError("value expected");
+//                 return nullptr;
+//             }
+//             String json = value->serialize();
+//             auto result = v8_inspector::protocol::Debugger::API::SearchMatch::fromJSONString(toV8InspectorStringView(json));
+//             if (!result)
+//                 errors->addError("cannot parse");
+//             return result;
         }
 
         static std::unique_ptr<protocol::Value> toValue(const v8_inspector::protocol::Debugger::API::SearchMatch* value)
         {
-            auto json = value->toJSONString();
-            return SerializedValue::create(toCoreString(std::move(json)));
+            DebugBreak();
+            return nullptr;
+//             auto json = value->toJSONString();
+//             return SerializedValue::create(toCoreString(std::move(json)));
         }
 
         static std::unique_ptr<protocol::Value> toValue(const std::unique_ptr<v8_inspector::protocol::Debugger::API::SearchMatch>& value)

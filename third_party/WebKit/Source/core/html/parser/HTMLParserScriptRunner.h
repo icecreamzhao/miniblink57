@@ -40,6 +40,7 @@ namespace blink {
 class Document;
 class Element;
 class HTMLParserScriptRunnerHost;
+class ModuleRecord;
 
 // HTMLParserScriptRunner is responsible for for arranging the execution of
 // script elements inserted by the parser, according to the rules for
@@ -93,6 +94,9 @@ public:
         return !!m_reentryPermit->scriptNestingLevel();
     }
 
+    // module
+    bool requestPendingModuleScript(Document* document, const ModuleRecord* parentModuleRecord, const String& sourceUrl, ScriptPromiseResolver* resolver);
+
     DECLARE_TRACE();
 
 private:
@@ -105,7 +109,10 @@ private:
 
     void executePendingScriptAndDispatchEvent(PendingScript*,
         ScriptStreamer::Type);
+    void executePendingModuleScript(PendingScript* pendingScript, ScriptStreamer::Type pendingScriptType);
     void executeParsingBlockingScripts();
+
+    bool parsePendingModuleScripts();
 
     void requestParsingBlockingScript(Element*);
     void requestDeferredScript(Element*);
@@ -119,6 +126,9 @@ private:
     bool isParserBlockingScriptReady();
 
     void possiblyFetchBlockedDocWriteScript(PendingScript*);
+
+    // module
+    bool m_isRunningScripts = false;    
 
     RefPtr<HTMLParserReentryPermit> m_reentryPermit;
     Member<Document> m_document;

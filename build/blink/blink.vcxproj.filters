@@ -1204,6 +1204,30 @@
     <Filter Include="linux">
       <UniqueIdentifier>{737bc8e1-3d9c-4c91-afb7-5b3ac16a5d7a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="mbvip\download">
+      <UniqueIdentifier>{e8b43b82-d67e-4e94-8527-8a7b6be89037}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\WebKit\Source\platform\image-decoders\webp">
+      <UniqueIdentifier>{a45c5073-7d00-4c32-9b57-f8be73c54439}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\WebKit\Source\modules\crypto">
+      <UniqueIdentifier>{7a36abfb-b117-4b74-84b1-8b81573fb363}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="v8_108">
+      <UniqueIdentifier>{0515fc16-e0cb-4301-b552-a5bde9e2bb9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="v8_108\third_party">
+      <UniqueIdentifier>{13cd7353-e56d-48ec-a705-19aa52b08476}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="v8_108\third_party\inspector_protocol">
+      <UniqueIdentifier>{06f9b3ab-6128-4710-856d-ad8a99f66c34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="v8_108\third_party\inspector_protocol\crdtp">
+      <UniqueIdentifier>{6339787b-2d4b-43ac-afa1-93b1bf9c837e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="node">
+      <UniqueIdentifier>{b6505f9c-d141-462e-affc-e99cb1ba2509}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -2953,9 +2977,6 @@
       <Filter>third_party\WebKit\Source\core\dom</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\WebKit\Source\core\dom\MessagePort.cpp">
-      <Filter>third_party\WebKit\Source\core\dom</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\WebKit\Source\core\dom\Modulator.cpp">
       <Filter>third_party\WebKit\Source\core\dom</Filter>
     </ClCompile>
     <ClCompile Include="..\..\third_party\WebKit\Source\core\dom\MutationObserver.cpp">
@@ -12441,6 +12462,66 @@
     <ClCompile Include="..\..\mbvip\core\mb2.cpp">
       <Filter>mbvip\core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\mbvip\download\SimpleDownload.cpp">
+      <Filter>mbvip\download</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\platform\image-decoders\webp\WEBPImageDecoder.cpp">
+      <Filter>third_party\WebKit\Source\platform\image-decoders\webp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\bindings\core\v8\Modulator.cpp">
+      <Filter>third_party\Webkit\Source\bindings\core\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\bindings\core\v8\ModuleRecord.cpp">
+      <Filter>third_party\Webkit\Source\bindings\core\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\core\dom\ModuleScriptLoader.cpp">
+      <Filter>third_party\Webkit\Source\core\dom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\crypto\DOMWindowCrypto.cpp">
+      <Filter>third_party\WebKit\Source\modules\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\modules\crypto\CryptoModules.cpp">
+      <Filter>third_party\WebKit\Source\modules\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\bindings\modules\v8\V8Crypto.cpp">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\WebKit\Source\bindings\core\v8\custom\V8CustomXPathNSResolver.cpp">
+      <Filter>third_party\Webkit\Source\bindings\core\v8\custom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gen\blink\core\XPathGrammar.cpp">
+      <Filter>gen\blink\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\content\resources\MediaPlayerDataNew.cpp">
+      <Filter>content\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_108\third_party\inspector_protocol\crdtp\status_crdtp.cc">
+      <Filter>v8_108\third_party\inspector_protocol\crdtp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_108\third_party\inspector_protocol\crdtp\cbor_crdtp.cc">
+      <Filter>v8_108\third_party\inspector_protocol\crdtp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_108\third_party\inspector_protocol\crdtp\dispatch_crdtp.cc">
+      <Filter>v8_108\third_party\inspector_protocol\crdtp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_108\third_party\inspector_protocol\crdtp\error_support.cc">
+      <Filter>v8_108\third_party\inspector_protocol\crdtp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_108\third_party\inspector_protocol\crdtp\json_crdtp.cc">
+      <Filter>v8_108\third_party\inspector_protocol\crdtp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_108\third_party\inspector_protocol\crdtp\json_platform_v8.cc">
+      <Filter>v8_108\third_party\inspector_protocol\crdtp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_108\third_party\inspector_protocol\crdtp\protocol_core.cc">
+      <Filter>v8_108\third_party\inspector_protocol\crdtp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_108\third_party\inspector_protocol\crdtp\serializable_crdtp.cc">
+      <Filter>v8_108\third_party\inspector_protocol\crdtp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\v8_108\third_party\inspector_protocol\crdtp\span_crdtp.cc">
+      <Filter>v8_108\third_party\inspector_protocol\crdtp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\third_party\WebKit\Source\bindings\core\v8\ActiveScriptWrappable.h">
@@ -14397,9 +14478,6 @@
       <Filter>third_party\WebKit\Source\core\dom</Filter>
     </ClInclude>
     <ClInclude Include="..\..\third_party\WebKit\Source\core\dom\MessagePort.h">
-      <Filter>third_party\WebKit\Source\core\dom</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\third_party\WebKit\Source\core\dom\Modulator.h">
       <Filter>third_party\WebKit\Source\core\dom</Filter>
     </ClInclude>
     <ClInclude Include="..\..\third_party\WebKit\Source\core\dom\MutationCallback.h">
@@ -26978,11 +27056,263 @@
     <ClInclude Include="..\build_config.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\linux\linuxwinimpl.h">
-      <Filter>linux</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\third_party\WebKit\Source\wtf\text\qt4\wchar.h">
       <Filter>third_party\WebKit\Source\wtf\text\qt4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mbvip\download\DownloadUtil.h">
+      <Filter>mbvip\download</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mbvip\download\SimpleDownload.h">
+      <Filter>mbvip\download</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\platform\image-decoders\webp\WEBPImageDecoder.h">
+      <Filter>third_party\WebKit\Source\platform\image-decoders\webp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\bindings\core\v8\ModuleRecord.h">
+      <Filter>third_party\Webkit\Source\bindings\core\v8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\bindings\core\v8\Modulator.h">
+      <Filter>third_party\Webkit\Source\bindings\core\v8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\core\dom\ModuleScriptLoader.h">
+      <Filter>third_party\Webkit\Source\core\dom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\crypto\Crypto.h">
+      <Filter>third_party\WebKit\Source\modules\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\Source\modules\crypto\DOMWindowCrypto.h">
+      <Filter>third_party\WebKit\Source\modules\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gen\blink\bindings\modules\v8\V8Crypto.h">
+      <Filter>gen\blink\bindings\modules\v8</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\content\TaskObserverAdapter.h">
+      <Filter>content</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\WebKit\public\web\WebHistoryCommitType.h">
+      <Filter>third_party\WebKit\public\web</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-value.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-value-serializer.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-value-serializer-version.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-version.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-version-string.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-wasm.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-wasm-trap-handler-posix.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-wasm-trap-handler-win.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-weak-callback-info.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-array-buffer.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-callbacks.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8config.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-container.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-context.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-cppgc.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-data.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-date.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-debug.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-embedder-heap.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-embedder-state-scope.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-exception.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-extension.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-external.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-fast-api-calls.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-forward.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-function.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-function-callback.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-initialization.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-inspector.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-inspector-protocol.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-internal.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-isolate.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-json.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-local-handle.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-locker.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-maybe.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-memory-span.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-message.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-metrics.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-microtask.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-microtask-queue.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-object.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-persistent-handle.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-platform.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-primitive.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-primitive-object.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-profiler.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-promise.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-proxy.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-regexp.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-script.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-snapshot.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-statistics.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-template.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-traced-handle.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-typed-array.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-unwinder.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-unwinder-state.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\include\v8-util.h">
+      <Filter>v8_108</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\third_party\inspector_protocol\crdtp\cbor.h">
+      <Filter>v8_108\third_party\inspector_protocol\crdtp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\third_party\inspector_protocol\crdtp\dispatch.h">
+      <Filter>v8_108\third_party\inspector_protocol\crdtp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\third_party\inspector_protocol\crdtp\error_support.h">
+      <Filter>v8_108\third_party\inspector_protocol\crdtp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\third_party\inspector_protocol\crdtp\export.h">
+      <Filter>v8_108\third_party\inspector_protocol\crdtp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\third_party\inspector_protocol\crdtp\find_by_first.h">
+      <Filter>v8_108\third_party\inspector_protocol\crdtp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\third_party\inspector_protocol\crdtp\frontend_channel.h">
+      <Filter>v8_108\third_party\inspector_protocol\crdtp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\third_party\inspector_protocol\crdtp\json.h">
+      <Filter>v8_108\third_party\inspector_protocol\crdtp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\third_party\inspector_protocol\crdtp\json_platform.h">
+      <Filter>v8_108\third_party\inspector_protocol\crdtp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\third_party\inspector_protocol\crdtp\maybe.h">
+      <Filter>v8_108\third_party\inspector_protocol\crdtp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\third_party\inspector_protocol\crdtp\parser_handler.h">
+      <Filter>v8_108\third_party\inspector_protocol\crdtp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\third_party\inspector_protocol\crdtp\protocol_core.h">
+      <Filter>v8_108\third_party\inspector_protocol\crdtp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\third_party\inspector_protocol\crdtp\serializable.h">
+      <Filter>v8_108\third_party\inspector_protocol\crdtp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\third_party\inspector_protocol\crdtp\span.h">
+      <Filter>v8_108\third_party\inspector_protocol\crdtp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\v8_108\third_party\inspector_protocol\crdtp\status.h">
+      <Filter>v8_108\third_party\inspector_protocol\crdtp</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

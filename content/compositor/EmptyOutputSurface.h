@@ -43,12 +43,11 @@ public:
 
     ~EmptyOutputSurface();
 
-    // cc::OutputSurface implementation.
-    cc::OverlayCandidateValidator* GetOverlayCandidateValidator() const override;
-
-    virtual void SwapBuffers(cc::OutputSurfaceFrame frame) override;
+    // cc::OutputSurface implace implace implace implace implace implace implace implace implace implace implace implace implace implace implace implace implace implrfaceFrame frame) override;
     virtual void BindToClient(cc::OutputSurfaceClient* client) override;
     virtual bool SurfaceIsSuspendForRecycle() const override;
+    cc::OverlayCandidateValidator* GetOverlayCandidateValidator() const override;
+    void SwapBuffers(cc::OutputSurfaceFrame frame) override;
 
     // cc::SurfaceFactoryClient implementation
     virtual void ReturnResources(const cc::ReturnedResourceArray& resources) override;

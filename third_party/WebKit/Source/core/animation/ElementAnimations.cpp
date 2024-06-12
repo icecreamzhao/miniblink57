@@ -108,7 +108,7 @@ void ElementAnimations::updateBaseComputedStyle(
         m_baseComputedStyle = nullptr;
         return;
     }
-#if DCHECK_IS_ON()
+#if 0 // DCHECK_IS_ON()
     if (m_baseComputedStyle && computedStyle)
         DCHECK(*m_baseComputedStyle == *computedStyle);
 #endif

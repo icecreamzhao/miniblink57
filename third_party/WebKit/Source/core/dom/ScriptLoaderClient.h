@@ -42,6 +42,7 @@ public:
     virtual bool asyncAttributeValue() const = 0;
     virtual bool deferAttributeValue() const = 0;
     virtual bool hasSourceAttribute() const = 0;
+    virtual bool hasNomoduleAttribute() const = 0;
 
     virtual AtomicString nonce() const = 0;
     virtual void setNonce(const String&) = 0;

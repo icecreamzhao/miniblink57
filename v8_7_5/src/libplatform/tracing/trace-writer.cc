@@ -5,6 +5,7 @@
 #include "src/libplatform/tracing/trace-writer.h"
 
 #include <cmath>
+#include <math.h>
 
 #include "base/trace_event/common/trace_event_common.h"
 #include "include/v8-platform.h"

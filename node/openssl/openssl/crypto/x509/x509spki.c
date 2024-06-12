@@ -76,7 +76,6 @@ EVP_PKEY *NETSCAPE_SPKI_get_pubkey(NETSCAPE_SPKI *x)
 }
 
 /* Load a Netscape SPKI from a base64 encoded string */
-
 NETSCAPE_SPKI *NETSCAPE_SPKI_b64_decode(const char *str, int len)
 {
     unsigned char *spki_der;

@@ -31,7 +31,6 @@ namespace blink {
 
 ThreadDebugger::ThreadDebugger(v8::Isolate* isolate)
     : m_isolate(isolate)
-    //, m_v8Inspector(nullptr)
     , m_v8Inspector(v8_inspector::V8Inspector::create(isolate, this))
     //m_v8TracingCpuProfiler(v8::TracingCpuProfiler::Create(isolate))
 {
@@ -91,8 +90,11 @@ MessageLevel ThreadDebugger::consoleAPITypeToMessageLevel(v8::Isolate::MessageEr
 
 void ThreadDebugger::willExecuteScript(v8::Isolate* isolate, int scriptId)
 {
-//     if (ThreadDebugger* debugger = ThreadDebugger::from(isolate))
+//     if (ThreadDebugger* debugger = ThreadDebugger::from(isolate)) {
 //         debugger->v8Inspector()->willExecuteScript(isolate->GetCurrentContext(), scriptId);
+//         v8_inspector::V8ContextInfo info(v8::Local<v8::Context> context, int contextGroupId, const StringView & humanReadableName);
+//         debugger->v8Inspector()->contextCreated(info);
+//     }
 }
 
 void ThreadDebugger::didExecuteScript(v8::Isolate* isolate)

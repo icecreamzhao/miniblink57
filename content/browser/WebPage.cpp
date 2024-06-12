@@ -242,6 +242,12 @@ void WebPage::didExitDebugLoop()
         m_pageImpl->didExitDebugLoop();
 }
 
+void WebPage::willCommitProvisionalLoad()
+{
+    if (m_pageImpl)
+        m_pageImpl->willCommitProvisionalLoad();
+}
+
 void WebPage::didStartProvisionalLoad()
 {
     if (m_pageImpl)
@@ -459,10 +465,10 @@ void WebPage::loadURL(int64 frameId, const wchar_t* url, const blink::Referrer& 
         m_pageImpl->loadURL(frameId, url, referrer, extraHeaders);
 }
 
-void WebPage::loadRequest(int64 frameId, const blink::WebURLRequest& request)
+void WebPage::loadRequest(int64 frameId, const blink::WebURLRequest& request, bool isViewSource)
 {
     if (m_pageImpl)
-        m_pageImpl->loadRequest(frameId, request);
+        m_pageImpl->loadRequest(frameId, request, isViewSource);
 }
 
 void WebPage::loadHTMLString(int64 frameId, const WebData& html, const WebURL& baseURL, const WebURL& unreachableURL, bool replace)

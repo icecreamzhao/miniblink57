@@ -32,11 +32,6 @@
 #include "avassert.h"
 #include "version.h"
 
-unsigned __int64 _tzcnt_u64(unsigned __int64 value)
-{
-    return __lzcnt64(value);
-}
-
 /* Stein's binary GCD algorithm:
  * https://en.wikipedia.org/wiki/Binary_GCD_algorithm */
 int64_t av_gcd(int64_t a, int64_t b) {

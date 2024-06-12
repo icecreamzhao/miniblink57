@@ -96,13 +96,17 @@ void Platform::initialize(Platform* platform)
     // TODO(ssid): remove this check after fixing crbug.com/486782.
     if (s_platform->m_mainThread) {
         ASSERT(!s_gcTaskRunner);
+
         s_gcTaskRunner = new GCTaskRunner(s_platform->m_mainThread);
+
         base::trace_event::MemoryDumpManager::GetInstance()->RegisterDumpProvider(
             PartitionAllocMemoryDumpProvider::instance(), "PartitionAlloc",
             base::ThreadTaskRunnerHandle::Get());
+
         base::trace_event::MemoryDumpManager::GetInstance()->RegisterDumpProvider(
             FontCacheMemoryDumpProvider::instance(), "FontCaches",
             base::ThreadTaskRunnerHandle::Get());
+
         base::trace_event::MemoryDumpManager::GetInstance()->RegisterDumpProvider(
             MemoryCacheDumpProvider::instance(), "MemoryCache",
             base::ThreadTaskRunnerHandle::Get());

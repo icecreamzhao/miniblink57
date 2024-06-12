@@ -123,7 +123,7 @@ class Span : private internal::SpanBase<const T> {
   Span(const C &container) : data_(container.data()), size_(container.size()) {}
 
   template <
-      typename C, typename = typename Enable......IfContainer<C>::type,
+      typename C, typename = typename EnableIfContainer<C>::type,
       typename = typename std::enable_if<!std::is_const<T>::value, C>::type>
   explicit Span(C &container)
       : data_(container.data()), size_(container.size()) {}

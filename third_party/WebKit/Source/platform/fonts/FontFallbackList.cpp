@@ -106,6 +106,7 @@ bool FontFallbackList::shouldSkipDrawing() const
 const SimpleFontData* FontFallbackList::determinePrimarySimpleFontData(const FontDescription& fontDescription) const
 {
     bool shouldLoadCustomFont = true;
+    const SimpleFontData* result = nullptr;
 
     for (unsigned fontIndex = 0;; ++fontIndex) {
         const FontData* fontData = fontDataAt(fontDescription, fontIndex);

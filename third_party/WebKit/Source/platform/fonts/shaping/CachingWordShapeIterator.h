@@ -68,7 +68,9 @@ public:
             if (m_startIndex)
                 return false;
             *wordResult = shapeWord(m_textRun, m_font);
-            m_startIndex = 1;
+            if (!(*wordResult))
+                return false;
+            m_startIndex =   1;
             return wordResult->get();
         }
 
@@ -76,11 +78,9 @@ public:
     }
 
 private:
-    PassRefPtr<const ShapeResult> shapeWordWithoutSpacing(
-        const TextRun& wordRun, const Font* font)
+    PassRefPtr<const ShapeResult> shapeWordWithoutSpacing(const TextRun& wordRun, const Font* font)
     {
-        ShapeCacheEntry* cacheEntry = m_shapeCache->add(wordRun,
-            ShapeCacheEntry());
+        ShapeCacheEntry* cacheEntry = m_shapeCache->add(wordRun, ShapeCacheEntry());
         if (cacheEntry && cacheEntry->m_shapeResult)
             return cacheEntry->m_shapeResult;
 #if 1 //def MINIBLINK_NOT_IMPLEMENTED
@@ -103,6 +103,9 @@ private:
             return shapeWordWithoutSpacing(wordRun, font);
 
         RefPtr<const ShapeResult> result = shapeWordWithoutSpacing(wordRun, font);
+        if (!result.get())
+            return nullptr;
+
         return result->applySpacingToCopy(m_spacing, wordRun);
     }
 

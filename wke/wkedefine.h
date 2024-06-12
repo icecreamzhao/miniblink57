@@ -543,6 +543,7 @@ typedef enum _wkeOtherLoadType {
     WKE_DID_GET_RESPONSE_DETAILS,
     WKE_DID_GET_REDIRECT_REQUEST,
     WKE_DID_POST_REQUEST,
+    WKE_WILL_COMMIT_PROVISIONAL_LOAD,
 } wkeOtherLoadType;
 typedef void(WKE_CALL_TYPE*wkeOnOtherLoadCallback)(wkeWebView webView, void* param, wkeOtherLoadType type, wkeTempCallbackInfo* info);
 

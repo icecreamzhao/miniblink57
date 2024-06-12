@@ -9,6 +9,7 @@ var json = [{
 		{"ndkBinPath":constVal.ndkBinPath},
 		{"v8dir": constVal.v8dir},
 		{"targetDir": constVal.targetDir},
+		{"sysroot": constVal.sysroot},
 	],
 	"compile":{
 		"ccompiler":"${clangPath}/clang.exe",
@@ -181,7 +182,7 @@ var json = [{
 		// 
 		"cmd":[
 			"-fno-exceptions",
-			"--target=x86_64-linux-guneabi", 
+			//"--target=x86_64-linux-guneabi", 
 			"-std=c++14",
 			"-fms-extensions",
 			//"-fshort-wchar",

@@ -436,6 +436,7 @@ SerializedScriptValue::transferArrayBufferContents(
                 return nullptr;
             }
         } else {
+#if V8_MAJOR_VERSION <= 7
             Vector<v8::Local<v8::ArrayBuffer>, 4> bufferHandles;
             v8::HandleScope handleScope(isolate);
             accumulateArrayBuffersForAllWorlds(
@@ -459,6 +460,9 @@ SerializedScriptValue::transferArrayBufferContents(
                 for (const auto& bufferHandle : bufferHandles)
                     bufferHandle->Neuter();
             }
+#else
+            DebugBreak();
+#endif
         }
     }
     return contents;

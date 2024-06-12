@@ -195,10 +195,10 @@ constexpr const _Ty& std_min(const _Ty& _Left, const _Ty& _Right)
 
 #define ENABLE_TENCENT(x) TENCENT_#x
 
-#if defined(OS_WIN) || defined(OS_LINUX_FOR_WIN)
+#if !defined(_MSC_VER) && (defined(OS_WIN) || defined(OS_LINUX_FOR_WIN))
 #pragma GCC diagnostic ignored "-Wignored-attributes"
-#include "windows.h"
 #endif
+#include "windows.h"
 
 #include "base/gtest_prod_util.h"
 

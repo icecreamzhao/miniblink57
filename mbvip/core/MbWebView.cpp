@@ -29,6 +29,8 @@
 #include "mbvip/core/RenderInit.h"
 #endif
 
+#include "content/browser/PostTaskHelper.h"
+
 #if !defined(OS_WIN)
 #include <cairo.h>
 #endif
@@ -36,11 +38,59 @@
 #include "third_party/WebKit/Source/wtf/text/qt4/mbchar.h"
 
 #include <vector>
+#include "base/atomic_mb.h"
+
+namespace wke {
+void connetDevTools(wkeWebView frontEnd, wkeWebView embedder);
+}
+
+#if !defined(OS_WIN)
+#if defined(SK_CPU_LENDIAN)
+static inline uint32_t pixel_format_skia_n32_to_cairo_argb(uint32_t color)
+{
+    // ABGR to ARGB
+    unsigned int c1 = ((color >> 16) & 0xff) << 0;
+    unsigned int c2 = ((color >> 0) & 0xff) << 16;
+    color &= 0xff00ff00;
+    return (color & 0xff00ff00) | c1 | c2;
+}
+
+static void copy_buffer_skia_n32_to_cairo_argb(void* dst, size_t dst_row_byte_size, const void* src, size_t src_row_byte_size,
+    unsigned int x, unsigned int y, unsigned int width, unsigned int height)
+{
+    uint32_t* dst_data;
+    const uint32_t* src_data;
+
+    if (width == 0 || height == 0)
+        return;
+
+    dst_data = (uint32_t*)dst + x;
+    src_data = (uint32_t*)src + x;
+
+    while (height--) {
+        uint32_t* d = dst_data;
+        const uint32_t* s = src_data;
+        unsigned int w = width;
+        while (w--) {
+            *d++ = pixel_format_skia_n32_to_cairo_argb(*s++);
+        }
+        dst_data += dst_row_byte_size / sizeof(uint32_t);
+        src_data += src_row_byte_size / sizeof(uint32_t);
+    }
+}
+
+#elif defined(SK_CPU_BENDIAN)
+#error "no implementation for SK_CPU_BENDIAN"
+#else
+#error "SK_CPU_xENDIAN not configure"
+#endif
+
+#endif
 
 namespace mb {
 
-long atomicIncrement(long volatile* addend) { return _InterlockedIncrement(reinterpret_cast<long volatile*>(addend)); }
-long atomicDecrement(long volatile* addend) { return _InterlockedDecrement(reinterpret_cast<long volatile*>(addend)); }
+long atomicIncrement(long volatile* addend) { return MB_InterlockedIncrement(reinterpret_cast<long volatile*>(addend)); }
+long atomicDecrement(long volatile* addend) { return MB_InterlockedDecrement(reinterpret_cast<long volatile*>(addend)); }
 const WCHAR* kClassWndName = u16("mbWebWindowClass");
 extern unsigned int g_mbMask;
 extern bool g_enableNativeSetCapture;
@@ -98,9 +148,16 @@ MbWebView::MbWebView()
 
 void MbWebView::preDestroy()
 {
+    char* output = (char*)malloc(0x100);
+    sprintf(output, "MbWebView::preDestroy: %p, %d\n", this, (int)m_id);
+    OutputDebugStringA(output);
+    free(output);
+
     common::LiveIdDetect::get()->deconstructed(m_id);
     m_state = kPageDestroying;
     ::RevokeDragDrop(m_hWnd);
+    ::SetPropW(m_hWnd, kClassWndName, NULL);
+    //::SetWindowLongPtrW(m_hWnd, GWLP_USERDATA, 0);
 }
 
 MbWebView::~MbWebView()
@@ -220,6 +277,7 @@ void WKE_CALL_TYPE onURLChanged(wkeWebView wkeWebview, void* param, wkeWebFrameH
 
 bool WKE_CALL_TYPE onPromptBox(wkeWebView wkeWebview, void* param, const wkeString msg, const wkeString defaultResult, wkeString result)
 {
+    BOOL isOk = TRUE;
 #if defined(WIN32) 
     int64_t id = (int64_t)param;
     MbWebView* self = (MbWebView*)common::LiveIdDetect::get()->getPtr(id);
@@ -227,8 +285,9 @@ bool WKE_CALL_TYPE onPromptBox(wkeWebView wkeWebview, void* param, const wkeStri
         return false;
 
     mbStringPtr resultVal = nullptr;
+    
     if (self->getClosure().m_PromptBoxCallback)
-        resultVal = self->getClosure().m_PromptBoxCallback(self->getWebviewHandle(), self->getClosure().m_PromptBoxParam, wkeGetString(msg), wkeGetString(defaultResult));
+        resultVal = self->getClosure().m_PromptBoxCallback(self->getWebviewHandle(), self->getClosure().m_PromptBoxParam, wkeGetString(msg), wkeGetString(defaultResult), &isOk);
     else {
         PromptWnd prompt(self->getHostWnd());
         std::string result = prompt.run(wkeGetString(msg), wkeGetString(defaultResult));
@@ -242,7 +301,7 @@ bool WKE_CALL_TYPE onPromptBox(wkeWebView wkeWebview, void* param, const wkeStri
         mbDeleteString(resultVal);
     }
 #endif
-    return true;
+    return isOk;
 }
 
 bool WKE_CALL_TYPE onContextMenuItemClickCallback(wkeWebView webView, void* param, wkeOnContextMenuItemClickType type, wkeOnContextMenuItemClickStep step, wkeWebFrameHandle frameId, void* info)
@@ -270,6 +329,34 @@ void WKE_CALL_TYPE MbWebView::onCaretChangedCallback(wkeWebView webView, void* p
     ::LeaveCriticalSection(&(self->m_clientSizeLock));
 }
 
+void MbWebView::resetState()
+{
+    m_hasDispatchWillCommitProvisionalLoad = false;
+}
+
+bool MbWebView::hasDispatchWillCommitProvisionalLoad() const 
+{
+    return m_hasDispatchWillCommitProvisionalLoad; 
+}
+
+void WKE_CALL_TYPE MbWebView::onOtherLoadCallback(wkeWebView webView, void* param, wkeOtherLoadType type, wkeTempCallbackInfo* info)
+{
+    int64_t id = (int64_t)param;
+    MbWebView* self = (MbWebView*)common::LiveIdDetect::get()->getPtr(id);
+    if (!self)
+        return;
+
+    ::EnterCriticalSection(&(self->m_clientSizeLock));
+
+    if (WKE_DID_START_LOADING == type) { // 有url load的时候会调用
+        self->resetState();
+    } else if (WKE_WILL_COMMIT_PROVISIONAL_LOAD == type) { // 有第一个数据来到的时候会调用
+        self->m_hasDispatchWillCommitProvisionalLoad = true;
+    }
+
+    ::LeaveCriticalSection(&(self->m_clientSizeLock));
+}
+
 void MbWebView::initWebviewInBlinkThread(wkeWebView wkeWebview)
 {
     if (m_wkeWebview)
@@ -294,6 +381,7 @@ void MbWebView::initWebviewInBlinkThread(wkeWebView wkeWebview)
     wkeOnPromptBox(wkeWebview, onPromptBox, (void*)m_id);
     wkeOnContextMenuItemClick(wkeWebview, onContextMenuItemClickCallback, (void*)m_id);
     wkeOnCaretChanged(wkeWebview, onCaretChangedCallback, (void*)m_id);
+    wkeOnOtherLoad(wkeWebview, onOtherLoadCallback, (void*)m_id);
 
     if (m_isTransparent)
         wkeSetTransparent(wkeWebview, true);
@@ -507,9 +595,9 @@ void MbWebView::createWkeWebWindowImplInUiThread(HWND parent, DWORD style, DWORD
     m_isWebWindowMode = true; // TODO
 }
 
-#ifdef OS_LINUX
 void MbWebView::bindGTKWindow(void* rootWindow, void* drawingArea, DWORD style, DWORD styleEx, int width, int height)
 {
+#if !defined(WIN32)
     const WCHAR* szClassName = u16("MtMbWebWindow");
     MSG msg = { 0 };
     WNDCLASSEXW wndClass = { 0 };
@@ -529,8 +617,8 @@ void MbWebView::bindGTKWindow(void* rootWindow, void* drawingArea, DWORD style, 
         wndClass.lpszClassName = szClassName;
         RegisterClassExW(&wndClass);
     }
-
-    m_hWnd = BindWindowByGTK(
+    
+    m_hWnd = bindWindowByGTK(
         rootWindow,
         drawingArea,
         styleEx,        // window ex-style
@@ -547,8 +635,8 @@ void MbWebView::bindGTKWindow(void* rootWindow, void* drawingArea, DWORD style, 
         mbShowWindow(getWebviewHandle(), true);
 
     m_isWebWindowMode = true; // TODO
-}
 #endif
+}
 
 void MbWebView::createWkeWebWindowInUiThread(mbWindowType type, HWND parent, int x, int y, int width, int height)
 {
@@ -704,21 +792,6 @@ void MbWebView::onResize(int w, int h, bool needSetHostWnd)
     if (m_isWebWindowMode && needSetHostWnd)
         ::SetWindowPos(m_hWnd, NULL, 0, 0, w, h, SWP_NOZORDER | SWP_NOMOVE | SWP_NOACTIVATE);
 }
-
-// void readFile(const wchar_t* path, std::vector<char>* buffer)
-// {
-//     HANDLE hFile = CreateFileW(path, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-//     if (INVALID_HANDLE_VALUE == hFile)
-//         return;
-// 
-//     DWORD fileSizeHigh;
-//     const DWORD bufferSize = ::GetFileSize(hFile, &fileSizeHigh);
-// 
-//     DWORD numberOfBytesRead = 0;
-//     buffer->resize(bufferSize);
-//     BOOL b = ::ReadFile(hFile, &buffer->at(0), bufferSize, &numberOfBytesRead, nullptr);
-//     ::CloseHandle(hFile);
-// }
 
 #if ENABLE_IN_MB_MAIN
 #if ENABLE_NODEJS
@@ -915,32 +988,24 @@ void MbWebView::onPaintUpdatedInCompositeThread(const HDC hdc, int x, int y, int
 
         m_bitmap = new SkBitmap();
         SkImageInfo info = SkImageInfo::MakeN32(cx, cy, kOpaque_SkAlphaType);
+        //SkImageInfo info = SkImageInfo::Make(cx, cy, kBGRA_8888_SkColorType, kPremul_SkAlphaType, nullptr);
+
         byteData = cairo_image_surface_get_data(m_surface);
-        m_bitmap->installPixels(info, byteData, cairo_image_surface_get_stride(m_surface), NULL, nullptr, nullptr);
+        bool b = m_bitmap->installPixels(info, byteData, cairo_image_surface_get_stride(m_surface), NULL, nullptr, nullptr);
         m_memoryCanvas = new SkCanvas(*m_bitmap);
     }
-    else if (m_isTransparent){
-        //gtk_window_set_decorated(GTK_WINDOW(window), FALSE);       // 设置无边框
-    }
 
-    if (m_memoryCanvas) {
+    if (m_memoryCanvas) {        
         SkRect isrc = SkRect::MakeXYWH(x, y, cx, cy);
         SkRect dst = isrc;
         m_memoryCanvas->drawBitmapRect(bitmap, isrc, dst, nullptr);
-
-//         unsigned char* line = cairo_image_surface_get_data(m_surface) + x * 4;
-//         unsigned char* p;
-//         for (int start_y = y; start_y < y + cy; start_y++) {
-//             p = line;
-//             for (int start_x = x; start_x < x + cx; start_x++) {
-//                 unsigned char tmp = p[0];
-//                 p[0] = p[2];
-//                 p[2] = tmp;
-//                 p += 4;
-//             }
-//             line += cairo_image_surface_get_stride(m_surface);
-//         }
     }
+
+//     if (m_memoryCanvas) {
+//         copy_buffer_skia_n32_to_cairo_argb((void*)cairo_image_surface_get_data(m_surface), (size_t)cairo_image_surface_get_stride(m_surface),
+//             (void*)bitmap.getPixels(), (size_t)bitmap.rowBytes(),
+//             (unsigned int)x, (unsigned int)y, (unsigned int)cx, (unsigned int)cy);
+//     }
 #endif
 }
 
@@ -979,7 +1044,7 @@ void MbWebView::onPaintUpdatedInUiThread(const HDC hdc, int x, int y, int cx, in
         
         ::ReleaseDC(m_hWnd, hdcScreen);
 #else
-        //gtk_window_set_decorated(GTK_WINDOW(window), FALSE);       // 设置无边框
+        ;
 #endif
     }
 
@@ -998,8 +1063,6 @@ void MbWebView::onPaintUpdatedInUiThread(const HDC hdc, int x, int y, int cx, in
         mbRect r = { x, y, cx, cy };
         paintBitUpdatedCallback(getWebviewHandle(), getClosure().m_PaintBitUpdatedParam, m_bits, &r, clientSize.cx, clientSize.cy);
     }
-#else
-    ;
 #endif
     ::LeaveCriticalSection(&m_memoryCanvasLock);
 
@@ -1033,8 +1096,6 @@ void MbWebView::onPrePaintUpdatedInCompositeThread(const HDC hdc, int x, int y, 
         ::InvalidateRect(m_hWnd, &rc, false);
     }
 }
-
-
 
 HDC MbWebView::getViewDC()
 {
@@ -1368,23 +1429,8 @@ void MbWebView::onPaint(HWND hWnd, WPARAM wParam)
 //                     source_data[y * stride + x] = 0xff112233;
 //                 }
 //             }
-
-//             unsigned char* line = cairo_image_surface_get_data(m_surface) + destX * 4;
-//             unsigned char* p;
-//             for (int start_y = destY; start_y < destY + height; start_y++) {
-//                 p = line;
-//                 for (int start_x = destX; start_x < destX + width; start_x++) {
-//                     unsigned char tmp = p[0];
-//                     p[0] = p[2];
-//                     p[2] = tmp;
-//                     p += 4;
-//                 }
-//                 line += cairo_image_surface_get_stride(m_surface);
-//             }
-            
             cairo_surface_mark_dirty(m_surface);
             cairo_set_source_surface(cr, m_surface, 0, 0);
-            cairo_paint(cr);
             ::LeaveCriticalSection(&m_memoryCanvasLock);
         }
 #endif
@@ -1428,6 +1474,7 @@ LRESULT MbWebView::windowProcImpl(HWND hWnd, UINT message, WPARAM wParam, LPARAM
         break;
 
     case WM_CLOSE:
+        printf("MbWebView::windowProcImpl, this:%p, %p\n", this, getClosure().m_ClosingCallback);
         if (getClosure().m_ClosingCallback) {
             if (!getClosure().m_ClosingCallback(getWebviewHandle(), getClosure().m_ClosingParam, nullptr))
                 return 0;
@@ -1492,6 +1539,9 @@ LRESULT MbWebView::windowProcImpl(HWND hWnd, UINT message, WPARAM wParam, LPARAM
             flags |= WKE_REPEAT;
         if (HIWORD(lParam) & KF_EXTENDED)
             flags |= WKE_EXTENDED;
+
+        if (virtualKeyCode == 0x43)
+            OutputDebugStringA("");
 
         if (mbFireKeyDownEvent(getWebviewHandle(), virtualKeyCode, flags, false))
             return 0;
@@ -1761,11 +1811,97 @@ void* MbWebView::getUserKeyValue(const char* key) const
 {
     ::EnterCriticalSection(&m_userKeyValuesLock);
     std::map<std::string, void*>::const_iterator it = m_userKeyValues.find(key);
-    if (m_userKeyValues.end() == it)
+    if (m_userKeyValues.end() == it) {
+        ::LeaveCriticalSection(&m_userKeyValuesLock);
         return nullptr;
+    }
     void* ret = it->second;
     ::LeaveCriticalSection(&m_userKeyValuesLock);
     return ret;
+}
+
+class ShowDevToolsInUiThread {
+public:
+    ShowDevToolsInUiThread(MbWebView* parent, const std::string& url, mbOnShowDevtoolsCallback callback, void* param)
+    {
+        m_mbDevToolsWebView = NULL_WEBVIEW;
+        m_parent = parent->getId();
+        m_url = url;
+        m_callback = callback;
+        m_param = param;
+
+        m_memoryBMP = nullptr;
+        m_memoryDC = nullptr;
+        ::InitializeCriticalSection(&m_memoryCanvasLock);
+    }
+
+    void createInBlinkThread()
+    {
+        //content::WebPage::connetDevTools(devToolsWebView->webPage(), m_parent->webPage());
+        MbWebView* devToolsWebView = (MbWebView*)common::LiveIdDetect::get()->getPtr(m_mbDevToolsWebView);
+        MbWebView* parent = (MbWebView*)common::LiveIdDetect::get()->getPtr(m_parent);
+        if (!devToolsWebView || !parent)
+            return;
+        wke::connetDevTools(devToolsWebView->getWkeWebView(), parent->getWkeWebView());
+
+        ShowDevToolsInUiThread* self = this;
+        content::postTaskToUiThread(FROM_HERE, NULL, [self] {
+            self->createInUiThreadStep2();
+        });
+    }
+
+    void createInUiThreadStep1()
+    {
+        m_mbDevToolsWebView = mbCreateWebWindow(MB_WINDOW_TYPE_POPUP, nullptr, 200, 200, 800, 600);
+        //m_parent->m_devToolsWebView = devToolsWebView;
+
+        ShowDevToolsInUiThread* self = this;
+        content::postTaskToMainThread(FROM_HERE, [self] {
+            self->createInBlinkThread();
+        });
+
+        // if (m_callback)
+        //     m_callback(devToolsWebView, m_param);
+    }
+
+    void createInUiThreadStep2()
+    {
+       
+
+        //         WrapInfo* wrapInfo = new WrapInfo();
+        //         wrapInfo->hWnd = mbGetHostHWND(devToolsWebView);
+        //         wrapInfo->self = this;
+        //         wrapInfo->parent = m_parent;
+        // 
+        //         wrapInfo->id = wkeGetWebviewId(devToolsWebView);
+
+        mbLoadURL(m_mbDevToolsWebView, m_url.c_str());
+        mbShowWindow(m_mbDevToolsWebView, TRUE);
+        //wkeOnWindowDestroy(m_mbDevToolsWebView, handleDevToolsWebViewDestroy, (void*)wrapInfo);
+        //wkeOnPaintUpdated(m_mbDevToolsWebView, onPaintUpdated, (void*)wrapInfo);
+        mbSetWindowTitle(m_mbDevToolsWebView, "Miniblink Devtools");
+        mbSetZoomFactor(m_mbDevToolsWebView, /*m_parent->zoomFactor()*/1);
+        mbSetDragDropEnable(m_mbDevToolsWebView, false);
+    }
+
+private:
+    mbWebView m_mbDevToolsWebView;
+    mbWebView m_parent;
+    std::string m_url;
+    mbOnShowDevtoolsCallback m_callback;
+    void* m_param;
+
+    CRITICAL_SECTION m_memoryCanvasLock;
+    HBITMAP m_memoryBMP;
+    HDC m_memoryDC;
+};
+
+void MbWebView::showDevTools(const utf8* url, mbOnShowDevtoolsCallback callback, void* param)
+{
+    ShowDevToolsInUiThread* dev = new ShowDevToolsInUiThread(this, url, callback, param);
+    content::postTaskToUiThread(FROM_HERE, NULL, [dev] {
+        dev->createInUiThreadStep1();
+    });
 }
 
 }

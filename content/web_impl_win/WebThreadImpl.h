@@ -12,6 +12,10 @@ namespace blink {
 
 class Task;
 
+namespace scheduler {
+class TaskTimeObserver;
+}
+
 } // blink
 
 namespace WTF {
@@ -26,6 +30,7 @@ namespace content {
 
 class WebSchedulerImpl;
 class WebTimerBase;
+class TaskObserverAdapter;
 
 class WebThreadImpl : public blink::WebThread {
 public:
@@ -45,8 +50,11 @@ public:
     virtual bool isCurrentThread() const override;
     virtual blink::PlatformThreadId threadId() const override;
 
-    virtual void addTaskObserver(TaskObserver*) override;
-    virtual void removeTaskObserver(TaskObserver*) override;
+    virtual void addTaskObserver(blink::WebThread::TaskObserver*) override;
+    virtual void removeTaskObserver(blink::WebThread::TaskObserver*) override;
+
+    virtual void addTaskTimeObserver(blink::scheduler::TaskTimeObserver*) override;
+    virtual void removeTaskTimeObserver(blink::scheduler::TaskTimeObserver*) override;
 
     // Returns the scheduler associated with the thread.
     virtual blink::WebScheduler* scheduler() const override;
@@ -119,7 +127,12 @@ private:
     std::vector<WebTimerBase*> m_timerHeap;
     std::vector<WebTimerBase*> m_unusedTimersToDelete;
     std::vector<TaskPair*> m_taskPairsToPost;
-    std::vector<TaskObserver*> m_observers;
+
+    std::vector<TaskObserverAdapter*> m_observers;
+    static std::vector<TaskObserverAdapter*>::iterator findObserver(std::vector<TaskObserverAdapter*>& observers, void* observer);
+    void addTaskObserverImpl(TaskObserverAdapter* observer);
+    void removeTaskObserverImpl(const TaskObserverAdapter& observer);
+
     bool m_isObserversDirty;
     const char* m_name;
 

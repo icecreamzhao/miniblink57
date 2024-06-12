@@ -9,7 +9,7 @@ var json = [{
 		{"ndkBinPath":constVal.ndkBinPath},
 		{"v8dir": constVal.v8dir},
 		{"targetDir": constVal.targetDir},
-		{"sysroot": constVal.sysroot}
+		{"sysroot": constVal.sysroot},
 	],
 	"compile":{
 		"ccompiler":"${clangPath}/clang.exe",
@@ -138,7 +138,7 @@ var json = [{
 		],
 		// 
 		"cmd":[
-			"--target=x86_64-linux-guneabi", 
+			//"--target=x86_64-linux-guneabi", 
 			"-std=c++14",
 			"-fno-exceptions",
 			"-fms-extensions",
@@ -171,7 +171,7 @@ var json = [{
 		"linkerCmd":[],
 		"endLibs":[
 		],
-		"linker":"${ndkBinPath}/ar.exe"
+		"linker":constVal.linker//"${ndkBinPath}/ar.exe"
 	}
 }];
 

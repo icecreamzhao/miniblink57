@@ -77,8 +77,9 @@ static String buildLocalStorageFileNameString(const String& localPath, const bli
 
     if (localStoragePath.length() > 0) {
         UChar c = localStoragePath.characters8()[localStoragePath.length() - 1];
+        char sep[2] = { kPlatformFilePathSeparator, 0 };
         if ('\\' != c && '/' != c)
-            localStoragePath.append(kPlatformFilePathSeparator);
+            localStoragePath.append(StringView(sep, 1));
     }
 
     localStoragePath.append(buildOriginLocalFileNameString(originUrl));

@@ -14,19 +14,19 @@
     <ProjectGuid>{94A5A47D-9E58-4D7D-B7D4-F1463FC123F8}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>zlib</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v141_xp</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v141_xp</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -41,12 +41,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\</OutDir>
-    <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)..\out\win_$(Configuration)_x86</OutDir>
+    <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\win_$(Configuration)_x86\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\$(Configuration)\</IntDir>
-    <OutDir>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\win_$(Configuration)_x86\</IntDir>
+    <OutDir>$(SolutionDir)..\out\win_$(Configuration)_x86</OutDir>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -639,25 +639,356 @@
     <ClInclude Include="..\..\..\..\chromium\M84\build\linux\debian_sid_amd64-sysroot\usr\include\xf86drmMode.h" />
     <ClInclude Include="..\..\..\..\chromium\M84\build\linux\debian_sid_amd64-sysroot\usr\include\zconf.h" />
     <ClInclude Include="..\..\..\..\chromium\M84\build\linux\debian_sid_amd64-sysroot\usr\include\zlib.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdk.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkalias.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkapplaunchcontext.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkcairo.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkcolor.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkconfig.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkcursor.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkdisplay.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkdisplaymanager.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkdnd.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkdrawable.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkenumtypes.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkevents.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkfont.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkgc.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdki18n.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkimage.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkinput.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkinternals.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkintl.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkkeys.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkkeysyms-compat.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkkeysyms.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkmarshalers.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkmedialib.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkpango.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkpixbuf.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkpixmap.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkpoly-generic.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkprivate.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkproperty.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkregion-generic.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkregion.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkrgb.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkscreen.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkselection.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkspawn.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdktestutils.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdktypes.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkvisual.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkwindow.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkwindowimpl.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\keyname-table.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtk.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkaboutdialog.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkaccelgroup.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkaccellabel.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkaccelmap.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkaccessible.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkaction.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkactiongroup.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkactivatable.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkadjustment.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkalias.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkalignment.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkarrow.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkaspectframe.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkassistant.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkbbox.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkbin.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkbindings.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkbox.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkbuildable.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkbuilder.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkbuilderprivate.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkbuiltincache.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkbutton.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcalendar.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcelleditable.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcelllayout.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcellrenderer.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcellrendereraccel.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcellrenderercombo.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcellrendererpixbuf.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcellrendererprogress.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcellrendererspin.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcellrendererspinner.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcellrenderertext.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcellrenderertoggle.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcellview.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcheckbutton.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcheckmenuitem.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkclipboard.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkclist.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcolorbutton.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcolorsel.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcolorseldialog.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcombo.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcombobox.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcomboboxentry.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcomboboxtext.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcontainer.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkctree.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcurve.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcustompaperunixdialog.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkdebug.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkdialog.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkdnd.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkdndcursors.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkdrawingarea.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkeditable.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkentry.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkentrybuffer.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkentrycompletion.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkentryprivate.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkenums.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkeventbox.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkexpander.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkfilechooser.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkfilechooserbutton.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkfilechooserdefault.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkfilechooserdialog.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkfilechooserembed.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkfilechooserentry.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkfilechooserprivate.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkfilechoosersettings.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkfilechooserutils.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkfilechooserwidget.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkfilefilter.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkfilesel.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkfilesystem.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkfilesystemmodel.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkfixed.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkfontbutton.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkfontsel.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkframe.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkgamma.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkgc.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkhandlebox.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkhbbox.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkhbox.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkhpaned.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkhruler.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkhscale.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkhscrollbar.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkhseparator.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkhsv.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkiconcache.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkiconcachevalidator.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkiconfactory.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkicontheme.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkiconview.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkimage.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkimagemenuitem.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkimcontext.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkimcontextsimple.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkimcontextsimpleseqs.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkimmodule.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkimmulticontext.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkinfobar.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkinputdialog.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkintl.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkinvisible.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkitem.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkitemfactory.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkkeyhash.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtklabel.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtklayout.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtklinkbutton.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtklist.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtklistitem.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkliststore.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkmain.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkmarshal.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkmarshalers.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkmenu.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkmenubar.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkmenuitem.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkmenushell.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkmenutoolbutton.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkmessagedialog.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkmisc.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkmnemonichash.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkmodules.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkmountoperation.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkmountoperationprivate.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtknotebook.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkobject.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkoffscreenwindow.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkoldeditable.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkoptionmenu.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkorientable.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkpagesetup.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkpagesetupunixdialog.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkpaned.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkpango.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkpapersize.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkpathbar.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkpixmap.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkplug.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkplugprivate.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkpreview.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkprint-win32.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkprintbackend.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkprintcontext.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkprinter-private.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkprinter.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkprinteroption.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkprinteroptionset.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkprinteroptionwidget.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkprintjob.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkprintoperation-private.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkprintoperation.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkprintoperationpreview.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkprintsettings.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkprintunixdialog.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkprintutils.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkprivate.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkprogress.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkprogressbar.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkquartz.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkquery.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkradioaction.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkradiobutton.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkradiomenuitem.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkradiotoolbutton.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkrange.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkrbtree.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkrc.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkrecentaction.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkrecentchooser.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkrecentchooserdefault.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkrecentchooserdialog.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkrecentchoosermenu.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkrecentchooserprivate.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkrecentchooserutils.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkrecentchooserwidget.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkrecentfilter.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkrecentmanager.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkruler.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkscale.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkscalebutton.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkscrollbar.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkscrolledwindow.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtksearchengine.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtksearchenginebeagle.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtksearchenginequartz.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtksearchenginesimple.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtksearchenginetracker.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkselection.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkseparator.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkseparatormenuitem.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkseparatortoolitem.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtksettings.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkshow.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtksignal.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtksizegroup.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtksocket.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtksocketprivate.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkspinbutton.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkspinner.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkstatusbar.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkstatusicon.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkstock.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkstyle.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktable.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktearoffmenuitem.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktestutils.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktext.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktextbtree.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktextbuffer.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktextbufferrichtext.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktextbufferserialize.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktextchild.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktextchildprivate.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktextdisplay.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktextiter.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktextiterprivate.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktextlayout.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktextmark.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktextmarkprivate.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktextsegment.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktexttag.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktexttagprivate.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktexttagtable.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktexttypes.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktextutil.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktextview.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkthemes.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktipsquery.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktoggleaction.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktoggleactionprivate.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktogglebutton.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktoggletoolbutton.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktoolbar.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktoolbutton.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktoolitem.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktoolitemgroup.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktoolpalette.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktoolpaletteprivate.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktoolshell.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktooltip.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktooltips.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktrayicon.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktree.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktreedatalist.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktreednd.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktreeitem.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktreemodel.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktreemodelfilter.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktreemodelsort.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktreeprivate.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktreeselection.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktreesortable.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktreestore.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktreeview.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktreeviewcolumn.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktypebuiltins.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktypeutils.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkuimanager.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkunixprint.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkvbbox.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkvbox.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkversion.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkviewport.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkvolumebutton.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkvpaned.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkvruler.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkvscale.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkvscrollbar.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkvseparator.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkwidget.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkwin32embed.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkwin32embedwidget.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkwindow-decorate.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkwindow.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkxembed.h" />
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\xembed.h" />
     <ClInclude Include="..\..\fastmake\CmdHandler.h" />
     <ClInclude Include="..\..\fastmake\FastMakeMain.h" />
     <ClInclude Include="..\..\mbvip\common\cJSON.h" />
     <ClInclude Include="..\..\mbvip\common\StringUtil.h" />
-    <ClInclude Include="..\..\quickjs-vs\cutils.h" />
-    <ClInclude Include="..\..\quickjs-vs\libbf.h" />
-    <ClInclude Include="..\..\quickjs-vs\libregexp-opcode.h" />
-    <ClInclude Include="..\..\quickjs-vs\libregexp.h" />
-    <ClInclude Include="..\..\quickjs-vs\libunicode-table.h" />
-    <ClInclude Include="..\..\quickjs-vs\libunicode.h" />
-    <ClInclude Include="..\..\quickjs-vs\list.h" />
-    <ClInclude Include="..\..\quickjs-vs\quickjs-atom.h" />
-    <ClInclude Include="..\..\quickjs-vs\quickjs-libc.h" />
-    <ClInclude Include="..\..\quickjs-vs\quickjs-opcode.h" />
-    <ClInclude Include="..\..\quickjs-vs\quickjs.h" />
+    <ClInclude Include="..\..\quickjs\cutils.h" />
+    <ClInclude Include="..\..\quickjs\libbf.h" />
+    <ClInclude Include="..\..\quickjs\libregexp-opcode.h" />
+    <ClInclude Include="..\..\quickjs\libregexp.h" />
+    <ClInclude Include="..\..\quickjs\libunicode-table.h" />
+    <ClInclude Include="..\..\quickjs\libunicode.h" />
+    <ClInclude Include="..\..\quickjs\list.h" />
+    <ClInclude Include="..\..\quickjs\quickjs-atom.h" />
+    <ClInclude Include="..\..\quickjs\quickjs-libc.h" />
+    <ClInclude Include="..\..\quickjs\quickjs.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\livi-browser-gtk\livi-browser-gtk-no-evco\src\livi_browser.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\fastmake\CmdHandler.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -673,13 +1004,12 @@
     <ClCompile Include="..\..\mbvip\common\StringUtil.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\quickjs-vs\bjson.c" />
-    <ClCompile Include="..\..\quickjs-vs\cutils.c" />
-    <ClCompile Include="..\..\quickjs-vs\libbf.c" />
-    <ClCompile Include="..\..\quickjs-vs\libregexp.c" />
-    <ClCompile Include="..\..\quickjs-vs\libunicode.c" />
-    <ClCompile Include="..\..\quickjs-vs\quickjs-libc.c" />
-    <ClCompile Include="..\..\quickjs-vs\quickjs.c" />
+    <ClCompile Include="..\..\quickjs\cutils.c" />
+    <ClCompile Include="..\..\quickjs\libbf.c" />
+    <ClCompile Include="..\..\quickjs\libregexp.c" />
+    <ClCompile Include="..\..\quickjs\libunicode.c" />
+    <ClCompile Include="..\..\quickjs\quickjs-libc.c" />
+    <ClCompile Include="..\..\quickjs\quickjs.c" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

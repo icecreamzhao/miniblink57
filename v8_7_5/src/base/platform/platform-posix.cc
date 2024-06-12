@@ -31,6 +31,7 @@
 #endif
 
 #include <cmath>
+#include <math.h>
 #include <cstdlib>
 
 #include "src/base/platform/platform-posix.h"

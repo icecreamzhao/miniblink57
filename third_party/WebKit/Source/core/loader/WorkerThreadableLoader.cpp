@@ -441,18 +441,14 @@ void WorkerThreadableLoader::didDownloadData(int dataLength)
     m_client->didDownloadData(dataLength);
 }
 
-void WorkerThreadableLoader::didReceiveResourceTiming(
-    std::unique_ptr<CrossThreadResourceTimingInfoData> timingData)
+void WorkerThreadableLoader::didReceiveResourceTiming(std::unique_ptr<CrossThreadResourceTimingInfoData> timingData)
 {
-    //   DCHECK(!isMainThread());
-    //   if (!m_client)
-    //     return;
-    //   std::unique_ptr<ResourceTimingInfo> info(
-    //       ResourceTimingInfo::adopt(std::move(timingData)));
-    //   WorkerGlobalScopePerformance::performance(*m_workerGlobalScope)
-    //       ->addResourceTiming(*info);
-    //   m_client->didReceiveResourceTiming(*info);
-    DebugBreak();
+    DCHECK(!isMainThread());
+    if (!m_client)
+        return;
+    std::unique_ptr<ResourceTimingInfo> info(ResourceTimingInfo::adopt(std::move(timingData)));
+    //WorkerGlobalScopePerformance::performance(*m_workerGlobalScope)->addResourceTiming(*info);
+    m_client->didReceiveResourceTiming(*info);
 }
 
 DEFINE_TRACE(WorkerThreadableLoader)

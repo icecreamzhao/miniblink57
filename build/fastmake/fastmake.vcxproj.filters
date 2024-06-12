@@ -37,6 +37,18 @@
     <Filter Include="src\quickjs">
       <UniqueIdentifier>{303c2ea9-e884-4a28-8b66-bd8898985af0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\qjs">
+      <UniqueIdentifier>{5ee33d5f-5a56-4062-b214-6f95f9190d9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\gtk+-2.24.32">
+      <UniqueIdentifier>{63e59cfb-f921-4a1a-bc10-beba5a06b0f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\gtk+-2.24.32\gtk">
+      <UniqueIdentifier>{2d630c26-4cc0-4aa8-aa7a-374b4c43ee77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\gtk+-2.24.32\gdk">
+      <UniqueIdentifier>{c139c944-a215-438f-968f-69a9af55a943}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -1701,37 +1713,1018 @@
     <ClInclude Include="..\..\fastmake\FastMakeMain.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\quickjs-vs\cutils.h">
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtk.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkaboutdialog.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkaccelgroup.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkaccellabel.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkaccelmap.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkaccessible.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkaction.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkactiongroup.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkactivatable.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkadjustment.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkalias.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkalignment.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkarrow.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkaspectframe.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkassistant.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkbbox.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkbin.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkbindings.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkbox.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkbuildable.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkbuilder.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkbuilderprivate.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkbuiltincache.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkbutton.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcalendar.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcelleditable.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcelllayout.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcellrenderer.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcellrendereraccel.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcellrenderercombo.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcellrendererpixbuf.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcellrendererprogress.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcellrendererspin.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcellrendererspinner.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcellrenderertext.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcellrenderertoggle.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcellview.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcheckbutton.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcheckmenuitem.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkclipboard.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkclist.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcolorbutton.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcolorsel.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcolorseldialog.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcombo.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcombobox.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcomboboxentry.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcomboboxtext.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcontainer.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkctree.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcurve.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkcustompaperunixdialog.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkdebug.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkdialog.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkdnd.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkdndcursors.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkdrawingarea.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkeditable.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkentry.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkentrybuffer.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkentrycompletion.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkentryprivate.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkenums.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkeventbox.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkexpander.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkfilechooser.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkfilechooserbutton.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkfilechooserdefault.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkfilechooserdialog.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkfilechooserembed.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkfilechooserentry.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkfilechooserprivate.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkfilechoosersettings.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkfilechooserutils.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkfilechooserwidget.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkfilefilter.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkfilesel.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkfilesystem.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkfilesystemmodel.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkfixed.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkfontbutton.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkfontsel.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkframe.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkgamma.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkgc.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkhandlebox.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkhbbox.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkhbox.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkhpaned.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkhruler.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkhscale.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkhscrollbar.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkhseparator.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkhsv.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkiconcache.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkiconcachevalidator.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkiconfactory.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkicontheme.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkiconview.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkimage.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkimagemenuitem.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkimcontext.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkimcontextsimple.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkimcontextsimpleseqs.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkimmodule.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkimmulticontext.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkinfobar.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkinputdialog.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkintl.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkinvisible.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkitem.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkitemfactory.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkkeyhash.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtklabel.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtklayout.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtklinkbutton.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtklist.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtklistitem.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkliststore.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkmain.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkmarshal.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkmarshalers.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkmenu.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkmenubar.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkmenuitem.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkmenushell.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkmenutoolbutton.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkmessagedialog.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkmisc.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkmnemonichash.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkmodules.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkmountoperation.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkmountoperationprivate.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtknotebook.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkobject.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkoffscreenwindow.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkoldeditable.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkoptionmenu.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkorientable.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkpagesetup.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkpagesetupunixdialog.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkpaned.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkpango.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkpapersize.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkpathbar.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkpixmap.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkplug.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkplugprivate.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkpreview.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkprintbackend.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkprintcontext.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkprinter.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkprinteroption.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkprinteroptionset.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkprinteroptionwidget.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkprinter-private.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkprintjob.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkprintoperation.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkprintoperationpreview.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkprintoperation-private.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkprintsettings.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkprintunixdialog.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkprintutils.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkprint-win32.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkprivate.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkprogress.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkprogressbar.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkquartz.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkquery.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkradioaction.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkradiobutton.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkradiomenuitem.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkradiotoolbutton.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkrange.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkrbtree.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkrc.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkrecentaction.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkrecentchooser.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkrecentchooserdefault.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkrecentchooserdialog.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkrecentchoosermenu.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkrecentchooserprivate.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkrecentchooserutils.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkrecentchooserwidget.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkrecentfilter.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkrecentmanager.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkruler.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkscale.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkscalebutton.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkscrollbar.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkscrolledwindow.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtksearchengine.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtksearchenginebeagle.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtksearchenginequartz.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtksearchenginesimple.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtksearchenginetracker.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkselection.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkseparator.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkseparatormenuitem.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkseparatortoolitem.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtksettings.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkshow.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtksignal.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtksizegroup.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtksocket.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtksocketprivate.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkspinbutton.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkspinner.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkstatusbar.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkstatusicon.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkstock.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkstyle.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktable.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktearoffmenuitem.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktestutils.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktext.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktextbtree.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktextbuffer.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktextbufferrichtext.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktextbufferserialize.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktextchild.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktextchildprivate.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktextdisplay.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktextiter.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktextiterprivate.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktextlayout.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktextmark.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktextmarkprivate.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktextsegment.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktexttag.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktexttagprivate.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktexttagtable.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktexttypes.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktextutil.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktextview.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkthemes.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktipsquery.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktoggleaction.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktoggleactionprivate.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktogglebutton.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktoggletoolbutton.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktoolbar.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktoolbutton.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktoolitem.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktoolitemgroup.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktoolpalette.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktoolpaletteprivate.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktoolshell.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktooltip.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktooltips.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktrayicon.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktree.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktreedatalist.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktreednd.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktreeitem.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktreemodel.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktreemodelfilter.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktreemodelsort.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktreeprivate.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktreeselection.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktreesortable.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktreestore.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktreeview.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktreeviewcolumn.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktypebuiltins.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtktypeutils.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkuimanager.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkunixprint.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkvbbox.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkvbox.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkversion.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkviewport.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkvolumebutton.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkvpaned.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkvruler.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkvscale.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkvscrollbar.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkvseparator.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkwidget.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkwin32embed.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkwin32embedwidget.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkwindow.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkwindow-decorate.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\gtkxembed.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gtk\xembed.h">
+      <Filter>src\gtk+-2.24.32\gtk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkregion-generic.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkrgb.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkscreen.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkselection.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkspawn.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdktestutils.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdktypes.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkvisual.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkwindow.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkwindowimpl.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\keyname-table.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdk.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkalias.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkapplaunchcontext.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkcairo.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkcolor.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkconfig.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkcursor.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkdisplay.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkdisplaymanager.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkdnd.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkdrawable.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkenumtypes.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkevents.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkfont.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkgc.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdki18n.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkimage.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkinput.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkinternals.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkintl.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkkeys.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkkeysyms.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkkeysyms-compat.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkmarshalers.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkmedialib.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkpango.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkpixbuf.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkpixmap.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkpoly-generic.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkprivate.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkproperty.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\gtk\gtk+-2.24.32\gdk\gdkregion.h">
+      <Filter>src\gtk+-2.24.32\gdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\quickjs\quickjs-atom.h">
       <Filter>src\quickjs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\quickjs-vs\libbf.h">
+    <ClInclude Include="..\..\quickjs\quickjs-libc.h">
       <Filter>src\quickjs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\quickjs-vs\libregexp.h">
+    <ClInclude Include="..\..\quickjs\cutils.h">
       <Filter>src\quickjs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\quickjs-vs\libregexp-opcode.h">
+    <ClInclude Include="..\..\quickjs\libbf.h">
       <Filter>src\quickjs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\quickjs-vs\libunicode.h">
+    <ClInclude Include="..\..\quickjs\libregexp.h">
       <Filter>src\quickjs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\quickjs-vs\libunicode-table.h">
+    <ClInclude Include="..\..\quickjs\libregexp-opcode.h">
       <Filter>src\quickjs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\quickjs-vs\list.h">
+    <ClInclude Include="..\..\quickjs\libunicode.h">
       <Filter>src\quickjs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\quickjs-vs\quickjs.h">
+    <ClInclude Include="..\..\quickjs\libunicode-table.h">
       <Filter>src\quickjs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\quickjs-vs\quickjs-atom.h">
+    <ClInclude Include="..\..\quickjs\list.h">
       <Filter>src\quickjs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\quickjs-vs\quickjs-libc.h">
-      <Filter>src\quickjs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\quickjs-vs\quickjs-opcode.h">
+    <ClInclude Include="..\..\quickjs\quickjs.h">
       <Filter>src\quickjs</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1754,25 +2747,25 @@
     <ClCompile Include="..\..\fastmake\QjsFastMake.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\quickjs-vs\libbf.c">
+    <ClCompile Include="..\..\..\livi-browser-gtk\livi-browser-gtk-no-evco\src\livi_browser.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\quickjs\cutils.c">
       <Filter>src\quickjs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\quickjs-vs\libregexp.c">
+    <ClCompile Include="..\..\quickjs\libbf.c">
       <Filter>src\quickjs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\quickjs-vs\libunicode.c">
+    <ClCompile Include="..\..\quickjs\libregexp.c">
       <Filter>src\quickjs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\quickjs-vs\quickjs.c">
+    <ClCompile Include="..\..\quickjs\libunicode.c">
       <Filter>src\quickjs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\quickjs-vs\quickjs-libc.c">
+    <ClCompile Include="..\..\quickjs\quickjs.c">
       <Filter>src\quickjs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\quickjs-vs\bjson.c">
-      <Filter>src\quickjs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\quickjs-vs\cutils.c">
+    <ClCompile Include="..\..\quickjs\quickjs-libc.c">
       <Filter>src\quickjs</Filter>
     </ClCompile>
   </ItemGroup>

@@ -9,6 +9,7 @@
 #endif
 
 #include <mmsystem.h>
+#include "base/atomic_mb.h"
 
 void nodeRunNoWait();
 
@@ -88,7 +89,7 @@ static LRESULT CALLBACK timerWindowWndProc(HWND hWnd, UINT message, WPARAM wPara
     LRESULT result = 0;
     if (message == WM_TIMER) {
         if (wParam == sharedTimerID) {
-            _InterlockedExchange(&s_pendingSharedTimers, 0);
+            MB_InterlockedExchange((long*)&s_pendingSharedTimers, 0);
             
             if (kShouldUseHighResolutionTimers)
                 ::KillTimer(s_timerWindowHandle, sharedTimerID);
@@ -102,7 +103,7 @@ static LRESULT CALLBACK timerWindowWndProc(HWND hWnd, UINT message, WPARAM wPara
             sharedTimerFiredFunction();
         }
     } else if (message == s_timerFiredMessage || WM_NULL == message) {
-        _InterlockedExchange(&s_pendingTimers, 0);
+        MB_InterlockedExchange((long*)&s_pendingTimers, 0);
         s_processingCustomTimerMessage = true;
         sharedTimerFiredFunction();
         s_processingCustomTimerMessage = false;
@@ -135,7 +136,7 @@ static void WINAPI queueTimerProc(PVOID, BOOLEAN)
 {
     if (s_pendingTimers > 100000) // 太大说明主线程卡死了
         return;
-    if (_InterlockedIncrement(&s_pendingTimers) == 1)
+    if (MB_InterlockedIncrement((long*)&s_pendingTimers) == 1)
         ::PostMessageW(s_timerWindowHandle, /*s_timerFiredMessage*/WM_NULL, s_timerFiredMessage, s_timerFiredMessage);
 }
 

@@ -1,3 +1,4 @@
+#if V8_TARGET_ARCH_IA32
 #include "src/builtins/builtins-utils-gen.h"
 #include "src/builtins/builtins.h"
 #include "src/code-factory.h"
@@ -28188,4 +28189,4 @@ compiler::TNode<FixedTypedArrayBase> BaseBuiltinsFromDSLAssembler::UnsafeCast19F
 
 }  // namespace internal
 }  // namespace v8
-
+#endif

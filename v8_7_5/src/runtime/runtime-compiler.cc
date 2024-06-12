@@ -38,8 +38,7 @@ namespace internal {
             return isolate->StackOverflow();
         }
         IsCompiledScope is_compiled_scope;
-        if (!Compiler::Compile(function, Compiler::KEEP_EXCEPTION,
-                &is_compiled_scope)) {
+        if (!Compiler::Compile(function, Compiler::KEEP_EXCEPTION, &is_compiled_scope)) {
             return ReadOnlyRoots(isolate).exception();
         }
         DCHECK(function->is_compiled());

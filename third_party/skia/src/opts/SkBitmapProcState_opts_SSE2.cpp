@@ -4,7 +4,7 @@
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
+#if defined(__i386__) || defined(_M_IX86) || defined(__x86_64__) || defined(_M_X64)
 #include "SkBitmapProcState_opts_SSE2.h"
 #include "SkColorPriv.h"
 #include "SkPaint.h"
@@ -617,3 +617,4 @@ void ClampX_ClampY_nofilter_affine_SSE2(const SkBitmapProcState& s,
         fy += dy;
     }
 }
+#endif // #if defined(__i386__) || defined(_M_IX86) || defined(__x86_64__) || defined(_M_X64)

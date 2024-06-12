@@ -99,8 +99,8 @@ private:
 
     void dispose();
 
-    //   std::unique_ptr<PNGImageEncoderState> m_pngEncoderState;
-    //   std::unique_ptr<JPEGImageEncoderState> m_jpegEncoderState;
+    std::unique_ptr<PNGImageEncoderState> m_pngEncoderState;
+    std::unique_ptr<JPEGImageEncoderState> m_jpegEncoderState;
     Member<DOMUint8ClampedArray> m_data;
     std::unique_ptr<Vector<unsigned char>> m_encodedImage;
     int m_numRowsCompleted;

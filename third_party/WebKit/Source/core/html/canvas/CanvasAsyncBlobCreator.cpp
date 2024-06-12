@@ -11,8 +11,8 @@
 #include "platform/Histogram.h"
 #include "platform/WebTaskRunner.h"
 #include "platform/graphics/ImageBuffer.h"
-// #include "platform/image-encoders/JPEGImageEncoder.h"
-// #include "platform/image-encoders/PNGImageEncoder.h"
+#include "platform/image-encoders/JPEGImageEncoder.h"
+#include "platform/image-encoders/PNGImageEncoder.h"
 #include "platform/threading/BackgroundTaskRunner.h"
 #include "public/platform/Platform.h"
 #include "public/platform/WebScheduler.h"
@@ -350,146 +350,128 @@ void CanvasAsyncBlobCreator::idleEncodeRowsPng(double deadlineSeconds)
     if (m_idleTaskStatus == IdleTaskSwitchedToImmediateTask) {
         return;
     }
-    DebugBreak();
-    //   double startTime = WTF::monotonicallyIncreasingTime();
-    //   unsigned char* inputPixels =
-    //       m_data->data() + m_pixelRowStride * m_numRowsCompleted;
-    //   for (int y = m_numRowsCompleted; y < m_size.height(); ++y) {
-    //     if (isDeadlineNearOrPassed(deadlineSeconds)) {
-    //       m_numRowsCompleted = y;
-    //       m_elapsedTime += (WTF::monotonicallyIncreasingTime() - startTime);
-    //       Platform::current()->currentThread()->scheduler()->postIdleTask(
-    //           BLINK_FROM_HERE, WTF::bind(&CanvasAsyncBlobCreator::idleEncodeRowsPng,
-    //                                      wrapPersistent(this)));
-    //       return;
-    //     }
-    //     PNGImageEncoder::writeOneRowToPng(inputPixels, m_pngEncoderState.get());
-    //     inputPixels += m_pixelRowStride;
-    //   }
-    //   m_numRowsCompleted = m_size.height();
-    //   PNGImageEncoder::finalizePng(m_pngEncoderState.get());
-    //
-    //   m_idleTaskStatus = IdleTaskCompleted;
-    //   m_elapsedTime += (WTF::monotonicallyIncreasingTime() - startTime);
-    //   recordElapsedTimeHistogram(IdleEncodeDuration, MimeTypePng, m_elapsedTime);
-    //   if (isDeadlineNearOrPassed(deadlineSeconds)) {
-    //     TaskRunnerHelper::get(TaskType::CanvasBlobSerialization, m_document)
-    //         ->postTask(BLINK_FROM_HERE,
-    //                    WTF::bind(&CanvasAsyncBlobCreator::createBlobAndReturnResult,
-    //                              wrapPersistent(this)));
-    //   } else {
-    //     this->createBlobAndReturnResult();
-    //   }
+
+    double startTime = WTF::monotonicallyIncreasingTime();
+    unsigned char* inputPixels =
+        m_data->data() + m_pixelRowStride * m_numRowsCompleted;
+    for (int y = m_numRowsCompleted; y < m_size.height(); ++y) {
+        if (isDeadlineNearOrPassed(deadlineSeconds)) {
+            m_numRowsCompleted = y;
+            m_elapsedTime += (WTF::monotonicallyIncreasingTime() - startTime);
+            Platform::current()->currentThread()->scheduler()->postIdleTask(
+                BLINK_FROM_HERE, WTF::bind(&CanvasAsyncBlobCreator::idleEncodeRowsPng,
+                    wrapPersistent(this)));
+            return;
+        }
+        PNGImageEncoder::writeOneRowToPng(inputPixels, m_pngEncoderState.get());
+        inputPixels += m_pixelRowStride;
+    }
+    m_numRowsCompleted = m_size.height();
+    PNGImageEncoder::finalizePng(m_pngEncoderState.get());
+
+    m_idleTaskStatus = IdleTaskCompleted;
+    m_elapsedTime += (WTF::monotonicallyIncreasingTime() - startTime);
+    recordElapsedTimeHistogram(IdleEncodeDuration, MimeTypePng, m_elapsedTime);
+    if (isDeadlineNearOrPassed(deadlineSeconds)) {
+        TaskRunnerHelper::get(TaskType::CanvasBlobSerialization, m_document)
+            ->postTask(BLINK_FROM_HERE, WTF::bind(&CanvasAsyncBlobCreator::createBlobAndReturnResult, wrapPersistent(this)));
+    } else {
+        this->createBlobAndReturnResult();
+    }
 }
 
 void CanvasAsyncBlobCreator::idleEncodeRowsJpeg(double deadlineSeconds)
 {
-    //   if (m_idleTaskStatus == IdleTaskSwitchedToImmediateTask) {
-    //     return;
-    //   }
-    //
-    //   double startTime = WTF::monotonicallyIncreasingTime();
-    //   m_numRowsCompleted = JPEGImageEncoder::progressiveEncodeRowsJpegHelper(
-    //       m_jpegEncoderState.get(), m_data->data(), m_numRowsCompleted,
-    //       SlackBeforeDeadline, deadlineSeconds);
-    //   m_elapsedTime += (WTF::monotonicallyIncreasingTime() - startTime);
-    //   if (m_numRowsCompleted == m_size.height()) {
-    //     m_idleTaskStatus = IdleTaskCompleted;
-    //     recordElapsedTimeHistogram(IdleEncodeDuration, MimeTypeJpeg, m_elapsedTime);
-    //
-    //     if (isDeadlineNearOrPassed(deadlineSeconds)) {
-    //       TaskRunnerHelper::get(TaskType::CanvasBlobSerialization, m_document)
-    //           ->postTask(
-    //               BLINK_FROM_HERE,
-    //               WTF::bind(&CanvasAsyncBlobCreator::createBlobAndReturnResult,
-    //                         wrapPersistent(this)));
-    //     } else {
-    //       this->createBlobAndReturnResult();
-    //     }
-    //   } else if (m_numRowsCompleted == JPEGImageEncoder::ProgressiveEncodeFailed) {
-    //     m_idleTaskStatus = IdleTaskFailed;
-    //     this->createNullAndReturnResult();
-    //   } else {
-    //     Platform::current()->currentThread()->scheduler()->postIdleTask(
-    //         BLINK_FROM_HERE, WTF::bind(&CanvasAsyncBlobCreator::idleEncodeRowsJpeg,
-    //                                    wrapPersistent(this)));
-    //   }
-    DebugBreak();
+    if (m_idleTaskStatus == IdleTaskSwitchedToImmediateTask) {
+        return;
+    }
+
+    double startTime = WTF::monotonicallyIncreasingTime();
+    m_numRowsCompleted = JPEGImageEncoder::progressiveEncodeRowsJpegHelper(
+        m_jpegEncoderState.get(), m_data->data(), m_numRowsCompleted,
+        SlackBeforeDeadline, deadlineSeconds);
+    m_elapsedTime += (WTF::monotonicallyIncreasingTime() - startTime);
+    if (m_numRowsCompleted == m_size.height()) {
+        m_idleTaskStatus = IdleTaskCompleted;
+        recordElapsedTimeHistogram(IdleEncodeDuration, MimeTypeJpeg, m_elapsedTime);
+
+        if (isDeadlineNearOrPassed(deadlineSeconds)) {
+            TaskRunnerHelper::get(TaskType::CanvasBlobSerialization, m_document)
+                ->postTask(BLINK_FROM_HERE, WTF::bind(&CanvasAsyncBlobCreator::createBlobAndReturnResult, wrapPersistent(this)));
+        } else {
+            this->createBlobAndReturnResult();
+        }
+    } else if (m_numRowsCompleted == JPEGImageEncoder::ProgressiveEncodeFailed) {
+        m_idleTaskStatus = IdleTaskFailed;
+        this->createNullAndReturnResult();
+    } else {
+        Platform::current()->currentThread()->scheduler()->postIdleTask(
+            BLINK_FROM_HERE, WTF::bind(&CanvasAsyncBlobCreator::idleEncodeRowsJpeg,
+                wrapPersistent(this)));
+    }
 }
 
 void CanvasAsyncBlobCreator::forceEncodeRowsPngOnCurrentThread()
 {
-    //   DCHECK(m_idleTaskStatus == IdleTaskSwitchedToImmediateTask);
-    //
-    //   // Continue encoding from the last completed row
-    //   unsigned char* inputPixels =
-    //       m_data->data() + m_pixelRowStride * m_numRowsCompleted;
-    //   for (int y = m_numRowsCompleted; y < m_size.height(); ++y) {
-    //     PNGImageEncoder::writeOneRowToPng(inputPixels, m_pngEncoderState.get());
-    //     inputPixels += m_pixelRowStride;
-    //   }
-    //   PNGImageEncoder::finalizePng(m_pngEncoderState.get());
-    //
-    //   if (isMainThread()) {
-    //     this->createBlobAndReturnResult();
-    //   } else {
-    //     TaskRunnerHelper::get(TaskType::CanvasBlobSerialization, m_document)
-    //         ->postTask(
-    //             BLINK_FROM_HERE,
-    //             crossThreadBind(&CanvasAsyncBlobCreator::createBlobAndReturnResult,
-    //                             wrapCrossThreadPersistent(this)));
-    //   }
-    //
-    //   this->signalAlternativeCodePathFinishedForTesting();
-    DebugBreak();
+    DCHECK(m_idleTaskStatus == IdleTaskSwitchedToImmediateTask);
+
+    // Continue encoding from the last completed row
+    unsigned char* inputPixels =
+        m_data->data() + m_pixelRowStride * m_numRowsCompleted;
+    for (int y = m_numRowsCompleted; y < m_size.height(); ++y) {
+        PNGImageEncoder::writeOneRowToPng(inputPixels, m_pngEncoderState.get());
+        inputPixels += m_pixelRowStride;
+    }
+    PNGImageEncoder::finalizePng(m_pngEncoderState.get());
+
+    if (isMainThread()) {
+        this->createBlobAndReturnResult();
+    } else {
+        TaskRunnerHelper::get(TaskType::CanvasBlobSerialization, m_document)
+            ->postTask(BLINK_FROM_HERE, crossThreadBind(&CanvasAsyncBlobCreator::createBlobAndReturnResult, wrapCrossThreadPersistent(this)));
+    }
+
+    this->signalAlternativeCodePathFinishedForTesting();
 }
 
 void CanvasAsyncBlobCreator::forceEncodeRowsJpegOnCurrentThread()
 {
-    //   DCHECK(m_idleTaskStatus == IdleTaskSwitchedToImmediateTask);
-    //
-    //   // Continue encoding from the last completed row
-    //   void (CanvasAsyncBlobCreator::*functionToBeCalled)(void);
-    //   if (JPEGImageEncoder::encodeWithPreInitializedState(
-    //           std::move(m_jpegEncoderState), m_data->data(), m_numRowsCompleted)) {
-    //     functionToBeCalled = &CanvasAsyncBlobCreator::createBlobAndReturnResult;
-    //   } else {
-    //     functionToBeCalled = &CanvasAsyncBlobCreator::createNullAndReturnResult;
-    //   }
-    //
-    //   if (isMainThread()) {
-    //     (this->*functionToBeCalled)();
-    //   } else {
-    //     TaskRunnerHelper::get(TaskType::CanvasBlobSerialization, m_document)
-    //         ->postTask(BLINK_FROM_HERE,
-    //                    crossThreadBind(functionToBeCalled,
-    //                                    wrapCrossThreadPersistent(this)));
-    //   }
-    //
-    //   this->signalAlternativeCodePathFinishedForTesting();
-    DebugBreak();
+    DCHECK(m_idleTaskStatus == IdleTaskSwitchedToImmediateTask);
+
+    // Continue encoding from the last completed row
+    void (CanvasAsyncBlobCreator:: * functionToBeCalled)(void);
+    if (JPEGImageEncoder::encodeWithPreInitializedState(
+        std::move(m_jpegEncoderState), m_data->data(), m_numRowsCompleted)) {
+        functionToBeCalled = &CanvasAsyncBlobCreator::createBlobAndReturnResult;
+    } else {
+        functionToBeCalled = &CanvasAsyncBlobCreator::createNullAndReturnResult;
+    }
+
+    if (isMainThread()) {
+        (this->*functionToBeCalled)();
+    } else {
+        TaskRunnerHelper::get(TaskType::CanvasBlobSerialization, m_document)
+            ->postTask(BLINK_FROM_HERE, crossThreadBind(functionToBeCalled, wrapCrossThreadPersistent(this)));
+    }
+
+    this->signalAlternativeCodePathFinishedForTesting();
 }
 
 void CanvasAsyncBlobCreator::createBlobAndReturnResult()
 {
-    //   recordIdleTaskStatusHistogram(m_idleTaskStatus);
-    //   recordElapsedTimeHistogram(ToBlobDuration, m_mimeType,
-    //                              WTF::monotonicallyIncreasingTime() - m_startTime);
-    //
-    //   Blob* resultBlob =
-    //       Blob::create(m_encodedImage->data(), m_encodedImage->size(),
-    //                    convertMimeTypeEnumToString(m_mimeType));
-    //   if (m_functionType == HTMLCanvasToBlobCallback) {
-    //     TaskRunnerHelper::get(TaskType::CanvasBlobSerialization, m_document)
-    //         ->postTask(BLINK_FROM_HERE, WTF::bind(&BlobCallback::handleEvent,
-    //                                               wrapPersistent(m_callback.get()),
-    //                                               wrapPersistent(resultBlob)));
-    //   } else {
-    //     m_scriptPromiseResolver->resolve(resultBlob);
-    //   }
-    //   // Avoid unwanted retention, see dispose().
-    //   dispose();
-    DebugBreak();
+    recordIdleTaskStatusHistogram(m_idleTaskStatus);
+    recordElapsedTimeHistogram(ToBlobDuration, m_mimeType,
+        WTF::monotonicallyIncreasingTime() - m_startTime);
+
+    Blob* resultBlob = Blob::create(m_encodedImage->data(), m_encodedImage->size(), convertMimeTypeEnumToString(m_mimeType));
+    if (m_functionType == HTMLCanvasToBlobCallback) {
+        TaskRunnerHelper::get(TaskType::CanvasBlobSerialization, m_document)
+            ->postTask(BLINK_FROM_HERE, WTF::bind(&BlobCallback::handleEvent, wrapPersistent(m_callback.get()), wrapPersistent(resultBlob)));
+    } else {
+        m_scriptPromiseResolver->resolve(resultBlob);
+    }
+    // Avoid unwanted retention, see dispose().
+    dispose();
 }
 
 void CanvasAsyncBlobCreator::createNullAndReturnResult()
@@ -499,9 +481,7 @@ void CanvasAsyncBlobCreator::createNullAndReturnResult()
         DCHECK(isMainThread());
         recordIdleTaskStatusHistogram(m_idleTaskStatus);
         TaskRunnerHelper::get(TaskType::CanvasBlobSerialization, m_document)
-            ->postTask(BLINK_FROM_HERE,
-                WTF::bind(&BlobCallback::handleEvent,
-                    wrapPersistent(m_callback.get()), nullptr));
+            ->postTask(BLINK_FROM_HERE, WTF::bind(&BlobCallback::handleEvent, wrapPersistent(m_callback.get()), nullptr));
     } else {
         Blob* blob = nullptr;
         m_scriptPromiseResolver->reject(blob);
@@ -518,41 +498,31 @@ void CanvasAsyncBlobCreator::encodeImageOnEncoderThread(double quality)
     if (!ImageDataBuffer(m_size, m_data->data())
              .encodeImage("image/webp", quality, m_encodedImage.get())) {
         m_parentFrameTaskRunner->get(TaskType::CanvasBlobSerialization)
-            ->postTask(BLINK_FROM_HERE,
-                crossThreadBind(&BlobCallback::handleEvent,
-                    wrapCrossThreadPersistent(m_callback.get()),
-                    nullptr));
+            ->postTask(BLINK_FROM_HERE, crossThreadBind(&BlobCallback::handleEvent, wrapCrossThreadPersistent(m_callback.get()), nullptr));
         return;
     }
 
     m_parentFrameTaskRunner->get(TaskType::CanvasBlobSerialization)
-        ->postTask(
-            BLINK_FROM_HERE,
-            crossThreadBind(&CanvasAsyncBlobCreator::createBlobAndReturnResult,
-                wrapCrossThreadPersistent(this)));
+        ->postTask(BLINK_FROM_HERE, crossThreadBind(&CanvasAsyncBlobCreator::createBlobAndReturnResult, wrapCrossThreadPersistent(this)));
 }
 
 bool CanvasAsyncBlobCreator::initializePngStruct()
 {
-    //   m_pngEncoderState =
-    //       PNGImageEncoderState::create(m_size, m_encodedImage.get());
-    //   if (!m_pngEncoderState) {
-    //     this->createNullAndReturnResult();
-    //     return false;
-    //   }
-    DebugBreak();
+    m_pngEncoderState = PNGImageEncoderState::create(m_size, m_encodedImage.get());
+    if (!m_pngEncoderState) {
+        this->createNullAndReturnResult();
+        return false;
+    }
     return true;
 }
 
 bool CanvasAsyncBlobCreator::initializeJpegStruct(double quality)
 {
-    //   m_jpegEncoderState =
-    //       JPEGImageEncoderState::create(m_size, quality, m_encodedImage.get());
-    //   if (!m_jpegEncoderState) {
-    //     this->createNullAndReturnResult();
-    //     return false;
-    //   }
-    DebugBreak();
+    m_jpegEncoderState = JPEGImageEncoderState::create(m_size, quality, m_encodedImage.get());
+    if (!m_jpegEncoderState) {
+        this->createNullAndReturnResult();
+        return false;
+    }
     return true;
 }
 

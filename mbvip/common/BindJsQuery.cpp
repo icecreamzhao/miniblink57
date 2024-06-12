@@ -72,7 +72,8 @@ void WKE_CALL_TYPE BindJsQuery::jsQueryFinalizeCallback(jsData* data)
     delete (BindJsQuery*)data;
 }
 
-static const char* injectScript = "window.__g_callbackMap__ = {};\n"
+static const char* injectScript = 
+"window.__g_callbackMap__ = {};\n"
 "window.__g_callbackMapIdGen__ = 0;\n"
 "window.__onMbQuery__ = function(id, customMsg, response) {\n"
 "    var cb = window.__g_callbackMap__[id];\n"
@@ -93,10 +94,10 @@ static const char* injectScript = "window.__g_callbackMap__ = {};\n"
 "        //console.log('mbQuery cb:' + typeof cb);\n"
 "    }\n"
 "}\n"
-"function __NumberFormat__() {}\n"
-"__NumberFormat__.prototype.format = function(num) { return num; }\n"
-"window.Intl = {};\n"
-"Intl.NumberFormat = __NumberFormat__;"
+// "function __NumberFormat__() {}\n"
+// "__NumberFormat__.prototype.format = function(num) { return num; }\n"
+// "window.Intl = {};\n"
+// "Intl.NumberFormat = __NumberFormat__;\n"
 ;
 
 void BindJsQuery::bindFun(int64_t hostId, QueryFn* queryFn, wkeWebView webView, wkeWebFrameHandle frameId)

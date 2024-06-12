@@ -11,7 +11,7 @@
 #ifndef MB_DEFINE_H
 #define MB_DEFINE_H
 
-#include <windows.h>
+#include "windows.h"
 #if !defined(WIN32)
 #include <dlfcn.h>
 #include <stdio.h>
@@ -19,10 +19,14 @@
 
 //////////////////////////////////////////////////////////////////////////
 
-#if defined(__clang__)
+#if defined(__clang__)|| defined(__GNUC__)
 #define MB_DLLEXPORT __attribute__ ((visibility("default")))
+#if __cplusplus == 201703L || _MSVC_LANG == 201703L
 //#define MB_SELECTANY __attribute__((selectany))
+#define MB_SELECTANY inline
+#else
 #define MB_SELECTANY 
+#endif
 #else
 typedef __int64 int64_t;
 #define MB_DLLEXPORT __declspec(dllexport)
@@ -446,7 +450,7 @@ typedef void(MB_CALL_TYPE* mbAcceleratedPaintCallback)(mbWebView webView, void* 
 typedef void(MB_CALL_TYPE *mbPaintBitUpdatedCallback)(mbWebView webView, void* param, const void* buffer, const mbRect* r, int width, int height);
 typedef void(MB_CALL_TYPE *mbAlertBoxCallback)(mbWebView webView, void* param, const utf8* msg);
 typedef BOOL(MB_CALL_TYPE *mbConfirmBoxCallback)(mbWebView webView, void* param, const utf8* msg);
-typedef mbStringPtr(MB_CALL_TYPE *mbPromptBoxCallback)(mbWebView webView, void* param, const utf8* msg, const utf8* defaultResult);
+typedef mbStringPtr(MB_CALL_TYPE *mbPromptBoxCallback)(mbWebView webView, void* param, const utf8* msg, const utf8* defaultResult, BOOL* result);
 typedef BOOL(MB_CALL_TYPE *mbNavigationCallback)(mbWebView webView, void* param, mbNavigationType navigationType, const utf8* url);
 typedef mbWebView(MB_CALL_TYPE *mbCreateViewCallback)(mbWebView webView, void* param, mbNavigationType navigationType, const utf8* url, const mbWindowFeatures* windowFeatures);
 typedef void(MB_CALL_TYPE *mbDocumentReadyCallback)(mbWebView webView, void* param, mbWebFrameHandle frameId);
@@ -548,9 +552,43 @@ typedef struct _mbDownloadBind {
     mbPopupDialogSaveNameCallback saveNameCallback;
 } mbDownloadBind;
 
+typedef struct _mbFileFilter {
+    const utf8* name; // 例如"image"、"Movies"
+    const utf8* extensions; // 例如"jpg|png|gif"
+} mbFileFilter;
+
+enum mbDialogProperties {
+    kMbDialogPropertiesOpenFile = 1 << 1, // 允许选择文件
+    kMbDialogPropertiesOpenDirectory = 1 << 2, // 允许选择文件夹
+    kMbDialogPropertiesMultiSelections = 1 << 3, // 允许多选。
+    kMbDialogPropertiesShowHiddenFiles = 1 << 4, // 显示对话框中的隐藏文件。
+    kMbDialogPropertiesCreateDirectory = 1 << 5, // macOS - 允许你通过对话框的形式创建新的目录。
+    kMbDialogPropertiesPromptToCreate = 1 << 6, // Windows - 如果输入的文件路径在对话框中不存在, 则提示创建。 这并不是真的在路径上创建一个文件，而是允许返回一些不存在的地址交由应用程序去创建。
+    kMbDialogPropertiesNoResolveAliases = 1 << 7, // macOS - 禁用自动的别名路径(符号链接) 解析。 所选别名现在将会返回别名路径而非其目标路径。
+    kMbDialogPropertiesTreatPackageAsDirectory = 1 << 8, // macOS - 将包(如.app 文件夹) 视为目录而不是文件。
+    kMbDialogPropertiesDontAddToRecent = 1 << 9, // Windows - 不要将正在打开的项目添加到最近的文档列表中。
+};
+
+typedef struct _mbDialogOptions {
+    int magic; // 'mbdo'
+    const utf8* title;
+    const utf8* defaultPath;
+    const utf8* buttonLabel;
+    mbFileFilter* filters;
+    int filtersCount;
+    mbDialogProperties prop;
+    const utf8* message;
+    BOOL securityScopedBookmarks;
+} mbDialogOptions;
+
+typedef struct _mbDownloadOptions {
+    int magic; // 'mbdo'
+    BOOL saveAsPathAndName;
+} mbDownloadOptions;
+
 typedef mbDownloadOpt(MB_CALL_TYPE*mbDownloadInBlinkThreadCallback)(
     mbWebView webView, 
-    void* param, 
+    void* param,
     size_t expectedContentLength,
     const char* url, 
     const char* mime, 
@@ -846,7 +884,7 @@ ITERATOR0(void, mbUninit, "") \
 ITERATOR0(mbSettings*, mbCreateInitSettings, "方便c#等其他语言创建setting结构体") \
 ITERATOR3(void, mbSetInitSettings, mbSettings* settings, const char* name, const char* value, "") \
 ITERATOR0(mbWebView, mbCreateWebView, "") \
-ITERATOR6(mbWebView, mbCreateWebViewBindGTKWindow, void* rootWindow, void* drawingArea, DWORD style, DWORD styleEx, int width, int height, "Linux下，用于GTK绑定窗口，Win下无效") \
+ITERATOR6(mbWebView, mbCreateWebViewBindGTKWindow, void* rootWindow, void* drawingArea, DWORD style, DWORD styleEx, int width, int height, "用于GTK绑定窗口") \
 ITERATOR1(void, mbDestroyWebView, mbWebView, "") \
 ITERATOR6(mbWebView, mbCreateWebWindow, mbWindowType type, HWND parent, int x, int y, int width, int height, "") \
 ITERATOR7(mbWebView, mbCreateWebCustomWindow, HWND parent, DWORD style, DWORD styleEx, int x, int y, int width, int height, "") \
@@ -866,6 +904,7 @@ ITERATOR1(const utf8*, mbGetString, mbStringPtr str, "") \
 \
 ITERATOR2(void, mbSetProxy, mbWebView webView, const mbProxy* proxy, "") \
 ITERATOR3(void, mbSetDebugConfig, mbWebView webView, const char* debugString, const char* param, "") \
+ITERATOR2(int, mbQueryState, mbWebView webView, const char* type, "") \
 \
 ITERATOR3(void, mbNetSetData, mbNetJob jobPtr, void* buf, int len, "调用此函数后,网络层收到数据会存储在一buf内,接收数据完成后响应OnLoadUrlEnd事件.#此调用严重影响性能,慎用" \
     "此函数和mbNetSetData的区别是，mbNetHookRequest会在接受到真正网络数据后再调用回调，并允许回调修改网络数据。"\
@@ -953,6 +992,7 @@ ITERATOR1(const utf8*, mbGetCookieOnBlinkThread, mbWebView webView, "") \
 ITERATOR1(void, mbClearCookie, mbWebView webView, "") \
 \
 ITERATOR3(void, mbResize, mbWebView webView, int w, int h, "") \
+ITERATOR2(void, mbGetSize, mbWebView webView, mbRect* rc, "") \
 \
 ITERATOR3(void, mbOnNavigation, mbWebView webView, mbNavigationCallback callback, void* param, "") \
 ITERATOR3(void, mbOnNavigationSync, mbWebView webView, mbNavigationCallback callback, void* param, "") \
@@ -1049,10 +1089,10 @@ ITERATOR4(void, mbUtilScreenshot, mbWebView webView, const mbScreenshotSettings*
 ITERATOR2(BOOL, mbUtilsSilentPrint, mbWebView webView, const char* settings, "") \
 \
 ITERATOR3(BOOL, mbPopupDownloadMgr, mbWebView webView, const char* url, void* downloadJob, "") \
-ITERATOR9(mbDownloadOpt, mbPopupDialogAndDownload, mbWebView webView, void* param, size_t contentLength, const char* url, \
+ITERATOR9(mbDownloadOpt, mbPopupDialogAndDownload, mbWebView webView, const mbDialogOptions* dialogOpt, size_t contentLength, const char* url, \
     const char* mime, const char* disposition, mbNetJob job, mbNetJobDataBind* dataBind, mbDownloadBind* callbackBind, "") \
-ITERATOR10(mbDownloadOpt, mbDownloadByPath, mbWebView webView, void* param, const WCHAR* path, size_t contentLength, const char* url, \
-    const char* mime, const char* disposition, mbNetJob job, mbNetJobDataBind* dataBind, mbDownloadBind* callbackBind, "") \
+ITERATOR10(mbDownloadOpt, mbDownloadByPath, mbWebView webView, const mbDownloadOptions* downloadOptions, const WCHAR* path, \
+    size_t expectedContentLength, const char* url, const char* mime, const char* disposition,mbNetJob job, mbNetJobDataBind* dataBind, mbDownloadBind* callbackBind, "") \
 \
 ITERATOR3(void, mbGetPdfPageData, mbWebView webView, mbOnGetPdfPageDataCallback callback, void* param, "") \
 \
@@ -1065,6 +1105,7 @@ ITERATOR2(void, mbPluginListBuilderAddFileExtensionToLastMediaType, void* builde
 \
 ITERATOR0(void, mbEnableHighDPISupport, "") \
 ITERATOR0(void, mbRunMessageLoop, "") \
+ITERATOR0(void, mbExitMessageLoop, "") \
 ITERATOR3(void, mbOnLoadUrlFinish, mbWebView webView, mbLoadUrlFinishCallback callback, void* callbackParam, "") \
 ITERATOR3(void, mbOnLoadUrlHeadersReceived, mbWebView webView, mbLoadUrlHeadersReceivedCallback callback, void* callbackParam, "") \
 ITERATOR3(void, mbOnDocumentReadyInBlinkThread, mbWebView webView, mbDocumentReadyCallback callback, void* param, "") \
@@ -1093,6 +1134,7 @@ ITERATOR3(void, mbInsertCSSByFrame, mbWebView webView, mbWebFrameHandle frameId,
 ITERATOR3(void, mbWebFrameGetMainWorldScriptContext, mbWebView webView, mbWebFrameHandle frameId, v8ContextPtr contextOut, "") \
 ITERATOR3(void, mbOnWillReleaseScriptContext, mbWebView webView, mbWillReleaseScriptContextCallback callback, void* callbackParam, "") \
 ITERATOR1(const char*, mbNetGetReferrer, mbNetJob jobPtr, "获取request的referrer") \
+ITERATOR2(void, mbPostToUiThread, mbOnCallUiThread callback, void* param, "") \
 ITERATOR2(void, mbSetEditable, mbWebView webView, bool editable, "") \
 ITERATOR1(void*, mbGetProcAddr, const char* name, "")
 
@@ -1164,8 +1206,9 @@ inline void mbInit(const mbSettings* settings)
 inline void mbInit(const mbSettings* settings)
 {
     printf("mbInit\n");
-    void* g_hMiniblinkMod = dlopen("/home/daniel/Desktop/wkexe/miniblink.so", RTLD_LAZY);
-    printf("g_hMiniblinkMod: %p\n", g_hMiniblinkMod);
+    //void* g_hMiniblinkMod = dlopen("/home/daniel/Desktop/wkexe/miniblink.so", RTLD_LAZY);
+    void* g_hMiniblinkMod = dlopen("./miniblink.so", RTLD_LAZY);
+    printf("g_hMiniblinkMod: %p, %s \n", g_hMiniblinkMod, dlerror());
     FN_mbInit mbInitExFunc = (FN_mbInit)dlsym(g_hMiniblinkMod, "mbInit");
     printf("mbInitExFunc: %p\n", mbInitExFunc);
     mbInitExFunc(settings);

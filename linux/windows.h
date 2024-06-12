@@ -1452,5 +1452,6 @@ EXTERN_C HMENU GetSystemMenu(HWND hWnd, BOOL bRevert);
 typedef struct _cairo_surface cairo_surface_t;
 
 EXTERN_C cairo_surface_t* createSurfaceByHwnd(HWND hwnd, int w, int h);
+EXTERN_C HWND bindWindowByGTK(void* rootWindow, void* drawingArea, DWORD dwExStyle, LPCWSTR lpClassName, DWORD dwStyle, int nWidth, int nHeight, LPVOID lpParam);
 
 #endif // WINDOWS_FOR_LINUX_H

@@ -78,9 +78,14 @@ int ZEXPORT compress (dest, destLen, source, sourceLen)
      If the default memLevel or windowBits for deflateInit() is changed, then
    this function needs to be updated.
  */
-uLong ZEXPORT compressBound (sourceLen)
+uLong ZEXPORT Cr_z_compressBound(sourceLen)
     uLong sourceLen;
 {
     return sourceLen + (sourceLen >> 12) + (sourceLen >> 14) +
            (sourceLen >> 25) + 13;
+}
+
+uLong ZEXPORT compressBound(uLong sourceLen)
+{
+    return Cr_z_compressBound(sourceLen);
 }

@@ -14,14 +14,51 @@
 #include <process.h>
 #include <wininet.h>
 #include <ShlObj.h>
+//#include <ShellScalingApi.h>
+
+#pragma optimize("", off)
+#pragma clang optimize off
 
 std::string getUrl();
 #define MAX_URL_LENGTH 255
 std::wstring utf8ToUtf16(const std::string& utf8);
 std::string utf16ToUtf8(LPCWSTR lpszSrc);
+std::wstring MCharToUtf16(const std::string& utf8, UINT codePage);
+void readFile(const wchar_t* path, std::vector<char>* buffer);
+
+void testError()
+{
+    std::vector<char> buffer;
+    readFile(L"G:\\test\\web_test\\51iwifi\\jjlogin_utf16le.js", &buffer);
+    //buffer.push_back(0);
+
+    std::wstring wbuf((const WCHAR*)buffer.data(), buffer.size() / 2);
+
+    const WCHAR* begin = wbuf.c_str();
+    const WCHAR* pos = wcsstr(wbuf.c_str(), L"晋江文学城微信服务号</span>给您发送的");
+    if (nullptr != pos) {
+        DebugBreak();
+    }
+    DebugBreak();
+}
+
+bool isRunTestUrl()
+{
+    int argc = 0;
+    LPWSTR* argv = CommandLineToArgvW(GetCommandLineW(), &argc);
+
+    if (2 != argc)
+        return false;
+    std::wstring str = argv[1];
+    return (str == L"http://www.use_res_url.com/");
+}
 
 std::string getUrl()
 {
+    //testError();
+    if (!isRunTestUrl())
+        return "miniblink.net";
+
     std::vector<wchar_t> path;
     path.resize(MAX_PATH + 1);
     memset(&path.at(0), 0, sizeof(wchar_t) * (MAX_PATH + 1));
@@ -39,185 +76,241 @@ std::string getUrl()
 
     DWORD value_length = ::GetEnvironmentVariable(L"GOOGLE_API_KEY", nullptr, 0);
 
-    const char* url = //urlA.c_str();
-        "https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty"; // Symbol.iterator错误
-        "https://cc.163.com/348422493/";
-        "file:///D:/test/web/cc_163/111.htm";
-        
-        "file:///G:/test/web_test/jq22/mp4.htm"; // 崩溃
-        "file:///G:/test/web_test/dragtest/testdrag.html"; // 拖拽失效
-        "file:///G:/test/web_test/tigerkin/testindex.htm"; // 文字排版不对
-        "http://39.99.38.196:8080"; // devtools有崩溃
-        "https://ant-design.gitee.io/docs/react/introduce-cn"; // ant 有js错误
-        "file:///G:/test/web_test/tongyonghuizhi.htm"; // 黑体空格显示成框框
-        "file:///G:/test/web_test/feihu/index1.html"; // 内存有泄漏
-        "https://xsdt1.i-xinnuo.com/xnt_pc/xnt.html#/pdfPage?id=1189&enterpriseName=%E7%88%B1%E4%BF%A1%E8%AF%BA%E5%BE%81%E4%BF%A1%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E6%B1%9F%E8%8B%8F%E5%88%86%E5%85%AC%E5%8F%B8"; // 内存泄漏
-        "https://iyn.me/i/"; // 有断行判断崩溃（LayoutRubyRun::canBreakBefore）
-        "file:///G:/test/web_test/alen_bug/index.html";
-        "https://xsdt1.i-xinnuo.com/?param="; // 下拉框出不来
-
-        "https://xuliangzhan_admin.gitee.io/vxe-table/v4/table/start/install";
-        "http://192.168.222.1:8000/index.html";
-        "https://element-plus.gitee.io/zh-CN/";
-        "https://www.epicgames.com/id/register/epic?";
-        "https://microsoft.github.io/monaco-editor/"; // 崩溃
-        "http://192.168.222.1:8000/jieshao.htm";
-        "file:///G:/test/web_test/icoc/video.htm";
-        "https://www.chinaacc.com/wangxiao/tanchu/jieshao.shtml"; // 视频播放有问题
-        "https://www.cdeledu.com/";
-
-        "file:///G:/test/web_test/web-components-examples-master/popup-info-box-web-component/index.html";
-        "file:///G:/test/web_test/element/test_gc.htm";
-        "file:///G:/test/web_test/media_match.htm";
-        "file:///G:/test/web_test/baidupan/mb57_text_crash.htm";
+    const char* url = //urlA.c_str();  
+        "http://www.szse.cn/";
+        "http://test2024.dev.gzoverlook.com:1270/";
+        "file:///G:/test/web_test/pinduoduo/asyn_test.htm";
+        "file:///G:/test/web_test/pinduoduo/tianditu.html";
         "https://baidu.com";
-        "file:///G:/test/web_test/baidupan/mb57_baidu_crash.htm";
-
-        "file:///G:/test/web_test/input.htm";
-        "http://yedict.com/zsts.htm"; // 扩展字体区
-        "file:///C:/Users/Administrator/Documents/input.htm";
-
-        "http://web.4399.com/user/?_a=login&redirecturl=%2Fuser%2F%3Ftype%3Dsafe";
-        "http://xp.4399.com/lc/register.html?pass=1&v";
-        "http://aoqi.100bt.com/play/play.html";
-        "file:///G:/test/web_test/npNetsignerTest/npNetsignerTest.html";
-        "https://xsdt1.i-xinnuo.com/xqc_pc/xqc.html#/pdfPage?title=%E5%90%88%E5%90%8C%E6%AD%A3%E6%96%87%E6%B5%8B%E8%AF%95.pdf&fileId=60ff7c7be4b017f601627438";
-        "file:///G:/test/web_test/kancloud/test_download.htm";
-        "file:///G:/mycode/miniblink57/third_party/WebKit/Source/core/inspector/InspectorOverlayPage49.html";
-        "file:///G:/test/web_test/kancloud/test_canvas.htm";
-        "http://seerh5.61.com/";
-
-        "http://seer.61.com/play.shtml";
-        "http://chrome.360.cn/test/v8/run.html";
-        "file:///G:/test/web_test/kancloud/index.htm";
-        "https://element.eleme.cn/#/zh-CN/component/transition";
-        "http://wonzilerv2.danweiapp.com/";
-        "file:///G:/test/exe_test/meng/img.htm";
-        "www.bilibili.com";
-        "file:///G:/mycode/miniblink57/Debug/plugins/test.html";
-        "http://seer.61.com.tw/Client.swf";
-        "http://192.168.222.1:8000/pdfjs/web/viewer.html";
-        "https://www.kancloud.cn/manual/thinkphp6_0/1037479";
-        "https://element.eleme.cn/#/zh-CN/component/pagination";
-        "https://poe.ninja/challenge/builds";
-        "file:///G:/test/web_test/example_icon/index1.html";
-        "Tanwan.com/cqbz/wd";
-        "file:///P:/BaiduNetdiskWorkspace/table_test1.html";
-        "oschina.net"; // 触发CachingWordShaper的字体未实现断言
-        "https://uniapp.dcloudet.cn/uniCloud/admin";
-        "https://static-54446097-3b6f-462e-8fe0-fe8855ea8c2e.bspapp.com/#/";
-        "https://fontawesome.dashgame.com/";
-        "http://aola.100bt.com/play/play.html";
-        "file:///G:/test/web_test/vxe-table/vxe-table.htm#/table/scroll/rows"; // 卡慢问题
-        "https://xuliangzhan.gitee.io/vxe-table/#/table/scroll/rows";
-
-        "https://projects.lukehaas.me/css-loaders/";
-        "http://192.168.222.1:8000/input.htm";
-        "file:///G:/test/web_test/flash_test/flash.html";
-
-        "https://www.easck.com/Internetmore/2021/0819/883307.shtml";
-
-        "file:///G:/test/web_test/v8_bug.html";
-        "https://kaifa.baidu.com/";
-        "file:///G:/test/web_test/dianxin/22.html";
-        "file:///G:/test/web_test/test_v8_error.htm";
-
-        "file:///G:/test/web_test/websocket_test/test.htm";
-        "file:///G:/test/web_test/element/test_img.htm";
-        "file:///G:/test/web_test/xmlifa/index.htm";
-        "http://www.websocket-test.com/";
-
-        "http://coolaf.com/tool/chattest";
-        "http://192.168.222.1:8000/input.htm";
-
-        "taobao.com";
-        "http://192.168.222.1:8000/test_img.htm";
-        "https://www.bilibili.com/video/BV1rp4y1n7Ft?spm_id_from=333.851.b_7265636f6d6d656e64.1";
-        "file:///G:/test/web_test/CallNumber/testSocket.html";
-        "file:///G:/test/web_test/test(3).html";
-        "http://aola.100bt.com/h5/";
-        "https://www.yuque.com/yuque/ng1qth/dashboard";
-        "file:///P:/test/web_test/chrome-tabs-gh-pages/index.html";
+        "http://192.168.0.104:8000/test.html";
+        "https://zhiweicloud.com/home/bar/38493?id=38493&title=%E5%B0%8F%E7%BD%91%E5%90%A7%EF%BC%881%2F1%29"; // 不流畅
+        "https://q2311j.xyz/pw/html_data/210/2402/7160230.html";
+        "http://127.0.0.1:8091/wasm_main.htm";
+        "file:///G:/test/web_test/Adeds/broadcast_channel.htm";
+        "http://192.168.10.13:8091/histroy.htm";
+        "http://yw.36x.cn/vueyw/index.html?token=4805284158223044913#/yw/pcname";
+        "http://lfjf.rzfwq.com/jtzy/Product/twF10/page/jybd.html?stockCode=600000#xwgg";
+        "https://fc-wpslinuxv2.huijiaoyun.com/weboffice/office/p/2860725?_w_appid=EGEDIMGNHEXDHILZ&_w_third_appid=EGEDIMGNHEXDHILZ&_w_third_file_id=2860725&route_key=1&simple&hidecmb&readonly&playWidth=765&playHeight=600&docTranIpPort=resft.wuhaneduyun.cn%2Fcms-ft&__doc_ha_node=10.0.90.24";
         
-        "http://static.newayz.com/sv/videoblink.html";
-        "https://yunpan.360.cn/file/index#/fileManage/my/file/%2F";
-        "file:///G:/test/exe_test/Test53kf/test.html";
-        "file:///G:/test/web_test/zzz_test/queen.htm";
-        "https://exhibition.trinasolar.com/index.html#/page/battery/SQ";
-        "file:///G:/test/web_test/gamebox_A.html";
-        "http://demo.finebi.com//decision/v10/entry/access/115e7870-8b9a-4e33-b7ff-6165041e9fab?dashboardType=4&width=1610&height=787";
-        "file:///G:/test/web_test/main_copy.html";
-        "http://192.168.9.240:13000/#/auth/audit";
-        //"http://www.suduzy8.com:777/play-14848.html";
-        "http://192.168.9.240:13000/#/user/login";
-        "file:///G:/test/web_test/test_download.htm";
-        "file:///M:/doc/fingerprint/testfp/gongjux.htm";
-        "https://www.mgtv.com/b/349988/11411698.html?fpa=15801&fpos=5&lastp=ch_home";
-        "http://demo.finebi.com/"; //v875不能点击里面按钮
-        "http://demo.gin-vue-admin.com/#/login";
-        "https://haokan.baidu.com/v?vid=12462553566250398173&pd=bjh&fr=bjhauthor&type=video";
-        "https://v.youku.com/v_show/id_XMzUzNjQzNjQ3Mg==.html";
-        "file:///P:/test/web_test/test_js_timer.html";
-        "https://tv.cctv.com/live/cctv7";
-        "https://new.qq.com/omn/20210310/20210310A089KB00.html";
+        "file:///G:/test/web_test/Adeds/main_frame.htm";
+        "https://hwjtdata.oss-ap-southeast-1.aliyuncs.com/jtzy/Product/rjxz/new_https/index.html#/?softName=HomilyChart%20&language=0";
+        "file:///G:/test/web_test/51iwifi/weibo.htm";
+        "https://isrc.iscas.ac.cn/";
+        "file:///G:/test/web_test/51iwifi/weibo.htm"; // "http://www.mincuan.com.cn/audio.html"; // 有个按钮
+        "http://f10.legu168.com:81/gu/600000/0001.htm";
+        "file:///G:/test/web_test/58/index2.htm";
+        "https://image.baidu.com/";
+        "file:///G:/test/web_test/58/voice.html";
+        "http://nx.nxyfan.com:8888/queue-mz/o/doctor?regionCode=1&roomCode=1";
+        "file:///G:/test/web_test/pinduoduo/1.htm";
+        "file:///G:/test/sln_test/QueueByMiniBlink/dist/test_vite.htm";
+        "https://cc.163.com/5343706/";
+        "file:///M:/doc/fingerprint/offcanvase.html";
+        "file:///W:/test/web_test/message_test/1.htm";
+        "https://yw.36x.cn/oaim/index.html?wsport=200528token=5179487897526493086";
+        "https://vuejs.org/";
+        "http://192.168.0.104:8091/moduletest/module.htm";
+        "http://192.168.0.101:8091/ceshivite/index.html";
+        "file:///M:/doc/fingerprint/offcanvase.html";
+        "file:///W:/test/web_test/yunci/ru1/test.htm";
+        "http://api.00nb.cn:80/";
+        "http://60.171.122.183:9003/";
+        "http://192.168.0.102:8091/index.html";
 
-
-
-        "http://192.168.0.103:8000/hls_deme/hls.htm";
-        "https://hls-js.netlify.app/demo/";
-        "http://192.168.0.103:8000/wasm/canvasDemo-wasm1/random.html";
-        "http://192.168.0.103:8000/bufferAll.html";
-        
-        "file:///G:/test/web_test/audio_test/Untitled1.html";
-        "file:///G:/test/web_test/audio_test/webtest.htm";
-        "https://chowsangsang.tmall.com";
-        "https://tarpa.tmall.com/wow/ark-pub/common/156bb3b2/tpl?wh_sid=ac45106ffe692a4b";
-        "file:///G:/test/web_test/hetao_mp4/test.htm";
-        "http://192.168.56.1:8000/layui-soul-table.htm#/zh-CN/component/changelog";
-        "http://192.168.56.1:8000/ajax.htm";
-
-        "http://221.226.213.42:5055/dist/index.html#/businessTown"; // 动画卡慢
-        "file:///G:/test/web_test/test_printer/testPrint.html";
-        "file:///G:/test/web_test/baidupan/html/land.html";
-        "file:///G:/test/web_test/baidupan/try_win_focus.htm";
-        "http://www.aardio.com/";
-        "https://www.layui.com/demo/table/parseData.html"; // 测试下载
-
-        "https://www.animejs.cn/documentation/#linearEasing";
-        "http://02.build.kelexuexi.com";
-        "https://www.aixuebanban.com/teacher/filemanager";
-        "https://www.w3school.com.cn/tiy/t.asp?f=html5_draganddrop";
-        "https://www.zhihu.com/zvideo/1285349052423831552";
-        "file:///G:/test/web_test/niushibang/index.htm";
-        "https://meet.jit.si";
-        "http://applicationteam.gitee.io/nsb-classroom-doc/miniblink_test/";
-        "file:///g:/test/web_test/icoc/video.htm";
         "weibo.com";
-        "file:///G:/test/web_test/icoc/sina/sina.htm";
+        "http://web-platform.test:8000/tools/runner/index.html";
+        "taobao.com";
+        "file:///G:/test/web_test/51iwifi/insertbefore.html";
+        "https://ecpm.tanx.com/ex?i=nm_12852562_1778064_69476187&_ksTS=1684891984367_96&cb=jsonp97";
+        "tv.sohu.com";
+        "file:///G:/test/web_test/51iwifi/2.htm";
+        
+        "file:///G:/test/web_test/pdf_print/main4.htm";
+        //"https://www.qq.com/";
+        //"file:///G:/test/web_test/51iwifi/universal-report.htm";
 
-        "https://www.zhihu.com/question/415822945";
-        "http://192.168.71.1:8000/video.htm";
-        "http://192.168.71.1:8000/ea0/index.htm";
-        "https://ea0.com";
-        "file:///G:/mycode/mbvip/out/x86/Release/1234.htm";
-        "http://aola.100bt.com/play/play.html";
-        "https://weibo.com/2970452952/JeQiWDULX?type=comment";
-        "https://new.qq.com/omn/20200727/20200727A0J6LI00.html";
-        "https://weibo.com/tv/show/1034:4531439128215563";
+        "jjwxc.net";
+        "file:///G:/test/web_test/51iwifi/1.htm";
 
-        "file:///G:/test/web_test/openlayers/image.html";
-        "file:///G:/test/web_test/icoc/weibo.htm";
+        "https://img.hao123.com/manual_res_2023/redict/to_www.html";
+        "https://isrc.iscas.ac.cn/";
+        "https://weibo.com/newlogin?url=https%3A%2F%2Fweibo.com%2F";
+        "file:///G:/test/web_test/51iwifi/2.htm";
+    "https://new.qq.com/rain/a/20230513A038QG00";
+    "view-source:file:///G:/test/web_test/pdf_print/main4.htm";
+    "https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty"; // Symbol.iterator错误
+    "https://cc.163.com/348422493/";
+    "file:///D:/test/web/cc_163/111.htm";
 
-        "http://video.sina.com.cn/p/ent/doc/2018-02-07/101868002478.html";
+    "file:///G:/test/web_test/jq22/mp4.htm"; // 崩溃
+    "file:///G:/test/web_test/dragtest/testdrag.html"; // 拖拽失效
+    "file:///G:/test/web_test/tigerkin/testindex.htm"; // 文字排版不对
+    "http://39.99.38.196:8080"; // devtools有崩溃
+    "https://ant-design.gitee.io/docs/react/introduce-cn"; // ant 有js错误
+    "file:///G:/test/web_test/tongyonghuizhi.htm"; // 黑体空格显示成框框
+    "file:///G:/test/web_test/feihu/index1.html"; // 内存有泄漏
+    "https://xsdt1.i-xinnuo.com/xnt_pc/xnt.html#/pdfPage?id=1189&enterpriseName=%E7%88%B1%E4%BF%A1%E8%AF%BA%E5%BE%81%E4%BF%A1%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E6%B1%9F%E8%8B%8F%E5%88%86%E5%85%AC%E5%8F%B8"; // 内存泄漏
+    "https://iyn.me/i/"; // 有断行判断崩溃（LayoutRubyRun::canBreakBefore）
+    "file:///G:/test/web_test/alen_bug/index.html";
+    "https://xsdt1.i-xinnuo.com/?param="; // 下拉框出不来
 
-        "miniblink.net";
-        "file:///G:/test/web_test/test_frame/iframe.html";
-        "file:///G:/mycode/easyckl/scripts/test_mbquery.htm";
-        "file:///G:/cache/qqcache/93527630/filerecv/m17090_802001_cor_insert.html";
-        "https://live.bilibili.com/10339607";
+    "https://xuliangzhan_admin.gitee.io/vxe-table/v4/table/start/install";
+    "http://192.168.222.1:8000/index.html";
+    "https://element-plus.gitee.io/zh-CN/";
+    "https://www.epicgames.com/id/register/epic?";
+    "https://microsoft.github.io/monaco-editor/"; // 崩溃
+    "http://192.168.222.1:8000/jieshao.htm";
+    "file:///G:/test/web_test/icoc/video.htm";
+    "https://www.chinaacc.com/wangxiao/tanchu/jieshao.shtml"; // 视频播放有问题
+    "https://www.cdeledu.com/";
 
-        "file:///G:/test/web_test/xingzhihai/test.html";
-        "file:///G:/test/web_test/icoc/video.htm";
+    "file:///G:/test/web_test/web-components-examples-master/popup-info-box-web-component/index.html";
+    "file:///G:/test/web_test/element/test_gc.htm";
+    "file:///G:/test/web_test/media_match.htm";
+    "file:///G:/test/web_test/baidupan/mb57_text_crash.htm";
+    "file:///G:/test/web_test/baidupan/mb57_baidu_crash.htm";
+
+    "file:///G:/test/web_test/input.htm";
+    "http://yedict.com/zsts.htm"; // 扩展字体区
+    "file:///C:/Users/Administrator/Documents/input.htm";
+
+    "http://web.4399.com/user/?_a=login&redirecturl=%2Fuser%2F%3Ftype%3Dsafe";
+    "http://xp.4399.com/lc/register.html?pass=1&v";
+    "http://aoqi.100bt.com/play/play.html";
+    "file:///G:/test/web_test/npNetsignerTest/npNetsignerTest.html";
+    "https://xsdt1.i-xinnuo.com/xqc_pc/xqc.html#/pdfPage?title=%E5%90%88%E5%90%8C%E6%AD%A3%E6%96%87%E6%B5%8B%E8%AF%95.pdf&fileId=60ff7c7be4b017f601627438";
+    "file:///G:/test/web_test/kancloud/test_download.htm";
+    "file:///G:/mycode/miniblink57/third_party/WebKit/Source/core/inspector/InspectorOverlayPage49.html";
+    "file:///G:/test/web_test/kancloud/test_canvas.htm";
+    "http://seerh5.61.com/";
+
+    "http://seer.61.com/play.shtml";
+    "http://chrome.360.cn/test/v8/run.html";
+    "file:///G:/test/web_test/kancloud/index.htm";
+    "https://element.eleme.cn/#/zh-CN/component/transition";
+    "http://wonzilerv2.danweiapp.com/";
+    "file:///G:/test/exe_test/meng/img.htm";
+    "www.bilibili.com";
+    "file:///G:/mycode/miniblink57/Debug/plugins/test.html";
+    "http://seer.61.com.tw/Client.swf";
+    "http://192.168.222.1:8000/pdfjs/web/viewer.html";
+    "https://www.kancloud.cn/manual/thinkphp6_0/1037479";
+    "https://element.eleme.cn/#/zh-CN/component/pagination";
+    "https://poe.ninja/challenge/builds";
+    "file:///G:/test/web_test/example_icon/index1.html";
+    "Tanwan.com/cqbz/wd";
+    "file:///P:/BaiduNetdiskWorkspace/table_test1.html";
+    "oschina.net"; // 触发CachingWordShaper的字体未实现断言
+    "https://uniapp.dcloudet.cn/uniCloud/admin";
+    "https://static-54446097-3b6f-462e-8fe0-fe8855ea8c2e.bspapp.com/#/";
+    "https://fontawesome.dashgame.com/";
+    "http://aola.100bt.com/play/play.html";
+    "file:///G:/test/web_test/vxe-table/vxe-table.htm#/table/scroll/rows"; // 卡慢问题
+    "https://xuliangzhan.gitee.io/vxe-table/#/table/scroll/rows";
+
+    "https://projects.lukehaas.me/css-loaders/";
+    "http://192.168.222.1:8000/input.htm";
+    "file:///G:/test/web_test/flash_test/flash.html";
+
+    "https://www.easck.com/Internetmore/2021/0819/883307.shtml";
+
+    "file:///G:/test/web_test/v8_bug.html";
+    "https://kaifa.baidu.com/";
+    "file:///G:/test/web_test/dianxin/22.html";
+    "file:///G:/test/web_test/test_v8_error.htm";
+
+    "file:///G:/test/web_test/websocket_test/test.htm";
+    "file:///G:/test/web_test/element/test_img.htm";
+    "file:///G:/test/web_test/xmlifa/index.htm";
+    "http://www.websocket-test.com/";
+
+    "http://coolaf.com/tool/chattest";
+    "http://192.168.222.1:8000/input.htm";
+
+    "taobao.com";
+    "http://192.168.222.1:8000/test_img.htm";
+    "https://www.bilibili.com/video/BV1rp4y1n7Ft?spm_id_from=333.851.b_7265636f6d6d656e64.1";
+    "file:///G:/test/web_test/CallNumber/testSocket.html";
+    "file:///G:/test/web_test/test(3).html";
+    "http://aola.100bt.com/h5/";
+    "https://www.yuque.com/yuque/ng1qth/dashboard";
+    "file:///P:/test/web_test/chrome-tabs-gh-pages/index.html";
+
+    "http://static.newayz.com/sv/videoblink.html";
+    "https://yunpan.360.cn/file/index#/fileManage/my/file/%2F";
+    "file:///G:/test/exe_test/Test53kf/test.html";
+    "file:///G:/test/web_test/zzz_test/queen.htm";
+    "https://exhibition.trinasolar.com/index.html#/page/battery/SQ";
+    "file:///G:/test/web_test/gamebox_A.html";
+    "http://demo.finebi.com//decision/v10/entry/access/115e7870-8b9a-4e33-b7ff-6165041e9fab?dashboardType=4&width=1610&height=787";
+    "file:///G:/test/web_test/main_copy.html";
+    "http://192.168.9.240:13000/#/auth/audit";
+    //"http://www.suduzy8.com:777/play-14848.html";
+    "http://192.168.9.240:13000/#/user/login";
+    "file:///G:/test/web_test/test_download.htm";
+    "file:///M:/doc/fingerprint/testfp/gongjux.htm";
+    "https://www.mgtv.com/b/349988/11411698.html?fpa=15801&fpos=5&lastp=ch_home";
+    "http://demo.finebi.com/"; //v875不能点击里面按钮
+    "http://demo.gin-vue-admin.com/#/login";
+    "https://haokan.baidu.com/v?vid=12462553566250398173&pd=bjh&fr=bjhauthor&type=video";
+    "https://v.youku.com/v_show/id_XMzUzNjQzNjQ3Mg==.html";
+    "file:///P:/test/web_test/test_js_timer.html";
+    "https://tv.cctv.com/live/cctv7";
+    "https://new.qq.com/omn/20210310/20210310A089KB00.html";
+    "http://192.168.0.103:8000/hls_deme/hls.htm";
+    "https://hls-js.netlify.app/demo/";
+    "http://192.168.0.103:8000/wasm/canvasDemo-wasm1/random.html";
+    "http://192.168.0.103:8000/bufferAll.html";
+
+    "file:///G:/test/web_test/audio_test/Untitled1.html";
+    "file:///G:/test/web_test/audio_test/webtest.htm";
+    "https://chowsangsang.tmall.com";
+    "https://tarpa.tmall.com/wow/ark-pub/common/156bb3b2/tpl?wh_sid=ac45106ffe692a4b";
+    "file:///G:/test/web_test/hetao_mp4/test.htm";
+    "http://192.168.56.1:8000/layui-soul-table.htm#/zh-CN/component/changelog";
+    "http://192.168.56.1:8000/ajax.htm";
+
+    "http://221.226.213.42:5055/dist/index.html#/businessTown"; // 动画卡慢
+    "file:///G:/test/web_test/test_printer/testPrint.html";
+    "file:///G:/test/web_test/baidupan/html/land.html";
+    "file:///G:/test/web_test/baidupan/try_win_focus.htm";
+    
+    "https://www.layui.com/demo/table/parseData.html"; // 测试下载
+
+    "https://www.animejs.cn/documentation/#linearEasing";
+    "http://02.build.kelexuexi.com";
+    "https://www.aixuebanban.com/teacher/filemanager";
+    "https://www.w3school.com.cn/tiy/t.asp?f=html5_draganddrop";
+    "https://www.zhihu.com/zvideo/1285349052423831552";
+    "file:///G:/test/web_test/niushibang/index.htm";
+    "https://meet.jit.si";
+    "http://applicationteam.gitee.io/nsb-classroom-doc/miniblink_test/";
+    "file:///g:/test/web_test/icoc/video.htm";
+    "file:///G:/test/web_test/icoc/sina/sina.htm";
+
+    "https://www.zhihu.com/question/415822945";
+    "http://192.168.71.1:8000/video.htm";
+    "http://192.168.71.1:8000/ea0/index.htm";
+    "https://ea0.com";
+    "file:///G:/mycode/mbvip/out/x86/Release/1234.htm";
+    "http://aola.100bt.com/play/play.html";
+    "https://weibo.com/2970452952/JeQiWDULX?type=comment";
+    "https://new.qq.com/omn/20200727/20200727A0J6LI00.html";
+    "https://weibo.com/tv/show/1034:4531439128215563";
+
+    "file:///G:/test/web_test/openlayers/image.html";
+    "file:///G:/test/web_test/icoc/weibo.htm";
+
+    "http://video.sina.com.cn/p/ent/doc/2018-02-07/101868002478.html";
+
+    "miniblink.net";
+    "file:///G:/test/web_test/test_frame/iframe.html";
+    "file:///G:/mycode/easyckl/scripts/test_mbquery.htm";
+    "file:///G:/cache/qqcache/93527630/filerecv/m17090_802001_cor_insert.html";
+    "https://live.bilibili.com/10339607";
+
+    "file:///G:/test/web_test/xingzhihai/test.html";
+    "file:///G:/test/web_test/icoc/video.htm";
 
     "file:///G:/test/web_test/58/test.html";
     "http://1.205.23.121:7418/";
@@ -260,7 +353,6 @@ std::string getUrl()
     "http://m.baidu.com/s?word=12306&sa=ts_1&ts=0&t_kt=0&ie=utf-8&rsv_t=9d07v4i2NAoIydVWMT3Bg8hA4nnRMWPPXPan9MMHwW3UAb2FzJrJ&rsv_pq=11524657842255675396&ss=100&sugid=102897658533638957&rq=12";
     "http://www.4399.com/flash/188528.htm";
 
-
     "file:///G:/test/web_test/icoc/echars.htm";
     "https://www.echartsjs.com/zh/index.html";
     "https://browserleaks.com/canvas";
@@ -271,12 +363,10 @@ std::string getUrl()
     "https://www.layui.com/demo/layer.html";
     "file:///G:/test/web_test/pure-css3-mac-dock/css3.htm";
 
-
     //"file:///G:/test/web_test/dashgame/index2.htm";
     //"G:\\test\\web_test\\dashgame\\index.htm";
     "http://fontawesome.dashgame.com/";
     "file:///G:/test/web_test/dashgame/index.htm";
-
 
     "file:///G:/test/web_test/jianglv_test/test.html";
     "https://api.weibo.com/oauth2/authorize?redirect_uri=https%3A%2F%2Fudb3lgn.huya.com%2Fweb%2Fv2%2Fcallback&client_id=4136543982&state=%7B%22action%22%3A%221%22%2C%22appid%22%3A%225002%22%2C%22busiurl%22%3A%22https%3A%2F%2Fwww.huya.com%22%2C%22byPass%22%3A3%2C%22domain%22%3A%22huya.com%22%2C%22domainList%22%3A%22%22%2C%22exchange%22%3A%2242135901%22%2C%22guid%22%3A%22d7c2841990b84019b5544fd3af4dd402%22%2C%22remember%22%3A0%2C%22requestId%22%3A%2242137148%22%2C%22smid%22%3A%22%22%2C%22style%22%3A%221%22%2C%22terminal%22%3A%22web%22%2C%22type%22%3A%22wb%22%2C%22uri%22%3A30003%2C%22win%22%3A%221%22%7D&display=default";
@@ -300,7 +390,6 @@ std::string getUrl()
     "file:///G:/test/web_test/test_printer/print-test1.html";
     "https://mj19916992-4.icoc.vc/";
     "http://www.xunyou.com/client/2013/jump.php?action=3&eid=54&appType=0001&ver=3.105.242.19111413&nickname=&username=bowengf&viptype=1&userid=bowengf&spid=0000&saleid=0&pwd=1BB1D88D646E08217015E5D605ED&pwd2=4098EDDD5036D969B56B5D228BC9659503B45194&pwd3=930FE476C61BD6E9596388BD6CBBD4A158415ECB217D49AA672F77CCFB32F016&spid2=&vc=&SACC=9D588A6EB0E68C462D74E7720E012673&xunyouvip=1&gameid=23646&gameareaname=BEF8B5D8C7F3C9FA2D537465616D2FD1C7B7FE&edate=0000:2011-01-01%2000:00:00";
-
 
     "https://image.baidu.com/search/detail?ct=503316480&z=0&ipn=d&word=%E4%BB%8A%E6%97%A5%E6%96%B0%E9%B2%9C%E4%BA%8B&step_word=&hs=0&pn=3&spn=0&di=124960&pi=0&rn=1&tn=baiduimagedetail&is=0%2C0&istype=0&ie=utf-8&oe=utf-8&in=&cl=2&lm=-1&st=undefined&cs=2192019847%2C875856785&os=171449302%2C3049960527&simid=3446915372%2C414806786&adpicid=0&lpn=0&ln=1250&fr=&fmq=1573009882761_R&fm=&ic=undefined&s=undefined&hd=undefined&latest=undefined&copyright=undefined&se=&sme=&tab=0&width=undefined&height=undefined&face=undefined&ist=&jit=&cg=&bdtype=0&oriquery=&objurl=http%3A%2F%2Fs06.lmbang.com%2FM00%2FB6%2FB6%2FecloD1vW3amAdUnnAAE-70Avd8k657.jpg&fromurl=ippr_z2C%24qAzdH3FAzdH3Fooo_z%26e3Bsw4wkwg2_z%26e3Bv54AzdH3Fp5rtvAzdH3Ft1-nd0bbc0b_z%26e3Bip4s&gsm=&rpstart=0&rpnum=0&islist=&querylist=&force=undefined";
     "file:///C:/cache/93527630/FileRecv/test_tip_f7.html";
@@ -408,10 +497,10 @@ std::string utf16ToUtf8(LPCWSTR lpszSrc)
     return sResult;
 }
 
-std::wstring utf8ToUtf16(const std::string& utf8)
+std::wstring MCharToUtf16(const std::string& utf8, UINT codePage)
 {
     std::wstring utf16;
-    size_t n = ::MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), utf8.size(), nullptr, 0);
+    size_t n = ::MultiByteToWideChar(codePage, 0, utf8.c_str(), utf8.size(), nullptr, 0);
     if (0 == n)
         return L"";
     std::vector<wchar_t> wbuf(n);
@@ -419,6 +508,11 @@ std::wstring utf8ToUtf16(const std::string& utf8)
     utf16.resize(n + 5);
     utf16.assign(&wbuf[0], n);
     return utf16;
+}
+
+std::wstring utf8ToUtf16(const std::string& utf8)
+{
+    return MCharToUtf16(utf8, CP_UTF8);
 }
 
 void readFile(const wchar_t* path, std::vector<char>* buffer)
@@ -443,6 +537,8 @@ void readFile(const wchar_t* path, std::vector<char>* buffer)
 
     DWORD fileSizeHigh;
     const DWORD bufferSize = ::GetFileSize(hFile, &fileSizeHigh);
+    if (0 == bufferSize)
+        return;
 
     DWORD numberOfBytesRead = 0;
     buffer->resize(bufferSize);
@@ -590,14 +686,14 @@ static unsigned int  __stdcall dialogSaveThread(void* param)
 
     if (!GetSaveFileNameW(&ofn)) {
         ::MessageBoxW(nullptr, L"失败", L"打开保存对话框失败", 0);
-        InterlockedIncrement((long *)&(info->isFinish));
+        InterlockedIncrement((long*)&(info->isFinish));
         return 0;
     }
 
     HANDLE hFile = CreateFileW(&fileResult.at(0), GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL);
     if (INVALID_HANDLE_VALUE == hFile) {
         ::MessageBoxW(nullptr, L"失败", L"打开文件失败", 0);
-        InterlockedIncrement((long *)&(info->isFinish));
+        InterlockedIncrement((long*)&(info->isFinish));
         return 0;
     }
 
@@ -605,7 +701,7 @@ static unsigned int  __stdcall dialogSaveThread(void* param)
     BOOL b = ::WriteFile(hFile, info->data, info->size, &numberOfBytesWrite, nullptr);
     ::CloseHandle(hFile);
 
-    InterlockedIncrement((long *)&(info->isFinish));
+    InterlockedIncrement((long*)&(info->isFinish));
     return 0;
 }
 
@@ -855,7 +951,12 @@ void printToPdf(mbWebView view)
 
 void testUtil(mbWebView mbView)
 {
-    mbRunJs(mbView, mbWebFrameGetMainFrame(mbView), "test2();", true, nullptr, nullptr, nullptr);
+    static int s_count = 0;
+    if (s_count % 2 == 0)
+        mbRunJs(mbView, mbWebFrameGetMainFrame(mbView), "setData();", true, nullptr, nullptr, nullptr);
+    else
+        mbRunJs(mbView, mbWebFrameGetMainFrame(mbView), "getImageBase64();", true, nullptr, nullptr, nullptr);
+    s_count++;
 }
 
 const UINT kBaseId = 100;
@@ -902,11 +1003,12 @@ LRESULT RootWindow::hideWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     } else if (kBaseId + 10 == id) {
         packetAddrEditDirectory(m_mbView, m_editHwnd);
     } else if (kBaseId + 11 == id) {
-        //testUtil(m_mbView);
-        mbGetCookie(m_mbView, onGetCookieCallback, nullptr);
+        testUtil(m_mbView);
+        //mbGetCookie(m_mbView, onGetCookieCallback, nullptr);
         //printToPdf(m_mbView);
     } else if (kBaseId + 12 == id) {
         //testUtil(m_mbView);
+        mbRunJs(m_mbView, mbWebFrameGetMainFrame(m_mbView), "getImageBase64();", true, nullptr, nullptr, nullptr);
     }
 
     return ::DefWindowProc(hwnd, uMsg, wParam, lParam);
@@ -1268,12 +1370,12 @@ void MB_CALL_TYPE onNetJobDataFinishCallback(void* ptr, mbNetJob job, mbLoadingR
 
 static mbDownloadOpt MB_CALL_TYPE onDownloadCallback(mbWebView webView,
     void* param,
-    size_t expectedContentLength,
-    const char* url,
-    const char* mime,
-    const char* disposition,
-    mbNetJob job,
-    mbNetJobDataBind* dataBind)
+  size_t expectedContentLength,
+  const char* url,
+  const char* mime,
+  const char* disposition,
+  mbNetJob job,
+  mbNetJobDataBind* dataBind)
 {
     char* output = (char*)malloc(0x8000);
     sprintf_s(output, 0x7990, "onDownloadCallback: %d %s\n", expectedContentLength, url);
@@ -1291,7 +1393,7 @@ static mbDownloadOpt MB_CALL_TYPE onDownloadCallback(mbWebView webView,
     bind.finishCallback = onNetJobDataFinishCallback;
     bind.saveNameCallback = nullptr;
 
-    return mbPopupDialogAndDownload(webView, param, expectedContentLength, url, mime, disposition, job, dataBind, &bind);
+    return mbPopupDialogAndDownload(webView, nullptr, expectedContentLength, url, mime, disposition, job, dataBind, &bind);
     //return mbDownloadByPath(webView, param, L"P:\\", expectedContentLength, url, mime, disposition, job, dataBind, &bind);
 }
 
@@ -1401,9 +1503,9 @@ mbWebView RootWindow::onCreateView(mbWebView parentWebviwe, void* param, mbNavig
     return newWindow;
 }
 
-static bool hookUrl(void* job, const char* url, const char* hookUrl, const wchar_t* localFile, const char* mime)
+static bool hookUrl(void* job, const char* url, const char* hookedUrl, const wchar_t* localFile, const char* mime)
 {
-    if (0 == strstr(url, hookUrl))
+    if (0 == strstr(url, hookedUrl))
         return false;
     
     std::vector<char> buffer;
@@ -1412,6 +1514,7 @@ static bool hookUrl(void* job, const char* url, const char* hookUrl, const wchar
         return false;
 
     mbNetSetData(job, &buffer[0], buffer.size());
+    mbNetSetMIMEType(job, mime);
 
     OutputDebugStringA("hookUrl:");
     OutputDebugStringA(url);
@@ -1801,6 +1904,15 @@ void RootWindow::createChildControl(HWND parentHwnd)
     editWndProcOld = setWndProcPtr(m_editHwnd, editWndProc);
 }
 
+BOOL MB_CALL_TYPE onCloseCallback(mbWebView webView, void* param, void* unuse)
+{
+    OutputDebugStringA("onCloseCallback\n");
+    RootWindow* self = (RootWindow*)param;
+    PostMessageW(self->getHwnd(), WM_CLOSE, 0, 0);
+    
+    return TRUE;
+}
+
 void RootWindow::initSettings()
 {
     //     mbOnPluginList(m_mbView, onGetPluginListCallback, nullptr);
@@ -1812,6 +1924,7 @@ void RootWindow::initSettings()
     mbSetProxy(nullptr, &proxy);
 #endif
     mbSetTransparent(m_mbView, false);
+    mbSetNpapiPluginsEnabled(m_mbView, false);
 
     mbSetDragDropEnable(m_mbView, true);
     mbSetDiskCacheEnabled(m_mbView, false);
@@ -1825,6 +1938,7 @@ void RootWindow::initSettings()
     mbSetCookieEnabled(m_mbView, true);
     mbSetNavigationToNewWindowEnable(m_mbView, true);
     mbSetCspCheckEnable(m_mbView, true);
+    mbOnClose(m_mbView, onCloseCallback, this);
 
     //mbNetEnableResPacket(m_mbView, L"E:\\mycode\\mbvip\\out\\x86\\Debug\\1.mbpack");
 
@@ -1877,31 +1991,35 @@ void RootWindow::initSettings()
 
 static BOOL MB_CALL_TYPE handleLoadUrlBegin(mbWebView webView, void* param, const char* url, void* job)
 {
-//     std::string urlStr("handleLoadUrlBegin:");
-//     urlStr += url;
-//     urlStr += "\n";
-//     OutputDebugStringA(urlStr.c_str());
+    std::string urlStrDebug("handleLoadUrlBegin:");
+    urlStrDebug += url;
+    urlStrDebug += "\n";
+    OutputDebugStringA(urlStrDebug.c_str());
 
-    if (hookUrl(job, url, "main.907756de.js", L"G:\\test\\web_test\\testherf\\main.907756de.js", "text/html"))
-        return true;
+//     if (hookUrl(job, url, "main.120724.js", L"G:\\test\\web_test\\51iwifi\\main.120724.js", "text/html"))
+//         return true;
 
-    if (hookUrl(job, url, "_app-f54e3843f15fa10c7198.js", L"D:\\test\\web\\cc_163\\_app-f54e3843f15fa10c7198.js", "text/javascript"))
-        return true;
-// 
+//     if (hookUrl(job, url, "passport.weibo.com/js/visitor/mini_original.js", L"G:\\test\\web_test\\aola\\mini_original.js", "text/javascript"))
+//         return true;
+ 
 //     if (hookUrl(job, url, "act/webcc/link-pk-game/v1.9.1/index.js", L"D:\\test\\web\\cc_163\\webcc_191_index.js", "text/javascript"))
 //         return true;
 // 
 //     if (hookUrl(job, url, "act/webcc/performance-reporter/v1.2.0/index.js", L"D:\\test\\web\\cc_163\\performance-reporter.js", "text/javascript"))
 //         return true;
 // 
-//     if (hookUrl(job, url, "act/webcc/h5player/v0.39.17/index.js", L"D:\\test\\web\\cc_163\\h5player.js", "text/javascript"))
+//     if (hookUrl(job, url, "vendors.7000f260.js", L"G:\\test\\web_test\\51iwifi\\vendors.7000f260.js", "text/javascript"))
+//         return true;
+// 
+//     if (hookUrl(job, url, "mini_original.js", L"G:\\test\\web_test\\51iwifi\\mini_original.js", "text/javascript"))
 //         return true;
 
-    if (hookUrl(job, url, "act/webcc/luxury-car-sdk/v1.3.1/index.js", L"D:\\test\\web\\cc_163\\luxury-car-sdk.js", "text/javascript"))
+    if (hookUrl(job, url, "index.ff33a4a0.js", L"G:\\test\\web_test\\pinduoduo\\index.ff33a4a0.js", "text/javascript"))
         return true;
 
-//     if (hookUrl(job, url, "mguser.api.max.mgtv.com/user/getArtistsByMediaId", L"G:\\test\\web_test\\mgtv\\getArtistsByMediaId.js", "text/javascript"))
-//         return true;
+    std::string urlStr = url;
+    if (urlStr.find("a7fe1df1") != std::string::npos)
+        OutputDebugStringA("");
 
 //     if (strstr(url, "daxiansheng/images/header.png")) {
 //         //mbNetSetData(job, " ", 1);
@@ -1921,7 +2039,8 @@ static BOOL MB_CALL_TYPE handleLoadUrlBegin(mbWebView webView, void* param, cons
 //     if (hookUrl(job, url, "wangeditor@3.1.1/release/wangEditor.min.js", L"G:\\test\\web_test\\wangeditor\\wangeditor.js", "text/javascript"))
 //         return true;
    
-//      if (0 != strstr(url, "pcweb.api.mgtv.com/abpage?did=")) {
+//      if (0 != strstr(url, "ecpm.tanx.com/ex?i=mm_")) 
+//      {
 //          mbNetHookRequest(job);
 //      }
 //      if (0 != strstr(url, "mguser.api.max.mgtv.com/user/getArtistsByMediaId")) {
@@ -1937,7 +2056,12 @@ static BOOL MB_CALL_TYPE handleLoadUrlBegin(mbWebView webView, void* param, cons
 
 static void MB_CALL_TYPE handleLoadUrlEnd(mbWebView webView, void* param, const char* url, void* job, void* buf, int len)
 {
-//    saveDumpFile(L"G:\\test\\web_test\\mgtv\\abpage.js", (const char*)buf, len);
+    std::string urlStr("handleLoadUrlEnd:");
+    urlStr += url;
+    urlStr += "\n";
+    OutputDebugStringA(urlStr.c_str());
+
+    saveDumpFile(L"G:\\test\\web_test\\51iwifi\\jjlogin.js", (const char*)buf, len);
 // 
 //     std::vector<char> buffer;
 //     readFile(L"G:\\test\\web_test\\m_baidu\\index.htm", &buffer);

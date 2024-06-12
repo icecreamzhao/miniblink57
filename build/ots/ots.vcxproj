@@ -5,30 +5,76 @@
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Official|Win32">
+      <Configuration>Official</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Official|x64">
+      <Configuration>Official</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{3A656E0E-C23A-4F36-9A5B-569F501587B4}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>ots</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v141_xp</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v141_xp</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Official|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Official|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -39,14 +85,46 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Official|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Official|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\$(Configuration)\</IntDir>
-    <OutDir>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\win_$(Configuration)_$(Platform)\</IntDir>
+    <OutDir>$(SolutionDir)..\out\win_$(Configuration)_$(Platform)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\</OutDir>
-    <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)..\out\win_$(Configuration)_$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\win_$(Configuration)_x86\</IntDir>
+    <IncludePath>$(IncludePath)</IncludePath>
+    <ReferencePath>$(ReferencePath)</ReferencePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <LibraryWPath>$(WindowsSDK_MetadataPath);</LibraryWPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\win_$(Configuration)_x64\</IntDir>
+    <OutDir>$(SolutionDir)..\out\win_$(Configuration)_x64</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)..\out\win_$(Configuration)_$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\win_$(Configuration)_$(Platform)\</IntDir>
+    <IncludePath>$(IncludePath)</IncludePath>
+    <ReferencePath>$(ReferencePath)</ReferencePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <LibraryWPath>$(WindowsSDK_MetadataPath);</LibraryWPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Official|x64'">
+    <OutDir>$(SolutionDir)..\out\win_$(Configuration)_x64</OutDir>
+    <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\win_$(Configuration)_x64\</IntDir>
     <IncludePath>$(IncludePath)</IncludePath>
     <ReferencePath>$(ReferencePath)</ReferencePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
@@ -59,7 +137,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;ZLIB_DLL;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../third_party/zlib/;../../third_party/ots/include;../../third_party/ots/;../../third_party/brotli;../../third_party/sfntly/src/cpp/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../third_party/libyuv/include;../../third_party/zlib/;../../third_party/ots/include;../../third_party/ots/;../../third_party/brotli;../../third_party/sfntly/src/cpp/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -78,10 +156,55 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;WIN32;_LIB;ZLIB_DLL;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../third_party/sfntly/src/cpp/src;../../third_party/zlib/;../../third_party/ots/include;../../third_party/ots/;../../third_party/brotli</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../third_party/sfntly/src/cpp/src;../../third_party/zlib/;../../third_party/ots/include;../../third_party/ots/;../../third_party/brotli;../../third_party/libyuv/include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
       <AdditionalOptions>/Zc:threadSafeInit- %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;WIN32;_LIB;ZLIB_DLL;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../../third_party/sfntly/src/cpp/src;../../third_party/zlib/;../../third_party/ots/include;../../third_party/ots/;../../third_party/brotli;../../third_party/libyuv/include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <EnableEnhancedInstructionSet>
+      </EnableEnhancedInstructionSet>
+      <AdditionalOptions>/Zc:threadSafeInit- %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;WIN32;_LIB;ZLIB_DLL;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>
+      </SDLCheck>
+      <AdditionalIncludeDirectories>../../third_party/sfntly/src/cpp/src;../../third_party/zlib/;../../third_party/ots/include;../../third_party/ots/;../../third_party/brotli;../../third_party/libyuv/include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <AdditionalOptions>/Zc:threadSafeInit- %(AdditionalOptions) /Gw</AdditionalOptions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -105,16 +228,7 @@
     <ClInclude Include="..\..\third_party\brotli\dec\streams.h" />
     <ClInclude Include="..\..\third_party\brotli\dec\transform.h" />
     <ClInclude Include="..\..\third_party\brotli\dec\types.h" />
-    <ClInclude Include="..\..\third_party\libjpeg\iccjpeg.h" />
-    <ClInclude Include="..\..\third_party\libjpeg\jconfig.h" />
-    <ClInclude Include="..\..\third_party\libjpeg\jdct.h" />
-    <ClInclude Include="..\..\third_party\libjpeg\jerror.h" />
-    <ClInclude Include="..\..\third_party\libjpeg\jinclude.h" />
-    <ClInclude Include="..\..\third_party\libjpeg\jmemsys.h" />
-    <ClInclude Include="..\..\third_party\libjpeg\jmorecfg.h" />
-    <ClInclude Include="..\..\third_party\libjpeg\jpegint.h" />
-    <ClInclude Include="..\..\third_party\libjpeg\jpeglib.h" />
-    <ClInclude Include="..\..\third_party\libjpeg\jversion.h" />
+    <ClInclude Include="..\..\third_party\libjpeg_turbo\jpeglib.h" />
     <ClInclude Include="..\..\third_party\libpng\png.h" />
     <ClInclude Include="..\..\third_party\libpng\pngconf.h" />
     <ClInclude Include="..\..\third_party\libpng\pngdebug.h" />
@@ -122,6 +236,13 @@
     <ClInclude Include="..\..\third_party\libpng\pnglibconf.h" />
     <ClInclude Include="..\..\third_party\libpng\pngpriv.h" />
     <ClInclude Include="..\..\third_party\libpng\pngstruct.h" />
+    <ClInclude Include="..\..\third_party\libwebp\webp\config.h" />
+    <ClInclude Include="..\..\third_party\libwebp\webp\decode.h" />
+    <ClInclude Include="..\..\third_party\libwebp\webp\demux.h" />
+    <ClInclude Include="..\..\third_party\libwebp\webp\encode.h" />
+    <ClInclude Include="..\..\third_party\libwebp\webp\format_constants.h" />
+    <ClInclude Include="..\..\third_party\libwebp\webp\mux_types.h" />
+    <ClInclude Include="..\..\third_party\libwebp\webp\types.h" />
     <ClInclude Include="..\..\third_party\ots\include\opentype-sanitiser.h" />
     <ClInclude Include="..\..\third_party\ots\include\ots-memory-stream.h" />
     <ClInclude Include="..\..\third_party\ots\src\cff.h" />
@@ -165,317 +286,407 @@
     <ClCompile Include="..\..\third_party\brotli\dec\huffman.c" />
     <ClCompile Include="..\..\third_party\brotli\dec\state.c" />
     <ClCompile Include="..\..\third_party\brotli\dec\streams.c" />
-    <ClCompile Include="..\..\third_party\libjpeg\iccjpeg.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jaricom.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jcapimin.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jcapistd.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jcarith.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jccoefct.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jccolor.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jcdctmgr.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jchuff.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jcinit.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jcmainct.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jcmarker.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jcmaster.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jcomapi.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jcparam.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jcprepct.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jcsample.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jctrans.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jdapimin.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jdapistd.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jdarith.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jdatadst.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jdatasrc.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jdcoefct.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jdcolor.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jddctmgr.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jdhuff.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jdinput.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jdmainct.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jdmarker.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jdmaster.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jdmerge.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jdpostct.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jdsample.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jdtrans.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jerror.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jfdctflt.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jfdctfst.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jfdctint.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jidctflt.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jidctfst.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jidctint.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jmemmgr.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jmemnobs.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jquant1.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jquant2.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\third_party\libjpeg\jutils.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\cdjpeg.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\example.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\iccjpeg.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jaricom.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcapimin.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcapistd.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcarith.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jccoefct.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jccolor.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcdctmgr.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jchuff.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcicc.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcinit.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcmainct.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcmarker.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcmaster.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcomapi.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcparam.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcphuff.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcprepct.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jcsample.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jctrans.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdapimin.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdapistd.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdarith.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdatadst-tj.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdatadst.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdatasrc-tj.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdatasrc.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdcoefct.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdcolor.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jddctmgr.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdhuff.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdicc.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdinput.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdmainct.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdmarker.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdmaster.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdmerge.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdphuff.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdpostct.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdsample.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jdtrans.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jerror.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jfdctflt.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jfdctfst.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jfdctint.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jidctflt.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jidctfst.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jidctint.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jidctred.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jmemansi.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jmemmgr.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jquant1.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jquant2.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jsimd_none.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\jutils.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\rdbmp.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\rdcolmap.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\rdgif.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\rdjpgcom.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\rdppm.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\rdrle.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\rdswitch.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\rdtarga.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\tjutil.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\transupp.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\wrbmp.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\wrgif.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\wrppm.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\wrrle.c" />
+    <ClCompile Include="..\..\third_party\libjpeg_turbo\wrtarga.c" />
     <ClCompile Include="..\..\third_party\libpng\libpng.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\libpng\pngerror.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\libpng\pngget.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\libpng\pngmem.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\libpng\pngpread.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\libpng\pngread.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\libpng\pngrio.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\libpng\pngrtran.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\libpng\pngrutil.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\libpng\pngset.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\libpng\pngtrans.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\libpng\pngwio.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\libpng\pngwrite.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\libpng\pngwtran.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\libpng\pngwutil.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\..\third_party\libwebp\dec\dec_alpha.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dec\dec_buffer.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dec\dec_frame.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dec\dec_idec.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dec\dec_io.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dec\dec_quant.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dec\dec_tree.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dec\dec_vp8.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dec\dec_vp8l.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dec\dec_webp.c" />
+    <ClCompile Include="..\..\third_party\libwebp\demux\demux.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\alpha_processing.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\alpha_processing_sse2.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\alpha_processing_sse41.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\cpu.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\dec.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\dec_clip_tables.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\dec_mips32.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\dec_sse2.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\dec_sse41.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\enc.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\enc_avx2.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\enc_sse2.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\filters.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\filters_sse2.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\lossless.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\lossless_sse2.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\rescaler.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\rescaler_sse2.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\upsampling.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\upsampling_sse2.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\yuv.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\yuv_mips32.c" />
+    <ClCompile Include="..\..\third_party\libwebp\dsp\yuv_sse2.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\enc_alpha.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\enc_analysis.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\enc_backward_references.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\enc_config.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\enc_cost.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\enc_delta_palettization.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\enc_filter.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\enc_frame.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\enc_histogram.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\enc_iterator.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\enc_near_lossless.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\enc_picture.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\enc_picture_csp.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\enc_picture_psnr.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\enc_picture_rescale.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\enc_picture_tools.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\enc_quant.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\enc_syntax.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\enc_token.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\enc_tree.c" />
+    <ClCompile Include="..\..\third_party\libwebp\enc\enc_vp8l.c" />
+    <ClCompile Include="..\..\third_party\libwebp\utils\color_cache.c" />
+    <ClCompile Include="..\..\third_party\libwebp\utils\quant_levels.c" />
+    <ClCompile Include="..\..\third_party\libwebp\utils\quant_levels_dec.c" />
+    <ClCompile Include="..\..\third_party\libwebp\utils\utils_webp.c" />
+    <ClCompile Include="..\..\third_party\libwebp\utils\util_bit_reader.c" />
+    <ClCompile Include="..\..\third_party\libwebp\utils\util_bit_writer.c" />
+    <ClCompile Include="..\..\third_party\libwebp\utils\util_filters.c" />
+    <ClCompile Include="..\..\third_party\libwebp\utils\util_huffman.c" />
+    <ClCompile Include="..\..\third_party\libwebp\utils\util_huffman_encode.c" />
+    <ClCompile Include="..\..\third_party\libwebp\utils\util_random.c" />
+    <ClCompile Include="..\..\third_party\libwebp\utils\util_rescaler.c" />
+    <ClCompile Include="..\..\third_party\libwebp\utils\util_thread.c" />
+    <ClCompile Include="..\..\third_party\libyuv\source\compare.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\compare_common.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\compare_gcc.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\compare_neon.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\compare_neon64.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\compare_win.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\convert.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\convert_argb.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\convert_from.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\convert_from_argb.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\convert_jpeg.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\convert_to_argb.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\convert_to_i420.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\cpu_id.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\mjpeg_decoder.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\mjpeg_validate.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\planar_functions.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\rotate.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\rotate_any.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\rotate_argb.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\rotate_common.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\rotate_gcc.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\rotate_neon.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\rotate_neon64.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\rotate_win.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\row_any.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\row_common.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\row_gcc.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\row_neon.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\row_neon64.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\row_win.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\scale.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\scale_any.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\scale_argb.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\scale_common.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\scale_gcc.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\scale_neon.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\scale_neon64.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\scale_win.cc" />
+    <ClCompile Include="..\..\third_party\libyuv\source\video_common.cc" />
     <ClCompile Include="..\..\third_party\ots\src\cff.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\ots\src\cff_type2_charstring.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\ots\src\cmap.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\ots\src\cvt.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\ots\src\fpgm.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\ots\src\gasp.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\ots\src\gdef.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\ots\src\glyf.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\ots\src\gpos.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\ots\src\gsub.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\ots\src\hdmx.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\ots\src\head.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\ots\src\hhea.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\ots\src\hmtx.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\ots\src\kern.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\ots\src\layout.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\ots\src\loca.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\ots\src\ltsh.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\ots\src\math.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\ots\src\maxp.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\ots\src\metrics.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\ots\src\name.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\ots\src\os2.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\ots\src\ots.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\ots\src\post.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\ots\src\prep.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\ots\src\vdmx.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\ots\src\vhea.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\ots\src\vmtx.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\ots\src\vorg.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\third_party\ots\src\woff2.cc" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Official|x64'">Create</PrecompiledHeader>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\out\win_Release_x86\wkexe_5775_x32.exe" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -16,12 +16,14 @@
 #include "libplatform/libplatform.h"
 
 #if V8_MAJOR_VERSION >= 7
-#include "v8_7_5/src/libplatform/default_platform_wrap.h"
+//#include "v8_7_5/src/libplatform/default_platform_wrap.h"
+#include "v8_7_5/src/libplatform/default-platform-wrap.h"
 #endif
 
 #include "third_party/WebKit/Source/config.h"
 
 #include "base/strings/string_util.h"
+#include "base/strings/utf_string_conversions.h"
 #include "base/command_line.h"
 #include "wke/wkedefine.h"
 

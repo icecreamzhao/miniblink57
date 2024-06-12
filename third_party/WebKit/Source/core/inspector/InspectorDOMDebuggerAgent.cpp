@@ -166,7 +166,7 @@ static v8::MaybeLocal<v8::Function> createRemoveFunction(
             v8String(isolate, "function remove() { [Command Line API] }"), 0,
             v8::ConstructorBehavior::kThrow)
             .ToLocal(&toStringFunction))
-        removeFunction->Set(v8String(context->GetIsolate(), "toString"),
+        removeFunction->Set(context, v8String(context->GetIsolate(), "toString"),
             toStringFunction);
     return removeFunction;
 }

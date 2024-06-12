@@ -60,7 +60,9 @@ void setCallStack(TracedValue* value)
     // So we collect the top frame with SourceLocation::capture() to get the
     // binding call site info.
     SourceLocation::capture()->toTracedValue(value, "stackTrace");
+#if V8_MAJOR_VERSION < 10
     v8::Isolate::GetCurrent()->GetCpuProfiler()->CollectSample();
+#endif
 }
 
 namespace {

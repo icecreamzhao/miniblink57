@@ -191,6 +191,11 @@ bool HTMLScriptElement::hasSourceAttribute() const
     return fastHasAttribute(srcAttr);
 }
 
+bool HTMLScriptElement::hasNomoduleAttribute() const
+{
+    return fastHasAttribute(nomoduleAttr);
+}
+
 void HTMLScriptElement::dispatchLoadEvent()
 {
     DCHECK(!m_loader->haveFiredLoadEvent());

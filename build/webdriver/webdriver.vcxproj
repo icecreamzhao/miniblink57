@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{2D637582-FB00-42C0-B811-968BFAB06C63}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>zlib</RootNamespace>
+    <WindowsTargetPlatformVersion>7.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141_xp</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)..\out\win_$(Configuration)_x86\</OutDir>
+    <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\win_$(Configuration)_x86\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\win_$(Configuration)_x86\</IntDir>
+    <OutDir>$(SolutionDir)..\out\win_$(Configuration)_x86</OutDir>
+    <TargetExt>.exe</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../../</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>Rpcrt4.lib;version.lib;shlwapi.lib;imm32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;comctl32.lib;WinHttp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>W:\test\wpt-master\_venv3\Scripts\chrome\chromedriver.Exe</OutputFile>
+    </Link>
+    <Lib>
+      <OutputFile>$(OutDir)$(TargetName).dll</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>Disabled</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
+      <AdditionalOptions>/Zc:threadSafeInit- %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>../../</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DebugInformationFormat>OldStyle</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>version.lib;shlwapi.lib;imm32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>W:\test\wpt-master\_venv3\Scripts\chrome\chromedriver.eXe</OutputFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\webdriver\atoms.h" />
+    <ClInclude Include="..\..\webdriver\civetweb\CivetServer.h" />
+    <ClInclude Include="..\..\webdriver\civetweb\civetweb.h" />
+    <ClInclude Include="..\..\webdriver\civetweb\civetweb_private_lua.h" />
+    <ClInclude Include="..\..\webdriver\CommandHandlerRepository.h" />
+    <ClInclude Include="..\..\webdriver\CommandHandlers\ClickElementCommandHandler.h" />
+    <ClInclude Include="..\..\webdriver\CommandHandlers\ElementUtil.h" />
+    <ClInclude Include="..\..\webdriver\CommandHandlers\FindElementCommandHandler.h" />
+    <ClInclude Include="..\..\webdriver\CommandHandlers\FindElementsCommandHandler.h" />
+    <ClInclude Include="..\..\webdriver\CommandHandlers\GoToUrlCommandHandler.h" />
+    <ClInclude Include="..\..\webdriver\CommandHandlers\NewSessionCommandHandler.h" />
+    <ClInclude Include="..\..\webdriver\CommandHandlers\SendKeysCommandHandler.h" />
+    <ClInclude Include="..\..\webdriver\CommandLineArguments.h" />
+    <ClInclude Include="..\..\webdriver\js.h" />
+    <ClInclude Include="..\..\webdriver\jsoncpp\jsoncpp.h" />
+    <ClInclude Include="..\..\webdriver\MBCommandExecutor.h" />
+    <ClInclude Include="..\..\webdriver\MBCommandHandler.h" />
+    <ClInclude Include="..\..\webdriver\MBServer.h" />
+    <ClInclude Include="..\..\webdriver\MBSession.h" />
+    <ClInclude Include="..\..\webdriver\server\command.h" />
+    <ClInclude Include="..\..\webdriver\server\command_handler.h" />
+    <ClInclude Include="..\..\webdriver\server\command_types.h" />
+    <ClInclude Include="..\..\webdriver\server\errorcodes.h" />
+    <ClInclude Include="..\..\webdriver\server\response.h" />
+    <ClInclude Include="..\..\webdriver\server\server.h" />
+    <ClInclude Include="..\..\webdriver\server\session.h" />
+    <ClInclude Include="..\..\webdriver\server\uri_info.h" />
+    <ClInclude Include="..\..\webdriver\server\wd_logging.h" />
+    <ClInclude Include="..\..\webdriver\StringUtilities.h" />
+    <ClInclude Include="..\..\webdriver\WebDriver.h" />
+    <ClInclude Include="..\..\webdriver\WebDriverConstants.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\webdriver\atoms.cpp" />
+    <ClCompile Include="..\..\webdriver\civetweb\civetweb.c" />
+    <ClCompile Include="..\..\webdriver\CommandHandlerRepository.cpp" />
+    <ClCompile Include="..\..\webdriver\CommandHandlers\AcceptAlertCommandHandler.cpp" />
+    <ClCompile Include="..\..\webdriver\CommandHandlers\ClickElementCommandHandler.cpp" />
+    <ClCompile Include="..\..\webdriver\CommandHandlers\CloseWindowCommandHandler.cpp" />
+    <ClCompile Include="..\..\webdriver\CommandHandlers\CreateNewWindowCommandHandler.cpp" />
+    <ClCompile Include="..\..\webdriver\CommandHandlers\DismissAlertCommandHandler.cpp" />
+    <ClCompile Include="..\..\webdriver\CommandHandlers\ElementUtil.cpp" />
+    <ClCompile Include="..\..\webdriver\CommandHandlers\ExecuteAsyncScriptCommandHandler.cpp" />
+    <ClCompile Include="..\..\webdriver\CommandHandlers\ExecuteScriptCommandHandler.cpp" />
+    <ClCompile Include="..\..\webdriver\CommandHandlers\FindElementCommandHandler.cpp" />
+    <ClCompile Include="..\..\webdriver\CommandHandlers\FindElementsCommandHandler.cpp" />
+    <ClCompile Include="..\..\webdriver\CommandHandlers\GetAlertTextCommandHandler.cpp" />
+    <ClCompile Include="..\..\webdriver\CommandHandlers\GetAllWindowHandlesCommandHandler.cpp" />
+    <ClCompile Include="..\..\webdriver\CommandHandlers\GetCurrentWindowHandleCommandHandler.cpp" />
+    <ClCompile Include="..\..\webdriver\CommandHandlers\GetElementAttributeCommandHandler.cpp" />
+    <ClCompile Include="..\..\webdriver\CommandHandlers\GetElementTextCommandHandler.cpp" />
+    <ClCompile Include="..\..\webdriver\CommandHandlers\GetTimeoutsCommandHandler.cpp" />
+    <ClCompile Include="..\..\webdriver\CommandHandlers\GetTitleCommandHandler.cpp" />
+    <ClCompile Include="..\..\webdriver\CommandHandlers\GoBackCommandHandler.cpp" />
+    <ClCompile Include="..\..\webdriver\CommandHandlers\GoForwardCommandHandler.cpp" />
+    <ClCompile Include="..\..\webdriver\CommandHandlers\GoToUrlCommandHandler.cpp" />
+    <ClCompile Include="..\..\webdriver\CommandHandlers\NewSessionCommandHandler.cpp" />
+    <ClCompile Include="..\..\webdriver\CommandHandlers\QuitCommandHandler.cpp" />
+    <ClCompile Include="..\..\webdriver\CommandHandlers\RefreshCommandHandler.cpp" />
+    <ClCompile Include="..\..\webdriver\CommandHandlers\ReleaseActionsCommandHandler.cpp" />
+    <ClCompile Include="..\..\webdriver\CommandHandlers\ScreenshotCommandHandler.cpp" />
+    <ClCompile Include="..\..\webdriver\CommandHandlers\SendKeysCommandHandler.cpp" />
+    <ClCompile Include="..\..\webdriver\CommandHandlers\SetTimeoutsCommandHandler.cpp" />
+    <ClCompile Include="..\..\webdriver\CommandHandlers\SetWindowRectCommandHandler.cpp" />
+    <ClCompile Include="..\..\webdriver\CommandHandlers\SwitchToFrameCommandHandler.cpp" />
+    <ClCompile Include="..\..\webdriver\CommandHandlers\SwitchToWindowCommandHandler.cpp" />
+    <ClCompile Include="..\..\webdriver\CommandLineArguments.cpp" />
+    <ClCompile Include="..\..\webdriver\js.cpp" />
+    <ClCompile Include="..\..\webdriver\jsoncpp\jsoncpp.cpp" />
+    <ClCompile Include="..\..\webdriver\MBCommandExecutor.cpp" />
+    <ClCompile Include="..\..\webdriver\MBCommandHandler.cpp" />
+    <ClCompile Include="..\..\webdriver\MBServer.cpp" />
+    <ClCompile Include="..\..\webdriver\MBSession.cpp" />
+    <ClCompile Include="..\..\webdriver\server\command.cpp" />
+    <ClCompile Include="..\..\webdriver\server\response.cpp" />
+    <ClCompile Include="..\..\webdriver\server\server.cpp" />
+    <ClCompile Include="..\..\webdriver\server\uri_info.cpp" />
+    <ClCompile Include="..\..\webdriver\StringUtilities.cpp" />
+    <ClCompile Include="..\..\webdriver\WebDriver.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\webdriver\civetweb\handle_form.inl" />
+    <None Include="..\..\webdriver\civetweb\md5.inl" />
+    <None Include="..\..\webdriver\civetweb\mod_duktape.inl" />
+    <None Include="..\..\webdriver\civetweb\mod_lua.inl" />
+    <None Include="..\..\webdriver\civetweb\mod_lua_shared.inl" />
+    <None Include="..\..\webdriver\civetweb\mod_zlib.inl" />
+    <None Include="..\..\webdriver\civetweb\sha1.inl" />
+    <None Include="..\..\webdriver\civetweb\timer.inl" />
+    <None Include="..\..\webdriver\civetweb\wolfssl_extras.inl" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

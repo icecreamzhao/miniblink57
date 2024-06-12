@@ -9,6 +9,14 @@
       <Configuration>Debug</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Official|Win32">
+      <Configuration>Official</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Official|x64">
+      <Configuration>Official</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
@@ -23,33 +31,49 @@
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Win32Project1</RootNamespace>
     <ProjectName>v8_7_5</ProjectName>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v141_xp</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v141_xp</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Official|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Official|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -65,19 +89,33 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Official|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Official|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\</OutDir>
-    <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)..\out\win_$(Configuration)_$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\win_$(Configuration)_$(Platform)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\</OutDir>
-    <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)..\out\win_$(Configuration)_$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\win_$(Configuration)_$(Platform)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">
+    <OutDir>$(SolutionDir)..\out\win_$(Configuration)_x86</OutDir>
+    <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\win_$(Configuration)_x86\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)..\out\win_$(Configuration)_$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\win_$(Configuration)_$(Platform)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Official|x64'">
     <OutDir>$(SolutionDir)..\out\Windows_$(Configuration)_$(Platform)\</OutDir>
     <IntDir>$(SolutionDir)..\out\tmp\$(ProjectName)\$(Configuration)\</IntDir>
   </PropertyGroup>
@@ -171,7 +209,75 @@
       <ForceSymbolReferences>__chkstk</ForceSymbolReferences>
     </Lib>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;WIN32;_LIB;SUPPORT_XP_CODE=1;V8_TARGET_ARCH_IA32;V8_EMBEDDED_BUILTINS=1;V8_TYPED_ARRAY_MAX_SIZE_IN_HEAP=0;V8_PROMISE_INTERNAL_FIELD_COUNT=1;DISABLE_UNTRUSTED_CODE_MITIGATIONS;ICU_UTIL_DATA_IMPL=ICU_UTIL_DATA_SHARED;UCONFIG_NO_SERVICE=1;UCONFIG_NO_REGULAR_EXPRESSIONS=1;U_ENABLE_DYLOAD=0;U_STATIC_IMPLEMENTATION=1;U_HAVE_STD_STRING=1;UCONFIG_NO_BREAK_ITERATION=0;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;V8_NO_FAST_TLS;V8_DEPRECATION_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>
+      </SDLCheck>
+      <AdditionalIncludeDirectories>../../v8_7_5;../../v8_7_5/include;../../gen/v8_7_5</AdditionalIncludeDirectories>
+      <ExceptionHandling>false</ExceptionHandling>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <DisableSpecificWarnings>4800;4530;4251;4275;4661;4251;4091</DisableSpecificWarnings>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <AdditionalOptions>/Zc:threadSafeInit-  /d2SSAOptimizer-  /Gw</AdditionalOptions>
+      <StringPooling>true</StringPooling>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>DbgHelp.lib;Shlwapi.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+    <Lib>
+      <ForceSymbolReferences>__chkstk</ForceSymbolReferences>
+    </Lib>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;WIN32;_LIB;SUPPORT_XP_CODE=1;V8_TARGET_ARCH_X64;V8_EMBEDDED_BUILTINS=1;V8_TYPED_ARRAY_MAX_SIZE_IN_HEAP=0;V8_PROMISE_INTERNAL_FIELD_COUNT=1;DISABLE_UNTRUSTED_CODE_MITIGATIONS;ICU_UTIL_DATA_IMPL=ICU_UTIL_DATA_SHARED;UCONFIG_NO_SERVICE=1;UCONFIG_NO_REGULAR_EXPRESSIONS=1;U_ENABLE_DYLOAD=0;U_STATIC_IMPLEMENTATION=1;U_HAVE_STD_STRING=1;UCONFIG_NO_BREAK_ITERATION=0;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;V8_NO_FAST_TLS;V8_DEPRECATION_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../../v8_7_5;../../v8_7_5/include;../../gen/v8_7_5</AdditionalIncludeDirectories>
+      <ExceptionHandling>false</ExceptionHandling>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <DisableSpecificWarnings>4800;4530;4661;4251;4275</DisableSpecificWarnings>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <EnableEnhancedInstructionSet>
+      </EnableEnhancedInstructionSet>
+      <AdditionalOptions>/Zc:threadSafeInit- %(AdditionalOptions)</AdditionalOptions>
+      <StringPooling>true</StringPooling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Official|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
@@ -180,7 +286,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>V8_NO_FAST_TLS;NDEBUG;WIN32;_LIB;V8_USE_EXTERNAL_STARTUP_DATA=1;V8_TARGET_ARCH_X64=1;V8_DEPRECATION_WARNINGS;NVALGRIND;ENABLE_HANDLE_ZAPPING;BUILDING_V8_SHARED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../v8_7_5;../../v8_7_5/include;../../gen/v8_7_5</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../v8_5_7;../../v8_5_7/include</AdditionalIncludeDirectories>
       <ExceptionHandling>false</ExceptionHandling>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
@@ -432,6 +538,8 @@
     <ClInclude Include="..\..\v8_7_5\src\compiler\backend\register-allocator-verifier.h" />
     <ClInclude Include="..\..\v8_7_5\src\compiler\backend\register-allocator.h" />
     <ClInclude Include="..\..\v8_7_5\src\compiler\backend\unwinding-info-writer.h" />
+    <ClInclude Include="..\..\v8_7_5\src\compiler\backend\x64\instruction-codes-x64.h" />
+    <ClInclude Include="..\..\v8_7_5\src\compiler\backend\x64\unwinding-info-writer-x64.h" />
     <ClInclude Include="..\..\v8_7_5\src\compiler\basic-block-instrumentor.h" />
     <ClInclude Include="..\..\v8_7_5\src\compiler\branch-elimination.h" />
     <ClInclude Include="..\..\v8_7_5\src\compiler\bytecode-analysis.h" />
@@ -725,9 +833,9 @@
     <ClInclude Include="..\..\v8_7_5\src\layout-descriptor-inl.h" />
     <ClInclude Include="..\..\v8_7_5\src\layout-descriptor.h" />
     <ClInclude Include="..\..\v8_7_5\src\libplatform\default-foreground-task-runner.h" />
+    <ClInclude Include="..\..\v8_7_5\src\libplatform\default-platform-wrap.h" />
     <ClInclude Include="..\..\v8_7_5\src\libplatform\default-platform.h" />
     <ClInclude Include="..\..\v8_7_5\src\libplatform\default-worker-threads-task-runner.h" />
-    <ClInclude Include="..\..\v8_7_5\src\libplatform\default_platform_wrap.h" />
     <ClInclude Include="..\..\v8_7_5\src\libplatform\delayed-task-queue.h" />
     <ClInclude Include="..\..\v8_7_5\src\libplatform\task-queue.h" />
     <ClInclude Include="..\..\v8_7_5\src\libplatform\tracing\trace-buffer.h" />
@@ -958,6 +1066,7 @@
     <ClInclude Include="..\..\v8_7_5\src\regexp\regexp-parser.h" />
     <ClInclude Include="..\..\v8_7_5\src\regexp\regexp-stack.h" />
     <ClInclude Include="..\..\v8_7_5\src\regexp\regexp-utils.h" />
+    <ClInclude Include="..\..\v8_7_5\src\regexp\x64\regexp-macro-assembler-x64.h" />
     <ClInclude Include="..\..\v8_7_5\src\register-arch.h" />
     <ClInclude Include="..\..\v8_7_5\src\register-configuration.h" />
     <ClInclude Include="..\..\v8_7_5\src\register.h" />
@@ -1120,6 +1229,13 @@
     <ClInclude Include="..\..\v8_7_5\src\wasm\wasm-text.h" />
     <ClInclude Include="..\..\v8_7_5\src\wasm\wasm-tier.h" />
     <ClInclude Include="..\..\v8_7_5\src\wasm\wasm-value.h" />
+    <ClInclude Include="..\..\v8_7_5\src\x64\assembler-x64-inl.h" />
+    <ClInclude Include="..\..\v8_7_5\src\x64\assembler-x64.h" />
+    <ClInclude Include="..\..\v8_7_5\src\x64\constants-x64.h" />
+    <ClInclude Include="..\..\v8_7_5\src\x64\frame-constants-x64.h" />
+    <ClInclude Include="..\..\v8_7_5\src\x64\macro-assembler-x64.h" />
+    <ClInclude Include="..\..\v8_7_5\src\x64\register-x64.h" />
+    <ClInclude Include="..\..\v8_7_5\src\x64\sse-instr.h" />
     <ClInclude Include="..\..\v8_7_5\src\zone\accounting-allocator.h" />
     <ClInclude Include="..\..\v8_7_5\src\zone\zone-allocator.h" />
     <ClInclude Include="..\..\v8_7_5\src\zone\zone-chunk-list.h" />
@@ -1148,6 +1264,7 @@
     <ClCompile Include="..\..\gen\v8_7_5\torque-generated\builtins-array-from-dsl-gen-64.cc">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\gen\v8_7_5\torque-generated\builtins-array-from-dsl-gen.cc" />
     <ClCompile Include="..\..\gen\v8_7_5\torque-generated\builtins-array-join-from-dsl-gen.cc" />
@@ -1162,6 +1279,7 @@
     <ClCompile Include="..\..\gen\v8_7_5\torque-generated\builtins-base-from-dsl-gen-x64.cc">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\gen\v8_7_5\torque-generated\builtins-base-from-dsl-gen.cc" />
     <ClCompile Include="..\..\gen\v8_7_5\torque-generated\builtins-collections-from-dsl-gen.cc" />
@@ -1179,6 +1297,7 @@
     <ClCompile Include="..\..\gen\v8_7_5\torque-generated\builtins-test-from-dsl-gen-x64.cc">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Official|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\gen\v8_7_5\torque-generated\builtins-test-from-dsl-gen.cc" />
     <ClCompile Include="..\..\gen\v8_7_5\torque-generated\builtins-typed-array-createtypedarray-from-dsl-gen.cc" />
@@ -1315,6 +1434,7 @@
     <ClCompile Include="..\..\v8_7_5\src\builtins\growable-fixed-array-gen.cc" />
     <ClCompile Include="..\..\v8_7_5\src\builtins\ia32\builtins-ia32.cc" />
     <ClCompile Include="..\..\v8_7_5\src\builtins\setup-builtins-internal.cc" />
+    <ClCompile Include="..\..\v8_7_5\src\builtins\x64\builtins-x64.cc" />
     <ClCompile Include="..\..\v8_7_5\src\cached-powers.cc" />
     <ClCompile Include="..\..\v8_7_5\src\cancelable-task.cc" />
     <ClCompile Include="..\..\v8_7_5\src\code-comments.cc" />
@@ -1344,6 +1464,10 @@
     <ClCompile Include="..\..\v8_7_5\src\compiler\backend\move-optimizer.cc" />
     <ClCompile Include="..\..\v8_7_5\src\compiler\backend\register-allocator-verifier.cc" />
     <ClCompile Include="..\..\v8_7_5\src\compiler\backend\register-allocator.cc" />
+    <ClCompile Include="..\..\v8_7_5\src\compiler\backend\x64\code-generator-x64.cc" />
+    <ClCompile Include="..\..\v8_7_5\src\compiler\backend\x64\instruction-scheduler-x64.cc" />
+    <ClCompile Include="..\..\v8_7_5\src\compiler\backend\x64\instruction-selector-x64.cc" />
+    <ClCompile Include="..\..\v8_7_5\src\compiler\backend\x64\unwinding-info-writer-x64.cc" />
     <ClCompile Include="..\..\v8_7_5\src\compiler\basic-block-instrumentor.cc" />
     <ClCompile Include="..\..\v8_7_5\src\compiler\branch-elimination.cc" />
     <ClCompile Include="..\..\v8_7_5\src\compiler\bytecode-analysis.cc" />
@@ -1454,6 +1578,7 @@
     <ClCompile Include="..\..\v8_7_5\src\debug\debug.cc" />
     <ClCompile Include="..\..\v8_7_5\src\debug\ia32\debug-ia32.cc" />
     <ClCompile Include="..\..\v8_7_5\src\debug\liveedit.cc" />
+    <ClCompile Include="..\..\v8_7_5\src\debug\x64\debug-x64.cc" />
     <ClCompile Include="..\..\v8_7_5\src\deoptimize-reason.cc" />
     <ClCompile Include="..\..\v8_7_5\src\deoptimizer.cc" />
     <ClCompile Include="..\..\v8_7_5\src\detachable-vector.cc" />
@@ -1586,9 +1711,9 @@
     <ClCompile Include="..\..\v8_7_5\src\keys.cc" />
     <ClCompile Include="..\..\v8_7_5\src\layout-descriptor.cc" />
     <ClCompile Include="..\..\v8_7_5\src\libplatform\default-foreground-task-runner.cc" />
+    <ClCompile Include="..\..\v8_7_5\src\libplatform\default-platform-wrap.cc" />
     <ClCompile Include="..\..\v8_7_5\src\libplatform\default-platform.cc" />
     <ClCompile Include="..\..\v8_7_5\src\libplatform\default-worker-threads-task-runner.cc" />
-    <ClCompile Include="..\..\v8_7_5\src\libplatform\default_platform_wrap.cc" />
     <ClCompile Include="..\..\v8_7_5\src\libplatform\delayed-task-queue.cc" />
     <ClCompile Include="..\..\v8_7_5\src\libplatform\task-queue.cc" />
     <ClCompile Include="..\..\v8_7_5\src\libplatform\tracing\trace-buffer.cc" />
@@ -1667,6 +1792,7 @@
     <ClCompile Include="..\..\v8_7_5\src\regexp\regexp-parser.cc" />
     <ClCompile Include="..\..\v8_7_5\src\regexp\regexp-stack.cc" />
     <ClCompile Include="..\..\v8_7_5\src\regexp\regexp-utils.cc" />
+    <ClCompile Include="..\..\v8_7_5\src\regexp\x64\regexp-macro-assembler-x64.cc" />
     <ClCompile Include="..\..\v8_7_5\src\register-configuration.cc" />
     <ClCompile Include="..\..\v8_7_5\src\reloc-info.cc" />
     <ClCompile Include="..\..\v8_7_5\src\roots.cc" />
@@ -1812,6 +1938,14 @@
     <ClCompile Include="..\..\v8_7_5\src\wasm\wasm-result.cc" />
     <ClCompile Include="..\..\v8_7_5\src\wasm\wasm-serialization.cc" />
     <ClCompile Include="..\..\v8_7_5\src\wasm\wasm-text.cc" />
+    <ClCompile Include="..\..\v8_7_5\src\x64\assembler-x64.cc" />
+    <ClCompile Include="..\..\v8_7_5\src\x64\cpu-x64.cc" />
+    <ClCompile Include="..\..\v8_7_5\src\x64\deoptimizer-x64.cc" />
+    <ClCompile Include="..\..\v8_7_5\src\x64\disasm-x64.cc" />
+    <ClCompile Include="..\..\v8_7_5\src\x64\eh-frame-x64.cc" />
+    <ClCompile Include="..\..\v8_7_5\src\x64\frame-constants-x64.cc" />
+    <ClCompile Include="..\..\v8_7_5\src\x64\interface-descriptors-x64.cc" />
+    <ClCompile Include="..\..\v8_7_5\src\x64\macro-assembler-x64.cc" />
     <ClCompile Include="..\..\v8_7_5\src\zone\accounting-allocator.cc" />
     <ClCompile Include="..\..\v8_7_5\src\zone\zone-segment.cc" />
     <ClCompile Include="..\..\v8_7_5\src\zone\zone.cc" />

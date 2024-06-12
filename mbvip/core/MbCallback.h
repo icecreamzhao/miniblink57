@@ -37,8 +37,9 @@ static bool WKE_CALL_TYPE onLoadUrlBegin(wkeWebView wkeWebview, void* param, con
 
     if (webview->handleResPacket(url, job))
         return true;
-    
-    BOOL b = webview->getClosure().m_LoadUrlBeginCallback(webviewHandle, webview->getClosure().m_LoadUrlBeginParam, url, job);
+
+    mbLoadUrlBeginCallback m_LoadUrlBeginCallback = webview->getClosure().m_LoadUrlBeginCallback;
+    BOOL b = m_LoadUrlBeginCallback(webviewHandle, webview->getClosure().m_LoadUrlBeginParam, url, job);
     return !!b;
 }
 
@@ -227,20 +228,20 @@ void MB_CALL_TYPE mbOnLoadingFinish(mbWebView webviewHandle, mbLoadingFinishCall
     mb::MbWebView* webview = (mb::MbWebView*)common::LiveIdDetect::get()->getPtr((int64_t)webviewHandle);
     if (!webview)
         return;
-	webview->getClosure().setLoadingFinishCallback(callback, param);
-	common::ThreadCall::callBlinkThreadAsyncWithValid(MB_FROM_HERE, webviewHandle, [webviewHandle](mb::MbWebView* webview) {
+	  webview->getClosure().setLoadingFinishCallback(callback, param);
+	  common::ThreadCall::callBlinkThreadAsyncWithValid(MB_FROM_HERE, webviewHandle, [webviewHandle](mb::MbWebView* webview) {
         wkeOnLoadingFinish(webview->getWkeWebView(), onLoadingFinish, (void*)webviewHandle);
     });
 }
 
 void MB_CALL_TYPE mbOnDownload(mbWebView webviewHandle, mbDownloadCallback callback, void* param) 
 { 
-	checkThreadCallIsValid(__FUNCTION__);
+	  checkThreadCallIsValid(__FUNCTION__);
     mb::MbWebView* webview = (mb::MbWebView*)common::LiveIdDetect::get()->getPtr((int64_t)webviewHandle);
     if (!webview)
         return;
-	webview->getClosure().setDownloadCallback(callback, param); 
-	common::ThreadCall::callBlinkThreadAsyncWithValid(MB_FROM_HERE, webviewHandle, [webviewHandle](mb::MbWebView* webview) {
+	  webview->getClosure().setDownloadCallback(callback, param); 
+	  common::ThreadCall::callBlinkThreadAsyncWithValid(MB_FROM_HERE, webviewHandle, [webviewHandle](mb::MbWebView* webview) {
         wkeOnDownload(webview->getWkeWebView(), onDownload, (void*)webviewHandle);
     });
 }
@@ -257,75 +258,75 @@ void MB_CALL_TYPE mbOnDownloadInBlinkThread(mbWebView webviewHandle, mbDownloadI
     });
 }
 
-void MB_CALL_TYPE mbOnAlertBox(mbWebView webviewHandle, mbAlertBoxCallback callback, void* param) 
+void MB_CALL_TYPE mbOnAlertBox(mbWebView webviewHandle, mbAlertBoxCallback callback, void* param)
 { 
-	checkThreadCallIsValid(__FUNCTION__);
+	  checkThreadCallIsValid(__FUNCTION__);
     mb::MbWebView* webview = (mb::MbWebView*)common::LiveIdDetect::get()->getPtr((int64_t)webviewHandle);
     if (!webview)
         return;
-	webview->getClosure().setAlertBoxCallback(callback, param); 
-	common::ThreadCall::callBlinkThreadAsyncWithValid(MB_FROM_HERE, webviewHandle, [webviewHandle](mb::MbWebView* webview) {
+	  webview->getClosure().setAlertBoxCallback(callback, param); 
+	  common::ThreadCall::callBlinkThreadAsyncWithValid(MB_FROM_HERE, webviewHandle, [webviewHandle](mb::MbWebView* webview) {
         wkeOnAlertBox(webview->getWkeWebView(), onAlertBox, (void*)webviewHandle);
     });
 }
 
 void MB_CALL_TYPE mbOnConfirmBox(mbWebView webviewHandle, mbConfirmBoxCallback callback, void* param) 
 { 
-	checkThreadCallIsValid(__FUNCTION__);
+	  checkThreadCallIsValid(__FUNCTION__);
     mb::MbWebView* webview = (mb::MbWebView*)common::LiveIdDetect::get()->getPtr((int64_t)webviewHandle);
     if (!webview)
         return;
-	webview->getClosure().setConfirmBoxCallback(callback, param); 
-	common::ThreadCall::callBlinkThreadAsyncWithValid(MB_FROM_HERE, webviewHandle, [webviewHandle](mb::MbWebView* webview) {
+	  webview->getClosure().setConfirmBoxCallback(callback, param); 
+	  common::ThreadCall::callBlinkThreadAsyncWithValid(MB_FROM_HERE, webviewHandle, [webviewHandle](mb::MbWebView* webview) {
         wkeOnConfirmBox(webview->getWkeWebView(), onConfirmBox, (void*)webviewHandle);
     });
 }
 
 void MB_CALL_TYPE mbOnPromptBox(mbWebView webviewHandle, mbPromptBoxCallback callback, void* param) 
 { 
-	checkThreadCallIsValid(__FUNCTION__);
+	  checkThreadCallIsValid(__FUNCTION__);
     mb::MbWebView* webview = (mb::MbWebView*)common::LiveIdDetect::get()->getPtr((int64_t)webviewHandle);
     if (!webview)
         return;
-	webview->getClosure().setPromptBoxCallback(callback, param); 
-	//common::ThreadCall::callBlinkThreadAsyncWithValid(webview, [webview] { wkeOnPromptBox(webview->getWkeWebView(), onPromptBox, webview); }); 
+	  webview->getClosure().setPromptBoxCallback(callback, param); 
+  	//common::ThreadCall::callBlinkThreadAsyncWithValid(webview, [webview] { wkeOnPromptBox(webview->getWkeWebView(), onPromptBox, webview); }); 
 }
 
 void MB_CALL_TYPE mbOnNetGetFavicon(mbWebView webviewHandle, mbNetGetFaviconCallback callback, void* param) 
 { 
-	checkThreadCallIsValid(__FUNCTION__);
+	  checkThreadCallIsValid(__FUNCTION__);
     mb::MbWebView* webview = (mb::MbWebView*)common::LiveIdDetect::get()->getPtr((int64_t)webviewHandle);
     if (!webview)
         return;
-	webview->getClosure().setNetGetFaviconCallback(callback, param); 
-	common::ThreadCall::callBlinkThreadAsyncWithValid(MB_FROM_HERE, webviewHandle, [webviewHandle](mb::MbWebView* webview) {
+	  webview->getClosure().setNetGetFaviconCallback(callback, param); 
+	  common::ThreadCall::callBlinkThreadAsyncWithValid(MB_FROM_HERE, webviewHandle, [webviewHandle](mb::MbWebView* webview) {
         wkeNetGetFavicon(webview->getWkeWebView(), onNetGetFavicon, (void*)webviewHandle);
     });
 }
 
 void MB_CALL_TYPE mbOnConsole(mbWebView webviewHandle, mbConsoleCallback callback, void* param) 
 { 
-	checkThreadCallIsValid(__FUNCTION__);
+	  checkThreadCallIsValid(__FUNCTION__);
     mb::MbWebView* webview = (mb::MbWebView*)common::LiveIdDetect::get()->getPtr((int64_t)webviewHandle);
     if (!webview)
         return;
-	webview->getClosure().setConsoleCallback(callback, param); 
-	common::ThreadCall::callBlinkThreadAsyncWithValid(MB_FROM_HERE, webviewHandle, [webviewHandle](mb::MbWebView* webview) { 
+	  webview->getClosure().setConsoleCallback(callback, param); 
+	  common::ThreadCall::callBlinkThreadAsyncWithValid(MB_FROM_HERE, webviewHandle, [webviewHandle](mb::MbWebView* webview) { 
         wkeOnConsole(webview->getWkeWebView(), onConsole, (void*)webviewHandle);
     });
 }
 
 BOOL MB_CALL_TYPE mbOnClose(mbWebView webviewHandle, mbCloseCallback callback, void* param)
 {
-	checkThreadCallIsValid(__FUNCTION__);
+	  checkThreadCallIsValid(__FUNCTION__);
     mb::MbWebView* webview = (mb::MbWebView*)common::LiveIdDetect::get()->getPtr((int64_t)webviewHandle);
     if (!webview)
         return TRUE;
-	webview->getClosure().setCloseCallback(callback, param);
-	common::ThreadCall::callBlinkThreadAsyncWithValid(MB_FROM_HERE, webviewHandle, [webviewHandle](mb::MbWebView* webview) {
-		wkeOnWindowClosing(webview->getWkeWebView(), onWindowClosingCallback, (void*)webviewHandle);
-	});
-	return TRUE;
+	  webview->getClosure().setCloseCallback(callback, param);
+	  common::ThreadCall::callBlinkThreadAsyncWithValid(MB_FROM_HERE, webviewHandle, [webviewHandle](mb::MbWebView* webview) {
+		    wkeOnWindowClosing(webview->getWkeWebView(), onWindowClosingCallback, (void*)webviewHandle);
+	  });
+	  return TRUE;
 }
 
 static bool WKE_CALL_TYPE onNetResponseCallback(wkeWebView webView, void* param, const utf8* url, wkeNetJob job)

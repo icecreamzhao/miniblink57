@@ -142,7 +142,7 @@ static String getDefaultFontList()
     FcObjectSet* os = FcObjectSetBuild(FC_FAMILY, FC_STYLE, FC_LANG, (char*)0);
     FcFontSet* fs = FcFontList(config, pat, os);
 
-    printf("Total fonts: %d\n", fs->nfont);
+    //printf("Total fonts: %d\n", fs->nfont);
 
     for (int i = 0; fs && i < fs->nfont; i++) {
         FcPattern* font = fs->fonts[i];
@@ -177,7 +177,7 @@ static String getDefaultFontList()
     defaultFont.split(u16(','), false, spli);
     defaultFont = spli[0];
 
-    printf("getDefaultFontList: %s\n", defaultFont.utf8().data());
+    //printf("getDefaultFontList: %s\n", defaultFont.utf8().data());
 
     return defaultFont;
 }
@@ -205,7 +205,7 @@ PassRefPtr<SimpleFontData> FontCache::getLastResortFallbackFont(const FontDescri
             AtomicString family(defaultFont);
             FontFaceCreationParams params(family);
             fontPlatformData = getFontPlatformData(description, params);
-            printf("FontCache::getLastResortFallbackFont~: %p\n", fontPlatformData);
+            //printf("FontCache::getLastResortFallbackFont~: %p\n", fontPlatformData);
         }
     }
 #endif
@@ -268,15 +268,27 @@ PassRefPtr<SkTypeface> FontCache::createTypeface(const FontDescription& fontDesc
     // provided font Manager rather than calling SkTypeface::CreateFromName which may redirect the
     // call to the default font Manager.
     // On Windows the font manager is always present.
-    if (m_fontManager)
+
+    bool useDW = true;
+#if OS(WIN)
+    useDW = useDirectWrite();
+#else
+    useDW = false;
+#endif
+    if (m_fontManager) {
+        return adoptRef(useDW
+            ? m_fontManager->matchFamilyStyle(name.data(), fontDescription.skiaFontStyle())
+            : m_fontManager->legacyCreateTypeface(name.data(), fontDescription.skiaFontStyle())
+        );
+
         return adoptRef(m_fontManager->matchFamilyStyle(name.data(), fontDescription.skiaFontStyle()));
+    }
 #endif
 
     // FIXME: Use m_fontManager, matchFamilyStyle instead of
     // legacyCreateTypeface on all platforms.
     RefPtr<SkFontMgr> fm = adoptRef(SkFontMgr::RefDefault());
-    return adoptRef(fm->legacyCreateTypeface(name.data(),
-        fontDescription.skiaFontStyle()));
+    return adoptRef(fm->legacyCreateTypeface(name.data(), fontDescription.skiaFontStyle()));
 }
 
 #if !OS(WIN)

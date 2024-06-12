@@ -6,6 +6,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <math.h>
 
 #include "src/debug/debug-interface.h"
 #include "src/inspector/v8-debugger.h"

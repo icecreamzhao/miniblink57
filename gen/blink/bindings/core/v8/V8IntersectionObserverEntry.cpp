@@ -151,9 +151,23 @@ namespace IntersectionObserverEntryV8Internal {
         v8SetReturnValue(info, impl->intersectionRatio());
     }
 
+    static void isIntersectingAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        IntersectionObserverEntry* impl = V8IntersectionObserverEntry::toImpl(holder);
+
+        v8SetReturnValue(info, impl->isIntersecting());
+    }    
+
     CORE_EXPORT void intersectionRatioAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
     {
         IntersectionObserverEntryV8Internal::intersectionRatioAttributeGetter(info);
+    }
+
+    CORE_EXPORT void isIntersectingAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        IntersectionObserverEntryV8Internal::isIntersectingAttributeGetter(info);
     }
 
     static void targetAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
@@ -178,6 +192,7 @@ const V8DOMConfiguration::AccessorConfiguration V8IntersectionObserverEntryAcces
     { "boundingClientRect", IntersectionObserverEntryV8Internal::boundingClientRectAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
     { "intersectionRect", IntersectionObserverEntryV8Internal::intersectionRectAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
     { "intersectionRatio", IntersectionObserverEntryV8Internal::intersectionRatioAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
+    { "isIntersecting", IntersectionObserverEntryV8Internal::isIntersectingAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
     { "target", IntersectionObserverEntryV8Internal::targetAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnPrototype, V8DOMConfiguration::CheckHolder },
 };
 

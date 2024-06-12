@@ -151,6 +151,9 @@
 #include <type_traits>
 #include <utility>
 
+#if defined(__cplusplus)
+extern "C" {
+#endif
 #include <openssl/aead.h>
 #include <openssl/err.h>
 #include <openssl/lhash.h>
@@ -158,10 +161,12 @@
 #include <openssl/span.h>
 #include <openssl/ssl.h>
 #include <openssl/stack.h>
+#if defined(__cplusplus)
+}
+#endif
 
 #include "../crypto/err/internal.h"
 #include "../crypto/internal.h"
-
 
 #if defined(OPENSSL_WINDOWS)
 // Windows defines struct timeval in winsock2.h.

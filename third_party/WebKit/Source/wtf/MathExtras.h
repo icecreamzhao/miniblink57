@@ -40,6 +40,8 @@
 // _USE_MATH_DEFINES adds the extra defines.
 #include <math.h>
 #include <stdint.h>
+#else
+#include <math.h>
 #endif
 
 #if OS(OPENBSD)

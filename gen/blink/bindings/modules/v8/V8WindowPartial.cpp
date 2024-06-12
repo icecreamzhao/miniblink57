@@ -271,7 +271,7 @@
 #include "modules/WindowModulesConstructors.h"
 #include "modules/cachestorage/GlobalCacheStorage.h"
 #include "modules/compositorworker/WindowAnimationWorklet.h"
-//#include "modules/crypto/DOMWindowCrypto.h"
+#include "modules/crypto/DOMWindowCrypto.h"
 #include "modules/csspaint/WindowPaintWorklet.h"
 #include "modules/device_light/DOMWindowDeviceLight.h"
 #include "modules/device_orientation/DOMWindowDeviceMotion.h"
@@ -350,29 +350,29 @@ namespace DOMWindowPartialV8Internal {
         DOMWindowPartialV8Internal::animationWorkletAttributeGetter(info);
     }
 
-//     static void cryptoAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
-//     {
-//         v8::Local<v8::Object> holder = info.Holder();
-// 
-//         DOMWindow* impl = V8Window::toImpl(holder);
-// 
-//         Crypto* cppValue(DOMWindowCrypto::crypto(*impl));
-// 
-//         // Keep the wrapper object for the return value alive as long as |this|
-//         // object is alive in order to save creation time of the wrapper object.
-//         if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), cppValue))
-//             return;
-//         v8::Local<v8::Value> v8Value(ToV8(cppValue, holder, info.GetIsolate()));
-//         const char kKeepAliveKey[] = "KeepAlive#Window#crypto";
-//         V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
-// 
-//         v8SetReturnValue(info, v8Value);
-//     }
-// 
-//     void cryptoAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
-//     {
-//         DOMWindowPartialV8Internal::cryptoAttributeGetter(info);
-//     }
+    static void cryptoAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        v8::Local<v8::Object> holder = info.Holder();
+
+        DOMWindow* impl = V8Window::toImpl(holder);
+
+        Crypto* cppValue(DOMWindowCrypto::crypto(*impl));
+
+        // Keep the wrapper object for the return value alive as long as |this|
+        // object is alive in order to save creation time of the wrapper object.
+        if (cppValue && DOMDataStore::setReturnValue(info.GetReturnValue(), (ScriptWrappable*)cppValue))
+            return;
+        v8::Local<v8::Value> v8Value(ToV8((ScriptWrappable*)cppValue, holder, info.GetIsolate()));
+        const char kKeepAliveKey[] = "KeepAlive#Window#crypto";
+        V8HiddenValue::setHiddenValue(ScriptState::current(info.GetIsolate()), holder, v8AtomicString(info.GetIsolate(), StringView(kKeepAliveKey, sizeof kKeepAliveKey)), v8Value);
+
+        v8SetReturnValue(info, v8Value);
+    }
+
+    void cryptoAttributeGetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+    {
+        DOMWindowPartialV8Internal::cryptoAttributeGetter(info);
+    }
 
     static void paintWorkletAttributeGetter(const v8::FunctionCallbackInfo<v8::Value>& info)
     {
@@ -1259,7 +1259,7 @@ const V8DOMConfiguration::AttributeConfiguration V8WindowLazyDataAttributes[] = 
 #endif
 
 const V8DOMConfiguration::AccessorConfiguration V8WindowAccessors[] = {
-//     { "crypto", DOMWindowPartialV8Internal::cryptoAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
+    { "crypto", DOMWindowPartialV8Internal::cryptoAttributeGetterCallback, 0, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::ReadOnly), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
 //     { "ondevicemotion", DOMWindowPartialV8Internal::ondevicemotionAttributeGetterCallback, DOMWindowPartialV8Internal::ondevicemotionAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
 //     { "ondeviceorientation", DOMWindowPartialV8Internal::ondeviceorientationAttributeGetterCallback, DOMWindowPartialV8Internal::ondeviceorientationAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },
 //     { "ondeviceorientationabsolute", DOMWindowPartialV8Internal::ondeviceorientationabsoluteAttributeGetterCallback, DOMWindowPartialV8Internal::ondeviceorientationabsoluteAttributeSetterCallback, 0, 0, nullptr, 0, v8::DEFAULT, static_cast<v8::PropertyAttribute>(v8::None), V8DOMConfiguration::OnInstance, V8DOMConfiguration::CheckHolder },

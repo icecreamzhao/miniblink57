@@ -224,29 +224,44 @@ static xmlChar *paths[MAX_PATHS + 1];
 static int nbpaths = 0;
 static int load_trace = 0;
 
+void XMLCALL xmlShell(xmlDocPtr doc, char* filename, xmlShellReadlineFunc input, FILE* output)
+{
+    DebugBreak();
+}
+
+void XMLCALL xmlDebugDumpDocument(FILE* output, xmlDocPtr doc)
+{
+    DebugBreak();
+}
+
+void XMLCALL xmlDebugDumpEntities(FILE* output, xmlDocPtr doc)
+{
+    DebugBreak();
+}
+
 static
 void parsePath(const xmlChar *path) {
     const xmlChar *cur;
 
     if (path == NULL)
-	return;
+    return;
     while (*path != 0) {
-	if (nbpaths >= MAX_PATHS) {
-	    fprintf(stderr, "MAX_PATHS reached: too many paths\n");
-	    return;
-	}
-	cur = path;
-	while ((*cur == ' ') || (*cur == PATH_SEPARATOR))
-	    cur++;
-	path = cur;
-	while ((*cur != 0) && (*cur != ' ') && (*cur != PATH_SEPARATOR))
-	    cur++;
-	if (cur != path) {
-	    paths[nbpaths] = xmlStrndup(path, cur - path);
-	    if (paths[nbpaths] != NULL)
-		nbpaths++;
-	    path = cur;
-	}
+    if (nbpaths >= MAX_PATHS) {
+        fprintf(stderr, "MAX_PATHS reached: too many paths\n");
+        return;
+    }
+    cur = path;
+    while ((*cur == ' ') || (*cur == PATH_SEPARATOR))
+        cur++;
+    path = cur;
+    while ((*cur != 0) && (*cur != ' ') && (*cur != PATH_SEPARATOR))
+        cur++;
+    if (cur != path) {
+        paths[nbpaths] = xmlStrndup(path, cur - path);
+        if (paths[nbpaths] != NULL)
+        nbpaths++;
+        path = cur;
+    }
     }
 }
 

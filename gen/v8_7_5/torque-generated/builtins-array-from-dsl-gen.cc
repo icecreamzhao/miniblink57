@@ -1,3 +1,4 @@
+#if V8_TARGET_ARCH_IA32
 #include "src/builtins/builtins-utils-gen.h"
 #include "src/builtins/builtins.h"
 #include "src/code-factory.h"
@@ -21276,4 +21277,5 @@ TF_BUILTIN(CanUseSameAccessor25ATFastSmiOrObjectElements, CodeStubAssembler) {
 
 }  // namespace internal
 }  // namespace v8
+#endif
 

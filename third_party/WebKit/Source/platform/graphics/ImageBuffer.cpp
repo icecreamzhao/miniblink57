@@ -328,7 +328,7 @@ bool ImageBuffer::copyRenderingResultsFromDrawingBuffer(
     //       gl, textureId, GL_RGBA, GL_UNSIGNED_BYTE, 0, true, false, IntPoint(0, 0),
     //       IntRect(IntPoint(0, 0), drawingBuffer->size()), sourceBuffer);
     DebugBreak();
-    return nullptr;
+    return false;
 }
 
 void ImageBuffer::draw(GraphicsContext& context,

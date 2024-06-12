@@ -103,7 +103,7 @@ void V8BooleanOrConstrainBooleanParameters::toImpl(v8::Isolate* isolate, v8::Loc
     }
 
     {
-        impl.setBoolean(v8Value->BooleanValue());
+        impl.setBoolean(v8Value->BooleanValue(isolate));
         return;
     }
 }

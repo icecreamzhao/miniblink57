@@ -388,6 +388,7 @@ void JS_MarkUserdataObjByGP(JSRuntime* rt, JSGCObjectHeader* gp, JS_MarkFunc* ma
 JSContext *JS_NewContext(JSRuntime *rt);
 void JS_FreeContext(JSContext *s);
 JSContext *JS_DupContext(JSContext *ctx);
+void JS_SetIsEmptyContext(JSContext* ctx);
 void *JS_GetContextOpaque(JSContext *ctx);
 void JS_SetContextOpaque(JSContext *ctx, void *opaque);
 JSRuntime *JS_GetRuntime(JSContext *ctx);
@@ -467,11 +468,13 @@ JSValue JS_AtomToString(JSContext *ctx, JSAtom atom);
 const char *JS_AtomToCString(JSContext *ctx, JSAtom atom);
 JSAtom JS_ValueToAtom(JSContext *ctx, JSValueConst val);
 
-JSAtom JS_NewAtomWithSymbol(JSContext *ctx, const char *str);
+JSAtom JS_NewAtomOrSymbol(JSContext *ctx, const char *str);
 JSValue JS_SymbolGetIterator(JSContext *ctx);
 JSValue JS_SymbolToStringTag(JSContext* ctx);
+JSValue JS_SymbolUnscopables(JSContext* ctx);
 JSAtom JS_SymbolGetIteratorAtom(JSContext* ctx);
 JSAtom JS_SymbolToStringTagAtom(JSContext* ctx);
+
 /* object class support */
 
 typedef struct JSPropertyEnum {
@@ -707,6 +710,10 @@ JS_BOOL JS_IsTypedArray(JSValueConst v);
 JS_BOOL JS_IsWeakSet(JSValueConst v);
 JS_BOOL JS_IsWeakMap(JSValueConst v);
 
+JS_BOOL JS_IsValueEq(JSContext* ctx, JSValue a, JSValue b, JS_BOOL is_strict);
+
+const char* JS_GetConstructorName(JSContext* ctx, JSValue fun);
+
 JSValue JS_Throw(JSContext *ctx, JSValue obj);
 JSValue JS_GetException(JSContext *ctx);
 JS_BOOL JS_IsError(JSContext *ctx, JSValueConst val);
@@ -720,6 +727,7 @@ JSValue __js_printf_like(2, 3) JS_ThrowInternalError(JSContext *ctx, const char 
 JSValue JS_ThrowOutOfMemory(JSContext *ctx);
 
 int JS_GetRefCount(JSContext* ctx, JSValue v);
+void JS_MaskTestValue(JSContext* ctx, JSValue v);
 
 void JS_FreeValue(JSContext* ctx, JSValue v);
 void JS_FreeValueRT(JSRuntime* rt, JSValue v);
@@ -753,6 +761,8 @@ JSValue JS_NewAtomString(JSContext *ctx, const char *str);
 JSValue JS_ToString(JSContext *ctx, JSValueConst val);
 JSValue JS_ToPropertyKey(JSContext *ctx, JSValueConst val);
 
+JSValue JS_NewSymbolByStr(JSContext* ctx, const char* str, int len);
+
 // 获取原始数据，如果是1byte就不拷贝，如果是2btye就拷贝
 const char *JS_GetStringData(JSContext *ctx, size_t *plen, JSValue* new_val, JSValueConst val);
 size_t JS_GetStringSize(JSContext* ctx, JSValueConst val);
@@ -775,13 +785,20 @@ JSValue JS_NewObjectClass(JSContext *ctx, int class_id);
 JSValue JS_NewObjectProto(JSContext *ctx, JSValueConst proto);
 JSValue JS_NewObject(JSContext *ctx);
 
+JS_BOOL JS_IsAsyncFunction(JSContext* ctx, JSValueConst val);
 JS_BOOL JS_IsFunction(JSContext* ctx, JSValueConst val);
+JS_BOOL JS_IsBytecodeFunction(JSContext* ctx, JSValueConst val);
 JS_BOOL JS_IsConstructor(JSContext* ctx, JSValueConst val);
 JS_BOOL JS_SetConstructorBit(JSContext *ctx, JSValueConst func_obj, JS_BOOL val);
 
 JSValue JS_NewArray(JSContext *ctx);
 int JS_IsArray(JSContext *ctx, JSValueConst val);
 
+JSValue JS_NewMap(JSContext* ctx);
+
+int JS_GetObjId(JSValue val);
+
+JSValue JS_GetPropertyImpl(JSContext* ctx, JSValueConst obj, JSAtom prop, JSValueConst this_obj, JS_BOOL throw_ref_error, JS_BOOL call_hook);
 JSValue JS_GetPropertyInternal(JSContext *ctx, JSValueConst obj, JSAtom prop, JSValueConst receiver, JS_BOOL throw_ref_error);
 static js_force_inline JSValue JS_GetProperty(JSContext *ctx, JSValueConst this_obj, JSAtom prop)
 {
@@ -873,6 +890,10 @@ void JS_SetTestVal(JSValue obj, void* v);
 void JS_SetTestValFromClone(JSValue obj, JSValue v);
 JSValue JS_GetTestVal(JSValueConst obj);
 
+// typedef struct JSFunctionBytecode JSFunctionBytecode;
+// JSFunctionBytecode* JS_GetFunctionBytecode(JSValueConst val);
+// size_t JS_GetFunctionBytecodeCode(const JSFunctionBytecode* code);
+
 /* 'buf' must be zero terminated i.e. buf[buf_len] = '\0'. */
 JSValue JS_ParseJSON(JSContext *ctx, const char *buf, size_t buf_len, const char *filename);
 #define JS_PARSE_JSON_EXT (1 << 0) /* allow extended JSON */
@@ -894,8 +915,11 @@ typedef struct {
 void JS_SetSharedArrayBufferFunctions(JSRuntime *rt, const JSSharedArrayBufferFunctions *sf);
 
 JSValue JS_NewTypedArray(JSContext *ctx, JS_TYPED_ARRAY type, JSValue array_buffer, size_t byte_offset, size_t length);
+JSValue JS_NewArrayBufferCopy(JSContext* ctx, const uint8_t* buf, size_t len);
 
 JSValue JS_NewPromiseCapability(JSContext *ctx, JSValue *resolving_funcs);
+
+JS_BOOL JS_IsPromisePending(JSValue val);
 
 /* is_handled = TRUE means that the rejection is handled */
 typedef void JSHostPromiseRejectionTracker(JSContext *ctx, JSValueConst promise, JSValueConst reason, JS_BOOL is_handled, void *opaque);
@@ -955,6 +979,8 @@ JSValue JS_ReadObject(JSContext *ctx, const uint8_t *buf, size_t buf_len, int fl
 /* instantiate and evaluate a bytecode function. Only used when
    reading a script or module with JS_ReadObject() */
 JSValue JS_EvalFunction(JSContext *ctx, JSValue fun_obj);
+JSValue JS_EvalFunctionWithArgs(JSContext* ctx, JSValue fun_obj, JSValueConst this_obj, int argc, JSValueConst* argv);
+
 /* load the dependencies of the module 'obj'. Useful when JS_ReadObject()
    returns a module. */
 int JS_ResolveModule(JSContext *ctx, JSValueConst obj);
@@ -1109,6 +1135,9 @@ int JS_SetModuleExport(JSContext *ctx, JSModuleDef *m, const char *export_name,
                        JSValue val);
 int JS_SetModuleExportList(JSContext *ctx, JSModuleDef *m,
                            const JSCFunctionListEntry *tab, int len);
+
+void JS_SetTestCtx(JSContext* ctx);
+void JS_MarkCtxIsEmptyCtx(JSContext* ctx);
 
 #undef js_unlikely
 #undef js_force_inline

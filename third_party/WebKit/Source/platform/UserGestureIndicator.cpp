@@ -29,6 +29,10 @@
 #include "wtf/Assertions.h"
 #include "wtf/CurrentTime.h"
 
+namespace mb {
+extern bool g_disableUserGestureIndicator;
+}
+
 namespace blink {
 
 // User gestures timeout in 1 second.
@@ -156,6 +160,9 @@ UserGestureIndicator::~UserGestureIndicator()
 // static
 bool UserGestureIndicator::utilizeUserGesture()
 {
+    if (mb::g_disableUserGestureIndicator)
+        return true;
+
     if (UserGestureIndicator::processingUserGesture()) {
         s_rootToken->userGestureUtilized();
         return true;

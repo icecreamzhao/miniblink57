@@ -145,7 +145,7 @@ void* allocPages(void* addr, size_t len, size_t align, PageAccessibilityConfigur
     }
 
     // First try to force an exact-size, aligned allocation from our random base.
-    for (int count = 0; count < 3; ++count) {
+    for (int count = 0; count < 30; ++count) {
         void* ret = systemAllocPages(addr, len, pageAccessibility);
         if (kHintIsAdvisory || ret) {
             // If the alignment is to our liking, we're done.
@@ -157,7 +157,6 @@ void* allocPages(void* addr, size_t len, size_t align, PageAccessibilityConfigur
 #endif
         } else if (!addr) { // We know we're OOM when an unhinted allocation fails.
             return nullptr;
-
         } else {
 #if CPU(32BIT)
             addr = reinterpret_cast<char*>(addr) + align;
@@ -168,6 +167,8 @@ void* allocPages(void* addr, size_t len, size_t align, PageAccessibilityConfigur
         addr = getRandomPageBase();
         addr = reinterpret_cast<void*>(reinterpret_cast<uintptr_t>(addr) & alignBaseMask);
 #endif
+        if (count > 10)
+            ::Sleep(50);
     }
 
     // Map a larger allocation so we can force alignment, but continue randomizing only on 64-bit POSIX.

@@ -51,6 +51,7 @@ mbSetHeadlessEnabled
 mbSetDragDropEnable
 mbSetDragEnable
 mbSetDebugConfig
+mbQueryState
 mbSetViewSettings
 mbSetTransparent
 mbSetProxy
@@ -81,6 +82,7 @@ mbGetCursorInfoType
 mbGetCookie
 mbGetCookieOnBlinkThread
 mbResize
+mbGetSize
 mbOnNavigation
 mbOnNavigationSync
 mbOnCreateView
@@ -221,3 +223,6 @@ mbNetGetReferrer
 mbOnLoadUrlHeadersReceived
 mbOnLoadUrlFinish
 mbGetProcAddr
+mbPostToUiThread
+mbCreateWebViewBindGTKWindow
+mbExitMessageLoop

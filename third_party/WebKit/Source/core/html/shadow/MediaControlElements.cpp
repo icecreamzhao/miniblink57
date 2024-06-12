@@ -711,6 +711,8 @@ MediaControlDownloadButtonElement::getOverflowStringName()
 
 bool MediaControlDownloadButtonElement::shouldDisplayDownloadButton()
 {
+    return false;
+
     const KURL& url = mediaElement().currentSrc();
 
     // Check page settings to see if download is disabled.

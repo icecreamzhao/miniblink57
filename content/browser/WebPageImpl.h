@@ -157,6 +157,7 @@ public:
     virtual void enablePaint() override;
 #endif
 
+    void willCommitProvisionalLoad();
     void didStartProvisionalLoad();
 
     // PopupMenuWinClient --------------------------------------------------------
@@ -223,7 +224,7 @@ public:
 
     void loadHistoryItem(int64 frameId, const blink::WebHistoryItem& item, blink::WebHistoryLoadType type, blink::WebCachePolicy policy);
     void loadURL(int64 frameId, const wchar_t* url, const blink::Referrer& referrer, const wchar_t* extraHeaders);
-    void loadRequest(int64 frameId, const blink::WebURLRequest& request);
+    void loadRequest(int64 frameId, const blink::WebURLRequest& request, bool isViewSource);
     void loadHTMLString(int64 frameId, const blink::WebData& html, const blink::WebURL& baseURL, const blink::WebURL& unreachableURL, bool replace);
 
     void setTransparent(bool transparent);
@@ -259,7 +260,7 @@ public:
         blink::WebNavigationPolicy policy,
         bool suppressOpener);
 
-    //virtual bool runFileChooser(const blink::WebFileChooserParams& params, blink::WebFileChooserCompletion* completion) override;
+    /*virtual*/ bool runFileChooser(const blink::WebFileChooserParams& params, blink::WebFileChooserCompletion* completion) /*override*/;
 
     // ----
     bool needDrawToScreen(HWND hWnd) const;
@@ -365,6 +366,7 @@ public:
     SkCanvas* m_memoryCanvasForUi;
     bool m_disablePaint;
     int m_firstDrawCount;
+    bool m_hadWillCommitProvisionalLoad = false;
 
     blink::Persistent<PageNavController> m_navigationController;
 #if defined(OS_WIN)

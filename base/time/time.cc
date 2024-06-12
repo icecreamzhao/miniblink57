@@ -5,6 +5,7 @@
 #include "base/time/time.h"
 
 #include <cmath>
+#include <math.h>
 #include <ios>
 #include <limits>
 #include <ostream>

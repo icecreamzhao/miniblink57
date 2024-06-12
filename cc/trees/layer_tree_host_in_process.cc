@@ -485,6 +485,8 @@ LayerTreeHostInProcess::CreateLayerTreeHostImpl(
         rendering_stats_instrumentation_.get(), task_graph_runner_,
         std::move(mutator_host_impl), id_, std::move(image_worker_task_runner_));
     host_impl->SetHasGpuRasterizationTrigger(has_gpu_rasterization_trigger_);
+
+    //host_impl->set_resourceless_software_draw_for_testing(); // weolar!!!
     host_impl->SetContentIsSuitableForGpuRasterization(
         content_is_suitable_for_gpu_rasterization_);
     task_graph_runner_ = NULL;

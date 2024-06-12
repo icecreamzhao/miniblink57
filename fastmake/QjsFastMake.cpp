@@ -1,8 +1,8 @@
 
 #include "FastMakeMain.h"
 
-#include "quickjs-vs/quickjs.h"
-#include "quickjs-vs/quickjs-libc.h"
+#include "quickjs/quickjs.h"
+#include "quickjs/quickjs-libc.h"
 
 #include "mbvip/common/Util.h"
 #include "mbvip/common/StringUtil.h"
@@ -37,7 +37,7 @@ void printDebug(const char* format, ...)
     va_end(argList);
 }
 
-static JSValue jsPrint(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv, void* userdata)
+static JSValue jsPrint(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv, void* userdata, JS_BOOL is_constructor)
 {
     int i;
     const char* str;
@@ -49,20 +49,20 @@ static JSValue jsPrint(JSContext* ctx, JSValueConst this_val, int argc, JSValueC
         if (!str)
             return JS_EXCEPTION;
         OutputDebugStringA(str);
-        JS_FreeCString(ctx, str);
+        JS_FreeCString(ctx, argv[i], str);
     }
     OutputDebugStringA("\n");
 
     return JS_UNDEFINED;
 }
 
-static JSValue jsQfmGetCmdline(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv, void* userdata)
+static JSValue jsQfmGetCmdline(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv, void* userdata, JS_BOOL is_constructor)
 {
     const CtxInfo* ctxInfo = (const CtxInfo*)JS_GetContextOpaque(ctx);
     return JS_NewStringLen(ctx, ctxInfo->cmd.c_str(), ctxInfo->cmd.size());
 }
 
-static JSValue jsQfmRebuild(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv, void* userdata)
+static JSValue jsQfmRebuild(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv, void* userdata, JS_BOOL is_constructor)
 {
     const CtxInfo* ctxInfo = (const CtxInfo*)JS_GetContextOpaque(ctx);
     const char* targetDir = JS_ToCString(ctx, argv[0]);
@@ -89,8 +89,8 @@ static JSValue jsQfmRebuild(JSContext* ctx, JSValueConst this_val, int argc, JSV
     else
         fmFastBuild(jsonPathW, ctxInfo->opt);
 
-    JS_FreeCString(ctx, targetDir);
-    JS_FreeCString(ctx, json);
+    JS_FreeCString(ctx, argv[0], targetDir);
+    JS_FreeCString(ctx, argv[1], json);
 
     return JS_UNDEFINED;
 }
@@ -100,14 +100,14 @@ static void printWhenError(JSContext* ctx)
     JSValue exception_val = JS_GetException(ctx);
     BOOL is_error = JS_IsError(ctx, exception_val);
 
-    jsPrint(ctx, JS_NULL, 1, &exception_val, nullptr);
+    jsPrint(ctx, JS_NULL, 1, &exception_val, nullptr, FALSE);
 
     if (is_error) {
         JSValue val = JS_GetPropertyStr(ctx, exception_val, "stack");
         if (!JS_IsUndefined(val)) {
             const char* stack = JS_ToCString(ctx, val);
             printDebug("%s\n", stack);
-            JS_FreeCString(ctx, stack);
+            JS_FreeCString(ctx, val, stack);
         }
         JS_FreeValue(ctx, val);
     }
@@ -217,6 +217,8 @@ void qjsRebuild(const std::string& jsonPath, const std::string& jsonName, const 
 
     std::vector<char> buffer;
     common::readFile(common::utf8ToUtf16(path).c_str(), &buffer);
+    if (buffer.size() == 0)
+        DebugBreak();
     buffer.push_back('\0');
 
     JSValue res_val = JS_Eval(ctx, buffer.data(), buffer.size() - 1, jsonName.c_str(), JS_EVAL_TYPE_MODULE);
